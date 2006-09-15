@@ -1,3 +1,6 @@
+White Russian /w X-Wrt Extensions
+******************************************************************************
+
 This is the buildsystem for the OpenWrt Linux distribution
 
 Please use "make menuconfig" to configure your appreciated
@@ -19,6 +22,6 @@ Building your own firmware you need to have access to a Linux system.
 
 Sunshine!
 	Your OpenWrt Project
-	http://openwrt.org
+	http://openwrt.org 
 
 
