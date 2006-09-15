@@ -1,0 +1,4 @@
+#!/bin/sh
+nvram set firmware_name="X-Wrt"
+nvram set firmware_subtitle="An OpenWrt based firmware."
+nvram set firmware_version="0.01 alpha"

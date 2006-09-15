@@ -1,0 +1,75 @@
+#!/bin/sh
+#
+# crond           Starts crond
+#
+crondir_base="/var/spool/cron"
+cron_realdir="/etc/spool/cron/crontabs"
+crondir="$crondir_base/crontabs"
+cron_root_realdir="/etc/spool/cron/root"
+cron_root_file="$cron_realdir/root"
+
+mkdir -p $cron_realdir
+mkdir -p $crondir_base
+[ -d $crondir ] || ln -s $cron_realdir $crondir
+
+# we concatenate al single files from this directory to a single root crontab file
+mkdir -p $cron_root_realdir
+
+getPID(){
+    echo `ps -elf | grep '/usr/sbin/crond' | grep -v grep | awk '{ print $1 }'`
+}
+
+start() {
+        if [ "$(nvram get cron_enable)" -eq "1" ]; then
+         pid=$(getPID)
+         if [ -z "$pid" ]; then 
+            #regenerate root crontab file
+            [ -f $cron_root_file ] && rm -f $cron_root_file
+            for root_cron_entry in $cron_root_realdir/*; do
+                cat $root_cron_entry >> $cron_root_file
+            done
+            
+            echo -n "Starting crond: "
+            ( /usr/sbin/crond && echo "OK" ) || echo "ERROR"
+           else
+                echo -n "crond is already started"
+           fi
+        else
+            echo -n "crond is disabled"
+        fi
+}
+
+stop() { 
+        pid=$(getPID)
+        if [ -n "$pid" ]; then
+            echo -n "Stopping crond: "
+            ( { 
+                kill $pid >/dev/null 2>&1
+              } && echo "OK" ) || echo "ERROR"
+        else
+            echo "crond is not running"
+        fi
+}
+
+restart() {
+        stop
+        start
+}
+
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  restart|reload)
+        restart
+        ;;
+  *)
+        echo $"Usage: $0 {start|stop|restart}"
+        exit 1
+esac
+
+exit $?
+

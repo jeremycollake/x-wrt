@@ -1,0 +1,29 @@
+#!/bin/sh
+
+# we'll se these only if they aren't already, so that
+# they can be pre-empted
+if [ -z $(nvram get firmware_name) ]; then
+	nvram set firmware_name="OpenWrt"
+	nvram set firmware_subtitle="White Russian"
+	nvram set firmware_version="RC5"
+fi
+
+############################################################
+# try to do a one-time identification of the device
+# this is used by the webif
+#
+# todo: add more devices
+#
+if [ -z $(nvram get device_name) ]; then
+	#
+	# WRT54G v2 - v5 CFE 
+	#
+	cat /dev/mtd/0 | strings | grep W54G > /dev/null 2>&1
+	if [ $? = 0 ]; then
+		nvram set device_name="Linksys WRT54G"
+		exit 0
+	fi
+fi
+
+
+
