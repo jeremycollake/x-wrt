@@ -64,7 +64,7 @@ EOF
     }
 fi
 
-header "Network" "Interfaces" "@TR<<DHCP>>" '' "$SCRIPT_NAME"
+header "Network" "DHCP" "@TR<<DHCP Interfaces>>" '' "$SCRIPT_NAME"
 
 #display_form<<EOF
 awk -v "name=@TR<<Name>>" \
