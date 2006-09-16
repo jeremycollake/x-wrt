@@ -64,7 +64,7 @@ EOF
     }
 fi
 
-header "Network" "Interfaces" "@TR<<DHCP Interfaces>>" '' "$SCRIPT_NAME"
+header "Network" "Interfaces" "@TR<<DHCP>>" '' "$SCRIPT_NAME"
 
 #display_form<<EOF
 awk -v "name=@TR<<Name>>" \
@@ -197,5 +197,5 @@ fi
 
 footer ?>
 <!--
-##WEBIF:name:Network:425:Interfaces
+##WEBIF:name:Network:425:DHCP
 -->
