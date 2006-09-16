@@ -3,6 +3,25 @@ killall dnsmasq
 pppoa_ifname="atm0" # hack for ppp over atm, which has no ${proto}_ifname
 args2=""
 
+#
+# jmc: initialize any missing nvram variables and turn on dhcp
+#   for LAN by default.
+#
+if [ -z $(nvram get lan_dhcp_enabled) ]; then
+	nvram set lan_dhcp_enabled=1					
+fi	
+for ifname in lan wan wifi $(nvram get ifnames); do		
+	if [ -z $(nvram get ${ifname}_dhcp_start) ]; then
+		nvram set ${ifname}_dhcp_start=$(nvram get dhcp_start)				
+	fi
+	if [ -z $(nvram get ${ifname}_dhcp_num) ]; then
+		nvram set ${ifname}_dhcp_num=$(nvram get dhcp_num)				
+	fi
+	if [ -z $(nvram get ${ifname}_dhcp_lease) ]; then
+		nvram set ${ifname}_dhcp_lease=$(nvram get dhcp_lease)				
+	fi
+done	
+
 for ifname in lan wan wifi $(nvram get ifnames); do
     dhcp_enabled=$(nvram get ${ifname}_dhcp_enabled)
     if [ "$dhcp_enabled" = 1 ]; then
