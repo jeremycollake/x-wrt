@@ -1,0 +1,18 @@
+#!/bin/sh
+
+#
+# earlier versions of the x-wrt webif qos-config.sh would create a 'dummy'
+# /etc/qos.conf if Rudy's QoS scripts weren't installed, and then
+# forever throw up a bunch of errors since newer versions use
+# the presence of that file for detection. Regardless, we should
+# clean this file up, so here we go.
+#
+
+# if qos.conf exists and qos-re package not installed, delete
+if [ -f "/etc/qos.conf" ]; then
+	ipkg list_installed | grep qos-re 2>&1 > /dev/null
+	if [ $? != 0 ]; then
+ 		echo " $0: cleaning up unused /etc/qos.conf"
+		rm "/etc/qos.conf"
+	fi	
+fi
