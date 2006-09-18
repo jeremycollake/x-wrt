@@ -11,9 +11,9 @@ if empty "$FORM_submit"; then
 	esac
 	FORM_wdsmac=${FORM_wdsmac:-00:00:00:00:00:00}
 	
-	FORM_lan_ipaddr=${lan_ipaddr:-$(nvram get lan_ipaddr)}
-	FORM_lan_netmask=${lan_netmask:-$(nvram get lan_netmask)}
-	FORM_lan_gateway=${lan_gateway:-$(nvram get lan_gateway)}
+	#FORM_lan_ipaddr=${lan_ipaddr:-$(nvram get lan_ipaddr)}
+	#FORM_lan_netmask=${lan_netmask:-$(nvram get lan_netmask)}
+	#FORM_lan_gateway=${lan_gateway:-$(nvram get lan_gateway)}
 else 
 	SAVED=1
 	validate <<EOF
