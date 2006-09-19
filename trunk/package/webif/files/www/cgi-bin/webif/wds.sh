@@ -1,7 +1,18 @@
 #!/usr/bin/webif-page
 <? 
 . "/usr/lib/webif/webif.sh"
-load_settings network
+load_settings wds
+load_settings wireless
+
+
+
+interface_num=49153
+for mac in $(nvram get wl0_wds); do
+wds_list=" $wds_list
+          wds0.$interface_num=$mac"
+let "interface_num+=1"
+done
+
 
 if empty "$FORM_submit"; then 
 	FORM_lazywds=${wl0_lazywds:-$(nvram get wl0_lazywds)}
@@ -25,6 +36,29 @@ EOF
 fi
 
 header "Network" "WDS" "@TR<<WDS Configuration>>" '' "$SCRIPT_NAME"
+
+awk -v "name=@TR<<MAC Address>>" \
+    -v "interface=@TR<<Bridge>>" \
+    -v "action=@TR<<Action>>" \
+    -f /usr/lib/webif/common.awk -f - /etc/dnsmasq.options <<EOF
+BEGIN{
+    start_form("@TR<<Active WDS Interfaces>>")
+    print "<table style=\\"width: 70%\\">"
+    print "<tr><th>" name "</th><th>" interface "</th><th>" action "</th></tr>"
+    print "<tr><td colspan=\\"3\\"><hr class=\\"separator\\" /></td></tr>"
+}
+EOF
+
+for mac in $(nvram get wl0_wds); do
+	IFBRIDGE=LAN
+        echo "<tr><td $style>$mac</td><td $style>$IFBRIDGE</td><td $style><a href=\"wds.sh?action=remove&amp;macremove=$mac\">@TR<<Remove>></a></td></tr><br />"
+done
+awk -f /usr/lib/webif/common.awk -f - /etc/dnsmasq.options <<EOF
+BEGIN{
+    print "</table><br />"
+    end_form();
+    }
+EOF
 
 display_form <<EOF
 start_form|@TR<<WDS Configuration>>
