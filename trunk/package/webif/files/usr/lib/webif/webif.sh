@@ -94,6 +94,8 @@ Pragma: no-cache
 		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
 	</head>
 	<body $4><div id="container">
+	 <script type="text/javascript" src="/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
+	  <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>	  
 	    <div id="header">
 	        <div id="header-title">
 				<div id="firmware-title"><h1>$_firmware_name Management Console</h1>
