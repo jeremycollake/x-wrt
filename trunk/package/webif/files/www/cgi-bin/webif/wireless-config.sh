@@ -3,7 +3,7 @@
 . /usr/lib/webif/webif.sh
 load_settings "wireless"
 
-header "Network" "Wireless" "@TR<<Wireless Configuration>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
+header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onLoad="modechange()"' ""
 
 #####################################################################
 # defaults - ONLY used in the rare case these nvram variables are unset
@@ -226,6 +226,10 @@ cat <<EOF
 <!--
 function modechange()
 {
+/* Where did this come from and what is its purpose? 
+	- wpa/psk should be ok in any mode
+	- and encryption_psk/encryption_wpa don't exist..
+	
 	if (isset('mode','adhoc')) 
 	{
 		document.getElementById('encryption_psk').disabled = true;
@@ -251,7 +255,7 @@ function modechange()
 	{
 		document.getElementById('encryption_wpa').disabled = false;
 	}
-	
+*/	
 	if (isset('gmode','bOnly')) 
 	{
 		document.getElementById('gmode_protection').disabled = true;
