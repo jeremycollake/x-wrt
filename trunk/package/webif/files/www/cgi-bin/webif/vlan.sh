@@ -188,7 +188,7 @@ display_form <<EOF
 onchange|modechange
 start_form|@TR<<VLAN Configuration>>
 helpitem|VLAN
-helptext|Helptext VLAN#A virtual LAN is a set of ports that are bridged. In cases where a port belongs to more than one VLAN, a technique known as tagging is used to identify to which VLAN traffic on that port belongs. If you do not understand what a VLAN is, do not adjust these settings.
+helptext|Helptext VLAN#A virtual LAN is a set of ports that are bridged. In cases where a port belongs to more than one VLAN, a technique known as tagging is used to identify to which VLAN traffic on that port belongs.
 string|<table><tbody>
 $FORM_all_vlans
 string|</tbody></table>
