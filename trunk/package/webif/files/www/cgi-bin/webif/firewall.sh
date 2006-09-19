@@ -323,7 +323,7 @@ END {
 	print sel_option("drop", "Drop")
 	print "</select>" button("new", "Add") "</form></td></tr>"
 	print "</table>"
-	print end_form("...");
+	print end_form(" ");
 }
 EOF
 
