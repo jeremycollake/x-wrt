@@ -47,7 +47,9 @@ $1 ~ /^field/ {
 	else field_opts=""
 	if ($4 == "hidden") field_opts = field_opts " style=\"display: none\""
 	print "<tr" field_opts ">"
-	if ($2 != "") print "<td width=\"50%\">" $2 "</td><td width=\"50%\">"
+	if ($2 != "") print "<td width=\"50%\""
+	if ($5 != "") print " onMouseOver=\"return overlib('" $5 "');\" onMouseOut=\"return nd();\""
+	if ($2 != "") print ">" $2 "</td><td width=\"50%\">"
 	else print "<td colspan=\"2\">"
 
 	field_open=1
