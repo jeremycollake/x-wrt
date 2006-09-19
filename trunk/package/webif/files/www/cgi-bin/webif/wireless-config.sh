@@ -3,7 +3,7 @@
 . /usr/lib/webif/webif.sh
 load_settings "wireless"
 
-header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onLoad="modechange()"' ""
+header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onLoad="modechange()"' "$SCRIPT_NAME"
 
 #####################################################################
 # defaults - ONLY used in the rare case these nvram variables are unset
