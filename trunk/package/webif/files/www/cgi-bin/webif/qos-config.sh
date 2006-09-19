@@ -2,7 +2,6 @@
 <?
 # Author: Travis Kemen <kemen04@gmail.com>
 # Version 0.001
-# WARNING: This is ugly code
 ##FIXME: edonkey-dl shows up as -dl for Layer 7 rules
 ##FIXME: L7 Save rules need to be dynamic
 ##FIXME: fix javascript hidden start_form workaround
@@ -16,9 +15,9 @@
 
 . /usr/lib/webif/webif.sh
 
-if [ -f /etc/qos.conf ]; then
 
-load_settings qos
+if [ -f /etc/qos.conf ]; then
+. /etc/qos.conf
 
 exists /tmp/.webif/qos  && QOS_FILE=/tmp/.webif/qos || QOS_FILE=/etc/qos.conf
 exists $QOS_FILE || touch $QOS_FILE >&- 2>&-
@@ -41,7 +40,7 @@ FORM_checkbox="$FORM_checkbox
 FORM_ip_string="$FORM_ip_string FORM_$name"		
 done
 ##############################################
-for config in $(grep IP_EXPR= /etc/qos.conf |cut -d '"' -f 2 2>&-); do
+for config in $IP_EXPR; do
 name=${config}
 ipbox_string="field|@TR<<Express IP Address>>
                 text|ip_expr$ipexprcount|$name"
@@ -50,7 +49,7 @@ ip_expr="$ip_expr
 let "ipexprcount+=1"
 done
 ###############################################
-for config in $(grep IP_PRIO= /etc/qos.conf |cut -d '"' -f 2 2>&-); do
+for config in $IP_PRIO; do
 name=${config}
 ipbox_string="field|@TR<<Priority IP Address>>
                 text|ip_prio$ippriocount|$name"
@@ -59,7 +58,7 @@ ip_prio="$ip_prio
 let "ippriocount+=1"
 done
 ###############################################
-for config in $(grep IP_BULK= /etc/qos.conf |cut -d '"' -f 2 2>&-); do
+for config in $IP_BULK; do
 name=${config}
 ipbox_string="field|@TR<<Bulk IP Address>>
                 text|ip_bulk$ipbulkcount|$name"
@@ -68,7 +67,7 @@ ip_bulk="$ip_bulk
 let "ipbulkcount+=1"
 done
 ###############################################
-for config in $(grep TCP_EXPR= /etc/qos.conf |cut -d '"' -f 2 2>&-); do
+for config in $TCP_EXPR; do
 name=${config}
 ipbox_string="field|@TR<<Express TCP Port>>
                 text|tcp_expr$tcpexprcount|$name"
@@ -77,7 +76,7 @@ tcp_expr="$tcp_expr
 let "tcpexprcount+=1"
 done
 ###############################################
-for config in $(grep TCP_PRIO= /etc/qos.conf |cut -d '"' -f 2 2>&-); do
+for config in $TCP_PRIO; do
 name=${config}
 ipbox_string="field|@TR<<Priority TCP Port>>
                 text|tcp_prio$tcppriocount|$name"
@@ -86,7 +85,7 @@ tcp_prio="$tcp_prio
 let "tcppriocount+=1"
 done
 ###############################################
-for config in $(grep TCP_BULK= /etc/qos.conf |cut -d '"' -f 2 2>&-); do
+for config in $TCP_BULK; do
 name=${config}
 ipbox_string="field|@TR<<Bulk TCP Port>>
                 text|tcp_bulk$tcpbulkcount|$name"
@@ -95,7 +94,7 @@ tcp_bulk="$tcp_bulk
 let "tcpbulkcount+=1"
 done
 ###############################################
-for config in $(grep UDP_EXPR= /etc/qos.conf |cut -d '"' -f 2 2>&-); do
+for config in $UDP_EXPR; do
 name=${config}
 ipbox_string="field|@TR<<Express UDP Port>>
                 text|udp_expr$udpexprcount|$name"
@@ -104,7 +103,7 @@ udp_expr="$udp_expr
 let "udpexprcount+=1"
 done
 ###############################################
-for config in $(grep UDP_PRIO= /etc/qos.conf |cut -d '"' -f 2 2>&-); do
+for config in $UDP_PRIO; do
 name=${config}
 ipbox_string="field|@TR<<Priority UDP Port>>
                 text|udp_prio$udppriocount|$name"
@@ -113,7 +112,7 @@ udp_prio="$udp_prio
 let "udppriocount+=1"
 done
 ###############################################
-for config in $(grep UDP_BULK= /etc/qos.conf |cut -d '"' -f 2 2>&-); do
+for config in $UDP_BULK; do
 name=${config}
 ipbox_string="field|@TR<<Bulk UDP Port>>
                 text|udp_bulk$udpbulkcount|$name"
@@ -127,8 +126,8 @@ done
 #Save Functions				      #
 ###############################################
 if empty "$FORM_submit"; then
-        FORM_download_speed=${download_speed:-$(grep DOWNLOAD= /etc/qos.conf |cut -d '"' -f 2)}
-        FORM_upload_speed=${upload_speed:-$(grep UPLOAD= /etc/qos.conf |cut -d '"' -f 2)}
+        FORM_download_speed=${download_speed:-$DOWNLOAD}
+        FORM_upload_speed=${upload_speed:-$UPLOAD}
         FORM_conntrack_max=${conntrack_max:-$(sysctl net.ipv4.ip_conntrack_max |cut -d ' ' -f 3)}
         FORM_conntrack_tcp_timeout=${conntrack_tcp_timeout:-$(sysctl net.ipv4.netfilter.ip_conntrack_tcp_timeout_established |cut -d ' ' -f 3)}
         FORM_conntrack_udp_timeout=${conntrack_udp_timeout:-$(sysctl net.ipv4.netfilter.ip_conntrack_udp_timeout |cut -d ' ' -f 3)}
