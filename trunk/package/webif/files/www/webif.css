@@ -298,9 +298,22 @@ dt,
 	background-color: #DDD;
 }
 
-#content .settings-block .settings .settings-title {
+
+#content .settings-block
+{
+	color: #000;	
+	background-color: #FFF;
+}
+
+#content .settings-title 
+{
+	color: #000;	
+	background-color: #FFF;
+}
+
+#content .settings {
 	color: #000;
-	background-color: #CCC;
+	
 }
 
 #save .page-save {
