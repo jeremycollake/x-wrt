@@ -82,5 +82,5 @@ EOF
 
 footer ?>
 <!--
-##WEBIF:name:Network:200:WDS
+##WEBIF:name:Network:415:WDS
 -->
