@@ -114,7 +114,6 @@ var cpu_data = new Array();
 var max_num_points = 120;  // maximum number of plot data points
 var step = 600 / max_num_points;  // plot X division size
 
-<!-- fix for opera -->
 var fetch_url='';
 
 var last_cpu_total=null, last_cpu_idle=null;
