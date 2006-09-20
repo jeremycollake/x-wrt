@@ -97,7 +97,7 @@ Pragma: no-cache
 	 <script type="text/javascript" src="/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
 	  <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>	  
 	    <div id="header">
-			$_categories
+			<h3>$_categories</h3>
 			$_subcategories					        		
 		</div>
 								<div id="short-status">
