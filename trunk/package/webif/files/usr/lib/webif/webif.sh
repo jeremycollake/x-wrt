@@ -71,7 +71,7 @@ header() {
 	_form="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />}"
 	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></p>}"
 	_categories=$(categories $1)
-	_subcategories=${2:+$(subcategories "$1" "$2")}
+	_subcategories=${2:+$(subcategories "$1" "$2")}	
 	
 	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && grep 'root:!' /etc/passwd >&- 2>&- && {
 		_nopasswd=1
@@ -97,8 +97,8 @@ Pragma: no-cache
 	 <script type="text/javascript" src="/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
 	  <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>	  
 	    <div id="header">
-			<h3>$_categories</h3>
-			<font size=-1>$_subcategories</font>
+			<div id=categories>$_categories</div>
+			<div id=subcategories>$_subcategories</div>
 		</div>
 								<div id="short-status">
 					<h3><strong>Status:</strong></h3>
