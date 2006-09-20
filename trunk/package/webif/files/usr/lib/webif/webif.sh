@@ -97,22 +97,18 @@ Pragma: no-cache
 	 <script type="text/javascript" src="/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
 	  <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>	  
 	    <div id="header">
-	        <div id="header-title">
-				<div id="firmware-title"><h1>$_firmware_name Management Console</h1>
-				<h3>$_firmware_subtitle</h3></div>
-				<div id="short-status">
+			$_categories
+			$_subcategories					        		
+		</div>
+								<div id="short-status">
 					<h3><strong>Status:</strong></h3>
 					<ul>
 						<li><strong>$_firmware_subtitle $_version </strong></li>
 						<li><strong>Host:</strong> $_hostname</li>						
 						<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
 						<li><strong>@TR<<Load>>:</strong> $_loadavg</li>						
-					</ul>
-				</div>
-			</div>
-			$_categories
-			$_subcategories
-		</div>
+					</ul>								
+				</div>		
 		$_form
 		<div id="content">
 			<div class="settings-block">
@@ -175,8 +171,8 @@ footer() {
 			</div>
 			<hr width="40%" />
 		</div>
-		<br />
-		<div id="save">
+		<br />	
+		<div id="save">				
 			<div class="page-save">
 				<div>
 					$_savebutton
