@@ -5,6 +5,8 @@
 #
 rm /www/cgi-bin/webif/wan.sh
 rm /www/cgi-bin/webif/lan.sh
+# old name
+rm /www/cgi-bin/webif/wan_lan.sh
 
 #
 # earlier versions of the x-wrt webif qos-config.sh would create a 'dummy'
