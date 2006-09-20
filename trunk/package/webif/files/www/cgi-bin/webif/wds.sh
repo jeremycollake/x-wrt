@@ -35,7 +35,30 @@ EOF
 	}
 fi
 
-header "Network" "WDS" "@TR<<WDS Configuration>>" '' "$SCRIPT_NAME"
+header "Network" "WDS" "@TR<<WDS Configuration>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
+
+cat <<EOF
+<script type="text/javascript" src="/webif.js"></script>
+<script type="text/javascript">
+<!--
+function modechange()
+	if (isset('wdsmode','bridged'))
+	{
+		set_visible('wdsbridgeform', isset('wdsmode','bridged');
+		hide('wdsp2pform');
+	}
+	if (isset('wdsmode','p2p'))
+	{
+		set_visible('wdsp2pform', isset('wdsmode','p2p');
+		hide('wdsbridgeform');
+	}
+	hide('save');
+	show('save');
+}
+-->
+</script>
+EOF
+
 
 awk -v "name=@TR<<MAC Address>>" \
     -v "interface=@TR<<Bridge>>" \
@@ -61,19 +84,36 @@ BEGIN{
 EOF
 
 display_form <<EOF
+onchange|modechange
+
+
 start_form|@TR<<WDS Configuration>>
 field|@TR<<WDS>>
 text|wds_mac|$FORM_wds_mac
-select|wdsmode|$FORM_macmode
+
+select|wdsmode|$FORM_wdsmode
 option|bridged|@TR<<Bridged>>
 option|p2p|@TR<<Point To Point>>
+
 helpitem|WDS
 helptext|Helptext WDS#This page does not work yet!!!!!!
+end_form
 
+start_form|@TR<<WDS Bridge Configuration>>|wdsbridgeform|hidden
+field|@TR<<WDS Bridge>>
+select|wdsbridge|$FORM_wdsbridge
+option|lan|@TR<<LAN>>
+option|wan|@TR<<WAN>>
+option|wifi|@TR<<WIFI>>
+end_form
+
+start_form|@TR<<WDS P2P Configuration>>|wdsp2pform|hidden
+field|@TR<<WDS P2P>>
 end_form
 
 start_form|@TR<<Automatic WDS>>
 field|@TR<<Automatic WDS>>
+
 select|lazywds|$FORM_lazywds
 option|1|@TR<<Enabled>>
 option|0|@TR<<Disabled>>
