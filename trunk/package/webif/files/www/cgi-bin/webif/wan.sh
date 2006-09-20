@@ -126,7 +126,7 @@ text|pptp_server_ip|$FORM_pptp_server_ip"
 }
 
 
-header "Network" "WAN" "@TR<<WAN Configuration>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
+header "Network" "WAN/LAN" "@TR<<WAN/LAN Configuration>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
 
 cat <<EOF
 <script type="text/javascript" src="/webif.js "></script>
@@ -265,5 +265,5 @@ EOF
 
 footer ?>
 <!--
-##WEBIF:name:Network:100:WAN
+##WEBIF:name:Network:100:WAN/LAN
 -->
