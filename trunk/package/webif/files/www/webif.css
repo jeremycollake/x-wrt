@@ -52,26 +52,28 @@ option {
 #header {
 	position: relative;
 	width: 100%;
+	padding-top: 1.8em;
+	padding-bottom: 1em;
 }
 
-#header-title {
-	padding-top: 2em;
-	padding-bottom: 0.2em;
+#short-status {
+	position: relative;	
+	left: 1em;
+	line-height: 1.2em;	
+	padding-bottom:	0.2em;
+	padding-top:	1.0em;
+	padding-right:	2.0em;
+	float: right;
 }
 
 #openwrt-title {
 	position: relative;
 	float: left;
 	left: 1em;
-	top: 0.7em;
+	top: 0.7em;	
 }
 
-#short-status {
-	position: relative;
-	right: 1em;
-	line-height: 1.2em;
-	padding-bottom:	0.2em;
-}
+
 
 #mainmenu,
 #submenu {
@@ -206,15 +208,21 @@ dt,
 	font-weight: bold;
 }
 
-
+#save .footer-info {
+	font-weight: bold;
+	font-size: 1.4em;
+}
+#save .footer-info2 {
+	font-size: 1.2em;
+}
 
 #openwrt-title h1 {
-	font-size: 2.8em;
+	font-size: 1.4em;
 }
 
 
 #short-status ul {
-	font-size: 0.8em;
+	font-size: 0.8em;	
 }
 
 #mainmenu h3,
@@ -254,6 +262,13 @@ dt,
 	color: #fff;
 }
 
+#firmwareinfo
+#firmware-title
+#firmware-subtitle
+{
+	color: #fff;
+}
+
 #header-title,
 #save .apply div {
 	background-color: #3D5C7A;
@@ -283,6 +298,10 @@ dt,
 
 #submenu a:hover {
 	color: #FB0;
+}
+
+#short-status {
+	color:  #7590AE;
 }
 
 #content .settings-block .settings .settings-title {
