@@ -183,8 +183,8 @@ text|wan_netmask|$FORM_wan_netmask
 field|@TR<<Default Gateway>>|gateway|hidden
 text|wan_gateway|$FORM_wan_gateway
 $PPTP_SERVER_OPTION
-helpitem|IP Settings
-helptext|Helptext IP Settings#IP Settings are optional for DHCP and PPTP. If you set them, they are used as defaults in case the DHCP server is unavailable.
+helpitem|WAN IP Settings
+helptext|Helptext WAN IP Settings#IP Settings are optional for DHCP and PPTP. If you set them, they are used as defaults in case the DHCP server is unavailable.
 end_form
 start_form|@TR<<DNS Servers>>|dns|hidden
 listedit|dns|$SCRIPT_NAME?wan_proto=static&|$FORM_dns|$FORM_dnsadd
