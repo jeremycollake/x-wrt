@@ -306,7 +306,9 @@ option|ap|@TR<<Access Point>>
 option|sta|@TR<<Client>>
 option|wet|@TR<<Client>> (@TR<<Bridge>>)
 option|adhoc|@TR<<Ad-Hoc>>
-#helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration#head-7126c5958e237d603674b3a9739c9d23bdfdb293
+helpitem|WLAN Mode
+helptext|HelpText WLAN Mode#This sets the operation mode of your wireless network. Selecting 'Client (Bridge)' will not change your network interface settings. It will only set some parameters in the wireless driver that allow for limited bridging of the interface.
+helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration#head-7126c5958e237d603674b3a9739c9d23bdfdb293
 
 field|@TR<<Wireless Mode#Wireless Mode>>
 select|gmode|$FORM_gmode
@@ -322,7 +324,8 @@ field|@TR<<G-mode Protection#G-mode Protection>>|||Set this in a mixed network w
 select|gmode_protection|$FORM_gmode_protection
 option|1|@TR<<Enabled>>
 option|0|@TR<<Disabled>>
-
+helpitem|G-mode Protection
+helptext|HelpText G-mode Protection#Set this in a mixed network when some stations can not hear.
 end_form
 start_form|@TR<<Encryption Settings>>
 field|@TR<<Encryption Type>>|||WPA (RADIUS) is only supported in Access Point mode. WPA (PSK) does not work in Ad-Hoc mode.
@@ -331,6 +334,8 @@ option|off|@TR<<Disabled>>
 option|wep|WEP
 option|psk|WPA (@TR<<PSK>>)
 option|wpa|WPA (RADIUS)
+helpitem|Encryption Type
+helptext|HelpText Encryption Type#WPA (RADIUS) is only supported in Access Point mode. WPA (PSK) does not work in Ad-Hoc mode.
 field|@TR<<WPA Mode>>|wpa_support|hidden
 checkbox|wpa1|$FORM_wpa1|wpa1|WPA1
 checkbox|wpa2|$FORM_wpa2|wpa2|WPA2
