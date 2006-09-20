@@ -98,7 +98,7 @@ Pragma: no-cache
 	  <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>	  
 	    <div id="header">
 			<h3>$_categories</h3>
-			$_subcategories					        		
+			<font size=-1>$_subcategories</font>
 		</div>
 								<div id="short-status">
 					<h3><strong>Status:</strong></h3>
