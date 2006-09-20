@@ -1,6 +1,12 @@
 #!/bin/sh
 
 #
+# remove old wan.sh and lan.sh (now is wan_lan.sh)
+#
+rm /www/cgi-bin/webif/wan.sh
+rm /www/cgi-bin/webif/lan.sh
+
+#
 # earlier versions of the x-wrt webif qos-config.sh would create a 'dummy'
 # /etc/qos.conf if Rudy's QoS scripts weren't installed, and then
 # forever throw up a bunch of errors since newer versions use
