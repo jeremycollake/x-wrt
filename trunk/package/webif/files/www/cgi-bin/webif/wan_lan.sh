@@ -2,7 +2,7 @@
 <? 
 . "/usr/lib/webif/webif.sh"
 
-header "Network" "WAN-LAN" "@TR<<WAN/LAN Configuration>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
+header "Network" "WAN-LAN" "@TR<<WAN-LAN Configuration>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
 
 load_settings network
 
