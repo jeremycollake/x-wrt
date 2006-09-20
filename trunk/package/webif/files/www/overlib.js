@@ -21,7 +21,7 @@
 //\  so other people can use them as well. This script is free to use, don't abuse.
 //\//////////////////////////////////////////////////////////////////////////////////
 //\mini
-//optimized copy - comments and blank lines removed from here on
+//optimized copy - comments and all formatting removed from here on
 var INARRAY=1
 var CAPARRAY=2
 var STICKY=3
