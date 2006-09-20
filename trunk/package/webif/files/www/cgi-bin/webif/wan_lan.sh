@@ -2,15 +2,17 @@
 <? 
 . "/usr/lib/webif/webif.sh"
 
+header "Network" "WAN/LAN" "@TR<<WAN/LAN Configuration>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
+
 load_settings network
 
-FORM_dns="${wan_dns:-$(nvram get wan_dns)}"
-LISTVAL="$FORM_dns"
-handle_list "$FORM_dnsremove" "$FORM_dnsadd" "$FORM_dnssubmit" 'ip|FORM_dnsadd|@TR<<DNS Address>>|required' && {
-	FORM_dns="$LISTVAL"
-	save_setting network wan_dns "$FORM_dns"
+FORM_wandns="${wan_dns:-$(nvram get wan_dns)}"
+LISTVAL="$FORM_wandns"
+handle_list "$FORM_dnsremove" "$FORM_wandnsadd" "$FORM_wandnssubmit" 'ip|FORM_dnsadd|@TR<<WAN DNS Address>>|required' && {
+	FORM_wandns="$LISTVAL"
+	save_setting network wan_dns "$FORM_wandns"
 }
-FORM_dnsadd=${FORM_dnsadd:-192.168.1.1}
+FORM_wandnsadd=${FORM_wandnsadd:-192.168.1.1}
 
 if empty "$FORM_submit"; then
 	FORM_wan_proto=${wan_proto:-$(nvram get wan_proto)}
@@ -60,7 +62,7 @@ else
 
 validate <<EOF
 ip|FORM_wan_ipaddr|@TR<<IP Address>>|$V_IP|$FORM_wan_ipaddr
-netmask|FORM_wan_netmask|@TR<<Netmask>>|$V_NM|$FORM_wan_netmask
+netmask|FORM_wan_netmask|@TR<<WAN Netmask>>|$V_NM|$FORM_wan_netmask
 ip|FORM_wan_gateway|@TR<<Default Gateway>>||$FORM_wan_gateway
 ip|FORM_pptp_server_ip|@TR<<PPTP Server IP>>|$V_PPTP|$FORM_pptp_server_ip
 EOF
@@ -126,8 +128,6 @@ text|pptp_server_ip|$FORM_pptp_server_ip"
 }
 
 
-header "Network" "WAN/LAN" "@TR<<WAN/LAN Configuration>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
-
 cat <<EOF
 <script type="text/javascript" src="/webif.js "></script>
 <script type="text/javascript">
@@ -145,13 +145,13 @@ function modechange()
 	set_visible('persist_redialperiod', v && !isset('ppp_redial', 'demand'));
 	
 	v = (isset('wan_proto', 'static') || isset('wan_proto', 'pptp') || isset('wan_proto', 'dhcp'));
-	set_visible('ip_settings', v);
-	set_visible('ipaddr', v);
-	set_visible('netmask', v);
+	set_visible('wan_ip_settings', v);
+	set_visible('wan_ipaddr', v);
+	set_visible('wan_netmask', v);
 	
 	v = isset('wan_proto', 'static');
-	set_visible('gateway', v);
-	set_visible('dns', v);
+	set_visible('wan_gateway', v);
+	set_visible('wan_dns', v);
 
 	v = isset('wan_proto', 'pptp');
 	set_visible('pptp_server',v);
@@ -175,21 +175,21 @@ $PPPOE_OPTION
 $PPTP_OPTION
 helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration#head-b62c144b9886b221e0c4b870edb0dd23a7b6acab
 end_form
-start_form|@TR<<IP Settings>>|ip_settings|hidden
+start_form|@TR<<IP Settings>>|wan_ip_settings|hidden
 field|@TR<<WAN IP Address>>|ipaddr|hidden
 text|wan_ipaddr|$FORM_wan_ipaddr
-field|@TR<<Netmask>>|netmask|hidden
+field|@TR<<Netmask>>|wan_netmask|hidden
 text|wan_netmask|$FORM_wan_netmask
-field|@TR<<Default Gateway>>|gateway|hidden
+field|@TR<<Default Gateway>>|wan_gateway|hidden
 text|wan_gateway|$FORM_wan_gateway
 $PPTP_SERVER_OPTION
 helpitem|WAN IP Settings
-helptext|Helptext WAN IP Settings#IP Settings are optional for DHCP and PPTP. If you set them, they are used as defaults in case the DHCP server is unavailable.
+helptext|Helptext WAN IP Settings#IP Settings are optional for DHCP and PPTP. They are used as defaults in case the DHCP server is unavailable.
 end_form
-start_form|@TR<<DNS Servers>>|dns|hidden
-listedit|dns|$SCRIPT_NAME?wan_proto=static&|$FORM_dns|$FORM_dnsadd
+start_form|@TR<<WAN DNS Servers>>|wan_dns|hidden
+listedit|wandns|$SCRIPT_NAME?wan_proto=static&|$FORM_wandns|$FORM_wandnsadd
 helpitem|Note
-helptext|Helptext DNS save#You should save your settings on this page before adding/removing DNS servers
+helptext|Helptext WAN DNS save#You should save your settings on this page before adding/removing DNS servers
 end_form
 
 start_form|@TR<<PPP Settings>>|ppp_settings|hidden
@@ -215,13 +215,13 @@ end_form
 EOF
 
 
-FORM_dns="${lan_dns:-$(nvram get lan_dns)}"
-LISTVAL="$FORM_dns"
-handle_list "$FORM_dnsremove" "$FORM_dnsadd" "$FORM_dnssubmit" 'ip|FORM_dnsadd|@TR<<DNS Address>>|required' && {
-	FORM_dns="$LISTVAL"
-	save_setting network lan_dns "$FORM_dns"
+FORM_landns="${lan_dns:-$(nvram get lan_dns)}"
+LISTVAL="$FORM_landns"
+handle_list "$FORM_dnsremove" "$FORM_landnsadd" "$FORM_landnssubmit" 'ip|FORM_dnsadd|@TR<<DNS Address>>|required' && {
+	FORM_landns="$LISTVAL"
+	save_setting network lan_dns "$FORM_landns"
 }
-FORM_dnsadd=${FORM_dnsadd:-192.168.1.1}
+FORM_landnsadd=${FORM_landnsadd:-192.168.1.1}
 
 if empty "$FORM_submit"; then 
 	FORM_lan_ipaddr=${lan_ipaddr:-$(nvram get lan_ipaddr)}
@@ -254,10 +254,10 @@ helptext|Helptext Netmask#This bitmask indicates what addresses are included in 
 field|@TR<<Default Gateway>>
 text|lan_gateway|$FORM_lan_gateway
 end_form
-start_form|@TR<<DNS Servers>>
-listedit|dns|$SCRIPT_NAME?|$FORM_dns|$FORM_dnsadd
+start_form|@TR<<LAN DNS Servers>>
+listedit|landns|$SCRIPT_NAME?|$FORM_landns|$FORM_landnsadd
 helpitem|Note
-helptext|Helptext DNS save#You need save your settings on this page before adding/removing DNS servers
+helptext|Helptext LAN DNS save#You need save your settings on this page before adding/removing DNS servers
 end_form
 EOF
 
