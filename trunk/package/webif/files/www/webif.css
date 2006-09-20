@@ -57,12 +57,11 @@ option {
 }
 
 #short-status {
-	position: relative;	
-	left: 1em;
+	position: relative;		
 	line-height: 1.2em;	
-	padding-bottom:	0.2em;
-	padding-top:	1.0em;
-	padding-right:	2.0em;
+	padding-top: 1.8em;
+	padding-bottom: 1em;
+	padding-right: 1.0em;
 	float: right;
 }
 
@@ -258,13 +257,6 @@ dt,
 #submenu a,
 #save a,
 #save .page-save
-{
-	color: #fff;
-}
-
-#firmwareinfo
-#firmware-title
-#firmware-subtitle
 {
 	color: #fff;
 }
