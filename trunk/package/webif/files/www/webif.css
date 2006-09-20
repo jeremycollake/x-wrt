@@ -31,7 +31,6 @@ li.about {
 hr,
 #submenu h3,
 #short-status h3,
-#progressbar,
 #content .settings-block .settings .settings-help h3 {
 	display: none;
 }
@@ -60,11 +59,11 @@ option {
 	padding-bottom: 0.2em;
 }
 
-#firmware-title {	
+#openwrt-title {
 	position: relative;
 	float: left;
 	left: 1em;
-	top: 0.9em;
+	top: 0.7em;
 }
 
 #short-status {
@@ -106,7 +105,7 @@ option {
 
 
 #content {
-	padding-top: 3em;
+	padding-top: 2em;
 	margin-left: 1em;
 	padding-bottom: 6em;
 }
@@ -122,7 +121,7 @@ option {
 #content .settings-block .settings {
 	clear: both;
 	margin-left: 1.5em;
-	padding-right: 1em;	
+	padding-right: 1em;
 }
 
 #content .settings-block .settings-block-title,
@@ -142,7 +141,6 @@ option {
 #content .settings-block .settings .settings-content input {
 	margin-top: 0.8em;
 }
-
 
 #content .settings-block .settings .settings-help {
 	padding: 0.4em;
@@ -198,25 +196,22 @@ th {
 /* font */
 body {
 	font-family: Verdana, Helvetica, sans-serif;
-	font-size: 0.9em;
+	font-size: 1.0em;
 }
 
 dt,
 .selected-maincat,
 #mainmenu a:active,
 #submenu a {
-	font-size: 1.1em;
 	font-weight: bold;
 }
 
-#firmware-title h1 {
-	font-size: 1.5em;
+
+
+#openwrt-title h1 {
+	font-size: 2.8em;
 }
 
-#firmware-title h3 {
-	font-size: 0.7em;
-	font-style: italic;
-}
 
 #short-status ul {
 	font-size: 0.8em;
@@ -228,19 +223,9 @@ dt,
 	font-size: 0.9em;
 }
 
-#mainmenu a
-{
-  font-size: 0.9em;
-  text-decoration: none;
-}
-
-#submenu a
-{
-	font-size: 0.8em;
-	text-decoration: none;
-}
-
-#save a {	
+#mainmenu a,
+#submenu a,
+#save a {
 	text-decoration: none;
 }
 
@@ -257,6 +242,7 @@ dt,
 	font-size: 1.1em;
 }
 
+
 /* color */
 
 #header-title,
@@ -265,12 +251,12 @@ dt,
 #save a,
 #save .page-save
 {
-	color: #444444;	
+	color: #fff;
 }
+
 #header-title,
 #save .apply div {
-	color: rgb(193,102,90);
-	background-color: #FAF9F6;
+	background-color: #3D5C7A;
 }
 
 #mainmenu {
@@ -279,41 +265,29 @@ dt,
 }
 
 #mainmenu a {
-	color: rgb(193,102,90);
+	color: #C3C4D2;
 }
 
 #mainmenu a:hover {
 	color: rgb(193,102,90);
 }
 
-#save div {  	
-	background-color: #1177DD;
-}
-
-#submenu {		
-	background-color: #1177DD;
-}
-
-#submenu a {
-  color: #FFFFFF;
+#submenu,
+#save div {
+	background-color: #7590AE;
 }
 
 #content .settings-block .settings-block-title h2 {
-	color: #222255;  
+	color: #7590AE;
 }
 
-#submenu a:hover {	
+#submenu a:hover {
 	color: #FB0;
 }
 
-#content .settings-block {
-  color: #000;
-  background-color: #CCCCCC;
-}
-
-#content .settings .settings-title {
+#content .settings-block .settings .settings-title {
 	color: #000;
-	background-color: #DDDDDD	
+	background-color: #CCC;
 }
 
 #save .page-save {
