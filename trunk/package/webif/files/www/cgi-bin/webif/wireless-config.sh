@@ -300,7 +300,7 @@ text|ssid|$FORM_ssid
 field|@TR<<Channel>>
 select|channel|$FORM_channel
 $F_CHANNELS
-field|@TR<<WLAN Mode#Mode>>|||This sets the operation mode of your wireless network. Selecting 'Client (Bridge)' will not change your network interface settings. It will only set some parameters in the wireless driver that allow for limited bridging of the interface.
+field|@TR<<WLAN Mode#Mode>>|||This sets the operation mode of your wireless network. 
 select|mode|$FORM_mode
 option|ap|@TR<<Access Point>>
 option|sta|@TR<<Client>>
