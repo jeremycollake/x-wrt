@@ -97,18 +97,23 @@ Pragma: no-cache
 	 <script type="text/javascript" src="/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
 	  <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>	  
 	    <div id="header">
-			<div id=categories>$_categories</div>
-			<div id=subcategories>$_subcategories</div>
-		</div>
-								<div id="short-status">
+	    				
+	    				<div id="openwrt-title">
+	    				<h1>$_firmware_name</h1>
+	    				<h3>$_firmware_subtitle $_version</h3>
+	    			   	</div>	 		
+	    				<div id="short-status">
 					<h3><strong>Status:</strong></h3>
-					<ul>
-						<li><strong>$_firmware_subtitle $_version </strong></li>
+					<ul>						
 						<li><strong>Host:</strong> $_hostname</li>						
 						<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
 						<li><strong>@TR<<Load>>:</strong> $_loadavg</li>						
-					</ul>								
+					</ul>	
+													
 				</div>		
+			<div id=categories>$_categories</div>
+			<div id=subcategories>$_subcategories</div>
+		</div>
 		$_form
 		<div id="content">
 			<div class="settings-block">
