@@ -176,7 +176,7 @@ $PPTP_OPTION
 helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration#head-b62c144b9886b221e0c4b870edb0dd23a7b6acab
 end_form
 start_form|@TR<<IP Settings>>|wan_ip_settings|hidden
-field|@TR<<WAN IP Address>>|ipaddr|hidden
+field|@TR<<WAN IP Address>>|wan_ipaddr|hidden
 text|wan_ipaddr|$FORM_wan_ipaddr
 field|@TR<<Netmask>>|wan_netmask|hidden
 text|wan_netmask|$FORM_wan_netmask
