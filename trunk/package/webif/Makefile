@@ -31,6 +31,7 @@ $(PKG_BUILD_DIR)/.built:
 $(IPKG_WEBIF): 
 	chmod -R 755 ./files/*
 	cp -a ./files/* $(IDIR_WEBIF)/
+	sh ./embed_rev.sh $(IDIR_WEBIF)/www/cgi-bin/webif/*
 	install -d $(IDIR_WEBIF)/usr/bin
 	install -m0755 $(PKG_BUILD_DIR)/webif-page $(IDIR_WEBIF)/usr/bin/webif-page
 	install -m0755 $(PKG_BUILD_DIR)/bstrip $(IDIR_WEBIF)/usr/bin/bstrip
