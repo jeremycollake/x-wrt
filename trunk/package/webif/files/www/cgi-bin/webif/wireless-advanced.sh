@@ -122,7 +122,7 @@ end_form
 
 start_form|@TR<<Settings>>
 
-field|@TR<<Automatic WDS>>
+field|@TR<<Automatic WDS>>|||Automatic WDS causes the AP to accept connections from any WDS nodes without them having to be added to the WDS MAC address list.
 select|lazywds|$FORM_lazywds
 option|1|@TR<<Enabled>>
 option|0|@TR<<Disabled>>
