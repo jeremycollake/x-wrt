@@ -1,7 +1,6 @@
 #!/usr/bin/webif-page
 <? 
 . "/usr/lib/webif/webif.sh"
-
 header "Network" "WAN-LAN" "@TR<<WAN-LAN Configuration>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
 
 load_settings network
@@ -175,10 +174,10 @@ $PPPOE_OPTION
 $PPTP_OPTION
 helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration#head-b62c144b9886b221e0c4b870edb0dd23a7b6acab
 end_form
-start_form|@TR<<WAN IP Settings>>|wan_ip_settings|hidden
-field|@TR<<WAN IP Address>>|wan_ipaddr|hidden
+start_form|@TR<<IP Settings>>|wan_ip_settings|hidden
+field|@TR<<WAN IP Address>>|ipaddr|hidden
 text|wan_ipaddr|$FORM_wan_ipaddr
-field|@TR<<Netmask>>|wan_netmask|hidden
+field|@TR<<Netmask>>|wan_netmask|hidden||For those who do not know what a bitmask is, just think of 255 as match this part and 0 as any number here.
 text|wan_netmask|$FORM_wan_netmask
 field|@TR<<Default Gateway>>|wan_gateway|hidden
 text|wan_gateway|$FORM_wan_gateway
@@ -260,8 +259,6 @@ helpitem|Note
 helptext|Helptext LAN DNS save#You need save your settings on this page before adding/removing DNS servers
 end_form
 EOF
-
-
 
 footer ?>
 <!--
