@@ -5,7 +5,7 @@ header "Info" "About" "@TR<<About>>" ''
 ?>
 
 <h3><font color=blue>webif</font><font color=red>^2</font> - @TR<< Administrative Console>></h3>
-@TR<<version>>: 0.01 alpha 09/12/06
+@TR<<version>>: Alpha development - revision __SVN_REVISION__
 <font size=-1>
 <table><tbody>
 <tr><th>OpenWrt Contributors (sorted by name):</th></tr>
