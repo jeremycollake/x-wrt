@@ -8,6 +8,8 @@ if [ $# -lt 1 ]; then
 	echo " Invalid usage. Must supply one or more files."
 	exit 1
 fi
+# must up to be at current rev
+svn up
 revision_number=$(svn info | grep Revision | cut -c11-)
 tempfile=$(mktemp)
 echo " Revision number is $revision_number"
