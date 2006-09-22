@@ -96,12 +96,12 @@ EOF
 display_form <<EOF
 onchange|modechange
 start_form|@TR<<Wireless LAN Enable/Disable>>
-field|@TR<<Split Wireless from the switch bridge>>
+field|@TR<<Split Wireless From Switch Bridge>>
 select|wifi_enable|$FORM_wifi_enable
 option|none|@TR<<Disable>>
 option|static|@TR<<Enable>>
 helpitem|Enable/Disable
-helptext|Helptext Enable/Disable#When this is enabled (after you save the settings) it will remove your wireless interface from the bridge with your switch and put it in its own bridge on a seperate subnet.
+helptext|Helptext Enable/Disable#When this is enabled it will remove your wireless interface from the bridge with your switch and put it in its own bridge on a seperate subnet.
 end_form
 start_form|@TR<<Wireless LAN Configuration>>|wifi_config|hidden
 field|@TR<<IP Address>>
