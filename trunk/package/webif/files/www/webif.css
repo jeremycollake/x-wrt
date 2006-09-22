@@ -76,8 +76,6 @@ option {
 	padding-top: 1em;
 }
 
-
-
 #submenu {
 	position: absolute;
 	width: 100%;
@@ -202,6 +200,16 @@ th {
 	text-align: right;
 }
 
+.helpitem
+{
+ 	font-size: 0.9em;
+}
+
+.helptext
+{
+ 	font-size: 0.6em;
+}
+
 /* font */
 body {
 	font-family: Verdana, Helvetica, sans-serif;
@@ -312,7 +320,6 @@ dt,
 	color: #7590AE;
 	background-color: #FFF;
 }
-
 
 #content .settings-block
 {
