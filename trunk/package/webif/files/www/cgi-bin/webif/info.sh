@@ -7,29 +7,27 @@ header "Info" "Firmware Info" "@TR<<Firmware Info>>"
 <pre><?
 _version=$(nvram get firmware_version)
 _kversion="$( cat /proc/version )"
-_date="$(date)"
 _mac="$(/sbin/ifconfig eth0 | grep HWaddr | cut -b39-)"
-sed -e 's/&/&amp;/g' < /etc/banner
 cat <<EOF
 </pre>
 <br />
 <br />
-<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="left">
+<table style="width: 90%; text-align: left;" border="0" cellspacing="10" align="left">
 <tbody>
 	<tr>
-		<td>@TR<<Firmware Version>></td>
-		<td>$_version</td>
+		<td><strong>@TR<<Firmware>></strong></td>
+		<td>$_firmware_name - $_firmware_subtitle $_version</td>
 	</tr>
 	<tr>
-		<td>@TR<<Kernel Version>></td>
+		<td><strong>@TR<<Mgmt Console>></strong></td>
+		<td>webif^2 r__SVN_REVISION__</td>
+	</tr>		
+	<tr>
+		<td><strong>@TR<<Kernel>></strong></td>
 		<td>$_kversion</td>
 	</tr>
 	<tr>
-		<td>@TR<<Current Date/Time>></td>
-		<td>$_date</td>
-	</tr>
-	<tr>
-		<td>@TR<<MAC Address>></td>
+		<td><strong>@TR<<MAC>></strong></td>
 		<td>$_mac</td>
 	</tr>
 </tbody>
