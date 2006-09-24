@@ -160,7 +160,7 @@ else
 		$QUALITY_STRING
 		string|<tr><td><strong>Signal</strong> $SIGNAL_DBM dBm <strong>Noise</strong> $NOISE_DBM dBm</tr></td>
 		#string|<tr><td></tr></td>
-		progressbar|Signal Integrity|<strong>Signal Integrity</strong> $SIGNAL_INTEGRITY dBm|40%|$(expr 100 + $SIGNAL_INTEGRITY)|#CCFFCC|#000000
+		progressbar|Signal Integrity|<strong>SNR</strong> $SIGNAL_INTEGRITY dBm|40%|$(expr 100 + $SIGNAL_INTEGRITY)|#CCFFCC|#000000
 		string|<tr><td><br /></td></tr>"
 		
 	rm -f "$tempfile"_"${current}"
