@@ -66,8 +66,7 @@ end_form"
 <!--
 function pageload()
 {	
-	hide('save');
-	show('save');
+ 	/* don't do anything */
 }
 -->
 </script>
