@@ -2,11 +2,32 @@
 <? 
 . /usr/lib/webif/webif.sh
 header "Info" "About" "@TR<<About>>" '' ''
+# __SVN_REVISION__ is replaced by revision by preprocessor at build
+this_revision=__SVN_REVISION__
+if [ -n "$FORM_update_check" ]; then	  	
+	tmpfile=$(mktemp "/tmp/.webif.XXXXXX")
+	wget http://ftp.berlios.de/pub/xwrt/.version -O $tmpfile 2> /dev/null >> /dev/null
+	cat $tmpfile | grep "doesn't exist" 2>&1 >> /dev/null
+	if [ $? = 0 ]; then		
+		revision_text="<div id=\"update-error\">ERROR CHECKING FOR UPDATE</div>"
+	else
+		latest_revision=$(cat $tmpfile)
+		if [ "$this_revision" != "$latest_revision" ]; then
+ 			revision_text="<div id=\"update-available\">webif^2 update available: r$latest_revision</div>"
+ 		else
+ 			revision_text="<div id=\"update-unavailable\">You have the latest webif^2: r$latest_revision</div>"	 		
+ 		fi
+fi
+	fi
+	rm -f "$tmpfile"	 
+ 	
 ?>
 
 <div class="webif-name-title">webif^2</div></font>
 <div class="webif-name-subtitle">Part of the end user extensions to OpenWrt by the X-Wrt project.</div>
-<div class="webif-name-version">@TR<<version>>: Alpha development - revision __SVN_REVISION__</div>
+<div class="webif-name-version">Alpha development - revision __SVN_REVISION__</div>
+<form enctype="multipart/form-data" method="post"><input type="submit" value=" Check for webif^2 update " name="update_check" /></form>
+<? echo $revision_text ?>
 <div class="webif-contributors">
 <table><tbody>
 <tr><th>OpenWrt Contributors (sorted by name):</th></tr>
