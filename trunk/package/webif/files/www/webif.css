@@ -132,14 +132,15 @@ option {
 }
 
 #content .settings-block .settings-block-title,
-#content .settings-block .settings .settings-title {
+#content .settings-block .settings .settings-title .settings-block-title {
 	padding: 0.2em;
 }
 
 #content .settings-block .settings .settings-content {
 	padding-top: 1em;
 	margin-left: 1em;
-	float: left;
+	position: relative;
+	float: left;	
 	width: 58%;
 	padding-bottom: 0.5em;
 }
@@ -161,7 +162,7 @@ option {
 }
 
 #save {
-	position: absolute;
+	position: relative;
 	bottom: 0;
 	width: 100%;
 }
