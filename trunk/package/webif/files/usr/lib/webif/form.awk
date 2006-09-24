@@ -38,7 +38,7 @@ $1 ~ /^start_form/ {
 	if ($4 == "hidden") field_opts = field_opts " style=\"display: none\""
 	start_form($2, field_opts);
 	print "<table width=\"100%\" summary=\"Settings\">"
-	form_help = ""
+	form_help = "<div class=helpform>"
 	form_help_link = ""
 }
 $1 ~ /^field/ {
@@ -125,8 +125,8 @@ $1 ~ /^text$/ { print "<input id=\"" $2 "\" type=\"text\" name=\"" $2 "\" value=
 $1 ~ /^password/ { print "<input id=\"" $2 "\" type=\"password\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
 $1 ~ /^upload/ { print "<input id=\"" $2 "\" type=\"file\" name=\"" $2 "\"/>" }
 $1 ~ /^submit/ { print "<input type=\"submit\" name=\"" $2 "\" value=\"" $3 "\" />" }
-$1 ~ /^helpitem/ { form_help = form_help "<div class=\"helpitem\"><dt>@TR<<" $2 ">>: </dt></div>" }
-$1 ~ /^helptext/ { form_help = form_help "<div class=\"helptext\"><dd>@TR<<" $2 ">> </dd></div>" }
+$1 ~ /^helpitem/ { form_help = form_help "<div class=\"helpitem\">@TR<<" $2 ">>:</div>" }
+$1 ~ /^helptext/ { form_help = form_help "<div class=\"helptext\">@TR<<" $2 ">></div>" }
 $1 ~ /^helplink/ { form_help_link = "<div class=\"more-help\"><a href=\"" $2 "\">@TR<<more...>></a></div>" }
 
 ($1 ~ /^checkbox/) || ($1 ~ /^radio/) {
@@ -137,6 +137,7 @@ $1 ~ /^end_form/ {
 	if (field_open == 1) print "</td></tr>"
 	field_open = 0
 	print "</table>"
+	form_help = form_help "</div>"
 	end_form(form_help, form_help_link);
 	form_help = ""
 	form_help_link = ""
