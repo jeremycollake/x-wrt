@@ -41,7 +41,7 @@ cat <<EOF
 		<td>webif^2 r__SVN_REVISION__</td>
 <td><form enctype="multipart/form-data" method="post"><input type="submit" value=" Check for webif update " name="update_check" /></form></td>
 </tr>
-<tr><td>$revision_text</td></tr>		
+<tr><td></td><td>$revision_text</td></tr>		
 	<tr>
 		<td><strong>@TR<<Kernel>></strong></td>
 		<td>$_kversion</td>
