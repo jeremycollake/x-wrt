@@ -152,7 +152,7 @@ option {
 #content .settings-block .settings .settings-help {
 	padding: 0.4em;
 	padding-top: 1.4em;
-	margin-left: 42%;
+	margin-left: 60%;
 }
 
 #content .settings-block .settings .settings-help .more-help {
@@ -194,6 +194,13 @@ th {
 	text-align: left;
 }
 
+.helpform
+{
+	position: relative;
+ 	float: left;
+}
+
+
 #content .settings-block .settings .settings-help .more-help,
 #save,
 #short-status {
@@ -202,7 +209,9 @@ th {
 
 .helpitem
 {
+	font-weight: bold;
  	font-size: 0.9em;
+ 	
 }
 
 .helptext
