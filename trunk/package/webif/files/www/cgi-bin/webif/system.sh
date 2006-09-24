@@ -22,16 +22,16 @@
 #   none
 #
 
-load_settings system
-load_settings nvram
-load_settings webif
+load_settings "system"
+load_settings "webif"
 
 #####################################################################
 # defaults
 OVERCLOCKING_DISABLED=1 # off for now
 
 #####################################################################
-header "System" "Settings" "@TR<<System Settings>>" 'onLoad="modechange()"' "$SCRIPT_NAME"
+header "System" "Settings" "@TR<<System Settings>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
+
 
 #####################################################################
 # todo: CPU_MODEL not actually used atm (except in building version)
@@ -73,9 +73,9 @@ EOF
 		save_setting system ntp_server "$FORM_ntp_server"
 		is_bcm947xx && {				  
 			case "$FORM_boot_wait" in
-				on|off) save_setting nvram boot_wait "$FORM_boot_wait";;
+				on|off) save_setting system boot_wait "$FORM_boot_wait";;
 			esac			
-			save_setting nvram wait_time "$FORM_wait_time"						
+			save_setting system wait_time "$FORM_wait_time"						
 			if [ "$OVERCLOCKING_DISABLED" = "0" ]; then		  	
 		  		save_setting nvram clkfreq "$FORM_clkfreq"		  		
 		  	fi
@@ -179,7 +179,7 @@ function modechange()
 	else
 	{
 		document.getElementById('wait_time').disabled = true;	
-	}
+	}	
 }
 </script>
 EOF
