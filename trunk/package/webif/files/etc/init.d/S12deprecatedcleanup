@@ -6,7 +6,7 @@
 rm /www/cgi-bin/webif/wan.sh 	  # merged into wan-lan.sh
 rm /www/cgi-bin/webif/lan.sh	  # merged into wan-lan.sh
 rm /www/cgi-bin/webif/wan_lan.sh  # old name
-rm /www/cgi-bin/webif/firmware.sh # now merged with info.sh
+rm /www/cgi-bin/webif/hardwarestats.sh # now merged with info.sh
 
 #
 # early alpha versions of the x-wrt webif qos-config.sh would create a 'dummy'
