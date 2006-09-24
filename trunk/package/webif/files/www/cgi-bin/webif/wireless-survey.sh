@@ -106,7 +106,7 @@ else
 	fi				
 	####################################################
 	# parse out MAC	
-	address_pre=$(sed '2,$ d' < "$tempfile"_"${current}" | sed s/'Cell'//g | sed s/'Address'//g | sed s/'-'//g)	
+	address_pre=$(sed '2,$ d' < "$tempfile"_"${current}" | sed -e s/'Cell'//g -e s/'Address'//g -e s/'-'//g)	
 	count=0
 	for i in $address_pre; do
 		case $count in
@@ -119,15 +119,15 @@ else
 
 	####################################################
 	# parse out essid
-	ESSID=$(grep -i "ESSID" < "$tempfile"_"${current}" | sed s/'ESSID:'//g | sed s/'"'//g)
+	ESSID=$(grep -i "ESSID" < "$tempfile"_"${current}" | sed -e s/'ESSID:'//g -e s/'"'//g)
 	
 	####################################################
 	# parse out channel
-	CHANNEL_ID=$(grep -i "Channel" < "$tempfile"_"${current}" | sed s/'Channel:'//g | sed s/' '//g)
+	CHANNEL_ID=$(grep -i "Channel" < "$tempfile"_"${current}" | sed -e s/'Channel:'//g -e s/' '//g)
 
 	####################################################
 	# parse out signal
-	quality_pre=$(grep -i "Quality" < "$tempfile"_"${current}" | sed s/'Quality:'//g | sed s/'Signal level:'//g  | sed s/'dBm'//g | sed s/'Noise level:'//g)
+	quality_pre=$(grep -i "Quality" < "$tempfile"_"${current}" | sed -e s/'Quality:'//g -e s/'Signal level:'//g  -e s/'dBm'//g -e s/'Noise level:'//g)
 	count=0
 	for i in $quality_pre; do
 		case $count in
