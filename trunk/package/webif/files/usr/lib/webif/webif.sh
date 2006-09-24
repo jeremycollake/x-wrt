@@ -85,13 +85,14 @@ Content-Type: text/html
 Pragma: no-cache
 
 
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <?xml version="1.0" encoding="@TR<<Encoding|ISO-8859-1>>"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 	<head>
     	<title>@TR<< $_firmware_name Administrative Console>></title>
 		<link rel="stylesheet" type="text/css" href="/webif.css" />
 		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
+		<meta http-equiv="expires" content="Mon, 01 Jan 1901 00:00:01 GMT" />
 	</head>
 	<body $4><div id="container">
 	 <script type="text/javascript" src="/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
