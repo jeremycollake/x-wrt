@@ -130,11 +130,11 @@ fi
 ####################################################################
 # add headers for the port numbers
 #
-FORM_port_headers="string|<tr><th>PORT</th>"
+FORM_port_headers="string|<tr><th>&nbsp</th>"
 for current_port in $(seq $PORT_BASE $MAX_PORT); do	
 	FORM_port_headers="${FORM_port_headers}<th>$current_port</th>"
 done
-FORM_port_headers="${FORM_port_headers}</tr>"
+FORM_port_headers="${FORM_port_headers}<td><- port</td></tr>"
 
 ####################################################################
 # now create the vlan rows, one for each set vlan variable, even
