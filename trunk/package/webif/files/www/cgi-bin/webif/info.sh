@@ -1,12 +1,13 @@
 #!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
-header "Info" "Firmware" "@TR<<Firmware Info>>" '' ''
+header "Info" "System Information" "@TR<<System Information>>" '' ''
 
 # __SVN_REVISION__ is replaced by revision by preprocessor at build
 this_revision=__SVN_REVISION__
 
-if [ -n "$FORM_update_check" ]; then	  	
+! empty $FORM_update_check &&
+{	  	
 	tmpfile=$(mktemp "/tmp/.webif.XXXXXX")
 	wget http://ftp.berlios.de/pub/xwrt/.version -O $tmpfile 2> /dev/null >> /dev/null
 	cat $tmpfile | grep "doesn't exist" 2>&1 >> /dev/null
@@ -19,9 +20,9 @@ if [ -n "$FORM_update_check" ]; then
  		else
  			revision_text="<div id=\"update-unavailable\">You have the latest webif^2: r$latest_revision</div>"	 		
  		fi
-fi
 	fi
 	rm -f "$tmpfile"	 
+}
  	
 ?>
 <pre><?
@@ -50,13 +51,49 @@ cat <<EOF
 		<td><strong>@TR<<MAC>></strong></td>
 		<td>$_mac</td>
 	</tr>
-</tbody>
-</table>
-<br />
 EOF
 
+#
+# board id checks go here.. todo: much work remains here
+#
+while empty $board_type; do
+	strings /dev/mtdblock/0 | grep 'W54G' 2>&1 >> /dev/null
+	if [ $? = "0" ]; then
+ 		board_type="WRT54G"
+ 		#board_version="v??"
+ 		break
+	fi	
+done
+empty $board_type && board_type="-id code not done for this board-";
+
+?>
+	<tr>
+		<td><strong>@TR<<Board>></strong></td><td> <? echo $board_type && ! empty $board_version && echo $board_version ?></td>
+	</tr>
+	
+	<tr><td><br /><br /></td></tr>
+	<tr>
+		<th><b>@TR<<Statistics|CPU Info>></b></th>
+	</tr>
+	
+	<tr>
+		<td><pre><? cat /proc/cpuinfo ?></pre></td>
+	</tr>	
+	<tr><td><br /><br /></td></tr>
+	
+		<tr>
+		<th><b>@TR<<Statistics|Memory Usage>></b></th>
+	</tr>
+	<tr>
+		<td><pre><? cat /proc/meminfo ?></pre></td>
+	</tr>
+	<tr><td><br /></td></tr>
+</tbody>
+</table>
+
+<?
 footer
 ?>
 <!--
-##WEBIF:name:Info:20:Firmware
+##WEBIF:name:Info:10:System Information
 -->
