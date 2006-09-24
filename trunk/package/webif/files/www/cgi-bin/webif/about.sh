@@ -1,37 +1,22 @@
 #!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
-header "Info" "About" "@TR<<About>>" ''
+header "Info" "About" "@TR<<About>>" '' ''
 ?>
 
-<h3><font color=blue>webif</font><font color=red>^2</font> - @TR<< Administrative Console>></h3>
-@TR<<version>>: Alpha development - revision __SVN_REVISION__
-<font size=-1>
+<div class="webif-name-title">webif^2</div></font>
+<div class="webif-name-subtitle">Part of the end user extensions to OpenWrt by the X-Wrt project.</div>
+<div class="webif-name-version">@TR<<version>>: Alpha development - revision __SVN_REVISION__</div>
+<div class="webif-contributors">
 <table><tbody>
 <tr><th>OpenWrt Contributors (sorted by name):</th></tr>
 <tr><td>	
-&nbsp&nbsp florian
-</td></tr>
-<tr><td>
-&nbsp&nbsp kaloz
+&nbsp&nbsp florian, kaloz, malbon, mbm, Olli, <a href="mailto:openwrt@nbd.name">Felix Fietkau</a> (nbd), wbx
 </td></tr>  
 <tr><td>
-&nbsp&nbsp malbon
-</td></tr>  
+&nbsp&nbsp Companies/Projects: linux, Broadcom, Linksys, Squashfs, JFFS2, MTD, etc...
 <tr><td>
-&nbsp&nbsp mbm  
-</td></tr>  
-<tr><td>	
-&nbsp&nbsp Olli (parted)
-</td></tr>  
-<tr><td>
-&nbsp&nbsp <a href="mailto:openwrt@nbd.name">Felix Fietkau</a> (nbd)
-</td></tr>  
-<tr><td>
-&nbsp&nbsp wbx (now with FreeWrt) 
-</td></tr>  
-<tr><td>
-&nbsp&nbsp ... and the many nameless community contributors to OpenWrt.
+<i>&nbsp&nbsp Openwrt is the product of countless contributors from the community.</i>
 </td></tr>  
 <br />
 
@@ -68,7 +53,7 @@ Layout based on <a href="http://www.openwebdesign.org/design/1773/prosimii/">&qu
 <font size=-1>@TR<<GPL_Text|This program is free software; you can redistribute it and/or <br />modify it under the terms of the GNU General Public License <br />as published by the Free Software Foundation; either version 2 <br />of the License, or (at your option) any later version.</font> <br /> >>
 </tr></td>
 </tbody></table>
-</font>
+</div>
 <? footer ?>
 <!--
 ##WEBIF:name:Info:1:About
