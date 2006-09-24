@@ -39,7 +39,7 @@ string|FORM_log_prefix|Message Prefix||$FORM_log_prefix
     fi
 }
 
-header "System" "Syslog" '' "$SCRIPT_NAME"
+header "System" "Syslog" "@TR<<Syslog>>" ' onLoad="pageload()" ' "$SCRIPT_NAME" 
 
 prefix_fields=""
 if [ -n "$can_prefix" ]; then
@@ -60,6 +60,18 @@ text|log_mark|$FORM_log_mark
 $prefix_fields
 end_form"
 ?>
+
+<script type="text/javascript" src="/webif.js"></script>
+<script type="text/javascript">
+<!--
+function pageload()
+{	
+	hide('save');
+	show('save');
+}
+-->
+</script>
+
 
 <a href="logread.sh">View Syslog</a>
 
