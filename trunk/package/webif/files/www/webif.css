@@ -245,7 +245,7 @@ dt,
 	font-size: 1.2em;
 }
 
-#openwrt-title h1 {
+.openwrt-title h1 {
 	font-size: 1.4em;
 }
 
@@ -344,6 +344,11 @@ dt,
 	color: #FF0000;
 }
 
+.openwrt-title 
+{
+	color: #555;
+}
+
 #header-title,
 #submenu,
 #submenu a,
@@ -354,38 +359,46 @@ dt,
 }
 
 #header-title,
-#save .apply div {
+#save .apply div 
+{
 	background-color: #3D5C7A;
 }
 
-#mainmenu {
+#mainmenu 
+{
 	color: #C3C4D2;
 	background-color: #213242;
 }
 
-#mainmenu a {
+#mainmenu a 
+{
 	color: #C3C4D2;
 }
 
-#mainmenu a:hover {
+#mainmenu a:hover 
+{
 	color: rgb(193,102,90);
 }
 
 #submenu,
-#save div {
+#save div 
+{
 	background-color: #7590AE;
 }
 
-#content .settings-block .settings-block-title h2 {
+#content .settings-block .settings-block-title h2 
+{
 	color: #7590AE;
 }
 
-#submenu a:hover {
+#submenu a:hover 
+{
 	color: #FB0;
 }
 
-#short-status {
-	color: #0;
+#short-status 
+{
+	color: #555;
 	background-color: #FFF;
 }
 
@@ -401,13 +414,14 @@ dt,
 	background-color: #CCC;
 }
 
-#content .settings {
+#content .settings 
+{
 	color: #000;
 	background-color: #FFF;
 	
 }
 
-#save .page-save {
+#save .page-save 
+{
 	background-color: #FFF;
 }
-
