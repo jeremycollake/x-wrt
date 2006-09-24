@@ -26,7 +26,7 @@ fi
 <div class="webif-name-title">webif^2</div></font>
 <div class="webif-name-subtitle">Part of the end user extensions to OpenWrt by the X-Wrt project.</div>
 <div class="webif-name-version">Alpha development - revision __SVN_REVISION__</div>
-<form enctype="multipart/form-data" method="post"><input type="submit" value=" Check for webif^2 update " name="update_check" /></form>
+<form enctype="multipart/form-data" method="post"><input type="submit" value=" Check for webif update " name="update_check" /></form>
 <? echo $revision_text ?>
 <div class="webif-contributors">
 <table><tbody>
