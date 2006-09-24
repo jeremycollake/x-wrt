@@ -9,12 +9,10 @@ load_settings "cron"
 
 header "System" "Crontabs" "@TR<<Cron Tables>>" "$SCRIPT_NAME"
 
-cron_dir_text="Cron Tables Directory:<pre>$crondir</pre><br/>"
+cron_dir_text="<br/>Cron Tables Directory:<pre>$crondir</pre><br/>"
 
-for crontab in $(ls $crondir/* 2>&-); do
-    echo -n "<h3>$crontab</h3><br /><pre>"
-    cron_text='$cron_text $(cat "$crondir/$crontab")'
-    echo '</pre><br />'
+for crontab in $(ls $crondir/* 2>&-); do    
+    cron_text='<h3>$crontab</h3><br /><pre>$cron_text $(cat "$crondir/$crontab")</pre><br />'    
 done
 
 display_form <<EOF
