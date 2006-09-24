@@ -1,7 +1,6 @@
 #!/usr/bin/webif-page
 <? 
 . "/usr/lib/webif/webif.sh"
-
 ###################################################################
 # system configuration page
 #
@@ -32,7 +31,7 @@ load_settings webif
 OVERCLOCKING_DISABLED=1 # off for now
 
 #####################################################################
-header "System" "Settings" "@TR<<System Settings>>" '' "$SCRIPT_NAME"
+header "System" "Settings" "@TR<<System Settings>>" 'onLoad="modechange()"' "$SCRIPT_NAME"
 
 #####################################################################
 # todo: CPU_MODEL not actually used atm (except in building version)
@@ -51,9 +50,9 @@ if empty "$FORM_submit"; then
 	FORM_hostname="${FORM_hostname:-OpenWrt}"	
 	FORM_language="${language:-$(nvram get language)}"
 	FORM_language="${FORM_language:-default}"	
-    FORM_system_timezone="${FORM_system_timezone:-$(nvram get time_zone)}"
-    FORM_system_timezone="${FORM_system_timezone:-""}"
-    FORM_ntp_server="${ntp_server:-$(nvram get ntp_server)}"	
+    	FORM_system_timezone="${FORM_system_timezone:-$(nvram get time_zone)}"
+    	FORM_system_timezone="${FORM_system_timezone:-""}"
+    	FORM_ntp_server="${ntp_server:-$(nvram get ntp_server)}"	
 	FORM_boot_wait="${boot_wait:-$(nvram get boot_wait)}"
 	FORM_boot_wait="${FORM_boot_wait:-off}"	
 	FORM_wait_time="${wait_time:-$(nvram get wait_time)}"
@@ -171,7 +170,8 @@ cat <<EOF
 <script type="text/javascript" src="/webif.js"></script>
 <script type="text/javascript">
 
-function modechange() {	
+function modechange() 
+{	
 	if(isset('boot_wait','on'))
 	{
 		document.getElementById('wait_time').disabled = false;	
@@ -179,9 +179,7 @@ function modechange() {
 	else
 	{
 		document.getElementById('wait_time').disabled = true;	
-	}	
-	hide('save');
-	show('save');
+	}
 }
 </script>
 EOF
