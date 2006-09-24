@@ -295,7 +295,40 @@ dt,
 	font-size: 0.9em;
 }
 
+#update-available
+{
+	font-size: 0.9em;
+	font-style: italic;
+}
+
+#update-unavailable
+{
+	font-size: 0.9em;	
+	font-style: italic;
+}
+
+#update-error
+{
+	font-size: 0.9em;
+	font-style: italic;
+}
+
 /* color */
+
+#update-available
+{
+	color: #FF0000;	
+}
+
+#update-unavailable
+{
+	
+}
+
+#update-error
+{
+	color: #FF0000;
+}
 
 #header-title,
 #submenu,
