@@ -274,6 +274,27 @@ dt,
 	font-size: 0.7em;
 }
 
+.webif-name-title
+{
+	font-weight: bold;
+	font-size: 1.0em;
+}	
+
+.webif-name-subtitle
+{
+	font-size: 0.8em;
+}
+
+.webif-name-version
+{
+	font-size: 0.8em;
+}		
+
+.webif-contributors
+{
+	font-size: 0.9em;
+}
+
 /* color */
 
 #header-title,
