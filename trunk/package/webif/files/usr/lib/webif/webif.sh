@@ -80,6 +80,7 @@ header() {
 	}
 
 	update_changes
+				
 	cat <<EOF
 Content-Type: text/html
 Pragma: no-cache
@@ -98,16 +99,17 @@ Pragma: no-cache
 	  <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>	  
 	    <div id="header">
 	    				
-	    				<div id="openwrt-title">
+	    				<div class="openwrt-title">
 	    				<h1>$_firmware_name</h1>
 	    				<h3>$_firmware_subtitle $_version</h3>
 	    			   	</div>	 		
-	    				<div id="short-status">
-					<h3><strong>Status:</strong></h3>
+	    				<div id="short-status">	
+	    				<h3>Status</h3>
 					<ul>						
-						<li><strong>Host:</strong> $_hostname</li>						
+						<li><strong>@TR<<System:>></strong> $_hostname / $_firmware_name $_version</li>
+						<li><strong>@TR<<Webif^2>>:</strong> __SVN_REVISION__</li>
 						<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
-						<li><strong>@TR<<Load>>:</strong> $_loadavg</li>						
+						<li><strong>@TR<<Load>>:</strong> $_loadavg</li>															
 					</ul>	
 													
 				</div>		
