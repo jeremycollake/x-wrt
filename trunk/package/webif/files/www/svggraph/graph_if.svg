@@ -262,7 +262,7 @@ function makeRoundMax(max) {
 		rmax = 1250;
 		i = 0;
 		while (max > rmax) {
-			dump(i+'\n');
+			//dump(i+'\n');
 			i++;
 			if (i && (i % 4 == 0)) {
 				rmax *= 1.25;
