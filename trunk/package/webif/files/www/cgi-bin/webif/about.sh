@@ -56,5 +56,5 @@ Layout based on <a href="http://www.openwebdesign.org/design/1773/prosimii/">&qu
 </div>
 <? footer ?>
 <!--
-##WEBIF:name:Info:1:About
+##WEBIF:name:Info:10:About
 -->

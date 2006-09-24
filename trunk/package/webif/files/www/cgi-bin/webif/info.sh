@@ -1,7 +1,7 @@
 #!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
-header "Info" "Firmware Info" "@TR<<Firmware Info>>"
+header "Info" "Firmware" "@TR<<Firmware Info>>" '' ''
 
 ?>
 <pre><?
@@ -37,5 +37,5 @@ EOF
 footer
 ?>
 <!--
-##WEBIF:name:Info:2:Frimware Info
+##WEBIF:name:Info:20:Firmware
 -->
