@@ -50,10 +50,10 @@ WL_MODE=$(nvram get wl0_mode)
 ##################################################
 #
 if equal $WL_MODE "ap" ; then
-	echo "<tr><td>Your wireless adaptor is not in client mode. " \
+	echo "<table><tbody><tr><td>Your wireless adaptor is not in client mode. " \
 	"To do a scan it must be put into client mode for a few seconds." \
-	"<br />Your WLAN traffic will be interrupted during this brief period.<br />" \
-	"<br />$CLIENT_SWITCH_BUTTON</td></tr>"
+	"Your WLAN traffic will be interrupted during this brief period." \
+	"<tr><td><br /></td></tr><tr><td>$CLIENT_SWITCH_BUTTON</td></tr></tbody></table>"
 else 		
 	
 tempfile=$(mktemp /tmp/survtemp.XXXXXX)
