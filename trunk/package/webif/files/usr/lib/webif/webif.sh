@@ -46,7 +46,7 @@ subcategories() {
 }
 
 update_changes() {
-	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))
+	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))		
 }
 
 header() {
@@ -79,7 +79,8 @@ header() {
 		_savebutton=""
 	}
 
-	update_changes
+	# moved to footer
+	#update_changes
 				
 	cat <<EOF
 Content-Type: text/html
@@ -171,6 +172,7 @@ EOF
 }
 
 footer() {
+	update_changes	
 	_changes=${CHANGES#0}
 	_changes=${_changes:+(${_changes})}
 	_endform=${_savebutton:+</form>}
