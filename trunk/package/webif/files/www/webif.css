@@ -211,12 +211,13 @@ th {
 {
 	font-weight: bold;
  	font-size: 0.9em;
- 	
+	 	
 }
 
 .helptext
 {
  	font-size: 0.6em;
+ 	padding-bottom: 1em;
 }
 
 /* font */
