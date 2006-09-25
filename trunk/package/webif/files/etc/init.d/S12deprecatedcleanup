@@ -1,9 +1,10 @@
 #!/bin/sh
 
+######################################################################
+# DeprecateFile
 #
 # to support squashfs filesystems with symlink hack, we can't just
 # delete these if they exist on /rom, else they will re-appear.
-#
 DeprecateFile ()
 {
 	if [ -f "$1" ]; then
@@ -13,9 +14,10 @@ DeprecateFile ()
 	fi
 }
 
+######################################################################
+# entry
 #
 # replaced at build time with revision number
-#
 this_revision=__SVN_REVISION__
 last_cleaned=$(nvram get webif_rev)
 if [ "$this_revision" = "$last_cleaned" ]; then
@@ -34,8 +36,6 @@ DeprecateFile "/www/cgi-bin/webif/hardwarestats.sh"
 # early alpha versions of the x-wrt webif qos-config.sh would create a 'dummy'
 # /etc/qos.conf if Rudy's QoS scripts weren't installed.
 #
-# if qos.conf exists and qos-re package not installed, delete
-#
 if [ -f "/etc/qos.conf" ]; then
 	ipkg list_installed | grep qos-re 2>&1 > /dev/null
 	if [ $? != 0 ]; then
@@ -44,8 +44,6 @@ if [ -f "/etc/qos.conf" ]; then
 	fi	
 fi
 
-#
 # I really hate to do this, but seems have to..
-#
 nvram set "webif_rev=$this_revision"
 nvram commit
