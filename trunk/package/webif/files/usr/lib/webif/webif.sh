@@ -78,9 +78,6 @@ header() {
 		_form=""
 		_savebutton=""
 	}
-
-	# moved to footer
-	#update_changes
 				
 	cat <<EOF
 Content-Type: text/html
@@ -120,11 +117,16 @@ Pragma: no-cache
 					</ul>	
 													
 				</div>		
-			<div id=categories>$_categories</div>
-			<div id=subcategories>$_subcategories</div>
 		</div>
+	
+		<div id=categories>$_categories</div>
+		<div id=subcategories>$_subcategories</div>
 		$_form
+		
+		
 		<div id="content">
+		
+
 			<div class="settings-block">
 				$_head
 				$ERROR
