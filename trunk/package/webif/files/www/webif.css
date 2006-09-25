@@ -371,6 +371,16 @@ dt,
 
 /* color */
 
+html, body 
+{		
+	
+}
+
+#header
+{
+	background-color: #e8ca9e
+}
+
 #update-available
 {	
 	color: #FF0000;	
@@ -402,14 +412,16 @@ dt,
 
 #header-title,
 #save .apply div 
-{
-	background-color: #3D5C7A;
+{	
+	background-color: #4d3f2a;
+	/*background-color: #3D5C7A; */ /* blue */
 }
 
 #mainmenu 
 {
 	color: #C3C4D2;
-	background-color: #213242;
+	/*background-color: #213242;*/ /* blue */
+	background-color: #4d3f2a;
 }
 
 #mainmenu a 
@@ -425,12 +437,14 @@ dt,
 #submenu,
 #save div 
 {
-	background-color: #7590AE;
+	background-color: #978568;
+	/* background-color: #7590AE; */ /* blue */
 }
 
 #content .settings-block .settings-block-title h2 
-{
-	color: #7590AE;
+{	
+	color: #978568;	
+	/* color: #7590AE; */ /* blue */
 }
 
 #submenu a:hover 
@@ -441,7 +455,7 @@ dt,
 #short-status 
 {
 	color: #555;
-	background-color: #FFF;
+	background-color: #e8ca9e
 }
 
 #content .settings-block
