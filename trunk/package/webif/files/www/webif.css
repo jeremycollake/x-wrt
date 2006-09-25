@@ -473,7 +473,8 @@ html, body
 #content .settings-title 
 {
 	color: #000;	
-	background-color: #CCC;
+	background-color: #b8b1a2; /* brown */
+	/* background-color: #CCC; */ /* gray */
 }
 
 #content .settings 
