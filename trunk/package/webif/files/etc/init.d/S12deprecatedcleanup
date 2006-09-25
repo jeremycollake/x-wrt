@@ -1,6 +1,19 @@
 #!/bin/sh
 
 #
+# to support squashfs filesystems with symlink hack, we can't just
+# delete these if they exist on /rom, else they will re-appear.
+#
+DeprecateFile ()
+{
+	if [ -f "$1" ]; then
+		echo " " > "$1"	  
+	else
+		rm "$1"
+	fi
+}
+
+#
 # replaced at build time with revision number
 #
 this_revision=__SVN_REVISION__
@@ -9,41 +22,13 @@ if [ "$this_revision" = "$last_cleaned" ]; then
 	exit 0
 fi
 
-#
-# remove old wan.sh and lan.sh (now is wan-lan.sh)
-#
-# to support squashfs filesystems with symlink hack, we can't just
-# delete this, they must exist in some form else they return from the 
-# RO filesystem. So, we'll symlink them to nowhere.
-#
-
 # merged into wan-lan.sh
-if [ -f /rom/www/cgi-bin/webif/wan.sh ]; then
-	echo "" > "/www/cgi-bin/webif/wan.sh" 	  
-else
-	rm "/www/cgi-bin/webif/wan.sh"
-fi
-
-# merged into wan-lan.sh
-if [ -f /rom/www/cgi-bin/webif/lan.sh ]; then
-	echo "" > "/www/cgi-bin/webif/lan.sh" 	 
-else
-	rm "/www/cgi-bin/webif/lan.sh"
-fi
-
+DeprecateFile "/www/cgi-bin/webif/wan.sh"
+DeprecateFile "/www/cgi-bin/webif/lan.sh"
 # old name for like 2 builds
-if [ -f /rom/www/cgi-bin/webif/wan_lan.sh ]; then
-	echo "" > "/www/cgi-bin/webif/wan_lan.sh" 	 
-else
-	rm "/www/cgi-bin/webif/wan_lan.sh"
-fi
-
-# old name for like 2 builds
-if [ -f /rom/www/cgi-bin/webif/hardwarestats.sh ]; then
-	echo "" > "/www/cgi-bin/webif/hardwarestats.sh" 	 
-else
-	rm "/www/cgi-bin/webif/hardwarestats.sh"
-fi
+DeprecateFile "/www/cgi-bin/webif/wan_lan.sh"
+# merged into info.sh
+DeprecateFile "/www/cgi-bin/webif/hardwarestats.sh"
 
 #
 # early alpha versions of the x-wrt webif qos-config.sh would create a 'dummy'
@@ -55,7 +40,7 @@ if [ -f "/etc/qos.conf" ]; then
 	ipkg list_installed | grep qos-re 2>&1 > /dev/null
 	if [ $? != 0 ]; then
  		echo " $0: cleaning up unused /etc/qos.conf"
-		echo "" > "/etc/qos.conf"
+		DeprecateFile "/etc/qos.conf"
 	fi	
 fi
 
