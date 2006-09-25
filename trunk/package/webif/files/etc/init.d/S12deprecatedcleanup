@@ -1,22 +1,26 @@
 #!/bin/sh
-
 #
 # remove old wan.sh and lan.sh (now is wan-lan.sh)
 #
-rm /www/cgi-bin/webif/wan.sh 	  # merged into wan-lan.sh
-rm /www/cgi-bin/webif/lan.sh	  # merged into wan-lan.sh
-rm /www/cgi-bin/webif/wan_lan.sh  # old name
-rm /www/cgi-bin/webif/hardwarestats.sh # now merged with info.sh
+# to support squashfs filesystems with symlink hack, we can't just
+# delete this, they must exist in some form else they return from the 
+# RO filesystem. So, we'll symlink them to nowhere.
+#
+ln -s /tmp/nothing /www/cgi-bin/webif/wan.sh 	  # merged into wan-lan.sh
+ln -s /tmp/nothing /www/cgi-bin/webif/lan.sh	  # merged into wan-lan.sh
+ln -s /tmp/nothing /www/cgi-bin/webif/wan_lan.sh  # old name
+ln -s /tmp/nothing /www/cgi-bin/webif/hardwarestats.sh # now merged with info.sh
 
 #
 # early alpha versions of the x-wrt webif qos-config.sh would create a 'dummy'
 # /etc/qos.conf if Rudy's QoS scripts weren't installed.
 #
 # if qos.conf exists and qos-re package not installed, delete
+#
 if [ -f "/etc/qos.conf" ]; then
 	ipkg list_installed | grep qos-re 2>&1 > /dev/null
 	if [ $? != 0 ]; then
  		echo " $0: cleaning up unused /etc/qos.conf"
-		rm "/etc/qos.conf"
+		ln -s /tmp/nothing "/etc/qos.conf"
 	fi	
 fi
