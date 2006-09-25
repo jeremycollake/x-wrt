@@ -56,16 +56,16 @@ option
 #container 
 {
 	position: relative;
-	min-height: 100%;
+	min-height: 100%;	
 }
 
 #header 
 {
 	position: relative;
 	width: 100%;
-	padding-top: 0.7em;
-	padding-bottom: 3.3em;
-	float: left;
+	height: 4em;
+	padding-top: 0.5em;
+	padding-bottom: 1em;	
 }
 
 #short-status 
@@ -73,72 +73,77 @@ option
 	position: relative;		
 	line-height: 1.0em;
 	padding-bottom: 0.5em;
-	padding-right: 1.0em;
-	padding-left: 1.0em;	
+	padding-right: 0.5em;
+	padding-left: 0.5em;	
 	float: right;		
 }
 
 .openwrt-title 
 {	
-	position: absolute;
-	float: left;
-	left: 1em;
+	position: relative;
+	float: left;	
 	top: 0em;
 	padding-bottom: 0.5em;
-	padding-top: 1em;	
-}
-
-#submenu 
-{
-	position: absolute;
-	width: 100%;
-	top: 10em;
-	padding-top: 0.5em;
-	padding-bottom: 0.5em;	
+	padding-top: 0.5em;	
+	padding-left: 1em;
 }
 
 #mainmenu
 {
-	position:absolute;	
-	top: 6em;
-	left: 0;
+	position: relative;		
 	width: 100%;
+	padding: 0.5em;		
+}
+
+#submenu 
+{
+	position: relative;
+	width: 100%;	
+	padding-left: 1.0em;
 	padding-top: 0.5em;
 	padding-bottom: 0.5em;	
+	padding-right: 1.0em;
 }
 
 #mainmenu h3 
 {
-	padding-left: 1em;
-	float: left;
+	padding-left: 1em;	
+	padding-right: 1em;
+	display: inline;	
 }
 
 #mainmenu li 
 {
-	font-size: 0.9em;
-	float: left;
-	margin-left: 1.5em;
+	display: inline;	
+	font-size: 0.9em;		
+	padding: 1.0em;	
+	list-style-type: none;
 }
 
 #submenu li 
-{
-	float: left;
-	margin-left: 1em;
+{	
+	display: inline;	
+	position: relative;		
+	padding: 0.5em;	
+	list-style-type: none;
+			
 }
 
 #content 
-{
-	position: absolute;		
-	top: 8em;
-	padding-top: 1em;
-	margin-left: 1em;
+{	
+	position: relative;			
+	padding-top: 1em;	
 	padding-bottom: 3em;
+	margin-right: 1em;
+	margin-left: 1em;
+	clear: both;		
 }
 
 #content .settings-block 
 {
 	padding-top: 0.5em;
-	margin-bottom: 1.5em;
+	margin-bottom: 1.5em;	
+	margin-left: 2em;
 }
 
 #content .settings-block .settings-block-title 
@@ -148,7 +153,6 @@ option
 
 #content .settings-block .settings 
 {
-	clear: both;
 	margin-left: 1.5em;
 	padding-right: 1em;
 	padding-top: 0.5em;
@@ -191,16 +195,10 @@ option
 
 #save 
 {
-	/* 
-	when absolute, opera and firefox show this properly at bottom of page even if page extends past
-	vertical window size, IE fucks up and will show it at the bottom of the window, not page, which
-	can over-write content if the page is longer than the window. It looks much better in opera and firefox
-	absolute though, since it's always at the page or window bottom, whichever is lowest. 
-	- update: now have webif_ie.css to over-ride below when IE is found.
-	*/	
-	position: absolute;
-	bottom: 0;
+	position: relative;	
 	width: 100%;
+	float: right;
+	
 }
 
 #save .page-save div 
@@ -214,10 +212,10 @@ option
 }
 
 #save .apply 
-{
-	clear: both;
+{	
 	width: 100%;
 	height: 5em;
+	float: right;
 }
 
 #save .apply div 
