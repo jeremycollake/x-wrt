@@ -2,8 +2,8 @@
 <? 
 . /usr/lib/webif/webif.sh
 header "Info" "About" "@TR<<About>>" '' ''
-# __SVN_REVISION__ is replaced by revision by preprocessor at build
-this_revision=__SVN_REVISION__
+# 322 is replaced by revision by preprocessor at build
+this_revision=322
 if [ -n "$FORM_update_check" ]; then	  	
 	tmpfile=$(mktemp "/tmp/.webif.XXXXXX")
 	wget http://ftp.berlios.de/pub/xwrt/.version -O $tmpfile 2> /dev/null >> /dev/null
@@ -25,7 +25,7 @@ fi
 
 <div class="webif-name-title">webif^2</div></font>
 <div class="webif-name-subtitle">Part of the end user extensions to OpenWrt by the X-Wrt project.</div>
-<div class="webif-name-version">Alpha development - revision __SVN_REVISION__</div>
+<div class="webif-name-version">Alpha development - revision 322</div>
 <form enctype="multipart/form-data" method="post"><input type="submit" value=" Check for webif update " name="update_check" /></form>
 <? echo $revision_text ?>
 <div class="webif-contributors">
