@@ -91,18 +91,17 @@ option
 #mainmenu
 {
 	position: relative;		
-	width: 100%;
-	padding: 0.5em;		
+	width: 100%;	
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
 }
 
 #submenu 
 {
 	position: relative;
 	width: 100%;	
-	padding-left: 1.0em;
 	padding-top: 0.5em;
-	padding-bottom: 0.5em;	
-	padding-right: 1.0em;
+	padding-bottom: 0.5em;
 }
 
 #mainmenu h3 
@@ -260,16 +259,6 @@ dt,
 #submenu a 
 {
 	font-weight: bold;
-}
-
-#save .footer-info 
-{
-	font-weight: bold;
-	font-size: 1.4em;
-}
-#save .footer-info2 
-{
-	font-size: 1.2em;
 }
 
 .openwrt-title h1 
