@@ -64,7 +64,8 @@ option
 	position: relative;
 	width: 100%;
 	padding-top: 0.7em;
-	padding-bottom: 2.4em;
+	padding-bottom: 3.4em;
+	float: left;
 }
 
 #short-status 
@@ -129,7 +130,7 @@ option
 {
 	padding-top: 2em;
 	margin-left: 1em;
-	padding-bottom: 6em;
+	padding-bottom: 3em;
 }
 
 #content .settings-block 
