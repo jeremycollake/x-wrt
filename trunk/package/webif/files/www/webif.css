@@ -128,7 +128,9 @@ option
 
 #content 
 {
-	padding-top: 2em;
+	position: absolute;		
+	top: 8em;
+	padding-top: 1em;
 	margin-left: 1em;
 	padding-bottom: 3em;
 }
@@ -154,7 +156,7 @@ option
 
 #content .settings-block .settings-block-title,
 #content .settings-block .settings .settings-title 
-{
+{	
 	padding: 0.2em;
 }
 

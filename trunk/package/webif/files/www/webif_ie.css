@@ -1,3 +1,11 @@
+#content 
+{
+	position: relative;
+	top: 2em;
+	width: 90%;	
+	padding-top: 1em;		
+}
+
 #save 
 {
 	/* 
@@ -8,3 +16,4 @@
 	*/	
 	position: relative;	
 }
+
