@@ -10,7 +10,7 @@ _kversion="$( uname -srv )"
 _mac="$(/sbin/ifconfig eth0 | grep HWaddr | cut -b39-)"
 cat <<EOF
 </pre>
-<table style="width: 90%; text-align: left;" border="0" cellspacing="0" align="left">
+<table>
 <tbody>
 	<tr>
 		<td><strong>@TR<<Firmware>></strong></td>
