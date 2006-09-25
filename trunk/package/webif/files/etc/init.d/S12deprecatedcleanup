@@ -17,10 +17,33 @@ fi
 # RO filesystem. So, we'll symlink them to nowhere.
 #
 
-echo "" > /www/cgi-bin/webif/wan.sh 	  # merged into wan-lan.sh
-echo "" > /www/cgi-bin/webif/lan.sh	  # merged into wan-lan.sh
-echo "" > /www/cgi-bin/webif/wan_lan.sh  # old name
-echo "" > /www/cgi-bin/webif/hardwarestats.sh # now merged with info.sh
+# merged into wan-lan.sh
+if [ -f /rom/www/cgi-bin/webif/wan.sh ]; then
+	echo "" > "/www/cgi-bin/webif/wan.sh" 	  
+else
+	rm "/www/cgi-bin/webif/wan.sh"
+fi
+
+# merged into wan-lan.sh
+if [ -f /rom/www/cgi-bin/webif/lan.sh ]; then
+	echo "" > "/www/cgi-bin/webif/lan.sh" 	 
+else
+	rm "/www/cgi-bin/webif/lan.sh"
+fi
+
+# old name for like 2 builds
+if [ -f /rom/www/cgi-bin/webif/wan_lan.sh ]; then
+	echo "" > "/www/cgi-bin/webif/wan_lan.sh" 	 
+else
+	rm "/www/cgi-bin/webif/wan_lan.sh"
+fi
+
+# old name for like 2 builds
+if [ -f /rom/www/cgi-bin/webif/hardwarestats.sh ]; then
+	echo "" > "/www/cgi-bin/webif/hardwarestats.sh" 	 
+else
+	rm "/www/cgi-bin/webif/hardwarestats.sh"
+fi
 
 #
 # early alpha versions of the x-wrt webif qos-config.sh would create a 'dummy'
