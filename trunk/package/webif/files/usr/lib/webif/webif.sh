@@ -66,7 +66,8 @@ header() {
 	_loadavg="${_uptime#*load average: }"
 	_uptime="${_uptime#*up }"
 	_uptime="${_uptime%%,*}"
-	_hostname=$(cat /proc/sys/kernel/hostname)		
+	_hostname=$(cat /proc/sys/kernel/hostname)	
+	_webif_rev=$(cat /www/.version)	
 	_head="${3:+<div class=\"settings-block-title\"><h2>$3$_saved_title</h2></div>}"
 	_form="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />}"
 	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></p>}"
@@ -111,7 +112,7 @@ Pragma: no-cache
 	    				<h3>Status</h3>
 					<ul>						
 						<li><strong>@TR<<System:>></strong> $_hostname / $_firmware_name $_version</li>
-						<li><strong>@TR<<Webif^2>>:</strong> __SVN_REVISION__</li>
+						<li><strong>@TR<<Webif^2>>:</strong> $_webif_rev</li>
 						<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
 						<li><strong>@TR<<Load>>:</strong> $_loadavg</li>															
 					</ul>	
