@@ -135,6 +135,7 @@ option
 
 #content .settings-block 
 {
+	padding-top: 0.5em;
 	margin-bottom: 1.5em;
 }
 
@@ -148,6 +149,7 @@ option
 	clear: both;
 	margin-left: 1.5em;
 	padding-right: 1em;
+	padding-top: 0.5em;
 }
 
 #content .settings-block .settings-block-title,
@@ -192,8 +194,9 @@ option
 	vertical window size, IE fucks up and will show it at the bottom of the window, not page, which
 	can over-write content if the page is longer than the window. It looks much better in opera and firefox
 	absolute though, since it's always at the page or window bottom, whichever is lowest. 
+	- update: now have webif_ie.css to over-ride below when IE is found.
 	*/	
-	position: relative;
+	position: absolute;
 	bottom: 0;
 	width: 100%;
 }
