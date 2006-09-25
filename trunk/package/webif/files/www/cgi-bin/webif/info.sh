@@ -33,14 +33,15 @@ EOF
 #
 # board id checks go here.. todo: much work remains here
 #
-while empty $board_type; do
-	# disabled until sped up..
-	#strings /dev/mtdblock/0 | grep 'W54G' 2>&1 >> /dev/null
-	#if [ $? = "0" ]; then
- 	#	board_type="WRT54G"
- 		#board_version="v??"
- 	#	break
-	#fi	
+# loop is just used to avoid a jump
+while empty $board_type; do	
+	strings /dev/mtdblock/0 | grep 'W54G' 2>&1 >> /dev/null
+	if [ $? = "0" ]; then
+ 		board_type="WRT54G"
+ 		board_version="v??"
+ 		break
+	fi	
+	break
 done
 empty $board_type && board_type="-id code not done for this board-";
 
