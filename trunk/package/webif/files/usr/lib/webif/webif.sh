@@ -95,6 +95,9 @@ Pragma: no-cache
 		<!--[if IE]>
 		<link rel="stylesheet" type="text/css" href="/webif_ie.css" />
 		<![endif]-->	
+		<!--[if lt IE 7]>
+		<link rel="stylesheet" type="text/css" href="/webif_ie_6.css" />
+		<![endif]-->	
 		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
 		<meta http-equiv="expires" content="Mon, 01 Jan 1901 00:00:01 GMT" />
 	</head>
