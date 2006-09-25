@@ -1,4 +1,14 @@
 #!/bin/sh
+
+#
+# replaced at build time with revision number
+#
+this_revision=__SVN_REVISION__
+last_cleaned=$(nvram get webif_rev)
+if [ "$this_revision" = "$last_cleaned" ]; then
+	exit 0
+fi
+
 #
 # remove old wan.sh and lan.sh (now is wan-lan.sh)
 #
@@ -6,10 +16,11 @@
 # delete this, they must exist in some form else they return from the 
 # RO filesystem. So, we'll symlink them to nowhere.
 #
-ln -s /tmp/nothing /www/cgi-bin/webif/wan.sh 	  # merged into wan-lan.sh
-ln -s /tmp/nothing /www/cgi-bin/webif/lan.sh	  # merged into wan-lan.sh
-ln -s /tmp/nothing /www/cgi-bin/webif/wan_lan.sh  # old name
-ln -s /tmp/nothing /www/cgi-bin/webif/hardwarestats.sh # now merged with info.sh
+
+echo "" > /www/cgi-bin/webif/wan.sh 	  # merged into wan-lan.sh
+echo "" > /www/cgi-bin/webif/lan.sh	  # merged into wan-lan.sh
+echo "" > /www/cgi-bin/webif/wan_lan.sh  # old name
+echo "" > /www/cgi-bin/webif/hardwarestats.sh # now merged with info.sh
 
 #
 # early alpha versions of the x-wrt webif qos-config.sh would create a 'dummy'
@@ -21,6 +32,12 @@ if [ -f "/etc/qos.conf" ]; then
 	ipkg list_installed | grep qos-re 2>&1 > /dev/null
 	if [ $? != 0 ]; then
  		echo " $0: cleaning up unused /etc/qos.conf"
-		ln -s /tmp/nothing "/etc/qos.conf"
+		echo "" > "/etc/qos.conf"
 	fi	
 fi
+
+#
+# I really hate to do this, but seems have to..
+#
+nvram set "webif_rev=$this_revision"
+nvram commit
