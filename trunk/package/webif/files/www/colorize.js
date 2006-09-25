@@ -39,9 +39,9 @@ function clickswatch() {
   var exp = new Date(); 
   exp.setTime(exp.getTime() + (24 * 60 * 60 * 1000 * 31 * 9)); 
   if (this==document.getElementById("colorize")) {
-    SetCookie("bgcolor","",exp,null,".openwrt.org")
+    SetCookie("bgcolor","",exp,null,".webif")
   } else {
-    SetCookie("bgcolor",this.style.backgroundColor,exp,null,".openwrt.org")
+    SetCookie("bgcolor",this.style.backgroundColor,exp,null,".webif")
   }
   colorize();
 }
