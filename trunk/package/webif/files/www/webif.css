@@ -123,8 +123,8 @@ option
 {	
 	display: inline;	
 	position: relative;		
-	padding: 0.5em;	
 	list-style-type: none;
+	padding-left: 0.4em;
 			
 }
 
