@@ -135,20 +135,8 @@ option
 	padding-top: 1em;	
 	padding-bottom: 3em;
 	margin-right: 1em;
-	margin-left: 1em;
+	margin-left: 1em;	
 	clear: both;		
-}
-
-#content .settings-block 
-{
-	padding-top: 0.5em;
-	margin-bottom: 1.5em;	
-	margin-left: 2em;
-}
-
-#content .settings-block .settings-block-title 
-{
-	margin-bottom: 10px;
 }
 
 #content .settings-block .settings 
@@ -182,12 +170,12 @@ option
 
 #content .settings-block .settings .settings-help 
 {
-	padding: 0.4em;
+	padding: 1.0em;
 	padding-top: 1.4em;
 	margin-left: 60%;
 }
 
-#content .settings-block .settings .settings-help .more-help 
+#content .settings-help .more-help 
 {
 	margin-right: 10%;
 	text-align: right;
@@ -197,8 +185,7 @@ option
 {
 	position: relative;	
 	width: 100%;
-	float: right;
-	
+	float: right;	
 }
 
 #save .page-save div 
@@ -235,7 +222,8 @@ th {
 .helpform
 {
 	position: relative;
- 	float: left;
+ 	float: right;
+ 	margin-right: 2em;
 }
 
 
