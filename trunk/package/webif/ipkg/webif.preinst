@@ -1,5 +1,6 @@
 #!/bin/sh
-# don't remove directories..
+echo " Cleaning up existing webif package (if one exists) ..."
+# remove files, but not directories
 rm -f /www/*
 rm -f /www/svggraph/*
 rm -f /www/cgi-bin/*
