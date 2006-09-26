@@ -1,2 +1,11 @@
 #!/bin/sh
-rm -f /www/index.html
+# don't remove directories..
+rm -f /www/*
+rm -f /www/svggraph/*
+rm -f /www/cgi-bin/*
+rm -f /www/cgi-bin/webif/*
+rm -f /usr/lib/webif/*
+rm -f /etc/init.d/S50dnsmasq
+rm -f /etc/init.d/S60ntp
+rm -f /etc/init.d/S51crond
+rm -f /etc/init.d/S11firmwareinfo
