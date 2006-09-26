@@ -1,5 +1,5 @@
 Package: webif
-Maintainer: Felix Fietkau <nbd@openwrt.org>
+Maintainer: Jeremy Collake <jeremy@bitsum.com>
 Section: net
 Depends: haserl
 Priority: normal
