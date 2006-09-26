@@ -56,17 +56,19 @@ if equal $WL_MODE "ap" ; then
 	"<tr><td><br /></td></tr><tr><td>$CLIENT_SWITCH_BUTTON</td></tr></tbody></table>"
 else 		
 	
-tempfile=$(mktemp /tmp/survtemp.XXXXXX)
-tempfile2=$(mktemp /tmp/survtemp.XXXXXX)
+tempfile=$(mktemp /tmp/.survtemp.XXXXXX)
+tempfile2=$(mktemp /tmp/.survtemp.XXXXXX)
 
+echo " Please wait while scan is performed ... <br /><br />"
 counter=0
 for counter in $(seq 1 $MAX_TRIES); do
-	#echo " scan attempt $counter..<br />"
+	#echo "." 	 
 	iwlist scan > $tempfile 2> /dev/null	
 	grep -i "Address" < $tempfile >> /dev/null
 	equal "$?" "0" && break				
 	sleep 1
 done
+echo "Done."
 
 first_hit=1
 if [ $counter -gt $MAX_TRIES ]; then
@@ -101,84 +103,83 @@ else
 	current=0
 	counter=0		
 	for counter in $(seq 1 $MAX_CELLS); do
-		if [ ! -f "$tempfile"_"${current}" ]; then
-		break
-	fi				
-	####################################################
-	# parse out MAC	
-	address_pre=$(sed '2,$ d' < "$tempfile"_"${current}" | sed -e s/'Cell'//g -e s/'Address'//g -e s/'-'//g)	
-	count=0
-	for i in $address_pre; do
-		case $count in
-			0) CELL_ID=$i;;
-			2) MAC_ID=$i;;	
-			3) break;;	
-		esac	
-		let "count+=1"
-	done
+		! exists "$tempfile"_"${current}" && break
+		####################################################
+		# parse out MAC	
+		address_pre=$(sed '2,$ d' < "$tempfile"_"${current}" | sed -e s/'Cell'//g -e s/'Address'//g -e s/'-'//g)	
+		count=0
+		for i in $address_pre; do
+			case $count in
+				0) CELL_ID=$i;;
+				2) MAC_ID=$i;;	
+				3) break;;	
+			esac	
+			let "count+=1"
+		done
 
-	####################################################
-	# parse out essid
-	ESSID=$(grep -i "ESSID" < "$tempfile"_"${current}" | sed -e s/'ESSID:'//g -e s/'"'//g)
+		####################################################
+		# parse out essid
+		ESSID=$(grep -i "ESSID" < "$tempfile"_"${current}" | sed -e s/'ESSID:'//g -e s/'"'//g)
 	
-	####################################################
-	# parse out channel
-	CHANNEL_ID=$(grep -i "Channel" < "$tempfile"_"${current}" | sed -e s/'Channel:'//g -e s/' '//g)
+		####################################################
+		# parse out channel
+		CHANNEL_ID=$(grep -i "Channel" < "$tempfile"_"${current}" | sed -e s/'Channel:'//g -e s/' '//g)
 
-	####################################################
-	# parse out signal
-	quality_pre=$(grep -i "Quality" < "$tempfile"_"${current}" | sed -e s/'Quality:'//g -e s/'Signal level:'//g  -e s/'dBm'//g -e s/'Noise level:'//g)
-	count=0
-	for i in $quality_pre; do
-		case $count in
-			0) QUALITY=$i;;
-			1) SIGNAL_DBM=$i;;		
-			2) NOISE_DBM=$i;;
-			3) break;;		
-		esac	
-		let "count+=1"
-	done
+		####################################################
+		# parse out signal
+		quality_pre=$(grep -i "Quality" < "$tempfile"_"${current}" | sed -e s/'Quality:'//g -e s/'Signal level:'//g  -e s/'dBm'//g -e s/'Noise level:'//g)
+		count=0
+		for i in $quality_pre; do
+			case $count in
+				0) QUALITY=$i;;
+				1) SIGNAL_DBM=$i;;		
+				2) NOISE_DBM=$i;;
+				3) break;;		
+			esac	
+			let "count+=1"
+		done
 	
-	#
-	# only show quality if it's not 0/0
-	#
-	if ! equal "$QUALITY" "0/0"; then
-		QUALITY_STRING="string|<tr><td>Quality $QUALITY</tr></td>"
-	fi
+		#
+		# only show quality if it's not 0/0
+		#
+		if ! equal "$QUALITY" "0/0"; then
+			QUALITY_STRING="string|<tr><td>Quality $QUALITY</tr></td>"
+		fi
+			
+		NOISE_BASE=-99
+		NOISE_DELTA=$(expr $NOISE_BASE - $NOISE_DBM)
 	
-	# todo: R&D.... guessing right now
-	NOISE_BASE=-99
-	NOISE_DELTA=$(expr $NOISE_BASE - $NOISE_DBM)
-	
-	SIGNAL_INTEGRITY=$(expr $SIGNAL_DBM + $NOISE_DELTA)
-	
-	#echo "<br />dbeug.adding cell $CELL_ID"
-	FORM_cells="$FORM_cells 
-		string|<tr><td><strong>Cell</strong> $CELL_ID</tr></td>
-		string|<tr><td><strong>SSID</strong> $ESSID (<font size=-1>$MAC_ID</font>)</tr></td>		
-		string|<tr><td><strong>Channel</strong> $CHANNEL_ID</tr></td>
-		$QUALITY_STRING
-		string|<tr><td><strong>Signal</strong> $SIGNAL_DBM dBm <strong>Noise</strong> $NOISE_DBM dBm</tr></td>
-		#string|<tr><td></tr></td>
-		progressbar|Signal Integrity|<strong>SNR</strong> $SIGNAL_INTEGRITY dBm|40%|$(expr 100 + $SIGNAL_INTEGRITY)|#CCFFCC|#000000
-		string|<tr><td><br /></td></tr>"
+		SIGNAL_INTEGRITY=$(expr $SIGNAL_DBM + $NOISE_DELTA)
+			
+		FORM_cells="$FORM_cells 
+			string|<tr><td><strong>Cell</strong> $CELL_ID</tr></td>
+			string|<tr><td><strong>SSID</strong> $ESSID (<font size=-1>$MAC_ID</font>)</tr></td>		
+			string|<tr><td><strong>Channel</strong> $CHANNEL_ID</tr></td>
+			$QUALITY_STRING
+			string|<tr><td><strong>Signal</strong> $SIGNAL_DBM dBm <strong>Noise</strong> $NOISE_DBM dBm</tr></td>
+			#string|<tr><td></tr></td>
+			progressbar|Signal Integrity|<strong>SNR</strong> $SIGNAL_INTEGRITY dBm|40%|$(expr 100 + $SIGNAL_INTEGRITY)|#CCFFCC|#000000
+			string|<tr><td><br /></td></tr>"
 		
-	rm -f "$tempfile"_"${current}"
+		rm -f "$tempfile"_"${current}"
 	
-	let "current+=1"
-done
-fi
+		let "current+=1"
+	done	
+fi # end if were scan results
+
 rm -f "$tempfile"
 rm -f "$tempfile2"
 
-if ! empty "$FORM_clientswitch"; then	  
-		#echo "<tr><td>Restoring settings...</tr></td>"
-		# restore radio to its original state
-		nvram set wl0_mode=$ORIGINAL_WL_MODE				
-		nvram set wl0_infra=$ORIGINAL_INFRA			
-		wifi up 2>/dev/null >/dev/null </dev/null	
-	fi	 
-fi
+if ! empty "$FORM_clientswitch"; then	  	
+	#echo "<tr><td>Restoring settings...</tr></td>"
+	# restore radio to its original state
+	nvram set wl0_mode=$ORIGINAL_WL_MODE				
+	nvram set wl0_infra=$ORIGINAL_INFRA			
+	wifi up 2>/dev/null >/dev/null </dev/null	
+fi 
+
+fi # end if is in 'allowed to scan' mode
+
  2>/dev/null >/dev/null </dev/null
 ?>
 <br /></tbody></table>
