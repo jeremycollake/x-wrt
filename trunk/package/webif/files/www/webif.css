@@ -142,13 +142,14 @@ option
 {
 	margin-left: 1.5em;
 	padding-right: 1em;
-	padding-top: 0.5em;
+	padding-top: 1.0em;
 }
 
 #content .settings-block .settings-block-title,
 #content .settings-block .settings .settings-title 
 {	
-	padding: 0.2em;
+	padding-bottom: 1.0em;
+	padding-top: 0.5em;		
 }
 
 #content .settings-block .settings .settings-content 
