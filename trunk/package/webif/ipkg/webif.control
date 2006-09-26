@@ -1,5 +1,5 @@
 Package: webif
-Maintainer: Jeremy Collake <jeremy@bitsum.com>
+Maintainer: X-Wrt Project
 Section: net
 Depends: haserl
 Priority: normal
