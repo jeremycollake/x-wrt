@@ -1,5 +1,5 @@
 #!/bin/sh
-cat /proc/cmdline | grep ttyS0
+cat /proc/cmdline | grep ttyS0 2>&1 >> /dev/null
 if [ $? = 0 ]; then
 	echo " Cleaning up existing webif package (if one exists) ..."
 	# remove files, but not directories

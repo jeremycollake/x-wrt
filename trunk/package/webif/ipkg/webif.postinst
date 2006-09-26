@@ -1,6 +1,6 @@
 #!/bin/sh
 # only when we're on embedded system.. todo: do better checks
-cat /proc/cmdline | grep ttyS0
+cat /proc/cmdline | grep ttyS0 2>&1 >> /dev/null
 if [ $? = 0 ] && [ -f "/etc/init.d/S50httpd" ]; then
 	echo " Restarting httpd ..."
 	killall wifi 2>&1 >> /dev/null  # survey page relaunches this, sometimes httpd gets 'hung' on it
