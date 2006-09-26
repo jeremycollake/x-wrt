@@ -1,20 +1,20 @@
 #!/usr/bin/webif-page
 <? 
 . "/usr/lib/webif/webif.sh"
-header "Status" "Status" "@TR<<Device Status>>" ''
+header "Status" "Status" "@TR<<Device Status>>" 
 ?>
 
 <meta http-equiv="refresh" content="20">
 
 <?
-MEMINFO=$(cat "/proc/meminfo")
-# my lame way to parse this.. maybe speedier than anything else though
+
+MEMINFO=$(free | sed 1,3d)
 nI="0"
 for CUR_VAR in $MEMINFO; do
 	case "$nI" in
-	  18) TOTAL_MEM=$CUR_VAR;;
-	  21) FREE_MEM=$CUR_VAR;;	  
-	  23) break;;	   
+	  1) TOTAL_MEM=$CUR_VAR;;
+	  3) FREE_MEM=$CUR_VAR
+	  	break;;	  	
 	esac		
 	let "nI+=1"		
 done
