@@ -1,13 +1,16 @@
 #!/bin/sh
-echo " Cleaning up existing webif package (if one exists) ..."
-# remove files, but not directories
-rm -f /www/*
-rm -f /www/svggraph/*
-rm -f /www/cgi-bin/*
-rm -f /www/cgi-bin/webif/*
-rm -f /usr/lib/webif/*
-rm -f /etc/init.d/S50dnsmasq
-rm -f /etc/init.d/S60ntp
-rm -f /etc/init.d/S51crond
-rm -f /etc/init.d/S11firmwareinfo
-rm -f /etc/init.d/S12deprecatedcleanup
+cat /proc/cmdline | grep ttyS0
+if [ $? = 0 ]; then
+	echo " Cleaning up existing webif package (if one exists) ..."
+	# remove files, but not directories
+	rm -f /www/*
+	rm -f /www/svggraph/*
+	rm -f /www/cgi-bin/*
+	rm -f /www/cgi-bin/webif/*
+	rm -f /usr/lib/webif/*
+	rm -f /etc/init.d/S50dnsmasq
+	rm -f /etc/init.d/S60ntp
+	rm -f /etc/init.d/S51crond
+	rm -f /etc/init.d/S11firmwareinfo
+	rm -f /etc/init.d/S12deprecatedcleanup
+fi

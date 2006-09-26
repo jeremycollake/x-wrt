@@ -1,6 +1,11 @@
 #!/bin/sh
-echo " Restarting httpd ..."
-killall webif-page
-killall haserl
-killall httpd
-/etc/init.d/S50httpd
+# only when we're on embedded system.. todo: do better checks
+cat /proc/cmdline | grep ttyS0
+if [ $? = 0 ]; then
+	echo " Restarting httpd ..."
+	killall webif-page
+	killall haserl
+	killall httpd
+	/etc/init.d/S50httpd
+fi
+exit 0 # always success
