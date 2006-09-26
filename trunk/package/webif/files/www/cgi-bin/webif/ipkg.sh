@@ -30,7 +30,7 @@
 header "System" "Installed Software" "@TR<<Installed Software>>"
 
 ?>
-<p style="position: absolute; right: 1em; top: 10.5em"><a href="ipkg.sh?action=update">@TR<<Update package lists>></a></p>
+<p style="position: absolute; right: 1em; top: 4em"><a href="ipkg.sh?action=update">@TR<<Update package lists>></a></p>
 <pre>
 <?
 if [ "$FORM_action" = "update" ]; then
