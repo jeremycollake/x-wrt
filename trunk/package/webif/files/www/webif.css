@@ -351,6 +351,12 @@ dt,
 	font-style: italic;
 }
 
+.mac-address
+{
+	font-size: 0.7em;
+	display: inline;	
+}
+
 /* color */
 
 html, body 
