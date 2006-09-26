@@ -3,9 +3,10 @@
 cat /proc/cmdline | grep ttyS0
 if [ $? = 0 ] && [ -f "/etc/init.d/S50httpd" ]; then
 	echo " Restarting httpd ..."
+	killall wifi 2>&1 >> /dev/null  # survey page relaunches this, sometimes httpd gets 'hung' on it
 	killall webif-page 2>&1 >> /dev/null
 	killall haserl 2>&1 >> /dev/null
 	killall httpd 2>&1 >> /dev/null
+	/etc/init.d/S40network 		# to relaunch wifi up if necessary
 	/etc/init.d/S50httpd
 fi
-exit 0 # always success
