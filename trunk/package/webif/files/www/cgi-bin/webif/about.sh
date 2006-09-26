@@ -54,7 +54,7 @@ fi
 <tr><td>
 &nbsp&nbsp <a href="mailto:spectra@gmx.ch">Spectra</a>
 </td></tr>
-<tr><th>Webif^2 Contributors (sorted by name):</th></tr>
+<tr><th>Webif<sup>2</sup> Contributors (sorted by name):</th></tr>
 <tr><td>
 &nbsp&nbsp <a href="mailto:jeremy.collake@gmail.com">Jeremy Collake</a>
 </td></tr>			
