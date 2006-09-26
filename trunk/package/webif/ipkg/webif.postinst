@@ -1,0 +1,6 @@
+#!/bin/sh
+echo " Restarting httpd ..."
+killall webif-page
+killall haserl
+killall httpd
+/etc/init.d/S50httpd
