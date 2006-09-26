@@ -1,11 +1,11 @@
 #!/bin/sh
 # only when we're on embedded system.. todo: do better checks
 cat /proc/cmdline | grep ttyS0
-if [ $? = 0 ]; then
+if [ $? = 0 ] && [ -f "/etc/init.d/S50httpd" ]; then
 	echo " Restarting httpd ..."
-	killall webif-page
-	killall haserl
-	killall httpd
+	killall webif-page 2>&1 >> /dev/null
+	killall haserl 2>&1 >> /dev/null
+	killall httpd 2>&1 >> /dev/null
 	/etc/init.d/S50httpd
 fi
 exit 0 # always success
