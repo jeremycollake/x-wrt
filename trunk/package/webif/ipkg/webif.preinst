@@ -9,3 +9,4 @@ rm -f /etc/init.d/S50dnsmasq
 rm -f /etc/init.d/S60ntp
 rm -f /etc/init.d/S51crond
 rm -f /etc/init.d/S11firmwareinfo
+rm -f /etc/init.d/S12deprecatedcleanup
