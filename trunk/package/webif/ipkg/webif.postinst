@@ -1,4 +1,7 @@
 #!/bin/sh
+#
+# TODO: this crap needs rewriting
+#
 # only when we're on embedded system.. todo: do better checks
 cat /proc/cmdline | grep ttyS0 2>&1 >> /dev/null
 if [ $? = 0 ] && [ -f "/etc/init.d/S50httpd" ]; then
