@@ -291,16 +291,16 @@ field|@TR<<Wireless Interface>>
 select|radio|$FORM_radio
 option|1|@TR<<Enabled>>
 option|0|@TR<<Disabled>>
-field|@TR<<ESSID Broadcast>>|||Broadcasting your SSID means it will show up in wireless surveys. Not broadcasting it means that clients must already know the SSID to connect to the AP.
+field|@TR<<ESSID Broadcast>>
 select|broadcast|$FORM_broadcast
 option|0|@TR<<Show>>
 option|1|@TR<<Hide>>
-field|@TR<<ESSID>>|||Name of your Wireless Network
+field|@TR<<ESSID>>
 text|ssid|$FORM_ssid
 field|@TR<<Channel>>
 select|channel|$FORM_channel
 $F_CHANNELS
-field|@TR<<WLAN Mode#Mode>>|||This sets the operation mode of your wireless network. 
+field|@TR<<WLAN Mode#Mode>>
 select|mode|$FORM_mode
 option|ap|@TR<<Access Point>>
 option|sta|@TR<<Client>>
@@ -320,7 +320,7 @@ option|gPerformance|@TR<<802.11g (performance)>>
 option|gLRS|@TR<<802.11g (range - LRS)>>
 option|gAfterburner|@TR<<802.11g (afterburner)>>
 
-field|@TR<<G-mode Protection#G-mode Protection>>|||Set this in a mixed network when some stations can not hear.
+field|@TR<<G-mode Protection#G-mode Protection>>
 select|gmode_protection|$FORM_gmode_protection
 option|1|@TR<<Enabled>>
 option|0|@TR<<Disabled>>
@@ -328,7 +328,7 @@ helpitem|G-mode Protection
 helptext|HelpText G-mode Protection#Set this in a mixed network when some stations can not hear.
 end_form
 start_form|@TR<<Encryption Settings>>
-field|@TR<<Encryption Type>>|||WPA (RADIUS) is only supported in Access Point mode. WPA (PSK) does not work in Ad-Hoc mode.
+field|@TR<<Encryption Type>>
 select|encryption|$FORM_encryption
 option|off|@TR<<Disabled>>
 option|wep|WEP

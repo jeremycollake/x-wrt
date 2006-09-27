@@ -1,7 +1,7 @@
 #!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
-load_settings "wireless"
+load_settings "wireless" 
 
 header "Network" "Advanced Wireless" "@TR<<Advanced Wireless Configuration>>" ' onLoad="modechange()"' "$SCRIPT_NAME"
 
@@ -122,12 +122,12 @@ end_form
 
 start_form|@TR<<Settings>>
 
-field|@TR<<Automatic WDS>>|||Automatic WDS causes the AP to accept connections from any WDS nodes without them having to be added to the WDS MAC address list.
+field|@TR<<Automatic WDS>>
 select|lazywds|$FORM_lazywds
 option|1|@TR<<Enabled>>
 option|0|@TR<<Disabled>>
 
-field|@TR<<Filter Mode>>|||Specifies if the list of client MAC addresses should indicate to allow only those clients, or deny those clients and allow all others. Disabled means the MAC address list is not used.
+field|@TR<<Filter Mode>>
 select|macmode|$FORM_macmode
 option|disabled|@TR<<Disabled>>
 option|allow|@TR<<Allow>>

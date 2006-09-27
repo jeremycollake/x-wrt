@@ -177,7 +177,7 @@ end_form
 start_form|@TR<<IP Settings>>|wan_ip_settings|hidden
 field|@TR<<WAN IP Address>>|ipaddr|hidden
 text|wan_ipaddr|$FORM_wan_ipaddr
-field|@TR<<Netmask>>|wan_netmask|hidden||For those who do not know what a bitmask is, just think of 255 as match this part and 0 as any number here.
+field|@TR<<Netmask>>|wan_netmask|hidden
 text|wan_netmask|$FORM_wan_netmask
 field|@TR<<Default Gateway>>|wan_gateway|hidden
 text|wan_gateway|$FORM_wan_gateway
@@ -246,7 +246,7 @@ field|@TR<<LAN IP Address>>
 text|lan_ipaddr|$FORM_lan_ipaddr
 helpitem|IP Address
 helptext|Helptext LAN IP Address#This is the address you want this device to have on your LAN.
-field|@TR<<Netmask>>|||For those who do not know what a bitmask is, just think of 255 as match this part and 0 as any number here.
+field|@TR<<Netmask>>
 text|lan_netmask|$FORM_lan_netmask
 helpitem|Netmask
 helptext|Helptext Netmask#This bitmask indicates what addresses are included in your LAN.
