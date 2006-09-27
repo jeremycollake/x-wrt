@@ -36,7 +36,7 @@ MAX_PORT=5		# maximum port number (todo: should determine dynamically)
 MAX_VLANS=16		# limit the switch can handle on the bcm947xx (todo: dynamically determine)
 MAX_VLANS_INDEX=15	# like MAX_VLANS, except starts at 0 instead of 1
 #for later use
-HELP_TEXT="In cases where a port belongs to more than one VLAN, a technique known as tagging is used to identify to which VLAN traffic on that port belongs."
+HELP_TEXT=
 
 ###################################################################
 # CountNumberOfVLANsThatContainPortX ( ### )
@@ -190,7 +190,7 @@ display_form <<EOF
 onchange|modechange
 start_form|@TR<<VLAN Configuration>>
 helpitem|VLAN
-helptext|Helptext VLAN#A virtual LAN is a set of ports that are bridged.
+helptext|Helptext VLAN#A virtual LAN is a set of ports that are bridged. In cases where a port belongs to more than one VLAN, a technique known as tagging is used to identify to which VLAN traffic on that port belongs.
 string|<table><tbody>
 $FORM_all_vlans
 string|</tbody></table>
@@ -198,7 +198,6 @@ end_form
 start_form|
 submit|add_vlan|Add
 submit|remove_vlan|Remove
-field|<font color=blue>HELP ME</font>|||$HELP_TEXT
 end_form
 EOF
 
