@@ -99,8 +99,7 @@ Pragma: no-cache
 		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
 		<meta http-equiv="expires" content="Mon, 01 Jan 1901 00:00:01 GMT" />
 	</head>
-	<body $4><div id="container">
-	 <script type="text/javascript" src="/overlib.js"><!-- overLIB (c) Erik Bosrup --></script>
+	<body $4><div id="container">	 
 	  <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>	  
 	    <div id="header">
 	    				
