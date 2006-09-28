@@ -107,9 +107,9 @@ $1 ~ /^textarea/ {
 }
 #####################################################
 # progressbar|id|caption|width_pixels_or_percent|percent_complete|completed_color|uncompleted_color
-#
+# todo: finish CSSification
 ($1 ~ /^progressbar/) {
-	print "<div class=\"settings\">"
+	print "<div class=\"progressbar\">"
 	# show caption 
 	print "<tr><td>"$3"</td></tr>"
 	# show progress bar
