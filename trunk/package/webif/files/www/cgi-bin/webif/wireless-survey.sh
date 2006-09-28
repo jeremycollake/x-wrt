@@ -152,15 +152,15 @@ else
 		SIGNAL_INTEGRITY=$(expr $SIGNAL_DBM + $NOISE_DELTA)
 		MAC_DASHES=$(echo "$MAC_ID" | sed s/':'/'-'/g)
 		MAC_FIRST_THREE=$(echo "$MAC_DASHES" | cut -c1-8)
+		SNR_PERCENT=$(expr 100 + $SIGNAL_INTEGRITY)
 			
 		FORM_cells="$FORM_cells 
 			string|<tr><td><strong>Cell</strong> $CELL_ID</tr></td>
 			string|<tr><td><strong>SSID</strong> $ESSID (<div class=mac-address><a href=\"http://standards.ieee.org/cgi-bin/ouisearch?$MAC_FIRST_THREE\" target=\"_new\">$MAC_DASHES</a></div>)</tr></td>		
+			progressbar|Signal Integrity|<strong>SNR</strong> $SIGNAL_INTEGRITY dBm|300|$SNR_PERCENT|$SIGNAL_INTEGRITY dBm
 			string|<tr><td><strong>Channel</strong> $CHANNEL_ID</tr></td>
 			$QUALITY_STRING
 			string|<tr><td><strong>Signal</strong> $SIGNAL_DBM dBm <strong>Noise</strong> $NOISE_DBM dBm</tr></td>
-			#string|<tr><td></tr></td>
-			progressbar|Signal Integrity|<strong>SNR</strong> $SIGNAL_INTEGRITY dBm|80%|$(expr 100 + $SIGNAL_INTEGRITY)|#CCFFCC|#000000
 			string|<tr><td><br /></td></tr>"
 		
 		rm -f "$tempfile"_"${current}"
