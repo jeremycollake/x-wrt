@@ -11,8 +11,8 @@
 #   OpenWrt developers (??)
 #   todo: person who added descriptions..
 #   eJunky
-#   Jeremy Collake <jeremy.collake@gmail.com>
 #   emag
+#   Jeremy Collake <jeremy.collake@gmail.com>
 #
 # Major revisions:
 #
