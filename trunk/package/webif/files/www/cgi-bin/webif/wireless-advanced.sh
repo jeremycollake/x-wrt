@@ -1,6 +1,25 @@
 #!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
+###################################################################
+# Advanced wireless configuration
+#
+# Description:
+#	Configure additional wireless settings.
+#
+# Author(s) [in order of work date]: 
+#       Original webif authors.
+# 	Jeremy Collake <jeremy.collake@gmail.com>
+#       Travis Kemen <kemen04@gmail.com>
+#
+# Major revisions:
+#
+# NVRAM variables referenced:
+#
+# Configuration files referenced: 
+#   none
+#
+
 load_settings "wireless" 
 
 header "Network" "Advanced Wireless" "@TR<<Advanced Wireless Configuration>>" ' onLoad="modechange()"' "$SCRIPT_NAME"
