@@ -42,7 +42,7 @@ empty "$_loadavg" && {
 }
 
 display_form <<EOF
-start_form|
+start_form|Basic Statistics
 string|<tr><td><h3>Load Average</h3></td></tr>
 string|<tr><td><font size=+1 color="red">$_loadavg</font><tr><td>
 string|<tr><td><br /></td></tr>
