@@ -106,18 +106,22 @@ $1 ~ /^textarea/ {
 	print "</textarea>"
 }
 #####################################################
-# progressbar|id|caption|width_percent|percent_complete|filled_caption|unfilled_caption
+# progressbar|id|title|width_percent|percent_complete|filled_caption|unfilled_caption
 # 
 ($1 ~ /^progressbar/) {
-	print "<div class=\"progressbar\">"
-	# show caption 
-	print "<tr><td>"$3"</td></tr>"
+	uncomplete_area=100-$5;
+	print "<div class=\"progressbar-title\">"
+	print "<tr>"
+	# show caption 	
+	if ($3 != "" ) print "<td>"$3"</td>"
 	# show progress bar
 	print "<td>"
-	print "<table border=\"1\" width=\"" $4 "\" id=\"" $2 "\"><tbody>"	
-	print "<tr><td class=\"progressbar-filled\" width=\"" $5 "%\">" $6 "</td></div>"
-	print "<td class=\"progressbar-unfilled\"><td>" $7 "</td></div></tr>"	
-	print "</tbody></table></td>"
+	print "<table class=\"progressbar-whole\" width=\"" $4 "\" id=\"" $2 "\"><tbody>"	
+	print "<tr>"
+	print "<td class=\"progressbar-filled\" width=\"" $5 "%\">" $6 "</td>"	
+	print "<td class=\"progressbar-unfilled\" width=\"" uncomplete_area "%\">" $7 "</td>"	
+	print "</tr>"	
+	print "</tbody></table></td></tr>"
 	print "</div>"
 }
 $1 ~ /^text$/ { print "<input id=\"" $2 "\" type=\"text\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
