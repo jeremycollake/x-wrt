@@ -226,9 +226,9 @@ cat <<EOF
 <!--
 function modechange()
 {
-/* Where did this come from and what is its purpose? 
-	- wpa/psk should be ok in any mode
+/* TODO: the following code from the original webif is fucked up
 	- and encryption_psk/encryption_wpa don't exist..
+	- wpa/psk should be ok in any mode
 	
 	if (isset('mode','adhoc')) 
 	{
