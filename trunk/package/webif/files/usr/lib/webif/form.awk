@@ -106,8 +106,8 @@ $1 ~ /^textarea/ {
 	print "</textarea>"
 }
 #####################################################
-# progressbar|id|caption|width_pixels_or_percent|percent_complete|completed_color|uncompleted_color
-# todo: finish CSSification
+# progressbar|id|caption|width_pixels_or_percent|percent_complete
+# 
 ($1 ~ /^progressbar/) {
 	print "<div class=\"progressbar\">"
 	# show caption 
@@ -115,8 +115,8 @@ $1 ~ /^textarea/ {
 	# show progress bar
 	print "<td>"
 	print "<table border=\"1\" width=\"" $4 "\" id=\"" $2 "\"><tbody>"	
-	print "<tr><td bgcolor=\"" $6 "\" width=\"" $5 "%\">&nbsp;</td>"
-	print "<td bgcolor=\"" $7 "\">&nbsp;</td></tr>"	
+	print "<tr><td style=\"progressbar-filled\" width=\"" $5 "%\">&nbsp;</td>"
+	print "<td style=\"progressbar-unfilled\">&nbsp;</td></tr>"	
 	print "</tbody></table></td>"
 	print "</div>"
 }
