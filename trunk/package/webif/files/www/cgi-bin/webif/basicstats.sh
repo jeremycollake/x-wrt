@@ -41,6 +41,16 @@ empty "$_loadavg" && {
 	_uptime="${_uptime#*up }"
 }
 
+mounts_form=$(
+df | awk 'BEGIN { mcount=0 }; 
+	/\// {
+	if ($5 > 10) filled_caption=$5;	
+	print "string|<tr><td><br /></td></tr>"	
+	print "string|<tr><td><dl><dt><strong>"$6"</strong><div class=mount-target>@"$1"</div><dd>Usage: "$4 "<div class=kb>KB</div> of " $2 "<div class=kb>KB</div></dt></dd></dt></dl></tr>"	
+	print "progressbar|mount_" mcount "||40%|" $5 "|" filled_caption "|" $4 "Kb"; mcount+=1}'
+	)
+		
+
 display_form <<EOF
 start_form|Basic Statistics
 string|<tr><td><h3>Load Average</h3></td></tr>
@@ -57,6 +67,9 @@ string|<tr><td><h3>Tracked Connections</h3></td></tr>
 string|<tr><td>Maximum: $MAX_CONNECTIONS</td></tr>
 string|<tr><td>Used: $ACTIVE_CONNECTIONS ($USED_CONNECTIONS_PERCENT%)</td></tr>
 progressbar|conntrackuse||200|$USED_CONNECTIONS_PERCENT|$USED_CONNECTIONS_PERCENT%||
+string|<tr><td><br /></td></tr>
+string|<tr><td><h3>Mounts</h3></td></tr
+$mounts_form
 string|<tr><td><br /></td></tr>
 end_form|
 EOF
