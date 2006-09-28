@@ -1,0 +1,6 @@
+config BR2_PACKAGE_WEPKEYGEN
+	tristate "wepkeygen - generate wep keys based on passphrase."
+	default m
+	help
+	 generates wwep keys based on a passphrase. This is supposed to use
+	 the standardized algorithm for doing so.
