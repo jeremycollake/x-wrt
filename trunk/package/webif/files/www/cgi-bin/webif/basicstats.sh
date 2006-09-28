@@ -47,7 +47,7 @@ df | awk 'BEGIN { mcount=0 };
 	if ($5 > 10) filled_caption=$5;	
 	print "string|<tr><td><br /></td></tr>"	
 	print "string|<tr><td><dl><dt><strong>"$6"</strong><div class=mount-target>@"$1"</div><dd>Usage: "$4 "<div class=kb>KB</div> of " $2 "<div class=kb>KB</div></dt></dd></dt></dl></tr>"	
-	print "progressbar|mount_" mcount "||40%|" $5 "|" filled_caption "|" $4 "Kb"; mcount+=1}'
+	print "progressbar|mount_" mcount "||40%|" $5 "|" filled_caption "|"; mcount+=1}'
 	)
 		
 
