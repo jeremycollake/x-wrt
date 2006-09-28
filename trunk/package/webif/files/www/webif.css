@@ -248,6 +248,21 @@ th {
  	padding-bottom: 1em;
 }
 
+.kb 
+{
+	display: inline;	
+	font-size: 0.8em;	
+}
+
+.mount-target
+{
+	display: inline;	
+	font-size: 0.8em;	
+	padding-left: 1em;
+	font-weight: normal;
+	
+}
+
 /* font */
 body 
 {
@@ -512,4 +527,15 @@ html, body
 {
 	color: #000;
 	background-color: #000;
+}
+
+.kb 
+{
+	color: #222;	
+}
+
+
+.mount-target
+{
+	color: #222;	
 }
