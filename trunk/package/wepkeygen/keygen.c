@@ -64,16 +64,19 @@ wep_keygen128(char *str, u_char *keys)
     }
 
     md5_begin(&ctx);
-    md5_hash(&ctx, buf, sizeof buf);
+    md5_hash(buf, sizeof buf, &ctx);
     md5_end(buf, &ctx);
 
     memcpy(keys, buf, WEPKEYSTORE);
+
     for(i = 0; i < WEPSTRONGKEYSIZE; i++) {
         keys[i] = buf[i];
     }
+
     for(; i < WEPKEYSTORE; i++) {
         keys[i] = 0;
     }
+
     return;
 }
 
