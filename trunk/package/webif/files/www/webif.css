@@ -358,6 +358,26 @@ dt,
 	display: inline;	
 }
 
+.progressbar-title
+{
+
+}
+
+.progressbar-whole
+{	
+	border: dotted gray;
+}
+
+.progressbar-filled
+{
+	font-size: 0.7em;
+}
+
+.progressbar-unfilled
+{
+	font-size: 0.7em;
+}
+
 /* color */
 
 html, body 
@@ -470,4 +490,26 @@ html, body
 #save .page-save 
 {
 	background-color: #FFF;
+}
+
+.progressbar-title
+{
+
+}
+
+.progressbar-whole
+{	
+	
+}
+
+.progressbar-filled
+{
+	color: #FFFFFF;
+	background-color: #2b1b9f;
+}
+
+.progressbar-unfilled
+{
+	color: #0;
+	background-color: #0;
 }
