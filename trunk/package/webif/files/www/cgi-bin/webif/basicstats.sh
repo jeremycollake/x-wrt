@@ -51,12 +51,12 @@ helptext|Helptext Load Average#The load average represents the average number of
 string|<tr><td><h3>RAM Utilization</h3><tr><td>
 string|<tr><td>Total: $TOTAL_MEM KB</td></tr>
 string|<tr><td>Used: $USED_MEM KB ($MEM_PERCENT_USED%)</tr></td>
-progressbar|ramuse||200|$MEM_PERCENT_USED|#CCFFCC|#000000
+progressbar|ramuse||200|$MEM_PERCENT_USED|$MEM_PERCENT_USED%||
 string|<tr><td><br /></td></tr>
 string|<tr><td><h3>Tracked Connections</h3></td></tr>
 string|<tr><td>Maximum: $MAX_CONNECTIONS</td></tr>
 string|<tr><td>Used: $ACTIVE_CONNECTIONS ($USED_CONNECTIONS_PERCENT%)</td></tr>
-progressbar|conntrackuse||200|$USED_CONNECTIONS_PERCENT|#CCFFCC|#000000
+progressbar|conntrackuse||200|$USED_CONNECTIONS_PERCENT|$USED_CONNECTIONS_PERCENT%||
 string|<tr><td><br /></td></tr>
 end_form|
 EOF
