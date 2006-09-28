@@ -1,6 +1,23 @@
 #!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
+###################################################################
+# About page
+#
+# Description:
+#	Shows the many contributors.
+#
+# Author(s) [in order of work date]: 
+#       Original webif authors.
+# 	Jeremy Collake <jeremy.collake@gmail.com>
+#
+# Major revisions:
+#
+# NVRAM variables referenced:
+#
+# Configuration files referenced: 
+#   none
+#
 header "Info" "About" "@TR<<About>>" '' ''
 # 322 is replaced by revision by preprocessor at build
 this_revision=322
