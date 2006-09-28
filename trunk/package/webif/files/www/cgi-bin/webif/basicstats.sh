@@ -66,7 +66,7 @@ start_form|Tracked Connections
 string|<tr><td>Maximum: $MAX_CONNECTIONS</td></tr>
 progressbar|conntrackuse|Used: $ACTIVE_CONNECTIONS ($USED_CONNECTIONS_PERCENT%)|200|$USED_CONNECTIONS_PERCENT|$USED_CONNECTIONS_PERCENT%||
 end_form|
-start_form|Mounts
+start_form|Mount Usage
 $mounts_form
 string|<tr><td><br /></td></tr>
 end_form|
