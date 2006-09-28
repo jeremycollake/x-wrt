@@ -44,31 +44,29 @@ empty "$_loadavg" && {
 mounts_form=$(
 df | awk 'BEGIN { mcount=0 }; 
 	/\// {
-	filled_caption=$5;		
-	print "string|<tr><td><br /></td></tr>"	
-	print "string|<tr><td><dl><dt><strong>"$6"</strong><div class=mount-target>@"$1"</div><dd>Usage: "$3 "<div class=kb>KB</div> of " $2 "<div class=kb>KB</div></dt></dd></dt></dl></tr>"	
-	print "progressbar|mount_" mcount "||40%|" $5 "|" filled_caption "|"; mcount+=1}'
+	filled_caption=$5;				
+	print "string|<tr><td><strong>"$6"</strong></td><td>"$1"</td></tr>"		
+	print "progressbar|mount_" mcount "|&nbsp;&nbsp;" $3 "<div class=kb>KB</div> of " $2 "<div class=kb>KB</div>|200|" $5 "|" filled_caption "|"; mcount+=1
+	print "string|<tr><td><br /></td></tr>"
+	}'
 	)
 		
 
 display_form <<EOF
-start_form|Basic Statistics
-string|<tr><td><h3>Load Average</h3></td></tr>
+start_form|Load Average
 string|<tr><td><font size=+1 color="red">$_loadavg</font><tr><td>
-string|<tr><td><br /></td></tr>
+end_form|
 helpitem|Load Average
 helptext|Helptext Load Average#The load average represents the average number of active processes during the past 1, 5, and 15 minutes. Generally speaking, >=3 is extremely high, >=2 is high, >=1 is moderate, and >=0 is low.
-string|<tr><td><h3>RAM Utilization</h3><tr><td>
+start_form|RAM Usage
 string|<tr><td>Total: $TOTAL_MEM KB</td></tr>
-string|<tr><td>Used: $USED_MEM KB ($MEM_PERCENT_USED%)</tr></td>
-progressbar|ramuse||200|$MEM_PERCENT_USED|$MEM_PERCENT_USED%||
-string|<tr><td><br /></td></tr>
-string|<tr><td><h3>Tracked Connections</h3></td></tr>
+progressbar|ramuse|Used: $USED_MEM KB ($MEM_PERCENT_USED%)|200|$MEM_PERCENT_USED|$MEM_PERCENT_USED%||
+end_form|
+start_form|Tracked Connections
 string|<tr><td>Maximum: $MAX_CONNECTIONS</td></tr>
-string|<tr><td>Used: $ACTIVE_CONNECTIONS ($USED_CONNECTIONS_PERCENT%)</td></tr>
-progressbar|conntrackuse||200|$USED_CONNECTIONS_PERCENT|$USED_CONNECTIONS_PERCENT%||
-string|<tr><td><br /></td></tr>
-string|<tr><td><h3>Mounts</h3></td></tr
+progressbar|conntrackuse|Used: $ACTIVE_CONNECTIONS ($USED_CONNECTIONS_PERCENT%)|200|$USED_CONNECTIONS_PERCENT|$USED_CONNECTIONS_PERCENT%||
+end_form|
+start_form|Mounts
 $mounts_form
 string|<tr><td><br /></td></tr>
 end_form|
