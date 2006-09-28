@@ -1,6 +1,24 @@
 #!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
+###################################################################
+# Wireless configuration
+#
+# Description:
+#	Basic wireless configuration.
+#
+# Author(s) [in order of work date]: 
+#       Original webif authors.
+# 	Jeremy Collake <jeremy.collake@gmail.com>
+#
+# Major revisions:
+#
+# NVRAM variables referenced:
+#
+# Configuration files referenced: 
+#   none
+#
+
 load_settings "wireless"
 
 header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onLoad="modechange()"' "$SCRIPT_NAME"
