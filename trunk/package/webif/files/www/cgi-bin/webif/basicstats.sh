@@ -55,20 +55,26 @@ df | awk 'BEGIN { mcount=0 };
 display_form <<EOF
 start_form|Load Average
 string|<tr><td><font size=+1 color="red">$_loadavg</font><tr><td>
-end_form|
 helpitem|Load Average
-helptext|Helptext Load Average#The load average represents the average number of active processes during the past 1, 5, and 15 minutes. Generally speaking, >=3 is extremely high, >=2 is high, >=1 is moderate, and >=0 is low.
+helptext|Helptext Load Average#The load average represents the average number of active processes during the past 1, 5, and 15 minutes
+end_form|
 start_form|RAM Usage
 string|<tr><td>Total: $TOTAL_MEM KB</td></tr>
 progressbar|ramuse|Used: $USED_MEM KB ($MEM_PERCENT_USED%)|200|$MEM_PERCENT_USED|$MEM_PERCENT_USED%||
+helpitem|RAM Usage
+helptext|Helptext RAM Usage#This is the current RAM usage. The amount free represents how much applications have available.
 end_form|
 start_form|Tracked Connections
 string|<tr><td>Maximum: $MAX_CONNECTIONS</td></tr>
 progressbar|conntrackuse|Used: $ACTIVE_CONNECTIONS ($USED_CONNECTIONS_PERCENT%)|200|$USED_CONNECTIONS_PERCENT|$USED_CONNECTIONS_PERCENT%||
+helpitem|Tracked Connections
+helptext|Helptext Tracked Connections#This is the number of connections in your router's conntrack table.
 end_form|
 start_form|Mount Usage
 $mounts_form
 string|<tr><td><br /></td></tr>
+helpitem|Mount Usage
+helptext|Helptext Mount Usage#This is the amount of space total and used on the filesystems mounted to your router.
 end_form|
 EOF
 ?>
