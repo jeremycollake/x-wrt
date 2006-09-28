@@ -1,0 +1,4 @@
+Package: wepkeygen
+Priority: optional
+Section: net
+Description: generate wep keys based on passphrase.
