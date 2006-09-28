@@ -1,6 +1,24 @@
 #!/usr/bin/webif-page
 <? 
 . "/usr/lib/webif/webif.sh"
+###################################################################
+# WAN and LAN configuration page
+#
+# Description:
+#	Configures basic WAN and LAN interface settings.
+#
+# Author(s) [in order of work date]: 
+#       Original webif authors of wan.sh and lan.sh
+# 	Jeremy Collake <jeremy.collake@gmail.com>
+#
+# Major revisions:
+#
+# NVRAM variables referenced:
+#
+# Configuration files referenced: 
+#   none
+#
+
 header "Network" "WAN-LAN" "@TR<<WAN-LAN Configuration>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
 
 load_settings network
