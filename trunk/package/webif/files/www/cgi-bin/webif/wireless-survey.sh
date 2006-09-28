@@ -38,8 +38,7 @@ else
 	nvram set wl0_mode="sta"
 	# tests show scan works in infra or ad-hoc mode, but we'll do this to be safe
 	ORIGINAL_INFRA=$(nvram get wl0_infra)	
-	nvram set wl0_infra="1"		
-	# todo: wifi up here and below causes the page to stay in a wait state.. tried several ways
+	nvram set wl0_infra="1"			
 	wifi up 2>/dev/null >/dev/null </dev/null
 fi
 WL_MODE=$(nvram get wl0_mode)					
@@ -182,9 +181,8 @@ if ! empty "$FORM_clientswitch"; then
 fi 
 
 fi # end if is in 'allowed to scan' mode
-
- 2>/dev/null >/dev/null </dev/null
 ?>
+
 <br /></tbody></table>
 
 <?
