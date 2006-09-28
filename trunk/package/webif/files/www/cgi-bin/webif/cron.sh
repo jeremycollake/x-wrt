@@ -1,5 +1,21 @@
 #!/usr/bin/webif-page
 <? 
+###################################################################
+# Crond
+#
+# Description:
+#	Cron daemon configuration.
+#
+# Author(s) [in order of work date]: 
+#       Travis Kemen <kemen04@gmail.com>
+#
+# Major revisions:
+#
+# NVRAM variables referenced:
+#
+# Configuration files referenced: 
+#   none
+#
 crondir_base="/var/spool/cron"
 cron_realdir="/etc/spool/cron/crontabs"
 crondir="$crondir_base/crontabs"
