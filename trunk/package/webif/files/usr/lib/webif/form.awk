@@ -106,7 +106,7 @@ $1 ~ /^textarea/ {
 	print "</textarea>"
 }
 #####################################################
-# progressbar|id|caption|width_pixels_or_percent|percent_complete
+# progressbar|id|caption|width_percent|percent_complete|filled_caption|unfilled_caption
 # 
 ($1 ~ /^progressbar/) {
 	print "<div class=\"progressbar\">"
@@ -115,8 +115,8 @@ $1 ~ /^textarea/ {
 	# show progress bar
 	print "<td>"
 	print "<table border=\"1\" width=\"" $4 "\" id=\"" $2 "\"><tbody>"	
-	print "<tr><td style=\"progressbar-filled\" width=\"" $5 "%\">&nbsp;</td>"
-	print "<td style=\"progressbar-unfilled\">&nbsp;</td></tr>"	
+	print "<tr><td class=\"progressbar-filled\" width=\"" $5 "%\">" $6 "</td></div>"
+	print "<td class=\"progressbar-unfilled\"><td>" $7 "</td></div></tr>"	
 	print "</tbody></table></td>"
 	print "</div>"
 }
