@@ -144,22 +144,22 @@ if empty "$FORM_submit"; then
 #####################################################################	
 # save forms
 else
-	SAVED=1					
-  	
-	case "$FORM_encryption" in
-		wpa) V_RADIUS="
-string|FORM_radius_key|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_radius_key
-ip|FORM_radius_ipaddr|@TR<<RADIUS IP Address>>|required|$FORM_radius_ipaddr";;
-		psk) V_PSK="wpapsk|FORM_wpa_psk|@TR<<WPA PSK#WPA Pre-Shared Key>>|required|$FORM_wpa_psk";;
-		wep) V_WEP="
+	if [ "$FORM_generate_wep" != "Generate Key(s)" ]; then
+		SAVED=1					  	
+		case "$FORM_encryption" in
+			wpa) V_RADIUS="
+	string|FORM_radius_key|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_radius_key
+	ip|FORM_radius_ipaddr|@TR<<RADIUS IP Address>>|required|$FORM_radius_ipaddr";;
+			psk) V_PSK="wpapsk|FORM_wpa_psk|@TR<<WPA PSK#WPA Pre-Shared Key>>|required|$FORM_wpa_psk";;
+			wep) V_WEP="
 int|FORM_key|@TR<<Selected WEP Key>>|min=1 max=4|$FORM_key
 wep|FORM_key1|@TR<<WEP Key>> 1||$FORM_key1
 wep|FORM_key2|@TR<<WEP Key>> 2||$FORM_key2
 wep|FORM_key3|@TR<<WEP Key>> 3||$FORM_key3
 wep|FORM_key4|@TR<<WEP Key>> 4||$FORM_key4";;
-	esac
+		esac
 
-	validate <<EOF
+		validate <<EOF
 int|FORM_radio|wl0_radio|required min=0 max=1|$FORM_radio
 int|FORM_broadcast|wl0_closed|required min=0 max=1|$FORM_broadcast
 string|FORM_ssid|@TR<<ESSID>>|required|$FORM_ssid
@@ -168,74 +168,81 @@ $V_WEP
 $V_RADIUS
 $V_PSK
 EOF
-	equal "$?" 0 && {
-	
-		NUM_gmode="1"	
-		case "$FORM_gmode" in
-	  		bOnly) NUM_gmode=0;;
-	  		b+g) NUM_gmode=1;;
-	  		g) NUM_gmode=2;;
-	  		bDeferred) NUM_gmode=3;;
-	  		gPerformance) NUM_gmode=4;;
-	  		gLRS) NUM_gmode=5;;
-	  		gAfterburner) NUM_gmode=6;;  
-		esac  	
+		equal "$?" 0 && {	
+			NUM_gmode="1"	
+			case "$FORM_gmode" in
+	  			bOnly) NUM_gmode=0;;
+	  			b+g) NUM_gmode=1;;
+	  			g) NUM_gmode=2;;
+	  			bDeferred) NUM_gmode=3;;
+	  			gPerformance) NUM_gmode=4;;
+	  			gLRS) NUM_gmode=5;;
+	  			gAfterburner) NUM_gmode=6;;  
+			esac  	
 
-		save_setting wireless wl0_gmode "$NUM_gmode"  
-  		save_setting wireless wl0_gmode_protection "$FORM_gmode_protection"  		
-		save_setting wireless wl0_radio "$FORM_radio"
+			save_setting wireless wl0_gmode "$NUM_gmode"  
+  			save_setting wireless wl0_gmode_protection "$FORM_gmode_protection"  		
+			save_setting wireless wl0_radio "$FORM_radio"
 
-		if equal "$FORM_mode" adhoc; then
-			FORM_mode=sta
-			infra="0"
-		fi
-		save_setting wireless wl0_mode "$FORM_mode"
-		save_setting wireless wl0_infra ${infra:-1}
+			if equal "$FORM_mode" adhoc; then
+				FORM_mode=sta
+				infra="0"
+			fi
+			save_setting wireless wl0_mode "$FORM_mode"
+			save_setting wireless wl0_infra ${infra:-1}
 			
-		save_setting wireless wl0_ssid "$FORM_ssid"
-		save_setting wireless wl0_closed "$FORM_broadcast"
-		save_setting wireless wl0_channel "$FORM_channel"
+			save_setting wireless wl0_ssid "$FORM_ssid"
+			save_setting wireless wl0_closed "$FORM_broadcast"
+			save_setting wireless wl0_channel "$FORM_channel"
 	
-		crypto=""
-		equal "$FORM_aes" aes && crypto="aes"
-		equal "$FORM_tkip" tkip && crypto="tkip${crypto:++$crypto}"
-		save_setting wireless wl0_crypto "$crypto"
+			crypto=""
+			equal "$FORM_aes" aes && crypto="aes"
+			equal "$FORM_tkip" tkip && crypto="tkip${crypto:++$crypto}"
+			save_setting wireless wl0_crypto "$crypto"
 
-		case "$FORM_encryption" in
-		psk)
-			case "${FORM_wpa1}${FORM_wpa2}" in
-				wpa1) save_setting wireless wl0_akm "psk";;
-				wpa2) save_setting wireless wl0_akm "psk2";;
-				wpa1wpa2) save_setting wireless wl0_akm "psk psk2";;
+			case "$FORM_encryption" in
+			psk)
+				case "${FORM_wpa1}${FORM_wpa2}" in
+					wpa1) save_setting wireless wl0_akm "psk";;
+					wpa2) save_setting wireless wl0_akm "psk2";;
+					wpa1wpa2) save_setting wireless wl0_akm "psk psk2";;
+				esac
+				save_setting wireless wl0_wpa_psk "$FORM_wpa_psk"
+				save_setting wireless wl0_wep "disabled"
+				;;
+			wpa)
+				case "${FORM_wpa1}${FORM_wpa2}" in
+					wpa1) save_setting wireless wl0_akm "wpa";;
+					wpa2) save_setting wireless wl0_akm "wpa2";;
+					wpa1wpa2) save_setting wireless wl0_akm "wpa wpa2";;
+				esac
+				save_setting wireless wl0_radius_ipaddr "$FORM_radius_ipaddr"
+				save_setting wireless wl0_radius_key "$FORM_radius_key"
+				save_setting wireless wl0_wep "disabled"
+				;;
+			wep)
+				save_setting wireless wl0_wep enabled
+				save_setting wireless wl0_akm "none"
+				save_setting wireless wl0_key1 "$FORM_key1"
+				save_setting wireless wl0_key2 "$FORM_key2"
+				save_setting wireless wl0_key3 "$FORM_key3"
+				save_setting wireless wl0_key4 "$FORM_key4"
+				save_setting wireless wl0_key "$FORM_key"
+				;;
+			off)
+				save_setting wireless wl0_akm "none"
+				save_setting wireless wl0_wep disabled
+				;;
 			esac
-			save_setting wireless wl0_wpa_psk "$FORM_wpa_psk"
-			save_setting wireless wl0_wep "disabled"
-			;;
-		wpa)
-			case "${FORM_wpa1}${FORM_wpa2}" in
-				wpa1) save_setting wireless wl0_akm "wpa";;
-				wpa2) save_setting wireless wl0_akm "wpa2";;
-				wpa1wpa2) save_setting wireless wl0_akm "wpa wpa2";;
-			esac
-			save_setting wireless wl0_radius_ipaddr "$FORM_radius_ipaddr"
-			save_setting wireless wl0_radius_key "$FORM_radius_key"
-			save_setting wireless wl0_wep "disabled"
-			;;
-		wep)
-			save_setting wireless wl0_wep enabled
-			save_setting wireless wl0_akm "none"
-			save_setting wireless wl0_key1 "$FORM_key1"
-			save_setting wireless wl0_key2 "$FORM_key2"
-			save_setting wireless wl0_key3 "$FORM_key3"
-			save_setting wireless wl0_key4 "$FORM_key4"
-			save_setting wireless wl0_key "$FORM_key"
-			;;
-		off)
-			save_setting wireless wl0_akm "none"
-			save_setting wireless wl0_wep disabled
-			;;
-		esac
-	}
+		}	
+	else
+		# generate a single 128(104)bit key
+		passphrase=$(wepkeygen -s "$FORM_wep_passphrase"  |
+			 awk 'BEGIN { count=0 }; 
+			 	{ total[count]=$1, count+=1; } 
+			 	END { print total[0] ":" total[1] ":" total[2] ":" total[3]}')		
+		FORM_key1=$(echo "$passphrase" | cut -d ':' -f 0-16 | sed s/':'//g)			
+	fi
 fi
 
 cat <<EOF
@@ -367,6 +374,10 @@ text|radius_ipaddr|$FORM_radius_ipaddr
 field|@TR<<RADIUS Server Key>>|radiuskey|hidden
 text|radius_key|$FORM_radius_key
 field|@TR<<WEP Keys>>|wep_keys|hidden
+string|@TR<<Passphrase>>
+text|wep_passphrase|$FORM_wep_passphrase
+submit|generate_wep|Generate Key(s)
+string|<br />
 radio|key|$FORM_key|1
 text|key1|$FORM_key1|<br />
 radio|key|$FORM_key|2
