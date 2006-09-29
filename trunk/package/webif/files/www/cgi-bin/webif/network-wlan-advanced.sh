@@ -84,6 +84,7 @@ if empty "$FORM_submit"; then
         FORM_wl0_bcn=${FORM_wl0_bcn:-100}
         FORM_wl0_maxassoc=${wl0_bcn:-$(nvram get wl0_maxassoc)}
         FORM_wl0_maxassoc=${FORM_wl0_maxassoc:-128}
+        FORM_wl0_distance=${wl0_distance:-$(nvram get wl0_distance)}
 else
 #####################################################################
 # save forms
@@ -99,6 +100,7 @@ int|FORM_wl0_bcn|beacon Period|min=0|$FORM_wl0_bcn
 int|FORM_wl0_maxassoc|Max Associated Clients|required min=0 max=256|$FORM_wl0_maxassoc
 int|FORM_antdiv|Recive Diversity|min=0|$FORM_antdiv
 int|FORM_txdiv|Transmit Diversity|min=0|$FORM_txdiv
+int|FORM_wl0_distance|Distance|min=0|$FORM_wl0_distance
 EOF
 	equal "$?" 0 && {
 		save_setting wireless wl0_lazywds "$FORM_lazywds"
@@ -114,6 +116,7 @@ EOF
                 save_setting wireless wl0_rts   "$FORM_wl0_rts"
                 save_setting wireless wl0_dtim  "$FORM_wl0_dtim"
                 save_setting wireless wl0_bcn   "$FORM_wl0_bcn"
+                save_setting wireless wl0_distance   "$FORM_wl0_distance"
 	}
 fi
 
@@ -197,6 +200,11 @@ text|wl0_bcn|$FORM_wl0_bcn
 
 field|Max Associated Clients (default 128)
 text|wl0_maxassoc|$FORM_wl0_maxassoc
+
+field|Wireless Distance
+text|wl0_distance|$FORM_wl0_distance
+helpitem|Wireless Distance
+helptext|Helptext Wirless Distance#You must enter a number that is double the distance of your longest link.
 end_form
 EOF
 
