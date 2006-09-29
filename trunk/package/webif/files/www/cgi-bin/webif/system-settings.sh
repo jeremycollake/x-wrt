@@ -27,7 +27,7 @@ load_settings "webif"
 
 #####################################################################
 # defaults
-OVERCLOCKING_DISABLED="1" # set to 1 to disble OC support for bcm3302 0.8
+OVERCLOCKING_DISABLED="0" # set to 1 to disble OC support for bcm3302 0.8
 
 #####################################################################
 header "System" "Settings" "@TR<<System Settings>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
@@ -134,7 +134,7 @@ is_bcm947xx && {
 
 LANGUAGES="$(grep -H '^[\t ]*lang[\t ]*=>' /usr/lib/webif/lang/*/*.txt 2>/dev/null | awk -f /usr/lib/webif/languages.awk)"
 is_bcm947xx && {
-	bootwait_form="field|boot_wait
+	bootwait_form="field|Boot Wait
 	select|boot_wait|$FORM_boot_wait
 	option|on|@TR<<Enabled>>
 	option|off|@TR<<Disabled>>"
@@ -195,7 +195,11 @@ start_form|@TR<<System Settings>>
 field|@TR<<Host Name>>
 text|hostname|$FORM_hostname
 $bootwait_form
+helpitem|Boot Wait
+helptext|HelpText Boot Wait#Boot wait causes the boot loader of some devices to wait a few seconds at bootup for a TFTP transfer of a new firmware image. This is a security risk to be left on.
 $waittime_form
+helpitem|Wait Time
+helptext|HelpText Wait Time#Number of seconds the boot loader should wait for a TFTP transfer if Boot Wait is on.
 field|@TR<<Language>>
 select|language|$FORM_language
 $LANGUAGES
