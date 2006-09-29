@@ -90,7 +90,7 @@ EOF
             else
         style=""
         fi
-        echo "<tr><td $style>$ifname</td><td $style>$IFACE</td><td $style>$IFACES</td><td $style><a href=\"dhcpiface.sh?action=modify&amp;iface=$ifname\">@TR<<Modify>></a></td></tr>"
+        echo "<tr><td $style>$ifname</td><td $style>$IFACE</td><td $style>$IFACES</td><td $style><a href=\"network-dhcpiface.sh?action=modify&amp;iface=$ifname\">@TR<<Modify>></a></td></tr>"
     done
     
 awk -f /usr/lib/webif/common.awk -f - /etc/dnsmasq.options <<EOF
@@ -141,7 +141,7 @@ BEGIN {
     for (i = 3; i <= NF; i++) {
         print \$i "<br />"
     }
-    print "</td><td><a href=\\"dhcpiface.sh?remove_line=1&mod=del&iface=" iface "&line=" \$0 "\\">" remove "</a></td></tr>"
+    print "</td><td><a href=\\"network-dhcpiface.sh?remove_line=1&mod=del&iface=" iface "&line=" \$0 "\\">" remove "</a></td></tr>"
     print "<tr><td colspan=\\"3\\"><hr class=\\"separator\\" /></td></tr>"
 }
 

@@ -72,7 +72,7 @@ function pageload()
 </script>
 
 
-<a href="logread.sh">View Syslog</a>
+<a href="systen-logread.sh">View Syslog</a>
 
 <? footer ?>
 <!--

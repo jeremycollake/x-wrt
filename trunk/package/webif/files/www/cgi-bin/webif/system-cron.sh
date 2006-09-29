@@ -45,7 +45,7 @@ radio|cron_enable|$FORM_cron_enable|0|Disable
 end_form" 
 ?>
 
-<a href="crontabs.sh">View Crontab files</a>
+<a href="system-crontabs.sh">View Crontab files</a>
 
 <? footer ?>
 <!--

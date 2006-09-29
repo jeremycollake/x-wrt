@@ -51,7 +51,7 @@ $2 !~ /terminated/ {
        link=$1
        gsub(/\+/,"%2B",link)
        desc=$5 " " $6 " " $7 " " $8 " " $9 " " $10 " " $11 " " $12 " " $13 " " $14 " " $15 " " $16 " " $17 " " $18 " " $19 " " $20 " " $21 " " $22 " " $23 " " $24 " " $25 " " $26 " " $27
-       print "<tr><td><a href=\"ipkg.sh?action=remove&pkg=" link "\">@TR<<Uninstall>></td><td>" $1 "</td><td><font size=-1>" desc "</font></td></tr>"       
+       print "<tr><td><a href=\"system-packages.sh?action=remove&pkg=" link "\">@TR<<Uninstall>></td><td>" $1 "</td><td><font size=-1>" desc "</font></td></tr>"       
 }
 '
 ?>
@@ -71,7 +71,7 @@ $1 ~ /status/ {
 	gsub(/\+/,"%2B",link)		
 	getline descline
         split(descline,desc,":")
-        print "<tr><td><a href=\"ipkg.sh?action=install&pkg=" link "\">@TR<<Install>></td><td>" $3 "</td><td><font size=-1>" desc[3] "</font></td></tr>"
+        print "<tr><td><a href=\"system-packages.sh?action=install&pkg=" link "\">@TR<<Install>></td><td>" $3 "</td><td><font size=-1>" desc[3] "</font></td></tr>"
         current=$1
 }
 '
