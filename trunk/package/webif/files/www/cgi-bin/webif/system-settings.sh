@@ -51,6 +51,17 @@ equal "$OVERCLOCKING_DISABLED" "0" && {
 }	
 
 #####################################################################
+# install NTP client if asked
+if ! empty "$FORM_install_ntpclient"; then
+	tmpfile=$(mktemp "/tmp/.webif_ntp-XXXXXX")
+	echo "Installing NTPCLIENT package ...<pre>"	
+	ipkg install ntpclient
+	echo "</pre>"
+	#echo "<br /><br /><a href="services.sh">Refresh this page to configure newly installed service(s)..</a><br />"
+fi
+
+
+#####################################################################
 # initialize forms
 if empty "$FORM_submit"; then
 	# initialize all defaults
@@ -152,6 +163,16 @@ is_bcm947xx && {
 }
 
 #####################################################################
+# check if ntpclient is installed and give user option to install if not
+ipkg list_installed | grep ntpclient >> /dev/null
+! equal "$?" "0" && 
+{
+	NTPCLIENT_INSTALL_FORM="string|<div class=warning>No NTP client is installed. For correct time support you need to install one.</div>
+		submit|install_ntpclient| Install NTP Client |"
+}
+
+
+#####################################################################
 # initialize time zones
 
 TIMEZONE_OPTS=$(
@@ -197,11 +218,14 @@ start_form|@TR<<System Settings>>
 field|@TR<<Host Name>>
 text|hostname|$FORM_hostname
 $bootwait_form
+
 helpitem|Boot Wait
 helptext|HelpText Boot Wait#Boot wait causes the boot loader of some devices to wait a few seconds at bootup for a TFTP transfer of a new firmware image. This is a security risk to be left on.
 $waittime_form
+
 helpitem|Wait Time
 helptext|HelpText Wait Time#Number of seconds the boot loader should wait for a TFTP transfer if Boot Wait is on.
+
 field|@TR<<Language>>
 select|language|$FORM_language
 $LANGUAGES
@@ -212,9 +236,12 @@ start_form|@TR<<Time Settings>>
 field|@TR<<Timezone>>
 select|system_timezone|$FORM_system_timezone
 $TIMEZONE_OPTS
+
 field|@TR<<NTP Server>>
 text|ntp_server|$FORM_ntp_server
 end_form
+
+$NTPCLIENT_INSTALL_FORM
 
 EOF
 footer ?>
