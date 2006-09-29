@@ -1,0 +1,5 @@
+#!/bin/sh
+if [ $(nvram get upnp_enabled) = "1" ]; then
+	echo "Starting UPNP daemon ..."
+	upnpd &
+fi

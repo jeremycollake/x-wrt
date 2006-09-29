@@ -115,9 +115,9 @@ $1 ~ /^textarea/ {
 	# show caption 	
 	if ($3 != "" ) print "<td>"$3"</td>"
 	# show progress bar
-	print "<td>"
+	print "<td width=\"" $4 "\">"
 	print "<table class=\"progressbar-whole\" width=\"" $4 "\" id=\"" $2 "\"><tbody>"	
-	print "<tr>"
+	print "<tr  width=\"" $4 "\">"
 	print "<td class=\"progressbar-filled\" width=\"" $5 "%\">" $6 "</td>"	
 	print "<td class=\"progressbar-unfilled\" width=\"" uncomplete_area "%\">" $7 "</td>"	
 	print "</tr>"	
