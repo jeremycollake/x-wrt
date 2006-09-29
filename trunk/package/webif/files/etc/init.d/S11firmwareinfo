@@ -20,9 +20,11 @@ if [ -z $(nvram get device_name) ]; then
 	#
 	cat /dev/mtd/0 | strings | grep W54G > /dev/null 2>&1
 	if [ $? = 0 ]; then
-		nvram set device_name="Linksys WRT54G"
+		nvram set "device_name=Linksys WRT54G"
 		exit 0
 	fi
+
+	nvram set "device_name=unidentified"
 fi
 
 
