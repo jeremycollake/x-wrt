@@ -27,7 +27,15 @@ load_settings "webif"
 
 #####################################################################
 # defaults
-OVERCLOCKING_DISABLED="0" # set to 1 to disble OC support for bcm3302 0.8
+#
+# Overclocking note:
+#  we only handle 3302 0.8 since these are usually safer if they have
+#  the same default CFE as found on Linksys WRT54G(S) v4+, as it
+#  will handle invalid clock frequencies more gracefully and default
+#  to a limit of 250mhz. It also has a fixed divider, so sbclock
+#  frequencies are implied, and ignored if specified.
+#		
+OVERCLOCKING_DISABLED="0" # set to 1 to disble OC support
 
 #####################################################################
 header "System" "Settings" "@TR<<System Settings>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
@@ -87,13 +95,7 @@ fi
 
 #####################################################################
 # over/underclocking
-#
-#  only handle 3302 0.8 since these are usually safer if they have
-#  the same default CFE as found on Linksys WRT54G(S) v4+, as it
-#  will handle invalid clock frequencies more gracefully and default
-#  to a limit of 250mhz. It also has a fixed divider, so sbclock
-#  frequencies are implied, and ignored if specified.
-#						
+#				
 is_bcm947xx && {   		
 	equal "$OVERCLOCKING_DISABLED" "0" && 
 	{
