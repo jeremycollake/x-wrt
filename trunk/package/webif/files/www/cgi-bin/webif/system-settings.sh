@@ -167,7 +167,7 @@ is_bcm947xx && {
 ipkg list_installed | grep ntpclient >> /dev/null
 ! equal "$?" "0" && 
 {
-	NTPCLIENT_INSTALL_FORM="string|<div class=warning>No NTP client is installed. For correct time support you need to install one.</div>
+	NTPCLIENT_INSTALL_FORM="string|<div class=warning>No NTP client is installed. For correct time support you need to install one:</div>
 		submit|install_ntpclient| Install NTP Client |"
 }
 
