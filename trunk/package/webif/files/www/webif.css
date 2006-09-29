@@ -223,7 +223,7 @@ th {
 
 .helpform
 {
-	position: relative;
+	position: absolute;
  	float: right;
  	margin-right: 2em;
 }
