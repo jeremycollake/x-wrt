@@ -43,7 +43,7 @@ EOF
     }
 fi
 
-header "Network" "DHCPSettings" "@TR<<DHCP Configuration>>" '' "$SCRIPT_NAME"
+header "Network" "Dnsmasq" "@TR<<DHCP Configuration>>" '' "$SCRIPT_NAME"
 
 display_form <<EOF
 start_form|@TR<<DHCP Configuration>> $FORM_iface
