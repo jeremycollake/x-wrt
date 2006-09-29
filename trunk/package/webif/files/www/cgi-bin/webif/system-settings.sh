@@ -129,8 +129,7 @@ is_bcm947xx && {
 	done
 }
 
-LANGUAGES="$(grep '^[\t ]*lang[\t ]*=>' /usr/lib/webif/lang/*/*.txt | awk -f /usr/lib/webif/languages.awk)"
-
+LANGUAGES="$(grep -H '^[\t ]*lang[\t ]*=>' /usr/lib/webif/lang/*/*.txt 2>/dev/null | awk -f /usr/lib/webif/languages.awk)"
 is_bcm947xx && {
 	bootwait_form="field|boot_wait
 	select|boot_wait|$FORM_boot_wait
