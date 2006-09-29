@@ -163,11 +163,11 @@ else
 			
 		FORM_cells="$FORM_cells 
 			#string|<tr><td><strong>Cell</strong> $CELL_ID</tr></td>
-			string|<tr><td><strong>SSID</strong> $ESSID (<div class=mac-address><a href=\"http://standards.ieee.org/cgi-bin/ouisearch?$MAC_FIRST_THREE\" target=\"_new\">$MAC_DASHES</a></div>) at cell $CELL_ID</tr></td>
+			string|<tr><td><strong>SSID</strong> $ESSID (<div class=mac-address><a href=\"http://standards.ieee.org/cgi-bin/ouisearch?$MAC_FIRST_THREE\" target=\"_new\">$MAC_DASHES</a></div>) <strong>Cell</strong>&nbsp;$CELL_ID</tr></td>
 			string|<tr><td><strong>Channel</strong> $CHANNEL_ID</tr></td>
 			$QUALITY_STRING
 			string|<tr><td><strong>Signal</strong> $SIGNAL_DBM&nbsp;<div class=kb>dBm</div> <strong>Noise</strong> $NOISE_DBM&nbsp;<div class=kb>dBm</div></tr></td>
-			progressbar|SNR|<strong>SNR</strong> $SIGNAL_INTEGRITY&nbsp;<div class=kb>dBm</div>|200|$SNR_PERCENT|$SIGNAL_INTEGRITY <div class=kb>dBm</div>
+			progressbar|SNR|<strong>SNR</strong> $SIGNAL_INTEGRITY&nbsp;<div class=kb>dBm</div>|200|$SNR_PERCENT|$SIGNAL_INTEGRITY dBm
 			string|<tr><td><br /></td></tr>"
 		
 		rm -f "$tempfile"_"${current}"
