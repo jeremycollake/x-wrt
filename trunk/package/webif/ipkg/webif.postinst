@@ -10,6 +10,9 @@ if [ $? = 0 ] && [ -f "/etc/init.d/S50httpd" ]; then
 	killall webif-page 2>&1 >> /dev/null
 	killall haserl 2>&1 >> /dev/null
 	killall httpd 2>&1 >> /dev/null
+	if [ -n $(nvram get firmware_name) ]; then
+		/etc/init.d/S11firmwareinfo	# set default firmware information
+	fi
 	/etc/init.d/S40network 		# to relaunch wifi up if necessary
 	/etc/init.d/S50httpd
 fi
