@@ -8,26 +8,26 @@
 #	Configures general system settings.
 #
 # Author(s) [in order of work date]: 
-#   Original webif developers -- todo
-#   Markus Wigge <markus@freewrt.org> 
-# 	Jeremy Collake <jeremy.collake@gmail.com>
+#   	Original webif developers -- todo
+#	Markus Wigge <markus@freewrt.org> 
+#   	Jeremy Collake <jeremy.collake@gmail.com>
 #
 # Major revisions:
 #
 # NVRAM variables referenced:
 #	time_zone
-#   ntp_server
+#  	ntp_server
 #
 # Configuration files referenced: 
 #   none
 #
 
 load_settings "system"
-load_settings "webif"
+load_settings "webif" 
 
 #####################################################################
 # defaults
-OVERCLOCKING_DISABLED=1 # off for now
+OVERCLOCKING_DISABLED="1" # set to 1 to disble OC support for bcm3302 0.8
 
 #####################################################################
 header "System" "Settings" "@TR<<System Settings>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
@@ -35,7 +35,7 @@ header "System" "Settings" "@TR<<System Settings>>" ' onLoad="modechange()" ' "$
 
 #####################################################################
 # todo: CPU_MODEL not actually used atm (except in building version)
-empty "$OVERCLOCKING_DISABLED" && {
+equal "$OVERCLOCKING_DISABLED" "0" && {
 	CPU_MODEL=$(sed -n "/cpu model/p" "/proc/cpuinfo")
 	CPU_VERSION=$(echo "$CPU_MODEL" | sed -e "s/BCM3302//" -e "s/cpu model//" -e "s/://")
 	#echo "debug.model: $CPU_MODEL <br />"
@@ -76,9 +76,11 @@ EOF
 				on|off) save_setting system boot_wait "$FORM_boot_wait";;
 			esac			
 			save_setting system wait_time "$FORM_wait_time"						
-			if [ "$OVERCLOCKING_DISABLED" = "0" ]; then		  	
-		  		save_setting nvram clkfreq "$FORM_clkfreq"		  		
-		  	fi
+			equal "$OVERCLOCKING_DISABLED" "0" && 
+			{
+				save_setting nvram clkfreq "$FORM_clkfreq"		  		
+			}
+		  
 		}
 	}
 fi
@@ -93,7 +95,8 @@ fi
 #  frequencies are implied, and ignored if specified.
 #						
 is_bcm947xx && {   		
-	empty "$OVERCLOCKING_DISABLED" && {
+	equal "$OVERCLOCKING_DISABLED" "0" && 
+	{
 	if [ $CPU_VERSION = "V0.8" ]; then				
 		FORM_clkfreq="$FORM_clkfreqs
 			option|184
@@ -139,7 +142,8 @@ is_bcm947xx && {
 	waittime_form="field|Wait Time
 	select|wait_time|$FORM_wait_time"
 
-	empty "$OVERCLOCKING_DISABLED" && { 
+	equal "$OVERCLOCKING_DISABLED" "0" && 
+	{ 
 		clkfreq_form="field|CPU Clock Frequency
 		select|clkfreq|$FORM_clkfreq"
 	}
