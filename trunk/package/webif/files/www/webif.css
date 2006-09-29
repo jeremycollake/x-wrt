@@ -266,6 +266,12 @@ th {
 	
 }
 
+.warning
+{
+	display: inline;		
+}
+
+
 /* font */
 body 
 {
@@ -537,8 +543,12 @@ html, body
 	color: #222;	
 }
 
-
 .mount-target
 {
 	color: #222;	
+}
+
+.warning
+{
+	color: red;
 }
