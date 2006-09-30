@@ -47,7 +47,7 @@ cat <<EOF
 		<td><strong>@TR<<Device>></strong></td><td>&nbsp;</td><td> $device_string</td>
 	</tr>		
 	<tr>
-		<td><strong>@TR<<Board>></strong></td><td>&nbsp;</td><td> $board_type </td>
+		<td><strong>@TR<<Board>></strong></td><td>&nbsp;</td><td> $board_type</td>
 	</tr>
 	<tr>
 		<td><strong>@TR<<Username>></strong></td><td>&nbsp;</td>
