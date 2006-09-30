@@ -402,6 +402,11 @@ dt,
 	font-size: 0.7em;
 }
 
+.smalltext
+{
+	font-size: 0.9em;
+}
+
 /* color */
 
 html, body 
