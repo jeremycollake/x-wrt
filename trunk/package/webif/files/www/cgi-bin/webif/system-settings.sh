@@ -111,7 +111,7 @@ is_bcm947xx && {
 	equal "$OVERCLOCKING_DISABLED" "0" && 
 	{
 	if [ $CPU_VERSION = "V0.8" ]; then				
-		FORM_clkfreq="$FORM_clkfreq
+		FORM_clkfreqs="$FORM_clkfreq
 			option|184
 			option|188
 			option|197
@@ -126,14 +126,14 @@ is_bcm947xx && {
 			option|250"
 		# special case for custom CFEs (like mine)
 		if [ $(nvram get clkfreq) -gt 250 ]; then
-			FORM_clkfreq="$FORM_clkfreq
+			FORM_clkfreqs="$FORM_clkfreqs
 				option|$(nvram get clkfreq)"
 		fi				
 	else
 		# BCM3302 v0.7 or other..
 		# in this case, we'll show it, but not have any options
-		FORM_clkfreq="$FORM_clkfreq
-			option|200,100"
+		FORM_clkfreqs="$FORM_clkfreq
+			option|$FORM_clkfreq"
 	fi
 	}
 	
@@ -158,7 +158,7 @@ is_bcm947xx && {
 	equal "$OVERCLOCKING_DISABLED" "0" && 
 	{ 
 		clkfreq_form="field|CPU Clock Frequency
-		select|clkfreq|$FORM_clkfreq"
+		select|clkfreq|$FORM_clkfreqs"
 	}
 }
 
@@ -229,7 +229,10 @@ helptext|HelpText Wait Time#Number of seconds the boot loader should wait for a 
 field|@TR<<Language>>
 select|language|$FORM_language
 $LANGUAGES
+
 $clkfreq_form
+helpitem|Clock Frequency
+helptext|HelpText Clock Frequency#Do not change with this unless you have a WRT54G(S)/L v4-v6. Only these devices are known to not be brickable through an invalid clock frequency setting. It should have no options if you have a different device.
 end_form
 
 start_form|@TR<<Time Settings>>
