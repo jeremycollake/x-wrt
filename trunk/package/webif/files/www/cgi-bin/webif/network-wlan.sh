@@ -43,8 +43,8 @@ done
 #####################################################################	
 # initialize forms
 if empty "$FORM_submit"; then
-
-  	FORM_gmode=${wl0_gmode:-$(nvram get wl0_gmode)}
+	echo "not save<br />"
+	FORM_gmode=${wl0_gmode:-$(nvram get wl0_gmode)}
   	case "$FORM_gmode" in
     		0) FORM_gmode=bOnly;;
     		1) FORM_gmode=b+g;;
@@ -144,7 +144,7 @@ if empty "$FORM_submit"; then
 #####################################################################	
 # save forms
 else
-	if [ "$FORM_generate_wep" != "Generate Key(s)" ]; then
+	
 		SAVED=1					  	
 		case "$FORM_encryption" in
 			wpa) V_RADIUS="
@@ -168,6 +168,9 @@ $V_WEP
 $V_RADIUS
 $V_PSK
 EOF
+	###
+	echo "<br /> todo.... validation is failing when wep key set.. fix <br />"
+	###
 		equal "$?" 0 && {	
 			NUM_gmode="1"	
 			case "$FORM_gmode" in
@@ -221,6 +224,7 @@ EOF
 				save_setting wireless wl0_wep "disabled"
 				;;
 			wep)
+				echo "wep<br />"
 				save_setting wireless wl0_wep enabled
 				save_setting wireless wl0_akm "none"
 				save_setting wireless wl0_key1 "$FORM_key1"
@@ -234,16 +238,20 @@ EOF
 				save_setting wireless wl0_wep disabled
 				;;
 			esac
-		}	
-	else
-		# generate a single 128(104)bit key
-		passphrase=$(wepkeygen -s "$FORM_wep_passphrase"  |
-			 awk 'BEGIN { count=0 }; 
-			 	{ total[count]=$1, count+=1; } 
-			 	END { print total[0] ":" total[1] ":" total[2] ":" total[3]}')		
-		FORM_key1=$(echo "$passphrase" | cut -d ':' -f 0-16 | sed s/':'//g)			
-	fi
+		}			
+	
 fi
+
+if [ "$FORM_generate_wep" = "Generate Key(s)" ]; then	
+	# generate a single 128(104)bit key
+	echo "generate<br />"
+	passphrase=$(wepkeygen -s "$FORM_wep_passphrase"  |
+		 awk 'BEGIN { count=0 }; 
+		 	{ total[count]=$1, count+=1; } 
+		 	END { print total[0] ":" total[1] ":" total[2] ":" total[3]}')		
+	FORM_key1=$(echo "$passphrase" | cut -d ':' -f 0-16 | sed s/':'//g)	
+fi
+
 
 cat <<EOF
 <script type="text/javascript" src="/webif.js"></script>
