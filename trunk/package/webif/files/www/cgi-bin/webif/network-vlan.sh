@@ -148,7 +148,9 @@ for count in $(seq "0" "$MAX_VLANS_INDEX"); do
 	# for each port, create a checkbox and mark if
 	#  port for in vlan
 	#
-	ports=$(nvram get "$vlanport")		
+	FORM_log_ipaddr=${log_ipaddr:-$(nvram get log_ipaddr)}
+	defaultval=$(nvram get "$vlanport")
+	eval ports="\${vlan${count}ports:-\"$defaultval\"}"	
 	if [ -z "$ports" ]; then
 		# make sure it really is unset and not just empty		
 		if [ -z $(nvram get vlan"$count"hwname) ]; then		
