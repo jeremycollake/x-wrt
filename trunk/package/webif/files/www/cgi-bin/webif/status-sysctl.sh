@@ -14,7 +14,7 @@ header "Status" "Active IP System Settings" "@TR<<Active IP System Settings>>"
 		<th><b>@TR<<Statistics|IP Parameters>></b></th>
 	</tr>
 	<tr>
-		<td><pre><? sysctl -a | grep "net." | sort ?></pre></td>
+		<td><pre><? sysctl -a 2> /dev/null | grep "net." | sort  ?></pre></td>
 	</tr>
 	
 </tbody>
