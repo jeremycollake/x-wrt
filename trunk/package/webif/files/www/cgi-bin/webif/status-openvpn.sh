@@ -60,7 +60,7 @@ equal "$(nvram get openvpn_cli)" "1" && {
 		echo "$ERROR"
 	}
 } || {
-	echo "OpenVPN is disabled"
+	echo "<br />OpenVPN is disabled"
 }
 
 footer ?>
