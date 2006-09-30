@@ -9,7 +9,7 @@
 header "Graphs" "CPU" "CPU Usage" "" "$SCRIPT_NAME"
 ?>
 <center>
-	<embed data="/svggraph/graph_cpu.svg?/cgi-bin/webif/data.sh" 
+	<object data="/svggraph/graph_cpu.svg?/cgi-bin/webif/data.sh" 
 		width="500" height="250"
 	/>
 </center>
