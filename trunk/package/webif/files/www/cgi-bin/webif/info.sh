@@ -22,6 +22,8 @@ done
 empty $device_type && device_type="-id code not done for this board-";
 board_type=$(cat /proc/cpuinfo | sed 2,20d | cut -c16-)
 device_string=$(echo $device_type && ! empty $device_version && echo $device_version)
+user_string=$REMOTE_USER
+equal $user_string "" && user_string="not logged in"
 
 cat <<EOF
 <table>
@@ -51,7 +53,7 @@ cat <<EOF
 	</tr>
 	<tr>
 		<td><strong>@TR<<Username>></strong></td><td>&nbsp;</td>
-		<td>$REMOTE_USER</td>
+		<td>$user_string</td>
 	</tr>
 	
 	<tr><td><br /><br /></td></tr>
