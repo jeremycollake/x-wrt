@@ -162,7 +162,9 @@ is_bcm947xx && {
 	equal "$OVERCLOCKING_DISABLED" "0" && 
 	{ 
 		clkfreq_form="field|CPU Clock Frequency
-		select|clkfreq|$FORM_clkfreqs"
+		select|clkfreq|$FORM_clkfreqs
+		helpitem|Clock Frequency
+		helptext|HelpText Clock Frequency#Do not change with this unless you have a WRT54G(S)/L v4-v6. Only those are safe. You should see no options if you have a different device."
 	}
 }
 
@@ -236,8 +238,6 @@ select|language|$FORM_language
 $LANGUAGES
 
 $clkfreq_form
-helpitem|Clock Frequency
-helptext|HelpText Clock Frequency#Do not change with this unless you have a WRT54G(S)/L v4-v6. Only those are safe. You should see no options if you have a different device.
 end_form
 
 start_form|@TR<<Time Settings>>
