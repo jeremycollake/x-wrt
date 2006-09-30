@@ -2,14 +2,28 @@
 <? 
 . /usr/lib/webif/webif.sh
 header "Info" "System Information" "@TR<<System Information>>" '' ''
- 	
-?>
-<pre><?
+
 _version=$(nvram get firmware_version)
 _kversion="$( uname -srv )"
 _mac="$(/sbin/ifconfig eth0 | grep HWaddr | cut -b39-)"
+#
+# board id checks go here.. todo: much work remains here
+#
+# loop is just used to avoid a jump
+while empty $device_type; do	
+	strings /dev/mtdblock/0 | grep 'W54G' 2>&1 >> /dev/null
+	if [ $? = "0" ]; then
+ 		device_type="WRT54G"
+ 		device_version="v??"
+ 		break
+	fi	
+	break
+done
+empty $device_type && device_type="-id code not done for this board-";
+board_type=$(cat /proc/cpuinfo | sed 2,20d | cut -c16-)
+device_string=$(echo $device_type && ! empty $device_version && echo $device_version)
+
 cat <<EOF
-</pre>
 <table>
 <tbody>
 <tr><td><br /><br /></td></tr>
@@ -29,38 +43,24 @@ cat <<EOF
 		<td><strong>@TR<<MAC>></strong></td><td>&nbsp;</td>
 		<td>$_mac</td>
 	</tr>
-EOF
-
-#
-# board id checks go here.. todo: much work remains here
-#
-# loop is just used to avoid a jump
-while empty $device_type; do	
-	strings /dev/mtdblock/0 | grep 'W54G' 2>&1 >> /dev/null
-	if [ $? = "0" ]; then
- 		device_type="WRT54G"
- 		device_version="v??"
- 		break
-	fi	
-	break
-done
-empty $device_type && device_type="-id code not done for this board-";
-board_type=$(cat /proc/cpuinfo | sed 2,20d | cut -c16-)
-
-?>	
 	<tr>
-		<td><strong>@TR<<Device>></strong></td><td>&nbsp;</td><td> <? echo $device_type && ! empty $device_version && echo $device_version ?></td>
+		<td><strong>@TR<<Device>></strong></td><td>&nbsp;</td><td> $device_string</td>
 	</tr>		
 	<tr>
-		<td><strong>@TR<<Board>></strong></td><td>&nbsp;</td><td> <? echo $board_type ?></td>
+		<td><strong>@TR<<Board>></strong></td><td>&nbsp;</td><td> $board_type </td>
+	</tr>
+	<tr>
+		<td><strong>@TR<<Username>></strong></td><td>&nbsp;</td>
+		<td>$REMOTE_USER</td>
 	</tr>
 	
 	<tr><td><br /><br /></td></tr>
 </tbody>
 </table>
+EOF
 
-<?
 footer
+
 ?>
 <!--
 ##WEBIF:name:Info:10:System Information
