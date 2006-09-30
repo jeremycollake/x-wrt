@@ -135,8 +135,8 @@ option
 #content 
 {	
 	position: relative;			
-	padding-top: 1em;	
-	padding-bottom: 3em;
+	padding-top: 0.5em;	
+	padding-bottom: 1em;
 	padding-right: 1em;
 	padding-left: 1em;	
 	clear: both;		
@@ -149,7 +149,13 @@ option
 	padding-top: 0.8em;
 }
 
-#content .settings-block .settings-block-title,
+#content .settings-block .settings-block-title
+{
+	padding-bottom: 1.0em;
+	padding-top: 0.4em;	
+	padding-left: 0.4em;	
+}
+
 #content .settings-block .settings .settings-title 
 {	
 	padding-bottom: 0.4em;
