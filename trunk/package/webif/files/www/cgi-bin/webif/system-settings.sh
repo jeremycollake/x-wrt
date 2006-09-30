@@ -85,7 +85,7 @@ else
 	validate <<EOF
 hostname|FORM_hostname|Hostname|nodots required|$FORM_hostname
 EOF
-	equal "$?" 0 && {		
+	if equal "$?" 0 ; then		
 		save_setting system wan_hostname "$FORM_hostname"
 		save_setting webif language "$FORM_language"
 		save_setting system time_zone "$FORM_system_timezone"
@@ -93,7 +93,7 @@ EOF
 		is_bcm947xx && {				  
 			case "$FORM_boot_wait" in
 				on|off) save_setting system boot_wait "$FORM_boot_wait";;
-			esac			
+			esac						
 			save_setting system wait_time "$FORM_wait_time"						
 			equal "$OVERCLOCKING_DISABLED" "0" && 
 			{
@@ -101,7 +101,9 @@ EOF
 			}
 		  
 		}
-	}
+	else
+		echo "<br /><div class=warning>Warning: Hostname failed validation. Can not be saved.</div><br />"	
+	fi
 fi
 
 #####################################################################
