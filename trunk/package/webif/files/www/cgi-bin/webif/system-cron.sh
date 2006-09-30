@@ -42,6 +42,8 @@ display_form "start_form|Cron Settings
 field|Cron Daemon
 radio|cron_enable|$FORM_cron_enable|1|Enable
 radio|cron_enable|$FORM_cron_enable|0|Disable
+helpitem|Cron
+helptext|HelpText Cron#Cron is a linux daemon that executes commands are desired times or intervals.
 end_form" 
 ?>
 
