@@ -87,15 +87,18 @@ hostname|FORM_hostname|Hostname|nodots required|$FORM_hostname
 EOF
 	if equal "$?" 0 ; then		
 		save_setting system wan_hostname "$FORM_hostname"
-		save_setting webif language "$FORM_language"
+		save_setting webif language "$FORM_language"		
 		save_setting system time_zone "$FORM_system_timezone"
 		save_setting system ntp_server "$FORM_ntp_server"
 		is_bcm947xx && {				  
 			case "$FORM_boot_wait" in
 				on|off) save_setting system boot_wait "$FORM_boot_wait";;
-			esac						
-			save_setting system wait_time "$FORM_wait_time"						
-			equal "$OVERCLOCKING_DISABLED" "0" && 
+			esac				
+			! empty "$FORM_wait_time" &&			
+			{
+				save_setting system wait_time "$FORM_wait_time"						
+			}
+			equal "$OVERCLOCKING_DISABLED" "0" && ! empty "$FORM_clkfreq" &&
 			{
 				save_setting nvram clkfreq "$FORM_clkfreq"		  		
 			}
@@ -189,8 +192,9 @@ TIMEZONE_OPTS=$(
 			print "optgroup|" $1
 		}
 		{
-			print "option|" $2 "	" $3 "|" $2
+			print "option|" $3 "|" $2
 		}' < /usr/lib/webif/timezones.csv
+				
 )
 
 #####################################################################s
