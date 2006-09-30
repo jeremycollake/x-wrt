@@ -60,49 +60,43 @@ POSSIBILITY OF SUCH DAMAGE.
 <script type="text/ecmascript">
 <![CDATA[
 if (typeof getURL == 'undefined') {
-	getURL = function(url, callback) {
-		if (!url) throw 'No URL for getURL';
+  getURL = function(url, callback) {
+    if (!url)
+      throw 'No URL for getURL';
 
-		try {
-			if (typeof callback.operationComplete == 'function') {
-				callback = callback.operationComplete;
-			}
-		} catch (e) {}
+    try {
+      if (typeof callback.operationComplete == 'function')
+        callback = callback.operationComplete;
+    } catch (e) {}
+    if (typeof callback != 'function')
+      throw 'No callback function for getURL';
 
-		if (typeof callback != 'function') {
-			throw 'No callback function for getURL';
-		}
+    var http_request = null;
+    if (typeof XMLHttpRequest != 'undefined') {
+      http_request = new XMLHttpRequest();
+    }
+    else if (typeof ActiveXObject != 'undefined') {
+      try {
+        http_request = new ActiveXObject('Msxml2.XMLHTTP');
+      } catch (e) {
+        try {
+          http_request = new ActiveXObject('Microsoft.XMLHTTP');
+        } catch (e) {}
+      }
+    }
+    if (!http_request)
+      throw 'Both getURL and XMLHttpRequest are undefined';
 
-		var http_request = null;
-		if (typeof XMLHttpRequest != 'undefined') {
-			http_request = new XMLHttpRequest();
-		} else if (typeof ActiveXObject != 'undefined') {
-			try {
-				http_request = new ActiveXObject('Msxml2.XMLHTTP');
-			} catch (e) {
-				try {
-					http_request = new ActiveXObject('Microsoft.XMLHTTP');
-				} catch (e) {}
-			}
-		}
-		if (!http_request) {
-			throw 'Both getURL and XMLHttpRequest are undefined';
-		}
-
-		http_request.onreadystatechange = function() {
-			if (http_request.readyState == 4) {
-				callback( 
-					{
-						success : true,
-						content : http_request.responseText,
-						contentType : http_request.getResponseHeader("Content-Type") 
-					}
-				);
-			}
-		}
-		http_request.open('GET', url, true);
-		http_request.send(null);
-	}
+    http_request.onreadystatechange = function() {
+      if (http_request.readyState == 4) {
+        callback( { success : true,
+                    content : http_request.responseText,
+                    contentType : http_request.getResponseHeader("Content-Type") } );
+      }
+    }
+    http_request.open('GET', url, true);
+    http_request.send(null);
+  }
 }
 
 
@@ -114,18 +108,12 @@ var cpu_data = new Array();
 var max_num_points = 120;  // maximum number of plot data points
 var step = 600 / max_num_points;  // plot X division size
 
-var fetch_url='';
-
-var last_cpu_total=null, last_cpu_idle=null;
+var fetch_url='/cgi-bin/webif/data.sh';
 
 function init(evt) {
-	<!-- fix for opera -->	
-	<!-- was: fetch_url=document.location.search.substr(1); -->
-	fetch_url=location.search.substr(1);
-
 	SVGDoc = evt.target.ownerDocument;
 	fetch_data();
-	setInterval(fetch_data, 1000);
+	setInterval('fetch_data()', 1000);
 }
 
 function fetch_data() {
@@ -168,6 +156,7 @@ function plot_cpu_data(obj) {
 	case 0:
 		SVGDoc.getElementById('collect_initial').setAttributeNS(null, 'visibility', 'visible');
 		cpu_data[0] = cpu;
+		fetch_data;
 		return;
 	case 1:
 		SVGDoc.getElementById('collect_initial').setAttributeNS(null, 'visibility', 'hidden');
@@ -189,18 +178,20 @@ function plot_cpu_data(obj) {
 		var y_cpu = 298 - 2.975*cpu_data[i];
 		path_data += " L" + x + " " + y_cpu;
 	}
-
+   
+	
 	SVGDoc.getElementById('error').setAttributeNS(null, 'visibility', 'hidden');
 	SVGDoc.getElementById('graph_cpu').setAttributeNS(null, 'd', path_data);
 	SVGDoc.getElementById('graph_txt').firstChild.data = Math.round(cpu*10)/10 + '%';
 }
 
 function handle_error() {
-	SVGDoc.getElementById('error').setAttributeNS(null, 'visibility', 'visible');
+  SVGDoc.getElementById("error").setAttributeNS(null, 'visibility', 'visible');
+  fetch_data();
 }
 
 function isNumber(a) {
-	return typeof a == 'number' && isFinite(a);
+  return typeof a == 'number' && isFinite(a);
 }
 
 ]]>
