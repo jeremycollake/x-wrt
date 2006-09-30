@@ -128,8 +128,7 @@ var scale_type = 'follow';
 var fetch_url='';
 
 function init(evt) {
-	<!-- fix for opera -->	
-	<!-- was: fetch_url=document.location.search.substr(1); -->
+	// opera fix - was: fetch_url=document.location.search.substr(1); 
 	fetch_url=location.search.substr(1);
 		
 	SVGDoc = evt.target.ownerDocument;
