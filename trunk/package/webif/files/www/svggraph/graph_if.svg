@@ -127,16 +127,18 @@ var scale_type = 'follow';
 
 var fetch_url='';
 
-function init(evt) {
-	// opera fix - was: fetch_url=document.location.search.substr(1); 
-	fetch_url=location.search.substr(1);
-		
+function init(evt) {	
+	/* hacked in fix for all browsers by spectra 
+	 * he says is 'ugly', and someone may want to redo the 'right' way */	 
+	fetch_url=location.search.split('?');
+	fetch_url='/cgi-bin/webif/data.sh?' + fetch_url[fetch_url.length-1];		
+	/* end hacked in fix */	
 	SVGDoc = evt.target.ownerDocument;
 	SVGDoc.getElementById("switch_unit").addEventListener("mousedown", switch_unit, false);
 	SVGDoc.getElementById("switch_scale").addEventListener("mousedown", switch_scale, false);
 	
 	fetch_data();
-	setInterval(fetch_data, 1000);
+	setInterval('fetch_data()', 1000);
 }
 
 function switch_unit(event) {
