@@ -100,8 +100,8 @@ Pragma: no-cache
 	    				<div class="openwrt-title">
 	    				
 	    			   	</div>	 		
-	    				<div id="short-status">	
-	    				$_firmware_name $_firmware_subtitle $_version
+	    			   	<div id="short-status">		    				
+	    				<strong>$_firmware_name $_firmware_subtitle $_version</strong><br /><br />
 	    				<h3>Status</h3>
 					<ul>									
 						<li><strong>@TR<<Webif<sup>2</sup>>>:</strong> r$_webif_rev</li>
