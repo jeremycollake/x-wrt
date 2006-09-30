@@ -49,7 +49,7 @@ HELP_TEXT=
 CountNumberOfVLANsThatContainPortX ( )
 {
 	RETURN_VAR=0	
-	for count2 in $(seq "0" "$MAX_VLANS_INDEX"); do	
+	for count2 in $(seq "0" "$MAX_VLANS_INDEX"); do		
 		if [ -z $(nvram get vlan"$count2"hwname) ]; then
 			break
 		fi			
