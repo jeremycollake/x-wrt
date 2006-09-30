@@ -101,7 +101,7 @@ Pragma: no-cache
 	    				
 	    			   	</div>	 		
 	    			   	<div id="short-status">		    				
-	    				<strong>$_firmware_name $_firmware_subtitle $_version</strong><br /><br />
+	    				$_firmware_subtitle $_version<br />
 	    				<h3>Status</h3>
 					<ul>									
 						<li><strong>@TR<<Webif<sup>2</sup>>>:</strong> r$_webif_rev</li>
