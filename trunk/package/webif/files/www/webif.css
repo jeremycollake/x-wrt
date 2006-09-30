@@ -192,6 +192,11 @@ option
 	text-align: right;
 }
 
+.tip
+{
+	padding-top: 1.0em;	
+}
+
 #save 
 {
 	position: relative;	
