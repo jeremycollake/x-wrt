@@ -28,7 +28,6 @@ equal $user_string "" && user_string="not logged in"
 cat <<EOF
 <table>
 <tbody>
-<tr><td><br /><br /></td></tr>
 	<tr>
 		<td><strong>@TR<<Firmware>></strong></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		<td>$_firmware_name - $_firmware_subtitle $_version</td>		
