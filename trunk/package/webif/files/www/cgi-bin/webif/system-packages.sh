@@ -79,8 +79,14 @@ $1 ~ /status/ {
   </table>
 </div>
 
-<div class="rowOfBoxes"></div>
-	  
+<div class=tip>
+<table><tbody>
+<tr><td>
+<strong>Tip:</strong> For a much larger assortment of packages, see if there is a backports repository available for your firmware (there is one for White Russian RC5). Such a repository brings
+an offering of packages from the latest bleeding edge branch of the firmware.
+</td></tr>
+</tbody></table>	  
+</div>
 <? footer ?>
 <!--
 ##WEBIF:name:System:300:Installed Software
