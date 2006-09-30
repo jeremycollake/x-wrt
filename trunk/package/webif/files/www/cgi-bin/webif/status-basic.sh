@@ -7,7 +7,6 @@ header "Status" "Status" "@TR<<Device Status>>"
 <meta http-equiv="refresh" content="20">
 
 <?
-
 MEMINFO=$(free | sed 1,3d)
 nI="0"
 for CUR_VAR in $MEMINFO; do
@@ -18,11 +17,6 @@ for CUR_VAR in $MEMINFO; do
 	esac		
 	let "nI+=1"		
 done
-
-# todo: in progress crap
-#CPU_UTIL=$(cpu -a | sed s/'CPU:'// | sed s/'average'// | sed s/'%'//)
-#CPU_AVG_USE=$(expr substr "$CPU_UTIL" 0 2)
-#echo $CPU_AVG_USE
 
 USED_MEM=$(expr $TOTAL_MEM - $FREE_MEM)
 MEM_PERCENT_FREE=$(expr $FREE_MEM "*" 100 / $TOTAL_MEM)
@@ -68,8 +62,9 @@ start_form|Tracked Connections
 string|<tr><td>Maximum: $MAX_CONNECTIONS</td></tr>
 progressbar|conntrackuse|Used: $ACTIVE_CONNECTIONS ($USED_CONNECTIONS_PERCENT%)|200|$USED_CONNECTIONS_PERCENT|$USED_CONNECTIONS_PERCENT%||
 helpitem|Tracked Connections
-helptext|Helptext Tracked Connections#This is the number of connections in your router's conntrack table.
+helptext|Helptext Tracked Connections#This is the number of connections in your router's conntrack table. <a href="status-conntrackread.sh">View Conntrack Table</a>
 end_form|
+
 start_form|Mount Usage
 $mounts_form
 string|<tr><td><br /></td></tr>
