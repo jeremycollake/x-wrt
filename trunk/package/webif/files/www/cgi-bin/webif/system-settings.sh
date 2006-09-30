@@ -54,10 +54,9 @@ equal "$OVERCLOCKING_DISABLED" "0" && {
 # install NTP client if asked
 if ! empty "$FORM_install_ntpclient"; then
 	tmpfile=$(mktemp "/tmp/.webif_ntp-XXXXXX")
-	echo "Installing NTPCLIENT package ...<pre>"	
+	echo "Installing NTPCLIENT package ...<pre>"
 	ipkg install ntpclient
-	echo "</pre>"
-	#echo "<br /><br /><a href="services.sh">Refresh this page to configure newly installed service(s)..</a><br />"
+	echo "</pre>"	
 fi
 
 
