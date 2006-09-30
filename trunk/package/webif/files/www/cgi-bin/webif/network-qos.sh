@@ -486,7 +486,7 @@ EOF
 else
 header "Network" "QoS" "@TR<<QOS Configuration>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
 
-echo "Compatible QOS package was not found to be installed. Try Rudy's QOS scripts."
+echo "A compatible QOS package was not found to be installed. At present this page only supports Rudy's QoS scripts, but support for nbd's QoS scripts is coming soon."
 
 fi
 
