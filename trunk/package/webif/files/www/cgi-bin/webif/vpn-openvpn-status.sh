@@ -2,7 +2,7 @@
 <?
 . /usr/lib/webif/webif.sh
 
-header "Status" "OpenVPN" "@TR<<OpenVPN Status>>"
+header "VPN" "OpenVPN" "@TR<<OpenVPN Status>>"
 
 equal "$(nvram get openvpn_cli)" "1" && {
 
@@ -65,5 +65,5 @@ equal "$(nvram get openvpn_cli)" "1" && {
 
 footer ?>
 <!--
-##WEBIF:name:Status:2:OpenVPN
+##WEBIF:name:VPN:2:OpenVPN
 -->
