@@ -107,7 +107,7 @@ Pragma: no-cache
 						<li><strong>@TR<<Webif<sup>2</sup>>>:</strong> r$_webif_rev</li>
 						<li><strong>@TR<<Host:>></strong> $_hostname</li>
 						<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
-						<li><strong>@TR<<Load>>:</strong> $_loadavg</li>															
+						<li><strong>@TR<<Load>>:</strong> $_loadavg</li>																					
 					</ul>	
 													
 				</div>		
