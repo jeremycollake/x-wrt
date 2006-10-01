@@ -3,7 +3,9 @@
 # TODO: this crap needs rewriting
 #
 # only when we're on embedded system.. todo: do better checks
-cat /proc/cmdline | grep ttyS0 2>&1 >> /dev/null
+# this is because the image builder will run these on the local
+# system, which we do not want.
+cat /proc/version | grep OpenWrt 2>&1 >> /dev/null
 if [ $? = 0 ] && [ -f "/etc/init.d/S50httpd" ]; then
 	nvram unset device_name 	# force rescan of device_name, in case new id code is added
 	echo " Restarting httpd ..."

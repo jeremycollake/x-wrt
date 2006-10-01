@@ -2,7 +2,7 @@
 #
 # TODO: this crap needs rewriting
 #
-cat /proc/cmdline | grep ttyS0 2>&1 >> /dev/null
+cat /proc/version | grep OpenWrt 2>&1 >> /dev/null
 if [ $? = 0 ]; then
 	echo " Cleaning up existing webif package (if one exists) ..."
 	# remove files, but not directories
