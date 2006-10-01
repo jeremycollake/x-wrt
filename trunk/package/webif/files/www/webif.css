@@ -96,16 +96,19 @@ option
 #mainmenu
 {
 	position: relative;			
+	float: left;	
+	width: 100%;
 	padding-top: 0.5em;
 	padding-bottom: 0.5em;	
 }
 
 #submenu 
 {
-	position: relative;	
+	position: relative;
+	float: left;		
+	width: 100%;
 	padding-top: 0.5em;
-	padding-bottom: 0.5em;
-	padding-left: 0.5em;
+	padding-bottom: 0.5em;	
 }
 
 #mainmenu h3 
