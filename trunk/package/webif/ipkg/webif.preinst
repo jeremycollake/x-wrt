@@ -13,7 +13,9 @@ if [ $? = 0 ]; then
 	rm -f /usr/lib/webif/* 2>&1 >> /dev/null
 	rm -f /etc/init.d/S50dnsmasq 2>&1 >> /dev/null
 	rm -f /etc/init.d/S60ntp 2>&1 >> /dev/null
-	rm -f /etc/init.d/S51crond 2>&1 >> /dev/null
+	rm -f /etc/init.d/S60upnp 2>&1 >> /dev/null   # we used this in r500 and below
+	rm -f /etc/init.d/S66upnpd_webif 2>&1 >> /dev/null   
+	rm -f /etc/init.d/S51crond 2>&1 >> /dev/null 
 	rm -f /etc/init.d/S11firmwareinfo 2>&1 >> /dev/null
 	rm -f /etc/init.d/S12deprecatedcleanup 2>&1 >> /dev/null
 fi
