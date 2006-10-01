@@ -1,0 +1,13 @@
+#!/bin/sh
+#
+# This is an ugly solution, but no better one developed yet.
+# We want to allow user to install a service but keep it disabled.
+# Without mandating use of packages that have startup scripts that
+# adhere to the variables we set to disable it, we must take
+# an alternate route. At present, this route is to stop services
+# configured to be disabled immediately after they start at boot.
+#
+if [ $(nvram get upnp_enabled) = "0" ]; then
+	echo "Stopping UPNP daemon ..."
+	./S65upnpd stop
+fi
