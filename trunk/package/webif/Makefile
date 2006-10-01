@@ -32,7 +32,7 @@ $(IPKG_WEBIF):
 	cp -a ./files/* $(IDIR_WEBIF)/
 	chmod -R 755 $(IDIR_WEBIF)/*
 	./embed_rev.sh $(IDIR_WEBIF)/www/.version \
-			$(IDIR_WEBIF)/usr/lib/webif/webif.sh
+			$(IDIR_WEBIF)/usr/lib/webif/webif.sh \
 			$(IDIR_WEBIF)/etc/init.d/* \
 			$(IDIR_WEBIF)/www/cgi-bin/webif/*
 	install -d $(IDIR_WEBIF)/usr/bin
