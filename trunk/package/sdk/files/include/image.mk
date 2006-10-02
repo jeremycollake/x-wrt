@@ -44,6 +44,19 @@ ifneq ($(CONFIG_TARGET_ROOTFS_INITRAMFS),y)
 		tar -zcf $(BIN_DIR)/openwrt-rootfs.tgz --owner=root --group=root -C $(BUILD_DIR)/root/ .
     endef
   endif
+endifs
+
+ifeq ($(CONFIG_TARGET_ROOTFS_TINY),y)
+   define Image/mkfs/prepare/tiny
+               tar -cf $(BUILD_DIR)/root/rom/local.tar --owner=root --group=root -C $(BUILD_DIR)/root etc
+               mkdir -p $(BUILD_DIR)/root/tmp/local/etc
+               chmod 0755 $(BUILD_DIR)/root/tmp/local
+               chmod 0755 $(BUILD_DIR)/root/tmp/local/etc
+               mv $(BUILD_DIR)/root/etc/preinit $(BUILD_DIR)/root/tmp/local/etc/preinit
+               rm -fr $(BUILD_DIR)/root/etc
+               ln -s /tmp/local/etc $(BUILD_DIR)/root/etc
+               ln -s /tmp/local $(BUILD_DIR)/root/usr/local
+   endef
 endif
 
 define Image/mkfs/prepare/default
@@ -56,6 +69,7 @@ endef
 
 define Image/mkfs/prepare
 	$(call Image/mkfs/prepare/default)
+        $(call Image/mkfs/prepare/tiny)
 endef
 
 define BuildImage
