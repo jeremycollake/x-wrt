@@ -69,11 +69,11 @@ do_ifup() {
 		
 		env -i ACTION="ifup" INTERFACE="${2}" PROTO=static /sbin/hotplug "iface" &
 	;;
-	dhcp)
+	dhcp*)
 		DHCP_IP=$(nvram get ${2}_ipaddr)
 		DHCP_NETMASK=$(nvram get ${2}_netmask)
 		mtu=$(nvram get ${2}_mtu)
-		$DEBUG ifconfig $if $ip ${netmask:+netmask $netmask} ${mtu:+mtu $(($mtu))} broadcast + up
+		$DEBUG ifconfig $if $DHCP_IP ${DHCP_NETMASK:+netmask $DHCP_NETMASK} ${mtu:+mtu $(($mtu))} broadcast + up
 
 		DHCP_ARGS="-i $if ${DHCP_IP:+-r $DHCP_IP} -b -p $pidfile"
 		DHCP_HOSTNAME=$(nvram get ${2}_hostname)
