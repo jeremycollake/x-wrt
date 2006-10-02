@@ -64,6 +64,11 @@ $(PKG_BUILD_DIR)/.configured:
 	touch $@
 
 $(PKG_BUILD_DIR)/.built:
+	$(TARGET_CC) $(TARGET_CFLAGS) \
+		$(TARGET_CFLAGS_EXTRA) \
+		$(TARGET_LDFLAGS) \
+		-o $(PKG_BUILD_DIR)/wepkeygen \
+		src/keygen.c src/md5.c
 	$(TARGET_CC) $(TARGET_CFLAGS) $(NVRAM_OPTS) -o $(PKG_BUILD_DIR)/webif-page src/webif-page.c
 	$(TARGET_CC) $(TARGET_CFLAGS) -o $(PKG_BUILD_DIR)/bstrip src/bstrip.c
 	$(STRIP) $(PKG_BUILD_DIR)/webif-page $(PKG_BUILD_DIR)/bstrip
@@ -71,7 +76,6 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_WEBIF): 
 	cp -a ./files/* $(IDIR_WEBIF)/
-	chmod -R 755 $(IDIR_WEBIF)/*
 	./embed_rev.sh $(IDIR_WEBIF)/www/.version \
 			$(IDIR_WEBIF)/usr/lib/webif/webif.sh \
 			$(IDIR_WEBIF)/etc/init.d/* \
@@ -79,6 +83,7 @@ $(IPKG_WEBIF):
 	install -d $(IDIR_WEBIF)/usr/bin
 	install -m0755 $(PKG_BUILD_DIR)/webif-page $(IDIR_WEBIF)/usr/bin/webif-page
 	install -m0755 $(PKG_BUILD_DIR)/bstrip $(IDIR_WEBIF)/usr/bin/bstrip
+	install -m0755 $(PKG_BUILD_DIR)/wepkeygen $(IDIR_WEBIF)/usr/bin/wepkeygen
 	ln -sf /www/index.html $(IDIR_WEBIF)/www/index.asp
 	find $(IDIR_WEBIF) -name CVS | xargs rm -rf
 	find $(IDIR_WEBIF) -name .svn | xargs rm -rf
