@@ -145,6 +145,7 @@ source "package/usbutils/Config.in"  # lsusb
 comment "Kernel related ---"
 source "package/fuse/Config.in"  # kmod-fuse
 source "package/shfs/Config.in"  # kmod-shfs
+source "package/flashfs/Config.in" # flashfs
 
 comment "Extra stuff"
 source "package/sdk/Config.in"
