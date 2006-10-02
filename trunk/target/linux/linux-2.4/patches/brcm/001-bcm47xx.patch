@@ -10250,7 +10250,7 @@ diff -urN linux.old/drivers/mtd/maps/bcm947xx-flash.c linux.dev/drivers/mtd/maps
 +#ifdef CONFIG_MTD_PARTITIONS
 +
 +static struct mtd_partition bcm947xx_parts[] = {
-+	{ name: "cfe",	offset: 0, size: 0, mask_flags: MTD_WRITEABLE, },
++	{ name: "cfe",	offset: 0, size: 0, },
 +	{ name: "linux", offset: 0, size: 0, },
 +	{ name: "rootfs", offset: 0, size: 0, },
 +	{ name: "nvram", offset: 0, size: 0, },
