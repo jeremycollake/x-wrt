@@ -28,6 +28,10 @@ header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onLoad="modechange(
 #DEFAULT_INFRA=1
 
 #####################################################################
+# constants
+EMPTY_passphrase_error="<div class=warning>ERROR: Can not generate key(s) from a non-existant passphrase.</div>"
+
+#####################################################################
 # Initialize channels based on country code
 CC=${wl0_country_code:-$(nvram get wl0_country_code)}
 case "$CC" in
@@ -240,23 +244,38 @@ fi
 
 ! empty "$FORM_generate_wep_128" && 
 {
-	# generate a single 128(104)bit key	
-	textkeys=$(wepkeygen -s "$FORM_wep_passphrase"  |
-		 awk 'BEGIN { count=0 }; 
-		 	{ total[count]=$1, count+=1; } 
-		 	END { print total[0] ":" total[1] ":" total[2] ":" total[3]}')		
-	FORM_key1=$(echo "$textkeys" | cut -d ':' -f 0-13 | sed s/':'//g)	
+	FORM_key1=""
 	FORM_key2=""
 	FORM_key3=""
 	FORM_key4=""
+	# generate a single 128(104)bit key	
+	if empty "$FORM_wep_passphrase"; then
+		echo "$EMPTY_passphrase_error"
+	else
+		textkeys=$(wepkeygen -s "$FORM_wep_passphrase"  |
+		 awk 'BEGIN { count=0 }; 
+		 	{ total[count]=$1, count+=1; } 
+		 	END { print total[0] ":" total[1] ":" total[2] ":" total[3]}')		
+		FORM_key1=$(echo "$textkeys" | cut -d ':' -f 0-13 | sed s/':'//g)	
+		FORM_key2=""
+		FORM_key3=""
+		FORM_key4=""
+	fi
 }
 
 ! empty "$FORM_generate_wep_40" && 
 {
+	FORM_key1=""
+	FORM_key2=""
+	FORM_key3=""
+	FORM_key4=""
 	# generate a single 128(104)bit key	
-	textkeys=$(wepkeygen "$FORM_wep_passphrase" | sed s/':'//g)		
-	keycount=1
-	for curkey in $textkeys; do
+	if empty "$FORM_wep_passphrase"; then
+		echo "$EMPTY_passphrase_error"
+	else
+		textkeys=$(wepkeygen "$FORM_wep_passphrase" | sed s/':'//g)		
+		keycount=1
+		for curkey in $textkeys; do
 		case $keycount in
 			1) FORM_key1=$curkey;;
 			2) FORM_key2=$curkey;;
@@ -265,11 +284,11 @@ fi
 				break;;
 		esac
 		let "keycount+=1"
-	done
+		done
+	fi
 	
 }
-
-
+	
 cat <<EOF
 <script type="text/javascript" src="/webif.js"></script>
 <script type="text/javascript">
@@ -403,7 +422,7 @@ string|@TR<<Passphrase>>
 text|wep_passphrase|$FORM_wep_passphrase
 string|<br />
 submit|generate_wep_128|Generate 128bit Key
-submit|generate_wep_40|Generate 40bit Key
+submit|generate_wep_40|Generate 40bit Keys
 string|<br />
 radio|key|$FORM_key|1
 text|key1|$FORM_key1|<br />
