@@ -16,11 +16,11 @@ $(PKG_BUILD_DIR)/.prepared:
 	touch $@
 
 $(PKG_BUILD_DIR)/.built:	
-	cp flashfs.sh $(PKG_BUILD_DIR)/flashfs.sh
+	cp ./flashfs $(PKG_BUILD_DIR)/flashfs
 	touch $@
 
 $(IPKG_FLASHFS): 
 	install -d -m0755 $(IDIR_FLASHFS)/sbin
-	install -m0755 $(PKG_BUILD_DIR)/flashfs.sh $(IDIR_FLASHFS)/sbin
+	install -m0755 $(PKG_BUILD_DIR)/flashfs $(IDIR_FLASHFS)/sbin	
 	$(RSTRIP) $(IDIR_FLASHFS)/sbin/*
 	$(IPKG_BUILD) $(IDIR_FLASHFS) $(PACKAGE_DIR)
