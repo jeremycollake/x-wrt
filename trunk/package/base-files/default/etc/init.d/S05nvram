@@ -3,6 +3,21 @@
 #
 # This file handles the NVRAM quirks of various hardware.
 
+##
+# i threw this in here because i'm lazy
+# sometimes on vxworks reversion nvram in invalid format leftover from the original vxworks install
+# can cause odd anomalies, the most important being the mtd utility flashes corrupt data (yes, surprising).
+# try this hack to fix it...
+
+if [ -z "$(nvram get nvram_was_erased)" ]; then
+	mtd erase nvram
+	nvram set nvram_was_erased=1
+	nvram commit
+	reboot
+fi
+
+##
+
 alias debug=${DEBUG:-:}
 
 remap () {
@@ -38,6 +53,8 @@ boardnum=$(nvram get boardnum)
 boardflags=$(($(nvram get boardflags)))
 adm_switch="$(( ($boardflags & 0x80) >> 7 ))"
 
+<<<<<<< .mine
+=======
 case "$(( $boardtype ))" in
 	"1800") #0x708
 		if [ "$adm_switch" = 0 ]; then
@@ -67,6 +84,7 @@ case "$(( $boardtype ))" in
 esac
 [ "$COMMIT" = "1" ] && nvram commit
 
+>>>>>>> .r4884
 # linksys bug; use 'dhcpclient' or similar as lan_proto if you want to use dhcp
 [ "$(nvram get lan_proto)" = "dhcp" ] && nvram unset lan_proto
 nvram_default lan_proto static
