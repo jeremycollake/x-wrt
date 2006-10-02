@@ -29,7 +29,7 @@ header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onLoad="modechange(
 
 #####################################################################
 # constants
-EMPTY_passphrase_error="<div class=warning>ERROR: Can not generate key(s) from a non-existant passphrase.</div>"
+EMPTY_passphrase_error="ERROR: Can not generate key(s) from a non-existant passphrase."
 
 #####################################################################
 # Initialize channels based on country code
@@ -250,7 +250,7 @@ fi
 	FORM_key4=""
 	# generate a single 128(104)bit key	
 	if empty "$FORM_wep_passphrase"; then
-		echo "$EMPTY_passphrase_error"
+		echo "<div class=warning>$EMPTY_passphrase_error</div>"
 	else
 		textkeys=$(wepkeygen -s "$FORM_wep_passphrase"  |
 		 awk 'BEGIN { count=0 }; 
@@ -271,7 +271,7 @@ fi
 	FORM_key4=""
 	# generate a single 128(104)bit key	
 	if empty "$FORM_wep_passphrase"; then
-		echo "$EMPTY_passphrase_error"
+		echo "<div class=warning>$EMPTY_passphrase_error</div>"
 	else
 		textkeys=$(wepkeygen "$FORM_wep_passphrase" | sed s/':'//g)		
 		keycount=1
