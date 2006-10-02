@@ -1,4 +1,4 @@
-# $Id: Makefile 1038 2005-05-24 00:42:36Z nico $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -65,18 +65,18 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_LIBGD):
 	install -d -m0755 $(IDIR_LIBGD)/usr/lib
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libgd.so.* $(IDIR_LIBGD)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgd.so.* $(IDIR_LIBGD)/usr/lib/
 	$(RSTRIP) $(IDIR_LIBGD)
 	$(IPKG_BUILD) $(IDIR_LIBGD) $(PACKAGE_DIR)
 
 $(STAGING_DIR)/usr/lib/libgd.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/bin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/bin/gdlib-config $(STAGING_DIR)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/gdlib-config $(STAGING_DIR)/usr/bin/
 	mkdir -p $(STAGING_DIR)/usr/include
-	cp -fpR $(PKG_INSTALL_DIR)/usr/include/entities.h $(STAGING_DIR)/usr/include/
-	cp -fpR $(PKG_INSTALL_DIR)/usr/include/gd*.h $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/entities.h $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/gd*.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libgd.{a,so*} $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgd.{a,so*} $(STAGING_DIR)/usr/lib/
 	touch $@
 
 install-dev: $(STAGING_DIR)/usr/lib/libgd.so

@@ -1,4 +1,4 @@
-# $Id: Makefile 2046 2005-10-03 20:17:09Z nbd $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -20,7 +20,7 @@ $(eval $(call PKG_template,NVRAM,nvram,$(PKG_RELEASE),$(ARCH)))
 
 $(PKG_BUILD_DIR)/.prepared:
 	mkdir -p $(PKG_BUILD_DIR)
-	cp -a ./src/* $(PKG_BUILD_DIR)
+	$(CP) ./src/* $(PKG_BUILD_DIR)
 	touch $@
 
 $(PKG_BUILD_DIR)/.built:

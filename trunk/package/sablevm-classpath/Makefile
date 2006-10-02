@@ -1,4 +1,4 @@
-# $Id: Makefile 1175 2005-06-08 19:54:05Z nico $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -70,15 +70,15 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_LIBSABLEVM_CLASSPATH):
 	install -d -m0755 $(IDIR_LIBSABLEVM_CLASSPATH)/usr/lib/sablevm-classpath
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/sablevm-classpath/libjava*.so $(IDIR_LIBSABLEVM_CLASSPATH)/usr/lib/sablevm-classpath/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/sablevm-classpath/libjava*.so $(IDIR_LIBSABLEVM_CLASSPATH)/usr/lib/sablevm-classpath/
 	install -d -m0755 $(IDIR_LIBSABLEVM_CLASSPATH)/usr/lib/security
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/security/classpath.security $(IDIR_LIBSABLEVM_CLASSPATH)/usr/lib/security/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/security/classpath.security $(IDIR_LIBSABLEVM_CLASSPATH)/usr/lib/security/
 	$(RSTRIP) $(IDIR_LIBSABLEVM_CLASSPATH)
 	$(IPKG_BUILD) $(IDIR_LIBSABLEVM_CLASSPATH) $(PACKAGE_DIR)
 
 $(IPKG_SABLEVM_CLASSPATH_FULL):
 	install -d -m0755 $(IDIR_SABLEVM_CLASSPATH_FULL)/usr/share/sablevm-classpath
-	cp -fpR $(PKG_INSTALL_DIR)/usr/share/sablevm-classpath/{libclasspath,resources}.jar \
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/sablevm-classpath/{libclasspath,resources}.jar \
 		$(IDIR_SABLEVM_CLASSPATH_FULL)/usr/share/sablevm-classpath/
 	$(IPKG_BUILD) $(IDIR_SABLEVM_CLASSPATH_FULL) $(PACKAGE_DIR)
 	

@@ -1,4 +1,4 @@
-# $Id: Makefile 1169 2005-06-08 06:43:01Z nico $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -60,15 +60,15 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_LIBREADLINE):
 	install -m0755 -d $(IDIR_LIBREADLINE)/usr/lib
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/lib{history,readline}.so.* $(IDIR_LIBREADLINE)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{history,readline}.so.* $(IDIR_LIBREADLINE)/usr/lib/
 	$(RSTRIP) $(IDIR_LIBREADLINE)
 	$(IPKG_BUILD) $(IDIR_LIBREADLINE) $(PACKAGE_DIR)
 
 $(STAGING_DIR)/usr/lib/libreadline.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/include
-	cp -fpR $(PKG_INSTALL_DIR)/usr/include/readline $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/readline $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/lib{history,readline}.{a,so*} $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{history,readline}.{a,so*} $(STAGING_DIR)/usr/lib/
 	touch $@
 
 install-dev: $(STAGING_DIR)/usr/lib/libreadline.so

@@ -1,4 +1,4 @@
-# $Id: Makefile 2917 2006-01-11 19:49:19Z olli $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -37,6 +37,6 @@ $(IPKG_VSFTPD):
 	install -d -m0755 $(IDIR_VSFTPD)/etc/init.d
 	install -m0755 ./files/vsftpd.init $(IDIR_VSFTPD)/etc/init.d/vsftpd
 	install -d -m0755 $(IDIR_VSFTPD)/usr/sbin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/vsftpd $(IDIR_VSFTPD)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/vsftpd $(IDIR_VSFTPD)/usr/sbin/
 	$(RSTRIP) $(IDIR_VSFTPD)
 	$(IPKG_BUILD) $(IDIR_VSFTPD) $(PACKAGE_DIR)

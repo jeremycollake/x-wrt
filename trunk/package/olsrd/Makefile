@@ -1,4 +1,4 @@
-# $Id: Makefile 2852 2006-01-07 01:09:05Z olli $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -61,9 +61,9 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_OLSRD):
 	install -d -m0755 $(IDIR_OLSRD)/etc
-	cp -fpR $(PKG_INSTALL_DIR)/etc/olsrd.conf $(IDIR_OLSRD)/etc/
+	$(CP) $(PKG_INSTALL_DIR)/etc/olsrd.conf $(IDIR_OLSRD)/etc/
 	install -d -m0755 $(IDIR_OLSRD)/usr/sbin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/olsrd $(IDIR_OLSRD)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/olsrd $(IDIR_OLSRD)/usr/sbin/
 	install -d -m0755 $(IDIR_OLSRD)/etc/init.d
 	install -m0755 ./files/olsrd.init $(IDIR_OLSRD)/etc/init.d/S60olsrd
 	$(RSTRIP) $(IDIR_OLSRD)
@@ -73,4 +73,4 @@ $(IPKG_OLSRD_MOD_SECURE): $(IDIR_OLSRD_MOD_SECURE)/etc/olsrd.d/olsrd_secure_key
 
 $(IDIR_OLSRD_MOD_SECURE)/etc/olsrd.d/olsrd_secure_key:
 	install -d -m0755 $(IDIR_OLSRD_MOD_SECURE)/etc/olsrd.d
-	cp -fpR ./files/olsrd_secure_key $(IDIR_OLSRD_MOD_SECURE)/etc/olsrd.d/
+	$(CP) ./files/olsrd_secure_key $(IDIR_OLSRD_MOD_SECURE)/etc/olsrd.d/

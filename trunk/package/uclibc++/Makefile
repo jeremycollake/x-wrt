@@ -1,4 +1,4 @@
-# $Id: Makefile 2368 2005-11-07 01:53:04Z nico $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -46,8 +46,8 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_UCLIBCXX):
 	install -d -m0755 $(IDIR_UCLIBCXX)/usr/lib
-	cp -fpR $(PKG_BUILD_DIR)/src/libuClibc++-$(PKG_VERSION).so $(IDIR_UCLIBCXX)/usr/lib/
-	cp -fpR $(PKG_BUILD_DIR)/src/libuClibc++.so.* $(IDIR_UCLIBCXX)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/src/libuClibc++-$(PKG_VERSION).so $(IDIR_UCLIBCXX)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/src/libuClibc++.so.* $(IDIR_UCLIBCXX)/usr/lib/
 	$(STRIP) $(IDIR_UCLIBCXX)/usr/lib/*.so*
 	mkdir -p $(PACKAGE_DIR)
 	$(IPKG_BUILD) $(IDIR_UCLIBCXX) $(PACKAGE_DIR)

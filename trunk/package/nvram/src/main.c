@@ -9,7 +9,7 @@
  * SPECIFICALLY DISCLAIMS ANY IMPLIED WARRANTIES OF MERCHANTABILITY, FITNESS
  * FOR A SPECIFIC PURPOSE OR NONINFRINGEMENT CONCERNING THIS SOFTWARE.
  *
- * $Id$
+ * $Id: main.c 3089 2006-01-31 15:22:43Z wbx $
  */
 
 #include <stdio.h>
@@ -22,75 +22,17 @@
 static void
 usage(void)
 {
-	//fprintf(stderr, "usage: nvram [get name] [set name=value] [unset name] [show]\n");
-
-	printf("usage: nvram [get name] [set name=val] [unset name] [show] [save file] [restore file]\n");
+	fprintf(stderr, "usage: nvram [get name] [set name=value] [unset name] [show]\n");
 	exit(0);
 }
 
-#define PROFILE_HEADER 	"HDR1"
-
-// save nvram to file
-int nvram_save(char *file, char *buf)
+/* hack for some PMON default nvram values which have '\r' appended */
+void
+puts_trim_cr(char *str)
 {
-	FILE *fp;
-	char *name;
-	unsigned long count, filelen, i;
-
-   	if ((fp=fopen(file, "w"))==NULL) return -1;
-
-	count = 0;
-	for (name=buf;*name;name+=strlen(name)+1)
-	{	
-		puts(name);
-		count = count+strlen(name)+1;
-	}
-   	
-   	filelen = count + (1024 - count%1024);	
-   	fwrite(PROFILE_HEADER, 1, 4, fp);
-   	fwrite(&filelen, 1, 4, fp);
-   	fwrite(buf, 1, count, fp);
-   	for(i=count;i<filelen;i++) fwrite(name, 1, 1, fp);   	
-   	fclose(fp);
-	return 0;
-}
-
-// restore nvram from file
-int nvram_restore(char *file, char *buf)
-{
-   	FILE *fp;
-   	char header[8], *p, *v;
-  	unsigned long count, *filelen;
-
-   	if ((fp=fopen(file, "r+"))==NULL) return -1;
-    	   
-   	count = fread(header, 1, 8, fp);
-   	if (count>=8 && strncmp(header, PROFILE_HEADER, 4)==0)
-   	{  
-	    filelen = (unsigned long *)(header + 4);
-   	    count = fread(buf, 1, *filelen, fp);
-   	}   
-   	fclose(fp);
-
-   	p = buf;       	           
-   
-   	while(*p)
-   	{       
-		//printf("nv:%s\n", p);     	     	        	     	
-       		v = strchr(p, '=');
-		if(v!=NULL)
-		{	
-			*v++ = NULL;
-			nvram_set(p, v);
-       			p = v + strlen(v) + 1;
-		}
-		else 
-		{
-			nvram_unset(p);
-			p = p + 1;
-		}
-   	}
-	return 0;
+	int len= strlen(str);
+	if (len && (str[len-1] == '\r')) len--;
+	printf("%.*s\n", len, str);
 }
 
 /* NVRAM utility */
@@ -111,8 +53,9 @@ main(int argc, char **argv)
 	for (; *argv; argv++) {
 		if (!strncmp(*argv, "get", 3)) {
 			if (*++argv) {
-				if ((value = nvram_get(*argv)))
-					puts(value);
+				if ((value = nvram_get(*argv))) {
+					puts_trim_cr(value);
+				}
 			}
 		}
 		else if (!strncmp(*argv, "set", 3)) {
@@ -129,33 +72,17 @@ main(int argc, char **argv)
 		else if (!strncmp(*argv, "commit", 5)) {
 			nvram_commit();
 		}
-		else if (!strncmp(*argv, "save", 4)) 
-		{
-			if (*++argv) 
-			{
-				nvram_getall(buf, sizeof(buf));	
-				nvram_save(*argv, buf);
-			}
-			
-		}
-		else if (!strncmp(*argv, "restore", 7)) 
-		{
-			if (*++argv) 
-			{
-				nvram_restore(*argv, buf);
-			}
-			
-		}
 		else if (!strncmp(*argv, "show", 4) ||
 			   !strncmp(*argv, "getall", 6)) {
 			nvram_getall(buf, sizeof(buf));
 			for (name = buf; *name; name += strlen(name) + 1)
-				puts(name);
+				puts_trim_cr(name);
 			size = sizeof(struct nvram_header) + (int) name - (int) buf;
 			fprintf(stderr, "size: %d bytes (%d left)\n", size, NVRAM_SPACE - size);
 		}
 		if (!*argv)
 			break;
 	}
+
 	return 0;
 }	

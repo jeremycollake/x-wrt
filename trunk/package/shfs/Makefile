@@ -1,4 +1,4 @@
-# $Id: Makefile 1985 2005-09-23 22:15:43Z nico $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -35,8 +35,8 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_SHFS_UTILS):
 	install -m0755 -d $(IDIR_SHFS_UTILS)/usr/sbin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/shfs{,u}mount $(IDIR_SHFS_UTILS)/usr/sbin/
-	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/mount.shfs $(IDIR_SHFS_UTILS)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/shfs{,u}mount $(IDIR_SHFS_UTILS)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/mount.shfs $(IDIR_SHFS_UTILS)/usr/sbin/
 	$(RSTRIP) $(IDIR_SHFS_UTILS)
 	$(IPKG_BUILD) $(IDIR_SHFS_UTILS) $(PACKAGE_DIR)
 

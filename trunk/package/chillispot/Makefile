@@ -1,4 +1,4 @@
-# $Id: Makefile 3573 2006-04-01 20:20:46Z wbx $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -65,6 +65,6 @@ $(IPKG_CHILLISPOT):
 	install -m0755 -d $(IDIR_CHILLISPOT)/etc
 	install -m0644 $(PKG_BUILD_DIR)/doc/chilli.conf $(IDIR_CHILLISPOT)/etc/
 	install -m0755 -d $(IDIR_CHILLISPOT)/usr/sbin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/chilli $(IDIR_CHILLISPOT)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/chilli $(IDIR_CHILLISPOT)/usr/sbin/
 	$(RSTRIP) $(IDIR_CHILLISPOT)
 	$(IPKG_BUILD) $(IDIR_CHILLISPOT) $(PACKAGE_DIR)

@@ -1,4 +1,4 @@
-# $Id: Makefile 3594 2006-04-05 12:40:42Z olli $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -67,23 +67,23 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_LIBSQLITE):
 	install -d -m0755 $(IDIR_LIBSQLITE)/usr/lib
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libsqlite3.so.* $(IDIR_LIBSQLITE)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsqlite3.so.* $(IDIR_LIBSQLITE)/usr/lib/
 	$(RSTRIP) $(IDIR_LIBSQLITE)
 	$(IPKG_BUILD) $(IDIR_LIBSQLITE) $(PACKAGE_DIR)
 
 $(IPKG_SQLITE_CLI):
 	install -d -m0755 $(IDIR_SQLITE_CLI)/usr/bin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/bin/sqlite3 $(IDIR_SQLITE_CLI)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/sqlite3 $(IDIR_SQLITE_CLI)/usr/bin/
 	$(RSTRIP) $(IDIR_SQLITE_CLI)
 	$(IPKG_BUILD) $(IDIR_SQLITE_CLI) $(PACKAGE_DIR)
 
 $(STAGING_DIR)/usr/lib/libsqlite3.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/include
-	cp -fpR $(PKG_INSTALL_DIR)/usr/include/sqlite3.h $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/sqlite3.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libsqlite3.{a,so*} $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsqlite3.{a,so*} $(STAGING_DIR)/usr/lib/
 	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/sqlite3.pc $(STAGING_DIR)/usr/lib/pkgconfig/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/sqlite3.pc $(STAGING_DIR)/usr/lib/pkgconfig/
 	touch $@
 
 install-dev: $(STAGING_DIR)/usr/lib/libsqlite3.so

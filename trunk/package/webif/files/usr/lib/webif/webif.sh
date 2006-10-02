@@ -38,7 +38,7 @@ categories() {
 
 subcategories() {
 	grep -H "##WEBIF:name:$1:" $cgidir/*.sh 2>/dev/null | \
-		sed -e 's,^.*/\([a-zA-Z\.\-]*\):\(.*\)$,\2:\1,' | \
+		sed -e 's,^.*/\([a-zA-Z0-9_\.\-]*\):\(.*\)$,\2:\1,' | \
 		sort -n | \
 		awk -v "selected=$2" \
 			-v "rootdir=$rootdir" \
@@ -46,7 +46,7 @@ subcategories() {
 }
 
 update_changes() {
-	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))		
+	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))
 }
 
 header() {

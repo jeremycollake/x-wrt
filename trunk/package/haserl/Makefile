@@ -1,4 +1,4 @@
-# $Id: Makefile 968 2005-05-19 21:14:18Z nico $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -55,7 +55,7 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_HASERL):
 	install -m0755 -d $(IDIR_HASERL)/usr/bin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/bin/haserl $(IDIR_HASERL)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/haserl $(IDIR_HASERL)/usr/bin/
 	$(RSTRIP) $(IDIR_HASERL)
 	$(IPKG_BUILD) $(IDIR_HASERL) $(PACKAGE_DIR)
 

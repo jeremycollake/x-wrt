@@ -79,7 +79,7 @@ ifeq ("$(strip $(ARCH))","armeb")
 	$(SCRIPT_DIR)/patch-kernel.sh $(GCC_DIR) ./$(GCC_VERSION) arm-softfloat.patch.conditional
 endif
 endif
-	$(SED) 's,\(version_string.. = "[0-9\.]*\).*\(";\),\1 (OpenWrt-2.0)\2,' $(GCC_DIR)/gcc/version.c
+	$(SED) 's,\(version_string.. = "[0-9\.]*\).*\(";\),\1 (OpenWrt-1.0)\2,' $(GCC_DIR)/gcc/version.c
 	$(SED) 's,\(bug_report_url.. = "\).*\(";\),\1<URL:https://dev.openwrt.org/>\2,' $(GCC_DIR)/gcc/version.c
 	touch $(GCC_DIR)/.patched
 

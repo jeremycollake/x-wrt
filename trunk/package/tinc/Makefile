@@ -1,10 +1,10 @@
-# $Id: Makefile 1160 2005-06-06 15:31:41Z nico $
+# $Id: Makefile 4884 2006-10-01 13:11:31Z nbd $
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tinc
 PKG_VERSION:=1.0.4
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=63887373dd763f8d90cecc5a3616c363
 
 PKG_SOURCE_URL:=http://www.tinc-vpn.org/packages \
@@ -48,6 +48,7 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		  $(DISABLE_LARGEFILE) \
 		  --with-kernel=$(LINUX_DIR) \
 		  --with-zlib=$(STAGING_DIR)/usr/ \
+		  --with-lzo-include=$(STAGING_DIR)/usr/include/lzo \
 	);
 	touch $@
 
@@ -63,7 +64,7 @@ $(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
 
 $(IPKG_TINC):
 	install -m0755 -d $(IDIR_TINC)/usr/sbin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/tincd $(IDIR_TINC)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/tincd $(IDIR_TINC)/usr/sbin/
 	$(RSTRIP) $(IDIR_TINC)
 	$(IPKG_BUILD) $(IDIR_TINC) $(PACKAGE_DIR)
 

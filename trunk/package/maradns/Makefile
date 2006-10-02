@@ -1,4 +1,4 @@
-# $Id: Makefile 3919 2006-06-09 00:46:54Z nbd $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -45,8 +45,8 @@ $(IPKG_MARADNS):
 	install -d -m0755 $(IDIR_MARADNS)/etc/init.d
 	install -m0755 ./files/maradns.init $(IDIR_MARADNS)/etc/init.d/S60maradns
 	install -d -m0755 $(IDIR_MARADNS)/usr/bin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/bin/{askmara,getzone,fetchzone,duende} $(IDIR_MARADNS)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/{askmara,getzone,fetchzone,duende} $(IDIR_MARADNS)/usr/bin/
 	install -d -m0755 $(IDIR_MARADNS)/usr/sbin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/{maradns,zoneserver} $(IDIR_MARADNS)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/{maradns,zoneserver} $(IDIR_MARADNS)/usr/sbin/
 	$(RSTRIP) $(IDIR_MARADNS)
 	$(IPKG_BUILD) $(IDIR_MARADNS) $(PACKAGE_DIR)

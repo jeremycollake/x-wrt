@@ -1,4 +1,4 @@
-# $Id: Makefile 973 2005-05-19 21:22:09Z nico $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -27,8 +27,8 @@ $(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
 
 $(IPKG_LIBPTHREAD):
 	mkdir -p $(IDIR_LIBPTHREAD)/lib
-	cp -fpR $(STAGING_DIR)/lib/libpthread.so.* $(IDIR_LIBPTHREAD)/lib/
-	cp -fpR $(STAGING_DIR)/lib/libpthread-*.so $(IDIR_LIBPTHREAD)/lib/
+	$(CP) $(STAGING_DIR)/lib/libpthread.so.* $(IDIR_LIBPTHREAD)/lib/
+	$(CP) $(STAGING_DIR)/lib/libpthread-*.so $(IDIR_LIBPTHREAD)/lib/
 	$(RSTRIP) $(IDIR_LIBPTHREAD)
 	$(IPKG_BUILD) $(IDIR_LIBPTHREAD) $(PACKAGE_DIR)
 

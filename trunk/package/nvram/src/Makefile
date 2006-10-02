@@ -1,8 +1,8 @@
-# $Id: Makefile 1629 2005-08-13 14:22:32Z nbd $
+# $Id: Makefile 4726 2006-09-02 18:37:11Z nbd $
 
 EXTRA_CFLAGS := -c -I. -I../include
-LIBSHARED_OBJS := shutils.o wl.o wl_linux.o defaults.o linux_timer.o
-LIBNVRAM_OBJS := nvram_linux.o nvram_convert.o
+LIBSHARED_OBJS := shutils.o wl.o wl_linux.o linux_timer.o
+LIBNVRAM_OBJS := nvram_linux.o
 
 all: libshared.so libnvram.so nvram
 

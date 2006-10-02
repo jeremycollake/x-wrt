@@ -1,4 +1,4 @@
-# $Id: Makefile 3593 2006-04-05 12:21:05Z olli $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -179,6 +179,6 @@ $(PKG_BUILD_DIR)/.built: $(BUILD_TARGETS)
 
 $(IPKG_PMACCT_CLIENT):
 	install -d -m0755 $(IDIR_PMACCT_CLIENT)/usr/sbin
-	cp -fpR $(PKG_BUILD_DIR)/pmacct $(IDIR_PMACCT_CLIENT)/usr/sbin/
+	$(CP) $(PKG_BUILD_DIR)/pmacct $(IDIR_PMACCT_CLIENT)/usr/sbin/
 	$(RSTRIP) $(IDIR_PMACCT_CLIENT)
 	$(IPKG_BUILD) $(IDIR_PMACCT_CLIENT) $(PACKAGE_DIR)

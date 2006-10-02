@@ -1,11 +1,11 @@
-# $Id: Makefile 1580 2005-08-03 11:13:00Z wbx $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=quagga
-PKG_VERSION:=0.98.4
+PKG_VERSION:=0.98.6
 PKG_RELEASE:=1
-PKG_MD5SUM:=c68e409931449afc5730289d3105f502
+PKG_MD5SUM:=b0d4132039953a0214256873b7d23d68
 
 PKG_SOURCE_URL:=http://www.quagga.net/download/ \
                 http://www.de.quagga.net/download/ \
@@ -25,6 +25,7 @@ $(eval $(call PKG_template,QUAGGA_OSPFD,quagga-ospfd,$(PKG_VERSION)-$(PKG_RELEAS
 $(eval $(call PKG_template,QUAGGA_OSPF6D,quagga-ospf6d,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,QUAGGA_RIPD,quagga-ripd,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,QUAGGA_RIPNGD,quagga-ripngd,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,QUAGGA_ISISD,quagga-isisd,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,QUAGGA_VTYSH,quagga-vtysh,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
 $(PKG_BUILD_DIR)/.configured:
@@ -60,6 +61,8 @@ $(PKG_BUILD_DIR)/.configured:
 		--enable-vtysh \
 		--enable-user=quagga \
 		--enable-group=quagga \
+		--enable-multipath=8 \
+		--enable-isisd \
 	);
 	touch $@
 
@@ -71,10 +74,10 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_QUAGGA):
 	install -d -m0755 $(IDIR_QUAGGA)/usr/lib
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libzebra.so.* $(IDIR_QUAGGA)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libzebra.so.* $(IDIR_QUAGGA)/usr/lib/
 	install -d -m0755 $(IDIR_QUAGGA)/usr/sbin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/zebra $(IDIR_QUAGGA)/usr/sbin/
-	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/watchquagga $(IDIR_QUAGGA)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/zebra $(IDIR_QUAGGA)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/watchquagga $(IDIR_QUAGGA)/usr/sbin/
 	# avoid /etc being set to 0750
 	install -d -m0755 $(IDIR_QUAGGA)/etc/quagga/
 	chmod 0750 $(IDIR_QUAGGA)/etc/quagga/
@@ -86,38 +89,44 @@ $(IPKG_QUAGGA):
 
 $(IPKG_QUAGGA_BGPD):
 	install -d -m0755 $(IDIR_QUAGGA_BGPD)/usr/sbin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/bgpd $(IDIR_QUAGGA_BGPD)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/bgpd $(IDIR_QUAGGA_BGPD)/usr/sbin/
 	$(RSTRIP) $(IDIR_QUAGGA_BGPD)
 	$(IPKG_BUILD) $(IDIR_QUAGGA_BGPD) $(PACKAGE_DIR)
 
 $(IPKG_QUAGGA_OSPFD):
 	install -d -m0755 $(IDIR_QUAGGA_OSPFD)/usr/lib
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libospf.so.* $(IDIR_QUAGGA_OSPFD)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libospf.so.* $(IDIR_QUAGGA_OSPFD)/usr/lib/
 	install -d -m0755 $(IDIR_QUAGGA_OSPFD)/usr/sbin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/ospfd $(IDIR_QUAGGA_OSPFD)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/ospfd $(IDIR_QUAGGA_OSPFD)/usr/sbin/
 	$(RSTRIP) $(IDIR_QUAGGA_OSPFD)
 	$(IPKG_BUILD) $(IDIR_QUAGGA_OSPFD) $(PACKAGE_DIR)
 
 $(IPKG_QUAGGA_OSPF6D):
 	install -d -m0755 $(IDIR_QUAGGA_OSPF6D)/usr/sbin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/ospf6d $(IDIR_QUAGGA_OSPF6D)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/ospf6d $(IDIR_QUAGGA_OSPF6D)/usr/sbin/
 	$(RSTRIP) $(IDIR_QUAGGA_OSPF6D)
 	$(IPKG_BUILD) $(IDIR_QUAGGA_OSPF6D) $(PACKAGE_DIR)
 
 $(IPKG_QUAGGA_RIPD):
 	install -d -m0755 $(IDIR_QUAGGA_RIPD)/usr/sbin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/ripd $(IDIR_QUAGGA_RIPD)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/ripd $(IDIR_QUAGGA_RIPD)/usr/sbin/
 	$(RSTRIP) $(IDIR_QUAGGA_RIPD)
 	$(IPKG_BUILD) $(IDIR_QUAGGA_RIPD) $(PACKAGE_DIR)
 
 $(IPKG_QUAGGA_RIPNGD):
 	install -d -m0755 $(IDIR_QUAGGA_RIPNGD)/usr/sbin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/ripngd $(IDIR_QUAGGA_RIPNGD)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/ripngd $(IDIR_QUAGGA_RIPNGD)/usr/sbin/
 	$(RSTRIP) $(IDIR_QUAGGA_RIPNGD)
 	$(IPKG_BUILD) $(IDIR_QUAGGA_RIPNGD) $(PACKAGE_DIR)
 
+$(IPKG_QUAGGA_ISISD):
+	install -d -m0755 $(IDIR_QUAGGA_ISISD)/usr/sbin
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/isisd $(IDIR_QUAGGA_ISISD)/usr/sbin/
+	$(RSTRIP) $(IDIR_QUAGGA_ISISD)
+	$(IPKG_BUILD) $(IDIR_QUAGGA_ISISD) $(PACKAGE_DIR)
+
 $(IPKG_QUAGGA_VTYSH):
 	install -d -m0755 $(IDIR_QUAGGA_VTYSH)/usr/bin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/bin/vtysh $(IDIR_QUAGGA_VTYSH)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/vtysh $(IDIR_QUAGGA_VTYSH)/usr/bin/
 	$(RSTRIP) $(IDIR_QUAGGA_VTYSH)
 	$(IPKG_BUILD) $(IDIR_QUAGGA_VTYSH) $(PACKAGE_DIR)

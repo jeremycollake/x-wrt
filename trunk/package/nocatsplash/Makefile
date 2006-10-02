@@ -1,4 +1,4 @@
-# $Id: Makefile 2559 2005-11-28 02:48:53Z nico $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -7,7 +7,7 @@ PKG_VERSION:=0.92
 PKG_RELEASE:=2
 PKG_MD5SUM:=e0fcc0effe52e63bc31070d16d0b4a81
 
-PKG_SOURCE_URL:=http://nocat.net/download/NoCatSplash/
+PKG_SOURCE_URL:=http://wifi.rulez.org/~josephus/
 PKG_SOURCE:=NoCatSplash-$(PKG_VERSION).tar.gz
 PKG_CAT:=zcat
 
@@ -58,7 +58,7 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_NOCATSPLASH):
 	mkdir -p $(IDIR_NOCATSPLASH)
-	cp -fpR $(PKG_INSTALL_DIR)/* $(IDIR_NOCATSPLASH)/ 
+	$(CP) $(PKG_INSTALL_DIR)/* $(IDIR_NOCATSPLASH)/ 
 	$(RSTRIP) $(IDIR_NOCATSPLASH)
 	$(IPKG_BUILD) $(IDIR_NOCATSPLASH) $(PACKAGE_DIR)
 

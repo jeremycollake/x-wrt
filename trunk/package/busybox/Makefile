@@ -1,9 +1,9 @@
-# $Id: Makefile 2458 2005-11-12 21:49:10Z nbd $
+# $Id: Makefile 4885 2006-10-02 17:38:17Z nbd $
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=busybox
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 
 ifeq ($(strip $(BR2_PACKAGE_BUSYBOX_SNAPSHOT)),y)
 # Be aware that this changes daily....

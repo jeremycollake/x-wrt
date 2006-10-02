@@ -1,4 +1,4 @@
-# $Id: Makefile 4742 2006-09-03 18:11:10Z nbd $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -27,7 +27,7 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_DNSMASQ):
 	install -d -m0755 $(IDIR_DNSMASQ)/usr/sbin
-	cp -fpR $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(IDIR_DNSMASQ)/usr/sbin/
+	$(CP) $(PKG_BUILD_DIR)/src/$(PKG_NAME) $(IDIR_DNSMASQ)/usr/sbin/
 	install -d -m0755 $(IDIR_DNSMASQ)/etc/init.d/
 	install -m0644 ./files/dnsmasq.conf $(IDIR_DNSMASQ)/etc/dnsmasq.conf
 	install -m0755 ./files/S50dnsmasq $(IDIR_DNSMASQ)/etc/init.d/S50dnsmasq

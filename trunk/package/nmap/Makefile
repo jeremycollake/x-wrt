@@ -1,4 +1,4 @@
-# $Id: Makefile 3031 2006-01-20 19:18:37Z wbx $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -67,10 +67,10 @@ $(PKG_BUILD_DIR)/.built:
 $(IPKG_NMAP):
 	install -d -m0755 $(IDIR_NMAP)/usr/share/nmap
 	for file in mac-prefixes os-fingerprints protocols rpc service-probes services; do \
-		cp -fpR $(PKG_INSTALL_DIR)/usr/share/nmap/nmap-$$file $(IDIR_NMAP)/usr/share/nmap; \
+		$(CP) $(PKG_INSTALL_DIR)/usr/share/nmap/nmap-$$file $(IDIR_NMAP)/usr/share/nmap; \
 	done
 	install -d -m0755 $(IDIR_NMAP)/usr/bin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/bin/nmap $(IDIR_NMAP)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nmap $(IDIR_NMAP)/usr/bin/
 	$(RSTRIP) $(IDIR_NMAP)
 	$(IPKG_BUILD) $(IDIR_NMAP) $(PACKAGE_DIR)
 

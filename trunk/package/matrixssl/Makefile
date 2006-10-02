@@ -1,4 +1,4 @@
-# $Id: Makefile 1164 2005-06-07 07:02:48Z wbx $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -29,16 +29,16 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_LIBMATRIXSSL):
 	install -d -m0755 $(IDIR_LIBMATRIXSSL)/usr/lib
-	cp -fpR $(PKG_BUILD_DIR)/src/libmatrixssl.so.* $(IDIR_LIBMATRIXSSL)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/src/libmatrixssl.so.* $(IDIR_LIBMATRIXSSL)/usr/lib/
 	$(RSTRIP) $(IDIR_LIBMATRIXSSL)
 	$(IPKG_BUILD) $(IDIR_LIBMATRIXSSL) $(PACKAGE_DIR)
 
 $(STAGING_DIR)/usr/lib/libmatrixssl.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/include/matrixSsl
-	cp -fpR $(PKG_BUILD_DIR)/matrixSsl.h $(STAGING_DIR)/usr/include/matrixSsl
+	$(CP) $(PKG_BUILD_DIR)/matrixSsl.h $(STAGING_DIR)/usr/include/matrixSsl
 	ln -sf matrixSsl/matrixSsl.h $(STAGING_DIR)/usr/include/matrixSsl.h
 	mkdir -p $(STAGING_DIR)/usr/lib
-	cp -fpR $(PKG_BUILD_DIR)/src/libmatrixssl.so* $(STAGING_DIR)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/src/libmatrixssl.so* $(STAGING_DIR)/usr/lib
 
 install-dev: $(STAGING_DIR)/usr/lib/libmatrixssl.so
 

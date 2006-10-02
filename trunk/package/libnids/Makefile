@@ -1,4 +1,4 @@
-# $Id: Makefile 1199 2005-06-11 11:40:04Z wbx $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -62,15 +62,15 @@ $(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
 
 $(IPKG_LIBNIDS): $(STAGING_DIR)/usr/lib/libnids.so
 	install -m0755 -d $(IDIR_LIBNIDS)/usr/lib
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libnids.so.* $(IDIR_LIBNIDS)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnids.so.* $(IDIR_LIBNIDS)/usr/lib/
 	$(RSTRIP) $(IDIR_LIBNIDS)
 	$(IPKG_BUILD) $(IDIR_LIBNIDS) $(PACKAGE_DIR)
 
 $(STAGING_DIR)/usr/lib/libnids.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/include
-	cp -fpR $(PKG_INSTALL_DIR)/usr/include/nids.h $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/nids.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libnids.{a,so*} $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnids.{a,so*} $(STAGING_DIR)/usr/lib/
 	touch $(STAGING_DIR)/usr/lib/libnids.so
 
 install-dev: $(STAGING_DIR)/usr/lib/libnids.so

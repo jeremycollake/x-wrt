@@ -1,4 +1,4 @@
-# $Id: Makefile 1529 2005-07-22 17:51:55Z nico $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -66,6 +66,6 @@ $(IPKG_XINETD):
 	install -d -m0755 $(IDIR_XINETD)/etc/init.d
 	install -m0755 ./files/xinetd.init $(IDIR_XINETD)/etc/init.d/xinetd
 	install -d -m0755 $(IDIR_XINETD)/usr/sbin
-	cp -fpR $(PKG_INSTALL_DIR)/usr/sbin/xinetd $(IDIR_XINETD)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/xinetd $(IDIR_XINETD)/usr/sbin/
 	$(RSTRIP) $(IDIR_XINETD)
 	$(IPKG_BUILD) $(IDIR_XINETD) $(PACKAGE_DIR)

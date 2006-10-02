@@ -1,4 +1,4 @@
-# $Id: Makefile 973 2005-05-19 21:22:09Z nico $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -55,6 +55,6 @@ $(IPKG_MONIT):
 	install -d -m0755 $(IDIR_MONIT)/etc/init.d
 	install -m0755 ./files/monit.init $(IDIR_MONIT)/etc/init.d/monit
 	install -d -m0755 $(IDIR_MONIT)/usr/sbin
-	cp -fpR $(PKG_BUILD_DIR)/monit $(IDIR_MONIT)/usr/sbin/
+	$(CP) $(PKG_BUILD_DIR)/monit $(IDIR_MONIT)/usr/sbin/
 	$(STRIP) $(IDIR_MONIT)/usr/sbin/monit
 	$(IPKG_BUILD) $(IDIR_MONIT) $(PACKAGE_DIR)

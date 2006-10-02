@@ -1,4 +1,4 @@
-# $Id: Makefile 2548 2005-11-22 14:06:58Z nico $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -18,7 +18,7 @@ include $(TOPDIR)/package/rules.mk
 $(eval $(call PKG_template,WPA_SUPPLICANT,wpa-supplicant,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
 $(PKG_BUILD_DIR)/.configured:
-	cp -fpR ./files/config $(PKG_BUILD_DIR)/.config
+	$(CP) ./files/config $(PKG_BUILD_DIR)/.config
 	touch $@
 
 $(PKG_BUILD_DIR)/.built:

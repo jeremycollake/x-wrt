@@ -1,4 +1,4 @@
-# $Id: Makefile 1025 2005-05-23 19:46:08Z nico $
+# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -59,16 +59,16 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_LIBEVENT):
 	install -d -m0755 $(IDIR_LIBEVENT)/usr/lib
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libevent-$(PKG_VERSION).so.* $(IDIR_LIBEVENT)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libevent-$(PKG_VERSION).so.* $(IDIR_LIBEVENT)/usr/lib/
 	$(RSTRIP) $(IDIR_LIBEVENT)
 	$(IPKG_BUILD) $(IDIR_LIBEVENT) $(PACKAGE_DIR)
 
 $(STAGING_DIR)/usr/lib/libevent.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/include
-	cp -fpR $(PKG_INSTALL_DIR)/usr/include/event.h $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/event.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libevent.{a,so} $(STAGING_DIR)/usr/lib/
-	cp -fpR $(PKG_INSTALL_DIR)/usr/lib/libevent-$(PKG_VERSION).so* $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libevent.{a,so} $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libevent-$(PKG_VERSION).so* $(STAGING_DIR)/usr/lib/
 	touch $@
 
 install-dev: $(STAGING_DIR)/usr/lib/libevent.so
