@@ -1,5 +1,0 @@
-config BR2_PACKAGE_FLASHFS
-	tristate "script to sync /etc with mtd partition holding .tar.gz."
-	default y
-	help
-	 Script to sync /etc with mtd partition holding .tar.gz. For tinyfs only.

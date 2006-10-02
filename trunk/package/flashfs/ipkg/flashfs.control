@@ -1,4 +1,0 @@
-Package: flashfs
-Priority: optional
-Section: sys
-Description: Script to sync /etc with mtd partition holding .tar.gz.
