@@ -25,24 +25,32 @@ TestInstall()
 # entry
 #
 
+#
+# sometimes ipkg may fail to create symlinks (i.e. on squashfs).
+#
+[ ! -f "/www/cgi-bin/webif/ipkg.sh" ] && {
+	ln -s "/www/cgi-bin/webif/system-packages.sh" "/www/cgi-bin/webif/ipkg.sh"
+}
+
+
 # embedded check. We don't want to execute this if installing
 # into firmware image (i.e. by Image Builder).
 cat /proc/version | grep OpenWrt 2>&1 >> /dev/null
-if [ $? = 0 ] && [ -f "/etc/init.d/S50httpd" ]; then
+[ $? = 0 ] && [ -f "/etc/init.d/S50httpd" ] && {
 	nvram unset device_name 	# force rescan of device_name, in case new id code is added
 	echo " Restarting httpd ..."
 	killall wifi 2>&1 >> /dev/null  # survey page relaunches this, sometimes httpd gets 'hung' on it
 	killall webif-page 2>&1 >> /dev/null
 	killall haserl 2>&1 >> /dev/null
 	killall httpd 2>&1 >> /dev/null
-	if [ -f "/etc/init.d/S11firmwareinfo" ]; then
+	[ -f "/etc/init.d/S11firmwareinfo" ] && {
 		/etc/init.d/S11firmwareinfo	# set webif default firmware information
-	fi
-	if [ -f "/etc/init.d/S12firmwareinfo" ]; then
+	}
+	[ -f "/etc/init.d/S12firmwareinfo" ] && {
 		/etc/init.d/S12firmwareinfo	# set over-ridden firmware information
-	fi
+	}
 	/etc/init.d/S40network 		# to relaunch wifi up if necessary
 	/etc/init.d/S50httpd
-fi
+}
 
 TestInstall	# always test the install, even on image build
