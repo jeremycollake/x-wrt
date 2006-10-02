@@ -79,7 +79,7 @@ $(IPKG_WEBIF):
 	./embed_rev.sh $(IDIR_WEBIF)/www/.version \
 			$(IDIR_WEBIF)/usr/lib/webif/webif.sh \
 			$(IDIR_WEBIF)/etc/init.d/* \
-			$(IDIR_WEBIF)/www/cgi-bin/webif/*
+			$(IDIR_WEBIF)/www/cgi-bin/webif/* 
 	install -d $(IDIR_WEBIF)/usr/bin
 	install -m0755 $(PKG_BUILD_DIR)/webif-page $(IDIR_WEBIF)/usr/bin/webif-page
 	install -m0755 $(PKG_BUILD_DIR)/bstrip $(IDIR_WEBIF)/usr/bin/bstrip
@@ -87,4 +87,8 @@ $(IPKG_WEBIF):
 	ln -sf /www/index.html $(IDIR_WEBIF)/www/index.asp
 	find $(IDIR_WEBIF) -name CVS | xargs rm -rf
 	find $(IDIR_WEBIF) -name .svn | xargs rm -rf
+	$(CP) ./ipkg/webif.postinst /tmp/.webif.postinst.orig
+	./embed_rev.sh ./ipkg/webif.postinst
 	$(IPKG_BUILD) $(IDIR_WEBIF) $(PACKAGE_DIR)
+	$(CP) /tmp/.webif.postinst.orig ./ipkg/webif.postinst
+	rm /tmp/.webif.postinst.orig
