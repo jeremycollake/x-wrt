@@ -10,6 +10,10 @@ ifeq ($(BR2_TARGET_ROOTFS_SQUASHFS_LZMA),y)
 include ./squashfs.mk
 endif
 
+ifeq ($(BR2_TARGET_ROOTFS_TINY),y)
+include ./tinyfs.mk
+endif
+
 prepare:
 compile:
 install:
