@@ -143,7 +143,7 @@ if empty "$FORM_submit"; then
 #####################################################################	
 # save forms
 else 
-	if [ "$FORM_generate_wep" != "Generate Key(s)" ]; then		
+	if [ "$FORM_generate_wep" != "Generate 128bit Key" ]; then		
 		SAVED=1					  	
 		case "$FORM_encryption" in
 			wpa) V_RADIUS="
@@ -237,7 +237,7 @@ EOF
 	fi
 fi
 
-if [ "$FORM_generate_wep" = "Generate Key(s)" ]; then	
+if [ "$FORM_generate_wep" = "Generate 128bit Key" ]; then	
 	# generate a single 128(104)bit key	
 	passphrase=$(wepkeygen -s "$FORM_wep_passphrase"  |
 		 awk 'BEGIN { count=0 }; 
@@ -370,7 +370,7 @@ field|@TR<<WPA Algorithms>>|wpa_crypto|hidden
 checkbox|tkip|$FORM_tkip|tkip|RC4 (TKIP)
 checkbox|aes|$FORM_aes|aes|AES
 field|WPA @TR<<PSK>>|wpapsk|hidden
-text|wpa_psk|$FORM_wpa_psk
+password|wpa_psk|$FORM_wpa_psk
 field|@TR<<RADIUS IP Address>>|radius_ip|hidden
 text|radius_ipaddr|$FORM_radius_ipaddr
 field|@TR<<RADIUS Server Key>>|radiuskey|hidden
@@ -378,7 +378,7 @@ text|radius_key|$FORM_radius_key
 field|@TR<<WEP Keys>>|wep_keys|hidden
 string|@TR<<Passphrase>>
 text|wep_passphrase|$FORM_wep_passphrase
-submit|generate_wep|Generate Key(s)
+submit|generate_wep|Generate 128bit Key
 string|<br />
 radio|key|$FORM_key|1
 text|key1|$FORM_key1|<br />
