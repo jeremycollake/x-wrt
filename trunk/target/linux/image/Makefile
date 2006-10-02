@@ -20,7 +20,7 @@ install-ib:
 	-$(MAKE) -C $(BOARD) IB_DIR="$(IB_DIR)" install-ib
 	mkdir -p $(IB_DIR)/build_$(ARCH)/linux-$(KERNEL)-$(BOARD)
 	cp $(BUILD_DIR)/linux-$(KERNEL)-$(BOARD)/kernel[-_]*.ipk $(IB_DIR)/build_$(ARCH)/linux-$(KERNEL)-$(BOARD)/	
-ifeq ($(CONFIG_TARGET_TAR_FS),y)
+ifeq ($(BR2_TARGET_TAR_FS),y)
    define Image/mkfs/prepare/tiny
                tar -cf $(IB_DIR)/root/rom/local.tar --owner=root --group=root -C $(IB_DIR)/root etc
                mkdir -p $(IB_DIR)/root/tmp/local/etc
