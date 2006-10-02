@@ -12,6 +12,12 @@ menu "Target Root Filesystem"
 		help
 		  Build a squashfs-lzma root filesystem
 
+	config BR2_TARGET_ROOTFS_TINY
+        	bool "tiny"
+	        default n
+		help
+	          Create a readonly file system with /etc in ram for small flash
+
 endmenu
 
 menu "Kernel Configuration / Device Support"
