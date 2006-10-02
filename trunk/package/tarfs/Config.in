@@ -1,0 +1,6 @@
+config BR2_PACKAGE_TARFS
+	tristate "tarfs - save/load ramfs /etc contents in mtd partition."
+	default m
+	depends BR2_TARGET_ROOTFS_SQUASHFS_LZMA
+	help
+	 save/load ramfs /etc contents in mtd partition.

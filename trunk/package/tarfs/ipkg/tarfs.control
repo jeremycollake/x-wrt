@@ -1,0 +1,4 @@
+Package: tarfs
+Priority: optional
+Section: sys
+Description: save/load ramfs /etc contents in mtd partition.
