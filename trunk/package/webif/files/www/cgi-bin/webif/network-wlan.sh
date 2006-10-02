@@ -143,7 +143,8 @@ if empty "$FORM_submit"; then
 #####################################################################	
 # save forms
 else 
-	if [ "$FORM_generate_wep" != "Generate 128bit Key" ]; then		
+	 empty "$FORM_generate_wep_128" 
+	 {	
 		SAVED=1					  	
 		case "$FORM_encryption" in
 			wpa) V_RADIUS="
@@ -234,17 +235,18 @@ EOF
 				;;
 			esac
 		}			
-	fi
+	}
 fi
 
-if [ "$FORM_generate_wep" = "Generate 128bit Key" ]; then	
+! empty "$FORM_generate_wep_128" && 
+{
 	# generate a single 128(104)bit key	
 	passphrase=$(wepkeygen -s "$FORM_wep_passphrase"  |
 		 awk 'BEGIN { count=0 }; 
 		 	{ total[count]=$1, count+=1; } 
 		 	END { print total[0] ":" total[1] ":" total[2] ":" total[3]}')		
 	FORM_key1=$(echo "$passphrase" | cut -d ':' -f 0-13 | sed s/':'//g)	
-fi
+}
 
 
 cat <<EOF
@@ -378,7 +380,8 @@ text|radius_key|$FORM_radius_key
 field|@TR<<WEP Keys>>|wep_keys|hidden
 string|@TR<<Passphrase>>
 text|wep_passphrase|$FORM_wep_passphrase
-submit|generate_wep|Generate 128bit Key
+string|<br />
+submit|generate_wep_128|Generate 128bit Key
 string|<br />
 radio|key|$FORM_key|1
 text|key1|$FORM_key1|<br />
