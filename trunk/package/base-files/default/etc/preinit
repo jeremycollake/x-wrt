@@ -5,6 +5,13 @@ mount none /proc -t proc
 insmod diag
 echo 0x01 > /proc/sys/diag
 
+[ -f /rom/local.tar ] && {
+  mount none /tmp -t tmpfs
+  mkdir /tmp/local
+  chmod 775 /tmp/local
+  [ -z "$FAILSAFE" ] && [ -x /sbin/flashfs ] && /sbin/flashfs load || tar -xf /rom/local.tar -C /tmp/local
+}
+
 ifname=eth0
 # WAP54G, WL-HDD
 [  "$(nvram get boardnum)" = "2" \
@@ -55,7 +62,6 @@ else
 	}
 fi
 
-#insmod mini_fo 2>&-
-mount_root ${FAILSAFE:+failsafe}
+[ -f /rom/local.tar ] || mount_root ${FAILSAFE:+failsafe}
 
 exec /sbin/init

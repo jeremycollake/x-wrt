@@ -7,6 +7,8 @@ export PS1='\u@\h:\w\$ '
 alias less=more
 alias vim=vi
 
+[ -d /usr/local/bin ] && export PATH=/usr/local/bin:$PATH
+
 arp() { cat /proc/net/arp; }
 ldd() { LD_TRACE_LOADED_OBJECTS=1 $*; }
 reboot() { ifdown wan 2>&1 >/dev/null ; /sbin/reboot; }
