@@ -72,6 +72,12 @@ config BR2_ARCH
 	default "sh4eb"   if BR2_sh4eb
 	default "sparc"   if BR2_sparc
 
+       config TARGET_ROOTFS_TINY
+               bool "tiny"
+               default n
+               depends !TARGET_ROOTFS_INITRAMFS
+               help
+                 Create a readonly file system with /etc in ram for small flash
 
 config BR2_WGET
 	string 
