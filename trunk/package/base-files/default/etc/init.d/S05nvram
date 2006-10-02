@@ -38,6 +38,35 @@ boardnum=$(nvram get boardnum)
 boardflags=$(($(nvram get boardflags)))
 adm_switch="$(( ($boardflags & 0x80) >> 7 ))"
 
+case "$(( $boardtype ))" in
+	"1800") #0x708
+		if [ "$adm_switch" = 0 ]; then
+			nvram_set sdram_init "$(printf 0x%04x $(( $(/usr/sbin/nvram get sdram_init) | 0x0100 )))"
+			[ "$COMMIT" = 1 ] && {
+				nvram_set clkfreq 216
+				nvram_set sdram_ncdl 0x0
+				nvram_set pa0itssit 62
+				nvram_set pa0b0 0x15eb
+				nvram_set pa0b1 0xfa82
+				nvram_set pa0b2 0xfe66
+				nvram_set pa0maxpwr 0x4e
+			}
+		fi
+	;;
+	"1127") #0x467
+		nvram_set sdram_init "$(printf 0x%04x $(( $(/usr/sbin/nvram get sdram_init) | 0x0100 )))"
+		[ "$COMMIT" = 1 ] && {
+			nvram_set sdram_ncdl 0x0
+			nvram_set pa0itssit 62
+			nvram_set pa0b0 0x168b
+			nvram_set pa0b1 0xfabf
+			nvram_set pa0b2 0xfeaf
+			nvram_set pa0maxpwr 0x4e
+		}
+	;;
+esac
+[ "$COMMIT" = "1" ] && nvram commit
+
 # linksys bug; use 'dhcpclient' or similar as lan_proto if you want to use dhcp
 [ "$(nvram get lan_proto)" = "dhcp" ] && nvram unset lan_proto
 nvram_default lan_proto static
