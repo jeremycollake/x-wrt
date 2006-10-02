@@ -143,7 +143,7 @@ if empty "$FORM_submit"; then
 #####################################################################	
 # save forms
 else 
-	 empty "$FORM_generate_wep_128" 
+	 empty "$FORM_generate_wep_128" && empty "$FORM_generate_wep_40" &&
 	 {	
 		SAVED=1					  	
 		case "$FORM_encryption" in
@@ -241,11 +241,32 @@ fi
 ! empty "$FORM_generate_wep_128" && 
 {
 	# generate a single 128(104)bit key	
-	passphrase=$(wepkeygen -s "$FORM_wep_passphrase"  |
+	textkeys=$(wepkeygen -s "$FORM_wep_passphrase"  |
 		 awk 'BEGIN { count=0 }; 
 		 	{ total[count]=$1, count+=1; } 
 		 	END { print total[0] ":" total[1] ":" total[2] ":" total[3]}')		
-	FORM_key1=$(echo "$passphrase" | cut -d ':' -f 0-13 | sed s/':'//g)	
+	FORM_key1=$(echo "$textkeys" | cut -d ':' -f 0-13 | sed s/':'//g)	
+	FORM_key2=""
+	FORM_key3=""
+	FORM_key4=""
+}
+
+! empty "$FORM_generate_wep_40" && 
+{
+	# generate a single 128(104)bit key	
+	textkeys=$(wepkeygen "$FORM_wep_passphrase" | sed s/':'//g)		
+	keycount=1
+	for curkey in $textkeys; do
+		case $keycount in
+			1) FORM_key1=$curkey;;
+			2) FORM_key2=$curkey;;
+			3) FORM_key3=$curkey;;
+			4) FORM_key4=$curkey
+				break;;
+		esac
+		let "keycount+=1"
+	done
+	
 }
 
 
@@ -382,6 +403,7 @@ string|@TR<<Passphrase>>
 text|wep_passphrase|$FORM_wep_passphrase
 string|<br />
 submit|generate_wep_128|Generate 128bit Key
+submit|generate_wep_40|Generate 40bit Key
 string|<br />
 radio|key|$FORM_key|1
 text|key1|$FORM_key1|<br />
