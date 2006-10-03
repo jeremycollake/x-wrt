@@ -55,10 +55,9 @@ equal "$OVERCLOCKING_DISABLED" "0" && {
 if ! empty "$FORM_install_ntpclient"; then
 	tmpfile=$(mktemp "/tmp/.webif_ntp-XXXXXX")
 	echo "Installing NTPCLIENT package ...<pre>"
-	ipkg install ntpclient
+	install_package "ntpclient"
 	echo "</pre>"	
 fi
-
 
 #####################################################################
 # initialize forms
@@ -170,8 +169,7 @@ is_bcm947xx && {
 
 #####################################################################
 # check if ntpclient is installed and give user option to install if not
-ipkg list_installed | grep ntpclient >> /dev/null
-! equal "$?" "0" && 
+! is_package_installed "ntpclient" && 
 {
 	NTPCLIENT_INSTALL_FORM="string|<div class=warning>No NTP client is installed. For correct time support you need to install one:</div>
 		submit|install_ntpclient| Install NTP Client |"
