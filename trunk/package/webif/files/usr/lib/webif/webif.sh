@@ -91,14 +91,17 @@ Pragma: no-cache
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<head>
     	<title>@TR<< $_firmware_name Administrative Console>></title>
-		<link rel="stylesheet" type="text/css" href="/webif.css" />
+		<link rel="stylesheet" type="text/css" href="/webif.css" />		
+		<link rel="stylesheet" type="text/css" href="/color1.css" />	
 		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
-		<meta http-equiv="expires" content="-1" />
+		<meta http-equiv="expires" content="-1" />		
 	</head>
-	<body $4><div id="container">	 
+	<body $4>	
+	<script type="text/javascript" src="/colorize.js"></script>
+	<script type="text/javascript">	colorize() </script>	
+	<div id="container">	 	
 	  <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>	  
-	    <div id="header">
-	    				
+	    <div id="header">	    				
 	    				<div class="openwrt-title">
 	    				
 	    			   	</div>	 		
@@ -118,7 +121,14 @@ Pragma: no-cache
 		<div id=categories>$_categories</div>
 		<div id=subcategories>$_subcategories</div>
 		$_form
-		
+		<div>
+			<div class="swatch" style="background: #557788"></div>
+			<div class="swatch" style="background: #114488"></div>
+			<div class="swatch" style="background: #192a65"></div>
+			<div class="swatch" style="background: #334444"></div>
+			<div class="swatch" id="colorize"></div>
+		</div>
+		<script type="text/javascript">	swatch() </script>		
 		
 		<div id="content">
 		

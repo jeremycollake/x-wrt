@@ -43,7 +43,8 @@ function clickswatch() {
   } else {
     SetCookie("bgcolor",this.style.backgroundColor,exp,null,".webif")
   }
-  colorize();
+  colorize();  
+  alert("Color theme switcher is not implemented yet."); 
 }
 
 function swatch(){
@@ -56,19 +57,19 @@ function swatch(){
 }
 
 function colorize(){
-  var message=new Date()
+  /* var message=new Date()
   var h=message.getHours()
   var color=GetCookie("bgcolor")
   if (color) {
     // nothing
   } else if (h>=7 && h<18) {
-    color='#557788'
+    document.write('<STYLE TYPE="text/css" src="/color1.css"></STYLE>');
   } else if (h>=6 && h<20) {
-    color='#114488'
+    document.write('<STYLE TYPE="text/css" src="/color2.css"></STYLE>');
   } else if (h>=5 && h<23) {
-    color='#192a65'
+    document.write('<STYLE TYPE="text/css" src="/color3.css"></STYLE>');
   } else {
-    color='#334444'
+    document.write('<STYLE TYPE="text/css" src="/color4.css"></STYLE>');
   }
-  document.body.style.backgroundColor=color
+  //document.body.style.backgroundColor=color  */  
 }

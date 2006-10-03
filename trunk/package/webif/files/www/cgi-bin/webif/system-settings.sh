@@ -1,6 +1,7 @@
 #!/usr/bin/webif-page
 <? 
 . "/usr/lib/webif/webif.sh"
+
 ###################################################################
 # system configuration page
 #

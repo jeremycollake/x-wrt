@@ -40,6 +40,13 @@ fi
  	
 ?>
 
+
+<script type="text/javascript">
+<!--
+swatch()
+-->
+</script>
+
 <div class="webif-name-title">webif^2</div></font>
 <div class="webif-name-subtitle">Part of the end user extensions to OpenWrt by the X-Wrt project.</div>
 <div class="webif-name-version">Alpha development - revision __SVN_REVISION__</div>
