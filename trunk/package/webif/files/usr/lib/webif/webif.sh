@@ -3,6 +3,7 @@ wwwdir=/www
 cgidir=/www/cgi-bin/webif
 rootdir=/cgi-bin/webif
 indexpage=index.sh
+. /usr/lib/webif/configfuncs.sh
 
 # workarounds for stupid busybox slowness on [ ]
 empty() {
@@ -38,7 +39,7 @@ categories() {
 
 subcategories() {
 	grep -H "##WEBIF:name:$1:" $cgidir/*.sh 2>/dev/null | \
-		sed -e 's,^.*/\([a-zA-Z0-9_\.\-]*\):\(.*\)$,\2:\1,' | \
+		sed -e 's,^.*/\([a-zA-Z\.\-]*\):\(.*\)$,\2:\1,' | \
 		sort -n | \
 		awk -v "selected=$2" \
 			-v "rootdir=$rootdir" \
@@ -46,7 +47,7 @@ subcategories() {
 }
 
 update_changes() {
-	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))
+	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))		
 }
 
 header() {
@@ -262,35 +263,6 @@ handle_list() {
 		return 0
 	fi
 }
-
-load_settings() {
-	equal "$1" "nvram" || {
-		exists /etc/config/$1 && . /etc/config/$1
-	}
-	exists /tmp/.webif/config-$1 && . /tmp/.webif/config-$1	
-}
-
-validate() {
-	if empty "$1"; then
-		eval "$(awk -f /usr/lib/webif/validate.awk)"
-	else
-		eval "$(echo "$1" | awk -f /usr/lib/webif/validate.awk)"
-	fi
-}
-
-
-save_setting() {
-	exists /tmp/.webif/* || mkdir -p /tmp/.webif
-	oldval=$(eval "echo \${$2}")
-	oldval=${oldval:-$(nvram get "$2")}
-	grep "^$2=" /tmp/.webif/config-$1 >&- 2>&- && {
-		grep -v "^$2=" /tmp/.webif/config-$1 > /tmp/.webif/config-$1-new 2>&- 
-		mv /tmp/.webif/config-$1-new /tmp/.webif/config-$1 2>&- >&-
-		oldval=""
-	}
-	equal "$oldval" "$3" || echo "$2=\"$3\"" >> /tmp/.webif/config-$1
-}
-
 
 is_bcm947xx() {
 	read _systype < /proc/cpuinfo

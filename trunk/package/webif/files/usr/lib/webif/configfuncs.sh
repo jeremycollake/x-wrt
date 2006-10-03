@@ -20,7 +20,9 @@
 #
 
 ######
-# New settings functions
+# New settings functions that work with ng style config files.
+# These have an "_ex" appended.
+#
 
 load_settings_ex() {
 	config_load "$1"
@@ -69,7 +71,9 @@ EOF
 
 
 ######
-# Original settings functions
+# Original settings functions that work with nvram.
+# 
+
 
 load_settings() {
 	equal "$1" "nvram" || {
