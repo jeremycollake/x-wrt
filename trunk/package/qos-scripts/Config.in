@@ -1,0 +1,8 @@
+config BR2_PACKAGE_QOS_SCRIPTS
+	tristate "QoS module for OpenWrt."
+	default m
+	help
+	 nbd's QoS scripts. A set of scripts that abstract QoS configuration
+	 into a simple configuration file supporting stanzas that specify
+	 any number of QoS entries.
+
