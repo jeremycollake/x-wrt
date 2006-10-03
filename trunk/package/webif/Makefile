@@ -75,7 +75,7 @@ $(PKG_BUILD_DIR)/.built:
 	touch $@
 
 $(IPKG_WEBIF): 
-	cp -a ./files/* $(IDIR_WEBIF)/
+	$(CP) -a ./files/* $(IDIR_WEBIF)/
 	./embed_rev.sh $(IDIR_WEBIF)/www/.version \
 			$(IDIR_WEBIF)/usr/lib/webif/webif.sh \
 			$(IDIR_WEBIF)/etc/init.d/* \
