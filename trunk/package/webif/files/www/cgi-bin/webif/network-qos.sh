@@ -15,8 +15,7 @@
 
 . /usr/lib/webif/webif.sh
 
-
-if [ -f /etc/qos.conf ]; then
+if is_package_installed "qos-re"; then
 . /etc/qos.conf
 
 exists /tmp/.webif/qos  && QOS_FILE=/tmp/.webif/qos || QOS_FILE=/etc/qos.conf
@@ -137,6 +136,11 @@ else
 int|FORM_download_speed|@TR<<Download Speed>>|required|$FORM_download_speed
 int|FORM_upload_speed|@TR<<Upload Speed>>|required|$FORM_upload_speed
 EOF
+	equal "$?" 0 && {
+        	save_setting conntrack ip_conntrack_max $FORM_conntrack_max
+        	save_setting conntrack tcp_timeout $FORM_conntrack_tcp_timeout
+        	save_setting conntrack udp_timeout $FORM_conntrack_udp_timeout
+        }
 
 ###############################################
 for count in $(seq 0 $ipexprcount); do
@@ -225,13 +229,7 @@ save_setting qos UDP_PRIO "$udp_prio_save_value"
 save_setting qos UDP_BULK "$udp_bulk_save_value"
 save_setting qos L7_EXPR "$FORM_aim $FORM_bittorrent $FORM_edonkey $FORM_fasttrack $FORM_ftp $FORM_gnutella $FORM_http $FORM_ident $FORM_irc $FORM_jabber $FORM_msnmessenger $FORM_ntp $FORM_pop3 $FORM_smtp $FORM_ssl $FORM_vnc"
 save_setting qos L7_PRIO "$FORM_aim $FORM_bittorrent $FORM_edonkey $FORM_fasttrack $FORM_ftp $FORM_gnutella $FORM_http $FORM_ident $FORM_irc $FORM_jabber $FORM_msnmessenger $FORM_ntp $FORM_pop3 $FORM_smtp $FORM_ssl $FORM_vnc"
-save_setting qos L7_BULK "$FORM_aim $FORM_bittorrent $FORM_edonkey $FORM_fasttrack $FORM_ftp $FORM_gnutella $FORM_http $FORM_ident $FORM_irc $FORM_jabber $FORM_msnmessenger $FORM_ntp $FORM_pop3 $FORM_smtp $FORM_ssl $FORM_vnc"
-
-	equal "$?" 0 && {
-        	save_setting conntrack ip_conntrack_max $FORM_conntrack_max
-        	save_setting conntrack tcp_timeout $FORM_conntrack_tcp_timeout
-        	save_setting conntrack udp_timeout $FORM_conntrack_udp_timeout
-        }
+save_setting qos L7_BULK "$FORM_aim $FORM_bittorrent $FORM_edonkey $FORM_fasttrack $FORM_ftp $FORM_gnutella $FORM_http $FORM_ident $FORM_irc $FORM_jabber $FORM_msnmessenger $FORM_ntp $FORM_pop3 $FORM_smtp $FORM_ssl $FORM_vnc"	
 fi
 
 header "Network" "QoS" "@TR<<QOS Configuration>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
