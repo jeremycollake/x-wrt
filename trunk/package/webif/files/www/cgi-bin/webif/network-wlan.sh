@@ -378,7 +378,6 @@ option|adhoc|@TR<<Ad-Hoc>>
 helpitem|WLAN Mode
 helptext|HelpText WLAN Mode#This sets the operation mode of your wireless network. Selecting 'Client (Bridge)' will not change your network interface settings. It will only set some parameters in the wireless driver that allow for limited bridging of the interface.
 helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration#head-7126c5958e237d603674b3a9739c9d23bdfdb293
-
 field|@TR<<Wireless Mode#Wireless Mode>>
 select|gmode|$FORM_gmode
 option|bOnly|@TR<<802.11b>>
@@ -388,7 +387,6 @@ option|bDeferred|@TR<<802.11g with 802.11b deferred>>
 option|gPerformance|@TR<<802.11g (performance)>>
 option|gLRS|@TR<<802.11g (range - LRS)>>
 option|gAfterburner|@TR<<802.11g (afterburner)>>
-
 field|@TR<<G-mode Protection#G-mode Protection>>
 select|gmode_protection|$FORM_gmode_protection
 option|1|@TR<<Enabled>>
