@@ -1,0 +1,3 @@
+#!/bin/sh
+# cleanup old stuff
+rm -f /sbin/flashfs	# original author used this as the name of what is now 'config'
