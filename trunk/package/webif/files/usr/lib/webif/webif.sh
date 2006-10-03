@@ -94,7 +94,7 @@ Pragma: no-cache
 		<link rel="stylesheet" type="text/css" href="/webif.css" />		
 		<link rel="stylesheet" type="text/css" href="/color1.css" />	
 		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
-		<meta http-equiv="expires" content="-1" />		
+		<meta http-equiv="expires" content="0" />		
 	</head>
 	<body $4>	
 	<script type="text/javascript" src="/colorize.js"></script>
