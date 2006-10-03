@@ -2,6 +2,9 @@
 #
 # This is an ugly solution, but no better one developed yet.
 # We want to allow user to install a service but keep it disabled.
+# This is important in cases where the package is pre-installed,
+# for example on micro distributions.
+#
 # Without mandating use of packages that have startup scripts that
 # adhere to the variables we set to disable it, we must take
 # an alternate route. At present, this route is to stop services
@@ -9,5 +12,8 @@
 #
 if [ $(nvram get upnp_enabled) = "0" ]; then
 	echo "Stopping UPNP daemon ..."
+	# try to do it right
 	./S65upnpd stop
+	# but don't trust it
+	killall upnpd
 fi
