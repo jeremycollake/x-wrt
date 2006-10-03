@@ -17,8 +17,7 @@ $(PKG_BUILD_DIR)/.prepared:
 	touch $@
 
 $(PKG_BUILD_DIR)/.built:
-	mkdir -p $(PKG_BUILD_DIR)/qos_scripts/files
-	cp -a ./files/* $(PKG_BUILD_DIR)/qos_scripts/files
+	cp -a ./files $(PKG_BUILD_DIR)/qos_scripts
 	touch $@
 
 $(IPKG_QOS_SCRIPTS): 
