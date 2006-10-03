@@ -6,6 +6,18 @@
 . /usr/lib/webif/webif.sh
 load_settings "openvpn"
 
+if ! empty "$FORM_install_package"; then	
+	echo "Installing openvpn package ...<pre>"	
+	install_package "openvpn"	
+	echo "</pre>"	
+fi
+
+install_package_button=""
+! is_package_installed "openvpn" && 
+	install_package_button="string|<div class=warning>VPN will not work until you install OpenVPN: </div>
+		submit|install_package| Install OpenVPN Package |"
+	
+
 if empty "$FORM_submit"; then
 	[ -f /etc/openvpn/certificate.p12 ] ||
 		NOCERT=1
@@ -67,6 +79,7 @@ EOF
 
 display_form <<EOF
 onchange|modechange
+$install_package_button
 start_form|@TR<<OpenVPN>>
 field|@TR<<Start VPN Connection>>
 select|openvpn_cli|$FORM_openvpn_cli
