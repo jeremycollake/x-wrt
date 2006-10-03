@@ -16,7 +16,7 @@ $(PKG_BUILD_DIR)/.prepared:
 	touch $@
 
 $(PKG_BUILD_DIR)/.built:	
-	cp ./tarfs $(PKG_BUILD_DIR)/tarfs
+	cp ./config $(PKG_BUILD_DIR)/config
 	touch $@
 
 $(IPKG_TARFS): 
