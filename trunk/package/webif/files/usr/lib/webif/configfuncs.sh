@@ -74,7 +74,6 @@ EOF
 # Original settings functions that work with nvram.
 # 
 
-
 load_settings() {
 	equal "$1" "nvram" || {
 		exists /etc/config/$1 && . /etc/config/$1
