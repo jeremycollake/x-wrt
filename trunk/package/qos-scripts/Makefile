@@ -21,7 +21,12 @@ $(PKG_BUILD_DIR)/.built:
 	touch $@
 
 $(IPKG_QOS_SCRIPTS): 
-	chmod -R 755 $(PKG_BUILD_DIR)/qos_scripts/ $(IDIR_QOS_SCRIPTS)/sbin
+	install -d $(IDIR_QOS_SCRIPTS)/usr/lib
+	install -d $(IDIR_QOS_SCRIPTS)/usr/bin	
+	install -d $(IDIR_QOS_SCRIPTS)/etc/init.d
+	install -d $(IDIR_QOS_SCRIPTS)/etc/hotplug.d
+	install -d $(IDIR_QOS_SCRIPTS)/etc/config
+	chmod -R 755 $(PKG_BUILD_DIR)/qos_scripts/
 	cp -a $(PKG_BUILD_DIR)/qos_scripts/* $(IDIR_QOS_SCRIPTS)/
 	$(IPKG_BUILD) $(IDIR_QOS_SCRIPTS) $(PACKAGE_DIR)
 
