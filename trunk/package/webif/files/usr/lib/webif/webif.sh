@@ -268,3 +268,28 @@ is_bcm947xx() {
 	read _systype < /proc/cpuinfo
 	equal "${_systype##* }" "BCM947XX"
 }
+
+
+#####
+# functions dealing with packages
+#
+is_package_installed() {
+	# $1 = package name
+	# returns 0 if package is installed.
+	ipkg list_installed | grep "$1" >> /dev/null 2>&1	
+}
+
+update_package_list() {
+	ipkg update >> /dev/null 2>&1
+}
+
+add_package_source() {
+	# $1 = new source
+	# this will not check for duplicates.
+	# for squashfs with symlink hack, rm first.
+	local ipkgtmp=$(mktemp /tmp/.webif-XXXXXX)
+	cp "/etc/ipkg.conf" "$ipkgtmp"	
+	cat "$1" >> "$ipkgtmp"	
+	rm "/etc/ipkg.conf"
+	mv "$ipkgtmp" "/etc/ipkg.conf"	
+}
