@@ -98,8 +98,8 @@ option
 	position: relative;			
 	float: left;	
 	width: 100%;
-	padding-top: 0.5em;
-	padding-bottom: 0.5em;	
+	padding-top: 0.3em;
+	padding-bottom: 0.3em;	
 }
 
 #submenu 
@@ -107,8 +107,8 @@ option
 	position: relative;
 	float: left;		
 	width: 100%;
-	padding-top: 0.5em;
-	padding-bottom: 0.5em;	
+	padding-top: 0.3em;
+	padding-bottom: 0.3em;	
 }
 
 #mainmenu h3 
