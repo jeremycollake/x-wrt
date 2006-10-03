@@ -21,6 +21,5 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_TARFS): 
 	install -d -m0755 $(IDIR_TARFS)/sbin
-	install -m0755 $(PKG_BUILD_DIR)/tarfs $(IDIR_TARFS)/sbin	
-	$(RSTRIP) $(IDIR_TARFS)/sbin/*
+	install -m0755 $(PKG_BUILD_DIR)/config $(IDIR_TARFS)/sbin	
 	$(IPKG_BUILD) $(IDIR_TARFS) $(PACKAGE_DIR)
