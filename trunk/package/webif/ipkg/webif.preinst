@@ -2,20 +2,17 @@
 #
 # TODO: this crap needs rewriting
 #
-cat /proc/version | grep OpenWrt 2>&1 >> /dev/null
+cat /proc/version | grep OpenWrt >> /dev/null 2>&1
 if [ $? = 0 ]; then
 	echo " Cleaning up existing webif package (if one exists) ..."
 	# remove files, but not directories
-	rm -f /www/* 2>&1 >> /dev/null
-	rm -f /www/svggraph/* 2>&1 >> /dev/null
-	rm -f /www/cgi-bin/* 2>&1 >> /dev/null
-	rm -f /www/cgi-bin/webif/* 2>&1 >> /dev/null
-	rm -f /usr/lib/webif/* 2>&1 >> /dev/null
-	rm -f /etc/init.d/S50dnsmasq 2>&1 >> /dev/null
-	rm -f /etc/init.d/S60ntp 2>&1 >> /dev/null
-	rm -f /etc/init.d/S60upnp 2>&1 >> /dev/null   # we used this in r500 and below
-	rm -f /etc/init.d/S66upnpd_webif 2>&1 >> /dev/null   
-	rm -f /etc/init.d/S51crond 2>&1 >> /dev/null 
-	rm -f /etc/init.d/S11firmwareinfo 2>&1 >> /dev/null
-	rm -f /etc/init.d/S12deprecatedcleanup 2>&1 >> /dev/null
+	rm -rf /www/* >> /dev/null 2>&1 
+	rm -f /usr/lib/webif/* >> /dev/null 2>&1
+	rm -f /etc/init.d/S50dnsmasq >> /dev/null 2>&1
+	rm -f /etc/init.d/S60ntp >> /dev/null 2>&1
+	rm -f /etc/init.d/S60upnp >> /dev/null 2>&1   # we used this in r500 and below
+	rm -f /etc/init.d/S66upnpd_webif >> /dev/null 2>&1   
+	rm -f /etc/init.d/S51crond >> /dev/null 2>&1 
+	rm -f /etc/init.d/S11firmwareinfo >> /dev/null 2>&1
+	rm -f /etc/init.d/S12deprecatedcleanup >> /dev/null 2>&1
 fi
