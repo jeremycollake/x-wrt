@@ -36,14 +36,14 @@ TestInstall()
 
 # embedded check. We don't want to execute this if installing
 # into firmware image (i.e. by Image Builder).
-cat /proc/version | grep OpenWrt 2>&1 >> /dev/null
+cat /proc/version | grep OpenWrt >> /dev/null 2>&1
 [ $? = 0 ] && [ -f "/etc/init.d/S50httpd" ] && {
 	nvram unset device_name 	# force rescan of device_name, in case new id code is added
 	echo " Restarting httpd ..."
-	killall wifi 2>&1 >> /dev/null  # survey page relaunches this, sometimes httpd gets 'hung' on it
-	killall webif-page 2>&1 >> /dev/null
-	killall haserl 2>&1 >> /dev/null
-	killall httpd 2>&1 >> /dev/null
+	killall wifi >> /dev/null 2>&1  # survey page relaunches this, sometimes httpd gets 'hung' on it
+	killall webif-page >> /dev/null 2>&1 
+	killall haserl >> /dev/null 2>&1 
+	killall httpd >> /dev/null 2>&1
 	[ -f "/etc/init.d/S11firmwareinfo" ] && {
 		/etc/init.d/S11firmwareinfo	# set webif default firmware information
 	}
