@@ -16,6 +16,7 @@ TestInstall()
 		echo "         errors or warnings you may see above and below this."
 	else
 		echo " WARNING: Installation may have failed."
+		echo " dbg: this_version=$this_version installed_version=$installed_version"
 	fi
 	echo " ************************************************************** "
 }
