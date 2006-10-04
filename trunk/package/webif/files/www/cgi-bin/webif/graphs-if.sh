@@ -4,7 +4,7 @@
 #credit goes to arantius and GasFed
 #
 . /usr/lib/webif/webif.sh
-. ./subcategories.sh
+. ./graphs-subcategories.sh
 
 header "Graphs" "Traffic $FORM_if" "Interface $FORM_if Traffic" "" "$SCRIPT_NAME"
 

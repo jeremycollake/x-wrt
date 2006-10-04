@@ -4,7 +4,7 @@
 #credit goes to arantius and GasFed
 #
 . /usr/lib/webif/webif.sh
-. ./subcategories.sh
+. ./graphs-subcategories.sh
 
 header "Graphs" "CPU" "CPU Usage" "" "$SCRIPT_NAME"
 ?>
