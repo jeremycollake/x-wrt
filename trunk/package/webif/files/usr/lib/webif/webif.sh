@@ -85,9 +85,9 @@ header() {
 	# 
 	# to enable unfinished color theme switcher like openwrt.org, uncomment these.
 	# 	
-	#swatch_script="<script type=\"text/javascript\">swatch() </script>"
-	#colorize_script="<script type=\"text/javascript\" src="/colorize.js"></script>
-	#	<script type=\"text/javascript\"> colorize() </script>"
+	swatch_script="<script type=\"text/javascript\">swatch() </script>"
+	colorize_script="<script type=\"text/javascript\" src="/colorize.js"></script>
+		<script type=\"text/javascript\"> colorize() </script>"
 
 	cat <<EOF
 Content-Type: text/html
