@@ -1,6 +1,7 @@
 #!/usr/bin/webif-page
 <? 
 . "/usr/lib/webif/webif.sh"
+
 load_settings wds
 load_settings wireless
 
@@ -16,7 +17,9 @@ done
 equal "$FORM_interface" "lan" && 
 {
 	wds_macs=$(echo $lan_wds_mac |sed s/$FORM_macremove//)
-	save_setting wireless wl0_wds "$wds_macs"
+	#save_setting wireless wl0_wds "$wds_macs"
+	save_setting_ex wds macaddress bridge bridgename(wan/wifi/p2p) 
+	save_setting_ex wds macaddress ipaddr ipaddress(192.168.3.4)
 }
 
 if empty "$FORM_submit"; then 
