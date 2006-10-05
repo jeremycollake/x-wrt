@@ -81,7 +81,14 @@ header() {
 		_form=""
 		_savebutton=""
 	}
-				
+	
+	# 
+	# to enable unfinished color theme switcher like openwrt.org, uncomment these.
+	# 	
+	swatch_script="<script type=\"text/javascript\">swatch() </script>"
+	colorize_script="<script type=\"text/javascript\" src="/colorize.js"></script>
+		<script type=\"text/javascript\"> colorize() </script>"
+
 	cat <<EOF
 Content-Type: text/html
 Pragma: no-cache
@@ -97,8 +104,7 @@ Pragma: no-cache
 		<meta http-equiv="expires" content="0" />		
 	</head>
 	<body $4>	
-	<script type="text/javascript" src="/colorize.js"></script>
-	<script type="text/javascript">	colorize() </script>	
+	$colorize_script
 	<div id="container">	 	
 	  <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>	  
 	    <div id="header">	    				
@@ -128,7 +134,8 @@ Pragma: no-cache
 			<div class="swatch" style="background: #334444"></div>
 			<div class="swatch" id="colorize"></div>
 		</div>
-		<script type="text/javascript">	swatch() </script>		
+		
+		$swatch_script		
 		
 		<div id="content">
 		
