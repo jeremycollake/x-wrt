@@ -54,4 +54,5 @@ cat /proc/version | grep OpenWrt >> /dev/null 2>&1
 	/etc/init.d/S50httpd
 }
 
-TestInstall	# always test the install, even on image build
+# disabled - __SVN_REVISION__ not getting replaced correctly. See Makefile.
+#TestInstall	# always test the install, even on image build
