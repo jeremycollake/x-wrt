@@ -42,7 +42,6 @@ cat /proc/version | grep OpenWrt >> /dev/null 2>&1
 	# ipkg barfs on these symlinks - for now we'll create them here.	
 	# also, we'll switch to hard links.
 	#
-	ln -f /www/cgi-bin/webif/system-packages.sh /www/cgi-bin/webif/ipkg.sh
 	ln -f /www/index.html /www/index.asp
 	#
 	#
