@@ -100,7 +100,7 @@ Pragma: no-cache
     	<title>@TR<< $_firmware_name Administrative Console>></title>
 		<link rel="stylesheet" type="text/css" href="/webif.css" />		
 		<!--[if lt IE 7]>
-			<link rel="stylesheet" type="text/css" href="/.styles/openwrt-2.0-msie.css" />
+			<link rel="stylesheet" type="text/css" href="/ie_lt7.css" />
 		<![endif]-->				
 		<link rel="stylesheet" type="text/css" href="/color1.css" />	
 		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
