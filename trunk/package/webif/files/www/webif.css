@@ -89,7 +89,7 @@ option
 	padding-left: 1em;
 	width: 30em;
 	height: 5.5em;
-	background: url(/images/openwrt-logo.png);
+	background: url(/images/openwrt-logo.png) 10px 50%;
 	background-repeat: no-repeat;
 }
 
@@ -433,4 +433,3 @@ dt,
 {
 	font-size: 0.9em;
 }
-
