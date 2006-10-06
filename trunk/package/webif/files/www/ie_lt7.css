@@ -1,0 +1,8 @@
+
+
+/* MSIE PNG HACK(S) */
+.openwrt-title 
+{ 
+	background-image: none;
+	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=/images/openwrt-logo.png);
+}
