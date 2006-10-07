@@ -295,36 +295,29 @@ cat <<EOF
 <!--
 function modechange()
 {
-/* TODO: the following code from the original webif is fucked up
-	- and encryption_psk/encryption_wpa don't exist..
-	- wpa/psk should be ok in any mode
-	
+	//
+	// force encryption listbox to no selection if user tries
+	// to set WPA (PSK) with Ad-hoc mode.
+	//	 
 	if (isset('mode','adhoc')) 
 	{
-		document.getElementById('encryption_psk').disabled = true;
 		if (isset('encryption','psk')) 
 		{
-				document.getElementById('encryption').value = 'off';
+			document.getElementById('encryption').value = 'off';
 		}
 	} 
-	else 
-	{
-		document.getElementById('encryption_psk').disabled = false;
-	}
-	
+	//
+	// force encryption listbox to no selection if user tries
+	// to set WPA (Radius) with anything but AP mode.
+	//	 	
 	if (!isset('mode','ap')) 
-	{
-		document.getElementById('encryption_wpa').disabled = true;
-		if (value('encryption') == 'wpa') 
+	{		
+		if (isset('encryption','wpa')) 
 		{
-				document.getElementById('encryption').value = 'off';
+			document.getElementById('encryption').value = 'off';
 		}
-	} 
-	else 
-	{
-		document.getElementById('encryption_wpa').disabled = false;
-	}
-*/	
+	} 	
+
 	var v= isset('encryption','wep');
 	set_visible('wep_key_1', v);
 	set_visible('wep_key_2', v);
