@@ -330,7 +330,9 @@ function modechange()
 	set_visible('wep_key_2', v);
 	set_visible('wep_key_3', v);
 	set_visible('wep_key_4', v);
-	
+	set_visible('wep_generate_keys', v);	
+	set_visible('wep_keyphrase', v);	
+		
 	if (isset('gmode','bOnly')) 
 	{
 		document.getElementById('gmode_protection').disabled = true;
@@ -421,13 +423,11 @@ field|@TR<<RADIUS IP Address>>|radius_ip|hidden
 text|radius_ipaddr|$FORM_radius_ipaddr
 field|@TR<<RADIUS Server Key>>|radiuskey|hidden
 text|radius_key|$FORM_radius_key
-field|@TR<<WEP Keys>>|wep_keys|hidden
-string|@TR<<Passphrase>>
+field|@TR<<Passphrase>>|wep_keyphrase|hidden
 text|wep_passphrase|$FORM_wep_passphrase
 string|<br />
-field|@TR<<WEP Key 1>>|wep_generate_40|hidden
+field||wep_generate_keys|hidden
 submit|generate_wep_40|Generate 40bit Keys
-field|@TR<<WEP Key 1>>|wep_generate_128|hidden
 submit|generate_wep_128|Generate 128bit Key
 string|<br />
 field|@TR<<WEP Key 1>>|wep_key_1|hidden
