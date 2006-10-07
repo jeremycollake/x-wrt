@@ -325,6 +325,12 @@ function modechange()
 		document.getElementById('encryption_wpa').disabled = false;
 	}
 */	
+	var v= isset('encryption','wep');
+	set_visible('wep_key_1', v);
+	set_visible('wep_key_2', v);
+	set_visible('wep_key_3', v);
+	set_visible('wep_key_4', v);
+	
 	if (isset('gmode','bOnly')) 
 	{
 		document.getElementById('gmode_protection').disabled = true;
@@ -334,7 +340,7 @@ function modechange()
 		document.getElementById('gmode_protection').disabled = false;
 	}
 
-	var v = (isset('encryption','wpa') || isset('encryption','psk'));
+	v = (isset('encryption','wpa') || isset('encryption','psk'));
 	set_visible('wpa_support', v);
 	set_visible('wpa_crypto', v);
 	
@@ -419,15 +425,21 @@ field|@TR<<WEP Keys>>|wep_keys|hidden
 string|@TR<<Passphrase>>
 text|wep_passphrase|$FORM_wep_passphrase
 string|<br />
-submit|generate_wep_128|Generate 128bit Key
+field|@TR<<WEP Key 1>>|wep_generate_40|hidden
 submit|generate_wep_40|Generate 40bit Keys
+field|@TR<<WEP Key 1>>|wep_generate_128|hidden
+submit|generate_wep_128|Generate 128bit Key
 string|<br />
+field|@TR<<WEP Key 1>>|wep_key_1|hidden
 radio|key|$FORM_key|1
 text|key1|$FORM_key1|<br />
+field|@TR<<WEP Key 2>>|wep_key_2|hidden
 radio|key|$FORM_key|2
 text|key2|$FORM_key2|<br />
+field|@TR<<WEP Key 3>>|wep_key_3|hidden
 radio|key|$FORM_key|3
 text|key3|$FORM_key3|<br />
+field|@TR<<WEP Key 4>>|wep_key_4|hidden
 radio|key|$FORM_key|4
 text|key4|$FORM_key4|<br />
 end_form
