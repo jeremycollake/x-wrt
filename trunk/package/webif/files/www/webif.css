@@ -433,3 +433,8 @@ dt,
 {
 	font-size: 0.9em;
 }
+
+.tip
+{
+	font-style: italic;
+}
