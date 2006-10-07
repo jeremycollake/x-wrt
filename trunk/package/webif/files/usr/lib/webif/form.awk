@@ -124,7 +124,14 @@ $1 ~ /^textarea/ {
 	print "</tbody></table></td></tr>"
 	print "</div>"
 }
-$1 ~ /^text$/ { print "<input id=\"" $2 "\" type=\"text\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
+$1 ~ /^text$/ { 	
+	cols = ""
+	if ($5 != "") {
+		cols = "<tr><td colspan=\"" $5 "\""
+		cols_end= "</td></tr>"	
+	}
+	print cols "<input id=\"" $2 "\" type=\"text\" name=\"" $2 "\" value=\"" $3 "\" />" $4 "</td>"
+}
 $1 ~ /^password/ { print "<input id=\"" $2 "\" type=\"password\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
 $1 ~ /^upload/ { print "<input id=\"" $2 "\" type=\"file\" name=\"" $2 "\"/>" }
 $1 ~ /^submit/ { print "<input type=\"submit\" name=\"" $2 "\" value=\"" $3 "\" />" }
@@ -140,7 +147,7 @@ $1 ~ /^end_form/ {
 	if (field_open == 1) print "</td></tr>"
 	field_open = 0
 	print "</table>"
-	form_help = form_help "</div>"
+	form_help = form_help "</div>"	
 	end_form(form_help, form_help_link);
 	form_help = ""
 	form_help_link = ""
