@@ -27,24 +27,106 @@
 #
 #
 
-header "System" "Installed Software" "@TR<<Installed Software>>"
+header "System" "Packages" "@TR<<Packages>>"
+
+##################################################################
+# 
+# Install from URL and Add Repository code - self-contained block.
+#
+
+repo_list=$(awk '/src/ { print "string|<tr><td>" $2 "</td><td></td><td>" $3 "</td></tr>"}' /etc/ipkg.conf)
+
+display_form <<EOF
+start_form|@TR<<Add Repository>>
+field|@TR<<Name of Repository>>
+text|reponame|$FORM_reponame
+field|@TR<<URL of Repository>>
+text|repourl|$FORM_repourl
+field|
+submit|install_repo|Add
+string|<tr><td></br></td></tr>
+string|<tr><td colspan="2"><h4>@TR<<Current Repositories>>:</h4></td><td>
+helpitem|Add Repository
+helptext|Add Repository#A repository is a server that contains a list of packages that can be installed on your OpenWrt device. Adding a new one allows you to list packages here that are not shown by default.
+$repo_list
+helpitem|Backports Tip
+helptext|HelpText Backports Tip#For a much larger assortment of packages, see if there is a backports repository available for your firmware (there is one for White Russian RC5). Such a repository brings
+an offering of packages from the latest bleeding edge branch of the firmware.
+end_form|
+EOF
+?>
+
+<?
+display_form <<EOF
+start_form|@TR<<Install Package From URL>>
+field|URL of Package
+text|pkgurl|$FORM_pkgurl
+field|
+submit|install_url|Install
+helpitem|Install Package
+helptext|Install Package#Normally one installs a package by clicking on the install link in the list of packages below. However, you can install a package not listed in the known repositories here.
+end_form|
+EOF
+
+! empty "$FORM_install_url" &&
+{
+	FORM_action="install"
+	FORM_pkg="$FORM_pkgurl"	
+}
+
+! empty "$FORM_install_repo" &&
+{
+	echo "install repo not empty<br />"
+	validate <<EOF
+string|FORM_repourl|@TR<<Repository URL>>|min=4 max=4096 required|$FORM_repourl|
+string|FORM_reponame|@TR<<Repository Name>>|min=1 max=128 required|$FORM_reponame|
+EOF	
+	equal "$?" "0" &&
+	{
+		# since firstboot doesn't make a copy of ipkg.conf, we must do it		
+		# todo: need a mutex or lock here
+		tmpfile=$(mktemp "/tmp/.webif-ipkg-XXXXXX")
+		cp "/etc/ipkg.conf" "$tmpfile"
+		echo "src $FORM_reponame $FORM_repourl" >> "$tmpfile"
+		rm "/etc/ipkg.conf"
+		mv "$tmpfile" "/etc/ipkg.conf"
+	}
+}
+
+
+
+# Block ends
+##################################################################
+
+
+display_form <<EOF
+start_form|@TR<<Packages Available>>|||nohelp
+EOF
 
 ?>
-<p style="position: absolute; right: 1em; top: 4em"><a href="ipkg.sh?action=update">@TR<<Update package lists>></a></p>
-<pre>
+<a href="ipkg.sh?action=update">@TR<<Update package lists>></a>
 <?
-if [ "$FORM_action" = "update" ]; then
+display_form <<EOF
+end_form
+EOF
+?>
+
+<?
+echo "<pre>"
+if [ "$FORM_action" = "update" ]; then	
 	ipkg update
-elif [ "$FORM_action" = "install" ]; then
-	yes n | ipkg install `echo "$FORM_pkg" | sed -e 's, ,+,g'`
-elif [ "$FORM_action" = "remove" ]; then
+elif [ "$FORM_action" = "install" ]; then	
+	yes n | ipkg install `echo "$FORM_pkg" | sed -e 's, ,+,g'`	
+elif [ "$FORM_action" = "remove" ]; then	
 	ipkg remove `echo "$FORM_pkg" | sed -e 's, ,+,g'`
 fi
+echo "</pre>"
 ?>
 </pre>
-<div class="half noBorderOnLeft">
-  <h3>@TR<<Installed Optional Packages>></h3>
-  <table style="width: 90%"><tr><th width="100">Action</th><th width="200">Package</th><th>Description</th></tr>
+<table>
+  <h3>@TR<<Installed Packages>></h3>
+  <br />
+  <table style="width: 90%"><tr><th width="150">Action</th><th width="200">Package</th><th>Description</th></tr>
 <?
 ipkg list_installed | egrep -v "(base-files|bridge|busybox|uclibc|kernel|Done\.)" | awk -F ' ' '
 $2 !~ /terminated/ {       
@@ -56,10 +138,10 @@ $2 !~ /terminated/ {
 '
 ?>
   </table>
-</div>
-<div class="half noBorderOnLeft"><br />
+  <br />
   <h3>@TR<<Available packages>></h3>
-  <table style="width: 90%"><tr><th width="100">Action</th><th width="200">Package</th><th>Description</th></tr>
+  <br />
+  <table style="width: 90%"><tr><th width="150">Action</th><th width="250">Package</th><th>Description</th></tr>
 <?
 egrep 'Package:|Description:' /usr/lib/ipkg/status /usr/lib/ipkg/lists/* 2>&- | sed -e 's, ,,' -e 's,/usr/lib/ipkg/lists/,,' | awk -F: '
 $1 ~ /status/ {
@@ -76,18 +158,10 @@ $1 ~ /status/ {
 }
 '
 ?>
-  </table>
-</div>
+</table>
+<br /><br /><br />
 
-<div class=tip>
-<table><tbody>
-<tr><td>
-<strong>Tip:</strong> For a much larger assortment of packages, see if there is a backports repository available for your firmware (there is one for White Russian RC5). Such a repository brings
-an offering of packages from the latest bleeding edge branch of the firmware.
-</td></tr>
-</tbody></table>	  
-</div>
 <? footer ?>
 <!--
-##WEBIF:name:System:300:Installed Software
+##WEBIF:name:System:300:Packages
 -->
