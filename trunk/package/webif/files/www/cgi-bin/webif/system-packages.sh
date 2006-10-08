@@ -52,6 +52,9 @@ header "System" "Packages" "@TR<<Packages>>" '' "$SCRIPT_NAME"
 		echo "src $FORM_reponame $FORM_repourl" >> "$tmpfile"
 		rm "/etc/ipkg.conf"
 		mv "$tmpfile" "/etc/ipkg.conf"
+		echo "<br />Repository sources updated. Performing update of package lists ...<br /><pre>"
+		ipkg update
+		echo "</pre>"
 	else
 		echo "<div class=\"warning\">ERROR: You did not specify all necessary repository fields.</div>"	
 	fi
