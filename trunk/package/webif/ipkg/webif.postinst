@@ -38,20 +38,11 @@ TestInstall()
 # into firmware image (i.e. by Image Builder).
 cat /proc/version | grep OpenWrt >> /dev/null 2>&1
 [ $? = 0 ] && [ -f "/etc/init.d/S50httpd" ] && {
-	#
-	# ipkg barfs on these symlinks - for now we'll create them here.	
-	# also, we'll switch to hard links.
-	#
-	ln -f /www/index.html /www/index.asp
-	#
-	#
-	#
-
 	nvram unset device_name 	# force rescan of device_name, in case new id code is added
 	echo " Restarting httpd ..."
 	killall wifi >> /dev/null 2>&1  # survey page relaunches this, sometimes httpd gets 'hung' on it
-	killall webif-page >> /dev/null 2>&1 
 	killall haserl >> /dev/null 2>&1 
+	killall webif-page >> /dev/null 2>&1
 	killall httpd >> /dev/null 2>&1
 	[ -f "/etc/init.d/S11firmwareinfo" ] && {
 		/etc/init.d/S11firmwareinfo	# set webif default firmware information
