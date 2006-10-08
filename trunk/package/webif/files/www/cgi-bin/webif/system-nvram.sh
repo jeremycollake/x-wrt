@@ -3,9 +3,11 @@
 #
 # credit goes to luke-jr+openwrt@utopios.org
 #
+# TODO: this page violates our CSS standards by having style defined in it.
+#
+#
 . /usr/lib/webif/webif.sh
 header "System" "NVRAM" "@TR<<NVRAM>>" ''
-?>
 
 <style type="text/css">
 	td {
