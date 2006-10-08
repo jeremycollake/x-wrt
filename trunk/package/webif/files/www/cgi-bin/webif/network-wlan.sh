@@ -325,6 +325,7 @@ function modechange()
 	set_visible('wep_key_4', v);
 	set_visible('wep_generate_keys', v);	
 	set_visible('wep_keyphrase', v);	
+	set_visible('wep_keys', v);
 		
 	if (isset('gmode','bOnly')) 
 	{
@@ -339,8 +340,7 @@ function modechange()
 	set_visible('wpa_support', v);
 	set_visible('wpa_crypto', v);
 	
-	set_visible('wpapsk', isset('encryption','psk'));
-	set_visible('wep_keys', isset('encryption','wep'));
+	set_visible('wpapsk', isset('encryption','psk'));	
 
 	v = isset('encryption','wpa');
 	set_visible('radiuskey', v);
