@@ -1,0 +1,12 @@
+diff -BurN linux-2.4.30/fs/jffs2/compr.c linux-2.4.30_new/fs/jffs2/compr.c
+--- linux-2.4.30/fs/jffs2/compr.c	2001-10-04 18:13:18.000000000 -0400
++++ linux-2.4.30_new/fs/jffs2/compr.c	2006-07-24 22:31:34.000000000 -0400
+@@ -136,7 +136,7 @@
+ #endif
+ 		break;
+ 	case JFFS2_COMPR_DYNRUBIN:
+-#if 1 /* Phase this one out */
++#if 0 /* Phase this one out */ /* db90h: phased out */
+ 		dynrubin_decompress(cdata_in, data_out, cdatalen, datalen);
+ #else
+ 		printk(KERN_WARNING "JFFS2: Dynrubin compression encountered but support not compiled in!\n");
