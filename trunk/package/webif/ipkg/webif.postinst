@@ -21,23 +21,44 @@ TestInstall()
 	echo " ************************************************************** "
 }
 
+#######################################################################################
+# FixReadOnlyLink (filename)
+# 
+# OpenWrt WR RC5 and below's firstboot doesn't copy everything it should to /jffs
+#  when it is setting up the symlinks back to ROM. This copies a file to /jffs
+#  where there was merely a symlink back to the read-only partition.
+#
+FixReadOnlyLink()
+{
+	local tmpfile=$(mktemp "/tmp/.webif-inst-XXXXXX")
+	cp "$1" "$tmpfile"
+	rm "$1"
+	mv "$tmpfile" "$1"
+}
+
 
 #######################################################################################
 # entry
 #
-
 #
-# sometimes ipkg may fail to create symlinks (i.e. on squashfs).
-#
-[ ! -f "/www/cgi-bin/webif/ipkg.sh" ] && {
-	ln -s "/www/cgi-bin/webif/system-packages.sh" "/www/cgi-bin/webif/ipkg.sh"
-}
-
-
 # embedded check. We don't want to execute this if installing
 # into firmware image (i.e. by Image Builder).
+#
 cat /proc/version | grep OpenWrt >> /dev/null 2>&1
 [ $? = 0 ] && [ -f "/etc/init.d/S50httpd" ] && {
+	#
+	# fix the ipkg.list on squashfs images
+	#  (we might as well fix it, tho its not really our job)
+	#
+	FixReadOnlyLink "/usr/lib/ipkg/info/webif.list"
+
+	#
+	# sometimes ipkg may fail to create symlinks (i.e. on squashfs).
+	#
+	[ ! -f "/www/cgi-bin/webif/ipkg.sh" ] && {
+		ln "/www/cgi-bin/webif/system-packages.sh" "/www/cgi-bin/webif/ipkg.sh"
+	}
+
 	nvram unset device_name 	# force rescan of device_name, in case new id code is added
 	echo " Restarting httpd ..."
 	killall wifi >> /dev/null 2>&1  # survey page relaunches this, sometimes httpd gets 'hung' on it
