@@ -95,7 +95,7 @@ start_form|@TR<<Packages Available>>|||nohelp
 EOF
 
 ?>
-<a href="ipkg.sh?action=update">@TR<<Update package lists>></a>
+<a href="system-packages.sh?action=update">@TR<<Update package lists>></a>
 <?
 display_form <<EOF
 end_form
