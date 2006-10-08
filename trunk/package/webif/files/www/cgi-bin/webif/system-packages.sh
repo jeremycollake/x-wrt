@@ -27,62 +27,24 @@
 #
 #
 
-header "System" "Packages" "@TR<<Packages>>"
+header "System" "Packages" "@TR<<Packages>>" '' "$SCRIPT_NAME"
 
 ##################################################################
 # 
 # Install from URL and Add Repository code - self-contained block.
 #
 
-repo_list=$(awk '/src/ { print "string|<tr><td>" $2 "</td><td></td><td>" $3 "</td></tr>"}' /etc/ipkg.conf)
-
-display_form <<EOF
-start_form|@TR<<Add Repository>>
-field|@TR<<Name of Repository>>
-text|reponame|$FORM_reponame
-field|@TR<<URL of Repository>>
-text|repourl|$FORM_repourl
-field|
-submit|install_repo|Add
-string|<tr><td></br></td></tr>
-string|<tr><td colspan="2"><h4>@TR<<Current Repositories>>:</h4></td><td>
-helpitem|Add Repository
-helptext|Add Repository#A repository is a server that contains a list of packages that can be installed on your OpenWrt device. Adding a new one allows you to list packages here that are not shown by default.
-$repo_list
-helpitem|Backports Tip
-helptext|HelpText Backports Tip#For a much larger assortment of packages, see if there is a backports repository available for your firmware (there is one for White Russian RC5). Such a repository brings
-an offering of packages from the latest bleeding edge branch of the firmware.
-end_form|
-EOF
-?>
-
-<?
-display_form <<EOF
-start_form|@TR<<Install Package From URL>>
-field|URL of Package
-text|pkgurl|$FORM_pkgurl
-field|
-submit|install_url|Install
-helpitem|Install Package
-helptext|Install Package#Normally one installs a package by clicking on the install link in the list of packages below. However, you can install a package not listed in the known repositories here.
-end_form|
-EOF
-
 ! empty "$FORM_install_url" &&
 {
+	# just set up to pass-through to normal handler
 	FORM_action="install"
 	FORM_pkg="$FORM_pkgurl"	
 }
 
 ! empty "$FORM_install_repo" &&
-{
-	echo "install repo not empty<br />"
-	validate <<EOF
-string|FORM_repourl|@TR<<Repository URL>>|min=4 max=4096 required|$FORM_repourl|
-string|FORM_reponame|@TR<<Repository Name>>|min=1 max=128 required|$FORM_reponame|
-EOF	
-	equal "$?" "0" &&
-	{
+{	
+	validate "string|FORM_repourl|@TR<<Repository URL>>|min=4 max=4096 required|$FORM_repourl"
+	if equal "$?" "0"; then	
 		# since firstboot doesn't make a copy of ipkg.conf, we must do it		
 		# todo: need a mutex or lock here
 		tmpfile=$(mktemp "/tmp/.webif-ipkg-XXXXXX")
@@ -90,14 +52,43 @@ EOF
 		echo "src $FORM_reponame $FORM_repourl" >> "$tmpfile"
 		rm "/etc/ipkg.conf"
 		mv "$tmpfile" "/etc/ipkg.conf"
-	}
+	else
+		echo "<div class=\"warning\">ERROR: You did not specify all necessary repository fields.</div>"	
+	fi
 }
 
 
+repo_list=$(awk '/src/ { print "string|<tr><td>" $2 "</td><td></td><td>" $3 "</td></tr>"}' /etc/ipkg.conf)
+
+display_form <<EOF
+start_form|@TR<<Add Repository>>
+field|@TR<<Repo. Name>>
+text|reponame|$FORM_reponame|
+field|@TR<<Repo. URL>>
+text|repourl|$FORM_repourl|
+field|
+submit|install_repo| Add Repository 
+string|<tr><td><br /><br /><br /><br /></td></tr>
+string|<tr><td colspan="2"><h4>@TR<<Current Repositories>>:</h4></td><td>
+helpitem|Add Repository
+helptext|Add Repository#A repository is a server that contains a list of packages that can be installed on your OpenWrt device. Adding a new one allows you to list packages here that are not shown by default.
+$repo_list
+helpitem|Backports Tip
+helptext|HelpText Backports Tip#For a much larger assortment of packages, see if there is a backports repository available for your firmware (there is one for White Russian RC5). Such a repository brings
+an offering of packages from the latest bleeding edge branch of the firmware.
+end_form
+start_form|@TR<<Install Package From URL>>
+field|URL of Package
+text|pkgurl|$FORM_pkgurl
+field|test
+submit|install_url|Install Package From URL |
+helpitem|Install Package
+helptext|Install Package#Normally one installs a package by clicking on the install link in the list of packages below. However, you can install a package not listed in the known repositories here.
+end_form
+EOF
 
 # Block ends
 ##################################################################
-
 
 display_form <<EOF
 start_form|@TR<<Packages Available>>|||nohelp
