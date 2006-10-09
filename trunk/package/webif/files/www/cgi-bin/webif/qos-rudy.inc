@@ -4,6 +4,20 @@
 # Rudy's QoS Script Config
 #
 #
+# Author: Travis Kemen <kemen04@gmail.com>
+# Version 0.001
+##FIXME: edonkey-dl shows up as -dl for Layer 7 rules
+##FIXME: L7 Save rules need to be dynamic
+##FIXME: fix javascript hidden start_form workaround
+##FIXME: L7 checkboxes need to display nicely
+##Possible FIXME: Should the save function be changed?
+##TODO: Finish Layer 7 Functions
+##TODO: Combine some of the functions
+##TODO: Figure out a different way to list and remove existing items
+##FIXME: Finish Save Button
+##TODO: Proper naming of variables.
+
+
 . /etc/qos.conf
 
 exists /tmp/.webif/qos  && QOS_FILE=/tmp/.webif/qos || QOS_FILE=/etc/qos.conf
