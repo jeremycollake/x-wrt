@@ -1,3 +1,16 @@
 #!/bin/sh
 # place your own startup commands here
+#
+# REMEMBER: You *MUST* place an '&' after launching programs you 
+#   that are to continue running in the background.
+#
+#   i.e. 
+#   BAD:  upnpd
+#   GOOD: upnpd &
+# 
+# Failure to do this will result in you seeing S95webif-custom in
+# the process list after the box has booted and the diag light 
+# remaining on, as well as other symptoms since any subsequent
+# startup scripts won't be executed.
+#
 
