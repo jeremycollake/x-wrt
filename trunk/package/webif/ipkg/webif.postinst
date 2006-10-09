@@ -59,6 +59,12 @@ if [ "$?" = "0" ]; then
 		ln "/www/cgi-bin/webif/system-packages.sh" "/www/cgi-bin/webif/ipkg.sh"
 	}
 
+	#
+	# initialize /etc/init.d/S95webif-custom if it doesn't already exist
+	# (mv will fail if it already exists)
+	#
+	mv "/etc/init.d/S95webif-custom-default" "/etc/init.d/S95webif-custom"  >> /dev/null 2>&1
+
 	nvram unset device_name 	# force rescan of device_name, in case new id code is added
 	echo " Restarting httpd ..."
 	killall wifi >> /dev/null 2>&1  # survey page relaunches this, sometimes httpd gets 'hung' on it
@@ -75,4 +81,4 @@ if [ "$?" = "0" ]; then
 	/etc/init.d/S50httpd
 fi
 
-TestInstall	# always test the install, even on image build
+#TestInstall	# always test the install, even on image build
