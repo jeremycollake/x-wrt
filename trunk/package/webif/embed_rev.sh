@@ -12,11 +12,14 @@ revision_number=$(svn info | grep Revision | cut -c11-)
 tempfile=$(mktemp)
 echo " Revision number is $revision_number"
 echo " Temporary file is $tempfile"
-# todo: update to unlimited args
-for curfile in $1 $2 $3 $4 $5 $6 $7 $8 $9; do
-	echo " Processing $curfile ..."
-	cp $curfile $tempfile	
-	cat $tempfile | sed s/__SVN_REVISION__/$revision_number/ > $curfile
-	rm $tempfile	
+until [ -z "$1" ]  
+do
+	for curfile in $1; do
+		echo " Processing $curfile ..."
+		cp $curfile $tempfile	
+		cat $tempfile | sed s/__SVN_REVISION__/$revision_number/ > $curfile
+		rm $tempfile	
+	done
+  shift
 done
 
