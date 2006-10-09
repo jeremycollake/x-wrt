@@ -9,4 +9,4 @@ diff -BurN linux-2.4.30/fs/jffs2/compr.c linux-2.4.30_new/fs/jffs2/compr.c
 +#if 0 /* Phase this one out */ /* db90h: phased out */
  		dynrubin_decompress(cdata_in, data_out, cdatalen, datalen);
  #else
- 		printk(KERN_WARNING "JFFS2: Dynrubin compression encountered but support not compiled in!\n");
+ 		printk(KERN_WARNING "JFFS2: Dynrubin - no decoder!\n");
