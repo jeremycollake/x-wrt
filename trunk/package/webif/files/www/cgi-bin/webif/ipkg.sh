@@ -61,7 +61,7 @@ header "System" "Packages" "@TR<<Packages>>" '' "$SCRIPT_NAME"
 }
 
 
-repo_list=$(awk '/src/ { print "string|<tr><td>" $2 "</td><td></td><td>" $3 "</td></tr>"}' /etc/ipkg.conf)
+repo_list=$(awk '/src/ { print "string|<tr><td>" $2 "</td><td>" $3 "</td></tr>"}' /etc/ipkg.conf)
 
 display_form <<EOF
 start_form|@TR<<Add Repository>>
