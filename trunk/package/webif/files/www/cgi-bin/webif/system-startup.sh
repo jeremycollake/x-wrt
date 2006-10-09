@@ -60,7 +60,7 @@ else
 fi
 ?>
 </textarea>
-</td></tr></table></div></div></div>
+</td></tr></table></div></div>
 
 <? footer ?>
 <!--
