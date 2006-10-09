@@ -21,4 +21,6 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_TARFS): 
 	$(CP) -a $(PKG_BUILD_DIR)/files/* $(IDIR_TARFS)/
+	find $(IDIR_TARFS) -name CVS | xargs rm -rf
+	find $(IDIR_TARFS) -name .svn | xargs rm -rf
 	$(IPKG_BUILD) $(IDIR_TARFS) $(PACKAGE_DIR)
