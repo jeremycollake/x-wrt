@@ -76,6 +76,7 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_WEBIF): 
 	$(CP) -a ./files/* $(IDIR_WEBIF)/
+	chmod -R 755 $(IDIR_WEBIF)/*
 	rm -rf $(IDIR_WEBIF)/usr/lib/webif/lang/
 	./embed_rev.sh $(IDIR_WEBIF)/www/.version \
 			$(IDIR_WEBIF)/usr/lib/webif/webif.sh \
