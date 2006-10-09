@@ -75,5 +75,4 @@ if [ "$?" = "0" ]; then
 	/etc/init.d/S50httpd
 fi
 
-# disabled - __SVN_REVISION__ not getting replaced correctly. See Makefile.
-#TestInstall	# always test the install, even on image build
+TestInstall	# always test the install, even on image build
