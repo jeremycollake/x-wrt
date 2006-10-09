@@ -22,7 +22,7 @@
 header "System" "Custom Startup" "@TR<<Custom Startup>>" '' "$SCRIPT_NAME" 
 
 # defaults
-custom_script_name="/etc/init.d/S95webif-custom-default"
+custom_script_name="/etc/init.d/S95custom-user-startup"
 tmp_script_name="/tmp/.webif/file-S95webif-custom-default"
 
 ! empty "$FORM_submit" &&
