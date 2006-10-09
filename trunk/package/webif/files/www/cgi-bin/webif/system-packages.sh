@@ -83,7 +83,7 @@ end_form
 start_form|@TR<<Install Package From URL>>
 field|URL of Package
 text|pkgurl|$FORM_pkgurl
-field|test
+field| 
 submit|install_url|Install Package From URL |
 helpitem|Install Package
 helptext|Install Package#Normally one installs a package by clicking on the install link in the list of packages below. However, you can install a package not listed in the known repositories here.
