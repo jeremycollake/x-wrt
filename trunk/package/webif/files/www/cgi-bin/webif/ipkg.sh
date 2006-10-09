@@ -69,7 +69,7 @@ field|@TR<<Repo. Name>>
 text|reponame|$FORM_reponame|
 field|@TR<<Repo. URL>>
 text|repourl|$FORM_repourl|
-field|
+field|&nbsp;
 submit|install_repo| Add Repository 
 string|<tr><td><br /><br /><br /><br /></td></tr>
 string|<tr><td colspan="2"><h4>@TR<<Current Repositories>>:</h4></td><td>
