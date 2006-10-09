@@ -53,13 +53,6 @@ if [ "$?" = "0" ]; then
 	FixReadOnlyLink "/usr/lib/ipkg/info/webif.list"
 
 	#
-	# sometimes ipkg may fail to create symlinks (i.e. on squashfs).
-	#
-	[ ! -f "/www/cgi-bin/webif/ipkg.sh" ] && {
-		ln "/www/cgi-bin/webif/system-packages.sh" "/www/cgi-bin/webif/ipkg.sh"
-	}
-
-	#
 	# initialize /etc/init.d/S95webif-custom if it doesn't already exist
 	# (mv will fail if it already exists)
 	#
