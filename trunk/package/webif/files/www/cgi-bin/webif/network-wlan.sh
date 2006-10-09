@@ -419,7 +419,7 @@ text|radius_key|$FORM_radius_key
 field|@TR<<Passphrase>>|wep_keyphrase|hidden
 text|wep_passphrase|$FORM_wep_passphrase
 string|<br />
-field||wep_generate_keys|hidden
+field|&nbsp;|wep_generate_keys
 submit|generate_wep_40|Generate 40bit Keys
 submit|generate_wep_128|Generate 128bit Key
 string|<br />
