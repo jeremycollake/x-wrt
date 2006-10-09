@@ -45,7 +45,7 @@ FixReadOnlyLink()
 # into firmware image (i.e. by Image Builder).
 #
 cat /proc/version | grep OpenWrt >> /dev/null 2>&1
-[ $? = 0 ] && [ -f "/etc/init.d/S50httpd" ] && {
+if [ "$?" = "0" ]; then
 	#
 	# fix the ipkg.list on squashfs images
 	#  (we might as well fix it, tho its not really our job)
@@ -73,7 +73,7 @@ cat /proc/version | grep OpenWrt >> /dev/null 2>&1
 	}
 	/etc/init.d/S40network 		# to relaunch wifi up if necessary
 	/etc/init.d/S50httpd
-}
+fi
 
 # disabled - __SVN_REVISION__ not getting replaced correctly. See Makefile.
 #TestInstall	# always test the install, even on image build
