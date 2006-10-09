@@ -77,14 +77,13 @@ $(PKG_BUILD_DIR)/.built:
 $(IPKG_WEBIF): 
 	$(CP) -a ./files/* $(IDIR_WEBIF)/
 	rm -rf $(IDIR_WEBIF)/usr/lib/webif/lang/
-	chmod 755 $(IDIR_WEBIF)/CONTROL/preinst
-	chmod 755 $(IDIR_WEBIF)/CONTROL/postinst
 	./embed_rev.sh $(IDIR_WEBIF)/www/.version \
 			$(IDIR_WEBIF)/usr/lib/webif/webif.sh \
 			$(IDIR_WEBIF)/etc/init.d/* \
-			$(IDIR_WEBIF)/www/cgi-bin/webif/* \			
-			$(IDIR_WEBIF)/CONTROL/preinst \
-			$(IDIR_WEBIF)/CONTROL/postinst
+			$(IDIR_WEBIF)/www/cgi-bin/webif/*
+	chmod 777 $(IDIR_WEBIF)/CONTROL/*inst
+	./embed_rev.sh $(IDIR_WEBIF)/CONTROL/*inst 
+	chmod 755 $(IDIR_WEBIF)/CONTROL/*inst
 	install -d $(IDIR_WEBIF)/usr/bin
 	install -m0755 $(PKG_BUILD_DIR)/webif-page $(IDIR_WEBIF)/usr/bin/webif-page
 	install -m0755 $(PKG_BUILD_DIR)/bstrip $(IDIR_WEBIF)/usr/bin/bstrip
