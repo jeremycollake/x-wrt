@@ -25,16 +25,19 @@ device_string=$(echo $device_type && ! empty $device_version && echo $device_ver
 user_string=$REMOTE_USER
 equal $user_string "" && user_string="not logged in"
 
+echo "<pre>"
+cat '/etc/banner'
+echo "</pre><br />"
 cat <<EOF
 <table>
-<tbody>
+<tbody>	
 	<tr>
 		<td><strong>@TR<<Firmware>></strong></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		<td>$_firmware_name - $_firmware_subtitle $_version</td>		
 	</tr>
 	<tr>
 		<td><strong>@TR<<Webif>></strong></td><td>&nbsp;</td>
-		<td>webif^2 r__SVN_REVISION__</td>
+		<td>webif^2 r638</td>
 	</tr>
 	<tr>
 		<td><strong>@TR<<Kernel>></strong></td><td>&nbsp;</td>
