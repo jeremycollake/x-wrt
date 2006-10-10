@@ -44,7 +44,7 @@ FixReadOnlyLink()
 # into firmware image (i.e. by Image Builder).
 #
 
-cat /proc/version | grep OpenWrt 2>&1
+cat /proc/version | grep OpenWrt >> /dev/null 2>&1
 if [ "$?" = "0" ]; then
 	echo "Executing post-install script ..."
 	cd /				# change out of cwd, since it got deleted out from under us
@@ -61,25 +61,26 @@ if [ "$?" = "0" ]; then
 	# initialize /etc/init.d/S95webif-custom if it doesn't already exist
 	# (mv will fail if it already exists)
 	#
-	mv "/etc/init.d/S95webif-custom-default" "/etc/init.d/S95webif-custom" 2>&1
-	[ -f "/etc/init.d/S11firmwareinfo" ] && {
-		/etc/init.d/S11firmwareinfo	# set webif default firmware information
-	}
-	[ -f "/etc/init.d/S12firmwareinfo" ] && {
-		/etc/init.d/S12firmwareinfo	# set over-ridden firmware information
-	}
-	nvram unset device_name 	# force rescan of device_name, in case new id code is added
+	mv "/etc/init.d/S95webif-custom-default" "/etc/init.d/S95webif-custom"  >> /dev/null 2>&1
 
 	echo "Restarting webif ..."	
-	killall wifi 2>&1  		# survey page relaunches this, sometimes httpd gets 'hung' on it
-	killall haserl 2>&1 
-	killall webif-page 2>&1	
-	killall httpd 2>&1
+	killall wifi  >> /dev/null 2>&1  		# survey page relaunches this, sometimes httpd gets 'hung' on it
+	killall haserl  >> /dev/null 2>&1 
+	killall webif-page  >> /dev/null 2>&1	
+	killall httpd  >> /dev/null 2>&1
 	wifi up &	
 	/etc/init.d/S50httpd
 	TestInstall	# always test the install, even on image build
+
+	nvram unset device_name 	# force rescan of device_name, in case new id code is added
+	[ -f "/etc/init.d/S11firmwareinfo" ] && {
+		/etc/init.d/S11firmwareinfo &	# set webif default firmware information
+	}
+	[ -f "/etc/init.d/S12firmwareinfo" ] && {
+		/etc/init.d/S12firmwareinfo &	# set over-ridden firmware information
+	}
+
 	exec 1>&6 6>&-  # restore stdout	
 	cat "$instlog"
 	rm "$instlog"
 fi
-TestInstall
