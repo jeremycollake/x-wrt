@@ -1,75 +1,146 @@
-/* this script swiped from openwrt.org */
-function GetCookie (name) {  
-  var arg = name + "=";  
-  var alen = arg.length;  
-  var clen = document.cookie.length;  
-  var i = 0;  
-  while (i < clen) {    
-    var j = i + alen;    
-    if (document.cookie.substring(i, j) == arg)      
-      return getCookieVal (j);    
-    i = document.cookie.indexOf(" ", i) + 1;    
-    if (i == 0) break;   
-  }  
-  return null;
+/* some standard cookie manipulation functions */
+
+/**
+ * Sets a Cookie with the given name and value.
+ *
+ * name       Name of the cookie
+ * value      Value of the cookie
+ * [expires]  Expiration date of the cookie (default: end of current session)
+ * [path]     Path where the cookie is valid (default: path of calling document)
+ * [domain]   Domain where the cookie is valid
+ *              (default: domain of calling document)
+ * [secure]   Boolean value indicating if the cookie transmission requires a
+ *              secure transmission
+ */
+function setCookie(name, value, expires, path, domain, secure) 
+{
+    document.cookie= name + "=" + escape(value) +
+        ((expires) ? "; expires=" + expires.toGMTString() : "") +
+        ((path) ? "; path=" + path : "") +
+        ((domain) ? "; domain=" + domain : "") +
+        ((secure) ? "; secure" : "");
 }
 
-function SetCookie (name, value) {  
-  var argv = SetCookie.arguments;  
-  var argc = SetCookie.arguments.length;  
-  var expires = (argc > 2) ? argv[2] : null;  
-  var path = (argc > 3) ? argv[3] : null;  
-  var domain = (argc > 4) ? argv[4] : null;  
-  var secure = (argc > 5) ? argv[5] : false;  
-  document.cookie = name + "=" + escape (value) + 
-  ((expires == null) ? "" : ("; expires=" + expires.toGMTString())) + 
-  ((path == null) ? "" : ("; path=" + path)) +  
-  ((domain == null) ? "" : ("; domain=" + domain)) +    
-  ((secure == true) ? "; secure" : "");
+/**
+ * Gets the value of the specified cookie.
+ *
+ * name  Name of the desired cookie.
+ *
+ * Returns a string containing value of specified cookie,
+ *   or null if cookie does not exist.
+ */
+function getCookie(name) 
+{
+    var dc = document.cookie;
+    var prefix = name + "=";
+    var begin = dc.indexOf("; " + prefix);
+    if (begin == -1) 
+    {
+        begin = dc.indexOf(prefix);
+        if (begin != 0) return null;
+    } 
+    else 
+    {
+        begin += 2;
+    }
+    var end = document.cookie.indexOf(";", begin);
+    if (end == -1) 
+    {
+        end = dc.length;
+    }
+    return unescape(dc.substring(begin + prefix.length, end));
 }
 
-function getCookieVal(offset) {
-  var endstr = document.cookie.indexOf (";", offset);
-  if (endstr == -1)
-    endstr = document.cookie.length;
-  return unescape(document.cookie.substring(offset, endstr));
+/**
+ * Deletes the specified cookie.
+ *
+ * name      name of the cookie
+ * [path]    path of the cookie (must be same as path used to create cookie)
+ * [domain]  domain of the cookie (must be same as domain used to create cookie)
+ */
+function deleteCookie(name, path, domain) 
+{
+    if (getCookie(name)) 
+    {
+        document.cookie = name + "=" +
+            ((path) ? "; path=" + path : "") +
+            ((domain) ? "; domain=" + domain : "") +
+            "; expires=Thu, 01-Jan-70 00:00:01 GMT";
+    }
 }
 
-function clickswatch() {
-  var exp = new Date(); 
-  exp.setTime(exp.getTime() + (24 * 60 * 60 * 1000 * 31 * 9)); 
-  if (this==document.getElementById("colorize")) {
-    SetCookie("bgcolor","",exp,null,".webif")
-  } else {
-    SetCookie("bgcolor",this.style.backgroundColor,exp,null,".webif")
-  }
-  colorize();  
-  alert("Color theme switcher is not implemented yet."); 
+/* ************************************************************ */
+/* color theme switching code */
+
+function setcolor()
+{	
+	// set cookie to expire in 30 days
+	var expireTime=new Date();
+	ThirtyDays=30*24*60*60*1000; 
+   	expireTime.setTime(expireTime.getTime()+ThirtyDays);	   	
+ 	setCookie("webif_colortheme",this.title, expireTime);			
+ 	colorize();  
+  	window.location.reload(true);
 }
 
-function swatch(){
+// find all objects of swatch class and set onclick handler
+function swatch()
+{
   var divs=document.getElementsByTagName("*");
-  for(var i=0; i < divs.length; i++) {
-    if(divs[i].className.indexOf("swatch") != -1) {
-      divs[i].onclick=clickswatch
+  var count=0;
+  for(var i=0; i < divs.length; i++) 
+  {   
+    if(divs[i].className.indexOf("swatch") != -1) 
+    {    	    	
+    	var colorTitle;
+    	switch(count)
+    	{
+    		case 0:
+    			colorTitle='green';
+    			break;
+    		case 1:
+    			colorTitle='blue';
+    			break;
+    		case 2:
+    			colorTitle='navyblue';
+    			break;    	
+    		case 3:
+    			colorTitle='white';
+    			break;    	
+    		case 4:
+    		default:    		
+    			colorTitle='brown';
+    			break;
+    	}   
+    	divs[i].title=colorTitle; 	
+    	divs[i].onclick=setcolor;
+    	count++;
     }
   }
 }
 
-function colorize(){
-  /* var message=new Date()
-  var h=message.getHours()
-  var color=GetCookie("bgcolor")
-  if (color) {
-    // nothing
-  } else if (h>=7 && h<18) {
-    document.write('<STYLE TYPE="text/css" src="/color1.css"></STYLE>');
-  } else if (h>=6 && h<20) {
-    document.write('<STYLE TYPE="text/css" src="/color2.css"></STYLE>');
-  } else if (h>=5 && h<23) {
-    document.write('<STYLE TYPE="text/css" src="/color3.css"></STYLE>');
-  } else {
-    document.write('<STYLE TYPE="text/css" src="/color4.css"></STYLE>');
+// set color theme from cookie
+function colorize()
+{  
+  var color=getCookie("webif_colortheme")
+  document.write('<link rel="stylesheet" type="text/css" href="');
+  switch(color)
+  {	
+	case 'green':
+  		document.write('/color_green.css" />');
+  		break;
+  	case 'blue':
+  		document.write('/color_blue.css" />');
+  		break;  	
+  	case 'navyblue':
+  		document.write('/color_navyblue.css" />');
+  		break;
+  	case 'white':
+  		document.write('/color_white.css" />');
+  		break;
+  	case 'brown':  	
+  	default:  		
+  		document.write('/color_brown.css" />');
+  		break;
   }
-  //document.body.style.backgroundColor=color  */  
 }
