@@ -36,7 +36,7 @@ load_settings "webif"
 #  to a limit of 250mhz. It also has a fixed divider, so sbclock
 #  frequencies are implied, and ignored if specified.
 #		
-OVERCLOCKING_DISABLED="0" # set to 1 to disble OC support
+OVERCLOCKING_DISABLED="1" # set to 1 to disble OC support
 
 #####################################################################
 header "System" "Settings" "@TR<<System Settings>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
@@ -164,7 +164,7 @@ is_bcm947xx && {
 		clkfreq_form="field|CPU Clock Frequency
 		select|clkfreq|$FORM_clkfreqs
 		helpitem|Clock Frequency
-		helptext|HelpText Clock Frequency#Do not change with this unless you have a WRT54G(S)/L v4-v6. Only those are safe. You should see no options if you have a different device."
+		helptext|HelpText Clock Frequency#WRT54G(S)/L v4 *ONLY*."
 	}
 }
 
