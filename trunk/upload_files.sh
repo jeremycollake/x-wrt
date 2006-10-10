@@ -8,7 +8,7 @@ scp \
 	build_mipsel/webif-0.3/ipkg/webif/www/.version \
 	../../whale/xwrt/xwrt.htm \
 	../../whale/xwrt/xwrt.asp \
-	someuser@shell.berlios.de:/home/groups/ftp/pub/xwrt/packages/
+	someuser@shell.berlios.de:/home/groups/ftp/pub/xwrt/
 
 scp patches/* \
 	someuser@shell.berlios.de:/home/groups/ftp/pub/xwrt/patches/
