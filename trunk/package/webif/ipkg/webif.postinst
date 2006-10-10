@@ -43,7 +43,10 @@ FixReadOnlyLink()
 # embedded check. We don't want to execute this if installing
 # into firmware image (i.e. by Image Builder).
 #
-cat /proc/version | grep OpenWrt >> /dev/null 2>&1
+
+exec 6>&1	# save stdout
+exec > /dev/null
+cat /proc/version | grep OpenWrt 2>&1
 if [ "$?" = "0" ]; then
 	#
 	# fix the ipkg.list on squashfs images
@@ -54,27 +57,25 @@ if [ "$?" = "0" ]; then
 	#
 	# initialize /etc/init.d/S95webif-custom if it doesn't already exist
 	# (mv will fail if it already exists)
-	# Commented out, we don't really want to rename this anymore after r635 do we ?
-	#mv "/etc/init.d/S95webif-custom-default" "/etc/init.d/S95webif-custom"  >> /dev/null 2>&1
-
-	nvram unset device_name 	# force rescan of device_name, in case new id code is added
-	echo " Restarting webif ..."
-	
-	cd /				# change out of cwd, since it got deleted out from under us
-	killall wifi >> /dev/null 2>&1  # survey page relaunches this, sometimes httpd gets 'hung' on it
-	killall haserl >> /dev/null 2>&1 
-	killall webif-page >> /dev/null 2>&1
+	#
+	mv "/etc/init.d/S95webif-custom-default" "/etc/init.d/S95webif-custom" 2>&1
 	[ -f "/etc/init.d/S11firmwareinfo" ] && {
 		/etc/init.d/S11firmwareinfo	# set webif default firmware information
 	}
 	[ -f "/etc/init.d/S12firmwareinfo" ] && {
 		/etc/init.d/S12firmwareinfo	# set over-ridden firmware information
 	}
-	wifi up &
-	pidof httpd
-	if [ $? != 0 ]; then
-		/etc/init.d/S50httpd	
-	fi
+	nvram unset device_name 	# force rescan of device_name, in case new id code is added
+	echo " Restarting webif ..."
+	
+	cd /				# change out of cwd, since it got deleted out from under us
+	killall wifi 2>&1  		# survey page relaunches this, sometimes httpd gets 'hung' on it
+	killall haserl 2>&1 
+	killall webif-page 2>&1	
+	killall httpd 2>&1
+	wifi up &	
+	/etc/init.d/S50httpd
 fi
+exec 1>&6 6>&-  # restore stdout
 TestInstall	# always test the install, even on image build
 exit 0
