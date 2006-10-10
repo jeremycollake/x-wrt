@@ -229,9 +229,11 @@ save_setting qos TCP_BULK "$tcp_bulk_save_value"
 save_setting qos UDP_EXPR "$udp_expr_save_value"
 save_setting qos UDP_PRIO "$udp_prio_save_value"
 save_setting qos UDP_BULK "$udp_bulk_save_value"
-save_setting qos L7_EXPR "$FORM_aim $FORM_bittorrent $FORM_edonkey $FORM_fasttrack $FORM_ftp $FORM_gnutella $FORM_http $FORM_ident $FORM_irc $FORM_jabber $FORM_msnmessenger $FORM_ntp $FORM_pop3 $FORM_smtp $FORM_ssl $FORM_vnc"
-save_setting qos L7_PRIO "$FORM_aim $FORM_bittorrent $FORM_edonkey $FORM_fasttrack $FORM_ftp $FORM_gnutella $FORM_http $FORM_ident $FORM_irc $FORM_jabber $FORM_msnmessenger $FORM_ntp $FORM_pop3 $FORM_smtp $FORM_ssl $FORM_vnc"
-save_setting qos L7_BULK "$FORM_aim $FORM_bittorrent $FORM_edonkey $FORM_fasttrack $FORM_ftp $FORM_gnutella $FORM_http $FORM_ident $FORM_irc $FORM_jabber $FORM_msnmessenger $FORM_ntp $FORM_pop3 $FORM_smtp $FORM_ssl $FORM_vnc"	
+case "$FORM_priority" in
+	expr) save_setting qos L7_EXPR "$FORM_aim $FORM_bittorrent $FORM_edonkey $FORM_fasttrack $FORM_ftp $FORM_gnutella $FORM_http $FORM_ident $FORM_irc $FORM_jabber $FORM_msnmessenger $FORM_ntp $FORM_pop3 $FORM_smtp $FORM_ssl $FORM_vnc";;
+	prio) save_setting qos L7_PRIO "$FORM_aim $FORM_bittorrent $FORM_edonkey $FORM_fasttrack $FORM_ftp $FORM_gnutella $FORM_http $FORM_ident $FORM_irc $FORM_jabber $FORM_msnmessenger $FORM_ntp $FORM_pop3 $FORM_smtp $FORM_ssl $FORM_vnc";;
+	bulk) save_setting qos L7_BULK "$FORM_aim $FORM_bittorrent $FORM_edonkey $FORM_fasttrack $FORM_ftp $FORM_gnutella $FORM_http $FORM_ident $FORM_irc $FORM_jabber $FORM_msnmessenger $FORM_ntp $FORM_pop3 $FORM_smtp $FORM_ssl $FORM_vnc";;
+esac
 fi
 
 cat <<EOF
@@ -328,7 +330,7 @@ option|ip|@TR<<IP>>
 option|tcp|@TR<<TCP>>
 option|udp|@TR<<UDP>>
 option|layer7|@TR<<Layer 7 Filtering>>
-select|priority|$FORM_wan_proto
+select|priority|$FORM_priority
 option|expr|@TR<<Express>>
 option|prio|@TR<<Priority>>
 option|bulk|@TR<<Bulk>>
