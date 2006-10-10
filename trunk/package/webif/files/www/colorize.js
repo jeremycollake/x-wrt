@@ -85,14 +85,17 @@ function swatch()
     			break;
     		case 2:
     			colorTitle='navyblue';
-    			break;
+    			break;    		
     		case 3:
-    			colorTitle='white';
-    			break;
-    		case 4:
-    		default:
     			colorTitle='brown';
     			break;
+    		case 4:
+    			colorTitle='white';
+    			break;
+    		default:
+    			colorTitle='blue';
+    			break;
+    			
     	}
     	divs[i].title=colorTitle;
     	divs[i].onclick=setcolor;
