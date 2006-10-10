@@ -130,7 +130,7 @@ Pragma: no-cache
 		<div id=subcategories>$_subcategories</div>
 		$_form
 		<div>
-			<div class="swatch" style="background: #557788"></div>
+			<div class="swatch" style="background: #2b6d21"></div>
 			<div class="swatch" style="background: #114488"></div>
 			<div class="swatch" style="background: #192a65"></div>			
 			<div class="swatch" style="background: #e8ca9e"></div>
