@@ -7,7 +7,7 @@ html, body
 
 #header
 {
-	background-color: #114488;
+	background-color: #51779e;
 }
 
 #update-available
@@ -48,9 +48,8 @@ html, body
 
 #mainmenu 
 {
-	color: #C3C4D2;
-	/*background-color: #213242;*/ /* blue */
-	background-color: #4d3f2a;
+	color: #C3C4D2;	
+	background-color: #315579;
 }
 
 #mainmenu a 
@@ -66,26 +65,24 @@ html, body
 #submenu,
 #save div 
 {
-	background-color: #978568;
-	/* background-color: #7590AE; */ /* blue */
+	background-color: #476889;
 }
 
 #content .settings-block .settings-block-title h2 
 {	
-	color: 000;
-	/* color: #978568; */ /* brown */
-	/* color: #7590AE; */ /* blue */
+	color: 000;	
 }
 
 #submenu a:hover 
 {
-	color: #FB0;
+	color: #400;
+	background-color: #aac1d9;
 }
 
 #short-status 
 {
 	color: #FFF;
-	background-color: #4d3f2a;
+	background-color: #51779e;
 }
 
 #content .settings-block
@@ -97,8 +94,7 @@ html, body
 #content .settings-title 
 {
 	color: #000;	
-	background-color: #b8b1a2; /* brown */
-	/* background-color: #CCC; */ /* gray */
+	background-color: #86a0bb;
 }
 
 #content .settings 
