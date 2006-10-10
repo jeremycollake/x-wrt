@@ -3,6 +3,32 @@
 . /usr/lib/webif/webif.sh
 header "Info" "System Information" "@TR<<System Information>>" '' ''
 
+this_revision=$(cat "/www/.version")
+
+if [ -n "$FORM_update_check" ]; then	  	
+	tmpfile=$(mktemp "/tmp/.webif.XXXXXX")
+	wget http://ftp.berlios.de/pub/xwrt/.version -O $tmpfile 2> /dev/null >> /dev/null
+	cat $tmpfile | grep "doesn't exist" 2>&1 >> /dev/null
+	if [ $? = 0 ]; then		
+		revision_text="<div id=\"update-error\">ERROR CHECKING FOR UPDATE</div>"
+	else
+		latest_revision=$(cat $tmpfile)
+		if [ "$this_revision" != "$latest_revision" ]; then
+ 			revision_text="<div id=\"update-available\">webif^2 update available: r$latest_revision (you have r$this_revision)</div>"
+ 		else
+ 			revision_text="<div id=\"update-unavailable\">You have the latest webif^2: r$latest_revision</div>"	 		
+ 		fi
+	fi	
+	rm -f "$tmpfile"	 	
+fi
+
+if [ -n "$FORM_install_webif" ]; then	  
+	echo "<pre>"
+	ipkg install http://ftp.berlios.de/pub/xwrt/webif_latest.ipk
+	echo "</pre>" 	
+fi
+
+
 _version=$(nvram get firmware_version)
 _kversion="$( uname -srv )"
 _mac="$(/sbin/ifconfig eth0 | grep HWaddr | cut -b39-)"
@@ -37,8 +63,18 @@ cat <<EOF
 	</tr>
 	<tr>
 		<td><strong>@TR<<Webif>></strong></td><td>&nbsp;</td>
-		<td>webif^2 r638</td>
+		<td>webif<sup>2</sup> r$this_revision $revision_text</td> 				
 	</tr>
+<tr>
+<td></td><td></td>
+<td colspan="2">
+<form enctype="multipart/form-data" method="post">
+<input type="submit" value=" Check For Webif^2 Update " name="update_check" />
+&nbsp;
+<input type="submit" value=" Install/Reinstall Webif^2  " name="install_webif" />
+</form>	
+</td>
+</tr>
 	<tr>
 		<td><strong>@TR<<Kernel>></strong></td><td>&nbsp;</td>
 		<td>$_kversion</td>

@@ -20,7 +20,7 @@
 #
 header "Info" "About" "@TR<<About>>" '' ''
 
-this_revision=$(cat /www/.version)
+this_revision=$(cat "/www/.version")
 
 if [ -n "$FORM_update_check" ]; then	  	
 	tmpfile=$(mktemp "/tmp/.webif.XXXXXX")
@@ -35,10 +35,15 @@ if [ -n "$FORM_update_check" ]; then
  		else
  			revision_text="<div id=\"update-unavailable\">You have the latest webif^2: r$latest_revision</div>"	 		
  		fi
+	fi	
+	rm -f "$tmpfile"	 	
 fi
-	fi
-	rm -f "$tmpfile"	 
- 	
+
+if [ -n "$FORM_install_webif" ]; then	  
+	echo "<pre>"
+	ipkg install http://ftp.berlios.de/pub/xwrt/webif_latest.ipk
+	echo "</pre>" 	
+fi
 ?>
 
 
@@ -50,8 +55,11 @@ swatch()
 
 <div class="webif-name-title">X-Wrt extensions: webif<sup>2</sup></div></font>
 <div class="webif-name-subtitle"></div>
-<div class="webif-name-version">Alpha development - revision <? echo $this_revision ?> </div>
-<form enctype="multipart/form-data" method="post"><input type="submit" value=" Check For Webif Update " name="update_check" /></form>
+<div class="webif-name-version">Alpha development - r<? echo "$this_revision" ?> </div>
+<form enctype="multipart/form-data" method="post">
+<input type="submit" value=" Check For Webif^2 Update " name="update_check" />
+<input type="submit" value=" Install/Reinstall Webif^2  " name="install_webif" />
+</form>
 <? echo $revision_text ?>
 <div class="webif-contributors">
 <table><tbody>
