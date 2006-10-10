@@ -42,8 +42,7 @@ FixReadOnlyLink()
 # embedded check. We don't want to execute this if installing
 # into firmware image (i.e. by Image Builder).
 #
-
-cat /proc/version | grep OpenWrt >> /dev/null 2>&1
+cat /proc/version | grep -q OpenWrt
 if [ "$?" = "0" ]; then
 	echo "Executing post-install script ..."
 	cd /				# change out of cwd, since it got deleted out from under us

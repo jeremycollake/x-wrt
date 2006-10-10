@@ -2,7 +2,7 @@
 #
 # TODO: this crap needs rewriting
 #
-cat /proc/version | grep OpenWrt >> /dev/null 2>&1
+cat /proc/version | grep -q OpenWrt
 if [ $? = 0 ]; then
 	echo "Cleaning up existing webif package (if one exists) ..."
 	# remove files, but not directories
