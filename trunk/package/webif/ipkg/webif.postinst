@@ -44,10 +44,12 @@ FixReadOnlyLink()
 # into firmware image (i.e. by Image Builder).
 #
 
-exec 6>&1	# save stdout
-exec > /dev/null
 cat /proc/version | grep OpenWrt 2>&1
 if [ "$?" = "0" ]; then
+	cd /				# change out of cwd, since it got deleted out from under us
+	instlog=$(mktemp /tmp/webif-inst-XXXXXX.log)	
+	exec 6>&1	# save stdout
+	exec > "$instlog"
 	#
 	# fix the ipkg.list on squashfs images
 	#  (we might as well fix it, tho its not really our job)
@@ -66,16 +68,17 @@ if [ "$?" = "0" ]; then
 		/etc/init.d/S12firmwareinfo	# set over-ridden firmware information
 	}
 	nvram unset device_name 	# force rescan of device_name, in case new id code is added
-	echo " Restarting webif ..."
-	
-	cd /				# change out of cwd, since it got deleted out from under us
+
+	echo " Restarting webif ..."	
 	killall wifi 2>&1  		# survey page relaunches this, sometimes httpd gets 'hung' on it
 	killall haserl 2>&1 
 	killall webif-page 2>&1	
 	killall httpd 2>&1
 	wifi up &	
 	/etc/init.d/S50httpd
+	TestInstall	# always test the install, even on image build
+	exec 1>&6 6>&-  # restore stdout	
+	cat "$instlog"
+	rm "$instlog"
 fi
-exec 1>&6 6>&-  # restore stdout
-TestInstall	# always test the install, even on image build
 exit 0
