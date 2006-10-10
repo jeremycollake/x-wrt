@@ -4,7 +4,7 @@
 #
 cat /proc/version | grep OpenWrt >> /dev/null 2>&1
 if [ $? = 0 ]; then
-	echo " Cleaning up existing webif package (if one exists) ..."
+	echo "Cleaning up existing webif package (if one exists) ..."
 	# remove files, but not directories
 	rm -rf /www/* >> /dev/null 2>&1 
 	rm -f /usr/lib/webif/* >> /dev/null 2>&1
