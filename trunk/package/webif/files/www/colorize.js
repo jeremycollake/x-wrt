@@ -128,19 +128,19 @@ function colorize()
   {	
 	case 'green':
   		document.write('/color_green.css" />');
-  		break;
-  	case 'blue':
-  		document.write('/color_blue.css" />');
-  		break;  	
-  	case 'navyblue':
-  		document.write('/color_navyblue.css" />');
-  		break;
+  		break;  		  	
   	case 'white':
   		document.write('/color_white.css" />');
   		break;
-  	case 'brown':  	
-  	default:  		
+  	case 'brown':  	  	
   		document.write('/color_brown.css" />');
   		break;
+	case 'blue':	
+  		document.write('/color_blue.css" />');
+  		break;      		
+	case 'navyblue':
+	default:
+  		document.write('/color_navyblue.css" />');
+  		break;  				
   }
 }
