@@ -7,7 +7,7 @@ html, body
 
 #header
 {
-	background-color: #e8ca9e;
+	//background-color: #e8ca9e;
 }
 
 #update-available
@@ -27,7 +27,7 @@ html, body
 
 .openwrt-title 
 {
-	color: #555;
+	//color: #FFF;
 }
 
 #header-title,
