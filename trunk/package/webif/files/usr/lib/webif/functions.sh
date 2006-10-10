@@ -52,7 +52,7 @@ commit_settings_ex() {(
 		awk \
 			-v cfgfile="/etc/config/$cfgfile" \
 			-v updatestr="$updatestr" \
-			-f /usr/lib/webif/uci-update.awk \
+			-f /lib/config/uci-update.awk \
 			-f - > /etc/config/$cfgfile.new <<EOF
 BEGIN {
 	cfg = read_file(cfgfile)

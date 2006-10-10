@@ -40,14 +40,9 @@ function cmd2config(atype,  aname) {
 }
 
 function update_config(cfg, update,  \
-  lines, line, l, n, i, i2, cmds, section, scnt, remove, tmp, aidx, rest) {
+  lines, line, l, n, i, i2, section, scnt, remove, tmp, aidx, rest) {
 	scnt = 1
 	linecnt=split(cfg "\n", lines, "\n")
-	cmdcount=split(update ";", cmds, ";")
-	for (i = 1; i < cmdcount; i++) {
-		gsub(/^[ \t]*/, "", cmds[i])
-		gsub(/[ \t]*$/, "", cmds[i])
-	}
 
 	cfg = ""
 	for (n = 1; n < linecnt; n++) {
@@ -90,13 +85,11 @@ function update_config(cfg, update,  \
 		# ignore it, because it is already set.
 		if ((section != "") && (l[1] != "option")) {
 			if (line ~ /^[ \t]*$/) {
-				for (i = 1; i < cmdcount; i++) {
-					if (cmds[i] ~ "^" section "\\.") {
-						gsub("^" section ".", "", cmds[i])
-						cfg = cfg cmd2option(cmds[i]) "\n"
-						gsub(/=.*$/, "", cmds[i])
-						cmds[i] = "-" section "." cmds[i]
-					}
+				if (update ~ "^" section "\\.") {
+					gsub("^" section ".", "", update)
+					cfg = cfg cmd2option(update) "\n"
+					gsub(/=.*$/, "", update)
+					update = "-" section "." update
 				}
 			}
 		}
@@ -105,15 +98,13 @@ function update_config(cfg, update,  \
 			# look for all unset values
 			if (section != "") {
 				flag=0
-				for (i = 1; i < cmdcount; i++) {
-					if (cmds[i] ~ "^" section "\\.") {
-						flag=1
-						gsub("^" section ".", "", cmds[i])
-						cfg = cfg cmd2option(cmds[i]) "\n"
-						
-						cmds[i] = "-" section "." cmds[i]
-					} 
-				}
+				if (update ~ "^" section "\\.") {
+					flag=1
+					gsub("^" section ".", "", update)
+					cfg = cfg cmd2option(update) "\n"
+					
+					update = "-" section "." update
+				} 
 				if (flag!=0) cfg = cfg "\n"
 			}
 			
@@ -123,29 +114,25 @@ function update_config(cfg, update,  \
 				section = "cfg" scnt
 			}	
 			scnt++
-			for (i = 1; i < cmdcount; i++) {
-				if (cmds[i] == "-" section) {
-					remove = "section"
-					cmds[i] = ""
-				} else if (cmds[i] ~ "^@" section "=") {
-					cmds[i] = ""
-				} else if (cmds[i] ~ "^\\*" section "=") {
-					gsub("^\\*" section "=", "", cmds[i])
-					line = cmd2config(l[2],cmds[i]) 
-					cmds[i] = ""
-				}
+			if (update == "-" section) {
+				remove = "section"
+				update = ""
+			} else if (update ~ "^@" section "=") {
+				update = ""
+			} else if (update ~ "^&" section "=") {
+				gsub("^&" section "=", "", update)
+				line = cmd2config(l[2],update) 
+				update = ""
 			}
 		}
 		if (remove == "option") remove = ""
 		if (l[1] == "option") {
-			for (i = 1; i < cmdcount; i++) {
-				if (cmds[i] ~ "^-" section "\\." l[2] "$") remove = "option"
-				# if a supplied config value already exists, replace the whole line
-				if (match(cmds[i], "^" section "." l[2] "=")) {
-					gsub("^" section ".", "", cmds[i])
-					line = cmd2option(cmds[i]) 
-					cmds[i] = ""
-				}
+			if (update ~ "^-" section "\\." l[2] "$") remove = "option"
+			# if a supplied config value already exists, replace the whole line
+			if (match(update, "^" section "." l[2] "=")) {
+				gsub("^" section ".", "", update)
+				line = cmd2option(update)
+				update = ""
 			}
 		}
 		if (remove == "") cfg = cfg line "\n"
@@ -153,33 +140,20 @@ function update_config(cfg, update,  \
 	
 	# any new options for the last section??
 	if (section != "") {
-		for (i = 1; i < cmdcount; i++) {
-			if (cmds[i] ~ "^" section "\\.") {
-				gsub("^" section ".", "", cmds[i])
-				cfg = cfg cmd2option(cmds[i]) "\n"
-				
-				cmds[i] = "-" section "." cmds[i]
-			} 
-		}
+		if (update ~ "^" section "\\.") {
+			gsub("^" section ".", "", update)
+			cfg = cfg cmd2option(update) "\n"
+
+			update = "-" section "." update
+		} 
 	}
 
-	# TODO: generate a new section if any foo.bar=baz command remains
-	for (i=1; i<cmdcount; i++) {
-		if (cmds[i] ~ "^@") {
-			# new section
-			section = stype = substr(cmds[i],2)
-			gsub(/=.*$/,"",section)
-			gsub(/^.*=/,"",stype)
-			cfg = cfg "\nconfig \"" stype "\" \"" section "\"\n"
-			for (i2=1; i2<cmdcount; i2++) {
-				if (cmds[i2] ~ "^" section "\\.") {
-					gsub("^" section ".", "", cmds[i2])
-					cfg = cfg cmd2option(cmds[i2]) "\n"
-					cmds[i2] = "-" section "." cmds[i2]
-				}
-			}
-			cfg = cfg "\n"
-		}
+	if (update ~ "^@") {
+		# new section
+		section = stype = substr(update,2)
+		gsub(/=.*$/,"",section)
+		gsub(/^.*=/,"",stype)
+		cfg = cfg "\nconfig \"" stype "\" \"" section "\"\n"
 	}
 
 	return cfg
