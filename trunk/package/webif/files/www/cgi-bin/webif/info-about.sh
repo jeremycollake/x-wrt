@@ -19,8 +19,9 @@
 #   none
 #
 header "Info" "About" "@TR<<About>>" '' ''
-# 322 is replaced by revision by preprocessor at build
-this_revision=322
+
+this_revision=$(cat /www/.version)
+
 if [ -n "$FORM_update_check" ]; then	  	
 	tmpfile=$(mktemp "/tmp/.webif.XXXXXX")
 	wget http://ftp.berlios.de/pub/xwrt/.version -O $tmpfile 2> /dev/null >> /dev/null
@@ -30,7 +31,7 @@ if [ -n "$FORM_update_check" ]; then
 	else
 		latest_revision=$(cat $tmpfile)
 		if [ "$this_revision" != "$latest_revision" ]; then
- 			revision_text="<div id=\"update-available\">webif^2 update available: r$latest_revision</div>"
+ 			revision_text="<div id=\"update-available\">webif^2 update available: r$latest_revision (you have r$this_revision)</div>"
  		else
  			revision_text="<div id=\"update-unavailable\">You have the latest webif^2: r$latest_revision</div>"	 		
  		fi
@@ -47,27 +48,38 @@ swatch()
 -->
 </script>
 
-<div class="webif-name-title">webif^2</div></font>
-<div class="webif-name-subtitle">Part of the end user extensions to OpenWrt by the X-Wrt project.</div>
-<div class="webif-name-version">Alpha development - revision __SVN_REVISION__</div>
-<form enctype="multipart/form-data" method="post"><input type="submit" value=" Check for webif update " name="update_check" /></form>
+<div class="webif-name-title">X-Wrt extensions: webif<sup>2</sup></div></font>
+<div class="webif-name-subtitle"></div>
+<div class="webif-name-version">Alpha development - revision <? echo $this_revision ?> </div>
+<form enctype="multipart/form-data" method="post"><input type="submit" value=" Check For Webif Update " name="update_check" /></form>
 <? echo $revision_text ?>
 <div class="webif-contributors">
 <table><tbody>
-<tr><th>OpenWrt Contributors (sorted by name):</th></tr>
+<tr><td><br /></td></tr>  
+<tr><th>X-Wrt Webif<sup>2</sup> Contributors (sorted by name):</th></tr>
+<tr><td>
+&nbsp&nbsp <a href="mailto:jeremy.collake@gmail.com">Jeremy Collake</a>
+</td></tr>			
+<tr><td>
+&nbsp&nbsp <a href="mailto:kemen04@gmail.com">Travis Kemen</a>
+</td></tr>		
+<tr><td><br /></td></tr>
+<tr><th>OpenWrt Contributors:</th></tr>
 <tr><td>	
 &nbsp&nbsp florian, kaloz, malbon, mbm, Olli, <a href="mailto:openwrt@nbd.name">Felix Fietkau</a> (nbd), wbx
 </td></tr>  
 <tr><td>
 &nbsp&nbsp Companies/Projects: linux, Broadcom, Linksys, Squashfs, JFFS2, MTD, etc...
 <tr><td>
-<i>&nbsp&nbsp Openwrt is the product of countless contributors from the community.</i>
+&nbsp&nbsp <b><i>Countless</i></b> contributors from the community.
 </td></tr>  
-<br />
-
-<tr><th>Webif Contributors (sorted by name):</th></tr>
+<tr><td><br /></td></tr>  
+<tr><th>Other Webif Contributors (sorted by name):</th></tr>
 <tr><td>
 &nbsp&nbsp <a href="mailto:openwrt@nbd.name">Felix Fietkau</a>
+</td></tr>
+<tr><td>
+&nbsp&nbsp <a href="mailto:markus@freewrt.org">Markus Wigge</a>			
 </td></tr>
 <tr><td>
 &nbsp&nbsp <a href="mailto:openwrt@kewis.ch">Philipp Kewisch</a>
@@ -78,20 +90,9 @@ swatch()
 <tr><td>
 &nbsp&nbsp <a href="mailto:spectra@gmx.ch">Spectra</a>
 </td></tr>
-<tr><th>Webif<sup>2</sup> Contributors (sorted by name):</th></tr>
+<tr><td><br /></td></tr> 
 <tr><td>
-&nbsp&nbsp <a href="mailto:jeremy.collake@gmail.com">Jeremy Collake</a>
-</td></tr>			
-<tr><td>
-&nbsp&nbsp <a href="mailto:kemen04@gmail.com">Travis Kemen</a>
-</td></tr>		
-<tr><td>
-&nbsp&nbsp <a href="mailto:markus@freewrt.org">Markus Wigge</a>			
-</td></tr>
-<tr><td><br /></td></tr>
-<tr><td>
-Original webif system &copy; 2005 Felix Fietkau &lt;<a href="mailto:openwrt@nbd.name">openwrt@nbd.name</a>&gt;.<br />
-Layout based on <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran
+Layout was originally based on <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran
 </tr></td>
 <tr><td><br /></td></tr>
 <tr><td>
