@@ -133,8 +133,8 @@ Pragma: no-cache
 			<div class="swatch" style="background: #557788"></div>
 			<div class="swatch" style="background: #114488"></div>
 			<div class="swatch" style="background: #192a65"></div>			
-			<div class="swatch" id="colorize"></div>
-			<div class="swatch" style="background: #334444"></div>
+			<div class="swatch" style="background: #e8ca9e"></div>
+			<div class="swatch" id="colorize"></div>			
 		</div>
 		
 		$swatch_script		
