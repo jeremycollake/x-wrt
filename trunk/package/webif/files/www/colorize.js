@@ -134,13 +134,13 @@ function colorize()
   		break;
   	case 'brown':  	  	
   		document.write('/color_brown.css" />');
-  		break;
-	case 'blue':	
-  		document.write('/color_blue.css" />');
-  		break;      		
-	case 'navyblue':
-	default:
+  		break;   		
+	case 'navyblue':	
   		document.write('/color_navyblue.css" />');
-  		break;  				
+  		break;  
+	case 'blue':	
+	default:	
+  		document.write('/color_blue.css" />');
+  		break;     						
   }
 }
