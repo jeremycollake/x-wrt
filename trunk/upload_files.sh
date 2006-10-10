@@ -1,5 +1,5 @@
 #!/bin/sh
-scp bin/packages/webif_0.3*.ipk \
+scp \
 	bin/packages/* \
 	jcollake@shell.berlios.de:/home/groups/ftp/pub/xwrt/packages/
 
