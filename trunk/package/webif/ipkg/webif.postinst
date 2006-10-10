@@ -29,10 +29,10 @@ TestInstall()
 #
 FixReadOnlyLink()
 {
-	local tmpfile=$(mktemp "/tmp/.webif-inst-XXXXXX")
-	cp "$1" "$tmpfile"
-	rm "$1"
-	mv "$tmpfile" "$1"
+	local tmpfile=$(mktemp "/tmp/.webif-inst-XXXXXX.tmp")
+	cp "$1" "$tmpfile" >> /dev/null 2>&1
+	rm "$1"  >> /dev/null 2>&1
+	mv "$tmpfile" "$1"  >> /dev/null 2>&1
 }
 
 
@@ -46,8 +46,9 @@ FixReadOnlyLink()
 
 cat /proc/version | grep OpenWrt 2>&1
 if [ "$?" = "0" ]; then
+	echo "Executing post-install script ..."
 	cd /				# change out of cwd, since it got deleted out from under us
-	instlog=$(mktemp /tmp/webif-inst-XXXXXX.log)	
+	instlog=$(mktemp /tmp/webif-inst-XXXXXX)	
 	exec 6>&1	# save stdout
 	exec > "$instlog"
 	#
@@ -69,7 +70,7 @@ if [ "$?" = "0" ]; then
 	}
 	nvram unset device_name 	# force rescan of device_name, in case new id code is added
 
-	echo " Restarting webif ..."	
+	echo "Restarting webif ..."	
 	killall wifi 2>&1  		# survey page relaunches this, sometimes httpd gets 'hung' on it
 	killall haserl 2>&1 
 	killall webif-page 2>&1	
@@ -81,4 +82,4 @@ if [ "$?" = "0" ]; then
 	cat "$instlog"
 	rm "$instlog"
 fi
-exit 0
+TestInstall
