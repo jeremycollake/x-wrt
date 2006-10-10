@@ -29,7 +29,7 @@ TestInstall()
 #
 FixReadOnlyLink()
 {
-	local tmpfile=$(mktemp "/tmp/.webif-inst-XXXXXX.tmp")
+	local tmpfile=$(mktemp "/tmp/.webif-inst-XXXXXX")
 	cp "$1" "$tmpfile" >> /dev/null 2>&1
 	rm "$1"  >> /dev/null 2>&1
 	mv "$tmpfile" "$1"  >> /dev/null 2>&1
