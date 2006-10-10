@@ -1,4 +1,4 @@
-/* some standard cookie manipulation functions */
+/* some common cookie manipulation functions */
 
 /**
  * Sets a Cookie with the given name and value.
@@ -12,7 +12,7 @@
  * [secure]   Boolean value indicating if the cookie transmission requires a
  *              secure transmission
  */
-function setCookie(name, value, expires, path, domain, secure) 
+function setCookie(name, value, expires, path, domain, secure)
 {
     document.cookie= name + "=" + escape(value) +
         ((expires) ? "; expires=" + expires.toGMTString() : "") +
@@ -29,57 +29,39 @@ function setCookie(name, value, expires, path, domain, secure)
  * Returns a string containing value of specified cookie,
  *   or null if cookie does not exist.
  */
-function getCookie(name) 
+function getCookie(name)
 {
     var dc = document.cookie;
     var prefix = name + "=";
     var begin = dc.indexOf("; " + prefix);
-    if (begin == -1) 
+    if (begin == -1)
     {
         begin = dc.indexOf(prefix);
         if (begin != 0) return null;
-    } 
-    else 
+    }
+    else
     {
         begin += 2;
     }
     var end = document.cookie.indexOf(";", begin);
-    if (end == -1) 
+    if (end == -1)
     {
         end = dc.length;
     }
     return unescape(dc.substring(begin + prefix.length, end));
 }
 
-/**
- * Deletes the specified cookie.
- *
- * name      name of the cookie
- * [path]    path of the cookie (must be same as path used to create cookie)
- * [domain]  domain of the cookie (must be same as domain used to create cookie)
- */
-function deleteCookie(name, path, domain) 
-{
-    if (getCookie(name)) 
-    {
-        document.cookie = name + "=" +
-            ((path) ? "; path=" + path : "") +
-            ((domain) ? "; domain=" + domain : "") +
-            "; expires=Thu, 01-Jan-70 00:00:01 GMT";
-    }
-}
-
 /* ************************************************************ */
 /* color theme switching code */
 
 function setcolor()
-{	
+{
 	// set cookie to expire in 30 days
 	var expireTime=new Date();
-	ThirtyDays=30*24*60*60*1000; 
-   	expireTime.setTime(expireTime.getTime()+ThirtyDays);	   	
- 	setCookie("webif_colortheme",this.title, expireTime);			
- 	colorize();  
+	ThirtyDays=30*24*60*60*1000;
+   	expireTime.setTime(expireTime.getTime()+ThirtyDays);
+ 	setCookie("webif_colortheme",this.title, expireTime);
+ 	colorize();
   	window.location.reload(true);
 }
 
@@ -88,10 +70,10 @@ function swatch()
 {
   var divs=document.getElementsByTagName("*");
   var count=0;
-  for(var i=0; i < divs.length; i++) 
-  {   
-    if(divs[i].className.indexOf("swatch") != -1) 
-    {    	    	
+  for(var i=0; i < divs.length; i++)
+  {
+    if(divs[i].className.indexOf("swatch") != -1)
+    {
     	var colorTitle;
     	switch(count)
     	{
@@ -103,16 +85,16 @@ function swatch()
     			break;
     		case 2:
     			colorTitle='navyblue';
-    			break;    	
+    			break;
     		case 3:
     			colorTitle='white';
-    			break;    	
+    			break;
     		case 4:
-    		default:    		
+    		default:
     			colorTitle='brown';
     			break;
-    	}   
-    	divs[i].title=colorTitle; 	
+    	}
+    	divs[i].title=colorTitle;
     	divs[i].onclick=setcolor;
     	count++;
     }
@@ -121,26 +103,26 @@ function swatch()
 
 // set color theme from cookie
 function colorize()
-{  
+{
   var color=getCookie("webif_colortheme")
   document.write('<link rel="stylesheet" type="text/css" href="');
   switch(color)
-  {	
+  {
 	case 'green':
   		document.write('/color_green.css" />');
-  		break;  		  	
+  		break;
   	case 'white':
   		document.write('/color_white.css" />');
   		break;
-  	case 'brown':  	  	
+  	case 'brown':
   		document.write('/color_brown.css" />');
-  		break;   		
-	case 'navyblue':	
+  		break;
+	case 'navyblue':
   		document.write('/color_navyblue.css" />');
-  		break;  
-	case 'blue':	
-	default:	
+  		break;
+	case 'blue':
+	default:
   		document.write('/color_blue.css" />');
-  		break;     						
+  		break;
   }
 }
