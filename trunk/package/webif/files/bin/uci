@@ -1,5 +1,5 @@
 #!/bin/sh
-# Shell script for interacting with config files
+# Shell script for interacting with buildroot-ng style config files
 #
 # Copyright (C) 2006 by Fokus Fraunhofer <carsten.tittel@fokus.fraumhofer.de>
 # Copyright (C) 2006 by Felix Fietkau <nbd@openwrt.org>
