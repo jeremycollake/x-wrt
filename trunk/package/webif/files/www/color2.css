@@ -1,4 +1,4 @@
- /* color */
+ /* color theme navy blue */
 
 html, body 
 {		
@@ -7,7 +7,7 @@ html, body
 
 #header
 {
-	background-color: #e8ca9e;
+	background-color: #192a65;
 }
 
 #update-available
@@ -82,8 +82,9 @@ html, body
 
 #short-status 
 {
-	color: #555;
-	background-color: #e8ca9e
+	color: #FFF;
+	background-color: #192a65; /* navy blue */
+	//background-color: #e8ca9e
 }
 
 #content .settings-block
@@ -94,7 +95,7 @@ html, body
 
 #content .settings-title 
 {
-	color: #000;	
+	color: #FFF;	
 	/* background-color: #b8b1a2; /* brown */
 	background-color: #CCC; /* gray */
 }
