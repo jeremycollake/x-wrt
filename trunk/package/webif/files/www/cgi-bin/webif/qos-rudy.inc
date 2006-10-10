@@ -8,13 +8,11 @@
 # Version 0.001
 ##FIXME: edonkey-dl shows up as -dl for Layer 7 rules
 ##FIXME: L7 Save rules need to be dynamic
-##FIXME: fix javascript hidden start_form workaround
 ##FIXME: L7 checkboxes need to display nicely
 ##Possible FIXME: Should the save function be changed?
 ##TODO: Finish Layer 7 Functions
 ##TODO: Combine some of the functions
 ##TODO: Figure out a different way to list and remove existing items
-##FIXME: Finish Save Button
 ##TODO: Proper naming of variables.
 
 
@@ -23,6 +21,7 @@
 exists /tmp/.webif/qos  && QOS_FILE=/tmp/.webif/qos || QOS_FILE=/etc/qos.conf
 exists $QOS_FILE || touch $QOS_FILE >&- 2>&-
 
+# Number of blank fields to make
 ipexprcount=5
 ippriocount=5
 ipbulkcount=5
@@ -32,6 +31,8 @@ tcpbulkcount=5
 udpexprcount=5
 udppriocount=5
 udpbulkcount=5
+
+
 ###############################################
 for config in $(ls /etc/l7-protocols/ -1 |cut -d "." -f 1 2>&-); do
 name=${config}
@@ -309,6 +310,8 @@ display_form <<EOF
 onchange|modechange
 start_form|@TR<<QOS Internet Speed Configuration>>
 field|@TR<<Upload Speed>>
+helpitem|Up/Down Speeds
+helptext|HelpText Up/Down Speeds#Set 5% - 10% lower than *measured* line speed (set to zero to disable)
 text|upload_speed|$FORM_upload_speed
 field|@TR<<Download Speed>>
 text|download_speed|$FORM_download_speed
