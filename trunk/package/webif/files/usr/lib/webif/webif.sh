@@ -83,12 +83,12 @@ header() {
 	}
 	
 	# 
-	# to enable unfinished color theme switcher like openwrt.org, uncomment these.
+	# color switcher
 	# 	
-	swatch_script="<script type=\"text/javascript\">swatch() </script>"
+	swatch_script="<script type=\"text/javascript\"> swatch() </script>"
 	colorize_script="<script type=\"text/javascript\" src="/colorize.js"></script>
-		<script type=\"text/javascript\"> colorize() </script>"
-
+		<script type=\"text/javascript\"> colorize(); </script>"		
+	
 	cat <<EOF
 Content-Type: text/html
 Pragma: no-cache
@@ -101,8 +101,7 @@ Pragma: no-cache
 		<link rel="stylesheet" type="text/css" href="/webif.css" />		
 		<!--[if lt IE 7]>
 			<link rel="stylesheet" type="text/css" href="/ie_lt7.css" />
-		<![endif]-->				
-		<link rel="stylesheet" type="text/css" href="/color1.css" />	
+		<![endif]-->						
 		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
 		<meta http-equiv="expires" content="0" />		
 	</head>
@@ -133,9 +132,9 @@ Pragma: no-cache
 		<div>
 			<div class="swatch" style="background: #557788"></div>
 			<div class="swatch" style="background: #114488"></div>
-			<div class="swatch" style="background: #192a65"></div>
-			<div class="swatch" style="background: #334444"></div>
+			<div class="swatch" style="background: #192a65"></div>			
 			<div class="swatch" id="colorize"></div>
+			<div class="swatch" style="background: #334444"></div>
 		</div>
 		
 		$swatch_script		
