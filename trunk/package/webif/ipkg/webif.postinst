@@ -8,16 +8,15 @@
 #
 TestInstall()
 {
-	echo " ************************************************************** "
+	echo "************************************************************** "
 	this_version="__SVN_REVISION__"
 	installed_version=$(cat /www/.version)
 	if [ -f "/www/.version" ] && [ "$this_version" = "$installed_version" ]; then
-		echo " NOTICE: Installation appears OK."
+		echo " Webif^2 installation appears OK."
 	else
-		echo " WARNING: Installation may have failed."
-		echo " dbg: this_version=$this_version installed_version=$installed_version"
+		echo " WARNING: Installation may have failed."		
 	fi
-	echo " ************************************************************** "
+	echo "************************************************************** "
 }
 
 #######################################################################################
