@@ -29,13 +29,20 @@ $1 > 0 {
 	print "</tr>"
 }
 ' /tmp/dhcp.leases ?>
-<tr><td><br><br></td></tr>
-</tbody</table>
+<tr><td><br /><br /></td></tr>
+</tbody></table>
 <table width="100%"><tbody>
-<tr><td><font size=-1><strong>DHCP Leases:</strong>&nbsp DHCP leases are assigned to network clients that request an IP address from the DHCP server of the router. Clients that requested their IP lease before this router was last rebooted may not be listed until they request a renewal of their lease.</font></td></tr>
-<tr><td><br><br></td></tr>
+<tr><td><font size="-1"><strong>DHCP Leases:</strong>&nbsp; DHCP leases are assigned to network clients that request an IP address from the DHCP server of the router. Clients that requested their IP lease before this router was last rebooted may not be listed until they request a renewal of their lease.</font></td></tr>
+<tr><td><br /><br /></td></tr>
 </tbody>
 </table>
+<br />
+<p>
+    <a href="http://validator.w3.org/check?uri=referer"><img
+        src="http://www.w3.org/Icons/valid-xhtml10"
+        alt="Valid XHTML 1.0 Transitional" height="31" width="88" /></a>
+  </p>
+  
 <? footer ?>
 <!--
 ##WEBIF:name:Status:400:DHCP

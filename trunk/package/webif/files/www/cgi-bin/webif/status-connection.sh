@@ -67,11 +67,11 @@ header "Status" "TCP/IP" "@TR<<TCP/IP Status>>"
                 <td>
                 <? 
                 if [ -f "/etc/config/qos" ]; then				
-					echo "<br><pre>"
+					echo "<br /><pre>"
 					qos-stat	
 					echo "</pre>"
                 elif [ -f "/etc/qos.conf" ]; then				
-					echo "<br><pre>"
+					echo "<br /><pre>"
 					qos-stat	
 					echo "</pre>"								
 		    else
@@ -85,6 +85,12 @@ header "Status" "TCP/IP" "@TR<<TCP/IP Status>>"
 </tbody>
 </table>
 
+<br />
+ <p>
+    <a href="http://validator.w3.org/check?uri=referer"><img
+        src="http://www.w3.org/Icons/valid-xhtml10"
+        alt="Valid XHTML 1.0 Transitional" height="31" width="88" /></a>
+  </p>
 <? footer ?>
 <!--
 ##WEBIF:name:Status:300:TCP/IP
