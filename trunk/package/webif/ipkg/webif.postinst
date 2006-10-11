@@ -46,9 +46,6 @@ cat /proc/version | grep -q OpenWrt
 if [ "$?" = "0" ]; then
 	echo "Executing post-install script ..."
 	cd /				# change out of cwd, since it got deleted out from under us
-	instlog=$(mktemp /tmp/webif-inst-XXXXXX)	
-	exec 6>&1	# save stdout
-	exec > "$instlog"
 	#
 	# fix the ipkg.list on squashfs images
 	#  (we might as well fix it, tho its not really our job)
@@ -68,17 +65,18 @@ if [ "$?" = "0" ]; then
 	[ -f "/etc/init.d/S12firmwareinfo" ] && {
 		/etc/init.d/S12firmwareinfo &	# set over-ridden firmware information
 	}
-
-	echo "Restarting webif ..."	
-	killall wifi >> /dev/null 2>&1  		# survey page relaunches this, sometimes httpd gets 'hung' on it
-	killall haserl >> /dev/null 2>&1 
-	killall webif-page >> /dev/null 2>&1	
-	killall httpd 2>&1
-	wifi up &	
+	echo '#!/bin/sh
+	echo "Restarting webif ..."			
+	killall wifi  >> /dev/null 2>&1  		# survey page relaunches this, sometimes httpd gets 'hung' on it
+	killall haserl  >> /dev/null 2>&1 
+	killall webif-page  >> /dev/null 2>&1	
+	killall httpd >> /dev/null 2>&1
+	sleep 10
+	/etc/init.d/S40network
 	/etc/init.d/S50httpd
-	TestInstall	# always test the install, even on image build
-
-	exec 1>&6 6>&-  # restore stdout	
-	cat "$instlog"
-	rm "$instlog"
+	rm "$0"
+	' > /tmp/launch-httpd.sh
+	chmod +x /tmp/launch-httpd.sh
+	/tmp/launch-httpd.sh &
+	TestInstall
 fi
