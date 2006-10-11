@@ -23,6 +23,7 @@ if [ -n "$FORM_update_check" ]; then
 fi
 
 if [ -n "$FORM_install_webif" ]; then	  
+	echo "Please wait, installation may take a couple minutes ...<br />"
 	echo "<pre>"
 	ipkg install http://ftp.berlios.de/pub/xwrt/webif_latest.ipk
 	echo "</pre>" 	
