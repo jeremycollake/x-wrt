@@ -65,13 +65,9 @@ cat <<EOF
 	<tr>
 		<td><strong>@TR<<Webif>></strong></td><td>&nbsp;</td>
 		<td>webif<sup>2</sup> r$this_revision $revision_text</td> 				
-	</tr>
-<tr>
-<td></td><td></td>
 <td colspan="2">
 <form enctype="multipart/form-data" method="post">
 <input type="submit" value=" Check For Webif^2 Update " name="update_check" />
-&nbsp;
 <input type="submit" value=" Install/Reinstall Webif^2  " name="install_webif" />
 </form>	
 </td>

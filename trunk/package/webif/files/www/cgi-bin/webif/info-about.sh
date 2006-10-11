@@ -54,16 +54,15 @@ swatch()
 -->
 </script>
 
-<div class="webif-name-title">X-Wrt extensions: webif<sup>2</sup></div></font>
+<div class="webif-name-title"><a href="http://www.bitsum.com/xwrt.asp">X-Wrt</a> Extensions - webif<sup>2</sup></div></font>
 <div class="webif-name-subtitle"></div>
-<div class="webif-name-version">Alpha development - r<? echo "$this_revision" ?> </div>
+<div class="webif-name-version">Milestone 1 rc1 - r<? echo "$this_revision" ?> </div><br />
 <form enctype="multipart/form-data" method="post">
 <input type="submit" value=" Check For Webif^2 Update " name="update_check" />
 <input type="submit" value=" Install/Reinstall Webif^2  " name="install_webif" />
 </form>
 <? echo $revision_text ?>
-<div class="webif-contributors">
-<table><tbody>
+<table class="webif-contributors"><tbody>
 <tr><td><br /></td></tr>  
 <tr><th>X-Wrt Webif<sup>2</sup> Contributors (sorted by name):</th></tr>
 <tr><td>
@@ -72,16 +71,7 @@ swatch()
 <tr><td>
 &nbsp&nbsp <a href="mailto:kemen04@gmail.com">Travis Kemen</a>
 </td></tr>		
-<tr><td><br /></td></tr>
-<tr><th>OpenWrt Contributors:</th></tr>
-<tr><td>	
-&nbsp&nbsp florian, kaloz, malbon, mbm, Olli, <a href="mailto:openwrt@nbd.name">Felix Fietkau</a> (nbd), wbx
-</td></tr>  
-<tr><td>
-&nbsp&nbsp Companies/Projects: linux, Broadcom, Linksys, Squashfs, JFFS2, MTD, etc...
-<tr><td>
-&nbsp&nbsp <b><i>Countless</i></b> contributors from the community.
-</td></tr>  
+
 <tr><td><br /></td></tr>  
 <tr><th>Other Webif Contributors (sorted by name):</th></tr>
 <tr><td>
@@ -99,6 +89,16 @@ swatch()
 <tr><td>
 &nbsp&nbsp <a href="mailto:spectra@gmx.ch">Spectra</a>
 </td></tr>
+<tr><td><br /></td></tr>
+<tr><th>OpenWrt Contributors:</th></tr>
+<tr><td>	
+&nbsp&nbsp florian, kaloz, malbon, mbm, Olli, <a href="mailto:openwrt@nbd.name">Felix Fietkau</a> (nbd), wbx
+</td></tr>  
+<tr><td>
+&nbsp&nbsp Companies/Projects: linux, Broadcom, Linksys, Squashfs, JFFS2, MTD, etc...
+<tr><td>
+&nbsp&nbsp <b><i>Countless</i></b> contributors from the community.
+</td></tr>  
 <tr><td><br /></td></tr> 
 <tr><td>
 Layout was originally based on <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran
@@ -108,7 +108,6 @@ Layout was originally based on <a href="http://www.openwebdesign.org/design/1773
 <font size=-1>@TR<<GPL_Text|This program is free software; you can redistribute it and/or <br />modify it under the terms of the GNU General Public License <br />as published by the Free Software Foundation; either version 2 <br />of the License, or (at your option) any later version.</font> <br /> >>
 </tr></td>
 </tbody></table>
-</div>
 <? footer ?>
 <!--
 ##WEBIF:name:Info:950:About
