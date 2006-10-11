@@ -56,7 +56,8 @@ html, body
 	color: #C3C4D2;
 }
 
-#mainmenu a:hover 
+#mainmenu a:hover,
+#save a:hover
 {
 	background-color: #759b7b;
 	color: #FFF;

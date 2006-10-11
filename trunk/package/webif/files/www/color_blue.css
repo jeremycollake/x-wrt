@@ -68,7 +68,8 @@ html, body
 }
 
 #mainmenu a:hover,
-#submenu a:hover 
+#submenu a:hover,
+#save a:hover
 {
 	color: #400;
 	background-color: #aac1d9;
