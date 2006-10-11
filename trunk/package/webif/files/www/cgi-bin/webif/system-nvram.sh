@@ -7,7 +7,7 @@
 #
 #
 . /usr/lib/webif/webif.sh
-header "System" "NVRAM" "@TR<<NVRAM>>" ''
+header "System" "NVRAM" "@TR<<NVRAM>>" '' '' ?>
 
 <style type="text/css">
 	td {
