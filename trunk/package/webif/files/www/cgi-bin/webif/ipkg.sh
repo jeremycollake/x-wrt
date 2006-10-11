@@ -73,7 +73,6 @@ field|&nbsp;
 submit|install_repo| Add Repository 
 helpitem|Add Repository
 helptext|Add Repository#A repository is a server that contains a list of packages that can be installed on your OpenWrt device. Adding a new one allows you to list packages here that are not shown by default.
-string|<tr><td><br /><br /></td></tr>
 string|<tr><td colspan="2" class="repositories"><h4>@TR<<Current Repositories>>:</h4></td><td>
 $repo_list
 helpitem|Backports Tip
