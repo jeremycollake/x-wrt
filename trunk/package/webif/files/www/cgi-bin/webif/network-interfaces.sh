@@ -20,6 +20,7 @@ header "Status" "Interfaces" "@TR<<Interfaces Status>>"
                 <td><pre><? ifconfig 2>&1 | grep -A 6 "`nvram get lan_ifname`" ?></pre></td>
         </tr>
         <tr><td><br /><br /></td></tr>
+        <tr>
         <th><b>@TR<<Interfaces Status|Wireless Interface>></b></th>
         </tr>
         <tr>
@@ -28,6 +29,12 @@ header "Status" "Interfaces" "@TR<<Interfaces Status>>"
                              
 </tbody>
 </table>
+<br />
+ <p>
+    <a href="http://validator.w3.org/check?uri=referer"><img
+        src="http://www.w3.org/Icons/valid-xhtml10"
+        alt="Valid XHTML 1.0 Transitional" height="31" width="88" /></a>
+  </p>
 
 <? footer ?>
 <!--
