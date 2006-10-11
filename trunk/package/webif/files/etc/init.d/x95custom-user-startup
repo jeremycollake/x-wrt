@@ -8,9 +8,8 @@
 #   BAD:  upnpd
 #   GOOD: upnpd &
 # 
-# Failure to do this will result in you seeing S95webif-custom in
-# the process list after the box has booted and the diag light 
-# remaining on, as well as other symptoms since any subsequent
-# startup scripts won't be executed.
+# Failure to do this will result in the startup process halting
+# on this file and the diagnostic light remaining on (at least
+# for WRT54G(s) models).
 #
 
