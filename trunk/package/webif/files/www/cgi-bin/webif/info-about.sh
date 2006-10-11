@@ -54,10 +54,10 @@ swatch()
 -->
 </script>
 
-<div class="webif-name-title"><a href="http://www.bitsum.com/xwrt.asp">X-Wrt</a> Extensions - webif<sup>2</sup></div></font>
+<div class="webif-name-title"><a href="http://www.bitsum.com/xwrt.asp">X-Wrt</a> Extensions - webif<sup>2</sup></div>
 <div class="webif-name-subtitle"></div>
 <div class="webif-name-version">Milestone 1 rc1 - r<? echo "$this_revision" ?> </div><br />
-<form enctype="multipart/form-data" method="post">
+<form action="" enctype="multipart/form-data" method="post">
 <input type="submit" value=" Check For Webif^2 Update " name="update_check" />
 <input type="submit" value=" Install/Reinstall Webif^2  " name="install_webif" />
 </form>
@@ -66,48 +66,55 @@ swatch()
 <tr><td><br /></td></tr>  
 <tr><th>X-Wrt Webif<sup>2</sup> Contributors (sorted by name):</th></tr>
 <tr><td>
-&nbsp&nbsp <a href="mailto:jeremy.collake@gmail.com">Jeremy Collake</a>
+&nbsp;&nbsp; <a href="mailto:jeremy.collake@gmail.com">Jeremy Collake</a>
 </td></tr>			
 <tr><td>
-&nbsp&nbsp <a href="mailto:kemen04@gmail.com">Travis Kemen</a>
+&nbsp;&nbsp; <a href="mailto:kemen04@gmail.com">Travis Kemen</a>
 </td></tr>		
 
 <tr><td><br /></td></tr>  
 <tr><th>Other Webif Contributors (sorted by name):</th></tr>
 <tr><td>
-&nbsp&nbsp <a href="mailto:openwrt@nbd.name">Felix Fietkau</a>
+&nbsp;&nbsp; <a href="mailto:openwrt@nbd.name">Felix Fietkau</a>
 </td></tr>
 <tr><td>
-&nbsp&nbsp <a href="mailto:markus@freewrt.org">Markus Wigge</a>			
+&nbsp;&nbsp; <a href="mailto:markus@freewrt.org">Markus Wigge</a>			
 </td></tr>
 <tr><td>
-&nbsp&nbsp <a href="mailto:openwrt@kewis.ch">Philipp Kewisch</a>
+&nbsp;&nbsp; <a href="mailto:openwrt@kewis.ch">Philipp Kewisch</a>
 </td></tr>
 <tr><td>
-&nbsp&nbsp SeDeKy
+&nbsp;&nbsp; SeDeKy
 </td></tr>
 <tr><td>
-&nbsp&nbsp <a href="mailto:spectra@gmx.ch">Spectra</a>
+&nbsp;&nbsp; <a href="mailto:spectra@gmx.ch">Spectra</a>
 </td></tr>
 <tr><td><br /></td></tr>
 <tr><th>OpenWrt Contributors:</th></tr>
 <tr><td>	
-&nbsp&nbsp florian, kaloz, malbon, mbm, Olli, <a href="mailto:openwrt@nbd.name">Felix Fietkau</a> (nbd), wbx
+&nbsp;&nbsp; florian, kaloz, malbon, mbm, Olli, <a href="mailto:openwrt@nbd.name">Felix Fietkau</a> (nbd), wbx
 </td></tr>  
 <tr><td>
-&nbsp&nbsp Companies/Projects: linux, Broadcom, Linksys, Squashfs, JFFS2, MTD, etc...
+&nbsp;&nbsp; Companies/Projects: linux, Broadcom, Linksys, Squashfs, JFFS2, MTD, etc...
+</td></tr>  
 <tr><td>
-&nbsp&nbsp <b><i>Countless</i></b> contributors from the community.
+&nbsp;&nbsp; <b><i>Countless</i></b> contributors from the community.
 </td></tr>  
 <tr><td><br /></td></tr> 
 <tr><td>
 Layout was originally based on <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran
-</tr></td>
+</td></tr>
 <tr><td><br /></td></tr>
 <tr><td>
-<font size=-1>@TR<<GPL_Text|This program is free software; you can redistribute it and/or <br />modify it under the terms of the GNU General Public License <br />as published by the Free Software Foundation; either version 2 <br />of the License, or (at your option) any later version.</font> <br /> >>
-</tr></td>
+<font size="-1">@TR<<GPL_Text|This program is free software; you can redistribute it and/or <br />modify it under the terms of the GNU General Public License <br />as published by the Free Software Foundation; either version 2 <br />of the License, or (at your option) any later version.</font> <br /> >>
+</td></tr>
 </tbody></table>
+<br />
+<p>
+    <a href="http://validator.w3.org/check?uri=referer"><img
+        src="http://www.w3.org/Icons/valid-xhtml10"
+        alt="Valid XHTML 1.0 Transitional" height="31" width="88" /></a>
+  </p>
 <? footer ?>
 <!--
 ##WEBIF:name:Info:950:About
