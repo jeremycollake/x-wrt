@@ -61,7 +61,7 @@ header "System" "Packages" "@TR<<Packages>>" '' "$SCRIPT_NAME"
 }
 
 
-repo_list=$(awk '/src/ { print "string|<tr><td>" $2 "</td><td>" $3 "</td></tr>"}' /etc/ipkg.conf)
+repo_list=$(awk '/src/ { print "string|<tr class=\"repositories\"><td>" $2 "</td><td>" $3 "</td></tr>"}' /etc/ipkg.conf)
 
 display_form <<EOF
 start_form|@TR<<Add Repository>>
@@ -71,10 +71,10 @@ field|@TR<<Repo. URL>>
 text|repourl|$FORM_repourl|
 field|&nbsp;
 submit|install_repo| Add Repository 
-string|<tr><td><br /><br /><br /><br /></td></tr>
-string|<tr><td colspan="2"><h4>@TR<<Current Repositories>>:</h4></td><td>
 helpitem|Add Repository
 helptext|Add Repository#A repository is a server that contains a list of packages that can be installed on your OpenWrt device. Adding a new one allows you to list packages here that are not shown by default.
+string|<tr><td><br /><br /></td></tr>
+string|<tr><td colspan="2" class="repositories"><h4>@TR<<Current Repositories>>:</h4></td><td>
 $repo_list
 helpitem|Backports Tip
 helptext|HelpText Backports Tip#For a much larger assortment of packages, see if there is a backports repository available for your firmware (there is one for White Russian RC5). Such a repository brings
