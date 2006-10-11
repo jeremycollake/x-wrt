@@ -110,14 +110,13 @@ Pragma: no-cache
 	<div id="container">	 	
 	  <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>	  
 	    <div id="header">	    				
-	    				<div class="openwrt-title">
-	    				
+	    				<div class="openwrt-title">	    				
 	    			   	</div>	 		
-	    			   	<div id="short-status">		    				
-	    				$_firmware_subtitle $_version<br />
-	    				<h3>Status</h3>
+	    			   	<div id="short-status">	
+	    			   	$_firmware_subtitle $_version<br />    					    				    				
+	    				<h3>Status</h3><br />
 					<ul>									
-						<li><strong>@TR<<Webif<sup>2</sup>>>:</strong> r$_webif_rev</li>
+						<li><strong>@TR<<X-Wrt Webif<sup>2</sup>>>:</strong> r$_webif_rev</li>
 						<li><strong>@TR<<Host:>></strong> $_hostname</li>
 						<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
 						<li><strong>@TR<<Load>>:</strong> $_loadavg</li>																					
