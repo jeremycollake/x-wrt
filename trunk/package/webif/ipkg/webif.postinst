@@ -67,7 +67,6 @@ if [ "$?" = "0" ]; then
 	killall wifi 
 	killall haserl 
 	killall webif-page
-	killall httpd 
+	killall -HUP httpd 	# reinitialize httpd (for any added mime types to httpd.conf)
 	/etc/init.d/S40network
-	/etc/init.d/S50httpd
 fi
