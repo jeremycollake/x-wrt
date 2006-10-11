@@ -51,7 +51,7 @@ if [ "$?" = "0" ]; then
 
 	# initialize /etc/init.d/S95webif-custom if it doesn't already exist
 	# (mv will fail if it already exists)	
-	mv "/etc/init.d/S95webif-custom-default" "/etc/init.d/S95webif-custom" >> /dev/null 2>&1
+	mv "/etc/init.d/xS95webif-custom-default" "/etc/init.d/S95webif-custom" >> /dev/null 2>&1
 
 	nvram unset device_name 	# force rescan of device_name, in case new id code is added
 	[ -f "/etc/init.d/S11firmwareinfo" ] && {
