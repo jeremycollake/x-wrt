@@ -83,8 +83,7 @@ html, body
 #short-status 
 {
 	color: #FFF;
-	background-color: #192a65; /* navy blue */
-	//background-color: #e8ca9e
+	background-color: #192a65;
 }
 
 #content .settings-block
