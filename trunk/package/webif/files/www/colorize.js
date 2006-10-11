@@ -62,7 +62,8 @@ function setcolor()
    	expireTime.setTime(expireTime.getTime()+ThirtyDays);
  	setCookie("webif_colortheme",this.title, expireTime);
  	colorize();
-  	window.location.reload(true);
+ 	document.close();
+ 	window.location.href = window.location.href; 	
 }
 
 // find all objects of swatch class and set onclick handler
