@@ -64,9 +64,5 @@ if [ "$?" = "0" ]; then
 	TestInstall
 	echo "Restarting webif ..."
 	exec 2>/dev/null >/dev/null </dev/null	
-	killall wifi 
-	killall haserl 
-	killall webif-page
 	killall -HUP httpd 	# reinitialize httpd (for any added mime types to httpd.conf)
-	/etc/init.d/S40network
 fi
