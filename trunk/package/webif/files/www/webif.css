@@ -1,35 +1,35 @@
 /* layout */
 
-* 
+*
 {
 	margin: 0;
 	padding: 0;
 }
 
-html, body 
-{	
+html, body
+{
 	width: inherit;
-	height: 100%;	
+	height: 100%;
 }
 
-dd 
+dd
 {
 	margin-left: 1em;
 	margin-bottom: 0.2em;
 }
 
-ul 
+ul
 {
 	display: inline;
 	list-style-type: none;
 }
 
-ul.about 
+ul.about
 {
 	list-style-type: disc;
 }
 
-li.about 
+li.about
 {
 	margin-left: 2em;
 }
@@ -37,55 +37,55 @@ li.about
 hr,
 #submenu h3,
 #short-status h3,
-#content .settings-block .settings .settings-help h3 
+#content .settings-block .settings .settings-help h3
 {
 	display: none;
 }
 
 ul.about,
-hr.separator 
+hr.separator
 {
 	display: block;
 }
 
-option 
+option
 {
 	padding-right: 1em;
 }
 
-#container 
+#container
 {
 	position: relative;
-	min-height: 100%;	
+	min-height: 100%;
 }
 
-#header 
+#header
 {
 	position: relative;
 	width: 100%;
 	height: 6em;
 	padding-top: 0.5em;
-	padding-bottom: 0.5em;		
+	padding-bottom: 0.5em;
 }
 
-#short-status 
-{	
-	position: relative;		
-	line-height: 1.0em;	
+#short-status
+{
+	position: relative;
+	line-height: 1.0em;
 	padding-top: 0.2em;
 	padding-bottom: 0.2em;
 	padding-right: 0.5em;
-	padding-left: 0.2em;	
-	float: right;		
+	padding-left: 0.2em;
+	float: right;
 }
 
-.openwrt-title 
-{	
+.openwrt-title
+{
 	position: relative;
-	float: left;	
+	float: left;
 	top: 0em;
 	padding-bottom: 0.5em;
-	padding-top: 0.5em;	
+	padding-top: 0.5em;
 	padding-left: 1em;
 	width: 30em;
 	height: 5.5em;
@@ -95,57 +95,57 @@ option
 
 #mainmenu
 {
-	position: relative;			
-	float: left;	
+	position: relative;
+	float: left;
 	width: 100%;
 	padding-top: 0.3em;
-	padding-bottom: 0.3em;	
+	padding-bottom: 0.3em;
 }
 
-#submenu 
+#submenu
 {
 	position: relative;
-	float: left;		
+	float: left;
 	width: 100%;
 	padding-top: 0.3em;
-	padding-bottom: 0.3em;	
+	padding-bottom: 0.3em;
 }
 
-#mainmenu h3 
+#mainmenu h3
 {
-	padding-left: 1em;	
+	padding-left: 1em;
 	padding-right: 1em;
-	display: inline;	
+	display: inline;
 }
 
-#mainmenu li 
+#mainmenu li
 {
-	display: inline;	
-	font-size: 0.9em;		
-	padding: 1.0em;	
+	display: inline;
+	font-size: 0.9em;
+	padding: 1.0em;
 	list-style-type: none;
 }
 
-#submenu li 
-{	
-	display: inline;	
-	position: relative;		
+#submenu li
+{
+	display: inline;
+	position: relative;
 	list-style-type: none;
 	padding-left: 0.4em;
-			
+
 }
 
-#content 
-{	
-	position: relative;			
-	padding-top: 0.5em;	
+#content
+{
+	position: relative;
+	padding-top: 0.5em;
 	padding-bottom: 1em;
 	padding-right: 1em;
-	padding-left: 1em;	
-	clear: both;		
+	padding-left: 1em;
+	clear: both;
 }
 
-#content .settings-block .settings 
+#content .settings-block .settings
 {
 	padding-left: 1.5em;
 	padding-right: 1em;
@@ -155,41 +155,41 @@ option
 #content .settings-block .settings-block-title
 {
 	padding-bottom: 1.0em;
-	padding-top: 0.4em;	
-	padding-left: 0.4em;	
+	padding-top: 0.4em;
+	padding-left: 0.4em;
 }
 
-#content .settings-block .settings .settings-title 
-{	
+#content .settings-block .settings .settings-title
+{
 	padding-bottom: 0.1em;
-	padding-top: 0.1em;	
-	padding-left: 0.4em;	
+	padding-top: 0.1em;
+	padding-left: 0.4em;
 }
 
-#content .settings-block .settings .settings-content 
+#content .settings-block .settings .settings-content
 {
 	padding-top: 1em;
 	margin-left: 1em;
 	position: relative;
-	float: left;	
+	float: left;
 	width: 58%;
 	padding-bottom: 0.5em;
 }
 
 #content .settings-block .settings .settings-content select,
-#content .settings-block .settings .settings-content input 
+#content .settings-block .settings .settings-content input
 {
 	margin-top: 0.4em;
 }
 
-#content .settings-block .settings .settings-help 
+#content .settings-block .settings .settings-help
 {
 	padding: 1.0em;
 	padding-top: 1.4em;
 	margin-left: 60%;
 }
 
-#content .settings-help .more-help 
+#content .settings-help .more-help
 {
 	margin-right: 10%;
 	text-align: right;
@@ -197,17 +197,17 @@ option
 
 .tip
 {
-	padding-top: 1.0em;	
+	padding-top: 1.0em;
 }
 
-#save 
+#save
 {
-	position: relative;	
+	position: relative;
 	width: 100%;
-	float: right;	
+	float: right;
 }
 
-#save .page-save div 
+#save .page-save div
 {
 	float: right;
 	width: 15em;
@@ -217,14 +217,14 @@ option
 	padding-bottom:	0.4em;
 }
 
-#save .apply 
-{	
+#save .apply
+{
 	width: 100%;
 	height: 5em;
 	float: right;
 }
 
-#save .apply div 
+#save .apply div
 {
 	float: right;
 	width: 15em;
@@ -240,7 +240,7 @@ th {
 
 .helpform
 {
-	position: absolute; 	
+	position: absolute;
 	float: right;
  	padding-left: 1em;
  	padding-right: 0.5em;
@@ -250,7 +250,7 @@ th {
 
 #content .settings-block .settings .settings-help .more-help,
 #save,
-#short-status 
+#short-status
 {
 	text-align: right;
 }
@@ -259,7 +259,7 @@ th {
 {
 	font-weight: bold;
  	font-size: 0.9em;
-	 	
+
 }
 
 .helptext
@@ -268,39 +268,39 @@ th {
  	padding-bottom: 1em;
 }
 
-.kb 
+.kb
 {
-	display: inline;	
-	font-size: 0.8em;	
+	display: inline;
+	font-size: 0.8em;
 }
 
 .mount-target
 {
-	display: inline;	
-	font-size: 0.8em;	
+	display: inline;
+	font-size: 0.8em;
 	padding-left: 1em;
 	font-weight: normal;
-	
+
 }
 
 .warning
 {
-	display: inline;		
+	display: inline;
 }
 
-.swatch 
+.swatch
 {
-  display: block;
-  float: right;
-  width: 10px;
-  height: 10px;
-  margin: 0.5em;
-  border: 2px solid #000;
-  cursor: pointer;
+  	display: block;
+  	float: right;
+  	width: 10px;
+  	height: 10px;
+  	margin: 0.5em;
+  	border: 2px solid #000;
+  	cursor: pointer;
 }
 
 /* font */
-body 
+body
 {
 	font-family: Verdana, Helvetica, sans-serif;
 	font-size: 1.0em;
@@ -309,46 +309,46 @@ body
 dt,
 .selected-maincat,
 #mainmenu a:active,
-#submenu a 
+#submenu a
 {
 	font-weight: bold;
 }
 
-.openwrt-title h1 
+.openwrt-title h1
 {
 	font-size: 1.4em;
 }
 
-#short-status ul 
+#short-status ul
 {
-	font-size: 0.6em;	
+	font-size: 0.6em;
 }
 
 #mainmenu h3,
 #mainmenu li,
-#short-status h3 
+#short-status h3
 {
 	font-size: 0.9em;
 }
 
 #mainmenu a,
 #submenu a,
-#save a 
+#save a
 {
 	text-decoration: none;
 }
 
-#save a:hover 
+#save a:hover
 {
 	text-decoration: underline;
 }
 
-#mainmenu h3 
+#mainmenu h3
 {
 	text-transform: uppercase;
 }
 
-#save a 
+#save a
 {
 	font-weight: normal;
 	font-size: 1.1em;
@@ -368,7 +368,7 @@ dt,
 {
 	font-weight: bold;
 	font-size: 1.0em;
-}	
+}
 
 .webif-name-subtitle
 {
@@ -378,7 +378,7 @@ dt,
 .webif-name-version
 {
 	font-size: 0.8em;
-}		
+}
 
 .webif-contributors
 {
@@ -393,7 +393,7 @@ dt,
 
 #update-unavailable
 {
-	font-size: 0.9em;	
+	font-size: 0.9em;
 	font-style: italic;
 }
 
@@ -406,7 +406,7 @@ dt,
 .mac-address
 {
 	font-size: 0.7em;
-	display: inline;	
+	display: inline;
 }
 
 .progressbar-title
@@ -415,7 +415,7 @@ dt,
 }
 
 .progressbar-whole
-{	
+{
 	border: dotted gray;
 }
 
@@ -437,4 +437,9 @@ dt,
 .tip
 {
 	font-style: italic;
+}
+
+.repositories
+{
+	font-size: 0.1em;
 }
