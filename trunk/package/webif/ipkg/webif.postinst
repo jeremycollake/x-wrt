@@ -8,15 +8,13 @@
 #
 TestInstall()
 {
-	echo "************************************************************** "
 	this_version="__SVN_REVISION__"
 	installed_version=$(cat /www/.version)
 	if [ -f "/www/.version" ] && [ "$this_version" = "$installed_version" ]; then
-		echo " Webif^2 installation appears OK."
+		echo "Webif^2 installation appears OK."
 	else
-		echo " WARNING: Installation may have failed."		
+		echo "WARNING: Installation may have failed."		
 	fi
-	echo "************************************************************** "
 }
 
 #######################################################################################
@@ -46,37 +44,30 @@ cat /proc/version | grep -q OpenWrt
 if [ "$?" = "0" ]; then
 	echo "Executing post-install script ..."
 	cd /				# change out of cwd, since it got deleted out from under us
-	#
+
 	# fix the ipkg.list on squashfs images
-	#  (we might as well fix it, tho its not really our job)
-	#
+	#  (we might as well fix it, tho its not really our job)	
 	FixReadOnlyLink "/usr/lib/ipkg/info/webif.list"
 
-	#
 	# initialize /etc/init.d/S95webif-custom if it doesn't already exist
-	# (mv will fail if it already exists)
-	#
+	# (mv will fail if it already exists)	
 	mv "/etc/init.d/S95webif-custom-default" "/etc/init.d/S95webif-custom" >> /dev/null 2>&1
 
 	nvram unset device_name 	# force rescan of device_name, in case new id code is added
 	[ -f "/etc/init.d/S11firmwareinfo" ] && {
-		/etc/init.d/S11firmwareinfo &	# set webif default firmware information
+		/etc/init.d/S11firmwareinfo 	# set webif default firmware information
 	}
 	[ -f "/etc/init.d/S12firmwareinfo" ] && {
-		/etc/init.d/S12firmwareinfo &	# set over-ridden firmware information
+		/etc/init.d/S12firmwareinfo 	# set over-ridden firmware information
 	}
-	echo '#!/bin/sh
-	echo "Restarting webif ..."			
-	killall wifi  >> /dev/null 2>&1  		# survey page relaunches this, sometimes httpd gets 'hung' on it
-	killall haserl  >> /dev/null 2>&1 
-	killall webif-page  >> /dev/null 2>&1	
-	killall httpd >> /dev/null 2>&1
-	sleep 10
+
+	TestInstall
+	echo "Restarting webif ..."
+	exec 2>/dev/null >/dev/null </dev/null	
+	killall wifi 
+	killall haserl 
+	killall webif-page
+	killall httpd 
 	/etc/init.d/S40network
 	/etc/init.d/S50httpd
-	rm "$0"
-	' > /tmp/launch-httpd.sh
-	chmod +x /tmp/launch-httpd.sh
-	/tmp/launch-httpd.sh &
-	TestInstall
 fi
