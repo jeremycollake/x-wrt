@@ -58,7 +58,8 @@ html, body
 
 #mainmenu a:hover 
 {
-	color: rgb(193,102,90);
+	background-color: #759b7b;
+	color: #FFF;
 }
 
 #submenu,
@@ -74,7 +75,8 @@ html, body
 
 #submenu a:hover 
 {
-	color: #FB0;
+	background-color: #759b7b;
+	color: #FFF;
 }
 
 #short-status 
