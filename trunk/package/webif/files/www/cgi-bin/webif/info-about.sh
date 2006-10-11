@@ -40,15 +40,14 @@ if [ -n "$FORM_update_check" ]; then
 fi
 
 if [ -n "$FORM_install_webif" ]; then	  
-	echo "Please wait, installation may take a couple minutes ... Your router will reboot afterwards.<br />"
+	echo "Please wait, installation may take a couple minutes ... <br />"
 	echo "<pre>"
-	ipkg install http://ftp.berlios.de/pub/xwrt/webif_latest.ipk && reboot
+	echo '#!/bin/sh
+	ipkg install http://ftp.berlios.de/pub/xwrt/webif_latest.ipk
+	' > /tmp/installwebif.sh
+	chmod +x /tmp/installwebif.sh
+	/tmp/installwebif.sh &
 	echo "</pre>" 	
-	echo '<script type="text/javascript" src="/webif.js"></script>
-		<script type="text/javascript">
-		<!--
-		window.location.reload(true);
-		-->'
 fi
 ?>
 
