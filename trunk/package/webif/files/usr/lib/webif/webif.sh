@@ -86,16 +86,16 @@ header() {
 	# color switcher
 	# 	
 	swatch_script="<script type=\"text/javascript\"> swatch() </script>"
-	colorize_script="<script type=\"text/javascript\" src="/colorize.js"></script>
+	colorize_script="<script type=\"text/javascript\" src=\"/colorize.js\"></script>
 		<script type=\"text/javascript\"> colorize(); </script>"		
 	
 	cat <<EOF
 Content-Type: text/html
 Pragma: no-cache
 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <?xml version="1.0" encoding="@TR<<Encoding|ISO-8859-1>>"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 	<head>
     	<title>@TR<< $_firmware_name Administrative Console>></title>
 		<link rel="stylesheet" type="text/css" href="/webif.css" />		
@@ -125,8 +125,8 @@ Pragma: no-cache
 				</div>		
 		</div>
 	
-		<div id=categories>$_categories</div>
-		<div id=subcategories>$_subcategories</div>
+		<div id="categories">$_categories</div>
+		<div id="subcategories">$_subcategories</div>
 		$_form
 		<div>
 			<div class="swatch" style="background: #2b6d21"></div>
