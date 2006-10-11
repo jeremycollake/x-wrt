@@ -25,7 +25,7 @@ echo '<form method="POST" action="'"$myself"'">'
 
 cancel="<a href=\"$myself\" style=\"border: 1px solid; background-color: grey; padding: 0.4ex 1em; margin: 0; color: black;\">Cancel</a>"
 if [ "$FORM_action" = 'Delete' ]; then
-	echo '<h3>@TR<<Delete NVRam Setting>></h3>'
+	echo '<h3>@TR<<Delete NVRAM Setting>></h3>'
 	echo '<p style="margin-top: 1em; margin-bottom: 1em;">'
 	if [ "$FORM_confirm" = 'yes' ]; then
 		if $live; then
@@ -51,9 +51,9 @@ if [ "$FORM_action" = 'Delete' ]; then
 elif [ "$FORM_action" = 'Change' ] || [ "$FORM_action" = 'Add' ]; then
 	value=$(nvram get "$FORM_var")
 	if [ "$value" = '' ]; then
-		echo '<h3>@TR<<Add New NVRam Setting>></h3>'
+		echo '<h3>@TR<<Add New NVRAM Setting>></h3>'
 	else
-		echo '<h3>@TR<<Change NVRam Setting>></h3>'
+		echo '<h3>@TR<<Change NVRAM Setting>></h3>'
 	fi
 	if [ "$FORM_newvalue" = '' ]; then
 		echo "<div>Set <strong>$FORM_var</strong> to:<br />"
