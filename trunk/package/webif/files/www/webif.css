@@ -63,7 +63,7 @@ option
 {
 	position: relative;
 	width: 100%;
-	height: 6em;
+	height: 6.2em;
 	padding-top: 0.5em;
 	padding-bottom: 0.5em;
 }
@@ -382,7 +382,7 @@ dt,
 
 .webif-contributors
 {
-	font-size: 0.9em;
+	font-size: 0.7em;
 }
 
 #update-available
