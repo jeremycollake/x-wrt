@@ -4,8 +4,7 @@
 header "Status" "Status" "@TR<<Device Status>>" 
 ?>
 
-<meta http-equiv="refresh" content="20">
-
+<meta http-equiv="refresh" content="20" />
 <?
 MEMINFO=$(free | sed 1,3d)
 nI="0"
@@ -47,7 +46,7 @@ df | awk 'BEGIN { mcount=0 };
 
 display_form <<EOF
 start_form|Load Average
-string|<tr><td><font size=+1 color="red">$_loadavg</font><tr><td>
+string|<tr><td><font size="+1" color="red">$_loadavg</font><tr><td>
 helpitem|Load Average
 helptext|Helptext Load Average#The load average represents the average number of active processes during the past 1, 5, and 15 minutes
 end_form|
