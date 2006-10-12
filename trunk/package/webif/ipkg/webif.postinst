@@ -88,13 +88,13 @@ if [ "$?" = "0" ]; then
 	FixReadOnlyLink "/etc/ipkg.conf"
 
 	AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/packages"
-	[ $(nvram get $firmware_version) = "RC5" ] && {
+	firmware_version-$(nvram get $firmware_version)
+	if [ "$firmware_version" = "RC5" ]; then
 		AddRepository "rc5-backports" "http://downloads.openwrt.org/backports/rc5"
-	}
-	[ $(nvram get $firmware_version) = "RC6" ] && {
+	elif [ "$firmware_version" = "RC6" ]; then
 		DeleteRepository "http://downloads.openwrt.org/backports/rc5"
 		AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"
-	}
+	fi
 	[ $IPKG_UPDATE_NEEDED = 1 ] && {
 		ipkg update
 	}
