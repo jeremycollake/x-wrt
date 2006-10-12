@@ -88,7 +88,7 @@ if [ "$?" = "0" ]; then
 	FixReadOnlyLink "/etc/ipkg.conf"
 
 	AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/packages"
-	firmware_version-$(nvram get $firmware_version)
+	firmware_version=$(nvram get $firmware_version)
 	if [ "$firmware_version" = "RC5" ]; then
 		AddRepository "rc5-backports" "http://downloads.openwrt.org/backports/rc5"
 	elif [ "$firmware_version" = "RC6" ]; then
