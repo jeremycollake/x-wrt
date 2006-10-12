@@ -43,7 +43,7 @@
 #mainmenu
 {
 	color: #C3C4D2;
-	background-color: #213242; /* blue */
+	background-color: #213242;
 }
 
 #mainmenu a
@@ -59,13 +59,13 @@
 #submenu,
 #save div
 {
-	background-color: #7590AE; /* blue */
+	background-color: #213242;
 }
 
 #content .settings-block .settings-block-title h2
 {
 	color: #000;
-	color: #7590AE;  /* blue */
+	color: #7590AE;
 }
 
 #submenu a:hover
