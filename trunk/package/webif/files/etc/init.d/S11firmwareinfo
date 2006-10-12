@@ -18,7 +18,7 @@ if [ -z $(nvram get device_name) ]; then
 	#
 	# WRT54G v2 - v5 CFE 
 	#
-	cat /dev/mtd/0 | strings | grep W54G > /dev/null 2>&1
+	dd bs=1024 skip=196 if=/dev/mtd/0 | strings | grep -q W54G >> /dev/null 2>&1
 	if [ $? = 0 ]; then
 		nvram set "device_name=Linksys WRT54G"
 		exit 0
