@@ -24,6 +24,7 @@ header "System" "Custom Startup" "@TR<<Custom Startup>>" '' "$SCRIPT_NAME"
 # defaults
 custom_script_name="/etc/init.d/S95custom-user-startup"
 tmp_script_name="/tmp/.webif/file-S95custom-user-startup"
+startup_script_template="/etc/init.d/x95custom-user-startup"
 
 ! empty "$FORM_submit" &&
 {
@@ -56,14 +57,10 @@ tmp_script_name="/tmp/.webif/file-S95custom-user-startup"
 if exists "$tmp_script_name"; then
 	cat "$tmp_script_name"
 elif exists "$custom_script_name"; then
-        cat "$custom_script_name"
-else	
-	# note: the custom startup script should always exist unless
-	# it got deleted by the user after postinst.
-        echo "#!bin/sh" > "$custom_script_name" # script intepreptor
-	echo >> "$custom_script_name"		# newline at end
-        chmod 755 "$custom_script_name"
-        cat "$custom_script_name"
+	cat "$custom_script_name" 
+else
+	cp "$startup_script_template" "$custom_script_name" 
+	cat "$custom_script_name"
 fi
 ?>
 </textarea>
