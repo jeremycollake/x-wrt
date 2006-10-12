@@ -1,4 +1,4 @@
- /* color theme: brown */
+ /* color theme: white */
 
 html, body 
 {		
@@ -7,7 +7,7 @@ html, body
 
 #header
 {
-	background-color: #CCC;
+	//background-color: #CCC;
 }
 
 #update-available
@@ -78,7 +78,7 @@ html, body
 
 #short-status 
 {
-	background-color: #CCC;
+	//background-color: #CCC;
 }
 
 #content .settings-block
