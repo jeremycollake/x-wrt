@@ -56,7 +56,7 @@ swatch()
 
 <div class="webif-name-title"><a href="http://www.bitsum.com/xwrt.asp">X-Wrt</a> Extensions - webif<sup>2</sup></div>
 <div class="webif-name-subtitle"></div>
-<div class="webif-name-version">Milestone 1 rc1 - r<? echo "$this_revision" ?> </div><br />
+<div class="webif-name-version">Milestone 1 rc2 - r<? echo "$this_revision" ?> </div><br />
 <form action="" enctype="multipart/form-data" method="post">
 <input type="submit" value=" Check For Webif^2 Update " name="update_check" />
 <input type="submit" value=" Install/Reinstall Webif^2  " name="install_webif" />
@@ -64,18 +64,21 @@ swatch()
 <? echo $revision_text ?>
 <table class="webif-contributors"><tbody>
 <tr><td><br /></td></tr>  
-<tr><th>X-Wrt Webif<sup>2</sup> Contributors (sorted by name):</th></tr>
+<tr><th>X-Wrt Webif<sup>2</sup> Contributors:</th></tr>
 <tr><td>
 &nbsp;&nbsp; <a href="mailto:jeremy.collake@gmail.com">Jeremy Collake</a>
 </td></tr>			
 <tr><td>
 &nbsp;&nbsp; <a href="mailto:kemen04@gmail.com">Travis Kemen</a>
 </td></tr>		
+<tr><td>
+&nbsp;&nbsp; Special thanks to Spectra, Felix Fietkau, beta testers, and others.
+</td></tr>		
 
 <tr><td><br /></td></tr>  
-<tr><th>Other Webif Contributors (sorted by name):</th></tr>
+<tr><th>Webif Contributors:</th></tr>
 <tr><td>
-&nbsp;&nbsp; <a href="mailto:openwrt@nbd.name">Felix Fietkau</a>
+&nbsp;&nbsp; <a href="mailto:openwrt@nbd.name">Felix Fietkau</a> (nbd)
 </td></tr>
 <tr><td>
 &nbsp;&nbsp; <a href="mailto:markus@freewrt.org">Markus Wigge</a>			
@@ -101,6 +104,9 @@ swatch()
 &nbsp;&nbsp; <b><i>Countless</i></b> contributors from the community.
 </td></tr>  
 <tr><td><br /></td></tr> 
+<tr><td>
+CPU and Traffic graphs based on code from <a href="http://m0n0.ch/wall/">m0n0wall</a>.
+</td></tr>  
 <tr><td>
 Layout was originally based on <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran
 </td></tr>
