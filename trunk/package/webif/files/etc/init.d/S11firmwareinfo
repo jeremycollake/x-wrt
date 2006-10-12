@@ -24,6 +24,7 @@ if [ -z "$device_name" ]; then
 	[ $? = 0 ] && {
 		nvram set "device_name=Linksys WRT54G"	
 	}
+	device_name=$(nvram get device_name)
 	[ -z "$device_name" ] && {
 		nvram set "device_name=unidentified"
 	}
