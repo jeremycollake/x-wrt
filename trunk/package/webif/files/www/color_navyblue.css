@@ -42,7 +42,7 @@ html, body
 #header-title,
 #save .apply div 
 {		
-	background-color: #3D5C7A; /* blue */
+	background-color: #192a65;	
 }
 
 #mainmenu 
@@ -64,14 +64,12 @@ html, body
 #submenu,
 #save div 
 {
-	/* background-color: #978568; /* brown */
 	background-color: #7590AE; /* blue */
 }
 
 #content .settings-block .settings-block-title h2 
 {	
 	color: #000;
-	/* color: #978568; */ /* brown */
 	color: #7590AE;  /* blue */
 }
 
@@ -95,7 +93,6 @@ html, body
 #content .settings-title 
 {
 	color: #FFF;	
-	/* background-color: #b8b1a2; /* brown */
 	background-color: #CCC; /* gray */
 }
 
