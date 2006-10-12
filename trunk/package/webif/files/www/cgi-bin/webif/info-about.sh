@@ -54,7 +54,7 @@ swatch()
 -->
 </script>
 
-<div class="webif-name-title"><a href="http://www.bitsum.com/xwrt.asp">X-Wrt</a> Extensions - webif<sup>2</sup></div>
+<div class="webif-name-title"><a href="http://www.bitsum.com/xwrt.asp">X-Wrt Extensions</a> - webif<sup>2</sup></div>
 <div class="webif-name-subtitle"></div>
 <div class="webif-name-version">Milestone 1 rc2 - r<? echo "$this_revision" ?> </div><br />
 <form action="" enctype="multipart/form-data" method="post">
@@ -95,7 +95,7 @@ swatch()
 <tr><td><br /></td></tr>
 <tr><th>OpenWrt Contributors:</th></tr>
 <tr><td>	
-&nbsp;&nbsp; florian, kaloz, malbon, mbm, Olli, <a href="mailto:openwrt@nbd.name">Felix Fietkau</a> (nbd), wbx
+&nbsp;&nbsp; <a href="mailto:openwrt@nbd.name">Felix Fietkau</a> (nbd), florian, groz, kaloz, malbon, mbm, Olli, wbx
 </td></tr>  
 <tr><td>
 &nbsp;&nbsp; Companies/Projects: linux, Broadcom, Linksys, Squashfs, JFFS2, MTD, etc...
@@ -108,7 +108,10 @@ swatch()
 CPU and Traffic graphs based on code from <a href="http://m0n0.ch/wall/">m0n0wall</a>.
 </td></tr>  
 <tr><td>
-Layout was originally based on <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran
+Layout was originally based on <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran.
+</td></tr>
+<tr><td>
+This device is running <a href="http://www.openwrt.org">OpenWrt</a> or a close derivative.
 </td></tr>
 <tr><td><br /></td></tr>
 <tr><td>
