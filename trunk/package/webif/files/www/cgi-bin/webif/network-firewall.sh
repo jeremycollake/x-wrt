@@ -323,6 +323,9 @@ END {
 	print sel_option("drop", "Drop")
 	print "</select>" button("new", "Add") "</form></td></tr>"
 	print "</table>"
+	print "<br /><br />"
+	print "<div class=\\"helpitem\\">@TR<<Firewall>>:</div>"
+	print "<div class=\\"helptext\\">Here you can forward ports and more. If you wish to manually configure these instead, use '/etc/config/firewall', not '/etc/firewall.user'. Although either works, only the former is used by this page.</div>"	
 	print end_form(" ");
 }
 EOF
