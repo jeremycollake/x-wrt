@@ -44,6 +44,7 @@ if [ -n "$FORM_install_webif" ]; then
 	echo "<pre>"
 	ipkg install http://ftp.berlios.de/pub/xwrt/webif_latest.ipk	
 	echo "</pre>" 	
+	this_revision=$(cat "/www/.version")
 fi
 ?>
 
