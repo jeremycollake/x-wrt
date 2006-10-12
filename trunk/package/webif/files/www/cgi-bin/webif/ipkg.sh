@@ -73,14 +73,14 @@ field|&nbsp;
 submit|install_repo| Add Repository 
 helpitem|Add Repository
 helptext|Add Repository#A repository is a server that contains a list of packages that can be installed on your OpenWrt device. Adding a new one allows you to list packages here that are not shown by default.
-string|<tr><td colspan="2" class="repositories"><h4>@TR<<Current Repositories>>:</h4></td><td>
+string|<tr><td colspan="2" class="repositories"><h4>@TR<<Current Repositories>>:</h4></td></tr>
 $repo_list
 helpitem|Backports Tip
 helptext|HelpText Backports Tip#For a much larger assortment of packages, see if there is a backports repository available for your firmware (there is one for White Russian RC5). Such a repository brings
 an offering of packages from the latest bleeding edge branch of the firmware.
 end_form
 start_form|@TR<<Install Package From URL>>
-field|URL of Package
+field|@TR<<URL of Package>>
 text|pkgurl|$FORM_pkgurl
 field| 
 submit|install_url|Install Package From URL |
