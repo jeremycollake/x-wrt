@@ -21,12 +21,13 @@ if [ -z "$device_name" ]; then
 	# WRT54G v2 - v5 CFE 
 	#
 	dd bs=1024 skip=196 if=/dev/mtd/0 2>/dev/null | strings | grep -q W54G
-	if [ $? = 0 ]; then
-		nvram set "device_name=Linksys WRT54G"
-		echo "Identified $device_name"
-		exit 0
-	fi
-	nvram set "device_name=unidentified"
+	[ $? = 0 ] && {
+		nvram set "device_name=Linksys WRT54G"	
+	}
+	[ -z "$device_name" ] && {
+		nvram set "device_name=unidentified"
+	}
+	echo "Device: $device_name"
 fi
 
 
