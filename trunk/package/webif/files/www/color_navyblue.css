@@ -86,9 +86,8 @@
 }
 
 #content .settings-title
-{
-	color: #FFF;
-	background-color: #CCC; /* gray */
+{	
+	background-color: #CCC;
 }
 
 #content .settings
