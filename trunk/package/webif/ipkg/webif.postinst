@@ -26,11 +26,32 @@ TestInstall()
 #
 FixReadOnlyLink()
 {
-	local tmpfile=$(mktemp "/tmp/.webif-inst-XXXXXX")
-	cp "$1" "$tmpfile" >> /dev/null 2>&1
-	rm "$1"  >> /dev/null 2>&1
-	mv "$tmpfile" "$1"  >> /dev/null 2>&1
+	touch "$1" >> /dev/null 2>&1	# test if read-only
+	[ "$?" != 0 ] && {
+		local tmpfile=$(mktemp "/tmp/.webif-inst-XXXXXX")
+		cp "$1" "$tmpfile" >> /dev/null 2>&1
+		rm "$1"  >> /dev/null 2>&1
+		mv "$tmpfile" "$1"  >> /dev/null 2>&1
+	}
 }
+
+#######################################################################################
+# AddRepository
+# 
+# Add a repository source if it doesn't already exist.
+#
+IPKG_UPDATE_NEEDED=0
+AddRepository()
+{
+	# $1=reponame
+	# $2=repourl
+	cat /etc/ipkg.conf | grep -q "$2"
+	[ "$?" != "0" ] && {
+		echo "src $1 $2" >> "/etc/ipkg.conf"
+		IPKG_UPDATE_NEEDED=1
+	}
+}
+
 
 
 #######################################################################################
@@ -45,9 +66,15 @@ if [ "$?" = "0" ]; then
 	echo "Executing post-install script ..."
 	cd /				# change out of cwd, since it got deleted out from under us
 
-	# fix the ipkg.list on squashfs images
-	#  (we might as well fix it, tho its not really our job)	
+	# fix some links on squashfs partition that aren't properly copied instead by firstboot
 	FixReadOnlyLink "/usr/lib/ipkg/info/webif.list"
+	FixReadOnlyLink "/etc/ipkg.conf"
+
+	AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/packages"
+	AddRepository "rc5-backports" "http://downloads.openwrt.org/backports/rc5"
+	[ $IPKG_UPDATE_NEEDED = 1 ] && {
+		ipkg update
+	}
 
 	nvram unset device_name 	# force rescan of device_name, in case new id code is added
 	[ -f "/etc/init.d/S11firmwareinfo" ] && {
