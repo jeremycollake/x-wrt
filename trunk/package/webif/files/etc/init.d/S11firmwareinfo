@@ -2,7 +2,8 @@
 
 # we'll se these only if they aren't already, so that
 # they can be pre-empted
-if [ -z $(nvram get firmware_name) ]; then
+firmware_name=$(nvram get firmware_name)
+if [ -z "$firmware_name" ]; then
 	nvram set firmware_name="OpenWrt White Russian"
 	nvram set firmware_subtitle="With X-Wrt Extensions"
 	nvram set firmware_version="RC5"
@@ -14,16 +15,17 @@ fi
 #
 # todo: add more devices
 #
-if [ -z $(nvram get device_name) ]; then
+device_name=$(nvram get device_name)
+if [ -z "$device_name" ]; then
 	#
 	# WRT54G v2 - v5 CFE 
 	#
-	dd bs=1024 skip=196 if=/dev/mtd/0 | strings | grep -q W54G >> /dev/null 2>&1
+	dd bs=1024 skip=196 if=/dev/mtd/0 2>/dev/null | strings | grep -q W54G
 	if [ $? = 0 ]; then
 		nvram set "device_name=Linksys WRT54G"
+		echo "Identified $device_name"
 		exit 0
 	fi
-
 	nvram set "device_name=unidentified"
 fi
 
