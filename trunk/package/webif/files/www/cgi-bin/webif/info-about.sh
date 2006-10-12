@@ -72,7 +72,7 @@ swatch()
 &nbsp;&nbsp; <a href="mailto:kemen04@gmail.com">Travis Kemen</a>
 </td></tr>		
 <tr><td>
-&nbsp;&nbsp; Special thanks to Spectra, Strontian, Felix Fietkau, beta testers, and others.
+&nbsp;&nbsp; Thanks to Spectra, Strontian, Sven-Ola, Felix Fietkau, beta testers, and many others.
 </td></tr>		
 
 <tr><td><br /></td></tr>  
