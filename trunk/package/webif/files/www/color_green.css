@@ -1,18 +1,13 @@
  /* color green */
 
-html, body 
-{		
-	
-}
-
 #header
 {
 	background-color: #2b6d21;
 }
 
 #update-available
-{	
-	color: #FF0000;	
+{
+	color: #FF0000;
 }
 
 #update-unavailable
@@ -25,7 +20,7 @@ html, body
 	color: #FF0000;
 }
 
-.openwrt-title 
+.openwrt-title
 {
 	color: #555;
 }
@@ -40,18 +35,18 @@ html, body
 }
 
 #header-title,
-#save .apply div 
-{	
+#save .apply div
+{
 	background-color: #2b6d21;
 }
 
-#mainmenu 
+#mainmenu
 {
 	color: #C3C4D2;
 	background-color: #22491c;
 }
 
-#mainmenu a 
+#mainmenu a
 {
 	color: #C3C4D2;
 }
@@ -64,23 +59,23 @@ html, body
 }
 
 #submenu,
-#save div 
+#save div
 {
-	background-color: #275820;	
+	background-color: #275820;
 }
 
-#content .settings-block .settings-block-title h2 
-{	
+#content .settings-block .settings-block-title h2
+{
 	color: #000;
 }
 
-#submenu a:hover 
+#submenu a:hover
 {
 	background-color: #759b7b;
 	color: #FFF;
 }
 
-#short-status 
+#short-status
 {
 	color: #FFF;
 	background-color: #2b6d21;
@@ -88,22 +83,22 @@ html, body
 
 #content .settings-block
 {
-	color: #000;	
+	color: #000;
 	background-color: #FFF;
 }
 
-#content .settings-title 
+#content .settings-title
 {
-	color: #000;		
+	color: #000;
 	background-color: #CCC;
 }
 
-#content .settings 
+#content .settings
 {
-	color: #000;	
+	color: #000;
 }
 
-#save .page-save 
+#save .page-save
 {
 	background-color: #FFF;
 }
@@ -114,8 +109,8 @@ html, body
 }
 
 .progressbar-whole
-{	
-	
+{
+
 }
 
 .progressbar-filled
@@ -130,14 +125,14 @@ html, body
 	background-color: #000;
 }
 
-.kb 
+.kb
 {
-	color: #222;	
+	color: #222;
 }
 
 .mount-target
 {
-	color: #222;	
+	color: #222;
 }
 
 .warning

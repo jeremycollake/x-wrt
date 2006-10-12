@@ -1,18 +1,13 @@
  /* color theme: brown */
 
-html, body 
-{		
-	
-}
-
 #header
 {
 	background-color: #e8ca9e;
 }
 
 #update-available
-{	
-	color: #FF0000;	
+{
+	color: #FF0000;
 }
 
 #update-unavailable
@@ -25,7 +20,7 @@ html, body
 	color: #FF0000;
 }
 
-.openwrt-title 
+.openwrt-title
 {
 	color: #555;
 }
@@ -40,49 +35,47 @@ html, body
 }
 
 #header-title,
-#save .apply div 
-{	
+#save .apply div
+{
 	background-color: #4d3f2a;
 	/*background-color: #3D5C7A; */ /* blue */
 }
 
-#mainmenu 
+#mainmenu
 {
 	color: #C3C4D2;
 	/*background-color: #213242;*/ /* blue */
 	background-color: #4d3f2a;
 }
 
-#mainmenu a 
+#mainmenu a
 {
 	color: #C3C4D2;
 }
 
-#mainmenu a:hover 
+#mainmenu a:hover
 {
 	color: rgb(193,102,90);
 }
 
 #submenu,
-#save div 
+#save div
 {
 	background-color: #978568;
 	/* background-color: #7590AE; */ /* blue */
 }
 
-#content .settings-block .settings-block-title h2 
-{	
+#content .settings-block .settings-block-title h2
+{
 	color: #000;
-	/* color: #978568; */ /* brown */
-	/* color: #7590AE; */ /* blue */
 }
 
-#submenu a:hover 
+#submenu a:hover
 {
 	color: #FB0;
 }
 
-#short-status 
+#short-status
 {
 	color: #555;
 	background-color: #e8ca9e
@@ -90,23 +83,22 @@ html, body
 
 #content .settings-block
 {
-	color: #000;	
+	color: #000;
 	background-color: #FFF;
 }
 
-#content .settings-title 
+#content .settings-title
 {
-	color: #000;	
+	color: #000;
 	background-color: #b8b1a2; /* brown */
-	/* background-color: #CCC; */ /* gray */
 }
 
-#content .settings 
+#content .settings
 {
-	color: #000;	
+	color: #000;
 }
 
-#save .page-save 
+#save .page-save
 {
 	background-color: #FFF;
 }
@@ -117,8 +109,8 @@ html, body
 }
 
 .progressbar-whole
-{	
-	
+{
+
 }
 
 .progressbar-filled
@@ -133,14 +125,14 @@ html, body
 	background-color: #000;
 }
 
-.kb 
+.kb
 {
-	color: #222;	
+	color: #222;
 }
 
 .mount-target
 {
-	color: #222;	
+	color: #222;
 }
 
 .warning
