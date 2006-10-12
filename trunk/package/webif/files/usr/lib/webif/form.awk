@@ -132,7 +132,7 @@ $1 ~ /^text$/ {
 		cols = "<tr><td colspan=\"" $5 "\""
 		cols_end= "</td></tr>"	
 	}
-	print cols "<input id=\"" $2 "\" type=\"text\" name=\"" $2 "\" value=\"" $3 "\" />" $4 "</td>"
+	print cols "<input id=\"" $2 "\" type=\"text\" name=\"" $2 "\" value=\"" $3 "\" />" $4 cols_end
 }
 $1 ~ /^password/ { print "<input id=\"" $2 "\" type=\"password\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
 $1 ~ /^upload/ { print "<input id=\"" $2 "\" type=\"file\" name=\"" $2 "\"/>" }
