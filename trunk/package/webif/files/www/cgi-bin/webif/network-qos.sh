@@ -7,7 +7,7 @@ header "Network" "QoS" "@TR<<QOS Configuration>>" ' onLoad="modechange()" ' "$SC
 
 if ! empty "$FORM_install_rudy"; then	
 	echo "Installing Rudy's QoS scripts (HSFC) ...<pre>"	
-	! install_package "qos-re" && {
+	! install_package "qos-re-hfsc" && {
 		install_package "http://ftp.berlios.de/pub/xwrt/packages/qos-re-hfsc_1.02_all.ipk"	
 	}
 	echo "</pre>"
