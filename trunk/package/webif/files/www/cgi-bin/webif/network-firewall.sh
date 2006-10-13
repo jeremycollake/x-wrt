@@ -332,5 +332,5 @@ EOF
 
 footer ?>
 <!--
-##WEBIF:name:Network:275:Firewall
+##WEBIF:name:Network:415:Firewall
 -->
