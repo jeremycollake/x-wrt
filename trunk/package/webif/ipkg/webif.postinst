@@ -110,6 +110,7 @@ if [ "$?" = "0" ]; then
 	TestInstall
 	httpd_1=$(cat /tmp/httpd.conf.old)
 	httpd_2=$(cat /etc/httpd.conf)	
+	rm -f /tmp/httpd.conf.old
 	if [ "$httpd_1" != "$httpd_2" ]; then
 		echo "Restarting httpd ... A reboot may be needed to ensure proper functionality."
 		# close std handles
