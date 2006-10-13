@@ -99,7 +99,7 @@ if [ "$?" = "0" ]; then
 		ipkg update
 	}
 
-	nvram unset device_name 	# force rescan of device_name, in case new id code is added
+	#nvram unset device_name 	# force rescan of device_name, in case new id code is added
 	[ -f "/etc/init.d/S11firmwareinfo" ] && {
 		/etc/init.d/S11firmwareinfo 	# set webif default firmware information
 	}
