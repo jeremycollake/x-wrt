@@ -34,28 +34,9 @@ fi
 _version=$(nvram get firmware_version)
 _kversion="$( uname -srv )"
 _mac="$(/sbin/ifconfig eth0 | grep HWaddr | cut -b39-)"
-#
-# board id checks go here.. todo: much work remains here
-#
-# loop is just used to avoid a jump
-while empty $device_type; do	
-	strings /dev/mtdblock/0 | grep 'W54G' 2>&1 >> /dev/null
-	if [ $? = "0" ]; then
- 		device_type="WRT54G"
- 		device_version="v??"
- 		break
-	fi
-	strings /dev/mtdblock/0 | grep 'WL500gp' 2>&1 >> /dev/null
-	if [ $? = "0" ]; then
- 		device_type="Asus WL-500g Premium"
- 		device_version=""
- 		break
-	fi
-	break
-done
-empty $device_type && device_type="-id code not done for this board-";
 board_type=$(cat /proc/cpuinfo | sed 2,20d | cut -c16-)
-device_string=$(echo $device_type && ! empty $device_version && echo $device_version)
+device_name=$(nvram get device_name)
+device_string=$(echo $device_name && ! empty $device_version && echo $device_version)
 user_string=$REMOTE_USER
 equal $user_string "" && user_string="not logged in"
 
