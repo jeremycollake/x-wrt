@@ -14,8 +14,7 @@ if ! empty "$FORM_install_rudy"; then
 fi
 
 if ! empty "$FORM_install_nbd"; then	
-	echo "Installing Nbd's QoS scripts ...<pre>"	
-	# assume X-Wrt repository available
+	echo "Installing Nbd's QoS scripts ...<pre>"		
 	! install_package "qos-scripts" && {
 		install_package "http://ftp.berlios.de/pub/xwrt/packages/qos-scripts_0.9.1-1_mipsel.ipk"
 	}
@@ -27,7 +26,7 @@ if is_package_installed "qos-scripts"; then
 	# nbd's QoS scripts
 	#	
 	echo "nbd's QoS scripts found installed. We haven't written code yet for this."
-	
+. ./qos-nbd.inc
 elif is_package_installed "qos-re"; then
 	#
 	# Rudy's QoS scripts
