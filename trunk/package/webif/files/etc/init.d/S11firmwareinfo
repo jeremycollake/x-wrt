@@ -16,7 +16,7 @@ fi
 # todo: add more devices
 #
 device_name=$(nvram get device_name)
-while empty $device_name; do	
+while -z $device_name; do	
 	dd bs=1024 skip=196 if=/dev/mtd/0 2>/dev/null | strings | grep -q W54G
 	[ $? = "0" ] && {
  		device_name="Linksys WRT54G"
