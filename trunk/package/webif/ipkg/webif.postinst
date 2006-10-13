@@ -108,7 +108,16 @@ if [ "$?" = "0" ]; then
 	}
 
 	TestInstall
-	echo "Restarting webif ..."
-	exec 2>/dev/null >/dev/null </dev/null	
-	killall -HUP httpd 	# reinitialize httpd (for any added mime types to httpd.conf)
+	httpd_1=$(cat /tmp/httpd.conf.old)
+	httpd_2=$(cat /tmp/httpd.conf)	
+	if [ "$httpd_1" != "$httpd_2" ]; then
+		echo "Restarting httpd ... If things aren't working, a reboot may be needed."
+		# close std handles
+		exec 2>/dev/null >/dev/null </dev/null						
+		killall httpd
+		/etc/init.d/S50httpd7
+	else
+		echo "Not restarting httpd, sending SIGUP ..."
+		killall -HUP httpd 	# reinitialize httpd - does not work as we hoped
+	fi
 fi

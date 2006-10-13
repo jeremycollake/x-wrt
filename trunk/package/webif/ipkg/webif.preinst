@@ -19,4 +19,5 @@ if [ $? = 0 ]; then
 	rm -f /etc/init.d/S51crond >> /dev/null 2>&1 
 	rm -f /etc/init.d/S11firmwareinfo >> /dev/null 2>&1
 	rm -f /etc/init.d/S12deprecatedcleanup >> /dev/null 2>&1
+	cp /etc/httpd.conf /tmp/httpd.conf.old        # make a copy for comparing
 fi
