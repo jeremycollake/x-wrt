@@ -45,6 +45,14 @@ option|$ch"
 done
 
 #####################################################################	
+# install NAS if asked
+if ! empty "$FORM_install_nas"; then
+	echo "Installing NAS package ...<pre>"	
+	install_package "nas"	
+	echo "</pre>"	
+fi
+
+#####################################################################	
 # initialize forms
 if empty "$FORM_submit"; then	
 	FORM_gmode=${wl0_gmode:-$(nvram get wl0_gmode)}
@@ -288,7 +296,28 @@ fi
 	fi
 	
 }
-	
+
+
+#####################################################################
+# generate nas package field
+#
+nas_installed="0"
+ipkg list_installed | grep -q nas
+equal "$?" "0" && nas_installed="1"
+
+install_nas_button='field|@TR<<NAS Package>>|install_nas|hidden'
+if ! equal "$nas_installed" "1"; then
+	install_nas_button="$install_nas_button	
+		string|<div class=\"warning\">WPA and WPA2 will not work until you install the NAS package. </div>
+		submit|install_nas| Install NAS Package |"
+else
+	install_nas_button="$install_nas_button	
+		string|NAS package is installed and should be functional."
+fi	
+
+#####################################################################	
+# modechange script
+#
 cat <<EOF
 <script type="text/javascript" src="/webif.js"></script>
 <script type="text/javascript">
@@ -339,8 +368,10 @@ function modechange()
 	v = (isset('encryption','wpa') || isset('encryption','psk'));
 	set_visible('wpa_support', v);
 	set_visible('wpa_crypto', v);
-	
-	set_visible('wpapsk', isset('encryption','psk'));	
+		
+	set_visible('wpapsk', isset('encryption','psk'));
+	v = (isset('encryption','psk') || isset('encryption','wpa'));
+	set_visible('install_nas', v);
 
 	v = isset('encryption','wpa');
 	set_visible('radiuskey', v);
@@ -419,7 +450,7 @@ text|radius_key|$FORM_radius_key
 field|@TR<<Passphrase>>|wep_keyphrase|hidden
 text|wep_passphrase|$FORM_wep_passphrase
 string|<br />
-field|&nbsp;|wep_generate_keys
+field|&nbsp;|wep_generate_keys|hidden
 submit|generate_wep_40|Generate 40bit Keys
 submit|generate_wep_128|Generate 128bit Key
 string|<br />
@@ -435,6 +466,7 @@ text|key3|$FORM_key3|<br />
 field|@TR<<WEP Key 4>>|wep_key_4|hidden
 radio|key|$FORM_key|4
 text|key4|$FORM_key4|<br />
+$install_nas_button
 end_form
 EOF
 
