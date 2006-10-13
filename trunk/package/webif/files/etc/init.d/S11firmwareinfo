@@ -16,20 +16,20 @@ fi
 # todo: add more devices
 #
 device_name=$(nvram get device_name)
-if [ -z "$device_name" ]; then
-	#
-	# WRT54G v2 - v5 CFE 
-	#
+while empty $device_name; do	
 	dd bs=1024 skip=196 if=/dev/mtd/0 2>/dev/null | strings | grep -q W54G
-	[ $? = 0 ] && {
-		nvram set "device_name=Linksys WRT54G"	
+	[ $? = "0" ] && {
+ 		device_name="Linksys WRT54G"
+		nvram commit "$device_name"
+ 		break
 	}
-	device_name=$(nvram get device_name)
-	[ -z "$device_name" ] && {
-		nvram set "device_name=unidentified"
+	dd bs=1024 skip=196 if=/dev/mtd/0 2>/dev/null | strings | grep -q "WL500gp"
+	[ $? = "0" ] && {
+ 		device_name="ASUS WL-500gp"
+		nvram commit "$device_name"
+ 		break
 	}
-	echo "Device: $device_name"
-fi
-
-
+	break
+done
+echo "Device: $device_name"
 
