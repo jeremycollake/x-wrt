@@ -24,8 +24,8 @@ load_settings services
 if ! empty "$FORM_install_upnp"; then
 	tmpfile=$(mktemp "/tmp/.webif_upnp-XXXXXX")
 	echo "Installing UPNP package ...<pre>"	
-	install_package "http://ftp.berlios.de/pub/xwrt/libupnp_1.2.1a_mipsel.ipk"
-	install_package "http://ftp.berlios.de/pub/xwrt/linux-igd_1.0.1.ipk"
+	install_package "http://ftp.berlios.de/pub/xwrt/packages/libupnp_1.2.1a_mipsel.ipk"
+	install_package "http://ftp.berlios.de/pub/xwrt/packages/linux-igd_1.0.1.ipk"
 	echo "</pre>"
 	#echo "<br /><br /><a href="services.sh">Refresh this page to configure newly installed service(s)..</a><br />"
 fi
