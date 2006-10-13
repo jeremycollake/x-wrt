@@ -109,7 +109,7 @@ if [ "$?" = "0" ]; then
 
 	TestInstall
 	httpd_1=$(cat /tmp/httpd.conf.old)
-	httpd_2=$(cat /tmp/httpd.conf)	
+	httpd_2=$(cat /etc/httpd.conf)	
 	if [ "$httpd_1" != "$httpd_2" ]; then
 		echo "Restarting httpd ... If things aren't working, a reboot may be needed."
 		# close std handles
