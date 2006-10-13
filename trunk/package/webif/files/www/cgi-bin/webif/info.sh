@@ -44,7 +44,13 @@ while empty $device_type; do
  		device_type="WRT54G"
  		device_version="v??"
  		break
-	fi	
+	fi
+	strings /dev/mtdblock/0 | grep 'WL500gp' 2>&1 >> /dev/null
+	if [ $? = "0" ]; then
+ 		device_type="Asus WL-500g Premium"
+ 		device_version=""
+ 		break
+	fi
 	break
 done
 empty $device_type && device_type="-id code not done for this board-";
