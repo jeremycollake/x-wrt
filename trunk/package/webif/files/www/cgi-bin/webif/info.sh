@@ -36,6 +36,7 @@ _kversion="$( uname -srv )"
 _mac="$(/sbin/ifconfig eth0 | grep HWaddr | cut -b39-)"
 board_type=$(cat /proc/cpuinfo | sed 2,20d | cut -c16-)
 device_name=$(nvram get device_name)
+empty "$device_name" && device_name="unidentified"
 device_string=$(echo $device_name && ! empty $device_version && echo $device_version)
 user_string=$REMOTE_USER
 equal $user_string "" && user_string="not logged in"
