@@ -111,11 +111,11 @@ if [ "$?" = "0" ]; then
 	httpd_1=$(cat /tmp/httpd.conf.old)
 	httpd_2=$(cat /etc/httpd.conf)	
 	if [ "$httpd_1" != "$httpd_2" ]; then
-		echo "Restarting httpd ... If things aren't working, a reboot may be needed."
+		echo "Restarting httpd ... A reboot may be needed to ensure proper functionality."
 		# close std handles
 		exec 2>/dev/null >/dev/null </dev/null						
 		killall httpd
-		/etc/init.d/S50httpd7
+		/etc/init.d/S50httpd
 	else
 		echo "Not restarting httpd, sending SIGUP ..."
 		killall -HUP httpd 	# reinitialize httpd - does not work as we hoped
