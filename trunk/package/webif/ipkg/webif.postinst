@@ -98,10 +98,10 @@ mv -f "${IPKG_INSTROOT}/etc/init.d/x50dnsmasq.webif" "${IPKG_INSTROOT}/etc/init.
 mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
 
 AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/packages"
-firmware_version=$(nvram get firmware_version)
-if [ "$firmware_version" = "RC5" ]; then
+[ -z "$IPKG_INSTROOT" ] && firmware_version=$(nvram get firmware_version)
+if [ "$firmware_version" = "RC5" ] || grep RC5 "${IPKG_INSTROOT}/etc/banner"; then
 	AddRepository "rc5-backports" "http://downloads.openwrt.org/backports/rc5"
-elif [ "$firmware_version" = "RC6" ]; then
+elif [ "$firmware_version" = "RC6" ] || grep RC6 "${IPKG_INSTROOT}/etc/banner"; then
 	DeleteRepository "http://downloads.openwrt.org/backports/rc5"
 	AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"
 fi
