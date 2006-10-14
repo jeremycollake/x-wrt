@@ -1,17 +1,4 @@
-/* some common cookie manipulation functions */
 
-/**
- * Sets a Cookie with the given name and value.
- *
- * name       Name of the cookie
- * value      Value of the cookie
- * [expires]  Expiration date of the cookie (default: end of current session)
- * [path]     Path where the cookie is valid (default: path of calling document)
- * [domain]   Domain where the cookie is valid
- *              (default: domain of calling document)
- * [secure]   Boolean value indicating if the cookie transmission requires a
- *              secure transmission
- */
 function setCookie(name, value, expires, path, domain, secure)
 {
     document.cookie= name + "=" + escape(value) +
@@ -21,14 +8,6 @@ function setCookie(name, value, expires, path, domain, secure)
         ((secure) ? "; secure" : "");
 }
 
-/**
- * Gets the value of the specified cookie.
- *
- * name  Name of the desired cookie.
- *
- * Returns a string containing value of specified cookie,
- *   or null if cookie does not exist.
- */
 function getCookie(name)
 {
     var dc = document.cookie;
@@ -51,9 +30,6 @@ function getCookie(name)
     return unescape(dc.substring(begin + prefix.length, end));
 }
 
-/* ************************************************************ */
-/* color theme switching code */
-
 function setcolor()
 {
 	// set cookie to expire in 30 days
@@ -63,7 +39,7 @@ function setcolor()
  	setCookie("webif_colortheme",this.title, expireTime);
  	colorize();
  	document.close();
- 	window.location.href = window.location.href; 	
+ 	window.location.href = window.location.href;
 }
 
 // find all objects of swatch class and set onclick handler
@@ -78,25 +54,29 @@ function swatch()
     	var colorTitle;
     	switch(count)
     	{
+    		/* count corresponds to ordering position on page */
     		case 0:
-    			colorTitle='green';
+    			colorTitle='black';
     			break;
     		case 1:
-    			colorTitle='blue';
+    			colorTitle='navyblue';
     			break;
     		case 2:
-    			colorTitle='navyblue';
-    			break;    		
+    			colorTitle='blue';
+    			break;
     		case 3:
-    			colorTitle='brown';
+    			colorTitle='green';
     			break;
     		case 4:
+    			colorTitle='brown';
+    			break;
+    		case 5:
     			colorTitle='white';
     			break;
     		default:
     			colorTitle='blue';
     			break;
-    			
+
     	}
     	divs[i].title=colorTitle;
     	divs[i].onclick=setcolor;
@@ -105,13 +85,15 @@ function swatch()
   }
 }
 
-// set color theme from cookie
 function colorize()
 {
   var color=getCookie("webif_colortheme")
   document.write('<link rel="stylesheet" type="text/css" href="');
   switch(color)
   {
+	case 'black':
+  		document.write('/color_black.css" />');
+  		break;
 	case 'green':
   		document.write('/color_green.css" />');
   		break;
