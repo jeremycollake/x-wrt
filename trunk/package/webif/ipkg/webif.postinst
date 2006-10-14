@@ -89,7 +89,6 @@ DeleteRepository()
 #
 #
 echo "Executing post-install script ..."
-cd /				# change out of cwd, since it got deleted out from under us
 
 # copy our new httpd.conf and S50dnsmasq files - we renamed them so that the webif can
 # be uninstalled without ipkg removing these pre-existing files as well.
