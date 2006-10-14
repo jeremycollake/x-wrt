@@ -11,12 +11,13 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 	rm -f /usr/lib/webif/* >> /dev/null 2>&1
 	rm -f /etc/init.d/S50dnsmasq >> /dev/null 2>&1
 	rm -f /etc/init.d/S60ntp >> /dev/null 2>&1
-	rm -f /etc/init.d/S60upnp >> /dev/null 2>&1   		# used in r500 and below
+	rm -f /etc/init.d/S60upnp >> /dev/null 2>&1   		# used in <=r500
 	rm -f /etc/init.d/S66upnpd_webif >> /dev/null 2>&1
 	rm -f /etc/init.d/S51crond >> /dev/null 2>&1
-	rm -f /etc/init.d/S11firmwareinfo >> /dev/null 2>&1	# used in r791 and below
+	rm -f /etc/init.d/S11firmwareinfo >> /dev/null 2>&1	# used in <=r791
 	rm -f /etc/init.d/S12deprecatedcleanup >> /dev/null 2>&1
 	rm -f /etc/init.d/S90webif_* >> /dev/null 2>&1
+	rm -f /etc/init.d/x95custom-user-startup >> /dev/null 2>&1 # used in <=r793
 	if [ -f "/etc/httpd.conf" ]; then	
 		cp /etc/httpd.conf /tmp/httpd.conf.old        	# make a copy for comparing
 	else

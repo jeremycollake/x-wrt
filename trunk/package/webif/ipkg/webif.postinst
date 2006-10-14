@@ -21,7 +21,7 @@ TestInstall()
 #######################################################################################
 # ExecuteIfExists
 #
-ExecuteIfExists
+ExecuteIfExists()
 {
 	# $1 = exec name
 	# $2-$9 = params
