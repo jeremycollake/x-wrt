@@ -1,8 +1,10 @@
  /* color theme navy blue */
 
-#header
+#header,
+#short-status
 {
-	background-color: #192a65;
+	color: #CCC;
+	background-color: #292155;
 }
 
 #update-available
@@ -34,13 +36,9 @@
 	color: #fff;
 }
 
+#mainmenu,
 #header-title,
 #save .apply div
-{
-	background-color: #192a65;
-}
-
-#mainmenu
 {
 	color: #C3C4D2;
 	background-color: #213242;
@@ -70,12 +68,6 @@
 #submenu a:hover
 {
 	color: #FB0;
-}
-
-#short-status
-{
-	color: #FFF;
-	background-color: #192a65;
 }
 
 #content .settings-block
