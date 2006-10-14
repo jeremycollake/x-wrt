@@ -17,21 +17,21 @@ fi
 #
 device_name=$(nvram get device_name)
 while [ -z "$device_name" ]; do		
-	dd bs=1024 skip=196 if=/dev/mtd/0 2>/dev/null | strings | grep -q W54G
+	dd bs=1024 skip=212 count=16 if=/dev/mtd/0 2>/dev/null | strings | grep -q W54G
 	[ $? = "0" ] && {
  		device_name="Linksys WRT54G"
- 		nvram set "device_name=$device_name"
-		nvram commit
+ 		nvram set "device_name=$device_name"		
  		break
 	}
 	dd bs=1024 count=1 skip=5 if=/dev/mtd/0 2>/dev/null | strings | grep "WL500gp"
 	[ $? = "0" ] && {
  		device_name="ASUS WL-500gp"
  		nvram set "device_name=$device_name"
-		nvram commit
  		break
 	}
 	break
 done
+# do not commit changes:
+# our id code is fast, we'll do it every boot until user does a commit for some other reason.
 echo "Device: $device_name"
 
