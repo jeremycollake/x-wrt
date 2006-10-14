@@ -128,12 +128,13 @@ Pragma: no-cache
 		<div id="categories">$_categories</div>
 		<div id="subcategories">$_subcategories</div>
 		$_form
-		<div>
-			<div class="swatch" style="background: #2b6d21"></div>
-			<div class="swatch" style="background: #114488"></div>
-			<div class="swatch" style="background: #192a65"></div>			
+		<div>	
+			<div class="swatch" style="background: #000000"></div>		
+			<div class="swatch" style="background: #192a65"></div>
+			<div class="swatch" style="background: #114488"></div>			
+			<div class="swatch" style="background: #2b6d21"></div>			
 			<div class="swatch" style="background: #e8ca9e"></div>
-			<div class="swatch" id="colorize"></div>			
+			<div class="swatch" style="background: #ffffff"></div>			
 		</div>
 		
 		$swatch_script		
