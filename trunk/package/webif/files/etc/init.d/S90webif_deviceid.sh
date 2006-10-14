@@ -1,19 +1,5 @@
-#!/bin/sh
-
-# we'll se these only if they aren't already, so that
-# they can be pre-empted
-firmware_name=$(nvram get firmware_name)
-if [ -z "$firmware_name" ]; then
-	nvram set firmware_name="OpenWrt White Russian"
-	nvram set firmware_subtitle="With X-Wrt Extensions"
-	nvram set firmware_version="RC5"
-fi
-
-############################################################
-# try to do a one-time identification of the device
-# this is used by the webif
-#
-# todo: add more devices
+###########################################################
+# identification of the device
 #
 device_name=$(nvram get device_name)
 while [ -z "$device_name" ]; do		
@@ -34,4 +20,3 @@ done
 # do not commit changes:
 # our id code is fast, we'll do it every boot until user does a commit for some other reason.
 echo "Device: $device_name"
-
