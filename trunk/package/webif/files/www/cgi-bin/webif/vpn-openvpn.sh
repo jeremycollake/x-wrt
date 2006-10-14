@@ -6,6 +6,8 @@
 . /usr/lib/webif/webif.sh
 load_settings "openvpn"
 
+header "VPN" "OpenVPN" "@TR<<OpenVPN>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
+
 if ! empty "$FORM_install_package"; then	
 	echo "Installing openvpn package ...<pre>"	
 	install_package "openvpn"	
@@ -48,8 +50,6 @@ else
 	save_setting openvpn openvpn_cli_auth $FORM_openvpn_cli_auth
 	save_setting openvpn openvpn_cli_psk $FORM_openvpn_cli_psk
 fi
-
-header "VPN" "OpenVPN" "@TR<<OpenVPN>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
 
 cat <<EOF
 <script type="text/javascript" src="/webif.js "></script>
