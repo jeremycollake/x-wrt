@@ -6,7 +6,7 @@ function start_form(title, field_opts, field_opts2) {
 
 function end_form(form_help, form_help_link) {
 	print "</div>"
-	if (form_help != "") form_help = "<dl>" form_help "</dl>"
+	if (form_help != "") form_help = "<div class=\"helpform\">" form_help "</div>"
 	print "<div class=\"settings-help\"><blockquote><h3><strong>@TR<<Short help>>:</strong></h3>" form_help form_help_link "</blockquote></div>"
 	print "<div style=\"clear: both\">&nbsp;</div></div>"
 }
@@ -21,14 +21,6 @@ function hidden(name, value) {
 
 function button(name, caption) {
 	return "<input type=\"submit\" name=\"" name "\" value=\"@TR<<" caption ">>\" />"
-}
-
-function helpitem(name) { 
-	return "<dt>@TR<<" name ">>: </dt>"
-}
-
-function helptext(short, name) { 
-	return "<dd>@TR<<" short "|" name ">>: </dd>"
 }
 
 function sel_option(name, caption, default, sel) {
