@@ -136,10 +136,9 @@ $1 ~ /^text$/ {
 }
 $1 ~ /^password/ { print "<input id=\"" $2 "\" type=\"password\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
 $1 ~ /^upload/ { print "<input id=\"" $2 "\" type=\"file\" name=\"" $2 "\"/>" }
-# TODO: I enclosed this in a form tag because submits weren't working right on some pages,
-#	depending on particularities in the display_form structure. 
-#	Need to do a proper investigation and fix.
-$1 ~ /^submit/ { print "<form action=\"\" enctype=\"multipart/form-data\" method=\"post\"><input type=\"submit\" name=\"" $2 "\" value=\"" $3 "\" /></form>" }
+$1 ~ /^formtag_begin/ { print "<form id=\"" $2 "\" action=\"" $3 "\" enctype=\"multipart/form-data\" method=\"post\">" }
+$1 ~ /^formtag_end/ { print "</form>" }
+$1 ~ /^submit/ { print "<input type=\"submit\" name=\"" $2 "\" value=\"" $3 "\" />" }
 $1 ~ /^helpitem/ { form_help = form_help "<div class=\"helpitem\">@TR<<" $2 ">>:</div>" }
 $1 ~ /^helptext/ { form_help = form_help "<div class=\"helptext\">@TR<<" $2 ">></div>" }
 $1 ~ /^helplink/ { form_help_link = "<div class=\"more-help\"><a href=\"" $2 "\">@TR<<more...>></a></div>" }
