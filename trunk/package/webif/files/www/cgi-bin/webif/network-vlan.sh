@@ -83,11 +83,11 @@ if ! empty "$FORM_submit"; then
 	#  as indication of the existance of the vlan, to allow for 
 	#  empty vlans.
 	#	
-	equal "$FORM_add_vlan" "Add" && 
+	! empty "$FORM_add_vlan" && 
 	{		
 		nvram set vlan"$count"hwname=et0					
 	}
-	equal "$FORM_remove_vlan" "Remove" && 
+	! empty "$FORM_remove_vlan" && 
 	{
 		# todo: will not work if vlan0 doesn't exist..	
 		let "count-=1"
@@ -130,11 +130,11 @@ fi
 ####################################################################
 # add headers for the port numbers
 #
-FORM_port_headers="string|<tr><th>&nbsp</th>"
+FORM_port_headers="string|<tr><th>&nbsp;</th>"
 for current_port in $(seq $PORT_BASE $MAX_PORT); do	
 	FORM_port_headers="${FORM_port_headers}<th>$current_port</th>"
 done
-FORM_port_headers="${FORM_port_headers}<td><- port</td></tr>"
+FORM_port_headers="${FORM_port_headers}<td>port</td></tr>"
 
 ####################################################################
 # now create the vlan rows, one for each set vlan variable, even
@@ -143,7 +143,7 @@ FORM_port_headers="${FORM_port_headers}<td><- port</td></tr>"
 FORM_all_vlans="$FORM_port_headers"		# holds VLAN webif form we build
 for count in $(seq "0" "$MAX_VLANS_INDEX"); do	
 	vlanport="vlan${count}ports"	
-	FORM_current_vlan="string|<tr><th>VLAN $count&nbsp&nbsp</th>"
+	FORM_current_vlan="string|<tr><th>VLAN $count&nbsp;&nbsp;</th>"
 	# 
 	# for each port, create a checkbox and mark if
 	#  port for in vlan
@@ -173,7 +173,7 @@ for count in $(seq "0" "$MAX_VLANS_INDEX"); do
 			port_included=1
 		fi
 		variable_name="vlan_${count}_port_${current_port}"		
-		checkbox_string="checkbox|$variable_name|$port_included|1|&nbsp"
+		checkbox_string="checkbox|$variable_name|$port_included|1|&nbsp;"
 		FORM_current_vlan="$FORM_current_vlan
 			string|<td>
 			$checkbox_string
@@ -193,13 +193,11 @@ onchange|modechange
 start_form|@TR<<VLAN Configuration>>
 helpitem|VLAN
 helptext|Helptext VLAN#A virtual LAN is a set of ports that are bridged. In cases where a port belongs to more than one VLAN, a technique known as tagging is used to identify to which VLAN traffic on that port belongs.
-string|<table><tbody>
 $FORM_all_vlans
-string|</tbody></table>
 end_form
 start_form|
-submit|add_vlan|Add
-submit|remove_vlan|Remove
+submit|add_vlan|Add New VLAN
+submit|remove_vlan|Remove Last VLAN
 end_form
 EOF
 
