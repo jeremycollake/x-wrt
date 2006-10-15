@@ -51,7 +51,7 @@ for mac in $lan_wds_mac; do
 		$stuff"
 done
 
-header "Network" "WDS" "@TR<<WDS Configuration>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
+header "Network" "WDS" "@TR<<WDS Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 display_form <<EOF
 

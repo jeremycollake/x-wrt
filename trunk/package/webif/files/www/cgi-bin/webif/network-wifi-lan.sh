@@ -71,7 +71,7 @@ EOF
 	esac
 fi
 
-header "Network" "WIFI-LAN" "@TR<<WIFI LAN Configuration>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
+header "Network" "WIFI-LAN" "@TR<<WIFI LAN Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 cat <<EOF
 <script type="text/javascript" src="/webif.js "></script>
 <script type="text/javascript">

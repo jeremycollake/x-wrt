@@ -21,7 +21,7 @@
 
 load_settings "wireless"
 
-header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onLoad="modechange()"' "$SCRIPT_NAME"
+header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onload="modechange()"' "$SCRIPT_NAME"
 
 #####################################################################
 # defaults - ONLY used in the rare case these nvram variables are unset

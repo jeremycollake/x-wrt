@@ -17,7 +17,7 @@
 #   	none
 #
 
-header "Network" "Services" "@TR<<Services Configuration>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
+header "Network" "Services" "@TR<<Services Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 load_settings services
 

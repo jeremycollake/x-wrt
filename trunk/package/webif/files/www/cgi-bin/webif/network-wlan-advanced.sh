@@ -22,7 +22,7 @@
 
 load_settings "wireless" 
 
-header "Network" "Advanced Wireless" "@TR<<Advanced Wireless Configuration>>" ' onLoad="modechange()"' "$SCRIPT_NAME"
+header "Network" "Advanced Wireless" "@TR<<Advanced Wireless Configuration>>" ' onload="modechange()"' "$SCRIPT_NAME"
 
 #####################################################################
 # defaults - ONLY used in the rare case these nvram variables are unset
