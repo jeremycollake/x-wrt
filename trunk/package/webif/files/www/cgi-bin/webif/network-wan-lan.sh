@@ -19,7 +19,7 @@
 #   none
 #
 
-header "Network" "WAN-LAN" "@TR<<WAN-LAN Configuration>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
+header "Network" "WAN-LAN" "@TR<<WAN-LAN Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 load_settings network
 
@@ -163,11 +163,11 @@ function modechange()
 	
 	v = (isset('wan_proto', 'static') || isset('wan_proto', 'pptp') || isset('wan_proto', 'dhcp'));
 	set_visible('wan_ip_settings', v);
-	set_visible('wan_ipaddr', v);
-	set_visible('wan_netmask', v);
+	set_visible('field_wan_ipaddr', v);
+	set_visible('field_wan_netmask', v);
 	
 	v = isset('wan_proto', 'static');
-	set_visible('wan_gateway', v);
+	set_visible('field_wan_gateway', v);
 	set_visible('wan_dns', v);
 
 	v = isset('wan_proto', 'pptp');
@@ -193,11 +193,11 @@ $PPTP_OPTION
 helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration#head-b62c144b9886b221e0c4b870edb0dd23a7b6acab
 end_form
 start_form|@TR<<IP Settings>>|wan_ip_settings|hidden
-field|@TR<<WAN IP Address>>|wan_ipaddr|hidden
+field|@TR<<WAN IP Address>>|field_wan_ipaddr|hidden
 text|wan_ipaddr|$FORM_wan_ipaddr
-field|@TR<<Netmask>>|wan_netmask|hidden
+field|@TR<<Netmask>>|field_wan_netmask|hidden
 text|wan_netmask|$FORM_wan_netmask
-field|@TR<<Default Gateway>>|wan_gateway|hidden
+field|@TR<<Default Gateway>>|field_wan_gateway|hidden
 text|wan_gateway|$FORM_wan_gateway
 $PPTP_SERVER_OPTION
 helpitem|WAN IP Settings
@@ -277,8 +277,10 @@ helpitem|Note
 helptext|Helptext LAN DNS save#You need save your settings on this page before adding/removing DNS servers
 end_form
 EOF
+show_validated_logo
 
 footer ?>
+  
 <!--
 ##WEBIF:name:Network:100:WAN-LAN
 -->
