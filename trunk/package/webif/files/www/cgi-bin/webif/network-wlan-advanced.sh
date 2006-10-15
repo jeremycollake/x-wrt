@@ -208,7 +208,7 @@ helptext|Helptext Wirless Distance#You must enter a number that is double the di
 end_form
 EOF
 
-show_validation_logo
+show_validated_logo
 
 footer ?>
 <!--
