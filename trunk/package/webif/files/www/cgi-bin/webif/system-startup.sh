@@ -52,7 +52,7 @@ startup_script_template="/etc/init.d/.x95custom-user-startup-default"
 <table width="100%" summary="Settings">
 <tr id="custom_startup">
 <td>
-<textarea id="custom_script" name="custom_script" rows=24 cols=80>
+<textarea id="custom_script" name="custom_script" rows="24" cols="80">
 <? 
 if exists "$tmp_script_name"; then
 	cat "$tmp_script_name"
