@@ -470,6 +470,8 @@ $install_nas_button
 end_form
 EOF
 
+show_validated_logo
+
 footer ?>
 <!--
 ##WEBIF:name:Network:300:Wireless

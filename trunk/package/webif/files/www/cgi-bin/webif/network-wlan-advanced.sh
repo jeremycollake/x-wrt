@@ -22,7 +22,7 @@
 
 load_settings "wireless" 
 
-header "Network" "Advanced Wireless" "@TR<<Advanced Wireless Configuration>>" ' onload="modechange()"' "$SCRIPT_NAME"
+header "Network" "Advanced Wireless" "@TR<<Advanced Wireless Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 #####################################################################
 # defaults - ONLY used in the rare case these nvram variables are unset
@@ -207,6 +207,8 @@ helpitem|Wireless Distance
 helptext|Helptext Wirless Distance#You must enter a number that is double the distance of your longest link.
 end_form
 EOF
+
+show_validation_logo
 
 footer ?>
 <!--
