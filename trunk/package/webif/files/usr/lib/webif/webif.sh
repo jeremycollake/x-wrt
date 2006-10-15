@@ -47,6 +47,13 @@ subcategories() {
 			-f /usr/lib/webif/subcategories.awk -
 }
 
+show_validated_logo() {
+	echo "<p><a href=\"http://validator.w3.org/check?uri=referer\">
+		<img src=\"http://www.w3.org/Icons/valid-xhtml10\" alt=\"Valid XHTML 1.0 Transitional\" height=\"31\" width=\"88\" />
+		</a></p>"
+}
+
+
 update_changes() {
 	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))		
 }
@@ -103,7 +110,7 @@ Pragma: no-cache
 			<link rel="stylesheet" type="text/css" href="/ie_lt7.css" />
 		<![endif]-->						
 		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
-		<meta http-equiv="expires" content="0" />		
+		<meta http-equiv="expires" content="-1" />
 	</head>
 	<body $4>	
 	$colorize_script
