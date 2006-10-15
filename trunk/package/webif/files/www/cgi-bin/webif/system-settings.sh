@@ -39,7 +39,7 @@ load_settings "webif"
 OVERCLOCKING_DISABLED="1" # set to 1 to disble OC support
 
 #####################################################################
-header "System" "Settings" "@TR<<System Settings>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
+header "System" "Settings" "@TR<<System Settings>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 
 #####################################################################
@@ -104,7 +104,7 @@ EOF
 		  
 		}
 	else
-		echo "<br /><div class=warning>Warning: Hostname failed validation. Can not be saved.</div><br />"	
+		echo "<br /><div class=\"warning\">Warning: Hostname failed validation. Can not be saved.</div><br />"	
 	fi
 fi
 
@@ -172,7 +172,7 @@ is_bcm947xx && {
 # check if ntpclient is installed and give user option to install if not
 ! is_package_installed "ntpclient" && 
 {
-	NTPCLIENT_INSTALL_FORM="string|<div class=warning>No NTP client is installed. For correct time support you need to install one:</div>
+	NTPCLIENT_INSTALL_FORM="string|<div class=\"warning\">No NTP client is installed. For correct time support you need to install one:</div>
 		submit|install_ntpclient| Install NTP Client |"
 }
 
@@ -249,8 +249,10 @@ text|ntp_server|$FORM_ntp_server
 end_form
 
 $NTPCLIENT_INSTALL_FORM
-
 EOF
+
+show_validated_logo
+
 footer ?>
 
 <!--
