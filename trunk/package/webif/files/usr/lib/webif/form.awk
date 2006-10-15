@@ -136,7 +136,7 @@ $1 ~ /^text$/ {
 }
 $1 ~ /^password/ { print "<input id=\"" $2 "\" type=\"password\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
 $1 ~ /^upload/ { print "<input id=\"" $2 "\" type=\"file\" name=\"" $2 "\"/>" }
-$1 ~ /^formtag_begin/ { print "<form id=\"" $2 "\" action=\"" $3 "\" enctype=\"multipart/form-data\" method=\"post\">" }
+$1 ~ /^formtag_begin/ { print "<form name=\"" $2 "\" action=\"" $3 "\" enctype=\"multipart/form-data\" method=\"post\">" }
 $1 ~ /^formtag_end/ { print "</form>" }
 $1 ~ /^submit/ { print "<input type=\"submit\" name=\"" $2 "\" value=\"" $3 "\" />" }
 $1 ~ /^helpitem/ { form_help = form_help "<div class=\"helpitem\">@TR<<" $2 ">>:</div>" }
