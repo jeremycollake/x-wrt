@@ -39,7 +39,7 @@ string|FORM_log_prefix|Message Prefix||$FORM_log_prefix
     fi
 }
 
-header "System" "Syslog" "@TR<<Syslog>>" ' onLoad="pageload()" ' "$SCRIPT_NAME" 
+header "System" "Syslog" "@TR<<Syslog>>" ' onload="pageload()" ' "$SCRIPT_NAME" 
 
 prefix_fields=""
 if [ -n "$can_prefix" ]; then

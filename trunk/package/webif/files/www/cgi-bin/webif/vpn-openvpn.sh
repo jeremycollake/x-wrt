@@ -6,7 +6,7 @@
 . /usr/lib/webif/webif.sh
 load_settings "openvpn"
 
-header "VPN" "OpenVPN" "@TR<<OpenVPN>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
+header "VPN" "OpenVPN" "@TR<<OpenVPN>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 if ! empty "$FORM_install_package"; then	
 	echo "Installing openvpn package ...<pre>"	
