@@ -120,8 +120,9 @@ listedit|dns|$SCRIPT_NAME?|$FORM_dns|$FORM_dnsadd
 helpitem|Note
 helptext|Helptext DNS save#You need save your settings on this page before adding/removing DNS servers
 end_form
-
 EOF
+
+show_validated_logo
 
 footer ?>
 <!--
