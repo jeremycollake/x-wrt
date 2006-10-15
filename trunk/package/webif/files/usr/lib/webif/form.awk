@@ -38,7 +38,7 @@ $1 ~ /^start_form/ {
 	if ($4 == "hidden") field_opts = field_opts " style=\"display: none\""
 	start_form($2, field_opts);
 	print "<table width=\"100%\" summary=\"Settings\">"
-	form_help = "<div class=helpform>"
+	form_help = "<div class=\"helpform\">"
 	form_help_link = ""
 }
 $1 ~ /^field/ {
