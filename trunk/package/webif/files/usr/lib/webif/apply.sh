@@ -2,6 +2,9 @@
 #
 # Default handlers for config files
 #
+custom_script_name="/etc/init.d/S95custom-user-startup"
+tmp_script_name="/tmp/.webif/file-S95custom-user-startup"
+startup_script_template="/etc/init.d/.x95custom-user-startup-default"
 cron_init="/etc/init.d/S51crond"
 HANDLERS_config='
 	wireless) reload_wireless;;
@@ -18,7 +21,7 @@ HANDLERS_file='
 	ethers) rm -f /etc/ethers; mv $config /etc/ethers; killall -HUP dnsmasq ;;
 	firewall) mv /tmp/.webif/file-firewall /etc/config/firewall && /etc/init.d/S45firewall;;
 	dnsmasq.conf) mv /tmp/.webif/file-dnsmasq.conf /etc/dnsmasq.conf && /etc/init.d/S50dnsmasq;;
-	S95custom-user-startup) mv /tmp/.webif/file-S95custom-user-startup /etc/init.d/S95custom-user-startup;;
+	S95custom-user-startup) chmod 755 "$tmp_script_name" && mv "$tmp_script_name" "$custom_script_name";;				
 '
 
 # for some reason a for loop with "." doesn't work

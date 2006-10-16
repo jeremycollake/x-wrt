@@ -60,6 +60,7 @@ elif exists "$custom_script_name"; then
 	cat "$custom_script_name" 
 else
 	cp "$startup_script_template" "$custom_script_name" 
+	chmod 755 "$custom_script_name"
 	cat "$custom_script_name"
 fi
 ?>
