@@ -19,7 +19,7 @@ HANDLERS_config='
 HANDLERS_file='
 	hosts) rm -f /etc/hosts; mv $config /etc/hosts; killall -HUP dnsmasq ;;
 	ethers) rm -f /etc/ethers; mv $config /etc/ethers; killall -HUP dnsmasq ;;
-	firewall) mv /tmp/.webif/file-firewall /etc/config/firewall && /etc/init.d/S45firewall;;
+	firewall) mv /tmp/.webif/file-firewall /etc/config/firewall && /etc/init.d/S??firewall;;
 	dnsmasq.conf) mv /tmp/.webif/file-dnsmasq.conf /etc/dnsmasq.conf && /etc/init.d/S50dnsmasq;;
 	S95custom-user-startup) chmod 755 "$tmp_script_name" && mv "$tmp_script_name" "$custom_script_name";;				
 '
