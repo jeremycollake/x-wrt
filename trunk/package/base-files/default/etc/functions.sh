@@ -15,7 +15,7 @@ if_valid () (
   ifconfig "$1" >&- 2>&- ||
   [ "${1%%[0-9]}" = "br" ] ||
   {
-    [ "${1%%[0-9]}" = "vlan" ] && ( 
+    [ "${1%%[0-9]*}" = "vlan" ] && ( 
       i=${1#vlan}
       hwname=$(nvram get vlan${i}hwname)
       hwaddr=$(nvram get ${hwname}macaddr)
@@ -101,7 +101,7 @@ append() {
 	local var="$1"
 	local value="$2"
 	local sep="${3:- }"
-	eval "export ${var}=\"\${${var}:+\${${var}}${value:+$sep}}$value\""
+	eval "export ${var}=\"\${${var}:+\${${var}}${value:+$sep}}\$value\""
 }
 
 reset_cb() {

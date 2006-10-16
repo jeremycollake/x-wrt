@@ -5,13 +5,6 @@ mount none /proc -t proc
 insmod diag
 echo 0x01 > /proc/sys/diag
 
-[ -f /rom/local.tar ] && {
-  mount none /tmp -t tmpfs
-  mkdir /tmp/local
-  chmod 775 /tmp/local
-  [ -z "$FAILSAFE" ] && [ -x /sbin/flashfs ] && /sbin/flashfs load || tar -xf /rom/local.tar -C /tmp/local
-}
-
 ifname=eth0
 # WAP54G, WL-HDD
 [  "$(nvram get boardnum)" = "2" \
@@ -42,7 +35,7 @@ netmsg 192.168.1.255 "Press reset now, to enter Failsafe!"
 sleep 2
 
 if [ "$(cat /proc/sys/reset 2>&-)" = 1 -o "$(nvram get failsafe)" = 1 ]; then
-	while :; do { echo $(((X=(X+1)%8)%2)) > /proc/sys/diag; sleep $((X==0)); } done &
+	while :; do { echo $((((X=(X+1)%8)%2)*3)) > /proc/sys/diag; sleep $((X==0)); } done &
 	export FAILSAFE=true
 	[ "$(nvram get boot_wait)" != "on" ] && {
 		nvram set boot_wait=on
@@ -62,6 +55,7 @@ else
 	}
 fi
 
-[ -f /rom/local.tar ] || mount_root ${FAILSAFE:+failsafe}
+insmod mini_fo 2>&-
+mount_root ${FAILSAFE:+failsafe}
 
 exec /sbin/init
