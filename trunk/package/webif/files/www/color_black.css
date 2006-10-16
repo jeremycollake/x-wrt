@@ -2,6 +2,7 @@
 
 html, body
 {
+	color: #CCC;
 	background-color: #111;
 }
 
@@ -132,15 +133,20 @@ html, body
 
 .kb
 {
-	color: #222;
+
 }
 
 .mount-target
 {
-	color: #222;
+	
 }
 
 .warning
 {
 	color: red;
+}
+
+.logread
+{
+	color: #FFF;
 }

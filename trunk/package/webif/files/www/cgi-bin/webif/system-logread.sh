@@ -9,7 +9,7 @@ header "System" "Syslog" "Syslog View" '' "$SCRIPT_NAME"
 prefix=$(nvram get log_prefix)
 ?>
 <? echo "Message Prefix: $prefix" ?><br/>
-<iframe src="logread_frame.sh" width="90%" height="80%" scrolling="auto" >
+<iframe src="logread_frame.sh" width="90%" height="300" scrolling="auto">
 Your browser does not support frames,
 please follow this link: <a href="logread_frame.sh" target="blank" >View Syslog</a>
 </iframe>
