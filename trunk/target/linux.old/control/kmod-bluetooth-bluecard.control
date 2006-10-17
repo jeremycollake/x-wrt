@@ -1,5 +1,0 @@
-Package: kmod-bluetooth-bluecard
-Priority: optional
-Section: net
-Depends: kmod-bluetooth kmod-pcmcia
-Description: Bluetooth HCI BlueCard (PC Card) driver

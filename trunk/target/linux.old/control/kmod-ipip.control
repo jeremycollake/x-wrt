@@ -1,4 +1,0 @@
-Package: kmod-ipip
-Priority: optional
-Section: net
-Description: kernel modules for IP in IP encapsulation

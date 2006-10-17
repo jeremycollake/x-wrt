@@ -1,4 +1,0 @@
-Package: kmod-nfs
-Priority: optional
-Section: sys
-Description: Kernel modules for NFS support

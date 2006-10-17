@@ -1,4 +1,0 @@
-Package: kmod-pcmcia
-Priority: optional
-Section: sys
-Description: Kernel modules for PCMCIA support

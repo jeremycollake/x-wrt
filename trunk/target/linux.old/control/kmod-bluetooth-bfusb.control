@@ -1,5 +1,0 @@
-Package: kmod-bluetooth-bfusb
-Priority: optional
-Section: net
-Depends: kmod-bluetooth kmod-usb-core
-Description: Bluetooth HCI BlueFRITZ! USB driver

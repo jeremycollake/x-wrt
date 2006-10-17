@@ -1,4 +1,0 @@
-Package: kmod-bluetooth
-Priority: optional
-Section: net
-Description: Bluetooth stack kernel modules

@@ -1,4 +1,0 @@
-Package: kmod-openswan
-Section: base
-Priority: optional
-Description: Openswan IPSec kernel module
