@@ -11,7 +11,7 @@ TestInstall()
 	this_version="__SVN_REVISION__"
 	installed_version=$(cat "${IPKG_INSTROOT}/www/.version")
 	if [ -f "/www/.version" ] && [ "$this_version" = "$installed_version" ]; then
-		echo "Congratulations, Webif^2 installation appears OK. Welcome to X-Wrt!"
+		echo "SUCCESS! Congratulations, Webif^2 installation appears OK. Welcome to X-Wrt!"
 	else
 		echo "WARNING: Installation may have failed."		
 		echo " Detected r$installed_version is installed, but this is r$this_version."
@@ -133,5 +133,6 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 	else
 		killall -HUP httpd 	# reinitialize httpd
 	fi
-
+	echo "!!! NOTICE: You may see a list of collected warnings below about not being able to"
+	echo "            remove some files. Ignore these warnings, they are essentially meaningless."
 fi
