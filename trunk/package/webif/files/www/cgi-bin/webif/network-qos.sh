@@ -25,7 +25,7 @@ if is_package_installed "qos-scripts"; then
 	#
 	# nbd's QoS scripts
 	#	
-	echo "nbd's QoS scripts found installed. We haven't written code yet for this."
+	echo "nbd's QoS scripts found installed. We have not written code yet for this."
 . ./qos-nbd.inc
 elif is_package_installed "qos-re"; then
 	#

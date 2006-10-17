@@ -1,6 +1,6 @@
 #
-# Nbd's QoS scripts config
-# todo: unfinished
+# Nbd QoS scripts config
 #
 
-echo "<br />Code unfinished.</br>"
+echo "<br /><br ./>Code is unfinished.</br>"
+
