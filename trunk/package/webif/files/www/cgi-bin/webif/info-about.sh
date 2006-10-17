@@ -57,7 +57,7 @@ swatch()
 
 <div class="webif-name-title"><a href="http://www.bitsum.com/xwrt.asp">X-Wrt Extensions</a> - webif<sup>2</sup></div>
 <div class="webif-name-subtitle"></div>
-<div class="webif-name-version">Milestone 1 rc3 - r<? echo "$this_revision" ?> </div><br />
+<div class="webif-name-version">Milestone 1 - r<? echo "$this_revision" ?> </div><br />
 <form action="" enctype="multipart/form-data" method="post">
 <input type="submit" value=" Check For Webif^2 Update " name="update_check" />
 <input type="submit" value=" Install/Reinstall Webif^2  " name="install_webif" />
