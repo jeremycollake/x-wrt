@@ -88,14 +88,7 @@ header() {
 		_form=""
 		_savebutton=""
 	}
-	
-	# 
-	# color switcher
-	# 	
-	swatch_script="<script type=\"text/javascript\"> swatch() </script>"
-	colorize_script="<script type=\"text/javascript\" src=\"/colorize.js\"></script>
-		<script type=\"text/javascript\"> colorize(); </script>"		
-	
+		
 	cat <<EOF
 Content-Type: text/html
 Pragma: no-cache
@@ -113,7 +106,10 @@ Pragma: no-cache
 		<meta http-equiv="expires" content="-1" />
 	</head>
 	<body $4>	
-	$colorize_script
+	
+	<script type="text/javascript" src="/colorize.js"></script>
+		<script type="text/javascript"> colorize(); </script>
+		
 	<div id="container">	 	
 	  <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>	  
 	    <div id="header">	    				
@@ -144,7 +140,7 @@ Pragma: no-cache
 			<div class="swatch" style="background: #ffffff"></div>			
 		</div>
 		
-		$swatch_script		
+		<script type="text/javascript"> swatch(); </script>
 		
 		<div id="content">
 		
