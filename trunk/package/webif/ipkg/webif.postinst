@@ -117,9 +117,11 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 	FixReadOnlyLink "/etc/ipkg.conf"
 	
 	nvram unset device_name 	# force rescan of device_name, in case new id code is added
+	nvram unset firmware_name	# force rescan of firmware_*
 	ExecuteIfExists "/etc/init.d/S90webif_deviceid"
+	ExecuteIfExists "/etc/init.d/S10firmwareinfo"	# x-wrt images use to pre-empt firmware_* set
 	ExecuteIfExists "/etc/init.d/S90webif_firmwareid"
-
+	
 	TestInstall
 	httpd_1=$(cat /tmp/httpd.conf.old)
 	httpd_2=$(cat /etc/httpd.conf)	
@@ -131,7 +133,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 		killall httpd
 		/etc/init.d/S50httpd
 	else
-		killall -HUP httpd 	# reinitialize httpd
+		killall -HUP httpd 	# reinitialize httpd - only reloads httpd.conf on newer busybox versions
 	fi
 	echo "!!! NOTICE: You may see a list of collected warnings below about not being able to"
 	echo "            remove some files. Ignore these warnings, they are essentially meaningless."
