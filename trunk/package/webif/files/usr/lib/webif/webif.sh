@@ -3,7 +3,7 @@ wwwdir=/www
 cgidir=/www/cgi-bin/webif
 rootdir=/cgi-bin/webif
 indexpage=index.sh
-. /usr/lib/webif/configfuncs.sh
+. /usr/lib/webif/functions.sh
 . /usr/lib/webif/pkgfuncs.sh
 
 # workarounds for stupid busybox slowness on [ ]
