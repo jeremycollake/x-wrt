@@ -324,8 +324,13 @@ END {
 	print "</select>" button("new", "Add") "</form></td></tr>"
 	print "</table>"
 	print "<br /><br />"
+	#print "<div class=\\"helpform\\">"
 	print "<div class=\\"helpitem\\">@TR<<Firewall>>:</div>"
 	print "<div class=\\"helptext\\">Here you can forward ports and more. If you wish to manually configure these instead, use '/etc/config/firewall', not '/etc/firewall.user'. Although either works, only the former is used by this page.</div>"	
+	print "<div class=\\"helpitem\\">@TR<<Forwarding a port>>:</div>"
+	print "<div class=\\"helptext\\">If you would like to forward port 999 TCP from the internet to a local computer at 192.168.100.1, it might look like below:</div>"			
+	#print "</div>"
+	print "<div class=\\"helptext\\"><br />Destination ports: 999 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Target: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: 999 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protocol: TCP</div>"		
 	print end_form(" ");
 }
 EOF
