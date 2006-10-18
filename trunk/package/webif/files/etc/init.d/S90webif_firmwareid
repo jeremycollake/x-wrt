@@ -1,12 +1,17 @@
 #!/bin/sh
-
-# we'll se these only if they aren't already, so that
-# they can be pre-empted
 firmware_name=$(nvram get firmware_name)
 if [ -z "$firmware_name" ]; then
 	nvram set firmware_name="OpenWrt White Russian"
 	nvram set firmware_subtitle="With X-Wrt Extensions"
-	nvram set firmware_version="RC5"
+	if grep -q "RC5" "/etc/banner"; then
+		nvram set firmware_version="RC5"
+	elif grep -q "RC6" "/etc/banner"; then
+		nvram set firmware_version="RC6"
+	elif grep -q "0.9" "/etc/banner"; then
+		nvram set firmware_version="0.9"
+	else
+		nvram set firmware_version="unknown version"		
+	fi
 fi
 
 
