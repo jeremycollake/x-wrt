@@ -1,6 +1,6 @@
 .asp:text/html
-/cgi-bin/webif:root:$p$root
-/cgi-bin/webif:admin:$p$root
+/:root:$p$root
+/:admin:$p$root
 .svg:image/svg+xml
 .png:image/png
 .gif:image/gif
