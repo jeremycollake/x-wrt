@@ -58,7 +58,7 @@ helptext|Helptext RAM Usage#This is the current RAM usage. The amount free repre
 end_form|
 start_form|Tracked Connections
 string|<tr><td>Maximum: $MAX_CONNECTIONS</td></tr>
-progressbar|conntrackuse|Used: $ACTIVE_CONNECTIONS ($USED_CONNECTIONS_PERCENT%)|200|$USED_CONNECTIONS_PERCENT|$USED_CONNECTIONS_PERCENT%||
+progressbar|conntrackuse|Used: $ACTIVE_CONNECTIONS ($USED_CONNECTIONS_PERCENT%)|200|$USED_CONNECTIONS_PERCENT|$USED_CONNECTIONS_PERCENT||
 helpitem|Tracked Connections
 helptext|Helptext Tracked Connections#This is the number of connections in your router's conntrack table. <a href="status-conntrackread.sh">View Conntrack Table</a>
 end_form|
