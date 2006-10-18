@@ -1,8 +1,11 @@
 #!/usr/bin/webif-page -p /bin/sh
 . /usr/lib/webif/webif.sh
 
+header "System" "Firmware Upgrade" "@TR<<Firmware Upgrade>>"
+
 #####################################################################
 do_upgrade() {
+	echo "<br />Upgrading firmware, please wait ... <br />"
 	# free some memory :)
 	ps | grep -vE 'Command|init|\[[kbmj]|httpd|haserl|bin/sh|awk|kill|ps|webif' | awk '{ print $1 }' | xargs kill -KILL
 	MEMFREE="$(awk 'BEGIN{ mem = 0 } ($1 == "MemFree:") || ($1 == "Cached:") {mem += int($2)} END{print mem}' /proc/meminfo)"
@@ -38,7 +41,6 @@ read_var() {
 #####################################################################
 NOINPUT=1
 
-header "System" "Firmware Upgrade" "@TR<<Firmware Upgrade>>"
 #####################################################################
 equal "$REQUEST_METHOD" "GET" && {
 	cat <<EOF
