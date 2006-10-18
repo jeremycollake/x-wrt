@@ -39,7 +39,7 @@ df | awk 'BEGIN { mcount=0 };
 	/\// {
 	filled_caption=$5;				
 	print "string|<tr><td><strong>"$6"</strong></td><td>"$1"</td></tr>"		
-	print "progressbar|mount_" mcount "|&nbsp;&nbsp;" $3 "<div class=kb>KB</div> of " $2 "<div class=kb>KB</div>|200|" $5 "|" filled_caption "|"; mcount+=1	
+	print "progressbar|mount_" mcount "|&nbsp;&nbsp;" $3 "<div class=\"kb\">KB</div> of " $2 "<div class=\"kb\">KB</div>|200|" $5 "|" filled_caption "|"; mcount+=1	
 	}'
 	)
 		
