@@ -42,6 +42,11 @@ saved_filename="/tmp/.webif/edited-files/$edit_pathname"
 
 empty "$FORM_cancel" || FORM_edit=""
 
+edit_filename="$FORM_edit"
+exists "$saved_filename" && {
+	edit_filename="$saved_filename"
+}
+
 if empty "$FORM_edit"; then
 	ls -halLe "$FORM_path" | awk \
 		-v url="$SCRIPT_NAME" \
@@ -49,21 +54,12 @@ if empty "$FORM_edit"; then
 		-f /usr/lib/webif/common.awk \
 		-f /usr/lib/webif/browser.awk
 else
-	if exists "$saved_filename"; then
-		cat "$saved_filename" | awk \
-			-v url="$SCRIPT_NAME" \
-			-v path="$FORM_path" \
-			-v file="$FORM_edit" \
-			-f /usr/lib/webif/common.awk \
-			-f /usr/lib/webif/editor.awk		
-	else
-		cat "$FORM_edit" | awk \
-			-v url="$SCRIPT_NAME" \
-			-v path="$FORM_path" \
-			-v file="$FORM_edit" \
-			-f /usr/lib/webif/common.awk \
-			-f /usr/lib/webif/editor.awk
-	fi
+	cat "$edit_filename" | awk \
+		-v url="$SCRIPT_NAME" \
+		-v path="$FORM_path" \
+		-v file="$FORM_edit" \
+		-f /usr/lib/webif/common.awk \
+		-f /usr/lib/webif/editor.awk	
 fi
 
 footer ?>

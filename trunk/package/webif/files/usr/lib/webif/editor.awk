@@ -15,7 +15,8 @@ BEGIN {
 
 END {
 	print "</textarea><br />"
-	print button("save", "Save") "&nbsp;" button("cancel", "Cancel")
+	print button("save", " Save Changes ") "&nbsp;" button("cancel", " Back ")
+	print "<br /><div class=\"tip\">After you are done changing files and making other configuration adjustments, you must click the Apply link to make the changes permanent.</div>"
 	end_form("&nbsp;")
 	print "</form>"
 }
