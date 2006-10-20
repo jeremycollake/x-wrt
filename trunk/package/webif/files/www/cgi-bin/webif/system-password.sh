@@ -36,5 +36,5 @@ EOF
 footer ?>
 
 <!--
-##WEBIF:name:System:200:Password Change
+##WEBIF:name:System:250:Password Change
 -->
