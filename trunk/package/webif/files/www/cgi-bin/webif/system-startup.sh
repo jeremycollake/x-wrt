@@ -23,28 +23,19 @@ header "System" "Startup" "@TR<<Startup>>" '' "$SCRIPT_NAME"
 
 # defaults
 custom_script_name="/etc/init.d/S95custom-user-startup"
-tmp_script_name="/tmp/.webif/file-S95custom-user-startup"
 startup_script_template="/etc/init.d/.x95custom-user-startup-default"
+FORM_edit="S95custom-user-startup"
+FORM_path="/etc/init.d"
+edit_pathname="$FORM_path/$FORM_edit"
+saved_filename="/tmp/.webif/edited-files/$edit_pathname"
 
-! empty "$FORM_submit" &&
-{
- 	SAVED=1
- 	# todo: don't be lazy, no ,9999d - use until end - look it up
- 	echo "$FORM_custom_script" | sed 2,9999d | grep "\#\!/bin/sh" >> /dev/null
- 	if equal "$?" "0"; then 	
- 		mkdir -p "/tmp/.webif"
- 		echo "$FORM_custom_script" > "$tmp_script_name"
- 	else 		
- 		echo '<div class=\"warning\">You must include #!/bin/sh as the first line of the script. Not saved.</div>'
- 	fi
+! empty "$FORM_save" && {	
+	SAVED=1		
+	mkdir -p "/tmp/.webif/edited-files/$FORM_path"	
+	echo "$FORM_filecontent" > "$saved_filename"
 }
 
-
-
-#
-# NOTE: had issues getting multi-line form data to initialize in textarea implemented by form.awk
-#       so am using static html for now. TODO
-#
+empty "$FORM_cancel" || FORM_edit=""
 ?>				
 <div class="settings">
 <div class="settings-title"><h3><strong>Custom Startup Script</strong></h3></div>
@@ -52,19 +43,33 @@ startup_script_template="/etc/init.d/.x95custom-user-startup-default"
 <table width="100%" summary="Settings">
 <tr id="custom_startup">
 <td>
-<textarea id="custom_script" name="custom_script" rows="24" cols="80">
+
 <? 
-if exists "$tmp_script_name"; then
-	cat "$tmp_script_name"
-elif exists "$custom_script_name"; then
-	cat "$custom_script_name" 
-else
+! exists "$custom_script_name" && ! exists "$saved_filename" && {
 	cp "$startup_script_template" "$custom_script_name" 
 	chmod 755 "$custom_script_name"
-	cat "$custom_script_name"
+}
+
+if empty "$FORM_edit"; then
+	ls -halLe "$FORM_path" | awk \
+		-v url="$SCRIPT_NAME" \
+		-v path="$FORM_path" \
+		-f /usr/lib/webif/common.awk \
+		-f /usr/lib/webif/browser.awk
+else
+	edit_filename="$FORM_edit"
+	exists "$saved_filename" && {
+		edit_filename="$saved_filename"
+	}
+	cat "$edit_filename" | awk \
+		-v url="$SCRIPT_NAME" \
+		-v path="$FORM_path" \
+		-v file="$FORM_edit" \
+		-f /usr/lib/webif/common.awk \
+		-f /usr/lib/webif/editor.awk	
 fi
 ?>
-</textarea>
+
 </td></tr></table></div></div>
 
 <? footer ?>
