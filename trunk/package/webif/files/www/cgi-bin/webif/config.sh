@@ -30,7 +30,16 @@ case "$FORM_mode" in
 			exists "$configname" && CONFIGFILES="$CONFIGFILES ${configname#file-}"
 		done
 		CONFIGFILES="${CONFIGFILES:+<h3 style="display:inline">Config files: </h3>$CONFIGFILES<br />}"
-		echo $CONFIGFILES
+		echo "$CONFIGFILES"
+		
+		EDITED_FILES=""
+		for edited_file in $(find "/tmp/.webif/edited-files/" -type f 2>&-); do
+			edited_file=$(echo "$edited_file" | sed s/'\/tmp\/.webif\/edited-files'//g)
+			EDITED_FILES="$EDITED_FILES $edited_file"
+		done
+		
+		EDITED_FILES="${EDITED_FILES:+<h3 style="display:inline">Edited files: </h3>$EDITED_FILES<br />}"
+		echo "$EDITED_FILES"
 		;;
 	save)
 		header $FORM_cat . "@TR<<Updating config...|Updating your configuration...>>"

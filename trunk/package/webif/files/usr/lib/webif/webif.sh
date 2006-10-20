@@ -55,7 +55,9 @@ show_validated_logo() {
 
 
 update_changes() {
-	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))		
+	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))
+	EDITED_FILES=$(find "/tmp/.webif/edited-files" -type f 2>&- | wc -l)
+	CHANGES=$(($CHANGES + $EDITED_FILES))
 }
 
 header() {

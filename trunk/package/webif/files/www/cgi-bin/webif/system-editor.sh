@@ -2,10 +2,6 @@
 <? 
 . /usr/lib/webif/webif.sh
 
-FORM_path="${FORM_path:-/}"
-cd "$FORM_path"
-FORM_path="$(pwd)"
-
 header "System" "File Editor" "@TR<<File Editor>>" ''
 
 cat <<EOF
@@ -32,6 +28,18 @@ textarea {
 --></style>
 EOF
 
+FORM_path="${FORM_path:-/}"
+cd "$FORM_path"
+FORM_path="$(pwd)"
+edit_pathname="$FORM_path/$FORM_edit"
+saved_filename="/tmp/.webif/edited-files/$edit_pathname"
+
+! empty "$FORM_save" && {	
+	SAVED=1
+	mkdir -p "/tmp/.webif/edited-files/$FORM_path"
+	echo "$FORM_filecontent" > "$saved_filename"	
+}
+
 empty "$FORM_cancel" || FORM_edit=""
 
 if empty "$FORM_edit"; then
@@ -41,12 +49,21 @@ if empty "$FORM_edit"; then
 		-f /usr/lib/webif/common.awk \
 		-f /usr/lib/webif/browser.awk
 else
-	cat "$FORM_edit" | awk \
-		-v url="$SCRIPT_NAME" \
-		-v path="$FORM_path" \
-		-v file="$FORM_edit" \
-		-f /usr/lib/webif/common.awk \
-		-f /usr/lib/webif/editor.awk
+	if exists "$saved_filename"; then
+		cat "$saved_filename" | awk \
+			-v url="$SCRIPT_NAME" \
+			-v path="$FORM_path" \
+			-v file="$FORM_edit" \
+			-f /usr/lib/webif/common.awk \
+			-f /usr/lib/webif/editor.awk		
+	else
+		cat "$FORM_edit" | awk \
+			-v url="$SCRIPT_NAME" \
+			-v path="$FORM_path" \
+			-v file="$FORM_edit" \
+			-f /usr/lib/webif/common.awk \
+			-f /usr/lib/webif/editor.awk
+	fi
 fi
 
 footer ?>

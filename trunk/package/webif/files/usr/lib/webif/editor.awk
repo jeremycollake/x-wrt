@@ -3,7 +3,7 @@ BEGIN {
 	start_form("@TR<<File>>: " path "/" file)
 	print hidden("path", path)
 	print hidden("edit", file)
-	printf "<textarea name=\"content\" cols=\"80\" rows=\"20\">"
+	printf "<textarea name=\"filecontent\" cols=\"80\" rows=\"20\">"
 }
 
 {
@@ -15,7 +15,7 @@ BEGIN {
 
 END {
 	print "</textarea><br />"
-	print button("save", "Save") button("cancel", "Cancel")
+	print button("save", "Save") "&nbsp;" button("cancel", "Cancel")
 	end_form("&nbsp;")
 	print "</form>"
 }

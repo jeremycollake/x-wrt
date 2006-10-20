@@ -109,7 +109,27 @@ reload_system() {
 	echo "$(nvram get wan_hostname)" > /proc/sys/kernel/hostname
 }
 
-cd /tmp/.webif
+is_read_only() {	
+	rom_file="/rom/$1"
+	touch "$1" 2>&- || [ -f "$rom_file" ]
+}
+
+# edited-files/*		user edited files - stored with directory tree in-tact
+for edited_file in $(find "/tmp/.webif/edited-files/" -type f 2>&-); do
+	target_file=$(echo "$edited_file" | sed s/'\/tmp\/.webif\/edited-files'//g)
+	echo "@TR<<Processing>> $target_file"
+	# for squashfs symlink hack
+	is_read_only "$target_file" && {		
+		rm "$target_file"
+	}
+	if cp "$edited_file" "$target_file"; then
+		rm "$edited_file" 2>&1
+	else
+	 	echo "@TR<<Critical Error>> : Could not replace $target_file. Media full?"
+	fi						
+done
+# leave if some files not applied
+rm -r "/tmp/.webif/edited-files" 2>&1
 
 # file-* 		other config files
 for config in $(ls file-* 2>&-); do
