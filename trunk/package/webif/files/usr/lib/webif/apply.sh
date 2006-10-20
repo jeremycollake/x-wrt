@@ -109,6 +109,8 @@ reload_system() {
 	echo "$(nvram get wan_hostname)" > /proc/sys/kernel/hostname
 }
 
+cd "/tmp/.webif"
+
 is_read_only() {	
 	rom_file="/rom/$1"
 	touch "$1" 2>&- || [ -f "$rom_file" ]
@@ -123,13 +125,13 @@ for edited_file in $(find "/tmp/.webif/edited-files/" -type f 2>&-); do
 		rm "$target_file"
 	}
 	if cp "$edited_file" "$target_file"; then
-		rm "$edited_file" 2>&1
+		rm "$edited_file" 2>&-
 	else
 	 	echo "@TR<<Critical Error>> : Could not replace $target_file. Media full?"
 	fi						
 done
 # leave if some files not applied
-rm -r "/tmp/.webif/edited-files" 2>&1
+rm -r "/tmp/.webif/edited-files" 2>&-
 
 # file-* 		other config files
 for config in $(ls file-* 2>&-); do
