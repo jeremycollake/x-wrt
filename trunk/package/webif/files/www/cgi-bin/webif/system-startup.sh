@@ -38,15 +38,7 @@ saved_filename="/tmp/.webif/edited-files/$edit_pathname"
 }
 
 empty "$FORM_cancel" || FORM_edit=""
-?>				
-<div class="settings">
-<div class="settings-title"><h3><strong>Custom Startup Script</strong></h3></div>
-<div class="settings-content">
-<table width="100%" summary="Settings">
-<tr id="custom_startup">
-<td>
 
-<? 
 ! exists "$custom_script_name" && ! exists "$saved_filename" && {
 	cp "$startup_script_template" "$custom_script_name" 
 	chmod 755 "$custom_script_name"
@@ -70,11 +62,9 @@ else
 		-f /usr/lib/webif/common.awk \
 		-f /usr/lib/webif/editor.awk	
 fi
-?>
 
-</td></tr></table></div></div>
 
-<? footer ?>
+ footer ?>
 <!--
 ##WEBIF:name:System:125:Startup
 -->
