@@ -19,7 +19,7 @@
 #
 . /usr/lib/webif/webif.sh
 
-header "System" "Custom Startup" "@TR<<Custom Startup>>" '' "$SCRIPT_NAME" 
+header "System" "Startup" "@TR<<Startup>>" '' "$SCRIPT_NAME" 
 
 # defaults
 custom_script_name="/etc/init.d/S95custom-user-startup"
@@ -69,5 +69,5 @@ fi
 
 <? footer ?>
 <!--
-##WEBIF:name:System:125:Custom Startup
+##WEBIF:name:System:125:Startup
 -->
