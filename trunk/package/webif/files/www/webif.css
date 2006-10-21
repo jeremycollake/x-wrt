@@ -278,11 +278,9 @@ th {
 
 .mount-target
 {
-	display: inline;
-	font-size: 0.8em;
+	display: inline;	
 	padding-left: 1em;
 	font-weight: normal;
-
 }
 
 .warning
@@ -299,6 +297,13 @@ th {
   	margin: 0.5em;
   	border: 2px solid #000;
   	cursor: pointer;
+}
+
+.packages
+{	
+	font-size: 0.8em;
+	text-align: left;
+
 }
 
 /* font */
@@ -429,6 +434,11 @@ dt,
 .progressbar-unfilled
 {
 	font-size: 0.7em;
+}
+
+.mount-target
+{
+	font-size: 0.8em;
 }
 
 .smalltext
