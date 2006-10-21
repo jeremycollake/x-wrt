@@ -18,6 +18,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 	rm -f /etc/init.d/S12deprecatedcleanup >> /dev/null 2>&1
 	rm -f /etc/init.d/S90webif_* >> /dev/null 2>&1
 	rm -f /etc/init.d/x95custom-user-startup >> /dev/null 2>&1 # used in <=r793
+	rm -f /etc/init.d/x*.webif >> /dev/null 2>&1		# intermediate files - renamed by postinst
 	if [ -f "/etc/httpd.conf" ]; then	
 		cp /etc/httpd.conf /tmp/httpd.conf.old        	# make a copy for comparing
 	else

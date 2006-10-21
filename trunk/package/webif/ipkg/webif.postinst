@@ -95,6 +95,8 @@ echo "Executing post-install script ..."
 rm -f "${IPKG_INSTROOT}/etc/init.d/S50dnsmasq"
 rm -f "${IPKG_INSTROOT}/etc/httpd.conf"
 mv -f "${IPKG_INSTROOT}/etc/init.d/x50dnsmasq.webif" "${IPKG_INSTROOT}/etc/init.d/S50dnsmasq"
+rm -f "${IPKG_INSTROOT}/etc/init.d/S60cron"
+mv -f "${IPKG_INSTROOT}/etc/init.d/x60cron.webif" "${IPKG_INSTROOT}/etc/init.d/S60cron"
 mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
 
 AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/packages"
