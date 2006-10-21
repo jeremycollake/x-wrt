@@ -3,22 +3,22 @@
 if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image builder)
 	echo "Cleaning up existing webif package (if one exists) ..."
 	# remove files, but not directories
-	rm -rf /www/* >> /dev/null 2>&1 
+	rm -rf /www/* 2>&- 
 	# temporary rename for milestone 1
-	#rm -f /etc/functions.sh >> /dev/null 2>&1	
-	rm -f /etc/functions_ex.sh >> /dev/null 2>&1	
+	#rm -f /etc/functions.sh 2>&-	
+	rm -f /etc/functions_ex.sh 2>&-	
 	# end temp
-	rm -f /usr/lib/webif/* >> /dev/null 2>&1
-	rm -f /etc/init.d/S50dnsmasq >> /dev/null 2>&1
-	rm -f /etc/init.d/S60ntp >> /dev/null 2>&1
-	rm -f /etc/init.d/S60upnp >> /dev/null 2>&1   		# used in <=r500
-	rm -f /etc/init.d/S66upnpd_webif >> /dev/null 2>&1
-	rm -f /etc/init.d/S51crond >> /dev/null 2>&1
-	rm -f /etc/init.d/S11firmwareinfo >> /dev/null 2>&1	# used in <=r791
-	rm -f /etc/init.d/S12deprecatedcleanup >> /dev/null 2>&1
-	rm -f /etc/init.d/S90webif_* >> /dev/null 2>&1
-	rm -f /etc/init.d/x95custom-user-startup >> /dev/null 2>&1 # used in <=r793
-	rm -f /etc/init.d/x*.webif >> /dev/null 2>&1		# intermediate files - renamed by postinst
+	rm -f /usr/lib/webif/* 2>&-
+	rm -f /etc/init.d/S50dnsmasq 2>&-
+	rm -f /etc/init.d/S60ntp 2>&-
+	rm -f /etc/init.d/S60upnp 2>&-   		# used in <=r500
+	rm -f /etc/init.d/S66upnpd_webif 2>&-
+	rm -f /etc/init.d/S51crond 2>&-
+	rm -f /etc/init.d/S11firmwareinfo 2>&-	# used in <=r791
+	rm -f /etc/init.d/S12deprecatedcleanup 2>&-
+	rm -f /etc/init.d/S90webif_* 2>&-
+	rm -f /etc/init.d/x95custom-user-startup 2>&- # used in <=r793
+	rm -f /etc/init.d/x*.webif 2>&-		# intermediate files - renamed by postinst
 	if [ -f "/etc/httpd.conf" ]; then	
 		cp /etc/httpd.conf /tmp/httpd.conf.old        	# make a copy for comparing
 	else

@@ -39,12 +39,12 @@ ExecuteIfExists()
 #
 FixReadOnlyLink()
 {
-	touch "$1" >> /dev/null 2>&1	# test if read-only
+	touch "$1" 2>&-	# test if read-only
 	[ "$?" != 0 ] && {
 		local tmpfile=$(mktemp "${IPKG_INSTROOT}/tmp/.webif-inst-XXXXXX")
-		cp "$1" "$tmpfile" >> /dev/null 2>&1
-		rm "$1"  >> /dev/null 2>&1
-		mv "$tmpfile" "$1"  >> /dev/null 2>&1
+		cp "$1" "$tmpfile" 2>&-
+		rm "$1"  2>&-
+		mv "$tmpfile" "$1"  2>&-
 	}
 }
 
