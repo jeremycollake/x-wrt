@@ -94,5 +94,5 @@ footer
 
 ?>
 <!--
-##WEBIF:name:Info:10:System Information
+##WEBIF:name:Info:1:System Information
 -->

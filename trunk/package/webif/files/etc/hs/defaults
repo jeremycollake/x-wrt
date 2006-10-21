@@ -1,0 +1,16 @@
+nvram set hs_type=
+nvram set hs_radconf=on
+nvram set hs_radconf_server=rad01.coova.org
+nvram set hs_radconf_authport=1812
+nvram set hs_radconf_secret=coova-anonymous
+nvram set hs_radconf_user=coova-ap-tos
+nvram set hs_radconf_pwd=coovachilli
+nvram set hs_mode=wireless
+nvram set hs_radauth=1812
+nvram set hs_radacct=1813
+nvram set hs_uamport=3660
+nvram set hs_admusr=chillispot
+nvram set hs_admpwd=chillispot
+nvram set hs_uamhomepage=http://\$HS_UAMLISTEN:\$HS_UAMPORT/www/coova.html
+nvram set hs_wwwdir=/rom/etc/chilli/www
+nvram set hs_adminterval=120

@@ -55,6 +55,20 @@ $1 ~ /^field/ {
 
 	field_open=1
 }
+$1 ~ /^button/ {
+	if (field_open == 1) print "</td></tr>"
+	if ($3 != "") field_opts=" id=\"" $3 "\""
+	else field_opts=""
+	if ($4 == "hidden") field_opts = field_opts " style=\"display: none\""
+	print "<tr" field_opts ">"
+	if ($2 != "") print "<td width=\"50%\">" $2 "</td><td width=\"50%\">"
+	else print "<td colspan=\"2\">"
+
+	print "<input type=\"button\" name=\"" $2 "\" value=\"" $3 "\" onclick=\"" $4 "\"/>"
+	print "</td></tr>"
+
+	field_open=0
+}
 $1 ~ /^checkbox/ {
 	if ($3==$4) opts="checked=\"checked\" "
 	else opts=""
@@ -78,9 +92,21 @@ $1 ~ /^select/ {
 	select_open = 1
 	select_default = $3
 }
+
 ($1 ~ /^optgroup/) && (select_open == 1) {
 	print "<optgroup label=\"" $2 "\">"
 	optgroup_open = 1
+}
+
+$1 ~ /^txtfile/ {
+	if (field_open == 0) print "<tr><td>"
+	field_open=1
+        rows=4
+	cols=60
+        file=$3
+	print "<small><textarea style=\"white-space: nowrap; overflow: auto;\" wrap=\"off\" rows=\"" rows "\" cols=\"" cols "\" id=\"" $2 "\" name=\"" $2 "\"" opts ">"
+        system("cat " file)
+	print "</textarea></small>"
 }
 ($1 ~ /^option/) && (select_open == 1) {
 	if ($2 == select_default) option_selected=" selected=\"selected\""

@@ -3,6 +3,11 @@ function value(name)
 	var item = document.getElementById(name);
 	return (item ? item.value : "");
 }
+function set_value(name, value)
+{
+	var item = document.getElementById(name);
+	if (item) item.value = value;
+}
 function isset(name, val)
 {
 	return (value(name) == val);

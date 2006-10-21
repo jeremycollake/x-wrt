@@ -105,6 +105,10 @@ echo "OK"
 reload_system() {
 	echo '@TR<<Applying>> @TR<<system settings>> ...'
 	echo "$(nvram get wan_hostname)" > /proc/sys/kernel/hostname
+	grep '_admin' config-system >&- 2>&- && {
+	    echo '@TR<<Reloading>> @TR<<firewall settings>> ...'
+	    /etc/init.d/S??firewall
+	}
 }
 
 cd "/tmp/.webif"

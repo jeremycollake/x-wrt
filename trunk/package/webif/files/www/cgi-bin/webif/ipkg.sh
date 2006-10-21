@@ -120,7 +120,7 @@ echo "</pre>"
   <br />
   <table class=\"packages\"><tr class=\"packages\"><th width="150">Action</th><th width="200">Package</th><th>Description</th></tr>
 <?
-ipkg list_installed | egrep -v "(base-files|bridge|busybox|uclibc|kernel|Done\.)" | awk -F ' ' '
+ipkg list_installed | awk -F ' ' '
 $2 !~ /terminated/ {       
        link=$1
        gsub(/\+/,"%2B",link)
