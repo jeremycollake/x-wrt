@@ -25,14 +25,14 @@ load_settings network
 
 FORM_wandns="${wan_dns:-$(nvram get wan_dns)}"
 LISTVAL="$FORM_wandns"
-handle_list "$FORM_dnsremove" "$FORM_wandnsadd" "$FORM_wandnssubmit" 'ip|FORM_dnsadd|@TR<<WAN DNS Address>>|required' && {
+handle_list "$FORM_wandnsremove" "$FORM_wandnsadd" "$FORM_wandnssubmit" 'ip|FORM_dnsadd|@TR<<WAN DNS Address>>|required' && {
 	FORM_wandns="$LISTVAL"
 	save_setting network wan_dns "$FORM_wandns"
 }
 FORM_wandnsadd=${FORM_wandnsadd:-192.168.1.1}
 
 if empty "$FORM_submit"; then
-	FORM_wan_proto=${wan_proto:-$(nvram get wan_proto)}
+	FORM_wan_proto=${FORM_wan_proto:-$(nvram get wan_proto)}
 	case "$FORM_wan_proto" in
 		# supported types
 		static|dhcp|pptp|pppoe) ;;
@@ -204,7 +204,7 @@ helpitem|WAN IP Settings
 helptext|Helptext WAN IP Settings#IP Settings are optional for DHCP and PPTP. They are used as defaults in case the DHCP server is unavailable.
 end_form
 start_form|@TR<<WAN DNS Servers>>|wan_dns|hidden
-listedit|wandns|$SCRIPT_NAME?wan_proto=static&|$FORM_wandns|$FORM_wandnsadd
+listedit|wandns|$SCRIPT_NAME?wan_proto=static&amp;|$FORM_wandns|$FORM_wandnsadd
 helpitem|Note
 helptext|Helptext WAN DNS save#You should save your settings on this page before adding/removing DNS servers
 end_form
@@ -234,7 +234,7 @@ EOF
 
 FORM_landns="${lan_dns:-$(nvram get lan_dns)}"
 LISTVAL="$FORM_landns"
-handle_list "$FORM_dnsremove" "$FORM_landnsadd" "$FORM_landnssubmit" 'ip|FORM_dnsadd|@TR<<DNS Address>>|required' && {
+handle_list "$FORM_landnsremove" "$FORM_landnsadd" "$FORM_landnssubmit" 'ip|FORM_dnsadd|@TR<<DNS Address>>|required' && {
 	FORM_landns="$LISTVAL"
 	save_setting network lan_dns "$FORM_landns"
 }
