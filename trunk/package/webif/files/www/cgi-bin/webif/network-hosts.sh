@@ -190,7 +190,7 @@ $1 > 0 {
 <tr><td><br /><br /></td></tr>
 </tbody></table>
 
-</div>
+</div></div></div>
 
 <? footer ?>
 <!--
