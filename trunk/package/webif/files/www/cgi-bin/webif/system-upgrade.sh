@@ -1,7 +1,7 @@
 #!/usr/bin/webif-page -p /bin/sh
 . /usr/lib/webif/webif.sh
 
-header "System" "Firmware Upgrade" "@TR<<Firmware Upgrade>>"
+header "System" "Upgrade" "@TR<<Firmware Upgrade>>"
 
 #####################################################################
 do_upgrade() {
@@ -116,4 +116,4 @@ EOF
 
 footer
 
-##WEBIF:name:System:400:Firmware Upgrade
+##WEBIF:name:System:900:Upgrade

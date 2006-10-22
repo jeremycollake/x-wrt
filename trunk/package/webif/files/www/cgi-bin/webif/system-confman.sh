@@ -40,8 +40,8 @@ boot_wait"
 
 . /usr/lib/webif/webif.sh
 
-header "System" "Config Management" "@TR<<Config Management>>" '' 
-
+header "System" "Backup" "@TR<<Backup and Restore>>" '' 
+ShowWIPWarning
 case "$FORM_action" in
     download)
 	tmp=/tmp/config.$$
@@ -226,5 +226,5 @@ EOF
 footer 
 ?>
 <!--
-##WEBIF:name:System:450:Config Management
+##WEBIF:name:System:450:Backup
 -->
