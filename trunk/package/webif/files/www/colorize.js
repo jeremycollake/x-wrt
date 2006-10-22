@@ -1,7 +1,3 @@
-/* TODO: somehow, the cookie is sometimes getting two values of the same
-    name in it, and we can only delete the more recent (no matter what). The original
-    remains perpetually stuck and we keep reading it, preventing the color from changing. 
-    */
 function setCookie(name, value, expires, path, domain, secure)
 {
     document.cookie= name + "=" + escape(value) +
@@ -45,13 +41,11 @@ function deleteCookie(name,path,domain) {
 
 function setcolor()
 {
-	// set cookie to expire in 30 days
 	var expireTime=new Date();
-	ThirtyDays=30*24*60*60*1000;
-   	expireTime.setTime(expireTime.getTime()+ThirtyDays);
-   	deleteCookie("webif_colortheme", '', '');   /* old cookie name */   	   	
+	OneYear=365*24*60*60*1000;
+   	expireTime.setTime(expireTime.getTime()+OneYear);  	   	
    	deleteCookie("webif_color_theme", '', '');   /* old cookie name */
- 	setCookie("webif_color_theme", this.title, expireTime, '', '', '');
+ 	setCookie("xwrt_color", this.title, expireTime, '', '', '');
  	colorize();
  	document.close();
  	window.location.href = window.location.href;
@@ -102,7 +96,7 @@ function swatch()
 
 function colorize()
 {
-  var color=getCookie("webif_color_theme")
+  var color=getCookie("xwrt_color")
   document.write('<link rel="stylesheet" type="text/css" href="');  
   switch(color)
   {
