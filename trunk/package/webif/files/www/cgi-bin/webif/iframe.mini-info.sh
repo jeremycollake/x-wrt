@@ -14,7 +14,7 @@
 		let "nI+=1"		
 	done
 
-    _firmware_subtitle="$(nvram get firmware_subtitle)"
+    	_firmware_name="$(nvram get firmware_name)"
 	_version="$(nvram get firmware_version)"	
 	_uptime="$(uptime)"
 	_loadavg="${_uptime#*load average: }"
@@ -29,15 +29,12 @@
 ?>
 <meta http-equiv="refresh" content="15">
 
-<body ><div id="container-mini-info">
+<body ><div id="short-status">
 	<ul>
-		<strong> <? echo -n $_firmware_subtitle ?> <? echo -n $_version ?>  </strong> <br/>
-
-		- <strong>Host:</strong> <? echo -n $_hostname ?> <br/>
-		- <strong>Uptime:</strong> <? echo -n $_uptime ?> <br/>
-		- <strong>Load:</strong> <? echo -n $_loadavg ?> <br/>
-		- <strong>Mem:</strong> <? echo -n $FREE_MEM ?> KB free - <? echo -n $MEM_PERCENT_USED  ?>% used <br/>
-
+		<li><strong> <? echo -n $_firmware_name ?> <? echo -n $_version ?>  </strong>
+		<li><li><strong>Host:</strong> <? echo -n $_hostname ?> <strong>Uptime:</strong> <? echo -n $_uptime ?>
+		<li><strong>Load:</strong> <? echo -n $_loadavg ?>
+		<li><strong>Mem:</strong> <? echo -n $FREE_MEM ?> KB free - <? echo -n $MEM_PERCENT_USED  ?>% used 
 	</ul>
 	</div>
 </body>
