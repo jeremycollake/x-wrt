@@ -20,7 +20,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 	rm -f /etc/init.d/x95custom-user-startup 2>&- 1>&- # used in <=r793
 	rm -f /etc/init.d/x*.webif 2>&- 1>&-		# intermediate files - renamed by postinst
 
-	# new c0da hotspot stuff
+	# new coova hotspot stuff
 	rm -f /etc/functions_net.sh 2>&- 1>&-
 	rm -f /usr/lib/webif/apply-hs.sh 2>&- 1>&-
 	rm -f /usr/lib/webif/apply-pptp.sh 2>&- 1>&-
@@ -28,7 +28,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 	rm -rf /etc/hs 2>&- 1>&-
 	rm -f /etc/init.d/pptp.init 2>&- 1>&-
 	rm -f /etc/init.d/S41wpa 2>&- 1>&-		# todo: this file should be moved to nas package
-	# end c0da stuff
+	# end coova stuff
 
 	if [ -f "/etc/httpd.conf" ]; then	
 		cp /etc/httpd.conf /tmp/httpd.conf.old        	# make a copy for comparing
