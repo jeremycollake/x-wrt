@@ -87,6 +87,24 @@ has_pkgs() {
     return $retval;
 }
 
+mini_header() {
+
+cat <<EOF
+Content-Type: text/html
+Pragma: no-cache
+
+
+<?xml version="1.0" encoding="@TR<<Encoding|ISO-8859-1>>"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+	<head>
+<link rel="stylesheet" type="text/css" href="/webif.css" />
+    	<title></title>
+</head>
+
+EOF
+}
+
 header() {
 	empty "$ERROR" && {
 		_saved_title="${SAVED:+: @TR<<Settings saved>>}"
@@ -145,17 +163,19 @@ Pragma: no-cache
 	    <div id="header">	    				
 	    				<div class="openwrt-title">	    				
 	    			   	</div>	 		
-	    			   	<div id="short-status">	
-	    			   	$_firmware_name $_version<br />    					    				    				
-	    				<h3>Status</h3><br />
-					<ul>									
-						<li><strong>@TR<<X-Wrt Webif<sup>2</sup>>>:</strong> r$_webif_rev</li>
-						<li><strong>@TR<<Host:>></strong> $_hostname</li>
-						<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
-						<li><strong>@TR<<Load>>:</strong> $_loadavg</li>																					
-					</ul>	
-													
-				</div>		
+	    			   	<div id="short-status">
+
+					<IFRAME src="/cgi-bin/webif/iframe.mini-info.sh" width="250" height="80"  scrolling="auto" frameborder="0" >
+
+						<h3><strong>Status:</strong></h3>
+						<ul>
+							<li><strong>$_firmware_subtitle $_version </strong></li>
+							<li><strong>Host:</strong> $_hostname</li>						
+							<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
+							<li><strong>@TR<<Load>>:</strong> $_loadavg</li>						
+						</ul>
+					</IFRAME>
+				</div>
 		</div>
 	
 		<div id="categories">$_categories</div>

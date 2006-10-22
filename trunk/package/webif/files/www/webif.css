@@ -59,6 +59,14 @@ option
 	min-height: 100%;
 }
 
+#container-mini-info {
+	position: relative;
+	min-height: 100%;
+	font-weight: normal;
+	font-size: 0.7em;
+	text-decoration: none;
+}
+
 #header
 {
 	position: relative;
