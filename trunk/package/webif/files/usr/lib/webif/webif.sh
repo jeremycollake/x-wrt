@@ -165,7 +165,7 @@ Pragma: no-cache
 	    			   	</div>	 		
 	    			   	<div id="short-status">
 
-					<IFRAME src="/cgi-bin/webif/iframe.mini-info.sh" width="250" height="80"  scrolling="auto" frameborder="0" >
+					<iframe src="/cgi-bin/webif/iframe.mini-info.sh" width="250" height="80"  scrolling="auto" frameborder="0" >
 
 						<h3><strong>Status:</strong></h3>
 						<ul>
@@ -174,7 +174,7 @@ Pragma: no-cache
 							<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
 							<li><strong>@TR<<Load>>:</strong> $_loadavg</li>						
 						</ul>
-					</IFRAME>
+					</iframe>
 				</div>
 		</div>
 	
