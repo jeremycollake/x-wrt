@@ -66,9 +66,6 @@ EOF
         save_setting network ${FORM_iface}_dhcp_num $FORM_dhcp_num
         save_setting network ${FORM_iface}_dhcp_bail $FORM_dhcp_bail
     }
-    ! equal "$?" "0" && {
-    	echo "validation failed!!!<br />"
-    }
 fi
 
 #display_form<<EOF
