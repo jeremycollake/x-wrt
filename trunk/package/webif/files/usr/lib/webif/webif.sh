@@ -170,7 +170,7 @@ Pragma: no-cache
 					$short_status_frame_0					
 						<h3><strong>Status:</strong></h3>
 						<ul>
-							<li><strong>$_firmware_subtitle $_version </strong></li>
+							<li><strong>$_firmware_name $_version </strong></li>
 							<li><strong>Host:</strong> $_hostname</li>						
 							<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
 							<li><strong>@TR<<Load>>:</strong> $_loadavg</li>						
