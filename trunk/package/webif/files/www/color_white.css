@@ -138,9 +138,7 @@ html, body
 
 .selected-maincat
 {
-	border-color: #000;	
-	border-style: solid;	
-	border-width: medium;	
+	border-color: #000;		
 	background-color: #DDD;	
 }
 
@@ -174,8 +172,6 @@ html, body
 .selected-subcat
 {
 	border-color: #000;	
-	border-style: solid;	
-	border-width: medium;	
 	background-color: #DDD;	
 }
 

@@ -137,10 +137,8 @@
 
 .selected-maincat
 {
-	border-color: #CCC;	
-	border-style: solid;	
-	border-width: medium;	
-	background-color: #224054;	
+	border-color: #CCC;		
+	background-color: #224054;		
 }
 
 .selected-maincat a:visited
@@ -172,11 +170,10 @@
 
 .selected-subcat
 {
-	border-color: #CCC;	
-	border-style: solid;	
-	border-width: medium;	
-	background-color: #224054;		
-}
+	border-color: #CCC;		
+	background-color: #224054;	
+}	
+
 
 .selectedsubcat a:visited
 {
@@ -189,8 +186,9 @@
 }
 
 .unselected-subcat
-{
-	
+{		
+
+	border-color: #CCC;		
 }
 
 .unselected-subcat a:visited
@@ -202,3 +200,4 @@
 {
 	
 }
+

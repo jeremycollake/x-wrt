@@ -143,8 +143,6 @@
 .selected-maincat
 {
 	border-color: #000;	
-	border-style: solid;	
-	border-width: medium;	
 	background-color: #343018;
 }
 
@@ -178,8 +176,6 @@
 .selected-subcat
 {
 	border-color: #000;	
-	border-style: solid;	
-	border-width: medium;	
 	background-color: #343018;
 }
 

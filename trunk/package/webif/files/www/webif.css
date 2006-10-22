@@ -131,8 +131,33 @@ option
 	display: inline;
 	position: relative;
 	list-style-type: none;
-	padding-left: 0.4em;
+	padding: 0.4em;	
+}
 
+
+.selected-subcat
+{
+	border-style: groove;
+	border-width: medium;	
+	border-bottom-style: hidden;
+}
+
+.unselected-subcat
+{		
+		
+	border-style: solid;	
+	border-width: thin;			
+}
+
+
+.selected-maincat
+{
+	border-color: #CCC;	
+	border-style: ridge;	
+	border-width: medium;	
+	background-color: #224054;	
+	border-bottom-style: hidden;
+	border-top-style: hidden;	
 }
 
 #content
