@@ -1,6 +1,9 @@
 #!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
+header "Network" "DHCP" "@TR<<DHCP Interfaces>>" '' "$SCRIPT_NAME"
+
+load_settings network
 
 exists /tmp/.webif/file-dnsmasq.conf  && DNSMASQ_FILE=/tmp/.webif/file-dnsmasq.conf || DNSMASQ_FILE=/etc/dnsmasq.conf
 exists $DNSMASQ_FILE || touch $DNSMASQ_FILE >&- 2>&-
@@ -40,14 +43,14 @@ empty "$FORM_add_line" || {
 
 empty "$FORM_remove_line" || update_dnsmasq del "$FORM_iface" "$FORM_line"
 
-    if [ -n "$FORM_iface" ]; then
-        FORM_dhcp_enabled=${dhcp_enabled:-$(nvram get ${FORM_iface}_dhcp_enabled)}
-        FORM_dhcp_start=${dhcp_start:-$(nvram get ${FORM_iface}_dhcp_start)}
-        FORM_dhcp_num=${dhcp_num:-$(nvram get ${FORM_iface}_dhcp_num)}
-        FORM_dhcp_bail=${dhcp_num:-$(nvram get ${FORM_iface}_dhcp_bail)}
+    if [ -n "$FORM_iface" ]; then    	
+        FORM_dhcp_enabled=${FORM_dhcp_enabled:-$(nvram get ${FORM_iface}_dhcp_enabled)}
+        FORM_dhcp_start=${FORM_dhcp_start:-$(nvram get ${FORM_iface}_dhcp_start)}
+        FORM_dhcp_num=${FORM_dhcp_num:-$(nvram get ${FORM_iface}_dhcp_num)}
+        FORM_dhcp_bail=${FORM_dhcp_bail:-$(nvram get ${FORM_iface}_dhcp_bail)}
     fi
-if [ -n "$FORM_submit" ]; then
-    SAVED=1
+if [ -n "$FORM_submit" ]; then   
+	echo "validating<br />" 
     validate <<EOF
 int|FORM_${FORM_iface}_dhcp_enabled|DHCP enabled||$FORM_dhcp_enabled
 string|FORM_${FORM_iface}_dhcp_iface|DHCP iface||$FORM_dhcp_iface
@@ -56,15 +59,17 @@ int|FORM_${FORM_iface}_dhcp_num|DHCP num||$FORM_dhcp_num
 string|FORM_${FORM_iface}_dhcp_bail|DHCP bail||$FORM_dhcp_bail
 EOF
     equal "$?" 0 && {
+    	SAVED=1  	 
         save_setting network ${FORM_iface}_dhcp_enabled $FORM_dhcp_enabled
         save_setting network ${FORM_iface}_dhcp_iface $FORM_dhcp_iface
         save_setting network ${FORM_iface}_dhcp_start $FORM_dhcp_start
         save_setting network ${FORM_iface}_dhcp_num $FORM_dhcp_num
         save_setting network ${FORM_iface}_dhcp_bail $FORM_dhcp_bail
     }
+    ! equal "$?" "0" && {
+    	echo "validation failed!!!<br />"
+    }
 fi
-
-header "Network" "DHCP" "@TR<<DHCP Interfaces>>" '' "$SCRIPT_NAME"
 
 #display_form<<EOF
 awk -v "name=@TR<<Name>>" \
@@ -179,20 +184,20 @@ END {
 EOF
 
 display_form<<EOF
-start_form|@TR<<DHCP Server for>> $FORM_iface
+start_form|@TR<<DHCP Server For>> 
 field|iface|iface|hidden
 text|iface|$FORM_iface
 field|@TR<<DHCP Enabled>>|dhcp_enabled
-checkbox|dhcp_enabled|$FORM_dhcp_enabled|1
+checkbox|dhcp_enabled|$FORM_dhcp_enabled|dhcp_enabled
 field|@TR<<DHCP Start>>|dhcp_start
 text|dhcp_start|$FORM_dhcp_start|$NETWORK
 field|@TR<<DHCP Num>>|dhcp_num
 text|dhcp_num|$FORM_dhcp_num
-field|@TR<<DHCP Bail>>|dhcp_bail
+field|@TR<<DHCP Bail>>
 text|dhcp_bail|$FORM_dhcp_bail
 end_form
 EOF
-fi
+fi 
 fi
 
 footer ?>
