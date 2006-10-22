@@ -80,6 +80,11 @@ empty "$FORM_remove_host" || update_hosts del "$FORM_remove_ip" "$FORM_remove_na
 empty "$FORM_remove_dhcp" || update_ethers del "$FORM_remove_mac"
 
 header "Network" "Hosts" "@TR<<Configured Hosts>>" ''
+?>
+
+<div class="settings"><div class="settings-block"><div class="settings-content">
+
+<?
 
 # Hosts in /etc/hosts
 awk -v "url=$SCRIPT_NAME" \
@@ -90,7 +95,7 @@ awk -v "url=$SCRIPT_NAME" \
 BEGIN {
 	FS="[ \t]"
 	start_form("@TR<<Host Names>>")
-	print "<table width=\"70%\" summary=\"Settings\">"
+	print "<table style=\\"width: 90%; text-align: left;\\" border=\\"0\\" cellpadding=\\"5\\" cellspacing=\\"10\\" summary=\\"Settings\\">"
 	print "<tr><th>@TR<<IP Address>></th><th>@TR<<Host Name>></th><th></th></tr>"
 	print "<tr><td colspan=\"3\"><hr class=\"separator\" /></td></tr>"
 }
@@ -134,7 +139,7 @@ BEGIN {
 	FS="[ \\t]"
 	print "<form enctype=\\"multipart/form-data\\" method=\\"post\\">"
 	start_form("@TR<<DHCP Static|Static IP addresses (for DHCP)>>")
-	print "<table width=\\"70%\\" summary=\\"Settings\\">"
+	print "<table style=\\"width: 90%; text-align: left;\\" border=\\"0\\" cellpadding=\\"5\\" cellspacing=\\"10\\" summary=\\"Settings\\">"
 	print "<tr><th>@TR<<MAC Address>></th><th>@TR<<IP Address>></th><th></th></tr>"
 }
 
@@ -152,7 +157,42 @@ END {
 }
 EOF
 
-footer ?>
+?>
+<table style="width: 90%; text-align: left;" border="0" cellpadding="5" cellspacing="10">
+<th style="text-align: left;">@TR<<Active DHCP Leases>></th>
+<tbody>
+	<tr>
+		<th>@TR<<MAC Address>></th>
+		<th>@TR<<IP Address>></th>
+		<th>@TR<<Name>></th>
+		<th>@TR<<Expires in>></th>
+	</tr>
+<? 
+exists /tmp/dhcp.leases && awk -vdate="$(date +%s)" '
+$1 > 0 {
+	print "<tr>"
+	print "<td>" $2 "</td>"
+	print "<td>" $3 "</td>"
+	print "<td>" $4 "</td>"
+	print "<td>"
+	t = $1 - date
+	h = int(t / 60 / 60)
+	if (h > 0) printf h "h "
+	m = int(t / 60 % 60)
+	if (m > 0) printf m "min "
+	s = int(t % 60)
+	printf s "sec "
+	printf "</td>"
+	print "</tr>"
+}
+' /tmp/dhcp.leases 
+?>
+<tr><td><br /><br /></td></tr>
+</tbody></table>
+
+</div>
+
+<? footer ?>
 <!--
 ##WEBIF:name:Network:500:Hosts
 -->
