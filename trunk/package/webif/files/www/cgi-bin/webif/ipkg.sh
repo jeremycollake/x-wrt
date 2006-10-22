@@ -118,14 +118,15 @@ echo "</pre>"
 <table>
   <h3>@TR<<Installed Packages>></h3>
   <br />
-  <table class=\"packages\"><tr class=\"packages\"><th width="150">Action</th><th width="200">Package</th><th>Description</th></tr>
+  <table class=\"packages\"><tr class=\"packages\"><th width="150">Action</th><th width="200">Package</th><th width=150>Version</th><th>Description</th></tr>
 <?
 ipkg list_installed | awk -F ' ' '
 $2 !~ /terminated/ {       
        link=$1
-       gsub(/\+/,"%2B",link)
+       gsub(/\+/,"%2B",link)       
+       version=$3
        desc=$5 " " $6 " " $7 " " $8 " " $9 " " $10 " " $11 " " $12 " " $13 " " $14 " " $15 " " $16 " " $17 " " $18 " " $19 " " $20 " " $21 " " $22 " " $23 " " $24 " " $25 " " $26 " " $27
-       print "<tr class=\"packages\"><td><a href=\"ipkg.sh?action=remove&pkg=" link "\">@TR<<Uninstall>></td><td>" $1 "</td><td>" desc "</td></tr>"       
+       print "<tr class=\"packages\"><td><a href=\"ipkg.sh?action=remove&pkg=" link "\">@TR<<Uninstall>></td><td>" $1 "</td><td>" version "</td><td>" desc "</td></tr>"       
 }
 '
 ?>
@@ -133,19 +134,21 @@ $2 !~ /terminated/ {
   <br />
   <h3>@TR<<Available packages>></h3>
   <br />
-  <table><tr class=\"packages\"><th width="150">Action</th><th width="250">Package</th><th>Description</th></tr>
+  <table><tr class=\"packages\"><th width="150">Action</th><th width="250">Package</th><th width=150>Version</th><th>Description</th></tr>
 <?
-egrep 'Package:|Description:' /usr/lib/ipkg/status /usr/lib/ipkg/lists/* 2>&- | sed -e 's, ,,' -e 's,/usr/lib/ipkg/lists/,,' | awk -F: '
+egrep 'Package:|Description:|Version:' /usr/lib/ipkg/status /usr/lib/ipkg/lists/* 2>&- | sed -e 's, ,,' -e 's,/usr/lib/ipkg/lists/,,' | awk -F: '
 $1 ~ /status/ {
 	installed[$3]++;
 }
-($1 !~ /terminated/) && ($1 !~ /\/status/) && (!installed[$3]) && ($2 !~ /Description/) {
+($1 !~ /terminated/) && ($1 !~ /\/status/) && (!installed[$3]) && ($2 !~ /Description/) && ($2 !~ /Version/) {
 	if (current != $1) print "<tr><th>" $1 "</th></tr>"
-	link=$3
-	gsub(/\+/,"%2B",link)		
+	link=$3	
+	gsub(/\+/,"%2B",link)			
+	getline verline
+	split(verline,ver,":")	
 	getline descline
         split(descline,desc,":")
-        print "<tr class=\"packages\"><td><a href=\"ipkg.sh?action=install&pkg=" link "\">@TR<<Install>></td><td>" $3 "</td><td>" desc[3] "</td></tr>"
+        print "<tr class=\"packages\"><td><a href=\"ipkg.sh?action=install&pkg=" link "\">@TR<<Install>></td><td>" $3 "</td><td>" ver[3] "</td><td>" desc[3] "</td></tr>"
         current=$1
 }
 '
