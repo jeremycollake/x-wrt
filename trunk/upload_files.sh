@@ -1,15 +1,31 @@
 #!/bin/sh
-echo " Uploading new X-Wrt Repository and Other Files ... "
+if [ $# -lt 1 ]; then
+	echo "Usage: $0 USERNAME"
+	exit 1
+fi
+export SCP_USER="$1"
+echo "Uploading webif ..."
 scp \
-	bin/packages/* \
-	someuser@shell.berlios.de:/home/groups/ftp/pub/xwrt/packages/
-
+	bin/packages/web* \
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/packages/
+echo "Uploading webif version info ..."
 scp \
 	build_mipsel/webif-0.3/ipkg/webif/www/.version \
-	../../whale/xwrt/xwrt.htm \
-	../../whale/xwrt/xwrt.asp \
-	someuser@shell.berlios.de:/home/groups/ftp/pub/xwrt/
-
-scp patches/* \
-	someuser@shell.berlios.de:/home/groups/ftp/pub/xwrt/patches/
-
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/
+echo "Uploading xwrt web pages ..."
+scp \
+	/mnt/whale/xwrt/xwrt.htm \
+	/mnt/whale/xwrt/xwrt.asp \
+	$SCP_USER@shell.berlios.de:/home/groups/xwrt/htdocs/
+echo "Uploading package repository ..."
+scp \
+	bin/packages/* \
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/packages/
+echo "Uploading X-Wrt patches ..."
+scp \
+	patches/* \
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/patches/
+echo "Uploading firmware images ..."
+scp \
+	bin/*.bz2.tar \
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/early_raw_alpha/default
