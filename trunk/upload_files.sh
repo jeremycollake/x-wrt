@@ -31,5 +31,5 @@ scp \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/early_raw_alpha/default
 echo "Uploading SDk and image builder ..."
 scp \
-	bin/*.bz2.tar \
+	bin/*.tar.bz2 \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/early_raw_alpha/default
