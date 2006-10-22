@@ -129,9 +129,17 @@ header() {
 	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></p>}"
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}	
-	# if using short-status iframe
-	#short_status_frame_0='<iframe src="/cgi-bin/webif/iframe.mini-info.sh" width="250" height="80"  scrolling="auto" frameborder="0" >'
-	#short_status_frame_1='</iframe>'
+
+	#
+	# (temporary) set nvram webif_short_status_frame=1 to enable use of
+	# a frame to refresh the short status area.
+	#
+	use_short_status=$(nvram get webif_short_status_frame)
+	equal $use_short_status "1" && {
+		short_status_frame_0='<iframe src="/cgi-bin/webif/iframe.mini-info.sh"
+			 	width="250" height="80"  scrolling="auto" frameborder="0" >'
+		short_status_frame_1='</iframe>'
+	}
 	
 	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && grep 'root:!' /etc/passwd >&- 2>&- && {
 		_nopasswd=1
