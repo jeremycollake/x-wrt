@@ -20,6 +20,7 @@ handle_list "$FORM_macallowremove" "$FORM_macallowadd" "$FORM_macallowsubmit" 'm
 FORM_macallowadd=${FORM_macallowadd:-00:00:00:00:00:00}
 
 header "HotSpot" "Access Lists" "HotSpot Config $HS_USING" '' "$SCRIPT_NAME"
+ShowWIPWarning
 
 has_required_pkg && {
 

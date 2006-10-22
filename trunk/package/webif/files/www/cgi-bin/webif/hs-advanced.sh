@@ -50,6 +50,7 @@ EOF
 fi
 
 header "HotSpot" "Advanced" "HotSpot Advanced Configs $HS_USING" '' "$SCRIPT_NAME"
+ShowWIPWarning
 
 has_required_pkg && {
 

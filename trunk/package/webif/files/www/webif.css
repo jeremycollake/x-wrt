@@ -97,18 +97,18 @@ option
 {
 	position: relative;
 	float: left;
-	width: 100%;
-	padding-top: 0.3em;
-	padding-bottom: 0.3em;
+	width: 100%;	
+	padding-top: 1.0em;
+	padding-bottom: 1.0em;
 }
 
 #submenu
 {
 	position: relative;
 	float: left;
-	width: 100%;
-	padding-top: 0.3em;
-	padding-bottom: 0.3em;
+	width: 100%;	
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
 }
 
 #mainmenu h3
@@ -237,7 +237,8 @@ option
 	padding-bottom: 0.5em;
 }
 
-th {
+th 
+{
 	text-align: left;
 }
 
@@ -314,12 +315,22 @@ body
 }
 
 dt,
-.selected-maincat,
 #mainmenu a:active,
 #submenu a
 {
 	font-weight: bold;
 }
+
+.selected-maincat
+{
+	font-size: 1.4em;
+}
+
+.selected-subcat
+{
+	font-size: 1.4em;
+}
+
 
 .openwrt-title h1
 {

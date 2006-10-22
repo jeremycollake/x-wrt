@@ -62,7 +62,7 @@
 
 #content .settings-block .settings-block-title h2
 {
-	color: #7590AE;
+	color: #1b205c;
 }
 
 #submenu a:hover
@@ -126,4 +126,72 @@
 .warning
 {
 	color: red;
+}
+
+.selected-maincat
+{
+	border-color: #DDD;	
+	border-style: solid;	
+	border-width: medium;	
+	background-color: #224054;	
+}
+
+.selected-maincat a:visited
+{
+	
+}
+
+.selected-maincat a:link
+{
+	
+}
+
+.unselected-maincat
+{
+	
+}
+
+
+.unselected-maincat a:visited
+{
+
+}
+
+.unselected-maincat a:link
+{
+	
+}
+
+
+.selected-subcat
+{
+	border-color: #DDD;	
+	border-style: solid;	
+	border-width: medium;	
+	background-color: #224054;		
+}
+
+.selectedsubcat a:visited
+{
+
+}
+
+.selected-subcat a:link
+{
+	
+}
+
+.unselected-subcat
+{
+	
+}
+
+.unselected-subcat a:visited
+{
+
+}
+
+.unselected-subcat a:link
+{
+	
 }

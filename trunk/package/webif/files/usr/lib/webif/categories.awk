@@ -19,8 +19,8 @@ END {
 	print "<div id=\"mainmenu\"><h3><strong>@TR<<Categories>>:</strong></h3><ul>"
 	
 	for (i = 1; i <= n; i++) {
-		if (sel == i) print "<li class=\"selected-maincat\"><a href=\"" f[c[i]] "\">&raquo;@TR<<" c[i] ">>&laquo;</a></li>"
-		else print "<li><a href=\"" f[c[i]] "\">&nbsp;@TR<<" c[i] ">>&nbsp;</a></li>";
+		if (sel == i) print "<li class=\"selected-maincat\"><a href=\"" f[c[i]] "\">&nbsp;@TR<<" c[i] ">>&nbsp;</a></li>"
+		else print "<li class=\"unselected-maincat\"><a href=\"" f[c[i]] "\">&nbsp;@TR<<" c[i] ">>&nbsp;</a></li>";
 	}
   
 	print "</ul></div>"

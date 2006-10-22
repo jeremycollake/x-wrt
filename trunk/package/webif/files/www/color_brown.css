@@ -90,7 +90,7 @@
 #content .settings-title
 {
 	color: #000;
-	background-color: #b8b1a2; /* brown */
+	background-color: #b8b1a2;
 }
 
 #content .settings
@@ -138,4 +138,72 @@
 .warning
 {
 	color: red;
+}
+
+.selected-maincat
+{
+	border-color: #000;	
+	border-style: solid;	
+	border-width: medium;	
+	background-color: #343018;
+}
+
+.selected-maincat a:visited
+{
+	
+}
+
+.selected-maincat a:link
+{
+	
+}
+
+.unselected-maincat
+{
+	
+}
+
+
+.unselected-maincat a:visited
+{
+
+}
+
+.unselected-maincat a:link
+{
+	
+}
+
+
+.selected-subcat
+{
+	border-color: #000;	
+	border-style: solid;	
+	border-width: medium;	
+	background-color: #343018;
+}
+
+.selectedsubcat a:visited
+{
+
+}
+
+.selected-subcat a:link
+{
+	
+}
+
+.unselected-subcat
+{
+	
+}
+
+.unselected-subcat a:visited
+{
+
+}
+
+.unselected-subcat a:link
+{
+	
 }

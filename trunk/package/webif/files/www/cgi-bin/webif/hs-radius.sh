@@ -41,6 +41,7 @@ EOF
 fi
 
 header "HotSpot" "RADIUS" "RADIUS Config $HS_USING" '' "$SCRIPT_NAME"
+ShowWIPWarning
 
 has_required_pkg && {
 

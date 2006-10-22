@@ -105,6 +105,7 @@ empty "$FORM_add_host" || authserv add
 empty "$FORM_del_host" || authserv del 
 
 header "HotSpot" "Configuration" "HotSpot Config $HS_USING" ' onLoad="modechange()" ' "$SCRIPT_NAME"
+ShowWIPWarning
 
 cat <<EOF
 <script type="text/javascript" src="/webif.js "></script>

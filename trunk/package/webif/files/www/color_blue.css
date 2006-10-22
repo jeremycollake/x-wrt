@@ -134,3 +134,71 @@
 {
 	color: red;
 }
+
+.selected-maincat
+{
+	border-color: #CCC;	
+	border-style: solid;	
+	border-width: medium;	
+	background-color: #224054;	
+}
+
+.selected-maincat a:visited
+{
+	
+}
+
+.selected-maincat a:link
+{
+	
+}
+
+.unselected-maincat
+{
+	
+}
+
+
+.unselected-maincat a:visited
+{
+
+}
+
+.unselected-maincat a:link
+{
+	
+}
+
+
+.selected-subcat
+{
+	border-color: #CCC;	
+	border-style: solid;	
+	border-width: medium;	
+	background-color: #224054;		
+}
+
+.selectedsubcat a:visited
+{
+
+}
+
+.selected-subcat a:link
+{
+	
+}
+
+.unselected-subcat
+{
+	
+}
+
+.unselected-subcat a:visited
+{
+
+}
+
+.unselected-subcat a:link
+{
+	
+}

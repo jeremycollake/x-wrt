@@ -53,6 +53,10 @@ show_validated_logo() {
 		</a></p>"
 }
 
+ShowWIPWarning() {
+	echo "<div class=\"warning\">WARNING: This page is incomplete and may not work correctly, or at all.</div>"
+}
+
 
 update_changes() {
 	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))
@@ -127,6 +131,7 @@ Pragma: no-cache
 		<!--[if lt IE 7]>
 			<link rel="stylesheet" type="text/css" href="/ie_lt7.css" />
 		<![endif]-->						
+		<link rel="stylesheet" type="text/css" href="/color_common.css" />
 		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
 		<meta http-equiv="expires" content="-1" />
 	</head>
