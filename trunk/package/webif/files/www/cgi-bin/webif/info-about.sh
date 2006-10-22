@@ -73,7 +73,7 @@ swatch()
 &nbsp;&nbsp; <a href="mailto:kemen04@gmail.com">Travis Kemen</a>
 </td></tr>		
 <tr><td>
-&nbsp;&nbsp; Thanks to Spectra, Strontian, Sven-Ola, Felix Fietkau, beta testers, and many others.
+&nbsp;&nbsp; Special thanks to Spectra, Strontian, Sven-Ola, Felix Fietkau, beta testers, and many others who have provided development, testing, or other contributions.
 </td></tr>		
 
 <tr><td><br /></td></tr>  
@@ -107,7 +107,10 @@ swatch()
 <tr><td><br /></td></tr> 
 <tr><td>
 CPU and Traffic graphs based on code from <a href="http://m0n0.ch/wall/">m0n0wall</a>.
-</td></tr>  
+</td></tr>
+<tr><td>
+Some pages, particularly the hotspot category, have been adopted from code written @TR<<by>> <a href="http://www.coova.org">Coova Technologies</a>.
+</td></tr>
 <tr><td>
 Layout was originally based on <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran.
 </td></tr>
