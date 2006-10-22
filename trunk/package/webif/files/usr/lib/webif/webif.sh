@@ -129,6 +129,9 @@ header() {
 	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></p>}"
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}	
+	# if using short-status iframe
+	#short_status_frame_0='<iframe src="/cgi-bin/webif/iframe.mini-info.sh" width="250" height="80"  scrolling="auto" frameborder="0" >'
+	#short_status_frame_1='</iframe>'
 	
 	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && grep 'root:!' /etc/passwd >&- 2>&- && {
 		_nopasswd=1
@@ -163,18 +166,16 @@ Pragma: no-cache
 	    <div id="header">	    				
 	    				<div class="openwrt-title">	    				
 	    			   	</div>	 		
-	    			   	<div id="short-status">
-
-					<iframe src="/cgi-bin/webif/iframe.mini-info.sh" width="250" height="80"  scrolling="auto" frameborder="0" >
-
+	    			   	<div id="short-status">    			   	
+					$short_status_frame_0					
 						<h3><strong>Status:</strong></h3>
 						<ul>
 							<li><strong>$_firmware_subtitle $_version </strong></li>
 							<li><strong>Host:</strong> $_hostname</li>						
 							<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
 							<li><strong>@TR<<Load>>:</strong> $_loadavg</li>						
-						</ul>
-					</iframe>
+						</ul>					
+					$short_status_frame_1						
 				</div>
 		</div>
 	
