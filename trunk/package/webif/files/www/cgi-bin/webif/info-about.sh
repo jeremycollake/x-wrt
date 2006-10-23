@@ -48,13 +48,6 @@ if [ -n "$FORM_install_webif" ]; then
 fi
 ?>
 
-
-<script type="text/javascript">
-<!--
-swatch()
--->
-</script>
-
 <div class="webif-name-title"><a href="http://www.bitsum.com/xwrt.asp">X-Wrt Extensions</a> - webif<sup>2</sup></div>
 <div class="webif-name-subtitle"></div>
 <div class="webif-name-version">Somewhere in the netherworld of post-Milestone 1 - r<? echo "$this_revision" ?> </div><br />
@@ -115,7 +108,7 @@ swatch()
 @TR<<CSS_Layout|Layout was originally based on>> <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran.
 </td></tr>
 <tr><td>
-@TR<<Translator_Credit|The translation you are currently using is authored by (translators name here).>></a>.
+@TR<<Translator_Credit|The translation you are currently using is authored by (translators name here)>>.
 </td></tr>
 <tr><td>
 This device is running <a href="http://www.openwrt.org">OpenWrt</a> or a close derivative.
@@ -126,7 +119,7 @@ This device is running <a href="http://www.openwrt.org">OpenWrt</a> or a close d
 </td></tr>
 </tbody></table>
 <br />
-<? ShowValidatedLogo 
+<? show_validated_logo
 footer ?>
 <!--
 ##WEBIF:name:Info:950:About
