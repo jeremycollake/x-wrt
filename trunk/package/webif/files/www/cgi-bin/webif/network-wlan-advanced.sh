@@ -152,8 +152,7 @@ select|lazywds|$FORM_lazywds
 option|1|@TR<<Enabled>>
 option|0|@TR<<Disabled>>
 
-field|@TR<<WDS watchdog timeout>>
-text|wdstimeout|$FORM_wdstimeout
+
 
 field|@TR<<Filter Mode>>
 select|macmode|$FORM_macmode
@@ -191,6 +190,9 @@ field|@TR<<Preamble (Default: Long)>>
 select|wl0_plcphdr|$FORM_wl0_plcphdr
 option|long|@TR<<Long>>
 option|short|@TR<<Short>>
+
+field|@TR<<WDS watchdog timeout>>
+text|wdstimeout|$FORM_wdstimeout
 
 field|Fragmentation Threshold (default 2346)
 text|wl0_frag|$FORM_wl0_frag
