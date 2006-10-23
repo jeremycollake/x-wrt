@@ -115,7 +115,7 @@ Some pages, particularly the hotspot category, have been adopted from code writt
 Layout was originally based on <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran.
 </td></tr>
 <tr><td>
-@TR<<The translation you are currently using is authored by (translators name here).>></a>.
+@TR<<Translator_Credit|The translation you are currently using is authored by (translators name here).>></a>.
 </td></tr>
 <tr><td>
 This device is running <a href="http://www.openwrt.org">OpenWrt</a> or a close derivative.
