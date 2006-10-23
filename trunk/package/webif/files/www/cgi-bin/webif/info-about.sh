@@ -59,13 +59,13 @@ swatch()
 <div class="webif-name-subtitle"></div>
 <div class="webif-name-version">Somewhere in the netherworld of post-Milestone 1 - r<? echo "$this_revision" ?> </div><br />
 <form action="" enctype="multipart/form-data" method="post">
-<input type="submit" value=" Check For Webif^2 Update " name="update_check" />
-<input type="submit" value=" Install/Reinstall Webif^2  " name="install_webif" />
+<input type="submit" value=" @TR<<Check_Upgrade|Check For Webif^2 Update>> " name="update_check" />
+<input type="submit" value=" @TR<<Upgrade_Webif|Upgrade Webif^2>> "  " name="install_webif" />
 </form>
 <? echo $revision_text ?>
 <table class="webif-contributors"><tbody>
 <tr><td><br /></td></tr>  
-<tr><th>X-Wrt Webif<sup>2</sup> Contributors:</th></tr>
+<tr><th>X-Wrt Webif<sup>2</sup> @TR<<Contributors>>:</th></tr>
 <tr><td>
 &nbsp;&nbsp; <a href="mailto:jeremy.collake@gmail.com">Jeremy Collake</a>
 </td></tr>			
@@ -77,7 +77,7 @@ swatch()
 </td></tr>		
 
 <tr><td><br /></td></tr>  
-<tr><th>Webif Contributors:</th></tr>
+<tr><th>Webif @TR<<Contributors>>:</th></tr>
 <tr><td>
 &nbsp;&nbsp; <a href="mailto:openwrt@nbd.name">Felix Fietkau</a> (nbd)
 </td></tr>
@@ -94,25 +94,25 @@ swatch()
 &nbsp;&nbsp; <a href="mailto:spectra@gmx.ch">Spectra</a>
 </td></tr>
 <tr><td><br /></td></tr>
-<tr><th>OpenWrt Contributors:</th></tr>
+<tr><th>OpenWrt @TR<<Contributors>>:</th></tr>
 <tr><td>	
 &nbsp;&nbsp; <a href="mailto:openwrt@nbd.name">Felix Fietkau</a> (nbd), florian, groz, kaloz, malbon, mbm, Olli, wbx
 </td></tr>  
 <tr><td>
-&nbsp;&nbsp; Companies/Projects: linux, Broadcom, Linksys, Squashfs, JFFS2, MTD, etc...
+&nbsp;&nbsp; @TR<<Companies_Projs|Companies/Projects>>: linux, Broadcom, Linksys, Squashfs, JFFS2, MTD, etc...
 </td></tr>  
 <tr><td>
 &nbsp;&nbsp; <b><i>Countless</i></b> contributors from the community.
 </td></tr>  
 <tr><td><br /></td></tr> 
 <tr><td>
-CPU and Traffic graphs based on code from <a href="http://m0n0.ch/wall/">m0n0wall</a>.
+@TR<<Monowall_Credit|CPU and Traffic graphs based on code from>> <a href="http://m0n0.ch/wall/">m0n0wall</a>.
 </td></tr>
 <tr><td>
-Some pages, particularly the hotspot category, have been adopted from code written @TR<<by>> <a href="http://www.coova.org">Coova Technologies</a>.
+@TR<<Cova_Credit|Some pages, particularly the hotspot category, have been adopted from code written>> @TR<<by>> <a href="http://www.coova.org">Coova Technologies</a>.
 </td></tr>
 <tr><td>
-Layout was originally based on <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran.
+@TR<<CSS_Layout|Layout was originally based on>> <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran.
 </td></tr>
 <tr><td>
 @TR<<Translator_Credit|The translation you are currently using is authored by (translators name here).>></a>.
@@ -126,12 +126,8 @@ This device is running <a href="http://www.openwrt.org">OpenWrt</a> or a close d
 </td></tr>
 </tbody></table>
 <br />
-<p>
-    <a href="http://validator.w3.org/check?uri=referer"><img
-        src="http://www.w3.org/Icons/valid-xhtml10"
-        alt="Valid XHTML 1.0 Transitional" height="31" width="88" /></a>
-  </p>
-<? footer ?>
+<? ShowValidatedLogo 
+footer ?>
 <!--
 ##WEBIF:name:Info:950:About
 -->
