@@ -56,8 +56,8 @@ cat <<EOF
 		<td>webif<sup>2</sup> r$this_revision $revision_text</td> 				
 <td colspan="2">
 <form action="" enctype="multipart/form-data" method="post">
-<input type="submit" value=" Check For Webif^2 Update " name="update_check" />
-<input type="submit" value=" Install/Reinstall Webif^2  " name="install_webif" />
+<input type="submit" value=" @TR<<Check_Upgrade|Check For Webif^2 Update>> " name="update_check" />
+<input type="submit" value=" @TR<<Upgrade_Webif|Upgrade Webif^2>> "  " name="install_webif" />
 </form>	
 </td>
 </tr>
@@ -82,14 +82,10 @@ cat <<EOF
 	
 	<tr><td><br /><br /></td></tr>
 </tbody>
-</table>
-  <p>
-    <a href="http://validator.w3.org/check?uri=referer"><img
-        src="http://www.w3.org/Icons/valid-xhtml10"
-        alt="Valid XHTML 1.0 Transitional" height="31" width="88" /></a>
-  </p>
+</table>  
 EOF
 
+show_validated_logo
 footer
 
 ?>

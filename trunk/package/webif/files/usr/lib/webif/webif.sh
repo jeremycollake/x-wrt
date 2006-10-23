@@ -48,9 +48,9 @@ subcategories() {
 }
 
 show_validated_logo() {
-	echo "<br /><br /><p><a href=\"http://validator.w3.org/check?uri=referer\">
+	echo "<br /><br /><p>
 		<img src=\"http://www.w3.org/Icons/valid-xhtml10\" alt=\"Valid XHTML 1.0 Transitional\" height=\"31\" width=\"88\" />
-		</a></p>"
+		</p>"
 }
 
 ShowWIPWarning() {
