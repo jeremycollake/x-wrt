@@ -35,7 +35,7 @@ empty "$_loadavg" && {
 }
 
 mounts_form=$(
-df | awk 'BEGIN { mcount=0 }; 
+df | uniq | awk 'BEGIN { mcount=0 }; 
 	/\// {
 	filled_caption=$5;				
 	print "string|<tr><td><strong>"$6"</strong></td><td>"$1"</td></tr>"		
