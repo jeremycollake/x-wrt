@@ -70,6 +70,7 @@ if empty "$FORM_submit"; then
 		1|on|enabled) FORM_lazywds=1;;
 		*) FORM_lazywds=0;;
 	esac
+	FORM_wdstimeout=${wl0_wdstimeout:-$(nvram get wl0_wdstimeout)}
 	FORM_antdiv=${antdiv:-$(nvram get wl0_antdiv)}
 	FORM_txdiv=${txdiv:-$(nvram get wl0_txdiv)}
 	FORM_txdiv=${FORM_txdiv:-3}
@@ -92,6 +93,7 @@ else
 
 	validate <<EOF
 int|FORM_lazywds|Lazy WDS On/Off|required min=0 max=1|$FORM_lazywds
+int|FORM_wdstimeout|WDS watchdog timeout|optional min=0 max=3600|$FORM_wdstimeout
 int|FORM_txpwr|Transmit Power (in mw)|required min=1 max=251|$FORM_txpwr
 int|FORM_wl0_frag|Fragmentation Threshold|min=0 max=2346|$FORM_wl0_frag
 int|FORM_wl0_rts|RTS Threshold|min=0 max=2347|$FORM_wl0_rts
@@ -104,6 +106,7 @@ int|FORM_wl0_distance|Distance|min=0|$FORM_wl0_distance
 EOF
 	equal "$?" 0 && {
 		save_setting wireless wl0_lazywds "$FORM_lazywds"
+		save_setting wireless wl0_wdstimeout "$FORM_wdstimeout"
 		save_setting wireless wl0_macmode "$FORM_macmode"
 		save_setting wireless wl0_txpwr "$FORM_txpwr"	
 		# todo: currently don't save if verify on above failed.. decide on this	
@@ -148,6 +151,9 @@ field|@TR<<Automatic WDS>>
 select|lazywds|$FORM_lazywds
 option|1|@TR<<Enabled>>
 option|0|@TR<<Disabled>>
+
+field|@TR<<WDS watchdog timeout>>
+text|wdstimeout|$FORM_wdstimeout
 
 field|@TR<<Filter Mode>>
 select|macmode|$FORM_macmode
