@@ -26,7 +26,7 @@ Router Info => Informaci&oacute;n del router
 Status => Estado
 Connections => Conexiones
 DHCP => DHCP
-Wireless => Wi-Fi
+Wireless => Wireless (Anal&aacute;mbrico)
 
 System => Sistema
 Password => Contrase&ntilde;a
@@ -36,22 +36,22 @@ Firmware Upgrade => Actualizar Firmware
 
 Network => Red
 LAN => LAN
-WAN => Internet
-Wireless => Wi-Fi
-Advanced Wireless => Wi-Fi (avanzado)
-Hosts => Configuration de hosts
+WAN => Internet (WAN)
+Wireless => Wireless
+Advanced Wireless => Wireless (avanzado)
+Hosts => Configuraci&oacute;n de hosts
 
 
 # 'About' page
 Copyright => Copyright
 
 GPL_Text => Este programa es software libre; Usted puede distribuirlo y/o <br />modificarlo bajo los t&eacute;rminos de la General Public License<br />como est&aacute; publicada por la Free Sofware Foundation; bien de la versi&oacute;n 2 de dicha Licencia o bien (seg&uacute;n su elecci&oacute;n) de cualquier versi&oacute;n posterior.
-Contributions by => Contribuidores
+Contributions by => Contribuciones de
 Layout based on => Aspecto basado en
 by => por
 
 
-No config change. => No ha habido cambios de configuraci&oacute;n.
+No config change. => No hay cambios de configuraci&oacute;n.
 Config discarded. => Los cambios no se han aceptado.
 Config changes: => Configuraci&oacute;n actual:
 Updating config... => Actualizando la configuraci&oacute;n...
@@ -60,7 +60,7 @@ Updating config... => Actualizando la configuraci&oacute;n...
 # 'Router Info' page
 Firmware Version => Versi&oacute;n del firmware
 Kernel Version => Versi&oacute;n del Kernel
-Current Date/Time => Fecha/Hora
+Current Date/Time => Fecha y Hora Actual
 MAC Address => Direcci&oacute;n MAC
 
 
@@ -74,16 +74,16 @@ Router Connections => Conexiones del router
 DHCP leases => Pr&eacute;stamos DHCP
 IP Address => Direcci&oacute;n IP
 Name => Nombre
-Expires in => Caduca en
+Expires in => Expira en
 
 
 # 'Wireless Status' page
-Wireless Status => Estado del Wi-Fi
+Wireless Status => Estado del Wireless
 
 # 'Password' page
-Password Change => Cambio de la contrase&ntilde;a
+Password Change => Cambiar contrase&ntilde;a
 New Password => Nueva contrase&ntilde;a
-Confirm Password => Confirme la contrase&ntilde;a
+Confirm Password => Confirmar la contrase&ntilde;a
 
 # 'System Settings' page
 System Settings => Par&aacute;metros del sistema
@@ -92,7 +92,7 @@ Language => Idioma
 
 # 'Installed Software' page
 Installed Packages => Paquetes instalados
-Update package lists => Actualizaci&oacute;n de la lista de paquetes
+Update package lists => Actualizar la lista de paquetes
 Uninstall => Desinstalar
 Install => Instalar
 
@@ -100,36 +100,36 @@ Install => Instalar
 # 'Firmware Upgrade' page
 Firmware format => Formato del firmware
 Error => Error
-done => hecho
+done => Finalizado
 Invalid_formt => Formato del firmware inv&aacute;lido
 Erase_JFFS2 => Borrar la partici&oacute;n JFFS2
 Options => Opciones
 Firmware_image => Archivo del firmware
 Upgrade => Actualizar
-Upgrading... => Actualizaci&oacute;n...
+Upgrading... => Actualizando...
 
 # 'LAN Settings' page
-LAN Settings => Configuraci&oacute;n LAN
+LAN Settings => Par&aacute;metros LAN
 LAN Configuration => Configuraci&oacute;n LAN
 Netmask => M&aacute;scara de subred
 Default Gateway => Puerta de enlace (gateway)
-DNS Servers => Servidor DNS
-DNS Address => Direcci&oacute;n IP del DNS
+DNS Servers => Servidores DNS
+DNS Address => Direcci&oacute;nes IP del DNS
 
 Note => Nota
 
 # 'WAN Settings' page
-WAN Settings => Configuraci&oacute;n de Internet
-WAN Configuration => Configuraci&oacute;n de Internet
+WAN Settings => Parametros de Internet (WAN)
+WAN Configuration => Configuraci&oacute;n de Internet (WAN)
 PPTP Server IP => Direcci&oacute;n IP del servidor PPTP
 Connection Type => Tipo de conexi&oacute;n
-No WAN => Sin configuraci&oacute;n de Internet
+No WAN => Sin configuraci&oacute;n de Internet (WAN)
 DHCP => DHCP
 Static IP => IP est&aacute;tica
 IP Settings => Configuraci&oacute;n IP
 PPP Settings => Configuraci&oacute;n PPP
 Redial Policy => Opciones de reconexi&oacute;n
-Connect on Demand => Bajo demanda
+Connect on Demand => Conectar bajo demanda
 Keep Alive => Conexi&oacute;n permanente
 Maximum Idle Time => Tiempo m&aacute;ximo de inactividad
 Redial Timeout => Tiempo de reconexi&oacute;n
@@ -138,24 +138,24 @@ Username => Nombre de usuario
 
 
 # 'Wireless Configuration' page
-Wireless Configuration => Configuraci&oacute;n Wi-Fi
-Wireless Interface => Interfaz Wi-Fi
+Wireless Configuration => Configuraci&oacute;n Wireless
+Wireless Interface => Interfaz Wireless
 WEP Key => Clave WEP
 Selected WEP Key => Clave WEP seleccionada
 WPA PSK => WPA-PSK
 ESSID => ESSID
 Channel => Canal
 RADIUS IP Address => Direcci&oacute;n IP del servidor RADIUS
-RADIUS Server Key => Secreto RADIUS
+RADIUS Server Key => Clave de Servidor RADIUS
 Enabled => Activado
 Disabled => Desactivado
 ESSID Broadcast => Difusi&oacute;n del SSID
 Show => Mostrar
 Hide => Ocultar
-WLAN Mode => Modo Wi-Fi
+WLAN Mode => Modo Wireless
 Access Point => Punto de acceso
 Client => Cliente
-Bridge => Bridge
+Bridge => Bridge (puente)
 Ad-Hoc => Ad-Hoc
 Operation mode => Modo de funcionamiento
 Encryption Settings => Par&aacute;metros de enriptaci&oacute;n
@@ -163,10 +163,10 @@ Encryption Type => Tipo de encriptaci&oacute;n
 PSK => PSK
 WPA Mode => Modo WPA
 WPA Algorithms => Algoritmos WPA
-WEP Keys => Clave WEP
+WEP Keys => Claves WEP
 
 # 'Advanced Wireless Configuration' page
-Advanced Wireless Configuration => Configuraci&oacute;n Wi-Fi avanzada
+Advanced Wireless Configuration => Configuraci&oacute;n Wireless avanzada
 WDS Connections => Conexiones WDS
 MAC Filter List => Filtrar por direcci&oacute;n MAC
 Filter Mode => Modo de filtrado
@@ -212,7 +212,7 @@ Destination Ports => Puertos destino
 Forward to => Redirigir a
 Port => Puerto
 
-Helptext ESSID => SSID
+Helptext ESSID =>El ESSID o SSID (Service Set IDentifier) es un c&oacute;digo incluido en todos los paquetes de una red inal&aacute;mbrica (Wi-Fi) para identificarlos como parte de esa red. El c&oacute;digo consiste en un m&aacute;ximo de 32 caracteres alfanum&eacute;ricos. Todos los dispositivos inal&aacute;mbricos que intentan comunicarse entre s&iacute; deben compartir el mismo SSID.
 Helptext DNS save => Es recomendable guardar los cambios antes de a&ntilde;adir o eliminar servidores de DNS de la lista
 
 Helptext Operation mode => Establece el modo de operaci&oacute;n de tu red wireless. Eligiendo 'Client (bridge)' no cambiar&aacute; la configuraci&oacute;n de la interfaz de red. Simplemente a&ntilde;adir&aacute; unos par&aacute;metros que permitir&aacute;n que la interfaz wireless act&uacute;e en cierta medida en modo bridge.
@@ -222,6 +222,7 @@ Helptext Idle Time => N&uacute;mero de segundos sin actividad con Internet que d
 Helptext Redial Timeout => N&uacute;mero de segundos sin recibir respuesta del servidor que debe esperar el router para volver a conectarse.
 
 
-# untranslated:
-Available packages => Available packages
+# translated:
+Available packages => Paquetes Disponibles
 
+# Revised & Updated
