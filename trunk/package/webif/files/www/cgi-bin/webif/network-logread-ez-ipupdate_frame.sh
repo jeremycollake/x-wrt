@@ -18,6 +18,7 @@ colorize_script=""
 <body $4>	
 <div class="logread"><pre>
 <?
+echo "If this page is blank then dyndns is not started, or you may have just rebooted"
 logread | grep 'ez-ipupdate\[' | sort -r | sed 's/[a-zA-Z]*\..*ez-ipupdate\[[0-9]*\]//' 
 ?>
 </pre></div>
