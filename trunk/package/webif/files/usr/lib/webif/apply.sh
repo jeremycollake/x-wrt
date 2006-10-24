@@ -13,6 +13,9 @@ HANDLERS_config='
 	syslog) reload_syslog;;
 	wifi-enable) reload_wifi_enable;;
 	wifi-disable) reload_wifi_disable;;
+	hotspot) reload_hotspot;;
+	shape) reload_shape;;
+	pptp) reload_pptp;;
 	
 '
 HANDLERS_file='
@@ -184,6 +187,45 @@ echo '@TR<<Applying>> @TR<<Conntrack settings>> ...'
 rm -f /tmp/.webif/config-conntrack
 echo '@TR<<Done>>'
 done
+
+reload_hotspot() {
+    echo '@TR<<Reloading>> @TR<<hotspot settings>> ...'
+    grep -v '^hs_cframe' config-hotspot | grep '^hs_' >&- 2>&- && {
+	[ -e "/usr/sbin/chilli" ] && {
+	    /etc/init.d/S??chilli stop  >&- 2>&-
+	    /etc/init.d/S??chilli start >&- 2>&-
+	}
+	[ -e "/usr/bin/wdctl" ] && {
+	    wdctl stop >&- 2>&-
+	    /etc/init.d/S??wifidog start >&- 2>&-
+	}
+    }
+    grep '^hs_cframe' config-hotspot >&- 2>&- && {
+	[ -e /etc/init.d/S??cframe ] && {
+	    /etc/init.d/S??cframe stop  >&- 2>&-
+	    /etc/init.d/S??cframe start >&- 2>&-
+	}
+    }
+}
+
+reload_shape() {
+    echo '@TR<<Reloading>> @TR<<traffic shaping settings>> ...'
+    grep '^shape_' config-shape >&- 2>&- && {
+	/etc/init.d/S90shape start >&- 2>&-
+    }
+}
+
+reload_pptp() {
+    echo '@TR<<Reloading>> @TR<<PPTP settings>> ...'
+    grep '_cli' config-pptp >&- 2>&- && [ -e /etc/init.d/S??pptp ] && {
+	/etc/init.d/S??pptp stop >&- 2>&-
+	/etc/init.d/S??pptp start >&- 2>&-
+    }
+    grep '_srv' config-pptp >&- 2>&- && [ -e /etc/init.d/S??pptpd ] && {
+	/etc/init.d/S??pptpd stop  >&- 2>&-
+	/etc/init.d/S??pptpd start >&- 2>&-
+    }
+}
 
 # config-*		simple config files
 (
