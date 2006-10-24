@@ -126,7 +126,7 @@ for edited_file in $(find "/tmp/.webif/edited-files/" -type f 2>&-); do
 	is_read_only "$target_file" && {		
 		rm "$target_file"
 	}
-	if cp "$edited_file" "$target_file"; then
+	if tr -d '\r' <"$edited_file" >"$target_file"; then
 		rm "$edited_file" 2>&-
 	else
 	 	echo "@TR<<Critical Error>> : Could not replace $target_file. Media full?"
