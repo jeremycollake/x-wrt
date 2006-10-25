@@ -14,10 +14,15 @@ echo "Uploading webif version info ..."
 scp \
 	build_mipsel/webif-0.3/ipkg/webif/www/.version \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/
+# for my personal shit
+if [ -d "/mnt/whale/xwrt" ]; then
+	cp /mnt/whale/xwrt/xwrt.htm ht_docs
+	cp /mnt/whale/xwrt/xwrt.asp ht_docs
+fi
 echo "Uploading xwrt web pages ..."
 scp \
-	/mnt/whale/xwrt/xwrt.htm \
-	/mnt/whale/xwrt/xwrt.asp \
+	ht_docs/xwrt.htm \
+	ht_docs/xwrt.asp \
 	$SCP_USER@shell.berlios.de:/home/groups/xwrt/htdocs/
 echo "Uploading package repository ..."
 scp \
