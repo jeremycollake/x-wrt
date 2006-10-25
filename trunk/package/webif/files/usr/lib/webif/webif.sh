@@ -58,7 +58,7 @@ ShowWIPWarning() {
 }
 
 ShowUntestedWarning() {
-	echo "<div class=\"warning\">WARNING: This page is untested and may or may not work correctly, or at all.</div>"
+	echo "<div class=\"warning\">WARNING: This page is untested and may or may not work correctly.</div>"
 }
 
 
