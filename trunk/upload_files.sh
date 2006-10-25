@@ -4,8 +4,8 @@ if [ $# -lt 1 ]; then
 	exit 1
 fi
 export SCP_USER="$1"
-chmod -R 755 bin/*
-chmod 755 build_mipsel/webif-0.3/ipkg/webif/www/.version
+chmod -R 775 bin/*
+chmod 775 build_mipsel/webif-0.3/ipkg/webif/www/.version
 echo "Uploading webif ..."
 scp \
 	bin/packages/web* \
