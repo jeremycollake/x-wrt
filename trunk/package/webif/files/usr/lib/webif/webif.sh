@@ -57,6 +57,10 @@ ShowWIPWarning() {
 	echo "<div class=\"warning\">WARNING: This page is incomplete and may not work correctly, or at all.</div>"
 }
 
+ShowUntestedWarning() {
+	echo "<div class=\"warning\">WARNING: This page is untested and may or may not work correctly, or at all.</div>"
+}
+
 
 update_changes() {
 	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))
