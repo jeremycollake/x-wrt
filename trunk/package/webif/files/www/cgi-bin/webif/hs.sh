@@ -107,6 +107,8 @@ empty "$FORM_del_host" || authserv del
 header "HotSpot" "Configuration" "HotSpot Config $HS_USING" ' onLoad="modechange()" ' "$SCRIPT_NAME"
 ShowWIPWarning
 
+has_pkgs chillispot wifidog
+
 cat <<EOF
 <script type="text/javascript" src="/webif.js "></script>
 <script type="text/javascript">
@@ -216,7 +218,10 @@ text|hs_gatewayid|$FORM_hs_gatewayid
 end_form
 EOF
 
+if [ ! -e /etc/wifidog/auth-servers ]; then
+mkdir /etc/wifidog >/dev/null
 touch /etc/wifidog/auth-servers
+fi
 
 awk     -v "url=$SCRIPT_NAME" \
 	-v "host=$FORM_host" \
