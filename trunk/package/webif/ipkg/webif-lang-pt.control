@@ -3,5 +3,5 @@ Maintainer: Felix Fietkau <nbd@openwrt.org>
 Section: net
 Depends: webif
 Priority: normal
-Description: Polish language file for webif.
+Description: Portuguese language file for webif.
 
