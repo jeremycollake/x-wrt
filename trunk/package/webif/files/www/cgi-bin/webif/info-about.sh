@@ -102,7 +102,7 @@ fi
 @TR<<Monowall_Credit|CPU and Traffic graphs based on code from>> <a href="http://m0n0.ch/wall/">m0n0wall</a>.
 </td></tr>
 <tr><td>
-@TR<<Cova_Credit|Some pages, particularly the hotspot category, have been adopted from code written>> @TR<<by>> <a href="http://www.coova.org">Coova Technologies</a>.
+@TR<<Cova_Credit|Some pages, particularly the hotspot category, have been adopted from code written>> @TR<<by>> <a href="http://www.coova.org">Coova Technologies</a>. @TR<<and by>> <a href="http://www.picopoint.com">PicoPoint B.V.</a>
 </td></tr>
 <tr><td>
 @TR<<CSS_Layout|Layout was originally based on>> <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran.
