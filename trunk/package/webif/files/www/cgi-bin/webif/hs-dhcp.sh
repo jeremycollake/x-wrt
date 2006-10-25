@@ -54,7 +54,7 @@ EOF
 fi
 
 header "HotSpot" "DHCP" "HotSpot DHCP Configs $HS_USING" '' "$SCRIPT_NAME"
-ShowWIPWarning
+ShowUntestedWarning
 
 
 has_required_pkg && {

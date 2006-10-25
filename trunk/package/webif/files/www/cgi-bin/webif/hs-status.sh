@@ -5,7 +5,7 @@ load_settings hotspot
 . /usr/lib/webif/hs.sh
 
 header "Status" "HotSpot" "HotSpot Status $HS_USING" ''
-ShowWIPWarning
+ShowUntestedWarning
 
 has_required_pkg && {
 
