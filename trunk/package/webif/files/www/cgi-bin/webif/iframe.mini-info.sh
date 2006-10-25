@@ -32,9 +32,10 @@
 <body ><div id="short-status">
 	<ul>
 		<li><strong> <? echo -n $_firmware_name ?> <? echo -n $_version ?>  </strong>
-		<li><li><strong>Host:</strong> <? echo -n $_hostname ?> <strong>Uptime:</strong> <? echo -n $_uptime ?>
-		<li><strong>Load:</strong> <? echo -n $_loadavg ?>
-		<li><strong>Mem:</strong> <? echo -n $FREE_MEM ?> KB free - <? echo -n $MEM_PERCENT_USED  ?>% used 
+		<li><strong>- Host:</strong> <? echo -n $_hostname ?> 
+		<li><strong>- Uptime:</strong> <? echo -n $_uptime ?>
+		<li><strong>- Load:</strong> <? echo -n $_loadavg ?>
+		<li><strong>- Mem:</strong> <? echo -n $FREE_MEM ?> KB free - <? echo -n $MEM_PERCENT_USED  ?>% used 
 	</ul>
 	</div>
 </body>

@@ -279,9 +279,13 @@ th
 
 #content .settings-block .settings .settings-help .more-help,
 #save,
-#short-status
 {
 	text-align: right;
+}
+
+#short-status
+{
+	text-align: left;
 }
 
 .helpitem

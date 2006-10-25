@@ -93,14 +93,20 @@ cat <<EOF
 Content-Type: text/html
 Pragma: no-cache
 
-
-<?xml version="1.0" encoding="@TR<<Encoding|ISO-8859-1>>"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<?xml version="1.0" encoding="@TR<<Encoding|ISO-8859-1>>"?>
 	<head>
+
 <link rel="stylesheet" type="text/css" href="/webif.css" />
     	<title></title>
 </head>
+
+<style type="text/css">
+	html, body {
+		background-color: transparent;
+	}	
+</style>
 
 EOF
 }
@@ -137,7 +143,8 @@ header() {
 	use_short_status=$(nvram get webif_short_status_frame)
 	equal $use_short_status "1" && {
 		short_status_frame_0='<iframe src="/cgi-bin/webif/iframe.mini-info.sh"
-			 	width="250" height="80"  scrolling="auto" frameborder="0" >'
+			 	width="200" height="80"  scrolling="no" frameborder="0" 
+			 	allowtransparency="true" background-color="transparent">'
 		short_status_frame_1='</iframe>'
 	}
 	
