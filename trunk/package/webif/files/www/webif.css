@@ -500,3 +500,10 @@ dt,
 {
 	font-size: 0.6em;
 }
+
+
+#validated-text
+{
+	font-weight: lighter;
+	font-size: 0.7em;
+}

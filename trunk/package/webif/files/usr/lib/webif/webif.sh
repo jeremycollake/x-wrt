@@ -49,7 +49,7 @@ subcategories() {
 
 show_validated_logo() {
 	echo "<br /><br /><p>
-		<img src=\"http://www.w3.org/Icons/valid-xhtml10\" alt=\"Valid XHTML 1.0 Transitional\" height=\"31\" width=\"88\" />
+		<div id=\"validated-text\">This page passed W3C XHTML validation tests.</div>
 		</p>"
 }
 
