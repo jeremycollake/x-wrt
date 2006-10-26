@@ -49,8 +49,7 @@ empty "$FORM_remove_line" || update_dnsmasq del "$FORM_iface" "$FORM_line"
         FORM_dhcp_num=${FORM_dhcp_num:-$(nvram get ${FORM_iface}_dhcp_num)}
         FORM_dhcp_bail=${FORM_dhcp_bail:-$(nvram get ${FORM_iface}_dhcp_bail)}
     fi
-if [ -n "$FORM_submit" ]; then   
-	echo "validating<br />" 
+if [ -n "$FORM_submit" ]; then   	
     validate <<EOF
 int|FORM_${FORM_iface}_dhcp_enabled|DHCP enabled||$FORM_dhcp_enabled
 string|FORM_${FORM_iface}_dhcp_iface|DHCP iface||$FORM_dhcp_iface
@@ -58,14 +57,17 @@ int|FORM_${FORM_iface}_dhcp_start|DHCP start||$FORM_dhcp_start
 int|FORM_${FORM_iface}_dhcp_num|DHCP num||$FORM_dhcp_num
 string|FORM_${FORM_iface}_dhcp_bail|DHCP bail||$FORM_dhcp_bail
 EOF
-    equal "$?" 0 && {
+    if equal "$?" 0; then
+    echo "validating ${FORM_iface}_dhcp_enabled <br />" 
     	SAVED=1  	 
         save_setting network ${FORM_iface}_dhcp_enabled $FORM_dhcp_enabled
         save_setting network ${FORM_iface}_dhcp_iface $FORM_dhcp_iface
         save_setting network ${FORM_iface}_dhcp_start $FORM_dhcp_start
         save_setting network ${FORM_iface}_dhcp_num $FORM_dhcp_num
         save_setting network ${FORM_iface}_dhcp_bail $FORM_dhcp_bail
-    }
+    else
+    	echo "<div class=\"failed-validation\">Validation failed on one or more variables. On this page a common error is putting an IP address in \"DHCP Start\" instead of a simple number.</div>"
+    fi
 fi
 
 #display_form<<EOF
@@ -125,7 +127,7 @@ awk -v "url=$SCRIPT_NAME" \
 BEGIN {
     FS=","
     start_form("@TR<<Options For>> $FORM_iface")
-    print "<form enctype=\"multipart/form-data\" method=\"post\">"
+    print "<form enctype=\"multipart/form-data\" method=\"post\" action=\"\">"
     print "<table style=\"width: 90%\"><tr><th>" param "</th><th>" value "</th><th>" action "</th></tr>"
     print "<tr><td colspan=\"4\"><hr class=\"separator\" /></td></tr>"
 }
@@ -181,14 +183,14 @@ END {
 EOF
 
 display_form<<EOF
-start_form|@TR<<DHCP Server For>> 
-field|iface|iface|hidden
+start_form|@TR<<DHCP Server For $FORM_iface>>
+field|@TR<<Interface>>|iface_field
 text|iface|$FORM_iface
-field|@TR<<DHCP Enabled>>|dhcp_enabled
+field|@TR<<DHCP Enabled>>|dhcp_enabled_field
 checkbox|dhcp_enabled|$FORM_dhcp_enabled|dhcp_enabled
-field|@TR<<DHCP Start>>|dhcp_start
-text|dhcp_start|$FORM_dhcp_start|$NETWORK
-field|@TR<<DHCP Num>>|dhcp_num
+field|@TR<<DHCP Start>>|dhcp_start_field
+text|dhcp_start|$FORM_dhcp_start|$NETWORK+x
+field|@TR<<DHCP Num>>|dhcp_num_field
 text|dhcp_num|$FORM_dhcp_num
 field|@TR<<DHCP Bail>>
 text|dhcp_bail|$FORM_dhcp_bail
@@ -196,6 +198,8 @@ end_form
 EOF
 fi 
 fi
+
+show_validated_logo
 
 footer ?>
 <!--
