@@ -53,7 +53,7 @@ fi
 <div class="webif-name-version">Somewhere in the netherworld of post-Milestone 1 - r<? echo "$this_revision" ?> </div><br />
 <form action="" enctype="multipart/form-data" method="post">
 <input type="submit" value=" @TR<<Check_Upgrade|Check For Webif^2 Update>> " name="update_check" />
-<input type="submit" value=" @TR<<Upgrade_Webif|Upgrade Webif^2>> "  " name="install_webif" />
+<input type="submit" value=" @TR<<Upgrade_Webif|Upgrade Webif^2>> "  name="install_webif" />
 </form>
 <? echo $revision_text ?>
 <table class="webif-contributors"><tbody>

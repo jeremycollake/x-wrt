@@ -8,7 +8,8 @@ html, body
 
 #header,
 #short-status
-{	
+{
+	color: #CCC;
 	background-color: #444;
 }
 

@@ -57,7 +57,7 @@ cat <<EOF
 <td colspan="2">
 <form action="" enctype="multipart/form-data" method="post">
 <input type="submit" value=" @TR<<Check_Upgrade|Check For Webif^2 Update>> " name="update_check" />
-<input type="submit" value=" @TR<<Upgrade_Webif|Upgrade Webif^2>> "  " name="install_webif" />
+<input type="submit" value=" @TR<<Upgrade_Webif|Upgrade Webif^2>> "  name="install_webif" />
 </form>	
 </td>
 </tr>

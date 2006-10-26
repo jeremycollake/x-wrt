@@ -193,8 +193,7 @@ Pragma: no-cache
 	<div id="container">	 	
 	  <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>	  
 	    <div id="header">	    				
-	    				<div class="openwrt-title">	    				
-	    			   	</div>	 			    			   				   	
+	    				<div class="openwrt-title"></div>	 			    			   				   	
 					$short_status_frame					
 		</div>
 	
