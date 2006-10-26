@@ -48,9 +48,8 @@ subcategories() {
 }
 
 show_validated_logo() {
-	echo "<br /><br /><p>
-		<div id=\"validated-text\">This page passed W3C XHTML validation tests.</div>
-		</p>"
+	echo "<br /><br />
+		<p id=\"validated-text\">This page passed W3C XHTML validation tests.</p>"
 }
 
 ShowWIPWarning() {
@@ -141,10 +140,10 @@ header() {
 	_subcategories=${2:+$(subcategories "$1" "$2")}	
 
 	#
-	# (temporary) set nvram webif_short_status_frame=1 to enable use of
+	# (temporary) set nvram webif_short_status_frame_disabled=1 to disable use of
 	# a frame to refresh the short status area.
 	#
-	use_short_status=$(nvram get webif_short_status_frame)
+	use_short_status=$(nvram get webif_short_status_frame_disabled)
 	equal $use_short_status "1" && {
 		short_status_frame_0='<iframe src="/cgi-bin/webif/iframe.mini-info.sh"
 			 	width="200" height="80"  scrolling="no" frameborder="0" 
