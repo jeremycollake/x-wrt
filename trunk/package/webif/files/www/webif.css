@@ -210,8 +210,8 @@ option
 
 #content .settings-block .settings .settings-help
 {
-	padding: 1.0em;
-	padding-top: 1.4em;
+	padding-top: 0.4em;
+	padding-bottom: 0.4em;
 	margin-left: 60%;
 }
 
