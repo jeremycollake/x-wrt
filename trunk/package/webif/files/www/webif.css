@@ -180,7 +180,7 @@ option
 
 #content .settings-block .settings-block-title
 {
-	padding-bottom: 1.0em;
+	padding-bottom: 0.7em;
 	padding-top: 0.4em;
 	padding-left: 0.4em;
 }
@@ -334,6 +334,13 @@ th
 	font-size: 0.8em;
 	text-align: left;
 
+}
+
+.failed-validation
+{
+	display: inline;	
+	width: 40%;	
+	text-align: left;
 }
 
 /* font */
@@ -518,3 +525,10 @@ dt,
 	font-size: 1.0em;
 }
 
+.failed-validation
+{
+	font-size: 1.0em;
+	font-style: italic;
+	font-weight: strong;
+	color: red;
+}
