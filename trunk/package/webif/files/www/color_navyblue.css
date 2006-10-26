@@ -1,7 +1,6 @@
  /* color theme navy blue */
 
-#header,
-#short-status
+#header
 {
 	color: #CCC;
 	background-color: #292155;

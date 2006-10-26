@@ -1,4 +1,9 @@
 /* common colors */
+#short-status 
+{
+	background-color: transparent;	
+}
+
 .kb
 {
 	color: #222;
@@ -23,4 +28,3 @@
 {
 
 }
-
