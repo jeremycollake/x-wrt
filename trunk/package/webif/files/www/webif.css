@@ -507,3 +507,14 @@ dt,
 	font-weight: lighter;
 	font-size: 0.7em;
 }
+
+#content .settings-block .settings-block-title h2
+{
+	font-size: 1.1em;
+}
+
+#content .settings-block .settings .settings-title h3
+{
+	font-size: 1.0em;
+}
+
