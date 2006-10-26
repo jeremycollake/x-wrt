@@ -278,7 +278,7 @@ th
 
 
 #content .settings-block .settings .settings-help .more-help,
-#save,
+#save
 {
 	text-align: right;
 }
@@ -350,6 +350,11 @@ dt,
 	font-weight: bold;
 }
 
+#submenu
+{
+	font-size: 0.8em;
+}
+
 .selected-maincat
 {
 	font-size: 1.4em;
@@ -357,7 +362,7 @@ dt,
 
 .selected-subcat
 {
-	font-size: 1.4em;
+	font-size: 1.2em;
 }
 
 
