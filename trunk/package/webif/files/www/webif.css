@@ -78,21 +78,19 @@ option
 	padding-left: 0.2em;
 	float: right;	
 }
-
 .openwrt-title
 {
-	position: relative;
-	float: left;
-	top: 0em;
-	padding-bottom: 0.5em;
-	padding-top: 0.5em;
-	padding-left: 1em;
-	width: 30em;
-	height: 5.5em;
-	background: url(/images/openwrt-logo.png) 10px 50%;
-	background-repeat: no-repeat;
+        position: relative;
+        float: left;
+        top: 0em;
+        padding-bottom: 0.5em;
+        padding-top: 0.5em;
+        padding-left: 1em;
+        width: 50em;
+        height: 5.5em;
+        background: url(/images/footer.png) 10px 40%;
+        background-repeat: no-repeat;
 }
-
 #mainmenu
 {
 	position: relative;
