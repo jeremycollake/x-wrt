@@ -233,7 +233,6 @@ option
 	width: 100%;	
 }
 
-/* save button */
 #save .page-save div
 {	
 	float: right;	
@@ -260,6 +259,14 @@ option
 	padding-right: 1em;
 	padding-top: 0.5em;
 	padding-bottom: 0.5em;
+}
+
+#save .apply #debug-button
+{	
+	position: relative;	
+	float: left;
+	width: 4em;
+	height: 4em;
 }
 
 th 

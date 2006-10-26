@@ -3,6 +3,8 @@
 . /usr/lib/webif/webif.sh
 header "Network" "DHCP" "@TR<<DHCP Interfaces>>" '' "$SCRIPT_NAME"
 
+env
+
 load_settings network
 
 exists /tmp/.webif/file-dnsmasq.conf  && DNSMASQ_FILE=/tmp/.webif/file-dnsmasq.conf || DNSMASQ_FILE=/etc/dnsmasq.conf
@@ -36,6 +38,7 @@ END {
     mv "/tmp/.webif/file-dnsmasq.conf-new" "/tmp/.webif/file-dnsmasq.conf"
     DNSMASQ_FILE=/tmp/.webif/file-dnsmasq.conf
 }
+
 
 empty "$FORM_add_line" || {
     update_dnsmasq add "$FORM_iface" "$FORM_hop" "$FORM_values"

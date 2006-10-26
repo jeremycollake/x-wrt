@@ -38,13 +38,11 @@
 #save .apply div
 {
 	background-color: #4d3f2a;
-	/*background-color: #3D5C7A; */ /* blue */
 }
 
 #mainmenu
 {
-	color: #C3C4D2;
-	/*background-color: #213242;*/ /* blue */
+	color: #C3C4D2;	
 	background-color: #4d3f2a;
 }
 

@@ -136,11 +136,13 @@ header() {
 	_head="${3:+<div class=\"settings-block-title\"><h2>$3$_saved_title</h2></div>}"
 	_form="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />}"
 	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></p>}"
+	# todo: temp
+	_debugbutton="<p><input type=\"submit\" name=\"debug\" value=\"@TR<<Debug>>\" /></p>"
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}	
 
 	#
-	# (temporary) set nvram webif_short_status_frame_disabled=1 to disable use of
+	# todo: (temporary) set nvram webif_short_status_frame_disabled=1 to disable use of
 	# a frame to refresh the short status area.
 	#
 	use_short_status=$(nvram get webif_short_status_frame_disabled)
@@ -174,7 +176,7 @@ Pragma: no-cache
 		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
 		<meta http-equiv="expires" content="-1" />
 	</head>
-	<body $4>	
+	<body $4>
 	
 	<script type="text/javascript" src="/colorize.js"></script>
 		<script type="text/javascript"> colorize(); </script>
@@ -212,12 +214,15 @@ Pragma: no-cache
 		<script type="text/javascript"> swatch(); </script>
 		
 		<div id="content">
-		
-
 			<div class="settings-block">
 				$_head
 				$ERROR
 EOF
+	# todo: temp - handle debug button press
+	! empty "$FORM_debug" && {
+		env
+	}
+
 	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && {
 		empty "$FORM_passwd1" || {
 			echo '<pre>'
@@ -275,22 +280,23 @@ footer() {
 			</div>
 			<hr width="40%" />
 		</div>
-		<br />	
-		<div id="save">				
+		<br />			
+		<div id="save">					
 			<div class="page-save">
-				<div>
-					$_savebutton
+				<div>					
+					$_savebutton					
 				</div>
 			</div>
 			<div class="apply">
+				<div id="debug-button">$_debugbutton</div>
 				<div>
 					<a href="config.sh?mode=save&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Apply Changes>> &laquo;</a><br />
 					<a href="config.sh?mode=clear&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Clear Changes>> &laquo;</a><br />
 					<a href="config.sh?mode=review&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Review Changes>> $_changes &laquo;</a>
-				</div>
-			</div>
+				</div>				
+			</div>			
 		</div>
-		$_endform
+		$_endform		
     </div></body>
 </html>
 EOF
