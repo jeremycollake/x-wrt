@@ -6,9 +6,10 @@ html, body
 	background-color: #111;
 }
 
-#header
-{
-	background-color: #111;
+#header,
+#short-status
+{	
+	background-color: #444;
 }
 
 #update-available

@@ -102,15 +102,16 @@ Pragma: no-cache
 	<head>
 
 <link rel="stylesheet" type="text/css" href="/webif.css" />
+<link rel="stylesheet" type="text/css" href="/color_common.css" />
     	<title></title>
 </head>
-
 <style type="text/css">
 	html, body {
 		background-color: transparent;
 	}	
 </style>
-
+<script type="text/javascript" src="/colorize.js"></script>
+<script type="text/javascript"> colorize(); </script>
 EOF
 }
 
@@ -145,12 +146,21 @@ header() {
 	# todo: (temporary) set nvram webif_short_status_frame_disabled=1 to disable use of
 	# a frame to refresh the short status area.
 	#
-	use_short_status=$(nvram get webif_short_status_frame_disabled)
-	! equal $use_short_status "1" && {
-		short_status_frame_0='<iframe src="/cgi-bin/webif/iframe.mini-info.sh"
-			 	width="200" height="80"  scrolling="no" frameborder="0">'
-		short_status_frame_1='</iframe>'
-	}
+	no_short_status=$(nvram get webif_no_status_frame)
+	if ! equal $no_short_status "1"; then
+		short_status_frame='<iframe src="/cgi-bin/webif/iframe.mini-info.sh"
+			 	width="200" height="80"  scrolling="no" frameborder="0"></iframe>'
+	else
+		short_status_frame='<div id="short-status">    				
+						<h3><strong>Status:</strong></h3>
+						<ul>
+							<li><strong>$_firmware_name $_version </strong></li>
+							<li><strong>@TR<<Host>>:</strong> $_hostname</li>						
+							<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
+							<li><strong>@TR<<Load>>:</strong> $_loadavg</li>						
+						</ul>										
+					</div>'
+	fi
 	
 	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && grep 'root:!' /etc/passwd >&- 2>&- && {
 		_nopasswd=1
@@ -184,18 +194,8 @@ Pragma: no-cache
 	  <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>	  
 	    <div id="header">	    				
 	    				<div class="openwrt-title">	    				
-	    			   	</div>	 		
-	    			   	<div id="short-status">    			   	
-					$short_status_frame_0					
-						<h3><strong>Status:</strong></h3>
-						<ul>
-							<li><strong>$_firmware_name $_version </strong></li>
-							<li><strong>@TR<<Host>>:</strong> $_hostname</li>						
-							<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
-							<li><strong>@TR<<Load>>:</strong> $_loadavg</li>						
-						</ul>					
-					$short_status_frame_1						
-				</div>
+	    			   	</div>	 			    			   				   	
+					$short_status_frame					
 		</div>
 	
 		<div id="categories">$_categories</div>
