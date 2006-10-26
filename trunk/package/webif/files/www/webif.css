@@ -87,9 +87,8 @@ option
         padding-top: 0.5em;
         padding-left: 1em;
         width: 50em;
-        height: 5.5em;
-        background: url(/images/openwrt-logo.png) 10px 40%;
-        background-repeat: no-repeat;
+        height: 5.6em;
+        background: url(/images/small-footer.png);
 }
 #mainmenu
 {
