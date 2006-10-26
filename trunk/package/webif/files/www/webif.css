@@ -265,6 +265,7 @@ option
 	float: left;
 	width: 4em;
 	height: 4em;
+	background-color: transparent;
 }
 
 th 
