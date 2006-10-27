@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: firstboot 4920 2006-10-04 22:23:26Z nbd $
+# $Id: firstboot 5305 2006-10-27 01:47:16Z nbd $
 
 rom=$(awk '/squashfs/ {print $2}' /proc/mounts)
 jffs=$(awk '/jffs2/ {print $2}' /proc/mounts)
@@ -21,7 +21,6 @@ dupe() { # <new_root> <old_root>
 		case "$file" in
 		./rom/note) ;; #nothing
 		./etc/config*|\
-		./etc/resolv.conf|\
 		./usr/lib/ipkg/info/*) cp -af $2/$file $file;;
 		*) ln -sf /rom/${file#./*} $file;;
 		esac

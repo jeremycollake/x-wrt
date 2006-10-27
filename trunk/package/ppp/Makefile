@@ -1,4 +1,4 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
+# $Id: Makefile 5305 2006-10-27 01:47:16Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -88,7 +88,7 @@ endif
 
 $(IPKG_PPP):
 	install -d -m0755 $(IDIR_PPP)/etc/ppp
-	ln -sf /tmp/resolv.conf $(IDIR_PPP)/etc/ppp/resolv.conf
+	ln -sf /tmp/resolv.conf.auto $(IDIR_PPP)/etc/ppp/resolv.conf
 	install -m0600 ./files/etc/ppp/chap-secrets $(IDIR_PPP)/etc/ppp/
 	install -m0644 ./files/etc/ppp/options $(IDIR_PPP)/etc/ppp/
 	$(INSTALL_FILTER)

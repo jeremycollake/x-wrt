@@ -60,10 +60,10 @@ do_ifup() {
 			} done
 		}
 
-		[ -f /tmp/resolv.conf ] || {
-			debug "# --- creating /tmp/resolv.conf ---"
+		[ -f /tmp/resolv.conf.auto ] || {
+			debug "# --- creating /tmp/resolv.conf.auto ---"
 			for dns in $(nvram get ${2}_dns); do
-				echo "nameserver $dns" >> /tmp/resolv.conf
+				echo "nameserver $dns" >> /tmp/resolv.conf.auto
 			done
 		}
 		
@@ -168,4 +168,31 @@ include() {
 	for file in $(ls /lib/$1/*.sh 2>/dev/null); do
 		. $file
 	done
+}
+
+set_led() {
+	local led="$1"
+	local state="$2"
+	[ -f "/proc/diag/led/$1" ] && echo "$state" > "/proc/diag/led/$1"
+}
+
+set_state() {
+	case "$1" in
+		preinit)
+			set_led dmz 1
+			set_led diag 1
+			set_led power 0
+		;;
+		failsafe)
+			set_led diag 0 && led=diag
+			set_led power 1 && led=power
+			set_led dmz 0 && led=dmz
+			while :; do { set_led "$led" $(((X=(X+1)%8)%2)); sleep $((X==0)); } done &
+		;;
+		done)
+			set_led dmz 0
+			set_led diag 0
+			set_led power 1
+		;;
+	esac
 }

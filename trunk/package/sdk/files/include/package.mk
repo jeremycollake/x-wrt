@@ -132,17 +132,7 @@ define BuildPackage
   INFO_$(1):=$(IPKG_STATE_DIR)/info/$(1).list
 
   ifdef Package/$(1)/install
-    ifeq ($(CONFIG_PACKAGE_$(1)),y)
-      install-targets: $$(INFO_$(1))
-    endif
-
-    ifneq ($(CONFIG_PACKAGE_$(1)),)
-      compile-targets: $$(IPKG_$(1))
-    else
-      compile-targets: $(1)-disabled
-      $(1)-disabled:
-	@echo "WARNING: skipping $(1) -- package not selected"
-    endif
+    compile-targets: $$(IPKG_$(1))
   endif
 
   ifeq ($(FORCEREBUILD),y)
@@ -290,7 +280,7 @@ define Build/Prepare
 endef
 
 define Build/Configure/Default
-	(cd $(PKG_BUILD_DIR)/$(3); \
+	(cd $(PKG_BUILD_DIR)/$(strip $(3)); \
 	if [ -x configure ]; then \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
