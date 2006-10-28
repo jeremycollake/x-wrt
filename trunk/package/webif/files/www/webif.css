@@ -465,20 +465,26 @@ dt,
     font-size: 1.0em;
 }
 
-.mainmenu {
+/* ***************************************** */
+/* TODO: the below doesn't adhere to above seperation of position, font, and color. */
+
+.mainmenu 
+{
     list-style-type: none;
     padding: 0;
     margin: 0;
     height: 20px;
 }
 
-.mainmenu li {
+.mainmenu li 
+{
     display: inline;
     padding: 0;
     margin: 0;
 }
 
-.mainmenu li a:link, .mainmenu li a:visited {
+.mainmenu li a:link, .mainmenu li a:visited 
+{    
     text-decoration: none;
     text-align:	center;
     float: left;
@@ -493,7 +499,9 @@ dt,
     border-bottom: solid 1px #dddddd;
 }
 
-.mainmenu li a.selected:link, .mainmenu	li a.selected:visited {
+.mainmenu li a.selected:link, .mainmenu	li a.selected:visited 
+{
+    display: inline;
     text-decoration: underline;
     background-color: #ffffff;
     color: #000000;
@@ -501,11 +509,13 @@ dt,
     border-bottom: solid 1px #ffffff;
 }
 
-.mainmenu li a:hover {
+.mainmenu li a:hover 
+{
     text-decoration: underline;
 }
 
-.mainmenu li a:active {
+.mainmenu li a:active 
+{
     background-color: #ffffff;
     color: #000000;
     border-right: solid	1px #dddddd;
