@@ -1,20 +1,36 @@
 # $Id$
-#
-# Makefile for the diag driver
-#
-# Copyright (C) 2006 Felix Fietkau <nbd@openwrt.org>
-#
-# This program is free software; you can redistribute it and/or
-# modify it under the terms of the GNU General Public License
-# as published by the Free Software Foundation; either version
-# 2 of the License, or (at your option) any later version.
-#
 
-EXTRA_CFLAGS := -I$(TOPDIR)/arch/mips/bcm947xx/include -DBCMDRIVER
+include $(TOPDIR)/rules.mk
+include ../../rules.mk
 
-obj-m			:= diag.o
+PKG_NAME := kmod-diag
+PKG_RELEASE := 5
+PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
-ifeq ($(MAKING_MODULES),1)
--include $(TOPDIR)/Rules.make
-endif
+include $(TOPDIR)/package/rules.mk
+
+$(eval $(call PKG_template,KMOD_DIAG,$(PKG_NAME),$(LINUX_VERSION)-$(BOARD)-$(PKG_RELEASE),$(ARCH),kernel ($(LINUX_VERSION)-$(BOARD)-$(LINUX_RELEASE))))
+
+$(PKG_BUILD_DIR)/.prepared:
+	mkdir -p $(PKG_BUILD_DIR)
+	cp -fpR ./src/* $(PKG_BUILD_DIR)/
+	touch $@
+
+$(PKG_BUILD_DIR)/.configured:
+	touch $@
+
+$(PKG_BUILD_DIR)/.built:
+	$(MAKE) -C "$(KERNEL_DIR)" \
+		CROSS_COMPILE="$(TARGET_CROSS)" \
+		ARCH="$(LINUX_KARCH)" \
+		PATH="$(TARGET_PATH)" \
+		SUBDIRS="$(PKG_BUILD_DIR)" \
+		modules
+	touch $@
+	
+$(IPKG_KMOD_DIAG):
+	install -m0755 -d $(IDIR_KMOD_DIAG)/lib/modules/$(LINUX_VERSION)
+	cp -fpR $(PKG_BUILD_DIR)/diag.o \
+		$(IDIR_KMOD_DIAG)/lib/modules/$(LINUX_VERSION)
+	$(IPKG_BUILD) $(IDIR_KMOD_DIAG) $(PACKAGE_DIR)
 
