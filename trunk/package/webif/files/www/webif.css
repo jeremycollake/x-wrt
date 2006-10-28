@@ -70,18 +70,21 @@ option
 
 #short-status
 {
-	position: relative;
+	position: absolute;
+	top: 0em;
+	left: 80%;
 	line-height: 1.0em;
-	padding-top: 0.2em;
+	margin-top: 1em;
 	padding-bottom: 0.2em;
 	padding-right: 0.5em;
-	padding-left: 0.2em;
-	float: right;	
+	padding-left: 1.0em;	
+	float: right;
 }
+
 .openwrt-title
 {
 	float: left;
-	width: 50em;
+	width: 80%;
 	margin-top: 1em;
 	height: 5em;
 	background: url(/images/supersmall-footer.png);

@@ -141,17 +141,13 @@ header() {
 	_debugbutton="<p><input type=\"submit\" name=\"debug\" value=\"@TR<<Debug>>\" /></p>"
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}	
-
-	#
-	# todo: (temporary) set nvram webif_short_status_frame_disabled=1 to disable use of
-	# a frame to refresh the short status area.
-	#
-	no_short_status=$(nvram get webif_no_status_frame)
-	if ! equal $no_short_status "1"; then
+	
+	use_short_status_frame=$(nvram get webif_use_short_status_frame)
+	if equal $use_short_status_frame "1"; then
 		short_status_frame='<iframe src="/cgi-bin/webif/iframe.mini-info.sh"
 			 	width="200" height="80"  scrolling="no" frameborder="0"></iframe>'
 	else
-		short_status_frame='<div id="short-status">    				
+		short_status_frame="<div id=\"short-status\">    				
 						<h3><strong>Status:</strong></h3>
 						<ul>
 							<li><strong>$_firmware_name $_version </strong></li>
@@ -159,7 +155,7 @@ header() {
 							<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
 							<li><strong>@TR<<Load>>:</strong> $_loadavg</li>						
 						</ul>										
-					</div>'
+					</div>"
 	fi
 	
 	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && grep 'root:!' /etc/passwd >&- 2>&- && {
