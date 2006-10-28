@@ -4,10 +4,14 @@
 header "Status" "Interfaces" "@TR<<Interfaces Status>>"
 
 # get WAN IP
-wan_config=$(ifconfig 2>&1 | grep -A 1 "`nvram get wan_ifname`")
+wan_config=$(ifconfig 2>&1 | grep -A 6 "`nvram get wan_ifname`")
 wan_ip_addr=$(echo "$wan_config" | grep "inet addr" | cut -d: -f 2 | sed s/Bcast//g)
-wan_mac_addr=$(echo "$wan_config" | grep -A 1 "`nvram get wan_ifname`" | grep "HWaddr" | cut -d' ' -f 10)
-
+wan_mac_addr=$(echo "$wan_config" | grep "HWaddr" | cut -d' ' -f 10)
+wan_tx_packets=$(echo "$wan_config" | grep "TX packets" | sed s/'TX packets:'//g | cut -d' ' -f 11)
+wan_rx_packets=$(echo "$wan_config" | grep "RX packets" | sed s/'RX packets:'//g | cut -d' ' -f 11)
+wan_tx_bytes=$(echo "$wan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d')' -f 2) 
+wan_rx_bytes=$(echo "$wan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d')' -f 1) 
+ 
 # enumerate WAN nameservers
 form_dns_servers=$(awk '
 	BEGIN { counter=1 }
@@ -21,6 +25,10 @@ string|$wan_mac_addr
 field|@TR<<IP Address>>|wan_ip_addr
 string|$wan_ip_addr
 $form_dns_servers
+field|@TR<<Received>>|wan_rx
+string|$wan_rx_packets packets<br />$wan_rx_bytes)
+field|@TR<<Transmitted>>|wan_tx
+string|$wan_tx_packets packets<br />$wan_tx_bytes)
 end_form
 start_form|@TR<<Raw Interface Status Info>>
 EOF
