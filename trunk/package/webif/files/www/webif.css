@@ -1,3 +1,17 @@
+/* If you want to edit this file, adhere to these rules:
+ *
+ * CSS is seperated by layout, font, and color. It might be a little more
+ * work, but keeping it grouped like this allows for easier implementation
+ * of things like the color switcher.
+ *
+ * The class/id layout is pretty good, though not perfect. We want the structure
+ * to be flexible --- it isn't about the current theme as much as allowing future
+ * themes to do whatever without changing anything but the CSS. Do NOT change
+ * a bunch of classes and ids in the form code without some discussion with
+ * the group.
+ *
+ */
+ 
 /* layout */
 
 *
