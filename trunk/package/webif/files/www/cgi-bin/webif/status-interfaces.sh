@@ -63,5 +63,5 @@ show_validated_logo
 
 footer ?>
 <!--
-##WEBIF:name:Status:500:Interfaces
+##WEBIF:name:Status:150:Interfaces
 -->

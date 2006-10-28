@@ -1,7 +1,7 @@
 #!/usr/bin/webif-page
 <? 
 . "/usr/lib/webif/webif.sh"
-header "Status" "Status" "@TR<<Device Status>>" 
+header "Status" "System" "@TR<<Device Status>>" 
 ?>
 
 <meta http-equiv="refresh" content="20" />
@@ -74,5 +74,5 @@ EOF
 
 <? footer ?>
 <!--
-##WEBIF:name:Status:1:Status
+##WEBIF:name:Status:100:System
 -->

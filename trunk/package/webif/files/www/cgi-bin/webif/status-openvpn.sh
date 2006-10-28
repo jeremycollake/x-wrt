@@ -65,5 +65,5 @@ equal "$(nvram get openvpn_cli)" "1" && {
 
 footer ?>
 <!--
-##WEBIF:name:Status:2:OpenVPN
+##WEBIF:name:Status:910:OpenVPN
 -->

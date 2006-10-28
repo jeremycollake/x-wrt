@@ -93,5 +93,5 @@ header "Status" "TCP/IP" "@TR<<TCP/IP Status>>"
   </p>
 <? footer ?>
 <!--
-##WEBIF:name:Status:300:TCP/IP
+##WEBIF:name:Status:200:TCP/IP
 -->
