@@ -48,8 +48,8 @@ $1 ~ /^field/ {
 	if ($4 == "hidden") field_opts = field_opts " style=\"display: none\""
 	print "<tr" field_opts ">"
 	if ($2 != "") {
-		print "<td width=\"50%\""
-		print ">" $2 "</td><td width=\"50%\">"
+		print "<td width=\"40%\""
+		print ">" $2 "</td><td width=\"60%\">"
 	}
 	else print "<td colspan=\"2\">"
 
@@ -61,7 +61,7 @@ $1 ~ /^button/ {
 	else field_opts=""
 	if ($4 == "hidden") field_opts = field_opts " style=\"display: none\""
 	print "<tr" field_opts ">"
-	if ($2 != "") print "<td width=\"50%\">" $2 "</td><td width=\"50%\">"
+	if ($2 != "") print "<td width=\"40%\">" $2 "</td><td width=\"60%\">"
 	else print "<td colspan=\"2\">"
 
 	print "<input type=\"button\" name=\"" $2 "\" value=\"" $3 "\" onclick=\"" $4 "\"/>"

@@ -27,13 +27,15 @@
 }
 
 #header-title,
+#submenu,
+#submenu a,
 #save a,
 #save .page-save
 {
 	color: #fff;
 }
 
-.mainmenu,
+#mainmenu,
 #header-title,
 #save .apply div
 {
@@ -41,16 +43,17 @@
 	background-color: #213242;
 }
 
-.mainmenu a
+#mainmenu a
 {
 	color: #C3C4D2;
 }
 
-.mainmenu a:hover
+#mainmenu a:hover
 {
 	color: rgb(193,102,90);
 }
 
+#submenu,
 #save div
 {
 	background-color: #213242;
@@ -59,6 +62,11 @@
 #content .settings-block .settings-block-title h2
 {
 	color: #1b205c;
+}
+
+#submenu a:hover
+{
+	color: #FB0;
 }
 
 #content .settings-block

@@ -26,6 +26,8 @@
 }
 
 #header-title,
+#submenu,
+#submenu a,
 #save a,
 #save .page-save
 {
@@ -38,17 +40,18 @@
 	background-color: #315579;
 }
 
-.mainmenu
+#mainmenu
 {
 	color: #C3C4D2;
 	background-color: #315579;
 }
 
-.mainmenu a
+#mainmenu a
 {
 	color: #C3C4D2;
 }
 
+#submenu,
 #save div
 {
 	background-color: #476889;
@@ -59,7 +62,7 @@
 	color: #000;
 }
 
-.mainmenu a:hover,
+#mainmenu a:hover,
 #submenu a:hover,
 #save a:hover
 {
