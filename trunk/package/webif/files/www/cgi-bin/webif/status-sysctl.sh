@@ -1,7 +1,7 @@
 #!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
-header "Status" "Active IP System Settings" "@TR<<Active IP System Settings>>"
+header "Status" "TCP/IP Params" "@TR<<TCP/IP Parameters>>"
 ?>
 <table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
 <tbody>
@@ -21,5 +21,5 @@ header "Status" "Active IP System Settings" "@TR<<Active IP System Settings>>"
 </table>
 <? footer ?>
 <!--
-##WEBIF:name:Status:950:Active IP System Settings
+##WEBIF:name:Status:950:TCP/IP Params
 -->
