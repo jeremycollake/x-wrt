@@ -145,12 +145,10 @@ header() {
     _subcategories=${2:+$(subcategories "$1" "$2")}
 
     #
-    # TODO: make this actually make sense.  i have eliminated the iframe for the moment
-    # (temporary) set nvram webif_short_status_frame_disabled=1 to disable use of
-    # a frame to refresh the short status area.
+    # toggle short-status iframe via nvram webif_short_status_iframe variable
     #
-    no_short_status=$(nvram get webif_no_status_frame)
-    if equal $no_short_status "1"; then
+    short_status_iframe=$(nvram get webif_short_status_iframe)
+    if equal $short_status_iframe "1"; then
         short_status_frame='<iframe src="/cgi-bin/webif/iframe.mini-info.sh"
                             width="200" height="80"  scrolling="no" frameborder="0"></iframe>'
     else
