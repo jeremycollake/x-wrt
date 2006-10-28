@@ -160,9 +160,9 @@ option
 #content
 {
         padding-top: 0.5em;
-        padding-bottom: 1em;
+        padding-bottom: 8em;
         padding-right: 1em;
-        padding-left: 1em;
+        padding-left: 1em;        
 	clear: both;
 }
 
@@ -170,7 +170,7 @@ option
 {
 	padding-left: 1.5em;
 	padding-right: 1em;
-	padding-top: 0.1em;
+	padding-top: 0.1em;	
 }
 
 #content .settings-block .settings-block-title
@@ -243,7 +243,7 @@ option
 {
 	clear: both;
 	width: 100%;
-	height: 5em;		
+	height: 5em;				
 }
 
 /* apply/clear/review area */
