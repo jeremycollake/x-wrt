@@ -1,7 +1,7 @@
 #!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
-header "Info" "System Information" "@TR<<System Information>>" '' ''
+header "Info" "System" "@TR<<System>>" '' ''
 
 this_revision=$(cat "/www/.version")
 
@@ -90,5 +90,5 @@ footer
 
 ?>
 <!--
-##WEBIF:name:Info:1:System Information
+##WEBIF:name:Info:1:System
 -->
