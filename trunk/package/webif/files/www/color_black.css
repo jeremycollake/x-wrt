@@ -34,8 +34,6 @@ html, body
 }
 
 #header-title,
-#submenu,
-#submenu a,
 #save a,
 #save .page-save
 {
@@ -64,7 +62,6 @@ html, body
 	color: rgb(193,102,90);
 }
 
-#submenu,
 #save div
 {
 	color: #CCC;
@@ -74,11 +71,6 @@ html, body
 #content .settings-block .settings-block-title h2
 {
 	color: #CCC;	
-}
-
-#submenu a:hover
-{
-	color: #FB0;
 }
 
 #content .settings-block

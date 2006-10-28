@@ -26,8 +26,6 @@
 }
 
 #header-title,
-#submenu,
-#submenu a,
 #save a,
 #save .page-save
 {
@@ -51,7 +49,6 @@
 	color: #C3C4D2;
 }
 
-#submenu,
 #save div
 {
 	background-color: #476889;

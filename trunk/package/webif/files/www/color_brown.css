@@ -26,8 +26,6 @@
 }
 
 #header-title,
-#submenu,
-#submenu a,
 #save a,
 #save .page-save
 {
@@ -56,7 +54,6 @@
 	color: rgb(193,102,90);
 }
 
-#submenu,
 #save div
 {
 	background-color: #978568;
