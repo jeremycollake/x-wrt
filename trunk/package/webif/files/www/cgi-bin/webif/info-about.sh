@@ -66,7 +66,10 @@ fi
 &nbsp;&nbsp; <a href="mailto:kemen04@gmail.com">Travis Kemen</a>
 </td></tr>		
 <tr><td>
-&nbsp;&nbsp; Special thanks to Spectra, Strontian, Sven-Ola, Felix Fietkau, beta testers, and many others who have provided development, testing, or other contributions.
+&nbsp;&nbsp; <a href="mailto:tyardley@users.berlios.de">Tim Yardley</a>
+</td></tr>	 	
+<tr><td>
+&nbsp;&nbsp; With help from Owen Brotherwood (Oxo), ido, Spectra, Strontian, Sven-Ola, Felix Fietkau, beta testers, and many others who have provided development, testing, or other contributions.
 </td></tr>		
 
 <tr><td><br /></td></tr>  
