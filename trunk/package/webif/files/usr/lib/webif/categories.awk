@@ -16,10 +16,10 @@ BEGIN {
 	f[$4] = rootdir "/" $1
 }
 END {
-	print "<ul id=\"mainmenu\"><li><strong>@TR<<Categories>>:</strong></li>"
+	print "<ul class=\"mainmenu\"><li><strong>@TR<<Categories>>:</strong></li>"
 	
 	for (i = 1; i <= n; i++) {
-		if (sel == i) print "<li><a id=\"selected\" href=\"" f[c[i]] "\">&nbsp;@TR<<" c[i] ">>&nbsp;</a></li>"
+		if (sel == i) print "<li><a class=\"selected\" href=\"" f[c[i]] "\">&nbsp;@TR<<" c[i] ">>&nbsp;</a></li>"
 		else print "<li><a href=\"" f[c[i]] "\">&nbsp;@TR<<" c[i] ">>&nbsp;</a></li>";
 	}
   

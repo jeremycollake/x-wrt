@@ -48,18 +48,18 @@ html, body
 	background-color: #111;
 }
 
-#mainmenu
+.mainmenu
 {
 	color: #C3C4D2;
 	background-color: #111;
 }
 
-#mainmenu a
+.mainmenu a
 {
 	color: #C3C4D2;
 }
 
-#mainmenu a:hover
+.mainmenu a:hover
 {
 	color: rgb(193,102,90);
 }

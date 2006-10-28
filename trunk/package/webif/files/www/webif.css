@@ -90,7 +90,7 @@ option
     background-repeat: repeat-x;
 }
 
-#mainmenu
+.mainmenu
 {
     position: relative;
     float: left;
@@ -108,14 +108,14 @@ option
     padding-bottom: 0.5em;
 }
 
-#mainmenu h3
+.mainmenu h3
 {
     padding-left: 1em;
     padding-right: 1em;
     display: inline;
 }
 
-#mainmenu li
+.mainmenu li
 {
     display: inline;
     font-size: 0.9em;
@@ -349,7 +349,7 @@ body
 }
 
 dt,
-#mainmenu a:active,
+.mainmenu a:active,
 #submenu a
 {
     font-weight: bold;
@@ -381,14 +381,14 @@ dt,
     font-size: 0.58em;
 }
 
-#mainmenu h3,
-#mainmenu li,
+.mainmenu h3,
+.mainmenu li,
 #short-status h3
 {
     font-size: 0.9em;
 }
 
-#mainmenu a,
+.mainmenu a,
 #submenu a,
 #save a
 {
@@ -400,7 +400,7 @@ dt,
     text-decoration: underline;
 }
 
-#mainmenu h3
+.mainmenu h3
 {
     text-transform: uppercase;
 }
@@ -523,20 +523,20 @@ dt,
     font-size: 1.0em;
 }
 
-#mainmenu {
+.mainmenu {
     list-style-type: none;
     padding: 0;
     margin: 0;
     height: 20px;
 }
 
-#mainmenu li {
+.mainmenu li {
     display: inline;
     padding: 0;
     margin: 0;
 }
 
-#mainmenu li a:link, #mainmenu li a:visited {
+.mainmenu li a:link, .mainmenu li a:visited {
     text-decoration: none;
     text-align: center;
     float: left;
@@ -551,7 +551,7 @@ dt,
     border-bottom: solid 1px #dddddd;
 }
 
-#mainmenu li a#selected:link, #mainmenu li a#selected:visited {
+.mainmenu li a.selected:link, .mainmenu li a.selected:visited {
     text-decoration: underline;
     background-color: #ffffff;
     color: #000000;
@@ -559,11 +559,11 @@ dt,
     border-bottom: solid 1px #ffffff;
 }
 
-#mainmenu li a:hover {
+.mainmenu li a:hover {
     text-decoration: underline;
 }
 
-#mainmenu li a:active {
+.mainmenu li a:active {
     background-color: #ffffff;
     color: #000000;
     border-right: solid 1px #dddddd;

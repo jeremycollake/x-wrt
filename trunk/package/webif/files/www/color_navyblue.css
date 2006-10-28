@@ -35,7 +35,7 @@
 	color: #fff;
 }
 
-#mainmenu,
+.mainmenu,
 #header-title,
 #save .apply div
 {
@@ -43,12 +43,12 @@
 	background-color: #213242;
 }
 
-#mainmenu a
+.mainmenu a
 {
 	color: #C3C4D2;
 }
 
-#mainmenu a:hover
+.mainmenu a:hover
 {
 	color: rgb(193,102,90);
 }

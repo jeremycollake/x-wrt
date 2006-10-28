@@ -40,18 +40,18 @@
 	background-color: #4d3f2a;
 }
 
-#mainmenu
+.mainmenu
 {
 	color: #C3C4D2;	
 	background-color: #4d3f2a;
 }
 
-#mainmenu a
+.mainmenu a
 {
 	color: #C3C4D2;
 }
 
-#mainmenu a:hover
+.mainmenu a:hover
 {
 	color: rgb(193,102,90);
 }
