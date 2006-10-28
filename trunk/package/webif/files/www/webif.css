@@ -128,11 +128,16 @@ option
 	clear: both;
 }
 
+#content .settings-block
+{
+	padding-bottom: 5em;
+}
+
 #content .settings-block .settings
 {
 	padding-left: 1.5em;
 	padding-right: 1em;
-	padding-top: 0.1em;	
+	padding-top: 0.2em;
 }
 
 #content .settings-block .settings-block-title
