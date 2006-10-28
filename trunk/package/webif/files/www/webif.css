@@ -500,8 +500,7 @@ dt,
 }
 
 .mainmenu li a.selected:link, .mainmenu	li a.selected:visited 
-{
-    display: inline;
+{    
     text-decoration: underline;
     background-color: #ffffff;
     color: #000000;
