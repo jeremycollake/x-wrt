@@ -2,10 +2,26 @@
 <?
 . /usr/lib/webif/webif.sh
 header "Status" "Interfaces" "@TR<<Interfaces Status>>"
-?>
 
-<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
-<tbody>
+# get WAN IP
+wan_ip_addr=$(ifconfig 2>&1 | grep -A 1 "`nvram get wan_ifname`" | grep "inet addr" | cut -d: -f 2 | sed s/Bcast//g)
+
+# enumerate WAN nameservers
+form_dns_servers=$(awk '
+	BEGIN { counter=1 }
+	/nameserver/ {print "field|@TR<<DNS Server>> " counter "|dns_server_" counter "\n string|" $2 "\n" ;counter+=1}
+	' /etc/resolv.conf)
+
+ 
+display_form <<EOF
+start_form|@TR<<WAN Status>>
+field|@TR<<IP Address>>|wan_ip_addr
+string|$wan_ip_addr
+$form_dns_servers
+end_form
+start_form|@TR<<Raw Interface Status Info>>
+EOF
+?>
         <tr>
         <th><b>@TR<<Interfaces Status|WAN Interface>></b></th>
         </tr>
@@ -25,18 +41,16 @@ header "Status" "Interfaces" "@TR<<Interfaces Status>>"
         </tr>
         <tr>
                 <td><pre><? iwconfig 2>&1 | grep -v 'no wireless' | grep '\w' ?></pre></td>
-        </tr>
-                             
-</tbody>
-</table>
-<br />
- <p>
-    <a href="http://validator.w3.org/check?uri=referer"><img
-        src="http://www.w3.org/Icons/valid-xhtml10"
-        alt="Valid XHTML 1.0 Transitional" height="31" width="88" /></a>
-  </p>
+        </tr>                            
+<? 
 
-<? footer ?>
+display_form <<EOF
+end_form
+EOF
+
+show_validated_logo
+
+footer ?>
 <!--
 ##WEBIF:name:Status:500:Interfaces
 -->
