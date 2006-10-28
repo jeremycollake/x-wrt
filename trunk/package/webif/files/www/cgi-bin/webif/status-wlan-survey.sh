@@ -204,5 +204,5 @@ fi
 
 <? footer ?>
 <!--
-##WEBIF:name:Status:800:Survey
+##WEBIF:name:Status:980:Survey
 -->

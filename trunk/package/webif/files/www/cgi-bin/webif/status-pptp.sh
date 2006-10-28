@@ -125,5 +125,5 @@ fi
 
 footer ?>
 <!--
-##WEBIF:name:Status:3:PPTP
+##WEBIF:name:Status:600:PPTP
 -->

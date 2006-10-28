@@ -229,5 +229,5 @@ footer
 ?>
 <!--
 ##WEBIF:name:HotSpot:9:Status
-##WEBIF:name:Status:6:HotSpot
+##WEBIF:name:Status:700:HotSpot
 -->
