@@ -3,8 +3,6 @@
 . /usr/lib/webif/webif.sh
 header "Status" "Asterisk" "Asterisk Simple Managment"
 
-has_pkgs asterisk-mini
-
 conf_path="/etc/asterisk"
 
 echo '<center>'
