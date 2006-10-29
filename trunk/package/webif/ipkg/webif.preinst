@@ -6,6 +6,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 		touch "/tmp/.webif_marker_0"
 	fi
 	echo "Cleaning up existing webif package (if one exists) ..."
+	ipkg remove hswebif 2>&- 1>&-
 	# remove files, but not directories
 	rm -rf /www/* 2>&- 1>&- 
 	# temporary rename for milestone 1
