@@ -48,7 +48,7 @@ empty "$FORM_remove_line" || update_dnsmasq del "$FORM_iface" "$FORM_line"
         FORM_dhcp_enabled=${FORM_dhcp_enabled:-$(nvram get ${FORM_iface}_dhcp_enabled)}        
         FORM_dhcp_start=${FORM_dhcp_start:-$(nvram get ${FORM_iface}_dhcp_start)}
         # fix for cases where an IP address got stuck in this instead of mere integer
-        echo "$FORM_dhcp_start" | grep "."
+        echo "$FORM_dhcp_start" | grep -q "."
         equal "$?" "0" && {        	
         	FORM_dhcp_start=$(echo "$FORM_dhcp_start" | cut -d'.' -f 4)
         }
