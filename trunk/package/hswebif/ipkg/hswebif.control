@@ -1,0 +1,6 @@
+Package: hswebif
+Maintainer: X-Wrt Project
+Section: net
+Depends: webif
+Priority: normal
+Description: Hotspot webif packages.
