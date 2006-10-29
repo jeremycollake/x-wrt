@@ -138,7 +138,7 @@ header() {
 	_form="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />}"
 	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></p>}"
 	# todo: temp
-	_debugbutton="<p><input type=\"submit\" name=\"debug\" value=\"@TR<<Debug>>\" /></p>"
+	_debugbutton="<p><input type=\"checkbox\" name=\"debug\" value=\"@TR<<Debug>>\" /></p>"
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}	
 	
