@@ -2,14 +2,11 @@
 
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=hshswebif
+PKG_NAME:=hswebif
 PKG_VERSION:=0.1
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-
-# for whiterussian only:
-NVRAM_OPTS=-DNVRAM -lnvram -I$(STAGING_DIR)/usr/include -L$(STAGING_DIR)/usr/lib
 
 include $(TOPDIR)/package/rules.mk
 
