@@ -44,9 +44,14 @@ empty "$FORM_add_line" || {
 
 empty "$FORM_remove_line" || update_dnsmasq del "$FORM_iface" "$FORM_line"
 
-    if [ -n "$FORM_iface" ]; then    	
-        FORM_dhcp_enabled=${FORM_dhcp_enabled:-$(nvram get ${FORM_iface}_dhcp_enabled)}
+    if [ -n "$FORM_iface" ]; then    	    
+        FORM_dhcp_enabled=${FORM_dhcp_enabled:-$(nvram get ${FORM_iface}_dhcp_enabled)}        
         FORM_dhcp_start=${FORM_dhcp_start:-$(nvram get ${FORM_iface}_dhcp_start)}
+        # fix for cases where an IP address got stuck in this instead of mere integer
+        echo "$FORM_dhcp_start" | grep "."
+        equal "$?" "0" && {        	
+        	FORM_dhcp_start=$(echo "$FORM_dhcp_start" | cut -d'.' -f 4)
+        }
         FORM_dhcp_num=${FORM_dhcp_num:-$(nvram get ${FORM_iface}_dhcp_num)}
         FORM_dhcp_bail=${FORM_dhcp_bail:-$(nvram get ${FORM_iface}_dhcp_bail)}
     fi
@@ -58,8 +63,7 @@ int|FORM_${FORM_iface}_dhcp_start|DHCP start||$FORM_dhcp_start
 int|FORM_${FORM_iface}_dhcp_num|DHCP num||$FORM_dhcp_num
 string|FORM_${FORM_iface}_dhcp_bail|DHCP bail||$FORM_dhcp_bail
 EOF
-    if equal "$?" 0; then
-    echo "validating ${FORM_iface}_dhcp_enabled <br />" 
+    if equal "$?" 0; then    
     	SAVED=1  	 
         save_setting network ${FORM_iface}_dhcp_enabled $FORM_dhcp_enabled
         save_setting network ${FORM_iface}_dhcp_iface $FORM_dhcp_iface
@@ -127,8 +131,7 @@ awk -v "url=$SCRIPT_NAME" \
     -v "ip=$FORM_dhcp_ip" -f /usr/lib/webif/common.awk -f - $DNSMASQ_FILE <<EOF
 BEGIN {
     FS=","
-    start_form("@TR<<Options For>> $FORM_iface")
-    print "<form enctype=\"multipart/form-data\" method=\"post\" action=\"\">"
+    start_form("@TR<<Options For>> $FORM_iface")    
     print "<table style=\"width: 90%\"><tr><th>" param "</th><th>" value "</th><th>" action "</th></tr>"
     print "<tr><td colspan=\"4\"><hr class=\"separator\" /></td></tr>"
 }
@@ -178,17 +181,19 @@ BEGIN {
 
 END {
     print "</select></td><td><input type=\\"text\\" name=\\"values\\" value=\\"" values "\\" /></td>"
-    print "<td><input type=\\"hidden\\" value=\\"" iface "\\" name=\\"iface\\" /><input type=\\"submit\\" value=\\"" add "\\" name=\\"add_line\\" /></td></tr></table></form>"
+    print "<td><input type=\\"hidden\\" value=\\"" iface "\\" name=\\"iface\\" /><input type=\\"submit\\" value=\\"" add "\\" name=\\"add_line\\" /></td></tr></table>"
     end_form();
 }
 EOF
 
 display_form<<EOF
 start_form|@TR<<DHCP Server For $FORM_iface>>
-field|@TR<<Interface>>|iface_field
+field|@TR<<Interface>>|iface_field|hidden
 text|iface|$FORM_iface
-field|@TR<<DHCP Enabled>>|dhcp_enabled_field
-checkbox|dhcp_enabled|$FORM_dhcp_enabled|dhcp_enabled
+field|@TR<<DHCP Service>>|dhcp_enabled_field
+select|dhcp_enabled|$FORM_dhcp_enabled
+option|0|@TR<<Disabled>>
+option|1|@TR<<Enabled>>
 field|@TR<<DHCP Start>>|dhcp_start_field
 text|dhcp_start|$FORM_dhcp_start|$NETWORK+x
 field|@TR<<DHCP Num>>|dhcp_num_field
