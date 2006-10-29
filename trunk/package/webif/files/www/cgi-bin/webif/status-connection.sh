@@ -90,5 +90,5 @@ header "Status" "Netstat" "@TR<<Netstat>>"
 show_validated_logo
 footer ?>
 <!--
-##WEBIF:name:Status:200:Netstat
+##WEBIF:name:Status:400:Netstat
 -->

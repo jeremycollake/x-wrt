@@ -29,7 +29,7 @@
 #
 
 . "/usr/lib/webif/webif.sh"
-header "Status" "Survey" "@TR<<Wireless survey>>"
+header "Status" "Site Survey" "@TR<<Wireless survey>>"
 ?>
 
 <?
@@ -204,5 +204,5 @@ fi
 
 <? footer ?>
 <!--
-##WEBIF:name:Status:980:Survey
+##WEBIF:name:Status:980:Site Survey
 -->

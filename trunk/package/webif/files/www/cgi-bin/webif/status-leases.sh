@@ -1,7 +1,7 @@
 #!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
-header "Status" "DHCP" "@TR<<DHCP leases>>"
+header "Status" "DHCP Clients" "@TR<<DHCP Leases>>"
 ?>
 <table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
 <tbody>
@@ -45,5 +45,5 @@ $1 > 0 {
   
 <? footer ?>
 <!--
-##WEBIF:name:Status:400:DHCP
+##WEBIF:name:Status:200:DHCP Clients
 -->
