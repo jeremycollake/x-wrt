@@ -516,6 +516,12 @@ dt,
 	font-size: 0.9em;
 }
 
+.numeric-small
+{
+	display: inline;
+	font-size: 0.9em;
+}
+
 .tip
 {
 	font-style: italic;
