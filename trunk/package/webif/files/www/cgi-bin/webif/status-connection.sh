@@ -1,7 +1,7 @@
 #!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
-header "Status" "TCP/IP" "@TR<<TCP/IP Status>>"
+header "Status" "Netstat" "@TR<<Netstat>>"
 ###################################################################
 # TCP/IP status page
 #
@@ -86,12 +86,9 @@ header "Status" "TCP/IP" "@TR<<TCP/IP Status>>"
 </table>
 
 <br />
- <p>
-    <a href="http://validator.w3.org/check?uri=referer"><img
-        src="http://www.w3.org/Icons/valid-xhtml10"
-        alt="Valid XHTML 1.0 Transitional" height="31" width="88" /></a>
-  </p>
-<? footer ?>
+<? 
+show_validated_logo
+footer ?>
 <!--
-##WEBIF:name:Status:200:TCP/IP
+##WEBIF:name:Status:200:Netstat
 -->

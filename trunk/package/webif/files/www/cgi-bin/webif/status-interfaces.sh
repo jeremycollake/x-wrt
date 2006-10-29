@@ -1,7 +1,7 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
-header "Status" "Interfaces" "@TR<<Interfaces Status>>"
+header "Status" "Interfaces" "@TR<<Interfaces>>"
 
 # TODO: some of this code can be abstracted a bit into a function.. not sure its worth doing.
 # get WAN stats
