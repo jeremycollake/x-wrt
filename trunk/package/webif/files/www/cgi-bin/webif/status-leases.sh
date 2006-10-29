@@ -28,7 +28,13 @@ $1 > 0 {
 	printf "</td>"
 	print "</tr>"
 }
-' /tmp/dhcp.leases ?>
+' /tmp/dhcp.leases
+grep "." /tmp/dhcp.leases
+! equal "$?" "0" &&
+{
+	echo "<tr><td>There are no known DHCP leases.</td></tr>"
+}
+?>
 <tr><td><br /><br /></td></tr>
 </tbody></table>
 <table width="100%"><tbody>
@@ -36,14 +42,10 @@ $1 > 0 {
 <tr><td><br /><br /></td></tr>
 </tbody>
 </table>
-<br />
-<p>
-    <a href="http://validator.w3.org/check?uri=referer"><img
-        src="http://www.w3.org/Icons/valid-xhtml10"
-        alt="Valid XHTML 1.0 Transitional" height="31" width="88" /></a>
-  </p>
-  
-<? footer ?>
+<br />  
+<? 
+show_validated_logo
+footer ?>
 <!--
 ##WEBIF:name:Status:200:DHCP Clients
 -->

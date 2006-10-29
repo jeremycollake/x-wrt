@@ -110,7 +110,7 @@ BEGIN {
 	for (i = 2; i <= n; i++) {
 		if (names[i] != "") {
 			if (first != 1) output = output "<tr>"
-			output = output "<td>" names[i] "</td><td align=\\"right\\" width=\\"10%\\"><a href=\\"" url "?remove_host=1&remove_ip=" \$1 "&remove_name=" names[i] "\\">@TR<<Remove>></a></td></tr>"
+			output = output "<td>" names[i] "</td><td align=\\"right\\" width=\\"10%\\"><a href=\\"" url "?remove_host=1&amp;remove_ip=" \$1 "&amp;remove_name=" names[i] "\\">@TR<<Remove>></a></td></tr>"
 			first = 0
 			names_found++
 		}
@@ -122,7 +122,7 @@ BEGIN {
 }
 
 END {
-	print "<form enctype=\\"multipart/form-data\\" method=\\"post\\">"
+	print "<form enctype=\\"multipart/form-data\\" method=\\"post\\" action=\\"\\">"
 	print "<tr><td>" textinput("host_ip", ip) "</td><td>" textinput("host_name", name) "</td><td style=\\"width: 10em\\">" button("add_host", "Add") "</td></tr>"
 	print "</form>"
 	print "</table>"
@@ -186,6 +186,11 @@ $1 > 0 {
 	print "</tr>"
 }
 ' /tmp/dhcp.leases 
+grep "." /tmp/dhcp.leases
+! equal "$?" "0" &&
+{
+	echo "<tr><td>There are no known DHCP leases.</td></tr>"
+}
 ?>
 <tr><td><br /><br /></td></tr>
 </tbody></table>
