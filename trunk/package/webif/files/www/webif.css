@@ -11,7 +11,7 @@
  * the group.
  *
  */
- 
+
 /* layout */
 
 *
@@ -91,7 +91,7 @@ option
 	margin-top: 1em;
 	padding-bottom: 0.2em;
 	padding-right: 0.5em;
-	padding-left: 1.0em;	
+	padding-left: 1.0em;
 	float: right;
 }
 
@@ -108,7 +108,7 @@ option
 {
 	position: relative;
 	float: left;
-	width: 100%;	
+	width: 100%;
 	padding-top: 0.5em;
 	padding-bottom: 0.5em;
 }
@@ -117,7 +117,7 @@ option
 {
 	position: relative;
 	float: left;
-	width: 100%;	
+	width: 100%;
 	padding-top: 0.5em;
 	padding-bottom: 0.5em;
 }
@@ -141,42 +141,41 @@ option
 {
 	display: inline;
 	position: relative;
-	list-style-type: none;
-	padding: 0.4em;	
+	list-style-type: none;	
+	padding: 0.4em;
 }
 
 
 .selected-subcat
 {
 	border-style: groove;
-	border-width: medium;	
+	border-width: medium;
 	border-bottom-style: hidden;
+	border-top-style: hidden;
 }
 
 .unselected-subcat
-{		
-		
-	border-style: solid;	
-	border-width: thin;			
+{
+	
 }
 
 
 .selected-maincat
 {
-	border-color: #CCC;	
-	border-style: ridge;	
-	border-width: medium;	
-	background-color: #224054;	
+	border-color: #CCC;
+	border-style: ridge;
+	border-width: medium;
+	background-color: #224054;
 	border-bottom-style: hidden;
-	border-top-style: hidden;	
+	border-top-style: hidden;
 }
 
 #content
 {
-        padding-top: 0.5em;
-        padding-bottom: 8em;
-        padding-right: 1em;
-        padding-left: 1em;        
+	padding-top: 0.5em;
+	padding-bottom: 8em;
+	padding-right: 1em;
+	padding-left: 1em;
 	clear: both;
 }
 
@@ -184,7 +183,7 @@ option
 {
 	padding-left: 1.5em;
 	padding-right: 1em;
-	padding-top: 0.1em;	
+	padding-top: 0.1em;
 }
 
 #content .settings-block .settings-block-title
@@ -239,30 +238,30 @@ option
 {
 	position: absolute;
 	bottom: 0;
-	width: 100%;	
+	width: 100%;
 }
 
 /* save button */
 #save .page-save div
-{	
-	float: right;	
+{
+	float: right;
 	width: 15em;
 	height: 1.5em;
 	padding-right: 1em;
 	padding-top: 0.5em;
-	padding-bottom:	0.4em;	
+	padding-bottom:	0.4em;
 }
 
 #save .apply
 {
 	clear: both;
 	width: 100%;
-	height: 5em;				
+	height: 5em;
 }
 
 /* apply/clear/review area */
 #save .apply div
-{	
+{
 	float: right;
 	width: 15em;
 	height: 4em;
@@ -272,15 +271,15 @@ option
 }
 
 #save .apply #debug-button
-{	
-	position: relative;	
+{
+	position: relative;
 	float: left;
 	width: 4em;
 	height: 4em;
 	background-color: transparent;
 }
 
-th 
+th
 {
 	text-align: left;
 }
@@ -289,9 +288,9 @@ th
 {
 	position: relative;
 	float: left;
- 	padding-left: 1em;
- 	padding-right: 0.5em;
- 	margin-right: 5em; 	
+	padding-left: 1em;
+	padding-right: 0.5em;
+	margin-right: 5em;
 }
 
 
@@ -309,13 +308,13 @@ th
 .helpitem
 {
 	font-weight: bold;
- 	font-size: 0.9em;
+	font-size: 0.9em;
 }
 
 .helptext
 {
- 	font-size: 0.6em;
- 	padding-bottom: 1em;
+	font-size: 0.6em;
+	padding-bottom: 1em;
 }
 
 .kb
@@ -326,7 +325,7 @@ th
 
 .mount-target
 {
-	display: inline;	
+	display: inline;
 	padding-left: 1em;
 	font-weight: normal;
 }
@@ -338,17 +337,17 @@ th
 
 .swatch
 {
-  	display: block;
-  	float: right;
-  	width: 10px;
-  	height: 10px;
-  	margin: 0.5em;
-  	border: 2px solid #000;
-  	cursor: pointer;
+	display: block;
+	float: right;
+	width: 10px;
+	height: 10px;
+	margin: 0.5em;
+	border: 2px solid #000;
+	cursor: pointer;
 }
 
 .packages
-{	
+{
 	font-size: 0.8em;
 	text-align: left;
 
@@ -356,8 +355,8 @@ th
 
 .failed-validation
 {
-	display: inline;	
-	width: 40%;	
+	display: inline;
+	width: 40%;
 	text-align: left;
 }
 
@@ -383,11 +382,13 @@ dt,
 .selected-maincat
 {
 	font-size: 1.4em;
+	font-weight: bold;
 }
 
 .selected-subcat
 {
 	font-size: 1.2em;
+	font-weight: bold;
 }
 
 
@@ -552,6 +553,6 @@ dt,
 .failed-validation
 {
 	font-size: 1.0em;
-	font-style: italic;	
+	font-style: italic;
 	color: red;
 }
