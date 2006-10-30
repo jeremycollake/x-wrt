@@ -16,6 +16,7 @@ function installWebif(form)
 {
   var install_url= "http://" + document.instform.routerip.value + "//cgi-bin/webif/ipkg.sh?action=install&amp;pkg=http://ftp.berlios.de/pub/xwrt/packages/webif_0.3-2_mipsel.ipk";
   window.open(install_url,'Auto-Install','toolbar=yes,resizable=yes');
+  return false;
 }
 </script> 
 
