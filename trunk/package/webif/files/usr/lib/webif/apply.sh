@@ -174,7 +174,8 @@ done
 # TODO: this must be updated to save settings to /etc/sysctl.conf. The sysctl utility only makes changes during
 #  this session.
 for config in $(ls config-conntrack 2>&-); do 
-echo '@TR<<Applying>> @TR<<Conntrack settings>> ...'
+echo '@TR<<Applying>> @TR<<conntrack settings>> ...'
+	echo "WARNING: Conntrack settings need a fix - as is they will not persist across a reboot. Edit /etc/sysctl.conf instead."
 	for conntrack in $(grep ip_conntrack_max /tmp/.webif/config-conntrack |cut -d '"' -f2); do
 		sysctl -w net.ipv4.ip_conntrack_max=$conntrack
 	done
@@ -187,6 +188,18 @@ echo '@TR<<Applying>> @TR<<Conntrack settings>> ...'
 		sysctl -w  net.ipv4.netfilter.ip_conntrack_udp_timeout=$conntrack
 	done
 rm -f /tmp/.webif/config-conntrack
+echo '@TR<<Done>>'
+done
+
+# config-theme
+for config in $(ls config-theme 2>&-); do 
+echo '@TR<<Applying>> @TR<<theme settings>> ...'
+	for newtheme in $(grep webif_theme /tmp/.webif/config-theme |cut -d '"' -f2); do
+		# create symlink to new active theme
+		rm /www/themes/active
+		ln -s /www/themes/$newtheme /www/themes/active
+	done
+rm -f /tmp/.webif/config-theme
 echo '@TR<<Done>>'
 done
 

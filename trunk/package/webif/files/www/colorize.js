@@ -101,23 +101,23 @@ function colorize()
   switch(color)
   {
 	case 'black':
-  		document.write('/color_black.css" />');
+  		document.write('/themes/active/color_black.css" />');
   		break;
 	case 'green':
-  		document.write('/color_green.css" />');
+  		document.write('/themes/active/color_green.css" />');
   		break;
   	case 'white':
-  		document.write('/color_white.css" />');
-  		break;
-  	case 'brown':
-  		document.write('/color_brown.css" />');
-  		break;
+  		document.write('/themes/active/color_white.css" />');
+  		break;  	
 	case 'navyblue':
-  		document.write('/color_navyblue.css" />');
+  		document.write('/themes/active/color_navyblue.css" />');
   		break;
-	case 'blue':
-	default:
-  		document.write('/color_blue.css" />');
-  		break;
+	case 'blue':	
+  		document.write('/themes/active/color_blue.css" />');
+  		break;  		
+	case 'brown':
+	default:	
+  		document.write('/themes/active/color_brown.css" />');
+  		break;  		
   }
 }

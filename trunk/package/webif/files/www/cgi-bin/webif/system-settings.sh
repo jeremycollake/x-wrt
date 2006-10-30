@@ -25,6 +25,7 @@
 
 load_settings "system"
 load_settings "webif" 
+load_settings "theme"
 
 #####################################################################
 # defaults
@@ -66,9 +67,7 @@ if empty "$FORM_submit"; then
 	# initialize all defaults
 	FORM_hostname="${wan_hostname:-$(nvram get wan_hostname)}"	
 	FORM_hostname="${FORM_hostname:-OpenWrt}"	
-	FORM_language="${language:-$(nvram get language)}"
-	FORM_language="${FORM_language:-default}"	
-    	FORM_system_timezone="${FORM_system_timezone:-$(nvram get time_zone)}"
+	FORM_system_timezone="${FORM_system_timezone:-$(nvram get time_zone)}"
     	FORM_system_timezone="${FORM_system_timezone:-""}"
     	FORM_ntp_server="${ntp_server:-$(nvram get ntp_server)}"	
 	FORM_boot_wait="${boot_wait:-$(nvram get boot_wait)}"
@@ -76,7 +75,12 @@ if empty "$FORM_submit"; then
 	FORM_wait_time="${wait_time:-$(nvram get wait_time)}"
 	FORM_wait_time="${FORM_wait_time:-1}"	
 	FORM_clkfreq="${clkfreq:-$(nvram get clkfreq)}";
-   	FORM_clkfreq="${FORM_clkfreq:-200}"   	   	
+   	FORM_clkfreq="${FORM_clkfreq:-200}"  	   	
+   	# webif settings
+   	FORM_language="${language:-$(nvram get language)}"
+	FORM_language="${FORM_language:-default}"
+	# get form theme by seeing where /www/themes/active/ points
+   	FORM_theme=$(ls /www/themes/active -l | cut -d'>' -f 2 | sed s/'\/www\/themes\/'//g)   	
 else
 #####################################################################
 # save forms
@@ -85,8 +89,7 @@ else
 hostname|FORM_hostname|Hostname|nodots required|$FORM_hostname
 EOF
 	if equal "$?" 0 ; then		
-		save_setting system wan_hostname "$FORM_hostname"
-		save_setting webif language "$FORM_language"		
+		save_setting system wan_hostname "$FORM_hostname"		
 		save_setting system time_zone "$FORM_system_timezone"
 		save_setting system ntp_server "$FORM_ntp_server"
 		is_bcm947xx && {				  
@@ -103,6 +106,9 @@ EOF
 			}
 		  
 		}
+		# webif settings
+		save_setting webif language "$FORM_language"
+		save_setting theme webif_theme "$FORM_theme"		
 	else
 		echo "<br /><div class=\"warning\">Warning: Hostname failed validation. Can not be saved.</div><br />"	
 	fi
@@ -142,8 +148,18 @@ is_bcm947xx && {
 	}
 	
 #####################################################################
+# enumerate themes by finding all subdirectories of /www/theme
+themes=$(find /www/themes/ -type d | sed s/'\/www\/themes\/'//g)
+for curtheme in "$themes"; do
+	! equal "$curtheme" "active" && {
+		THEMES="$THEMES
+			field|$curtheme"
+	}
+done	
+	
+#####################################################################
 # Initialize wait_time form			
-	for wtime in $(seq 1 30); do	
+	for wtime in $(seq 1 30); do
 		FORM_wait_time="$FORM_wait_time
 			option|$wtime"		
 	done
@@ -162,9 +178,7 @@ is_bcm947xx && {
 	equal "$OVERCLOCKING_DISABLED" "0" && 
 	{ 
 		clkfreq_form="field|CPU Clock Frequency
-		select|clkfreq|$FORM_clkfreqs
-		helpitem|Clock Frequency
-		helptext|HelpText Clock Frequency#WRT54G(S)/L v4 *ONLY*."
+		select|clkfreq|$FORM_clkfreqs"
 	}
 }
 
@@ -224,31 +238,33 @@ start_form|@TR<<System Settings>>
 field|@TR<<Host Name>>
 text|hostname|$FORM_hostname
 $bootwait_form
-
 helpitem|Boot Wait
 helptext|HelpText Boot Wait#Boot wait causes the boot loader of some devices to wait a few seconds at bootup for a TFTP transfer of a new firmware image. This is a security risk to be left on.
 $waittime_form
-
 helpitem|Wait Time
 helptext|HelpText Wait Time#Number of seconds the boot loader should wait for a TFTP transfer if Boot Wait is on.
-
-field|@TR<<Language>>
-select|language|$FORM_language
-$LANGUAGES
-
 $clkfreq_form
 end_form
-
 start_form|@TR<<Time Settings>>
 field|@TR<<Timezone>>
 select|system_timezone|$FORM_system_timezone
 $TIMEZONE_OPTS
-
 field|@TR<<NTP Server>>
 text|ntp_server|$FORM_ntp_server
 end_form
-
 $NTPCLIENT_INSTALL_FORM
+##########################
+# webif settings
+start_form|@TR<<Webif Settings>>
+field|@TR<<Language>>
+select|language|$FORM_language
+$LANGUAGES
+field|@TR<<Theme>>
+select|theme|$FORM_theme
+$THEMES
+end_form
+# end webif settings
+###########################
 EOF
 
 show_validated_logo
