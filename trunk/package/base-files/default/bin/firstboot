@@ -1,5 +1,5 @@
 #!/bin/sh
-# $Id: firstboot 5305 2006-10-27 01:47:16Z nbd $
+# $Id$
 
 rom=$(awk '/squashfs/ {print $2}' /proc/mounts)
 jffs=$(awk '/jffs2/ {print $2}' /proc/mounts)
@@ -50,11 +50,13 @@ mountdp() { # <device> <mount_point> <ignored> <fs>
 
 fopivot() { # <rw_root> <ro_root> <dupe?>
 	root=$1
-	{
-		mount -t mini_fo -o base=/,sto=$1 $1 /mnt 2>&- && root=/mnt
-	} || {
-		[ "$3" = "1" ] && mount -o bind $1 $1 && dupe $1 $rom
-	}
+	# temporarily disable mini_fo	
+	#{		
+	#	mount -t mini_fo -o base=/,sto=$1 $1 /mnt 2>&- && root=/mnt
+	#} || {
+	#	[ "$3" = "1" ] && mount -o bind $1 $1 && dupe $1 $rom
+	#}
+	[ "$3" = "1" ] && mount -o bind $1 $1 && dupe $1 $rom
 	pivot $root $2
 }
 
