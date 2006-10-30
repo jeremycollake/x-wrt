@@ -57,31 +57,6 @@ header "Status" "Netstat" "@TR<<Netstat>>"
 	<tr>
 		<td><pre><? netstat -n 2>&- | awk '$0 ~ /^Active UNIX/ {ignore = 1}; ignore != 1 { print $0 }' ?></pre></td>
 	</tr>
-
-	<tr><td><br /><br /></td></tr>
-
-        <tr>
-          		<th><b>@TR<<QoS Packets | Quality Of Service Packet Info>></b></th>
-        </tr>
-        <tr>
-                <td>
-                <? 
-                if [ -f "/etc/config/qos" ]; then				
-					echo "<br /><pre>"
-					qos-stat	
-					echo "</pre>"
-                elif [ -f "/etc/qos.conf" ]; then				
-					echo "<br /><pre>"
-					qos-stat	
-					echo "</pre>"								
-		    else
-                	echo "Compatible QOS package was not found to be installed. Try nbd's or Rudy's QOS scripts."
-                fi                
-                ?></td>
-        </tr>
-	
-		<tr><td><br /><br /></td></tr>
-	
 </tbody>
 </table>
 
