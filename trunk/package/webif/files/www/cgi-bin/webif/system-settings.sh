@@ -37,7 +37,7 @@ load_settings "theme"
 #  to a limit of 250mhz. It also has a fixed divider, so sbclock
 #  frequencies are implied, and ignored if specified.
 #
-OVERCLOCKING_DISABLED="1" # set to 1 to disble OC support
+OVERCLOCKING_DISABLED="0" # set to 1 to disble OC support
 
 #####################################################################
 header "System" "Settings" "@TR<<System Settings>>" ' onload="modechange()" ' "$SCRIPT_NAME"
@@ -165,6 +165,10 @@ done
 	done
 }
 
+dangerous_form_start=""
+dangerous_form_end=""
+dangerous_form_help=""
+
 LANGUAGES="$(grep -H '^[\t ]*lang[\t ]*=>' /usr/lib/webif/lang/*/*.txt 2>/dev/null | awk -f /usr/lib/webif/languages.awk)"
 is_bcm947xx && {
 	bootwait_form="field|Boot Wait
@@ -179,6 +183,10 @@ is_bcm947xx && {
 	{
 		clkfreq_form="field|CPU Clock Frequency
 		select|clkfreq|$FORM_clkfreqs"
+		dangerous_form_start="start_form|@TR<<Dangerous Settings>>"
+		dangerous_form_end="end_form"
+		dangerous_form_help="helpitem|Clock Frequency
+					helptext|HelpText Clock Frequency#Do not change this. You may brick your router if you do not know what you are doing. We've tried to disable it for all routers that can be bricked through an invalid clock frequency setting. Only Linksys WRT54G v4 units are known to be unbrickable by a bad clkfreq setting."
 	}
 }
 
@@ -243,7 +251,6 @@ helptext|HelpText Boot Wait#Boot wait causes the boot loader of some devices to 
 $waittime_form
 helpitem|Wait Time
 helptext|HelpText Wait Time#Number of seconds the boot loader should wait for a TFTP transfer if Boot Wait is on.
-$clkfreq_form
 end_form
 start_form|@TR<<Time Settings>>
 field|@TR<<Timezone>>
@@ -265,6 +272,10 @@ $THEMES
 end_form
 # end webif settings
 ###########################
+$dangerous_form_start
+$clkfreq_form
+$dangerous_form_help
+$dangerous_form_end
 EOF
 
 show_validated_logo
