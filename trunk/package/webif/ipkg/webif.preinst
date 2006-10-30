@@ -9,7 +9,9 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 	ipkg remove hswebif 2>&- 1>&-
 	# remove files
 	rm -f /www/images/* 2>&- 1>&-
-	rm -f /www/themes/default/* 2>&- 1>&-
+	rm -f /www/themes/* 2>&- 1>&-
+	rm -rf /www/themes/active/* 2>&- 1>&-
+	rm -rf /www/themes/xwrt/* 2>&- 1>&-
 	rm -f /www/cgi-bin/* 2>&- 1>&-
 	rm -f /www/cgi-bin/webif/* 2>&- 1>&-
 	rm -f /www/cgi-bin/svggraph/* 2>&- 1>&-
