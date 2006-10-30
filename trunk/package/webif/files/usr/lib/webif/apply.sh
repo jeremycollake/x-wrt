@@ -16,6 +16,7 @@ HANDLERS_config='
 	hotspot) reload_hotspot;;
 	shape) reload_shape;;
 	pptp) reload_pptp;;
+	log) reload_log;;
 
 '
 HANDLERS_file='
@@ -240,6 +241,12 @@ reload_pptp() {
 	/etc/init.d/S??pptpd stop  >&- 2>&-
 	/etc/init.d/S??pptpd start >&- 2>&-
     }
+}
+
+reload_log() {
+	echo '@TR<<Reloading syslogd ...>>'
+	killall syslogd >&- 2>&- <&-
+	/sbin/runsyslogd >&- 2>&- <&-
 }
 
 # config-*		simple config files
