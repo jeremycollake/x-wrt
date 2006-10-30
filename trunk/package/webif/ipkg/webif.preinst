@@ -38,7 +38,6 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 	rm -f /usr/lib/webif/hs.sh 2>&- 1>&-
 	rm -rf /etc/hs 2>&- 1>&-
 	rm -f /etc/init.d/pptp.init 2>&- 1>&-
-	rm -f /etc/init.d/S41wpa 2>&- 1>&-		# todo: this file should be moved to nas package
 	# end coova stuff
 
 	if [ -f "/etc/httpd.conf" ]; then	
