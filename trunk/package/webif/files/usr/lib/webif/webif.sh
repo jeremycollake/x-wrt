@@ -103,12 +103,12 @@ Pragma: no-cache
 
 <link rel="stylesheet" type="text/css" href="/webif.css" />
 <link rel="stylesheet" type="text/css" href="/color_common.css" />
-    	<title></title>
+	<title></title>
 </head>
 <style type="text/css">
 	html, body {
 		background-color: transparent;
-	}	
+	}
 </style>
 <script type="text/javascript" src="/colorize.js"></script>
 <script type="text/javascript"> colorize(); </script>
@@ -127,13 +127,13 @@ header() {
 	_category="$1"
 	_firmware_name="$(nvram get firmware_name)"
 	_firmware_subtitle="$(nvram get firmware_subtitle)"
-	_version="$(nvram get firmware_version)"	
+	_version="$(nvram get firmware_version)"
 	_uptime="$(uptime)"
 	_loadavg="${_uptime#*load average: }"
 	_uptime="${_uptime#*up }"
 	_uptime="${_uptime%%,*}"
-	_hostname=$(cat /proc/sys/kernel/hostname)	
-	_webif_rev=$(cat /www/.version)	
+	_hostname=$(cat /proc/sys/kernel/hostname)
+	_webif_rev=$(cat /www/.version)
 	_head="${3:+<div class=\"settings-block-title\"><h2>$3$_saved_title</h2></div>}"
 	_form="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />}"
 	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></p>}"
@@ -144,30 +144,30 @@ header() {
 		_debugbutton=""
 	fi
 	_categories=$(categories $1)
-	_subcategories=${2:+$(subcategories "$1" "$2")}	
-	
+	_subcategories=${2:+$(subcategories "$1" "$2")}
+
 	use_short_status_frame=$(nvram get webif_use_short_status_frame)
 	if equal $use_short_status_frame "1"; then
 		short_status_frame='<iframe src="/cgi-bin/webif/iframe.mini-info.sh"
-			 	width="200" height="80"  scrolling="no" frameborder="0"></iframe>'
+				width="200" height="80"  scrolling="no" frameborder="0"></iframe>'
 	else
-		short_status_frame="<div id=\"short-status\">    				
+		short_status_frame="<div id=\"short-status\">
 						<h3><strong>Status:</strong></h3>
 						<ul>
 							<li><strong>$_firmware_name $_version </strong></li>
-							<li><strong>@TR<<Host>>:</strong> $_hostname</li>						
+							<li><strong>@TR<<Host>>:</strong> $_hostname</li>
 							<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
-							<li><strong>@TR<<Load>>:</strong> $_loadavg</li>						
-						</ul>										
+							<li><strong>@TR<<Load>>:</strong> $_loadavg</li>
+						</ul>
 					</div>"
 	fi
-	
+
 	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && grep 'root:!' /etc/passwd >&- 2>&- && {
 		_nopasswd=1
 		_form=""
 		_savebutton=""
 	}
-		
+
 	cat <<EOF
 Content-Type: text/html
 Pragma: no-cache
@@ -176,41 +176,41 @@ Pragma: no-cache
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <?xml version="1.0" encoding="@TR<<Encoding|ISO-8859-1>>"?>
 	<head>
-    	<title>@TR<< $_firmware_name Administrative Console>></title>
-		<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />		
+	<title>@TR<< $_firmware_name Administrative Console>></title>
+		<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
 		<!--[if lt IE 7]>
 			<link rel="stylesheet" type="text/css" href="/themes/active/ie_lt7.css" />
-		<![endif]-->						
+		<![endif]-->
 		<link rel="stylesheet" type="text/css" href="/themes/active/color_common.css" />
 		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
 		<meta http-equiv="expires" content="-1" />
 	</head>
 	<body $4>
-	
+
 	<script type="text/javascript" src="/colorize.js"></script>
 		<script type="text/javascript"> colorize(); </script>
-		
-	<div id="container">	 	
-	  <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>	  
-	    <div id="header">	    				
-	    				<div class="openwrt-title"></div>	 			    			   				   	
-					$short_status_frame					
+
+	<div id="container">
+	  <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
+	    <div id="header">
+					<div class="openwrt-title"></div>
+					$short_status_frame
 		</div>
-	
+
 		<div id="categories">$_categories</div>
 		<div id="subcategories">$_subcategories</div>
 		$_form
-		<div>	
-			<div class="swatch" style="background: #000000"></div>		
+		<div>
+			<div class="swatch" style="background: #000000"></div>
 			<div class="swatch" style="background: #192a65"></div>
-			<div class="swatch" style="background: #114488"></div>			
-			<div class="swatch" style="background: #2b6d21"></div>			
+			<div class="swatch" style="background: #114488"></div>
+			<div class="swatch" style="background: #2b6d21"></div>
 			<div class="swatch" style="background: #e8ca9e"></div>
-			<div class="swatch" style="background: #ffffff"></div>			
+			<div class="swatch" style="background: #ffffff"></div>
 		</div>
-		
+
 		<script type="text/javascript"> swatch(); </script>
-		
+
 		<div id="content">
 			<div class="settings-block">
 				$_head
@@ -233,7 +233,7 @@ EOF
 			footer
 			exit
 		}
-		
+
 		equal "$_nopasswd" 1 && {
 			cat <<EOF
 <br />
@@ -270,7 +270,7 @@ EOF
 }
 
 footer() {
-	update_changes	
+	update_changes
 	_changes=${CHANGES#0}
 	_changes=${_changes:+(${_changes})}
 	_endform=${_savebutton:+</form>}
@@ -278,11 +278,11 @@ footer() {
 			</div>
 			<hr width="40%" />
 		</div>
-		<br />			
-		<div id="save">					
+		<br />
+		<div id="save">
 			<div class="page-save">
-				<div>					
-					$_savebutton					
+				<div>
+					$_savebutton
 				</div>
 			</div>
 			<div class="apply">
@@ -291,10 +291,10 @@ footer() {
 					<a href="config.sh?mode=save&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Apply Changes>> &laquo;</a><br />
 					<a href="config.sh?mode=clear&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Clear Changes>> &laquo;</a><br />
 					<a href="config.sh?mode=review&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Review Changes>> $_changes &laquo;</a>
-				</div>				
-			</div>			
+				</div>
+			</div>
 		</div>
-		$_endform		
+		$_endform
     </div></body>
 </html>
 EOF
@@ -334,14 +334,14 @@ handle_list() {
 	# $2 - add
 	# $3 - submit
 	# $4 - validate
-	
+
 	empty "$1" || {
 		LISTVAL="$(list_remove "$LISTVAL" "$1") "
 		LISTVAL="${LISTVAL# }"
 		LISTVAL="${LISTVAL%% }"
 		_changed=1
 	}
-	
+
 	empty "$3" || {
 		validate "${4:-none}|$2" && {
 			LISTVAL="$LISTVAL $2"

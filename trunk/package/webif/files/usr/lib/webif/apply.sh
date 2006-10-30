@@ -16,13 +16,13 @@ HANDLERS_config='
 	hotspot) reload_hotspot;;
 	shape) reload_shape;;
 	pptp) reload_pptp;;
-	
+
 '
 HANDLERS_file='
 	hosts) rm -f /etc/hosts; mv $config /etc/hosts; killall -HUP dnsmasq ;;
 	ethers) rm -f /etc/ethers; mv $config /etc/ethers; killall -HUP dnsmasq ;;
 	firewall) mv /tmp/.webif/file-firewall /etc/config/firewall && /etc/init.d/S??firewall;;
-	dnsmasq.conf) mv /tmp/.webif/file-dnsmasq.conf /etc/dnsmasq.conf && /etc/init.d/S50dnsmasq;;				
+	dnsmasq.conf) mv /tmp/.webif/file-dnsmasq.conf /etc/dnsmasq.conf && /etc/init.d/S50dnsmasq;;
 '
 
 # for some reason a for loop with "." doesn't work
@@ -48,7 +48,7 @@ reload_network() {
 		ifup wan
 		killall -HUP dnsmasq
 	}
-	
+
 	grep '^lan_' config-network >&- 2>&- && {
 		ifdown lan
 		ifup lan
@@ -85,16 +85,16 @@ echo "(Re)start syslogd..."
 pid=$(getPID)
 if [ -n "$pid" ]; then
     echo -n "Stopping syslogd: "
-    ( { 
-        kill $pid >/dev/null 2>&1
+    ( {
+	kill $pid >/dev/null 2>&1
       } && echo "OK" ) || echo "ERROR"
 fi
 echo -n "Start syslogd: "
 syslog_ip=$(nvram get log_ipaddr)
 ipcalc -s "$syslog_ip" || syslog_ip=""
-log_port=$(nvram get log_port) 
-log_port=${log_port:+:$log_port} 
-log_mark=$(nvram get log_mark) 
+log_port=$(nvram get log_port)
+log_port=${log_port:+:$log_port}
+log_mark=$(nvram get log_mark)
 log_mark=${log_mark:+-m $log_mark}
 can_prefix=`syslogd --help 2>&1 | grep -e 'PREFIX' `
 log_prefix=""
@@ -116,7 +116,7 @@ reload_system() {
 
 cd "/tmp/.webif"
 
-is_read_only() {	
+is_read_only() {
 	rom_file="/rom/$1"
 	touch "$1" 2>&- || [ -f "$rom_file" ]
 }
@@ -126,14 +126,14 @@ for edited_file in $(find "/tmp/.webif/edited-files/" -type f 2>&-); do
 	target_file=$(echo "$edited_file" | sed s/'\/tmp\/.webif\/edited-files'//g)
 	echo "@TR<<Processing>> $target_file"
 	# for squashfs symlink hack
-	is_read_only "$target_file" && {		
+	is_read_only "$target_file" && {
 		rm "$target_file"
 	}
 	if tr -d '\r' <"$edited_file" >"$target_file"; then
 		rm "$edited_file" 2>&-
 	else
-	 	echo "@TR<<Critical Error>> : Could not replace $target_file. Media full?"
-	fi						
+		echo "@TR<<Critical Error>> : Could not replace $target_file. Media full?"
+	fi
 done
 # leave if some files not applied
 rm -r "/tmp/.webif/edited-files" 2>&-
@@ -148,7 +148,7 @@ for config in $(ls file-* 2>&-); do
 done
 
 # config-qos		QOS Config file
-for config in $(ls config-qos 2>&-); do 
+for config in $(ls config-qos 2>&-); do
 echo '@TR<<Applying>> @TR<<QOS settings>> ...'
 /usr/bin/qos-stop
 mv -f config-qos /etc/qos.conf
@@ -173,17 +173,17 @@ done
 # config-conntrack	  Conntrack Config file
 # TODO: this must be updated to save settings to /etc/sysctl.conf. The sysctl utility only makes changes during
 #  this session.
-for config in $(ls config-conntrack 2>&-); do 
+for config in $(ls config-conntrack 2>&-); do
 echo '@TR<<Applying>> @TR<<conntrack settings>> ...'
 	echo "WARNING: Conntrack settings need a fix - as is they will not persist across a reboot. Edit /etc/sysctl.conf instead."
 	for conntrack in $(grep ip_conntrack_max /tmp/.webif/config-conntrack |cut -d '"' -f2); do
 		sysctl -w net.ipv4.ip_conntrack_max=$conntrack
 	done
-	
+
 	for conntrack in $(grep tcp_timeout /tmp/.webif/config-conntrack |cut -d '"' -f2); do
 		sysctl -w net.ipv4.netfilter.ip_conntrack_tcp_timeout_established=$conntrack
 	done
-	
+
 	for conntrack in $(grep udp_timeout /tmp/.webif/config-conntrack |cut -d '"' -f2); do
 		sysctl -w  net.ipv4.netfilter.ip_conntrack_udp_timeout=$conntrack
 	done
@@ -192,7 +192,7 @@ echo '@TR<<Done>>'
 done
 
 # config-theme
-for config in $(ls config-theme 2>&-); do 
+for config in $(ls config-theme 2>&-); do
 echo '@TR<<Applying>> @TR<<theme settings>> ...'
 	for newtheme in $(grep webif_theme /tmp/.webif/config-theme |cut -d '"' -f2); do
 		# create symlink to new active theme
@@ -251,7 +251,7 @@ reload_pptp() {
 		nvram commit
 	}
 )
-for config in $(ls config-* 2>&-); do 
+for config in $(ls config-* 2>&-); do
 	name=${config#config-}
 	eval 'case "$name" in
 		'"$HANDLERS_config"'

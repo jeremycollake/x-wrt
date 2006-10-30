@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<? 
+<?
 . "/usr/lib/webif/webif.sh"
 
 ###################################################################
@@ -8,9 +8,9 @@
 # Description:
 #	Configures general system settings.
 #
-# Author(s) [in order of work date]: 
+# Author(s) [in order of work date]:
 #   	Original webif developers -- todo
-#	Markus Wigge <markus@freewrt.org> 
+#	Markus Wigge <markus@freewrt.org>
 #   	Jeremy Collake <jeremy.collake@gmail.com>
 #
 # Major revisions:
@@ -19,12 +19,12 @@
 #	time_zone
 #  	ntp_server
 #
-# Configuration files referenced: 
+# Configuration files referenced:
 #   none
 #
 
 load_settings "system"
-load_settings "webif" 
+load_settings "webif"
 load_settings "theme"
 
 #####################################################################
@@ -36,7 +36,7 @@ load_settings "theme"
 #  will handle invalid clock frequencies more gracefully and default
 #  to a limit of 250mhz. It also has a fixed divider, so sbclock
 #  frequencies are implied, and ignored if specified.
-#		
+#
 OVERCLOCKING_DISABLED="1" # set to 1 to disble OC support
 
 #####################################################################
@@ -50,7 +50,7 @@ equal "$OVERCLOCKING_DISABLED" "0" && {
 	CPU_VERSION=$(echo "$CPU_MODEL" | sed -e "s/BCM3302//" -e "s/cpu model//" -e "s/://")
 	#echo "debug.model: $CPU_MODEL <br />"
 	#echo "debug.version: $CPU_VERSION <br />"
-}	
+}
 
 #####################################################################
 # install NTP client if asked
@@ -58,29 +58,29 @@ if ! empty "$FORM_install_ntpclient"; then
 	tmpfile=$(mktemp "/tmp/.webif_ntp-XXXXXX")
 	echo "Installing NTPCLIENT package ...<pre>"
 	install_package "ntpclient"
-	echo "</pre>"	
+	echo "</pre>"
 fi
 
 #####################################################################
 # initialize forms
 if empty "$FORM_submit"; then
 	# initialize all defaults
-	FORM_hostname="${wan_hostname:-$(nvram get wan_hostname)}"	
-	FORM_hostname="${FORM_hostname:-OpenWrt}"	
+	FORM_hostname="${wan_hostname:-$(nvram get wan_hostname)}"
+	FORM_hostname="${FORM_hostname:-OpenWrt}"
 	FORM_system_timezone="${FORM_system_timezone:-$(nvram get time_zone)}"
-    	FORM_system_timezone="${FORM_system_timezone:-""}"
-    	FORM_ntp_server="${ntp_server:-$(nvram get ntp_server)}"	
+	FORM_system_timezone="${FORM_system_timezone:-""}"
+	FORM_ntp_server="${ntp_server:-$(nvram get ntp_server)}"
 	FORM_boot_wait="${boot_wait:-$(nvram get boot_wait)}"
-	FORM_boot_wait="${FORM_boot_wait:-off}"	
+	FORM_boot_wait="${FORM_boot_wait:-off}"
 	FORM_wait_time="${wait_time:-$(nvram get wait_time)}"
-	FORM_wait_time="${FORM_wait_time:-1}"	
+	FORM_wait_time="${FORM_wait_time:-1}"
 	FORM_clkfreq="${clkfreq:-$(nvram get clkfreq)}";
-   	FORM_clkfreq="${FORM_clkfreq:-200}"  	   	
-   	# webif settings
-   	FORM_language="${language:-$(nvram get language)}"
+	FORM_clkfreq="${FORM_clkfreq:-200}"
+	# webif settings
+	FORM_language="${language:-$(nvram get language)}"
 	FORM_language="${FORM_language:-default}"
 	# get form theme by seeing where /www/themes/active/ points
-   	FORM_theme=$(ls /www/themes/active -l | cut -d'>' -f 2 | sed s/'\/www\/themes\/'//g)   	
+	FORM_theme=$(ls /www/themes/active -l | cut -d'>' -f 2 | sed s/'\/www\/themes\/'//g)
 else
 #####################################################################
 # save forms
@@ -88,39 +88,39 @@ else
 	validate <<EOF
 hostname|FORM_hostname|Hostname|nodots required|$FORM_hostname
 EOF
-	if equal "$?" 0 ; then		
-		save_setting system wan_hostname "$FORM_hostname"		
+	if equal "$?" 0 ; then
+		save_setting system wan_hostname "$FORM_hostname"
 		save_setting system time_zone "$FORM_system_timezone"
 		save_setting system ntp_server "$FORM_ntp_server"
-		is_bcm947xx && {				  
+		is_bcm947xx && {
 			case "$FORM_boot_wait" in
 				on|off) save_setting system boot_wait "$FORM_boot_wait";;
-			esac				
-			! empty "$FORM_wait_time" &&			
+			esac
+			! empty "$FORM_wait_time" &&
 			{
-				save_setting system wait_time "$FORM_wait_time"						
+				save_setting system wait_time "$FORM_wait_time"
 			}
 			equal "$OVERCLOCKING_DISABLED" "0" && ! empty "$FORM_clkfreq" &&
 			{
-				save_setting nvram clkfreq "$FORM_clkfreq"		  		
+				save_setting nvram clkfreq "$FORM_clkfreq"
 			}
-		  
+
 		}
 		# webif settings
 		save_setting webif language "$FORM_language"
-		save_setting theme webif_theme "$FORM_theme"		
+		save_setting theme webif_theme "$FORM_theme"
 	else
-		echo "<br /><div class=\"warning\">Warning: Hostname failed validation. Can not be saved.</div><br />"	
+		echo "<br /><div class=\"warning\">Warning: Hostname failed validation. Can not be saved.</div><br />"
 	fi
 fi
 
 #####################################################################
 # over/underclocking
-#				
-is_bcm947xx && {   		
-	equal "$OVERCLOCKING_DISABLED" "0" && 
+#
+is_bcm947xx && {
+	equal "$OVERCLOCKING_DISABLED" "0" &&
 	{
-	if [ $CPU_VERSION = "V0.8" ]; then				
+	if [ $CPU_VERSION = "V0.8" ]; then
 		FORM_clkfreqs="$FORM_clkfreq
 			option|184
 			option|188
@@ -138,7 +138,7 @@ is_bcm947xx && {
 		if [ $(nvram get clkfreq) -gt 250 ]; then
 			FORM_clkfreqs="$FORM_clkfreqs
 				option|$(nvram get clkfreq)"
-		fi				
+		fi
 	else
 		# BCM3302 v0.7 or other..
 		# in this case, we'll show it, but not have any options
@@ -146,7 +146,7 @@ is_bcm947xx && {
 			option|$FORM_clkfreq"
 	fi
 	}
-	
+
 #####################################################################
 # enumerate themes by finding all subdirectories of /www/theme
 themes=$(find /www/themes/ -type d | sed s/'\/www\/themes\/'//g)
@@ -155,13 +155,13 @@ for curtheme in "$themes"; do
 		THEMES="$THEMES
 			field|$curtheme"
 	}
-done	
-	
+done
+
 #####################################################################
-# Initialize wait_time form			
+# Initialize wait_time form
 	for wtime in $(seq 1 30); do
 		FORM_wait_time="$FORM_wait_time
-			option|$wtime"		
+			option|$wtime"
 	done
 }
 
@@ -175,8 +175,8 @@ is_bcm947xx && {
 	waittime_form="field|Wait Time
 	select|wait_time|$FORM_wait_time"
 
-	equal "$OVERCLOCKING_DISABLED" "0" && 
-	{ 
+	equal "$OVERCLOCKING_DISABLED" "0" &&
+	{
 		clkfreq_form="field|CPU Clock Frequency
 		select|clkfreq|$FORM_clkfreqs"
 	}
@@ -184,7 +184,7 @@ is_bcm947xx && {
 
 #####################################################################
 # check if ntpclient is installed and give user option to install if not
-! is_package_installed "ntpclient" && 
+! is_package_installed "ntpclient" &&
 {
 	NTPCLIENT_INSTALL_FORM="string|<div class=\"warning\">No NTP client is installed. For correct time support you need to install one:</div>
 		submit|install_ntpclient| Install NTP Client |"
@@ -208,7 +208,7 @@ TIMEZONE_OPTS=$(
 		{
 			print "option|" $3 "|" $2
 		}' < /usr/lib/webif/timezones.csv
-				
+
 )
 
 #####################################################################s
@@ -216,22 +216,22 @@ cat <<EOF
 <script type="text/javascript" src="/webif.js"></script>
 <script type="text/javascript">
 
-function modechange() 
-{	
+function modechange()
+{
 	if(isset('boot_wait','on'))
 	{
-		document.getElementById('wait_time').disabled = false;	
+		document.getElementById('wait_time').disabled = false;
 	}
 	else
 	{
-		document.getElementById('wait_time').disabled = true;	
-	}	
+		document.getElementById('wait_time').disabled = true;
+	}
 }
 </script>
 EOF
 
 #####################################################################
-# Show form		
+# Show form
 display_form <<EOF
 onchange|modechange
 start_form|@TR<<System Settings>>
