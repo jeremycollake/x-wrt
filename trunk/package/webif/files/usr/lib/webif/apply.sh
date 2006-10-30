@@ -171,6 +171,8 @@ for config in $(ls config-wifi-disable 2>&-); do
 done
 
 # config-conntrack	  Conntrack Config file
+# TODO: this must be updated to save settings to /etc/sysctl.conf. The sysctl utility only makes changes during
+#  this session.
 for config in $(ls config-conntrack 2>&-); do 
 echo '@TR<<Applying>> @TR<<Conntrack settings>> ...'
 	for conntrack in $(grep ip_conntrack_max /tmp/.webif/config-conntrack |cut -d '"' -f2); do
