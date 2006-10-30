@@ -149,11 +149,11 @@ is_bcm947xx && {
 
 #####################################################################
 # enumerate themes by finding all subdirectories of /www/theme
-themes=$(find /www/themes/ -type d | sed s/'\/www\/themes\/'//g)
-for curtheme in "$themes"; do
+for curtheme in /www/themes/*; do
+	curtheme=$(echo "$curtheme" | sed s/'\/www\/themes\/'//g)
 	! equal "$curtheme" "active" && {
 		THEMES="$THEMES
-			field|$curtheme"
+			option|$curtheme"
 	}
 done
 
