@@ -15,7 +15,7 @@ fi
 <table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
 <tbody>
 	<tr>
-		<th><a href="pppoe.sh?action=reconnect" style="color: red">Reconnect</a></th>
+		<th><a href="status-pppoe.sh?action=reconnect" style="color: red">Reconnect</a></th>
 	</tr>
 	</tr>
 		<tr><td><br /></td></tr>
@@ -24,10 +24,10 @@ fi
 		<th><b>Manual Control:</b></th>
 	</tr>
 	<tr>
-		<th><a href="pppoe.sh?action=disconnect" style="color: green">Disconnect</a></th>
+		<th><a href="status-pppoe.sh?action=disconnect" style="color: green">Disconnect</a></th>
 	</tr>
 	<tr>
-		<th><a href="pppoe.sh?action=connect" style="color: green">Connect</a></th>
+		<th><a href="status-pppoe.sh?action=connect" style="color: green">Connect</a></th>
 	</tr>
 		<tr><td><br /><br /></td></tr>
 	<tr>
