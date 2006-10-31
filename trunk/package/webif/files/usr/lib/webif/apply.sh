@@ -176,7 +176,7 @@ done
 #  this session.
 for config in $(ls config-conntrack 2>&-); do
 echo '@TR<<Applying>> @TR<<conntrack settings>> ...'
-	for conntrack in $(grep ip_conntrack_max /tmp/.webif/config-conntrack |cut -d '"' -f2); do
+	for conntrack in $(grep max_conntrack /tmp/.webif/config-conntrack |cut -d '"' -f2); do
 		sysctl -w net.ipv4.ip_conntrack_max=$conntrack
 		remove_lines_from_file "/etc/sysctl.conf" "net.ipv4.ip_conntrack_max"
 		echo "net.ipv4.ip_conntrack_max=$conntrack" >> /etc/sysctl.conf
@@ -208,6 +208,12 @@ echo '@TR<<Applying>> @TR<<conntrack settings>> ...'
 
 	
 	# old names used in Rudy's QoS config page - todo: depreciate when page changes
+	for conntrack in $(grep ip_conntrack_max /tmp/.webif/config-conntrack |cut -d '"' -f2); do
+		sysctl -w net.ipv4.ip_conntrack_max=$conntrack
+		remove_lines_from_file "/etc/sysctl.conf" "net.ipv4.ip_conntrack_max"
+		echo "net.ipv4.ip_conntrack_max=$conntrack" >> /etc/sysctl.conf
+	done
+	
 	for conntrack in $(grep tcp_timeout /tmp/.webif/config-conntrack |cut -d '"' -f2); do
 		sysctl -w net.ipv4.netfilter.ip_conntrack_tcp_timeout_established=$conntrack
 		remove_lines_from_file "/etc/sysctl.conf" "net.ipv4.netfilter.ip_conntrack_tcp_timeout_established"

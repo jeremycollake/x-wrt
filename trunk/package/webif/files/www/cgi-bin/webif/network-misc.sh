@@ -22,14 +22,16 @@ header "Network" "Miscellaneous" "@TR<<Miscellaneous Configuration>>" 'onload="m
 
 ! empty "$FORM_submit" && {
 	validate <<EOF
+int|FORM_max_conntrack|Maximum Connections|min=512 max=16384|$FORM_max_conntrack
 int|FORM_udp_stream_timeout|UDP Stream Timeout|min=30 max=134217728|$FORM_udp_stream_timeout
-int|FORM_udp_timeout|UDP Timeout|min=30 max=134217728|$FORM_udp_timeout
+#int|FORM_udp_timeout|UDP Timeout|min=30 max=134217728|$FORM_udp_timeout
 int|FORM_tcp_est_timeout|TCP Established Timeout|min=30 max=134217728|$FORM_tcp_est_timeout
 EOF
 	equal "$?" "0" && {
 		save_setting conntrack udp_stream_timeout "$FORM_udp_stream_timeout"
 		save_setting conntrack udp_timeout "$FORM_udp_timeout"
 		save_setting conntrack tcp_est_timeout "$FORM_tcp_est_timeout"
+		save_setting conntrack max_conntrack "$FORM_max_conntrack"
 	}	
 }
 
@@ -52,6 +54,8 @@ display_form <<EOF
 start_form|@TR<<Conntrack Configuration>>
 field|@TR<<Maximum Connections>>|max_conntrack
 text|max_conntrack|$FORM_max_conntrack
+helpitem|Maximum Connections
+helptext|HelpText maximum_connections#This is the maximum number of simultaneous connections your router can track. A larger number means more RAM use and higher CPU utilization if that many connections actually end up used. It is usually best to leave this at its default value.
 field|@TR<<TCP Established Timeout>>|tcp_est_timeout
 text|tcp_est_timeout|$FORM_tcp_est_timeout
 helpitem|TCP Established Timeout
