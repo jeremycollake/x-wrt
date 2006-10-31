@@ -138,13 +138,15 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 	rm -f /tmp/httpd.conf.old
 	if [ "$httpd_1" != "$httpd_2" ]; then
 		echo "Restarting httpd ... If there are problems, a reboot may be needed."
+		2>/dev/null >/dev/null </dev/null
+		killall webif-page
 		killall httpd
 		sh /etc/init.d/S50httpd
-		if pidof httpd; then
+		if ! pidof httpd; then
 			echo "Second attempt to restart httpd ..."
 			httpd -p 80 -h /www -r OpenWrt & # failsafe launch of httpd
 			sleep 2
-			if pidof httpd; then
+			if ! pidof httpd; then
 				echo "Restarting of httpd failed. Attempting to reboot ..."
 				reboot
 			fi
