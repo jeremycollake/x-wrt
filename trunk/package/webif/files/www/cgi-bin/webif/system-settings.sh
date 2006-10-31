@@ -247,10 +247,10 @@ field|@TR<<Host Name>>
 text|hostname|$FORM_hostname
 $bootwait_form
 helpitem|Boot Wait
-helptext|HelpText Boot Wait#Boot wait causes the boot loader of some devices to wait a few seconds at bootup for a TFTP transfer of a new firmware image. This is a security risk to be left on.
+helptext|HelpText boot_wait#Boot wait causes the boot loader of some devices to wait a few seconds at bootup for a TFTP transfer of a new firmware image. This is a security risk to be left on.
 $waittime_form
 helpitem|Wait Time
-helptext|HelpText Wait Time#Number of seconds the boot loader should wait for a TFTP transfer if Boot Wait is on.
+helptext|HelpText wait_time#Number of seconds the boot loader should wait for a TFTP transfer if Boot Wait is on.
 end_form
 start_form|@TR<<Time Settings>>
 field|@TR<<Timezone>>
