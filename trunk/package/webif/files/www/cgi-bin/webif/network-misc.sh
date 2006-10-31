@@ -38,22 +38,26 @@ load_settings "conntrack"
 # defaults used in WR RC6
 #net.ipv4.ip_conntrack_tcp_timeouts="300 43200 120 60 120 120 10 60 30 120"
 #net.ipv4.ip_conntrack_udp_timeouts="60 180"
+current_max_conntrack=$(cat /proc/sys/net/ipv4/ip_conntrack_max)
 current_tcp_est_timeout=$(cat /proc/sys/net/ipv4/netfilter/ip_conntrack_tcp_timeout_established)
 current_udp_stream_timeout=$(cat /proc/sys/net/ipv4/netfilter/ip_conntrack_udp_timeout_stream)
-current_udp_timeout=$(cat /proc/sys/net/ipv4/netfilter/ip_conntrack_udp_timeout)
+#current_udp_timeout=$(cat /proc/sys/net/ipv4/netfilter/ip_conntrack_udp_timeout)
 
+FORM_max_conntrack="${max_conntrack:-$current_max_conntrack}"
 FORM_tcp_est_timeout="${tcp_est_timeout:-$current_tcp_est_timeout}"
 FORM_udp_stream_timeout="${udp_stream_timeout:-$current_udp_stream_timeout}"
-FORM_udp_timeout="${udp_timeout:-$current_udp_timeout}"
+#FORM_udp_timeout="${udp_timeout:-$current_udp_timeout}"
 
 display_form <<EOF
 start_form|@TR<<Conntrack Configuration>>
+field|@TR<<Maximum Connections>>|max_conntrack
+text|max_conntrack|$FORM_max_conntrack
 field|@TR<<TCP Established Timeout>>|tcp_est_timeout
 text|tcp_est_timeout|$FORM_tcp_est_timeout
 helpitem|TCP Established Timeout
 helptext|HelpText tcp_established_timeout#This is the number of seconds that a established connection can be idle before it is forcibly closed. Sometime connections are not properly closed and can fill up your conntrack table if these values are too high. If they are too low, then connections can be disconnected simple because they are idle.
-field|@TR<<UDP Timeout>>|udp_timeout
-text|udp_timeout|$FORM_udp_timeout
+#field|@TR<<UDP Timeout>>|udp_timeout
+#text|udp_timeout|$FORM_udp_timeout
 field|@TR<<UDP Stream Timeout>>|udp_stream_timeout
 text|udp_stream_timeout|$FORM_udp_stream_timeout
 end_form
