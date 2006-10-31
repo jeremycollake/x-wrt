@@ -65,6 +65,6 @@ header "Status" "USB" "USB Devices"
 
 <? footer ?>
 <!--
-##WEBIF:name:Status:4:USB
+##WEBIF:name:Status:454:USB
 -->
 
