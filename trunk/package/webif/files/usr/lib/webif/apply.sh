@@ -191,6 +191,19 @@ echo '@TR<<Applying>> @TR<<conntrack settings>> ...'
 		remove_lines_from_file "/etc/sysctl.conf" "net.ipv4.netfilter.ip_conntrack_udp_timeout_established"
 		echo "net.ipv4.netfilter.ip_conntrack_udp_timeout_established=$conntrack" >> /etc/sysctl.conf
 	done
+
+	for conntrack in $(grep udp_timeout /tmp/.webif/config-conntrack |cut -d '"' -f2); do
+		sysctl -w  net.ipv4.netfilter.ip_conntrack_udp_timeout=$conntrack
+		remove_lines_from_file "/etc/sysctl.conf" "net.ipv4.netfilter.ip_conntrack_udp_timeout"
+		echo "net.ipv4.netfilter.ip_conntrack_udp_timeout=$conntrack" >> /etc/sysctl.conf
+	done
+
+	for conntrack in $(grep udp_stream_timeout /tmp/.webif/config-conntrack |cut -d '"' -f2); do
+		sysctl -w  net.ipv4.netfilter.ip_conntrack_udp_timeout_stream=$conntrack
+		remove_lines_from_file "/etc/sysctl.conf" "net.ipv4.netfilter.ip_conntrack_udp_timeout_stream"
+		echo "net.ipv4.netfilter.ip_conntrack_udp_timeout_stream=$conntrack" >> /etc/sysctl.conf
+	done
+
 	
 	# old names used in Rudy's QoS config page - todo: depreciate when page changes
 	for conntrack in $(grep tcp_timeout /tmp/.webif/config-conntrack |cut -d '"' -f2); do
@@ -201,8 +214,8 @@ echo '@TR<<Applying>> @TR<<conntrack settings>> ...'
 
 	for conntrack in $(grep udp_timeout /tmp/.webif/config-conntrack |cut -d '"' -f2); do
 		sysctl -w  net.ipv4.netfilter.ip_conntrack_udp_timeout=$conntrack
-		remove_lines_from_file "/etc/sysctl.conf" "net.ipv4.netfilter.ip_conntrack_udp_timeout_established"
-		echo "net.ipv4.netfilter.ip_conntrack_udp_timeout_established=$conntrack" >> /etc/sysctl.conf
+		remove_lines_from_file "/etc/sysctl.conf" "net.ipv4.netfilter.ip_conntrack_udp_timeout"
+		echo "net.ipv4.netfilter.ip_conntrack_udp_timeout=$conntrack" >> /etc/sysctl.conf
 	done
 	
 rm -f /tmp/.webif/config-conntrack

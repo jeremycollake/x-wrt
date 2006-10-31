@@ -22,11 +22,13 @@ header "Network" "Miscellaneous" "@TR<<Miscellaneous Configuration>>" 'onload="m
 
 ! empty "$FORM_submit" && {
 	validate <<EOF
-int|FORM_udp_est_timeout|UDP Established Timeout|min=30 max=134217728|$FORM_udp_est_timeout
+int|FORM_udp_stream_timeout|UDP Stream Timeout|min=30 max=134217728|$FORM_udp_stream_timeout
+int|FORM_udp_timeout|UDP Timeout|min=30 max=134217728|$FORM_udp_timeout
 int|FORM_tcp_est_timeout|TCP Established Timeout|min=30 max=134217728|$FORM_tcp_est_timeout
 EOF
 	equal "$?" "0" && {
-		save_setting conntrack udp_est_timeout "$FORM_udp_est_timeout"
+		save_setting conntrack udp_stream_timeout "$FORM_udp_stream_timeout"
+		save_setting conntrack udp_timeout "$FORM_udp_timeout"
 		save_setting conntrack tcp_est_timeout "$FORM_tcp_est_timeout"
 	}	
 }
@@ -36,40 +38,24 @@ load_settings "conntrack"
 # defaults used in WR RC6
 #net.ipv4.ip_conntrack_tcp_timeouts="300 43200 120 60 120 120 10 60 30 120"
 #net.ipv4.ip_conntrack_udp_timeouts="60 180"
-sysctl_contents=$(cat /etc/sysctl.conf)
-all_tcp_timeouts=$(echo "$sysctl_contents" | grep "net.ipv4.ip_conntrack_tcp_timeouts" | cut -d'=' -f2)
-all_udp_timeouts=$(echo "$sysctl_contents" | grep "net.ipv4.ip_conntrack_udp_timeouts" | cut -d'=' -f2)
-
-# if we have a full string of timeouts, extract applicable ones
-! empty "$all_tcp_timeouts" && {
-	current_tcp_est_timeout=$(echo "$all_tcp_timeouts" | cut -d' ' -f2)	
-}
-! empty "$all_udp_timeouts" && {
-	current_udp_est_timeout=$(echo "$all_udp_timeouts" | cut -d' ' -f2)
-}
-
-# if we have specific timeouts, extract applicable ones
-echo "$sysctl_contents" | grep -q "ip_conntrack_tcp_timeout_established"
-equal "$?" "0" && {
-	current_tcp_est_timeout=$(echo "$sysctl_contents" | grep "ip_conntrack_tcp_timeout_established" | cut -d'=' -f2)
-}
-echo "$sysctl_contents" | grep -q "ip_conntrack_udp_timeout_established"
-equal "$?" "0" && {
-	current_udp_est_timeout=$(echo "$sysctl_contents" | grep "ip_conntrack_udp_timeout_established" | cut -d'=' -f2)
-}
+current_tcp_est_timeout=$(cat /proc/sys/net/ipv4/netfilter/ip_conntrack_tcp_timeout_established)
+current_udp_stream_timeout=$(cat /proc/sys/net/ipv4/netfilter/ip_conntrack_udp_timeout_stream)
+current_udp_timeout=$(cat /proc/sys/net/ipv4/netfilter/ip_conntrack_udp_timeout)
 
 FORM_tcp_est_timeout="${tcp_est_timeout:-$current_tcp_est_timeout}"
-FORM_tcp_est_timeout="${FORM_tcp_est_timeout:-432000}"
-# todo: what is the default udp timeout?
-FORM_udp_est_timeout="${udp_est_timeout:-$current_udp_est_timeout}"
-FORM_udp_est_timeout="${FORM_udp_est_timeout:-432000}"
+FORM_udp_stream_timeout="${udp_stream_timeout:-$current_udp_stream_timeout}"
+FORM_udp_timeout="${udp_timeout:-$current_udp_timeout}"
 
 display_form <<EOF
 start_form|@TR<<Conntrack Configuration>>
-field|@TR<<UDP Established Timeout>>|udp_est_timeout
-text|udp_est_timeout|$FORM_udp_est_timeout
 field|@TR<<TCP Established Timeout>>|tcp_est_timeout
 text|tcp_est_timeout|$FORM_tcp_est_timeout
+helpitem|TCP Established Timeout
+helptext|HelpText tcp_established_timeout#This is the number of seconds that a established connection can be idle before it is forcibly closed. Sometime connections are not properly closed and can fill up your conntrack table if these values are too high. If they are too low, then connections can be disconnected simple because they are idle.
+field|@TR<<UDP Timeout>>|udp_timeout
+text|udp_timeout|$FORM_udp_timeout
+field|@TR<<UDP Stream Timeout>>|udp_stream_timeout
+text|udp_stream_timeout|$FORM_udp_stream_timeout
 end_form
 EOF
 
