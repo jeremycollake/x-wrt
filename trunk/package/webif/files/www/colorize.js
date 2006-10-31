@@ -11,30 +11,28 @@ function getCookie(name)
 {
 	var dc = document.cookie;
 	var prefix = name + "=";
-	var begin = dc.indexOf("; " + prefix);
-	if (begin == -1)
+	var begin = dc.indexOf(prefix);
+	if (begin == 0)
 	{
-		begin = dc.indexOf(prefix);
-		if (begin != 0) return null;
+		var end = document.cookie.indexOf(";", begin);
+		if (end == -1)
+		{
+			end = dc.length;
+		}
+		return unescape(dc.substring(begin + prefix.length, end));
 	}
 	else
 	{
-		begin += 2;
+		return null;
 	}
-	var end = document.cookie.indexOf(";", begin);
-	if (end == -1)
-	{
-		end = dc.length;
-	}
-	return unescape(dc.substring(begin + prefix.length, end));
 }
 
 function deleteCookie(name,path,domain) {
 	if (getCookie(name)) {
-	 document.cookie = name + "=" +
-		((path) ? "; path=" + path : "") +
-		((domain) ? "; domain=" + domain : "") +
-		"; expires=Thu, 01-Jan-70 00:00:01 GMT";
+		document.cookie = name + "=" +
+			((path) ? "; path=" + path : "") +
+			((domain) ? "; domain=" + domain : "") +
+			"; expires=Thu, 01-Jan-70 00:00:01 GMT";
 	}
 }
 
@@ -44,6 +42,7 @@ function setcolor()
 	OneYear = 365*24*60*60*1000;
 	expireTime.setTime(expireTime.getTime()+OneYear);
 	deleteCookie("webif_color_theme", '', '');   /* old cookie name */
+	deleteCookie("xwrt_color", '', '');   /* previous cookie */
 	setCookie("xwrt_color", this.title, expireTime, '', '', '');
 	colorize();
 	document.close();
