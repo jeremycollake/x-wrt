@@ -98,3 +98,14 @@ save_setting() {
 	}
 	equal "$oldval" "$3" || echo "$2=\"$3\"" >> /tmp/.webif/config-$1
 }
+
+# misc. functions
+remove_lines_from_file() {
+	# $1=filename
+	# $2=substring in lines to remove
+	cat "$1" | grep -q "$2"
+	[ "$?" = "0" ] && {
+		local _substr_sed=$(echo "$2" | sed s/'\/'/'\\\/'/g)							
+		cat "$1" |  sed /$_substr_sed/d > "$1"
+	}
+}
