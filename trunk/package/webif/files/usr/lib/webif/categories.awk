@@ -16,11 +16,18 @@ BEGIN {
 	f[$4] = rootdir "/" $1
 }
 END {
-	print "<div id=\"mainmenu\"><h3><strong>@TR<<Categories>>:</strong></h3><ul>"
+	print "<div id=\"mainmenu\"><ul>"
 	
 	for (i = 1; i <= n; i++) {
 		if (sel == i) print "<li class=\"selected-maincat\"><a href=\"" f[c[i]] "\">&nbsp;@TR<<" c[i] ">>&nbsp;</a></li>"
-		else print "<li class=\"unselected-maincat\"><a href=\"" f[c[i]] "\">&nbsp;@TR<<" c[i] ">>&nbsp;</a></li>";
+		else {
+			if (c[i] == "-") {
+				print "<li class=\"seperator-maincat\">-</li>"	
+			}
+			else {		
+				print "<li class=\"unselected-maincat\"><a href=\"" f[c[i]] "\">&nbsp;@TR<<" c[i] ">>&nbsp;</a></li>";	
+			}
+		}
 	}
   
 	print "</ul></div>"
