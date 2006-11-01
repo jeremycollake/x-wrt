@@ -31,22 +31,16 @@ elif ! empty "$FORM_filter" ; then
 	long=${#FORM_filter}
 	idx=$(expr index "$FORM_filter" : )
 	if equal $idx 1 ; then
-		# ACTION or PREFIX
-		FORM_act=":"
+		# PREFIX
+		FORM_act="p"
 		FORM_value=$(expr substr "$FORM_filter" 2 $(($long-1)))
-		idx=$(expr index "$FORM_value" : )
-		if ! equal $idx 0 ; then
-			# PREFIX
-			FORM_act="p"
-			FORM_value=$(expr substr "$FORM_filter" 2 $(($long-2)))
-		fi
+		FORM_filter=$FORM_value
 	else
 		# the rest (SRC DST PROTO SPT DPT TYPE)
 		idx=$(expr index "$FORM_filter" = )
 		FORM_value=$(expr substr "$FORM_filter" $(($idx+1)) $(($long-$idx)))
 		FORM_act=$(expr substr "$FORM_filter" 1 $idx)
 		# the case of a blank field
-		# set ' ' for the filter and '-' for form display
 		idx=$(expr index "$FORM_filter" - )
 		if ! equal $idx 0 ; then
 			FORM_filter=$FORM_act" "
@@ -72,7 +66,6 @@ start_form|@TR<<Filter>>
 select|act|$FORM_act
 option|A|@TR<<All>>
 option|p|@TR<<Prefix>>
-option|:|@TR<<Action>>
 option|SRC=|@TR<<Source IP>>
 option|DST=|@TR<<Destination IP>>
 option|PROTO=|@TR<<Protocol>>
@@ -90,7 +83,7 @@ $LOGREAD | sort -r | awk -v filter=$FORM_filter -F ' ' '
 BEGIN { 
 	print "<h3>Listing</h3>";
 	print "<table width=\"90%\">";
-	print "<th>Date</th><th>Prefix</th><th>Action</th><th>Source IP</th><th>Destination IP</th><th>Proto</th><th>Source Port</th><th>Dest. Port</th><th>Type</th>";
+	print "<th>Date</th><th>Prefix</th><th>Source IP</th><th>Destination IP</th><th>Proto</th><th>Source Port</th><th>Dest. Port</th><th>Type</th>";
 	}
 
 # is this line a netfilter record ?
@@ -102,10 +95,16 @@ BEGIN {
 			
 	while ( ($i !~ /IN=/)  && (i <= NF) ) i++;
 	if ( i > NF) next;
-	split($i, champs, ":");
-	if_in=substr( champs[4], 4, length(champs[4]) - 3);
-	action=champs[3];
-	prefix=champs[2];
+	action=""
+	idx=index($i,"IN=");
+        if ( ( idx == 1 ) && ( $(i-2) == "kernel:" ) )
+                prefix=$(i-1);
+        else    prefix=substr($i, 1, idx-1);
+
+#	split($i, champs, ":");
+#	if_in=substr( champs[4], 4, length(champs[4]) - 3);
+#	action=champs[3];
+#	prefix=champs[2];
 	
 	while ( ($i !~ /OUT=/) && (i <= NF) ) i++;
 	if ( i > NF) next;
@@ -145,8 +144,7 @@ BEGIN {
 		}
 
 	print "<tr><td>"$1" "$2" "$3"</td>"\
-	"<td><a href=log-browse.sh?filter=:"prefix":>"prefix"</a></td>"\
-	"<td><a href=log-browse.sh?filter=:"action">"action"</a></td>"\
+	"<td><a href=log-browse.sh?filter=:"prefix">"prefix"</a></td>"\
 	"<td><a href=log-browse.sh?filter=SRC="ip_src">"ip_src"</a></td>"\
 	"<td><a href=log-browse.sh?filter=DST="ip_dst">"ip_dst"</a></td>"\
 	"<td><a href=log-browse.sh?filter=PROTO="proto">"proto"</a></td>"\
