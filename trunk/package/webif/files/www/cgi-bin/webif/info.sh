@@ -78,10 +78,7 @@ cat <<EOF
 	<tr>
 		<td><strong>@TR<<Username>></strong></td><td>&nbsp;</td>
 		<td>$user_string</td>
-	</tr>
-	<tr>
-	              <td colspan="4"><strong>@TR<<Warning: Please Backup All Changes You Made To Webif Files As They Will Be Deleted When Your Upgrade>></strong></td>
-        </tr>
+	</tr>	
 	<tr><td><br /><br /></td></tr>
 </tbody>
 </table>  

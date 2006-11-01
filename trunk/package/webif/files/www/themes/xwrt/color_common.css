@@ -14,7 +14,8 @@
 	color: #222;
 }
 
-.warning
+.warning,
+.warning-light
 {
 	color: #9a2c2c;
 }

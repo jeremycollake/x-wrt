@@ -340,6 +340,11 @@ th
 	display: inline;
 }
 
+.warning-light
+{
+	display: inline;
+}
+
 .swatch
 {
 	display: block;
@@ -558,4 +563,9 @@ dt,
 	font-size: 1.0em;
 	font-style: italic;
 	color: red;
+}
+
+.warning-light
+{
+	font-size: 0.8em;
 }
