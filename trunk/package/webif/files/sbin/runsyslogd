@@ -15,6 +15,7 @@ DEFAULT_SIZE=16
 DEFAULT_TYPE="circular"
 DEFAULT_IP=""
 DEFAULT_PORT="514"
+DEFAULT_FILE="/var/log/messages"
 
 # retrieve nvram values
 syslog_ip=$(nvram get log_ipaddr)
@@ -22,19 +23,22 @@ syslog_port=$(nvram get log_port)
 syslog_size=$(nvram get log_size)
 syslog_type=$(nvram get log_type)
 syslog_mark=$(nvram get log_mark)
+syslog_file=$(nvram get log_file)
 
 # verify values
 [ $syslog_type = "circular" ] 2>>/dev/null || [ $syslog_type = "file" ] 2>>/dev/null || syslog_type=$DEFAULT_TYPE
 [ $syslog_size -gt 0 ] 2>>/dev/null || syslog_size=$DEFAULT_SIZE
 eval $(ipcalc "$syslog_ip")
 [ $syslog_ip = "$IP" ] 2>>/dev/null || syslog_ip=$DEFAULT_IP
-[ -z $syslog_port] 2>>/dev/null || [ $syslog_port -lt 0 ] 2>>/dev/null || [ $syslog_port -gt 65535 ] 2>>/dev/null && syslog_port=$DEFAULT_PORT 
+[ -z $syslog_port ] 2>>/dev/null || [ $syslog_port -lt 0 ] 2>>/dev/null || [ $syslog_port -gt 65535 ] 2>>/dev/null && syslog_port=$DEFAULT_PORT
 [ $syslog_mark -gt 0 ] 2>>/dev/null || syslog_mark=$DEFAULT_MARK
+#should test it is a valid writable file
+[ -z $syslog_file ] 2>>/dev/null && syslog_file=$DEFAULT_FILE
 
 # build command syslog command line
 if [ "$syslog_type" = "circular" ] ; then
 	SYSLOG_CMD="-C $syslog_size -m $syslog_mark ${syslog_ip:+-L -R $syslog_ip:$syslog_port}"
-else	SYSLOG_CMD="-s $syslog_size -m $syslog_mark ${syslog_ip:+-L -R $syslog_ip:$syslog_port}"
+else	SYSLOG_CMD="-s $syslog_size -O $syslog_file -m $syslog_mark ${syslog_ip:+-L -R $syslog_ip:$syslog_port}"
 fi
 
 # start syslogd

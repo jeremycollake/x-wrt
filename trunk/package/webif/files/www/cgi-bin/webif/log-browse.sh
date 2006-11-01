@@ -7,8 +7,10 @@
 # defaults to circular, wich is the default install for openwrt
 # use log-setup.sh to modify these parameters
 LOG_TYPE=$(nvram get log_type)
+LOG_FILE=$(nvram get log_file)
 if equal $LOG_TYPE "file" ; then
-	LOGREAD="cat /var/log/messages"
+	LOG_FILE=${LOG_FILE:-"/var/log/messages"}
+	LOGREAD="cat "$LOG_FILE
 else LOGREAD="logread"
 fi
 

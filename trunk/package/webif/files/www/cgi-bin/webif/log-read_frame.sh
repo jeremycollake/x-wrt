@@ -18,8 +18,18 @@ colorize_script=""
 <body $4>	
 <div class="logread"><pre>
 <? 
+. /usr/lib/webif/webif.sh
+
 prefix=$(nvram get log_prefix)
-logread | sort -r | sed -e "s| $prefix| |" 
+LOG_TYPE=$(nvram get log_type)
+LOG_FILE=$(nvram get log_file)
+if equal $LOG_TYPE "file" ; then
+	LOG_FILE=${LOG_FILE:-"/var/log/messages"}
+	LOGREAD="cat "$LOG_FILE
+else LOGREAD="logread"
+fi
+
+$LOGREAD | sort -r  | sed -e "s| $prefix| |" 
 ?>
 </pre></div>
 </body>

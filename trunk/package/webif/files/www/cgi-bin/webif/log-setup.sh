@@ -2,6 +2,8 @@
 <? 
 . /usr/lib/webif/webif.sh
 
+#FILE_NAME="/var/log/messages"
+
 load_settings log
 
 if empty "$FORM_submit" ; then
@@ -13,6 +15,8 @@ if empty "$FORM_submit" ; then
 	FORM_log_port=${log_port:-$(nvram get log_port)}
        	FORM_log_mark=${log_mark:-$(nvram get log_mark)}
     	FORM_log_mark=${FORM_log_mark:-0}
+    	FORM_filename="${log_file:-$(nvram get log_file)}"
+    	FORM_filename=${FORM_filename:-"/var/log/messages"}
 else
 validate <<EOF
 ip|FORM_ipaddr|@TR<<Remote host>>||$FORM_ipaddr
@@ -27,12 +31,27 @@ EOF
 		save_setting log log_ipaddr $FORM_ipaddr
 		save_setting log log_port $FORM_log_port
 		save_setting log log_mark $FORM_log_mark
+		save_setting log log_file $FORM_filename
 	fi
 fi
 
-header "Log" "Syslog Settings" "@TR<<syslog Settings>>" '' "$SCRIPT_NAME"
+header "Log" "Syslog Settings" "@TR<<syslog Settings>>"  ' onload="modechange()" ' "$SCRIPT_NAME"
+
+cat <<EOF
+<script type="text/javascript" src="/webif.js "></script>
+<script type="text/javascript">
+function modechange()
+{
+	var v;
+	v = isset('type', 'file');
+	set_visible('logname', v);
+}
+</script>
+EOF
+
 
 display_form <<EOF
+onchange|modechange
 start_form|Remote Syslog
 field|Server IP Address
 text|ipaddr|$FORM_ipaddr
@@ -51,6 +70,8 @@ field|Log type
 select|type|$FORM_type
 option|circular|@TR<<Circular>>
 option|file|@TR<<File>>
+field|@TR<<Log File>>|logname|hidden
+text|filename|$FORM_filename
 field|Log Size
 text|size|$FORM_size
 end_form
