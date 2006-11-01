@@ -9,7 +9,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 	# backup old files
 	tar -czf /tmp/webif-backup.tar.gz /www/* /usr/lib/webif/* 2>&-
 	echo "IMPORTANT: If you had any files in /www or /usr/lib/webif, they have"
-	echo "  been saved in /tmp/webif-backup.tar.gz, which will exist until you 
+	echo "  been saved in /tmp/webif-backup.tar.gz, which will exist until you"
 	echo "  reboot your router."
 	# end backup
 	ipkg remove hswebif 2>&- 1>&-
