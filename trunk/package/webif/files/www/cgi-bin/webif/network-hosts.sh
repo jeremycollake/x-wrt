@@ -2,6 +2,12 @@
 <? 
 . /usr/lib/webif/webif.sh
 
+header "Network" "Hosts" "@TR<<Configured Hosts>>" '' "$SCRIPT_NAME"
+
+display_form <<EOF
+start_form|
+EOF
+
 exists /tmp/.webif/file-hosts  && HOSTS_FILE=/tmp/.webif/file-hosts || HOSTS_FILE=/etc/hosts
 exists /tmp/.webif/file-ethers  && ETHERS_FILE=/tmp/.webif/file-ethers || ETHERS_FILE=/etc/ethers
 exists $HOSTS_FILE || touch $HOSTS_FILE >&- 2>&-
@@ -79,10 +85,7 @@ EOF
 empty "$FORM_remove_host" || update_hosts del "$FORM_remove_ip" "$FORM_remove_name"
 empty "$FORM_remove_dhcp" || update_ethers del "$FORM_remove_mac"
 
-header "Network" "Hosts" "@TR<<Configured Hosts>>" ''
 ?>
-
-<div class="settings"><div class="settings-block"><div class="settings-content">
 
 <?
 
@@ -93,9 +96,9 @@ awk -v "url=$SCRIPT_NAME" \
 	-f /usr/lib/webif/common.awk \
 	-f - $HOSTS_FILE <<EOF
 BEGIN {
-	FS="[ \t]"
-	start_form("@TR<<Host Names>>")
-	print "<table style=\\"width: 90%; text-align: left;\\" border=\\"0\\" cellpadding=\\"5\\" cellspacing=\\"10\\" summary=\\"Settings\\">"
+	FS="[ \t]"	
+	print "<div class=\"settings-title\"><h3>@TR<<Host Names>></h3></div>"	
+	print "<table style=\"text-align: left;\" border=\"0\" cellpadding=\"4\" cellspacing=\"4\" >"
 	print "<tr><th>@TR<<IP Address>></th><th>@TR<<Host Name>></th><th></th></tr>"
 	print "<tr><td colspan=\"3\"><hr class=\"separator\" /></td></tr>"
 }
@@ -122,11 +125,9 @@ BEGIN {
 }
 
 END {
-	print "<form enctype=\\"multipart/form-data\\" method=\\"post\\" action=\\"\\">"
-	print "<tr><td>" textinput("host_ip", ip) "</td><td>" textinput("host_name", name) "</td><td style=\\"width: 10em\\">" button("add_host", "Add") "</td></tr>"
-	print "</form>"
+	print "<tr><td>" textinput("host_ip", ip) "</td><td>" textinput("host_name", name) "</td><td style=\\"width: 10em\\">" button("add_host", "Add") "</td></tr>"	
+	print "<tr><td><br /><br /></td></tr>"
 	print "</table>"
-	end_form()
 }
 EOF
 
@@ -136,10 +137,9 @@ awk -v "url=$SCRIPT_NAME" \
 	-v "ip=$FORM_dhcp_ip" -f /usr/lib/webif/common.awk -f - $ETHERS_FILE <<EOF
 	
 BEGIN {
-	FS="[ \\t]"
-	print "<form enctype=\\"multipart/form-data\\" method=\\"post\\">"
-	start_form("@TR<<DHCP Static|Static IP addresses (for DHCP)>>")
-	print "<table style=\\"width: 90%; text-align: left;\\" border=\\"0\\" cellpadding=\\"5\\" cellspacing=\\"10\\" summary=\\"Settings\\">"
+	FS="[ \\t]"		
+	print "<div class=\"settings-title\"><h3 style=\"text-align: left;\">@TR<<DHCP Static|Static IP addresses (for DHCP)>></h3></div>"	
+	print "<table style=\"text-align: left;\" border=\"0\" cellpadding=\"4\" cellspacing=\"4\">"
 	print "<tr><th>@TR<<MAC Address>></th><th>@TR<<IP Address>></th><th></th></tr>"
 }
 
@@ -151,22 +151,20 @@ BEGIN {
 
 END {
 	print "<tr><td>" textinput("dhcp_mac", mac) "</td><td>" textinput("dhcp_ip", ip) "</td><td style=\\"width: 10em\\">" button("add_dhcp", "Add") "</td></tr>"
-	print "</table>"
-	print "</form>"
-	end_form();
+	print "<tr><td><br /><br /></td></tr>"
+	print "</table>"		
 }
 EOF
 
 ?>
-<table style="width: 90%; text-align: left;" border="0" cellpadding="5" cellspacing="10">
+<table style="text-align: left;" border="0" cellpadding="2" cellspacing="20">
 <th style="text-align: left;">@TR<<Active DHCP Leases>></th>
-<tbody>
 	<tr>
 		<th>@TR<<MAC Address>></th>
 		<th>@TR<<IP Address>></th>
 		<th>@TR<<Name>></th>
 		<th>@TR<<Expires in>></th>
-	</tr>
+	</tr>	
 <? 
 exists /tmp/dhcp.leases && awk -vdate="$(date +%s)" '
 $1 > 0 {
@@ -193,11 +191,13 @@ grep "." /tmp/dhcp.leases
 }
 ?>
 <tr><td><br /><br /></td></tr>
-</tbody></table>
+</table>
+<?
+display_form <<EOF
+end_form
+EOF
 
-</div></div></div>
-
-<? footer ?>
+footer ?>
 <!--
 ##WEBIF:name:Network:500:Hosts
 -->
