@@ -168,13 +168,13 @@ EOF
 	;;
 esac
 
+display_form <<EOF
+start_form|@TR<<Download Configuration>>
+EOF
 
 cat <<EOF
 <form method="GET" name="download" action="$SCRIPT_NAME">
 <input type="hidden" name="action" value="download">
-<div class="settings">
-<div class="settings-title"><h3><strong>Download Configuration</strong></h3></div>
-<div class="settings-content">
 	<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
 	<tbody>
 		<tr>
@@ -191,18 +191,21 @@ cat <<EOF
 		</tr>
 	</tbody>
 	</table>
-</div>
-</div>
 </form>
+EOF
+
+display_form <<EOF
+end_form|
+EOF
+
+display_form <<EOF
+start_form|@TR<<Upload Configuration>>
 EOF
 
 cat<<EOF
 <form method="POST" name="instconfig" action="$SCRIPT_NAME" enctype="multipart/form-data">
 <input type="hidden" name="action" value="chkconfig">
-<div class="settings">
-<div class="settings-title"><h3><strong>Upload Configuration</strong></h3></div>
-<div class="settings-content">
-	<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
+	<table style="text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
 	<tbody>
 		<tr>
 			<td>@TR<<Saved config.tgz file:>></td>
@@ -218,9 +221,11 @@ cat<<EOF
 		</tr>
 	</tbody>
 	</table>
-</div>
-</div>
 </form>
+EOF
+
+display_form <<EOF
+end_form|
 EOF
 
 footer 
