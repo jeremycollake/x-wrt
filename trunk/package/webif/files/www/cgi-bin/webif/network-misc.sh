@@ -18,7 +18,7 @@
 #   /etc/sysctl.conf
 #
 
-header "Network" "Miscellaneous" "@TR<<Miscellaneous Configuration>>" 'onload="modechange()"' "$SCRIPT_NAME"
+header "Network" "Misc" "@TR<<Miscellaneous Configuration>>" 'onload="modechange()"' "$SCRIPT_NAME"
 
 ! empty "$FORM_submit" && {
 	validate <<EOF
@@ -71,5 +71,5 @@ EOF
 
 footer ?>
 <!--
-##WEBIF:name:Network:900:Miscellaneous
+##WEBIF:name:Network:900:Misc
 -->

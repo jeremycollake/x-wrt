@@ -5,8 +5,12 @@
 HOSTS_FILE=/etc/hosts
 ETHERS_FILE=/etc/ethers
 
-header "Network" "WOL" "Wake-On-LAN" ''
-has_pkgs ether-wake
+header "Network" "WoL" "@TR<<Wake-On-LAN>>" ''
+
+# check to make sure busybox's etherwake isn't included 
+! exists "/bin/etherwake" && {
+	has_pkgs ether-wake
+}
 ?>
 
 <p>Here you can send a Wake-On-LAN packet to automatically boot up a computer that is turned off. The computer must support WOL, and the feature needs to be turned on in the BIOS for this to work. Unfortunately, there is no explicit response from that machine, so you do not know whether the waking was successfull and the machine is really booting up.</p>
@@ -73,6 +77,6 @@ fi
 
 <? footer ?>
 <!--
-##WEBIF:name:Network:699:Wake-On-LAN
+##WEBIF:name:Network:699:WoL
 -->
 
