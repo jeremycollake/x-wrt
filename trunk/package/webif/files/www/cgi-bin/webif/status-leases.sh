@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<? 
+<?
 . /usr/lib/webif/webif.sh
 header "Status" "DHCP Clients" "@TR<<DHCP Leases>>"
 ?>
@@ -29,7 +29,7 @@ $1 > 0 {
 	print "</tr>"
 }
 ' /tmp/dhcp.leases
-grep "." /tmp/dhcp.leases
+grep "." /tmp/dhcp.leases > /dev/null
 ! equal "$?" "0" &&
 {
 	echo "<tr><td>There are no known DHCP leases.</td></tr>"
@@ -42,8 +42,8 @@ grep "." /tmp/dhcp.leases
 <tr><td><br /><br /></td></tr>
 </tbody>
 </table>
-<br />  
-<? 
+<br />
+<?
 show_validated_logo
 footer ?>
 <!--
