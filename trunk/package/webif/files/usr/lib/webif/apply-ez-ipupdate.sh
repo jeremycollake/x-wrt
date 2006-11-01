@@ -15,7 +15,6 @@ ddns_server=$(nvram get ddns_server)
 ddns_max_interval=$(nvram get ddns_max_interval)
 
 # (re)start ez-ipupdated
-if [ -e /tmp/.webif/ez-ipupdate ]; then
 if [ "$ddns_enable" -eq "1" ]; then
     mkdir -p $ddns_dir
     echo "service-type=$ddns_service_type"   > $ddns_conf
@@ -35,5 +34,4 @@ if [ "$ddns_enable" -eq "1" ]; then
 else
     echo "Stop ez-ipupdate..."
     $initfile stop
-fi
 fi
