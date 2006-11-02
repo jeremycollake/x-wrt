@@ -262,11 +262,12 @@ for config in $(ls config-* 2>&-); do
 	esac'
 done
 
+rm -f "config-*"
+
 #
 # now apply any UCI config changes
 #
 commit_settings_ex
-
-sleep 2
-rm -f "config-*"
 rm -f "/tmp/.webif-uci/config-*"
+
+# give user a chance to read output from this page
