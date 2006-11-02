@@ -270,4 +270,5 @@ rm -f "config-*"
 commit_settings_ex
 rm -f "/tmp/.webif-uci/config-*"
 
-# give user a chance to read output from this page
+# give user more time to read output from this page ??
+# sleep 2 

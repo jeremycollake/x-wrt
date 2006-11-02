@@ -6,30 +6,6 @@ indexpage=index.sh
 . /usr/lib/webif/functions.sh
 . /usr/lib/webif/pkgfuncs.sh
 
-# workarounds for stupid busybox slowness on [ ]
-empty() {
-	case "$1" in
-		"") return 0 ;;
-		*) return 255 ;;
-	esac
-}
-equal() {
-	case "$1" in
-		"$2") return 0 ;;
-		*) return 255 ;;
-	esac
-}
-neq() {
-	case "$1" in
-		"$2") return 255 ;;
-		*) return 0 ;;
-	esac
-}
-# very crazy, but also very fast :-)
-exists() {
-	( < $1 ) 2>&-
-}
-
 categories() {
 	grep '##WEBIF:' $cgidir/.categories $cgidir/*.sh 2>/dev/null | \
 		awk -v "selected=$1" \
