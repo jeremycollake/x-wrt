@@ -11,23 +11,33 @@ case "$FORM_mode" in
 	nochange) header $FORM_cat . "@TR<<No config change.|No configuration changes were made.>>";;
 	clear)
 		rm -rf /tmp/.webif >&- 2>&- 
+		rm -rf /tmp/.webif-uci >&- 2>&- 
 		header $FORM_cat . "@TR<<Config discarded.|Your configuration changes have been discarded.>>"
 		CHANGES=""
 		echo "${FORM_prev:+<meta http-equiv=\"refresh\" content=\"2; URL=$FORM_prev\" />}"
 		;;
 	review)
-		header $FORM_cat . "@TR<<Config changes:|Current configuration changes:>>"
-		cd /tmp/.webif
-		for configname in config-*; do
+		header $FORM_cat . "@TR<<Config changes:|Current configuration changes:>>"		
+		for configname in /tmp/.webif/config-*; do
 			grep = $configname >&- 2>&- && {
-				echo -n "<h3>${configname#config-}</h3><br /><pre>"
+				echo -n "<h3>${configname#/tmp/.webif/config-}</h3><br /><pre>"
 				cat $configname
 				echo '</pre><br />'
 			}
-		done
+		done	
 		CONFIGFILES=""
-		for configname in file-*; do
-			exists "$configname" && CONFIGFILES="$CONFIGFILES ${configname#file-}"
+		for configname in /tmp/.webif/file-*; do
+			exists "$configname" && {
+				configname=$(echo $configname | sed s/'\/tmp\/.webif\/'//g) 
+				CONFIGFILES="$CONFIGFILES ${configname#/tmp/.webif/file-}"
+			}
+		done		
+		for configname in /tmp/.webif-uci/config-*; do
+			grep = $configname >&- 2>&- && {
+				echo -n "<h3>${configname#/tmp/.webif-uci/config-}</h3><br /><pre>"
+				cat $configname
+				echo '</pre><br />'
+			}
 		done
 		CONFIGFILES="${CONFIGFILES:+<h3 style="display:inline">Config files: </h3>$CONFIGFILES<br />}"
 		echo "$CONFIGFILES"
@@ -46,7 +56,7 @@ case "$FORM_mode" in
 		CHANGES=""
 		echo "<pre>"
 		sh /usr/lib/webif/apply.sh 2>&1
-		echo "</pre>${FORM_prev:+<meta http-equiv=\"refresh\" content=\"2; URL=$FORM_prev\" />}"
+		echo "</pre>${FORM_prev:+<meta http-equiv=\"refresh\" content=\"4; URL=$FORM_prev\" />}"
 		;;
 esac
 
