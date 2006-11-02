@@ -23,12 +23,12 @@
 . /etc/functions_ex.sh
 
 #############################################################################
-# New UCI config functions
+# UCI config functions
 # 
 #  These work with UCI compatibile configuration files. These files are 
 #  stored in /etc/config.
 #
-
+#############################################################################
 
 #
 # load_settings_ex loads all settings from a UCI config file to shell
@@ -41,7 +41,7 @@ load_settings_ex() {
 }
 
 #
-# save_settings_ex save a setting to an intermediate (temporary)
+# save_settings_ex saves a setting to an intermediate (temporary)
 # UCI config file. To persist changes to the final UCI config file, 
 # call commit_settings_ex.
 #
@@ -99,6 +99,7 @@ EOF
 #  These work with as a tuple based configuration system. apply.sh applies
 #  the changes.
 #
+#############################################################################
 
 load_settings() {
 	equal "$1" "nvram" || {
@@ -133,9 +134,12 @@ save_setting() {
 
 
 #############################################################################
-# Misc. functions - todo: move elsewhere as they are not used by above.
+# Misc. functions
+#
+# - todo: move elsewhere?? they are not used by above.
 #
 #
+#############################################################################
 remove_lines_from_file() {
 	# $1=filename
 	# $2=substring in lines to remove
