@@ -36,8 +36,8 @@
 #
 load_settings_ex() {
 	# $1 = file
-	config_load "$1"
-	exists /tmp/.webif/config-$1 && . /tmp/.webif/config-$1
+	config_load "$1"	
+	exists /tmp/.webif-uci/config-$1 && . /tmp/.webif-uci/config-$1
 }
 
 #
@@ -50,8 +50,8 @@ save_setting_ex() {
 	# $2 = group
 	# $3 = name
 	# $4 = value
-	mkdir -p /tmp/.webif
-	cat >> /tmp/.webif/config-$1 <<EOF
+	mkdir -p /tmp/.webif-uci
+	cat >> /tmp/.webif-uci/config-$1 <<EOF
 config update "$2"
 	option "$3" "$4"
 EOF
@@ -60,20 +60,20 @@ EOF
 #
 # commit_settings_ex applies all pending config changes from save_setting_ex.
 #
-commit_settings_ex() {(
+commit_settings_ex() {(	
 	reset_cb
 	option_cb() {
 		# FIXME: ';' cannot be used in any config values
 		updatestr="${updatestr:+$updatestr;}$CONFIG_SECTION.$1=$2"
 	}
 
-	for cfg in /tmp/.webif/config-*; do
+	for cfg in /tmp/.webif-uci/config-*; do
 		exists $cfg || continue
 		export cfgfile="${cfg##*config-}"
 		export updatestr=
 		. $cfg
 		
-		lock /tmp/.webif/update-$cfgfile
+		lock /tmp/.webif-uci/update-$cfgfile
 		awk \
 			-v cfgfile="/etc/config/$cfgfile" \
 			-v updatestr="$updatestr" \
@@ -86,9 +86,9 @@ BEGIN {
 EOF
 		equal "$?" 0 && {
 			mv /etc/config/$cfgfile.new /etc/config/$cfgfile
-			rm -f /tmp/.webif/config-$cfgfile
+			rm -f /tmp/.webif-uci/config-$cfgfile
 		}
-		lock -u /tmp/.webif/update-$cfgfile
+		lock -u /tmp/.webif-uci/update-$cfgfile
 	done
 )}
 
@@ -138,11 +138,10 @@ save_setting() {
 #
 # - todo: move elsewhere?? they are not used by above.
 #
-#
 #############################################################################
 remove_lines_from_file() {
 	# $1=filename
-	# $2=substring in lines to remove
+	# $2=substring match indicating lines to remove (case sensitive)
 	cat "$1" | grep -q "$2"
 	[ "$?" = "0" ] && {
 		local _substr_sed=$(echo "$2" | sed s/'\/'/'\\\/'/g)							

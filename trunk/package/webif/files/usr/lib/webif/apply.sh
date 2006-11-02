@@ -261,5 +261,12 @@ for config in $(ls config-* 2>&-); do
 		'"$HANDLERS_config"'
 	esac'
 done
+
+#
+# now apply any UCI config changes
+#
+commit_settings_ex
+
 sleep 2
-rm -f config-*
+rm -f "config-*"
+rm -f "/tmp/.webif-uci/config-*"

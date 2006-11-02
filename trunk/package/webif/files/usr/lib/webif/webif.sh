@@ -63,8 +63,9 @@ ShowUntestedWarning() {
 
 update_changes() {
 	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))
+	CHANGES_UCI=$(ls /tmp/.webif-uci/config-* | wc -l)
 	EDITED_FILES=$(find "/tmp/.webif/edited-files" -type f 2>&- | wc -l)
-	CHANGES=$(($CHANGES + $EDITED_FILES))
+	CHANGES=$(($CHANGES + $EDITED_FILES + $CHANGES_UCI))
 }
 
 pcnt=0
