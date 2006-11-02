@@ -61,6 +61,9 @@ fi
 <tr><th>X-Wrt Webif<sup>2</sup> @TR<<Contributors>>: <div class="smalltext">(@TR<<sorted_by_name#sorted by last name>>)</div></th></tr>
 <tr><td>
 &nbsp;&nbsp; <a href="mailto:oxo@users.berlios.de">Owen Brotherwood (oxo)</a>
+</td></tr>
+<tr><td>
+&nbsp;&nbsp; <a href="mailto:guymarc@users.berlios.de">Guymarc</a>
 </td></tr>	 	
 <tr><td>
 &nbsp;&nbsp; <a href="mailto:jeremy.collake@gmail.com">Jeremy Collake (db90h)</a>
@@ -71,8 +74,9 @@ fi
 <tr><td>
 &nbsp;&nbsp; <a href="mailto:tyardley@users.berlios.de">Tim Yardley (lst)</a>
 </td></tr>
+
 <tr><td>
-&nbsp;&nbsp; With important help from Reinhold Kainhofer, ido, Spectra, Strontian, Sven-Ola, Felix Fietkau, guymarc, redhad, beta testers, and many others who have provided development, testing, or other contributions.
+&nbsp;&nbsp; With important help from Reinhold Kainhofer, ido, Spectra, Strontian, Sven-Ola, Felix Fietkau, redhat, beta testers, and many others who have provided development, testing, or other contributions.
 </td></tr>		
 
 <tr><td><br /></td></tr>  
