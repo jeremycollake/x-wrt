@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<? 
+<?
 . /usr/lib/webif/webif.sh
 header "Status" "PPPoE" "@TR<<PPPoE Status>>"
 ?>

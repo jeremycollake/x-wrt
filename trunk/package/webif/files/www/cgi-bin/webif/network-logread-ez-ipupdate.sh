@@ -1,8 +1,8 @@
 #!/usr/bin/webif-page
-<? 
+<?
 . /usr/lib/webif/webif.sh
 
-header "Network" "Settings" "DynDNS Syslog View" '' "$SCRIPT_NAME" 
+header "Network" "Settings" "DynDNS Syslog View" '' "$SCRIPT_NAME"
 
 ?>
 <iframe src="network-logread-ez-ipupdate_frame.sh" width="90%" height="300" scrolling="auto" >

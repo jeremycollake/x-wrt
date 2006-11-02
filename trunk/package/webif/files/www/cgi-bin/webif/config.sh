@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<? 
+<?
 . /usr/lib/webif/webif.sh
 
 update_changes
@@ -7,10 +7,10 @@ update_changes
 case "$CHANGES" in
 	""|0)FORM_mode=nochange
 esac
-case "$FORM_mode" in 
+case "$FORM_mode" in
 	nochange) header $FORM_cat . "@TR<<No config change.|No configuration changes were made.>>";;
 	clear)
-		rm -rf /tmp/.webif >&- 2>&- 
+		rm -rf /tmp/.webif >&- 2>&-
 		rm -rf /tmp/.webif-uci >&- 2>&- 
 		header $FORM_cat . "@TR<<Config discarded.|Your configuration changes have been discarded.>>"
 		CHANGES=""
@@ -41,13 +41,13 @@ case "$FORM_mode" in
 		done
 		CONFIGFILES="${CONFIGFILES:+<h3 style="display:inline">Config files: </h3>$CONFIGFILES<br />}"
 		echo "$CONFIGFILES"
-		
+
 		EDITED_FILES=""
 		for edited_file in $(find "/tmp/.webif/edited-files/" -type f 2>&-); do
 			edited_file=$(echo "$edited_file" | sed s/'\/tmp\/.webif\/edited-files'//g)
 			EDITED_FILES="$EDITED_FILES $edited_file"
 		done
-		
+
 		EDITED_FILES="${EDITED_FILES:+<h3 style="display:inline">Edited files: </h3>$EDITED_FILES<br />}"
 		echo "$EDITED_FILES"
 		;;

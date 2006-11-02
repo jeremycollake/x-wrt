@@ -17,14 +17,14 @@ fi
 header "VPN" "PPTP" "@TR<<PPTP>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
 
 if [ ! -e /etc/ppp/functions.sh ]; then
-    has_pkgs pptp pptpd
+	has_pkgs pptp pptpd
 else
 
 . /etc/ppp/functions.sh
 
 empty "$FORM_add_user" || {
-        vip=
-        equal "$FORM_ip" "*" || vip="ip|FORM_ip|@TR<<IP Address>>|required|$FORM_ip"
+	vip=
+	equal "$FORM_ip" "*" || vip="ip|FORM_ip|@TR<<IP Address>>|required|$FORM_ip"
 	validate <<EOF
 $vip
 hostname|FORM_user|@TR<<Username>>|required|$FORM_user
@@ -34,8 +34,8 @@ EOF
 }
 
 empty "$FORM_add_peer" || {
-        vip=
-        equal "$FORM_ip" "*" || vip="ip|FORM_ip|@TR<<IP Address>>|required|$FORM_ip"
+	vip=
+	equal "$FORM_ip" "*" || vip="ip|FORM_ip|@TR<<IP Address>>|required|$FORM_ip"
 	validate <<EOF
 $vip
 hostname|FORM_peer|@TR<<Peername>>|required|$FORM_peer
@@ -50,14 +50,14 @@ empty "$FORM_del_user" || {
 	validate <<EOF
 hostname|FORM_user|@TR<<Username>>|required|$FORM_user
 EOF
-	equal "$?" 0 && ppp_del_user pptpd "$FORM_user" 
+	equal "$?" 0 && ppp_del_user pptpd "$FORM_user"
 }
 
 empty "$FORM_del_peer" || {
 	validate <<EOF
 hostname|FORM_peer|@TR<<Peername>>|required|$FORM_peer
 EOF
-	equal "$?" 0 && ppp_del_peer pptp "$FORM_peer" 
+	equal "$?" 0 && ppp_del_peer pptp "$FORM_peer"
 }
 
 build_chap_secrets
@@ -105,13 +105,13 @@ onchange|
 end_form
 EOF
 
-awk     -v "url=$SCRIPT_NAME" \
+awk -v "url=$SCRIPT_NAME" \
 	-v "peer=$FORM_peer" \
 	-v "host=$FORM_host" \
 	-v "user=$FORM_user" \
 	-v "pass=$FORM_pass" \
-        -v "ip=$FORM_ip" \
-        -f /usr/lib/webif/common.awk -f - /etc/ppp/users.pptp /etc/ppp/peers.pptp <<EOF
+	-v "ip=$FORM_ip" \
+	-f /usr/lib/webif/common.awk -f - /etc/ppp/users.pptp /etc/ppp/peers.pptp <<EOF
 BEGIN {
 	FS="[ \\t]"
 	print "<form enctype=\\"multipart/form-data\\" method=\\"post\\">"
@@ -120,9 +120,9 @@ BEGIN {
 	print "<tr><th>@TR<<Peername>></th><th>@TR<<Hostname>></th><th>@TR<<Username>></th><th>@TR<<Password>></th><th>IP Address</th><th></th></tr>"
 }
 (\$4 != "") {
-    user[\$1]=\$2
-    pass[\$1]=\$3
-    ip[\$1]=\$4
+	user[\$1]=\$2
+	pass[\$1]=\$3
+	ip[\$1]=\$4
 }
 (\$4 == "") {
 	print "<tr><td>" \$1 "</td><td>" \$2 "</td><td>" \$3 "</td><td>" pass[\$1] "</td><td>" ip[\$1] "</td><td align=\\"right\\" width=\\"10%\\"><a href=\\"" url "?del_peer=1&peer=" \$1 "\\">@TR<<Remove>></a></td></tr>"
@@ -150,11 +150,11 @@ onchange|
 end_form
 EOF
 
-awk     -v "url=$SCRIPT_NAME" \
+awk -v "url=$SCRIPT_NAME" \
 	-v "user=$FORM_user" \
 	-v "pass=$FORM_pass" \
-        -v "ip=$FORM_ip" \
-        -f /usr/lib/webif/common.awk -f - /etc/ppp/users.pptpd <<EOF
+	-v "ip=$FORM_ip" \
+	-f /usr/lib/webif/common.awk -f - /etc/ppp/users.pptpd <<EOF
 BEGIN {
 	FS="[ \\t]"
 	print "<form enctype=\\"multipart/form-data\\" method=\\"post\\">"
@@ -171,7 +171,7 @@ END {
 	print "<tr><td>" textinput("user", user) "</td><td>" textinput("pass", pass) "</td><td>" textinput("ip", ip) "</td><td style=\\"width: 10em\\">" button("add_user", "Add") "</td></tr>"
 	print "</table>"
 	print "</form>"
-        print "<b>Note</b>: The PPTP VPN network will be on the 192.168.200.0 network with gateway IP 192.168.200.1. Assign IP addresses in that network, e.g. 192.168.200.10"
+	print "<b>Note</b>: The PPTP VPN network will be on the 192.168.200.0 network with gateway IP 192.168.200.1. Assign IP addresses in that network, e.g. 192.168.200.10"
 	end_form();
 }
 EOF

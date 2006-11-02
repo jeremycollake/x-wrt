@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<? 
+<?
 . /usr/lib/webif/webif.sh
 ###################################################################
 # Misc. Network Configuration
@@ -7,14 +7,14 @@
 # Description:
 #	Misc. Network configuration
 #
-# Author(s) [in order of work date]: 
-# 	Jeremy Collake <jeremy.collake@gmail.com>
+# Author(s) [in order of work date]:
+#	Jeremy Collake <jeremy.collake@gmail.com>
 #
 # Major revisions:
 #
 # NVRAM variables referenced:
 #
-# Configuration files referenced: 
+# Configuration files referenced:
 #   /etc/sysctl.conf
 #
 
@@ -36,7 +36,7 @@ EOF
 		save_setting conntrack ip_conntrack_max "$FORM_ip_conntrack_max"
 		save_setting conntrack ip_conntrack_generic_timeout "$FORM_ip_conntrack_generic_timeout"
 		save_setting conntrack ip_conntrack_icmp_timeout "$FORM_ip_conntrack_icmp_timeout"
-	}	
+	}
 }
 
 load_settings "conntrack"

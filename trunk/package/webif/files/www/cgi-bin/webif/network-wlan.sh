@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<? 
+<?
 . /usr/lib/webif/webif.sh
 ###################################################################
 # Wireless configuration
@@ -7,15 +7,15 @@
 # Description:
 #	Basic wireless configuration.
 #
-# Author(s) [in order of work date]: 
+# Author(s) [in order of work date]:
 #       Original webif authors.
-# 	Jeremy Collake <jeremy.collake@gmail.com>
+#	Jeremy Collake <jeremy.collake@gmail.com>
 #
 # Major revisions:
 #
 # NVRAM variables referenced:
 #
-# Configuration files referenced: 
+# Configuration files referenced:
 #   none
 #
 
@@ -44,31 +44,31 @@ for ch in $CHANNELS; do
 option|$ch"
 done
 
-#####################################################################	
+#####################################################################
 # install NAS if asked
 if ! empty "$FORM_install_nas"; then
-	echo "Installing NAS package ...<pre>"	
-	install_package "nas"	
-	echo "</pre>"	
+	echo "Installing NAS package ...<pre>"
+	install_package "nas"
+	echo "</pre>"
 fi
 
-#####################################################################	
+#####################################################################
 # initialize forms
-if empty "$FORM_submit"; then	
+if empty "$FORM_submit"; then
 	FORM_gmode=${wl0_gmode:-$(nvram get wl0_gmode)}
-  	case "$FORM_gmode" in
-    		0) FORM_gmode=bOnly;;
-    		1) FORM_gmode=b+g;;
-    		2) FORM_gmode=g;;
-    		3) FORM_gmode=bDeferred;;
-    		4) FORM_gmode=gPerformance;;
-    		5) FORM_gmode=gLRS;;
-    		6) FORM_gmode=gAfterburner;;
-    		*) FORM_gmode=Unknown;;    
-  	esac
-  
-  	FORM_gmode_protection=${wl0_gmode_protection:-$(nvram get wl0_gmode_protection)}
-  
+	case "$FORM_gmode" in
+			0) FORM_gmode=bOnly;;
+			1) FORM_gmode=b+g;;
+			2) FORM_gmode=g;;
+			3) FORM_gmode=bDeferred;;
+			4) FORM_gmode=gPerformance;;
+			5) FORM_gmode=gLRS;;
+			6) FORM_gmode=gAfterburner;;
+			*) FORM_gmode=Unknown;;
+	esac
+
+	FORM_gmode_protection=${wl0_gmode_protection:-$(nvram get wl0_gmode_protection)}
+
 	FORM_mode=${wl0_mode:-$(nvram get wl0_mode)}
 	infra=${wl0_infra:-$(nvram get wl0_infra)}
 	case "$infra" in
@@ -79,7 +79,7 @@ if empty "$FORM_submit"; then
 		0|off|diabled) FORM_radio=0;;
 		*) FORM_radio=1;;
 	esac
-			
+
 	FORM_ssid=${wl0_ssid:-$(nvram get wl0_ssid)}
 	FORM_broadcast=${wl0_closed:-$(nvram get wl0_closed)}
 	case "$FORM_broadcast" in
@@ -152,12 +152,12 @@ if empty "$FORM_submit"; then
 	FORM_key4=${wl0_key4:-$(nvram get wl0_key4)}
 	key=${wl0_key:-$(nvram get wl0_key)}
 	FORM_key=${key:-1}
-#####################################################################	
+#####################################################################
 # save forms
-else 
+else
 	 empty "$FORM_generate_wep_128" && empty "$FORM_generate_wep_40" &&
-	 {	
-		SAVED=1					  	
+	 {
+		SAVED=1
 		case "$FORM_encryption" in
 			wpa) V_RADIUS="
 	string|FORM_radius_key|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_radius_key
@@ -180,20 +180,20 @@ $V_WEP
 $V_RADIUS
 $V_PSK
 EOF
-		equal "$?" 0 && {	
-			NUM_gmode="1"	
+		equal "$?" 0 && {
+			NUM_gmode="1"
 			case "$FORM_gmode" in
-	  			bOnly) NUM_gmode=0;;
-	  			b+g) NUM_gmode=1;;
-	  			g) NUM_gmode=2;;
-	  			bDeferred) NUM_gmode=3;;
-	  			gPerformance) NUM_gmode=4;;
-	  			gLRS) NUM_gmode=5;;
-	  			gAfterburner) NUM_gmode=6;;  
-			esac  	
+				bOnly) NUM_gmode=0;;
+				b+g) NUM_gmode=1;;
+				g) NUM_gmode=2;;
+				bDeferred) NUM_gmode=3;;
+				gPerformance) NUM_gmode=4;;
+				gLRS) NUM_gmode=5;;
+				gAfterburner) NUM_gmode=6;;
+			esac
 
-			save_setting wireless wl0_gmode "$NUM_gmode"  
-  			save_setting wireless wl0_gmode_protection "$FORM_gmode_protection"  		
+			save_setting wireless wl0_gmode "$NUM_gmode"
+			save_setting wireless wl0_gmode_protection "$FORM_gmode_protection"
 			save_setting wireless wl0_radio "$FORM_radio"
 
 			if equal "$FORM_mode" adhoc; then
@@ -202,11 +202,11 @@ EOF
 			fi
 			save_setting wireless wl0_mode "$FORM_mode"
 			save_setting wireless wl0_infra ${infra:-1}
-			
+
 			save_setting wireless wl0_ssid "$FORM_ssid"
 			save_setting wireless wl0_closed "$FORM_broadcast"
 			save_setting wireless wl0_channel "$FORM_channel"
-	
+
 			crypto=""
 			equal "$FORM_aes" aes && crypto="aes"
 			equal "$FORM_tkip" tkip && crypto="tkip${crypto:++$crypto}"
@@ -232,7 +232,7 @@ EOF
 				save_setting wireless wl0_radius_key "$FORM_radius_key"
 				save_setting wireless wl0_wep "disabled"
 				;;
-			wep)				
+			wep)
 				save_setting wireless wl0_wep enabled
 				save_setting wireless wl0_akm "none"
 				save_setting wireless wl0_key1 "$FORM_key1"
@@ -246,42 +246,42 @@ EOF
 				save_setting wireless wl0_wep disabled
 				;;
 			esac
-		}			
+		}
 	}
 fi
 
-! empty "$FORM_generate_wep_128" && 
+! empty "$FORM_generate_wep_128" &&
 {
 	FORM_key1=""
 	FORM_key2=""
 	FORM_key3=""
 	FORM_key4=""
-	# generate a single 128(104)bit key	
+	# generate a single 128(104)bit key
 	if empty "$FORM_wep_passphrase"; then
 		echo "<div class=warning>$EMPTY_passphrase_error</div>"
 	else
 		textkeys=$(wepkeygen -s "$FORM_wep_passphrase"  |
-		 awk 'BEGIN { count=0 }; 
-		 	{ total[count]=$1, count+=1; } 
-		 	END { print total[0] ":" total[1] ":" total[2] ":" total[3]}')		
-		FORM_key1=$(echo "$textkeys" | cut -d ':' -f 0-13 | sed s/':'//g)	
+		 awk 'BEGIN { count=0 };
+			{ total[count]=$1, count+=1; }
+			END { print total[0] ":" total[1] ":" total[2] ":" total[3]}')
+		FORM_key1=$(echo "$textkeys" | cut -d ':' -f 0-13 | sed s/':'//g)
 		FORM_key2=""
 		FORM_key3=""
 		FORM_key4=""
 	fi
 }
 
-! empty "$FORM_generate_wep_40" && 
+! empty "$FORM_generate_wep_40" &&
 {
 	FORM_key1=""
 	FORM_key2=""
 	FORM_key3=""
 	FORM_key4=""
-	# generate a single 128(104)bit key	
+	# generate a single 128(104)bit key
 	if empty "$FORM_wep_passphrase"; then
 		echo "<div class=warning>$EMPTY_passphrase_error</div>"
 	else
-		textkeys=$(wepkeygen "$FORM_wep_passphrase" | sed s/':'//g)		
+		textkeys=$(wepkeygen "$FORM_wep_passphrase" | sed s/':'//g)
 		keycount=1
 		for curkey in $textkeys; do
 		case $keycount in
@@ -294,7 +294,7 @@ fi
 		let "keycount+=1"
 		done
 	fi
-	
+
 }
 
 
@@ -307,15 +307,15 @@ equal "$?" "0" && nas_installed="1"
 
 install_nas_button='field|@TR<<NAS Package>>|install_nas|hidden'
 if ! equal "$nas_installed" "1"; then
-	install_nas_button="$install_nas_button	
+	install_nas_button="$install_nas_button
 		string|<div class=\"warning\">WPA and WPA2 will not work until you install the NAS package. </div>
 		submit|install_nas| Install NAS Package |"
 else
-	install_nas_button="$install_nas_button	
+	install_nas_button="$install_nas_button
 		string|NAS package is installed and should be functional."
-fi	
+fi
 
-#####################################################################	
+#####################################################################
 # modechange script
 #
 cat <<EOF
@@ -327,40 +327,40 @@ function modechange()
 	//
 	// force encryption listbox to no selection if user tries
 	// to set WPA (PSK) with Ad-hoc mode.
-	//	 
-	if (isset('mode','adhoc')) 
+	//
+	if (isset('mode','adhoc'))
 	{
-		if (isset('encryption','psk')) 
+		if (isset('encryption','psk'))
 		{
 			document.getElementById('encryption').value = 'off';
 		}
-	} 
+	}
 	//
 	// force encryption listbox to no selection if user tries
 	// to set WPA (Radius) with anything but AP mode.
-	//	 	
-	if (!isset('mode','ap')) 
-	{		
-		if (isset('encryption','wpa')) 
+	//
+	if (!isset('mode','ap'))
+	{
+		if (isset('encryption','wpa'))
 		{
 			document.getElementById('encryption').value = 'off';
 		}
-	} 	
+	}
 
 	var v= isset('encryption','wep');
 	set_visible('wep_key_1', v);
 	set_visible('wep_key_2', v);
 	set_visible('wep_key_3', v);
 	set_visible('wep_key_4', v);
-	set_visible('wep_generate_keys', v);	
-	set_visible('wep_keyphrase', v);	
+	set_visible('wep_generate_keys', v);
+	set_visible('wep_keyphrase', v);
 	set_visible('wep_keys', v);
-		
-	if (isset('gmode','bOnly')) 
+
+	if (isset('gmode','bOnly'))
 	{
 		document.getElementById('gmode_protection').disabled = true;
-	} 
-	else 
+	}
+	else
 	{
 		document.getElementById('gmode_protection').disabled = false;
 	}
@@ -368,7 +368,7 @@ function modechange()
 	v = (isset('encryption','wpa') || isset('encryption','psk'));
 	set_visible('wpa_support', v);
 	set_visible('wpa_crypto', v);
-		
+
 	set_visible('wpapsk', isset('encryption','psk'));
 	v = (isset('encryption','psk') || isset('encryption','wpa'));
 	set_visible('install_nas', v);

@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<? 
+<?
 . /usr/lib/webif/webif.sh
 
 header "Network" "Hosts" "@TR<<Configured Hosts>>" '' "$SCRIPT_NAME"
@@ -60,7 +60,7 @@ update_ethers() {
 		del)
 			grep -E -v "^[ \t]*$2" $ETHERS_FILE > /tmp/.webif/file-ethers-new
 			mv /tmp/.webif/file-ethers-new  /tmp/.webif/file-ethers
-		;;	
+		;;
 	esac
 	ETHERS_FILE=/tmp/.webif/file-ethers
 }
@@ -96,8 +96,8 @@ awk -v "url=$SCRIPT_NAME" \
 	-f /usr/lib/webif/common.awk \
 	-f - $HOSTS_FILE <<EOF
 BEGIN {
-	FS="[ \t]"	
-	print "<div class=\"settings-title\"><h3>@TR<<Host Names>></h3></div>"	
+	FS="[ \t]"
+	print "<div class=\"settings-title\"><h3>@TR<<Host Names>></h3></div>"
 	print "<table style=\"text-align: left;\" border=\"0\" cellpadding=\"4\" cellspacing=\"4\" >"
 	print "<tr><th>@TR<<IP Address>></th><th>@TR<<Host Name>></th><th></th></tr>"
 	print "<tr><td colspan=\"3\"><hr class=\"separator\" /></td></tr>"
@@ -125,7 +125,7 @@ BEGIN {
 }
 
 END {
-	print "<tr><td>" textinput("host_ip", ip) "</td><td>" textinput("host_name", name) "</td><td style=\\"width: 10em\\">" button("add_host", "Add") "</td></tr>"	
+	print "<tr><td>" textinput("host_ip", ip) "</td><td>" textinput("host_name", name) "</td><td style=\\"width: 10em\\">" button("add_host", "Add") "</td></tr>"
 	print "<tr><td><br /><br /></td></tr>"
 	print "</table>"
 }
@@ -135,10 +135,10 @@ EOF
 awk -v "url=$SCRIPT_NAME" \
 	-v "mac=$FORM_dhcp_mac" \
 	-v "ip=$FORM_dhcp_ip" -f /usr/lib/webif/common.awk -f - $ETHERS_FILE <<EOF
-	
+
 BEGIN {
-	FS="[ \\t]"		
-	print "<div class=\"settings-title\"><h3 style=\"text-align: left;\">@TR<<DHCP Static|Static IP addresses (for DHCP)>></h3></div>"	
+	FS="[ \\t]"
+	print "<div class=\"settings-title\"><h3 style=\"text-align: left;\">@TR<<DHCP Static|Static IP addresses (for DHCP)>></h3></div>"
 	print "<table style=\"text-align: left;\" border=\"0\" cellpadding=\"4\" cellspacing=\"4\">"
 	print "<tr><th>@TR<<MAC Address>></th><th>@TR<<IP Address>></th><th></th></tr>"
 }
@@ -152,7 +152,7 @@ BEGIN {
 END {
 	print "<tr><td>" textinput("dhcp_mac", mac) "</td><td>" textinput("dhcp_ip", ip) "</td><td style=\\"width: 10em\\">" button("add_dhcp", "Add") "</td></tr>"
 	print "<tr><td><br /><br /></td></tr>"
-	print "</table>"		
+	print "</table>"
 }
 EOF
 
@@ -164,8 +164,8 @@ EOF
 		<th>@TR<<IP Address>></th>
 		<th>@TR<<Name>></th>
 		<th>@TR<<Expires in>></th>
-	</tr>	
-<? 
+	</tr>
+<?
 exists /tmp/dhcp.leases && awk -vdate="$(date +%s)" '
 $1 > 0 {
 	print "<tr>"
@@ -183,7 +183,7 @@ $1 > 0 {
 	printf "</td>"
 	print "</tr>"
 }
-' /tmp/dhcp.leases 
+' /tmp/dhcp.leases
 grep "." /tmp/dhcp.leases
 ! equal "$?" "0" &&
 {

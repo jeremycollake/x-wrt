@@ -11,7 +11,7 @@ wan_mac_addr=$(echo "$wan_config" | grep "HWaddr" | cut -d' ' -f 10)
 wan_tx_packets=$(echo "$wan_config" | grep "TX packets" | sed s/'TX packets:'//g | cut -d' ' -f 11)
 wan_rx_packets=$(echo "$wan_config" | grep "RX packets" | sed s/'RX packets:'//g | cut -d' ' -f 11)
 wan_tx_bytes=$(echo "$wan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d'(' -f 3)
-wan_rx_bytes=$(echo "$wan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d'(' -f 2 | cut -d ')' -f 1) 
+wan_rx_bytes=$(echo "$wan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d'(' -f 2 | cut -d ')' -f 1)
 # get LAN stats
 lan_config=$(ifconfig 2>&1 | grep -A 6 "`nvram get lan_ifname`")
 lan_ip_addr=$(echo "$lan_config" | grep "inet addr" | cut -d: -f 2 | sed s/Bcast//g)
@@ -19,7 +19,7 @@ lan_mac_addr=$(echo "$lan_config" | grep "HWaddr" | cut -d' ' -f 12)
 lan_tx_packets=$(echo "$lan_config" | grep "TX packets" | sed s/'TX packets:'//g | cut -d' ' -f 11)
 lan_rx_packets=$(echo "$lan_config" | grep "RX packets" | sed s/'RX packets:'//g | cut -d' ' -f 11)
 lan_tx_bytes=$(echo "$lan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d'(' -f 3)
-lan_rx_bytes=$(echo "$lan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d'(' -f 2 | cut -d ')' -f 1)  
+lan_rx_bytes=$(echo "$lan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d'(' -f 2 | cut -d ')' -f 1)
 # get wifi stats
 wlan_config=$(iwconfig 2>&1 | grep -v 'no wireless' | grep '\w')
 wlan_ssid=$(echo "$wlan_config" | grep 'ESSID' | cut -d':' -f 2 | sed s/'"'//g)
@@ -41,7 +41,7 @@ form_dns_servers=$(awk '
 	BEGIN { counter=1 }
 	/nameserver/ {print "field|@TR<<DNS Server>> " counter "|dns_server_" counter "\n string|" $2 "\n" ;counter+=1}
 	' /etc/resolv.conf)
- 
+
 display_form <<EOF
 
 start_form|@TR<<WAN>>
@@ -105,29 +105,29 @@ start_form|@TR<<Raw Information>>
 EOF
 ?>
 	<tr><td><br /></td></tr>
-	<div class="smalltext">               
-        <tr>
-        <th><b>@TR<<Interfaces Status|WAN Interface>></b></th>
-        </tr>
-        <tr>
-                <td><pre><? ifconfig 2>&1 | grep -A 6 "`nvram get wan_ifname`" ?></pre></td>
-        </tr>
-        <tr><td><br /><br /></td></tr>
-        <tr>
-        <th><b>@TR<<Interfaces Status|LAN Interface>></b></th>
-        </tr>
-        <tr>
-                <td><pre><? ifconfig 2>&1 | grep -A 6 "`nvram get lan_ifname`" ?></pre></td>
-        </tr>
-         <tr><td><br /><br /></td></tr>
-        <tr>
-        <th><b>@TR<<Interfaces Status|Wireless Interface>></b></th>
-        </tr>
-        <tr>
-                <td><pre><? iwconfig 2>&1 | grep -v 'no wireless' | grep '\w' ?></pre></td>
-        </tr>                   
-        </div>         
-<? 
+	<div class="smalltext">
+		<tr>
+			<th><b>@TR<<Interfaces Status|WAN Interface>></b></th>
+		</tr>
+		<tr>
+			<td><pre><? ifconfig 2>&1 | grep -A 6 "`nvram get wan_ifname`" ?></pre></td>
+		</tr>
+		<tr><td><br /><br /></td></tr>
+		<tr>
+			<th><b>@TR<<Interfaces Status|LAN Interface>></b></th>
+		</tr>
+		<tr>
+			<td><pre><? ifconfig 2>&1 | grep -A 6 "`nvram get lan_ifname`" ?></pre></td>
+		</tr>
+		<tr><td><br /><br /></td></tr>
+		<tr>
+			<th><b>@TR<<Interfaces Status|Wireless Interface>></b></th>
+		</tr>
+		<tr>
+			<td><pre><? iwconfig 2>&1 | grep -v 'no wireless' | grep '\w' ?></pre></td>
+		</tr>
+		</div>
+<?
 
 display_form <<EOF
 end_form

@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<? 
+<?
 . /usr/lib/webif/webif.sh
 
 #FILE_NAME="/var/log/messages"
@@ -13,10 +13,10 @@ if empty "$FORM_submit" ; then
 	FORM_type=${FORM_type:-"circular"}
 	FORM_ipaddr="${log_ipaddr:-$(nvram get log_ipaddr)}"
 	FORM_log_port=${log_port:-$(nvram get log_port)}
-       	FORM_log_mark=${log_mark:-$(nvram get log_mark)}
-    	FORM_log_mark=${FORM_log_mark:-0}
-    	FORM_filename="${log_file:-$(nvram get log_file)}"
-    	FORM_filename=${FORM_filename:-"/var/log/messages"}
+		FORM_log_mark=${log_mark:-$(nvram get log_mark)}
+		FORM_log_mark=${FORM_log_mark:-0}
+		FORM_filename="${log_file:-$(nvram get log_file)}"
+		FORM_filename=${FORM_filename:-"/var/log/messages"}
 else
 validate <<EOF
 ip|FORM_ipaddr|@TR<<Remote host>>||$FORM_ipaddr

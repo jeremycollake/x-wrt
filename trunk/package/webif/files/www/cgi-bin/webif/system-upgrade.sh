@@ -45,7 +45,7 @@ NOINPUT=1
 equal "$REQUEST_METHOD" "GET" && {
 	cat <<EOF
 	<script type="text/javascript">
-	
+
 function statusupdate() {
 	document.getElementById("form_submit").style.display = "none";
 	document.getElementById("status_text").style.display = "inline";

@@ -9,15 +9,15 @@
 #	Configures general system settings.
 #
 # Author(s) [in order of work date]:
-#   	Original webif developers -- todo
+#		Original webif developers -- todo
 #	Markus Wigge <markus@freewrt.org>
-#   	Jeremy Collake <jeremy.collake@gmail.com>
+#		Jeremy Collake <jeremy.collake@gmail.com>
 #
 # Major revisions:
 #
 # NVRAM variables referenced:
 #	time_zone
-#  	ntp_server
+#	ntp_server
 #
 # Configuration files referenced:
 #   none
@@ -186,7 +186,7 @@ is_bcm947xx && {
 		dangerous_form_start="start_form|@TR<<Dangerous Settings>>"
 		dangerous_form_end="end_form"
 		dangerous_form_help="helpitem|Clock Frequency
-					helptext|HelpText Clock Frequency#Do not change this. You may brick your router if you do not know what you are doing. We've tried to disable it for all routers that can be bricked through an invalid clock frequency setting. Only Linksys WRT54G v4 units are known to be unbrickable by a bad clkfreq setting."
+		helptext|HelpText Clock Frequency#Do not change this. You may brick your router if you do not know what you are doing. We've tried to disable it for all routers that can be bricked through an invalid clock frequency setting. Only Linksys WRT54G v4 units are known to be unbrickable by a bad clkfreq setting."
 	}
 }
 
@@ -205,7 +205,7 @@ is_bcm947xx && {
 TIMEZONE_OPTS=$(
 	awk '
 		BEGIN {
-			FS="	"
+			FS="    "
 			last_group=""
 		}
 		/^(#.*)?$/ {next}

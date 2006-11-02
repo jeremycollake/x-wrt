@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<? 
+<?
 . /usr/lib/webif/webif.sh
 
 header "System" "File Editor" "@TR<<File Editor>>" ''
@@ -34,10 +34,10 @@ FORM_path="$(pwd)"
 edit_pathname="$FORM_path/$FORM_edit"
 saved_filename="/tmp/.webif/edited-files/$edit_pathname"
 
-! empty "$FORM_save" && {	
+! empty "$FORM_save" && {
 	SAVED=1
 	mkdir -p "/tmp/.webif/edited-files/$FORM_path"
-	echo "$FORM_filecontent" > "$saved_filename"	
+	echo "$FORM_filecontent" > "$saved_filename"
 }
 
 empty "$FORM_cancel" || FORM_edit=""
@@ -58,7 +58,7 @@ else
 		-v path="$FORM_path" \
 		-v file="$FORM_edit" \
 		-f /usr/lib/webif/common.awk \
-		-f /usr/lib/webif/editor.awk	
+		-f /usr/lib/webif/editor.awk
 fi
 
 footer ?>

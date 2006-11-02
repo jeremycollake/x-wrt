@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<? 
+<?
 . /usr/lib/webif/webif.sh
 ###################################################################
 # Advanced wireless configuration
@@ -7,26 +7,26 @@
 # Description:
 #	Configure additional wireless settings.
 #
-# Author(s) [in order of work date]: 
+# Author(s) [in order of work date]:
 #       Original webif authors.
-# 	Jeremy Collake <jeremy.collake@gmail.com>
+#	Jeremy Collake <jeremy.collake@gmail.com>
 #       Travis Kemen <kemen04@gmail.com>
 #
 # Major revisions:
 #
 # NVRAM variables referenced:
 #
-# Configuration files referenced: 
+# Configuration files referenced:
 #   none
 #
 
-load_settings "wireless" 
+load_settings "wireless"
 
 header "Network" "Advanced Wireless" "@TR<<Advanced Wireless Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 #####################################################################
 # defaults - ONLY used in the rare case these nvram variables are unset
-# todo: maybe change to 84? 
+# todo: maybe change to 84?
 DEFAULT_TXPWR=28
 DEFAULT_AP_ISOLATE=0
 
@@ -55,16 +55,16 @@ while [ "$txpwr" -le 251 ]; do
 	VALID_TXPWR="${VALID_TXPWR}
 	option|$txpwr"
 	let "txpwr+=1"
-done		
-		
+done
+
 #####################################################################
 # Initialize forms
 if empty "$FORM_submit"; then
 	FORM_macmode="${wl0_macmode:-$(nvram get wl0_macmode)}"
 	FORM_isolate=${wl0_ap_isolate:-$(nvram get wl0_ap_isolate)}
 	FORM_isolate=${FORM_isolate:-$DEFAULT_AP_ISOLATE}
-	FORM_txpwr=${wl0_txpwr:-$(nvram get wl0_txpwr)}		
-	FORM_txpwr=${FORM_txpwr:-$DEFAULT_TXPWR}	
+	FORM_txpwr=${wl0_txpwr:-$(nvram get wl0_txpwr)}
+	FORM_txpwr=${FORM_txpwr:-$DEFAULT_TXPWR}
 	FORM_lazywds=${wl0_lazywds:-$(nvram get wl0_lazywds)}
 	case "$FORM_lazywds" in
 		1|on|enabled) FORM_lazywds=1;;
@@ -76,16 +76,16 @@ if empty "$FORM_submit"; then
 	FORM_txdiv=${FORM_txdiv:-3}
 	FORM_wl0_plcphdr=${wl0_plcphdr:-$(nvram get wl0_plcphdr)}
 	FORM_wl0_frag=${wl0_frag:-$(nvram get wl0_frag)}
-        FORM_wl0_frag=${FORM_wl0_frag:-2346}
-        FORM_wl0_rts=${wl0_rts:-$(nvram get wl0_rts)}
-        FORM_wl0_rts=${FORM_wl0_rts:-2347}
-        FORM_wl0_dtim=${wl0_dtim:-$(nvram get wl0_dtim)}
-        FORM_wl0_dtim=${FORM_wl0_dtim:-1}
-        FORM_wl0_bcn=${wl0_bcn:-$(nvram get wl0_bcn)}
-        FORM_wl0_bcn=${FORM_wl0_bcn:-100}
-        FORM_wl0_maxassoc=${wl0_bcn:-$(nvram get wl0_maxassoc)}
-        FORM_wl0_maxassoc=${FORM_wl0_maxassoc:-128}
-        FORM_wl0_distance=${wl0_distance:-$(nvram get wl0_distance)}
+	FORM_wl0_frag=${FORM_wl0_frag:-2346}
+	FORM_wl0_rts=${wl0_rts:-$(nvram get wl0_rts)}
+	FORM_wl0_rts=${FORM_wl0_rts:-2347}
+	FORM_wl0_dtim=${wl0_dtim:-$(nvram get wl0_dtim)}
+	FORM_wl0_dtim=${FORM_wl0_dtim:-1}
+	FORM_wl0_bcn=${wl0_bcn:-$(nvram get wl0_bcn)}
+	FORM_wl0_bcn=${FORM_wl0_bcn:-100}
+	FORM_wl0_maxassoc=${wl0_bcn:-$(nvram get wl0_maxassoc)}
+	FORM_wl0_maxassoc=${FORM_wl0_maxassoc:-128}
+	FORM_wl0_distance=${wl0_distance:-$(nvram get wl0_distance)}
 else
 #####################################################################
 # save forms
@@ -108,18 +108,18 @@ EOF
 		save_setting wireless wl0_lazywds "$FORM_lazywds"
 		save_setting wireless wl0_wdstimeout "$FORM_wdstimeout"
 		save_setting wireless wl0_macmode "$FORM_macmode"
-		save_setting wireless wl0_txpwr "$FORM_txpwr"	
-		# todo: currently don't save if verify on above failed.. decide on this	
+		save_setting wireless wl0_txpwr "$FORM_txpwr"
+		# todo: currently don't save if verify on above failed.. decide on this
 		save_setting wireless wl0_ap_isolate "$FORM_isolate"
 		save_setting wireless wl0_frameburst "$FORM_frameburst"
 		save_setting wireless wl0_antdiv "$FORM_antdiv"
 		save_setting wireless wl0_txdiv "$FORM_txdiv"
 		save_setting wireless wl0_plcphdr "$FORM_wl0_plcphdr"
-                save_setting wireless wl0_frag  "$FORM_wl0_frag"
-                save_setting wireless wl0_rts   "$FORM_wl0_rts"
-                save_setting wireless wl0_dtim  "$FORM_wl0_dtim"
-                save_setting wireless wl0_bcn   "$FORM_wl0_bcn"
-                save_setting wireless wl0_distance   "$FORM_wl0_distance"
+		save_setting wireless wl0_frag  "$FORM_wl0_frag"
+		save_setting wireless wl0_rts   "$FORM_wl0_rts"
+		save_setting wireless wl0_dtim  "$FORM_wl0_dtim"
+		save_setting wireless wl0_bcn   "$FORM_wl0_bcn"
+		save_setting wireless wl0_distance   "$FORM_wl0_distance"
 	}
 fi
 
@@ -130,7 +130,7 @@ cat <<EOF
 
 function modechange() {
 	var v = (value("macmode") == "allow") || (value("macmode") == "deny");
-	set_visible('mac_list', v);	
+	set_visible('mac_list', v);
 }
 </script>
 EOF
@@ -151,8 +151,6 @@ field|@TR<<Automatic WDS>>
 select|lazywds|$FORM_lazywds
 option|1|@TR<<Enabled>>
 option|0|@TR<<Disabled>>
-
-
 
 field|@TR<<Filter Mode>>
 select|macmode|$FORM_macmode

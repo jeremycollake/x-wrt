@@ -1,9 +1,9 @@
 #!/usr/bin/webif-page
-<? 
+<?
 . /usr/lib/webif/webif.sh
 
 #---------------------------------------------
-# sets the type of log: file or circular 
+# sets the type of log: file or circular
 # defaults to circular, wich is the default install for openwrt
 # use log-setup.sh to modify these parameters
 LOG_TYPE=$(nvram get log_type)
@@ -48,7 +48,7 @@ elif ! empty "$FORM_filter" ; then
 			FORM_filter=$FORM_act" "
 		fi
 	fi
-else 
+else
 	# no filter selected
 	FORM_act="A"
 	FORM_value=""
@@ -82,7 +82,7 @@ EOF
 
 # display --------------------------------
 $LOGREAD | sort -r | awk -v filter=$FORM_filter -F ' ' '
-BEGIN { 
+BEGIN {
 	print "<h3>Listing</h3>";
 	print "<table width=\"90%\">";
 	print "<th>Date</th><th>Prefix</th><th>Source IP</th><th>Destination IP</th><th>Proto</th><th>Source Port</th><th>Dest. Port</th><th>Type</th>";
@@ -94,7 +94,7 @@ BEGIN {
 	if ( ( filter != "" ) && ( $0 !~ filter ) ) next;
 
 	i=1; #field counter
-			
+
 	while ( ($i !~ /IN=/)  && (i <= NF) ) i++;
 	if ( i > NF) next;
 	action=""
@@ -107,24 +107,24 @@ BEGIN {
 #	if_in=substr( champs[4], 4, length(champs[4]) - 3);
 #	action=champs[3];
 #	prefix=champs[2];
-	
+
 	while ( ($i !~ /OUT=/) && (i <= NF) ) i++;
 	if ( i > NF) next;
 	if_out=substr( $i, 5, length($i) - 4);
 	if (if_out == "") if_out="-";
-	
+
 	while ( ($i !~ /SRC=/)  && (i <= NF) ) i++;
 	if ( i > NF) next;
 	ip_src=substr( $i, 5, length($i) - 4);
-	
+
 	while (($i !~ /DST=/)  && (i <= NF) ) i++;
 	if ( i > NF) next;
 	ip_dst=substr( $i, 5, length($i) - 4);
-	
+
 	while ( ($i !~ /PROTO=/)  && (i <= NF) ) i++;
 	if ( i > NF) next;
 	proto=substr( $i, 7, length($i) - 6);
-	
+
 	spt="";
 	dpt="";
 	type="";
@@ -142,7 +142,7 @@ BEGIN {
 		{
 		while ( ($i !~ /TYPE=/)  && (i <= NF) ) i++;
 		if ( i > NF) next;
-		type=substr( $i, 6, length($i) - 5);		
+		type=substr( $i, 6, length($i) - 5);
 		}
 
 	print "<tr><td>"$1" "$2" "$3"</td>"\

@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<? 
+<?
 . "/usr/lib/webif/webif.sh"
 load_settings network
 br_num=$(ifconfig -a|grep br |wc -l |cut -d " " -f 7)
@@ -18,7 +18,7 @@ handle_list "$FORM_dnsremove" "$FORM_dnsadd" "$FORM_dnssubmit" 'ip|FORM_dnsadd|@
 }
 FORM_dnsadd=${FORM_dnsadd:-192.168.1.1}
 
-if empty "$FORM_submit"; then 
+if empty "$FORM_submit"; then
 	FORM_wifi_enable="${wifi_enable:-$(nvram get wifi_proto)}"
 	case "$FORM_wifi_enable" in
 		static)	;;
@@ -28,7 +28,7 @@ if empty "$FORM_submit"; then
 	esac
 
 	lan_interfaces_save=$($lan_interfaces_current |sed s/$wifi_interface//)
-	
+
 	case "$FORM_wifi_enable" in
 		static)
 			FORM_wifi_ipaddr=${wifi_ipaddr:-$(nvram get wifi_ipaddr)}
@@ -36,7 +36,7 @@ if empty "$FORM_submit"; then
 			FORM_wifi_gateway=${wifi_gateway:-$(nvram get wifi_gateway)}
 			;;
 	esac
-else 
+else
 	case "$FORM_wifi_enable" in
 		static)
 SAVED=1
@@ -82,10 +82,10 @@ function modechange()
 	set_visible('wifi_dns', isset('wifi_enable','static'));
 	if (isset('wifi_enable','none'))
 	{
-            hide('wifi_config');
-            hide('wifi_config');
+		hide('wifi_config');
+		hide('wifi_config');
 	}
-	
+
 	hide('save');
 	show('save');
 }

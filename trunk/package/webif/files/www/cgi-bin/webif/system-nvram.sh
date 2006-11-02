@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<? 
+<?
 #
 # credit goes to luke-jr+openwrt@utopios.org
 #
@@ -91,7 +91,7 @@ else
 	echo '<tr><td><input style="width: 100%;" name="var"></td><td style="vertical-align: middle;"><em style="font-size: 75%;">New Variable</em></td>'
 	echo '<td colspan="2"><input type="submit" name="action" value="Add" style="width: 100%;" /></td>'
 	echo '</tr>'
-	
+
 	nvram show 2>/dev/null | sed 's,^\([^=]\+\)=.*$,\1,;t;d' | sed '/eou_private_key/d' | sed '/eou_public_key/d' | sed '/sdram_/d' | sort |
 	while IFS='=' read name; do
 		value=$(nvram get "$name")

@@ -1,19 +1,19 @@
 #!/usr/bin/webif-page
-<? 
+<?
 ###################################################################
 # Crond
 #
 # Description:
 #	Cron daemon configuration.
 #
-# Author(s) [in order of work date]: 
+# Author(s) [in order of work date]:
 #       Travis Kemen <kemen04@gmail.com>
 #
 # Major revisions:
 #
 # NVRAM variables referenced:
 #
-# Configuration files referenced: 
+# Configuration files referenced:
 #   none
 #
 crondir_base="/var/spool/cron"
@@ -25,15 +25,15 @@ crondir="$crondir_base/crontabs"
 load_settings "cron"
 
 [ -z $FORM_submit ] && {
-	
-    FORM_cron_enable=${cron_enable:-$(nvram get cron_enable)}
+
+	FORM_cron_enable=${cron_enable:-$(nvram get cron_enable)}
 	FORM_cron_enable=${FORM_cron_enable:-"0"}
 
 } || {
 	SAVED=1
-    {
-    save_setting cron cron_enable $FORM_cron_enable
-    }
+	{
+	save_setting cron cron_enable $FORM_cron_enable
+	}
 }
 
 header "System" "Cron" "@TR<<Cron>>" '' "$SCRIPT_NAME"
@@ -44,12 +44,12 @@ radio|cron_enable|$FORM_cron_enable|1|Enable
 radio|cron_enable|$FORM_cron_enable|0|Disable
 helpitem|Cron
 helptext|HelpText Cron#Cron is a linux daemon that executes commands are desired times or intervals.
-end_form" 
+end_form"
 ?>
 
 <a href="system-crontabs.sh">View Crontab files</a>
 
-<? 
+<?
 show_validated_logo
 footer ?>
 <!--

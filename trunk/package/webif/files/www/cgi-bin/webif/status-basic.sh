@@ -1,7 +1,7 @@
 #!/usr/bin/webif-page
-<? 
+<?
 . "/usr/lib/webif/webif.sh"
-header "Status" "System" "@TR<<Device Status>>" 
+header "Status" "System" "@TR<<Device Status>>"
 ?>
 
 <meta http-equiv="refresh" content="20" />
@@ -10,11 +10,11 @@ MEMINFO=$(free | sed 1,3d)
 nI="0"
 for CUR_VAR in $MEMINFO; do
 	case "$nI" in
-	  1) TOTAL_MEM=$CUR_VAR;;
-	  3) FREE_MEM=$CUR_VAR
-	  	break;;	  	
-	esac		
-	let "nI+=1"		
+		1)	TOTAL_MEM=$CUR_VAR;;
+		3)	FREE_MEM=$CUR_VAR
+			break;;
+	esac
+	let "nI+=1"
 done
 
 USED_MEM=$(expr $TOTAL_MEM - $FREE_MEM)
@@ -35,14 +35,13 @@ empty "$_loadavg" && {
 }
 
 mounts_form=$(
-df | uniq | awk 'BEGIN { mcount=0 }; 
+df | uniq | awk 'BEGIN { mcount=0 };
 	/\// {
-	filled_caption=$5;				
-	print "string|<tr><td><strong>"$6"</strong></td><td>"$1"</td></tr>"		
-	print "progressbar|mount_" mcount "|&nbsp;&nbsp;" $3 "<div class=kb>KB</div> of " $2 "<div class=kb>KB</div>|200|" $5 "|" filled_caption "|"; mcount+=1	
+		filled_caption=$5;
+		print "string|<tr><td><strong>"$6"</strong></td><td>"$1"</td></tr>"
+		print "progressbar|mount_" mcount "|&nbsp;&nbsp;" $3 "<div class=kb>KB</div> of " $2 "<div class=kb>KB</div>|200|" $5 "|" filled_caption "|"; mcount+=1
 	}'
-	)
-		
+)
 
 display_form <<EOF
 start_form|Load Average

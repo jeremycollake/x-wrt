@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<? 
+<?
 #
 #credit goes to arantius and GasFed
 #
@@ -13,7 +13,7 @@ echo "<center>"
 ?>
 <br /><br />
 <?if [ "$FORM_if" ] ?>
-	<embed src="/svggraph/graph_if.svg?if=<? echo -n ${FORM_if} ?>" 
+	<embed src="/svggraph/graph_if.svg?if=<? echo -n ${FORM_if} ?>"
 		width="500" height="250" type="image/svg+xml"
 	/>
 <?fi?>

@@ -3,12 +3,12 @@
 . /usr/lib/webif/webif.sh
 header "Reboot" "Reboot" ""
 timeout=45
-if empty "$FORM_reboot"; then	  	
+if empty "$FORM_reboot"; then
 	reboot_msg="<form enctype=\"multipart/form-data\" method=\"post\"><input type=\"submit\" value=\" Yes, really reboot now \" name=\"reboot\" /></form>"
 else
 	router_ip=$(nvram get lan_ipaddr)
 	echo "<meta http-equiv="refresh" content=$timeout;http://$router_ip />"
-	reboot_msg="Rebooting now... router should be up in about $timeout seconds. The webif should automatically reload."	
+	reboot_msg="Rebooting now... router should be up in about $timeout seconds. The webif should automatically reload."
 fi
 
 ?>

@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<? 
+<?
 . /usr/lib/webif/webif.sh
 
 mkdir -p /tmp/.webif
@@ -179,7 +179,7 @@ function set_data() {
 	_l["dest"] = dest
 	_l["dport"] = dport
 	_l["layer7"] = layer7
-	
+
 	if (del_proto != "") _l["proto"] = ""
 	if (del_src != "") _l["src"] = ""
 	if (del_sport != "") _l["sport"] = ""
@@ -213,7 +213,7 @@ function iptstr2edit(str, edit) {
 	if ((new_match == "src") || (new_match == "dest")) _l[new_match] = "0.0.0.0"
 	if ((new_match == "sport") || (new_match == "dport")) _l[new_match] = "0"
 	if ((new_match != "") && (_l[new_match] == "")) _l[new_match] = " "
-	
+
 	if (_l["proto"] != "") {
 		edit = edit "<tr><td class=\\"match_title\\">@TR<<Protocol>>: </td><td>"
 		edit = edit "<select name=\\"proto\\">"
@@ -297,7 +297,7 @@ BEGIN {
 (\$1 == "drop") || (\$1 == "accept") || (\$1 == "forward" ) {
 	if (n == edit) {
 		printf "<tr><td>&nbsp;</td><td>" button("save", "Save") button("cancel", "Cancel") "</td></tr>"
-		
+
 		print "</table>"
 		print "</td></tr>"
 		print "</form>"
@@ -326,11 +326,11 @@ END {
 	print "<br /><br />"
 	#print "<div class=\\"helpform\\">"
 	print "<div class=\\"helpitem\\">@TR<<Firewall>>:</div>"
-	print "<div class=\\"helptext\\">Here you can forward ports and more. If you wish to manually configure these instead, use '/etc/config/firewall', not '/etc/firewall.user'. Although either works, only the former is used by this page.</div>"	
+	print "<div class=\\"helptext\\">Here you can forward ports and more. If you wish to manually configure these instead, use '/etc/config/firewall', not '/etc/firewall.user'. Although either works, only the former is used by this page.</div>"
 	print "<div class=\\"helpitem\\">@TR<<Forwarding a port>>:</div>"
-	print "<div class=\\"helptext\\">If you would like to forward port 999 TCP from the internet to a local computer at 192.168.100.1, it might look like below:</div>"			
+	print "<div class=\\"helptext\\">If you would like to forward port 999 TCP from the internet to a local computer at 192.168.100.1, it might look like below:</div>"
 	#print "</div>"
-	print "<div class=\\"helptext\\"><br />Destination ports: 999 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Target: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: 999 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protocol: TCP</div>"		
+	print "<div class=\\"helptext\\"><br />Destination ports: 999 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Target: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: 999 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protocol: TCP</div>"
 	print end_form(" ");
 }
 EOF
