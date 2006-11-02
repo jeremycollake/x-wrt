@@ -49,12 +49,15 @@ remove_lines_from_file() {
 #############################################################################
 
 load_settings_ex() {
+echo "deprecated" > /dev/null
 }
 
 save_setting_ex() {
+echo "deprecated" > /dev/null
 }
 
 commit_settings_ex() {
+echo "deprecated" > /dev/null
 }
 
 #############################################################################
