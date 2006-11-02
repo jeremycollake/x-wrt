@@ -18,6 +18,12 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
+###########################################################################
+# uci_load(package)
+#
+#  This function loads config given as $1 into shell variables named 
+#   CONFIG_group_variable=value
+###########################################################################
 uci_load() {
 	local PACKAGE="$1"	# todo: this was missing, assume necessary - check later
 	config_load "$PACKAGE"
@@ -28,6 +34,12 @@ uci_load() {
 	}
 }
 
+
+###########################################################################
+# uci_do_update(filename, update)
+#
+#  
+###########################################################################
 uci_do_update() {
 	local FILENAME="$1"
 	local UPDATE="$2"
@@ -40,6 +52,11 @@ BEGIN {
 EOF
 }
 
+###########################################################################
+# uci_add_update(filename, update)
+#
+#
+###########################################################################
 uci_add_update() {
 	local PACKAGE="$1"
 	local UPDATE="$2"
@@ -50,6 +67,11 @@ uci_add_update() {
 	echo "$UPDATE" >> "/tmp/.uci/${PACKAGE_BASE}"
 }
 
+###########################################################################
+# uci_set(package, config_group, option, value)
+#
+#  Set a particular option value.
+###########################################################################
 uci_set() {
 	local PACKAGE="$1"
 	local CONFIG="$2"
@@ -63,6 +85,11 @@ uci_set() {
 	) || uci_add_update "$PACKAGE" "CONFIG_SECTION='$CONFIG'${N}option '$OPTION' '$VALUE'"
 }
 
+###########################################################################
+# uci_add(package, type, config_group)
+#
+#  Add a new config group.
+###########################################################################
 uci_add() {
 	local PACKAGE="$1"
 	local TYPE="$2"
@@ -71,6 +98,11 @@ uci_add() {
 	uci_add_update "$PACKAGE" "config '$TYPE' '$CONFIG'"
 }
 
+###########################################################################
+# uci_rename(package, config_group, new_config_group)
+#
+#
+###########################################################################
 uci_rename() {
 	local PACKAGE="$1"
 	local CONFIG="$2"
@@ -79,6 +111,11 @@ uci_rename() {
 	uci_add_update "$PACKAGE" "config_rename '$CONFIG' '$VALUE'"
 }
 
+###########################################################################
+# uci_remove(package, config_group, option)
+#
+#
+###########################################################################
 uci_remove() {
 	local PACKAGE="$1"
 	local CONFIG="$2"
@@ -91,6 +128,11 @@ uci_remove() {
 	fi
 }
 
+###########################################################################
+# uci_commit(package)
+#
+#
+###########################################################################
 uci_commit() {
 	local PACKAGE="$1"
 	local PACKAGE_BASE="$(basename "$PACKAGE")"
