@@ -186,7 +186,7 @@ echo '@TR<<Applying>> @TR<<conntrack settings>> ...'
 		remove_lines_from_file "/etc/sysctl.conf" "net.ipv4.netfilter.$variable_name"
 		echo "net.ipv4.netfilter.$variable_name=$variable_value" >> /etc/sysctl.conf
 	done
-	sysctl -p   # reload sysctl.conf
+	sysctl -p 2>&-  # reload sysctl.conf
 rm -f /tmp/.webif/config-conntrack
 echo '@TR<<Done>>'
 done
