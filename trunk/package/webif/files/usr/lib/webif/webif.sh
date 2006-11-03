@@ -4,6 +4,7 @@ cgidir=/www/cgi-bin/webif
 rootdir=/cgi-bin/webif
 indexpage=index.sh
 . /usr/lib/webif/functions.sh
+. /lib/config/uci.sh
 . /usr/lib/webif/pkgfuncs.sh
 
 categories() {
@@ -39,7 +40,7 @@ ShowUntestedWarning() {
 
 update_changes() {
 	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))
-	CHANGES_UCI=$(ls /tmp/.webif-uci/config-* 2>&- | wc -l)
+	CHANGES_UCI=$(ls /tmp/.uci/* 2>&- | wc -l)
 	EDITED_FILES=$(find "/tmp/.webif/edited-files" -type f 2>&- | wc -l)
 	CHANGES=$(($CHANGES + $EDITED_FILES + $CHANGES_UCI))
 }

@@ -3,6 +3,7 @@
 # Default handlers for config files
 #
 . /usr/lib/webif/functions.sh
+. /lib/config/uci.sh
 cron_init="/etc/init.d/S51crond"
 
 HANDLERS_config='
@@ -267,8 +268,10 @@ rm -f "config-*"
 #
 # now apply any UCI config changes
 #
-commit_settings_ex
-rm -f "/tmp/.webif-uci/config-*"
+for package in $(ls /tmp/.uci/*); do
+	echo "@TR<<Committing>> $package ..."
+	uci_commit "$package"
+done
 
 # give user more time to read output from this page ??
 # sleep 2 
