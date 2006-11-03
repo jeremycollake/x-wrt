@@ -11,7 +11,7 @@ case "$FORM_mode" in
 	nochange) header $FORM_cat . "@TR<<No config change.|No configuration changes were made.>>";;
 	clear)
 		rm -rf /tmp/.webif >&- 2>&-
-		rm -rf /tmp/.webif-uci >&- 2>&- 
+		rm -rf /tmp/.uci >&- 2>&- 
 		header $FORM_cat . "@TR<<Config discarded.|Your configuration changes have been discarded.>>"
 		CHANGES=""
 		echo "${FORM_prev:+<meta http-equiv=\"refresh\" content=\"2; URL=$FORM_prev\" />}"
@@ -32,9 +32,9 @@ case "$FORM_mode" in
 				CONFIGFILES="$CONFIGFILES ${configname#/tmp/.webif/file-}"
 			}
 		done		
-		for configname in /tmp/.webif-uci/config-*; do
+		for configname in /tmp/.uci/*; do
 			grep = $configname >&- 2>&- && {
-				echo -n "<h3>${configname#/tmp/.webif-uci/config-}</h3><br /><pre>"
+				echo -n "<h3>${configname#/tmp/.uci/}</h3><br /><pre>"
 				cat $configname
 				echo '</pre><br />'
 			}
