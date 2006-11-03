@@ -255,7 +255,7 @@ reload_log() {
 	cat /tmp/.webif/config-* 2>&- | grep '=' >&- 2>&- && {
 		cat /tmp/.webif/config-* 2>&- | tee fd/1 | xargs -n1 nvram set
 		echo "@TR<<Committing>> NVRAM ..."
-		#nvram commit
+		nvram commit
 	}
 )
 for config in $(ls config-* 2>&-); do
