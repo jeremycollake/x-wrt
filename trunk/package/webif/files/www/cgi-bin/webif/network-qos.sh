@@ -37,10 +37,10 @@ else
 display_form <<EOF
 onchange|modechange
 start_form|@TR<<QoS Packages>>
+field|Nbd's QoS Scripts (recommended)|nbd_qos
+submit|install_nbd|Install
 field|Rudy's QoS Scripts|rudy_qos
 submit|install_rudy|Install
-field|Nbd's QoS Scripts (unsupported by webif)|nbd_qos
-submit|install_nbd|Install
 end_form
 EOF
 fi
