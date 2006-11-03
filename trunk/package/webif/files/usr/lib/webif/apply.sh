@@ -278,5 +278,3 @@ for package in $(ls /tmp/.uci/*); do
 	esac
 done
 
-# give user more time to read output from this page ??
-# sleep 2 
