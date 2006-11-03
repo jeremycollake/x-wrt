@@ -108,11 +108,14 @@ fi
 @TR<<Translator_Credit|The translation you are currently using is authored by (nobody)>>.
 </td></tr>
 <tr><td>
-This device is running <a href="http://www.openwrt.org">OpenWrt</a> or a close derivative.
+@TR<<UCI>> @TR<<facilitating code>> @TR<<Copyright>> (C) 2006 by Fokus Fraunhofer <carsten.tittel@fokus.fraumhofer.de>.
+</td></tr>
+<tr><td>
+@TR<<This device is running>> <a href="http://www.openwrt.org">OpenWrt</a> @TR<<or a close derivative>>.
 </td></tr>
 <tr><td><br /></td></tr>
 <tr><td>
-<font size="-1">@TR<<GPL_Text|This program is free software; you can redistribute it and/or <br />modify it under the terms of the GNU General Public License <br />as published by the Free Software Foundation; either version 2 <br />of the License, or (at your option) any later version.</font> <br /> >>
+@TR<<GPL_Text|This program is free software; you can redistribute it and/or <br />modify it under the terms of the GNU General Public License <br />as published by the Free Software Foundation; either version 2 <br />of the License, or (at your option) any later version.<br /> >>
 </td></tr>
 </tbody></table>
 <br />
