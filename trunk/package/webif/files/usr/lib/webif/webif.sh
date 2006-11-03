@@ -37,16 +37,15 @@ ShowUntestedWarning() {
 	echo "<div class=\"warning\">WARNING: This page is untested and may or may not work correctly.</div>"
 }
 
-
 update_changes() {
 	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))
 	EDITED_FILES=$(find "/tmp/.webif/edited-files" -type f 2>&- | wc -l)
-	# calculate number of uci changes
+	CHANGES=$(($CHANGES + $EDITED_FILES))
+	# calculate and add number of pending uci changes
 	for uci_tmp_file in $(ls /tmp/.uci/*); do
 		CHANGES_CUR=$(cat "$uci_tmp_file" | grep CONFIG_SECTION | wc -l)
 		CHANGES=$(($CHANGES + $CHANGES_CUR))
-	done
-	CHANGES=$(($CHANGES + $EDITED_FILES))
+	done	
 }
 
 pcnt=0
@@ -342,9 +341,5 @@ handle_list() {
 	fi
 }
 
-is_bcm947xx() {
-	read _systype < /proc/cpuinfo
-	equal "${_systype##* }" "BCM947XX"
-}
 
 

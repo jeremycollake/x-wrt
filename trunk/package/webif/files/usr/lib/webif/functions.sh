@@ -31,6 +31,11 @@ exists() {
 	( < $1 ) 2>&-
 }
 
+is_bcm947xx() {
+	read _systype < /proc/cpuinfo
+	equal "${_systype##* }" "BCM947XX"
+}
+
 remove_lines_from_file() {
 	# $1=filename
 	# $2=substring match indicating lines to remove (case sensitive)
@@ -39,25 +44,6 @@ remove_lines_from_file() {
 		local _substr_sed=$(echo "$2" | sed s/'\/'/'\\\/'/g)							
 		cat "$1" |  sed /$_substr_sed/d > "$1"
 	}
-}
-
-#############################################################################
-# UCI config functions
-# 
-# !!! These are deprecated. See /lib/config/uci.sh. !!!
-#
-#############################################################################
-
-load_settings_ex() {
-echo "deprecated" > /dev/null
-}
-
-save_setting_ex() {
-echo "deprecated" > /dev/null
-}
-
-commit_settings_ex() {
-echo "deprecated" > /dev/null
 }
 
 #############################################################################
@@ -83,7 +69,6 @@ validate() {
 	fi
 }
 
-
 save_setting() {
 	# $1 = group
 	# $2 = name
@@ -98,5 +83,4 @@ save_setting() {
 	}
 	equal "$oldval" "$3" || echo "$2=\"$3\"" >> /tmp/.webif/config-$1
 }
-
 
