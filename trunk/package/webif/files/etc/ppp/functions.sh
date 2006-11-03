@@ -1,5 +1,3 @@
-***************
-*** 0 ****
 #!/bin/sh
 
 . /etc/functions-net.sh
