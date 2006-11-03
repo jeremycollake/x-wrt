@@ -53,7 +53,7 @@ function modechange()
 	else
 	{
 		document.getElementById('wan_upload').disabled = true;
-		document.getElementById('wan_download').disabled = true;
+		document.getElementById('wan_download').disabled = true;		
 	}
 }
 </script>
@@ -62,7 +62,7 @@ EOF
 
 display_form <<EOF
 onchange|modechange
-start_form|@TR<<Basic QoS Options>>
+start_form|@TR<<QoS Options>>
 field|@TR<<QoS Service>>|field_n_enabled
 select|wan_enabled|$FORM_wan_enabled
 option|1|Enabled
@@ -75,7 +75,10 @@ helpitem|Maximum Download
 helptext|HelpText Maximum Download#This should be about 95% of your maximum sustained WAN download throughput, in kilobits.
 field|@TR<<WAN Download Speed>>|field_n_wan_download
 text|wan_download|$FORM_wan_download| @TR<<kilobits>>
-tip|@TR<<nbd_qos_cfg_tip#The rest of the configuration is stored in /etc/config/qos. Its default state suffices for most users.>>|n_cfg_tip
+field|@TR<<Advanced>>|field_n_advanced
+helpitem|Advanced
+helptext|HelpText Advanced#The rest of the configuration is stored in /etc/config/qos. Its default state suffices for most users.
+string|<a href="./system-editor.sh?path=/etc/config&edit=qos">@TR<<edit_qos_cfg#Edit Config File>></a>
 end_form
 EOF
 
