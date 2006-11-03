@@ -105,10 +105,10 @@ fi
 @TR<<CSS_Layout|Layout was originally based on>> <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran.
 </td></tr>
 <tr><td>
-@TR<<Translator_Credit|The translation you are currently using is authored by (nobody)>>.
+@TR<<UCI>> @TR<<facilitating code>> @TR<<Copyright>> (C) 2006 by Fokus Fraunhofer <carsten.tittel@fokus.fraumhofer.de>.
 </td></tr>
 <tr><td>
-@TR<<UCI>> @TR<<facilitating code>> @TR<<Copyright>> (C) 2006 by Fokus Fraunhofer <carsten.tittel@fokus.fraumhofer.de>.
+@TR<<Translator_Credit|The translation you are currently using is authored by (nobody)>>.
 </td></tr>
 <tr><td>
 @TR<<This device is running>> <a href="http://www.openwrt.org">OpenWrt</a> @TR<<or a close derivative>>.
