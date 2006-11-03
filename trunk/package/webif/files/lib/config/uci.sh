@@ -3,6 +3,7 @@
 #
 # Copyright (C) 2006 by Fokus Fraunhofer <carsten.tittel@fokus.fraumhofer.de>
 # Copyright (C) 2006 by Felix Fietkau <nbd@openwrt.org>
+# Docs and minor hacks (C) 2006 by Jeremy Collake <jeremy@bitsum.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -18,14 +19,38 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
+#
+# How the UCI system works:
+#
+#  Each package has a configuration file in standard uci format stored in
+#  /etc/config/. The configuration files are named after the base name of 
+#  their owner packages, i.e. for 'qos' package the configuration file is
+#  /etc/config/qos.
+#
+#  Changes to UCI config files are done by first saving changes to a 
+#  temporary file in /tmp/.uci/ that is named the same as the configuration 
+#  file it pertains to, i.e. /tmp/.uci/qos. The uci_add and other functions
+#  will save changes to this intermediate area. 
+# 
+#  The uci_load function will load config files and then any uncommitted
+#  changes found in /tmp/.uci. Therefore, when working with config files
+#  uncomitted changes are visible as long as you use this function.
+# 
+#  One commits pending changes by calling uci_commit. This function will
+#  write changes found in /tmp/.uci to the pertainent package configuration 
+#  file, then delete the temporary file in /tmp/.uci if successful.
+#
+#
+
 ###########################################################################
 # uci_load(package)
 #
 #  This function loads config given as $1 into shell variables named 
 #   CONFIG_group_variable=value
+#  This function DOES load pending changes that haven't been committed.
 ###########################################################################
 uci_load() {
-	local PACKAGE="$1"	# todo: this was missing, assume necessary - check later
+	local PACKAGE="$1"
 	config_load "$PACKAGE"
 	local PACKAGE_BASE="$(basename "$PACKAGE")"
 	[ -f "/tmp/.uci/${PACKAGE_BASE}" ] && {
