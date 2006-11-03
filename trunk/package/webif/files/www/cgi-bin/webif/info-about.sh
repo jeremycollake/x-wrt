@@ -50,7 +50,7 @@ fi
 
 <div class="webif-name-title"><a href="http://www.bitsum.com/xwrt.asp">X-Wrt Extensions</a> - webif<sup>2</sup></div>
 <div class="webif-name-subtitle"></div>
-<div class="webif-name-version">Somewhere in the netherworld of post-Milestone 1 - r<? echo "$this_revision" ?> </div><br />
+<div class="webif-name-version">Milestone 2 rc1 - r<? echo "$this_revision" ?> </div><br />
 <form action="" enctype="multipart/form-data" method="post">
 <input type="submit" value=" @TR<<Check_Upgrade|Check For Webif^2 Update>> " name="update_check" />
 <input type="submit" value=" @TR<<Upgrade_Webif|Upgrade Webif^2>> "  name="install_webif" />
@@ -112,13 +112,13 @@ fi
 @TR<<Monowall_Credit|CPU and Traffic graphs based on code from>> <a href="http://m0n0.ch/wall/">m0n0wall</a>.
 </td></tr>
 <tr><td>
-@TR<<Cova_Credit|Some pages, particularly the hotspot category, have been adopted from code written>> @TR<<by>> <a href="http://www.coova.org">Coova Technologies</a>. @TR<<and by>> <a href="http://www.picopoint.com">PicoPoint B.V.</a>
+@TR<<Cova_Credit|Some pages have been adopted from code written>> @TR<<by>> C0da, <a href="http://www.coova.org">Coova Technologies</a>, @TR<<and by>> <a href="http://www.picopoint.com">PicoPoint B.V.</a>
 </td></tr>
 <tr><td>
 @TR<<CSS_Layout|Layout was originally based on>> <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran.
 </td></tr>
 <tr><td>
-@TR<<Translator_Credit|The translation you are currently using is authored by (translators name here)>>.
+@TR<<Translator_Credit|The translation you are currently using is authored by (nobody)>>.
 </td></tr>
 <tr><td>
 This device is running <a href="http://www.openwrt.org">OpenWrt</a> or a close derivative.
