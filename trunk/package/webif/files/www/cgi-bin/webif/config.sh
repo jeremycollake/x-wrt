@@ -34,7 +34,7 @@ case "$FORM_mode" in
 		done		
 		for configname in /tmp/.uci/*; do
 			grep = $configname >&- 2>&- && {
-				echo -n "<h3>${configname#/tmp/.uci/-}</h3><br /><pre>"
+				echo -n "<h3>${configname#/tmp/.uci/}</h3><br /><pre>"
 				cat $configname
 				echo '</pre><br />'
 			}
