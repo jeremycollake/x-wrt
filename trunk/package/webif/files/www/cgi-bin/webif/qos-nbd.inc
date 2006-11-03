@@ -1,7 +1,6 @@
 #
 # Nbd QoS scripts config
 #	
-uci_load qos	
 
 ! empty "$FORM_submit" && {
 	SAVED=1
@@ -16,7 +15,7 @@ EOF
 	}
 }
 
-uci_load "qos"
+uci_load qos
 FORM_wan_enabled="$CONFIG_wan_enabled"
 FORM_wan_download="$CONFIG_wan_download"
 FORM_wan_upload="$CONFIG_wan_upload"
