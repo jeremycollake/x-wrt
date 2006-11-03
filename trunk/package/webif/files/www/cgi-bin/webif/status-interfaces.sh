@@ -24,9 +24,9 @@ lan_rx_bytes=$(echo "$lan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed
 wlan_config=$(iwconfig 2>&1 | grep -v 'no wireless' | grep '\w')
 wlan_ssid=$(echo "$wlan_config" | grep 'ESSID' | cut -d':' -f 2 | sed s/'"'//g)
 wlan_mode=$(echo "$wlan_config" | grep "Mode:" | cut -d':' -f 2 | cut -d' ' -f 1)
-wlan_freq="$(echo "$wlan_config" | grep "Mode:" | cut -d':' -f 3 | cut -d' ' -f 1) <div class=\"kb\">Ghz</div>"
+wlan_freq=$(echo "$wlan_config" | grep "Mode:" | cut -d':' -f 3 | cut -d' ' -f 1)
 wlan_ap=$(echo "$wlan_config" | grep "Mode:" | cut -d' ' -f 18)
-wlan_txpwr="$(echo "$wlan_config" | grep Tx-Power | cut -d':' -f 2 | sed s/"dBm"//g) <div class=\"kb\">dBm</div>"
+wlan_txpwr=$(echo "$wlan_config" | grep Tx-Power | cut -d'-' -f2 | cut -d':' -f 2 | sed s/"dBm"//g)
 wlan_key=$(echo "$wlan_config" | grep "Encryption key:" | sed s/"Encryption key:"//)
 wlan_tx_retries=$(echo "$wlan_config" | grep "Tx excessive retries" | cut -d':' -f 2 | cut -d' ' -f 1)
 wlan_tx_invalid=$(echo "$wlan_config" | grep "Tx excessive retries" | cut -d':' -f 3 | cut -d' ' -f 1)
@@ -34,7 +34,12 @@ wlan_tx_missed=$(echo "$wlan_config" | grep "Missed beacon" | cut -d':' -f 4 | c
 wlan_rx_invalid_nwid=$(echo "$wlan_config" | grep "Rx invalid nwid:" | cut -d':' -f 2 | cut -d' ' -f 1)
 wlan_rx_invalid_crypt=$(echo "$wlan_config" | grep "Rx invalid nwid:" | cut -d':' -f 3 | cut -d' ' -f 1)
 wlan_rx_invalid_frag=$(echo "$wlan_config" | grep "Rx invalid nwid:" | cut -d':' -f 4 | cut -d' ' -f 1)
-wlan_noise="$(echo "$wlan_config" | grep "Link Noise level:" | cut -d':' -f 2 | cut -d' ' -f 1) <div class=\"kb\">dBm</div>"
+wlan_noise=$(echo "$wlan_config" | grep "Link Noise level:" | cut -d':' -f 2 | cut -d' ' -f 1)
+
+# set unset vars
+wlan_freq="${wlan_freq:-0}"
+wlan_noise="${wlan_noise:-0}"
+wlan_txpwr="${wlan_txpwr:-0}"
 
 # enumerate WAN nameservers
 form_dns_servers=$(awk '
@@ -79,22 +84,22 @@ string|$wlan_mode
 field|@TR<<ESSID>>|wlan_ssid
 string|$wlan_ssid
 field|@TR<<Frequency>>|wlan_freq
-string|$wlan_freq
+string|$wlan_freq <div class="kb">Ghz</div>
 field|@TR<<Transmit Power>>|wlan_txpwr
-string|$wlan_txpwr
+string|$wlan_txpwr <div class="kb">dBm</div>
 field|@TR<<Noise Level>>|wlan_noise
-string|$wlan_noise
+string|$wlan_noise <div class="kb">dBm</div>
 field|@TR<<Encryption Key>>|wlan_key
 string|<div class="numeric-small">$wlan_key</div>
-field|@TR<<Receive Invalid NWID>>|wlan_rx_invalid_nwid
+field|@TR<<Rx Invalid nwid>>|wlan_rx_invalid_nwid
 string|$wlan_rx_invalid_nwid
-field|@TR<<Receive Invalid Crypt>>|wlan_rx_invalid_crypt
+field|@TR<<Rx Invalid Encryption>>|wlan_rx_invalid_crypt
 string|$wlan_rx_invalid_crypt
-field|@TR<<Transmit Retries>>|wan_tx_retries
-string|$wlan_tx_retries in excess
-field|@TR<<Transmit Invalid>>|wan_tx_invalid
+field|@TR<<Tx Retries in Excess>>|wan_tx_retries
+string|$wlan_tx_retries
+field|@TR<<Tx Invalid>>|wan_tx_invalid
 string|$wlan_tx_invalid
-field|@TR<<Transmit Missed Beacon>>|wan_tx_missed
+field|@TR<<Tx Missed Beacon>>|wan_tx_missed
 string|$wlan_tx_missed
 helpitem|WLAN
 helptext|WLAN LAN#LAN stands for Wireless Local Area Network.
