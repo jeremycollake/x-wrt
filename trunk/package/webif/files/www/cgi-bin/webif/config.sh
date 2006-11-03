@@ -18,7 +18,7 @@ case "$FORM_mode" in
 		;;
 	review)
 		header $FORM_cat . "@TR<<Config changes:|Current configuration changes:>>"		
-		for configname in /tmp/.webif/config-*; do
+		for configname in $(ls /tmp/.webif/config-* 2>&-); do
 			grep = $configname >&- 2>&- && {
 				echo -n "<h3>${configname#/tmp/.webif/config-}</h3><br /><pre>"
 				cat $configname
@@ -26,13 +26,13 @@ case "$FORM_mode" in
 			}
 		done	
 		CONFIGFILES=""
-		for configname in /tmp/.webif/file-*; do
+		for configname in $(ls /tmp/.webif/file-* 2>&-); do
 			exists "$configname" && {
 				configname=$(echo $configname | sed s/'\/tmp\/.webif\/'//g) 
 				CONFIGFILES="$CONFIGFILES ${configname#/tmp/.webif/file-}"
 			}
 		done		
-		for configname in $(mkdir -p /tmp/.uci && ls /tmp/.uci/* 2>&-); do
+		for configname in $(ls /tmp/.uci/* 2>&-); do
 			grep = $configname >&- 2>&- && {
 				echo -n "<h3>${configname#/tmp/.uci/}</h3><br /><pre>"
 				cat $configname

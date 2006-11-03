@@ -42,7 +42,7 @@ update_changes() {
 	EDITED_FILES=$(find "/tmp/.webif/edited-files" -type f 2>&- | wc -l)
 	CHANGES=$(($CHANGES + $EDITED_FILES))
 	# calculate and add number of pending uci changes
-	for uci_tmp_file in $(mkdir -p /tmp/.uci && ls /tmp/.uci/* 2>&-); do
+	for uci_tmp_file in $(ls /tmp/.uci/* 2>&-); do
 		CHANGES_CUR=$(cat "$uci_tmp_file" | grep CONFIG_SECTION | wc -l)
 		CHANGES=$(($CHANGES + $CHANGES_CUR))
 	done	

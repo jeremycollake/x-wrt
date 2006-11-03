@@ -264,12 +264,10 @@ for config in $(ls config-* 2>&-); do
 	esac'
 done
 
-rm -f "config-*"
-
 #
 # now apply any UCI config changes
 #
-for package in $(ls /tmp/.uci/*); do
+for package in $(ls /tmp/.uci/* 2>&-); do
 	echo "@TR<<Committing>> ${package#/tmp/.uci/} ..."
 	uci_commit "$package"
 	case "$package" in
@@ -277,4 +275,9 @@ for package in $(ls /tmp/.uci/*); do
 			qos-start;;
 	esac
 done
+
+#
+# cleanup
+#
+rm -r "/tmp/.webif/*" >&- 2>&-
 
