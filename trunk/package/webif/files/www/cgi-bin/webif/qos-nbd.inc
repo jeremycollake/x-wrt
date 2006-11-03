@@ -78,10 +78,8 @@ text|wan_download|$FORM_wan_download| @TR<<kilobits>>
 field|@TR<<Advanced>>|field_n_advanced
 helpitem|Advanced
 helptext|HelpText Advanced#The rest of the configuration is stored in /etc/config/qos. Its default state suffices for most users.
-string|<a href="./system-editor.sh?path=/etc/config&edit=qos">@TR<<edit_qos_cfg#Edit Config File>></a>
+string|<a href="./system-editor.sh?path=/etc/config&amp;edit=qos">@TR<<edit_qos_cfg#Edit Config File>></a>
 end_form
 EOF
 
-
-	
-
+show_validated_logo
