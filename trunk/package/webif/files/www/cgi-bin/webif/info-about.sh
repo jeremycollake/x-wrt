@@ -56,39 +56,31 @@ fi
 <input type="submit" value=" @TR<<Upgrade_Webif|Upgrade Webif^2>> "  name="install_webif" />
 </form>
 <? echo $revision_text ?>
-<table class="webif-contributors"><tbody>
+<table class="webif-contributors" width="70%"><tbody>
 <tr><td><br /></td></tr>
-<tr><th>X-Wrt Webif<sup>2</sup> @TR<<Contributors>>: <div class="smalltext">(@TR<<sorted_by_name#sorted by last name>>)</div></th></tr>
-<tr><td>
-&nbsp;&nbsp; <a href="mailto:oxo@users.berlios.de">Owen Brotherwood (oxo)</a>
-</td></tr>
-<tr><td>
-&nbsp;&nbsp; <a href="mailto:guymarc@users.berlios.de">Guymarc</a>
-</td></tr>
+<tr><th>Webif^2 Primary Developers: <div class="smalltext">(@TR<<sorted_by_name#sorted by name>>)</div></th></tr>
 <tr><td>
 &nbsp;&nbsp; <a href="mailto:jeremy.collake@gmail.com">Jeremy Collake (db90h)</a>
 </td></tr>
 <tr><td>
 &nbsp;&nbsp; <a href="mailto:kemen04@gmail.com">Travis Kemen (thepeople)</a>
 </td></tr>
-<tr><td>
-&nbsp;&nbsp; <a href="mailto:tyardley@users.berlios.de">Tim Yardley (lst)</a>
-</td></tr>
-
-<tr><td>
-&nbsp;&nbsp; With important help from Reinhold Kainhofer, ido, Spectra, Strontian, Sven-Ola, Felix Fietkau, redhat, beta testers, and many others who have provided development, testing, or other contributions.
-</td></tr>
-
 <tr><td><br /></td></tr>
-<tr><th>Webif @TR<<Contributors>>: <div class="smalltext">(@TR<<sorted_by_name#sorted by last name>>)</div></th></tr>
+<tr><th>Webif<sup>2</sup> @TR<<Contributing Developers>>: <div class="smalltext">(@TR<<sorted_by_name#sorted by name>>)</div></th></tr>
+<tr><td>
+&nbsp;&nbsp; <a href="mailto:oxo@users.berlios.de">Owen Brotherwood (oxo)</a>
+</td></tr>
 <tr><td>
 &nbsp;&nbsp; <a href="mailto:openwrt@nbd.name">Felix Fietkau</a> (nbd)
 </td></tr>
 <tr><td>
-&nbsp;&nbsp; <a href="mailto:markus@freewrt.org">Markus Wigge</a>
+&nbsp;&nbsp; <a href="mailto:guymarc@users.berlios.de">Guymarc</a>
 </td></tr>
 <tr><td>
 &nbsp;&nbsp; <a href="mailto:openwrt@kewis.ch">Philipp Kewisch</a>
+</td></tr>
+<tr><td>
+&nbsp;&nbsp; <a href="mailto:markus@freewrt.org">Markus Wigge</a>
 </td></tr>
 <tr><td>
 &nbsp;&nbsp; SeDeKy
@@ -96,16 +88,11 @@ fi
 <tr><td>
 &nbsp;&nbsp; <a href="mailto:spectra@gmx.ch">Spectra</a>
 </td></tr>
-<tr><td><br /></td></tr>
-<tr><th>OpenWrt @TR<<Contributors>>:</th></tr>
 <tr><td>
-&nbsp;&nbsp; <a href="mailto:openwrt@nbd.name">Felix Fietkau</a> (nbd), florian, groz, kaloz, malbon, mbm, Olli, wbx
+&nbsp;&nbsp; <a href="mailto:tyardley@users.berlios.de">Tim Yardley (lst)</a>
 </td></tr>
-<tr><td>
-&nbsp;&nbsp; @TR<<Companies_Projs|Companies/Projects>>: linux, Broadcom, Linksys, Squashfs, JFFS2, MTD, etc...
-</td></tr>
-<tr><td>
-&nbsp;&nbsp; <b><i>Countless</i></b> contributors from the community.
+<tr><td colspan="2">
+&nbsp;&nbsp; With help from Reinhold Kainhofer, ido, Strontian, Sven-Ola, redhat, and many others who have provided development, testing, or other contributions.
 </td></tr>
 <tr><td><br /></td></tr>
 <tr><td>
