@@ -219,7 +219,7 @@ TIMEZONE_OPTS=$(
 
 )
 
-#####################################################################s
+######################################################################
 cat <<EOF
 <script type="text/javascript" src="/webif.js"></script>
 <script type="text/javascript">
