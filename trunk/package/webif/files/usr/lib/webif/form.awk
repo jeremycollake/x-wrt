@@ -124,6 +124,9 @@ $1 ~ /^txtfile/ {
 }
 $1 ~ /^caption/ { print "<b>" $2 "</b>" }
 $1 ~ /^string/ { print $2 }
+$1 ~ /^tip/ { 
+	print "<tr><td colspan=\"3\"><div class=\"tip\">" $2 "</div></td></tr>"
+}	
 $1 ~ /^textarea/ {
 	rows = ""
 	if ($4 != "") rows = " rows=\"" $4 "\""

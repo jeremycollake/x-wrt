@@ -116,6 +116,7 @@ reload_system() {
 	}
 }
 
+mkdir -p "/tmp/.webif"
 cd "/tmp/.webif"
 
 is_read_only() {
@@ -269,7 +270,7 @@ rm -f "config-*"
 # now apply any UCI config changes
 #
 for package in $(ls /tmp/.uci/*); do
-	echo "@TR<<Committing>> $package ..."
+	echo "@TR<<Committing>> ${package#/tmp/.uci/} ..."
 	uci_commit "$package"
 done
 

@@ -2,7 +2,6 @@
 <?
 
 . /usr/lib/webif/webif.sh
-. /lib/config/uci.sh
 
 header "Network" "QoS" "@TR<<QOS Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
@@ -25,16 +24,8 @@ fi
 if is_package_installed "qos-scripts"; then
 	#
 	# nbd's QoS scripts
-	#
-	echo "nbd's QoS scripts found installed. We have not written code yet for this."
-	
-	uci_load qos	
-	echo "CONFIG_wan_download is $CONFIG_wan_download<br />"
-	uci_set "qos" "wan" "download" "3000"
-	#uci_commit "qos"
-	
-
-
+	#	
+. ./qos-nbd.inc
 elif is_package_installed "qos-re"; then
 	#
 	# Rudy's QoS scripts

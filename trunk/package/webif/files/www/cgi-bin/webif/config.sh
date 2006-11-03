@@ -10,7 +10,7 @@ esac
 case "$FORM_mode" in
 	nochange) header $FORM_cat . "@TR<<No config change.|No configuration changes were made.>>";;
 	clear)
-		rm -rf /tmp/.webif >&- 2>&-
+		rm /tmp/.webif/* >&- 2>&-
 		rm /tmp/.uci/* >&- 2>&- 
 		header $FORM_cat . "@TR<<Config discarded.|Your configuration changes have been discarded.>>"
 		CHANGES=""
