@@ -40,9 +40,13 @@ ShowUntestedWarning() {
 
 update_changes() {
 	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))
-	CHANGES_UCI=$(ls /tmp/.uci/* 2>&- | wc -l)
 	EDITED_FILES=$(find "/tmp/.webif/edited-files" -type f 2>&- | wc -l)
-	CHANGES=$(($CHANGES + $EDITED_FILES + $CHANGES_UCI))
+	# calculate number of uci changes
+	for uci_tmp_file in $(ls /tmp/.uci/*); do
+		CHANGES_CUR=$(cat "$uci_tmp_file" | grep CONFIG_SECTION | wc -l)
+		CHANGES=$(($CHANGES + $CHANGES_CUR))
+	done
+	CHANGES=$(($CHANGES + $EDITED_FILES))
 }
 
 pcnt=0
