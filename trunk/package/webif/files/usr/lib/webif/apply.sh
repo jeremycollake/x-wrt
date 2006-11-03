@@ -272,6 +272,10 @@ rm -f "config-*"
 for package in $(ls /tmp/.uci/*); do
 	echo "@TR<<Committing>> ${package#/tmp/.uci/} ..."
 	uci_commit "$package"
+	case "$package" in
+		"/tmp/.uci/qos") echo "&nbsp;@TR<<restart_qos#Restarting>> ..."
+			qos-start;;
+	esac
 done
 
 # give user more time to read output from this page ??
