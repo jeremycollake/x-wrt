@@ -32,7 +32,7 @@ case "$FORM_mode" in
 				CONFIGFILES="$CONFIGFILES ${configname#/tmp/.webif/file-}"
 			}
 		done		
-		for configname in /tmp/.uci/*; do
+		for configname in $(mkdir -p /tmp/.uci && ls /tmp/.uci/* 2>&-); do
 			grep = $configname >&- 2>&- && {
 				echo -n "<h3>${configname#/tmp/.uci/}</h3><br /><pre>"
 				cat $configname
