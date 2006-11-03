@@ -34,20 +34,14 @@ fi
 		<th><b>Ip Addr:</b></th>
 	</tr>
 	<tr>
-		<td><pre><? ifconfig |grep ppp0 >>/dev/null
-			if [ $? = 0 ]; then
-			/sbin/ifconfig ppp0 | grep inet | awk '{print $2}'| awk -F : '{print $2}'
-			fi  ?></pre></td>
+		<td><pre><? /sbin/ifconfig ppp0 | grep inet | awk '{print $2}'| awk -F : '{print $2}' ?></pre></td>
 	</tr>
 		<tr><td><br /><br /></td></tr>
 	<tr>
 		<th><b>Ifconfig ppp0</b></th>
 	</tr>
 	<tr>
-		<td><pre><? ifconfig |grep ppp0 >>/dev/null
-			if [ $? = 0 ]; then
-			ifconfig ppp0 
-			fi ?></pre></td>
+		<td><pre><? ifconfig ppp0 ?></pre></td>
 	</tr>
 		<tr><td><br /><br /></td></tr>
 	<tr>

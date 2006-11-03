@@ -178,15 +178,15 @@ done
 #  this session.
 for config in $(ls config-conntrack 2>&-); do
 echo '@TR<<Applying>> @TR<<conntrack settings>> ...'
-	# set any and all net.ipv4.netfilter settings.
-	for conntrack in $(grep ip_ /tmp/.webif/config-conntrack); do
+	# set any and all net.ipv4.netfilter settings.	
+	for conntrack in $(grep ip_ /tmp/.webif/config-conntrack); do		
 		variable_name=$(echo "$conntrack" | cut -d '=' -f1)
 		variable_value=$(echo "$conntrack" | cut -d '"' -f2)		
 		echo "&nbsp;@TR<<Setting>> $variable_name to $variable_value"		
-		sysctl -w "net.ipv4.netfilter.$variable_name=$variable_value"
 		remove_lines_from_file "/etc/sysctl.conf" "net.ipv4.netfilter.$variable_name"
 		echo "net.ipv4.netfilter.$variable_name=$variable_value" >> /etc/sysctl.conf
-	done	
+	done
+	sysctl -p   # reload sysctl.conf
 rm -f /tmp/.webif/config-conntrack
 echo '@TR<<Done>>'
 done
