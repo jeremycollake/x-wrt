@@ -22,7 +22,7 @@ FORM_wan_upload="$CONFIG_wan_upload"
 
 display_form <<EOF
 start_form|@TR<<Basic QoS Options>>
-field|@TR<<System Status>>|field_n_enabled
+field|@TR<<QoS Service>>|field_n_enabled
 select|wan_enabled|$FORM_wan_enabled
 option|1|Enabled
 option|0|Disabled
