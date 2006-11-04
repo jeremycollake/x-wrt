@@ -178,6 +178,10 @@ done
 #  this session.
 for config in $(ls config-conntrack 2>&-); do
 	echo '@TR<<Applying>> @TR<<conntrack settings>> ...'
+	is_read_only "/etc/sysctl.conf" && {
+		rm /etc/sysctl.conf
+		cp /rom/etc/sysctl.conf /etc/sysctl.conf
+	}
 	# set any and all net.ipv4.netfilter settings.
 	for conntrack in $(grep ip_ /tmp/.webif/config-conntrack); do
 		variable_name=$(echo "$conntrack" | cut -d '=' -f1)
