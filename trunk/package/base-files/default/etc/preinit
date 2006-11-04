@@ -24,9 +24,9 @@ ifconfig $ifname 192.168.1.1 netmask 255.255.255.0 broadcast 192.168.1.255 up
 # save the boot loader's vlan config
 # we need it on some routers that have no vlan*ports set
 [ -d /proc/switch/eth0 ] && {
-	v0p="$(cat /proc/switch/eth0/vlan/0/ports)"
-	v1p="$(cat /proc/switch/eth0/vlan/1/ports)"
-	v2p="$(cat /proc/switch/eth0/vlan/2/ports)"
+	export v0p="$(cat /proc/switch/eth0/vlan/0/ports)"
+	export v1p="$(cat /proc/switch/eth0/vlan/1/ports)"
+	export v2p="$(cat /proc/switch/eth0/vlan/2/ports)"
 	echo 1 > /proc/switch/eth0/reset
 
 	# this would be easier if we blasted the message across all ports
@@ -40,6 +40,7 @@ ifconfig $ifname 192.168.1.1 netmask 255.255.255.0 broadcast 192.168.1.255 up
 } || netmsg 192.168.1.255 "Press reset now, to enter Failsafe!"
 
 sleep 2
+
 lock -w /tmp/.failsafe
 echo /sbin/hotplug > /proc/sys/kernel/hotplug
 
@@ -51,6 +52,7 @@ ifconfig $ifname 0.0.0.0 down
 	echo "$v0p" > /proc/switch/eth0/vlan/0/ports
 	echo "$v1p" > /proc/switch/eth0/vlan/1/ports
 	echo "$v2p" > /proc/switch/eth0/vlan/2/ports
+	unset v0p v1p v2p
 }
 
 mount_root
