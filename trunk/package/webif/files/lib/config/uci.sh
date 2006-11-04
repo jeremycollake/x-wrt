@@ -3,7 +3,7 @@
 #
 # Copyright (C) 2006 by Fokus Fraunhofer <carsten.tittel@fokus.fraumhofer.de>
 # Copyright (C) 2006 by Felix Fietkau <nbd@openwrt.org>
-# Docs and minor hacks (C) 2006 by Jeremy Collake <jeremy@bitsum.com>
+# Docs and minor hacks by Jeremy Collake <jeremy@bitsum.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
