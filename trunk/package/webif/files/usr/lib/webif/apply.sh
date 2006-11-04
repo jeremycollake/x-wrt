@@ -70,49 +70,48 @@ reload_wireless() {
 
 reload_cron() {
 	echo '@TR<<Reloading Cron>> ...'
-# (re)start crond
-if [ -x $cron_init ]; then
-    echo "(Re)start cron..."
-    $cron_init restart
-fi
+	# (re)start crond
+	if [ -x $cron_init ]; then
+		echo "(Re)start cron..."
+		$cron_init restart
+	fi
 }
 
 reload_syslog() {
-getPID(){
-    echo `ps -elf | grep 'syslogd' | grep -v grep | awk '{ print $1 }'`
-}
-# (re)start syslogd
+	getPID(){
+		echo `ps -elf | grep 'syslogd' | grep -v grep | awk '{ print $1 }'`
+	}
+	# (re)start syslogd
+	echo "(Re)start syslogd..."
+	pid=$(getPID)
+	if [ -n "$pid" ]; then
+		echo -n "Stopping syslogd: "
+		( {
+			kill $pid >/dev/null 2>&1
+		} && echo "OK" ) || echo "ERROR"
+	fi
+	echo -n "Start syslogd: "
+	syslog_ip=$(nvram get log_ipaddr)
+	ipcalc -s "$syslog_ip" || syslog_ip=""
+	log_port=$(nvram get log_port)
+	log_port=${log_port:+:$log_port}
+	log_mark=$(nvram get log_mark)
+	log_mark=${log_mark:+-m $log_mark}
+	can_prefix=`syslogd --help 2>&1 | grep -e 'PREFIX' `
+	log_prefix=""
+	[ -z "$can_prefix" ] || log_prefix=$(nvram get log_prefix)
+	log_prefix=${log_prefix:+-P "$log_prefix"}
+	syslogd -C 16 ${syslog_ip:+-L -R $syslog_ip$log_port} $log_mark $log_prefix
 
-echo "(Re)start syslogd..."
-pid=$(getPID)
-if [ -n "$pid" ]; then
-    echo -n "Stopping syslogd: "
-    ( {
-	kill $pid >/dev/null 2>&1
-      } && echo "OK" ) || echo "ERROR"
-fi
-echo -n "Start syslogd: "
-syslog_ip=$(nvram get log_ipaddr)
-ipcalc -s "$syslog_ip" || syslog_ip=""
-log_port=$(nvram get log_port)
-log_port=${log_port:+:$log_port}
-log_mark=$(nvram get log_mark)
-log_mark=${log_mark:+-m $log_mark}
-can_prefix=`syslogd --help 2>&1 | grep -e 'PREFIX' `
-log_prefix=""
-[ -z "$can_prefix" ] || log_prefix=$(nvram get log_prefix)
-log_prefix=${log_prefix:+-P "$log_prefix"}
-syslogd -C 16 ${syslog_ip:+-L -R $syslog_ip$log_port} $log_mark $log_prefix
-
-echo "OK"
+	echo "OK"
 }
 
 reload_system() {
 	echo '@TR<<Applying>> @TR<<system settings>> ...'
 	echo "$(nvram get wan_hostname)" > /proc/sys/kernel/hostname
 	grep '_admin' config-system >&- 2>&- && {
-	    echo '@TR<<Reloading>> @TR<<firewall settings>> ...'
-	    /etc/init.d/S??firewall
+		echo '@TR<<Reloading>> @TR<<firewall settings>> ...'
+		/etc/init.d/S??firewall
 	}
 }
 
@@ -142,7 +141,7 @@ done
 # leave if some files not applied
 rm -r "/tmp/.webif/edited-files" 2>&-
 
-# file-* 		other config files
+# file-*		other config files
 for config in $(ls file-* 2>&-); do
 	name=${config#file-}
 	echo "@TR<<Processing>> @TR<<config file>>: $name"
@@ -153,11 +152,11 @@ done
 
 # config-qos		QOS Config file
 for config in $(ls config-qos 2>&-); do
-echo '@TR<<Applying>> @TR<<QOS settings>> ...'
-/usr/bin/qos-stop
-mv -f config-qos /etc/qos.conf
-/usr/bin/qos-start
-echo '@TR<<Done>>'
+	echo '@TR<<Applying>> @TR<<QOS settings>> ...'
+	/usr/bin/qos-stop
+	mv -f config-qos /etc/qos.conf
+	/usr/bin/qos-start
+	echo '@TR<<Done>>'
 done
 
 # config-wifi-enable		QOS Config file
@@ -178,69 +177,69 @@ done
 # TODO: this must be updated to save settings to /etc/sysctl.conf. The sysctl utility only makes changes during
 #  this session.
 for config in $(ls config-conntrack 2>&-); do
-echo '@TR<<Applying>> @TR<<conntrack settings>> ...'
-	# set any and all net.ipv4.netfilter settings.	
-	for conntrack in $(grep ip_ /tmp/.webif/config-conntrack); do		
+	echo '@TR<<Applying>> @TR<<conntrack settings>> ...'
+	# set any and all net.ipv4.netfilter settings.
+	for conntrack in $(grep ip_ /tmp/.webif/config-conntrack); do
 		variable_name=$(echo "$conntrack" | cut -d '=' -f1)
-		variable_value=$(echo "$conntrack" | cut -d '"' -f2)		
-		echo "&nbsp;@TR<<Setting>> $variable_name to $variable_value"		
+		variable_value=$(echo "$conntrack" | cut -d '"' -f2)
+		echo "&nbsp;@TR<<Setting>> $variable_name to $variable_value"
 		remove_lines_from_file "/etc/sysctl.conf" "net.ipv4.netfilter.$variable_name"
 		echo "net.ipv4.netfilter.$variable_name=$variable_value" >> /etc/sysctl.conf
 	done
 	sysctl -p 2>&- 1>&- # reload sysctl.conf
-rm -f /tmp/.webif/config-conntrack
-echo '@TR<<Done>>'
+	rm -f /tmp/.webif/config-conntrack
+	echo '@TR<<Done>>'
 done
 
 # config-theme
 for config in $(ls config-theme 2>&-); do
-echo '@TR<<Applying>> @TR<<theme settings>> ...'
+	echo '@TR<<Applying>> @TR<<theme settings>> ...'
 	for newtheme in $(grep webif_theme /tmp/.webif/config-theme |cut -d '"' -f2); do
 		# create symlink to new active theme
 		rm /www/themes/active
 		ln -s /www/themes/$newtheme /www/themes/active
 	done
-rm -f /tmp/.webif/config-theme
-echo '@TR<<Done>>'
+	rm -f /tmp/.webif/config-theme
+	echo '@TR<<Done>>'
 done
 
 reload_hotspot() {
-    echo '@TR<<Reloading>> @TR<<hotspot settings>> ...'
-    grep -v '^hs_cframe' config-hotspot | grep '^hs_' >&- 2>&- && {
+	echo '@TR<<Reloading>> @TR<<hotspot settings>> ...'
+	grep -v '^hs_cframe' config-hotspot | grep '^hs_' >&- 2>&- && {
 	[ -e "/usr/sbin/chilli" ] && {
-	    /etc/init.d/S??chilli stop  >&- 2>&-
-	    /etc/init.d/S??chilli start >&- 2>&-
+		/etc/init.d/S??chilli stop  >&- 2>&-
+		/etc/init.d/S??chilli start >&- 2>&-
 	}
 	[ -e "/usr/bin/wdctl" ] && {
-	    wdctl stop >&- 2>&-
-	    /etc/init.d/S??wifidog start >&- 2>&-
+		wdctl stop >&- 2>&-
+		/etc/init.d/S??wifidog start >&- 2>&-
 	}
-    }
-    grep '^hs_cframe' config-hotspot >&- 2>&- && {
+	}
+	grep '^hs_cframe' config-hotspot >&- 2>&- && {
 	[ -e /etc/init.d/S??cframe ] && {
-	    /etc/init.d/S??cframe stop  >&- 2>&-
-	    /etc/init.d/S??cframe start >&- 2>&-
+		/etc/init.d/S??cframe stop  >&- 2>&-
+		/etc/init.d/S??cframe start >&- 2>&-
 	}
-    }
+	}
 }
 
 reload_shape() {
-    echo '@TR<<Reloading>> @TR<<traffic shaping settings>> ...'
-    grep '^shape_' config-shape >&- 2>&- && {
-	/etc/init.d/S90shape start >&- 2>&-
-    }
+	echo '@TR<<Reloading>> @TR<<traffic shaping settings>> ...'
+	grep '^shape_' config-shape >&- 2>&- && {
+		/etc/init.d/S90shape start >&- 2>&-
+	}
 }
 
 reload_pptp() {
-    echo '@TR<<Reloading>> @TR<<PPTP settings>> ...'
-    grep '_cli' config-pptp >&- 2>&- && [ -e /etc/init.d/S??pptp ] && {
-	/etc/init.d/S??pptp stop >&- 2>&-
-	/etc/init.d/S??pptp start >&- 2>&-
-    }
-    grep '_srv' config-pptp >&- 2>&- && [ -e /etc/init.d/S??pptpd ] && {
-	/etc/init.d/S??pptpd stop  >&- 2>&-
-	/etc/init.d/S??pptpd start >&- 2>&-
-    }
+	echo '@TR<<Reloading>> @TR<<PPTP settings>> ...'
+	grep '_cli' config-pptp >&- 2>&- && [ -e /etc/init.d/S??pptp ] && {
+		/etc/init.d/S??pptp stop >&- 2>&-
+		/etc/init.d/S??pptp start >&- 2>&-
+	}
+	grep '_srv' config-pptp >&- 2>&- && [ -e /etc/init.d/S??pptpd ] && {
+		/etc/init.d/S??pptpd stop  >&- 2>&-
+		/etc/init.d/S??pptpd start >&- 2>&-
+	}
 }
 
 reload_log() {

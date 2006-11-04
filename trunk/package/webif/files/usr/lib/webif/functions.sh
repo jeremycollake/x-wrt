@@ -41,7 +41,7 @@ remove_lines_from_file() {
 	# $2=substring match indicating lines to remove (case sensitive)
 	cat "$1" | grep -q "$2"
 	[ "$?" = "0" ] && {
-		local _substr_sed=$(echo "$2" | sed s/'\/'/'\\\/'/g)							
+		local _substr_sed=$(echo "$2" | sed s/'\/'/'\\\/'/g)
 		cat "$1" |  sed /$_substr_sed/d > "$1"
 	}
 }
@@ -58,7 +58,7 @@ load_settings() {
 	equal "$1" "nvram" || {
 		exists /etc/config/$1 && . /etc/config/$1
 	}
-	exists /tmp/.webif/config-$1 && . /tmp/.webif/config-$1	
+	exists /tmp/.webif/config-$1 && . /tmp/.webif/config-$1
 }
 
 validate() {
@@ -77,7 +77,7 @@ save_setting() {
 	oldval=$(eval "echo \${$2}")
 	oldval=${oldval:-$(nvram get "$2")}
 	grep "^$2=" /tmp/.webif/config-$1 >&- 2>&- && {
-		grep -v "^$2=" /tmp/.webif/config-$1 > /tmp/.webif/config-$1-new 2>&- 
+		grep -v "^$2=" /tmp/.webif/config-$1 > /tmp/.webif/config-$1-new 2>&-
 		mv /tmp/.webif/config-$1-new /tmp/.webif/config-$1 2>&- >&-
 		oldval=""
 	}
