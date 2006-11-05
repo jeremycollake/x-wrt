@@ -99,11 +99,11 @@ rm -f "${IPKG_INSTROOT}/etc/init.d/S60cron"
 mv -f "${IPKG_INSTROOT}/etc/init.d/x60cron.webif" "${IPKG_INSTROOT}/etc/init.d/S60cron"
 mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
 
-rm -f "${IPKG_INSTROOT}/www/themes/active" # initialize default theme
+# initialize default webif theme
 # create symlink to /www/themes/xwrt (do NOT use INSTROOT in first arg).
-ln -s "/www/themes/xwrt" "${IPKG_INSTROOT}/www/themes/active" 
+ln -s "/www/themes/xwrt" "${IPKG_INSTROOT}/www/themes/active" 1>&- 2>&-
 [ $? != 0 ] && {
-	# if fs doesn't support symlinks, do a copy	
+	# if fs doesn't support symlinks, do a copy
 	cp -r "/www/themes/xwrt/*" "${IPKG_INSTROOT}/www/themes/active/"
 }
 
