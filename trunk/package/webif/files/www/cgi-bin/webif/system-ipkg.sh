@@ -34,15 +34,13 @@ header "System" "Packages" "@TR<<Packages>>" '' "$SCRIPT_NAME"
 # Install from URL and Add Repository code - self-contained block.
 #
 
-! empty "$FORM_install_url" &&
-{
+! empty "$FORM_install_url" && {
 	# just set up to pass-through to normal handler
 	FORM_action="install"
 	FORM_pkg="$FORM_pkgurl"
 }
 
-! empty "$FORM_install_repo" &&
-{
+! empty "$FORM_install_repo" && {
 	validate "string|FORM_repourl|@TR<<Repository URL>>|min=4 max=4096 required|$FORM_repourl"
 	if equal "$?" "0"; then
 		# since firstboot doesn't make a copy of ipkg.conf, we must do it
@@ -60,8 +58,12 @@ header "System" "Packages" "@TR<<Packages>>" '' "$SCRIPT_NAME"
 	fi
 }
 
+! empty "$FORM_remove_repo" && {
+	remove_lines_from_file "/etc/ipkg.conf" "$FORM_remove_repo"
+	echo "<br />Repository source was removed: $FORM_remove_repo<br />"
+}
 
-repo_list=$(awk '/src/ { print "string|<tr class=\"repositories\"><td>" $2 "</td><td>" $3 "</td></tr>"}' /etc/ipkg.conf)
+repo_list=$(awk '/src/ { print "string|<tr class=\"repositories\"><td><a href=./system-ipkg.sh?remove_repo=" $3 ">remove</a>&nbsp;&nbsp;" $2 "</td><td colspan=\"2\">" $3 "</td></tr>"}' /etc/ipkg.conf)
 
 display_form <<EOF
 start_form|@TR<<Add Repository>>

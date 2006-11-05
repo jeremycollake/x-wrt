@@ -119,11 +119,6 @@ mkdir -p "/tmp/.webif"
 _pushed_dir=$(pwd)
 cd "/tmp/.webif"
 
-is_read_only() {
-	rom_file="/rom/$1"
-	touch "$1" 2>&- || [ -f "$rom_file" ]
-}
-
 # edited-files/*		user edited files - stored with directory tree in-tact
 for edited_file in $(find "/tmp/.webif/edited-files/" -type f 2>&-); do
 	target_file=$(echo "$edited_file" | sed s/'\/tmp\/.webif\/edited-files'//g)
