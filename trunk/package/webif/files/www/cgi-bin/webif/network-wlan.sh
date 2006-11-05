@@ -312,7 +312,7 @@ if ! equal "$nas_installed" "1"; then
 		submit|install_nas| Install NAS Package |"
 else
 	install_nas_button="$install_nas_button
-		string|NAS package is installed and should be functional."
+		string|@TR<<Installed>>."
 fi
 
 #####################################################################
