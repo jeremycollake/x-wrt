@@ -99,21 +99,29 @@ rm -f "${IPKG_INSTROOT}/etc/init.d/S60cron"
 mv -f "${IPKG_INSTROOT}/etc/init.d/x60cron.webif" "${IPKG_INSTROOT}/etc/init.d/S60cron"
 mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
 
-# initialize default theme
-rm -f "${IPKG_INSTROOT}/www/themes/active"
-# don't use INSTROOT in first
-ln -s "/www/themes/xwrt" "${IPKG_INSTROOT}/www/themes/active"
+rm -f "${IPKG_INSTROOT}/www/themes/active" # initialize default theme
+# create symlink to /www/themes/xwrt (do NOT use INSTROOT in first arg).
+ln -s "/www/themes/xwrt" "${IPKG_INSTROOT}/www/themes/active" 
+[ $? != 0 ] && {
+	# if fs doesn't support symlinks, do a copy	
+	cp -r "/www/themes/xwrt/*" "${IPKG_INSTROOT}/www/themes/active/"
+}
 
 AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/packages"
 [ -z "$IPKG_INSTROOT" ] && firmware_version=$(nvram get firmware_version)
 if [ "$firmware_version" = "RC5" ] || grep -q RC5 "${IPKG_INSTROOT}/etc/banner"; then
+	DeleteRepository "http://downloads.openwrt.org/backports/rc4"
 	AddRepository "rc5-backports" "http://downloads.openwrt.org/backports/rc5"
 elif [ "$firmware_version" = "RC6" ] || grep -q RC6 "${IPKG_INSTROOT}/etc/banner"; then
-	# temp: don't use rc6-backports until it actually exists..
-	#DeleteRepository "http://downloads.openwrt.org/backports/rc5"
-	#AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"
-	# temp: remove below when enable above two
-	AddRepository "rc5-backports" "http://downloads.openwrt.org/backports/rc5"
+	# see if RC6 backports repository exists, if not use RC5 backports
+	wget http://downloads.openwrt.org/backports/rc6/Packages.filelist -P /tmp 1>&- 2>&-
+	if [ "$?" = "0" ]; then
+		DeleteRepository "http://downloads.openwrt.org/backports/rc5"
+		AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"	
+	else
+		DeleteRepository "http://downloads.openwrt.org/backports/rc4"
+		AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc5"		
+	fi
 fi
 
 if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image builder)
