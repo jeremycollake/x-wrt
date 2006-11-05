@@ -34,7 +34,7 @@ scp \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/patches/
 echo "Uploading firmware images ..."
 scp \
-	bin/*.rar \
+	bin/*.7z \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/early_raw_alpha/default
 echo "Uploading SDk and image builder ..."
 scp \
