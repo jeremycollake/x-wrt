@@ -12,6 +12,7 @@ TestInstall()
 	installed_version=$(cat "${IPKG_INSTROOT}/www/.version")
 	if [ -f "/www/.version" ] && [ "$this_version" = "$installed_version" ]; then
 		echo "SUCCESS! Congratulations, Webif^2 installation appears OK. Welcome to X-Wrt!"
+		echo "** YOU MAY NEED TO DO A HARD REFRESH OF YOUR WEB BROWSER TO CLEAR OLD CSS **"
 	else
 		echo "WARNING: Installation may have failed."		
 		echo " Detected r$installed_version is installed, but this is r$this_version."
