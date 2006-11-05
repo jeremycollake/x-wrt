@@ -4,15 +4,16 @@ pppoa_ifname="atm0" # hack for ppp over atm, which has no ${proto}_ifname
 args2=""
 
 #
-# jmc: initialize any missing nvram variables and turn on dhcp
+# initialize any missing nvram variables and turn on dhcp
 #   for LAN by default.
 #
 if [ -z $(nvram get lan_dhcp_enabled) ]; then
 	nvram set lan_dhcp_enabled=1					
 fi	
-for ifname in lan wan wifi $(nvram get ifnames); do		
+for ifname in lan wan wifi $(nvram get ifnames); do			
 	if [ -z $(nvram get ${ifname}_dhcp_start)]; then
-		nvram set ${ifname}_dhcp_start=$(nvram get dhcp_start)
+		# cut is in case someone set a full IP here instead of integer
+		nvram set ${ifname}_dhcp_start=$(nvram get dhcp_start | cut -d '.' -f 4)
 	fi
 	if [ -z $(nvram get ${ifname}_dhcp_num) ]; then
 		nvram set ${ifname}_dhcp_num=$(nvram get dhcp_num)
