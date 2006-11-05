@@ -19,12 +19,13 @@ colorize_script=""
 <div class="logread"><pre>
 <?
 . /usr/lib/webif/webif.sh
+. /etc/runsyslogd.conf
 
 prefix=$(nvram get log_prefix)
 LOG_TYPE=$(nvram get log_type)
 LOG_FILE=$(nvram get log_file)
 if equal $LOG_TYPE "file" ; then
-	LOG_FILE=${LOG_FILE:-"/var/log/messages"}
+	LOG_FILE=${LOG_FILE:-$DEFAULT_log_file}
 	LOGREAD="cat "$LOG_FILE
 else LOGREAD="logread"
 fi

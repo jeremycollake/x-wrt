@@ -1,6 +1,7 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
+. /etc/runsyslogd.conf
 
 #FILE_NAME="/var/log/messages"
 
@@ -8,15 +9,15 @@ load_settings log
 
 if empty "$FORM_submit" ; then
 	FORM_size="${log_size:-$(nvram get log_size)}"
-	FORM_size=${FORM_size:-16}
+	FORM_size=${FORM_size:-$DEFAULT_log_size}
 	FORM_type="${log_type:-$(nvram get log_type)}"
-	FORM_type=${FORM_type:-"circular"}
+	FORM_type=${FORM_type:-$DEFAULT_log_type}
 	FORM_ipaddr="${log_ipaddr:-$(nvram get log_ipaddr)}"
 	FORM_log_port=${log_port:-$(nvram get log_port)}
-		FORM_log_mark=${log_mark:-$(nvram get log_mark)}
-		FORM_log_mark=${FORM_log_mark:-0}
-		FORM_filename="${log_file:-$(nvram get log_file)}"
-		FORM_filename=${FORM_filename:-"/var/log/messages"}
+	FORM_log_mark=${log_mark:-$(nvram get log_mark)}
+	FORM_log_mark=${FORM_log_mark:-$DEFAULT_log_mark}
+	FORM_filename="${log_file:-$(nvram get log_file)}"
+	FORM_filename=${FORM_filename:-$DEFAULT_log_file}
 else
 validate <<EOF
 ip|FORM_ipaddr|@TR<<Remote host>>||$FORM_ipaddr
@@ -24,8 +25,9 @@ int|FORM_log_port|Remote Port|min=0 max=65535|$FORM_log_port
 int|FORM_log_mark|Minutes Between Marks||$FORM_log_mark
 int|FORM_size|Log Size||$FORM_size
 EOF
-
+	
 	if equal "$?" 0 ; then
+		[ -z $FORM_ipaddr ] && FORM_log_port=""
 		save_setting log log_size $FORM_size
 		save_setting log log_type $FORM_type
 		save_setting log log_ipaddr $FORM_ipaddr
@@ -34,6 +36,7 @@ EOF
 		save_setting log log_file $FORM_filename
 	fi
 fi
+
 
 header "Log" "Syslog Settings" "@TR<<syslog Settings>>"  ' onload="modechange()" ' "$SCRIPT_NAME"
 

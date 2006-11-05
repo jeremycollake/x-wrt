@@ -1,4 +1,5 @@
 #!/bin/sh
+#
 #syslogd options
 # -m MIN          Minutes between MARK lines (default=20, 0=off)
 # -n              Run as a foreground process
@@ -10,12 +11,7 @@
 # -L              Log locally and via network logging (default is network only)
 # -C [size(KiB)]  Log to a circular buffer (read the buffer using logread)
 
-DEFAULT_MARK=0
-DEFAULT_SIZE=16
-DEFAULT_TYPE="circular"
-DEFAULT_IP=""
-DEFAULT_PORT="514"
-DEFAULT_FILE="/var/log/messages"
+. /etc/runsyslogd.conf
 
 # retrieve nvram values
 syslog_ip=$(nvram get log_ipaddr)
@@ -26,14 +22,14 @@ syslog_mark=$(nvram get log_mark)
 syslog_file=$(nvram get log_file)
 
 # verify values
-[ $syslog_type = "circular" ] 2>>/dev/null || [ $syslog_type = "file" ] 2>>/dev/null || syslog_type=$DEFAULT_TYPE
-[ $syslog_size -gt 0 ] 2>>/dev/null || syslog_size=$DEFAULT_SIZE
+[ $syslog_type = "circular" ] 2>>/dev/null || [ $syslog_type = "file" ] 2>>/dev/null || syslog_type=$DEFAULT_log_type
+[ $syslog_size -gt 0 ] 2>>/dev/null || syslog_size=$DEFAULT_log_size
 eval $(ipcalc "$syslog_ip")
-[ $syslog_ip = "$IP" ] 2>>/dev/null || syslog_ip=$DEFAULT_IP
-[ -z $syslog_port ] 2>>/dev/null || [ $syslog_port -lt 0 ] 2>>/dev/null || [ $syslog_port -gt 65535 ] 2>>/dev/null && syslog_port=$DEFAULT_PORT
-[ $syslog_mark -gt 0 ] 2>>/dev/null || syslog_mark=$DEFAULT_MARK
-#should test it is a valid writable file
-[ -z $syslog_file ] 2>>/dev/null && syslog_file=$DEFAULT_FILE
+[ $syslog_ip = "$IP" ] 2>>/dev/null || syslog_ip=$DEFAULT_log_ipaddr
+[ -z $syslog_port ] 2>>/dev/null || [ $syslog_port -lt 0 ] 2>>/dev/null || [ $syslog_port -gt 65535 ] 2>>/dev/null && syslog_port=$DEFAULT_log_port
+[ $syslog_mark -gt 0 ] 2>>/dev/null || syslog_mark=$DEFAULT_log_mark
+#TODO: should test it is a valid writable file
+[ -z $syslog_file ] 2>>/dev/null && syslog_file=$DEFAULT_log_file
 
 # build command syslog command line
 if [ "$syslog_type" = "circular" ] ; then
