@@ -364,7 +364,7 @@ static struct platform_t __init platforms[] = {
 		},
 		.leds		= {
 			{ .name = "power",	.gpio = 1 << 1, .polarity = NORMAL },
-			{ .name = "wlan",	.gpio = 1 << 0, .polarity = NORMAL },
+			{ .name = "wlan",	.gpio = 1 << 0, .polarity = REVERSE },
 			{ .name = "dmz",	.gpio = 1 << 6, .polarity = REVERSE },
 			{ .name = "diag",	.gpio = 1 << 7, .polarity = REVERSE },
 		},
@@ -591,8 +591,8 @@ static void button_handler(int irq, void *dev_id, struct pt_regs *regs)
 static void register_leds(struct led_t *l)
 {
 	struct proc_dir_entry *p;
-	u32 mask;
-	u32 val;
+	u32 mask = 0;
+	u32 val = 0;
 
 	leds = proc_mkdir("led", diag);
 	if (!leds) 
@@ -660,6 +660,8 @@ static void led_flash(unsigned long dummy) {
 	mask &= ~gpiomask;
 	if (mask) {
 		u32 val = ~sb_gpioin(sbh);
+
+		val &= mask;
 
 		sb_gpioouten(sbh, mask, mask);
 		sb_gpiocontrol(sbh, mask, 0);
