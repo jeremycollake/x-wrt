@@ -273,9 +273,13 @@ footer() {
 					<a href="config.sh?mode=clear&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Clear Changes>> &laquo;</a><br />
 					<a href="config.sh?mode=review&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Review Changes>> $_changes &laquo;</a>
 				</div>
-			</div>
-		</div>
+			</div>			
+		</div>	
 		$_endform
+	<div id="footer-logo">
+	X-Wrt
+	<div id="footer-sublogo">@TR<<making_usable#Making OpenWrt usable>></div>
+	</div>			
     </div></body>
 </html>
 EOF

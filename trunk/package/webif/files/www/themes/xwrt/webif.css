@@ -573,3 +573,19 @@ dt,
 {
 	font-size: 0.em;
 }
+
+#footer-logo
+{	
+	position: absolute;
+	bottom: 1em;
+	font-size: 1.5em;	
+	display: inline;
+	text-align: left;		
+	margin-left: 1em;
+}
+
+#footer-logo #footer-sublogo
+{	
+	font-size: 0.5em;
+	font-style: italic;
+}
