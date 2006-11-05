@@ -1,3 +1,20 @@
+###################################################################
+# Webif base
+#
+# Description:
+#	Holds primary functions. Header, footer, etc..
+#
+# Author(s) [in order of work date]:
+#	A variety of people. Several X-Wrt developers.
+#
+# Major revisions:
+#
+# NVRAM variables referenced:
+#
+# Configuration files referenced:
+#
+#
+
 libdir=/usr/lib/webif
 wwwdir=/www
 cgidir=/www/cgi-bin/webif

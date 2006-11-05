@@ -24,15 +24,12 @@ load_settings "wireless"
 header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onload="modechange()"' "$SCRIPT_NAME"
 
 #####################################################################
-# defaults - ONLY used in the rare case these nvram variables are unset
-#DEFAULT_INFRA=1
-
-#####################################################################
 # constants
 EMPTY_passphrase_error="ERROR: Can not generate key(s) from a non-existant passphrase."
 
 #####################################################################
 # Initialize channels based on country code
+# (--- hardly a switch here ---)
 CC=${wl0_country_code:-$(nvram get wl0_country_code)}
 case "$CC" in
 	All|all|ALL) CHANNELS="1 2 3 4 5 6 7 8 9 10 11 12 13 14"; CHANNEL_MAX=14 ;;

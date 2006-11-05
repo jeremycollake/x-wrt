@@ -22,7 +22,7 @@ header "Network" "Tweaks" "@TR<<Networking Tweaks>>" 'onload="modechange()"' "$S
 
 ! empty "$FORM_submit" && {
 	validate <<EOF
-int|FORM_ip_conntrack_max|Maximum Connections|min=512 max=16384|$FORM_ip_conntrack_max
+int|FORM_ip_conntrack_max|Maximum Connections|min=512 max=32768|$FORM_ip_conntrack_max
 int|FORM_ip_conntrack_udp_timeout_stream|UDP Stream Timeout|min=30 max=134217728|$FORM_ip_conntrack_udp_timeout_stream
 int|FORM_ip_conntrack_udp_timeout|UDP Timeout|min=30 max=134217728|$FORM_ip_conntrack_udp_timeout
 int|FORM_ip_conntrack_tcp_timeout_established|TCP Established Timeout|min=30 max=134217728|$FORM_ip_conntrack_tcp_timeout_established
