@@ -1,5 +1,5 @@
 #!/bin/sh
-killall dnsmasq
+killall -q dnsmasq
 pppoa_ifname="atm0" # hack for ppp over atm, which has no ${proto}_ifname
 args2=""
 
