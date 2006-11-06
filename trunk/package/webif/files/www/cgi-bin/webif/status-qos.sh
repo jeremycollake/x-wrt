@@ -29,7 +29,8 @@ express_class="1:20"
 normal_class="1:30"
 bulk_class="1:40"
 
-qos_status=$(qos-stat)
+qos_status=$(qos-stat 2>&-)
+if ! empty "$qos_status" && exists "/usr/bin/qos-stat"; then
 ingress_start_line=$(echo "$qos_status" | grep INGRESS -n | cut -d ':' -f 1)
 egress_status=$(echo "$qos_status" | sed "$ingress_start_line,\$ d")
 ingress_status=$(echo "$qos_status" | sed "1,$ingress_start_line d")
@@ -75,8 +76,6 @@ display_form <<EOF
 end_form
 EOF
 
-
-
 egress_stats_table=$(echo "$egress_status" | 
 	(awk \
 		-v root_class="$root_class" \
@@ -118,32 +117,26 @@ display_form <<EOF
 end_form
 EOF
 
-?>
-<br />
-<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
+#########################################
+# raw stats
+echo "<br />
+<table style=\"width: 90%; text-align: left;\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\">
 <tbody>
-	<tr>
-		<th>@TR<<QoS Packets | Raw Stats>></th>
-	</tr>
-	<tr>
-		<td>
-<?
-	if [ -f "/etc/config/qos" ] || [ -f "/etc/qos.conf" ]; then
-		echo "<br /><div class=\"smalltext\"><pre>"
-		qos-stat
-		echo "</pre></div>"
-	else
-		echo "Compatible QOS package was not found to be installed. Try nbd's or Rudy's QOS scripts."
-	fi
-?></td>
-	</tr>
-	<tr><td><br /><br /></td></tr>
+<tr>
+	<th>@TR<<QoS Packets | Raw Stats>></th>
+</tr>
+<tr>
+<td>"
+echo "<br /><div class=\"smalltext\"><pre>"
+qos-stat
+echo "</pre></div>"
+echo "</td></tr><tr><td><br /><br /></td></tr></tbody></table>"
+else
+#########################################
+# no QoS Service
+	echo "<br />@TR<<no_qos#No QoS Service found running so no parsed QoS statistics can be shown! We recommend to install nbd's QoS scripts.>><br />"	
+fi
 
-</tbody>
-</table>
-
-<br />
-<?
 show_validated_logo
 footer ?>
 <!--
