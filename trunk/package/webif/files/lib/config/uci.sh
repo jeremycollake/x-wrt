@@ -1,4 +1,4 @@
-7#!/bin/sh
+#!/bin/sh
 # Shell script defining macros for manipulating config files
 #
 # Copyright (C) 2006 by Fokus Fraunhofer <carsten.tittel@fokus.fraumhofer.de>
