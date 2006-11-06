@@ -5,6 +5,8 @@ header "Status" "Asterisk" "Asterisk Simple Managment"
 
 conf_path="/etc/asterisk"
 
+if [ -e $conf_path ]; then
+
 echo '<center>'
 echo '<a href="'$SCRIPT_NAME'">Version</a>'
 echo '<a href="'$SCRIPT_NAME'?action=sip_peers">SIP/Peers</a>'
@@ -88,6 +90,9 @@ if [ "$FORM_action" = "edit" ]; then
 	echo '<br /><INPUT type="submit" value="@TR<<Save Changes>>">'
 	echo '</center>'
 	echo '</form>'
+fi
+else
+has_pkgs asterisk
 fi
 footer ?>
 <!--
