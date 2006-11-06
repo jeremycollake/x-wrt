@@ -31,7 +31,7 @@ if [ -n "$FORM_update_check" ]; then
 	else
 		latest_revision=$(cat $tmpfile)
 		if [ "$this_revision" -lt "$latest_revision" ]; then
-			revision_text="<div id=\"update-available\">webif^2 update available: r$latest_revision (you have r$this_revision)</div>"
+			revision_text="<div id=\"update-available\">webif^2 update available: r$latest_revision</div>"
 		else
 			revision_text="<div id=\"update-unavailable\">You have the latest webif^2: r$this_revision</div>"
 		fi
@@ -50,7 +50,7 @@ fi
 
 <div class="webif-name-title"><a href="http://www.bitsum.com/xwrt.asp">X-Wrt Extensions</a> - webif<sup>2</sup></div>
 <div class="webif-name-subtitle"></div>
-<div class="webif-name-version">Milestone 2 rc1 - r<? echo "$this_revision" ?> </div><br />
+<div class="webif-name-version">(in-development beta) Milestone 2 rc1 - r<? echo "$this_revision" ?> </div><br />
 <form action="" enctype="multipart/form-data" method="post">
 <input type="submit" value=" @TR<<Check_Upgrade|Check For Webif^2 Update>> " name="update_check" />
 <input type="submit" value=" @TR<<Upgrade_Webif|Upgrade Webif^2>> "  name="install_webif" />

@@ -14,7 +14,7 @@ if [ -n "$FORM_update_check" ]; then
 	else
 		latest_revision=$(cat $tmpfile)
 		if [ "$this_revision" -lt "$latest_revision" ]; then
-			revision_text="<div id=\"update-available\">webif^2 update available: r$latest_revision (you have r$this_revision)</div>"
+			revision_text="<div id=\"update-available\">webif^2 update available: r$latest_revision</div>"
 		else
 			revision_text="<div id=\"update-unavailable\">You have the latest webif^2: r$this_revision</div>"
 		fi
