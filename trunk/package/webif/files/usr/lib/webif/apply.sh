@@ -123,10 +123,7 @@ cd "/tmp/.webif"
 for edited_file in $(find "/tmp/.webif/edited-files/" -type f 2>&-); do
 	target_file=$(echo "$edited_file" | sed s/'\/tmp\/.webif\/edited-files'//g)
 	echo "@TR<<Processing>> $target_file"
-	# for squashfs symlink hack
-	is_read_only "$target_file" && {
-		rm "$target_file"
-	}
+	fix_symlink_hack "$target_file"
 	if tr -d '\r' <"$edited_file" >"$target_file"; then
 		rm "$edited_file" 2>&-
 	else
@@ -173,10 +170,7 @@ done
 #  this session.
 for config in $(ls config-conntrack 2>&-); do
 	echo '@TR<<Applying>> @TR<<conntrack settings>> ...'
-	is_read_only "/etc/sysctl.conf" && {
-		rm /etc/sysctl.conf
-		cp /rom/etc/sysctl.conf /etc/sysctl.conf
-	}
+	fix_symlink_hack "/etc/sysctl.conf"
 	# set any and all net.ipv4.netfilter settings.
 	for conntrack in $(grep ip_ /tmp/.webif/config-conntrack); do
 		variable_name=$(echo "$conntrack" | cut -d '=' -f1)

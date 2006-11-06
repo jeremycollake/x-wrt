@@ -36,16 +36,15 @@ is_bcm947xx() {
 	equal "${_systype##* }" "BCM947XX"
 }
 
-is_read_only() {	
-	touch "$1" 2>&-
-}
-
 fix_symlink_hack() {
-	local atmpfile=$(mktemp "/tmp/webif-XXXXXX")
-	cp "$1" "$atmpfile"
-	equal "$?" "0" && {
-		rm "$1"
-		mv "$atmpfile" "$1"
+	touch "$1" >&- 2>&-
+	! equal "$?" "0" && {
+		local atmpfile=$(mktemp "/tmp/webif-XXXXXX")
+		cp "$1" "$atmpfile"
+		equal "$?" "0" && {
+			rm "$1"
+			mv "$atmpfile" "$1"
+		}
 	}
 }
 
@@ -54,7 +53,7 @@ remove_lines_from_file() {
 	# $2=substring match indicating lines to remove (case sensitive)
 	cat "$1" | grep -q "$2"
 	[ "$?" = "0" ] && {
-		is_read_only "$1" && fix_symlink_hack "$1"				
+		fix_symlink_hack "$1"
 		local _substr_sed=$(echo "$2" | sed s/'\/'/'\\\/'/g)
 		cat "$1" |  sed /$_substr_sed/d > "$1"
 	}
