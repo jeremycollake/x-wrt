@@ -13,10 +13,10 @@ if [ -n "$FORM_update_check" ]; then
 		revision_text="<div id=\"update-error\">ERROR CHECKING FOR UPDATE</div>"
 	else
 		latest_revision=$(cat $tmpfile)
-		if [ "$this_revision" != "$latest_revision" ]; then
+		if [ "$this_revision" -lt "$latest_revision" ]; then
 			revision_text="<div id=\"update-available\">webif^2 update available: r$latest_revision (you have r$this_revision)</div>"
 		else
-			revision_text="<div id=\"update-unavailable\">You have the latest webif^2: r$latest_revision</div>"
+			revision_text="<div id=\"update-unavailable\">You have the latest webif^2: r$this_revision</div>"
 		fi
 	fi
 	rm -f "$tmpfile"
