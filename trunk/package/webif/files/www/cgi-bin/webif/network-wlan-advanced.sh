@@ -65,6 +65,7 @@ if empty "$FORM_submit"; then
 	FORM_isolate=${FORM_isolate:-$DEFAULT_AP_ISOLATE}
 	FORM_txpwr=${wl0_txpwr:-$(nvram get wl0_txpwr)}
 	FORM_txpwr=${FORM_txpwr:-$DEFAULT_TXPWR}
+	FORM_frameburst=${wl0_frameburst:-$(nvram get wl0_frameburst)}
 	FORM_lazywds=${wl0_lazywds:-$(nvram get wl0_lazywds)}
 	case "$FORM_lazywds" in
 		1|on|enabled) FORM_lazywds=1;;
@@ -160,8 +161,8 @@ option|deny|@TR<<Deny>>
 
 field|@TR<<Frameburst>>
 select|frameburst|$FORM_frameburst
-option|1|@TR<<Enabled>>
 option|0|@TR<<Disabled>>
+option|1|@TR<<Enabled>>
 
 field|@TR<<Isolate WLAN clients>>
 select|isolate|$FORM_isolate
