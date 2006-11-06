@@ -50,7 +50,7 @@ fi
 
 <div class="webif-name-title"><a href="http://www.bitsum.com/xwrt.asp">X-Wrt Extensions</a> - webif<sup>2</sup></div>
 <div class="webif-name-subtitle"></div>
-<div class="webif-name-version">(in-development beta) Milestone 2 rc1 - r<? echo "$this_revision" ?> </div><br />
+<div class="webif-name-version">(in-development beta) Milestone 2 rc2 - r<? echo "$this_revision" ?> </div><br />
 <form action="" enctype="multipart/form-data" method="post">
 <input type="submit" value=" @TR<<Check_Upgrade|Check For Webif^2 Update>> " name="update_check" />
 <input type="submit" value=" @TR<<Upgrade_Webif|Upgrade Webif^2>> "  name="install_webif" />
