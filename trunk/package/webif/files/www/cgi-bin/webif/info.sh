@@ -14,7 +14,7 @@ if [ -n "$FORM_update_check" ]; then
 	else
 		latest_revision=$(cat $tmpfile)
 		if [ "$this_revision" -lt "$latest_revision" ]; then
-			revision_text="<div id=\"update-available\">webif^2 update available: r$latest_revision - <a href=\"http://svn.berlios.de/wsvn/xwrt/trunk/package/webif/?op=log&amp;rev=0&amp;sc=0&amp;isdir=1\">view changes</a></div>"
+			revision_text="<div id=\"update-available\">webif^2 update available: r$latest_revision - <a href=\"http://svn.berlios.de/wsvn/xwrt/trunk/package/webif/?op=log&amp;rev=0&amp;sc=0&amp;isdir=1\" target=\"_blank\">view changes</a></div>"
 		else
 			revision_text="<div id=\"update-unavailable\">You have the latest webif^2: r$this_revision</div>"
 		fi
