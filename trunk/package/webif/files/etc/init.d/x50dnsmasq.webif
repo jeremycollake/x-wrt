@@ -11,7 +11,7 @@ if [ -z $(nvram get lan_dhcp_enabled) ]; then
 	nvram set lan_dhcp_enabled=1					
 fi	
 for ifname in lan wan wifi $(nvram get ifnames); do			
-	if [ -z $(nvram get ${ifname}_dhcp_start)]; then
+	if [ -z $(nvram get ${ifname}_dhcp_start) ]; then
 		# cut is in case someone set a full IP here instead of integer
 		nvram set ${ifname}_dhcp_start=$(nvram get dhcp_start | cut -d '.' -f 4)
 	fi
