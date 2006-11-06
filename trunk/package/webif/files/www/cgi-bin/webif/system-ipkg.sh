@@ -58,12 +58,13 @@ header "System" "Packages" "@TR<<Packages>>" '' "$SCRIPT_NAME"
 	fi
 }
 
-! empty "$FORM_remove_repo" && {
-	remove_lines_from_file "/etc/ipkg.conf" "$FORM_remove_repo"
-	echo "<br />Repository source was removed: $FORM_remove_repo<br />"
+! empty "$FORM_remove_repo_name" && ! empty "$FORM_remove_repo_url" && {
+	repo_src_line="src $FORM_remove_repo_name $FORM_remove_repo_url"
+	remove_lines_from_file "/etc/ipkg.conf" "$repo_src_line"
+	echo "<br />Repository source was removed: $FORM_remove_repo_name<br />"
 }
 
-repo_list=$(awk '/src/ { print "string|<tr class=\"repositories\"><td><a href=./system-ipkg.sh?remove_repo=" $3 ">remove</a>&nbsp;&nbsp;" $2 "</td><td colspan=\"2\">" $3 "</td></tr>"}' /etc/ipkg.conf)
+repo_list=$(awk '/src/ { print "string|<tr class=\"repositories\"><td><a href=./system-ipkg.sh?remove_repo_name=" $2 "&amp;remove_repo_url=" $3 ">remove</a>&nbsp;&nbsp;" $2 "</td><td colspan=\"2\">" $3 "</td></tr>"}' /etc/ipkg.conf)
 
 display_form <<EOF
 start_form|@TR<<Add Repository>>
