@@ -30,12 +30,10 @@ normal_class="1:30"
 bulk_class="1:40"
 
 qos_status=$(qos-stat 2>&-)
+if ! empty "$qos_status" && exists "/usr/bin/qos-stat"; then
 ingress_start_line=$(echo "$qos_status" | grep INGRESS -n | cut -d ':' -f 1)
 egress_status=$(echo "$qos_status" | sed "$ingress_start_line,\$ d")
 ingress_status=$(echo "$qos_status" | sed "1,$ingress_start_line d")
-
-if ! empty "$qos_status" && ! empty "$egress_status" && ! empty "$ingress_status" && exists "/usr/bin/qos-stat"; then
-
 ingress_stats_table=$(echo "$ingress_status" | 
 	(awk \
 		-v root_class="$root_class" \
