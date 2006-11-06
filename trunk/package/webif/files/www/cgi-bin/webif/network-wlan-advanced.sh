@@ -207,7 +207,7 @@ text|wl0_bcn|$FORM_wl0_bcn
 field|Max Associated Clients (default 128)
 text|wl0_maxassoc|$FORM_wl0_maxassoc
 
-field|Wireless Distance
+field|Wireless Distance (In Meters)
 text|wl0_distance|$FORM_wl0_distance
 helpitem|Wireless Distance
 helptext|Helptext Wirless Distance#You must enter a number that is double the distance of your longest link.
