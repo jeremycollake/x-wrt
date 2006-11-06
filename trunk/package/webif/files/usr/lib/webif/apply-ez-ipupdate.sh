@@ -27,11 +27,10 @@ if [ "$ddns_enable" -eq "1" ]; then
 
 	[ -f $ddns_cache ] && rm -f $ddns_msg
 	echo "(Re)start DynDNS ez-ipupdate" > $ddns_msg
-
 	echo "(Re)start ez-ipupdate..."
 
 	$initfile restart
 else
-	echo "Stop ez-ipupdate..."
-	$initfile stop
+	#echo "Stop ez-ipupdate..."
+	$initfile stop >&- 2>&-
 fi

@@ -264,7 +264,7 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 	echo "@TR<<Committing>> ${package#/tmp/.uci/} ..."
 	uci_commit "$package"
 	case "$package" in
-		"/tmp/.uci/qos") echo "&nbsp;@TR<<restart_qos#Restarting>> ..."
+		"/tmp/.uci/qos") echo "&nbsp;@TR<<Restarting>> ..."
 			qos-start;;
 	esac
 done
