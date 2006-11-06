@@ -52,8 +52,8 @@ fi
 <div class="webif-name-subtitle"></div>
 <div class="webif-name-version">(in-development beta) Milestone 2 rc2 - r<? echo "$this_revision" ?> </div><br />
 <form action="" enctype="multipart/form-data" method="post">
-<input type="submit" value=" @TR<<Check_Upgrade|Check For Webif^2 Update>> " name="update_check" />
-<input type="submit" value=" @TR<<Upgrade_Webif|Upgrade Webif^2>> "  name="install_webif" />
+<input type="submit" value=" @TR<<Check_Upgrade#Check For Webif^2 Update>> " name="update_check" />
+<input type="submit" value=" @TR<<Upgrade_Webif#Upgrade Webif^2>> "  name="install_webif" />
 </form>
 <? echo $revision_text ?>
 <table class="webif-contributors" width="70%"><tbody>
@@ -96,26 +96,26 @@ fi
 </td></tr>
 <tr><td><br /></td></tr>
 <tr><td>
-@TR<<Monowall_Credit|CPU and Traffic graphs based on code from>> <a href="http://m0n0.ch/wall/">m0n0wall</a>.
+@TR<<Monowall_Credit#CPU and Traffic graphs based on code from>> <a href="http://m0n0.ch/wall/">m0n0wall</a>.
 </td></tr>
 <tr><td>
-@TR<<Cova_Credit|Some pages have been adopted from code written>> @TR<<by>> David Bird, <a href="http://www.coova.org">Coova Technologies</a>, @TR<<and>> <a href="http://sourceforge.net/projects/hotspot-zone">Hotspot-Zone</a>.
+@TR<<Cova_Credit#Some pages have been adopted from code written>> @TR<<by>> David Bird, <a href="http://www.coova.org">Coova Technologies</a>, @TR<<and>> <a href="http://sourceforge.net/projects/hotspot-zone">Hotspot-Zone</a>.
 </td></tr>
 <tr><td>
-@TR<<CSS_Layout|Layout was originally based on>> <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran.
+@TR<<CSS_Layout#Layout was originally based on>> <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran.
 </td></tr>
 <tr><td>
 @TR<<UCI>> @TR<<facilitating code>> @TR<<Copyright>> (C) 2006 by Fokus Fraunhofer <carsten.tittel@fokus.fraumhofer.de>.
 </td></tr>
 <tr><td>
-@TR<<Translator_Credit|The translation you are currently using is authored by (nobody)>>.
+@TR<<Translator_Credit#The translation you are currently using is authored by (nobody)>>.
 </td></tr>
 <tr><td>
 @TR<<This device is running>> <a href="http://www.openwrt.org">OpenWrt</a> @TR<<or a close derivative>>.
 </td></tr>
 <tr><td><br /></td></tr>
 <tr><td>
-@TR<<GPL_Text|This program is free software; you can redistribute it and/or <br />modify it under the terms of the GNU General Public License <br />as published by the Free Software Foundation; either version 2 <br />of the License, or (at your option) any later version.<br /> >>
+@TR<<GPL_Text#This program is free software; you can redistribute it and/or <br />modify it under the terms of the GNU General Public License <br />as published by the Free Software Foundation; either version 2 <br />of the License, or (at your option) any later version.<br /> >>
 </td></tr>
 </tbody></table>
 <br />
