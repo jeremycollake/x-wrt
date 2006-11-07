@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 		/* throw a null at end of field */
 		for(;*p!=0x20 && *p; p++);
 		*p++=0;
-		printf("%sB ", make_human_readable_str(strtoul(pS, NULL, 10), 1,  0));
+		printf("%s ", make_human_readable_str(strtoul(pS, NULL, 10), 1,  0));
 	}
 	free(pszInputText);
 	printf("\n");				
