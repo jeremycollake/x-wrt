@@ -184,7 +184,7 @@ $1 > 0 {
 	print "</tr>"
 }
 ' /tmp/dhcp.leases
-grep "." /tmp/dhcp.leases
+grep -q "." /tmp/dhcp.leases
 ! equal "$?" "0" &&
 {
 	echo "<tr><td>There are no known DHCP leases.</td></tr>"
