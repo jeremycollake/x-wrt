@@ -14,6 +14,7 @@ package-$(BR2_PACKAGE_BWM) += bwm
 package-$(BR2_PACKAGE_CHILLISPOT) += chillispot
 package-$(BR2_PACKAGE_CIFSMOUNT) += cifsmount
 package-$(BR2_PACKAGE_CPU) += cpu
+package-$(BR2_PACKAGE_INT2HUMAN) += int2human
 package-$(BR2_PACKAGE_CUPS) += cups
 package-$(BR2_PACKAGE_CYRUS_SASL) += cyrus-sasl
 package-$(BR2_PACKAGE_DHCP_FORWARDER) += dhcp-forwarder

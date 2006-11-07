@@ -1,0 +1,5 @@
+config BR2_PACKAGE_INT2HUMAN
+	tristate "int2human - small utility to convert integers to human readable form."
+	default m
+	help
+	 Small utility to convert integers to human readable form. Based on Busybox's code.
