@@ -32,7 +32,7 @@ elif is_package_installed "qos-re"; then
 	#
 . ./qos-rudy.inc
 else
-	echo "<div class=\"warning\">A compatible QOS package was not found to be installed. Currently this page supports Rudy's QoS scripts.</div>"
+	echo "<div class=\"warning\">A compatible QOS package was not found to be installed. Currently this page supports Rudy's or nbd's QoS scripts.</div>"
 
 display_form <<EOF
 onchange|modechange
