@@ -1,7 +1,7 @@
 menu "webif - OpenWrt Administrative Console"
 
 config BR2_PACKAGE_WEBIF
-	select BR2_PACKAGE_HASERL
+	select BR2_PACKAGE_HASERL BR2_PACKAGE_INT2HUMAN
 	tristate "webif - OpenWrt Administrative Console"
 	default y
 	help
