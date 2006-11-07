@@ -197,7 +197,7 @@ text|dhcp_num|$FORM_dhcp_num
 field|@TR<<DHCP Bail>>
 text|dhcp_bail|$FORM_dhcp_bail
 end_form
-eOF
+EOF
 		fi
 fi
 
