@@ -15,27 +15,153 @@ handle_list "$FORM_wdsremove" "$FORM_wdsadd" "$FORM_wdssubmit" 'mac|FORM_wdsadd|
 FORM_wdsadd=${FORM_wdsadd:-00:00:00:00:00:00}
 
 if empty "$FORM_submit"; then
+	FORM_wds_ssid=${wl0_wds_ssid:-$(nvram get wl0_wds_ssid)}
 	FORM_lazywds=${wl0_lazywds:-$(nvram get wl0_lazywds)}
-	FORM_wl0_distance=${wl0_distance:-$(nvram get wl0_distance)}
+	akm=${wl0_wds_akm:-$(nvram get wl0_wds_akm)}
+	case "$akm" in
+		psk)
+			FORM_encryption=psk
+			FORM_wpa1=wpa1
+			;;
+		psk2)
+			FORM_encryption=psk
+			FORM_wpa2=wpa2
+			;;
+		'psk psk2')
+			FORM_encryption=psk
+			FORM_wpa1=wpa1
+			FORM_wpa2=wpa2
+			;;
+		wpa)
+			FORM_encryption=wpa
+			FORM_wpa1=wpa1
+			;;
+		wpa2)
+			FORM_encryption=wpa
+			FORM_wpa2=wpa2
+			;;
+		'wpa wpa2')
+			FORM_encryption=wpa
+			FORM_wpa1=wpa1
+			FORM_wpa2=wpa2
+			;;
+		*)
+			FORM_wpa1=wpa1
+			;;
+	esac
+	FORM_wds_wpa_psk=${wl0_wds_wpa_psk:-$(nvram get wl0_wds_wpa_psk)}
+	FORM_wds_radius_key=${wl0_wds_radius_key:-$(nvram get wl0_wds_radius_key)}
+	FORM_wds_radius_ipaddr=${wl0_wds_radius_ipaddr:-$(nvram get wl0_wds_radius_ipaddr)}
+	crypto=${wl0_wds_crypto:-$(nvram get wl0_wds_crypto)}
+	case "$crypto" in
+		tkip)
+			FORM_tkip=tkip
+			;;
+		aes)
+			FORM_aes=aes
+			;;
+		'tkip+aes'|'aes+tkip')
+			FORM_aes=aes
+			FORM_tkip=tkip
+			;;
+		*)
+			FORM_tkip=tkip
+			;;
+	esac
 else
 	SAVED=1
 	validate <<EOF
+string|FORM_wds_ssid|@TR<<ESSID>>|required|$FORM_wds_ssid
 int|FORM_lazywds|Lazy WDS On/Off|required min=0 max=1|$FORM_lazywds
 int|FORM_wl0_distance|Distance|min=0|$FORM_wl0_distance
 int|FORM_wdstimeout|WDS watchdog timeout|optional min=0 max=3600|$FORM_wdstimeout
 EOF
 equal "$?" 0 && {
+	save_setting wireless wl0_wds_ssid "$FORM_wds_ssid"
 	save_setting wireless wl0_lazywds "$FORM_lazywds"
 	save_setting wireless wl0_wdstimeout "$FORM_wdstimeout"
+crypto=""
+			equal "$FORM_wds_aes" aes && crypto="aes"
+			equal "$FORM_wds_tkip" tkip && crypto="tkip${crypto:++$crypto}"
+			save_setting wireless wl0_crypto "$crypto"
+
+			case "$FORM_encryption" in
+			psk)
+				case "${FORM_wpa1}${FORM_wpa2}" in
+					wpa1) save_setting wireless wl0_wds_akm "psk";;
+					wpa2) save_setting wireless wl0_wds_akm "psk2";;
+					wpa1wpa2) save_setting wireless wl0_wds_akm "psk psk2";;
+				esac
+				save_setting wireless wl0_wpa_psk "$FORM_wds_wpa_psk"
+				;;
+			wpa)
+				case "${FORM_wds_wpa1}${FORM_wds_wpa2}" in
+					wpa1) save_setting wireless wl0_wds_akm "wpa";;
+					wpa2) save_setting wireless wl0_wds_akm "wpa2";;
+					wpa1wpa2) save_setting wireless wl0_wds_akm "wpa wpa2";;
+				esac
+				save_setting wireless wl0_radius_ipaddr "$FORM_wds_radius_ipaddr"
+				save_setting wireless wl0_radius_key "$FORM_wds_radius_key"
+				;;
+			off)
+				save_setting wireless wl0_wds_akm ""
+				;;
+			esac
 	}
 fi
+
+#####################################################################
+# generate nas package field
+#
+nas_installed="0"
+ipkg list_installed | grep -q nas
+equal "$?" "0" && nas_installed="1"
+
+install_nas_button='field|@TR<<NAS Package>>|install_nas|hidden'
+if ! equal "$nas_installed" "1"; then
+	install_nas_button="$install_nas_button
+		string|<div class=\"warning\">WPA and WPA2 will not work until you install the NAS package. </div>
+		submit|install_nas| Install NAS Package |"
+else
+	install_nas_button="$install_nas_button
+		string|@TR<<Installed>>."
+fi
+
+#####################################################################
+# modechange script
+#
+cat <<EOF
+<script type="text/javascript" src="/webif.js"></script>
+<script type="text/javascript">
+<!--
+function modechange()
+{
+	v = (isset('wds_encryption','wpa') || isset('wds_encryption','psk'));
+	set_visible('wds_wpa_support', v);
+	set_visible('wds_wpa_crypto', v);
+
+	set_visible('wds_wpapsk', isset('wds_encryption','psk'));
+	v = (isset('wds_encryption','psk') || isset('wds_encryption','wpa'));
+	set_visible('install_nas', v);
+
+	v = isset('wds_encryption','wpa');
+	set_visible('wds_radiuskey', v);
+	set_visible('wds_radius_ip', v);
+
+	hide('save');
+	show('save');
+}
+-->
+</script>
+
+EOF
 		
 display_form <<EOF
 onchange|modechange
-start_form|@TR<<WDS Connections>>
+start_form|@TR<<LAN Bridge WDS Connections>>
 listedit|wds|$SCRIPT_NAME?|$FORM_wds|$FORM_wdsadd
 end_form
-start_form|WDS Options
+start_form|@TR<<WDS Options>>
 
 field|@TR<<WDS watchdog timeout>>
 text|wdstimeout|$FORM_wdstimeout
@@ -44,6 +170,34 @@ field|@TR<<Automatic WDS>>
 select|lazywds|$FORM_lazywds
 option|1|@TR<<Enabled>>
 option|0|@TR<<Disabled>>
+
+field|@TR<<Encryption Type>>
+select|wds_encryption|$FORM_wds_encryption
+option|off|@TR<<Disabled>>
+option|psk|WPA (@TR<<PSK>>)
+option|wpa|WPA (RADIUS)
+
+helpitem|Encryption Type
+helptext|HelpText Encryption Type#WPA2 is currently unsupported.
+
+field|@TR<<WPA Mode>>|wpa_support|hidden:
+checkbox|wpa1|$FORM_wpa1|wpa1|WPA1
+checkbox|wpa2|$FORM_wpa2|wpa2|WPA2
+
+field|@TR<<WPA Algorithms>>|wds_wpa_crypto|hidden
+checkbox|tkip|$FORM_wds_tkip|wds_tkip|RC4 (TKIP)
+checkbox|aes|$FORM_wds_aes|wds_aes|AES
+
+field|WPA @TR<<PSK>>|wds_wpapsk|hidden
+password|wds_wpa_psk|$FORM_wds_wpa_psk
+
+field|@TR<<RADIUS IP Address>>|wds_radius_ip|hidden
+text|wds_radius_ipaddr|$FORM_wds_radius_ipaddr
+
+field|@TR<<RADIUS Server Key>>|wds_radiuskey|hidden
+text|wds_radius_key|$FORM_wds_radius_key
+
+$install_nas_button
 
 end_form
 EOF
