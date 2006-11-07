@@ -295,7 +295,7 @@ footer() {
 		$_endform
 	<div id="footer-logo">
 	X-Wrt
-	<div id="footer-sublogo">@TR<<making_usable#Making OpenWrt usable for the rest of us>></div>
+	<div id="footer-sublogo">@TR<<making_usable#End user extensions for OpenWrt>></div>
 	</div>			
     </div></body>
 </html>
