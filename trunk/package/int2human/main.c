@@ -37,7 +37,7 @@ int main(int argc, char **argv)
 		int nReqLen=1;  /* require at least null terminator */
 		for(nI=1; nI<argc;nI++)
 		{
-			if(!strcmp(argv[nI],"--?")) 
+			if(!strcmp(argv[nI], "--?") || !strcmp(argv[nI], "--help")) 
 			{
 				usage();
 				exit(1);
