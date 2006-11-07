@@ -8,10 +8,9 @@
 void usage() 
 {
 	printf("Usage: int2human integer1 integer2 integer3 ...\n\n"
-		" Where integerX is an integer you want converted to human readable form. If\n"
-		" multiple integers are supplied on the command line, the output is delimited by.\n"
-		" a space. Currently this program is limited to integers the width of the\n"
-		" system's unsigned long.\n\n");
+		" Where integerX is an integer to convert to human readable form. If multiple\n"
+		" integers are supplied, the output is delimited by a space. Currently this\n"
+		" program is limited to integers the width of the system's unsigned long.\n\n");
 }
 
 int main(int argc, char **argv)
