@@ -1,6 +1,4 @@
 .asp:text/html
-/:root:$p$root
-/:admin:$p$root
 .svg:image/svg+xml
 .png:image/png
 .gif:image/gif
