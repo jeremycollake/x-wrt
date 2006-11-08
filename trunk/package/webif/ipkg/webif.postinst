@@ -91,6 +91,11 @@ DeleteRepository()
 #
 echo "Executing post-install script ..."
 
+# fix some links on squashfs partition that aren't properly copied instead by firstboot
+# has no effect when done in image builder.
+FixReadOnlyLink "${IPKG_INSTROOT}/usr/lib/ipkg/info/webif.list"
+FixReadOnlyLink "${IPKG_INSTROOT}/etc/ipkg.conf"
+
 # copy our new httpd.conf and S50dnsmasq files - we renamed them so that the webif can
 # be uninstalled without ipkg removing these pre-existing files as well.
 rm -f "${IPKG_INSTROOT}/etc/init.d/S50dnsmasq"
@@ -130,10 +135,6 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 	[ $IPKG_UPDATE_NEEDED = 1 ] && {
 		ipkg update
 	}
-
-	# fix some links on squashfs partition that aren't properly copied instead by firstboot
-	FixReadOnlyLink "/usr/lib/ipkg/info/webif.list"
-	FixReadOnlyLink "/etc/ipkg.conf"
 
 	# don't trust ipkg's dependency handling (who would)
 	# WARNING: one of the side effects of this is that since the package list is locked, it
