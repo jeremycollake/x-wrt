@@ -34,6 +34,8 @@ header "System" "Packages" "@TR<<Packages>>" '' "$SCRIPT_NAME"
 # Install from URL and Add Repository code - self-contained block.
 #
 
+repo_update_needed=0
+
 ! empty "$FORM_install_url" && {
 	# just set up to pass-through to normal handler
 	FORM_action="install"
@@ -43,25 +45,30 @@ header "System" "Packages" "@TR<<Packages>>" '' "$SCRIPT_NAME"
 ! empty "$FORM_install_repo" && {
 	validate "string|FORM_repourl|@TR<<Repository URL>>|min=4 max=4096 required|$FORM_repourl"
 	if equal "$?" "0"; then
+		repo_update_needed=1
 		# since firstboot doesn't make a copy of ipkg.conf, we must do it
 		# todo: need a mutex or lock here
 		tmpfile=$(mktemp "/tmp/.webif-ipkg-XXXXXX")
 		cp "/etc/ipkg.conf" "$tmpfile"
 		echo "src $FORM_reponame $FORM_repourl" >> "$tmpfile"
 		rm "/etc/ipkg.conf"
-		mv "$tmpfile" "/etc/ipkg.conf"
-		echo "<br />Repository sources updated. Performing update of package lists ...<br /><pre>"
-		ipkg update
-		echo "</pre>"
+		mv "$tmpfile" "/etc/ipkg.conf"				
 	else
 		echo "<div class=\"warning\">ERROR: You did not specify all necessary repository fields.</div>"
 	fi
 }
 
-! empty "$FORM_remove_repo_name" && ! empty "$FORM_remove_repo_url" && {
+! empty "$FORM_remove_repo_name" && ! empty "$FORM_remove_repo_url" && {	
+	repo_update_needed=1
 	repo_src_line="src $FORM_remove_repo_name $FORM_remove_repo_url"
 	remove_lines_from_file "/etc/ipkg.conf" "$repo_src_line"
 	echo "<br />Repository source was removed: $FORM_remove_repo_name<br />"
+}
+
+equal "$repo_update_needed" "1" && {
+	echo "<br />Repository sources updated. Performing update of package lists ...<br /><pre>"
+	ipkg update
+	echo "</pre>"
 }
 
 repo_list=$(awk '/src/ { print "string|<tr class=\"repositories\"><td><a href=./system-ipkg.sh?remove_repo_name=" $2 "&amp;remove_repo_url=" $3 ">remove</a>&nbsp;&nbsp;" $2 "</td><td colspan=\"2\">" $3 "</td></tr>"}' /etc/ipkg.conf)
