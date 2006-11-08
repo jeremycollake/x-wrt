@@ -3,9 +3,6 @@
 . /usr/lib/webif/webif.sh
 header "Status" "Interfaces" "@TR<<Interfaces>>"
 
-haspkgs int2human
-
-# TODO: some of this code can be abstracted a bit into a function.. not sure its worth doing.
 # get WAN stats
 wan_config=$(ifconfig 2>&1 | grep -A 6 "`nvram get wan_ifname`")
 wan_ip_addr=$(echo "$wan_config" | grep "inet addr" | cut -d: -f 2 | sed s/Bcast//g)
