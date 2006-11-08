@@ -1,3 +1,5 @@
+/:root:$p$root
+/:admin:$p$root
 .asp:text/html
 .svg:image/svg+xml
 .png:image/png
