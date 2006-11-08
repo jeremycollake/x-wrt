@@ -132,6 +132,9 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 	}
 
 	# don't trust ipkg's dependency handling (who would)
+	# WARNING: one of the side effects of this is that since the package list is locked, it
+	#  will NOT be updated. Normally ipkg would install this listed dependency, but this
+	#  doesn't seem to always be the case (maybe when initial install didn't have this dependency?).
 	ipkg list_installed | grep -q "int2human"
 	[ "$?" != "0" ] && [ ! -f "/sbin/int2human" ] && {
 		echo "Installing dependency int2human ..."
