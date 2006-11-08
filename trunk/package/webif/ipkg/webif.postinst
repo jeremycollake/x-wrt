@@ -95,6 +95,7 @@ echo "Executing post-install script ..."
 # has no effect when done in image builder.
 FixReadOnlyLink "${IPKG_INSTROOT}/usr/lib/ipkg/info/webif.list"
 FixReadOnlyLink "${IPKG_INSTROOT}/etc/ipkg.conf"
+FixReadOnlyLink "${IPKG_INSTROOT}/usr/lib/ipkg/status"
 
 # copy our new httpd.conf and S50dnsmasq files - we renamed them so that the webif can
 # be uninstalled without ipkg removing these pre-existing files as well.
