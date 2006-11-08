@@ -14,8 +14,9 @@ build_chap_secrets
 
 cat<<EOF
 <div class="settings">
-<div class="settings-title"><h3><strong>PPTP Client</strong></h3></div>
+<div class="settings-title"><h3><strong>@TR<<PPTP Client>></strong></h3></div>
 <div class="settings-content">
+<table><tbody>
 EOF
 
 if equal "$(nvram get pptp_cli)" "1"; then
@@ -47,28 +48,31 @@ if equal "$(nvram get pptp_cli)" "1"; then
 	echo "<h3>Active PPTP Tunnels:</h3>"
 	ifconfig_info raw | awk '$6 ~ "pptp:"' | awk '
 BEGIN {
-	print "<table width=\"100%\"><tr><th>Peername</th><th>Interface</th><th>IP Address</th><th>Netmask</th><th>Protocol</th><th>Link</th><th>RX Bytes</th><th>TX Bytes</th></tr>"
+	print "<table width=\"80%\"><tbody><tr><th>Peername</th><th>Interface</th><th>IP Address</th><th>Netmask</th><th>Protocol</th><th>Link</th><th>RX Bytes</th><th>TX Bytes</th></tr>"
 }
 {
 	print "<tr><td>" substr($6,6) "</td><td>" $1 "</td><td>" $2 "</td><td>" $3 "</td><td>" $4 "</td><td>" $5 "</td><td align=right>" $7 " " $8 "</td><td align=right>" $9 " " $10 "</td><td><a href=\"?cli_action=stop&peer=" substr($6,6) "\">stop</a></td></tr>"
 }
 END {
-	print "</table>"
+	print "</tbody></table>"
 }
 '
 
 else
-	echo "<p>pptp client disabled.</p>"
+	echo "pptp client disabled."
 fi
 cat<<EOF
+</tbody></table>
 </div>
 </div>
 EOF
 
 cat<<EOF
+<br /><br />
 <div class="settings">
-<div class="settings-title"><h3><strong>PPTP Server</strong></h3></div>
+<div class="settings-title"><h3><strong>@TR<<PPTP Server>></strong></h3></div>
 <div class="settings-content">
+<table><tbody>
 EOF
 
 if equal "$(nvram get pptp_srv)" "1"; then
@@ -99,7 +103,7 @@ if equal "$(nvram get pptp_srv)" "1"; then
 
 	echo "<br><h3>Established VPN Connections</h3>"
 	if [ -e $SRV_USR.ppp ] && [ -e $SRV_IPS.pptp ]; then
-		echo "<table style=\"margin-top: 10px; width: 90%; text-align: left;\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\">"
+		echo "<table style=\"margin-top: 10px; width: 80%; text-align: left;\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\"><tbody>"
 		echo "<tr><th>Interface</th><th>Username</th><th>TTY</th><th>Tunnel IP</th><th>Client IP</th><th>Time</th><th></th></tr>"
 		cat $SRV_USR.ppp $SRV_IPS.pptp | awk '
 			($6 != "") {
@@ -110,13 +114,14 @@ if equal "$(nvram get pptp_srv)" "1"; then
 				print "<tr><td>" $1 "</td><td>" user[$1] "</td><td>" $2 "</td><td>" $4 "</td><td>" $5 "</td><td>" user_login[$1] "</td><td><a href=\"?srv_action=stopvpn&clientip=" $5 "\">Stop VPN</a></td></tr>"
 			}
 		'
-		echo "</table>"
+		echo "</tbody></table>"
 	fi
 else
 	echo "<p>pptp server disabled.</p>"
 fi
 
 cat<<EOF
+</tbody></table>
 </div>
 </div>
 EOF
