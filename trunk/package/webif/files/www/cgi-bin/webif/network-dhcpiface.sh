@@ -53,7 +53,7 @@ empty "$FORM_remove_line" || update_dnsmasq del "$FORM_iface" "$FORM_line"
 		FORM_dhcp_bail=${FORM_dhcp_bail:-$(nvram get ${FORM_iface}_dhcp_bail)}
 	fi
 if [ -n "$FORM_submit" ]; then
-	validate <<EOF
+validate <<EOF
 int|FORM_${FORM_iface}_dhcp_enabled|DHCP enabled||$FORM_dhcp_enabled
 string|FORM_${FORM_iface}_dhcp_iface|DHCP iface||$FORM_dhcp_iface
 int|FORM_${FORM_iface}_dhcp_start|DHCP start||$FORM_dhcp_start
@@ -74,15 +74,15 @@ fi
 
 #display_form<<EOF
 awk -v "name=@TR<<Name>>" \
-	-v "interface=@TR<<Interface>>" \
-	-v "interfaces=@TR<<Interfaces>>" \
-	-v "action=@TR<<Action>>" \
-	-f /usr/lib/webif/common.awk -f - /etc/dnsmasq.options <<EOF
+-v "interface=@TR<<Interface>>" \
+-v "interfaces=@TR<<Interfaces>>" \
+-v "action=@TR<<Action>>" \
+-f /usr/lib/webif/common.awk -f - /etc/dnsmasq.options <<EOF
 BEGIN{
-	start_form("@TR<<Interfaces>>")
-	print "<table style=\\"width: 90%\\">"
-	print "<tr><th>" name "</th><th>" interface "</th><th>" interfaces "</th><th>" action "</th></tr>"
-	print "<tr><td colspan=\\"4\\"><hr class=\\"separator\\" /></td></tr>"
+start_form("@TR<<Interfaces>>")
+print "<table style=\\"width: 90%\\">"
+print "<tr><th>" name "</th><th>" interface "</th><th>" interfaces "</th><th>" action "</th></tr>"
+print "<tr><td colspan=\\"4\\"><hr class=\\"separator\\" /></td></tr>"
 }
 EOF
 
@@ -101,8 +101,8 @@ EOF
 
 awk -f /usr/lib/webif/common.awk -f - /etc/dnsmasq.options <<EOF
 BEGIN{
-	print "</table><br />"
-	end_form();
+print "</table><br />"
+end_form();
 }
 EOF
 #end_form
@@ -116,71 +116,71 @@ if [ -n "$FORM_iface" ]; then
 
 		eval $(ipcalc $ipaddr $netmask ${start:-100} ${num:-150})
 		# Static DHCP mappings (/etc/ethers)
-		awk -v "url=$SCRIPT_NAME" \
-			-v "mac=$FORM_dhcp_mac" \
-			-v "remove=@TR<<Remove>>" \
-			-v "add=@TR<<Add>>" \
-			-v "param=@TR<<Parameters>>" \
-			-v "value=@TR<<Value>>" \
-			-v "action=@TR<<Action>>" \
-			-v "macaddress=@TR<<MAC Address>>" \
-			-v "iface=$FORM_iface" \
-			-v "ip=$FORM_dhcp_ip" -f /usr/lib/webif/common.awk -f - $DNSMASQ_FILE <<EOF
-		BEGIN {
-			FS=","
-			start_form("@TR<<Options For>> $FORM_iface")
-			print "<table style=\"width: 90%\"><tr><th>" param "</th><th>" value "</th><th>" action "</th></tr>"
-			print "<tr><td colspan=\"4\"><hr class=\"separator\" /></td></tr>"
-		}
+awk -v "url=$SCRIPT_NAME" \
+-v "mac=$FORM_dhcp_mac" \
+-v "remove=@TR<<Remove>>" \
+-v "add=@TR<<Add>>" \
+-v "param=@TR<<Parameters>>" \
+-v "value=@TR<<Value>>" \
+-v "action=@TR<<Action>>" \
+-v "macaddress=@TR<<MAC Address>>" \
+-v "iface=$FORM_iface" \
+-v "ip=$FORM_dhcp_ip" -f /usr/lib/webif/common.awk -f - $DNSMASQ_FILE <<EOF
+BEGIN {
+FS=","
+start_form("@TR<<Options For>> $FORM_iface")
+print "<table style=\"width: 90%\"><tr><th>" param "</th><th>" value "</th><th>" action "</th></tr>"
+print "<tr><td colspan=\"4\"><hr class=\"separator\" /></td></tr>"
+}
 
-		# only for type not empty
-		{
-			n = split(\$1, value, "[=]")
-			option = value[2];
-		}
-		(\$1 ~ /^dhcp-option/ && option == iface) {
-			gsub(/#.*$/, "");
-			print "<tr><td>" \$2 "</td><td>"
-			# first = 1
-			for (i = 3; i <= NF; i++) {
-				print \$i "<br />"
-			}
-			print "</td><td><a href=\\"network-dhcpiface.sh?remove_line=1&mod=del&iface=" iface "&line=" \$0 "\\">" remove "</a></td></tr>"
-			print "<tr><td colspan=\\"3\\"><hr class=\\"separator\\" /></td></tr>"
-		}
+# only for type not empty
+{
+n = split(\$1, value, "[=]")
+option = value[2];
+}
+(\$1 ~ /^dhcp-option/ && option == iface) {
+gsub(/#.*$/, "");
+print "<tr><td>" \$2 "</td><td>"
+# first = 1
+for (i = 3; i <= NF; i++) {
+print \$i "<br />"
+}
+print "</td><td><a href=\\"network-dhcpiface.sh?remove_line=1&mod=del&iface=" iface "&line=" \$0 "\\">" remove "</a></td></tr>"
+print "<tr><td colspan=\\"3\\"><hr class=\\"separator\\" /></td></tr>"
+}
 
-		END {
-			print ""
-		}
-		EOF
+END {
+print ""
+}
+EOF
 
-		awk -v "url=$SCRIPT_NAME" \
-			-v "mac=$FORM_dhcp_mac" \
-			-v "remove=@TR<<Remove>>" \
-			-v "add=@TR<<Add>>" \
-			-v "param=@TR<<Parameters>>" \
-			-v "value=@TR<<Value>>" \
-			-v "action=@TR<<Action>>" \
-			-v "macaddress=@TR<<MAC Address>>" \
-			-v "iface=$FORM_iface" \
-			-v "ip=$FORM_dhcp_ip" -f /usr/lib/webif/common.awk -f - /etc/dnsmasq.options <<EOF
-		BEGIN {
-			FS=":"
-			print "<tr><td><select id=\\"hop\\" name=\\"hop\\">"
-		}
+awk -v "url=$SCRIPT_NAME" \
+-v "mac=$FORM_dhcp_mac" \
+-v "remove=@TR<<Remove>>" \
+-v "add=@TR<<Add>>" \
+-v "param=@TR<<Parameters>>" \
+-v "value=@TR<<Value>>" \
+-v "action=@TR<<Action>>" \
+-v "macaddress=@TR<<MAC Address>>" \
+-v "iface=$FORM_iface" \
+-v "ip=$FORM_dhcp_ip" -f /usr/lib/webif/common.awk -f - /etc/dnsmasq.options <<EOF
+BEGIN {
+FS=":"
+print "<tr><td><select id=\\"hop\\" name=\\"hop\\">"
+}
 
-		# only for type not empty
-		(\$3 != "") {
-			gsub(/#.*$/, "");
-			print "<option value=\\"@TR<<" \$1 "\>>\">" \$1 " - " \$2 " - (" \$3 ")</option>"
-		}
+# only for type not empty
+(\$3 != "") {
+gsub(/#.*$/, "");
+print "<option value=\\"@TR<<" \$1 "\>>\">" \$1 " - " \$2 " - (" \$3 ")</option>"
+}
 
-		END {
-			print "</select></td><td><input type=\\"text\\" name=\\"values\\" value=\\"" values "\\" /></td>"
-			print "<td><input type=\\"hidden\\" value=\\"" iface "\\" name=\\"iface\\" /><input type=\\"submit\\" value=\\"" add "\\" name=\\"add_line\\" /></td></tr></table>"
-			end_form();
-		}
-		EOF
+END {
+print "</select></td><td><input type=\\"text\\" name=\\"values\\" value=\\"" values "\\" /></td>"
+print "<td><input type=\\"hidden\\" value=\\"" iface "\\" name=\\"iface\\" /><input type=\\"submit\\" value=\\"" add "\\" name=\\"add_line\\" /></td></tr></table>"
+end_form();
+}
+EOF
 
 display_form<<EOF
 start_form|@TR<<DHCP Server For $FORM_iface>>
