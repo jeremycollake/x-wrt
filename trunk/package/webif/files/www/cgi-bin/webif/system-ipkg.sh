@@ -86,7 +86,7 @@ helptext|Add Repository#A repository is a server that contains a list of package
 string|<tr><td colspan="2" class="repositories"><h4>@TR<<Current Repositories>>:</h4></td></tr>
 $repo_list
 helpitem|Backports Tip
-helptext|HelpText Backports Tip#For a much larger assortment of packages, see if there is a backports repository available for your firmware (there is one for White Russian RC5). Such a repository brings
+helptext|HelpText Backports Tip#For a much larger assortment of packages, see if there is a backports repository available for your firmware (there is one for White Russian). Such a repository brings
 an offering of packages from the latest bleeding edge branch of the firmware.
 end_form
 start_form|@TR<<Install Package From URL>>
