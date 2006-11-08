@@ -105,7 +105,7 @@ mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
 ln -s "/www/themes/xwrt" "${IPKG_INSTROOT}/www/themes/active" 1>&- 2>&-
 [ $? != 0 ] && {
 	# if fs doesn't support symlinks, do a copy
-	cp -r "/www/themes/xwrt/*" "${IPKG_INSTROOT}/www/themes/active/"
+	cp -r "${IPKG_INSTROOT}/www/themes/xwrt/*" "${IPKG_INSTROOT}/www/themes/active/"
 }
 
 AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/packages"
@@ -131,6 +131,10 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 		ipkg update
 	}
 
+	# fix some links on squashfs partition that aren't properly copied instead by firstboot
+	FixReadOnlyLink "/usr/lib/ipkg/info/webif.list"
+	FixReadOnlyLink "/etc/ipkg.conf"
+
 	# don't trust ipkg's dependency handling (who would)
 	# WARNING: one of the side effects of this is that since the package list is locked, it
 	#  will NOT be updated. Normally ipkg would install this listed dependency, but this
@@ -138,15 +142,11 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 	ipkg list_installed | grep -q "int2human"
 	[ "$?" != "0" ] && [ ! -f "/sbin/int2human" ] && {
 		echo "Installing dependency int2human ..."
-		ipkg install int2human 2>&-
+		ipkg install int2human 2>&- >&-
 		[ "$?" != "0" ] && {
 			ipkg install http://ftp.berlios.de/pub/xwrt/packages/int2human_2_mipsel.ipk 2>&-
 		}
 	}
-
-	# fix some links on squashfs partition that aren't properly copied instead by firstboot
-	FixReadOnlyLink "/usr/lib/ipkg/info/webif.list"
-	FixReadOnlyLink "/etc/ipkg.conf"
 	
 	nvram unset device_name 	# force rescan of device_name, in case new id code is added
 	nvram unset firmware_name	# force rescan of firmware_*
@@ -178,7 +178,6 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 	fi
 	if [ -f "/tmp/.webif_marker_0" ]; then
 		rm -f "/tmp/.webif_marker_0"
-		echo "!!! NOTICE: You may see a list of collected warnings below about not"
-		echo "            being able remove files. Ignore these warnings."
+		echo "NOTICE: You may see a list of collected warnings/errors. Ignore them."
 	fi
 fi

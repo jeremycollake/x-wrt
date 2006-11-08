@@ -3,4 +3,4 @@ Maintainer: X-Wrt Project
 Section: net
 Depends: haserl int2human
 Priority: normal
-Description: A modular, extensible web interface for OpenWrt.
+Description: A modular, extensible web interface for OpenWrt
