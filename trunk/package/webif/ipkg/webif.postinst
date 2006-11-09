@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Webif post-install script. 
+# Webif post-install script.
 #
 
 #######################################################################################
@@ -14,7 +14,7 @@ TestInstall()
 		echo "SUCCESS! Congratulations, Webif^2 installation appears OK. Welcome to X-Wrt!"
 		echo "** YOU MAY NEED TO DO A HARD REFRESH OF YOUR WEB BROWSER TO CLEAR OLD CSS **"
 	else
-		echo "WARNING: Installation may have failed."		
+		echo "WARNING: Installation may have failed."
 		echo " Detected r$installed_version is installed, but this is r$this_version."
 	fi
 }
@@ -33,7 +33,7 @@ ExecuteIfExists()
 
 #######################################################################################
 # FixReadOnlyLink (filename)
-# 
+#
 # OpenWrt WR RC5 and below's firstboot doesn't copy everything it should to /jffs
 #  when it is setting up the symlinks back to ROM. This copies a file to /jffs
 #  where there was merely a symlink back to the read-only partition.
@@ -51,7 +51,7 @@ FixReadOnlyLink()
 
 #######################################################################################
 # AddRepository
-# 
+#
 # Add a repository source if it doesn't already exist.
 #
 IPKG_UPDATE_NEEDED=0
@@ -68,7 +68,7 @@ AddRepository()
 
 #######################################################################################
 # DeleteRepository
-# 
+#
 # Delete a repository source.
 #
 IPKG_UPDATE_NEEDED=0
@@ -77,7 +77,7 @@ DeleteRepository()
 	# $1=repourl
 	cat "${IPKG_INSTROOT}/etc/ipkg.conf" | grep -q "$1"
 	[ "$?" = "0" ] && {
-		repo_url_sed=$(echo "$1" | sed s/'\/'/'\\\/'/g)							
+		repo_url_sed=$(echo "$1" | sed s/'\/'/'\\\/'/g)
 		cat "${IPKG_INSTROOT}/etc/ipkg.conf" |  sed /$repo_url_sed/d > "${IPKG_INSTROOT}/etc/ipkg.conf"
 		IPKG_UPDATE_NEEDED=1
 	}
@@ -124,10 +124,10 @@ elif [ "$firmware_version" = "RC6" ] || grep -q RC6 "${IPKG_INSTROOT}/etc/banner
 	wget http://downloads.openwrt.org/backports/rc6/Packages.filelist -P /tmp 1>&- 2>&-
 	if [ "$?" = "0" ]; then
 		DeleteRepository "http://downloads.openwrt.org/backports/rc5"
-		AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"	
+		AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"
 	else
 		DeleteRepository "http://downloads.openwrt.org/backports/rc4"
-		AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc5"		
+		AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc5"
 	fi
 fi
 
@@ -149,16 +149,16 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 			ipkg install http://ftp.berlios.de/pub/xwrt/packages/int2human_2_mipsel.ipk 2>&-
 		}
 	}
-	
+
 	nvram unset device_name 	# force rescan of device_name, in case new id code is added
 	nvram unset firmware_name	# force rescan of firmware_*
 	ExecuteIfExists "/etc/init.d/S90webif_deviceid"
 	ExecuteIfExists "/etc/init.d/S10firmwareinfo"	# x-wrt images use to pre-empt firmware_* set
 	ExecuteIfExists "/etc/init.d/S90webif_firmwareid"
-	
+
 	TestInstall
 	httpd_1=$(cat /tmp/httpd.conf.old)
-	httpd_2=$(cat /etc/httpd.conf)	
+	httpd_2=$(cat /etc/httpd.conf)
 	rm -f /tmp/httpd.conf.old
 	if [ "$httpd_1" != "$httpd_2" ]; then
 		echo "Restarting httpd ... If there are problems, a reboot may be needed."
