@@ -26,5 +26,5 @@ $(PKG_BUILD_DIR)/.built:
 $(IPKG_WEPKEYGEN): 
 	install -d -m0755 $(IDIR_WEPKEYGEN)/sbin
 	install -m0755 $(PKG_BUILD_DIR)/wepkeygen $(IDIR_WEPKEYGEN)/sbin
-	$(RSTRIP) $(IDIR_WEPKEYGEN)/sbin/*
+	$(RSTRIP) $(IDIR_WEPKEYGEN)/usr/sbin/*
 	$(IPKG_BUILD) $(IDIR_WEPKEYGEN) $(PACKAGE_DIR)
