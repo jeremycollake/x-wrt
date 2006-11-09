@@ -92,7 +92,7 @@ fi
 &nbsp;&nbsp; <a href="mailto:tyardley@users.berlios.de">Tim Yardley (lst)</a>
 </td></tr>
 <tr><td colspan="2">
-&nbsp;&nbsp; With help from Reinhold Kainhofer, ido, Strontian, Sven-Ola, redhat, and many others who have provided development, testing, or other contributions.
+&nbsp;&nbsp; With help from Reinhold Kainhofer, ido, Strontian, Sven-Ola, redhat, Exiles, and many others.
 </td></tr>
 <tr><td><br /></td></tr>
 <tr><td>
