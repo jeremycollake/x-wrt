@@ -3,7 +3,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME := int2human
-PKG_RELEASE := 2
+PKG_RELEASE := 3
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
@@ -26,5 +26,5 @@ $(PKG_BUILD_DIR)/.built:
 $(IPKG_INT2HUMAN): 
 	install -d -m0755 $(IDIR_INT2HUMAN)/sbin
 	install -m0755 $(PKG_BUILD_DIR)/int2human $(IDIR_INT2HUMAN)/sbin
-	$(RSTRIP) $(IDIR_INT2HUMAN)/sbin/*
+	$(RSTRIP) $(IDIR_INT2HUMAN)/usr/sbin/*
 	$(IPKG_BUILD) $(IDIR_INT2HUMAN) $(PACKAGE_DIR)
