@@ -21,13 +21,13 @@ function installWebif(form)
 </script> 
 
 <div align="center">
-	<table border="0" width="800" id="table3" bgcolor="#FFFFFF" cellpadding="5">
+	<table border="0" width="1000" id="table3" bgcolor="#FFFFFF" cellpadding="5">
 		<tr>
 			<td align="left">&nbsp;<table border="0" width="100%" id="table4">
 	<tr>
 		<td align="left"><i><font color="#666699"><b><font face="Book Antiqua" size="7">X</font><font size="6">-Wrt </font></b>
 		</font>&nbsp;<br />
-		Pragmatism at work.<br />
+		<b>Pragmatism at work.</b><br />
 		</i>
 <a href="https://developer.berlios.de/projects/xwrt/">https://developer.berlios.de/projects/xwrt/</a> 
 		</td>
@@ -48,7 +48,9 @@ here</a>.</p>
 		<b><font size="5" color="#666699"><br />
 </font></b>Forums: <a href="http://www.bitsum.com/smf/index.php?board=17.0">
 http://www.bitsum.com/smf/index.php?board=17.0</a><br />
-Screenshots: <a href="http://www.bitsum.com/xwrt">http://www.bitsum.com/xwrt</a></p>
+Screenshots: <a href="http://www.bitsum.com/xwrt">http://www.bitsum.com/xwrt</a> 
+(usually very out-dated)</p>
+			<p>&nbsp;</p>
 			<p><br>
 			<b><font size="5" color="#666699">Why do this?</font></b></p>
 <p>In short, because nobody else is. X-Wrt's target audience has been forced to either 
@@ -57,91 +59,131 @@ time and energy configuring OpenWrt on their routers. Not everyone has the time 
 learn OpenWrt's NVRAM and/or config file based setup. With X-Wrt, people can have 
 all the benefits of OpenWrt with a minimal set up time.</p>
 <p><br />
-<b><font size="5" color="#666699">Will X-Wrt work be ported to OpenWrt, FreeWrt, 
-and other projects?</font><font size="4"><br />
-<br />
-</font>
-</b>Some of it will, some of it won't. It isn't up to us, it is up to the 
-developers of the projects. We have tried to work with all projects to the best 
-our abilities, but many developers of the other projects either have no interest 
-in end user extensions, or are actively hostile to it.</p>
-<p><br />
-<b><font size="5" color="#666699">How much is completed so far?</font></b></p>
-<p>This project is still very new, but we are accomplishing things at a rapid 
-pace. You can keep up with the latest developments by checking the xwrt-svncheckins 
+&nbsp;</p>
+			<p><b><font size="5" color="#666699">How much is completed so far?</font></b></p>
+<p>This project is still young, but we are accomplishing things at a rapid 
+pace. All our work is currently in beta, but most of our code can be used today. You can keep up with the latest developments by checking the xwrt-svncheckins 
 message list that archives commit logs as they happen:
 <a href="https://lists.berlios.de/pipermail/xwrt-svncheckins/">
-https://lists.berlios.de/pipermail/xwrt-svncheckins</a> .<br />
+https://lists.berlios.de/pipermail/xwrt-svncheckins</a>. </p>
+			<p><br />
 &nbsp;</p>
-<p><br />
-<font size="5" color="#666699"><b>How do I install X-Wrt?</b></font></p>
-<p>At present you first install OpenWrt White Russian, then install X-Wrt 
-package(s). Alternatively, you can use OpenWrt's image builder to create 
-firmware images with X-Wrt's packages pre-installed. </p>
-<p>The first and most important package is Webif^2, our new http based managed 
-console. Below are instructions on how to install this new webif.</p>
-<blockquote>
-	<p><br /><b><font size="4" color="#666699">I'm an experienced OpenWrt user, how do I the latest webif^2 package?</font></b></p>
-	<blockquote>
-		<p>You can install the latest <font color="#666699"><i>alpha build </i>
-		</font>of our webif if you are running 
-OpenWrt White Russian RC5 or later (but NOT kamikaze) by ssh'ing into the router and running the 
-following commands:</p>
-	</blockquote>
-</blockquote>
-<table border="0" width="100%" bgcolor="#FFFFFF" id="table5">
-	<tr>
-		<td>
-		<blockquote>
+			<p><font size="5" color="#666699"><b>How do I install X-Wrt?</b></font></p>
+<p>X-Wrt is a set of packages that overlay OpenWrt. There are three ways to 
+install and use X-Wrt on your router:</p>
+			<ul>
+				<li><b><font size="4"><u>Method #1</u> (recommended): </font>
+				</b><font size="4">Flash OpenWrt White Russian RC5 or RC6 then 
+				install X-Wrt packages like Webif^2.</font></li>
+			</ul>
 			<blockquote>
-				<p>
-				<font size="2" face="Courier New">ipkg install 
-			http://ftp.berlios.de/pub/xwrt/packages/webif_0.3-2_mipsel.ipk
-				</font></p>
-			</blockquote>
-		</blockquote>
-		</td>
-	</tr>
-</table>
-<blockquote>
+	<p><font size="4" color="#666699"><b>Step-by-step if you have NOT already 
+	flashed OpenWrt</b></font></p>
 	<blockquote>
-		<p>If you get a conflict error you may need to add '-force-overwrite'. 
-		If you have problems accessing some or all pages, reboot your router to 
-		force the httpd to be restart, or run 'killall httpd; 
-		/etc/init.d/S50httpd'.</p>
+		<ol>
+			<li>Download an appropriate OpenWrt White Russian image and flash it 
+		(follow instructions on <a href="http://wiki.openwrt.org">OpenWrt's wiki</a>). We recommend 
+		White Russian RC5, RC6, or 0.9 (when it is released). Kamikaze is NOT supported yet, 
+		but will be eventually.</li>
+			<li>&nbsp;Flash it, let it reboot, then reboot it 
+		again (in case you used JFFS2 image, which needs a second reboot and 
+		doesn't do it automatically).</li>
+			<li>Then use the following form to install the latest X-Wrt webif<sup>2</sup> on to your 
+router:</li>
+		</ol>
 	</blockquote>
-	<p><br /><b><font size="4" color="#666699">I'm totally new to OpenWrt. How do I install the latest 
-webif^2 package?</font></b></p>
-	<blockquote>
-		<p>1. Download an appropriate OpenWrt White Russian image. We recommend 
-	RC5, <a href="http://downloads.openwrt.org/people/nbd/whiterussian/">pre-RC6</a>, 
-		or any later release (presumably, since they don't exist yet). 
-		Alternatively, you can download a pre-built X-Wrt OpenWrt image soon.<br />2. Flash it, let it reboot, then reboot it again (in case you used JFFS2 image, 
-which needs a second reboot and doesn't do it automatically).<br />3. Then use the following form to install the latest X-Wrt webif^2 on to your 
-router:</p></blockquote>
 </blockquote>
 <form action="" method="post" name="instform">	
 	<blockquote>
 		<blockquote>
-			<p>Your Router's IP: 
-			<input type="text" name="routerip" size="12" value="192.168.1.1"></input>
-			<input type="submit" value=" Install Webif^2 " name="install_webif"  onclick="installWebif(this.form)"></input></p>
+			<blockquote>
+				<p><b>Your Router's IP:</b>
+				<input type="text" name="routerip" size="12" value="192.168.1.1"></input>
+				<input type="submit" value=" Install Webif^2 " name="install_webif"  onclick="installWebif(this.form)"></input>
+				<i>NOTE: this button will NOT work with Internet Explorer!</i></p>
+			</blockquote>
 		</blockquote>
 	</blockquote>
 </form>
 <blockquote>
 	<blockquote>
-		<p>You'll see various text emitted, then finally 'Terminated Successfully'. Ignore any warnings or errors you may get, so long you see that phrase at the end. At this point, reboot your router.</p>
+		<ol start="4">
+			<li>Once the installation has completed, you may need to reboot your 
+		router. </li>
+			<li>If the display of the web management console pages looks funny, do a 
+		hard refresh (hold down SHIFT and click REFRESH) to clear out the old 
+		CSS.</li>
+		</ol>
+	</blockquote>
+	<p><font size="4" color="#666699"><b>Step-by-step if you HAVE already 
+	flashed OpenWrt</b></font></p>
+	<blockquote>
+		<p>You can install the latest build of X-Wrt's webif<sup>2</sup> if you are running 
+OpenWrt White Russian RC5 or RC6. Kamikaze and pre-RC5 images are not supported. 
+		To install the package, run this at the terminal (ssh) prompt:</p>
 	</blockquote>
 </blockquote>
+			<table border="0" width="100%" bgcolor="#FFFFFF" id="table5">
+				<tr>
+					<td>
+					<blockquote>
+						<blockquote>
+							<ol>
+								<li><font size="2" face="Courier New"><b>ipkg install 
+			http://ftp.berlios.de/pub/xwrt/packages/webif_0.3-2_mipsel.ipk</b></font></li>
+							</ol>
+						</blockquote>
+					</blockquote></td>
+				</tr>
+			</table>
+			<blockquote>
+				<blockquote>
+					<p><i>Conflicts? If you get a conflict error you may need to add '-force-overwrite'. 
+		If you have problems accessing some or all pages, reboot your router to 
+		force the httpd to be restart, or run 'killall httpd; 
+		/etc/init.d/S50httpd'.</i></p>
+					<p>&nbsp;</p>
+				</blockquote>
+			</blockquote>
+			<ul>
+				<li><b><font size="4"><u>Method #2</u>: </font></b>Flash 
+				pre-built OpenWrt White Russian images that already contain 
+				X-Wrt packages. 
+				<blockquote>
+					<ol>
+						<li>Download firmware images from here:
+						<a href="ftp://ftp.berlios.de/pub/xwrt/images/">ftp://ftp.berlios.de/pub/xwrt/images/</a> . They may be in a 7z 
+				archive, which you should download and extract with compatible 
+				software like <a href="http://www.7zip.org">7-Zip</a>. </li>
+						<li>Once you've extracted the images, flash the squashfs 
+						image appropriate to your router by following the 
+						instructions on <a href="http://wiki.openwrt.org">OpenWrt's wiki</a>. 
+						(<b>note:</b> X-Wrt does not use JFFS2 only images since our 
+						squashfs images make use of a filesystem that make the 
+						root appear writable, making JFFS2 only images less than 
+						necessary).</li>
+					</ol>
+					<p>&nbsp;</p>
+				</blockquote>
+				</li>
+			</ul>
+			<ul>
+				<li><b><font size="4"><u>Method #3</u>: </font></b>Build your 
+				own OpenWrt images with X-Wrt packages pre-installed. The 
+				OpenWrt image builder allows you to easily do this. You can also 
+				use the X-Wrt image builder, which may be more convenient since 
+				X-Wrt packages are already in the repository.</li>
+			</ul>
 <p><br />
-<font size="5" color="#666699"><b>I want to help!</b></font></p>
+&nbsp;</p>
+			<p><font size="5" color="#666699"><b>I want to help!</b></font></p>
 <p>Great! We really need developers, translators, documentation writers, testers, and plain users ;). Join the 
 effort by visiting our forums or emailing
 <a href="mailto:jeremy@bitsum.com">jeremy@bitsum.com</a>. </p>
- <p>
-    &nbsp;</p>
 			<p>&nbsp;</td>
+		</tr>
+		<tr>
+			<td align="left">&nbsp;</td>
 		</tr>
 	</table>
 </div>
