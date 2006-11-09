@@ -119,15 +119,8 @@ if [ "$firmware_version" = "RC5" ] || grep RC5 "${IPKG_INSTROOT}/etc/banner"; th
 	DeleteRepository "http://downloads.openwrt.org/backports/rc4"
 	AddRepository "rc5-backports" "http://downloads.openwrt.org/backports/rc5"
 elif [ "$firmware_version" = "RC6" ] || grep RC6 "${IPKG_INSTROOT}/etc/banner"; then
-	# see if RC6 backports repository exists, if not use RC5 backports
-	wget http://downloads.openwrt.org/backports/rc6/Packages.filelist -P /tmp 1>&- 2>&-
-	if [ "$?" = "0" ]; then
-		DeleteRepository "http://downloads.openwrt.org/backports/rc5"
-		AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"
-	else
-		DeleteRepository "http://downloads.openwrt.org/backports/rc4"
-		AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc5"
-	fi
+	DeleteRepository "http://downloads.openwrt.org/backports/rc5"
+	AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"	
 fi
 
 if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image builder)
