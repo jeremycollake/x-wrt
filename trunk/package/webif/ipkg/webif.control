@@ -1,6 +1,6 @@
 Package: webif
 Maintainer: X-Wrt Project
 Section: net
-Depends: haserl int2human
+Depends: haserl
 Priority: normal
-Description: A modular, extensible web interface for OpenWrt
+Description: An HTTP administrative console for OpenWrt.

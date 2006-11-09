@@ -134,20 +134,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 
 	[ $IPKG_UPDATE_NEEDED = 1 ] && {
 		ipkg update
-	}
-
-	# don't trust ipkg's dependency handling (who would)
-	# WARNING: one of the side effects of this is that since the package list is locked, it
-	#  will NOT be updated. Normally ipkg would install this listed dependency, but this
-	#  doesn't seem to always be the case (maybe when initial install didn't have this dependency?).
-	ipkg list_installed | grep -q "int2human"
-	[ "$?" != "0" ] && [ ! -f "/sbin/int2human" ] && {
-		echo "Installing dependency int2human ..."
-		ipkg install int2human 2>&- >&-
-		[ "$?" != "0" ] && {
-			ipkg install http://ftp.berlios.de/pub/xwrt/packages/int2human_2_mipsel.ipk 2>&-
-		}
-	}
+	}	
 
 	nvram unset device_name 	# force rescan of device_name, in case new id code is added
 	nvram unset firmware_name	# force rescan of firmware_*
@@ -155,17 +142,13 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 	ExecuteIfExists "/etc/init.d/S10firmwareinfo"	# x-wrt images use to pre-empt firmware_* set
 	ExecuteIfExists "/etc/init.d/S90webif_firmwareid"
 
+	# test installation successfulness
 	TestInstall
 
 	killall -HUP httpd 	# reinitialize httpd - can not count on to work on all busybox httpd builds
-	httpd_1=$(cat /tmp/httpd.conf.old)
-	httpd_2=$(cat /etc/httpd.conf)
-	rm -f /tmp/httpd.conf.old
-	if [ "$httpd_1" != "$httpd_2" ]; then
+	grep -qi svg "/etc/httpd.conf.old"
+	[ "$?" != "0" ] && {
 		echo "The httpd configuration has changed. You must *REBOOT* or reload the httpd."
-	fi
-	if [ -f "/tmp/.webif_marker_0" ]; then
-		rm -f "/tmp/.webif_marker_0"
-		echo "NOTICE: You may see a list of collected warnings/errors. Ignore them."
-	fi
+	}
+	rm -f /tmp/httpd.conf.old
 fi
