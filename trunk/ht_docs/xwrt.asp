@@ -27,7 +27,7 @@ function installWebif(form)
 	<tr>
 		<td align="left"><i><font color="#666699"><b><font face="Book Antiqua" size="7">X</font><font size="6">-Wrt </font></b>
 		</font>&nbsp;<br />
-		<b>Pragmatism at work.</b><br />
+		<b>End User Extensions for OpenWrt</b><br />
 		</i>
 <a href="https://developer.berlios.de/projects/xwrt/">https://developer.berlios.de/projects/xwrt/</a> 
 		</td>
