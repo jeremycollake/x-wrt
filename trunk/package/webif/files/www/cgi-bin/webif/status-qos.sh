@@ -113,7 +113,9 @@ echo "<table cellspacing=\"10\" cellpadding=\"10\">
 	$egress_stats_table</tbody></table>"
 
 display_form <<EOF
-string|<br />
+field||spacer1
+string|<br /><br />
+field||show_raw
 formtag_begin|raw_stats|$SCRIPT_NAME
 submit|show_raw_stats| @TR<< Show raw statistics >>
 formtag_end

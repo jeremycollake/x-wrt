@@ -102,40 +102,57 @@ field|@TR<<Tx Missed Beacon>>|wan_tx_missed
 string|$wlan_tx_missed
 helpitem|WLAN
 helptext|WLAN LAN#LAN stands for Wireless Local Area Network.
+field||spacer1
+string|<br /><br />
+field||show_raw
+formtag_begin|raw_stats|$SCRIPT_NAME
+submit|show_raw_stats| @TR<< Show raw statistics >>
+formtag_end
 end_form
+EOF
 
+#########################################
+# raw stats
+! empty "$FORM_show_raw_stats" && {
 
+display_form <<EOF
 start_form|@TR<<Raw Information>>
 EOF
-?>
-	<tr><td><br /></td></tr>
-	<div class="smalltext">
+
+echo "<tr><td><br /></td></tr>
+	<div class=\"smalltext\">
 		<tr>
 			<th><b>@TR<<Interfaces Status|WAN Interface>></b></th>
 		</tr>
 		<tr>
-			<td><pre><? ifconfig 2>&1 | grep -A 6 "`nvram get wan_ifname`" ?></pre></td>
+			<td><pre>"
+ifconfig 2>&1 | grep -A 6 "`nvram get wan_ifname`"
+echo "</pre></td>
 		</tr>
 		<tr><td><br /><br /></td></tr>
 		<tr>
 			<th><b>@TR<<Interfaces Status|LAN Interface>></b></th>
 		</tr>
 		<tr>
-			<td><pre><? ifconfig 2>&1 | grep -A 6 "`nvram get lan_ifname`" ?></pre></td>
+			<td><pre>"
+ifconfig 2>&1 | grep -A 6 "`nvram get lan_ifname`"
+echo "</pre></td>
 		</tr>
 		<tr><td><br /><br /></td></tr>
 		<tr>
 			<th><b>@TR<<Interfaces Status|Wireless Interface>></b></th>
 		</tr>
 		<tr>
-			<td><pre><? iwconfig 2>&1 | grep -v 'no wireless' | grep '\w' ?></pre></td>
+			<td><pre>"
+iwconfig 2>&1 | grep -v 'no wireless' | grep '\w'
+echo "</pre></td>
 		</tr>
-		</div>
-<?
+		</div>"
 
 display_form <<EOF
 end_form
 EOF
+}
 
 show_validated_logo
 
