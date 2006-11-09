@@ -54,11 +54,13 @@ ingress_stats_table=$(echo "$ingress_status" |
 					class="Bulk"
 				} else {
 					class="Unknown" $3
-				}										
-				getline;
-				sent_bytes=$2;
-				sent_packets=$4;
-				print "<tr><td>" class "</td><td>" sent_packets "</td><td>" sent_bytes "</td></tr>";
+				}														
+				getline		
+				print "<tr><td>" class "</td><td>" 
+				print $2
+				print "</td><td>" 
+				print $4
+				print "</td></tr>"
 			}
 		}'))
 
@@ -96,10 +98,12 @@ egress_stats_table=$(echo "$egress_status" |
 				} else {
 					class="Unknown" $3
 				}										
-				getline;
-				sent_bytes=$2;
-				sent_packets=$4;
-				print "<tr><td>" class "</td><td>" sent_packets "</td><td>" sent_bytes "</td></tr>";
+				getline
+				print "<tr><td>" class "</td><td>" 
+				print $2
+				print "</td><td>" 
+				print $4
+				print "</td></tr>"
 			}
 		}'))
 
