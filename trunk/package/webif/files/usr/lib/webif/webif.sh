@@ -134,13 +134,7 @@ header() {
 	_webif_rev=$(cat /www/.version)
 	_head="${3:+<div class=\"settings-block-title\"><h2>$3$_saved_title</h2></div>}"
 	_form="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />}"
-	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></p>}"
-	# todo: temp
-	if equal "$(nvram get webif_debug)" "1"; then
-		_debugbutton="<p><input type=\"submit\" name=\"debug\" value=\"@TR<<Debug>>\" /></p>"
-	else
-		_debugbutton=""
-	fi
+	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></p>}"	
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}
 
@@ -214,10 +208,6 @@ Pragma: no-cache
 				$_head
 				$ERROR
 EOF
-	# todo: temp - handle debug button press
-	! empty "$FORM_debug" && {
-		env
-	}
 
 	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && {
 		empty "$FORM_passwd1" || {
@@ -284,7 +274,6 @@ footer() {
 				</div>
 			</div>
 			<div class="apply">
-				<div id="debug-button">$_debugbutton</div>
 				<div>
 					<a href="config.sh?mode=save&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Apply Changes>> &laquo;</a><br />
 					<a href="config.sh?mode=clear&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Clear Changes>> &laquo;</a><br />

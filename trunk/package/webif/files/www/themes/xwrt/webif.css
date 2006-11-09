@@ -276,15 +276,6 @@ option
 	padding-bottom: 0.5em;
 }
 
-#save .apply #debug-button
-{
-	position: relative;
-	float: left;
-	width: 4em;
-	height: 4em;
-	background-color: transparent;
-}
-
 th
 {
 	text-align: left;
@@ -575,7 +566,7 @@ dt,
 }
 
 #footer-logo
-{	
+{			
 	position: absolute;
 	bottom: 1em;
 	font-size: 1.5em;	
