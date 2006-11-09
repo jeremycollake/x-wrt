@@ -29,7 +29,7 @@ $1 > 0 {
 	print "</tr>"
 }
 ' /tmp/dhcp.leases
-grep -q "." /tmp/dhcp.leases > /dev/null
+exists /tmp/dhcp.leases && grep -q "." /tmp/dhcp.leases > /dev/null
 ! equal "$?" "0" &&
 {
 	echo "<tr><td>There are no known DHCP leases.</td></tr>"
