@@ -20,33 +20,33 @@ if empty "$FORM_submit"; then
 	akm=${wl0_wds_akm:-$(nvram get wl0_wds_akm)}
 	case "$akm" in
 		psk)
-			FORM_encryption=psk
-			FORM_wpa1=wpa1
+			FORM_wds_encryption=psk
+			FORM_wds_wpa1=wpa1
 			;;
 		psk2)
 			FORM_encryption=psk
 			FORM_wpa2=wpa2
 			;;
 		'psk psk2')
-			FORM_encryption=psk
-			FORM_wpa1=wpa1
-			FORM_wpa2=wpa2
+			FORM_wds_encryption=psk
+			FORM_wds_wpa1=wpa1
+			FORM_wds_wpa2=wpa2
 			;;
 		wpa)
-			FORM_encryption=wpa
-			FORM_wpa1=wpa1
+			FORM_wds_encryption=wpa
+			FORM_wds_wpa1=wpa1
 			;;
 		wpa2)
-			FORM_encryption=wpa
-			FORM_wpa2=wpa2
+			FORM_wds_encryption=wpa
+			FORM_wds_wpa2=wpa2
 			;;
 		'wpa wpa2')
-			FORM_encryption=wpa
-			FORM_wpa1=wpa1
-			FORM_wpa2=wpa2
+			FORM_wds_encryption=wpa
+			FORM_wds_wpa1=wpa1
+			FORM_wds_wpa2=wpa2
 			;;
 		*)
-			FORM_wpa1=wpa1
+			FORM_wds_wpa1=wpa1
 			;;
 	esac
 	FORM_wds_wpa_psk=${wl0_wds_wpa_psk:-$(nvram get wl0_wds_wpa_psk)}
@@ -55,17 +55,17 @@ if empty "$FORM_submit"; then
 	crypto=${wl0_wds_crypto:-$(nvram get wl0_wds_crypto)}
 	case "$crypto" in
 		tkip)
-			FORM_tkip=tkip
+			FORM_wds_tkip=tkip
 			;;
 		aes)
-			FORM_aes=aes
+			FORM_wds_aes=aes
 			;;
 		'tkip+aes'|'aes+tkip')
-			FORM_aes=aes
-			FORM_tkip=tkip
+			FORM_wds_aes=aes
+			FORM_wds_tkip=tkip
 			;;
 		*)
-			FORM_tkip=tkip
+			FORM_wds_tkip=tkip
 			;;
 	esac
 else
@@ -83,11 +83,11 @@ equal "$?" 0 && {
 crypto=""
 			equal "$FORM_wds_aes" aes && crypto="aes"
 			equal "$FORM_wds_tkip" tkip && crypto="tkip${crypto:++$crypto}"
-			save_setting wireless wl0_crypto "$crypto"
+			save_setting wireless wl0_wds_crypto "$crypto"
 
-			case "$FORM_encryption" in
+			case "$FORM_wds_encryption" in
 			psk)
-				case "${FORM_wpa1}${FORM_wpa2}" in
+				case "${FORM_wds_wpa1}${FORM_wds_wpa2}" in
 					wpa1) save_setting wireless wl0_wds_akm "psk";;
 					wpa2) save_setting wireless wl0_wds_akm "psk2";;
 					wpa1wpa2) save_setting wireless wl0_wds_akm "psk psk2";;
@@ -180,9 +180,9 @@ option|wpa|WPA (RADIUS)
 helpitem|Encryption Type
 helptext|HelpText Encryption Type#WPA2 is currently unsupported.
 
-field|@TR<<WPA Mode>>|wpa_support|hidden:
-checkbox|wpa1|$FORM_wpa1|wpa1|WPA1
-checkbox|wpa2|$FORM_wpa2|wpa2|WPA2
+field|@TR<<WPA Mode>>|wpa_support|hidden
+checkbox|wpa1|$FORM_wds_wpa1|wds_wpa1|WPA1
+checkbox|wpa2|$FORM_wds_wpa2|wds_wpa2|WPA2
 
 field|@TR<<WPA Algorithms>>|wds_wpa_crypto|hidden
 checkbox|tkip|$FORM_wds_tkip|wds_tkip|RC4 (TKIP)
