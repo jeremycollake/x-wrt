@@ -33,7 +33,7 @@ header "Status" "Site Survey" "@TR<<Wireless survey>>"
 ?>
 
 <?
-MAX_TRIES=5
+MAX_TRIES=4
 MAX_CELLS=100
 WL0_IFNAME=$(nvram get wl0_ifname)
 ##################################################
@@ -66,7 +66,7 @@ else
 tempfile=$(mktemp /tmp/.survtemp.XXXXXX)
 tempfile2=$(mktemp /tmp/.survtemp.XXXXXX)
 
-echo " Please wait while scan is performed ... <br /><br />"
+#echo " Please wait while scan is performed ... <br /><br />"
 counter=0
 for counter in $(seq 1 $MAX_TRIES); do
 	#echo "."
@@ -75,7 +75,6 @@ for counter in $(seq 1 $MAX_TRIES); do
 	equal "$?" "0" && break
 	sleep 1
 done
-echo "Done."
 
 first_hit=1
 if [ $counter -gt $MAX_TRIES ]; then
