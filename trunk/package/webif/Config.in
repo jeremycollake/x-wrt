@@ -2,11 +2,10 @@ menu "webif - OpenWrt Administrative Console"
 
 config BR2_PACKAGE_WEBIF
 	select BR2_PACKAGE_HASERL
-	select BR2_PACKAGE_INT2HUMAN
-	tristate "webif - OpenWrt Administrative Console"
+	tristate "webif^2 - HTTP Administrative Console"
 	default y
 	help
-	  A web interface for configuring OpenWrt
+	  An HTTP based management console for OpenWrt.
 	  
 config BR2_PACKAGE_WEBIF_LANG_CA
 	select BR2_PACKAGE_HASERL
