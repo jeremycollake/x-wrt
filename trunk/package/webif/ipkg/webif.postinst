@@ -139,7 +139,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 	TestInstall
 
 	killall -HUP httpd 	# reinitialize httpd - can not count on to work on all busybox httpd builds
-	grep -qi svg "/etc/httpd.conf.old"
+	grep -qi svg "/tmp/httpd.conf.old"
 	[ "$?" != "0" ] && {
 		echo "The httpd configuration has changed. You must *REBOOT* or reload the httpd."
 	}
