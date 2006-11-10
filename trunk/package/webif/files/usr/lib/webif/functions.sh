@@ -39,7 +39,8 @@ is_bcm947xx() {
 fix_symlink_hack() {
 	touch "$1" >&- 2>&-
 	! equal "$?" "0" && {
-		local atmpfile=$(mktemp "/tmp/webif-XXXXXX")
+		local atmpfile
+		atmpfile=$(mktemp "/tmp/webif-XXXXXX")
 		cp "$1" "$atmpfile"
 		equal "$?" "0" && {
 			rm "$1"
@@ -54,7 +55,8 @@ remove_lines_from_file() {
 	cat "$1" | grep -q "$2"
 	[ "$?" = "0" ] && {
 		fix_symlink_hack "$1"
-		local _substr_sed=$(echo "$2" | sed s/'\/'/'\\\/'/g)
+		local _substr_sed
+		_substr_sed=$(echo "$2" |  sed s/'\/'/'\\\/'/g)
 		cat "$1" |  sed /"$_substr_sed"/d > "$1"
 	}
 }
