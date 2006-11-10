@@ -85,6 +85,7 @@ mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
 
 # initialize default webif theme
 # create symlink to /www/themes/xwrt (do NOT use INSTROOT in first arg).
+rm "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
 ln -s "/www/themes/xwrt" "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
 [ $? != 0 ] && {
 	# if fs doesn't support symlinks, do a copy
