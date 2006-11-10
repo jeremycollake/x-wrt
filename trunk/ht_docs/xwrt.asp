@@ -93,7 +93,7 @@ router:</li>
 		</ol>
 	</blockquote>
 </blockquote>
-<form action="" method="post" name="instform">	
+<form action="" method="get" name="instform">	
 	<blockquote>
 		<blockquote>
 			<blockquote>
