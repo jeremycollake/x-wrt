@@ -96,10 +96,10 @@ ln -sf "/www/themes/xwrt" "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
 # initialize ipkg.conf
 AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/packages"
 [ -z "$IPKG_INSTROOT" ] && firmware_version=$(nvram get firmware_version)
-if [ "$firmware_version" = "RC5" ] || grep RC5 "${IPKG_INSTROOT}/etc/banner"; then
+if [ "$firmware_version" = "RC5" ] || grep -q RC5 "${IPKG_INSTROOT}/etc/banner"; then
 	DeleteRepository "http://downloads.openwrt.org/backports/rc4"
 	AddRepository "rc5-backports" "http://downloads.openwrt.org/backports/rc5"
-elif [ "$firmware_version" = "RC6" ] || grep RC6 "${IPKG_INSTROOT}/etc/banner"; then
+elif [ "$firmware_version" = "RC6" ] || grep -q RC6 "${IPKG_INSTROOT}/etc/banner"; then
 	DeleteRepository "http://downloads.openwrt.org/backports/rc5"
 	AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"	
 fi
@@ -120,14 +120,29 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 
 	httpd_1=$(cat /tmp/httpd.conf.old)
 	httpd_2=$(cat /etc/httpd.conf)
-	[ "$httpd_1" != "$httpd_2" ] && {
-		grep -qi svg "/tmp/httpd.conf.old"
-		[ "$?" != "0" ] && {
-			echo "The httpd configuration has changed. You may need to *REBOOT* or reload the httpd."	
-		}
-		2>/dev/null >/dev/null </dev/null
-		# reinitialize httpd - can not count on to work on all busybox httpd builds
-		killall -HUP httpd
-	}
 	rm -f /tmp/httpd.conf.old
+	[ "$httpd_1" != "$httpd_2" ] && {
+		# Note: Even if the httpd.conf is *NOT* changed the httpd still needs 
+		#  restarting when upgraded from original webif. Don't believe me? Test it -
+		#  thoroughly.
+		# 		
+		# I know you think you can do this better and I'm all fucked up.
+		# Well if you do careful testing you'll see that nothing quite works
+		# from an upgrade of the original webif - not a mere SIGHUP to httpd
+		# and I have not succeeded in being able to terminate and restart httpd
+		# when upgraded through webif. Yes, I've tried everything. Fuck you if you
+		# think you can do it better. Oh, and go ahead.. but do test, won't you?
+		# There is probably some solution to these troubles, but I have tried so
+		# many different things that I'm over it. Assume I'm an idiot at your
+		# own eventual peril as you will end up wasting considerable time to do
+		# this right when the upgrade is done in the webif.
+		#		
+		echo "I'm sorry, but I must reboot your reboot! This is a ONE time thing and"
+		echo " future upgrades of the webif will NOT require a reboot."		
+		reboot_file=$(mktemp /tmp/rebootme.XXXXXX)
+		echo "#!/bin/sh" > $reboot_file
+		echo "sleep 5 && reboot" >> "$reboot_file"
+		chmod +x "$reboot_file"
+		sh "$reboot_file" &		
+	}	
 fi
