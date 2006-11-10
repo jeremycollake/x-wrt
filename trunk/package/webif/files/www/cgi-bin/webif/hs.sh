@@ -3,7 +3,7 @@
 . /usr/lib/webif/webif.sh
 
 hswebif_msg=$(has_pkgs hswebif)
-if !empty "$hswebif_msg"; then
+if ! empty "$hswebif_msg"; then
 
 header "HotSpot" "Configuration" "HotSpot Config $HS_USING" ' onLoad="modechange()" ' "$SCRIPT_NAME"
 has_pkgs hswebif
