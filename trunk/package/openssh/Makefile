@@ -1,4 +1,4 @@
-# $Id: Makefile 4880 2006-09-29 20:55:46Z nbd $
+# $Id: Makefile 5484 2006-11-09 16:57:26Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -74,6 +74,10 @@ $(PKG_BUILD_DIR)/.configured:
 $(PKG_BUILD_DIR)/.built:
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		LIBS="" \
+		sftp-server
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
