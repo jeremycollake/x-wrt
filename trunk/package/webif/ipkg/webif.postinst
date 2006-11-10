@@ -146,5 +146,6 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 		echo "sleep 5 && reboot" >> "$reboot_file"
 		chmod +x "$reboot_file"
 		sh "$reboot_file" &		
-	}	
+	}
 fi
+exit 0
