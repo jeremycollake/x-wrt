@@ -62,13 +62,14 @@ repo_update_needed=0
 	repo_update_needed=1
 	repo_src_line="src $FORM_remove_repo_name $FORM_remove_repo_url"
 	remove_lines_from_file "/etc/ipkg.conf" "$repo_src_line"
+	# manually remove package lists since ipkg update won't..
+	# todo: odd issue where 'rm -f /usr/lib/ipkg/lists/* does not work - openwrt should investigate
+	rm "/usr/lib/ipkg/lists/$FORM_remove_repo_name" >&- 2>&-
 	echo "<br />Repository source was removed: $FORM_remove_repo_name<br />"
 }
 
 equal "$repo_update_needed" "1" && {
 	echo "<br />Repository sources updated. Performing update of package lists ...<br /><pre>"	
-	# todo: odd issue where 'rm -f /usr/lib/ipkg/lists/* does not work
-	rm -rf "/usr/lib/ipkg/lists/*" >&- 2>&-
 	mkdir "/usr/lib/ipkg/lists" >&- 2>&-
 	ipkg update
 	echo "</pre>"
