@@ -3,9 +3,9 @@
 # Webif post-install script.
 #
 
-#######################################################################################
-# TestInstall - tries to determine if install succeeded.
-#
+#########################################################################################
+# functions
+
 TestInstall()
 {
 	this_version="__SVN_REVISION__"
@@ -19,9 +19,6 @@ TestInstall()
 	fi
 }
 
-#######################################################################################
-# ExecuteIfExists
-#
 ExecuteIfExists()
 {
 	# $1 = exec name
@@ -31,30 +28,19 @@ ExecuteIfExists()
 	}
 }
 
-#######################################################################################
-# FixReadOnlyLink (filename)
-#
-# OpenWrt WR RC5 and below's firstboot doesn't copy everything it should to /jffs
-#  when it is setting up the symlinks back to ROM. This copies a file to /jffs
-#  where there was merely a symlink back to the read-only partition.
-#
+# for squashfs symlink hacks like in WR RC5 (requires rm before change)
 FixReadOnlyLink()
 {
-	touch "$1" 2>&- 1>&-	# test if read-only
+	touch "$1" >&- 2>&-	# test if read-only
 	[ "$?" != 0 ] && {
 		local tmpfile=$(mktemp "${IPKG_INSTROOT}/tmp/.webif-inst-XXXXXX")
-		cp "$1" "$tmpfile" 2>&- 1>&-
-		rm "$1"  2>&- 1>&-
-		mv "$tmpfile" "$1"  2>&- 1>&-
+		cp "$1" "$tmpfile" >&- 2>&-
+		rm "$1"  >&- 2>&-
+		mv "$tmpfile" "$1"  >&- 2>&-
 	}
 }
 
-#######################################################################################
-# AddRepository
-#
-# Add a repository source if it doesn't already exist.
-#
-IPKG_UPDATE_NEEDED=0
+IPKG_UPDATE_NEEDED="0"
 AddRepository()
 {
 	# $1=reponame
@@ -62,16 +48,11 @@ AddRepository()
 	cat "${IPKG_INSTROOT}/etc/ipkg.conf" | grep -q "$2"
 	[ "$?" != "0" ] && {
 		echo "src $1 $2" >> "${IPKG_INSTROOT}/etc/ipkg.conf"
-		IPKG_UPDATE_NEEDED=1
+		IPKG_UPDATE_NEEDED="1"
 	}
 }
 
-#######################################################################################
-# DeleteRepository
-#
-# Delete a repository source.
-#
-IPKG_UPDATE_NEEDED=0
+IPKG_UPDATE_NEEDED="0"
 DeleteRepository()
 {
 	# $1=repourl
@@ -79,16 +60,13 @@ DeleteRepository()
 	[ "$?" = "0" ] && {
 		repo_url_sed=$(echo "$1" | sed s/'\/'/'\\\/'/g)
 		cat "${IPKG_INSTROOT}/etc/ipkg.conf" |  sed /$repo_url_sed/d > "${IPKG_INSTROOT}/etc/ipkg.conf"
-		IPKG_UPDATE_NEEDED=1
+		IPKG_UPDATE_NEEDED="1"
 	}
 }
 
 
-
-#######################################################################################
-# entry
-#
-#
+#########################################################################################
+# entry point
 
 # fix some links on squashfs partition that aren't properly copied instead by firstboot
 # has no effect when done in image builder.
@@ -107,27 +85,27 @@ mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
 
 # initialize default webif theme
 # create symlink to /www/themes/xwrt (do NOT use INSTROOT in first arg).
-ln -s "/www/themes/xwrt" "${IPKG_INSTROOT}/www/themes/active" 1>&- 2>&-
+ln -s "/www/themes/xwrt" "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
 [ $? != 0 ] && {
 	# if fs doesn't support symlinks, do a copy
 	cp -r "${IPKG_INSTROOT}/www/themes/xwrt/*" "${IPKG_INSTROOT}/www/themes/active/"
 }
 
+# initialize ipkg.conf
 AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/packages"
 [ -z "$IPKG_INSTROOT" ] && firmware_version=$(nvram get firmware_version)
-if [ "$firmware_version" = "RC5" ] || grep -q RC5 "${IPKG_INSTROOT}/etc/banner"; then
+if [ "$firmware_version" = "RC5" ] || grep RC5 "${IPKG_INSTROOT}/etc/banner"; then
 	DeleteRepository "http://downloads.openwrt.org/backports/rc4"
 	AddRepository "rc5-backports" "http://downloads.openwrt.org/backports/rc5"
-elif [ "$firmware_version" = "RC6" ] || grep -q RC6 "${IPKG_INSTROOT}/etc/banner"; then
+elif [ "$firmware_version" = "RC6" ] || grep RC6 "${IPKG_INSTROOT}/etc/banner"; then
 	DeleteRepository "http://downloads.openwrt.org/backports/rc5"
 	AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"	
 fi
 
-if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image builder)
+# only run below on 'real' system (not image builder)
+if [ -z "${IPKG_INSTROOT}" ]; then	
 
-	[ $IPKG_UPDATE_NEEDED = 1 ] && {
-		ipkg update
-	}	
+	[ "$IPKG_UPDATE_NEEDED" = "1" ] && ipkg update
 
 	nvram unset device_name 	# force rescan of device_name, in case new id code is added
 	nvram unset firmware_name	# force rescan of firmware_*
@@ -138,7 +116,8 @@ if [ -z "${IPKG_INSTROOT}" ]; then	# only run below on 'real' system (not image 
 	# test installation successfulness
 	TestInstall
 
-	killall -HUP httpd 	# reinitialize httpd - can not count on to work on all busybox httpd builds
+	# reinitialize httpd - can not count on to work on all busybox httpd builds
+	killall -HUP httpd
 	grep -qi svg "/tmp/httpd.conf.old"
 	[ "$?" != "0" ] && {
 		echo "The httpd configuration has changed. You must *REBOOT* or reload the httpd."
