@@ -124,7 +124,8 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	[ "$httpd_1" != "$httpd_2" ] && {
 		# Note: Even if the httpd.conf is *NOT* changed the httpd still needs 
 		#  restarting when upgraded from original webif. Don't believe me? Test it -
-		#  thoroughly.
+		#  thoroughly. Newly created pages can't be found by the httpd, not sure why.
+		#  Merely changed pages can though.
 		# 		
 		# I know you think you can do this better and I'm all fucked up.
 		# Well if you do careful testing you'll see that nothing quite works
