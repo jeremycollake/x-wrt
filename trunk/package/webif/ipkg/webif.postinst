@@ -123,21 +123,19 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	rm -f /tmp/httpd.conf.old
 	[ "$httpd_1" != "$httpd_2" ] && {
 		# Note: Even if the httpd.conf is *NOT* changed the httpd still needs 
-		#  restarting when upgraded from original webif. Don't believe me? Test it -
-		#  thoroughly. Newly created pages can't be found by the httpd, not sure why.
-		#  Merely changed pages can though.
+		#  restarting when upgraded from original webif. Newly created pages 
+		#  can't be found by the httpd, not sure why. Yes, its true.
 		# 		
-		# I know you think you can do this better and I'm all fucked up.
-		# Well if you do careful testing you'll see that nothing quite works
-		# from an upgrade of the original webif - not a mere SIGHUP to httpd
-		# and I have not succeeded in being able to terminate and restart httpd
-		# when upgraded through webif. Yes, I've tried everything. Fuck you if you
-		# think you can do it better. Oh, and go ahead.. but do test, won't you?
-		# There is probably some solution to these troubles, but I have tried so
-		# many different things that I'm over it. Assume I'm an idiot at your
-		# own eventual peril as you will end up wasting considerable time to do
-		# this right when the upgrade is done in the webif.
-		#		
+		# Only sending SIGHUP to httpd does not work. Restarting httpd when
+		# upgrade is done through webif has not been successful, despite a 
+		# a number of techniques one would think would work. 
+		#
+		# Do *NOT* change this just because you think something or the other
+		# should work. We've tried about everything. Only change after you've
+		# thoroughly tested on clean, fresh installs of WR RC5 and RC6, and 
+		# when upgrading the webif through the webif (i.e. use automated install
+		# on X-Wrt home page). If you break this just because you think something
+		# should definitely work, you will die.
 		echo "I'm sorry, but I must reboot your reboot! This is a ONE time thing and"
 		echo " future upgrades of the webif will NOT require a reboot."
 		echo "Please wait about one minute for your router to reboot ..."
