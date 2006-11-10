@@ -191,12 +191,11 @@ is_bcm947xx && {
 }
 
 #####################################################################
-# check if ntpclient is installed and give user option to install if not
-! is_package_installed "ntpclient" &&
-{
+# check if ntpclient or opennptd is installed and give user option to install ntpclient if neither are installed.
+if [ -n "$(has_pkgs ntpclient)" -a -n "$(has_pkgs openntpd)" ]; then
 	NTPCLIENT_INSTALL_FORM="string|<div class=\"warning\">No NTP client is installed. For correct time support you need to install one:</div>
 		submit|install_ntpclient| Install NTP Client |"
-}
+fi
 
 
 #####################################################################
