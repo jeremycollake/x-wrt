@@ -89,6 +89,7 @@ rm -rf "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
 ln -sf "/www/themes/xwrt" "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
 [ $? != 0 ] && {
 	# if fs doesn't support symlinks, do a copy
+	mkdir -p "${IPKG_INSTROOT}/www/themes/active"
 	cp -r "${IPKG_INSTROOT}/www/themes/xwrt/*" "${IPKG_INSTROOT}/www/themes/active/"
 }
 
