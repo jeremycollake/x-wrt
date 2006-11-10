@@ -66,7 +66,10 @@ repo_update_needed=0
 }
 
 equal "$repo_update_needed" "1" && {
-	echo "<br />Repository sources updated. Performing update of package lists ...<br /><pre>"
+	echo "<br />Repository sources updated. Performing update of package lists ...<br /><pre>"	
+	# todo: odd issue where 'rm -f /usr/lib/ipkg/lists/* does not work
+	rm -rf "/usr/lib/ipkg/lists/*" >&- 2>&-
+	mkdir "/usr/lib/ipkg/lists" >&- 2>&-
 	ipkg update
 	echo "</pre>"
 }
