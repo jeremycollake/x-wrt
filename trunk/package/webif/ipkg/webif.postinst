@@ -117,11 +117,16 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	# test installation successfulness
 	TestInstall
 
-	# reinitialize httpd - can not count on to work on all busybox httpd builds
-	killall -HUP httpd
-	grep -qi svg "/tmp/httpd.conf.old"
-	[ "$?" != "0" ] && {
-		echo "The httpd configuration has changed. You must *REBOOT* or reload the httpd."
+	httpd_1=$(cat /tmp/httpd.conf.old)
+	httpd_2=$(cat /etc/httpd.conf)
+	[ "$httpd_1" != "$httpd_2" ] && {
+		grep -qi svg "/tmp/httpd.conf.old"
+		[ "$?" != "0" ] && {
+			echo "The httpd configuration has changed. You may need to *REBOOT* or reload the httpd."	
+		}
+		2>/dev/null >/dev/null </dev/null
+		# reinitialize httpd - can not count on to work on all busybox httpd builds
+		killall -HUP httpd
 	}
 	rm -f /tmp/httpd.conf.old
 fi
