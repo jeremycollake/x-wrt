@@ -5,6 +5,6 @@ cd bin
 rm -f xwrt*.tar
 rm -f xwrt*.rar.tar
 tar -cvf xwrt-squashfs-images.tar *squashfs*.bin *squashfs*.trx
-tar -cvf xwrt-jffs-images.tar *jffs*.bin *jffs*.trx
+#tar -cvf xwrt-jffs-images.tar *jffs*.bin *jffs*.trx
 7z a xwrt-firmware-images.7z xwrt-*-images.tar
 cd ..
