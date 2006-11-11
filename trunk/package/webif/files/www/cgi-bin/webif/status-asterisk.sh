@@ -93,6 +93,7 @@ if [ "$FORM_action" = "edit" ]; then
 fi
 else
 has_pkgs asterisk
+echo '<a href="system-editor.sh?path=/www/cgi-bin/webif&edit=status-asterisk.sh">You may need to edit this page and change conf_path= to the location of your config file for asterisk</a>'
 fi
 footer ?>
 <!--
