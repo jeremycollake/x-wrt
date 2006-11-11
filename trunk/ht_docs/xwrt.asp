@@ -145,8 +145,7 @@ router:</li>
 				</span> </font></b><font size="4">
 				<span style="background-color: #FFFF00">Flash 
 				pre-built OpenWrt White Russian images that already contain 
-				X-Wrt packages. 
-				</span></font> 
+				X-Wrt packages. </span></font> 
 				<blockquote>
 					<ol>
 						<li>Download firmware images from here:
