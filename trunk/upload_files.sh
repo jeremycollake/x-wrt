@@ -35,8 +35,14 @@ scp \
 echo "Uploading firmware images ..."
 scp \
 	bin/*.7z \
-	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/beta/
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/
+scp \
+	bin/*.bin \
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/
+scp \
+	bin/*.trx \
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/
 echo "Uploading SDk and image builder ..."
 scp \
 	bin/*.tar.bz2 \
-	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/beta/
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/
