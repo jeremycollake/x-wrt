@@ -14,7 +14,7 @@
 <script type="text/javascript">
 function installWebif(form)
 {
-  var install_url= "http://" + document.instform.routerip.value + "//cgi-bin/webif/ipkg.sh?action=install&amp;pkg=http://ftp.berlios.de/pub/xwrt/packages/webif_0.3-2_mipsel.ipk";
+  var install_url= "http://" + document.instform.routerip.value + "//cgi-bin/webif/ipkg.sh?action=install&amp;pkg=http://ftp.berlios.de/pub/xwrt/packages/webif_milestone2.ipk";
   window.open(install_url,'Auto-Install','toolbar=yes,resizable=yes');
   return false;
 }
@@ -66,7 +66,10 @@ pace. All our work is currently in beta, but most of our code can be used today.
 message list that archives commit logs as they happen:
 <a href="https://lists.berlios.de/pipermail/xwrt-svncheckins/">
 https://lists.berlios.de/pipermail/xwrt-svncheckins</a>. </p>
-			<p><br />
+			<p>Our latest stable snapshot of webif^2 is <b>Milestone 2</b>. The 
+			install buttons below will have you install it. If you then use the 
+			webif's update feature you will get the latest internal build.<br>
+			<br />
 &nbsp;</p>
 			<p><font size="5" color="#666699"><b>How do I install X-Wrt?</b></font></p>
 <p>X-Wrt is a set of packages that overlay OpenWrt. There are three ways to 
@@ -97,10 +100,13 @@ router:</li>
 	<blockquote>
 		<blockquote>
 			<blockquote>
-				<p><b>Your Router's IP:</b>
+				<p><b><u>Install Milestone 2 Release</u><br>
+				Your Router's IP:</b>
 				<input type="text" name="routerip" size="12" value="192.168.1.1"></input>
 				<input type="submit" value=" Install Webif^2 " name="install_webif"  onclick="installWebif(this.form)"></input>
-				<i>NOTE: this button will NOT work with Internet Explorer!</i></p>
+				<i>NOTE: This button will NOT work with Internet Explorer!<br>
+				</i>If you then use the webif's update feature you will end up 
+				with the latest internal build.</p>
 			</blockquote>
 		</blockquote>
 	</blockquote>
@@ -130,7 +136,7 @@ OpenWrt White Russian RC5 or RC6. Kamikaze and pre-RC5 images are not supported.
 						<blockquote>
 							<ol>
 								<li><font size="2" face="Courier New"><b>ipkg install 
-			http://ftp.berlios.de/pub/xwrt/packages/webif_0.3-2_mipsel.ipk</b></font></li>
+			http://ftp.berlios.de/pub/xwrt/packages/webif_milestone2.ipk</b></font></li>
 							</ol>
 						</blockquote>
 					</blockquote></td>
