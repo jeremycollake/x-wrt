@@ -83,9 +83,11 @@ install and use X-Wrt on your router:</p>
 &nbsp;</li>
 			</ol>
 			<ul>
-				<li><b><font size="4"><u>Method #1</u>: </font></b>
-				<font size="4">Flash OpenWrt White Russian RC5 or RC6 then 
-				install X-Wrt packages like Webif^2.</font></li>
+				<li><b><font size="4"><u>
+				<span style="background-color: #FFFF00">Method #1</span></u><span style="background-color: #FFFF00">:
+				</span></font></b><font size="4">
+				<span style="background-color: #FFFF00">Flash OpenWrt White Russian RC5 or RC6 then 
+				install X-Wrt packages like Webif^2.</span></font></li>
 			</ul>
 			<blockquote>
 	<p><font size="4" color="#666699"><b>Step-by-step if you have NOT already 
@@ -138,11 +140,13 @@ router:</li>
 	</blockquote>
 </blockquote>
 			<ul>
-				<li><b><font size="4"><u>Method #2</u>: </font></b>
-				<font size="4">Flash 
+				<li><b><font size="4"><u>
+				<span style="background-color: #FFFF00">Method #2</span></u><span style="background-color: #FFFF00">: 
+				</span> </font></b><font size="4">
+				<span style="background-color: #FFFF00">Flash 
 				pre-built OpenWrt White Russian images that already contain 
 				X-Wrt packages. 
-				</font> 
+				</span></font> 
 				<blockquote>
 					<ol>
 						<li>Download firmware images from here:
