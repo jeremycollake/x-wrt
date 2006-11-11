@@ -72,11 +72,19 @@ https://lists.berlios.de/pipermail/xwrt-svncheckins</a>. </p>
 			<br />
 &nbsp;</p>
 			<p><font size="5" color="#666699"><b>How do I install X-Wrt?</b></font></p>
-<p>X-Wrt is a set of packages that overlay OpenWrt. There are three ways to 
+<p>X-Wrt is a set of packages that overlay OpenWrt. There are two primary ways to 
 install and use X-Wrt on your router:</p>
+			<ol>
+				<li>Flash OpenWrt White Russian, then install webif^2 and any 
+				other X-Wrt packages.</li>
+				<li>Flash a pre-built image of OpenWrt White Russian that 
+				already includes X-Wrt packages like webif^2 as well as other 
+				X-Wrt updates.<br>
+&nbsp;</li>
+			</ol>
 			<ul>
-				<li><b><font size="4"><u>Method #1</u> (recommended): </font>
-				</b><font size="4">Flash OpenWrt White Russian RC5 or RC6 then 
+				<li><b><font size="4"><u>Method #1</u>: </font></b>
+				<font size="4">Flash OpenWrt White Russian RC5 or RC6 then 
 				install X-Wrt packages like Webif^2.</font></li>
 			</ul>
 			<blockquote>
@@ -88,7 +96,7 @@ install and use X-Wrt on your router:</p>
 		(follow instructions on <a href="http://wiki.openwrt.org">OpenWrt's wiki</a>). We recommend 
 		White Russian RC5, RC6, or 0.9 (when it is released). Kamikaze is NOT supported yet, 
 		but will be eventually.</li>
-			<li>&nbsp;Flash it, let it reboot, then reboot it 
+			<li>Flash it, let it reboot, then reboot it 
 		again (in case you used JFFS2 image, which needs a second reboot and 
 		doesn't do it automatically).</li>
 			<li>Then use the following form to install the latest X-Wrt webif<sup>2</sup> on to your 
@@ -100,13 +108,17 @@ router:</li>
 	<blockquote>
 		<blockquote>
 			<blockquote>
-				<p><b><u>Install Milestone 2 Release</u><br>
+				<p><b><u>Install Milestone 2 Release<br>
+				</u><br>
 				Your Router's IP:</b>
 				<input type="text" name="routerip" size="12" value="192.168.1.1"></input>
 				<input type="submit" value=" Install Webif^2 " name="install_webif"  onclick="installWebif(this.form)"></input>
-				<i>NOTE: This button will NOT work with Internet Explorer!<br>
-				</i>If you then use the webif's update feature you will end up 
-				with the latest internal build.</p>
+				<i><br>
+				NOTE: This button will NOT work with Internet Explorer!<br>
+				<br>
+				</i>Alternately, if you are an advanced user you can ssh to the 
+				router and run &quot;<font size="2" face="Courier New"><b>ipkg install 
+			http://ftp.berlios.de/pub/xwrt/packages/webif_milestone2.ipk&quot;.</b></font></p>
 			</blockquote>
 		</blockquote>
 	</blockquote>
@@ -121,46 +133,21 @@ router:</li>
 		CSS.</li>
 		</ol>
 	</blockquote>
-	<p><font size="4" color="#666699"><b>Step-by-step if you HAVE already 
-	flashed OpenWrt</b></font></p>
 	<blockquote>
-		<p>You can install the latest build of X-Wrt's webif<sup>2</sup> if you are running 
-OpenWrt White Russian RC5 or RC6. Kamikaze and pre-RC5 images are not supported. 
-		To install the package, run this at the terminal (ssh) prompt:</p>
+		<p>&nbsp;</p>
 	</blockquote>
 </blockquote>
-			<table border="0" width="100%" bgcolor="#FFFFFF" id="table5">
-				<tr>
-					<td>
-					<blockquote>
-						<blockquote>
-							<ol>
-								<li><font size="2" face="Courier New"><b>ipkg install 
-			http://ftp.berlios.de/pub/xwrt/packages/webif_milestone2.ipk</b></font></li>
-							</ol>
-						</blockquote>
-					</blockquote></td>
-				</tr>
-			</table>
-			<blockquote>
-				<blockquote>
-					<p><i>Conflicts? If you get a conflict error you may need to add '-force-overwrite'. 
-		If you have problems accessing some or all pages, reboot your router to 
-		force the httpd to be restart, or run 'killall httpd; 
-		/etc/init.d/S50httpd'.</i></p>
-					<p>&nbsp;</p>
-				</blockquote>
-			</blockquote>
 			<ul>
-				<li><b><font size="4"><u>Method #2</u>: </font></b>Flash 
+				<li><b><font size="4"><u>Method #2</u>: </font></b>
+				<font size="4">Flash 
 				pre-built OpenWrt White Russian images that already contain 
 				X-Wrt packages. 
+				</font> 
 				<blockquote>
 					<ol>
 						<li>Download firmware images from here:
-						<a href="ftp://ftp.berlios.de/pub/xwrt/images/">ftp://ftp.berlios.de/pub/xwrt/images/</a> . They may be in a 7z 
-				archive, which you should download and extract with compatible 
-				software like <a href="http://www.7zip.org">7-Zip</a>. </li>
+						<a href="ftp://ftp.berlios.de/pub/xwrt/images/">ftp://ftp.berlios.de/pub/xwrt/images/</a> 
+						. Download the one appropriate to your router. </li>
 						<li>Once you've extracted the images, flash the squashfs 
 						image appropriate to your router by following the 
 						instructions on <a href="http://wiki.openwrt.org">OpenWrt's wiki</a>. 
@@ -169,24 +156,16 @@ OpenWrt White Russian RC5 or RC6. Kamikaze and pre-RC5 images are not supported.
 						root appear writable, making JFFS2 only images less than 
 						necessary).</li>
 					</ol>
-					<p>&nbsp;</p>
 				</blockquote>
 				</li>
 			</ul>
-			<ul>
-				<li><b><font size="4"><u>Method #3</u>: </font></b>Build your 
-				own OpenWrt images with X-Wrt packages pre-installed. The 
-				OpenWrt image builder allows you to easily do this. You can also 
-				use the X-Wrt image builder, which may be more convenient since 
-				X-Wrt packages are already in the repository.</li>
-			</ul>
-<p><br />
+			<p><br />
 &nbsp;</p>
-			<p><font size="5" color="#666699"><b>I want to help!</b></font></p>
-<p>Great! We really need developers, translators, documentation writers, testers, and plain users ;). Join the 
-effort by visiting our forums or emailing
-<a href="mailto:jeremy@bitsum.com">jeremy@bitsum.com</a>. </p>
-			<p>&nbsp;</td>
+			<p><br>
+			<i>Join the 
+			development effort by visiting us on irc freenode#x-wrt or emailing
+<a href="mailto:jeremy@bitsum.com">jeremy@bitsum.com</a>. </i> </p>
+			</td>
 		</tr>
 		<tr>
 			<td align="left">&nbsp;</td>
