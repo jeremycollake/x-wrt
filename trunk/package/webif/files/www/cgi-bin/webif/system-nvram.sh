@@ -18,6 +18,7 @@ header "System" "NVRAM" "@TR<<NVRAM>>" '' '' ?>
 
 <div class="half noBorderOnLeft">
 <?
+MAX_VALUE_LEN=60
 myself=$(basename "$SCRIPT_NAME")
 live=false
 
@@ -94,8 +95,12 @@ else
 
 	nvram show 2>/dev/null | sed 's,^\([^=]\+\)=.*$,\1,;t;d' | sed '/eou_private_key/d' | sed '/eou_public_key/d' | sed '/sdram_/d' | sort |
 	while IFS='=' read name; do
-		value=$(nvram get "$name")
+		value=$(nvram get "$name")		
 		empty "$value" && continue;
+		value_size=$(echo "$value" | wc -c)				
+		[ "$value_size" -gt $MAX_VALUE_LEN ] && {
+			value="$(echo "$value" | cut -c1-$MAX_VALUE_LEN)..."
+		}
 		echo '<tr>'
 		echo "<td>$name</td>"
 		echo "<td><code>$value</code></td>"
