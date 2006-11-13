@@ -16,6 +16,10 @@ cat <<EOF
 	padding-right: 3em;
 }
 
+.fsize {
+        padding-right: 3em;
+}
+        
 .c2 {
 	width: 3em;
 }
