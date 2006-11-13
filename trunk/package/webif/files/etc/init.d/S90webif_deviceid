@@ -15,6 +15,12 @@ while [ -z "$device_name" ]; do
  		break
 	}
 	break
+	dd bs=1024 count=1 skip=5 if=/dev/mtd/0 2>/dev/null | strings | grep "WL500gd"
+	[ $? = "0" ] && {
+ 		device_name="ASUS WL-500gd" 		
+ 		break
+	}
+	break
 done
 nvram set "device_name=$device_name"
 # do not commit changes:
