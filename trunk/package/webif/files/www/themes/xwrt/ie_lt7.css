@@ -1,11 +1,2 @@
 /* This file contains CSS specific to IE version < 7 */
 
-/* MSIE PNG HACK(S) */
-.openwrt-title 
-{ 
-	background-image: none;
-	/* This will not tile - switch to GIF */
-	/*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/openwrt-logo.png', sizingMethod='image');*/
-	/* Gradient as a temporary replacement .. */
-	filter:progid:DXImageTransform.Microsoft.Gradient( startColorstr=#99999999, endColorstr=#00000000, Enabled='true', GradientType='1');
-}
