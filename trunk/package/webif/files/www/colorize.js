@@ -1,3 +1,4 @@
+
 function setCookie(name, value, expires, path, domain, secure)
 {
 	document.cookie = name + "=" + escape(value) +
@@ -42,8 +43,8 @@ function setcolor()
 	OneYear = 365*24*60*60*1000;
 	expireTime.setTime(expireTime.getTime()+OneYear);
 	deleteCookie("webif_color", '', '');   /* old cookie name */
-	deleteCookie("xwrt_color_theme", '', '');   /* previous cookie */
-	setCookie("xwrt_color_theme", this.title, expireTime, '', '', '');
+	deleteCookie('xwrt_color_theme', '', '');   /* previous cookie */
+	setCookie('xwrt_color_theme', this.title, expireTime, '', '', '');
 	colorize();
 	document.close();
 	window.location.href = window.location.href;
@@ -93,7 +94,7 @@ function swatch()
 
 function colorize()
 {
-	var color = getCookie("xwrt_color")
+	var color = getCookie('xwrt_color_theme');
 	document.write('<link rel="stylesheet" type="text/css" href="');
 	switch(color)
 	{
