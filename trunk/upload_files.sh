@@ -32,17 +32,47 @@ echo "Uploading X-Wrt patches ..."
 scp \
 	patches/* \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/patches/
+
 echo "Uploading firmware images ..."
 scp \
-	bin/*.7z \
-	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/
+	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default/*.7z \
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/default/
 scp \
-	bin/*.bin \
-	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/
+	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default/*.bin \
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/default/
 scp \
-	bin/*.trx \
-	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/
+	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default/*.trx \
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/default/
+#scp \
+#	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/micro/*.7z \
+#	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/micro/
+#scp \
+#	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/micro/*.bin \
+#	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/micro/
+#scp \
+#	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/micro/*.trx \
+#	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/micro/
+scp \
+	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pppoe/*.7z \
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/pppoe/
+scp \
+	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pppoe/*.bin \
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/pppoe/
+scp \
+	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pppoe/*.trx \
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/pppoe/
+scp \
+	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pptp/*.7z \
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/pptp/
+scp \
+	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pptp/*.bin \
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/pptp/
+scp \
+	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pptp/*.trx \
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/pptp/
 echo "Uploading SDk and image builder ..."
 scp \
 	bin/*.tar.bz2 \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/rc6/
+
+
