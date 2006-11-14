@@ -41,9 +41,9 @@ function setcolor()
 	var expireTime = new Date();
 	OneYear = 365*24*60*60*1000;
 	expireTime.setTime(expireTime.getTime()+OneYear);
-	deleteCookie("webif_color_theme", '', '');   /* old cookie name */
-	deleteCookie("xwrt_color", '', '');   /* previous cookie */
-	setCookie("xwrt_color", this.title, expireTime, '', '', '');
+	deleteCookie("webif_color", '', '');   /* old cookie name */
+	deleteCookie("xwrt_color_theme", '', '');   /* previous cookie */
+	setCookie("xwrt_color_theme", this.title, expireTime, '', '', '');
 	colorize();
 	document.close();
 	window.location.href = window.location.href;
@@ -109,13 +109,13 @@ function colorize()
 	case 'navyblue':
 		document.write('/themes/active/color_navyblue.css" />');
 		break;
-	case 'blue':
-		document.write('/themes/active/color_blue.css" />');
-		break;
 	case 'brown':
-	default:
 		document.write('/themes/active/color_brown.css" />');
 		break;
+	case 'blue':
+	default:
+		document.write('/themes/active/color_blue.css" />');
+		break;	
 	}
 }
 

@@ -100,9 +100,10 @@ option
 	float: left;
 	width: 80%;
 	margin-top: 1em;
+	padding-left: 0.5em;
 	height: 5em;
 	background: url(/images/openwrt-logo.png);
-	background-repeat: repeat-x;
+	background-repeat: repeat-x;	
 }
 
 #mainmenu
@@ -567,16 +568,18 @@ dt,
 
 #footer-logo
 {			
-	position: absolute;
+	display: none;
+	/*position: absolute;
 	bottom: 1em;
 	font-size: 1.5em;	
 	display: inline;
 	text-align: left;		
-	margin-left: 1em;
+	margin-left: 1em;*/
 }
 
 #footer-logo #footer-sublogo
 {	
-	font-size: 0.5em;
-	font-style: italic;
+	display: none;
+	/*font-size: 0.5em;
+	font-style: italic;*/
 }

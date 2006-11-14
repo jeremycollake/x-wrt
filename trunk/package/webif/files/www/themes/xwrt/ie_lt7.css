@@ -4,5 +4,8 @@
 .openwrt-title 
 { 
 	background-image: none;
-	filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src=/images/openwrt-logo.png);
+	/* This will not tile - switch to GIF */
+	/*filter:progid:DXImageTransform.Microsoft.AlphaImageLoader(src='/images/openwrt-logo.png', sizingMethod='image');*/
+	/* Gradient as a temporary replacement .. */
+	filter:progid:DXImageTransform.Microsoft.Gradient( startColorstr=#FFFFFFFF, endColorstr=#00000000, Enabled='true', GradientType='1');
 }
