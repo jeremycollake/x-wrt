@@ -12,19 +12,19 @@ function getCookie(name)
 {
 	var dc = document.cookie;
 	var prefix = name + "=";
-	var begin = dc.indexOf(prefix);
-	if (begin == 0)
-	{
+	var begin = dc.indexOf(prefix);	
+	if (begin != -1)
+	{		
 		var end = document.cookie.indexOf(";", begin);
 		if (end == -1)
 		{
 			end = dc.length;
-		}
+		}		
 		return unescape(dc.substring(begin + prefix.length, end));
 	}
 	else
 	{
-		return null;
+		return null;	
 	}
 }
 
@@ -93,7 +93,7 @@ function swatch()
 }
 
 function colorize()
-{
+{	
 	var color = getCookie('xwrt_color_theme');
 	document.write('<link rel="stylesheet" type="text/css" href="');
 	switch(color)
