@@ -48,7 +48,7 @@ function setcolor()
 	document.close();
 	window.location.href = window.location.href;
 }
-
+a
 // find all objects of swatch class and set onclick handler
 function swatch()
 {
