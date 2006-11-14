@@ -155,12 +155,16 @@ else
 	 empty "$FORM_generate_wep_128" && empty "$FORM_generate_wep_40" &&
 	 {
 		SAVED=1
+# TODO: A bug exists in validate where if blank lines preceed a validation entry then it can fail validation
+#  without any reported error, only the return value is bad. The old code here used seperate validation 
+#  strings, i.e. V_PSK, V_WEP. This would result in blank lines in the validation call, causing this anomaly.
 		case "$FORM_encryption" in
-			wpa) V_RADIUS="
+			wpa) V_ENCRYPTION="$V_ENCRYPTION
 	string|FORM_radius_key|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_radius_key
 	ip|FORM_radius_ipaddr|@TR<<RADIUS IP Address>>|required|$FORM_radius_ipaddr";;
-			psk) V_PSK="wpapsk|FORM_wpa_psk|@TR<<WPA PSK#WPA Pre-Shared Key>>|required|$FORM_wpa_psk";;
-			wep) V_WEP="
+			psk) V_ENCRYPTION="$V_ENCRYPTION
+				wpapsk|FORM_wpa_psk|@TR<<WPA PSK#WPA Pre-Shared Key>>|required|$FORM_wpa_psk";;
+			wep) V_ENCRYPTION="$V_ENCRYPTION
 int|FORM_key|@TR<<Selected WEP Key>>|min=1 max=4|$FORM_key
 wep|FORM_key1|@TR<<WEP Key>> 1||$FORM_key1
 wep|FORM_key2|@TR<<WEP Key>> 2||$FORM_key2
@@ -173,9 +177,7 @@ int|FORM_radio|wl0_radio|required min=0 max=1|$FORM_radio
 int|FORM_broadcast|wl0_closed|required min=0 max=1|$FORM_broadcast
 string|FORM_ssid|@TR<<ESSID>>|required|$FORM_ssid
 int|FORM_channel|@TR<<Channel>>|required min=0 max=$CHANNEL_MAX|$FORM_channel
-$V_WEP
-$V_RADIUS
-$V_PSK
+$V_ENCRYPTION
 EOF
 		equal "$?" 0 && {
 			NUM_gmode="1"
