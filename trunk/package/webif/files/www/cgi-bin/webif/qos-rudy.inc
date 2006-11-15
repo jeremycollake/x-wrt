@@ -131,8 +131,8 @@ if empty "$FORM_submit"; then
         FORM_download_speed=${download_speed:-$DOWNLOAD}
         FORM_upload_speed=${upload_speed:-$UPLOAD}
         FORM_conntrack_max=${conntrack_max:-$(sysctl net.ipv4.ip_conntrack_max |cut -d ' ' -f 3)}
-        FORM_conntrack_ip_conntrack_tcp_timeout_established=${conntrack_ip_conntrack_tcp_timeout_established:-$(sysctl net.ipv4.netfilter.ip_conntrack_ip_conntrack_tcp_timeout_established_established |cut -d ' ' -f 3)}
-        FORM_conntrack_ip_conntrack_udp_timeout_stream=${conntrack_ip_conntrack_udp_timeout_stream:-$(sysctl net.ipv4.netfilter.ip_conntrack_ip_conntrack_udp_timeout_stream |cut -d ' ' -f 3)}
+        FORM_conntrack_tcp_timeout=${conntrack_tcp_timeout:-$(sysctl net.ipv4.netfilter.ip_conntrack_tcp_timeout_established |cut -d ' ' -f 3)}
+        FORM_conntrack_udp_timeout=${conntrack_udp_timeout:-$(sysctl net.ipv4.netfilter.ip_conntrack_udp_timeout |cut -d ' ' -f 3)}
 else 
 	SAVED=1
 	validate <<EOF
@@ -141,8 +141,8 @@ int|FORM_upload_speed|@TR<<Upload Speed>>|required|$FORM_upload_speed
 EOF
 	equal "$?" 0 && {
         	save_setting conntrack ip_conntrack_max $FORM_conntrack_max
-        	save_setting conntrack ip_conntrack_tcp_timeout_established $FORM_conntrack_ip_conntrack_tcp_timeout_established
-        	save_setting conntrack ip_conntrack_udp_timeout_stream $FORM_conntrack_ip_conntrack_udp_timeout_stream
+        	save_setting conntrack tcp_timeout $FORM_conntrack_tcp_timeout
+        	save_setting conntrack udp_timeout $FORM_conntrack_udp_timeout
         }
 
 ###############################################
@@ -318,9 +318,9 @@ text|download_speed|$FORM_download_speed
 field|@TR<<Maximum Number Of Connections>>
 text|conntrack_max|$FORM_conntrack_max
 field|@TR<<TCP Timeout (in seconds)>>
-text|conntrack_ip_conntrack_tcp_timeout_established|$FORM_conntrack_ip_conntrack_tcp_timeout_established
+text|conntrack_tcp_timeout|$FORM_conntrack_tcp_timeout
 field|@TR<<UDP Timeout (in seconds)>>
-text|conntrack_ip_conntrack_udp_timeout_stream|$FORM_conntrack_ip_conntrack_udp_timeout_stream
+text|conntrack_udp_timeout|$FORM_conntrack_udp_timeout
 end_form
 
 #################################################################
