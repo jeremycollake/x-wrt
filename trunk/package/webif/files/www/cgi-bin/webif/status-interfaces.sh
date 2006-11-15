@@ -5,12 +5,14 @@ header "Status" "Interfaces" "@TR<<Interfaces>>"
 
 # get WAN stats
 wan_config=$(ifconfig 2>&1 | grep -A 6 "`nvram get wan_ifname`")
+if [ -n "$wan_config" ]; then
 wan_ip_addr=$(echo "$wan_config" | grep "inet addr" | cut -d: -f 2 | sed s/Bcast//g)
 wan_mac_addr=$(echo "$wan_config" | grep "HWaddr" | cut -d' ' -f 10)
 wan_tx_packets=$(echo "$wan_config" | grep "TX packets" | sed s/'TX packets:'//g | cut -d' ' -f 11 | int2human)
 wan_rx_packets=$(echo "$wan_config" | grep "RX packets" | sed s/'RX packets:'//g | cut -d' ' -f 11 | int2human)
 wan_tx_bytes=$(echo "$wan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d'(' -f 3)
 wan_rx_bytes=$(echo "$wan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d'(' -f 2 | cut -d ')' -f 1)
+fi
 # get LAN stats
 lan_config=$(ifconfig 2>&1 | grep -A 6 "`nvram get lan_ifname`")
 lan_ip_addr=$(echo "$lan_config" | grep "inet addr" | cut -d: -f 2 | sed s/Bcast//g)
@@ -46,6 +48,7 @@ form_dns_servers=$(awk '
 	/nameserver/ {print "field|@TR<<DNS Server>> " counter "|dns_server_" counter "\n string|" $2 "\n" ;counter+=1}
 	' /etc/resolv.conf)
 
+if [ -n "$wan_config" ]; then
 display_form <<EOF
 
 start_form|@TR<<WAN>>
@@ -61,7 +64,10 @@ string|$wan_tx_packets <div class="kb">pkts</div>&nbsp;<div class="numeric-small
 helpitem|WAN
 helptext|WAN WAN#WAN stands for Wide Area Network and is usually the upstream connection to the internet.
 end_form
+EOF
+fi
 
+display_form <<EOF
 start_form|@TR<<LAN>>
 field|@TR<<MAC Address>>|lan_mac_addr
 string|<div class="mac-address">$lan_mac_addr</div>
