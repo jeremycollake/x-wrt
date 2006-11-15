@@ -51,6 +51,21 @@ empty "$FORM_remove_line" || update_dnsmasq del "$FORM_iface" "$FORM_line"
 		FORM_dhcp_start=$(echo "$FORM_dhcp_start" | cut -d '.' -f 4)
 		FORM_dhcp_num=${FORM_dhcp_num:-$(nvram get ${FORM_iface}_dhcp_num)}
 		FORM_dhcp_bail=${FORM_dhcp_bail:-$(nvram get ${FORM_iface}_dhcp_bail)}
+		FORM_dhcp_lease=${FORM_dhcp_lease:-$(nvram get ${FORM_iface}_dhcp_lease)}
+		FORM_dhcp_lease=${FORM_dhcp_lease:-12h}
+		
+		# convert lease time to minutes
+		lease_int=$(echo "$FORM_dhcp_lease" | tr -d [a-z][A-Z])			
+		time_units=$(echo "$FORM_dhcp_lease" | tr -d [1-9])
+		case "$time_units" in
+			"h" | "H" ) let "FORM_dhcp_lease=$lease_int*60";;
+			"d" | "D" ) let "FORM_dhcp_lease=$lease_int*24*60";;
+			"s" | "S" ) let "FORM_dhcp_lease=$lease_int/60";;
+			"w" | "W" ) let "FORM_dhcp_lease=$lease_int*7*24*60";;
+			"m" | "M" | "" ) FORM_dhcp_lease="$lease_int";;  # minutes 			
+			*) FORM_dhcp_lease="$lease_int"; echo "<br />WARNING: Unknown suffix found on dhcp lease time: $FORM_dhcp_lease";;
+		esac					
+			
 	fi
 if [ -n "$FORM_submit" ]; then
 	validate <<EOF
@@ -59,6 +74,7 @@ string|FORM_${FORM_iface}_dhcp_iface|DHCP iface||$FORM_dhcp_iface
 int|FORM_${FORM_iface}_dhcp_start|DHCP start||$FORM_dhcp_start
 int|FORM_${FORM_iface}_dhcp_num|DHCP num||$FORM_dhcp_num
 string|FORM_${FORM_iface}_dhcp_bail|DHCP bail||$FORM_dhcp_bail
+int|FORM_${FORM_iface}_dhcp_lease|DHCP lease time|min=1 max=2147483647 required|$FORM_dhcp_lease
 EOF
 	if equal "$?" 0; then
 		SAVED=1
@@ -67,6 +83,7 @@ EOF
 		save_setting network ${FORM_iface}_dhcp_start $FORM_dhcp_start
 		save_setting network ${FORM_iface}_dhcp_num $FORM_dhcp_num
 		save_setting network ${FORM_iface}_dhcp_bail $FORM_dhcp_bail
+		save_setting network ${FORM_iface}_dhcp_lease "${FORM_dhcp_lease}m"
 	else
 		echo "<div class=\"failed-validation\">Validation failed on one or more variables. On this page a common error is putting an IP address in \"DHCP Start\" instead of a simple number.</div>"
 	fi
@@ -151,7 +168,6 @@ END {
 	print ""
 }
 EOF
-
 		awk -v "url=$SCRIPT_NAME" \
 			-v "mac=$FORM_dhcp_mac" \
 			-v "remove=@TR<<Remove>>" \
@@ -194,6 +210,8 @@ field|@TR<<DHCP Num>>|dhcp_num_field
 text|dhcp_num|$FORM_dhcp_num
 field|@TR<<DHCP Bail>>
 text|dhcp_bail|$FORM_dhcp_bail
+field|@TR<<DHCP Lease Minutes>>
+text|dhcp_lease|$FORM_dhcp_lease
 end_form
 EOF
 	fi
