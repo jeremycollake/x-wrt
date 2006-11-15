@@ -80,6 +80,9 @@ fi
 &nbsp;&nbsp; <a href="mailto:openwrt@kewis.ch">Philipp Kewisch</a>
 </td></tr>
 <tr><td>
+&nbsp;&nbsp; <a href="mailto:mtsales@users.berlios.de">M.t. Sales</a>
+</td></tr>
+<tr><td>
 &nbsp;&nbsp; <a href="mailto:markus@freewrt.org">Markus Wigge</a>
 </td></tr>
 <tr><td>
