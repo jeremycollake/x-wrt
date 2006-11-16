@@ -83,6 +83,15 @@ rm -f "${IPKG_INSTROOT}/etc/init.d/S60cron"
 mv -f "${IPKG_INSTROOT}/etc/init.d/x60cron.webif" "${IPKG_INSTROOT}/etc/init.d/S60cron"
 mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
 
+# if /etc/functions.sh contains uci config functions, then make /etc/functions_ex.sh a symlink
+# to /etc/functions.sh. Else, keep /etc/functions_ex.sh. This is because RC5 does not have
+# this code, while RC6 does - and we don't want duplicated code laying around.
+grep -i "config_load" "${IPKG_INSTROOT}/etc/functions.sh"
+[ $? = 0 ] && {
+	rm "${IPKG_INSTROOT}/etc/functions_ex.sh"
+	ln -s "/etc/functions.sh" "${IPKG_INSTROOT}/etc/functions_ex.sh"
+}
+
 # initialize default webif theme
 # create symlink to /www/themes/xwrt (do NOT use INSTROOT in first arg).
 rm -rf "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
@@ -143,7 +152,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 		echo "#!/bin/sh" > $reboot_file
 		echo "sleep 5 && reboot" >> "$reboot_file"
 		chmod +x "$reboot_file"
-		sh "$reboot_file" &		
+		sh "$reboot_file" &	
 	}
 fi
 exit 0
