@@ -26,7 +26,7 @@ Categories => Categorias
 
 Subcategories => Subcategorias
 
-more... => mais
+more... => saber mais...
 
 Add => Adicionar
 
@@ -34,7 +34,7 @@ Remove => Eliminar
 
 Warning => Atenção
 
-Password_warning => Não foi estabelecida uma palavra-chave para o acesso ao router (acesso web e ssh). Por favor, estabeleça uma palavra-chave agora (o nome de utilizador será ‘root’)
+Password_warning => Não foi estabelecida uma palavra-chave para o acesso ao router (acesso web e ssh). Por favor, estabeleça uma palavra-chave agora (o nome de utilizador será 'root')
 
  
 
@@ -92,7 +92,7 @@ Copyright => Copyright
 
  
 
-GPL_Text => Este programa é livre e poderá ser distribuído e/ou <br>modificado segundo os termos da licença GPL (General Public License)<br>tal como publicada pela Free Software Foundation como está publicada por la Free Sofware Foundation; quer pela versão 2<br> quer por qualquer versão posterior (à sua escolha).
+GPL_Text => Este programa é livre e poderá ser distribuído e/ou <br>modificado segundo os termos da licença GPL (General Public License)<br>tal como publicada pela Free Software Foundation; quer pela versão 2<br> quer por qualquer versão posterior (à sua escolha).
 
 Contributions by => Contribuidores
 
@@ -434,11 +434,11 @@ Helptext DNS save => É recomendável guardar as alterações antes de adicionar ou 
 
  
 
-Helptext Operation mode => Estabelece o modo de operação da rede sem fios. Escolhendo ‘Client (bridge)’ não altera a configuração da interface de rede. Irá simplesmente configurar alguns parâmetros da rede sem fios para operar em modo ponte (bridge).
+Helptext Operation mode => Estabelece o modo de operação da rede sem fios. Escolhendo 'Client (bridge)' não altera a configuração da interface de rede. Irá simplesmente configurar alguns parâmetros da rede sem fios para operar em modo ponte (bridge).
 
  
 
-Helptext Encryption Type => 'WPA (RADIUS)' só pode ser usado em modo ‘Ponto de acesso’.<br /> 'WPA (PSK)' não funciona em modo Ad-Hoc.
+Helptext Encryption Type => 'WPA (RADIUS)' só pode ser usado em modo "Ponto de acesso"<br> 'WPA (PSK)' não funciona em modo Ad-Hoc.
 
  
 
@@ -448,7 +448,7 @@ Helptext IP Settings => As opções IP são opcionais para os modos DHCP e PPTP. Ap
 
 Helptext Idle Time => Número de segundos sem actividade na Internet que o router deve esperar antes de se desligar da Internet.
 
-(Apenas para o modo ‘Ligar quando necessário’ (connect on demand))
+(Apenas para o modo 'Ligar quando necessário' (connect on demand))
 
  
 Helptext Redial Timeout => Número de segundo sem receber resposta que o router deve esperar para voltar a estabelecer ligação à Internet.
