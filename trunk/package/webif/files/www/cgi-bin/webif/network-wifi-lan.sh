@@ -71,7 +71,7 @@ EOF
 	esac
 fi
 
-header "Network" "WIFI-LAN" "@TR<<WIFI LAN Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
+header "Network" "WIFI-LAN" "@TR<<Wireless Bridge Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 cat <<EOF
 <script type="text/javascript" src="/webif.js "></script>
 <script type="text/javascript">
@@ -95,7 +95,7 @@ EOF
 
 display_form <<EOF
 onchange|modechange
-start_form|@TR<<Wireless LAN Enable/Disable>>
+start_form|@TR<<Enable/Disable Unbridged Wireless>>
 field|@TR<<Split WLAN From Switch Bridge>>|||When you split the Wireless LAN from the bridge the wired and and wireless traffic will no longer see each other.
 select|wifi_enable|$FORM_wifi_enable
 option|none|@TR<<Disable>>
