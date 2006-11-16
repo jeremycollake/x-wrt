@@ -35,7 +35,7 @@ if empty "$FORM_submit"; then
 	FORM_wan_proto=${FORM_wan_proto:-$(nvram get wan_proto)}
 	case "$FORM_wan_proto" in
 		# supported types
-		static|dhcp|pptp|pppoe) ;;
+		static|dhcp|pptp|pppoe|wwan) ;;
 		# otherwise select "none"
 		*) FORM_wan_proto="none";;
 	esac
@@ -59,6 +59,14 @@ if empty "$FORM_submit"; then
 	esac
 
 	FORM_pptp_server_ip=${pptp_server_ip:-$(nvram get pptp_server_ip)}
+	
+	# umts apn
+	FORM_wwan_service=${wwan_service:-$(nvram get wwan_service)}
+	FORM_wwan_pincode="-@@-"
+	FORM_wwan_country=${wwan_country:-$(nvram get wwan_country)}
+	FORM_wwan_apn=${wwan_apn:-$(nvram get wwan_apn)}
+	FORM_wwan_username=${wwan_username:-$(nvram get wwan_username)}
+	FORM_wwan_passwd=${wwan_passwd:-$(nvram get wwan_passwd)}
 else
 	SAVED=1
 
@@ -90,6 +98,16 @@ EOF
 		case "$FORM_wan_proto" in
 			static) save_setting network wan_gateway $FORM_wan_gateway ;;
 			pptp) save_setting network pptp_server_ip "$FORM_pptp_server_ip" ;;
+			wwan)
+			save_setting network wwan_service $FORM_wwan_service
+			if ! equal "$FORM_wwan_pincode" "-@@-"; then
+				save_setting wwan wwan_pincode $FORM_wwan_pincode
+			fi
+			save_setting network wwan_country $FORM_wwan_country
+			save_setting network wwan_apn $FORM_wwan_apn
+			save_setting network wwan_username $FORM_wwan_username
+			save_setting network wwan_passwd $FORM_wwan_passwd
+			;;
 		esac
 
 		# Common settings for PPTP, Static and DHCP
@@ -102,7 +120,7 @@ EOF
 
 		# Common PPP settings
 		case "$FORM_wan_proto" in
-			pppoe|pptp)
+			pppoe|pptp|wwan)
 				empty "$FORM_ppp_username" || save_setting network ppp_username $FORM_ppp_username
 				empty "$FORM_ppp_passwd" || save_setting network ppp_passwd $FORM_ppp_passwd
 
@@ -144,11 +162,37 @@ text|pptp_server_ip|$FORM_pptp_server_ip"
 	PPPOE_OPTION="option|pppoe|PPPoE"
 }
 
+[ -x /sbin/ifup.wwan ] && {
+	WWAN_OPTION="option|wwan|UMTS/GPRS"
+	WWAN_COUNTRY_LIST=$(
+		awk '	BEGIN{FS=":"}
+			$1 ~ /[ \t]*#/ {next}
+			{print "option|" $1 "|@TR<<" $2 ">>"}' < /usr/lib/webif/apn.csv
+	)
+	JS_APN_DB=$(
+		awk '	BEGIN{FS=":"}
+			$1 ~ /[ \t]*#/ {next}
+			{print "	apnDB." $1 " = new Object;"
+			 print "	apnDB." $1 ".name = \"" $3 "\";"
+			 print "	apnDB." $1 ".user = \"" $4 "\";"
+			 print "	apnDB." $1 ".pass = \"" $5 "\";\n"}' < /usr/lib/webif/apn.csv
+	)
+}
 
 cat <<EOF
 <script type="text/javascript" src="/webif.js "></script>
 <script type="text/javascript">
 <!--
+function setAPN(element) {
+	var apnDB = new Object();
+
+$JS_APN_DB
+
+	document.getElementById("wwan_apn").value = apnDB[element.value].name;
+	document.getElementById("wwan_username").value = apnDB[element.value].user;
+	document.getElementById("wwan_passwd").value = apnDB[element.value].pass;
+}
+
 function modechange()
 {
 	var v;
@@ -171,7 +215,12 @@ function modechange()
 	set_visible('wan_dns', v);
 
 	v = isset('wan_proto', 'pptp');
-	set_visible('pptp_server',v);
+	set_visible('pptp_server', v);
+	
+	v = isset('wan_proto', 'wwan');
+	set_visible('wwan_service', v);
+	set_visible('wwan_sim_settings', v);
+	set_visible('apn_settings', v);
 
 	hide('save');
 	show('save');
@@ -189,9 +238,11 @@ option|none|@TR<<No WAN#None>>
 option|dhcp|@TR<<DHCP>>
 option|static|@TR<<Static IP>>
 $PPPOE_OPTION
+$WWAN_OPTION
 $PPTP_OPTION
 helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration#head-b62c144b9886b221e0c4b870edb0dd23a7b6acab
 end_form
+
 start_form|@TR<<IP Settings>>|wan_ip_settings|hidden
 field|@TR<<WAN IP Address>>|field_wan_ipaddr|hidden
 text|wan_ipaddr|$FORM_wan_ipaddr
@@ -203,10 +254,38 @@ $PPTP_SERVER_OPTION
 helpitem|WAN IP Settings
 helptext|Helptext WAN IP Settings#IP Settings are optional for DHCP and PPTP. They are used as defaults in case the DHCP server is unavailable.
 end_form
+
 start_form|@TR<<WAN DNS Servers>>|wan_dns|hidden
 listedit|wandns|$SCRIPT_NAME?wan_proto=static&amp;|$FORM_wandns|$FORM_wandnsadd
 helpitem|Note
 helptext|Helptext WAN DNS save#You should save your settings on this page before adding/removing DNS servers
+end_form
+
+start_form|@TR<<Preferred Connection Type>>|wwan_service|hidden
+field|@TR<<Connection Type>>
+select|wwan_service|$FORM_wwan_service
+option|umts_first|@TR<<UMTS first>>
+option|umts_only|@TR<<UMTS only>>
+option|gprs_only|@TR<<GPRS only>>
+end_form
+
+start_form|@TR<<SIM Configuration>>|wwan_sim_settings|hidden
+field|@TR<<PIN Code>>
+password|wwan_pincode|$FORM_wwan_pincode
+end_form
+
+start_form|@TR<<APN Settings>>|apn_settings|hidden
+field|@TR<<Select Network>>
+onchange|setAPN
+select|wwan_country|$FORM_wwan_country
+$WWAN_COUNTRY_LIST
+onchange|
+field|@TR<<APN Name>>
+text|wwan_apn|$FORM_wwan_apn
+field|@TR<<Username>>
+text|wwan_username|$FORM_wwan_username
+field|@TR<<Password>>
+text|wwan_passwd|$FORM_wwan_passwd
 end_form
 
 start_form|@TR<<PPP Settings>>|ppp_settings|hidden

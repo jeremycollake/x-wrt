@@ -45,7 +45,7 @@ reload_wifi_disable() {
 
 reload_network() {
 	echo '@TR<<Reloading>> @TR<<networking settings>> ...'
-	grep '^wan_' config-network >&- 2>&- && {
+	grep '^w?wan_' config-network >&- 2>&- && {
 		ifdown wan
 		ifup wan
 		killall -HUP dnsmasq
