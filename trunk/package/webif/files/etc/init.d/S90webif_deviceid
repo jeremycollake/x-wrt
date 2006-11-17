@@ -15,10 +15,13 @@ while [ -z "$device_name" ]; do
  		break
 	}
 	break
-	if [ -e $(nvram get hardware_version) ]; then
- 		device_name=$(nvram get hardware_version)
- 		break
-	fi
+
+        nvram get hardware_version
+        [ $? = "0" ] && {
+               device_name=$(nvram get hardware_version)
+                 break
+        }
+
 	break
 done
 nvram set "device_name=$device_name"
