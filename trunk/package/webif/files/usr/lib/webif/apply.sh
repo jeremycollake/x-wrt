@@ -45,7 +45,7 @@ reload_wifi_disable() {
 
 reload_network() {
 	echo '@TR<<Reloading>> @TR<<networking settings>> ...'
-	grep '^w?wan_' config-network >&- 2>&- && {
+	grep '^wan_' config-network >&- 2>&- && {
 		ifdown wan
 		ifup wan
 		killall -HUP dnsmasq
@@ -270,9 +270,13 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 done
 
 #
+# commit tarfs if exists
+#
+[ -f "/rom/local.tar" ] && config save
+
+#
 # cleanup
 #
-echo "Cleaning up ...<br />"
 cd "$pushed_dir"
 rm /tmp/.webif/* >&- 2>&-
 
