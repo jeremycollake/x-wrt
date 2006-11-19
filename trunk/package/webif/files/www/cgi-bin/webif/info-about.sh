@@ -74,7 +74,7 @@ fi
 &nbsp;&nbsp; <a href="mailto:openwrt@nbd.name">Felix Fietkau</a> (nbd)
 </td></tr>
 <tr><td>
-&nbsp;&nbsp; <a href="mailto:guymarc@users.berlios.de">Guymarc</a>
+&nbsp;&nbsp; <a href="mailto:guymarc@users.berlios.de">Guy Marcenac (guymarc)</a>
 </td></tr>
 <tr><td>
 &nbsp;&nbsp; <a href="mailto:openwrt@kewis.ch">Philipp Kewisch</a>
