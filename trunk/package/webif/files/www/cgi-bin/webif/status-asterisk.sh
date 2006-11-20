@@ -3,9 +3,31 @@
 . /usr/lib/webif/webif.sh
 header "Status" "Asterisk" "Asterisk Simple Managment"
 
-conf_path="/etc/asterisk"
+if [ -e /var/run/asterisk.pid ]; then
 
-if [ -e $conf_path ]; then
+ast_pid=$(cat /var/run/asterisk.pid)
+
+ast_proc_info="$(cat /proc/$ast_pid/cmdline | sed 's/\0/ /g')"
+
+asterisk_exec="$(echo $ast_proc_info | awk '{print $1}')"
+
+if [ -z "$asterisk_exec" ]; then
+	asterisk_exec="/usr/sbin/asterisk"
+fi
+
+ast_conf_file="$(echo $ast_proc_info | awk '{for (i=2; i<=NF; i++) if ($i == "-C") print $(i+1)}')"
+
+if [ -e $ast_conf_file ]; then
+	ast_conf_path="$(cat $ast_conf_file | grep '^astetcdir => ')"
+
+	if [ -n "$ast_conf_path" ]; then
+		ast_conf_path="$(echo $ast_conf_path | awk '{print $3}')"
+	else
+		ast_conf_path=/etc/asterisk
+	fi
+else
+	ast_conf_path=/etc/asterisk
+fi
 
 echo '<center>'
 echo '<a href="'$SCRIPT_NAME'">Version</a>'
@@ -24,33 +46,33 @@ echo '<table><tr><td align=left border=0>'
 echo '<pre>'
 if [ "$FORM_action" = "reload" ]; then
 	echo "<h3>Reloading...</h3>"
-	asterisk -r -x 'reload'
+	$asterisk_exec -r -x 'reload'
 elif [ "$FORM_action" = "sip_peers" ]; then
 	echo "<h3>SIP/Peers</h3>"
-	asterisk -r -x 'sip show peers'
+	$asterisk_exec -r -x 'sip show peers'
 elif [ "$FORM_action" = "sip_channels" ]; then
 	echo "<h3>SIP/Channels</h3>"
-	asterisk -r -x 'sip show channels'
+	$asterisk_exec -r -x 'sip show channels'
 elif [ "$FORM_action" = "sip_registry" ]; then
 	echo "<h3>SIP/Registry</h3>"
-	asterisk -r -x 'sip show registry'
+	$asterisk_exec -r -x 'sip show registry'
 elif [ "$FORM_action" = "iax_peers" ]; then
 	echo "<h3>IAX/Peers</h3>"
-	asterisk -r -x 'iax2 show peers'
+	$asterisk_exec -r -x 'iax2 show peers'
 elif [ "$FORM_action" = "iax_channels" ]; then
 	echo "<h3>IAX/Channels</h3>"
-	asterisk -r -x 'iax2 show channels'
+	$asterisk_exec -r -x 'iax2 show channels'
 elif [ "$FORM_action" = "iax_registry" ]; then
 	echo "<h3>IAX/Registration</h3>"
-	asterisk -r -x 'iax2 show registry'
+	$asterisk_exec -r -x 'iax2 show registry'
 elif [ "$FORM_action" = "modules" ]; then
 	echo "<h3>Global/Modules</h3>"
-	asterisk -r -x 'show modules'
+	$asterisk_exec -r -x 'show modules'
 elif [ "$FORM_action" = "execute" ]; then
 	echo "<h3>$FORM_exec_com</h3>"
-	asterisk -r -x "$FORM_exec_com"
+	$asterisk_exec -r -x "$FORM_exec_com"
 elif [ "$FORM_action" = "" ]; then
-	asterisk -r -x 'show version'
+	$asterisk_exec -r -x 'show version'
 fi
 echo '</pre>'
 echo '</td></tr></table>'
@@ -68,7 +90,7 @@ fi
 if [ "$FORM_action" = "editor" ]; then
 	echo '<center><form action="'$SCRIPT_NAME'" method=POST>'
 	echo '<table style="width: 25%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">'
-	ls $conf_path/.  | awk -F' ' '
+	ls $ast_conf_path/.  | awk -F' ' '
 	{
 		link=$1
 		gsub(/\+/,"%2B",link)
@@ -77,10 +99,10 @@ if [ "$FORM_action" = "editor" ]; then
 	echo '</table></form></center>'
 fi
 if [ "$FORM_conf" != "" ]; then
-	echo "$FORM_conf" | tr -d '\r' > $conf_path/$FORM_target
+	echo "$FORM_conf" | tr -d '\r' > $ast_conf_path/$FORM_target
 fi
 if [ "$FORM_action" = "edit" ]; then
-	conf_file="$( cat $conf_path/$FORM_target )"
+	conf_file="$( cat $ast_conf_path/$FORM_target )"
 	echo '<form action="'$SCRIPT_NAME'" method=POST>'
 	echo '<center>'
 	echo '<TEXTAREA name="conf" rows="30" cols="100">'
@@ -93,7 +115,7 @@ if [ "$FORM_action" = "edit" ]; then
 fi
 else
 has_pkgs asterisk
-echo '<a href="system-editor.sh?path=/www/cgi-bin/webif&edit=status-asterisk.sh">You may need to edit this page and change conf_path= to the location of your config file for asterisk</a>'
+echo 'Asterisk is not running.'
 fi
 footer ?>
 <!--
