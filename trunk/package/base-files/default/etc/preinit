@@ -6,6 +6,12 @@ mount none /proc -t proc
 size=$(awk '/Mem:/ {l=5242880;print((s=$2/2)<l)?$2-l:s}' /proc/meminfo)
 mount none /tmp -t tmpfs -o size=$size
 
+[ -f "/rom/local.tar" ] && {
+	mkdir /tmp/local
+	chmod 755 /tmp/local
+	/sbin/config load || tar -xf /rom/local.tar -C /tmp/local
+}
+
 insmod diag
 echo /sbin/hotplug.failsafe > /proc/sys/kernel/hotplug
 set_state preinit
@@ -55,6 +61,6 @@ ifconfig $ifname 0.0.0.0 down
 	unset v0p v1p v2p
 }
 
-mount_root
+[ -f "/rom/local.tar" ] || mount_root
 
 exec /sbin/init
