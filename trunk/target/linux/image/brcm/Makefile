@@ -38,7 +38,8 @@ $(KDIR)/loader.tmp.gz:
 
 $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx: $(KDIR)/loader.tmp.gz
 	$(STAGING_DIR)/bin/trx -o $@ $(KDIR)/loader.tmp.gz $(KDIR)/vmlinux.lzma $(TRXALIGN) $(KDIR)/root.$(FS)
-
+	cp $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx $(BIN_DIR)/openwrt-wrt54gv5-squashfs.bin
+	cp $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx $(BIN_DIR)/openwrt-wrt54gsv5-squashfs.bin
 
 ifeq ($(KERNEL),2.4)
 FSNAME:=$(patsubst jffs2-%,jffs2,$(FS))
