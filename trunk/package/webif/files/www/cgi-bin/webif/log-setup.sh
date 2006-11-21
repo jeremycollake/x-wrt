@@ -3,8 +3,6 @@
 . /usr/lib/webif/webif.sh
 . /etc/runsyslogd.conf
 
-#FILE_NAME="/var/log/messages"
-
 load_settings log
 
 #header "Log" "Syslog Settings" "@TR<<syslog Settings>>"  ' onload="modechange()" ' "$SCRIPT_NAME"
@@ -15,6 +13,9 @@ if empty "$FORM_submit" ; then
 	FORM_type="${log_type:-$(nvram get log_type)}"
 	FORM_type=${FORM_type:-$DEFAULT_log_type}
 	FORM_ipaddr="${log_ipaddr:-$(nvram get log_ipaddr)}"
+	if equal $FORM_ipaddr 0 ; then
+		FORM_ipaddr=""
+	fi
 	FORM_log_port=${log_port:-$(nvram get log_port)}
 	if empty "$FORM_ipaddr" ; then
 		FORM_log_port=""
@@ -64,7 +65,7 @@ start_form|Remote Syslog
 field|Server IP Address
 text|ipaddr|$FORM_ipaddr
 helpitem|Remote Syslog
-helptext|Remote Syslog#IP address and port of the remote logging host. The port is set to $DEFAULT_log_port by default
+helptext|Remote Syslog#IP address and port of the remote logging host. Leave this address blank for no remote logging. The port is set to $DEFAULT_log_port by default
 field|Server Port
 text|log_port|$FORM_log_port
 end_form
@@ -74,7 +75,6 @@ field|Minutes Between Marks
 text|log_mark|$FORM_log_mark
 helpitem|Syslog Marks
 helptext|Syslog Marks#Periodic marks in your log. This parameter sets the time in seconds between the marks. A value of 0 means no mark. Default value: $DEFAULT_log_mark.
-#$prefix_fields
 end_form
 
 start_form|@TR<<Local Log>>
@@ -87,7 +87,7 @@ helptext|Log Type#Wether your log will be stored in a memory circular buffer or 
 field|@TR<<Log File>>|logname|hidden
 text|filename|$FORM_filename
 helpitem|Log File
-helptext|Log File#The path and name of your log file. It can be set on any writable filesystem. CAUTION: DO NOT USE A JFFS filsystem because syslog will write A LOT to it. You can use /tmp or any filesystem on an external storage unit. Default value: $DEFAULT_log_file.
+helptext|Log File#The path and name of your log file. It can be set on any writable filesystem. CAUTION: DO NOT USE A JFFS filesystem because syslog will write A LOT to it. You can use /tmp or any filesystem on an external storage unit. Default value: $DEFAULT_log_file.
 field|Log Size
 text|size|$FORM_size
 helpitem|Log Size
