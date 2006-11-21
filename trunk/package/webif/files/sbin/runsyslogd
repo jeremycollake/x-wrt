@@ -24,7 +24,11 @@ syslog_file=$(nvram get log_file)
 # verify values
 [ $syslog_type = "circular" ] 2>>/dev/null || [ $syslog_type = "file" ] 2>>/dev/null || syslog_type=$DEFAULT_log_type
 [ $syslog_size -gt 0 ] 2>>/dev/null || syslog_size=$DEFAULT_log_size
+if [ "$(nvram get firmware_version)" = "0.9" ]; then
+eval $(ipcalc.sh "$syslog_ip")
+else
 eval $(ipcalc "$syslog_ip")
+fi
 [ $syslog_ip = "$IP" ] 2>>/dev/null || syslog_ip=$DEFAULT_log_ipaddr
 [ -z $syslog_port ] 2>>/dev/null || [ $syslog_port -lt 0 ] 2>>/dev/null || [ $syslog_port -gt 65535 ] 2>>/dev/null && syslog_port=$DEFAULT_log_port
 [ $syslog_mark -gt 0 ] 2>>/dev/null || syslog_mark=$DEFAULT_log_mark
