@@ -128,8 +128,12 @@ if [ -n "$FORM_iface" ]; then
 		netmask=$(nvram get ${FORM_iface}_netmask)
 		start=$(nvram get ${FORM_iface}_dhcp_start)
 		num=$(nvram get ${FORM_iface}_dhcp_num)
-
+		
+		if [ "$(nvram get firmware_version)" = "0.9" ]; then
+		eval $(ipcalc.sh $ipaddr $netmask ${start:-100} ${num:-150})
+		else
 		eval $(ipcalc $ipaddr $netmask ${start:-100} ${num:-150})
+		fi
 		# Static DHCP mappings (/etc/ethers)
 		awk -v "url=$SCRIPT_NAME" \
 			-v "mac=$FORM_dhcp_mac" \

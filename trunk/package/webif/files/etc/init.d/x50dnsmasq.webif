@@ -37,8 +37,11 @@ for ifname in lan wan wifi $(nvram get ifnames); do
         
         start=$(nvram get ${ifname}_dhcp_start)
         num=$(nvram get ${ifname}_dhcp_num)
-        
+        if [ "$(nvram get firmware_version)" = "0.9" ]; then
+        eval $(ipcalc.sh $ipaddr $netmask ${start:-100} ${num:-150})
+        else
         eval $(ipcalc $ipaddr $netmask ${start:-100} ${num:-150})
+        fi
         lease=$(nvram get ${ifname}_dhcp_lease)
 	[ "$lease" = "0" ] && {
 		lease="12h"

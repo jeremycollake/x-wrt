@@ -13,7 +13,7 @@ elif grep -q "RC6" "/etc/banner"; then
 	if [ "$firmware_version" != "RC6" ]; then
 		nvram set firmware_version="RC6"
 	fi
-elif grep -q "0.9" "/etc/banner"; then
+elif grep -q "0.9" "/etc/openwrt_version"; then
 	if [ "$firmware_version" != "0.9" ]; then
 		nvram set firmware_version="0.9"
 	fi
