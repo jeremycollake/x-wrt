@@ -5,6 +5,7 @@
 load_settings "wireless"
 
 header "Network" "WDS" "@TR<<WDS Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
+ShowUntestedWarning
 
 FORM_wds="${wl0_wds:-$(nvram get wl0_wds)}"
 LISTVAL="$FORM_wds"
@@ -17,33 +18,16 @@ FORM_wdsadd=${FORM_wdsadd:-00:00:00:00:00:00}
 if empty "$FORM_submit"; then
 	FORM_wds_ssid=${wl0_wds_ssid:-$(nvram get wl0_wds_ssid)}
 	FORM_lazywds=${wl0_lazywds:-$(nvram get wl0_lazywds)}
+	FORM_wdstimeout=${wl0_wdstimeout:-$(nvram get wl0_wdstimeout)}
 	akm=${wl0_wds_akm:-$(nvram get wl0_wds_akm)}
 	case "$akm" in
 		psk)
 			FORM_wds_encryption=psk
 			FORM_wds_wpa1=wpa1
 			;;
-		psk2)
-			FORM_encryption=psk
-			FORM_wpa2=wpa2
-			;;
-		'psk psk2')
-			FORM_wds_encryption=psk
-			FORM_wds_wpa1=wpa1
-			FORM_wds_wpa2=wpa2
-			;;
 		wpa)
 			FORM_wds_encryption=wpa
 			FORM_wds_wpa1=wpa1
-			;;
-		wpa2)
-			FORM_wds_encryption=wpa
-			FORM_wds_wpa2=wpa2
-			;;
-		'wpa wpa2')
-			FORM_wds_encryption=wpa
-			FORM_wds_wpa1=wpa1
-			FORM_wds_wpa2=wpa2
 			;;
 		*)
 			FORM_wds_wpa1=wpa1
@@ -72,10 +56,10 @@ else
 	SAVED=1
 	validate <<EOF
 string|FORM_wds_ssid|@TR<<ESSID>>|required|$FORM_wds_ssid
-int|FORM_lazywds|Lazy WDS On/Off|required min=0 max=1|$FORM_lazywds
-int|FORM_wl0_distance|Distance|min=0|$FORM_wl0_distance
-int|FORM_wdstimeout|WDS watchdog timeout|optional min=0 max=3600|$FORM_wdstimeout
-int|FORM_radius_ipaddr|Radus||$FORM_radius_ipaddr
+int|FORM_lazywds|@TR<<Lazy WDS On/Off>>|required min=0 max=1|$FORM_lazywds
+int|FORM_wl0_distance|@TR<<Distance>>|min=0|$FORM_wl0_distance
+int|FORM_wdstimeout|@TR<<WDS watchdog timeout>>|optional min=0 max=3600|$FORM_wdstimeout
+ip|FORM_radius_ipaddr|@TR<<Radus>>||$FORM_radius_ipaddr
 EOF
 equal "$?" 0 && {
 	save_setting wireless wl0_wds_ssid "$FORM_wds_ssid"
@@ -88,19 +72,11 @@ crypto=""
 
 			case "$FORM_wds_encryption" in
 			psk)
-				case "${FORM_wds_wpa1}${FORM_wds_wpa2}" in
-					wpa1) save_setting wireless wl0_wds_akm "psk";;
-					wpa2) save_setting wireless wl0_wds_akm "psk2";;
-					wpa1wpa2) save_setting wireless wl0_wds_akm "psk psk2";;
-				esac
-				save_setting wireless wl0_wpa_psk "$FORM_wds_wpa_psk"
+				save_setting wireless wl0_wds_akm "psk"
+				save_setting wireless wl0_wds_wpa_psk "$FORM_wds_wpa_psk"
 				;;
 			wpa)
-				case "${FORM_wds_wpa1}${FORM_wds_wpa2}" in
-					wpa1) save_setting wireless wl0_wds_akm "wpa";;
-					wpa2) save_setting wireless wl0_wds_akm "wpa2";;
-					wpa1wpa2) save_setting wireless wl0_wds_akm "wpa wpa2";;
-				esac
+				save_setting wireless wl0_wds_akm "wpa"
 				save_setting wireless wl0_radius_ipaddr "$FORM_radius_ipaddr"
 				save_setting wireless wl0_radius_key "$FORM_radius_key"
 				;;
@@ -121,7 +97,7 @@ equal "$?" "0" && nas_installed="1"
 install_nas_button='field|@TR<<NAS Package>>|install_nas|hidden'
 if ! equal "$nas_installed" "1"; then
 	install_nas_button="$install_nas_button
-		string|<div class=\"warning\">WPA and WPA2 will not work until you install the NAS package. </div>
+		string|<div class=\"warning\">WPA will not work until you install the NAS package. </div>
 		submit|install_nas| Install NAS Package |"
 else
 	install_nas_button="$install_nas_button
@@ -138,7 +114,6 @@ cat <<EOF
 function modechange()
 {
 	v = (isset('wds_encryption','wpa') || isset('wds_encryption','psk'));
-	set_visible('wds_wpa_support', v);
 	set_visible('wds_wpa_crypto', v);
 
 	set_visible('wds_wpapsk', isset('wds_encryption','psk'));
@@ -164,6 +139,9 @@ listedit|wds|$SCRIPT_NAME?|$FORM_wds|$FORM_wdsadd
 end_form
 start_form|@TR<<WDS Options>>
 
+field|@TR<<WDS SSID>>
+text|wds_ssid|$FORM_wds_ssid
+
 field|@TR<<WDS watchdog timeout>>
 text|wdstimeout|$FORM_wdstimeout
 
@@ -181,19 +159,15 @@ option|wpa|WPA (RADIUS)
 helpitem|Encryption Type
 helptext|HelpText Encryption Type#WPA2 is currently unsupported.
 
-field|@TR<<WPA Mode>>|wpa_support|hidden
-checkbox|wpa1|$FORM_wds_wpa1|wds_wpa1|WPA1
-checkbox|wpa2|$FORM_wds_wpa2|wds_wpa2|WPA2
-
 field|@TR<<WPA Algorithms>>|wds_wpa_crypto|hidden
-checkbox|tkip|$FORM_wds_tkip|wds_tkip|RC4 (TKIP)
-checkbox|aes|$FORM_wds_aes|wds_aes|AES
+checkbox|wds_tkip|$FORM_wds_tkip|tkip|RC4 (TKIP)
+checkbox|wds_aes|$FORM_wds_aes|aes|AES
 
 field|WPA @TR<<PSK>>|wds_wpapsk|hidden
 password|wds_wpa_psk|$FORM_wds_wpa_psk
 
-field|@TR<<RADIUS IP Address>>|wds_radius_ip|hidden
-text|radius_ipaddr|$FORM_wds_radius_ipaddr
+field|@TR<<RADIUS IP Address>>|radius_ip|hidden
+text|radius_ipaddr|$FORM_radius_ipaddr
 
 field|@TR<<RADIUS Server Key>>|radius_key|hidden
 text|radius_key|$FORM_radius_key
