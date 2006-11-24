@@ -117,6 +117,7 @@ package-$(BR2_PACKAGE_SNORT) += snort
 package-$(BR2_PACKAGE_SPEEX) += speex
 package-$(BR2_PACKAGE_SQLITE) += sqlite
 package-$(BR2_PACKAGE_STRACE) += strace
+package-$(BR2_PACKAGE_STUNNEL) += stunnel
 package-$(BR2_PACKAGE_TCPDUMP) += tcpdump
 package-$(BR2_PACKAGE_TINC) += tinc
 package-$(BR2_PACKAGE_TOR) += tor
