@@ -76,9 +76,14 @@ FixReadOnlyLink "${IPKG_INSTROOT}/usr/lib/ipkg/status"
 
 # copy our new httpd.conf and S50dnsmasq files - we renamed them so that the webif can
 # be uninstalled without ipkg removing these pre-existing files as well.
-rm -f "${IPKG_INSTROOT}/etc/init.d/S50dnsmasq"
+dnsmasq_filename="S50dnsmasq"
+[ -f "${IPKG_INSTROOT}/etc/init.d/S60dnsmasq" ] && {
+	# S50dnsmasq renamed to S60dnsmasq in post-RC6
+	dnsmasq_filename="S60dnsmasq"
+}
+rm -f "${IPKG_INSTROOT}/etc/init.d/S?0dnsmasq"
 rm -f "${IPKG_INSTROOT}/etc/httpd.conf"
-mv -f "${IPKG_INSTROOT}/etc/init.d/x50dnsmasq.webif" "${IPKG_INSTROOT}/etc/init.d/S50dnsmasq"
+mv -f "${IPKG_INSTROOT}/etc/init.d/x50dnsmasq.webif" "${IPKG_INSTROOT}/etc/init.d/${dnsmasq_filename}"
 rm -f "${IPKG_INSTROOT}/etc/init.d/S60cron"
 mv -f "${IPKG_INSTROOT}/etc/init.d/x60cron.webif" "${IPKG_INSTROOT}/etc/init.d/S60cron"
 mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
