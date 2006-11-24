@@ -1,5 +1,5 @@
 #############################################################
-# $Id: broadcom.mk 5146 2006-10-16 01:29:09Z nbd $
+# $Id: broadcom.mk 5580 2006-11-19 00:23:57Z nbd $
 #
 # Makefile for the proprietary Broadcom drivers
 #
@@ -29,7 +29,7 @@ $(LINUX_DIR)/.modules_done: $(LINUX_DIR)/.drivers-unpacked
 
 $(LINUX_DIR)/.drivers-unpacked: $(LINUX_DIR)/.unpacked $(DL_DIR)/$(LINUX_BINARY_WL_DRIVER)
 	-mkdir -p $(BUILD_DIR)
-	zcat $(DL_DIR)/$(LINUX_BINARY_WL_DRIVER) | tar -C $(BUILD_DIR) $(TAR_OPTIONS) -
+	zcat $(DL_DIR)/$(LINUX_BINARY_WL_DRIVER) | tar -C $(BUILD_DIR) $(TAR_OPTIONS)
 	# copy binary wlan driver
 	mkdir -p $(LINUX_DIR)/drivers/net/wl
 	cp -a $(BUILD_DIR)/wl/*.o $(LINUX_DIR)/drivers/net/wl

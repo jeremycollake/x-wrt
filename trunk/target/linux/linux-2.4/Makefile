@@ -1,5 +1,5 @@
 #############################################################
-# $Id: Makefile 5483 2006-11-09 16:34:21Z florian $
+# $Id: Makefile 5581 2006-11-19 01:03:47Z nbd $
 #
 # Linux 2.4 kernel target for the OpenWRT project
 #
@@ -33,7 +33,7 @@ TARGET_MODULES_DIR := $(TARGET_DIR)/lib/modules/$(LINUX_VERSION)
 IPKG_KERNEL:=IPKG_TMP=$(BUILD_DIR)/tmp IPKG_INSTROOT=$(LINUX_TARGET_DIR) IPKG_CONF_DIR=$(LINUX_BUILD_DIR) $(SCRIPT_DIR)/ipkg -force-defaults -force-depends
 
 PKG_BUILD_DIR := $(LINUX_BUILD_DIR)/linux-modules
-PKG_RELEASE := 4
+PKG_RELEASE := 5
 
 KERNEL_IPKG:=$(LINUX_BUILD_DIR)/kernel_$(LINUX_VERSION)-$(BOARD)-$(PKG_RELEASE)_$(ARCH).ipk
 KERNEL_IDIR:=$(LINUX_BUILD_DIR)/kernel-ipkg
@@ -75,6 +75,9 @@ $(eval $(call KMOD_template,IPT_IPOPT,ipt-ipopt,\
 ))
 $(eval $(call KMOD_template,IPT_IPSEC,ipt-ipsec,\
 	$(foreach mod,$(IPT_IPSEC-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
+))
+$(eval $(call KMOD_template,IPT_NAT_DEFAULT,ipt-nat-default,\
+	$(foreach mod,$(IPT_NAT_DEFAULT-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
 ))
 $(eval $(call KMOD_template,IPT_NAT,ipt-nat,\
 	$(foreach mod,$(IPT_NAT-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
@@ -311,7 +314,7 @@ $(PACKAGE_DIR):
 
 $(LINUX_DIR)/.unpacked: $(DL_DIR)/$(LINUX_SOURCE)
 	-mkdir -p $(LINUX_BUILD_DIR)
-	bzcat $(DL_DIR)/$(LINUX_SOURCE) | tar -C $(LINUX_BUILD_DIR) $(TAR_OPTIONS) -
+	bzcat $(DL_DIR)/$(LINUX_SOURCE) | tar -C $(LINUX_BUILD_DIR) $(TAR_OPTIONS)
 	rm -f $(LINUX_DIR)
 	ln -s $(LINUX_BUILD_DIR)/linux-$(LINUX_VERSION) $(LINUX_DIR)
 	touch $(LINUX_DIR)/.unpacked
