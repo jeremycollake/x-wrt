@@ -1,9 +1,9 @@
-# $Id: Makefile 5305 2006-10-27 01:47:16Z nbd $
+# $Id: Makefile 5602 2006-11-21 14:17:17Z nbd $
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=base-files
-PKG_RELEASE:=8
+PKG_RELEASE:=9
 PKG_BUILD_DIR:=$(BUILD_DIR)/base-files
 
 include $(TOPDIR)/package/rules.mk
