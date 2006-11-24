@@ -1,0 +1,30 @@
+diff -urN miniupnpd.orig/Makefile.openwrt miniupnpd/Makefile.openwrt
+--- miniupnpd.orig/Makefile.openwrt	2006-11-23 07:31:06.000000000 -0500
++++ miniupnpd/Makefile.openwrt	2006-11-24 17:50:57.000000000 -0500
+@@ -2,12 +2,13 @@
+ # http://miniupnp.free.fr/
+ # Author : Thomas Bernard
+ # for use with GNU Make
+-#CFLAGS = -Wall -O -D_GNU_SOURCE -g
+-CFLAGS = -Wall -Os -D_GNU_SOURCE
+-CC = mipsel-linux-gcc
++include $(TOPDIR)/rules.mk
++CC = $(TARGET_CC)
++CFLAGS = $(TARGET_CFLAGS)
++CFLAGS += -D_GNU_SOURCE
+ RM = rm -f
+ INSTALL = install
+-IPTABLESINC=/home/nanard/code/openwrt/iptables-1.3.3/include
++IPTABLESINC=$(BUILD_DIR)/iptables-1.3.3/include
+ 
+ BASEOBJS = miniupnpd.o upnphttp.o upnpdescgen.o upnpsoap.o \
+            ../miniupnpc/upnpreplyparse.o ../miniupnpc/minixml.o \
+@@ -15,7 +16,7 @@
+ 
+ LNXOBJS = linux/getifstats.o linux/iptcrdr.o
+ 
+-LIBS = /home/nanard/code/openwrt/iptables-1.3.3/libiptc/libiptc.a
++LIBS = $(BUILD_DIR)/iptables-1.3.3/libiptc/libiptc.a
+ 
+ TESTUPNPDESCGENOBJS = testupnpdescgen.o upnpdescgen.o
+ 

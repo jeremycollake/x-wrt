@@ -1,0 +1,4 @@
+Package: miniupnpd
+Priority: optional
+Section: net
+Description: a small and capable UPNP daemon.
