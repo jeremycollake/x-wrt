@@ -13,8 +13,8 @@ tar -cvf xwrt-squashfs-images.tar *squashfs*.bin *squashfs*.trx
 cd "$odir"
 }
 
-CompressDir "imgbuild/bin/default"
-CompressDir "imgbuild/bin/micro"
-CompressDir "imgbuild/bin/pppoe"
-CompressDir "imgbuild/bin/pptp"
+CompressDir "imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default"
+CompressDir "imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/micro"
+CompressDir "imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pppoe"
+CompressDir "imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pptp"
 
