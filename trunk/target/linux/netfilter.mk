@@ -1,4 +1,4 @@
-# $Id: netfilter.mk 5008 2006-10-10 12:23:06Z nbd $
+# $Id: netfilter.mk 5581 2006-11-19 01:03:47Z nbd $
 
 IPT_CONNTRACK-m :=
 IPT_CONNTRACK-$(CONFIG_IP_NF_MATCH_CONNTRACK) += ipt_conntrack
@@ -53,11 +53,20 @@ IPT_NAT-$(CONFIG_IP_NF_TARGET_MASQUERADE) += ipt_MASQUERADE
 IPT_NAT-$(CONFIG_IP_NF_TARGET_MIRROR) += ipt_MIRROR
 IPT_NAT-$(CONFIG_IP_NF_TARGET_REDIRECT) += ipt_REDIRECT
 
+IPT_NAT_DEFAULT-$(CONFIG_IP_NF_TFTP) += ip_conntrack_tftp
+IPT_NAT_DEFAULT-$(CONFIG_IP_NF_NAT_TFTP) += ip_nat_tftp
+IPT_NAT_DEFAULT-$(CONFIG_IP_NF_FTP) += ip_conntrack_ftp
+IPT_NAT_DEFAULT-$(CONFIG_IP_NF_NAT_FTP) += ip_nat_ftp
+IPT_NAT_DEFAULT-$(CONFIG_IP_NF_IRC) += ip_conntrack_irc
+IPT_NAT_DEFAULT-$(CONFIG_IP_NF_NAT_IRC) += ip_nat_irc
+
 IPT_NAT_H323-m := 
 IPT_NAT_H323-$(CONFIG_IP_NF_H323) += ip_conntrack_h323
 IPT_NAT_H323-$(CONFIG_IP_NF_NAT_H323) += ip_nat_h323
 
 IPT_NAT_PPTP-m +=
+IPT_NAT_PPTP-$(CONFIG_IP_NF_CT_PROTO_GRE) += ip_conntrack_proto_gre
+IPT_NAT_PPTP-$(CONFIG_IP_NF_NAT_PROTO_GRE) += ip_nat_proto_gre
 IPT_NAT_PPTP-$(CONFIG_IP_NF_PPTP) += ip_conntrack_pptp
 IPT_NAT_PPTP-$(CONFIG_IP_NF_NAT_PPTP) += ip_nat_pptp
 
@@ -67,11 +76,7 @@ IPT_NAT_RTSP-$(CONFIG_IP_NF_NAT_RTSP) += ip_nat_rtsp
 
 IPT_NAT_EXTRA-m := 
 IPT_NAT_EXTRA-$(CONFIG_IP_NF_AMANDA) += ip_conntrack_amanda
-IPT_NAT_EXTRA-$(CONFIG_IP_NF_CT_PROTO_GRE) += ip_conntrack_proto_gre
-IPT_NAT_EXTRA-$(CONFIG_IP_NF_NAT_PROTO_GRE) += ip_nat_proto_gre
 IPT_NAT_EXTRA-$(CONFIG_IP_NF_NAT_SNMP_BASIC) += ip_nat_snmp_basic
-IPT_NAT_EXTRA-$(CONFIG_IP_NF_TFTP) += ip_conntrack_tftp
-IPT_NAT_EXTRA-$(CONFIG_IP_NF_NAT_TFTP) += ip_nat_tftp
 
 IPT_QUEUE-m :=
 IPT_QUEUE-$(CONFIG_IP_NF_QUEUE) += ip_queue

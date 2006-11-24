@@ -18,7 +18,7 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  *
- * $Id: wlcompat.c 5475 2006-11-09 02:34:52Z nbd $
+ * $Id: wlcompat.c 5522 2006-11-13 18:52:03Z nbd $
  */
 
 
@@ -52,7 +52,7 @@ const long channel_frequency[] = {
 #define NUM_CHANNELS ( sizeof(channel_frequency) / sizeof(channel_frequency[0]) )
 
 #define SCAN_RETRY_MAX	5
-#define RNG_POLL_FREQ	20
+#define RNG_POLL_FREQ	2
 
 typedef struct internal_wsec_key {
 	uint8 index;		// 0x00

@@ -63,6 +63,8 @@ enum {
 	WHR_HP_G54,
 	WHR2_A54G54,
 	WLA2_G54L,
+	WZR_RS_G54,
+	WZR_RS_G54HP,
 	BUFFALO_UNKNOWN,
 	BUFFALO_UNKNOWN_4710,
 
@@ -141,7 +143,7 @@ static struct platform_t __init platforms[] = {
 		},
 		.leds		= {
 			{ .name = "power",	.gpio = 1 << 1, .polarity = NORMAL },
-			{ .name = "dmz",	.gpio = 1 << 7, .polarity = REVERSE },
+			{ .name = "dmz",	.gpio = 1 << 0, .polarity = REVERSE },
 			{ .name = "ses_white",	.gpio = 1 << 5, .polarity = REVERSE },
 			{ .name = "ses_orange",	.gpio = 1 << 7, .polarity = REVERSE },
 		},
@@ -273,6 +275,30 @@ static struct platform_t __init platforms[] = {
 			{ .name = "diag",	.gpio = 1 << 1, .polarity = REVERSE },
 		},
 	},
+	[WZR_RS_G54] = {
+		.name		= "Buffalo WZR-RS-G54",
+		.buttons	= {
+			{ .name = "ses",	.gpio = 1 << 0 },
+			{ .name = "reset",	.gpio = 1 << 4 },
+		},
+		.leds		= {
+			{ .name = "diag",	.gpio = 1 << 7, .polarity = REVERSE },
+			{ .name = "ses",	.gpio = 1 << 6, .polarity = REVERSE },
+			{ .name = "vpn",	.gpio = 1 << 1, .polarity = REVERSE },
+		},
+	},
+	[WZR_RS_G54HP] = {
+		.name		= "Buffalo WZR-RS-G54HP",
+		.buttons	= {
+			{ .name = "ses",	.gpio = 1 << 0 },
+			{ .name = "reset",	.gpio = 1 << 4 },
+		},
+		.leds		= {
+			{ .name = "diag",	.gpio = 1 << 7, .polarity = REVERSE },
+			{ .name = "ses",	.gpio = 1 << 6, .polarity = REVERSE },
+			{ .name = "vpn",	.gpio = 1 << 1, .polarity = REVERSE },
+		},
+	},
 	[BUFFALO_UNKNOWN] = {
 		.name		= "Buffalo (unknown)",
 		.buttons	= {
@@ -400,7 +426,7 @@ static struct platform_t __init *platform_detect(void)
 	if (strncmp(getvar("pmon_ver"), "CFE", 3) == 0) {
 		/* CFE based - newer hardware */
 		if (!strcmp(boardnum, "42")) { /* Linksys */
-			if (!strcmp(boardtype, "0x0101"))
+			if (!strcmp(boardtype, "0x0101") && !strcmp(getvar("boot_ver"), "v3.6"))
 				return &platforms[WRT54G3G];
 
 			if (!strcmp(getvar("et1phyaddr"),"5") && !strcmp(getvar("et1mdcport"), "1"))
@@ -420,6 +446,13 @@ static struct platform_t __init *platform_detect(void)
 		if (!strcmp(boardnum, "10496"))
 			return &platforms[USR5461];
 	} else { /* PMON based - old stuff */
+		if ((simple_strtoul(getvar("GemtekPmonVer"), NULL, 0) == 9) &&
+			(simple_strtoul(getvar("et0phyaddr"), NULL, 0) == 30)) {
+			if (!strncmp(getvar("ModelId"),"WE800G", 6))
+				return &platforms[WE800G];
+			else
+				return &platforms[WR850GV1];
+		}
 		if (!strncmp(boardtype, "bcm94710dev", 11)) {
 			if (!strcmp(boardnum, "42"))
 				return &platforms[WRT54GV1];
@@ -441,14 +474,6 @@ static struct platform_t __init *platform_detect(void)
 		/* unknown asus stuff, probably bcm4702 */
 		if (!strncmp(boardnum, "asusX", 5))
 			return &platforms[ASUS_4702];
-
-		if ((simple_strtoul(getvar("GemtekPmonVer"), NULL, 0) == 9) &&
-			(simple_strtoul(getvar("et0phyaddr"), NULL, 0) == 30)) {
-			if (!strncmp(getvar("ModelId"),"WE800G", 6))
-				return &platforms[WE800G];
-			else
-				return &platforms[WR850GV1];
-		}
 	}
 
 	if ((buf = (nvram_get("melco_id") ?: nvram_get("buffalo_id")))) {
@@ -463,6 +488,10 @@ static struct platform_t __init *platform_detect(void)
 			return &platforms[WHR_G54S];
 		if (!strcmp(buf, "290441dd"))
 			return &platforms[WHR2_A54G54];
+		if (!strcmp(buf, "30083"))
+			return &platforms[WZR_RS_G54];
+		if (!strcmp(buf, "30103"))
+			return &platforms[WZR_RS_G54HP];
 	}
 
 	if (buf || !strcmp(boardnum, "00")) {/* probably buffalo */
