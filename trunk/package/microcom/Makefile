@@ -1,4 +1,4 @@
-# $Id: Makefile 1050 2005-05-24 14:25:55Z nbd $
+# $Id: Makefile 5580 2006-11-19 00:23:57Z nbd $
 
 include $(TOPDIR)/rules.mk
 
@@ -23,7 +23,7 @@ $(PKG_BUILD_DIR)/.prepared:
 	rm -rf $(PKG_BUILD_DIR)
 	mkdir -p $(PKG_BUILD_DIR)
 	# the .tar.gz is different - no subdirectory, so do this manually
-	$(PKG_CAT) $(DL_DIR)/$(PKG_SOURCE) | tar -C $(PKG_BUILD_DIR) $(TAR_OPTIONS) -
+	$(PKG_CAT) $(DL_DIR)/$(PKG_SOURCE) | tar -C $(PKG_BUILD_DIR) $(TAR_OPTIONS)
 	touch $@
 
 $(PKG_BUILD_DIR)/.configured:
