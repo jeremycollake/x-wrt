@@ -82,4 +82,66 @@ string|<a href="./system-editor.sh?path=/etc/config&amp;edit=qos">@TR<<edit_qos_
 end_form
 EOF
 
+
+# show the current ruleset in a table
+cat <<EOF
+<div class="settings">
+<div class="settings-title"><h3>@TR<<Current QoS Configuration>></h3></div>
+</div>
+<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="0" align="center"><tbody>
+<tr><th>Group</th><th>Protocol</th><th>L7 Filters</th><th>Port range</th><th>Ports</th></tr>
+EOF
+
+# outputs variable to a column
+show_column() 
+{
+	# cfg number
+	# option name
+	# bgcolor (optional)
+	# over-ride text (if config option is empty)
+	local _val
+	eval _val="\"\$CONFIG_cfg${1}_${2}\""		
+	td_start="<td>"
+	! empty "$3" && td_start="<td bgcolor=\"$3\">"
+	echo "$td_start"	
+	if empty "$_val" && ! empty "$4"; then	
+		echo "$4"
+	else
+		echo "$_val"
+	fi	
+	echo "</td>"			
+}
+
+ALT_BACKGROUND_COLOR_1="#e5e7e9"
+
+count=2 # wan interface config is the first
+while [ 1 ]; do
+	eval _type="\"\$CONFIG_cfg${count}_TYPE\""
+	empty "$_type" && break
+	equal "$_type" "classify" && {
+		if equal "$cur_color" "$ALT_BACKGROUND_COLOR_1"; then
+			cur_color=""
+		else
+			cur_color="$ALT_BACKGROUND_COLOR_1"
+		fi
+		echo "<tr>"
+		show_column "$count" "target" "$cur_color"		
+		eval _val="\"\$CONFIG_cfg${count}_ipp2p\""
+		if empty "$_val"; then
+		 	show_column "$count" "proto" "$cur_color"
+		else
+			show_column "$count" "proto" "$cur_color" "peer-2-peer"
+		fi		
+		show_column "$count" "layer7" "$cur_color"
+		show_column "$count" "portrange" "$cur_color"
+		show_column "$count" "ports" "$cur_color"
+		echo "</tr>"
+	}
+	let count+=1
+done
+
+cat <<EOF
+</tbody></table>
+EOF
+
 show_validated_logo
