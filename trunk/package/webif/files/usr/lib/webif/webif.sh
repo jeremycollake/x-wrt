@@ -217,12 +217,6 @@ EOF
 				sleep 1
 				echo "$FORM_passwd2"
 			) | passwd root 2>&1 && apply_passwd
-			exists "/bin/pkginit.sh" && ! exists "/etc/.pkginit-done" && {
-				/bin/pkginit.sh
-				exists "/tmp/pkg/install-update.sh" && {
-					touch "/etc/.pkginit-done"
-				}
-			}
 			echo '</pre>'
 			footer
 			exit
