@@ -20,14 +20,14 @@ $(PKG_BUILD_DIR)/.configured:
 	touch $@
 
 $(PKG_BUILD_DIR)/.built:
-	make -C $(PKG_BUILD_DIR) -f Makefile.openwrt
-
+	make -C $(PKG_BUILD_DIR) -f Makefile.openwrt	
 	touch $@
 
 $(IPKG_MINIUPNPD):
 	mkdir -p $(IDIR_MINIUPNPD)/usr/bin
 	install -m 755 $(PKG_BUILD_DIR)/miniupnpd $(IDIR_MINIUPNPD)/usr/bin/
 	install -m 755 $(PKG_BUILD_DIR)/linux/*.sh $(IDIR_MINIUPNPD)/usr/bin/
+	$(CP) -a ./files/* $(IDIR_MINIUPNPD)/
 	$(STRIP) $(IDIR_MINIUPNPD)/usr/bin/miniupnpd
 	$(IPKG_BUILD) $(IDIR_MINIUPNPD) $(PACKAGE_DIR)
 
