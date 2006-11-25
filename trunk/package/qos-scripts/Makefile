@@ -22,6 +22,7 @@ $(PKG_BUILD_DIR)/.built:
 $(IPKG_QOS_SCRIPTS): 
 	mkdir -p $(IDIR_QOS_SCRIPTS)
 	$(CP) ./files/* $(IDIR_QOS_SCRIPTS)/
+	find $(IDIR_QOS_SCRIPTS) -name CVS | xargs rm -rf
 	find $(IDIR_QOS_SCRIPTS) -name .svn | xargs rm -rf
 	$(IPKG_BUILD) $(IDIR_QOS_SCRIPTS) $(PACKAGE_DIR)
 
