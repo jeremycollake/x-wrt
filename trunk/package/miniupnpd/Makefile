@@ -28,8 +28,8 @@ $(IPKG_MINIUPNPD):
 	install -m 755 $(PKG_BUILD_DIR)/miniupnpd $(IDIR_MINIUPNPD)/usr/bin/
 	install -m 755 $(PKG_BUILD_DIR)/linux/*.sh $(IDIR_MINIUPNPD)/usr/bin/
 	$(CP) -a ./files/* $(IDIR_MINIUPNPD)/
-	find $(IDIR_WEBIF) -name CVS | xargs rm -rf
-	find $(IDIR_WEBIF) -name .svn | xargs rm -rf
+	find $(IDIR_MINIUPNPD) -name CVS | xargs rm -rf
+	find $(IDIR_MINIUPNPD) -name .svn | xargs rm -rf
 	$(STRIP) $(IDIR_MINIUPNPD)/usr/bin/miniupnpd
 	$(IPKG_BUILD) $(IDIR_MINIUPNPD) $(PACKAGE_DIR)
 
