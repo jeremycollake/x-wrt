@@ -18,6 +18,7 @@ HANDLERS_config='
 	shape) reload_shape;;
 	pptp) reload_pptp;;
 	log) reload_log;;
+	upnpd) reload_upnpd;;
 
 '
 HANDLERS_file='
@@ -92,11 +93,7 @@ reload_syslog() {
 	fi
 	echo -n "Start syslogd: "
 	syslog_ip=$(nvram get log_ipaddr)
-	if [ "$(nvram get firmware_version)" = "0.9" ]; then
-	ipcalc.sh -s "$syslog_ip" || syslog_ip=""
-	else
 	ipcalc -s "$syslog_ip" || syslog_ip=""
-	fi
 	log_port=$(nvram get log_port)
 	log_port=${log_port:+:$log_port}
 	log_mark=$(nvram get log_mark)
@@ -117,6 +114,11 @@ reload_system() {
 		echo '@TR<<Reloading>> @TR<<firewall settings>> ...'
 		/etc/init.d/S??firewall
 	}
+}
+
+reload_upnpd() {
+	echo '@TR<<Reloading>> @TR<<UPNPd>> ...'
+	/etc/init.d/S95miniupnpd
 }
 
 mkdir -p "/tmp/.webif"
