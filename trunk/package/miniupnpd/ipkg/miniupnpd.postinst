@@ -1,0 +1,3 @@
+#!/bin/sh
+/etc/init.d/S95miniupnpd
+exit 0
