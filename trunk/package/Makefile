@@ -193,6 +193,8 @@ vtun-compile: zlib-compile openssl-compile lzo-compile
 wificonf-compile: wireless-tools-compile nvram-compile
 wpa_supplicant-compile: openssl-compile
 
+stunnel-compile: openssl-compile tcp-wrappers-compile
+
 asterisk-compile: ncurses-compile openssl-compile
 ifneq ($(BR2_PACKAGE_ASTERISK_CODEC_SPEEX),)
 asterisk-compile: speex-compile
