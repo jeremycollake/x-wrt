@@ -23,8 +23,7 @@ load_settings services
 
 if ! empty "$FORM_install_upnp"; then
 	echo "Installing UPNP package ...<pre>"
-	install_package "http://ftp.berlios.de/pub/xwrt/packages/libupnp_1.2.1a_mipsel.ipk"
-	install_package "http://ftp.berlios.de/pub/xwrt/packages/linux-igd_1.0.1.ipk"
+	install_package miniupnpd
 	echo "</pre>"
 	#echo "<br /><br /><a href="services.sh">Refresh this page to configure newly installed service(s)..</a><br />"
 fi
@@ -53,16 +52,20 @@ EOF
 
 upnp_installed="0"
 ipkg list_installed | grep linux-igd >> /dev/null
+equal "$?" "0" && {
+	upnp_installed="1"
+	echo "<div class=\"warning\">You are using an old upnpd. We now recommend to use miniupnpd. To uninstall your old own remove the 'linux-igd' and 'libupnp' packages.</div>"
+}
+ipkg list_installed | grep miniupnpd >> /dev/null
 equal "$?" "0" && upnp_installed="1"
 
-
 if equal "$upnp_installed" "1" ; then
-	install_upnp_button="field|@TR<<UPNP Enabled>>
+	install_upnp_button="field|@TR<<UPNPd Enabled>>
 	select|upnp_enabled|$FORM_upnp_enabled
 	option|0|@TR<<Disabled>>
 	option|1|@TR<<Enabled>>"
 else
-	install_upnp_button="submit|install_upnp| Install UPNP Package |"
+	install_upnp_button="submit|install_upnp| Install UPNP daemon |"
 fi
 
 display_form <<EOF
