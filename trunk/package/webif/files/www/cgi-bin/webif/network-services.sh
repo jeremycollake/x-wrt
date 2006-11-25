@@ -20,6 +20,7 @@
 header "Network" "Services" "@TR<<Services Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 load_settings services
+load_settings upnpd
 
 if ! empty "$FORM_install_upnp"; then
 	echo "Installing UPNP package ...<pre>"
@@ -33,7 +34,7 @@ if empty "$FORM_submit"; then
 	FORM_upnp_enabled="${upnp_enabled:-$(nvram get upnp_enabled)}"
 else
 	# save form
-	save_setting services upnp_enabled "$FORM_upnp_enabled"
+	save_setting upnpd upnp_enabled "$FORM_upnp_enabled"
 fi
 
 #####################################################################s
