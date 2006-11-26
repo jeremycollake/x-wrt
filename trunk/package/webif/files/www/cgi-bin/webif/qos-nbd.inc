@@ -259,6 +259,11 @@ EOF
 	select|current_ipp2p|$_ipp2p
 	option||None
 	option|all|All
+	option|bit|bitTorrent
+	option|dc|DirectConnect
+	option|edk|eDonkey
+	option|gnu|Gnutella
+	option|kazaa|Kazaa	
 	end_form
 EOF
 }
