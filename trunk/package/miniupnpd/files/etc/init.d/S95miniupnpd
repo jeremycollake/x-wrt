@@ -5,7 +5,12 @@ if [ $(nvram get upnp_enabled) = "1" ]; then
 	killall miniupnpd 2>&-
 	iptables_removeall.sh 2>&- >&-
 	iptables_init.sh
-	miniupnpd -i $(nvram get wan_ifname) -a $(nvram get lan_ipaddr) -p 5000 -U &
+	local _debug
+	if [ $(nvram get upnpd_log_output) = "1" ]; then
+		miniupnpd -i $(nvram get wan_ifname) -a $(nvram get lan_ipaddr) -p 5000 -U -d | logger -t miniupnpd &
+	else
+		miniupnpd -i $(nvram get wan_ifname) -a $(nvram get lan_ipaddr) -p 5000 -U
+	fi
 else
 	echo "miniupnpd service is disabled. Set nvram upnp_enabled to '1' to enable."
 fi
