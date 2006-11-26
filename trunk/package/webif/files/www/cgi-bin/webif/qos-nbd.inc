@@ -130,10 +130,10 @@ helpitem|Maximum Download
 helptext|HelpText Maximum Download#This should be about 95% of your maximum sustained WAN download throughput, in kilobits.
 field|@TR<<WAN Download Speed>>|field_n_wan_download
 text|wan_download|$FORM_wan_download| @TR<<kilobits>>
-field|@TR<<Advanced>>|field_n_advanced
-helpitem|Advanced
-helptext|HelpText Advanced#The rest of the configuration is stored in /etc/config/qos.
-string|<a href="./system-editor.sh?path=/etc/config&amp;edit=qos">@TR<<edit_qos_cfg#Edit Config File>></a>
+#field|@TR<<Advanced>>|field_n_advanced
+#helpitem|Advanced
+#helptext|HelpText Advanced#The rest of the configuration is stored in /etc/config/qos.
+#string|<a href="./system-editor.sh?path=/etc/config&amp;edit=qos">@TR<<edit_qos_cfg#Edit Config File>></a>
 end_form
 EOF
 
@@ -219,7 +219,7 @@ EOF
 
 display_form <<EOF
 helpitem|Default QoS
-helptext|HelpText default_qos#he QoS package is pre-configured for the majority of users. Peer-2-peer traffic such as bittorrent is marked as 'bulk' and common network services that require responsiveness are marked in higher priorities. Additionally, TCP SYN/ACK packets and DNS queries are given very high priority to ensure speedy networking performance.
+helptext|HelpText default_qos#The QoS package is pre-configured for the majority of users. Peer-2-peer traffic such as bittorrent is marked as 'bulk' and common network services that require responsiveness are marked in higher priorities. Additionally, TCP SYN/ACK packets and DNS queries are given very high priority to ensure speedy networking performance.
 end_form
 EOF
 
