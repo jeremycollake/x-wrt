@@ -160,7 +160,7 @@ show_column()
 {
 	# cfg number
 	# option name
-	# bgcolor (optional)
+	# cell bgcolor (optional)
 	# over-ride text (if config option is empty)
 	local _val
 	eval _val="\"\$CONFIG_cfg${1}_${2}\""		
@@ -175,7 +175,7 @@ show_column()
 	echo "</td>"			
 }
 
-ALT_BACKGROUND_COLOR_1="#e5e7e9"
+#ALT_BACKGROUND_COLOR_1="#e5e7e9"
 
 # TODO:
 #
@@ -190,22 +190,22 @@ ALT_BACKGROUND_COLOR_1="#e5e7e9"
 for count in $(seq 2 100); do 	# !! see note above for static limit rationale !!
 	eval _type="\"\$CONFIG_cfg${count}_TYPE\""	
 	equal "$_type" "classify" && {
-		if equal "$cur_color" "$ALT_BACKGROUND_COLOR_1"; then
-			cur_color=""
+		if equal "$cur_color" "even"; then
+			cur_color="odd"
 		else
-			cur_color="$ALT_BACKGROUND_COLOR_1"
+			cur_color="even"
 		fi
-		echo "<tr>"
-		show_column "$count" "target" "$cur_color"		
+		echo "<tr class=\"$cur_color\">"
+		show_column "$count" "target" ""		
 		eval _val="\"\$CONFIG_cfg${count}_ipp2p\""
 		if empty "$_val"; then
-		 	show_column "$count" "proto" "$cur_color"
+		 	show_column "$count" "proto" ""
 		else
-			show_column "$count" "proto" "$cur_color" "peer-2-peer"
+			show_column "$count" "proto" "" "peer-2-peer"
 		fi		
-		show_column "$count" "layer7" "$cur_color"
-		show_column "$count" "portrange" "$cur_color"
-		show_column "$count" "ports" "$cur_color"		
+		show_column "$count" "layer7" ""
+		show_column "$count" "portrange" ""
+		show_column "$count" "ports" ""		
 		echo "<td bgcolor=\"$cur_color\"><a href=\"$SCRIPT_NAME?qos_edit=$count\">@TR<<edit>></a>&nbsp;"
 		echo "<a href=\"$SCRIPT_NAME?qos_remove=$count\">@TR<<clear>></a></td>"
 		echo "</tr>"
@@ -236,7 +236,7 @@ EOF
 	eval _layer7="\"\$CONFIG_cfg${current_item}_layer7\""	
 	eval _ipp2p="\"\$CONFIG_cfg${current_item}_ipp2p\""
 	display_form <<EOF
-	start_form|@TR<<QoS Rule>>
+	start_form|@TR<<QoS Rule Edit>>
 	field|@TR<<Classify As>>|current_target
 	select|current_target|$_target
 	option|Bulk|Bulk
@@ -263,4 +263,4 @@ EOF
 EOF
 }
 
-show_validated_logo
+#show_validated_logo
