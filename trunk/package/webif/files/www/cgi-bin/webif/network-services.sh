@@ -23,18 +23,20 @@ load_settings services
 load_settings upnpd
 
 if ! empty "$FORM_install_upnp"; then
-	echo "Installing UPNP package ...<pre>"
+	echo "Installing UPNP package ...<pre>"	
 	install_package miniupnpd
-	echo "</pre>"
-	#echo "<br /><br /><a href="services.sh">Refresh this page to configure newly installed service(s)..</a><br />"
+	save_setting upnpd upnp_enabled "1"
+	echo "</pre>"	
 fi
 
 if empty "$FORM_submit"; then
 	# initialize all defaults
 	FORM_upnp_enabled="${upnp_enabled:-$(nvram get upnp_enabled)}"
+	FORM_upnp_log_output="${upnp_log_output:-$(nvram get upnpd_log_output)}"
 else
 	# save form
 	save_setting upnpd upnp_enabled "$FORM_upnp_enabled"
+	save_setting upnpd upnpd_log_output "$FORM_upnp_log_output"
 fi
 
 #####################################################################s
@@ -61,8 +63,12 @@ ipkg list_installed | grep miniupnpd >> /dev/null
 equal "$?" "0" && upnp_installed="1"
 
 if equal "$upnp_installed" "1" ; then
-	install_upnp_button="field|@TR<<UPNPd Enabled>>
+	install_upnp_button="field|@TR<<UPNP Daemon>>
 	select|upnp_enabled|$FORM_upnp_enabled
+	option|0|@TR<<Disabled>>
+	option|1|@TR<<Enabled>>
+	field|@TR<<Log Debug Output>>
+	select|upnp_log_output|$FORM_upnp_log_output
 	option|0|@TR<<Disabled>>
 	option|1|@TR<<Enabled>>"
 else
