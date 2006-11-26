@@ -77,20 +77,27 @@ field|@TR<<WAN Download Speed>>|field_n_wan_download
 text|wan_download|$FORM_wan_download| @TR<<kilobits>>
 field|@TR<<Advanced>>|field_n_advanced
 helpitem|Advanced
-helptext|HelpText Advanced#The rest of the configuration is stored in /etc/config/qos. Its default state suffices for most users.
+helptext|HelpText Advanced#The rest of the configuration is stored in /etc/config/qos.
 string|<a href="./system-editor.sh?path=/etc/config&amp;edit=qos">@TR<<edit_qos_cfg#Edit Config File>></a>
 end_form
 EOF
 
 
 # show the current ruleset in a table
+display_form <<EOF
+start_form|@TR<<Current QoS Configuration>>
+EOF
+
 cat <<EOF
-<div class="settings">
-<div class="settings-title"><h3>@TR<<Current QoS Configuration>></h3></div>
-<div class="settings-content"></div>
-</div>
-<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="0" align="center"><tbody>
-<tr><th>@TR<<Group>></th><th>@TR<<Protocol>></th><th>@TR<<L7 Filters>></th><th>@TR<<Port range>></th><th>@TR<<Ports>></th><th>...</th></tr>
+<table style="width: 100%; text-align: left; font-size: 0.8em;" border="0" cellpadding="2"><tbody>
+<tr>
+<th>@TR<<Group>></th>
+<th>@TR<<Protocol>></th>
+<th>@TR<<L7 Filters>></th>
+<th>@TR<<Port range>></th>
+<th>@TR<<Ports>></th>
+<th></th>
+</tr>
 EOF
 
 # outputs variable to a column
@@ -136,7 +143,7 @@ while [ 1 ]; do
 		show_column "$count" "layer7" "$cur_color"
 		show_column "$count" "portrange" "$cur_color"
 		show_column "$count" "ports" "$cur_color"		
-		echo "<td><a href=\"$SCRIPT_NAME?qos_edit=$count\">@TR<<edit>></a>&nbsp;"
+		echo "<td bgcolor=\"$cur_color\"><a href=\"$SCRIPT_NAME?qos_edit=$count\">@TR<<edit>></a>&nbsp;"
 		echo "<a href=\"$SCRIPT_NAME?qos_remove=$count\">@TR<<remove>></a></td>"
 		echo "</tr>"
 	}
@@ -145,10 +152,22 @@ done
 
 cat <<EOF
 </tbody></table>
-<div class="tip">The QoS package is pre-configured for the majority of users. 
-Peer-2-peer traffic such as bittorrent is marked as 'bulk' and common network services that
-require responsiveness are marked in higher priorities. Additionally, TCP SYN/ACK packets
-and DNS queries are given very high priority to ensure speedy networking performance.</tip>
 EOF
+
+display_form <<EOF
+helpitem|Default QoS
+helptext|HelpText default_qos#he QoS package is pre-configured for the majority of users. Peer-2-peer traffic such as bittorrent is marked as 'bulk' and common network services that require responsiveness are marked in higher priorities. Additionally, TCP SYN/ACK packets and DNS queries are given very high priority to ensure speedy networking performance.
+end_form
+EOF
+
+# 
+# if FORM_qos_edit not empty, show selected classification for editing
+#
+! empty "$FORM_qos_edit" && {
+display_form <<EOF
+start_form|@TR<<QoS Classification Entry>>
+end_form
+EOF
+}
 
 show_validated_logo
