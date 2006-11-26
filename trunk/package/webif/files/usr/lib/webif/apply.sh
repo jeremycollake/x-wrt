@@ -155,8 +155,9 @@ done
 # config-qos		QOS Config file
 for config in $(ls config-qos 2>&-); do
 	echo '@TR<<Applying>> @TR<<QOS settings>> ...'
-	/usr/bin/qos-stop
-	mv -f config-qos /etc/qos.conf
+	/usr/bin/qos-stop	
+	# for Rudy's QoS scripts only, nbd's is configured via UCI
+	mv -f config-qos /etc/qos.conf 
 	/usr/bin/qos-start
 	echo '@TR<<Done>>'
 done
