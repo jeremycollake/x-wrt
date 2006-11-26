@@ -87,6 +87,7 @@ EOF
 cat <<EOF
 <div class="settings">
 <div class="settings-title"><h3>@TR<<Current QoS Configuration>></h3></div>
+<div class="settings-content"></div>
 </div>
 <table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="0" align="center"><tbody>
 <tr><th>@TR<<Group>></th><th>@TR<<Protocol>></th><th>@TR<<L7 Filters>></th><th>@TR<<Port range>></th><th>@TR<<Ports>></th><th>...</th></tr>
@@ -144,6 +145,10 @@ done
 
 cat <<EOF
 </tbody></table>
+<div class="tip">The QoS package is pre-configured for the majority of users. 
+Peer-2-peer traffic such as bittorrent is marked as 'bulk' and common network services that
+require responsiveness are marked in higher priorities. Additionally, TCP SYN/ACK packets
+and DNS queries are given very high priority to ensure speedy networking performance.</tip>
 EOF
 
 show_validated_logo
