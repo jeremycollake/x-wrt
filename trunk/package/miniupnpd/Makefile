@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miniupnpd
 PKG_VERSION:=0.1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=4ba2a49c593d0c1088cc5791b8c6a985
 
 PKG_SOURCE_URL:=http://ftp.berlios.de/pub/xwrt/storage/
