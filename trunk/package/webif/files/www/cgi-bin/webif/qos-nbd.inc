@@ -231,7 +231,7 @@ EOF
 	#
 	# build list of available L7-protocols
 	#
-	l7_protocols=""
+	l7_protocols="option||None"
 	for curfile in /etc/l7-protocols/*; do
 		_l7basename=$(basename "$curfile" | sed s/'.pat'//g)
 		l7_protocols="$l7_protocols
