@@ -238,7 +238,7 @@ option
 
 .tip
 {
-	padding-top: 1.0em;
+	padding: 1.0em;
 }
 
 #save
@@ -529,7 +529,7 @@ dt,
 
 .tip
 {
-	font-style: italic;
+	font-size: 0.8em;
 }
 
 .repositories
