@@ -228,6 +228,16 @@ EOF
 #
 #
 ! empty "$FORM_qos_edit" && {	
+	#
+	# build list of available L7-protocols
+	#
+	l7_protocols=""
+	for curfile in /etc/l7-protocols/*; do
+		_l7basename=$(basename "$curfile" | sed s/'.pat'//g)
+		l7_protocols="$l7_protocols
+			option|$_l7basename|$_l7basename"
+	done
+	
 	current_item="$FORM_qos_edit"
 	eval _target="\"\$CONFIG_cfg${current_item}_target\""	
 	eval _proto="\"\$CONFIG_cfg${current_item}_proto\""
@@ -254,7 +264,8 @@ EOF
 	field|@TR<<Port Range>>|current_portrange
 	text|current_portrange|$_portrange
 	field|@TR<<Layer7>>|current_layer7
-	text|current_layer7|$_layer7
+	select|current_layer7|$_layer7
+	$l7_protocols
 	field|@TR<<Peer-2-Peer>>|ipp2p
 	select|current_ipp2p|$_ipp2p
 	option||None
