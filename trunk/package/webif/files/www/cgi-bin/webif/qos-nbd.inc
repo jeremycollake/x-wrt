@@ -201,7 +201,8 @@ for count in $(seq 2 100); do 	# !! see note above for static limit rationale !!
 		if empty "$_val"; then
 		 	show_column "$count" "proto" ""
 		else
-			show_column "$count" "proto" "" "peer-2-peer"
+			equal "$_val" "all" && _val="peer-2-peer"
+			show_column "$count" "proto" "" "$_val"
 		fi		
 		show_column "$count" "layer7" ""
 		show_column "$count" "portrange" ""
