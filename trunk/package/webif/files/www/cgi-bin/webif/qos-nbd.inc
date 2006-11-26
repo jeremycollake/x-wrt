@@ -16,13 +16,38 @@
 #   /etc/config/qos
 #
 #
-! empty "$FORM_submit" && {
-	SAVED=1
+! empty "$FORM_submit" && {	
+	#
+	# determine if user was editing a QoS classification entry by checking
+	# HTTP_REFERER. May want to change this method.
+	#
+	current_qos_item=$(echo "$HTTP_REFERER" | grep "qos_edit=" | cut -d'=' -f2)	
+	! empty "$current_qos_item" && {				
+		# for validation purposes, replace non-numeric stuff in
+		# ports list and port range with integer.				
+		ports_validate=$(echo "$FORM_current_ports" | sed s/','/'0'/g)
+		portrange_validate=$(echo "$FORM_current_portrange" | sed s/'-'/'0'/g)
+		validate <<EOF
+			int|ports_validate|Port Listing||$ports_validate
+			int|portrange_validate|Port Range||$portrange_validate				
+EOF
+		equal "$?" "0" && {
+			SAVED=1				
+			uci_set "qos" "cfg$current_qos_item" "target" "$FORM_current_target"
+			uci_set "qos" "cfg$current_qos_item" "proto" "$FORM_current_proto"
+			uci_set "qos" "cfg$current_qos_item" "ports" "$FORM_current_ports"			
+			uci_set "qos" "cfg$current_qos_item" "portrange" "$FORM_current_portrange"
+			uci_set "qos" "cfg$current_qos_item" "layer7" "$FORM_current_layer7"			
+			uci_set "qos" "cfg$current_qos_item" "ipp2p" "$FORM_current_ipp2p"		
+		}						
+	}			
+	
 	validate <<EOF
 int|FORM_wan_dowload|WAN Download Speed||$FORM_wan_download
 int|FORM_wan_upload|WAN Upload Speed||$FORM_wan_upload
 EOF
 	equal "$?" "0" && {
+		SAVED=1		
 		uci_set "qos" "wan" "enabled" "$FORM_wan_enabled"
 		! empty "$FORM_wan_download" && {
 			uci_set "qos" "wan" "download" "$FORM_wan_download"
@@ -33,6 +58,36 @@ EOF
 	}
 }
 
+#
+# handle 'add new rule'
+#
+! empty "$FORM_qos_add" && {	
+	# todo: this add needs to be in the save area, causes instant save here	of
+	#       an empty rule here. However, requires more work than a simple move ;).
+	uci_add "qos" "classify" ""
+}
+	
+#
+# handle 'remove' (qos rule)
+#
+! empty "$FORM_qos_remove" && {
+	current_qos_item=$(echo "$QUERY_STRING" | grep "qos_remove=" | cut -d'=' -f2)	
+	! empty "$current_qos_item" && {		
+		# TODO: This isn't always working when the item is non-empty, possibly because of a problem with 
+		#       uci_unset.
+		#uci_remove "qos" "cfg$current_qos_item"
+		#
+		# Until the above works, we'll just clear everything .. not ideal, but..	
+		# 
+		uci_set "qos" "cfg$current_qos_item" "target" ""
+		uci_set "qos" "cfg$current_qos_item" "proto" ""
+		uci_set "qos" "cfg$current_qos_item" "ports" ""
+		uci_set "qos" "cfg$current_qos_item" "portrange" ""
+		uci_set "qos" "cfg$current_qos_item" "layer7" ""
+		uci_set "qos" "cfg$current_qos_item" "ipp2p" ""
+	}
+}
+	
 uci_load qos
 FORM_wan_enabled="$CONFIG_wan_enabled"
 FORM_wan_download="$CONFIG_wan_download"
@@ -85,15 +140,15 @@ EOF
 
 # show the current ruleset in a table
 display_form <<EOF
-start_form|@TR<<Current QoS Configuration>>
+start_form|@TR<<QoS Traffic Classification Rules>>
 EOF
 
 cat <<EOF
-<table style="width: 100%; text-align: left; font-size: 0.8em;" border="0" cellpadding="2"><tbody>
+<table style="width: 100%; text-align: left; font-size: 0.8em;" border="0" cellpadding="2" cellspacing="1"><tbody>
 <tr>
 <th>@TR<<Group>></th>
 <th>@TR<<Protocol>></th>
-<th>@TR<<L7 Filters>></th>
+<th>@TR<<Layer7>></th>
 <th>@TR<<Port range>></th>
 <th>@TR<<Ports>></th>
 <th></th>
@@ -122,10 +177,18 @@ show_column()
 
 ALT_BACKGROUND_COLOR_1="#e5e7e9"
 
-count=2 # wan interface config is the first
-while [ 1 ]; do
-	eval _type="\"\$CONFIG_cfg${count}_TYPE\""
-	empty "$_type" && break
+# TODO:
+#
+# We can't just break out when we think we're at the end
+# because new classification rules get added to the very bottom.
+# Possible solutions:
+#
+#       * uci_insert function (best)
+#       * variable that contains count of UCI config groups loaded
+#         (so we at least know the real end).
+#
+for count in $(seq 2 100); do 	# !! see note above for static limit rationale !!
+	eval _type="\"\$CONFIG_cfg${count}_TYPE\""	
 	equal "$_type" "classify" && {
 		if equal "$cur_color" "$ALT_BACKGROUND_COLOR_1"; then
 			cur_color=""
@@ -144,13 +207,13 @@ while [ 1 ]; do
 		show_column "$count" "portrange" "$cur_color"
 		show_column "$count" "ports" "$cur_color"		
 		echo "<td bgcolor=\"$cur_color\"><a href=\"$SCRIPT_NAME?qos_edit=$count\">@TR<<edit>></a>&nbsp;"
-		echo "<a href=\"$SCRIPT_NAME?qos_remove=$count\">@TR<<remove>></a></td>"
+		echo "<a href=\"$SCRIPT_NAME?qos_remove=$count\">@TR<<clear>></a></td>"
 		echo "</tr>"
-	}
-	let count+=1
+	}	
 done
 
 cat <<EOF
+<tr><td><a href="$SCRIPT_NAME?qos_add=1">@TR<<new rule>></a></td></tr>
 </tbody></table>
 EOF
 
@@ -161,12 +224,42 @@ end_form
 EOF
 
 # 
-# if FORM_qos_edit not empty, show selected classification for editing
+# handle 'edit' (qos rule)
 #
-! empty "$FORM_qos_edit" && {
-display_form <<EOF
-start_form|@TR<<QoS Classification Entry>>
-end_form
+#
+! empty "$FORM_qos_edit" && {	
+	current_item="$FORM_qos_edit"
+	eval _target="\"\$CONFIG_cfg${current_item}_target\""	
+	eval _proto="\"\$CONFIG_cfg${current_item}_proto\""
+	eval _ports="\"\$CONFIG_cfg${current_item}_ports\""
+	eval _portrange="\"\$CONFIG_cfg${current_item}_portrange\""
+	eval _layer7="\"\$CONFIG_cfg${current_item}_layer7\""	
+	eval _ipp2p="\"\$CONFIG_cfg${current_item}_ipp2p\""
+	display_form <<EOF
+	start_form|@TR<<QoS Rule>>
+	field|@TR<<Classify As>>|current_target
+	select|current_target|$_target
+	option|Bulk|Bulk
+	option|Normal|Normal
+	option|Priority|Priority
+	option|Express|Express
+	field|@TR<<Protocol>>|proto
+	select|current_proto|$_proto
+	option||Any
+	option|tcp|TCP
+	option|udp|UDP
+	option|tcp,udp|TCP/UDP
+	field|@TR<<Ports>>|current_ports
+	text|current_ports|$_ports
+	field|@TR<<Port Range>>|current_portrange
+	text|current_portrange|$_portrange
+	field|@TR<<Layer7>>|current_layer7
+	text|current_layer7|$_layer7
+	field|@TR<<Peer-2-Peer>>|ipp2p
+	select|current_ipp2p|$_ipp2p
+	option||None
+	option|all|All
+	end_form
 EOF
 }
 
