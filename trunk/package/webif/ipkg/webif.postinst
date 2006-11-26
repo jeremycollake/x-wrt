@@ -156,7 +156,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 		# when upgrading the webif through the webif (i.e. use automated install
 		# on X-Wrt home page). If you break this just because you think something
 		# should definitely work, you will die.
-		echo "I'm sorry, but I must reboot your reboot! This is a ONE time thing and"
+		echo "I'm sorry, but I must reboot your router. This is a ONE time thing and"
 		echo " future upgrades of the webif will NOT require a reboot."
 		echo "Please wait about one minute for your router to reboot ..."
 		reboot_file=$(mktemp /tmp/rebootme.XXXXXX)
