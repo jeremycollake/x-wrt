@@ -1,11 +1,13 @@
 #!/bin/sh
-if [ $(nvram get upnp_enabled) = "1" ]; then
+upnpd_enabled=$(nvram get upnp_enabled)
+if [ "$upnpd_enabled" = "1" ]; then
 	echo "miniupnpd starting ..."
 	iptables_flush.sh 2>&- >&-
 	killall miniupnpd 2>&-
 	iptables_removeall.sh 2>&- >&-
 	iptables_init.sh
-	if [ $(nvram get upnpd_log_output) = "1" ]; then
+	upnpd_log=$(nvram get upnpd_log_output)
+	if [ "$upnpd_log" = "1" ]; then
 		miniupnpd -i $(nvram get wan_ifname) -a $(nvram get lan_ipaddr) -p 5000 -U -d | logger -t miniupnpd &
 	else
 		miniupnpd -i $(nvram get wan_ifname) -a $(nvram get lan_ipaddr) -p 5000 -U
