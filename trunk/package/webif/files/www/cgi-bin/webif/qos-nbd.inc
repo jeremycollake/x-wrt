@@ -89,7 +89,7 @@ cat <<EOF
 <div class="settings-title"><h3>@TR<<Current QoS Configuration>></h3></div>
 </div>
 <table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="0" align="center"><tbody>
-<tr><th>Group</th><th>Protocol</th><th>L7 Filters</th><th>Port range</th><th>Ports</th></tr>
+<tr><th>@TR<<Group>></th><th>@TR<<Protocol>></th><th>@TR<<L7 Filters>></th><th>@TR<<Port range>></th><th>@TR<<Ports>></th><th>...</th></tr>
 EOF
 
 # outputs variable to a column
@@ -134,7 +134,9 @@ while [ 1 ]; do
 		fi		
 		show_column "$count" "layer7" "$cur_color"
 		show_column "$count" "portrange" "$cur_color"
-		show_column "$count" "ports" "$cur_color"
+		show_column "$count" "ports" "$cur_color"		
+		echo "<td><a href=\"$SCRIPT_NAME?qos_edit=$count\">@TR<<edit>></a>&nbsp;"
+		echo "<a href=\"$SCRIPT_NAME?qos_remove=$count\">@TR<<remove>></a></td>"
 		echo "</tr>"
 	}
 	let count+=1
