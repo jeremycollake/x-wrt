@@ -125,9 +125,9 @@ option|0|Disabled
 field|@TR<<WAN Upload Speed>>|field_n_wan_upload
 text|wan_upload|$FORM_wan_upload| @TR<<kilobits>>
 helpitem|Maximum Upload
-helptext|HelpText Maximum Upload#This should be about 90% of your maximum sustained WAN upload throughput, in kilobits.
+helptext|HelpText Maximum Upload#This should be set to your maximum sustained WAN upload throughput, in kilobits.
 helpitem|Maximum Download
-helptext|HelpText Maximum Download#This should be about 95% of your maximum sustained WAN download throughput, in kilobits.
+helptext|HelpText Maximum Download#This should be set to your maximum sustained WAN download throughput, in kilobits.
 field|@TR<<WAN Download Speed>>|field_n_wan_download
 text|wan_download|$FORM_wan_download| @TR<<kilobits>>
 #field|@TR<<Advanced>>|field_n_advanced
