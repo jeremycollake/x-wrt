@@ -51,17 +51,7 @@
 #  This function DOES load pending changes that haven't been committed.
 ###########################################################################
 uci_load() {
-	local PACKAGE="$1"	
-		
-	# kill handlers - else we'll see function not defined messages when
-	# these calls exist in the intermediate file.
-	config_rename() {		
-	}
-	config_unset() {		
-	}
-	config_clear() {
-	}
-			
+	local PACKAGE="$1"			
 	config_load "$PACKAGE"
 	local PACKAGE_BASE="$(basename "$PACKAGE")"
 	[ -f "/tmp/.uci/${PACKAGE_BASE}" ] && {
