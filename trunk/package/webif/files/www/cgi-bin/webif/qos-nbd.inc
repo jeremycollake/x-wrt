@@ -47,17 +47,17 @@ EOF
 			if ! empty "$FORM_current_portrange"; then
 				uci_set "qos" "cfg$current_qos_item" "portrange" "$FORM_current_portrange"
 			else
-				uci_remove "qos" "cfg$current_qos_item" "ports" "$FORM_current_portrange"
+				uci_remove "qos" "cfg$current_qos_item" "portrange" "$FORM_current_portrange"
 			fi
 			if ! empty "$FORM_current_layer7"; then			
 				uci_set "qos" "cfg$current_qos_item" "layer7" "$FORM_current_layer7"			
 			else
-				uci_remove "qos" "cfg$current_qos_item" "ports" "$FORM_current_layer7"
+				uci_remove "qos" "cfg$current_qos_item" "layer7" "$FORM_current_layer7"
 			fi
 			if ! empty "$FORM_current_ipp2p"; then						
 				uci_set "qos" "cfg$current_qos_item" "ipp2p" "$FORM_current_ipp2p"		
 			else
-				uci_remove "qos" "cfg$current_qos_item" "ports" "$FORM_current_ipp2p"
+				uci_remove "qos" "cfg$current_qos_item" "ipp2p" "$FORM_current_ipp2p"
 			fi		
 		}						
 	}			
