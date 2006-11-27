@@ -39,7 +39,7 @@ EOF
 			else
 				uci_remove "qos" "cfg$current_qos_item" "proto"
 			fi
-			aif ! empty "$FORM_current_ports"; then			
+			if ! empty "$FORM_current_ports"; then			
 				uci_set "qos" "cfg$current_qos_item" "ports" "$FORM_current_ports"			
 			else
 				uci_remove "qos" "cfg$current_qos_item" "ports" "$FORM_current_ports"
@@ -68,7 +68,7 @@ int|FORM_wan_upload|WAN Upload Speed||$FORM_wan_upload
 EOF
 	equal "$?" "0" && {
 		SAVED=1
-		uci_load qos 2>&- >&- # to check existing variables
+		uci_load qos # to check existing variables
 		! equal "$FORM_wan_enabled" "$CONFIG_wan_enabled" && {
 		 	uci_set "qos" "wan" "enabled" "$FORM_wan_enabled"
 		}
@@ -108,7 +108,7 @@ EOF
 	}
 }
 	
-uci_load qos 2>&- >&-
+uci_load qos
 FORM_wan_enabled="$CONFIG_wan_enabled"
 FORM_wan_download="$CONFIG_wan_download"
 FORM_wan_upload="$CONFIG_wan_upload"
