@@ -32,13 +32,33 @@
 			int|portrange_validate|Port Range||$portrange_validate				
 EOF
 		equal "$?" "0" && {
-			SAVED=1				
+			SAVED=1							
 			uci_set "qos" "cfg$current_qos_item" "target" "$FORM_current_target"
-			uci_set "qos" "cfg$current_qos_item" "proto" "$FORM_current_proto"
-			uci_set "qos" "cfg$current_qos_item" "ports" "$FORM_current_ports"			
-			uci_set "qos" "cfg$current_qos_item" "portrange" "$FORM_current_portrange"
-			uci_set "qos" "cfg$current_qos_item" "layer7" "$FORM_current_layer7"			
-			uci_set "qos" "cfg$current_qos_item" "ipp2p" "$FORM_current_ipp2p"		
+			if ! empty "$FORM_current_proto"; then
+				uci_set "qos" "cfg$current_qos_item" "proto" "$FORM_current_proto"
+			else
+				uci_remove "qos" "cfg$current_qos_item" "proto"
+			fi
+			if ! empty "$FORM_current_ports"; then			
+				uci_set "qos" "cfg$current_qos_item" "ports" "$FORM_current_ports"			
+			else
+				uci_remove "qos" "cfg$current_qos_item" "ports" "$FORM_current_ports"
+			fi
+			if ! empty "$FORM_current_portrange"; then
+				uci_set "qos" "cfg$current_qos_item" "portrange" "$FORM_current_portrange"
+			else
+				uci_remove "qos" "cfg$current_qos_item" "ports" "$FORM_current_portrange"
+			fi
+			if ! empty "$FORM_current_layer7"; then			
+				uci_set "qos" "cfg$current_qos_item" "layer7" "$FORM_current_layer7"			
+			else
+				uci_remove "qos" "cfg$current_qos_item" "ports" "$FORM_current_layer7"
+			fi
+			if ! empty "$FORM_current_ipp2p"; then						
+				uci_set "qos" "cfg$current_qos_item" "ipp2p" "$FORM_current_ipp2p"		
+			else
+				uci_remove "qos" "cfg$current_qos_item" "ports" "$FORM_current_ipp2p"
+			fi		
 		}						
 	}			
 	
@@ -73,7 +93,7 @@ EOF
 ! empty "$FORM_qos_remove" && {
 	current_qos_item=$(echo "$QUERY_STRING" | grep "qos_remove=" | cut -d'=' -f2)	
 	! empty "$current_qos_item" && {		
-		# also manually clear the other options so they are immediately empty
+		# also manually clear the other options so they are immediately empty		
 		uci_set "qos" "cfg$current_qos_item" "proto" ""
 		uci_set "qos" "cfg$current_qos_item" "layer7" ""
 		uci_set "qos" "cfg$current_qos_item" "ipp2p" ""
@@ -85,7 +105,7 @@ EOF
 	}
 }
 	
-uci_load qos
+uci_load qos 2>&-
 FORM_wan_enabled="$CONFIG_wan_enabled"
 FORM_wan_download="$CONFIG_wan_download"
 FORM_wan_upload="$CONFIG_wan_upload"
