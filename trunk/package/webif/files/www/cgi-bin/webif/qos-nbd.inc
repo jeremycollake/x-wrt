@@ -227,6 +227,8 @@ for count in $(seq 2 100); do 	# !! see note above for static limit rationale !!
 		echo "<td bgcolor=\"$cur_color\"><a href=\"$SCRIPT_NAME?qos_edit=$count\">@TR<<edit>></a>&nbsp;"
 		echo "<a href=\"$SCRIPT_NAME?qos_remove=$count\">@TR<<remove>></a></td>"
 		echo "</tr>"
+		# if we are adding, always keep last index in FORM_qos_edit
+		! empty "$FORM_qos_add" && FORM_qos_edit="$count"		
 	}	
 done
 
