@@ -1,7 +1,6 @@
 #!/usr/bin/webif-page
 <?
-crondir_base="/var/spool/cron"
-crondir="$crondir_base/crontabs/crontabs/"
+crondir="/var/spool/cron/crontabs/"
 
 . /usr/lib/webif/webif.sh
 
@@ -11,8 +10,12 @@ header "System" "Crontabs" "@TR<<Cron Tables>>" "$SCRIPT_NAME"
 
 cron_dir_text="<br/>Cron Tables Directory:<pre>$crondir</pre><br/>"
 
-for crontab in $(ls $crondir/* 2>&-); do
-	cron_text='<h3>$crontab</h3><br /><pre>$cron_text $(cat "$crondir/$crontab")</pre><br />'
+for crontab in $(ls $crondir/); do
+	for i in $(cat $crondir$crontab | tr ' ' '@'); do
+		text="$text$i<br/>"
+	done
+	cron_text="<h3>$crontab</h3><pre>$(echo "$text" | tr '@' ' ')</pre><br/>$cron_text"
+	text=""
 done
 
 display_form <<EOF
@@ -28,4 +31,3 @@ footer ?>
 <!--
 ##WEBIF:name:System:175:Crontabs
 -->
-
