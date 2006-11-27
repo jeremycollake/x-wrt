@@ -73,18 +73,15 @@ EOF
 ! empty "$FORM_qos_remove" && {
 	current_qos_item=$(echo "$QUERY_STRING" | grep "qos_remove=" | cut -d'=' -f2)	
 	! empty "$current_qos_item" && {		
-		# TODO: This isn't always working when the item is non-empty, possibly because of a problem with 
-		#       uci_unset.
-		#uci_remove "qos" "cfg$current_qos_item"
-		#
-		# Until the above works, we'll just clear everything .. not ideal, but..	
-		# 
-		uci_set "qos" "cfg$current_qos_item" "target" ""
+		# also manually clear the other options so they are immediately empty
 		uci_set "qos" "cfg$current_qos_item" "proto" ""
-		uci_set "qos" "cfg$current_qos_item" "ports" ""
-		uci_set "qos" "cfg$current_qos_item" "portrange" ""
 		uci_set "qos" "cfg$current_qos_item" "layer7" ""
 		uci_set "qos" "cfg$current_qos_item" "ipp2p" ""
+		uci_set "qos" "cfg$current_qos_item" "ports" ""
+		uci_set "qos" "cfg$current_qos_item" "portrange" ""
+		# show 'deleted' as target to indicate pending delete
+		uci_set "qos" "cfg$current_qos_item" "target" "deleted"
+		uci_remove "qos" "cfg$current_qos_item"			
 	}
 }
 	
@@ -208,7 +205,7 @@ for count in $(seq 2 100); do 	# !! see note above for static limit rationale !!
 		show_column "$count" "portrange" ""
 		show_column "$count" "ports" ""		
 		echo "<td bgcolor=\"$cur_color\"><a href=\"$SCRIPT_NAME?qos_edit=$count\">@TR<<edit>></a>&nbsp;"
-		echo "<a href=\"$SCRIPT_NAME?qos_remove=$count\">@TR<<clear>></a></td>"
+		echo "<a href=\"$SCRIPT_NAME?qos_remove=$count\">@TR<<remove>></a></td>"
 		echo "</tr>"
 	}	
 done
