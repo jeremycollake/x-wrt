@@ -280,8 +280,7 @@ EOF
 	select|current_proto|$_proto
 	option||Any
 	option|tcp|TCP
-	option|udp|UDP
-	option|tcp,udp|TCP/UDP
+	option|udp|UDP	
 	field|@TR<<Ports>>|current_ports
 	text|current_ports|$_ports
 	field|@TR<<Port Range>>|current_portrange
