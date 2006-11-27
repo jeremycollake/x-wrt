@@ -87,11 +87,6 @@ mv -f "${IPKG_INSTROOT}/etc/init.d/x50dnsmasq.webif" "${IPKG_INSTROOT}/etc/init.
 rm -f "${IPKG_INSTROOT}/etc/init.d/S60cron"
 mv -f "${IPKG_INSTROOT}/etc/init.d/x60cron.webif" "${IPKG_INSTROOT}/etc/init.d/S60cron"
 mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
-# OpenWrt went and renamed /bin/ipcalc to /bin/ipcalc.sh in WR 0.9. This is a risky change for
-# a build that is claiming bug fixes only. Let's make their day and fix it.
-[ ! -f "/bin/ipcalc" ] && {
-	ln -s "/bin/ipcalc.sh" "{IPKG_INSTROOT}/bin/ipcalc"
-}
 
 # if /etc/functions.sh contains uci config functions, then make /etc/functions_ex.sh a symlink
 # to /etc/functions.sh. Else, keep /etc/functions_ex.sh and add a line to /etc/functions.sh 
