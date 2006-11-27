@@ -87,6 +87,11 @@ mv -f "${IPKG_INSTROOT}/etc/init.d/x50dnsmasq.webif" "${IPKG_INSTROOT}/etc/init.
 rm -f "${IPKG_INSTROOT}/etc/init.d/S60cron"
 mv -f "${IPKG_INSTROOT}/etc/init.d/x60cron.webif" "${IPKG_INSTROOT}/etc/init.d/S60cron"
 mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
+# OpenWrt went and renamed /bin/ipcalc to /bin/ipcalc.sh in WR 0.9. This is a risky change for
+# a build that is claiming bug fixes only. Let's make their day and fix it.
+[ ! -f "/bin/ipcalc" ] && {
+	ln -s "/bin/ipcalc.sh" "{IPKG_INSTROOT}/bin/ipcalc"
+}
 
 # if /etc/functions.sh contains uci config functions, then make /etc/functions_ex.sh a symlink
 # to /etc/functions.sh. Else, keep /etc/functions_ex.sh and add a line to /etc/functions.sh 
@@ -120,6 +125,10 @@ if [ "$firmware_version" = "RC5" ] || grep -q RC5 "${IPKG_INSTROOT}/etc/banner";
 	DeleteRepository "http://downloads.openwrt.org/backports/rc4"
 	AddRepository "rc5-backports" "http://downloads.openwrt.org/backports/rc5"
 elif [ "$firmware_version" = "RC6" ] || grep -q RC6 "${IPKG_INSTROOT}/etc/banner"; then
+	DeleteRepository "http://downloads.openwrt.org/backports/rc5"
+	AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"	
+else
+	# todo: intended for 0.9, code properly later - verify backports exists
 	DeleteRepository "http://downloads.openwrt.org/backports/rc5"
 	AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"	
 fi
