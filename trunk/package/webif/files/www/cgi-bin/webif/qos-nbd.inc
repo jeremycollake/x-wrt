@@ -81,7 +81,7 @@ EOF
 		uci_set "qos" "cfg$current_qos_item" "portrange" ""
 		# show 'deleted' as target to indicate pending delete
 		uci_set "qos" "cfg$current_qos_item" "target" "deleted"
-		uci_remove "qos" "cfg$current_qos_item"			
+		uci_remove "qos" "cfg$current_qos_item"
 	}
 }
 	
@@ -193,7 +193,7 @@ for count in $(seq 2 100); do 	# !! see note above for static limit rationale !!
 			cur_color="even"
 		fi
 		echo "<tr class=\"$cur_color\">"
-		show_column "$count" "target" ""		
+		show_column "$count" "target" "" "EDIT ME"	
 		eval _val="\"\$CONFIG_cfg${count}_ipp2p\""
 		if empty "$_val"; then
 		 	show_column "$count" "proto" ""
