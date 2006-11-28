@@ -75,7 +75,7 @@ $(PKG_BUILD_DIR)/.built:
 		src/wepkeygen/keygen.c src/wepkeygen/md5.c src/webifmetabin.c
 	$(TARGET_CC) $(TARGET_CFLAGS) $(NVRAM_OPTS) -o $(PKG_BUILD_DIR)/webif-page src/webif-page.c
 	$(TARGET_CC) $(TARGET_CFLAGS) -o $(PKG_BUILD_DIR)/bstrip src/bstrip.c
-	$(STRIP) $(PKG_BUILD_DIR)/webif-page $(PKG_BUILD_DIR)/bstrip
+	$(STRIP) $(PKG_BUILD_DIR)/webif-page $(PKG_BUILD_DIR)/bstrip $(PKG_BUILD_DIR)/webifmetabin
 	touch $@
 
 $(IPKG_WEBIF): 
