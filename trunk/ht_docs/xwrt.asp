@@ -149,7 +149,8 @@ router:</li>
 		</ol>
 	</blockquote>
 	<blockquote>
-		<p>&nbsp;</p>
+		<p><b><font color="#FF0000">WARNING: The very first install of webif^2 
+		will reboot your router!</font></b></p>
 	</blockquote>
 </blockquote>
 			<ul>
