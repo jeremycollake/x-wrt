@@ -115,8 +115,8 @@ ln -sf "/www/themes/xwrt" "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
 
 # initialize wepkeygen and int2human
 # todo: move back to makefile because this won't be cleaned up good
-ln -s /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/wepkeygen"
-ln -s /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/int2human"
+ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/wepkeygen"
+ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/int2human"
 
 # initialize ipkg.conf
 AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/packages"
