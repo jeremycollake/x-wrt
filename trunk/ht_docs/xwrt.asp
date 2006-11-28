@@ -105,9 +105,7 @@ install and use X-Wrt on your router:</p>
 		(follow instructions on <a href="http://wiki.openwrt.org">OpenWrt's wiki</a>). We recommend 
 		White Russian RC5, RC6, or 0.9 (when it is released). Kamikaze is NOT supported yet, 
 		but will be eventually.</li>
-			<li>Flash it, let it reboot, then reboot it 
-		again (in case you used JFFS2 image, which needs a second reboot and 
-		doesn't do it automatically).</li>
+			<li>Flash it.</li>
 			<li>Then use the following form to install the latest X-Wrt webif<sup>2</sup> on to your 
 router:</li>
 		</ol>
@@ -145,7 +143,7 @@ router:</li>
 		<ol start="4">
 			<li>Once the installation has completed, you may need to reboot your 
 		router. </li>
-			<li>If the display of the web management console pages looks funny, do a 
+			<li>If the display of the web pages looks funny, do a 
 		hard refresh (hold down SHIFT and click REFRESH) to clear out the old 
 		CSS.</li>
 		</ol>
