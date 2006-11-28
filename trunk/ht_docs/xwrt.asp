@@ -9,25 +9,25 @@
 <meta name="keywords" content="X-Wrt XWrt OpenWrt">
 </head>
 
-<body bgcolor="#666699">
+<body>
 
 <script type="text/javascript">
 function installWebif(form)
 {
-  var install_url= "http://" + document.instform.routerip.value + "//cgi-bin/webif/ipkg.sh?action=install&amp;pkg=http://ftp.berlios.de/pub/xwrt/packages/webif_milestone2.ipk";
+  var install_url= "http://" + document.instform.routerip.value + "//cgi-bin/webif/ipkg.sh?action=install&amp;pkg=http://ftp.berlios.de/pub/xwrt/webif_latest.ipk";
   window.open(install_url,'Auto-Install','toolbar=yes,resizable=yes');
   return false;
 }
 </script> 
 
 <div align="center">
-	<table border="0" width="1000" id="table3" bgcolor="#FFFFFF" cellpadding="5">
+	<table border="0" width="1077" id="table3" bgcolor="#FFFFFF" cellpadding="5">
 		<tr>
 			<td align="left">&nbsp;<table border="0" width="100%" id="table4">
 	<tr>
 		<td align="left"><i><font color="#666699"><b><font face="Book Antiqua" size="7">X</font><font size="6">-Wrt </font></b>
-		</font>&nbsp;<br />
-		<b>End User Extensions for OpenWrt</b><br />
+		</font>&nbsp;<b><br>
+		End User Extensions for OpenWrt</b><br />
 		</i>
 <a href="https://developer.berlios.de/projects/xwrt/">https://developer.berlios.de/projects/xwrt/</a> 
 		</td>
@@ -43,22 +43,23 @@ development in that we want to get the job done as elegantly as possible, but
 most importantly, get the job done. If you still don't quite get what X-Wrt is, I recommend reading this short article
 <a href="http://developer.berlios.de/blog/archives/69-OpenWrt,-FreeWrt,-and-X-Wrt.html#extended">
 here</a>.</p>
-<p>Project:
-<a href="https://developer.berlios.de/projects/xwrt/">https://developer.berlios.de/projects/xwrt/</a> 
-		<b><font size="5" color="#666699"><br />
-</font></b>Forums: <a href="http://www.bitsum.com/smf/index.php?board=17.0">
-http://www.bitsum.com/smf/index.php?board=17.0</a><br />
-Screenshots: <a href="http://www.bitsum.com/xwrt">http://www.bitsum.com/xwrt</a> 
-(usually very out-dated)</p>
-			<p>&nbsp;</p>
+			<blockquote>
+				<p>Project:
+				<a href="https://developer.berlios.de/projects/xwrt/">https://developer.berlios.de/projects/xwrt/</a>
+				<b><font size="5" color="#666699"><br /></font></b>Forums: 
+				<a href="http://www.bitsum.com/smf/index.php?board=17.0">http://www.bitsum.com/smf/index.php?board=17.0</a><br />Screenshots: 
+				<a href="http://www.bitsum.com/xwrt">http://www.bitsum.com/xwrt</a> 
+(usually very out-dated)<br>
+				Email contact(s): <a href="mailto:jeremy@bitsum.com">
+				jeremy@bitsum.com</a> </p>
+			</blockquote>
 			<p><br>
 			<b><font size="5" color="#666699">Why do this?</font></b></p>
 <p>In short, because nobody else is. X-Wrt's target audience has been forced to either 
 deal with buggy and/or incomplete end user firmwares, or expend considerable 
 time and energy configuring OpenWrt on their routers. Not everyone has the time or desire to 
 learn OpenWrt's NVRAM and/or config file based setup. With X-Wrt, people can have 
-all the benefits of OpenWrt with a minimal set up time.</p>
-<p><br />
+all the benefits of OpenWrt with a minimal set up time.<br>
 &nbsp;</p>
 			<p><b><font size="5" color="#666699">How much is completed so far?</font></b></p>
 <p>This project is still young, but we are accomplishing things at a rapid 
@@ -69,7 +70,6 @@ https://lists.berlios.de/pipermail/xwrt-svncheckins</a>. </p>
 			<p>Our latest stable snapshot of webif^2 is <b>Milestone 2</b>. The 
 			install buttons below will have you install it. If you then use the 
 			webif's update feature you will get the latest internal build.<br>
-			<br />
 &nbsp;</p>
 			<p><font size="5" color="#666699"><b>How do I install X-Wrt?</b></font></p>
 <p>X-Wrt is a set of packages that overlay OpenWrt. There are two primary ways to 
@@ -84,10 +84,10 @@ install and use X-Wrt on your router:</p>
 			</ol>
 			<ul>
 				<li><b><font size="4"><u>
-				<span style="background-color: #FFFF00">Method #1</span></u><span style="background-color: #FFFF00">:
-				</span></font></b><font size="4">
-				<span style="background-color: #FFFF00">Flash OpenWrt White Russian RC5 or RC6 then 
-				install X-Wrt packages like Webif^2.</span></font></li>
+				Method #1:
+				</u></font></b><u><font size="4">
+				Flash OpenWrt White Russian RC5 or RC6 then 
+				install X-Wrt packages like Webif^2.</font></u></li>
 			</ul>
 			<blockquote>
 	<p><font size="4" color="#666699"><b>Step-by-step if you have NOT already 
@@ -110,7 +110,7 @@ router:</li>
 	<blockquote>
 		<blockquote>
 			<blockquote>
-				<p><b><u>Install Milestone 2 Release<br>
+				<p><b><u>Install Latest Webif^2 build:<br>
 				</u><br>
 				Your Router's IP:</b>
 				<input type="text" name="routerip" size="12" value="192.168.1.1"></input>
@@ -120,7 +120,7 @@ router:</li>
 				<br>
 				</i>Alternately, if you are an advanced user you can ssh to the 
 				router and run &quot;<font size="2" face="Courier New"><b>ipkg install 
-			http://ftp.berlios.de/pub/xwrt/packages/webif_milestone2.ipk&quot;.</b></font></p>
+				http://ftp.berlios.de/pub/xwrt/webif_latest.ipk&quot;.</b></font></p>
 			</blockquote>
 		</blockquote>
 	</blockquote>
@@ -141,11 +141,12 @@ router:</li>
 </blockquote>
 			<ul>
 				<li><b><font size="4"><u>
-				<span style="background-color: #FFFF00">Method #2</span></u><span style="background-color: #FFFF00">: 
-				</span> </font></b><font size="4">
-				<span style="background-color: #FFFF00">Flash 
+				Method #2: 
+				</u> </font></b><u><font size="4">
+				Flash 
 				pre-built OpenWrt White Russian images that already contain 
-				X-Wrt packages. </span></font> 
+				X-Wrt packages. </font> 
+				</u> 
 				<blockquote>
 					<ol>
 						<li>Download firmware images from here:
@@ -159,15 +160,21 @@ router:</li>
 						root appear writable, making JFFS2 only images less than 
 						necessary).</li>
 					</ol>
+					<p>Micro builds are currently under development and will be 
+					posted as soon as they are ready.</p>
+					<p><b><i>WARNING:</i> </b><i>These images are in a non-final 
+					state and are updated several times a week. Although they 
+					should be stable, if you have any troubles with them, please 
+					report it. </i></p>
 				</blockquote>
 				</li>
 			</ul>
 			<p><br />
 &nbsp;</p>
 			<p><br>
-			<i>Join the 
+			Join the 
 			development effort by visiting us on irc freenode#x-wrt or emailing
-<a href="mailto:jeremy@bitsum.com">jeremy@bitsum.com</a>. </i> </p>
+<a href="mailto:jeremy@bitsum.com">jeremy@bitsum.com</a>. </p>
 			</td>
 		</tr>
 		<tr>
