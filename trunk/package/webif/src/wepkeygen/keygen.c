@@ -119,14 +119,18 @@ wep_keyprint(u_char *keys)
 }
 
 void
-usage(char *prog)
+wepkeygen_usage(char *prog)
 {
     printf("Usage:  %s [-s] keystring\n", prog);
     exit(1);
 }
 
 int
+#ifdef _METAPACK
+wepkeygen_main(int argc, char **argv)
+#else
 main(int argc, char **argv)
+#endif
 {
     u_char keys[WEPKEYSTORE];
     char *prog, *genstr;
@@ -140,14 +144,14 @@ main(int argc, char **argv)
             strong ++;
             break;
         default:
-            usage(prog);
+            wepkeygen_usage(prog);
         }
     }
     argc -= optind;
     argv += optind;
 
     if(argc != 1)
-        usage(prog);
+        wepkeygen_usage(prog);
     genstr = argv[0];
 
     if(strong)

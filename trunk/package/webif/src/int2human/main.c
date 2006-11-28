@@ -1,4 +1,4 @@
-/* stupid stand-alone stub - jmc */ 
+/* stupid stand-alone stub - Jeremy Collake <jeremy@bitsum.com> */ 
 /* This code GPL, as if anyone cares. */
 
 #include <stdio.h>
@@ -6,7 +6,7 @@
 #include <string.h>
 #include "human_readable.h"
 
-void usage() 
+void int2human_usage() 
 {
 	printf("Usage: int2human integer1 integer2 integer3 ...\n\n"
 		" Where integerX is an integer to convert to human readable form. If multiple\n"
@@ -17,7 +17,12 @@ void usage()
 
 #define LAME_STATIC_SIZE 4096 	/* be very lazy and limit stdin input to 4KB */
 
-int main(int argc, char **argv)
+int
+#ifdef _METAPACK
+int2human_main(int argc, char **argv)
+#else
+main(int argc, char **argv)
+#endif
 {
 	int nUseStdin=0;
 	char *pszInputText;
@@ -27,7 +32,7 @@ int main(int argc, char **argv)
 		pszInputText=(char *)malloc(LAME_STATIC_SIZE+1);
 		if(!fgets(pszInputText,LAME_STATIC_SIZE,stdin))
 		{
-			usage();
+			int2human_usage();
 			exit(1);
 		}		
 	}
@@ -39,7 +44,7 @@ int main(int argc, char **argv)
 		{
 			if(!strcmp(argv[nI], "--?") || !strcmp(argv[nI], "--help")) 
 			{
-				usage();
+				int2human_usage();
 				exit(1);
 			}
 			nReqLen+=strlen(argv[nI])+1; /* extra for delimeter */
