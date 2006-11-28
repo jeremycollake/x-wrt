@@ -94,8 +94,6 @@ $(IPKG_WEBIF):
 	install -m0755 $(PKG_BUILD_DIR)/webif-page $(IDIR_WEBIF)/usr/bin/webif-page
 	install -m0755 $(PKG_BUILD_DIR)/bstrip $(IDIR_WEBIF)/usr/bin/bstrip	
 	install -m0755 $(PKG_BUILD_DIR)/webifmetabin $(IDIR_WEBIF)/usr/bin/wepifmetabin	
-	ln -s /usr/bin/webifmetabin $(IDIR_WEBIF)/usr/bin/wepkeygen
-	ln -s /usr/bin/webifmetabin $(IDIR_WEBIF)/usr/bin/int2human
 	find $(IDIR_WEBIF) -name CVS | xargs rm -rf
 	find $(IDIR_WEBIF) -name .svn | xargs rm -rf
 	$(IPKG_BUILD) $(IDIR_WEBIF) $(PACKAGE_DIR)

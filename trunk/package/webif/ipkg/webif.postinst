@@ -113,6 +113,10 @@ ln -sf "/www/themes/xwrt" "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
 	cp -r "${IPKG_INSTROOT}/www/themes/xwrt/*" "${IPKG_INSTROOT}/www/themes/active/"
 }
 
+# initialize wepkeygen and int2human
+ln -s /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/wepkeygen"
+ln -s /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/int2human"
+
 # initialize ipkg.conf
 AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/packages"
 [ -z "$IPKG_INSTROOT" ] && firmware_version=$(nvram get firmware_version)
