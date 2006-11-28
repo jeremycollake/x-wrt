@@ -18,6 +18,13 @@ function installWebif(form)
   window.open(install_url,'Auto-Install','toolbar=yes,resizable=yes');
   return false;
 }
+
+function installWebifMilestone2(form)
+{
+  var install_url= "http://" + document.instform.routerip.value + "//cgi-bin/webif/ipkg.sh?action=install&amp;pkg=http://ftp.berlios.de/pub/xwrt/packages/webif_milestone2.ipk";
+  window.open(install_url,'Auto-Install','toolbar=yes,resizable=yes');
+  return false;
+}
 </script> 
 
 <div align="center">
@@ -110,13 +117,21 @@ router:</li>
 	<blockquote>
 		<blockquote>
 			<blockquote>
-				<p><b><u>Install Latest Webif^2 build:<br>
+				<p><b><u>Install Latest Webif^2 build (newest and best code):<br>
 				</u><br>
 				Your Router's IP:</b>
 				<input type="text" name="routerip" size="12" value="192.168.1.1"></input>
 				<input type="submit" value=" Install Webif^2 " name="install_webif"  onclick="installWebif(this.form)"></input>
 				<i><br>
-				NOTE: This button will NOT work with Internet Explorer!<br>
+				</i><b><u><br>
+				Install Webif^2 Milestone 2 (last stable milestone):<br>
+				</u><br>
+				Your Router's IP:</b>
+				<input type="text" name="routerip0" size="12" value="192.168.1.1"></input>
+				<input type="submit" value=" Install Webif^2 " name="install_webif0"  onclick="installWebifMilestone2(this.form)"></input>
+				</p>
+				<p>
+				<i>NOTE: This button will NOT work with Internet Explorer!<br>
 				<br>
 				</i>Alternately, if you are an advanced user you can ssh to the 
 				router and run &quot;<font size="2" face="Courier New"><b>ipkg install 
