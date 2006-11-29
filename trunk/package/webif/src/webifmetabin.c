@@ -1,7 +1,10 @@
-/* silly stupid meta binary stub */
+/* silly stupid meta binary stub 
+ * (c)2006 Jeremy Collake, released under GPL license. */
+
 #include <stdio.h>
 #include <string.h>
 
+/* todo: if we add any more, maybe throw these in a table */
 int wepkeygen_main(int argc, char **argv);
 int int2human_main(int argc, char **argv);
 int bstrip_main(int argc, char **argv);
@@ -23,7 +26,7 @@ main(int argc, char **argv)
 	}
 	else
 	{
-		printf(" Usage: symlink to wepkeygen or int2human and run.\n");
+		printf(" Usage: symlink to bstrip, wepkeygen, int2human and run.\n");
 	}	
 	return 1;
 }
