@@ -15,7 +15,7 @@ main(int argc, char **argv)
 {
 	if(strstr(argv[0], "wepif-page")) 
 	{
-		return wepifpage_main(argc, argv);
+		return webifpage_main(argc, argv);
 	}
 	else if(strstr(argv[0], "bstrip"))
 	{
