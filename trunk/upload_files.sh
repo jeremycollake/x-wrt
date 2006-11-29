@@ -39,9 +39,9 @@ date > /tmp/build-date.txt
 scp \
 	/tmp/build-date.txt \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/default/
-scp \
-	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default/*.7z \
-	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/default/
+#scp \
+#	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default/*.7z \
+#	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/default/
 scp \
 	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default/*.bin \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/default/
@@ -57,18 +57,18 @@ scp \
 #scp \
 #	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/micro/*.trx \
 #	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/micro/
-scp \
-	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pppoe/*.7z \
-	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/pppoe/
+#scp \
+#	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pppoe/*.7z \
+#	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/pppoe/
 scp \
 	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pppoe/*.bin \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/pppoe/
 scp \
 	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pppoe/*.trx \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/pppoe/
-scp \
-	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pptp/*.7z \
-	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/pptp/
+#scp \
+#	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pptp/*.7z \
+#	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/pptp/
 scp \
 	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pptp/*.bin \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/pptp/
