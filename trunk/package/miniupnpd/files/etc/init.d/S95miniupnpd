@@ -18,7 +18,7 @@ if [ "$upnpd_enabled" = "1" ]; then
 	}
 	upnpd_log=$(nvram get upnpd_log_output)
 	if [ "$upnpd_log" = "1" ]; then
-		miniupnpd -i $(nvram get wan_ifname) -a $(nvram get lan_ipaddr) -p 5000 -U $bitspeed_str -d | logger -t miniupnpd &
+		miniupnpd -i $(nvram get wan_ifname) -a $(nvram get lan_ipaddr) -p 5000 -U $bitspeed_str | logger -t miniupnpd &
 	else
 		miniupnpd -i $(nvram get wan_ifname) -a $(nvram get lan_ipaddr) -p 5000 -U $bitspeed_str
 	fi
