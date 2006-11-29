@@ -11,8 +11,8 @@ if [ "$upnpd_enabled" = "1" ]; then
 	upnpd_down_bitspeed=(nvram get upnpd_down_bitspeed)
 	[ -n "$upnpd_up_bitspeed" ] && [ -n "$upnpd_down_bitspeed" ] && {
 		# covert to bytespeed		
-		let upnpd_up_bytespeed=upnpd_up_bitspeed/8
-		let upnpd_down_bytespeed=upnpd_down_bitspeed/8
+		let upnpd_up_bytespeed=upnpd_up_bitspeed*1024/8
+		let upnpd_down_bytespeed=upnpd_down_bitspeed*1024/8
 		bitspeed_str="-B $upnpd_down_bytespeed $upnpd_up_bytespeed"
 	}	
 	upnpd_log=$(nvram get upnpd_log_output)
