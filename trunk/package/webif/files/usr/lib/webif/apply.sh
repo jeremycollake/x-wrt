@@ -19,7 +19,7 @@ HANDLERS_config='
 	pptp) reload_pptp;;
 	log) reload_log;;
 	upnpd) reload_upnpd;;
-	ex-ipupdate) reload_ex-ipupdate;;
+	exipupdate) reload_exipupdate;;
 
 '
 HANDLERS_file='
@@ -126,7 +126,7 @@ reload_upnpd() {
 	/etc/init.d/S95miniupnpd
 }
 
-reload_ex-ipupdate() {
+reload_exipupdate() {
 #!/bin/sh
 initfile="/etc/init.d/S52ez-ipupdate"
 

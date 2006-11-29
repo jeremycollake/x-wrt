@@ -5,7 +5,7 @@ ddns_msg="$ddns_dir/ez-ipupdate.msg"
 
 . /usr/lib/webif/webif.sh
 
-load_settings "ez-ipupdate"
+load_settings "ezipupdate"
 
 # todo add javascript /enable/disable for mx and wildcard / connection type
 #ezip            { "server", "user", "address", "wildcard", "mx", "url", "host", NULL };
@@ -60,15 +60,15 @@ string|FORM_ddns_hostname|Host Name||$FORM_ddns_hostname
 hostname|FORM_ddns_server|Server Name||$FORM_ddns_server
 int|FORM_ddns_max_interval|Max Interval (sec)|min=86400 max=2196000|$FORM_ddns_max_interval
 " && {
-	save_setting "ez-ipupdate" ddns_enable $FORM_ddns_enable
-	save_setting "ez-ipupdate" ddns_service_type $FORM_ddns_service_type
-	save_setting "ez-ipupdate" ddns_username $FORM_ddns_username
-	save_setting "ez-ipupdate" ddns_passwd $FORM_ddns_passwd
-	save_setting "ez-ipupdate" ddns_hostname $FORM_ddns_hostname
-	save_setting "ez-ipupdate" ddns_wildcard $FORM_ddns_wildcard
-	#save_setting "ez-ipupdate" ddns_tzo_ctype $FORM_ddns_tzo_ctype
-	save_setting "ez-ipupdate" ddns_server $FORM_ddns_server
-	save_setting "ez-ipupdate" ddns_max_interval $FORM_ddns_max_interval
+	save_setting "ezipupdate" ddns_enable $FORM_ddns_enable
+	save_setting "ezipupdate" ddns_service_type $FORM_ddns_service_type
+	save_setting "ezipupdate" ddns_username $FORM_ddns_username
+	save_setting "ezipupdate" ddns_passwd $FORM_ddns_passwd
+	save_setting "ezipupdate" ddns_hostname $FORM_ddns_hostname
+	save_setting "ezipupdate" ddns_wildcard $FORM_ddns_wildcard
+	#save_setting "ezipupdate" ddns_tzo_ctype $FORM_ddns_tzo_ctype
+	save_setting "ezipupdate" ddns_server $FORM_ddns_server
+	save_setting "ezipupdate" ddns_max_interval $FORM_ddns_max_interval
 	}
 }
 
