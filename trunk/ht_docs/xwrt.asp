@@ -143,21 +143,17 @@ install and use X-Wrt on your router:</font></p>
 			<blockquote>
 	<blockquote>
 		<ol>
-			<li><font face="Verdana">Download an appropriate OpenWrt White Russian image and flash it 
-		(follow instructions on <a href="http://wiki.openwrt.org">OpenWrt's wiki</a>). We recommend 
+			<li><font face="Verdana">If you do not already have OpenWrt White 
+			Russian on your router, download an appropriate OpenWrt White Russian image and flash it 
+		(follow instructions in <a href="http://wiki.openwrt.org">OpenWrt's wiki</a>). We recommend 
 		White Russian RC5, RC6, or 0.9 (when it is released). Kamikaze is NOT supported yet, 
 		but will be eventually.</font></li>
-			<li><font face="Verdana">Flash it.</font></li>
 			<li><font face="Verdana">Enter your router's IP address in the field below and click one 
 			of the two buttons to install either the latest daily build of 
 			webif<sup>2</sup>, or the last official release. The last official release 
 			(currently milestone 2) might be more well tested, but has not got 
 			all the latest updates included.
-				<i><br>
-			<br>
-			This button will NOT work with Internet Explorer at present, nor on 
-			builds of OpenWrt that do not have the default webif package 
-			installed!</i></font></li>
+				These buttons will <b>NOT </b>work with Internet Explorer at present.</font></li>
 		</ol>
 	</blockquote>
 </blockquote>
@@ -168,18 +164,19 @@ install and use X-Wrt on your router:</font></p>
 				<blockquote>
 					<p><font face="Verdana"><b><br></b>Your Router's IP address:
 					<input type="text" name="routerip" size="12" value="192.168.1.1"></input></font><font face="Verdana"><p>
-					<input type="submit" value=" Install Latest Daily Build of Webif^2 " name="install_webif"  onclick="installWebif(this.form)"></input><i> 
-					(newer)<br>
+					<input type="submit" value=" Install Latest Daily Build of Webif^2 " name="install_webif"  onclick="installWebif(this.form)"></input><i>&nbsp;&nbsp; 
+					- newer<br>
 					<br>
 					</i>
 					<input type="submit" value=" Install Milestone 2 Release of Webif^2 " name="install_webif0"  onclick="installWebifMilestone2(this.form)"><i> 
-					(better tested)</i></p>
+					- more tested<br>
+&nbsp;</i></p>
 				</blockquote>
 			</blockquote>
 		</blockquote>
 	</blockquote>
 </form>
-<blockquote>
+			<blockquote>
 	<blockquote>
 		<p><font color="#FF0000" face="Verdana"><b>WARNING: </b>The very first install of 
 		webif<sup>2</sup> will reboot your router!</font></p>
@@ -188,9 +185,9 @@ install and use X-Wrt on your router:</font></p>
 		CSS.</p>
 		<p>Instead of using this automated install procedure, you can also ssh 
 		or telnet to the 
-				router and run &quot;ipkg install 
-				<a href="http://ftp.berlios.de/pub/xwrt/webif_latest.ipk">http://ftp.berlios.de/pub/xwrt/webif_latest.ipk</a>&quot;.<br>
-&nbsp;</p>
+				router and run: <span style="background-color: #FFFFCC">&nbsp;ipkg install 
+				<a href="http://ftp.berlios.de/pub/xwrt/webif_latest.ipk">http://ftp.berlios.de/pub/xwrt/webif_latest.ipk</a>
+		</span></p>
 	</blockquote>
 </blockquote>
 			<ul>
