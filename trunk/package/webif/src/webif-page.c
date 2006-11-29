@@ -178,7 +178,13 @@ static void load_lang(char *file)
 	}
 }
 
-int main (int argc, char **argv)
+int
+#ifdef _METAPACK
+webifpage_main
+#else
+main
+#endif
+(int argc, char **argv)
 {
 	FILE *f;
 	int len, i, done;
