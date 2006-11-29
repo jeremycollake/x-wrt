@@ -4,7 +4,6 @@ menu "OpenWrt Package Selection"
 
 comment "The default set"
 source "package/busybox/Config.in"
-source "package/busybox_micro/Config.in"
 source "package/bridge/Config.in"
 source "package/dnsmasq/Config.in"
 source "package/ipkg/Config.in"

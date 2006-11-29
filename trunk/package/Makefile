@@ -9,7 +9,6 @@ package-$(BR2_PACKAGE_ARPWATCH) += arpwatch
 package-$(BR2_PACKAGE_ASTERISK) += asterisk
 package-$(BR2_PACKAGE_BRIDGE) += bridge
 package-$(BR2_PACKAGE_BUSYBOX) += busybox
-package-$(BR2_PACKAGE_BUSYBOX_MICRO) += busybox_micro
 package-$(BR2_PACKAGE_BWM) += bwm
 package-$(BR2_PACKAGE_CHILLISPOT) += chillispot
 package-$(BR2_PACKAGE_CIFSMOUNT) += cifsmount

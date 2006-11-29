@@ -1,4 +1,0 @@
-Package: busybox_micro
-Priority: optional
-Section: net
-Description: Core utilities for embedded Linux systems (micro version).
