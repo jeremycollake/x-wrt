@@ -44,7 +44,10 @@ function installWebifMilestone2(form)
 <hr />
 			<blockquote>
 				<p><font face="Verdana"><b>X-Wrt</b> is a set of packages and patches to enhance the end user 
-experience of OpenWrt. It is NOT, in any way, shape, or form a fork of OpenWrt.</font></p>
+experience of OpenWrt. It is NOT, in any way, shape, or form a fork of OpenWrt. 
+				We work in conjunction with the OpenWrt developers to extend 
+				OpenWrt. We have a separate project due only to the difference 
+				in focus.</font></p>
 				<blockquote>
 					<p><font face="Verdana">Project:
 					<a href="https://developer.berlios.de/projects/xwrt/">https://developer.berlios.de/projects/xwrt/</a>
