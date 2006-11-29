@@ -8,7 +8,7 @@ PKG_RELEASE:=1
 PKG_MD5SUM:=1826c480e61e0573dfa1d835ee9d8802
 
 PKG_SOURCE_URL:=http://miniupnp.tuxfamily.org/files/
-PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)$(PKG_VERSION).tar.gz
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_CAT:=zcat
 
