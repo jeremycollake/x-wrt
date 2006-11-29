@@ -58,7 +58,8 @@ here</a>.</p>
 				<a href="http://www.bitsum.com/xwrt">http://www.bitsum.com/xwrt</a> 
 (usually very out-dated)<br>
 				Email contact(s): <a href="mailto:jeremy@bitsum.com">
-				jeremy@bitsum.com</a> </p>
+				jeremy@bitsum.com</a> <br>
+				IRC: #x-wrt on irc.freenode.net</p>
 			</blockquote>
 			<p><br>
 			<b><font size="5" color="#666699">Why do this?</font></b></p>
@@ -149,8 +150,8 @@ router:</li>
 		</ol>
 	</blockquote>
 	<blockquote>
-		<p><b><font color="#FF0000">WARNING: The very first install of webif^2 
-		will reboot your router!</font></b></p>
+		<p><font color="#FF0000"><b>WARNING: </b>The very first install of 
+		webif^2 will reboot your router!</font></p>
 	</blockquote>
 </blockquote>
 			<ul>
@@ -184,11 +185,20 @@ router:</li>
 				</li>
 			</ul>
 			<p><br />
-&nbsp;</p>
+			<font size="5" color="#666699"><b>How do I participate in the X-Wrt 
+			project?</b></font></p>
+			<p>We always need developers, testers, documentation writers, 
+			translators, and support personnel. Our project is truly OPEN and 
+			FREE. Anyone can come join our project. </p>
+			<p>If you would like to get write access to our repository, just 
+			create an account at <a href="http://www.berlios.de">www.berlios.de</a> 
+			and email <a href="mailto:jeremy@bitsum.com">jeremy@bitsum.com</a> 
+			or contact one of our other developers on the irc channel (#x-wrt / 
+			freenode). We do not make anyone pass an 'entrance exam', though we 
+			do like for people to supply a patch of some sort just to prove that 
+			you are serious. </p>
 			<p><br>
-			Join the 
-			development effort by visiting us on irc freenode#x-wrt or emailing
-<a href="mailto:jeremy@bitsum.com">jeremy@bitsum.com</a>. </p>
+			&nbsp;</p>
 			</td>
 		</tr>
 		<tr>
