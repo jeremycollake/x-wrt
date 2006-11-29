@@ -13,7 +13,7 @@ int webifpage_main(int argc, char **argv);
 int
 main(int argc, char **argv)
 {
-	if(strstr(argv[0], "wepif-page")) 
+	if(strstr(argv[0], "webif-page")) 
 	{
 		return webifpage_main(argc, argv);
 	}
