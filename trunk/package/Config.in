@@ -4,6 +4,7 @@ menu "OpenWrt Package Selection"
 
 comment "The default set"
 source "package/busybox/Config.in"
+source "package/busybox_micro/Config.in"
 source "package/bridge/Config.in"
 source "package/dnsmasq/Config.in"
 source "package/ipkg/Config.in"
@@ -147,6 +148,7 @@ source "package/pciutils/Config.in"
 source "package/pcmcia-cs/Config.in"  # pcmcia-utils
 source "package/strace/Config.in"
 source "package/usbutils/Config.in"  # lsusb
+source "package/webfone/Config.in"
 
 # what are we going to do with both of you
 comment "Kernel related ---"
