@@ -286,13 +286,6 @@ install and use X-Wrt on your router:</font></p>
 					<li><font face="Verdana"><b>web hosting.</b> Berlios 
 					provides most our web services, but we may need other web 
 					hosts in the future.</font></li>
-					<li><font face="Verdana"><b>domain name purchases.</b> 
-					Domain names aren't as important as they used to be, but we 
-					wouldn't mind having a few more to ensure people can easily 
-					find our project. You can guess which ones we might want, 
-					anything that has to do with x-wrt. If you register a domain 
-					name for us you must register it in one of our developers 
-					names, or transfer ownership of it to us.</font></li>
 					<li><font face="Verdana"><b>hardware donations. </b>You can 
 					donate routers or other hardware to our developers, who may 
 					be in need of them for testing purposes. We are currently 
