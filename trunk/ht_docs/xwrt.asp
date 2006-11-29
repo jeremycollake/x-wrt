@@ -128,10 +128,10 @@ install and use X-Wrt on your router:</font></p>
 			</blockquote>
 			<ol>
 				<li><font face="Verdana">Flash OpenWrt White Russian, then install webif<sup>2</sup> and any 
-				other X-Wrt packages.</font></li>
+				other X-Wrt packages.<br>
+				<b><i>...or...</i></b></font></li>
 				<li><font face="Verdana">Flash a pre-built image of OpenWrt White Russian that 
-				already includes X-Wrt packages like webif<sup>2</sup> as well as other 
-				X-Wrt updates.<br>
+				already includes X-Wrt packages like webif<sup>2</sup>.<br>
 &nbsp;</font></li>
 			</ol>
 			<ul>
@@ -141,8 +141,6 @@ install and use X-Wrt on your router:</font></p>
 				install X-Wrt packages</font></font></li>
 			</ul>
 			<blockquote>
-	<p><font size="4" color="#666699" face="Verdana"><b>Step-by-step if you have NOT already 
-	flashed OpenWrt</b></font></p>
 	<blockquote>
 		<ol>
 			<li><font face="Verdana">Download an appropriate OpenWrt White Russian image and flash it 
