@@ -115,7 +115,7 @@ pace. All our work is currently in beta, but our code can be used today and is
 message list that archives commit logs as they happen:
 				<a href="https://lists.berlios.de/pipermail/xwrt-svncheckins/">https://lists.berlios.de/pipermail/xwrt-svncheckins</a>. 
 				</font></p>
-				<p><font face="Verdana">Our latest stable snapshot of webif^2 is 
+				<p><font face="Verdana">Our latest stable snapshot of webif<sup>2</sup> is 
 				<b>Milestone 2</b>. The 
 			install buttons below will have you install it. If you then use the 
 			webif's update feature you will get the latest internal build.<br>&nbsp;</font></p>
@@ -127,10 +127,10 @@ message list that archives commit logs as they happen:
 install and use X-Wrt on your router:</font></p>
 			</blockquote>
 			<ol>
-				<li><font face="Verdana">Flash OpenWrt White Russian, then install webif^2 and any 
+				<li><font face="Verdana">Flash OpenWrt White Russian, then install webif<sup>2</sup> and any 
 				other X-Wrt packages.</font></li>
 				<li><font face="Verdana">Flash a pre-built image of OpenWrt White Russian that 
-				already includes X-Wrt packages like webif^2 as well as other 
+				already includes X-Wrt packages like webif<sup>2</sup> as well as other 
 				X-Wrt updates.<br>
 &nbsp;</font></li>
 			</ol>
@@ -152,7 +152,7 @@ install and use X-Wrt on your router:</font></p>
 			<li><font face="Verdana">Flash it.</font></li>
 			<li><font face="Verdana">Enter your router's IP address in the field below and click one 
 			of the two buttons to install either the latest daily build of 
-			webif^2, or the last official release. The last official release 
+			webif<sup>2</sup>, or the last official release. The last official release 
 			(currently milestone 2) might be more well tested, but has not got 
 			all the latest updates included.
 				<i><br>
@@ -184,7 +184,7 @@ install and use X-Wrt on your router:</font></p>
 <blockquote>
 	<blockquote>
 		<p><font color="#FF0000" face="Verdana"><b>WARNING: </b>The very first install of 
-		webif^2 will reboot your router!</font></p>
+		webif<sup>2</sup> will reboot your router!</font></p>
 		<p>If the display of the web pages looks funny, do a 
 		hard refresh (hold down SHIFT and click REFRESH) to clear out the old 
 		CSS.</p>
@@ -222,12 +222,12 @@ install and use X-Wrt on your router:</font></p>
 			</ul>
 			<p><font size="5" color="#666699"><b>X-Wrt Packages</b></font></p>
 			<blockquote>
-				<p>Although all our work is based around our webif^2 package, we 
+				<p>Although all our work is based around our webif<sup>2</sup> package, we 
 				actually have a number of packages to add to OpenWrt. At present 
 				they are all for White Russian, but we are moving actively into 
 				Kamikaze right now. A list of some of our packages are:</p>
 				<ul>
-					<li><b>webif^2</b> - our new webif, but you already know 
+					<li><b>webif<sup>2</sup></b> - our new webif, but you already know 
 					that ;).</li>
 					<li><b>miniupnpd</b> - an offering of this excellent new 
 					upnp daemon.</li>
