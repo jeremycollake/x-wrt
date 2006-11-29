@@ -250,8 +250,15 @@ install and use X-Wrt on your router:</font></p>
 			or contact one of our other developers on the irc channel (#x-wrt / 
 			freenode). We do not make anyone pass an 'entrance exam', though we 
 			do like for people to supply a patch of some sort just to prove that 
-			you are serious. <br>
-&nbsp;</font></p>
+			you are serious.</font></p>
+				<p>A listing of some of the needs we have are:</p>
+				<ul>
+					<li>development</li>
+					<li>graphic artists</li>
+					<li>localization (translation)</li>
+					<li>user support</li>
+					<li>documentation writers<br>&nbsp;</li>
+				</ul>
 			</blockquote>
 			<p><font size="5" color="#666699" face="Verdana"><b>Support X-Wrt</b></font></p>
 			<blockquote>
