@@ -39,7 +39,13 @@ int do_gets(char *buf)
 	return c;
 }
 
-int main(int argc, char **argv)
+int
+#ifdef _METAPACK
+bstrip_main
+#else
+main
+#endif
+(int argc, char **argv)
 {
 	char buf[BUF_SIZE];
 	char buf1[BUF_SIZE];

@@ -72,10 +72,10 @@ $(PKG_BUILD_DIR)/.built:
 		$(TARGET_LDFLAGS) \
 		-o $(PKG_BUILD_DIR)/webifmetabin \
 		src/int2human/main.c src/int2human/human_readable.c \
-		src/wepkeygen/keygen.c src/wepkeygen/md5.c src/webifmetabin.c
+		src/wepkeygen/keygen.c src/wepkeygen/md5.c \
+		src/bstrip.c src/webifmetabin.c
 	$(TARGET_CC) $(TARGET_CFLAGS) $(NVRAM_OPTS) -o $(PKG_BUILD_DIR)/webif-page src/webif-page.c
-	$(TARGET_CC) $(TARGET_CFLAGS) -o $(PKG_BUILD_DIR)/bstrip src/bstrip.c
-	$(STRIP) $(PKG_BUILD_DIR)/webif-page $(PKG_BUILD_DIR)/bstrip $(PKG_BUILD_DIR)/webifmetabin
+	$(STRIP) $(PKG_BUILD_DIR)/webif-page $(PKG_BUILD_DIR)/webifmetabin
 	touch $@
 
 $(IPKG_WEBIF): 
@@ -92,7 +92,6 @@ $(IPKG_WEBIF):
 	chmod 755 $(IDIR_WEBIF)/CONTROL/*inst
 	install -d $(IDIR_WEBIF)/usr/bin
 	install -m0755 $(PKG_BUILD_DIR)/webif-page $(IDIR_WEBIF)/usr/bin/webif-page
-	install -m0755 $(PKG_BUILD_DIR)/bstrip $(IDIR_WEBIF)/usr/bin/bstrip	
 	install -m0755 $(PKG_BUILD_DIR)/webifmetabin $(IDIR_WEBIF)/usr/bin/webifmetabin
 	find $(IDIR_WEBIF) -name CVS | xargs rm -rf
 	find $(IDIR_WEBIF) -name .svn | xargs rm -rf

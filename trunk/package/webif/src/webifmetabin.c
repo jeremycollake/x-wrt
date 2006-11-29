@@ -4,6 +4,7 @@
 
 int wepkeygen_main(int argc, char **argv);
 int int2human_main(int argc, char **argv);
+int bstrip_main(int argc, char **argv);
 
 int
 main(int argc, char **argv)
@@ -15,6 +16,10 @@ main(int argc, char **argv)
 	else if(strstr(argv[0], "int2human"))
 	{
 		return int2human_main(argc, argv);
+	}
+	else if(strstr(argv[0], "bstrip"))
+	{
+		return bstrip_main(argc, argv);
 	}
 	else
 	{

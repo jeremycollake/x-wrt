@@ -19,10 +19,11 @@ void int2human_usage()
 
 int
 #ifdef _METAPACK
-int2human_main(int argc, char **argv)
+int2human_main
 #else
-main(int argc, char **argv)
+main
 #endif
+(int argc, char **argv)
 {
 	int nUseStdin=0;
 	char *pszInputText;

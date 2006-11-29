@@ -127,10 +127,11 @@ wepkeygen_usage(char *prog)
 
 int
 #ifdef _METAPACK
-wepkeygen_main(int argc, char **argv)
+wepkeygen_main
 #else
-main(int argc, char **argv)
+main
 #endif
+(int argc, char **argv)
 {
     u_char keys[WEPKEYSTORE];
     char *prog, *genstr;
