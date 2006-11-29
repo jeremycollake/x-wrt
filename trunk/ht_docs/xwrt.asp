@@ -93,11 +93,7 @@ experience of OpenWrt. It is NOT, in any way, shape, or form a fork of OpenWrt.
 					about 'us' offering 'you' something, it's about everyone 
 					coming together to work towards common goal.</font></li>
 					<li><font face="Verdana"><b>No monetary donations without 
-					accounting. </b>We realize that revenue generation is a 
-					temptation when any project becomes popular, so we've 
-					structured the project to resist such pressures by being 
-					non-centralized and having distributed ownership. This 
-					inherently means that the project can not accept monetary 
+					accounting. </b>The project can not accept monetary 
 					donations without having a treasurer to hold and account for 
 					all donations and what they have went towards. If we did it 
 					any other way then there would be some question as to whom 
@@ -164,13 +160,10 @@ install and use X-Wrt on your router:</font></p>
 				<blockquote>
 					<p><font face="Verdana"><b><br></b>Your Router's IP address:
 					<input type="text" name="routerip" size="12" value="192.168.1.1"></input></font><font face="Verdana"><p>
-					<input type="submit" value=" Install Latest Daily Build of Webif^2 " name="install_webif"  onclick="installWebif(this.form)"></input><i>&nbsp;&nbsp; 
-					- newer<br>
+					<input type="submit" value=" Install Latest Daily Build of Webif^2 -- newer " name="install_webif"  onclick="installWebif(this.form)"></input><i> 
 					<br>
 					</i>
-					<input type="submit" value=" Install Milestone 2 Release of Webif^2 " name="install_webif0"  onclick="installWebifMilestone2(this.form)"><i> 
-					- more tested<br>
-&nbsp;</i></p>
+					<input type="submit" value=" Install Milestone 2 Release of Webif^2 -- more tested " name="install_webif0"  onclick="installWebifMilestone2(this.form)"></p>
 				</blockquote>
 			</blockquote>
 		</blockquote>
