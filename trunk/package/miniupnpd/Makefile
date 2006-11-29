@@ -3,11 +3,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miniupnpd
-PKG_VERSION:=0.1
+PKG_VERSION:=20061129
 PKG_RELEASE:=3
-PKG_MD5SUM:=4ba2a49c593d0c1088cc5791b8c6a985
+PKG_MD5SUM:=1826c480e61e0573dfa1d835ee9d8802
 
-PKG_SOURCE_URL:=http://ftp.berlios.de/pub/xwrt/storage/
+PKG_SOURCE_URL:=http://miniupnp.tuxfamily.org/files/
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).tar.gz
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 PKG_CAT:=zcat
