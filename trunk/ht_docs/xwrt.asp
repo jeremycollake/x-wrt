@@ -135,11 +135,10 @@ install and use X-Wrt on your router:</font></p>
 &nbsp;</font></li>
 			</ol>
 			<ul>
-				<li><font face="Verdana"><b><font size="4"><u>
-				Method #1:
-				</u></font></b><u><font size="4">
-				Flash OpenWrt White Russian RC5 or RC6 then 
-				install X-Wrt packages like Webif^2.</font></u></font></li>
+				<li><font face="Verdana"><b><font size="4">Method #1:
+				</font></b><font size="4">
+				Flash OpenWrt White Russian then 
+				install X-Wrt packages</font></font></li>
 			</ul>
 			<blockquote>
 	<p><font size="4" color="#666699" face="Verdana"><b>Step-by-step if you have NOT already 
@@ -155,7 +154,12 @@ install and use X-Wrt on your router:</font></p>
 			of the two buttons to install either the latest daily build of 
 			webif^2, or the last official release. The last official release 
 			(currently milestone 2) might be more well tested, but has not got 
-			all the latest updates included.</font></li>
+			all the latest updates included.
+				<i><br>
+			<br>
+			This button will NOT work with Internet Explorer at present, nor on 
+			builds of OpenWrt that do not have the default webif package 
+			installed!</i></font></li>
 		</ol>
 	</blockquote>
 </blockquote>
@@ -163,49 +167,38 @@ install and use X-Wrt on your router:</font></p>
 	<blockquote>
 		<blockquote>
 			<blockquote>
-				<p><font face="Verdana"><b><br>
-				Your Router's IP:</b>
-				<input type="text" name="routerip" size="12" value="192.168.1.1"></input>
-				<input type="submit" value=" Install Latest Daily Build of Webif^2 " name="install_webif"  onclick="installWebif(this.form)"></input>
-				<i>newer<br>
-				</i><b><br>
-				Your Router's IP:</b>
-				<input type="text" name="routerip0" size="12" value="192.168.1.1"></input>
-				<input type="submit" value=" Install Milestone 2 Release of Webif^2 " name="install_webif0"  onclick="installWebifMilestone2(this.form)"></input>
-				<i>better tested</i></font></p>
-				<p>
-				<font face="Verdana">
-				<i>NOTE: This button will NOT work with Internet Explorer!<br>
-				<br>
-				</i>Alternately, if you are an advanced user you can ssh to the 
-				router and run &quot;</font><font size="2" face="Verdana"><b>ipkg install 
-				http://ftp.berlios.de/pub/xwrt/webif_latest.ipk&quot;.</b></font></p>
+				<blockquote>
+					<p><font face="Verdana"><b><br></b>Your Router's IP address:
+					<input type="text" name="routerip" size="12" value="192.168.1.1"></input></font><font face="Verdana"><p>
+					<input type="submit" value=" Install Latest Daily Build of Webif^2 " name="install_webif"  onclick="installWebif(this.form)"></input><i> 
+					(newer)<br>
+					<br>
+					</i>
+					<input type="submit" value=" Install Milestone 2 Release of Webif^2 " name="install_webif0"  onclick="installWebifMilestone2(this.form)"><i> 
+					(better tested)</i></p>
+				</blockquote>
 			</blockquote>
 		</blockquote>
 	</blockquote>
 </form>
 <blockquote>
 	<blockquote>
-		<ol start="4">
-			<li><font face="Verdana">Once the installation has completed, you may need to reboot your 
-		router. </font> </li>
-			<li><font face="Verdana">If the display of the web pages looks funny, do a 
-		hard refresh (hold down SHIFT and click REFRESH) to clear out the old 
-		CSS.</font></li>
-		</ol>
-	</blockquote>
-	<blockquote>
 		<p><font color="#FF0000" face="Verdana"><b>WARNING: </b>The very first install of 
 		webif^2 will reboot your router!</font></p>
+		<p>If the display of the web pages looks funny, do a 
+		hard refresh (hold down SHIFT and click REFRESH) to clear out the old 
+		CSS.</p>
+		<p>Instead of using this automated install procedure, you can also ssh 
+		or telnet to the 
+				router and run &quot;ipkg install 
+				<a href="http://ftp.berlios.de/pub/xwrt/webif_latest.ipk">http://ftp.berlios.de/pub/xwrt/webif_latest.ipk</a>&quot;.<br>
+&nbsp;</p>
 	</blockquote>
 </blockquote>
 			<ul>
-				<li><font face="Verdana"><b><font size="4"><u>
-				Method #2: 
-				</u> </font></b><u><font size="4">
-				Flash 
-				pre-built OpenWrt White Russian images that already contain 
-				X-Wrt packages. </font> 
+				<li><b><font size="4">Method #2: 
+				</font></b><font size="4">
+				Flash pre-built OpenWrt White Russian images<u> 
 				</u> 
 				</font> 
 				<blockquote>
@@ -290,6 +283,7 @@ install and use X-Wrt on your router:</font></p>
 			</blockquote>
 			<p><font face="Verdana"><br>
 			&nbsp;</font></p>
+			</font>
 			</td>
 		</tr>
 		<tr>
