@@ -32,11 +32,15 @@ fi
 if empty "$FORM_submit"; then
 	# initialize all defaults
 	FORM_upnp_enabled="${upnp_enabled:-$(nvram get upnp_enabled)}"
-	FORM_upnp_log_output="${upnp_log_output:-$(nvram get upnpd_log_output)}"
+	FORM_upnpd_log_output="${upnpd_log_output:-$(nvram get upnpd_log_output)}"
+	FORM_upnpd_up_bitspeed="${upnpd_up_bitspeed:-$(nvram get upnpd_up_bitspeed)}"
+	FORM_upnpd_down_bitspeed="${upnpd_down_bitspeed:-$(nvram get upnpd_down_bitspeed)}"
 else
 	# save form
 	save_setting upnpd upnp_enabled "$FORM_upnp_enabled"
-	save_setting upnpd upnpd_log_output "$FORM_upnp_log_output"
+	save_setting upnpd upnpd_log_output "$FORM_upnpd_log_output"
+	save_setting upnpd upnpd_down_bitspeed "$FORM_upnpd_down_bitspeed"
+	save_setting upnpd upnpd_up_bitspeed "$FORM_upnpd_up_bitspeed"
 fi
 
 #####################################################################s
@@ -67,8 +71,16 @@ if equal "$upnp_installed" "1" ; then
 	select|upnp_enabled|$FORM_upnp_enabled
 	option|0|@TR<<Disabled>>
 	option|1|@TR<<Enabled>>
+	field|@TR<<WAN Upload (bits/sec)>>
+	text|upnpd_up_bitspeed|$FORM_upnpd_up_bitspeed| @TR<<kilobits>>
+	field|@TR<<WAN Download (bits/sec)>>
+	text|upnpd_down_bitspeed|$FORM_upnpd_down_bitspeed| @TR<<kilobits>>
+	helpitem|WAN Upload Speed
+	helptext|HelpText upnpd_wan_upload#This option setting represents the WAN line upload speed in kilobits per second.
+	helpitem|WAN Download Speed
+	helptext|HelpText upnpd_wan_download#This option setting represents the WAN line download speed in kilobits per second.	
 	field|@TR<<Log Debug Output>>
-	select|upnp_log_output|$FORM_upnp_log_output
+	select|upnpd_log_output|$FORM_upnpd_log_output
 	option|0|@TR<<Disabled>>
 	option|1|@TR<<Enabled>>"
 else
