@@ -4,34 +4,47 @@
 #include <stdio.h>
 #include <string.h>
 
-/* todo: if we add any more, maybe throw these in a table */
+typedef int (*PFN_MAIN)(int argc, char **argv);
 int wepkeygen_main(int argc, char **argv);
 int int2human_main(int argc, char **argv);
 int bstrip_main(int argc, char **argv);
 int webifpage_main(int argc, char **argv);
 
-int
-main(int argc, char **argv)
+/* parallel arrays representing entry points of
+ *  applets and corresponding applet names */
+char *pszAppletNames[] =
 {
-	if(strstr(argv[0], "webif-page")) 
+	"webif-page",
+	"bstrip",
+	"int2human",
+	"wepkeygen",
+	NULL
+};
+
+PFN_MAIN ppEntryPoints[] =
+{
+	&webifpage_main,
+	&bstrip_main,
+	&int2human_main,
+	&wepkeygen_main
+};
+
+int main(int argc, char **argv)
+{
+	int nI;
+	for(nI=0; pszAppletNames[nI]; nI++) 
 	{
-		return webifpage_main(argc, argv);
+		if(strstr(argv[0], pszAppletNames[nI]))
+		{
+			return ppEntryPoints[nI](argc, argv);
+		}
 	}
-	else if(strstr(argv[0], "bstrip"))
+
+	printf(" ERROR: Must symlink to a supported applet.\n");
+	printf(" Applets supported are:\n");
+	for(nI=0; pszAppletNames[nI]; nI++) 
 	{
-		return bstrip_main(argc, argv);
+		printf("  %s\n", pszAppletNames[nI]);
 	}
-	else if(strstr(argv[0], "int2human"))
-	{
-		return int2human_main(argc, argv);
-	}
-	else if(strstr(argv[0], "wepkeygen")) 
-	{
-		return wepkeygen_main(argc, argv);
-	}
-	else
-	{
-		printf(" ERR: Must symlink to bstrip, int2human, webif-page, or wepkeygen.\n");
-	}	
 	return 1;
 }
