@@ -90,10 +90,18 @@ most importantly, get the job done. If you still don't quite get what X-Wrt is, 
 					<li><b>Community driven.</b> This isn't about 'us' offering 
 					'you' something, it's about everyone coming together to work 
 					towards common goal.</li>
-					<li><b>No commercialization. </b>We realize that revenue 
-					generation is a temptation when any project becomes popular, 
-					so we've structured the project to resist such pressures by 
-					being non-centralized and having distributed ownership.<br>
+					<li><b>No monetary donations without accounting. </b>We 
+					realize that revenue generation is a temptation when any 
+					project becomes popular, so we've structured the project to 
+					resist such pressures by being non-centralized and having 
+					distributed ownership. This inherently means that the 
+					project can not accept monetary donations without having a 
+					treasurer to hold and account for all donations and what 
+					they have went towards. If we did it any other way then 
+					there would be some question as to whom the donations are 
+					going to. Individual X-Wrt developers may accept monetary 
+					donations and users are encouraged to donate directly to 
+					them.<br>
 &nbsp;</li>
 				</ul>
 			</blockquote>
@@ -241,7 +249,34 @@ install and use X-Wrt on your router:</p>
 			or contact one of our other developers on the irc channel (#x-wrt / 
 			freenode). We do not make anyone pass an 'entrance exam', though we 
 			do like for people to supply a patch of some sort just to prove that 
-			you are serious. </p>
+			you are serious. <br>
+&nbsp;</p>
+			</blockquote>
+			<p><font size="5" color="#666699"><b>Support X-Wrt</b></font></p>
+			<blockquote>
+				<p>We do not accept monetary donations because we have no 
+				project treasurer to account for those donations and where they 
+				go. However, there are some things you can help us with if you 
+				choose:</p>
+				<ul>
+					<li><b>web hosting.</b> Berlios provides most our web 
+					services, but we may need other web hosts in the future.</li>
+					<li><b>domain name purchases.</b> Domain names aren't as 
+					important as they used to be, but we wouldn't mind having a 
+					few more to ensure people can easily find our project. You 
+					can guess which ones we might want, anything that has to do 
+					with x-wrt. If you register a domain name for us you must 
+					register it in one of our developers names, or transfer 
+					ownership of it to us.</li>
+					<li><b>hardware donations. </b>You can donate routers or 
+					other hardware to our developers, who may be in need of them 
+					for testing purposes. We are currently running our poor 
+					routers into the ground, so we encourage these type of 
+					donations.</li>
+					<li><b>spread the word.</b> Tell people you think might be 
+					interested about our project. That helps tremendously.</li>
+				</ul>
+				<p>&nbsp;</p>
 			</blockquote>
 			<p><br>
 			&nbsp;</p>
@@ -251,7 +286,10 @@ install and use X-Wrt on your router:</p>
 			<td align="left">&nbsp;</td>
 		</tr>
 	</table>
-</div>
+	<p>X-Wrt is a free, open-source project maintained by the community that 
+	uses it.<br>
+	All our work is licensed under the GPL.<br>
+	<a href="http://www.x-wrt.org">http://www.x-wrt.org</a></div>
 <p align="center"><font color="#FFFFFF">(c)2006 Jeremy Collake / X-Wrt Project</font></p>
 </body>
 </html>
