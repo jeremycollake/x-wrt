@@ -34,7 +34,8 @@ function installWebifMilestone2(form)
 	<tr>
 		<td align="left"><i><font color="#666699"><b>
 		<font face="Arial Black" size="7">X</font><font size="6" face="Arial Black">-Wrt </font></b>
-		</font><font face="Verdana">&nbsp;</font></i></td>
+		</font><font face="Verdana">&nbsp;<br>
+		OpenWrt for end users</font></i></td>
 		<td width="130"><font face="Verdana"><a href="https://developer.berlios.de/projects/xwrt/%20"> <img src="http://developer.berlios.de/bslogo.php?group_id=7373" width="124px" height="32px" border="0" alt="BerliOS Developer Logo" /></a>
 		</font>
 		</td>
@@ -42,12 +43,8 @@ function installWebifMilestone2(form)
 </table>
 <hr />
 			<blockquote>
-				<p><font face="Verdana"><i><b>X-Wrt</b></i> is a set of packages and patches to enhance the end user 
-experience of OpenWrt<i>.</i> X-Wrt will have the stability and extensibility of 
-OpenWrt, but will be easier to use. Furthermore, we aim to be pragmatic in our 
-development in that we want to get the job done as elegantly as possible, but 
-most importantly, get the job done. If you still don't quite get what X-Wrt is, I recommend reading this short article
-				<a href="http://developer.berlios.de/blog/archives/69-OpenWrt,-FreeWrt,-and-X-Wrt.html#extended">here</a>.</font></p>
+				<p><font face="Verdana"><b>X-Wrt</b> is a set of packages and patches to enhance the end user 
+experience of OpenWrt. It is NOT, in any way, shape, or form a fork of OpenWrt.</font></p>
 				<blockquote>
 					<p><font face="Verdana">Project:
 					<a href="https://developer.berlios.de/projects/xwrt/">https://developer.berlios.de/projects/xwrt/</a>
