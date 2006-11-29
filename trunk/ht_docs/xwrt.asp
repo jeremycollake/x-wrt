@@ -220,7 +220,28 @@ install and use X-Wrt on your router:</font></p>
 				</blockquote>
 				</li>
 			</ul>
-			<p><font size="5" color="#666699" face="Verdana"><b>Can I use X-Wrt 
+			<p><font size="5" color="#666699"><b>X-Wrt Packages</b></font></p>
+			<blockquote>
+				<p>Although all our work is based around our webif^2 package, we 
+				actually have a number of packages to add to OpenWrt. At present 
+				they are all for White Russian, but we are moving actively into 
+				Kamikaze right now. A list of some of our packages are:</p>
+				<ul>
+					<li><b>webif^2</b> - our new webif, but you already know 
+					that ;).</li>
+					<li><b>miniupnpd</b> - an offering of this excellent new 
+					upnp daemon.</li>
+					<li><b>tarfs</b> - a specialized pseudo-filesystem for micro 
+					sized routers. <i>- alpha stage development</i></li>
+					<li><b>busybox 1.2.1</b> - an update over the Busybox 1.0 
+					used in White Russian. It also includes some different 
+					applets, like user management utilities.</li>
+					<li><b>wireless-tools v29 pre10</b> - an update to 
+					wireless-tools (iwconfig, iwlist, etc..).</li>
+				</ul>
+			</blockquote>
+			<p><font size="5" color="#666699" face="Verdana"><b><br>
+			Can I use X-Wrt 
 			in my commercial venture?</b></font></p>
 			<blockquote>
 				<p><font face="Verdana">Yes, you can use X-Wrt in whatever way 
