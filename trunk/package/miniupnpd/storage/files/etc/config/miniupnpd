@@ -1,0 +1,13 @@
+# minupnpd UCI configuration file
+# !! Work in Progress !! - this file is *NOT* used yet
+
+config settings miniupnpd
+	option enabled "1"
+	option port "5000"
+	option log_output "1"
+	option run_as_daemon "1"
+
+# line speeds, in kilobits
+config interface speeds
+	option upload "256"
+	option download "3072" 
