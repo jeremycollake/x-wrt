@@ -49,7 +49,7 @@ build:
 		sh ./scripts/all.sh; \
 	fi
 	if [ -e ./scripts/$(LIST).sh ]; then \
-		sh ./scripts/$(LIST).sh; \
+		sh ./scripts/$(LIST).sh $(LINUX_BUILD_DIR)/root; \
 	fi
 	find $(LINUX_BUILD_DIR)/root -name '.svn' || 'CVS' | xargs rm -rf
 	$(MAKE) -S -C image KERNEL="$(KERNEL)" BOARD="$(BOARD)" BIN_DIR="$(BIN_DIR)/$(LIST)" install
