@@ -33,33 +33,75 @@ function installWebifMilestone2(form)
 			<td align="left">&nbsp;<table border="0" width="100%" id="table4">
 	<tr>
 		<td align="left"><i><font color="#666699"><b>
-		<font face="Arial Black" size="7">X</font><font size="6" face="Arial Black">-Wrt </font></b>
-		</font><font face="Verdana">&nbsp;<br>
+		<font face="Arial Black" size="7">X</font><font size="6" face="Arial Black">-</font><font size="5" face="Arial Black">Wrt </font></b>
+		</font><font face="Verdana"><font size="5">&nbsp;</font><br>
 		OpenWrt for end users</font></i></td>
-		<td width="130"><font face="Verdana"><a href="https://developer.berlios.de/projects/xwrt/%20"> <img src="http://developer.berlios.de/bslogo.php?group_id=7373" width="124px" height="32px" border="0" alt="BerliOS Developer Logo" /></a>
+		<td width="130"><font face="Verdana">Hosted at ...<a href="https://developer.berlios.de/projects/xwrt/"><img src="http://developer.berlios.de/bslogo.php?group_id=7373" width="124px" height="32px" border="0" alt="BerliOS Developer Logo" /></a>
 		</font>
 		</td>
 	</tr>
 </table>
 <hr />
 			<blockquote>
-				<p><font face="Verdana"><b>X-Wrt</b> is a set of packages and patches to enhance the end user 
-experience of OpenWrt. It is NOT, in any way, shape, or form a fork of OpenWrt. 
+				<p><font face="Verdana"><b>X-Wrt</b> is a set of packages and 
+				patches to enhance the end user experience of OpenWrt. It is NOT a fork of OpenWrt. 
 				We work in conjunction with the OpenWrt developers to extend 
-				OpenWrt. We have a separate project due only to the difference 
-				in focus.</font></p>
+				OpenWrt. </font></p>
+				<p><font face="Verdana">Our packages currently work with the 
+				latest public release of OpenWrt - White Russian RC6. We also 
+				maintain backwards compatibility with OpenWrt White Russian RC5. 
+				Support of OpenWrt's upcoming Kamikaze firmware is
+				<a href="#kamikaze">coming soon</a>. Explore this page to learn 
+				about our work, or just skip straight to
+				<a href="#Installation_Instructions">installing X-Wrt</a> and 
+				see the fruits of our labor yourself.</font></p>
+				<p><b><font face="Verdana">Project Links:</font></b></p>
 				<blockquote>
-					<p><font face="Verdana">Project:
-					<a href="https://developer.berlios.de/projects/xwrt/">https://developer.berlios.de/projects/xwrt/</a>
-					<b><font size="5" color="#666699"><br /></font></b>Forums: 
-					<a href="http://www.bitsum.com/smf/index.php?board=17.0">http://www.bitsum.com/smf/index.php?board=17.0</a><br />Screenshots: 
-					<a href="http://www.bitsum.com/xwrt">http://www.bitsum.com/xwrt</a> 
-(usually out-dated)<br>Email contact(s): <a href="mailto:jeremy@bitsum.com">jeremy@bitsum.com</a>
-					<br>IRC: #x-wrt on irc.freenode.net<br>
-&nbsp;</font></p>
+					<ul type="circle">
+						<li><font face="Verdana">
+						<a href="https://developer.berlios.de/projects/xwrt/">
+						Project Hosting</a></font></li>
+						<li><font face="Verdana">
+						<a href="ftp://ftp.berlios.de/pub/xwrt">FTP Site</a></font></li>
+						<li><font face="Verdana">
+						<a href="http://developer.berlios.de/mail/?group_id=7373">
+						Mailing Lists</a></font></li>
+						<li><font face="Verdana">
+						<a href="http://www.bitsum.com/smf/index.php?board=17.0">Forums</a></font></li>
+						<li><font face="Verdana">
+						<a href="http://www.bitsum.com/xwrt">Screenshots</a></font></li>
+						<li><font face="Verdana">
+						<a href="mailto:jeremy@bitsum.com">Email</a></font></li>
+						<li><font face="Verdana"><a href="#x-wrt">IRC</a></font></li>
+					</ul>
+				</blockquote>
+				<p><b><font face="Verdana">Document Navigation:</font></b></p>
+				<blockquote>
+					<ol type="I">
+						<li><font face="Verdana"><a href="#About_X-Wrt">
+						Introduction</a></font></li>
+						<li><font face="Verdana"><a href="#Project_Status">
+						Status</a></font></li>
+						<li><font face="Verdana">
+						<a href="#Installation_Instructions">Installation 
+						Instructions</a></font></li>
+						<li><font face="Verdana"><a href="#X-Wrt_Packages">X-Wrt 
+						Packages</a></font></li>
+						<li><font face="Verdana"><a href="#kamikaze">OpenWrt 
+						Kamikaze Plans</a></font></li>
+						<li><font face="Verdana"><a href="#commercial">
+						Commercial Use: Ok</a></font></li>
+						<li><font face="Verdana"><a href="#participate">
+						Participate</a></font></li>
+						<li><font face="Verdana"><a href="#support">Support Us</a></font><br>
+&nbsp;</li>
+					</ol>
 				</blockquote>
 			</blockquote>
-			<p><b><font size="5" color="#666699" face="Verdana">About X-Wrt</font></b></p>
+			<p><a name="About_X-Wrt"><b>
+			<font face="Verdana" size="5" color="#666699">Instruction to </font>
+			</b></a><b><a name="About_X-Wrt">
+			<font size="5" color="#666699" face="Verdana">X-Wrt</font></a></b></p>
 			<blockquote>
 				<p><font face="Verdana">X-Wrt was started because there was a 
 				need for end user extensions to OpenWrt, such as an enhanced web 
@@ -69,6 +111,14 @@ experience of OpenWrt. It is NOT, in any way, shape, or form a fork of OpenWrt.
 				extensibility, robustness, and design. We at X-Wrt decided it 
 				was long past time for end users to get access to this superior 
 				firmware. </font></p>
+				<p><font face="Verdana">We are a separate project from OpenWrt 
+				due to the difference in focus and development ideals. We are 
+				considerably more pragmatic than OpenWrt and have the goal of 
+				providing solutions <i>today</i>, while OpenWrt has a more 
+				idealistic development philosophy and intends to perfect the 
+				firmware core, no matter how many rewrites and how much time it 
+				takes. This difference in development attitude creates a 
+				complimentary atmosphere that benefits everyone.</font></p>
 				<p><font face="Verdana">This is a free, open-source, 
 				community-driven project. Our primary project ideals are:</font></p>
 				<ul>
@@ -91,19 +141,16 @@ experience of OpenWrt. It is NOT, in any way, shape, or form a fork of OpenWrt.
 					dictatorship it is subject to the faults of its dictator.</font></li>
 					<li><font face="Verdana"><b>Community driven.</b> This isn't 
 					about 'us' offering 'you' something, it's about everyone 
-					coming together to work towards common goal.</font></li>
+					coming together to work towards the common goal.</font></li>
 					<li><font face="Verdana"><b>No monetary donations without 
 					accounting. </b>The project can not accept monetary 
 					donations without having a treasurer to hold and account for 
-					all donations and what they have went towards. If we did it 
-					any other way then there would be some question as to whom 
-					the donations are going to. Individual X-Wrt developers may 
-					accept monetary donations and users are encouraged to donate 
-					directly to them.<br>
+					all donations and what they have went towards.<br>
 &nbsp;</font></li>
 				</ul>
 			</blockquote>
-			<p><font size="5" color="#666699" face="Verdana"><b>Project Status</b></font></p>
+			<p><font size="5" color="#666699" face="Verdana"><b>
+			<a name="Project_Status">Project Status</a></b></font></p>
 			<blockquote>
 				<p><font face="Verdana">This project is still young, but we are accomplishing things at a rapid 
 pace. All our work is currently in beta, but our code can be used today and is 
@@ -116,8 +163,9 @@ message list that archives commit logs as they happen:
 			install buttons below will have you install it. If you then use the 
 			webif's update feature you will get the latest internal build.<br>&nbsp;</font></p>
 			</blockquote>
-			<p><font size="5" color="#666699" face="Verdana"><b>Installation 
-			Instructions</b></font></p>
+			<p><font size="5" color="#666699" face="Verdana"><b>
+			<a name="Installation_Instructions">Installation 
+			Instructions</a></b></font></p>
 			<blockquote>
 				<p><font face="Verdana">X-Wrt is a set of packages that overlay OpenWrt. There are two primary ways to 
 install and use X-Wrt on your router:</font></p>
@@ -143,7 +191,7 @@ install and use X-Wrt on your router:</font></p>
 			Russian on your router, download an appropriate OpenWrt White Russian image and flash it 
 		(follow instructions in <a href="http://wiki.openwrt.org">OpenWrt's wiki</a>). We recommend 
 		White Russian RC5, RC6, or 0.9 (when it is released). Kamikaze is NOT supported yet, 
-		but will be eventually.</font></li>
+		but will be <a href="#kamikaze">soon</a>.</font></li>
 			<li><font face="Verdana">Enter your router's IP address in the field below and click one 
 			of the two buttons to install either the latest daily build of 
 			webif<sup>2</sup>, or the last official release. The last official release 
@@ -160,8 +208,7 @@ install and use X-Wrt on your router:</font></p>
 				<blockquote>
 					<p><font face="Verdana"><b><br></b>Your Router's IP address:
 					<input type="text" name="routerip" size="12" value="192.168.1.1"></input></font><font face="Verdana"><p>
-					<input type="submit" value=" Install Latest Daily Build of Webif^2 -- newer " name="install_webif"  onclick="installWebif(this.form)"></input><i> 
-					<br>
+					<input type="submit" value=" Install Latest Daily Build of Webif^2 -- newer " name="install_webif"  onclick="installWebif(this.form)"></input><i><br>
 					</i>
 					<input type="submit" value=" Install Milestone 2 Release of Webif^2 -- more tested " name="install_webif0"  onclick="installWebifMilestone2(this.form)"></p>
 				</blockquote>
@@ -208,7 +255,7 @@ install and use X-Wrt on your router:</font></p>
 				</blockquote>
 				</li>
 			</ul>
-			<p><font size="5" color="#666699"><b>X-Wrt Packages</b></font></p>
+			<p><font size="5" color="#666699"><b><a name="X-Wrt_Packages">X-Wrt Packages</a></b></font></p>
 			<blockquote>
 				<p>Although all our work is based around our webif<sup>2</sup> package, we 
 				actually have a number of packages to add to OpenWrt. At present 
@@ -227,10 +274,74 @@ install and use X-Wrt on your router:</font></p>
 					<li><b>wireless-tools v29 pre10</b> - an update to 
 					wireless-tools (iwconfig, iwlist, etc..).</li>
 				</ul>
+				<p>&nbsp;</p>
+			</blockquote>
+			<p><font size="5" color="#666699" face="Verdana"><b>
+			<a name="kamikaze"></a>OpenWrt Kamikaze Plans</b></font></p>
+			<blockquote>
+				<p>We are working actively towards a version of the webif for 
+				OpenWrt's long delayed next generation, Kamikaze. By the time 
+				Kamikaze goes public, we probably will have finished support for 
+				it.</p>
+				<p>OpenWrt Kamikaze represents a substantial and fundamental 
+				change. It is not simply a new version of White Russian, but 
+				instead a complete rewrite of the build root and configuration 
+				structure. That is why White Russian went stagnant for so long, 
+				the developers quit working on it in favor of this more 
+				ambitious idealized solution. This new branch of OpenWrt took a 
+				long, long time to hash out, but now its almost ready.</p>
+				<p>The ever-popular NVRAM configuration storage system is no 
+				longer utilized in Kamikaze. It has been replaced with 
+				configuration files, many stored in the common format known as 
+				'UCI'. This was done because although an emulated NVRAM storage 
+				area to keep tuple based configuration data can be easily 
+				implemented on any platform, the OpenWrt developers felt it 
+				wasn't structured enough for their tastes. So, out the window it 
+				went.</p>
+				<p>To make the webif work with Kamikaze we therefore have to 
+				work with this new configuration system. The good news is our 
+				webif already supports UCI. Some pages, like the QoS page, use 
+				the UCI system entirely. To finalize support for Kamikaze we 
+				simply have to take the remaining code that utilizes NVRAM and 
+				either write new code or write a translation layer to convert 
+				NVRAM to and from UCI configuration files. The end solution may 
+				be a combination of both.</p>
+				<p>While some do not approve of us maintaining support for White 
+				Russian, we believe it is important to continue to support the 
+				only stable branch of OpenWrt released at the time of this 
+				writing. White Russian will be around for many years and the 
+				overhead required in supporting both Kamikaze and White Russian 
+				is minimal compared to the rewards.</p>
+				<p><i>We hope to have basic Kamikaze support by the end of 2006. 
+				Join the team and help us accomplish this!</i></p>
+				<p><b>A new webif system</b> ...</p>
+				<p>This is only partially related to the Kamikaze support, but 
+				it should be mentioned somewhere.</p>
+				<p>At the core of the webif is a system that is responsible for 
+				actually rendering the webif pages (which are combinations of 
+				shell and awk code mostly). There are some in the OpenWrt 
+				community who are calling for a complete rewrite of this base 
+				webif system. The plan is to develop an AWK-only system that 
+				uses no shell scripting. This will have advantages in efficiency 
+				and resource use, but will likely not be substantially easier to 
+				code for. This rewrite of the base webif system has not yet 
+				commenced at the time of this writing. </p>
+				<p>We are proceeding in such a way that ensures backwards 
+				compatibility with existing webif pages. At first, there will be 
+				two webif systems operating together, the old and the new. There 
+				will be little to no performance overhead to this dual-system 
+				and the base webif system is so small that it will hardly occupy 
+				any flash ROM space. What small price there is to having a 
+				dual-system in place will be well worth not having to wait 
+				indefinitely for all webif pages to be rewritten from scratch.</p>
+				<p>It is important to note that nobody should wait for this new 
+				system to become available before making contributions to the 
+				webif. As stated above, this planned new system has not even 
+				been started yet, and it is possible it never will be.</p>
 			</blockquote>
 			<p><font size="5" color="#666699" face="Verdana"><b><br>
-			Can I use X-Wrt 
-			in my commercial venture?</b></font></p>
+			<a name="commercial">Can I use X-Wrt 
+			in my commercial venture</a>?</b></font></p>
 			<blockquote>
 				<p><font face="Verdana">Yes, you can use X-Wrt in whatever way 
 				you like, providing you do not violate the terms of the GPL 
@@ -247,8 +358,9 @@ install and use X-Wrt on your router:</font></p>
 				your name and email address listed in this space, please let me 
 				(db90h) know.</i></font></p>
 			</blockquote>
-			<p><font face="Verdana"><br />
-			<font size="5" color="#666699"><b>Participate in X-Wrt</b></font></font></p>
+			<p><br>
+			<br />
+			<font size="5" color="#666699"><b><a name="participate">Participate in X-Wrt</a></b></font></p>
 			<blockquote>
 				<p><font face="Verdana">We always need developers, testers, documentation writers, 
 			translators, and support personnel. Our project is truly OPEN and 
@@ -269,12 +381,13 @@ install and use X-Wrt on your router:</font></p>
 					<li>documentation writers<br>&nbsp;</li>
 				</ul>
 			</blockquote>
-			<p><font size="5" color="#666699" face="Verdana"><b>Support X-Wrt</b></font></p>
+			<p><font size="5" color="#666699" face="Verdana"><b>
+			<a name="support">Support X-Wrt</a></b></font></p>
 			<blockquote>
-				<p><font face="Verdana">We do not accept monetary donations 
+				<p>We do not accept monetary donations 
 				because we have no project treasurer to account for those 
 				donations and where they go. However, there are some things you 
-				can help us with if you choose:</font></p>
+				can help us with if you choose:</p>
 				<ul>
 					<li><font face="Verdana"><b>web hosting.</b> Berlios 
 					provides most our web services, but we may need other web 
@@ -285,8 +398,10 @@ install and use X-Wrt on your router:</font></p>
 					running our poor routers into the ground, so we encourage 
 					these type of donations.</font></li>
 					<li><font face="Verdana"><b>spread the word.</b> Tell people 
-					you think might be interested about our project. That helps 
-					tremendously.</font></li>
+					you think might be interested about our project. Not even 
+					all OpenWrt users have heard of our project yet. You might 
+					consider mentioning X-Wrt on the OpenWrt forums and in 
+					#openwrt on freenode. </font></li>
 				</ul>
 				<p>&nbsp;</p>
 			</blockquote>
@@ -303,6 +418,7 @@ install and use X-Wrt on your router:</font></p>
 	the community that uses it.<br>
 	All our work is licensed under the GPL.<br>
 	<a href="http://www.x-wrt.org">http://www.x-wrt.org</a></font></div>
-<p align="center"><font color="#FFFFFF" face="Verdana">(c)2006 Jeremy Collake / X-Wrt Project</font></p>
+<p align="center"><font color="#FFFFFF" face="Verdana">(c)2006 Jeremy Collake / 
+X-Wrt Project</font></p>
 </body>
 </html>
