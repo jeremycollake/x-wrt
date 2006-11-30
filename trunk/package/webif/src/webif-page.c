@@ -24,7 +24,7 @@
 #include <bcmnvram.h>
 #endif
 
-#define HASH_MAX	100
+#define HASH_MAX	512
 #define LINE_BUF	1024 /* max. buffer allocated for one line */
 #define MAX_TR		32	 /* max. translations done on one line */
 #define TR_START	"@TR<<"
