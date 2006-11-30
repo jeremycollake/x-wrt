@@ -1,0 +1,889 @@
+package-$(CONFIG_PACKAGE_6tunnel) += 6tunnel
+package-$(CONFIG_PACKAGE_aiccu) += aiccu
+package-$(CONFIG_PACKAGE_aircrack-ng) += aircrack-ng
+package-$(CONFIG_PACKAGE_alsa-lib) += alsa-lib
+package-$(CONFIG_PACKAGE_alsa-utils) += alsa-utils
+package-$(CONFIG_PACKAGE_amwall) += amwall
+package-$(CONFIG_PACKAGE_aodv-uu) += aodv-uu
+package-$(CONFIG_PACKAGE_arpd) += arpd
+package-$(CONFIG_PACKAGE_arptables) += arptables
+package-$(CONFIG_PACKAGE_arpwatch) += arpwatch
+package-$(CONFIG_PACKAGE_asterisk) += asterisk
+package-$(CONFIG_PACKAGE_asterisk-chan-bluetooth) += asterisk
+package-$(CONFIG_PACKAGE_asterisk-chan-h323) += asterisk
+package-$(CONFIG_PACKAGE_asterisk-chan-mgcp) += asterisk
+package-$(CONFIG_PACKAGE_asterisk-chan-skinny) += asterisk
+package-$(CONFIG_PACKAGE_asterisk-codec-ilbc) += asterisk
+package-$(CONFIG_PACKAGE_asterisk-codec-lpc10) += asterisk
+package-$(CONFIG_PACKAGE_asterisk-codec-speex) += asterisk
+package-$(CONFIG_PACKAGE_asterisk-mini) += asterisk
+package-$(CONFIG_PACKAGE_asterisk-mysql) += asterisk
+package-$(CONFIG_PACKAGE_asterisk-pbx-dundi) += asterisk
+package-$(CONFIG_PACKAGE_asterisk-pgsql) += asterisk
+package-$(CONFIG_PACKAGE_asterisk-res-agi) += asterisk
+package-$(CONFIG_PACKAGE_asterisk-sounds) += asterisk
+package-$(CONFIG_PACKAGE_asterisk-sqlite) += asterisk
+package-$(CONFIG_PACKAGE_asterisk-voicemail) += asterisk
+package-$(CONFIG_PACKAGE_atftp) += atftp
+package-$(CONFIG_PACKAGE_atftpd) += atftp
+package-$(CONFIG_PACKAGE_autossh) += autossh
+package-$(CONFIG_PACKAGE_avahi-autoipd) += avahi
+prereq-$(CONFIG_PACKAGE_avahi-autoipd) += avahi
+package-$(CONFIG_PACKAGE_avahi-daemon) += avahi
+prereq-$(CONFIG_PACKAGE_avahi-daemon) += avahi
+package-$(CONFIG_PACKAGE_avahi-dnsconfd) += avahi
+prereq-$(CONFIG_PACKAGE_avahi-dnsconfd) += avahi
+package-$(CONFIG_PACKAGE_awhttpd) += axtls
+package-$(CONFIG_PACKAGE_base-files) += base-files
+package-$(CONFIG_PACKAGE_bc) += bc
+package-$(CONFIG_PACKAGE_bind-check) += bind
+package-$(CONFIG_PACKAGE_bind-client) += bind
+package-$(CONFIG_PACKAGE_bind-dig) += bind
+package-$(CONFIG_PACKAGE_bind-dnssec) += bind
+package-$(CONFIG_PACKAGE_bind-host) += bind
+package-$(CONFIG_PACKAGE_bind-rndc) += bind
+package-$(CONFIG_PACKAGE_bind-server) += bind
+package-$(CONFIG_PACKAGE_bind-tools) += bind
+package-$(CONFIG_PACKAGE_bing) += bing
+package-$(CONFIG_PACKAGE_bitchx) += bitchx
+package-$(CONFIG_PACKAGE_bitlbee) += bitlbee
+package-$(CONFIG_PACKAGE_bluez-libs) += bluez-libs
+package-$(CONFIG_PACKAGE_bluez-utils) += bluez-utils
+package-$(CONFIG_PACKAGE_bmon) += bmon
+package-$(CONFIG_PACKAGE_br2684ctl) += linux-atm
+prereq-$(CONFIG_PACKAGE_br2684ctl) += linux-atm
+package-$(CONFIG_PACKAGE_bridge) += bridge
+package-$(CONFIG_PACKAGE_busybox) += busybox
+package-$(CONFIG_PACKAGE_bwm) += bwm
+package-$(CONFIG_PACKAGE_cbtt) += cbtt
+package-$(CONFIG_PACKAGE_cbtt-mysql) += cbtt
+package-$(CONFIG_PACKAGE_cgilib) += cgilib
+package-$(CONFIG_PACKAGE_chat) += ppp
+package-$(CONFIG_PACKAGE_chillispot) += chillispot
+package-$(CONFIG_PACKAGE_cifsmount) += cifsmount
+package-$(CONFIG_PACKAGE_click) += click
+package-$(CONFIG_PACKAGE_collectd) += collectd
+package-$(CONFIG_PACKAGE_comgt) += comgt
+package-$(CONFIG_PACKAGE_crowdcontrol) += crowdcontrol
+package-$(CONFIG_PACKAGE_ctorrent) += ctorrent
+package-$(CONFIG_PACKAGE_cups) += cups
+package-$(CONFIG_PACKAGE_curl) += curl
+package-$(CONFIG_PACKAGE_cutter) += cutter
+package-$(CONFIG_PACKAGE_dc) += bc
+package-$(CONFIG_PACKAGE_deco) += deco
+package-$(CONFIG_PACKAGE_dhcp-forwarder) += dhcp-forwarder
+package-$(CONFIG_PACKAGE_dhcp-relay) += dhcp
+package-$(CONFIG_PACKAGE_dhcp-server) += dhcp
+package-$(CONFIG_PACKAGE_dhcp6-client) += dhcp6
+package-$(CONFIG_PACKAGE_dhcp6-server) += dhcp6
+package-$(CONFIG_PACKAGE_dnsmasq) += dnsmasq
+package-$(CONFIG_PACKAGE_dosfstools) += dosfstools
+package-$(CONFIG_PACKAGE_dropbear) += dropbear
+package-$(CONFIG_PACKAGE_dropbearconvert) += dropbear
+package-$(CONFIG_PACKAGE_dsl-qos-queue) += dsl-qos-queue
+package-$(CONFIG_PACKAGE_dsniff) += dsniff
+package-$(CONFIG_PACKAGE_dtach) += dtach
+package-$(CONFIG_PACKAGE_e2fsprogs) += e2fsprogs
+package-$(CONFIG_PACKAGE_ebtables) += ebtables
+package-$(CONFIG_PACKAGE_elinks) += elinks
+prereq-$(CONFIG_PACKAGE_elinks) += elinks
+package-$(CONFIG_PACKAGE_ethtool) += ethtool
+package-$(CONFIG_PACKAGE_ettercap) += ettercap
+package-$(CONFIG_PACKAGE_ez-ipupdate) += ez-ipupdate
+package-$(CONFIG_PACKAGE_fdisk) += util-linux
+package-$(CONFIG_PACKAGE_fetchmail) += fetchmail
+package-$(CONFIG_PACKAGE_fping) += fping
+package-$(CONFIG_PACKAGE_fprobe) += fprobe
+package-$(CONFIG_PACKAGE_fprobe-ulog) += fprobe-ulog
+package-$(CONFIG_PACKAGE_freeradius) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-democerts) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-mod-chap) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-mod-detail) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-mod-eap) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-mod-eap-gtc) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-mod-eap-md5) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-mod-eap-mschapv2) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-mod-eap-peap) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-mod-eap-tls) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-mod-eap-ttls) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-mod-files) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-mod-ldap) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-mod-mschap) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-mod-pap) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-mod-preprocess) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-mod-realm) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-mod-sql) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-mod-sql-mysql) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-mod-sql-pgsql) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-mod-sqlcounter) += freeradius
+package-$(CONFIG_PACKAGE_freeradius-utils) += freeradius
+package-$(CONFIG_PACKAGE_frickin) += frickin
+package-$(CONFIG_PACKAGE_fuse-utils) += fuse
+package-$(CONFIG_PACKAGE_gdbserver) += gdbserver
+package-$(CONFIG_PACKAGE_glib1) += glib
+package-$(CONFIG_PACKAGE_gmediaserver) += gmediaserver
+package-$(CONFIG_PACKAGE_gnupg) += gnupg
+package-$(CONFIG_PACKAGE_gnutls-utils) += gnutls
+package-$(CONFIG_PACKAGE_gphoto2) += gphoto2
+package-$(CONFIG_PACKAGE_gpsd) += gpsd
+package-$(CONFIG_PACKAGE_gsm-utils) += gsm
+package-$(CONFIG_PACKAGE_haserl) += haserl
+package-$(CONFIG_PACKAGE_hdparm) += hdparm
+package-$(CONFIG_PACKAGE_heyu) += heyu
+package-$(CONFIG_PACKAGE_hostap-utils) += hostap-utils
+package-$(CONFIG_PACKAGE_hostapd) += hostapd
+package-$(CONFIG_PACKAGE_hostapd-mini) += hostapd
+package-$(CONFIG_PACKAGE_hostapd-utils) += hostapd
+package-$(CONFIG_PACKAGE_howl-autoipd) += howl
+package-$(CONFIG_PACKAGE_howl-mdnsresponder) += howl
+package-$(CONFIG_PACKAGE_howl-nifd) += howl
+package-$(CONFIG_PACKAGE_howl-utils) += howl
+package-$(CONFIG_PACKAGE_htpdate) += htpdate
+package-$(CONFIG_PACKAGE_httping) += httping
+package-$(CONFIG_PACKAGE_icecast) += icecast
+package-$(CONFIG_PACKAGE_id3lib) += id3lib
+package-$(CONFIG_PACKAGE_iftop) += iftop
+package-$(CONFIG_PACKAGE_igmpproxy) += igmpproxy
+package-$(CONFIG_PACKAGE_ip) += iproute2
+package-$(CONFIG_PACKAGE_ip6tables) += iptables
+package-$(CONFIG_PACKAGE_ipcad) += ipcad
+package-$(CONFIG_PACKAGE_iperf) += iperf
+package-$(CONFIG_PACKAGE_ipkungfu) += ipkungfu
+package-$(CONFIG_PACKAGE_ipsec-tools) += ipsec-tools
+package-$(CONFIG_PACKAGE_ipset) += ipset
+package-$(CONFIG_PACKAGE_iptables) += iptables
+package-$(CONFIG_PACKAGE_iptables-mod-conntrack) += iptables
+package-$(CONFIG_PACKAGE_iptables-mod-extra) += iptables
+package-$(CONFIG_PACKAGE_iptables-mod-filter) += iptables
+package-$(CONFIG_PACKAGE_iptables-mod-imq) += iptables
+package-$(CONFIG_PACKAGE_iptables-mod-ipopt) += iptables
+package-$(CONFIG_PACKAGE_iptables-mod-ipsec) += iptables
+package-$(CONFIG_PACKAGE_iptables-mod-nat) += iptables
+package-$(CONFIG_PACKAGE_iptables-mod-ulog) += iptables
+package-$(CONFIG_PACKAGE_iptables-snmp) += iptables-snmp
+package-$(CONFIG_PACKAGE_iptables-utils) += iptables
+package-$(CONFIG_PACKAGE_iptraf) += iptraf
+package-$(CONFIG_PACKAGE_irssi) += irssi
+package-$(CONFIG_PACKAGE_isakmpd) += isakmpd
+package-$(CONFIG_PACKAGE_jamvm) += jamvm
+package-$(CONFIG_PACKAGE_jpeg-tools) += libjpeg
+package-$(CONFIG_PACKAGE_keynote) += keynote
+package-$(CONFIG_PACKAGE_kismet-client) += kismet
+package-$(CONFIG_PACKAGE_kismet-drone) += kismet
+package-$(CONFIG_PACKAGE_kismet-server) += kismet
+package-$(CONFIG_PACKAGE_kmod-3c59x) += kernel
+package-$(CONFIG_PACKAGE_kmod-8139too) += kernel
+package-$(CONFIG_PACKAGE_kmod-alsa) += alsa
+package-$(CONFIG_PACKAGE_kmod-aodv-uu) += aodv-uu
+package-$(CONFIG_PACKAGE_kmod-arptables) += kernel
+package-$(CONFIG_PACKAGE_kmod-atm) += kernel
+package-$(CONFIG_PACKAGE_kmod-atmtcp) += kernel
+package-$(CONFIG_PACKAGE_kmod-avalanche-cpmac) += ar7-net
+package-$(CONFIG_PACKAGE_kmod-ax25) += kernel
+package-$(CONFIG_PACKAGE_kmod-bluetooth) += kernel
+package-$(CONFIG_PACKAGE_kmod-brcm-wl) += broadcom-wl
+package-$(CONFIG_PACKAGE_kmod-brcm-wl-mimo) += broadcom-wl
+package-$(CONFIG_PACKAGE_kmod-crypto) += kernel
+package-$(CONFIG_PACKAGE_kmod-diag) += broadcom-diag
+package-$(CONFIG_PACKAGE_kmod-e100) += kernel
+package-$(CONFIG_PACKAGE_kmod-e1000) += kernel
+package-$(CONFIG_PACKAGE_kmod-ebtables) += kernel
+package-$(CONFIG_PACKAGE_kmod-fs-cifs) += kernel
+package-$(CONFIG_PACKAGE_kmod-fs-ext2) += kernel
+package-$(CONFIG_PACKAGE_kmod-fs-ext3) += kernel
+package-$(CONFIG_PACKAGE_kmod-fs-hfsplus) += kernel
+package-$(CONFIG_PACKAGE_kmod-fs-isofs) += kernel
+package-$(CONFIG_PACKAGE_kmod-fs-minix) += kernel
+package-$(CONFIG_PACKAGE_kmod-fs-nfs) += kernel
+package-$(CONFIG_PACKAGE_kmod-fs-udf) += kernel
+package-$(CONFIG_PACKAGE_kmod-fs-vfat) += kernel
+package-$(CONFIG_PACKAGE_kmod-fs-xfs) += kernel
+package-$(CONFIG_PACKAGE_kmod-fuse) += fuse
+package-$(CONFIG_PACKAGE_kmod-gre) += kernel
+package-$(CONFIG_PACKAGE_kmod-hostap) += hostap
+package-$(CONFIG_PACKAGE_kmod-hostap-pci) += hostap
+package-$(CONFIG_PACKAGE_kmod-hostap-plx) += hostap
+package-$(CONFIG_PACKAGE_kmod-ide-core) += kernel
+package-$(CONFIG_PACKAGE_kmod-ide-pdc202xx) += kernel
+package-$(CONFIG_PACKAGE_kmod-ieee80211) += kernel
+package-$(CONFIG_PACKAGE_kmod-ip6tables) += kernel
+package-$(CONFIG_PACKAGE_kmod-ipip) += kernel
+package-$(CONFIG_PACKAGE_kmod-ipsec) += kernel
+package-$(CONFIG_PACKAGE_kmod-ipsec4) += kernel
+package-$(CONFIG_PACKAGE_kmod-ipsec6) += kernel
+package-$(CONFIG_PACKAGE_kmod-ipt-conntrack) += kernel
+package-$(CONFIG_PACKAGE_kmod-ipt-extra) += kernel
+package-$(CONFIG_PACKAGE_kmod-ipt-filter) += kernel
+package-$(CONFIG_PACKAGE_kmod-ipt-imq) += kernel
+package-$(CONFIG_PACKAGE_kmod-ipt-ipopt) += kernel
+package-$(CONFIG_PACKAGE_kmod-ipt-ipsec) += kernel
+package-$(CONFIG_PACKAGE_kmod-ipt-nat) += kernel
+package-$(CONFIG_PACKAGE_kmod-ipt-nathelper) += kernel
+package-$(CONFIG_PACKAGE_kmod-ipt-queue) += kernel
+package-$(CONFIG_PACKAGE_kmod-ipt-ulog) += kernel
+package-$(CONFIG_PACKAGE_kmod-ipv6) += kernel
+package-$(CONFIG_PACKAGE_kmod-ixp4xx-npe) += kernel
+package-$(CONFIG_PACKAGE_kmod-loop) += kernel
+package-$(CONFIG_PACKAGE_kmod-lp) += kernel
+package-$(CONFIG_PACKAGE_kmod-madwifi) += madwifi
+package-$(CONFIG_PACKAGE_kmod-mini-fo) += mini_fo
+package-$(CONFIG_PACKAGE_kmod-mppe) += kernel
+package-$(CONFIG_PACKAGE_kmod-natsemi) += kernel
+package-$(CONFIG_PACKAGE_kmod-nbd) += kernel
+package-$(CONFIG_PACKAGE_kmod-ne2k-pci) += kernel
+package-$(CONFIG_PACKAGE_kmod-net-airo) += kernel
+package-$(CONFIG_PACKAGE_kmod-net-bcm43xx) += kernel
+package-$(CONFIG_PACKAGE_kmod-net-hermes) += kernel
+package-$(CONFIG_PACKAGE_kmod-net-hermes-pci) += kernel
+package-$(CONFIG_PACKAGE_kmod-net-hermes-plx) += kernel
+package-$(CONFIG_PACKAGE_kmod-net-ipw2100) += kernel
+package-$(CONFIG_PACKAGE_kmod-net-ipw2200) += kernel
+package-$(CONFIG_PACKAGE_kmod-net-prism54) += kernel
+package-$(CONFIG_PACKAGE_kmod-nls-base) += kernel
+package-$(CONFIG_PACKAGE_kmod-nls-cp437) += kernel
+package-$(CONFIG_PACKAGE_kmod-nls-cp850) += kernel
+package-$(CONFIG_PACKAGE_kmod-nls-iso8859-1) += kernel
+package-$(CONFIG_PACKAGE_kmod-nls-iso8859-15) += kernel
+package-$(CONFIG_PACKAGE_kmod-nls-koi8r) += kernel
+package-$(CONFIG_PACKAGE_kmod-nls-utf8) += kernel
+package-$(CONFIG_PACKAGE_kmod-nozomi) += nozomi
+package-$(CONFIG_PACKAGE_kmod-openswan) += openswan
+package-$(CONFIG_PACKAGE_kmod-pcmcia-core) += kernel
+package-$(CONFIG_PACKAGE_kmod-pcmcia-serial) += kernel
+package-$(CONFIG_PACKAGE_kmod-ppp) += kernel
+package-$(CONFIG_PACKAGE_kmod-pppoa) += kernel
+package-$(CONFIG_PACKAGE_kmod-pppoe) += kernel
+package-$(CONFIG_PACKAGE_kmod-r8169) += kernel
+package-$(CONFIG_PACKAGE_kmod-rt2x00) += rt2x00
+package-$(CONFIG_PACKAGE_kmod-sangam-atm-annex-a) += ar7-atm
+package-$(CONFIG_PACKAGE_kmod-sangam-atm-annex-b) += ar7-atm
+package-$(CONFIG_PACKAGE_kmod-sched) += kernel
+package-$(CONFIG_PACKAGE_kmod-shfs) += shfs
+package-$(CONFIG_PACKAGE_kmod-sis900) += kernel
+package-$(CONFIG_PACKAGE_kmod-softdog) += kernel
+package-$(CONFIG_PACKAGE_kmod-soundcore) += kernel
+package-$(CONFIG_PACKAGE_kmod-spca5xx) += spca5xx
+package-$(CONFIG_PACKAGE_kmod-switch) += switch
+package-$(CONFIG_PACKAGE_kmod-tun) += kernel
+package-$(CONFIG_PACKAGE_kmod-ueagle-atm) += ueagle-atm
+package-$(CONFIG_PACKAGE_kmod-usb-acm) += kernel
+package-$(CONFIG_PACKAGE_kmod-usb-audio) += kernel
+package-$(CONFIG_PACKAGE_kmod-usb-core) += kernel
+package-$(CONFIG_PACKAGE_kmod-usb-ohci) += kernel
+package-$(CONFIG_PACKAGE_kmod-usb-printer) += kernel
+package-$(CONFIG_PACKAGE_kmod-usb-pwc) += kernel
+package-$(CONFIG_PACKAGE_kmod-usb-serial) += kernel
+package-$(CONFIG_PACKAGE_kmod-usb-serial-belkin) += kernel
+package-$(CONFIG_PACKAGE_kmod-usb-serial-ftdi) += kernel
+package-$(CONFIG_PACKAGE_kmod-usb-serial-mct) += kernel
+package-$(CONFIG_PACKAGE_kmod-usb-serial-pl2303) += kernel
+package-$(CONFIG_PACKAGE_kmod-usb-serial-visor) += kernel
+package-$(CONFIG_PACKAGE_kmod-usb-speedtouch) += kernel
+package-$(CONFIG_PACKAGE_kmod-usb-storage) += kernel
+package-$(CONFIG_PACKAGE_kmod-usb-uhci) += kernel
+package-$(CONFIG_PACKAGE_kmod-usb2) += kernel
+package-$(CONFIG_PACKAGE_kmod-via-rhine) += kernel
+package-$(CONFIG_PACKAGE_kmod-videodev) += kernel
+package-$(CONFIG_PACKAGE_kmod-wlcompat) += wlcompat
+package-$(CONFIG_PACKAGE_kmod-wlcompat-debug) += wlcompat
+package-$(CONFIG_PACKAGE_kmod-zd1211) += zd1211
+package-$(CONFIG_PACKAGE_knock) += knock
+package-$(CONFIG_PACKAGE_knockd) += knock
+package-$(CONFIG_PACKAGE_l2tpd) += l2tpd
+package-$(CONFIG_PACKAGE_l2tpns) += l2tpns
+package-$(CONFIG_PACKAGE_lcd4linux) += lcd4linux
+package-$(CONFIG_PACKAGE_lft) += lft
+package-$(CONFIG_PACKAGE_libamsel) += libamsel
+package-$(CONFIG_PACKAGE_libao) += libao
+package-$(CONFIG_PACKAGE_libart) += libart
+package-$(CONFIG_PACKAGE_libaudiofile) += libaudiofile
+package-$(CONFIG_PACKAGE_libavahi) += avahi
+prereq-$(CONFIG_PACKAGE_libavahi) += avahi
+package-$(CONFIG_PACKAGE_libaxtls) += axtls
+package-$(CONFIG_PACKAGE_libbzip2) += bzip2
+package-$(CONFIG_PACKAGE_libcli) += libcli
+package-$(CONFIG_PACKAGE_libcurl) += curl
+package-$(CONFIG_PACKAGE_libdaemon) += libdaemon
+package-$(CONFIG_PACKAGE_libdb) += db
+package-$(CONFIG_PACKAGE_libdnet) += libdnet
+package-$(CONFIG_PACKAGE_libelf) += libelf
+package-$(CONFIG_PACKAGE_libevent) += libevent
+package-$(CONFIG_PACKAGE_libexif) += libexif
+package-$(CONFIG_PACKAGE_libexpat) += expat
+package-$(CONFIG_PACKAGE_libffi-sable) += libffi-sable
+package-$(CONFIG_PACKAGE_libflac) += flac
+package-$(CONFIG_PACKAGE_libfreetype) += freetype
+package-$(CONFIG_PACKAGE_libfuse) += fuse
+package-$(CONFIG_PACKAGE_libgcc) += base-files
+package-$(CONFIG_PACKAGE_libgcrypt) += libgcrypt
+package-$(CONFIG_PACKAGE_libgd) += gd
+package-$(CONFIG_PACKAGE_libgdbm) += libgdbm
+package-$(CONFIG_PACKAGE_libgmp) += gmp
+package-$(CONFIG_PACKAGE_libgnutls) += gnutls
+package-$(CONFIG_PACKAGE_libgnutls-openssl) += gnutls
+package-$(CONFIG_PACKAGE_libgpg-error) += libgpg-error
+package-$(CONFIG_PACKAGE_libgphoto2) += libgphoto2
+package-$(CONFIG_PACKAGE_libgphoto2-drivers) += libgphoto2
+package-$(CONFIG_PACKAGE_libgsm) += gsm
+package-$(CONFIG_PACKAGE_libhowl) += howl
+package-$(CONFIG_PACKAGE_libiconv) += libiconv
+package-$(CONFIG_PACKAGE_libid3tag) += libid3tag
+package-$(CONFIG_PACKAGE_libjpeg) += libjpeg
+package-$(CONFIG_PACKAGE_libltdl) += libtool
+package-$(CONFIG_PACKAGE_liblua) += lua
+package-$(CONFIG_PACKAGE_liblzo) += lzo
+package-$(CONFIG_PACKAGE_libmad) += libmad
+package-$(CONFIG_PACKAGE_libmatrixssl) += matrixssl
+package-$(CONFIG_PACKAGE_libmcrypt) += libmcrypt
+package-$(CONFIG_PACKAGE_libmysqlclient) += mysql
+package-$(CONFIG_PACKAGE_libncurses) += ncurses
+package-$(CONFIG_PACKAGE_libnet0) += libnet-1.0.x
+package-$(CONFIG_PACKAGE_libnet1) += libnet-1.1.x
+package-$(CONFIG_PACKAGE_libnetsnmp) += net-snmp
+package-$(CONFIG_PACKAGE_libnids) += libnids
+package-$(CONFIG_PACKAGE_libnotimpl) += libnotimpl
+package-$(CONFIG_PACKAGE_libol) += libol
+package-$(CONFIG_PACKAGE_libopencdk) += opencdk
+package-$(CONFIG_PACKAGE_libopenh323) += openh323
+package-$(CONFIG_PACKAGE_libopenldap) += openldap
+package-$(CONFIG_PACKAGE_libopenssl) += openssl
+package-$(CONFIG_PACKAGE_libosip2) += libosip2
+package-$(CONFIG_PACKAGE_libpcap) += libpcap
+package-$(CONFIG_PACKAGE_libpcre) += pcre
+package-$(CONFIG_PACKAGE_libpng) += libpng
+package-$(CONFIG_PACKAGE_libpopt) += popt
+prereq-$(CONFIG_PACKAGE_libpopt) += popt
+package-$(CONFIG_PACKAGE_libpq) += postgresql
+package-$(CONFIG_PACKAGE_libpthread) += base-files
+package-$(CONFIG_PACKAGE_libradiusclient-ng) += radiusclient-ng
+package-$(CONFIG_PACKAGE_libreadline) += readline
+package-$(CONFIG_PACKAGE_librrd) += rrdtool
+package-$(CONFIG_PACKAGE_librrd1) += rrdtool-1.0.x
+package-$(CONFIG_PACKAGE_librsync) += librsync
+package-$(CONFIG_PACKAGE_libsablevm-classpath) += sablevm-classpath
+prereq-$(CONFIG_PACKAGE_libsablevm-classpath) += sablevm-classpath
+package-$(CONFIG_PACKAGE_libsasl2) += cyrus-sasl
+package-$(CONFIG_PACKAGE_libspeex) += speex
+package-$(CONFIG_PACKAGE_libsqlite2) += sqlite2
+package-$(CONFIG_PACKAGE_libsqlite3) += sqlite3
+package-$(CONFIG_PACKAGE_libtasn1) += libtasn1
+package-$(CONFIG_PACKAGE_libupnp) += libupnp
+package-$(CONFIG_PACKAGE_libusb) += libusb
+package-$(CONFIG_PACKAGE_libvorbisidec) += libvorbisidec
+package-$(CONFIG_PACKAGE_libwrap) += tcp_wrappers
+package-$(CONFIG_PACKAGE_libxml2) += libxml2
+package-$(CONFIG_PACKAGE_libxslt) += libxslt
+package-$(CONFIG_PACKAGE_lighttpd) += lighttpd
+package-$(CONFIG_PACKAGE_lighttpd-mod-accesslog) += lighttpd
+package-$(CONFIG_PACKAGE_lighttpd-mod-alias) += lighttpd
+package-$(CONFIG_PACKAGE_lighttpd-mod-auth) += lighttpd
+package-$(CONFIG_PACKAGE_lighttpd-mod-cgi) += lighttpd
+package-$(CONFIG_PACKAGE_lighttpd-mod-evasive) += lighttpd
+package-$(CONFIG_PACKAGE_lighttpd-mod-expire) += lighttpd
+package-$(CONFIG_PACKAGE_lighttpd-mod-fastcgi) += lighttpd
+package-$(CONFIG_PACKAGE_lighttpd-mod-proxy) += lighttpd
+package-$(CONFIG_PACKAGE_lighttpd-mod-redirect) += lighttpd
+package-$(CONFIG_PACKAGE_lighttpd-mod-rewrite) += lighttpd
+package-$(CONFIG_PACKAGE_lighttpd-mod-setenv) += lighttpd
+package-$(CONFIG_PACKAGE_lighttpd-mod-simple-vhost) += lighttpd
+package-$(CONFIG_PACKAGE_lighttpd-mod-ssi) += lighttpd
+package-$(CONFIG_PACKAGE_lighttpd-mod-status) += lighttpd
+package-$(CONFIG_PACKAGE_lighttpd-mod-usertrack) += lighttpd
+package-$(CONFIG_PACKAGE_lighttpd-mod-webdav) += lighttpd
+package-$(CONFIG_PACKAGE_lilo) += lilo
+prereq-$(CONFIG_PACKAGE_lilo) += lilo
+package-$(CONFIG_PACKAGE_linux-atm) += linux-atm
+prereq-$(CONFIG_PACKAGE_linux-atm) += linux-atm
+package-$(CONFIG_PACKAGE_logrotate) += logrotate
+package-$(CONFIG_PACKAGE_losetup) += util-linux
+package-$(CONFIG_PACKAGE_lrzsz) += lrzsz
+package-$(CONFIG_PACKAGE_lua) += lua
+package-$(CONFIG_PACKAGE_lua-examples) += lua
+package-$(CONFIG_PACKAGE_luac) += lua
+package-$(CONFIG_PACKAGE_macchanger) += macchanger
+package-$(CONFIG_PACKAGE_madplay) += madplay
+package-$(CONFIG_PACKAGE_maradns) += maradns
+package-$(CONFIG_PACKAGE_matrixtunnel) += matrixtunnel
+package-$(CONFIG_PACKAGE_mgetty) += mgetty
+package-$(CONFIG_PACKAGE_miau) += miau
+package-$(CONFIG_PACKAGE_miax) += miax
+package-$(CONFIG_PACKAGE_microcom) += microcom
+package-$(CONFIG_PACKAGE_microperl) += perl
+package-$(CONFIG_PACKAGE_mini-httpd) += mini_httpd
+package-$(CONFIG_PACKAGE_mini-httpd-htpasswd) += mini_httpd
+package-$(CONFIG_PACKAGE_mini-httpd-matrixssl) += mini_httpd
+package-$(CONFIG_PACKAGE_mini-httpd-openssl) += mini_httpd
+package-$(CONFIG_PACKAGE_mini-sendmail) += mini_sendmail
+package-$(CONFIG_PACKAGE_minicom) += minicom
+package-$(CONFIG_PACKAGE_miredo-client) += miredo
+package-$(CONFIG_PACKAGE_miredo-server) += miredo
+package-$(CONFIG_PACKAGE_monit) += monit
+package-$(CONFIG_PACKAGE_monit-nossl) += monit
+package-$(CONFIG_PACKAGE_motion) += motion
+package-$(CONFIG_PACKAGE_mpd) += mpd
+package-$(CONFIG_PACKAGE_mrd6) += mrd6
+package-$(CONFIG_PACKAGE_mt-daapd) += mt-daapd
+package-$(CONFIG_PACKAGE_mtd) += mtd
+package-$(CONFIG_PACKAGE_mtr) += mtr
+package-$(CONFIG_PACKAGE_mutt) += mutt
+package-$(CONFIG_PACKAGE_nano) += nano
+package-$(CONFIG_PACKAGE_nas) += broadcom-wl
+package-$(CONFIG_PACKAGE_ndisc6) += ndisc
+package-$(CONFIG_PACKAGE_netperf) += netperf
+package-$(CONFIG_PACKAGE_netstat-nat) += netstat-nat
+package-$(CONFIG_PACKAGE_nfs-kernel-server) += nfs-kernel-server
+package-$(CONFIG_PACKAGE_nfs-kernel-server-utils) += nfs-kernel-server
+package-$(CONFIG_PACKAGE_nfs-server) += nfs-server
+package-$(CONFIG_PACKAGE_nmap) += nmap
+package-$(CONFIG_PACKAGE_nocatsplash) += nocatsplash
+package-$(CONFIG_PACKAGE_ntpclient) += ntpclient
+package-$(CONFIG_PACKAGE_nvram) += nvram
+package-$(CONFIG_PACKAGE_oidentd) += oidentd
+package-$(CONFIG_PACKAGE_olsrd) += olsrd
+package-$(CONFIG_PACKAGE_olsrd-mod-dot-draw) += olsrd
+package-$(CONFIG_PACKAGE_olsrd-mod-dyn-gw) += olsrd
+package-$(CONFIG_PACKAGE_olsrd-mod-httpinfo) += olsrd
+package-$(CONFIG_PACKAGE_olsrd-mod-nameservice) += olsrd
+package-$(CONFIG_PACKAGE_olsrd-mod-power) += olsrd
+package-$(CONFIG_PACKAGE_olsrd-mod-secure) += olsrd
+package-$(CONFIG_PACKAGE_olsrd-mod-tas) += olsrd
+package-$(CONFIG_PACKAGE_openldap-utils) += openldap
+package-$(CONFIG_PACKAGE_openntpd) += openntpd
+package-$(CONFIG_PACKAGE_openser) += openser
+package-$(CONFIG_PACKAGE_openser-mod-acc) += openser
+package-$(CONFIG_PACKAGE_openser-mod-auth) += openser
+package-$(CONFIG_PACKAGE_openser-mod-auth-db) += openser
+package-$(CONFIG_PACKAGE_openser-mod-auth-radius) += openser
+package-$(CONFIG_PACKAGE_openser-mod-avp-radius) += openser
+package-$(CONFIG_PACKAGE_openser-mod-avpops) += openser
+package-$(CONFIG_PACKAGE_openser-mod-dispatcher) += openser
+package-$(CONFIG_PACKAGE_openser-mod-diversion) += openser
+package-$(CONFIG_PACKAGE_openser-mod-flatstore) += openser
+package-$(CONFIG_PACKAGE_openser-mod-gflags) += openser
+package-$(CONFIG_PACKAGE_openser-mod-group) += openser
+package-$(CONFIG_PACKAGE_openser-mod-group-radius) += openser
+package-$(CONFIG_PACKAGE_openser-mod-lcr) += openser
+package-$(CONFIG_PACKAGE_openser-mod-mediaproxy) += openser
+package-$(CONFIG_PACKAGE_openser-mod-msilo) += openser
+package-$(CONFIG_PACKAGE_openser-mod-mysql) += openser
+package-$(CONFIG_PACKAGE_openser-mod-nathelper) += openser
+package-$(CONFIG_PACKAGE_openser-mod-options) += openser
+package-$(CONFIG_PACKAGE_openser-mod-pdt) += openser
+package-$(CONFIG_PACKAGE_openser-mod-permissions) += openser
+package-$(CONFIG_PACKAGE_openser-mod-pike) += openser
+package-$(CONFIG_PACKAGE_openser-mod-sms) += openser
+package-$(CONFIG_PACKAGE_openser-mod-speeddial) += openser
+package-$(CONFIG_PACKAGE_openser-mod-uac) += openser
+package-$(CONFIG_PACKAGE_openser-mod-uac-redirect) += openser
+package-$(CONFIG_PACKAGE_openser-mod-uri) += openser
+package-$(CONFIG_PACKAGE_openser-mod-uri-db) += openser
+package-$(CONFIG_PACKAGE_openser-mod-uri-radius) += openser
+package-$(CONFIG_PACKAGE_openser-mod-xlog) += openser
+package-$(CONFIG_PACKAGE_openssh-client) += openssh
+package-$(CONFIG_PACKAGE_openssh-client-utils) += openssh
+package-$(CONFIG_PACKAGE_openssh-server) += openssh
+package-$(CONFIG_PACKAGE_openssh-sftp-client) += openssh
+package-$(CONFIG_PACKAGE_openssh-sftp-server) += openssh
+package-$(CONFIG_PACKAGE_openssl-util) += openssl
+package-$(CONFIG_PACKAGE_openswan) += openswan
+package-$(CONFIG_PACKAGE_openvpn) += openvpn
+package-$(CONFIG_PACKAGE_openvpn-easy-rsa) += openvpn
+package-$(CONFIG_PACKAGE_osirisd) += osiris
+package-$(CONFIG_PACKAGE_p910nd) += p910nd
+package-$(CONFIG_PACKAGE_palantir) += palantir
+package-$(CONFIG_PACKAGE_parprouted) += parprouted
+package-$(CONFIG_PACKAGE_pciutils) += pciutils
+package-$(CONFIG_PACKAGE_pcmcia-cs) += pcmcia-cs
+package-$(CONFIG_PACKAGE_peercast) += peercast
+package-$(CONFIG_PACKAGE_peerguardian) += peerguardian
+package-$(CONFIG_PACKAGE_pgsql-cli) += postgresql
+package-$(CONFIG_PACKAGE_php4) += php4
+package-$(CONFIG_PACKAGE_php4-cgi) += php4
+package-$(CONFIG_PACKAGE_php4-cli) += php4
+package-$(CONFIG_PACKAGE_php4-fastcgi) += php4
+package-$(CONFIG_PACKAGE_php4-mod-curl) += php4
+package-$(CONFIG_PACKAGE_php4-mod-ftp) += php4
+package-$(CONFIG_PACKAGE_php4-mod-gd) += php4
+package-$(CONFIG_PACKAGE_php4-mod-gmp) += php4
+package-$(CONFIG_PACKAGE_php4-mod-ldap) += php4
+package-$(CONFIG_PACKAGE_php4-mod-mysql) += php4
+package-$(CONFIG_PACKAGE_php4-mod-openssl) += php4
+package-$(CONFIG_PACKAGE_php4-mod-pcre) += php4
+package-$(CONFIG_PACKAGE_php4-mod-pgsql) += php4
+package-$(CONFIG_PACKAGE_php4-mod-session) += php4
+package-$(CONFIG_PACKAGE_php4-mod-sockets) += php4
+package-$(CONFIG_PACKAGE_php4-mod-sqlite) += php4
+package-$(CONFIG_PACKAGE_php4-mod-xml) += php4
+package-$(CONFIG_PACKAGE_php5) += php5
+package-$(CONFIG_PACKAGE_php5-cgi) += php5
+package-$(CONFIG_PACKAGE_php5-cli) += php5
+package-$(CONFIG_PACKAGE_php5-fastcgi) += php5
+package-$(CONFIG_PACKAGE_php5-mod-curl) += php5
+package-$(CONFIG_PACKAGE_php5-mod-ftp) += php5
+package-$(CONFIG_PACKAGE_php5-mod-gd) += php5
+package-$(CONFIG_PACKAGE_php5-mod-gmp) += php5
+package-$(CONFIG_PACKAGE_php5-mod-ldap) += php5
+package-$(CONFIG_PACKAGE_php5-mod-mysql) += php5
+package-$(CONFIG_PACKAGE_php5-mod-openssl) += php5
+package-$(CONFIG_PACKAGE_php5-mod-pcre) += php5
+package-$(CONFIG_PACKAGE_php5-mod-pgsql) += php5
+package-$(CONFIG_PACKAGE_php5-mod-session) += php5
+package-$(CONFIG_PACKAGE_php5-mod-sockets) += php5
+package-$(CONFIG_PACKAGE_php5-mod-sqlite) += php5
+package-$(CONFIG_PACKAGE_php5-mod-xml) += php5
+package-$(CONFIG_PACKAGE_picocom) += picocom
+package-$(CONFIG_PACKAGE_pipacs) += pipacs
+package-$(CONFIG_PACKAGE_portmap) += portmap
+package-$(CONFIG_PACKAGE_portsentry) += portsentry
+package-$(CONFIG_PACKAGE_ppp) += ppp
+package-$(CONFIG_PACKAGE_ppp-mod-pppoa) += ppp
+package-$(CONFIG_PACKAGE_ppp-mod-pppoe) += ppp
+package-$(CONFIG_PACKAGE_ppp-mod-radius) += ppp
+package-$(CONFIG_PACKAGE_pppdump) += ppp
+package-$(CONFIG_PACKAGE_pppstats) += ppp
+package-$(CONFIG_PACKAGE_pptp) += pptp
+package-$(CONFIG_PACKAGE_pptpd) += pptpd
+package-$(CONFIG_PACKAGE_privoxy) += privoxy
+package-$(CONFIG_PACKAGE_procmail) += procmail
+package-$(CONFIG_PACKAGE_psybnc) += psybnc
+package-$(CONFIG_PACKAGE_ptunnel) += ptunnel
+package-$(CONFIG_PACKAGE_pwlib) += pwlib
+package-$(CONFIG_PACKAGE_python) += python
+package-$(CONFIG_PACKAGE_qos-scripts) += qos-scripts
+package-$(CONFIG_PACKAGE_quagga) += quagga
+package-$(CONFIG_PACKAGE_quagga-bgpd) += quagga
+package-$(CONFIG_PACKAGE_quagga-isisd) += quagga
+package-$(CONFIG_PACKAGE_quagga-libospf) += quagga
+package-$(CONFIG_PACKAGE_quagga-libzebra) += quagga
+package-$(CONFIG_PACKAGE_quagga-ospf6d) += quagga
+package-$(CONFIG_PACKAGE_quagga-ospfd) += quagga
+package-$(CONFIG_PACKAGE_quagga-ripd) += quagga
+package-$(CONFIG_PACKAGE_quagga-ripngd) += quagga
+package-$(CONFIG_PACKAGE_quagga-vtysh) += quagga
+package-$(CONFIG_PACKAGE_raddump) += raddump
+package-$(CONFIG_PACKAGE_radiusclient-ng) += radiusclient-ng
+package-$(CONFIG_PACKAGE_radvd) += radvd
+package-$(CONFIG_PACKAGE_rarpd) += rarpd
+package-$(CONFIG_PACKAGE_rdiff-backup) += rdiff-backup
+package-$(CONFIG_PACKAGE_rdisc6) += ndisc
+package-$(CONFIG_PACKAGE_reaim) += reaim
+package-$(CONFIG_PACKAGE_robocfg) += robocfg
+package-$(CONFIG_PACKAGE_roofnet) += click
+package-$(CONFIG_PACKAGE_rp-l2tpd) += rp-l2tp
+package-$(CONFIG_PACKAGE_rp-l2tpd-mod-cmd) += rp-l2tp
+package-$(CONFIG_PACKAGE_rp-l2tpd-mod-ppp) += rp-l2tp
+package-$(CONFIG_PACKAGE_rp-pppoe-client) += rp-pppoe
+package-$(CONFIG_PACKAGE_rp-pppoe-relay) += rp-pppoe
+package-$(CONFIG_PACKAGE_rp-pppoe-server) += rp-pppoe
+package-$(CONFIG_PACKAGE_rp-pppoe-sniff) += rp-pppoe
+package-$(CONFIG_PACKAGE_rrdcgi) += rrdtool
+package-$(CONFIG_PACKAGE_rrdcgi1) += rrdtool-1.0.x
+package-$(CONFIG_PACKAGE_rrdcollect) += rrdcollect
+package-$(CONFIG_PACKAGE_rrdcollect-example) += rrdcollect
+package-$(CONFIG_PACKAGE_rrdtool) += rrdtool
+package-$(CONFIG_PACKAGE_rrdtool1) += rrdtool-1.0.x
+package-$(CONFIG_PACKAGE_rrs) += rrs
+package-$(CONFIG_PACKAGE_rrs-nossl) += rrs
+package-$(CONFIG_PACKAGE_rsync) += rsync
+package-$(CONFIG_PACKAGE_sablevm) += sablevm
+package-$(CONFIG_PACKAGE_sablevm-classpath-full) += sablevm-classpath
+prereq-$(CONFIG_PACKAGE_sablevm-classpath-full) += sablevm-classpath
+package-$(CONFIG_PACKAGE_sablevm-classpath-mini) += sablevm-classpath
+prereq-$(CONFIG_PACKAGE_sablevm-classpath-mini) += sablevm-classpath
+package-$(CONFIG_PACKAGE_samba-client) += samba
+package-$(CONFIG_PACKAGE_samba-server) += samba
+package-$(CONFIG_PACKAGE_sane-backends) += sane-backends
+package-$(CONFIG_PACKAGE_sane-libs) += sane-backends
+package-$(CONFIG_PACKAGE_scanlogd) += scanlogd
+package-$(CONFIG_PACKAGE_scdp) += scdp
+package-$(CONFIG_PACKAGE_screen) += screen
+package-$(CONFIG_PACKAGE_send-nsca) += nsca
+package-$(CONFIG_PACKAGE_ser2net) += ser2net
+package-$(CONFIG_PACKAGE_serdisplib) += serdisplib
+package-$(CONFIG_PACKAGE_setpwc) += setpwc
+package-$(CONFIG_PACKAGE_setserial) += setserial
+package-$(CONFIG_PACKAGE_shat) += shat
+package-$(CONFIG_PACKAGE_shfs-utils) += shfs
+package-$(CONFIG_PACKAGE_sipp) += sipp
+package-$(CONFIG_PACKAGE_siproxd) += siproxd
+package-$(CONFIG_PACKAGE_sipsak) += sipsak
+package-$(CONFIG_PACKAGE_slurm) += slurm
+package-$(CONFIG_PACKAGE_snmp-utils) += net-snmp
+package-$(CONFIG_PACKAGE_snmpd) += net-snmp
+package-$(CONFIG_PACKAGE_snmpd-static) += net-snmp
+package-$(CONFIG_PACKAGE_socat) += socat
+package-$(CONFIG_PACKAGE_sox) += sox
+package-$(CONFIG_PACKAGE_sqlite2-cli) += sqlite2
+package-$(CONFIG_PACKAGE_sqlite3-cli) += sqlite3
+package-$(CONFIG_PACKAGE_squid) += squid
+package-$(CONFIG_PACKAGE_squid-mod-basic-auth-getpwnam) += squid
+package-$(CONFIG_PACKAGE_squid-mod-basic-auth-ncsa) += squid
+package-$(CONFIG_PACKAGE_squid-mod-basic-auth-smb) += squid
+package-$(CONFIG_PACKAGE_squid-mod-basic-auth-winbind) += squid
+package-$(CONFIG_PACKAGE_squid-mod-digest-auth-password) += squid
+package-$(CONFIG_PACKAGE_squid-mod-external-acl-ip-user) += squid
+package-$(CONFIG_PACKAGE_squid-mod-external-acl-unix-group) += squid
+package-$(CONFIG_PACKAGE_squid-mod-external-acl-winbind-group) += squid
+package-$(CONFIG_PACKAGE_squid-mod-ntlm-auth-fakeauth) += squid
+package-$(CONFIG_PACKAGE_squid-mod-ntlm-auth-smb-auth) += squid
+package-$(CONFIG_PACKAGE_squid-mod-ntlm-auth-winbind-auth) += squid
+package-$(CONFIG_PACKAGE_srelay) += srelay
+package-$(CONFIG_PACKAGE_ssltunnel) += ssltunnel
+package-$(CONFIG_PACKAGE_ssmtp) += ssmtp
+package-$(CONFIG_PACKAGE_strace) += strace
+package-$(CONFIG_PACKAGE_swap-utils) += util-linux
+package-$(CONFIG_PACKAGE_syslog-ng) += syslog-ng
+package-$(CONFIG_PACKAGE_tc) += iproute2
+package-$(CONFIG_PACKAGE_tcpdump) += tcpdump
+package-$(CONFIG_PACKAGE_tcptraceroute6) += ndisc
+package-$(CONFIG_PACKAGE_tinc) += tinc
+package-$(CONFIG_PACKAGE_tinyproxy) += tinyproxy
+package-$(CONFIG_PACKAGE_tmsnc) += tmsnc
+package-$(CONFIG_PACKAGE_tor) += tor
+package-$(CONFIG_PACKAGE_ttcp) += ttcp
+package-$(CONFIG_PACKAGE_uclibc) += base-files
+package-$(CONFIG_PACKAGE_uclibcxx) += uclibc++
+package-$(CONFIG_PACKAGE_udev) += udev
+package-$(CONFIG_PACKAGE_udp-broadcast-relay) += udp-broadcast-relay
+package-$(CONFIG_PACKAGE_ulogd) += ulogd
+package-$(CONFIG_PACKAGE_ulogd-mod-extra) += ulogd
+package-$(CONFIG_PACKAGE_ulogd-mod-mysql) += ulogd
+package-$(CONFIG_PACKAGE_ulogd-mod-pcap) += ulogd
+package-$(CONFIG_PACKAGE_ulogd-mod-pgsql) += ulogd
+package-$(CONFIG_PACKAGE_ulogd-mod-sqlite) += ulogd
+package-$(CONFIG_PACKAGE_uob-nomad) += uob-nomad
+package-$(CONFIG_PACKAGE_updatedd) += updatedd
+package-$(CONFIG_PACKAGE_updatedd-mod-changeip) += updatedd
+package-$(CONFIG_PACKAGE_updatedd-mod-dyndns) += updatedd
+package-$(CONFIG_PACKAGE_updatedd-mod-eurodyndns) += updatedd
+package-$(CONFIG_PACKAGE_updatedd-mod-hn) += updatedd
+package-$(CONFIG_PACKAGE_updatedd-mod-noip) += updatedd
+package-$(CONFIG_PACKAGE_updatedd-mod-ods) += updatedd
+package-$(CONFIG_PACKAGE_updatedd-mod-ovh) += updatedd
+package-$(CONFIG_PACKAGE_updatedd-mod-regfish) += updatedd
+package-$(CONFIG_PACKAGE_updatedd-mod-tzo) += updatedd
+package-$(CONFIG_PACKAGE_usbutils) += usbutils
+package-$(CONFIG_PACKAGE_ustl) += ustl
+package-$(CONFIG_PACKAGE_vgp) += vgp
+package-$(CONFIG_PACKAGE_vim) += vim
+package-$(CONFIG_PACKAGE_vnc-reflector) += vnc-reflector
+package-$(CONFIG_PACKAGE_vncrepeater) += vncrepeater
+package-$(CONFIG_PACKAGE_vnstat) += vnstat
+package-$(CONFIG_PACKAGE_vpnc) += vpnc
+package-$(CONFIG_PACKAGE_vrrpd) += vrrpd
+package-$(CONFIG_PACKAGE_vsftpd) += vsftpd
+package-$(CONFIG_PACKAGE_vtun) += vtun
+package-$(CONFIG_PACKAGE_wccpd) += wccpd
+package-$(CONFIG_PACKAGE_wdiag) += wdiag
+package-$(CONFIG_PACKAGE_weechat) += weechat
+package-$(CONFIG_PACKAGE_wifidog) += wifidog
+package-$(CONFIG_PACKAGE_wireless-tools) += wireless-tools
+package-$(CONFIG_PACKAGE_wiviz) += wiviz
+package-$(CONFIG_PACKAGE_wknock) += wknock
+package-$(CONFIG_PACKAGE_wl) += broadcom-wl
+package-$(CONFIG_PACKAGE_wlc) += broadcom-wl
+package-$(CONFIG_PACKAGE_wpa-cli) += wpa_supplicant
+package-$(CONFIG_PACKAGE_wpa-supplicant) += wpa_supplicant
+package-$(CONFIG_PACKAGE_wput) += wput
+package-$(CONFIG_PACKAGE_wrt-radauth) += wrt-radauth
+package-$(CONFIG_PACKAGE_wx200d) += wx200d
+package-$(CONFIG_PACKAGE_xinetd) += xinetd
+package-$(CONFIG_PACKAGE_xsupplicant) += xsupplicant
+package-$(CONFIG_PACKAGE_yafc) += yafc
+package-$(CONFIG_PACKAGE_yamonenv) += yamonenv
+package-$(CONFIG_PACKAGE_zlib) += zlib
+
+6tunnel-compile:  libpcap-compile
+alsa-lib-compile:  alsa-compile
+alsa-utils-compile:  alsa-lib-compile ncurses-compile
+amwall-compile:  libamsel-compile
+arpd-compile:  libpcap-compile libdnet-compile libevent-compile
+arpwatch-compile:  libpcap-compile
+asterisk-compile:  ncurses-compile
+asterisk-compile:  bluez-libs-compile
+asterisk-compile:  openh323-compile uclibc++-compile
+asterisk-compile:  speex-compile
+asterisk-compile:  mysql-compile
+asterisk-compile:  postgresql-compile
+asterisk-compile:  sqlite2-compile
+atftp-compile:  readline-compile pcre-compile
+autossh-compile:  openssh-compile
+avahi-compile:  libdaemon-compile expat-compile libgdbm-compile
+bind-compile:  openssl-compile
+bitchx-compile:  ncurses-compile
+bitlbee-compile:  openssl-compile glib-compile libiconv-compile
+bluez-utils-compile:  bluez-libs-compile
+bmon-compile:  ncurses-compile
+cbtt-compile:  zlib-compile mysql-compile
+ppp-compile:  libpcap-compile linux-atm-compile
+comgt-compile:  ppp-compile
+ctorrent-compile:  openssl-compile uclibc++-compile
+cups-compile:  zlib-compile
+deco-compile:  ncurses-compile
+dhcp6-compile:  ncurses-compile
+dsl-qos-queue-compile:  iptables-compile
+dsniff-compile:  libpcap-compile libnids-compile libnet-1.0.x-compile openssl-compile libgdbm-compile
+elinks-compile:  openssl-compile
+ettercap-compile:  libpcap-compile libnet-1.1.x-compile openssl-compile pcre-compile libiconv-compile ncurses-compile libtool-compile
+fprobe-compile:  libpcap-compile
+freeradius-compile:  libtool-compile openssl-compile
+freeradius-compile:  openldap-compile
+freeradius-compile:  mysql-compile
+freeradius-compile:  postgresql-compile
+gmediaserver-compile:  id3lib-compile libupnp-compile
+gphoto2-compile:  libexif-compile libgphoto2-compile libtool-compile popt-compile
+gpsd-compile:  uclibc++-compile ncurses-compile libnotimpl-compile
+heyu-compile:  setserial-compile
+hostap-utils-compile:  hostap-compile
+hostapd-compile:  openssl-compile madwifi-compile
+httping-compile:  openssl-compile
+icecast-compile:  curl-compile libvorbisidec-compile libxml2-compile libxslt-compile
+id3lib-compile:  zlib-compile uclibc++-compile
+iftop-compile:  libpcap-compile ncurses-compile
+ipcad-compile:  libpcap-compile
+iperf-compile:  uclibc++-compile
+ipsec-tools-compile:  openssl-compile
+iptables-snmp-compile:  net-snmp-compile
+iptraf-compile:  ncurses-compile
+irssi-compile:  glib-compile ncurses-compile
+isakmpd-compile:  openssl-compile keynote-compile gmp-compile
+jamvm-compile:  libffi-sable-compile
+libjpeg-compile:  libtool-compile
+keynote-compile:  openssl-compile
+kismet-compile:  ncurses-compile uclibc++-compile libpcap-compile
+wlcompat-compile:  broadcom-wl-compile
+knock-compile:  libpcap-compile
+l2tpns-compile:  libcli-compile
+lcd4linux-compile:  ncurses-compile
+lft-compile:  libpcap-compile
+libao-compile:  alsa-lib-compile
+axtls-compile:  libgdbm-compile
+curl-compile:  openssl-compile zlib-compile
+db-compile:  libxml2-compile
+freetype-compile:  zlib-compile
+libgcrypt-compile:  libgpg-error-compile
+gd-compile:  libjpeg-compile libpng-compile
+gnutls-compile:  libgcrypt-compile
+libgphoto2-compile:  libusb-compile libexif-compile libjpeg-compile libtool-compile
+libid3tag-compile:  zlib-compile
+mysql-compile:  zlib-compile ncurses-compile readline-compile
+libnet-1.0.x-compile:  libpcap-compile
+libnet-1.1.x-compile:  libpcap-compile
+net-snmp-compile:  libelf-compile
+libnids-compile:  libnet-1.0.x-compile
+opencdk-compile:  libgcrypt-compile
+openh323-compile:  pwlib-compile uclibc++-compile
+openldap-compile:  openssl-compile cyrus-sasl-compile
+openssl-compile:  zlib-compile
+libpng-compile:  zlib-compile
+postgresql-compile:  zlib-compile
+rrdtool-compile:  libart-compile freetype-compile libpng-compile zlib-compile
+rrdtool-1.0.x-compile:  zlib-compile
+cyrus-sasl-compile:  openssl-compile
+sqlite2-compile:  ncurses-compile readline-compile
+sqlite3-compile:  ncurses-compile readline-compile
+libxml2-compile:  zlib-compile
+libxslt-compile:  libxml2-compile
+lighttpd-compile:  openssl-compile pcre-compile sqlite3-compile libxml2-compile
+logrotate-compile:  popt-compile
+madplay-compile:  libid3tag-compile libmad-compile
+matrixtunnel-compile:  matrixssl-compile
+miax-compile:  bluez-libs-compile
+mini_httpd-compile:  matrixssl-compile
+mini_httpd-compile:  openssl-compile
+minicom-compile:  ncurses-compile
+miredo-compile:  uclibc++-compile
+monit-compile:  openssl-compile
+motion-compile:  libjpeg-compile
+mpd-compile:  flac-compile libid3tag-compile libmad-compile libvorbisidec-compile
+mrd6-compile:  uclibc++-compile libnotimpl-compile
+mt-daapd-compile:  libgdbm-compile howl-compile libid3tag-compile
+mtr-compile:  ncurses-compile
+mutt-compile:  openssl-compile ncurses-compile
+nano-compile:  ncurses-compile
+broadcom-wl-compile:  nvram-compile
+nfs-server-compile:  portmap-compile
+nmap-compile:  libdnet-compile libpcap-compile pcre-compile uclibc++-compile
+nocatsplash-compile:  glib-compile
+openser-compile:  radiusclient-ng-compile
+openser-compile:  mysql-compile
+openssh-compile:  openssl-compile zlib-compile
+openswan-compile:  gmp-compile
+openvpn-compile:  openssl-compile lzo-compile
+osiris-compile:  openssl-compile
+palantir-compile:  libjpeg-compile
+peercast-compile:  uclibc++-compile
+peerguardian-compile:  ncurses-compile iptables-compile
+php4-compile:  openssl-compile zlib-compile
+php4-compile:  curl-compile
+php4-compile:  gd-compile
+php4-compile:  gmp-compile
+php4-compile:  openldap-compile
+php4-compile:  mysql-compile
+php4-compile:  pcre-compile
+php4-compile:  postgresql-compile
+php4-compile:  sqlite2-compile
+php4-compile:  expat-compile
+php5-compile:  openssl-compile zlib-compile
+php5-compile:  curl-compile
+php5-compile:  gd-compile
+php5-compile:  gmp-compile
+php5-compile:  openldap-compile
+php5-compile:  mysql-compile
+php5-compile:  pcre-compile
+php5-compile:  postgresql-compile
+php5-compile:  sqlite2-compile
+php5-compile:  expat-compile
+portmap-compile:  tcp_wrappers-compile
+privoxy-compile:  pcre-compile
+ptunnel-compile:  libpcap-compile
+pwlib-compile:  uclibc++-compile
+python-compile:  uclibc++-compile
+qos-scripts-compile:  iproute2-compile iptables-compile
+quagga-compile:  readline-compile ncurses-compile
+raddump-compile:  libpcap-compile openssl-compile
+rarpd-compile:  libnet-1.0.x-compile
+rdiff-backup-compile:  librsync-compile python-compile
+reaim-compile:  iptables-compile
+rp-pppoe-compile:  ppp-compile
+rrdtool-compile:  cgilib-compile
+rrdcollect-compile:  rrdtool-1.0.x-compile
+rrs-compile:  uclibc++-compile openssl-compile
+rsync-compile:  popt-compile
+sablevm-compile:  libffi-sable-compile libtool-compile popt-compile zlib-compile
+scanlogd-compile:  libpcap-compile libnet-1.0.x-compile libnids-compile
+scdp-compile:  libnet-1.0.x-compile
+screen-compile:  ncurses-compile
+nsca-compile:  libmcrypt-compile
+sipp-compile:  uclibc++-compile ncurses-compile
+siproxd-compile:  libosip2-compile
+slurm-compile:  ncurses-compile
+socat-compile:  openssl-compile
+sox-compile:  flac-compile libid3tag-compile libmad-compile libvorbisidec-compile libnotimpl-compile
+squid-compile:  openssl-compile
+ssltunnel-compile:  ppp-compile openssl-compile
+syslog-ng-compile:  libol-compile
+tcpdump-compile:  libpcap-compile
+tinc-compile:  lzo-compile openssl-compile zlib-compile
+tmsnc-compile:  ncurses-compile openssl-compile
+tor-compile:  libevent-compile openssl-compile zlib-compile
+ulogd-compile:  iptables-compile
+ulogd-compile:  mysql-compile
+ulogd-compile:  libpcap-compile
+ulogd-compile:  postgresql-compile
+ulogd-compile:  sqlite3-compile
+usbutils-compile:  libusb-compile
+vim-compile:  ncurses-compile
+vnc-reflector-compile:  libjpeg-compile zlib-compile
+vncrepeater-compile:  uclibc++-compile
+vpnc-compile:  libgpg-error-compile libgcrypt-compile
+vtun-compile:  lzo-compile openssl-compile zlib-compile
+weechat-compile:  ncurses-compile lua-compile gnutls-compile
+wifidog-compile:  iptables-compile
+wiviz-compile:  libpcap-compile
+wknock-compile:  broadcom-wl-compile libpcap-compile
+wpa_supplicant-compile:  openssl-compile
+wrt-radauth-compile:  broadcom-wl-compile nvram-compile
+wx200d-compile:  postgresql-compile
+xsupplicant-compile:  openssl-compile wireless-tools-compile madwifi-compile
+yafc-compile:  ncurses-compile readline-compile

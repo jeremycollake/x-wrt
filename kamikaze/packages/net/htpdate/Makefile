@@ -1,0 +1,53 @@
+#
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id: Makefile 5624 2006-11-23 00:29:07Z nbd $
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=htpdate
+PKG_VERSION:=0.9.0
+PKG_RELEASE:=1
+
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.clevervest.com/htp/archive/c/
+PKG_MD5SUM:=12cf883c5619cf4c13a62f77f1a55b54
+PKG_CAT:=zcat
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/htpdate
+  SECTION:=net
+  CATEGORY:=Network
+  TITLE:=an HTP (Hypertext Time Protocol) implementation
+  URL:=http://www.clevervest.com/htp/
+endef
+
+define Package/htpdate/conffiles
+/etc/default/htpdate
+endef
+
+define Build/Compile	
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		$(TARGET_CONFIGURE_OPTS) \
+		CFLAGS="$(TARGET_CFLAGS)"
+endef
+
+
+define Package/htpdate/install	
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/htpdate $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/etc/default/
+	$(INSTALL_DATA) ./files/htpdate.default $(1)/etc/default/htpdate
+	$(INSTALL_DIR) $(1)/etc/init.d/
+	$(INSTALL_BIN) ./files/htpdate.init $(1)/etc/init.d/htpdate
+endef
+
+$(eval $(call BuildPackage,htpdate))
+

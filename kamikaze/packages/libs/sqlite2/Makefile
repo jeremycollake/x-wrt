@@ -1,0 +1,107 @@
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id: Makefile 5624 2006-11-23 00:29:07Z nbd $
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=sqlite2
+PKG_VERSION:=2.8.17
+PKG_RELEASE:=1
+
+PKG_SOURCE:=sqlite-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.sqlite.org/
+PKG_MD5SUM:=838dbac20b56d2c4292e98848505a05b
+PKG_CAT:=zcat
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/sqlite-$(PKG_VERSION)
+PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+
+PKG_BUILDDEP:=libncurses libreadline
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/sqlite2/Default
+  TITLE:=SQLite (v2.x) database engine
+  DESCRIPTION:=\
+	SQLite is a small C library that implements a self-contained, embeddable, \\\
+	zero-configuration SQL database engine.
+  URL:=http://www.sqlite.org/
+endef
+
+define Package/libsqlite2
+  $(call Package/sqlite2/Default)
+  SECTION:=libs
+  CATEGORY:=Libraries
+  TITLE+= (library)
+  DESCRIPTION+=\\\
+	\\\
+	This package contains the SQLite (v2.x) shared library, used by other programs.
+endef
+
+define Package/sqlite2-cli
+  $(call Package/sqlite2/Default)
+  SECTION:=utils
+  CATEGORY:=Utilities
+  DEPENDS:=+libsqlite2 +libncurses +libreadline
+  TITLE+= (cli)
+  DESCRIPTION+=\\\
+	\\\
+	This package contains a terminal-based front-end to the SQLite (v2.x) library \\\
+	that can evaluate queries interactively and display the results in \\\
+	multiple formats.
+endef
+
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--enable-shared \
+		--enable-static \
+		, \
+		config_BUILD_CC="$(HOSTCC)" \
+		config_BUILD_CFLAGS="-O2" \
+		config_TARGET_CC="$(TARGET_CC)" \
+		config_TARGET_CFLAGS="$(TARGET_CFLAGS)" \
+		config_TARGET_READLINE_INC="-I$(STAGING_DIR)/usr/include" \
+		config_TARGET_READLINE_LIBS="-L$(STAGING_DIR)/usr/lib -lreadline -lncurses" \
+		config_TARGET_TCL_INC="-DNO_TCL=1" \
+	)
+endef
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
+endef
+
+define Build/InstallDev
+	mkdir -p $(STAGING_DIR)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/sqlite.h $(STAGING_DIR)/usr/include/
+	mkdir -p $(STAGING_DIR)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsqlite.{a,so*} $(STAGING_DIR)/usr/lib/
+	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/sqlite.pc $(STAGING_DIR)/usr/lib/pkgconfig/
+	$(SED) 's,-I$$$${includedir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/sqlite.pc
+	$(SED) 's,-L$$$${libdir},,g' $(STAGING_DIR)/usr/lib/pkgconfig/sqlite.pc
+endef
+
+define Build/UninstallDev
+	rm -rf	$(STAGING_DIR)/usr/include/sqlite.h \
+		$(STAGING_DIR)/usr/lib/libsqlite.{a,so*} \
+		$(STAGING_DIR)/usr/lib/pkgconfig/sqlite.pc
+endef
+
+define Package/libsqlite2/install
+	$(INSTALL_DIR) $(1)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsqlite.so.* $(1)/usr/lib/
+endef
+
+define Package/sqlite2-cli/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/sqlite $(1)/usr/bin/
+endef
+
+$(eval $(call BuildPackage,libsqlite2))
+$(eval $(call BuildPackage,sqlite2-cli))

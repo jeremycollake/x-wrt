@@ -1,0 +1,65 @@
+#
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id: Makefile 5624 2006-11-23 00:29:07Z nbd $
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=comgt
+PKG_VERSION:=0.3
+PKG_RELEASE:=1
+
+PKG_SOURCE:=$(PKG_NAME)$(PKG_VERSION).tgz
+PKG_SOURCE_URL:=http://www.pharscape.org/3G/comgt
+PKG_MD5SUM:=cd32663025ed94a0ee623a689989f3c3
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_UNPACK:=mkdir -p $(PKG_BUILD_DIR); zcat $(DL_DIR)/$(PKG_SOURCE) | $(TAR) -C $(PKG_BUILD_DIR) $(TAR_OPTIONS)
+
+include $(INCLUDE_DIR)/package.mk
+
+
+define Package/comgt
+  SECTION:=utils
+  CATEGORY:=Utilities
+  TITLE:=Option/Vodafone 3G/GPRS control tool
+  DEPENDS:=+chat
+  DESCRIPTION:=\
+	comgt is a scripting language interpreter useful for establishing communications \\\
+	on serial lines and through PCMCIA modems as well as GPRS and 3G datacards.
+  URL:= http://www.pharscape.org/content/view/46/70/
+endef
+
+
+define Build/Compile
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		$(TARGET_CONFIGURE_OPTS) \
+		CFLAGS="$(TARGET_CFLAGS)" \
+		gcom
+endef
+	
+define Package/comgt/install
+	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/gcom $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc/ppp
+	$(INSTALL_BIN) ./files/3g.connect $(1)/etc/ppp/3g.connect
+	$(INSTALL_DIR) $(1)/etc/chatscripts
+	$(INSTALL_DATA) ./files/3g.chat $(1)/etc/chatscripts/3g.chat
+	$(INSTALL_DIR) $(1)/lib/network
+	$(INSTALL_DATA) ./files/3g.sh $(1)/lib/network/3g.sh
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/button
+	$(INSTALL_DATA) ./files/3g.button $(1)/etc/hotplug.d/button/05-3g
+	$(INSTALL_DIR) $(1)/etc/hotplug.d/iface
+	$(INSTALL_DATA) ./files/3g.iface $(1)/etc/hotplug.d/iface/05-3g
+	$(INSTALL_DIR) $(1)/etc/gcom
+	$(INSTALL_DATA) ./files/setpin.gcom $(1)/etc/gcom/setpin.gcom
+	$(INSTALL_DATA) ./files/setmode.gcom $(1)/etc/gcom/setmode.gcom
+	$(INSTALL_DATA) ./files/getcardinfo.gcom $(1)/etc/gcom/getcardinfo.gcom
+	$(INSTALL_DATA) ./files/getstrength.gcom $(1)/etc/gcom/getstrength.gcom
+endef
+
+$(eval $(call BuildPackage,comgt))
+

@@ -1,0 +1,17 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+
+DEFAULT=/etc/default/asterisk
+OPTIONS=""
+
+start() {
+	[ -f $DEFAULT ] && . $DEFAULT
+	[ -d /var/run ] || mkdir -p /var/run
+	[ -d /var/log/asterisk ] || mkdir -p /var/log/asterisk
+	[ -d /var/spool/asterisk ] || mkdir -p /var/spool/asterisk
+	/usr/sbin/asterisk $OPTIONS
+}
+
+stop() {
+	[ -f /var/run/asterisk.pid ] && kill $(cat /var/run/asterisk.pid) >/dev/null 2>&1
+}
