@@ -119,7 +119,8 @@ endef
 
 define Package/webif/install
 	$(CP) -a ./files/* $(1)/
-	$(CP) -a ./ipkg/*inst $(1)/CONTROL/
+	$(CP) -a ./ipkg/webif.preinst $(1)/CONTROL/preinst
+	$(CP) -a ./ipkg/webif.postinst $(1)/CONTROL/postinst
 	chmod -R 755 $(1)/*
 	rm -rf $(1)/usr/lib/webif/lang/
 	rm -f $(1)/www/cgi-bin/webif/*.wip
