@@ -17,7 +17,7 @@ define Package/webif
   TITLE:=Webif
   DESCRIPTION:=\
 	This package contains Webif^2
-  VERSION:=$(LINUX_VERSION)+$(PKG_VERSION)-$(PKG_RELEASE)
+  VERSION:=$(LINUX_VERSION) $(PKG_VERSION)-$(PKG_RELEASE)
 endef
 
 define Package/WEBIF-LANG-CA
