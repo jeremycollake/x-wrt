@@ -118,39 +118,39 @@ $(call Package/webif)
 endef
 
 define Build/Prepare
-        $(call Build/Prepare/Default)
-        $(CP) src/* $(PKG_BUILD_DIR)/
+	$(call Build/Prepare/Default)
+	$(CP) src/* $(PKG_BUILD_DIR)/
 endef
 
 define Build/Compile
-        $(TARGET_CC) $(TARGET_CFLAGS) \
-                -D_METAPACK \
-                $(TARGET_CFLAGS_EXTRA) \
-                $(TARGET_LDFLAGS) \
-                -o $(PKG_BUILD_DIR)/webifmetabin \
-                src/int2human/main.c src/int2human/human_readable.c \
-                src/wepkeygen/keygen.c src/wepkeygen/md5.c \
-                src/webif-page.c src/bstrip.c src/webifmetabin.c
-        $(STRIP) $(PKG_BUILD_DIR)/webifmetabin
+	$(TARGET_CC) $(TARGET_CFLAGS) \
+		-D_METAPACK \
+		$(TARGET_CFLAGS_EXTRA) \
+		$(TARGET_LDFLAGS) \
+		-o $(PKG_BUILD_DIR)/webifmetabin \
+		src/int2human/main.c src/int2human/human_readable.c \
+		src/wepkeygen/keygen.c src/wepkeygen/md5.c \
+		src/webif-page.c src/bstrip.c src/webifmetabin.c
+	$(STRIP) $(PKG_BUILD_DIR)/webifmetabin
 endef
 
 define Package/webif/install
-        $(CP) -a ./files/* $(1)/
-        $(CP) -a ./ipkg/*inst $(1)/CONTROL/
-        chmod -R 755 $(1)/*
-        rm -rf $(1)/usr/lib/webif/lang/
-        rm -f $(1)/www/cgi-bin/webif/*.wip
-        ./embed_rev.sh $(1)/www/.version \
-                        $(1)/usr/lib/webif/webif.sh \
-                        $(1)/etc/init.d/* \
-                        $(1)/www/cgi-bin/webif/*
-        chmod 777 $(1)/CONTROL/*inst
-        ./embed_rev.sh $(1)/CONTROL/*inst
-        chmod 755 $(1)/CONTROL/*inst
-        mkdir -p $(1)/usr/bin
-        $(INSTALL_BIN) $(PKG_BUILD_DIR)/webifmetabin $(1)/usr/bin/webifmetabin
-        find $(1) -name CVS | xargs rm -rf
-        find $(1) -name .svn | xargs rm -rf
+	$(CP) -a ./files/* $(1)/
+	$(CP) -a ./ipkg/*inst $(1)/CONTROL/
+	chmod -R 755 $(1)/*
+	rm -rf $(1)/usr/lib/webif/lang/
+	rm -f $(1)/www/cgi-bin/webif/*.wip
+	./embed_rev.sh $(1)/www/.version \
+			$(1)/usr/lib/webif/webif.sh \
+			$(1)/etc/init.d/* \
+			$(1)/www/cgi-bin/webif/*
+	chmod 777 $(1)/CONTROL/*inst
+	./embed_rev.sh $(1)/CONTROL/*inst
+	chmod 755 $(1)/CONTROL/*inst
+	mkdir -p $(1)/usr/bin
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/webifmetabin $(1)/usr/bin/webifmetabin
+	find $(1) -name CVS | xargs rm -rf
+	find $(1) -name .svn | xargs rm -rf
 endef
 
 define Package/WEBIF_LANG_CA/install
