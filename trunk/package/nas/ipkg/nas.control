@@ -1,0 +1,8 @@
+Package: nas
+Priority: optional
+Section: net
+Maintainer: Felix Fietkau <nbd@openwrt.org>
+Source: N/A
+Description: Proprietary Broadcom WPA Authenticator/Supplicant
+Version: 3.90.37-17
+Architecture: mipsel

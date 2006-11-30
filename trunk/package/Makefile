@@ -69,6 +69,7 @@ package-$(BR2_PACKAGE_MONIT) += monit
 package-$(BR2_PACKAGE_MTD) += mtd
 package-$(BR2_PACKAGE_MYSQL) += mysql
 package-$(BR2_PACKAGE_NANO) += nano
+package-$(BR2_PACKAGE_NAS) += nas
 package-$(BR2_PACKAGE_NCURSES) += ncurses
 package-$(BR2_PACKAGE_NDISC) += ndisc
 package-$(BR2_PACKAGE_NET_SNMP) += net-snmp

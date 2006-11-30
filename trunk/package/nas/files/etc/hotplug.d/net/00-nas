@@ -1,0 +1,55 @@
+#!/bin/sh
+
+nasrunning() {
+	[ -f "/var/run/nas.lan.pid" ] && {
+		kill -0 $(cat /var/run/nas.lan.pid 2>/dev/null)
+	}
+	return
+}
+
+nas4not() {
+	nasrunning || /etc/init.d/S??wpa start
+
+	[ -e /tmp/.nas_wait ] && {
+		# Wait - nas dosn't always accept registration immediately
+		sleep 10
+	}
+
+	/usr/sbin/nas4not $@
+	# wait for a second before adding the interface to the bridge
+	sleep 1
+}
+
+[ "${INTERFACE%%[0-9]*}" = "wds" -a "$ACTION" = "register" ] && { 
+	[ -x "/usr/sbin/nas4not" ] && {
+		crypto="$(nvram get wl0_${INTERFACE}_crypto)"
+		crypto="${crypto:-$(nvram get wl0_wds_crypto)}"
+		crypto="${crypto:-$(nvram get wl0_crypto)}"
+		[ "${crypto}" = "" ] || {
+			wifi_ifname="$(nvram get wl0_ifname)"
+			wifi_ifname="${wifi_interface:-eth1}"
+			auth_mode="$(nvram get wl0_${INTERFACE}_akm)"
+			auth_mode="${auth_mode:-$(nvram get wl0_wds_akm)}"
+			auth_mode="${auth_mode:-$(nvram get wl0_wds_auth_mode)}"
+			auth_mode="${auth_mode:-$(nvram get wl0_akm)}"
+			auth_mode="${auth_mode:-$(nvram get wl0_auth_mode)}"
+			ssid="$(nvram get wl0_${INTERFACE}_ssid)"
+			ssid="${ssid:-$(nvram get wl0_wds_ssid)}"
+			ssid="${ssid:-$(nvram get wl0_ssid)}"
+			gtk_rekey="$(nvram get wl0_${INTERFACE}_wpa_gtk_rekey)"
+			gtk_rekey="${gtk_rekey:-$(nvram get wl0_wds_wpa_gtk_rekey)}"
+			gtk_rekey="${gtk_rekey:-$(nvram get wl0_wpa_gtk_rekey)}"
+			gtk_rekey="${gtk_rekey:-3600}"
+			# Need to add support for radius auth_mode if that is possible on wds
+			[ "${auth_mode%%[2 ]*}" = "psk" ] && {
+				psk="$(nvram get wl0_${INTERFACE}_wpa_psk)"
+				psk="${psk:-$(nvram get wl0_wds_wpa_psk)}"
+				psk="${psk:-$(nvram get wl0_wpa_psk)}"
+				ifconfig $INTERFACE 0.0.0.0 up
+				nas4not lan $INTERFACE up auto "$crypto" "$auth_mode" "$psk" "$ssid"
+			} || {
+				echo I do not know how to handle auth_mode=$auth_mode
+			}
+		}
+	}
+}

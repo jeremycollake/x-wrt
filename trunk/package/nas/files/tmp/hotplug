@@ -1,0 +1,9 @@
+#!/bin/sh
+PATH=/bin:/sbin:/usr/bin:/usr/sbin
+[ -f /etc/hotplug.d/net/00-nas ] && . /etc/hotplug.d/net/00-nas
+
+[ "${INTERFACE%%[0-9]*}" = "wds" ] && { 
+	ifconfig $INTERFACE 0.0.0.0 up
+	/usr/sbin/brctl addif br0 $INTERFACE
+}
+ 

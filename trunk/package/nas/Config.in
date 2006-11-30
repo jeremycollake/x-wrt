@@ -1,0 +1,5 @@
+config BR2_PACKAGE_NAS
+	tristate "nas - proprietary Broadcom WPA Authenticator/Supplicant"
+	default m
+	help
+	 Proprietary Broadcom WPA Authenticator/Supplicant
