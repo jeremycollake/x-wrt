@@ -1,6 +1,6 @@
 #!/bin/sh
 # don't run the telnetd if dropbear (ssh) is active since
 # it OpenWrt will have disabled the telnetd login anyway.
-[ -f "/etc/dropbear/dropbear_rsa_host_key" ] && {
+[ ! -f "/etc/dropbear/dropbear_rsa_host_key" ] && {
 	telnetd -l /bin/login
 }
