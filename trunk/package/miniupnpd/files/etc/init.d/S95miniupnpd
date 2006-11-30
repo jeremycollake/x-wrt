@@ -4,8 +4,7 @@ if [ "$upnpd_enabled" = "1" ]; then
 	echo "miniupnpd starting ..."
 	iptables_flush.sh 2>&- >&-
 	killall miniupnpd 2>&-
-	iptables_removeall.sh 2>&- >&-
-	iptables_init.sh
+	iptables_init.sh 2>&- >&-
 	# get bitspeed information, if provided
 	upnpd_up_bitspeed=$(nvram get upnpd_up_bitspeed)
 	upnpd_down_bitspeed=$(nvram get upnpd_down_bitspeed)
