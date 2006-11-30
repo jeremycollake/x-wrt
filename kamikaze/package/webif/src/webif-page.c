@@ -24,7 +24,7 @@
 #include <bcmnvram.h>
 #endif
 
-#define HASH_MAX	100
+#define HASH_MAX	512
 #define LINE_BUF	1024 /* max. buffer allocated for one line */
 #define MAX_TR		32	 /* max. translations done on one line */
 #define TR_START	"@TR<<"
@@ -48,7 +48,7 @@ static inline unsigned long hash(char *str)
 
 	while ((c = *str++))
 		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
-	
+
 	return hash;
 }
 
@@ -57,14 +57,14 @@ static inline char *translate_lookup(char *str)
 	char *name, *def, *p, *res = NULL;
 	lstr *i;
 	int h;
-	
+
 	def = name = str;
 	if (((p = strchr(str, '|')) != NULL)
 		|| ((p = strchr(str, '#')) != NULL)) {
 		def = p + 1;
 		*p = 0;
 	}
-	
+
 	h = hash(name) % HASH_MAX;
 	i = ltable[h];
 	while ((res == NULL) && (i != NULL)) {
@@ -72,10 +72,10 @@ static inline char *translate_lookup(char *str)
 			res = i->value;
 		i = i->next;
 	}
-	
+
 	if (res == NULL)
 		res = def;
-	
+
 	return res;
 }
 
@@ -88,7 +88,7 @@ static inline void add_line(char *name, char *value)
 	s->name = strdup(name);
 	s->value = strdup(value);
 	s->next = NULL;
-	
+
 	if (ltable[h] == NULL)
 		ltable[h] = s;
 	else {
@@ -123,7 +123,7 @@ static char *translate_line(char *line)
 		l += strlen(TR_END);
 	}
 	len++;
-	
+
 	if (len > LINE_BUF)
 		p = malloc(len);
 	else
@@ -152,7 +152,7 @@ static void load_lang(char *file)
 			b++; /* skip leading spaces */
 		if (!*b)
 			continue;
-		
+
 		name = b;
 		if ((b = strstr(name, "=>")) == NULL)
 			continue; /* separator not found */
@@ -160,17 +160,17 @@ static void load_lang(char *file)
 		value = b + 2;
 		if (!*value)
 			continue;
-		
+
 		*b = 0;
 		for (b--; isspace(*b); b--)
 			*b = 0; /* remove trailing spaces */
-		
+
 		while (isspace(*value))
 			value++; /* skip leading spaces */
 
 		for (b = value + strlen(value) - 1; isspace(*b); b--)
 			*b = 0; /* remove trailing spaces */
-		
+
 		if (!*value)
 			continue;
 
@@ -199,17 +199,17 @@ main
 #else
 	if ((f = fopen("/etc/config/webif", "r")) != NULL) {
 		int n, i;
-		
+
 		while (!feof(f) && (lang == NULL)) {
 			fgets(line, LINE_BUF - 1, f);
-			
+
 			if (strncasecmp(line, "lang", 4) != 0)
 				goto nomatch;
-			
+
 			lang = line + 4;
 			while (isspace(*lang))
 				lang++;
-			
+
 			if (*lang != '=')
 				goto nomatch;
 
@@ -285,11 +285,11 @@ nomatch:
 		sprintf(buf + strlen(buf), " %s", argv[i++]);
 	}
 	f = popen(buf, "r");
-	
+
 	while (!feof(f) && (fgets(buf, LINE_BUF - 1, f)) != NULL) {
 		fprintf(stdout, "%s", translate_line(buf));
 		fflush(stdout);
 	}
-	
+
 	return 0;
 }
