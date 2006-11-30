@@ -48,12 +48,12 @@ if [ -n "$FORM_install_webif" ]; then
 fi
 ?>
 
-<div class="webif-name-title"><a href="http://www.bitsum.com/xwrt.asp">X-Wrt Extensions</a> - webif<sup>2</sup></div>
+<div class="webif-name-title"><a href="http://www.x-wrt.org">X-Wrt Extensions</a> - webif<sup>2</sup></div>
 <div class="webif-name-subtitle"></div>
 <div class="webif-name-version">Milestone 2 - r<? echo "$this_revision" ?> </div><br />
 <form action="" enctype="multipart/form-data" method="post">
-<input type="submit" value=" @TR<<Check_Upgrade#Check For Webif^2 Update>> " name="update_check" />
-<input type="submit" value=" @TR<<Upgrade_Webif#Upgrade Webif^2>> "  name="install_webif" />
+<input type="submit" value=" @TR<<Check_Upgrade#Check For Webif Update>> " name="update_check" />
+<input type="submit" value=" @TR<<Upgrade_Webif#Upgrade/Reinstall Webif>> "  name="install_webif" />
 </form>
 <? echo $revision_text ?>
 <table class="webif-contributors" width="70%"><tbody>

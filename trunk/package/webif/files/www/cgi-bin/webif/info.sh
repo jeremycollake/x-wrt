@@ -52,11 +52,11 @@ cat <<EOF
 	</tr>
 	<tr>
 		<td><strong>@TR<<Webif>></strong></td><td>&nbsp;</td>
-		<td>webif<sup>2</sup> r$this_revision $revision_text</td>
+		<td><a href="http://www.x-wrt.org">X-Wrt</a> Webif<sup>2</sup> r$this_revision $revision_text</td>
 <td colspan="2">
 <form action="" enctype="multipart/form-data" method="post">
-<input type="submit" value=" @TR<<Check_Upgrade|Check For Webif^2 Update>> " name="update_check" />
-<input type="submit" value=" @TR<<Upgrade_Webif|Upgrade Webif^2>> "  name="install_webif" />
+<input type="submit" value=" @TR<<Check_Upgrade|Check For Webif Update>> " name="update_check" />
+<input type="submit" value=" @TR<<Upgrade_Webif#Upgrade/Reinstall Webif>> "  name="install_webif" />
 </form>
 </td>
 </tr>
