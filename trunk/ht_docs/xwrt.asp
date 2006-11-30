@@ -99,7 +99,7 @@ function installWebifMilestone2(form)
 				</blockquote>
 			</blockquote>
 			<p><a name="About_X-Wrt"><b>
-			<font face="Verdana" size="5" color="#666699">Instruction to </font>
+			<font face="Verdana" size="5" color="#666699">Introduction to </font>
 			</b></a><b><a name="About_X-Wrt">
 			<font size="5" color="#666699" face="Verdana">X-Wrt</font></a></b></p>
 			<blockquote>
