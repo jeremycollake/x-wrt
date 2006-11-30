@@ -1,0 +1,206 @@
+ /* color blue */
+
+#header
+{
+	background-color: #51779e;
+}
+
+#update-available
+{
+	color: #FF0000;
+}
+
+#update-unavailable
+{
+	color: #000000;
+}
+
+#update-error
+{
+	color: #FF0000;
+}
+
+.openwrt-title
+{
+	color: #FFF;
+}
+
+#header-title,
+#submenu,
+#submenu a,
+#save a,
+#save .page-save
+{
+	color: #fff;
+}
+
+#header-title,
+#save .apply div
+{
+	background-color: #315579;
+}
+
+#mainmenu
+{
+	color: #C3C4D2;
+	background-color: #315579;
+}
+
+#mainmenu a
+{
+	color: #C3C4D2;
+}
+
+#submenu,
+#save div
+{
+	background-color: #476889;
+}
+
+#content .settings-block .settings-block-title h2
+{
+	color: #000;
+}
+
+#mainmenu a:hover,
+#submenu a:hover,
+#save a:hover
+{
+	color: #400;
+	background-color: #aac1d9;
+}
+
+#content .settings-block
+{
+	color: #000;
+	background-color: #FFF;
+}
+
+#content .settings-title
+{
+	color: #000;
+	background-color: #86a0bb;
+}
+
+#content .settings
+{
+	color: #000;
+}
+
+#save .page-save
+{
+	background-color: #FFF;
+}
+
+.progressbar-title
+{
+
+}
+
+.progressbar-whole
+{
+
+}
+
+.progressbar-filled
+{
+	color: #FFFFFF;
+	background-color: #2b1b9f;
+}
+
+.progressbar-unfilled
+{
+	color: #000;
+	background-color: #000;
+}
+
+.kb
+{
+	color: #222;
+}
+
+.mount-target
+{
+	color: #222;
+}
+
+.warning
+{
+	color: red;
+}
+
+.selected-maincat
+{
+	border-color: #CCC;		
+	background-color: #224054;		
+}
+
+.selected-maincat a:visited
+{
+	
+}
+
+.selected-maincat a:link
+{
+	
+}
+
+.unselected-maincat
+{
+	
+}
+
+
+.unselected-maincat a:visited
+{
+
+}
+
+.unselected-maincat a:link
+{
+	
+}
+
+
+.selected-subcat
+{
+	border-color: #CCC;		
+	background-color: #224054;	
+}	
+
+
+.selectedsubcat a:visited
+{
+
+}
+
+.selected-subcat a:link
+{
+	
+}
+
+.unselected-subcat
+{		
+
+	border-color: #CCC;		
+}
+
+.unselected-subcat a:visited
+{
+
+}
+
+.unselected-subcat a:link
+{
+	
+}
+
+#short-status
+{
+	color: #CCC;	
+}
+
+#footer-logo
+{
+	color: #FFF;
+}
