@@ -20,82 +20,82 @@ define Package/webif
   VERSION:=$(LINUX_VERSION)+$(PKG_VERSION)-$(PKG_RELEASE)
 endef
 
-define Package/WEBIF_LANG_CA
+define Package/WEBIF-LANG-CA
 $(call Package/webif)
   TITLE:=WEBIF_LANG_CA
 endef
 
-define Package/WEBIF_LANG_CZ
+define Package/WEBIF-LANG-CZ
 $(call Package/webif)
   TITLE:=WEBIF_LANG_CZ
 endef
 
-define Package/WEBIF_LANG_DE
+define Package/WEBIF-LANG-DE
 $(call Package/webif)
   TITLE:=WEBIF_LANG_DE
 endef
 
-define Package/WEBIF_LANG_DK
+define Package/WEBIF-LANG-DK
 $(call Package/webif)
   TITLE:=WEBIF_LANG_DK
 endef
 
-define Package/WEBIF_LANG_EE
+define Package/WEBIF-LANG-EE
 $(call Package/webif)
   TITLE:=WEBIF_LANG_EE
 endef
 
-define Package/WEBIF_LANG_ES
+define Package/WEBIF-LANG-ES
 $(call Package/webif)
   TITLE:=WEBIF_LANG_ES
 endef
 
-define Package/WEBIF_LANG_FR
+define Package/WEBIF-LANG-FR
 $(call Package/webif)
   TITLE:=WEBIF_LANG_FR
 endef
 
-define Package/WEBIF_LANG_HR
+define Package/WEBIF-LANG-HR
 $(call Package/webif)
   TITLE:=WEBIF_LANG_HR
 endef
 
-define Package/WEBIF_LANG_HU
+define Package/WEBIF-LANG-HU
 $(call Package/webif)
   TITLE:=WEBIF_LANG_HU
 endef
 
-define Package/WEBIF_LANG_IT
+define Package/WEBIF-LANG-IT
 $(call Package/webif)
   TITLE:=WEBIF_LANG_IT
 endef
 
-define Package/WEBIF_LANG_NL
+define Package/WEBIF-LANG-NL
 $(call Package/webif)
   TITLE:=WEBIF_LANG_NL
 endef
 
-define Package/WEBIF_LANG_NO
+define Package/WEBIF-LANG-NO
 $(call Package/webif)
   TITLE:=WEBIF_LANG_NO
 endef
 
-define Package/WEBIF_LANG_PL
+define Package/WEBIF-LANG-PL
 $(call Package/webif)
   TITLE:=WEBIF_LANG_PL
 endef
 
-define Package/WEBIF_LANG_PT
+define Package/WEBIF-LANG-PT
 $(call Package/webif)
   TITLE:=WEBIF_LANG_PT
 endef
 
-define Package/WEBIF_LANG_RU
+define Package/WEBIF-LANG-RU
 $(call Package/webif)
   TITLE:=WEBIF_LANG_RU
 endef
 
-define Package/WEBIF_LANG_SE
+define Package/WEBIF-LANG-SE
 $(call Package/webif)
   TITLE:=WEBIF_LANG_SE
 endef
@@ -138,98 +138,98 @@ endef
 
 define Package/WEBIF_LANG_CA/install
 	mkdir -p $(1)/usr/lib/webif/lang/ca/
-	$(CP) -a ./usr/lib/webif/lang/ca/common.txt $(1)//usr/lib/webif/lang/ca/common.txt
+	$(CP) -a ./files/usr/lib/webif/lang/ca/common.txt $(1)//usr/lib/webif/lang/ca/common.txt
 endef
 
 define Package/WEBIF_LANG_CZ/install
 	mkdir -p $(1)/usr/lib/webif/lang/cz/
-	$(CP) -a ./usr/lib/webif/lang/cz/common.txt $(1)//usr/lib/webif/lang/cz/common.txt
+	$(CP) -a ./files/usr/lib/webif/lang/cz/common.txt $(1)//usr/lib/webif/lang/cz/common.txt
 endef
 
 define Package/WEBIF_LANG_DE/install
 	mkdir -p $(1)/usr/lib/webif/lang/de/
-	$(CP) -a ./usr/lib/webif/lang/de/common.txt $(1)//usr/lib/webif/lang/de/common.txt
+	$(CP) -a ./files/usr/lib/webif/lang/de/common.txt $(1)//usr/lib/webif/lang/de/common.txt
 endef
 
 define Package/WEBIF_LANG_DK/install
 	mkdir -p $(1)/usr/lib/webif/lang/dk/
-	$(CP) -a ./usr/lib/webif/lang/dk/common.txt $(1)//usr/lib/webif/lang/dk/common.txt
+	$(CP) -a ./files/usr/lib/webif/lang/dk/common.txt $(1)//usr/lib/webif/lang/dk/common.txt
 endef
 
 define Package/WEBIF_LANG_EE/install
 	mkdir -p $(1)/usr/lib/webif/lang/ee/
-	$(CP) -a ./usr/lib/webif/lang/ee/common.txt $(1)//usr/lib/webif/lang/ee/common.txt
+	$(CP) -a ./files/usr/lib/webif/lang/ee/common.txt $(1)//usr/lib/webif/lang/ee/common.txt
 endef
 
 define Package/WEBIF_LANG_ES/install
 	mkdir -p $(1)/usr/lib/webif/lang/es/
-	$(CP) -a ./usr/lib/webif/lang/es/common.txt $(1)//usr/lib/webif/lang/es/common.txt
+	$(CP) -a ./files/usr/lib/webif/lang/es/common.txt $(1)//usr/lib/webif/lang/es/common.txt
 endef
 
 define Package/WEBIF_LANG_FR/install
 	mkdir -p $(1)/usr/lib/webif/lang/fr/
-	$(CP) -a ./usr/lib/webif/lang/fr/common.txt $(1)//usr/lib/webif/lang/fr/common.txt
+	$(CP) -a ./files/usr/lib/webif/lang/fr/common.txt $(1)//usr/lib/webif/lang/fr/common.txt
 endef
 
 define Package/WEBIF_LANG_HR/install
 	mkdir -p $(1)/usr/lib/webif/lang/hr/
-	$(CP) -a ./usr/lib/webif/lang/hr/common.txt $(1)//usr/lib/webif/lang/hr/common.txt
+	$(CP) -a ./files/usr/lib/webif/lang/hr/common.txt $(1)//usr/lib/webif/lang/hr/common.txt
 endef
 
 define Package/WEBIF_LANG_HU/install
 	mkdir -p $(1)/usr/lib/webif/lang/hu/
-	$(CP) -a ./usr/lib/webif/lang/hu/common.txt $(1)//usr/lib/webif/lang/hu/common.txt
+	$(CP) -a ./files/usr/lib/webif/lang/hu/common.txt $(1)//usr/lib/webif/lang/hu/common.txt
 endef
 
 define Package/WEBIF_LANG_IT/install
 	mkdir -p $(1)/usr/lib/webif/lang/it/
-	$(CP) -a ./usr/lib/webif/lang/it/common.txt $(1)//usr/lib/webif/lang/it/common.txt
+	$(CP) -a ./files/usr/lib/webif/lang/it/common.txt $(1)//usr/lib/webif/lang/it/common.txt
 endef
 
 define Package/WEBIF_LANG_NL/install
 	mkdir -p $(1)/usr/lib/webif/lang/nl/
-	$(CP) -a ./usr/lib/webif/lang/nl/common.txt $(1)//usr/lib/webif/lang/nl/common.txt
+	$(CP) -a ./files/usr/lib/webif/lang/nl/common.txt $(1)//usr/lib/webif/lang/nl/common.txt
 endef
 
 define Package/WEBIF_LANG_NO/install
 	mkdir -p $(1)/usr/lib/webif/lang/no/
-	$(CP) -a ./usr/lib/webif/lang/no/common.txt $(1)//usr/lib/webif/lang/no/common.txt
+	$(CP) -a ./files/usr/lib/webif/lang/no/common.txt $(1)//usr/lib/webif/lang/no/common.txt
 endef
 
 define Package/WEBIF_LANG_PL/install
 	mkdir -p $(1)/usr/lib/webif/lang/pl/
-	$(CP) -a ./usr/lib/webif/lang/pl/common.txt $(1)//usr/lib/webif/lang/pl/common.txt
+	$(CP) -a ./files/usr/lib/webif/lang/pl/common.txt $(1)//usr/lib/webif/lang/pl/common.txt
 endef
 
 define Package/WEBIF_LANG_PT/install
 	mkdir -p $(1)/usr/lib/webif/lang/pt/
-	$(CP) -a ./usr/lib/webif/lang/pt/common.txt $(1)//usr/lib/webif/lang/pt/common.txt
+	$(CP) -a ./files/usr/lib/webif/lang/pt/common.txt $(1)//usr/lib/webif/lang/pt/common.txt
 endef
 
 define Package/WEBIF_LANG_RU/install
 	mkdir -p $(1)/usr/lib/webif/lang/ru/
-	$(CP) -a ./usr/lib/webif/lang/ru/common.txt $(1)//usr/lib/webif/lang/ru/common.txt
+	$(CP) -a ./files/usr/lib/webif/lang/ru/common.txt $(1)//usr/lib/webif/lang/ru/common.txt
 endef
 
 define Package/WEBIF_LANG_SE/install
 	mkdir -p $(1)/usr/lib/webif/lang/se/
-	$(CP) -a ./usr/lib/webif/lang/se/common.txt $(1)//usr/lib/webif/lang/se/common.txt
+	$(CP) -a ./files/usr/lib/webif/lang/se/common.txt $(1)//usr/lib/webif/lang/se/common.txt
 endef
 
 $(eval $(call BuildPackage,webif))
-$(eval $(call BuildPackage,WEBIF_LANG_CA))
-$(eval $(call BuildPackage,WEBIF_LANG_CZ))
-$(eval $(call BuildPackage,WEBIF_LANG_DE))
-$(eval $(call BuildPackage,WEBIF_LANG_DK))
-$(eval $(call BuildPackage,WEBIF_LANG_EE))
-$(eval $(call BuildPackage,WEBIF_LANG_ES))
-$(eval $(call BuildPackage,WEBIF_LANG_FR))
-$(eval $(call BuildPackage,WEBIF_LANG_HR))
-$(eval $(call BuildPackage,WEBIF_LANG_HU))
-$(eval $(call BuildPackage,WEBIF_LANG_IT))
-$(eval $(call BuildPackage,WEBIF_LANG_NL))
-$(eval $(call BuildPackage,WEBIF_LANG_NO))
-$(eval $(call BuildPackage,WEBIF_LANG_PL))
-$(eval $(call BuildPackage,WEBIF_LANG_PT))
-$(eval $(call BuildPackage,WEBIF_LANG_RU))
-$(eval $(call BuildPackage,WEBIF_LANG_SE))
+$(eval $(call BuildPackage,WEBIF-LANG-CA))
+$(eval $(call BuildPackage,WEBIF-LANG-CZ))
+$(eval $(call BuildPackage,WEBIF-LANG-DE))
+$(eval $(call BuildPackage,WEBIF-LANG-DK))
+$(eval $(call BuildPackage,WEBIF-LANG-EE))
+$(eval $(call BuildPackage,WEBIF-LANG-ES))
+$(eval $(call BuildPackage,WEBIF-LANG-FR))
+$(eval $(call BuildPackage,WEBIF-LANG-HR))
+$(eval $(call BuildPackage,WEBIF-LANG-HU))
+$(eval $(call BuildPackage,WEBIF-LANG-IT))
+$(eval $(call BuildPackage,WEBIF-LANG-NL))
+$(eval $(call BuildPackage,WEBIF-LANG-NO))
+$(eval $(call BuildPackage,WEBIF-LANG-PL))
+$(eval $(call BuildPackage,WEBIF-LANG-PT))
+$(eval $(call BuildPackage,WEBIF-LANG-RU))
+$(eval $(call BuildPackage,WEBIF-LANG-SE))
