@@ -18,103 +18,86 @@ define Package/webif
   DESCRIPTION:=\
 	This package contains Webif^2
   VERSION:=$(LINUX_VERSION)+$(PKG_VERSION)-$(PKG_RELEASE)
-  MENU:=1
 endef
 
 define Package/WEBIF_LANG_CA
 $(call Package/webif)
   TITLE:=WEBIF_LANG_CA
-  MENU:=0
 endef
 
 define Package/WEBIF_LANG_CZ
 $(call Package/webif)
   TITLE:=WEBIF_LANG_CZ
-  MENU:=0
 endef
 
 define Package/WEBIF_LANG_DE
 $(call Package/webif)
   TITLE:=WEBIF_LANG_DE
-  MENU:=0
 endef
 
 define Package/WEBIF_LANG_DK
 $(call Package/webif)
   TITLE:=WEBIF_LANG_DK
-  MENU:=0
 endef
 
 define Package/WEBIF_LANG_EE
 $(call Package/webif)
   TITLE:=WEBIF_LANG_EE
-  MENU:=0
 endef
 
 define Package/WEBIF_LANG_ES
 $(call Package/webif)
   TITLE:=WEBIF_LANG_ES
-  MENU:=0
 endef
 
 define Package/WEBIF_LANG_FR
 $(call Package/webif)
   TITLE:=WEBIF_LANG_FR
-  MENU:=0
 endef
 
 define Package/WEBIF_LANG_HR
 $(call Package/webif)
   TITLE:=WEBIF_LANG_HR
-  MENU:=0
 endef
 
 define Package/WEBIF_LANG_HU
 $(call Package/webif)
   TITLE:=WEBIF_LANG_HU
-  MENU:=0
 endef
 
 define Package/WEBIF_LANG_IT
 $(call Package/webif)
   TITLE:=WEBIF_LANG_IT
-  MENU:=0
 endef
 
 define Package/WEBIF_LANG_NL
 $(call Package/webif)
   TITLE:=WEBIF_LANG_NL
-  MENU:=0
 endef
 
 define Package/WEBIF_LANG_NO
 $(call Package/webif)
   TITLE:=WEBIF_LANG_NO
-  MENU:=0
 endef
 
 define Package/WEBIF_LANG_PL
 $(call Package/webif)
   TITLE:=WEBIF_LANG_PL
-  MENU:=0
 endef
 
 define Package/WEBIF_LANG_PT
 $(call Package/webif)
   TITLE:=WEBIF_LANG_PT
-  MENU:=0
 endef
 
 define Package/WEBIF_LANG_RU
 $(call Package/webif)
   TITLE:=WEBIF_LANG_RU
-  MENU:=0
 endef
 
 define Package/WEBIF_LANG_SE
 $(call Package/webif)
   TITLE:=WEBIF_LANG_SE
-  MENU:=0
 endef
 
 define Build/Prepare
