@@ -2,6 +2,10 @@
 # (c)2006 Owen Brotherwood and Jeremy Collake
 # X-Wrt project
 # Released under GPL license.
+[ "$#" != 1 ] && {
+	echo "USAGE: $0 webif_base_file_folder"	
+	exit 1
+}
 ROOT="$1"
 add_missing_symbols() {
         for dir in ${ROOT}/www/* ${ROOT}usr/lib/webif/*; do
