@@ -1,4 +1,7 @@
 config webif general
-	option language "en"
 	option firmware_version "Kamikaze"
 	option device_name ""
+	
+	
+#This is to be used untill a uci library is written in C
+lang="en"
