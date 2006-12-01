@@ -2,7 +2,7 @@
 <?
 . /usr/lib/webif/webif.sh
 header "Status" "DHCP Clients" "@TR<<DHCP Leases>>"
-ShowNotUpdatedWarning
+ShowUntestedWarning
 ?>
 <table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
 <tbody>

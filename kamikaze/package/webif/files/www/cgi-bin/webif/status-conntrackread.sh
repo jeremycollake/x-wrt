@@ -2,7 +2,7 @@
 <?
 . /usr/lib/webif/webif.sh
 header "Status" "Conntrack Table" "@TR<<Conntrack Table>>"
-ShowNotUpdatedWarning
+ShowUntestedWarning
 
 echo "<table><tbody><tr><td><div class=smalltext><pre>"
 cat /proc/net/ip_conntrack | sort

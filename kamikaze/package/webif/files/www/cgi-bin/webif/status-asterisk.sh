@@ -2,7 +2,7 @@
 <?
 . /usr/lib/webif/webif.sh
 header "Status" "Asterisk" "Asterisk Simple Managment"
-ShowNotUpdatedWarning
+ShowUntestedWarning
 
 if [ -e /var/run/asterisk.pid ]; then
 

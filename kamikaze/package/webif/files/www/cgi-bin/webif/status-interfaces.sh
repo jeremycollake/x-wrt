@@ -2,10 +2,10 @@
 <?
 . /usr/lib/webif/webif.sh
 header "Status" "Interfaces" "@TR<<Interfaces>>"
-ShowNotUpdatedWarning
+ShowUntestedWarning
 
 # get WAN stats
-wan_config=$(ifconfig 2>&1 | grep -A 6 "`nvram get wan_ifname`")
+wan_config=$(ifconfig 2>&1 | grep -A 6 "`uci get network wan ifname`")
 if [ -n "$wan_config" ]; then
 wan_ip_addr=$(echo "$wan_config" | grep "inet addr" | cut -d: -f 2 | sed s/Bcast//g)
 wan_mac_addr=$(echo "$wan_config" | grep "HWaddr" | cut -d' ' -f 10)
@@ -15,7 +15,7 @@ wan_tx_bytes=$(echo "$wan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed
 wan_rx_bytes=$(echo "$wan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d'(' -f 2 | cut -d ')' -f 1)
 fi
 # get LAN stats
-lan_config=$(ifconfig 2>&1 | grep -A 6 "`nvram get lan_ifname`")
+lan_config=$(ifconfig 2>&1 | grep -A 6 "`uci get network lan ifname`")
 lan_ip_addr=$(echo "$lan_config" | grep "inet addr" | cut -d: -f 2 | sed s/Bcast//g)
 lan_mac_addr=$(echo "$lan_config" | grep "HWaddr" | cut -d' ' -f 12)
 lan_tx_packets=$(echo "$lan_config" | grep "TX packets" | sed s/'TX packets:'//g | cut -d' ' -f 11 | int2human)
@@ -133,7 +133,7 @@ echo "<tr><td><br /></td></tr>
 		</tr>
 		<tr>
 			<td><pre>"
-ifconfig 2>&1 | grep -A 6 "`nvram get wan_ifname`"
+ifconfig 2>&1 | grep -A 6 "`uci get network wan ifname`"
 echo "</pre></td>
 		</tr>
 		<tr><td><br /><br /></td></tr>
@@ -142,7 +142,7 @@ echo "</pre></td>
 		</tr>
 		<tr>
 			<td><pre>"
-ifconfig 2>&1 | grep -A 6 "`nvram get lan_ifname`"
+ifconfig 2>&1 | grep -A 6 "`uci get network lan ifname`"
 echo "</pre></td>
 		</tr>
 		<tr><td><br /><br /></td></tr>
