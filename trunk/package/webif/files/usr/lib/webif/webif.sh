@@ -168,7 +168,7 @@ Pragma: no-cache
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <?xml version="1.0" encoding="@TR<<Encoding|ISO-8859-1>>"?>
 	<head>
-	<title>@TR<< $_firmware_name Administrative Console>></title>
+	<title>$_firmware_name @TR<<Administrative Console>></title>
 		<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
 		<!--[if lt IE 7]>
 			<link rel="stylesheet" type="text/css" href="/themes/active/ie_lt7.css" />
