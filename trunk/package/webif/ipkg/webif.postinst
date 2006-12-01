@@ -144,7 +144,7 @@ fi
 # only run below on 'real' system (not image builder)
 if [ -z "${IPKG_INSTROOT}" ]; then	
 	# force re-initialization of language list
-	rm -f "/usr/lib/webif/languages.lst"
+	rm -f "/etc/languages.lst"
 
 	[ "$IPKG_UPDATE_NEEDED" = "1" ] && ipkg update
 

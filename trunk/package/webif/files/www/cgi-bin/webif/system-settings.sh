@@ -175,10 +175,10 @@ dangerous_form_help=""
 #####################################################################
 # Initialize LANGUAGES form
 # create list if it doesn't exist ..
-! exists "/usr/lib/webif/languages.lst" && {
+! exists "/etc/languages.lst" && {
 	/usr/lib/webif/webif-mklanglist.sh
 }
-LANGUAGES=$(cat "/usr/lib/webif/languages.lst")
+LANGUAGES=$(cat "/etc/languages.lst")
 
 is_bcm947xx && {
 	bootwait_form="field|Boot Wait
