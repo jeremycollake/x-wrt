@@ -176,7 +176,7 @@ dangerous_form_help=""
 # Initialize LANGUAGES form
 # create list if it doesn't exist ..
 ! exists "/etc/languages.lst" && {
-	/usr/lib/webif/webif-mklanglist.sh
+	/usr/lib/webif/webif-mklanglist.sh	
 }
 LANGUAGES=$(cat "/etc/languages.lst")
 
