@@ -21,7 +21,7 @@
 
 . /usr/lib/webif/webif.sh
 
-haspackage_msg=$(has_pkgs hswebif)
+haspackage_msg=$(has_pkgs qos-scripts)
 if ! empty "$haspackage_msg"; then
 	header "Network" "QoS" "" ' onload="modechange()" ' "$SCRIPT_NAME"
 	has_pkgs qos-scripts
