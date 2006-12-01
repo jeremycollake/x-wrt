@@ -13,7 +13,7 @@
 #
 # Major revisions:
 #
-# NVRAM variables referenced:
+# UCI variables referenced:
 #
 # Configuration files referenced:
 #   none

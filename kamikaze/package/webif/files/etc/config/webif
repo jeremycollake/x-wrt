@@ -1,0 +1,4 @@
+config webif general
+	option language "en"
+	option firmware_version "Kamikaze"
+	option device_name ""

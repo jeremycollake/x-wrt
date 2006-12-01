@@ -2,7 +2,7 @@
 <?
 . /usr/lib/webif/webif.sh
 header "Info" "System" "@TR<<System>>" '' ''
-ShowNotUpdatedWarning
+ShowUntestedWarning
 
 this_revision=$(cat "/www/.version")
 
@@ -31,11 +31,11 @@ if [ -n "$FORM_install_webif" ]; then
 	this_revision=$(cat "/www/.version")
 fi
 
-_version=$(nvram get firmware_version)
+_version=$(uci get webif general firmware_version)
 _kversion="$( uname -srv )"
 _mac="$(/sbin/ifconfig eth0 | grep HWaddr | cut -b39-)"
 board_type=$(cat /proc/cpuinfo | sed 2,20d | cut -c16-)
-device_name=$(nvram get device_name)
+device_name=$(uci get webif general device_name)
 empty "$device_name" && device_name="unidentified"
 device_string=$(echo $device_name && ! empty $device_version && echo $device_version)
 user_string=$REMOTE_USER
