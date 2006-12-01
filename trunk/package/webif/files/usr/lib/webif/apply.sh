@@ -211,7 +211,7 @@ for config in $(ls config-webif 2>&-); do
 			webif_version=$(ipkg info webif | awk '/Version:/ { print $2 }' | sort -r | sed 2d)
 			xwrt_repo_url=$(cat /etc/ipkg.conf | grep X-Wrt | cut -d' ' -f3)
 			# always install language pack, since it may have been updated without package version change
-			ipkg install "${xwrt_repo_url}/webif-lang-${newlang}_${webif_version}_mipsel.ipk" -force-reinstall -force-overwrite
+			ipkg install "${xwrt_repo_url}/webif-lang-${newlang}_${webif_version}_mipsel.ipk" -force-reinstall -force-overwrite | uniq
 		}
 	done
 	rm -f /tmp/.webif/config-conntrack
