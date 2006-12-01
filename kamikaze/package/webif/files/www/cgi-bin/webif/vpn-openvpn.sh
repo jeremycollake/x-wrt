@@ -7,6 +7,7 @@
 load_settings "openvpn"
 
 header "VPN" "OpenVPN" "@TR<<OpenVPN>>" ' onload="modechange()" ' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 
 if ! empty "$FORM_install_package"; then
 	echo "Installing openvpn package ...<pre>"

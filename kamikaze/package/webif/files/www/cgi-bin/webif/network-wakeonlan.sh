@@ -6,6 +6,8 @@ HOSTS_FILE=/etc/hosts
 ETHERS_FILE=/etc/ethers
 
 header "Network" "WoL" "@TR<<Wake-On-LAN>>" ''
+ShowNotUpdatedWarning
+
 # check to make sure busybox's etherwake isn't included
 ! exists "/bin/etherwake" && {
 	has_pkgs ether-wake

@@ -6,6 +6,7 @@ load_settings "wireless"
 
 header "Network" "WDS" "@TR<<WDS Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 ShowUntestedWarning
+ShowNotUpdatedWarning
 
 FORM_wds="${wl0_wds:-$(nvram get wl0_wds)}"
 LISTVAL="$FORM_wds"

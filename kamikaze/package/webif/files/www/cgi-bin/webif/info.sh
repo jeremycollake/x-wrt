@@ -2,6 +2,7 @@
 <?
 . /usr/lib/webif/webif.sh
 header "Info" "System" "@TR<<System>>" '' ''
+ShowNotUpdatedWarning
 
 this_revision=$(cat "/www/.version")
 

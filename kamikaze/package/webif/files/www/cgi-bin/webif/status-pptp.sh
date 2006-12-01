@@ -4,6 +4,7 @@
 . /usr/lib/webif/webif.sh
 
 header "Status" "PPTP" "@TR<<PPTP Status>>"
+ShowNotUpdatedWarning
 
 if [ ! -e /etc/ppp/functions.sh ]; then
 	has_pkgs pptp pptpd

@@ -73,6 +73,7 @@ int|FORM_ddns_max_interval|Max Interval (sec)|min=86400 max=2196000|$FORM_ddns_m
 }
 
 header "Network" "DynDNS" "@TR<<DynDNS Settings>>" '' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 
 has_pkgs ez-ipupdate
 

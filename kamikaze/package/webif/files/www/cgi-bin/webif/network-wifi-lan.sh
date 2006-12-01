@@ -72,6 +72,7 @@ EOF
 fi
 
 header "Network" "WIFI-LAN" "@TR<<Wireless Bridge Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 cat <<EOF
 <script type="text/javascript" src="/webif.js "></script>
 <script type="text/javascript">

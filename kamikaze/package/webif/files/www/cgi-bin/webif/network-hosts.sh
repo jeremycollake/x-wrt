@@ -3,6 +3,7 @@
 . /usr/lib/webif/webif.sh
 
 header "Network" "Hosts" "@TR<<Configured Hosts>>" '' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 
 display_form <<EOF
 start_form|

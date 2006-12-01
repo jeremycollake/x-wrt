@@ -2,6 +2,7 @@
 <?
 . /usr/lib/webif/webif.sh
 header "Network" "DHCP" "@TR<<DHCP Interfaces>>" '' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 
 load_settings network
 

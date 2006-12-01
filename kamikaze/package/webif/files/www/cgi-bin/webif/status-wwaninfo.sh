@@ -16,6 +16,7 @@ do
 done
 
 header "Status" "UMTS" "@TR<<UMTS/GPRS Status>>"
+ShowNotUpdatedWarning
 
 cat << EOF
 <pre>

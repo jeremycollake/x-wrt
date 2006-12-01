@@ -20,6 +20,7 @@
 . /usr/lib/webif/webif.sh
 
 header "System" "Startup" "@TR<<Startup>>" ''
+ShowNotUpdatedWarning
 
 # defaults
 custom_script_name="/etc/init.d/S95custom-user-startup"

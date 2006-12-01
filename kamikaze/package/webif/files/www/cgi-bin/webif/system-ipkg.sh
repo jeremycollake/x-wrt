@@ -28,6 +28,7 @@
 #
 
 header "System" "Packages" "@TR<<Packages>>" '' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 
 ##################################################################
 #

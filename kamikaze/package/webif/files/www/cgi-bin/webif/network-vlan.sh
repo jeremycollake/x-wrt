@@ -22,6 +22,7 @@
 load_settings network
 
 header "Network" "VLAN" "@TR<<Virtual LANs>>" '' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 
 ###################################################################
 # toggles and default settings

@@ -17,6 +17,7 @@ EOF
 fi
 
 header "Network" "Mesh" "@TR<<Mesh Configuration>>" '' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 
 has_pkgs ip wl olsrd olsrd-mod-httpinfo olsrd-mod-nameservice olsrd-mod-power olsrd-mod-secure olsrd-mod-tas olsrd-mod-dyn-gw
 

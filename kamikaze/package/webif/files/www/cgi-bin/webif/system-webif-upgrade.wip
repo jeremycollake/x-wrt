@@ -18,6 +18,7 @@
 #	none
 #
 header "System" "Webif Upgrade" "@TR<<Webif Upgrade>>" '' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 
 export
 

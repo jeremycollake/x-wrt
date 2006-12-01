@@ -20,6 +20,7 @@
 #
 
 header "Network" "WAN-LAN" "@TR<<WAN-LAN Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 
 load_settings network
 

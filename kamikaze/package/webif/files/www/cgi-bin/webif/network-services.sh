@@ -18,6 +18,7 @@
 #
 
 header "Network" "Services" "@TR<<Services Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 
 load_settings services
 load_settings upnpd

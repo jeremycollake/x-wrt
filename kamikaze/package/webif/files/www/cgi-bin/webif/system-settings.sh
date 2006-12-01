@@ -41,6 +41,7 @@ OVERCLOCKING_DISABLED="0" # set to 1 to disble OC support
 
 #####################################################################
 header "System" "Settings" "@TR<<System Settings>>" ' onload="modechange()" ' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 
 
 #####################################################################

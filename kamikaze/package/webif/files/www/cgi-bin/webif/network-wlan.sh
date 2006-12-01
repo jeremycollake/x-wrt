@@ -22,6 +22,7 @@
 load_settings "wireless"
 
 header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onload="modechange()"' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 
 #####################################################################
 # constants

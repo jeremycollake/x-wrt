@@ -60,6 +60,7 @@ fi
 
 
 header "Log" "Firewall Log View" "@TR<<Netfilter Log>>" '' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 
 
 # request for filtering -----------------------

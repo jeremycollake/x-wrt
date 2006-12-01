@@ -4,6 +4,7 @@
 . /usr/lib/webif/webif.sh
 
 header "Network" "QoS" "@TR<<QOS Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 
 if ! empty "$FORM_install_rudy"; then
 	echo "Installing Rudy's QoS scripts (HSFC) ...<pre>"

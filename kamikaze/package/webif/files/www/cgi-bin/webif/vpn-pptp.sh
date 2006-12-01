@@ -15,6 +15,7 @@ else
 fi
 
 header "VPN" "PPTP" "@TR<<PPTP>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 
 if [ ! -e /etc/ppp/functions.sh ]; then
 	has_pkgs pptp pptpd

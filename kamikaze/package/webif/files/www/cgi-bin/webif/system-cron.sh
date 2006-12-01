@@ -37,6 +37,7 @@ load_settings "cron"
 }
 
 header "System" "Cron" "@TR<<Cron>>" '' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 
 display_form "start_form|Cron Settings
 field|Cron Daemon

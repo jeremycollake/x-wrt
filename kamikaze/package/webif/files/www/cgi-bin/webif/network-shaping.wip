@@ -95,6 +95,7 @@ EOF
 fi
 
 header "Network" "Shaping" "@TR<<Traffic Shaping>>" '' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 
 has_pkgs iptables tc ip && {
 

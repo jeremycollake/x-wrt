@@ -6,6 +6,7 @@
 . /usr/lib/webif/webif.sh
 
 header "Status" "Shaping" "@TR<<Shaping Status>>"
+ShowNotUpdatedWarning
 
 has_pkgs iptables tc ip && {
 

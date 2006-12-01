@@ -5,6 +5,7 @@
 #$meta_refresh="<meta http-equiv=\"refresh\" content=\"5; URL=log-read.sh\">"
 
 header "Log" "Syslog" "@TR<<Syslog View>>" '' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 #| sed -e "s|<head>|<head>$meta_refresh|"
 prefix=$(nvram get log_prefix)
 ?>

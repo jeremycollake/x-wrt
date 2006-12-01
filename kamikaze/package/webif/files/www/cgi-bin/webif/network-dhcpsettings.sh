@@ -44,6 +44,7 @@ EOF
 fi
 
 header "Network" "Dnsmasq" "@TR<<DHCP Configuration>>" '' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 
 display_form <<EOF
 start_form|@TR<<DHCP Configuration>> $FORM_iface

@@ -41,6 +41,7 @@ boot_wait"
 . /usr/lib/webif/webif.sh
 
 header "System" "Backup" "@TR<<Backup and Restore>>" ''
+ShowNotUpdatedWarning
 
 case "$FORM_action" in
 	download)

@@ -2,6 +2,7 @@
 <?
 . /usr/lib/webif/webif.sh
 header "Status" "Interfaces" "@TR<<Interfaces>>"
+ShowNotUpdatedWarning
 
 # get WAN stats
 wan_config=$(ifconfig 2>&1 | grep -A 6 "`nvram get wan_ifname`")

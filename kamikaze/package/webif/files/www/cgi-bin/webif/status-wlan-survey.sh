@@ -30,6 +30,7 @@
 
 . "/usr/lib/webif/webif.sh"
 header "Status" "Site Survey" "@TR<<Wireless survey>>"
+ShowNotUpdatedWarning
 ?>
 
 <?

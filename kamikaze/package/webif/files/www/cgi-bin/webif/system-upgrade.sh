@@ -2,6 +2,7 @@
 . /usr/lib/webif/webif.sh
 
 header "System" "Upgrade" "@TR<<Firmware Upgrade>>"
+ShowNotUpdatedWarning
 
 #####################################################################
 do_upgrade() {

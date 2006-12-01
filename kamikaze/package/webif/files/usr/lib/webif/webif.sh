@@ -54,6 +54,10 @@ ShowUntestedWarning() {
 	echo "<div class=\"warning\">WARNING: This page is untested and may or may not work correctly.</div>"
 }
 
+ShowNotUpdatedWarning() {
+	echo "<div class=\"warning\">WARNING: This page has not been updated or looked at for correct to check for correct functionality under Kamikaze.</div>"
+}
+
 update_changes() {
 	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))
 	EDITED_FILES=$(find "/tmp/.webif/edited-files" -type f 2>&- | wc -l)

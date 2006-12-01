@@ -45,6 +45,7 @@ fi
 
 
 header "Log" "Syslog Settings" "@TR<<syslog Settings>>"  ' onload="modechange()" ' "$SCRIPT_NAME"
+ShowNotUpdatedWarning
 
 cat <<EOF
 <script type="text/javascript" src="/webif.js "></script>
