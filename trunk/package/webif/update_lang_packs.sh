@@ -8,7 +8,7 @@
 }
 ROOT="$1"
 add_missing_symbols() {
-        for dir in ${ROOT}/www/* ${ROOT}usr/lib/webif/*; do
+        for dir in ${ROOT}/www/* ${ROOT}/usr/lib/webif/*; do
                 tmp_symbol_names=$(grep @TR -R "$dir" | sed -e 's/.*@TR<<\(.*\)>>.*/\1/' | tr '|' '#' | cut -f1 -d'#' | sed -e s/'"'//g -e s/' '/'%20'/g | sort -u)
 		# spaces translated above to %20, so we can use space as delimiter
 		all_symbol_names="$all_symbol_names $tmp_symbol_names"
@@ -20,12 +20,18 @@ add_missing_symbols() {
 		lang_file="${lang_dir}/common.txt"
 		for cur_symbol in $all_symbol_names; do
 			cur_symbol=$(echo "$cur_symbol" | sed s/'%20'/' '/g) # put back spaces
-			sym_lookup=$(grep "$cur_symbol" "$lang_file" 2>&-)
+			echo "$cur_symbol" | grep -q '$' # make sure symbol doesn't contain '$'
 			[ "$?" != "0" ] && {
-				echo "adding $cur_symbol to $lang_file"
-				echo "$cur_symbol =>" >> $lang_file
+			sym_lookup=$(grep "$cur_symbol" "$lang_file" 2>&-)
+				[ "$?" != "0" ] && {
+					echo "adding $cur_symbol to $lang_file"
+					echo "$cur_symbol =>" >> $lang_file
+				}
 			}
 		done
 	done
+	#
+	#
+	#
 }
 add_missing_symbols 
