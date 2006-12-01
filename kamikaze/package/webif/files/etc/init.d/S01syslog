@@ -1,3 +1,4 @@
 #!/bin/sh
-killall syslogd
-/sbin/runsyslogd
+#Commented out until our syslog service is updated
+#killall syslogd
+#/sbin/runsyslogd
