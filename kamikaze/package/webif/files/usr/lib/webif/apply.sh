@@ -84,7 +84,7 @@ reload_syslog() {
 		echo `ps -elf | grep 'syslogd' | grep -v grep | awk '{ print $1 }'`
 	}
 	# (re)start syslogd
-	echo "(Re)start syslogd..."
+	echo "@TR<<(Re)start syslogd...>>"
 	pid=$(getPID)
 	if [ -n "$pid" ]; then
 		echo -n "Stopping syslogd: "
@@ -92,24 +92,9 @@ reload_syslog() {
 			kill $pid >/dev/null 2>&1
 		} && echo "OK" ) || echo "ERROR"
 	fi
-	echo -n "Start syslogd: "
-	syslog_ip=$(nvram get log_ipaddr)
-	if [ "$(nvram get firmware_version)" = "0.9" ]; then
-	ipcalc.sh -s "$syslog_ip" || syslog_ip=""
-	else
-	ipcalc -s "$syslog_ip" || syslog_ip=""
-	fi
-	log_port=$(nvram get log_port)
-	log_port=${log_port:+:$log_port}
-	log_mark=$(nvram get log_mark)
-	log_mark=${log_mark:+-m $log_mark}
-	can_prefix=`syslogd --help 2>&1 | grep -e 'PREFIX' `
-	log_prefix=""
-	[ -z "$can_prefix" ] || log_prefix=$(nvram get log_prefix)
-	log_prefix=${log_prefix:+-P "$log_prefix"}
-	syslogd -C 16 ${syslog_ip:+-L -R $syslog_ip$log_port} $log_mark $log_prefix
-
-	echo "OK"
+	echo -n "@TR<<Start syslogd:>>"
+	/etc/init.d/S01syslog
+	echo "@TR<<OK>>"
 }
 
 reload_system() {

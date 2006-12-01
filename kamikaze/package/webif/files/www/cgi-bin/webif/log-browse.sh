@@ -6,8 +6,8 @@
 # sets the type of log: file or circular
 # defaults to circular, wich is the default install for openwrt
 # use log-setup.sh to modify these parameters
-LOG_TYPE=$(nvram get log_type)
-LOG_FILE=$(nvram get log_file)
+LOG_TYPE=$(uci get webif syslog type)
+LOG_FILE=$(uci get webif syslog file)
 if equal $LOG_TYPE "file" ; then
 	LOG_FILE=${LOG_FILE:-"/var/log/messages"}
 	LOGREAD="cat "$LOG_FILE
@@ -60,7 +60,7 @@ fi
 
 
 header "Log" "Firewall Log View" "@TR<<Netfilter Log>>" '' "$SCRIPT_NAME"
-ShowNotUpdatedWarning
+
 
 
 # request for filtering -----------------------

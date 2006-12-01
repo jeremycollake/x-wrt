@@ -21,9 +21,9 @@ colorize_script=""
 . /usr/lib/webif/webif.sh
 . /etc/runsyslogd.conf
 
-prefix=$(nvram get log_prefix)
-LOG_TYPE=$(nvram get log_type)
-LOG_FILE=$(nvram get log_file)
+prefix=$(uci get webif syslog prefix)
+LOG_TYPE=$(uci get webif syslog type)
+LOG_FILE=$(uci get webif syslog file)
 if equal $LOG_TYPE "file" ; then
 	LOG_FILE=${LOG_FILE:-$DEFAULT_log_file}
 	LOGREAD="cat "$LOG_FILE

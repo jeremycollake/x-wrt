@@ -4,6 +4,14 @@ config webif general
 	option firmware_subtitle "With X-Wrt Extensions"
 	option device_name ""
 	
+config webif syslog
+	option ipaddr ""
+	option port ""
+	option size ""
+	option type ""
+	option mark ""
+	option file ""
+	
 	
 #This is to be used untill a uci library is written in C
 lang="en"
