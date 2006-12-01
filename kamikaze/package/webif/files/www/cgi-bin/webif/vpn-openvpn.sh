@@ -7,7 +7,7 @@
 load_settings "openvpn"
 
 header "VPN" "OpenVPN" "@TR<<OpenVPN>>" ' onload="modechange()" ' "$SCRIPT_NAME"
-ShowNotUpdatedWarning
+ShowUntestedWarning
 
 if ! empty "$FORM_install_package"; then
 	echo "Installing openvpn package ...<pre>"
@@ -25,14 +25,14 @@ if empty "$FORM_submit"; then
 		NOCERT=1
 	[ -f /etc/openvpn/shared.key ] ||
 		NOPSK=1
-	FORM_openvpn_cli=${openvpn_cli:-$(nvram get openvpn_cli)}
-	FORM_openvpn_cli_server=${openvpn_cli_server:-$(nvram get openvpn_cli_server)}
-	FORM_openvpn_cli_proto=${openvpn_cli_proto:-$(nvram get openvpn_cli_proto)}
-	FORM_openvpn_cli_port=${openvpn_cli_port:-$(nvram get openvpn_cli_port)}
+	FORM_openvpn_cli=${openvpn_cli:-$(uci get openvpn general mode)}
+	FORM_openvpn_cli_server=${openvpn_cli_server:-$(uci get openvpn client ipaddr)}
+	FORM_openvpn_cli_proto=${openvpn_cli_proto:-$(uci get openvpn general proto)}
+	FORM_openvpn_cli_port=${openvpn_cli_port:-$(uci get openvpn general port)}
 	FORM_openvpn_cli_port=${FORM_openvpn_cli_port:-1194}
-	FORM_openvpn_cli_auth=${openvpn_cli_auth:-$(nvram get openvpn_cli_auth)}
+	FORM_openvpn_cli_auth=${openvpn_cli_auth:-$(uci get openvpn client auth)}
 	FORM_openvpn_cli_auth=${FORM_openvpn_cli_auth:-cert)}
-	FORM_openvpn_cli_psk=${openvpn_cli_psk:-$(nvram get openvpn_cli_psk)}
+	FORM_openvpn_cli_psk=${openvpn_cli_psk:-$(uci get openvpn client psk)}
 else
 	[ -d /etc/openvpn ] || mkdir /etc/openvpn
 	[ -f "$FORM_openvpn_pkcs12file" ] && {
@@ -43,12 +43,12 @@ else
 		cp "$FORM_openvpn_pskfile" /etc/openvpn/shared.key &&
 			UPLOAD_PSK=1
 	}
-	save_setting openvpn openvpn_cli $FORM_openvpn_cli
-	save_setting openvpn openvpn_cli_server $FORM_openvpn_cli_server
-	save_setting openvpn openvpn_cli_proto $FORM_openvpn_cli_proto
-	save_setting openvpn openvpn_cli_port $FORM_openvpn_cli_port
-	save_setting openvpn openvpn_cli_auth $FORM_openvpn_cli_auth
-	save_setting openvpn openvpn_cli_psk $FORM_openvpn_cli_psk
+	uci_set "openvpn" "general" "mode" "$FORM_openvpn_cli"
+	uci_set "openvpn" "client" "ipaddr" "$FORM_openvpn_cli_server"
+	uci_set "openvpn" "general" "proto" "$FORM_openvpn_cli_proto"
+	uci_set "openvpn" "general" "port" "$FORM_openvpn_cli_port"
+	uci_set "openvpn" "general" "auth" "$FORM_openvpn_cli_auth"
+	uci_set "openvpn" "client" "psk" "$FORM_openvpn_cli_psk"
 fi
 
 cat <<EOF
@@ -58,7 +58,7 @@ cat <<EOF
 function modechange()
 {
 	var v;
-	v = isset('openvpn_cli', '1');
+	v = isset('openvpn_cli', 'client');
 	set_visible('connection_settings', v);
 	set_visible('authentication', v);
 
@@ -84,7 +84,7 @@ start_form|@TR<<OpenVPN>>
 field|@TR<<Start VPN Connection>>
 select|openvpn_cli|$FORM_openvpn_cli
 option|0|@TR<<Disabled>>
-option|1|@TR<<Enabled>>
+option|client|@TR<<Enabled>>
 onchange|
 end_form
 

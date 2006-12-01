@@ -20,6 +20,7 @@ HANDLERS_config='
 	log) reload_log;;
 	upnpd) reload_upnpd;;
 	exipupdate) reload_exipupdate;;
+	openvpn) reload_openvpn;;
 
 '
 HANDLERS_file='
@@ -109,6 +110,11 @@ reload_system() {
 reload_upnpd() {
 	echo '@TR<<Reloading>> @TR<<UPNPd>> ...'
 	/etc/init.d/S95miniupnpd
+}
+
+reload_openvpn() {
+	echo '@TR<<Reloading>> @TR<<UPNPd>> ...'
+	/etc/init.d/S??openvpn reload
 }
 
 reload_exipupdate() {
