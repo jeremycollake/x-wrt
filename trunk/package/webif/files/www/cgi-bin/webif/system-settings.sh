@@ -77,7 +77,10 @@ if empty "$FORM_submit"; then
 	FORM_clkfreq="${clkfreq:-$(nvram get clkfreq)}";
 	FORM_clkfreq="${FORM_clkfreq:-200}"
 	# webif settings
-	FORM_language="${language:-$(nvram get language)}"
+	FORM_language="${language:-$(cat /etc/config/webif | grep lang= | cut -d'=' -f2)}"
+	exists "/usr/sbin/nvram" && {
+		FORM_language="${FORM_language:-$(nvram get language)}"
+	}
 	FORM_language="${FORM_language:-default}"
 	# get form theme by seeing where /www/themes/active/ points
 	FORM_theme=$(ls /www/themes/active -l | cut -d'>' -f 2 | sed s/'\/www\/themes\/'//g)
@@ -169,7 +172,14 @@ dangerous_form_start=""
 dangerous_form_end=""
 dangerous_form_help=""
 
-LANGUAGES="$(grep -H '^[\t ]*lang[\t ]*=>' /usr/lib/webif/lang/*/*.txt 2>/dev/null | awk -f /usr/lib/webif/languages.awk)"
+#####################################################################
+# Initialize LANGUAGES form
+# create list if it doesn't exist ..
+! exists "/usr/lib/webif/languages.lst" && {
+	/usr/lib/webif/webif-mklanglist.sh
+}
+LANGUAGES=$(cat "/usr/lib/webif/languages.lst")
+
 is_bcm947xx && {
 	bootwait_form="field|Boot Wait
 	select|boot_wait|$FORM_boot_wait

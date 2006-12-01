@@ -203,11 +203,7 @@ for config in $(ls config-webif 2>&-); do
 		exists "/etc/config/webif" && {
 			cat "/etc/config/webif" | sed /'lang='/d > "$_tmpwebifconfig"
 		}
-		echo "lang=$newlang" >> "$_tmpwebifconfig"
-		mv "$_tmpwebifconfig" "/etc/config/webif"
-		# set nvram for posterity
-		nvram set "language=$newlang"
-		need_nvram_commit=1
+		mv "$_tmpwebifconfig" "/etc/config/webif"		
 	done
 	rm -f /tmp/.webif/config-conntrack
 	echo '@TR<<Done>>'
