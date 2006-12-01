@@ -6,6 +6,8 @@
 . /lib/config/uci.sh
 cron_init="/etc/init.d/S51crond"
 
+need_nvram_commit=0
+
 HANDLERS_config='
 	wireless) reload_wireless;;
 	network) reload_network;;
@@ -192,13 +194,32 @@ for config in $(ls file-* 2>&-); do
 	esac'
 done
 
+# config-webif		Webif config
+for config in $(ls config-webif 2>&-); do
+	echo '@TR<<Applying>> @TR<<Webif settings>> ...'
+	for newlang in $(grep "language" "$config" |cut -d '"' -f2); do		
+		_tmpwebifconfig=$(mktemp "/tmp/.webif-XXXXXX")
+		touch "$_tmpwebifconfig"  # for to exist
+		exists "/etc/config/webif" && {
+			cat "/etc/config/webif" | sed /'lang='/d > "$_tmpwebifconfig"
+		}
+		echo "lang=$newlang" >> "$_tmpwebifconfig"
+		mv "$_tmpwebifconfig" "/etc/config/webif"
+		# set nvram for posterity
+		nvram set "language=$newlang"
+		need_nvram_commit=1
+	done
+	rm -f /tmp/.webif/config-conntrack
+	echo '@TR<<Done>>'
+done
+
 # config-qos		QOS Config file
 for config in $(ls config-qos 2>&-); do
 	echo '@TR<<Applying>> @TR<<QOS settings>> ...'
 	/usr/bin/qos-stop	
 	# for Rudy's QoS scripts only, nbd's is configured via UCI
 	mv -f config-qos /etc/qos.conf 
-	/usr/bin/qos-start
+	/usr/bin/qos-start	
 	echo '@TR<<Done>>'
 done
 
@@ -297,11 +318,16 @@ reload_log() {
 (
 	cd /proc/self
 	cat /tmp/.webif/config-* 2>&- | grep '=' >&- 2>&- && {
-		cat /tmp/.webif/config-* 2>&- | tee fd/1 | xargs -n1 nvram set
-		echo "@TR<<Committing>> NVRAM ..."
-		nvram commit
+		cat /tmp/.webif/config-* 2>&- | tee fd/1 | xargs -n1 nvram set	
+		need_nvram_commit=1	
 	}
 )
+
+equal "$need_nvram_commit" "1" && {
+	echo "@TR<<Committing>> NVRAM ..."
+	nvram commit
+}
+
 for config in $(ls config-* 2>&-); do
 	name=${config#config-}
 	eval 'case "$name" in
