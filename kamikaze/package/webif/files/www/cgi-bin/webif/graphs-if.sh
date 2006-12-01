@@ -7,7 +7,6 @@
 . ./graphs-subcategories.sh
 
 header "Graphs" "Traffic $FORM_if" "Interface $FORM_if Traffic" "" "$SCRIPT_NAME"
-ShowNotUpdatedWarning
 
 echo "<center>"
 #cat /proc/net/dev|sed -n '/:/{s/:.*//;s/^ *//;s/\(.*\)/<a href="\/cgi-bin\/webif\/graphs-if.sh?if=\1">\1<\/a>/p}'

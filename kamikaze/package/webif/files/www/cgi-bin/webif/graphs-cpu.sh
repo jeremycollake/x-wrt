@@ -7,7 +7,7 @@
 . ./graphs-subcategories.sh
 
 header "Graphs" "CPU" "CPU Usage" "" "$SCRIPT_NAME"
-ShowNotUpdatedWarning
+
 ?>
 <center>
 	<embed src="/svggraph/graph_cpu.svg?/cgi-bin/webif/data.sh"
