@@ -8,21 +8,21 @@ load_settings log
 #header "Log" "Syslog Settings" "@TR<<syslog Settings>>"  ' onload="modechange()" ' "$SCRIPT_NAME"
 
 if empty "$FORM_submit" ; then
-	FORM_size="${log_size:-$(uci get webif syslog size)}"
+	FORM_size="${log_size:-$(uci get webif.syslog.size)}"
 	FORM_size=${FORM_size:-$DEFAULT_log_size}
-	FORM_type="${log_type:-$(uci get webif syslog type)}"
+	FORM_type="${log_type:-$(uci get webif.syslog.type)}"
 	FORM_type=${FORM_type:-$DEFAULT_log_type}
-	FORM_ipaddr="${log_ipaddr:-$(uci get webif syslog ipaddr)}"
+	FORM_ipaddr="${log_ipaddr:-$(uci get webif.syslog.ipaddr)}"
 	if equal $FORM_ipaddr 0 ; then
 		FORM_ipaddr=""
 	fi
-	FORM_log_port=${log_port:-$(uci get webif syslog port)}
+	FORM_log_port=${log_port:-$(uci get webif.syslog.port)}
 	if empty "$FORM_ipaddr" ; then
 		FORM_log_port=""
 	fi
-	FORM_log_mark=${log_mark:-$(uci get webif syslog mark)}
+	FORM_log_mark=${log_mark:-$(uci get webif.syslog.mark)}
 	FORM_log_mark=${FORM_log_mark:-$DEFAULT_log_mark}
-	FORM_filename="${log_file:-$(uci get webif syslog file)}"
+	FORM_filename="${log_file:-$(uci get webif.syslog.file)}"
 	FORM_filename=${FORM_filename:-$DEFAULT_log_file}
 else
 validate <<EOF
@@ -34,12 +34,12 @@ EOF
 	
 	if equal "$?" 0 ; then
 		[ -z $FORM_ipaddr ] && FORM_log_port=""
-		uci_set "webif" "syslog" "size" "$FORM_size"
-		uci_set "webif" "syslog" "type" "$FORM_type"
-		uci_set "webif" "syslog" "ipaddr" "$FORM_ipaddr"
-		uci_set "webif" "syslog" "port" "$FORM_log_port"
-		uci_set "webif" "syslog" "mark" "$FORM_log_mark"
-		uci_set "webif" "syslog" "file" "$FORM_filename"
+		uci_set "webif" "syslog"."size"="$FORM_size"
+		uci_set "webif" "syslog"."type"="$FORM_type"
+		uci_set "webif" "syslog"."ipaddr"="$FORM_ipaddr"
+		uci_set "webif" "syslog"."port"="$FORM_log_port"
+		uci_set "webif" "syslog"."mark"="$FORM_log_mark"
+		uci_set "webif" "syslog"."file"="$FORM_filename"
 	fi
 fi
 

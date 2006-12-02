@@ -127,9 +127,9 @@ header() {
 	}
 
 	_category="$1"
-	_firmware_name="$(uci get webif general firmware_name)"
-	_firmware_subtitle="$(uci get webif general firmware_subtitle)"
-	_version="$(uci get webif general firmware_version)"
+	_firmware_name="$(uci get webif.general.firmware_name)"
+	_firmware_subtitle="$(uci get webif.general.firmware_subtitle)"
+	_version="$(uci get webif.general.firmware_version)"
 	_uptime="$(uptime)"
 	_loadavg="${_uptime#*load average: }"
 	_uptime="${_uptime#*up }"

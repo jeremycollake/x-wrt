@@ -1,7 +1,7 @@
 ###########################################################
 # identification of the device
 #
-device_name=$(uci get webif general device_name)
+device_name=$(uci get webif.general.device_name)
 
 [ -z "$device_name" ] && [ -f "/proc/diag/model" ] && device_name=$(cat "/proc/diag/model")
 while [ -z "$device_name" ]; do  
@@ -17,7 +17,7 @@ while [ -z "$device_name" ]; do
         }
 break
 done
-uci set webif general device_name "$device_name"
+uci set webif general.device_name."$device_name"
 uci commit webif
 # do not commit changes:
 # our id code is fast, we'll do it every boot until user does a commit for some other reason.

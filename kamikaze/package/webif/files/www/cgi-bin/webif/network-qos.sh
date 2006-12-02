@@ -46,31 +46,31 @@ header "Network" "QoS" "@TR<<QOS Configuration>>" ' onload="modechange()" ' "$SC
 EOF
 		equal "$?" "0" && {
 			SAVED=1							
-			uci_set "qos" "cfg$current_qos_item" "target" "$FORM_current_target"
+			uci_set "qos"."cfg$current_qos_item"."target"="$FORM_current_target"
 			if ! empty "$FORM_current_proto"; then
-				uci_set "qos" "cfg$current_qos_item" "proto" "$FORM_current_proto"
+				uci_set "qos"."cfg$current_qos_item"."proto"="$FORM_current_proto"
 			else
-				uci_remove "qos" "cfg$current_qos_item" "proto"
+				uci_remove "qos"."cfg$current_qos_item"."proto"
 			fi
 			if ! empty "$FORM_current_ports"; then			
-				uci_set "qos" "cfg$current_qos_item" "ports" "$FORM_current_ports"			
+				uci_set "qos"."cfg$current_qos_item"."ports"="$FORM_current_ports"			
 			else
-				uci_remove "qos" "cfg$current_qos_item" "ports" "$FORM_current_ports"
+				uci_remove "qos"."cfg$current_qos_item"."ports"."$FORM_current_ports"
 			fi
 			if ! empty "$FORM_current_portrange"; then
-				uci_set "qos" "cfg$current_qos_item" "portrange" "$FORM_current_portrange"
+				uci_set "qos"."cfg$current_qos_item"."portrange"="$FORM_current_portrange"
 			else
-				uci_remove "qos" "cfg$current_qos_item" "portrange" "$FORM_current_portrange"
+				uci_remove "qos"."cfg$current_qos_item"."portrange"."$FORM_current_portrange"
 			fi
 			if ! empty "$FORM_current_layer7"; then			
-				uci_set "qos" "cfg$current_qos_item" "layer7" "$FORM_current_layer7"			
+				uci_set "qos"."cfg$current_qos_item"."layer7"="$FORM_current_layer7"			
 			else
-				uci_remove "qos" "cfg$current_qos_item" "layer7" "$FORM_current_layer7"
+				uci_remove "qos"."cfg$current_qos_item"."layer7"."$FORM_current_layer7"
 			fi
 			if ! empty "$FORM_current_ipp2p"; then						
-				uci_set "qos" "cfg$current_qos_item" "ipp2p" "$FORM_current_ipp2p"		
+				uci_set "qos"."cfg$current_qos_item"."ipp2p"="$FORM_current_ipp2p"		
 			else
-				uci_remove "qos" "cfg$current_qos_item" "ipp2p" "$FORM_current_ipp2p"
+				uci_remove "qos"."cfg$current_qos_item"."ipp2p"."$FORM_current_ipp2p"
 			fi		
 		}						
 	}			
@@ -83,13 +83,13 @@ EOF
 		SAVED=1
 		uci_load qos # to check existing variables
 		! equal "$FORM_wan_enabled" "$CONFIG_wan_enabled" && {
-		 	uci_set "qos" "wan" "enabled" "$FORM_wan_enabled"
+		 	uci_set "qos"."wan"."enabled"="$FORM_wan_enabled"
 		}
 		! empty "$FORM_wan_download" && ! equal "$FORM_wan_download" "$CONFIG_wan_download" && {
-			uci_set "qos" "wan" "download" "$FORM_wan_download"
+			uci_set "qos"."wan"."download"="$FORM_wan_download"
 		}
 		! empty "$FORM_wan_upload" && ! equal "$FORM_wan_upload" "$CONFIG_wan_upload" && {
-			uci_set "qos" "wan" "upload" "$FORM_wan_upload"
+			uci_set "qos"."wan"."upload"="$FORM_wan_upload"
 		}
 	}
 }
@@ -100,7 +100,7 @@ EOF
 ! empty "$FORM_qos_add" && {	
 	# todo: this add needs to be in the save area, causes instant save here	of
 	#       an empty rule here. However, requires more work than a simple move ;).
-	uci_add "qos" "classify" ""
+	uci_add "qos"."classify".""
 }
 	
 #
@@ -110,14 +110,14 @@ EOF
 	current_qos_item=$(echo "$QUERY_STRING" | grep "qos_remove=" | cut -d'=' -f2)	
 	! empty "$current_qos_item" && {		
 		# also manually clear the other options so they are immediately empty		
-		uci_set "qos" "cfg$current_qos_item" "proto" ""
-		uci_set "qos" "cfg$current_qos_item" "layer7" ""
-		uci_set "qos" "cfg$current_qos_item" "ipp2p" ""
-		uci_set "qos" "cfg$current_qos_item" "ports" ""
-		uci_set "qos" "cfg$current_qos_item" "portrange" ""
+		uci_set "qos"."cfg$current_qos_item"."proto"=""
+		uci_set "qos"."cfg$current_qos_item"."layer7"=""
+		uci_set "qos"."cfg$current_qos_item"."ipp2p"=""
+		uci_set "qos"."cfg$current_qos_item"."ports"=""
+		uci_set "qos"."cfg$current_qos_item"."portrange"=""
 		# show 'deleted' as target to indicate pending delete
-		uci_set "qos" "cfg$current_qos_item" "target" "deleted"
-		uci_remove "qos" "cfg$current_qos_item"
+		uci_set "qos"."cfg$current_qos_item"."target"="deleted"
+		uci_remove "qos"."cfg$current_qos_item"
 	}
 }
 	
