@@ -14,12 +14,12 @@
 . /etc/runsyslogd.conf
 
 # retrieve uci values
-syslog_ip=$(uci get webif.syslog.ipaddr)
-syslog_port=$(uci get webif.syslog.port)
-syslog_size=$(uci get webif.syslog.size)
-syslog_type=$(uci get webif.syslog.type)
-syslog_mark=$(uci get webif.syslog.mark)
-syslog_file=$(uci get webif.syslog.file)
+syslog_ip=$(uci get webif syslog ipaddr)
+syslog_port=$(uci get webif syslog port)
+syslog_size=$(uci get webif syslog size)
+syslog_type=$(uci get webif syslog type)
+syslog_mark=$(uci get webif syslog mark)
+syslog_file=$(uci get webif syslog file)
 
 # verify values
 [ $syslog_type = "circular" ] 2>>/dev/null || [ $syslog_type = "file" ] 2>>/dev/null || syslog_type=$DEFAULT_log_type
