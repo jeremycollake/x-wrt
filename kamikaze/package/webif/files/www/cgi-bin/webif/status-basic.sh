@@ -2,7 +2,6 @@
 <?
 . "/usr/lib/webif/webif.sh"
 header "Status" "System" "@TR<<Device Status>>"
-ShowUntestedWarning
 ?>
 
 <meta http-equiv="refresh" content="20" />
