@@ -8,14 +8,14 @@ this_revision=$(cat "/www/.version")
 
 if [ -n "$FORM_update_check" ]; then
 	tmpfile=$(mktemp "/tmp/.webif.XXXXXX")
-	wget http://ftp.berlios.de/pub/xwrt/.version -O $tmpfile 2> /dev/null >> /dev/null
+	wget http://ftp.berlios.de/pub/xwrt/kamikaze/.version -O $tmpfile 2> /dev/null >> /dev/null
 	cat $tmpfile | grep "doesn't exist" 2>&1 >> /dev/null
 	if [ $? = 0 ]; then
 		revision_text="<div id=\"update-error\">ERROR CHECKING FOR UPDATE</div>"
 	else
 		latest_revision=$(cat $tmpfile)
 		if [ "$this_revision" -lt "$latest_revision" ]; then
-			revision_text="<div id=\"update-available\">webif^2 update available: r$latest_revision - <a href=\"http://svn.berlios.de/wsvn/xwrt/trunk/package/webif/?op=log&amp;rev=0&amp;sc=0&amp;isdir=1\" target=\"_blank\">view changes</a></div>"
+			revision_text="<div id=\"update-available\">webif^2 update available: r$latest_revision - <a href=\"http://svn.berlios.de/wsvn/xwrt/kamikaze/package/webif/?op=log&amp;rev=0&amp;sc=0&amp;isdir=1\" target=\"_blank\">view changes</a></div>"
 		else
 			revision_text="<div id=\"update-unavailable\">You have the latest webif^2: r$this_revision</div>"
 		fi
@@ -26,7 +26,7 @@ fi
 if [ -n "$FORM_install_webif" ]; then
 	echo "Please wait, installation may take a minute ... <br />"
 	echo "<pre>"
-	ipkg install http://ftp.berlios.de/pub/xwrt/webif_latest.ipk | uniq
+	ipkg install http://ftp.berlios.de/pub/xwrt/kamikaze/webif_latest.ipk | uniq
 	echo "</pre>"
 	this_revision=$(cat "/www/.version")
 fi

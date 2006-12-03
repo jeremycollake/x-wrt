@@ -127,19 +127,8 @@ ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/wepkeygen"
 ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/int2human"
 
 # initialize ipkg.conf
-#AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/packages"
-#[ -z "$IPKG_INSTROOT" ] && firmware_version=$(nvram get firmware_version)
-#if [ "$firmware_version" = "RC5" ] || grep -q RC5 "${IPKG_INSTROOT}/etc/banner"; then
-#	DeleteRepository "http://downloads.openwrt.org/backports/rc4"
-#	AddRepository "rc5-backports" "http://downloads.openwrt.org/backports/rc5"
-#elif [ "$firmware_version" = "RC6" ] || grep -q RC6 "${IPKG_INSTROOT}/etc/banner"; then
-#	DeleteRepository "http://downloads.openwrt.org/backports/rc5"
-#	AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"	
-#else
-	# todo: intended for 0.9, code properly later - verify backports exists
-#	DeleteRepository "http://downloads.openwrt.org/backports/rc5"
-#	AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"	
-#fi
+AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/kamikaze/packages"
+
 
 # only run below on 'real' system (not image builder)
 if [ -z "${IPKG_INSTROOT}" ]; then	
