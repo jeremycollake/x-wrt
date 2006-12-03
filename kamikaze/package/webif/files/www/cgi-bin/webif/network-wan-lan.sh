@@ -24,7 +24,7 @@ ShowUntestedWarning
 
 load_settings network
 
-FORM_wandns="${wan_dns:-$(uci get network wan dns)}"
+FORM_wandns="${wan_dns:-$(uci get network.wan.dns)}"
 LISTVAL="$FORM_wandns"
 handle_list "$FORM_wandnsremove" "$FORM_wandnsadd" "$FORM_wandnssubmit" 'ip|FORM_dnsadd|@TR<<WAN DNS Address>>|required' && {
 	FORM_wandns="$LISTVAL"
@@ -33,7 +33,7 @@ handle_list "$FORM_wandnsremove" "$FORM_wandnsadd" "$FORM_wandnssubmit" 'ip|FORM
 FORM_wandnsadd=${FORM_wandnsadd:-192.168.1.1}
 
 if empty "$FORM_submit"; then
-	FORM_wan_proto=${FORM_wan_proto:-$(uci get network wan proto)}
+	FORM_wan_proto=${FORM_wan_proto:-$(uci get network.wan.proto)}
 	case "$FORM_wan_proto" in
 		# supported types
 		static|dhcp|pptp|pppoe|wwan) ;;
@@ -42,33 +42,33 @@ if empty "$FORM_submit"; then
 	esac
 
 	# pptp, dhcp and static common
-	FORM_wan_ipaddr=${wan_ipaddr:-$(uci get network wan ipaddr)}
-	FORM_wan_netmask=${wan_netmask:-$(uci get network wan netmask)}
-	FORM_wan_gateway=${wan_gateway:-$(uci get network wan gateway)}
+	FORM_wan_ipaddr=${wan_ipaddr:-$(uci get network.wan.ipaddr)}
+	FORM_wan_netmask=${wan_netmask:-$(uci get network.wan.netmask)}
+	FORM_wan_gateway=${wan_gateway:-$(uci get network.wan.gateway)}
 
 	# ppp common
 	#TODO: verify all ppp variables still work under kamikaze.
-	FORM_ppp_username=${ppp_username:-$(uci get network wan username)}
-	FORM_ppp_passwd=${ppp_passwd:-$(uci get network wan passwd)}
-	FORM_ppp_idletime=${ppp_idletime:-$(uci get network wan idletime)}
-	FORM_ppp_redialperiod=${ppp_redialperiod:-$(uci get network wan redialperiod)}
-	FORM_ppp_mtu=${ppp_mtu:-$(uci get network wan mtu)}
+	FORM_ppp_username=${ppp_username:-$(uci get network.wan.username)}
+	FORM_ppp_passwd=${ppp_passwd:-$(uci get network.wan.passwd)}
+	FORM_ppp_idletime=${ppp_idletime:-$(uci get network.wan.idletime)}
+	FORM_ppp_redialperiod=${ppp_redialperiod:-$(uci get network.wan.redialperiod)}
+	FORM_ppp_mtu=${ppp_mtu:-$(uci get network.wan.mtu)}
 
-	redial=${ppp_demand:-$(uci get network wan demand)}
+	redial=${ppp_demand:-$(uci get network.wan.demand)}
 	case "$redial" in
 		1|enabled|on) FORM_ppp_redial="demand";;
 		*) FORM_ppp_redial="persist";;
 	esac
 
-	FORM_pptp_server_ip=${pptp_server_ip:-$(uci get network wan server)}
+	FORM_pptp_server_ip=${pptp_server_ip:-$(uci get network.wan.server)}
 	
 	# umts apn
-	FORM_wwan_service=${wwan_service:-$(uci get network wan service)}
+	FORM_wwan_service=${wwan_service:-$(uci get network.wan.service)}
 	FORM_wwan_pincode="-@@-"
-	FORM_wwan_country=${wwan_country:-$(uci get network wan country)}
-	FORM_wwan_apn=${wwan_apn:-$(uci get network wan apn)}
-	FORM_wwan_username=${wwan_username:-$(uci get network wan username)}
-	FORM_wwan_passwd=${wwan_passwd:-$(uci get network wan passwd)}
+	FORM_wwan_country=${wwan_country:-$(uci get network.wan.country)}
+	FORM_wwan_apn=${wwan_apn:-$(uci get network.wan.apn)}
+	FORM_wwan_username=${wwan_username:-$(uci get network.wan.username)}
+	FORM_wwan_passwd=${wwan_passwd:-$(uci get network.wan.passwd)}
 else
 	SAVED=1
 
@@ -313,7 +313,7 @@ end_form
 EOF
 
 
-FORM_landns="${lan_dns:-$(uci get network lan dns)}"
+FORM_landns="${lan_dns:-$(uci get network.lan.dns)}"
 LISTVAL="$FORM_landns"
 handle_list "$FORM_landnsremove" "$FORM_landnsadd" "$FORM_landnssubmit" 'ip|FORM_dnsadd|@TR<<DNS Address>>|required' && {
 	FORM_landns="$LISTVAL"
@@ -322,9 +322,9 @@ handle_list "$FORM_landnsremove" "$FORM_landnsadd" "$FORM_landnssubmit" 'ip|FORM
 FORM_landnsadd=${FORM_landnsadd:-192.168.1.1}
 
 if empty "$FORM_submit"; then
-	FORM_lan_ipaddr=${lan_ipaddr:-$(uci get network lan ipaddr)}
-	FORM_lan_netmask=${lan_netmask:-$(uci get network lan netmask)}
-	FORM_lan_gateway=${lan_gateway:-$(uci get network lan gateway)}
+	FORM_lan_ipaddr=${lan_ipaddr:-$(uci get network.lan.ipaddr)}
+	FORM_lan_netmask=${lan_netmask:-$(uci get network.lan.netmask)}
+	FORM_lan_gateway=${lan_gateway:-$(uci get network.lan.gateway)}
 else
 	SAVED=1
 	validate <<EOF

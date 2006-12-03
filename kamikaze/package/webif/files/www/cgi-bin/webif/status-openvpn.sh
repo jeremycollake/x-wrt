@@ -5,7 +5,7 @@
 header "Status" "OpenVPN" "@TR<<OpenVPN Status>>"
 ShowNotUpdatedWarning
 
-equal "$(nvram get openvpn_cli)" "1" && {
+equal "$(uci get openvpn.general.mode)" "client" && {
 
 	case "$FORM_action" in
 		start)
@@ -24,7 +24,7 @@ equal "$(nvram get openvpn_cli)" "1" && {
 		;;
 	esac
 
-	case "$(nvram get openvpn_cli_auth)" in
+	case "$(uci get openvpn.client.auth)" in
 		cert)
 			[ -f "/etc/openvpn/certificate.p12" ] ||
 				ERROR="Error, certificate is missing!"

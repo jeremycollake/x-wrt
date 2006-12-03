@@ -127,9 +127,9 @@ header() {
 	}
 
 	_category="$1"
-	_firmware_name="$(uci get webif general firmware_name)"
-	_firmware_subtitle="$(uci get webif general firmware_subtitle)"
-	_version="$(uci get webif general firmware_version)"
+	_firmware_name="$(uci get webif.general.firmware_name)"
+	_firmware_subtitle="$(uci get webif.general.firmware_subtitle)"
+	_version="$(uci get webif.general.firmware_version)"
 	_uptime="$(uptime)"
 	_loadavg="${_uptime#*load average: }"
 	_uptime="${_uptime#*up }"
@@ -142,7 +142,7 @@ header() {
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}
 
-	use_short_status_frame=$(uci get webif general use_short_status_frame)
+	use_short_status_frame=$(uci get webif.general.use_short_status_frame)
 	if equal $use_short_status_frame "1"; then
 		short_status_frame='<iframe src="/cgi-bin/webif/iframe.mini-info.sh"
 				width="200" height="80"  scrolling="no" frameborder="0"></iframe>'

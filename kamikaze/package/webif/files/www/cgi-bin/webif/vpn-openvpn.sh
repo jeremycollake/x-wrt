@@ -25,14 +25,14 @@ if empty "$FORM_submit"; then
 		NOCERT=1
 	[ -f /etc/openvpn/shared.key ] ||
 		NOPSK=1
-	FORM_openvpn_cli=${openvpn_cli:-$(uci get openvpn general mode)}
-	FORM_openvpn_cli_server=${openvpn_cli_server:-$(uci get openvpn client ipaddr)}
-	FORM_openvpn_cli_proto=${openvpn_cli_proto:-$(uci get openvpn general proto)}
-	FORM_openvpn_cli_port=${openvpn_cli_port:-$(uci get openvpn general port)}
+	FORM_openvpn_cli=${openvpn_cli:-$(uci get openvpn.general.mode)}
+	FORM_openvpn_cli_server=${openvpn_cli_server:-$(uci get openvpn.client.ipaddr)}
+	FORM_openvpn_cli_proto=${openvpn_cli_proto:-$(uci get openvpn.general.proto)}
+	FORM_openvpn_cli_port=${openvpn_cli_port:-$(uci get openvpn.general.port)}
 	FORM_openvpn_cli_port=${FORM_openvpn_cli_port:-1194}
-	FORM_openvpn_cli_auth=${openvpn_cli_auth:-$(uci get openvpn client auth)}
+	FORM_openvpn_cli_auth=${openvpn_cli_auth:-$(uci get openvpn.client.auth)}
 	FORM_openvpn_cli_auth=${FORM_openvpn_cli_auth:-cert)}
-	FORM_openvpn_cli_psk=${openvpn_cli_psk:-$(uci get openvpn client psk)}
+	FORM_openvpn_cli_psk=${openvpn_cli_psk:-$(uci get openvpn.client.psk)}
 else
 	[ -d /etc/openvpn ] || mkdir /etc/openvpn
 	[ -f "$FORM_openvpn_pkcs12file" ] && {
