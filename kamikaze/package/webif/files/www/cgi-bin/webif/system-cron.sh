@@ -23,7 +23,7 @@ load_settings "cron"
 [ -z $FORM_submit ] && {
 
 	FORM_cron_enable=${cron_enable:-$(uci get webif.cron.enable)}
-	FORM_cron_enable=${FORM_cron_enable:-"0"}
+	FORM_cron_enable=${FORM_cron_enable:-"1"}
 
 } || {
 	SAVED=1

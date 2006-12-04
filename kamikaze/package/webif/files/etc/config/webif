@@ -11,7 +11,9 @@ config webif syslog
 	option type ""
 	option mark ""
 	option file ""
+
+config webif cron
+	option enable "1"
 	
-	
-#This is to be used untill a uci library is written in C
+#This is to be used for webif-page until a uci library is written in C
 lang="en"
