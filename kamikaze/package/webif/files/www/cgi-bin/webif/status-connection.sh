@@ -2,7 +2,6 @@
 <?
 . /usr/lib/webif/webif.sh
 header "Status" "Netstat" "@TR<<Netstat>>"
-ShowUntestedWarning
 ###################################################################
 # TCP/IP status page
 #

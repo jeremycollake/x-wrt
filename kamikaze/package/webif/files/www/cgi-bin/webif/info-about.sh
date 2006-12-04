@@ -42,7 +42,7 @@ fi
 if [ -n "$FORM_install_webif" ]; then
 	echo "Please wait, installation may take a minute ... <br />"
 	echo "<pre>"
-	ipkg install http://ftp.berlios.de/pub/xwrt/kamikazewebif_latest.ipk | uniq
+	ipkg install http://ftp.berlios.de/pub/xwrt/kamikaze/webif_latest.ipk | uniq
 	echo "</pre>"
 	this_revision=$(cat "/www/.version")
 fi

@@ -3,7 +3,6 @@
 . /usr/lib/webif/webif.sh
 
 header "Status" "OpenVPN" "@TR<<OpenVPN Status>>"
-ShowNotUpdatedWarning
 
 equal "$(uci get openvpn.general.mode)" "client" && {
 

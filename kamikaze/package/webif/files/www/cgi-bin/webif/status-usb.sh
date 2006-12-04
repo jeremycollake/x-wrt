@@ -2,7 +2,6 @@
 <?
 . /usr/lib/webif/webif.sh
 header "Status" "USB" "USB Devices"
-ShowUntestedWarning
 ?>
 <table style="width: 90%; " border="0" cellpadding="2" cellspacing="2" align="center">
 <tbody>

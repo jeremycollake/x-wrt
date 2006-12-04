@@ -2,7 +2,6 @@
 <?
 . /usr/lib/webif/webif.sh
 header "Status" "QoS" "@TR<<Quality of Service Statistics>>"
-ShowUntestedWarning
 ###################################################################
 # TCP/IP status page
 #

@@ -2,7 +2,6 @@
 <?
 . /usr/lib/webif/webif.sh
 header "Status" "PPPoE" "@TR<<PPPoE Status>>"
-ShowUntestedWarning
 ?>
 <?
 if [ "$FORM_action" = "reconnect" ]; then
