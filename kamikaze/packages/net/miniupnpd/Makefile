@@ -40,8 +40,9 @@ define Package/miniupnpd/install
 	$(INSTALL_DIR) $(1)/usr/bin $(1)/etc/rc.d $(1)/etc/config
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/miniupnpd $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/linux/*.sh $(1)/usr/bin/
-	$(INSTALL_BIN) ./files/miniupnpd.init $(1)/etc/rc.d/S99miniupnpd
+	$(INSTALL_BIN) ./files/miniupnpd.init $(1)/etc/init.d/miniupnpd
 	$(INSTALL_BIN) ./files/upnpd.uci $(1)/etc/config/upnpd
+	$(CP) -a ./ipkg/miniupnp.postinst $(1)/CONTROL/postinst
 	$(STRIP) $(1)/usr/bin/miniupnpd
 endef
 
