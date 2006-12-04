@@ -77,15 +77,15 @@ FixReadOnlyLink "${IPKG_INSTROOT}/usr/lib/ipkg/status"
 # copy our new httpd.conf and S50dnsmasq files - we renamed them so that the webif can
 # be uninstalled without ipkg removing these pre-existing files as well.
 #dnsmasq_filename="S50dnsmasq"
-#[ -f "${IPKG_INSTROOT}/etc/init.d/S60dnsmasq" ] && {
+#[ -f "${IPKG_INSTROOT}/etc/rc.d/S60dnsmasq" ] && {
 	# S50dnsmasq renamed to S60dnsmasq in post-RC6
 #	dnsmasq_filename="S60dnsmasq"
 #}
-#rm -f "${IPKG_INSTROOT}/etc/init.d/S?0dnsmasq"
+#rm -f "${IPKG_INSTROOT}/etc/rc.d/S?0dnsmasq"
 #rm -f "${IPKG_INSTROOT}/etc/httpd.conf"
-#mv -f "${IPKG_INSTROOT}/etc/init.d/x50dnsmasq.webif" "${IPKG_INSTROOT}/etc/init.d/${dnsmasq_filename}"
-rm -f "${IPKG_INSTROOT}/etc/init.d/cron"
-mv -f "${IPKG_INSTROOT}/etc/init.d/x60cron.webif" "${IPKG_INSTROOT}/etc/init.d/cron"
+#mv -f "${IPKG_INSTROOT}/etc/rc.d/x50dnsmasq.webif" "${IPKG_INSTROOT}/etc/rc.d/${dnsmasq_filename}"
+rm -f "${IPKG_INSTROOT}/etc/rc.d/S60cron"
+mv -f "${IPKG_INSTROOT}/etc/rc.d/x60cron.webif" "${IPKG_INSTROOT}/etc/rc.d/S60cron"
 #mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
 
 # if /etc/functions.sh contains uci config functions, then make /etc/functions_ex.sh a symlink
@@ -133,13 +133,13 @@ AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/kamikaze/packages"
 # only run below on 'real' system (not image builder)
 if [ -z "${IPKG_INSTROOT}" ]; then	
 
-#	[ "$IPKG_UPDATE_NEEDED" = "1" ] && ipkg update
+	[ "$IPKG_UPDATE_NEEDED" = "1" ] && ipkg update
 
 #	nvram unset device_name 	# force rescan of device_name, in case new id code is added
 #	nvram unset firmware_name	# force rescan of firmware_*
-#	ExecuteIfExists "/etc/init.d/S90webif_deviceid"
-#	ExecuteIfExists "/etc/init.d/S10firmwareinfo"	# x-wrt images use to pre-empt firmware_* set
-#	ExecuteIfExists "/etc/init.d/S90webif_firmwareid"
+	ExecuteIfExists "/etc/rc.d/S90webif_deviceid"
+#	ExecuteIfExists "/etc/rc.d/S10firmwareinfo"	# x-wrt images use to pre-empt firmware_* set
+#	ExecuteIfExists "/etc/rc.d/S90webif_firmwareid"
 
 	# test installation successfulness
 	TestInstall
