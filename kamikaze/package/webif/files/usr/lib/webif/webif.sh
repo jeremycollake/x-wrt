@@ -55,7 +55,7 @@ ShowUntestedWarning() {
 }
 
 ShowNotUpdatedWarning() {
-	echo "<div class=\"warning\">WARNING: This page has not been updated or looked at for correct to check for correct functionality under Kamikaze.</div>"
+	echo "<div class=\"warning\">WARNING: This page has not been updated or checked for correct functionality under Kamikaze.</div>"
 }
 
 update_changes() {

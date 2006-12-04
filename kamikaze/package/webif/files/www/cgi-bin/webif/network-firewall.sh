@@ -129,7 +129,6 @@ EOF
 }
 
 header "Network" "Firewall" "@TR<<Firewall Configuration>>" ''
-ShowNotUpdatedWarning
 
 ?>
 <style>
