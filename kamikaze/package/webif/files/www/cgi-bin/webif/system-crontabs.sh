@@ -1,13 +1,12 @@
 #!/usr/bin/webif-page
 <?
-crondir="/var/spool/cron/crontabs/"
+crondir="/etc/crontabs/"
 
 . /usr/lib/webif/webif.sh
 
 load_settings "cron"
 
 header "System" "Crontabs" "@TR<<Cron Tables>>" "$SCRIPT_NAME"
-ShowNotUpdatedWarning
 
 cron_dir_text="<br/>Cron Tables Directory:<pre>$crondir</pre><br/>"
 

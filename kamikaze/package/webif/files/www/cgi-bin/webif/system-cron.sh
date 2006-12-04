@@ -16,28 +16,23 @@
 # Configuration files referenced:
 #   none
 #
-crondir_base="/var/spool/cron"
-cron_realdir="/etc/spool/cron/crontabs"
-crondir="$crondir_base/crontabs"
-
 . /usr/lib/webif/webif.sh
 
 load_settings "cron"
 
 [ -z $FORM_submit ] && {
 
-	FORM_cron_enable=${cron_enable:-$(nvram get cron_enable)}
+	FORM_cron_enable=${cron_enable:-$(uci get webif.cron.enable)}
 	FORM_cron_enable=${FORM_cron_enable:-"0"}
 
 } || {
 	SAVED=1
 	{
-	save_setting cron cron_enable $FORM_cron_enable
+	uci_set "webif" "cron" "enable" "$FORM_cron_enable"
 	}
 }
 
 header "System" "Cron" "@TR<<Cron>>" '' "$SCRIPT_NAME"
-ShowNotUpdatedWarning
 
 display_form "start_form|Cron Settings
 field|Cron Daemon

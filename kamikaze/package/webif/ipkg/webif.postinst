@@ -84,8 +84,8 @@ FixReadOnlyLink "${IPKG_INSTROOT}/usr/lib/ipkg/status"
 #rm -f "${IPKG_INSTROOT}/etc/init.d/S?0dnsmasq"
 #rm -f "${IPKG_INSTROOT}/etc/httpd.conf"
 #mv -f "${IPKG_INSTROOT}/etc/init.d/x50dnsmasq.webif" "${IPKG_INSTROOT}/etc/init.d/${dnsmasq_filename}"
-#rm -f "${IPKG_INSTROOT}/etc/init.d/S60cron"
-#mv -f "${IPKG_INSTROOT}/etc/init.d/x60cron.webif" "${IPKG_INSTROOT}/etc/init.d/S60cron"
+rm -f "${IPKG_INSTROOT}/etc/init.d/cron"
+mv -f "${IPKG_INSTROOT}/etc/init.d/x60cron.webif" "${IPKG_INSTROOT}/etc/init.d/cron"
 #mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
 
 # if /etc/functions.sh contains uci config functions, then make /etc/functions_ex.sh a symlink
