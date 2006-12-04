@@ -41,7 +41,7 @@ define Package/miniupnpd/install
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/miniupnpd $(1)/usr/bin/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/linux/*.sh $(1)/usr/bin/
 	$(INSTALL_BIN) ./files/miniupnpd.init $(1)/etc/init.d/miniupnpd
-	$(INSTALL_BIN) ./files/unpnpd.uci $(1)/etc/init.d/miniupnpd
+	$(INSTALL_BIN) ./files/unpnpd.uci $(1)/etc/config/upnpd
 	$(STRIP) $(1)/usr/bin/miniupnpd
 endef
 
