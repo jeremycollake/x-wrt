@@ -8,9 +8,11 @@ revision_text=" r$this_revision "
 
 version_url="http://ftp.berlios.de/pub/xwrt/"
 version_file=".version-stable"
+package_filename="webif_latest_stable.ipk"
 daily_checked=""
 equal "$FORM_check_daily" "1" && {	
 	version_file=".version"
+	package_filename="webif_latest.ipk"
 	daily_checked="checked=\"checked\""
 }
 
@@ -36,7 +38,7 @@ fi
 if [ -n "$FORM_install_webif" ]; then
 	echo "Please wait, installation may take a minute ... <br />"
 	echo "<pre>"
-	ipkg install http://ftp.berlios.de/pub/xwrt/webif_latest.ipk | uniq
+	ipkg install "http://ftp.berlios.de/pub/xwrt/$package_filename" | uniq
 	echo "</pre>"
 	this_revision=$(cat "/www/.version")
 fi
