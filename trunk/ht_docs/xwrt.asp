@@ -192,12 +192,14 @@ install and use X-Wrt on your router:</font></p>
 		(follow instructions in <a href="http://wiki.openwrt.org">OpenWrt's wiki</a>). We recommend 
 		White Russian RC5, RC6, or 0.9 (when it is released). Kamikaze is NOT supported yet, 
 		but will be <a href="#kamikaze">soon</a>.</font></li>
-			<li><font face="Verdana">Enter your router's IP address in the field below and click one 
-			of the two buttons to install either the latest daily build of 
-			webif<sup>2</sup>, or the last official release. The last official release 
-			(currently milestone 2) might be more well tested, but has not got 
-			all the latest updates included.
-				These buttons will <b>NOT </b>work with Internet Explorer at present.</font></li>
+			<li><font face="Verdana">Enter your router's IP address in the field below and click the 
+			button below to install the latest official beta release of X-Wrt's webif. 
+			After you install the latest official beta release the 'check for 
+			update' and 'upgrade' buttons you'll find in the webif itself will 
+			move you up to the latest daily build, which has more features but 
+			has been less extensively tested.<br>
+			<br>
+			This button will <b>NOT </b>work with Internet Explorer at present.</font></li>
 		</ol>
 	</blockquote>
 </blockquote>
@@ -207,10 +209,8 @@ install and use X-Wrt on your router:</font></p>
 			<blockquote>
 				<blockquote>
 					<p><font face="Verdana"><b><br></b>Your Router's IP address:
-					<input type="text" name="routerip" size="12" value="192.168.1.1"></input></font><font face="Verdana"><p>
-					<input type="submit" value=" Install Latest Daily Build of Webif^2 beta -- newer, less tested " name="install_webif"  onclick="installWebif(this.form)"></input><i><br>
-					</i>
-					<input type="submit" value=" Install Milestone 2 Release of Webif^2 beta -- older, more tested " name="install_webif0"  onclick="installWebifMilestone2(this.form)"></p>
+					<input type="text" name="routerip" size="12" value="192.168.1.1"></input></font><font face="Verdana"><p>				
+					<input type="submit" value=" Install Milestone 2 Release of Webif^2 beta " name="install_webif0"  onclick="installWebifMilestone2(this.form)"></p>
 				</blockquote>
 			</blockquote>
 		</blockquote>
