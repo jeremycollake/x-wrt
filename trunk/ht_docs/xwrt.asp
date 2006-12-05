@@ -28,7 +28,7 @@ function installWebifMilestone2(form)
 </script> 
 
 <div align="center">
-	<table border="0" width="943" id="table3" bgcolor="#FFFFFF" cellpadding="5">
+	<table border="0" width="959" id="table3" bgcolor="#FFFFFF" cellpadding="5">
 		<tr>
 			<td align="left">&nbsp;<table border="0" width="100%" id="table4">
 	<tr>
@@ -224,10 +224,14 @@ install and use X-Wrt on your router:</font></p>
 		hard refresh (hold down SHIFT and click REFRESH) to clear out the old 
 		CSS.</p>
 		<p>Instead of using this automated install procedure, you can also ssh 
-		or telnet to the 
-				router and run: <span style="background-color: #FFFFCC">&nbsp;ipkg install 
+		or telnet to the router and run ...</p>
+		<p>(latest milestone): <span style="background-color: #FFFFCC">&nbsp;ipkg install 
+				<a href="http://ftp.berlios.de/pub/xwrt/webif_latest.ipk">http://ftp.berlios.de/pub/xwrt/packages/webif_milestone2.ipk</a>
+		<br>
+		</span>(latest daily): <span style="background-color: #FFFFCC">&nbsp;ipkg install 
 				<a href="http://ftp.berlios.de/pub/xwrt/webif_latest.ipk">http://ftp.berlios.de/pub/xwrt/webif_latest.ipk</a>
 		</span></p>
+		<p>&nbsp;</p>
 	</blockquote>
 </blockquote>
 			<ul>
