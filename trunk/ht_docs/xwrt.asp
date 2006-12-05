@@ -273,6 +273,9 @@ install and use X-Wrt on your router:</font></p>
 					applets, like user management utilities.</li>
 					<li><b>wireless-tools v29 pre10</b> - an update to 
 					wireless-tools (iwconfig, iwlist, etc..).</li>
+					<li><b>ipkg-upgrade-fix</b> - issues a warning when a user 
+					tries to run 'ipkg upgrade', something known to wreak havoc 
+					on unsuspecting users.</li>
 				</ul>
 				<p>&nbsp;</p>
 			</blockquote>
