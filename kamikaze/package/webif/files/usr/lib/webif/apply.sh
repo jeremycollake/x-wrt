@@ -4,23 +4,15 @@
 #
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
-cron_init="/etc/init.d/S51crond"
 
 HANDLERS_config='
 	wireless) reload_wireless;;
 	network) reload_network;;
 	system) reload_system;;
-	cron) reload_cron;;
-	syslog) reload_syslog;;
 	wifi-enable) reload_wifi_enable;;
 	wifi-disable) reload_wifi_disable;;
-	hotspot) reload_hotspot;;
-	shape) reload_shape;;
 	pptp) reload_pptp;;
-	log) reload_log;;
-	upnpd) reload_upnpd;;
 	exipupdate) reload_exipupdate;;
-	openvpn) reload_openvpn;;
 
 '
 HANDLERS_file='
@@ -71,33 +63,6 @@ reload_wireless() {
 	) >&- 2>&- <&-
 }
 
-reload_cron() {
-	echo '@TR<<Reloading Cron>> ...'
-	# (re)start crond
-	if [ -x $cron_init ]; then
-		echo "(Re)start cron..."
-		$cron_init restart
-	fi
-}
-
-reload_syslog() {
-	getPID(){
-		echo `ps -elf | grep 'syslogd' | grep -v grep | awk '{ print $1 }'`
-	}
-	# (re)start syslogd
-	echo "@TR<<(Re)start syslogd...>>"
-	pid=$(getPID)
-	if [ -n "$pid" ]; then
-		echo -n "Stopping syslogd: "
-		( {
-			kill $pid >/dev/null 2>&1
-		} && echo "OK" ) || echo "ERROR"
-	fi
-	echo -n "@TR<<Start syslogd:>>"
-	/etc/init.d/S01syslog
-	echo "@TR<<OK>>"
-}
-
 reload_system() {
 	echo '@TR<<Applying>> @TR<<system settings>> ...'
 	echo "$(nvram get wan_hostname)" > /proc/sys/kernel/hostname
@@ -105,16 +70,6 @@ reload_system() {
 		echo '@TR<<Reloading>> @TR<<firewall settings>> ...'
 		/etc/init.d/S??firewall
 	}
-}
-
-reload_upnpd() {
-	echo '@TR<<Reloading>> @TR<<UPNPd>> ...'
-	/etc/init.d/S95miniupnpd
-}
-
-reload_openvpn() {
-	echo '@TR<<Reloading>> @TR<<UPNPd>> ...'
-	/etc/init.d/S??openvpn reload
 }
 
 reload_exipupdate() {
@@ -183,16 +138,6 @@ for config in $(ls file-* 2>&-); do
 	esac'
 done
 
-# config-qos		QOS Config file
-for config in $(ls config-qos 2>&-); do
-	echo '@TR<<Applying>> @TR<<QOS settings>> ...'
-	/usr/bin/qos-stop	
-	# for Rudy's QoS scripts only, nbd's is configured via UCI
-	mv -f config-qos /etc/qos.conf 
-	/usr/bin/qos-start
-	echo '@TR<<Done>>'
-done
-
 # config-wifi-enable		QOS Config file
 for config in $(ls config-wifi-enable 2>&-); do
 	ifdown wifi
@@ -238,32 +183,7 @@ for config in $(ls config-theme 2>&-); do
 	echo '@TR<<Done>>'
 done
 
-reload_hotspot() {
-	echo '@TR<<Reloading>> @TR<<hotspot settings>> ...'
-	grep -v '^hs_cframe' config-hotspot | grep '^hs_' >&- 2>&- && {
-	[ -e "/usr/sbin/chilli" ] && {
-		/etc/init.d/S??chilli stop  >&- 2>&-
-		/etc/init.d/S??chilli start >&- 2>&-
-	}
-	[ -e "/usr/bin/wdctl" ] && {
-		wdctl stop >&- 2>&-
-		/etc/init.d/S??wifidog start >&- 2>&-
-	}
-	}
-	grep '^hs_cframe' config-hotspot >&- 2>&- && {
-	[ -e /etc/init.d/S??cframe ] && {
-		/etc/init.d/S??cframe stop  >&- 2>&-
-		/etc/init.d/S??cframe start >&- 2>&-
-	}
-	}
-}
 
-reload_shape() {
-	echo '@TR<<Reloading>> @TR<<traffic shaping settings>> ...'
-	grep '^shape_' config-shape >&- 2>&- && {
-		/etc/init.d/S90shape start >&- 2>&-
-	}
-}
 
 reload_pptp() {
 	echo '@TR<<Reloading>> @TR<<PPTP settings>> ...'
@@ -277,11 +197,6 @@ reload_pptp() {
 	}
 }
 
-reload_log() {
-	echo '@TR<<Reloading syslogd ...>>'
-	killall syslogd >&- 2>&- <&-
-	/sbin/runsyslogd >&- 2>&- <&-
-}
 
 
 # config-*		simple config files
@@ -309,6 +224,18 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 	case "$package" in
 		"/tmp/.uci/qos") echo "&nbsp;@TR<<Restarting>> ..."
 			qos-start;;
+		"/tmp/.uci/syslog")
+			echo '@TR<<Reloading syslogd ...>>'
+			killall syslogd >&- 2>&- <&-
+			/sbin/runsyslogd >&- 2>&- <&- ;;
+		"/tmp/.uci/miniupnpd")
+			echo '@TR<<Reloading>> @TR<<UPNPd>> ...'
+			/etc/rc.d/S??miniupnpd stop
+			/etc/rc.d/S??miniupnpd start ;;
+		"/tmp/.uci/openvpn")
+			echo '@TR<<Reloading>> @TR<<UPNPd>> ...'
+			killall openvpn >&- 2>&- <&-
+			/etc/rc.d/S??openvpn start
 	esac
 done
 
