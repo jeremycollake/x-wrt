@@ -85,6 +85,7 @@ function installWebifMilestone2(form)
 						<li><font face="Verdana">
 						<a href="#Installation_Instructions">Installation 
 						Instructions</a></font></li>
+						<li><font face="Verdana"><a href="#webif_problems">Webif<sup>2</sup> Troubleshooting</a></font></li>
 						<li><font face="Verdana"><a href="#X-Wrt_Packages">X-Wrt 
 						Packages</a></font></li>
 						<li><font face="Verdana"><a href="#kamikaze">OpenWrt 
@@ -133,20 +134,13 @@ function installWebifMilestone2(form)
 					actively grant write access to anyone interested in having 
 					it. We believe people are responsible when given 
 					responsibility. Just ask and we'll sign you up.</font></li>
-					<li><font face="Verdana"><b>Democracy.</b> Control should 
-					not rest in the hands of any single person. A project yields 
-					the best results when it is managed&nbsp; by the community, 
-					with decisions made in a democratic manner. We realize that 
-					no single person is perfect and any time a project becomes a 
-					dictatorship it is subject to the faults of its dictator.</font></li>
 					<li><font face="Verdana"><b>Community driven.</b> This isn't 
 					about 'us' offering 'you' something, it's about everyone 
 					coming together to work towards the common goal.</font></li>
 					<li><font face="Verdana"><b>No monetary donations without 
 					accounting. </b>The project can not accept monetary 
 					donations without having a treasurer to hold and account for 
-					all donations and what they have went towards.<br>
-&nbsp;</font></li>
+					all donations and what they have went towards.<br>&nbsp;</font></li>
 				</ul>
 			</blockquote>
 			<p><font size="5" color="#666699" face="Verdana"><b>
@@ -175,9 +169,15 @@ install and use X-Wrt on your router:</font></p>
 				other X-Wrt packages.<br>
 				<b><i>...or...</i></b></font></li>
 				<li><font face="Verdana">Flash a pre-built image of OpenWrt White Russian that 
-				already includes X-Wrt packages like webif<sup>2</sup>.<br>
-&nbsp;</font></li>
+				already includes X-Wrt packages like webif<sup>2</sup>.</font></li>
 			</ol>
+			<blockquote>
+				<p><font face="Verdana" color="#FF0000"><b>WARNING:</b> All 
+				X-Wrt packages, including webif<sup>2</sup> are in <b>beta</b>. For 
+				stability we recommend you install the latest milestone build 
+				and not do any upgrades until a new milestone build is 
+				available.</font></p>
+			</blockquote>
 			<ul>
 				<li><font face="Verdana"><b><font size="4">Method #1:
 				</font></b><font size="4">
@@ -208,9 +208,9 @@ install and use X-Wrt on your router:</font></p>
 				<blockquote>
 					<p><font face="Verdana"><b><br></b>Your Router's IP address:
 					<input type="text" name="routerip" size="12" value="192.168.1.1"></input></font><font face="Verdana"><p>
-					<input type="submit" value=" Install Latest Daily Build of Webif^2 -- newer " name="install_webif"  onclick="installWebif(this.form)"></input><i><br>
+					<input type="submit" value=" Install Latest Daily Build of Webif^2 beta -- newer, less tested " name="install_webif"  onclick="installWebif(this.form)"></input><i><br>
 					</i>
-					<input type="submit" value=" Install Milestone 2 Release of Webif^2 -- more tested " name="install_webif0"  onclick="installWebifMilestone2(this.form)"></p>
+					<input type="submit" value=" Install Milestone 2 Release of Webif^2 beta -- older, more tested " name="install_webif0"  onclick="installWebifMilestone2(this.form)"></p>
 				</blockquote>
 			</blockquote>
 		</blockquote>
@@ -255,6 +255,27 @@ install and use X-Wrt on your router:</font></p>
 				</blockquote>
 				</li>
 			</ul>
+			<p><font size="5" color="#666699"><b><a name="webif_problems">
+			Webif<sup>2</sup> Problems</a></b></font></p>
+			<blockquote>
+				<p>Since our new webif is in beta sometimes you can get a build 
+				that has problems. The best advice is:</p>
+				<ol>
+					<li>Upgrade to a newer build when it is available.</li>
+					<li>Report bugs or other errata you see if you don't find it 
+					fixed in the next build. It's hard for us to test every 
+					build thoroughly.</li>
+					<li>If you somehow got unlucky and ended up with a daily 
+					build that was horribly broken and you can't upgrade the 
+					webif, ssh into the router and run this:<br>
+					<br>
+					<i>ipkg install
+					<a href="http://ftp.berlios.de/pub/xwrt/webif_latest.ipk">
+					http://ftp.berlios.de/pub/xwrt/webif_latest.ipk</a> 
+					-force-reinstall</i></li>
+				</ol>
+			</blockquote>
+			<p>&nbsp;</p>
 			<p><font size="5" color="#666699"><b><a name="X-Wrt_Packages">X-Wrt Packages</a></b></font></p>
 			<blockquote>
 				<p>Although all our work is based around our webif<sup>2</sup> package, we 
