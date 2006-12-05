@@ -205,7 +205,7 @@ EOF
 cat<<EOF
 <form method="POST" name="instconfig" action="$SCRIPT_NAME" enctype="multipart/form-data">
 <input type="hidden" name="action" value="chkconfig">
-	<table style="text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
+	<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
 	<tbody>
 		<tr>
 			<td>@TR<<Saved config.tgz file:>></td>
