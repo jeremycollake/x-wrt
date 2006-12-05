@@ -225,6 +225,9 @@ cat<<EOF
 EOF
 
 display_form <<EOF
+helpitem|Backup
+helptext|HelpText Backup#The backup feature on this page attempts to save important config files in /etc as well as nvram settings. It generally works, but should not be relied on 100% to preserve a configuration until after you've verified it does indeed work for your
+configuration.
 end_form|
 EOF
 
