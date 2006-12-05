@@ -31,13 +31,21 @@ fi
 
 if empty "$FORM_submit"; then
 	# initialize all defaults
-	FORM_upnp_enabled="${upnp_enabled:-$(uci get upnpd.general.enabled)}"
+	if [ -L /etc/rc.d/S??miniupnpd ]; then
+	FORM_upnp_enabled="1"
+	else
+	FORM_upnp_enabled="0"
+	fi
 	FORM_upnpd_log_output="${upnpd_log_output:-$(uci get upnpd.general.log_output)}"
 	FORM_upnpd_up_bitspeed="${upnpd_up_bitspeed:-$(uci get upnpd.general.up_bitspeed)}"
 	FORM_upnpd_down_bitspeed="${upnpd_down_bitspeed:-$(uci get upnpd.general.down_bitspeed)}"
 else
 	# save form
-	uci_set "upnpd" "general" "enabled" "$FORM_upnp_enabled"
+	if [ "$FORM_upnp_enabled" = "1" ]; then
+		/etc/init.d/miniupnpd enable 2>&-
+	else
+		/etc/init.d/miniupnpd disable 2>&-
+	fi
 	uci_set "upnpd" "general" "log_output" "$FORM_upnpd_log_output"
 	uci_set "upnpd" "general" "down_bitspeed" "$FORM_upnpd_down_bitspeed"
 	uci_set "upnpd" "general" "up_bitspeed" "$FORM_upnpd_up_bitspeed"
