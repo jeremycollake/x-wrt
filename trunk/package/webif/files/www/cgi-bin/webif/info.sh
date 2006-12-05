@@ -4,11 +4,22 @@
 header "Info" "System" "@TR<<System>>" '' ''
 
 this_revision=$(cat "/www/.version")
+revision_text=" r$this_revision "
+
+version_url="http://ftp.berlios.de/pub/xwrt/"
+version_file=".version-stable"
+daily_checked=""
+equal "$FORM_check_daily" "1" && {	
+	version_file=".version"
+	daily_checked="checked=\"checked\""
+}
 
 if [ -n "$FORM_update_check" ]; then
-	tmpfile=$(mktemp "/tmp/.webif.XXXXXX")
-	wget http://ftp.berlios.de/pub/xwrt/.version -O $tmpfile 2> /dev/null >> /dev/null
-	cat $tmpfile | grep "doesn't exist" 2>&1 >> /dev/null
+	echo "Please wait while checking for an update ...<br />"
+	tmpfile=$(mktemp "/tmp/.webif.XXXXXX")	
+	wget -q "$version_url$version_file" -O "$tmpfile" 2>&-
+	! exists "$tmpfile" && echo "doesn't exist" > "$tmpfile"
+	cat $tmpfile | grep -q "doesn't exist"
 	if [ $? = 0 ]; then
 		revision_text="<div id=\"update-error\">ERROR CHECKING FOR UPDATE</div>"
 	else
@@ -43,6 +54,7 @@ equal $user_string "" && user_string="not logged in"
 echo "<pre>"
 cat '/etc/banner'
 echo "</pre><br />"
+
 cat <<EOF
 <table>
 <tbody>
@@ -52,11 +64,13 @@ cat <<EOF
 	</tr>
 	<tr>
 		<td><strong>@TR<<Webif>></strong></td><td>&nbsp;</td>
-		<td><a href="http://www.x-wrt.org">X-Wrt</a> Webif<sup>2</sup> r$this_revision $revision_text</td>
+		<td><a href="http://www.x-wrt.org">X-Wrt</a> Webif<sup>2</sup></td>
 <td colspan="2">
 <form action="" enctype="multipart/form-data" method="post">
 <input type="submit" value=" @TR<<Check_Upgrade|Check For Webif Update>> " name="update_check" />
-<input type="submit" value=" @TR<<Upgrade_Webif#Upgrade/Reinstall Webif>> "  name="install_webif" />
+<input type="submit" value=" @TR<<Upgrade_Webif#Update/Reinstall Webif>> "  name="install_webif" />
+</td><tr><td></td><td></td><td>$revision_text</td><td>
+<input type="checkbox" $daily_checked value="1" name="check_daily" id="field_check_daily" />Include Daily Builds in Check
 </form>
 </td>
 </tr>
