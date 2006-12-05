@@ -43,6 +43,7 @@ define Package/miniupnpd/install
 	$(INSTALL_BIN) ./files/miniupnpd.init $(1)/etc/init.d/miniupnpd
 	$(INSTALL_BIN) ./files/upnpd.config $(1)/etc/config/upnpd
 	$(INSTALL_BIN) ./ipkg/miniupnpd.postinst $(1)/CONTROL/postinst
+	chmod 777 $(1)/CONTROL/*inst
 	$(STRIP) $(1)/usr/bin/miniupnpd
 endef
 
