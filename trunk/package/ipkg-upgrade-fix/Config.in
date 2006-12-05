@@ -1,0 +1,7 @@
+config BR2_PACKAGE_IPKG_UPGRADE_FIX
+	select BR2_PACKAGE_IPKG
+	tristate "ipkg-upgrade-fix - Warning for 'ipkg upgrade'."
+	default y
+	help
+	  Shows warning about 'ipkg upgrade' when user tries to use it. User can still
+	  execute 'ipkg upgrade' through a method to over-ride though.

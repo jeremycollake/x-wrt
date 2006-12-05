@@ -1,0 +1,1 @@
+mv "${IPKG_INSTROOT}/bin/ipkg" "${IPKG_INSTROOT}/bin/.ipkg"

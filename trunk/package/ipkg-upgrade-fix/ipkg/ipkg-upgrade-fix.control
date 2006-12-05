@@ -1,0 +1,6 @@
+Package: ipkg-upgrade-fix
+Maintainer: Jeremy Collake
+Section: base
+Depends: ipkg
+Priority: normal
+Description: Shows warning about 'ipkg upgrade' when user tries to use it.

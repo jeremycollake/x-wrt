@@ -1,0 +1,9 @@
+#!/bin/sh
+[ "$#" = "1" ] && [ "$1" = "upgrade" ] &&
+	echo "ipkg upgrade is a BAD idea. It can break lots of things."
+	echo "Since OpenWrt has not disabled it, we've done so in X-Wrt."
+	echo "You can still use it by running: /bin/.ipkg upgrade"
+	exit 1
+}
+/bin/.ipkg $*
+exit $?

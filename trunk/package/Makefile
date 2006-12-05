@@ -37,6 +37,7 @@ package-$(BR2_PACKAGE_HASERL) += haserl
 package-$(BR2_PACKAGE_HOWL) += howl
 package-$(BR2_PACKAGE_HTPDATE) += htpdate
 package-$(BR2_PACKAGE_IPKG) += ipkg
+package-$(BR2_PACKAGE_IPKG_UPGRADE_FIX) += ipkg-upgrade-fix
 package-$(BR2_PACKAGE_IPROUTE2) += iproute2
 package-$(BR2_PACKAGE_IPTABLES) += iptables
 package-$(BR2_PACKAGE_KISMET) += kismet
