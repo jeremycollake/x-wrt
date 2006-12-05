@@ -66,8 +66,10 @@ function installWebifMilestone2(form)
 						<li><font face="Verdana">
 						<a href="http://developer.berlios.de/mail/?group_id=7373">
 						Mailing Lists</a></font></li>
-						<li><font face="Verdana">
-						<a href="http://www.bitsum.com/smf/index.php?board=17.0">Forums</a></font></li>
+						<li><font face="Verdana">Forums:
+						<a href="http://xwrt.berlios.de/forum">New</a>
+						<a href="http://www.bitsum.com/smf/index.php?board=17.0">
+						Old</a></font></li>
 						<li><font face="Verdana">
 						<a href="http://www.bitsum.com/xwrt">Screenshots</a></font></li>
 						<li><font face="Verdana">
