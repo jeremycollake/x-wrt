@@ -56,6 +56,7 @@ cat '/etc/banner'
 echo "</pre><br />"
 
 cat <<EOF
+<form action="" enctype="multipart/form-data" method="post">	
 <table>
 <tbody>
 	<tr>
@@ -66,12 +67,10 @@ cat <<EOF
 		<td><strong>@TR<<Webif>></strong></td><td>&nbsp;</td>
 		<td><a href="http://www.x-wrt.org">X-Wrt</a> Webif<sup>2</sup></td>
 <td colspan="2">
-<form action="" enctype="multipart/form-data" method="post">
 <input type="submit" value=" @TR<<Check_Upgrade|Check For Webif Update>> " name="update_check" />
 <input type="submit" value=" @TR<<Upgrade_Webif#Update/Reinstall Webif>> "  name="install_webif" />
-</td><tr><td></td><td></td><td>$revision_text</td><td>
+</td></tr><tr><td></td><td></td><td>$revision_text</td><td>
 <input type="checkbox" $daily_checked value="1" name="check_daily" id="field_check_daily" />Include Daily Builds in Check
-</form>
 </td>
 </tr>
 	<tr>
@@ -95,6 +94,8 @@ cat <<EOF
 	<tr><td><br /><br /></td></tr>
 </tbody>
 </table>
+</form>
+
 EOF
 
 show_validated_logo
