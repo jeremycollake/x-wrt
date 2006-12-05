@@ -1,0 +1,18 @@
+About 7z Files
+----------------------------------------------------------------------
+
+To save disk space and bandwidth costs we distribute X-Wrt firmware 
+images in the form of 7-Zip archives. 7-Zip is an archiver like 
+PKZIP, TAR/GZIP, RAR, etc. Most common archiving software can 
+extract 7-Zip archives. RAR can for instance extract them. The official
+software is at http://www.7-zip.org and is free and open-source for
+Windows, Linux, and other platforms.
+
+Each 7-Zip archive contains *ALL* firmware images even though the
+compressed size is smaller than any one image uncompressed. That is
+why we save so much space.
+
+Once you have extracted the 7-Zip archive, simply flash the image to
+your router using standard methods (web UI, TFTP, etc..).
+
+-X-Wrt project
