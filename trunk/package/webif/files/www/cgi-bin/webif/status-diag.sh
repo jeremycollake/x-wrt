@@ -4,27 +4,9 @@
 
 header "Status" "Diagnostics" "@TR<<Diagnostics>>" '' "$SCRIPT_NAME"
 
+OUTPUT_CHECK_DELAY=1  # secs in pseudo-tail check
 diag_command_output=""
 diag_command=""
-please_wait_msg="@TR<<Please wait>> ...<br />"
-
-! empty "$FORM_ping_button" && {
-	echo "$please_wait_msg"
-	sanitized=$(echo "$FORM_ping_hostname" | awk -f "/usr/lib/webif/sanitize.awk")	
-	! empty "$sanitized" && {
-		diag_command="ping -c 4 $sanitized"
-		diag_command_output=$($diag_command)
-	}
-}
-
-! empty "$FORM_tracert_button" && {
-	echo "$please_wait_msg"
-	sanitized=$(echo "$FORM_tracert_hostname" | awk -f "/usr/lib/webif/sanitize.awk")	
-	! empty "$sanitized" && {
-		diag_command="traceroute $sanitized"
-		diag_command_output=$($diag_command)
-	}
-}
 
 FORM_ping_hostname=${FORM_ping_hostname:-google.com}
 FORM_tracert_hostname=${FORM_tracert_hostname:-google.com}
@@ -40,13 +22,69 @@ submit|tracert_button|@TR<<TraceRoute>>
 end_form
 EOF
 
-! empty "$diag_command" && {
-cat <<EOF
-<br />Output of "$diag_command"<br /><br />
-<pre>
-$diag_command_output
-</pre>
-EOF
+# determine if a process exists, by PID
+does_process_exist() {
+	# $1=PID
+	ps | cut -c 1-6 | grep -q "$1 "
+}
+
+! empty "$FORM_ping_button" || ! empty "$FORM_tracert_button" && {
+	! empty "$FORM_ping_button" && {		
+		sanitized=$(echo "$FORM_ping_hostname" | awk -f "/usr/lib/webif/sanitize.awk")	
+		! empty "$sanitized" && {
+			diag_command="ping -c 4 $sanitized"		
+		}
+	}
+
+	! empty "$FORM_tracert_button" && {
+		echo "$please_wait_msg"
+		sanitized=$(echo "$FORM_tracert_hostname" | awk -f "/usr/lib/webif/sanitize.awk")	
+		! empty "$sanitized" && {
+			diag_command="traceroute $sanitized"		
+		}
+	}
+
+	echo "<br />@TR<<Please wait for output of>> \"$diag_command\" ...<br /><br />"
+	tmpfile=$(mktemp /tmp/.webif-diag-XXXXXX)
+	tmpfile2=$(mktemp /tmp/.webif-diag-XXXXXX)
+	$diag_command 2>&1 > "$tmpfile" &
+	ps_search=$(echo "$diag_command" | cut -c 1-15) # todo: limitation, X char match resolution
+	_pid=$(ps | grep "$ps_search" | grep -v "grep" | cut -d ' ' -f 1 | sed 2,99d)	
+	#
+	# every one second take a snapshot of the temp file and output it (killing old copy)	
+	# we force synchronization by stopping the outputting process while taking a snapshot
+	# of its output file.
+	#	
+	output_snapshot_file() {
+		# output file
+		# tmpfile2
+		# PID
+		touch "$2" # force to exist first iter
+		# stop process..	
+		kill -23 $3 2>&- >&-
+		exists "$1" && {			
+			linecount_1=$(cat "$1" | wc -l | tr -d ' ') # current snapshot size
+			linecount_2=$(cat "$2" | wc -l | tr -d ' ') # last snapshot size
+			cp "$1" "$2"			
+			let new_lines=$linecount_1-$linecount_2
+			! equal "$new_lines" "0" && {
+				echo "<pre>"
+				tail -n $new_lines "$2"
+				echo "</pre>"
+			}			
+		}			
+		# continue process..	
+		kill -25 $3 2>&- >&-
+	}
+	while sleep $OUTPUT_CHECK_DELAY; do
+		! does_process_exist "$_pid" && {			
+			break;
+		}
+		output_snapshot_file "$tmpfile" "$tmpfile2"
+	done	
+	output_snapshot_file "$tmpfile" "$tmpfile2"
+	rm -f "$tmpfile2"	
+	rm -f "$tmpfile"	
 }
 
  footer ?>
