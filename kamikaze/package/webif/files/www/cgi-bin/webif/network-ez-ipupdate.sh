@@ -26,54 +26,53 @@ load_settings "ezipupdate"
 
 [ -z $FORM_submit ] && {
 
-	FORM_ddns_enable=${ddns_enable:-$(nvram get ddns_enable)}
+	FORM_ddns_enable=${ddns_enable:-$(uci get ez-ipupdate.general.enable)}
 	FORM_ddns_enable=${FORM_ddns_enable:-'0'}
 
-	FORM_ddns_service_type=${ddns_service_type:-$(nvram get ddns_service_type)}
+	FORM_ddns_service_type=${ddns_service_type:-$(uci get ez-ipupdate.general.service)}
 	FORM_ddns_service_type=${FORM_ddns_service_type:-"dyndns"}
 
-	FORM_ddns_username=${ddns_username:-$(nvram get ddns_username)}
-	FORM_ddns_passwd=${ddns_passwd:-$(nvram get ddns_passwd)}
-	FORM_ddns_hostname=${ddns_hostname:-$(nvram get ddns_hostname)}
+	FORM_ddns_username=${ddns_username:-$(uci get ez-ipupdate.general.username)}
+	FORM_ddns_passwd=${ddns_passwd:-$(uci get ez-ipupdate.general.passwd)}
+	FORM_ddns_hostname=${ddns_hostname:-$(uci get ez-ipupdate.general.hostname)}
 
-	FORM_ddns_wildcard=${ddns_wildcard:-$(nvram get ddns_wildcard)}
+	FORM_ddns_wildcard=${ddns_wildcard:-$(uci get ez-ipupdate.general.wildcard)}
 	FORM_ddns_wildcard=${FORM_ddns_wildcard:-'0'}
 
-	FORM_ddns_server=${ddns_server:-$(nvram get ddns_server)}
+	FORM_ddns_server=${ddns_server:-$(uci get ez-ipupdate.general.server)}
 
-	FORM_ddns_max_interval=${ddns_max_interval:-$(nvram get ddns_max_interval)}
+	FORM_ddns_max_interval=${ddns_max_interval:-$(uci get ez-ipupdate.general.max_interval)}
 	FORM_ddns_max_interval=${FORM_ddns_max_interval:-'86400'}
 
-#    FORM_ddns_tzo_ctype=${ddns_tzo_ctype:-$(nvram get ddns_tzo_ctype)}
+#    FORM_ddns_tzo_ctype=${ddns_tzo_ctype:-$(uci get ez-ipupdate.general.tzo_ctype)}
 #    FORM_ddns_tzo_ctype=${FORM_ddns_tzo_ctype:-"1"}
 
 } || {
 	SAVED=1
 
-	#int|FORM_ddns_tzo_ctype|Connection Type||$FORM_ddns_tzo_ctype
+	#int|FORM_ddns_tzo_ctype|@TR<<Connection Type>>||$FORM_ddns_tzo_ctype
 
 	validate "
-string|FORM_ddns_service_type|Service Type|required|$FORM_ddns_service_type
-string|FORM_ddns_username|User Name|required|$FORM_ddns_username
-string|FORM_ddns_passwd|Password|required|$FORM_ddns_passwd
-string|FORM_ddns_hostname|Host Name||$FORM_ddns_hostname
-hostname|FORM_ddns_server|Server Name||$FORM_ddns_server
-int|FORM_ddns_max_interval|Max Interval (sec)|min=86400 max=2196000|$FORM_ddns_max_interval
+string|FORM_ddns_service_type|@TR<<Service Type>>|required|$FORM_ddns_service_type
+string|FORM_ddns_username|@TR<<User Name>>|required|$FORM_ddns_username
+string|FORM_ddns_passwd|@TR<<Password>>|required|$FORM_ddns_passwd
+string|FORM_ddns_hostname|@TR<<Host Name>>||$FORM_ddns_hostname
+hostname|FORM_ddns_server|@TR<<Server Name>>||$FORM_ddns_server
+int|FORM_ddns_max_interval|@TR<<Max Interval (sec)>>|min=86400 max=2196000|$FORM_ddns_max_interval
 " && {
-	save_setting "ezipupdate" ddns_enable $FORM_ddns_enable
-	save_setting "ezipupdate" ddns_service_type $FORM_ddns_service_type
-	save_setting "ezipupdate" ddns_username $FORM_ddns_username
-	save_setting "ezipupdate" ddns_passwd $FORM_ddns_passwd
-	save_setting "ezipupdate" ddns_hostname $FORM_ddns_hostname
-	save_setting "ezipupdate" ddns_wildcard $FORM_ddns_wildcard
-	#save_setting "ezipupdate" ddns_tzo_ctype $FORM_ddns_tzo_ctype
-	save_setting "ezipupdate" ddns_server $FORM_ddns_server
-	save_setting "ezipupdate" ddns_max_interval $FORM_ddns_max_interval
+	uci_set "ez-ipupdate" "general" "enable" "$FORM_ddns_enable"
+	uci_set "ez-ipupdate" "general" "service" "$FORM_ddns_service_type"
+	uci_set "ez-ipupdate" "general" "username" "$FORM_ddns_username"
+	uci_set "ez-ipupdate" "general" "passwd" "$FORM_ddns_passwd"
+	uci_set "ez-ipupdate" "general" "hostname" "$FORM_ddns_hostname"
+	uci_set "ez-ipupdate" "general" "wildcard" "$FORM_ddns_wildcard"
+	#uci_set "ez-ipupdate" "general" "tzo_ctype" "$FORM_ddns_tzo_ctype"
+	uci_set "ez-ipupdate" "general" "server" "$FORM_ddns_server"
+	uci_set "ez-ipupdate" "general" "max_interval" "$FORM_ddns_max_interval"
 	}
 }
 
 header "Network" "DynDNS" "@TR<<DynDNS Settings>>" '' "$SCRIPT_NAME"
-ShowNotUpdatedWarning
 
 has_pkgs ez-ipupdate
 
@@ -81,51 +80,51 @@ has_pkgs ez-ipupdate
 #field|Connection Type (only for TZO)
 #text|ddns_tzo_ctype|$FORM_ddns_tzo_ctype
 
-display_form "start_form|DynDNS
-field|ez-ipupdate
-radio|ddns_enable|$FORM_ddns_enable|1|Enable
-radio|ddns_enable|$FORM_ddns_enable|0|Disable
-field|Service Type
+display_form "start_form|@TR<<DynDNS>>
+field|@TR<<ez-ipupdate>>
+radio|ddns_enable|$FORM_ddns_enable|1|@TR<<Enable>>
+radio|ddns_enable|$FORM_ddns_enable|0|@TR<<Disable>>
+field|@TR<<Service Type>>
 select|ddns_service_type|$FORM_ddns_service_type
-option|ezip|ez-ip
-option|dyndns|dyndns
-option|ods|ods
-option|tzo|tzo
-option|easydns|easydns
-option|gnudip|gnudip
-option|pgpow|justlinux v1.0 (penguinpowered)
-option|justlinux|justlinux v2.0 (penguinpowered)
-option|dyns|dyns
-option|hn|hammer node
-option|zoneedit|zoneedit
-option|heipv6tb|heipv6tb
-option|dyndns-static|dyndns-static
-option|dyndns-custom|dyndns-custom
-option|easydns-partner|easydns-partner
-option|dhs|dhs
+option|ezip|@TR<<ez-ip>>
+option|dyndns|@TR<<dyndns>>
+option|ods|@TR<<ods>>
+option|tzo|@TR<<tzo>>
+option|easydns|@TR<<easydns>>
+option|gnudip|@TR<<gnudip>>
+option|pgpow|@TR<<justlinux v1.0 (penguinpowered)>>
+option|justlinux|@TR<<justlinux v2.0 (penguinpowered)>>
+option|dyns|@TR<<dyns>>
+option|hn|@TR<<hammer node>>
+option|zoneedit|@TR<<zoneedit>>
+option|heipv6tb|@TR<<heipv6tb>>
+option|dyndns-static|@TR<<dyndns-static>>
+option|dyndns-custom|@TR<<dyndns-custom>>
+option|easydns-partner|@TR<<easydns-partner>>
+option|dhs|@TR<<dhs>>
 end_form
 
-start_form|Account
-field|User Name
+start_form|@TR<<Account>>
+field|@TR<<User Name>>
 text|ddns_username|$FORM_ddns_username
-field|Password
+field|@TR<<Password>>
 password|ddns_passwd|$FORM_ddns_passwd
 end_form
 
-start_form|Host
-field|Host Name
+start_form|@TR<<Host>>
+field|@TR<<Host Name>>
 text|ddns_hostname|$FORM_ddns_hostname
-field|Wildcard
-radio|ddns_wildcard|$FORM_ddns_wildcard|1|Enable
-radio|ddns_wildcard|$FORM_ddns_wildcard|0|Disable
+field|@TR<<Wildcard>>
+radio|ddns_wildcard|$FORM_ddns_wildcard|1|@TR<<Enable>>
+radio|ddns_wildcard|$FORM_ddns_wildcard|0|@TR<<Disable>>
 end_form
 
-start_form|Server
-field|Server Name
+start_form|@TR<<Server>>
+field|@TR<<Server Name>
 text|ddns_server|$FORM_ddns_server
-field|Max Interval (sec)
+field|@TR<<Max Interval (sec)>>
 text|ddns_max_interval|$FORM_ddns_max_interval
-string|<br /><a href="network-logread-ez-ipupdate.sh">View DynDNS Syslog</a>
+string|<br /><a href="network-logread-ez-ipupdate.sh">@TR<<View DynDNS Syslog>></a>
 end_form"
 ?>
 <?if [ -f  $ddns_msg ] ?>

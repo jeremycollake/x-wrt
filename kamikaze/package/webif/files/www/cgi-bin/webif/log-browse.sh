@@ -6,8 +6,8 @@
 # sets the type of log: file or circular
 # defaults to circular, wich is the default install for openwrt
 # use log-setup.sh to modify these parameters
-LOG_TYPE=$(uci get webif.syslog.type)
-LOG_FILE=$(uci get webif.syslog.file)
+LOG_TYPE=$(uci get syslogd.general.type)
+LOG_FILE=$(uci get syslogd.general.file)
 if equal $LOG_TYPE "file" ; then
 	LOG_FILE=${LOG_FILE:-"/var/log/messages"}
 	LOGREAD="cat "$LOG_FILE
@@ -164,5 +164,5 @@ END { print "</table>"}
 footer ?>
 
 <!--
-##WEBIF:name:Log:1:Firewall Log View
+##WEBIF:name:Log:3:Firewall Log View
 -->

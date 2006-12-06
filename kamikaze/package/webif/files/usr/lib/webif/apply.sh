@@ -230,7 +230,6 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 			/sbin/runsyslogd >&- 2>&- <&- ;;
 		"/tmp/.uci/miniupnpd")
 			echo '@TR<<Reloading>> @TR<<UPNPd>> ...'
-			/etc/rc.d/S??miniupnpd stop
 			/etc/rc.d/S??miniupnpd start ;;
 		"/tmp/.uci/openvpn")
 			echo '@TR<<Reloading>> @TR<<UPNPd>> ...'

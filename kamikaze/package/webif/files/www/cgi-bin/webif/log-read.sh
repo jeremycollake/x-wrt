@@ -6,7 +6,7 @@
 
 header "Log" "Syslog" "@TR<<Syslog View>>" '' "$SCRIPT_NAME"
 #| sed -e "s|<head>|<head>$meta_refresh|"
-prefix=$(uci get webif.syslog.prefix)
+prefix=$(uci get syslogd.general.prefix)
 ?>
 <? echo "Message Prefix: $prefix" ?><br/>
 <iframe src="log-read_frame.sh" width="90%" height="300" scrolling="auto">
@@ -15,5 +15,5 @@ please follow this link: <a href="log-read_frame.sh" target="blank" >View Syslog
 </iframe>
 <? footer ?>
 <!--
-##WEBIF:name:Log:425:Syslog
+##WEBIF:name:Log:2:Syslog
 -->

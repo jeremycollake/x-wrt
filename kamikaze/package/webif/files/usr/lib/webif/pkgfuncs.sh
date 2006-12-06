@@ -51,3 +51,26 @@ add_package_source() {
 	rm "/etc/ipkg.conf"
 	mv "$ipkgtmp" "/etc/ipkg.conf"
 }
+
+pcnt=0
+nothave=0
+_savebutton_bk=""
+
+has_pkgs() {
+	retval=0;
+	for pkg in "$@"; do
+		pcnt=$((pcnt + 1))
+		empty $(ipkg list_installed | grep "^$pkg ") && {
+			echo -n "<p>Features on this page require the \"<b>$pkg</b>\" package. &nbsp;<a href=\"/cgi-bin/webif/ipkg.sh?action=install&pkg=$pkg&prev=$SCRIPT_NAME\">install now</a>.</p>"
+			retval=1;
+			nothave=$((nothave + 1))
+		}
+	done
+	[ -z "$_savebutton_bk" ] && _savebutton_bk=$_savebutton
+	if [ "$pcnt" = "$nothave" ]; then
+		_savebutton=""
+	else
+		_savebutton=$_savebutton_bk
+	fi
+	return $retval;
+}
