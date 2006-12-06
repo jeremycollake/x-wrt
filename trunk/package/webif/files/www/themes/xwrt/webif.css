@@ -374,12 +374,12 @@ dt,
 #mainmenu a:active,
 #submenu a
 {
-	font-weight: bold;
+	font-weight: normal;
 }
 
 #submenu
 {
-	font-size: 0.8em;
+	font-size: 0.9em;
 }
 
 .selected-maincat
