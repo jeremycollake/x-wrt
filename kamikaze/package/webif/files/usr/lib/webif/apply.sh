@@ -215,6 +215,13 @@ for config in $(ls config-* 2>&-); do
 	esac'
 done
 
+get_real_interface () {
+	include /lib/network
+	scan_interfaces
+	config_get ifname "$iface" ifname
+}
+
+
 #
 # now apply any UCI config changes
 #
@@ -222,10 +229,21 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 	echo "@TR<<Committing>> ${package#/tmp/.uci/} ..."
 	uci_commit "$package"
 	case "$package" in
+		"/tmp/.uci/network")
+			echo '@TR<<Reloading network>> ...'
+			get_real_interface wan
+			ifdown $ifname
+			ifup $ifname
+			
+			get_real_interface lan
+			ifdown $ifname
+			ifup ifname
+			killall dnsmasq
+			/etc/init.d/dnsmasq start ;;
 		"/tmp/.uci/qos") echo "&nbsp;@TR<<Restarting>> ..."
 			qos-start;;
 		"/tmp/.uci/syslog")
-			echo '@TR<<Reloading syslogd ...>>'
+			echo '@TR<<Reloading syslogd>> ...'
 			killall syslogd >&- 2>&- <&-
 			/sbin/runsyslogd >&- 2>&- <&- ;;
 		"/tmp/.uci/miniupnpd")

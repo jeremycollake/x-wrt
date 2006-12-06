@@ -1,7 +1,5 @@
 #!/bin/sh /etc/rc.common
-# Copyright (C) 2006 OpenWrt.org
 
-#!/bin/sh
 #
 # ez-ipupdate     Starts ez-ipupdate
 #
@@ -11,7 +9,6 @@ PID_F=$RUN_D/ez-ipupdate.pid
 ddns_dir="/etc/ez-ipupdate"
 ddns_cache="/tmp/ez-ipupdate.cache"
 ddns_msg="$ddns_dir/ez-ipupdate.msg"
-ddns_exec_ok="$ddns_dir/ez-ipupdate-ok.sh"
 
 getPID(){
     if [ -f $PID_F ]; then 
@@ -23,16 +20,19 @@ getPID(){
 
 start() {
         if [ "$(uci get ez-ipupdate.general.enable)" -eq "1" ]; then
-         wan_interface=`route | grep default | sed 's/[ ]\{1,\}/ /g' | cut -f8 -d' '`
-         #FIRST=0, && FIRST=1
-         [ -f $ddns_msg ] || ( mkdir -p $ddns_dir && echo "DynDNS Update started" > $ddns_msg )
+        include /lib/network
+	scan_interfaces
+	iface=wan
+	config_get ifname "$iface" ifname
+	config_get proto "$iface" proto
+
          pid=$(getPID)
          if [ -z "$pid" ]; then
-            if [ -n "$wan_interface" ]; then
-                echo "ez-ipupdate WAN interface: $wan_interface"
+            if [ -n "$ifname" ]; then
+                echo "ez-ipupdate WAN interface: $ifname"
                 if [ -f $ddns_conf ]; then
                    echo -n "Starting ez-ipupdate:..."
-                   /usr/sbin/ez-ipupdate -d -F $PID_F -c $ddns_conf -b $ddns_cache -i $wan_interface -e $ddns_exec_ok
+                   /usr/sbin/ez-ipupdate -d -F $PID_F -c $ -b $ddns_cache -i $ifname
                     echo "OK"
                 else
                    echo "ez-ipupdate: no configuration file found"
