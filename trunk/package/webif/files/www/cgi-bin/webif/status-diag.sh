@@ -64,6 +64,8 @@ does_process_exist() {
 	# every one second take a snapshot of the output file and output new lines since last snapshot.	
 	# we force synchronization by stopping the outputting process while taking a snapshot
 	# of its output file.
+	#
+	# TODO: Bug.. occasisionally lines can get skipped with this method, look into.
 	#	
 	echo "<br />@TR<<Please wait for output of>> \"$diag_command\" ...<br /><br />"
 	tmpfile=$(mktemp /tmp/.webif-diag-XXXXXX)
