@@ -8,8 +8,7 @@ start() {
 		config_get ipaddr lan ipaddr
 		
 		echo "miniupnpd starting ..."
-		iptables_flush.sh 2>&- >&-
-		iptables_removeall.sh 2>&- >&-
+		stop
 		iptables_init.sh
 		# get bitspeed information, if provided
 		upnpd_up_bitspeed=$(uci get upnpd.general.up_bitspeed)
@@ -32,7 +31,8 @@ start() {
 	fi
 }
 stop() {
+	pnpd_pid=$(cat /var/run/miniupnpd.pid) 2>&- >&-
 	iptables_flush.sh 2>&- >&-
-	killall miniupnpd 2>&-
+	kill $pnpd_pid 2>&-
 	iptables_removeall.sh 2>&- >&-
 }

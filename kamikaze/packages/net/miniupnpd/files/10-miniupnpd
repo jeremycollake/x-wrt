@@ -1,2 +1,2 @@
 #!/bin/sh
-[ "$ACTION" = "ifup" ] && [ "$INTERFACE" = "wan" ] && /etc/init.d/miniupnpd start
+[ "$ACTION" = "ifup" ] && [ "$INTERFACE" = "wan" ] && /etc/init.d/miniupnpd restart
