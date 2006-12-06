@@ -567,7 +567,7 @@ dt,
 }
 
 #footer-logo
-{				
+{
 	position: absolute;
 	bottom: 1em;
 	font-size: 1.5em;	
@@ -577,7 +577,7 @@ dt,
 }
 
 #footer-logo #footer-sublogo
-{		
+{
 	font-size: 0.5em;
 	font-style: italic;
 }
