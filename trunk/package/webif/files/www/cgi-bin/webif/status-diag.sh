@@ -12,7 +12,7 @@ FORM_ping_hostname=${FORM_ping_hostname:-google.com}
 FORM_tracert_hostname=${FORM_tracert_hostname:-google.com}
 
 display_form <<EOF
-start_form|@TR<<Network Diagnostics>>
+start_form|@TR<<Network Utilities>>
 field|
 text|ping_hostname|$FORM_ping_hostname
 submit|ping_button|@TR<<Ping>>
