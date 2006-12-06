@@ -58,26 +58,26 @@ does_process_exist() {
 	output_snapshot_file() {
 		# output file
 		# tmpfile2
-		# PID
-		touch "$2" # force to exist first iter
+		# PID		
 		# stop process..	
 		kill -23 $3 2>&- >&-
-		exists "$1" && {			
+		exists "$1" && {
 			linecount_1=$(cat "$1" | wc -l | tr -d ' ') # current snapshot size
 			linecount_2=$(cat "$2" | wc -l | tr -d ' ') # last snapshot size
-			cp "$1" "$2"			
+			cp "$1" "$2"
 			let new_lines=$linecount_1-$linecount_2
 			! equal "$new_lines" "0" && {
 				echo "<pre>"
 				tail -n $new_lines "$2"
 				echo "</pre>"
-			}			
-		}			
+			}
+		}
 		# continue process..	
 		kill -25 $3 2>&- >&-
 	}
+	touch "$tmpfile2" # force to exist first iter
 	while sleep $OUTPUT_CHECK_DELAY; do
-		! does_process_exist "$_pid" && {			
+		! does_process_exist "$_pid" && {
 			break;
 		}
 		output_snapshot_file "$tmpfile" "$tmpfile2"
