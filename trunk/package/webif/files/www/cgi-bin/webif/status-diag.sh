@@ -44,17 +44,17 @@ does_process_exist() {
 		}
 	}
 
+	#
+	# every one second take a snapshot of the output file and output new lines since last snapshot.	
+	# we force synchronization by stopping the outputting process while taking a snapshot
+	# of its output file.
+	#	
 	echo "<br />@TR<<Please wait for output of>> \"$diag_command\" ...<br /><br />"
 	tmpfile=$(mktemp /tmp/.webif-diag-XXXXXX)
 	tmpfile2=$(mktemp /tmp/.webif-diag-XXXXXX)
 	$diag_command 2>&1 > "$tmpfile" &
 	ps_search=$(echo "$diag_command" | cut -c 1-15) # todo: limitation, X char match resolution
 	_pid=$(ps | grep "$ps_search" | grep -v "grep" | cut -d ' ' -f 1 | sed 2,99d)	
-	#
-	# every one second take a snapshot of the temp file and output it (killing old copy)	
-	# we force synchronization by stopping the outputting process while taking a snapshot
-	# of its output file.
-	#	
 	output_snapshot_file() {
 		# output file
 		# tmpfile2
