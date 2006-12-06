@@ -1,7 +1,23 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
-
+###################################################################
+# Diagnostics
+#
+# Description:
+#	Provide some diagnostic tools.
+#
+# Author(s) [in order of work date]:
+#	Jeremy Collake <jeremy.collake@gmail.com>
+#
+# Major revisions:
+#
+# NVRAM variables referenced:
+#  none
+#
+# Configuration files referenced:
+#   none
+#
 header "Status" "Diagnostics" "@TR<<Diagnostics>>" '' "$SCRIPT_NAME"
 
 OUTPUT_CHECK_DELAY=1  # secs in pseudo-tail check
