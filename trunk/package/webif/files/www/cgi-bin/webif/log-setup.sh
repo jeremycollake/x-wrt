@@ -74,7 +74,7 @@ start_form|Syslog Marks
 field|Minutes Between Marks
 text|log_mark|$FORM_log_mark
 helpitem|Syslog Marks
-helptext|Syslog Marks#Periodic marks in your log. This parameter sets the time in seconds between the marks. A value of 0 means no mark. Default value: $DEFAULT_log_mark.
+helptext|Syslog Marks#Periodic marks in your log. This parameter sets the time in minutes between the marks. A value of 0 means no mark. Default value: $DEFAULT_log_mark.
 end_form
 
 start_form|@TR<<Local Log>>
