@@ -15,5 +15,5 @@ please follow this link: <a href="log-read_frame.sh" target="blank" >View Syslog
 </iframe>
 <? footer ?>
 <!--
-##WEBIF:name:Log:425:Syslog
+##WEBIF:name:Log:200:Syslog
 -->

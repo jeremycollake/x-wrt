@@ -99,5 +99,5 @@ EOF
 footer ?>
 
 <!--
-##WEBIF:name:Log:2:Syslog Settings
+##WEBIF:name:Log:100:Syslog Settings
 -->

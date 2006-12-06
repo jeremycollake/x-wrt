@@ -163,5 +163,5 @@ END { print "</table>"}
 footer ?>
 
 <!--
-##WEBIF:name:Log:1:Firewall Log View
+##WEBIF:name:Log:700:Firewall Log View
 -->
