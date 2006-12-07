@@ -81,11 +81,11 @@ FixReadOnlyLink "${IPKG_INSTROOT}/usr/lib/ipkg/status"
 	# S50dnsmasq renamed to S60dnsmasq in post-RC6
 #	dnsmasq_filename="S60dnsmasq"
 #}
-#rm -f "${IPKG_INSTROOT}/etc/rc.d/S?0dnsmasq"
+"${IPKG_INSTROOT}/etc/init.d/Swebif_firmwareid enable"
+"${IPKG_INSTROOT}/etc/init.d/S90webif_deviceid enable"
+"${IPKG_INSTROOT}/etc/init.d.d/custom-user-startup enable"
+"${IPKG_INSTROOT}/etc/init.d/S01syslog enable"
 #rm -f "${IPKG_INSTROOT}/etc/httpd.conf"
-#mv -f "${IPKG_INSTROOT}/etc/rc.d/x50dnsmasq.webif" "${IPKG_INSTROOT}/etc/rc.d/${dnsmasq_filename}"
-rm -f "${IPKG_INSTROOT}/etc/rc.d/S60cron"
-mv -f "${IPKG_INSTROOT}/etc/rc.d/x60cron.webif" "${IPKG_INSTROOT}/etc/rc.d/S60cron"
 #mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
 
 # if /etc/functions.sh contains uci config functions, then make /etc/functions_ex.sh a symlink
@@ -135,11 +135,9 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 
 	[ "$IPKG_UPDATE_NEEDED" = "1" ] && ipkg update
 
-#	nvram unset device_name 	# force rescan of device_name, in case new id code is added
-#	nvram unset firmware_name	# force rescan of firmware_*
 	ExecuteIfExists "/etc/rc.d/S90webif_deviceid"
 #	ExecuteIfExists "/etc/rc.d/S10firmwareinfo"	# x-wrt images use to pre-empt firmware_* set
-#	ExecuteIfExists "/etc/rc.d/S90webif_firmwareid"
+	ExecuteIfExists "/etc/rc.d/S90webif_firmwareid"
 
 	# test installation successfulness
 	TestInstall

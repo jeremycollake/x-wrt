@@ -1,3 +1,4 @@
-#!/bin/sh
+#!/bin/sh /etc/rc.common
+START=01
 killall syslogd
 /sbin/runsyslogd

@@ -1,8 +1,9 @@
-#!/bin/sh
+#!/bin/sh /etc/rc.common
 # This file is compatible with White Russian and Kamikaze.
 #
 # identification of the device
 #
+START=90
 . /etc/functions.sh
 . /lib/config/uci.sh
 uci_load "webif"
