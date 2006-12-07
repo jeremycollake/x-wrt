@@ -1,9 +1,8 @@
 #!/bin/sh
 # This file is compatible with White Russian and Kamikaze.
-###########################################################
+#
 # identification of the device
 #
-. /lib/config/uci.sh
 device_name=$(uci get webif.general.device_name)
 
 [ -z "$device_name" ] && [ -f "/proc/diag/model" ] && device_name=$(cat "/proc/diag/model")
