@@ -13,7 +13,7 @@
 #
 # Major revisions:
 #
-# UCI variables referenced:
+# NVRAM variables referenced:
 #
 # Configuration files referenced:
 #   none
@@ -22,40 +22,11 @@ header "Info" "About" "@TR<<About>>" '' ''
 
 this_revision=$(cat "/www/.version")
 
-if [ -n "$FORM_update_check" ]; then
-	tmpfile=$(mktemp "/tmp/.webif.XXXXXX")
-	wget http://ftp.berlios.de/pub/xwrt/kamikaze/.version -O $tmpfile 2> /dev/null >> /dev/null
-	cat $tmpfile | grep "doesn't exist" 2>&1 >> /dev/null
-	if [ $? = 0 ]; then
-		revision_text="<div id=\"update-error\">ERROR CHECKING FOR UPDATE</div>"
-	else
-		latest_revision=$(cat $tmpfile)
-		if [ "$this_revision" -lt "$latest_revision" ]; then
-			revision_text="<div id=\"update-available\">webif^2 update available: r$latest_revision - <a href=\"http://svn.berlios.de/wsvn/xwrt/kamikaze/package/webif/?op=log&amp;rev=0&amp;sc=0&amp;isdir=1\" target=\"_blank\">view changes</a></div>"
-		else
-			revision_text="<div id=\"update-unavailable\">You have the latest webif^2: r$this_revision</div>"
-		fi
-	fi
-	rm -f "$tmpfile"
-fi
-
-if [ -n "$FORM_install_webif" ]; then
-	echo "Please wait, installation may take a minute ... <br />"
-	echo "<pre>"
-	ipkg install http://ftp.berlios.de/pub/xwrt/kamikaze/webif_latest.ipk | uniq
-	echo "</pre>"
-	this_revision=$(cat "/www/.version")
-fi
 ?>
 
 <div class="webif-name-title"><a href="http://www.x-wrt.org">X-Wrt Extensions</a> - webif<sup>2</sup></div>
 <div class="webif-name-subtitle"></div>
-<div class="webif-name-version">Milestone 2 - r<? echo "$this_revision" ?> </div><br />
-<form action="" enctype="multipart/form-data" method="post">
-<input type="submit" value=" @TR<<Check_Upgrade#Check For Webif Update>> " name="update_check" />
-<input type="submit" value=" @TR<<Upgrade_Webif#Upgrade/Reinstall Webif>> "  name="install_webif" />
-</form>
-<? echo $revision_text ?>
+<div class="webif-name-version">Milestone 2.5 rc1 - r<? echo "$this_revision" ?> </div><br />
 <table class="webif-contributors" width="70%"><tbody>
 <tr><td><br /></td></tr>
 <tr><th>Webif^2 Primary Developers: <div class="smalltext">(@TR<<sorted_by_name#sorted by name>>)</div></th></tr>
