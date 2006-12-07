@@ -1,24 +1,43 @@
 #!/bin/sh
-firmware_name=$(nvram get firmware_name)
-firmware_version=$(nvram get firmware_version)
-if [ -z "$firmware_name" ]; then
-	nvram set firmware_name="OpenWrt White Russian"
-	nvram set firmware_subtitle="With X-Wrt Extensions"
-fi
+old_firmware_name=$(uci get webif.general.firmware_name)
+old_firmware_subtitle=$(uci get webif.general.firmware_subtitle)
+old_firmware_version=$(uci get webif.general.firmware_version)
+firmware_name="$old_firmware_name"
+firmware_subtitle="$old_firmware_subtitle"
+firmware_version="$old_firmware_version"
+
+[ -z "$old_firmware_name" ] && {
+	if grep -qi "KAMIKAZE" "/etc/banner"; then
+		firmware_name="OpenWrt Kamikaze"
+	else	
+		firmware_name="OpenWrt White Russian"		
+	fi	
+}
+
+[ -z "$old_firmware_subtitle" ] && {
+	firmware_subtitle="With X-Wrt Extensions"
+}
+
 if grep -q "RC5" "/etc/banner"; then
-	if [ "$firmware_version" != "RC5" ]; then
-		nvram set firmware_version="RC5"
-	fi
+	firmware_version="RC5"	
 elif grep -q "RC6" "/etc/banner"; then
-	if [ "$firmware_version" != "RC6" ]; then
-		nvram set firmware_version="RC6"
-	fi
+	firmware_version="RC6"	
 elif grep -q "0.9" "/etc/openwrt_version"; then
-	if [ "$firmware_version" != "0.9" ]; then
-		nvram set firmware_version="0.9"
-	fi
+	firmware_version="0.9"	
 else
-	nvram set firmware_version="unknown version"		
+	firmware_version="unknown"
+fi
+
+#
+# if any variables changed, commit the change
+#
+if [ "$old_firmware_version" != "$firmware_version" ] ||
+	[ "$old_firmware_name" != "$firmware_name" ] ||
+	[ "$old_firmware_subtitle" != "$firmware_subtitle" ]; then
+	uci set "webif.general.firmware_name=$firmware_name"
+	uci set "webif.general.firmware_version=$firmware_version"
+	uci set "webif.general.firmware_subtitle=$firmware_subtitle"
+	uci commit
 fi
 
 
