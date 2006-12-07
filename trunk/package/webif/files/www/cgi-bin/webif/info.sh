@@ -1,15 +1,29 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
+#
+# This page is synchronized between kamikaze and WR branches. Changes to it *must* 
+# be followed by running the webif-sync.sh script.
+#
+# TODO: This page looks ugly anymore (rendered).
+#
 header "Info" "System" "@TR<<System>>" '' ''
+
+if is_kamikaze; then
+	XWRT_BRANCH="kamikaze"
+	package_filename="kamikaze/webif_latest_stable.ipk"
+	version_url="http://ftp.berlios.de/pub/xwrt/kamikaze/"
+else
+	XWRT_BRANCH="trunk"
+	package_filename="webif_latest_stable.ipk"
+	version_url="http://ftp.berlios.de/pub/xwrt/"
+fi
 
 this_revision=$(cat "/www/.version")
 revision_text=" r$this_revision "
-
-version_url="http://ftp.berlios.de/pub/xwrt/"
 version_file=".version-stable"
-package_filename="webif_latest_stable.ipk"
 daily_checked=""
+
 equal "$FORM_check_daily" "1" && {	
 	version_file=".version"
 	package_filename="webif_latest.ipk"
@@ -27,7 +41,7 @@ if [ -n "$FORM_update_check" ]; then
 	else
 		latest_revision=$(cat $tmpfile)
 		if [ "$this_revision" -lt "$latest_revision" ]; then
-			revision_text="<div id=\"update-available\">webif^2 update available: r$latest_revision - <a href=\"http://svn.berlios.de/wsvn/xwrt/trunk/package/webif/?op=log&amp;rev=0&amp;sc=0&amp;isdir=1\" target=\"_blank\">view changes</a></div>"
+			revision_text="<div id=\"update-available\">webif^2 update available: r$latest_revision - <a href=\"http://svn.berlios.de/wsvn/xwrt/${XWRT_BRANCH}/package/webif/?op=log&amp;rev=0&amp;sc=0&amp;isdir=1\" target=\"_blank\">view changes</a></div>"
 		else
 			revision_text="<div id=\"update-unavailable\">You have the latest webif^2: r$this_revision</div>"
 		fi
@@ -43,11 +57,11 @@ if [ -n "$FORM_install_webif" ]; then
 	this_revision=$(cat "/www/.version")
 fi
 
-_version=$(nvram get firmware_version)
+_version=$(uci get webif.general.firmware_version)
 _kversion="$( uname -srv )"
 _mac="$(/sbin/ifconfig eth0 | grep HWaddr | cut -b39-)"
 board_type=$(cat /proc/cpuinfo | sed 2,20d | cut -c16-)
-device_name=$(nvram get device_name)
+device_name=$(uci get webif.general.device_name)
 empty "$device_name" && device_name="unidentified"
 device_string=$(echo $device_name && ! empty $device_version && echo $device_version)
 user_string=$REMOTE_USER
