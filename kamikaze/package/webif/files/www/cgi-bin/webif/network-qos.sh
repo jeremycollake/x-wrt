@@ -18,18 +18,20 @@
 #   /etc/config/qos
 #
 #
-
 . /usr/lib/webif/webif.sh
-
-haspackage_msg=$(has_pkgs qos-scripts)
-if ! empty "$haspackage_msg"; then
-	header "Network" "QoS" "" ' onload="modechange()" ' "$SCRIPT_NAME"
-	has_pkgs qos-scripts
-else
 
 header "Network" "QoS" "@TR<<QOS Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
-! empty "$FORM_submit" && {	
+if ! empty "$FORM_install_nbd"; then
+	echo "Installing Nbd's QoS scripts ...<pre>"
+	! install_package "qos-scripts" && {
+		install_package "http://ftp.berlios.de/pub/xwrt/packages/qos-scripts_0.9.1-1_mipsel.ipk"
+	}
+	echo "</pre>"
+fi
+
+if is_package_installed "qos-scripts"; then
+! empty "$FORM_submit" && empty "$FORM_install_nbd" && {	
 	#
 	# determine if user was editing a QoS classification entry by checking
 	# HTTP_REFERER. May want to change this method.
@@ -313,12 +315,21 @@ EOF
 	end_form
 EOF
 }
+else
+	echo "<div class=\"warning\">A compatible QOS package was not found to be installed.</div>"
+
+display_form <<EOF
+onchange|modechange
+start_form|@TR<<QoS Packages>>
+field|Nbd's QoS Scripts (recommended)|nbd_qos
+submit|install_nbd|Install
+end_form
+EOF
+fi
 
 #show_validated_logo
-fi
 
 footer ?>
 <!--
 ##WEBIF:name:Network:600:QoS
 -->
-
