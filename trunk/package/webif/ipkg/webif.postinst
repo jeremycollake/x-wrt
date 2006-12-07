@@ -148,10 +148,8 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 
 	[ "$IPKG_UPDATE_NEEDED" = "1" ] && ipkg update
 
-	nvram unset device_name 	# force rescan of device_name, in case new id code is added
-	nvram unset firmware_name	# force rescan of firmware_*
+	# todo: merge these two files so two uci commits don't get done
 	ExecuteIfExists "/etc/init.d/S90webif_deviceid"
-	ExecuteIfExists "/etc/init.d/S10firmwareinfo"	# x-wrt images use to pre-empt firmware_* set
 	ExecuteIfExists "/etc/init.d/S90webif_firmwareid"
 
 	# test installation successfulness
