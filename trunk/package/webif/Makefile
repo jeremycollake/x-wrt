@@ -23,7 +23,7 @@ $$(IPKG_$(1)):
 
 endef
 
-$(eval $(call PKG_template,WEBIF,webif,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,WEBIF,$(PKG_NAME),$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,WEBIF_LANG_CA,webif-lang-ca,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,WEBIF_LANG_CZ,webif-lang-cz,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,WEBIF_LANG_DE,webif-lang-de,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
