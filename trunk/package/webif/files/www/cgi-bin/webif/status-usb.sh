@@ -1,5 +1,9 @@
 #!/usr/bin/webif-page
 <?
+#
+# This page is synchronized between kamikaze and WR branches. Changes to it *must* 
+# be followed by running the webif-sync.sh script.
+#
 . /usr/lib/webif/webif.sh
 header "Status" "USB" "USB Devices"
 ?>
@@ -9,7 +13,7 @@ header "Status" "USB" "USB Devices"
 	<tr><th><b>All connected devices (excluding system hubs)</b></th></tr>
 	<tr><td><table border=1>
 	<col style=\"text-align:center;\"><col align=center><col><col><col align=center><col align=center>
-	<tr style="background:#c0c0c0;"><th>Bus</th><th>Device</th><th>Product</th><th>Manufacturer</th><th>VendorID:ProdID</th><th>USB version</th></tr>
+	<tr><th>Bus</th><th>Device</th><th>Product</th><th>Manufacturer</th><th>VendorID:ProdID</th><th>USB version</th></tr>
 	<?
 	[ -f /proc/bus/usb/devices ] && grep -e "^[TDPS]:" /proc/bus/usb/devices | sed 's/[[:space:]]*=[[:space:]]*/=/g' | sed 's/[[:space:]]\([^ |=]*\)=/|\1=/g' | sed 's/^/|/' | awk '
 	BEGIN { i=0; RS="|"; FS="=";}
