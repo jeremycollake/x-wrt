@@ -4,6 +4,9 @@
 ###################################################################
 # Diagnostics
 #
+# This page is synchronized between kamikaze and WR branches. Changes to it *must* 
+# be followed by running the webif-sync.sh script.
+#
 # Description:
 #	Provide some diagnostic tools.
 #
