@@ -1,6 +1,6 @@
 config webif general
-	option firmware_name "OpenWrt Kamikaze"
-	option firmware_version "Pre-RC1"
+	option firmware_name ""
+	option firmware_version ""
 	option firmware_subtitle "With X-Wrt Extensions"
 	option device_name ""
 	
