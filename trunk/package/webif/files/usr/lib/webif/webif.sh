@@ -54,6 +54,10 @@ ShowUntestedWarning() {
 	echo "<div class=\"warning\">WARNING: This page is untested and may or may not work correctly.</div>"
 }
 
+ShowNotUpdatedWarning() {
+       echo "<div class=\"warning\">WARNING: This page has not been updated or checked for correct functionality under Kamikaze.</div>"
+}
+
 update_changes() {
 	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))
 	EDITED_FILES=$(find "/tmp/.webif/edited-files" -type f 2>&- | wc -l)
@@ -139,7 +143,7 @@ header() {
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}
 
-	use_short_status_frame=$(nvram get webif_use_short_status_frame)
+	use_short_status_frame="$CONFIG_general_use_short_status_frame"
 	if equal $use_short_status_frame "1"; then
 		short_status_frame='<iframe src="/cgi-bin/webif/iframe.mini-info.sh"
 				width="200" height="80"  scrolling="no" frameborder="0"></iframe>'
