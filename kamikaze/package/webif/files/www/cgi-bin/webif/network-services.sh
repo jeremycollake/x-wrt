@@ -28,6 +28,10 @@ uci_load upnpd
 if ! empty "$FORM_install_upnp"; then
 	echo "Installing UPNP package ...<pre>"	
 	install_package miniupnpd
+	! equal "$?" "0" && {
+		ipkg update
+		install_package miniupnpd
+	}
 	uci_set "upnpd" "general" "enable" "1"
 	echo "</pre>"	
 fi
