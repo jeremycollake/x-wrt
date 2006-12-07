@@ -19,12 +19,12 @@ firmware_version="$old_firmware_version"
 	firmware_subtitle="With X-Wrt Extensions"
 }
 
-if grep -q "RC5" "/etc/banner"; then
+if [ -f "/etc/openwrt_version" ]; then
+	firmware_version=$(cat "/etc/openwrt_version")
+elif grep -q "RC5" "/etc/banner"; then
 	firmware_version="RC5"	
 elif grep -q "RC6" "/etc/banner"; then
 	firmware_version="RC6"	
-elif [ -f "/etc/openwrt_version" ]; then
-	firmware_version=$(cat "/etc/openwrt_version")
 else
 	firmware_version="unknown"
 fi
