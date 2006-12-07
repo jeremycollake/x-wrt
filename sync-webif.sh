@@ -41,6 +41,7 @@ echo "Synchronizing branches ..."
 synchronize_file "www/themes/xwrt/*"
 synchronize_file "etc/config/webif"
 synchronize_file "usr/lib/webif/functions.sh"
+#synchronize_file "usr/lib/webif/webif.sh" # WR's copy should now work in kami, just waiting to test to verify
 synchronize_file "www/cgi-bin/webif/info.sh"
 synchronize_file "www/cgi-bin/webif/info-about.sh"
 synchronize_file "www/cgi-bin/webif/status-diag.sh"
