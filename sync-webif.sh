@@ -9,8 +9,23 @@
 # As any programmer knows, maintainence is part of life.
 #
 
-BRANCH_SOURCE="trunk/package/webif/files"
-BRANCH_DEST="kamikaze/package/webif/files"
+if [ $# != 1 ]; then
+	echo "USAGE: sync-webif.sh [-fromkami|-fromwr]"
+	echo "  use -fromkami to copy files from Kamikaze to White Russian."
+	echo "  use -fromwr to copy files from White Russian to Kamikaze."
+	exit 1
+fi
+
+case "$1" in
+	"-fromkami") 
+		BRANCH_DEST="trunk/package/webif/files"
+		BRANCH_SOURCE="kamikaze/package/webif/files";;
+	"-fromwr") 
+		BRANCH_SOURCE="trunk/package/webif/files"
+		BRANCH_DEST="kamikaze/package/webif/files";;
+	*) echo "Invalid parameter!"
+	   exit 1;;
+esac
 
 synchronize_file () {
 	# filename	
