@@ -1,4 +1,5 @@
 #!/bin/sh
+# This file is compatible with White Russian and Kamikaze.
 old_firmware_name=$(uci get webif.general.firmware_name)
 old_firmware_subtitle=$(uci get webif.general.firmware_subtitle)
 old_firmware_version=$(uci get webif.general.firmware_version)
