@@ -34,7 +34,7 @@ fi
 
 if empty "$FORM_submit"; then
 	# initialize all defaults
-	FORM_upnp_enabled="$CONFIG_general_enabled"
+	FORM_upnp_enable="$CONFIG_general_enable"
 	FORM_upnpd_log_output="$CONFIG_general_log_output"
 	FORM_upnpd_up_bitspeed="$CONFIG_general_up_bitspeed"
 	FORM_upnpd_down_bitspeed="$CONFIG_general_down_bitspeed"
@@ -42,13 +42,13 @@ else
 	# save form
 	is_kamikaze && {
 		# TODO: This should be moved to apply.sh shouldn't it?
-		if [ "$FORM_upnp_enabled" = "1" ]; then
+		if [ "$FORM_upnp_enable" = "1" ]; then
 			/etc/init.d/miniupnpd enable 2>&-
 		else
 			/etc/init.d/miniupnpd disable 2>&-
 		fi
 	}
-	uci_set "upnpd" "general" "enable" "$FORM_upnp_enabled"
+	uci_set "upnpd" "general" "enable" "$FORM_upnp_enable"
 	uci_set "upnpd" "general" "log_output" "$FORM_upnpd_log_output"
 	uci_set "upnpd" "general" "down_bitspeed" "$FORM_upnpd_down_bitspeed"
 	uci_set "upnpd" "general" "up_bitspeed" "$FORM_upnpd_up_bitspeed"
@@ -79,7 +79,7 @@ equal "$?" "0" && upnp_installed="1"
 
 if equal "$upnp_installed" "1" ; then
 	install_upnp_button="field|@TR<<UPNP Daemon>>
-	select|upnp_enabled|$FORM_upnp_enabled
+	select|upnp_enable|$FORM_upnp_enable
 	option|0|@TR<<Disabled>>
 	option|1|@TR<<Enabled>>
 	field|@TR<<WAN Upload (bits/sec)>>
