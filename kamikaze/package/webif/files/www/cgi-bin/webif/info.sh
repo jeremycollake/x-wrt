@@ -1,6 +1,9 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
+. /etc/functions.sh
+include /lib/config
+. /lib/config/uci.sh
 #
 # This page is synchronized between kamikaze and WR branches. Changes to it *must* 
 # be followed by running the webif-sync.sh script.
