@@ -5,8 +5,6 @@
 # This page is synchronized between kamikaze and WR branches. Changes to it *must* 
 # be followed by running the webif-sync.sh script.
 #
-# TODO: Must switch to /usr/lib/config.uci.sh, /bin/uci should NOT be used in pages since it
-#	is much less efficient (calls uci_load for every uci get).
 # TODO: This page looks ugly anymore (rendered).
 #
 header "Info" "System" "@TR<<System>>" '' ''
@@ -59,11 +57,15 @@ if [ -n "$FORM_install_webif" ]; then
 	this_revision=$(cat "/www/.version")
 fi
 
-_version=$(uci get webif.general.firmware_version)
+uci_load "webif"
+version="$CONFIG_general_firmware_version"
+firmware_name="$CONFIG_general_firmware_name"
+firmware_subtitle="$CONFIG_general_firmware_subtitle"
+firmware_version="$CONFIG_general_firmware_version"
 _kversion="$( uname -srv )"
 _mac="$(/sbin/ifconfig eth0 | grep HWaddr | cut -b39-)"
 board_type=$(cat /proc/cpuinfo | sed 2,20d | cut -c16-)
-device_name=$(uci get webif.general.device_name)
+device_name="$CONFIG_general_device_name"
 empty "$device_name" && device_name="unidentified"
 device_string=$(echo $device_name && ! empty $device_version && echo $device_version)
 user_string=$REMOTE_USER
@@ -79,7 +81,7 @@ cat <<EOF
 <tbody>
 	<tr>
 		<td><strong>@TR<<Firmware>></strong></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-		<td>$_firmware_name - $_firmware_subtitle $_version</td>
+		<td>$firmware_name - $firmware_subtitle $version</td>
 	</tr>
 	<tr>
 		<td><strong>@TR<<Webif>></strong></td><td>&nbsp;</td>
