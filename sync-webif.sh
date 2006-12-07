@@ -23,4 +23,5 @@ synchronize_file () {
 }
 echo "Synchronizing branches ..."
 synchronize_file "www/themes/xwrt/*"
+synchronize_file "etc/config/*"
 svn ci "$BRANCH_DEST" -m "synchronize with white russian branch"
