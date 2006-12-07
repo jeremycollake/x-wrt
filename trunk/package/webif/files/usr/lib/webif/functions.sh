@@ -36,6 +36,11 @@ is_bcm947xx() {
 	equal "${_systype##* }" "BCM947XX"
 }
 
+is_kamikaze() {
+	# todo: switch to a more reliable check of kamikaze
+	grep -iq "KAMIKAZE" "/etc/banner"	
+}
+
 fix_symlink_hack() {
 	touch "$1" >&- 2>&-
 	! equal "$?" "0" && {
@@ -98,4 +103,5 @@ save_setting() {
 	}
 	equal "$oldval" "$3" || echo "$2=\"$3\"" >> /tmp/.webif/config-$1
 }
+
 
