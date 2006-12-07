@@ -23,8 +23,8 @@ if grep -q "RC5" "/etc/banner"; then
 	firmware_version="RC5"	
 elif grep -q "RC6" "/etc/banner"; then
 	firmware_version="RC6"	
-elif grep -q "0.9" "/etc/openwrt_version"; then
-	firmware_version="0.9"	
+elif [ -f "/etc/openwrt_version" ]; then
+	firmware_version=$(cat "/etc/openwrt_version")
 else
 	firmware_version="unknown"
 fi
