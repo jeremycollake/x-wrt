@@ -14,10 +14,10 @@
 #	Jeremy Collake <jeremy.collake@gmail.com>
 #
 # NVRAM variables referenced:
-#	upnp_enabled
+#	none
 #
 # Configuration files referenced:
-#		none
+#	none
 #
 
 header "Network" "Services" "@TR<<Services Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
@@ -28,7 +28,7 @@ uci_load upnpd
 if ! empty "$FORM_install_upnp"; then
 	echo "Installing UPNP package ...<pre>"	
 	install_package miniupnpd
-	uci_set "upnpd" "general" "enabled" "1"
+	uci_set "upnpd" "general" "enable" "1"
 	echo "</pre>"	
 fi
 
