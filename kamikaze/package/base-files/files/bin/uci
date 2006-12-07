@@ -1,6 +1,14 @@
 #!/bin/sh
 # Shell script for interacting with config files
 #
+# Do *NOT* use these functions inside shell scripts. They are for use
+# on the command line only. Why? Although these will work in scripts,
+# every time you perform a 'uci get' it re-invokes 'uci_load'. This
+# means the entire config file has to be parsed and reloaded, along with
+# pending changes, every time you simply get a variable value.
+#
+# In shell scripts, use /lib/config/uci.sh.
+#
 # Copyright (C) 2006 by Fokus Fraunhofer <carsten.tittel@fokus.fraunhofer.de>
 # Copyright (C) 2006 by Felix Fietkau <nbd@openwrt.org>
 #
