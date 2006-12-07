@@ -4,6 +4,9 @@
 ###################################################################
 # Services configuration page
 #
+# This page is synchronized between kamikaze and WR branches. Changes to it *must* 
+# be followed by running the webif-sync.sh script.
+#
 # Description:
 #	Configures services not configured elsewhere.
 #
@@ -20,27 +23,35 @@
 header "Network" "Services" "@TR<<Services Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 load_settings services
-load_settings upnpd
+uci_load upnpd
 
 if ! empty "$FORM_install_upnp"; then
 	echo "Installing UPNP package ...<pre>"	
 	install_package miniupnpd
-	save_setting upnpd upnp_enabled "1"
+	uci_set "upnpd" "general" "enabled" "1"
 	echo "</pre>"	
 fi
 
 if empty "$FORM_submit"; then
 	# initialize all defaults
-	FORM_upnp_enabled="${upnp_enabled:-$(nvram get upnp_enabled)}"
-	FORM_upnpd_log_output="${upnpd_log_output:-$(nvram get upnpd_log_output)}"
-	FORM_upnpd_up_bitspeed="${upnpd_up_bitspeed:-$(nvram get upnpd_up_bitspeed)}"
-	FORM_upnpd_down_bitspeed="${upnpd_down_bitspeed:-$(nvram get upnpd_down_bitspeed)}"
+	FORM_upnp_enabled="$CONFIG_general_enabled"
+	FORM_upnpd_log_output="$CONFIG_general_log_output"
+	FORM_upnpd_up_bitspeed="$CONFIG_general_up_bitspeed"
+	FORM_upnpd_down_bitspeed="$CONFIG_general_down_bitspeed"
 else
 	# save form
-	save_setting upnpd upnp_enabled "$FORM_upnp_enabled"
-	save_setting upnpd upnpd_log_output "$FORM_upnpd_log_output"
-	save_setting upnpd upnpd_down_bitspeed "$FORM_upnpd_down_bitspeed"
-	save_setting upnpd upnpd_up_bitspeed "$FORM_upnpd_up_bitspeed"
+	is_kamikaze && {
+		# TODO: This should be moved to apply.sh shouldn't it?
+		if [ "$FORM_upnp_enabled" = "1" ]; then
+			/etc/init.d/miniupnpd enable 2>&-
+		else
+			/etc/init.d/miniupnpd disable 2>&-
+		fi
+	}
+	uci_set "upnpd" "general" "enable" "$FORM_upnp_enabled"
+	uci_set "upnpd" "general" "log_output" "$FORM_upnpd_log_output"
+	uci_set "upnpd" "general" "down_bitspeed" "$FORM_upnpd_down_bitspeed"
+	uci_set "upnpd" "general" "up_bitspeed" "$FORM_upnpd_up_bitspeed"
 fi
 
 #####################################################################s
