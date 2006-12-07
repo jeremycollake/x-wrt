@@ -93,4 +93,5 @@ $(IPKG_WEBIF):
 	install -m0755 $(PKG_BUILD_DIR)/webifmetabin $(IDIR_WEBIF)/usr/bin/webifmetabin
 	find $(IDIR_WEBIF) -name CVS | xargs rm -rf
 	find $(IDIR_WEBIF) -name .svn | xargs rm -rf
+	find $(IDIR_WEBIF) -name *~ | xargs rm -rf
 	$(IPKG_BUILD) $(IDIR_WEBIF) $(PACKAGE_DIR)
