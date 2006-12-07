@@ -39,7 +39,7 @@ synchronize_file () {
 
 echo "Synchronizing branches ..."
 synchronize_file "www/themes/xwrt/*"
-synchronize_file "etc/config/*"
-synchronize_file "bin/uci"
+synchronize_file "etc/config/webif"
 synchronize_file "usr/lib/webif/functions.sh"
+synchronize_file "www/cgi-bin/webif/info.sh"
 svn ci "$BRANCH_DEST" -m "synchronize with white russian branch"
