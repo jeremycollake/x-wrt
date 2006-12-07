@@ -1,7 +1,10 @@
 #!/bin/sh /etc/rc.common
+. /etc/functions.sh
+. /lib/config/uci.sh
 START=95
 start() {
-	if [ "$(uci get upnpd.general.enable)" = "1" ]; then
+	uci_load "upnpd"
+	if [ "$CONFIG_general_enable" = "1" ]; then
 		include /lib/network
 		scan_interfaces
 		config_get ifname wan ifname
@@ -11,17 +14,16 @@ start() {
 		stop
 		iptables_init.sh
 		# get bitspeed information, if provided
-		upnpd_up_bitspeed=$(uci get upnpd.general.up_bitspeed)
-		upnpd_down_bitspeed=$(uci get upnpd.general.down_bitspeed)
+		upnpd_up_bitspeed=$CONFIG_general_up_bitspeed
+		upnpd_down_bitspeed=$CONFIG_general_down_bitspeed
 		bitspeed_str=""
 		[ -n "$upnpd_up_bitspeed" ] && [ -n "$upnpd_down_bitspeed" ] && {
 			# covert to bytespeed
 			let upnpd_up_bytespeed=$upnpd_up_bitspeed*1024/8
 			let upnpd_down_bytespeed=$upnpd_down_bitspeed*1024/8
 			bitspeed_str="-B $upnpd_down_bytespeed $upnpd_up_bytespeed"
-		}
-		upnpd_log=$(uci get upnpd.general.log_output)
-		if [ "$upnpd_log" = "1" ]; then
+		}		
+		if [ "$CONFIG_general_log_output" = "1" ]; then
 		        miniupnpd -i "$ifname" -a "$ipaddr" -p 5000 -U $bitspeed_str -d | logger -t miniupnpd &
 		else
 		        miniupnpd -i "$ifname" -a "$ipaddr" -p 5000 -U $bitspeed_str
