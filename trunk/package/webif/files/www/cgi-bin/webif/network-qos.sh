@@ -30,6 +30,10 @@ if ! empty "$FORM_install_nbd"; then
 	echo "</pre>"
 fi
 
+is_package_installed "qos-re" && {
+	echo "<div class=\"warning\">Rudy's QoS scripts are found installed. Be sure to uninstall Rudy's scripts before using the new qos-scripts package.</div>"
+}
+
 if is_package_installed "qos-scripts"; then
 ! empty "$FORM_submit" && empty "$FORM_install_nbd" && {	
 	#
