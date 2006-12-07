@@ -1,10 +1,10 @@
 #!/usr/bin/webif-page
 <?
 ###################################################################
-# Nbd QoS scripts config
+# qos-scripts configuration page
 #
 # Description:
-#	Configures nbd's QoS scripts.
+#	Configures the qos-scripts package.
 #
 # Author(s) [in order of work date]:
 #	Jeremy Collake <jeremy.collake@gmail.com>
