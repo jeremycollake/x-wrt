@@ -8,17 +8,12 @@ firmware_name=$CONFIG_general_firmware_name
 firmware_subtitle=$CONFIG_general_firmware_subtitle
 firmware_version=$CONFIG_general_firmware_version
 
-[ -z "$old_firmware_name" ] && {
-	if grep -qi "KAMIKAZE" "/etc/banner"; then
-		firmware_name="OpenWrt Kamikaze"
-	else	
-		firmware_name="OpenWrt White Russian"		
-	fi	
-}
-
-[ -z "$old_firmware_subtitle" ] && {
-	firmware_subtitle="With X-Wrt Extensions"
-}
+if grep -qi "KAMIKAZE" "/etc/banner"; then
+	firmware_name="OpenWrt Kamikaze"
+else	
+	firmware_name="OpenWrt White Russian"		
+fi	
+firmware_subtitle="With X-Wrt Extensions"
 
 if [ -f "/etc/openwrt_version" ]; then
 	firmware_version=$(cat "/etc/openwrt_version")
