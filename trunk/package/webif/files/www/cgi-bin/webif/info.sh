@@ -58,7 +58,7 @@ if [ -n "$FORM_install_webif" ]; then
 fi
 
 uci_load "webif"
-version="$CONFIG_general_firmware_version"
+firmware_version="$CONFIG_general_firmware_version"
 firmware_name="$CONFIG_general_firmware_name"
 firmware_subtitle="$CONFIG_general_firmware_subtitle"
 firmware_version="$CONFIG_general_firmware_version"
@@ -81,7 +81,7 @@ cat <<EOF
 <tbody>
 	<tr>
 		<td><strong>@TR<<Firmware>></strong></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-		<td>$firmware_name - $firmware_subtitle $version</td>
+		<td>$firmware_name - $firmware_subtitle $firmware_version</td>
 	</tr>
 	<tr>
 		<td><strong>@TR<<Webif>></strong></td><td>&nbsp;</td>
