@@ -197,3 +197,29 @@ include() {
 		. $file
 	done
 }
+
+# used by: /bin/uci
+strtok() { # <string> { <variable> [<separator>] ... }
+        local tmp
+        local val="$1"
+        local count=0
+
+        shift
+
+        while [ $# -gt 1 ]; do
+                tmp="${val%%$2*}"
+
+                [ "$tmp" = "$val" ] && break
+
+                val="${val#$tmp$2}"
+
+                export "$1=$tmp"; count=$((count+1))
+                shift 2
+        done
+
+        if [ $# -gt 0 -a "$val" ]; then
+                export "$1=$val"; count=$((count+1))
+        fi
+
+        return $count
+}
