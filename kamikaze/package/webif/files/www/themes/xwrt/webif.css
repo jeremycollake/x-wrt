@@ -91,7 +91,7 @@ option
 	margin-top: 1em;
 	padding-bottom: 0.2em;
 	padding-right: 0.5em;
-	padding-left: 1.0em;
+	padding-left: 2.0em;
 	float: right;
 }
 
@@ -144,7 +144,7 @@ option
 	display: inline;
 	position: relative;
 	list-style-type: none;	
-	padding: 0.4em;
+	padding: 0.5em;
 }
 
 
@@ -374,12 +374,12 @@ dt,
 #mainmenu a:active,
 #submenu a
 {
-	font-weight: bold;
+	font-weight: normal;
 }
 
 #submenu
 {
-	font-size: 0.8em;
+	font-size: 0.9em;
 }
 
 .selected-maincat
@@ -567,17 +567,17 @@ dt,
 }
 
 #footer-logo
-{				
+{
 	position: absolute;
 	bottom: 1em;
 	font-size: 1.5em;	
 	display: inline;
-	text-align: left;		
+	text-align: left;
 	margin-left: 1em;
 }
 
 #footer-logo #footer-sublogo
-{		
+{
 	font-size: 0.5em;
 	font-style: italic;
 }
