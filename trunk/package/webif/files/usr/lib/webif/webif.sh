@@ -123,9 +123,10 @@ header() {
 	}
 
 	_category="$1"
-	_firmware_name="$(nvram get firmware_name)"
-	_firmware_subtitle="$(nvram get firmware_subtitle)"
-	_version="$(nvram get firmware_version)"
+	uci_load "webif"
+	_firmware_version="$CONFIG_general_firmware_version"
+	_firmware_name="$CONFIG_general_firmware_name"
+	_firmware_subtitle="$CONFIG_general_firmware_subtitle"
 	_uptime="$(uptime)"
 	_loadavg="${_uptime#*load average: }"
 	_uptime="${_uptime#*up }"
@@ -146,7 +147,7 @@ header() {
 		short_status_frame="<div id=\"short-status\">
 						<h3><strong>Status:</strong></h3>
 						<ul>
-							<li><strong>$_firmware_name $_version </strong></li>
+							<li><strong>$_firmware_name $firmware_version </strong></li>
 							<li><strong>@TR<<Host>>:</strong> $_hostname</li>
 							<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
 							<li><strong>@TR<<Load>>:</strong> $_loadavg</li>
