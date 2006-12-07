@@ -5,6 +5,9 @@ header "Status" "QoS" "@TR<<Quality of Service Statistics>>"
 ###################################################################
 # TCP/IP status page
 #
+# This page is synchronized between kamikaze and WR branches. Changes to it *must* 
+# be followed by running the webif-sync.sh script.
+#
 # Description:
 #	Shows connections to the router, netstat stuff, routing table..
 #
@@ -57,9 +60,9 @@ ingress_stats_table=$(echo "$ingress_status" |
 				}														
 				getline		
 				print "<tr><td>" class "</td><td>" 
-				print $2
-				print "</td><td>" 
 				print $4
+				print "</td><td>" 
+				print $2
 				print "</td></tr>"
 			}
 		}'))
@@ -100,9 +103,9 @@ egress_stats_table=$(echo "$egress_status" |
 				}										
 				getline
 				print "<tr><td>" class "</td><td>" 
-				print $2
-				print "</td><td>" 
 				print $4
+				print "</td><td>" 
+				print $2
 				print "</td></tr>"
 			}
 		}'))
