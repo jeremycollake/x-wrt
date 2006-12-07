@@ -36,7 +36,10 @@ synchronize_file () {
 		cp ${BRANCH_SOURCE}/${base_file} ${BRANCH_DEST}/${base_file}
 	done
 }
+
 echo "Synchronizing branches ..."
 synchronize_file "www/themes/xwrt/*"
 synchronize_file "etc/config/*"
+synchronize_file "bin/uci"
+synchronize_file "usr/lib/webif/functions.sh"
 svn ci "$BRANCH_DEST" -m "synchronize with white russian branch"
