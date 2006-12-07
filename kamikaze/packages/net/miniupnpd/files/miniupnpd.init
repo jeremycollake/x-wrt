@@ -29,7 +29,7 @@ start() {
 		        miniupnpd -i "$ifname" -a "$ipaddr" -p 5000 -U $bitspeed_str
 		fi
 	else
-		echo "Please set option enable = '1' in /etc/config/upnpd"
+		echo "To enable miniupnpd set option enable = '1' in /etc/config/upnpd."
 	fi
 }
 stop() {
