@@ -142,9 +142,8 @@ header() {
 	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></p>}"	
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}
-
-	use_short_status_frame="$CONFIG_general_use_short_status_frame"
-	if equal $use_short_status_frame "1"; then
+	
+	if equal $CONFIG_general_use_short_status_frame "1"; then
 		short_status_frame='<iframe src="/cgi-bin/webif/iframe.mini-info.sh"
 				width="200" height="80"  scrolling="no" frameborder="0"></iframe>'
 	else
