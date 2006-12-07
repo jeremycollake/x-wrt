@@ -5,6 +5,8 @@
 # This page is synchronized between kamikaze and WR branches. Changes to it *must* 
 # be followed by running the webif-sync.sh script.
 #
+# TODO: Must switch to /usr/lib/config.uci.sh, /bin/uci should NOT be used in pages since it
+#	is much less efficient (calls uci_load for every uci get).
 # TODO: This page looks ugly anymore (rendered).
 #
 header "Info" "System" "@TR<<System>>" '' ''

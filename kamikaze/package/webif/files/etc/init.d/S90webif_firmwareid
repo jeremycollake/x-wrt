@@ -1,11 +1,11 @@
 #!/bin/sh
 # This file is compatible with White Russian and Kamikaze.
-old_firmware_name=$(uci get webif.general.firmware_name)
-old_firmware_subtitle=$(uci get webif.general.firmware_subtitle)
-old_firmware_version=$(uci get webif.general.firmware_version)
-firmware_name="$old_firmware_name"
-firmware_subtitle="$old_firmware_subtitle"
-firmware_version="$old_firmware_version"
+. /etc/functions.sh
+. /lib/config/uci.sh
+uci_load "webif"
+firmware_name=$CONFIG_general_firmware_name
+firmware_subtitle=$CONFIG_general_firmware_subtitle
+firmware_version=$CONFIG_general_firmware_version
 
 [ -z "$old_firmware_name" ] && {
 	if grep -qi "KAMIKAZE" "/etc/banner"; then
@@ -32,13 +32,14 @@ fi
 #
 # if any variables changed, commit the change
 #
-if [ "$old_firmware_version" != "$firmware_version" ] ||
-	[ "$old_firmware_name" != "$firmware_name" ] ||
-	[ "$old_firmware_subtitle" != "$firmware_subtitle" ]; then
-	uci set "webif.general.firmware_name=$firmware_name"
-	uci set "webif.general.firmware_version=$firmware_version"
-	uci set "webif.general.firmware_subtitle=$firmware_subtitle"
-	uci commit
+if [ "$CONFIG_general_firmware_version" != "$firmware_version" ] ||
+	[ "$CONFIG_general_firmware_name" != "$firmware_name" ] ||
+	[ "$CONFIG_general_firmware_subtitle" != "$firmware_subtitle" ]; then
+	echo "Committing new firmware id ..."
+	uci_set "webif" "general" "firmware_name" "$firmware_name"
+	uci_set "webif" "general" "firmware_version" "$firmware_version"
+	uci_set "webif" "general" "firmware_subtitle" "$firmware_subtitle"
+	uci_commit "webif"
 fi
 
 
