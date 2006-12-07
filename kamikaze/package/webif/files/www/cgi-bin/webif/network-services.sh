@@ -14,10 +14,10 @@
 #	Jeremy Collake <jeremy.collake@gmail.com>
 #
 # NVRAM variables referenced:
-#	upnp_enabled
+#	none
 #
 # Configuration files referenced:
-#		none
+#	none
 #
 
 header "Network" "Services" "@TR<<Services Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
