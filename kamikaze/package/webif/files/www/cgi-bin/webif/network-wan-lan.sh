@@ -10,20 +10,22 @@
 # Author(s) [in order of work date]:
 #       Original webif authors of wan.sh and lan.sh
 #	Jeremy Collake <jeremy.collake@gmail.com>
+#	Travis Kemen <kemen04@gmail.com>
 #
 # Major revisions:
 #
-# NVRAM variables referenced:
-#
+# UCI variables referenced:
+#   todo
 # Configuration files referenced:
 #   none
 #
 
+#Load settings from the network config file.	
+uci_load "network"
+
 header "Network" "WAN-LAN" "@TR<<WAN-LAN Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
-load_settings network
-
-FORM_wandns="${wan_dns:-$(uci get network.wan.dns)}"
+FORM_wandns="$CONFIG_wan_dns"
 LISTVAL="$FORM_wandns"
 handle_list "$FORM_wandnsremove" "$FORM_wandnsadd" "$FORM_wandnssubmit" 'ip|FORM_dnsadd|@TR<<WAN DNS Address>>|required' && {
 	FORM_wandns="$LISTVAL"
@@ -31,43 +33,47 @@ handle_list "$FORM_wandnsremove" "$FORM_wandnsadd" "$FORM_wandnssubmit" 'ip|FORM
 }
 FORM_wandnsadd=${FORM_wandnsadd:-192.168.1.1}
 
-if empty "$FORM_submit"; then
-	FORM_wan_proto=${FORM_wan_proto:-$(uci get network.wan.proto)}
+if empty "$FORM_submit"; then	
+	FORM_wan_proto="$CONFIG_wan_proto"
 	case "$FORM_wan_proto" in
 		# supported types
-		static|dhcp|pptp|pppoe|wwan) ;;
+		static|dhcp|pptp|pppoe|pppoa|wwan) ;;
 		# otherwise select "none"
 		*) FORM_wan_proto="none";;
 	esac
 
 	# pptp, dhcp and static common
-	FORM_wan_ipaddr=${wan_ipaddr:-$(uci get network.wan.ipaddr)}
-	FORM_wan_netmask=${wan_netmask:-$(uci get network.wan.netmask)}
-	FORM_wan_gateway=${wan_gateway:-$(uci get network.wan.gateway)}
+	FORM_wan_ipaddr="$CONFIG_wan_ipaddr"
+	FORM_wan_netmask="$CONFIG_wan_netmask"
+	FORM_wan_gateway="$CONFIG_wan_gateway"
 
 	# ppp common
 	#TODO: verify all ppp variables still work under kamikaze.
-	FORM_ppp_username=${ppp_username:-$(uci get network.wan.username)}
-	FORM_ppp_passwd=${ppp_passwd:-$(uci get network.wan.passwd)}
-	FORM_ppp_idletime=${ppp_idletime:-$(uci get network.wan.idletime)}
-	FORM_ppp_redialperiod=${ppp_redialperiod:-$(uci get network.wan.redialperiod)}
-	FORM_ppp_mtu=${ppp_mtu:-$(uci get network.wan.mtu)}
+	FORM_ppp_username="$CONFIG_wan_username"
+	FORM_ppp_passwd="$CONFIG_wan_passwd"
+	FORM_ppp_idletime="$CONFIG_wan_idletime"
+	FORM_ppp_redialperiod="$CONFIG_wan.redialperiod"
+	FORM_ppp_mtu="$CONFIG_wan_mtu"
 
-	redial=${ppp_demand:-$(uci get network.wan.demand)}
+	redial=+$CONFIG_wan_demand"
 	case "$redial" in
 		1|enabled|on) FORM_ppp_redial="demand";;
 		*) FORM_ppp_redial="persist";;
 	esac
 
-	FORM_pptp_server_ip=${pptp_server_ip:-$(uci get network.wan.server)}
+	FORM_pptp_server_ip="$CONFIG_wan_server"
+	
+	# pppoa
+	FORM_pppoa_vpi="CONFIG_wan_vpi"
+	FORM_pppoa_vci="CONFIG_wan_vci"
 	
 	# umts apn
-	FORM_wwan_service=${wwan_service:-$(uci get network.wan.service)}
+	FORM_wwan_service="$CONFIG_wan_service"
 	FORM_wwan_pincode="-@@-"
-	FORM_wwan_country=${wwan_country:-$(uci get network.wan.country)}
-	FORM_wwan_apn=${wwan_apn:-$(uci get network.wan.apn)}
-	FORM_wwan_username=${wwan_username:-$(uci get network.wan.username)}
-	FORM_wwan_passwd=${wwan_passwd:-$(uci get network.wan.passwd)}
+	FORM_wwan_country="$CONFIG_wan_country"
+	FORM_wwan_apn="$CONFIG_wan_apn"
+	FORM_wwan_username="$CONFIG_wan_username"
+	FORM_wwan_passwd="$CONFIG_wan_passwd"
 else
 	SAVED=1
 
@@ -109,6 +115,9 @@ EOF
 			uci_set "network" "wan" "username" "$FORM_wwan_username"
 			uci_set "network" "wan" "passwd" "$FORM_wwan_passwd"
 			;;
+			pppoe)
+			uci_set "network" "wan" "vpi" "$FORM_wan_vpi"
+			uci_set "network" "wan" "vci" "$FORM_wan_vci"
 		esac
 
 		# Common settings for PPTP, Static and DHCP
@@ -159,8 +168,15 @@ fi
 	PPTP_SERVER_OPTION="field|PPTP Server IP|pptp_server|hidden
 text|pptp_server_ip|$FORM_pptp_server_ip"
 }
-[ -x "/sbin/ifup.pppoe" ] && {
+[ -x "/lib/network/pppoe.sh" ] && {
 	PPPOE_OPTION="option|pppoe|PPPoE"
+}
+[ -x "/lib/network/pppoe.sh" ] && {
+	PPPOA_OPTION="option|pppoa|PPPoA"
+	PPPOA_VCI_OPTION="field|VCI|vci|hidden
+text|wan_vci|$FORM_wan_vci
+field|VPI|vpi|hidden
+text|wan_vpi|FORM_wan_vpi"
 }
 
 [ -x /sbin/ifup.wwan ] && {
@@ -197,7 +213,7 @@ $JS_APN_DB
 function modechange()
 {
 	var v;
-	v = (isset('wan_proto', 'pppoe') || isset('wan_proto', 'pptp'));
+	v = (isset('wan_proto', 'pppoe') || isset('wan_proto', 'pptp')); || isset('wan_proto', 'ppoa'));
 	set_visible('ppp_settings', v);
 	set_visible('username', v);
 	set_visible('passwd', v);
@@ -217,6 +233,10 @@ function modechange()
 
 	v = isset('wan_proto', 'pptp');
 	set_visible('pptp_server', v);
+	
+	v = isset('wan_proto', 'pppoa');
+	set_visible('vci', v);
+	set_visible('vpi', v);
 	
 	v = isset('wan_proto', 'wwan');
 	set_visible('wwan_service', v);
@@ -239,6 +259,7 @@ option|none|@TR<<No WAN#None>>
 option|dhcp|@TR<<DHCP>>
 option|static|@TR<<Static IP>>
 $PPPOE_OPTION
+$PPPOA_OPTION
 $WWAN_OPTION
 $PPTP_OPTION
 helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration#head-b62c144b9886b221e0c4b870edb0dd23a7b6acab
@@ -252,6 +273,7 @@ text|wan_netmask|$FORM_wan_netmask
 field|@TR<<Default Gateway>>|field_wan_gateway|hidden
 text|wan_gateway|$FORM_wan_gateway
 $PPTP_SERVER_OPTION
+$PPPOA_VCI_OPTION
 helpitem|WAN IP Settings
 helptext|Helptext WAN IP Settings#IP Settings are optional for DHCP and PPTP. They are used as defaults in case the DHCP server is unavailable.
 end_form
@@ -312,7 +334,7 @@ end_form
 EOF
 
 
-FORM_landns="${lan_dns:-$(uci get network.lan.dns)}"
+FORM_landns="$CONFIG_lan_dns"
 LISTVAL="$FORM_landns"
 handle_list "$FORM_landnsremove" "$FORM_landnsadd" "$FORM_landnssubmit" 'ip|FORM_dnsadd|@TR<<DNS Address>>|required' && {
 	FORM_landns="$LISTVAL"
@@ -321,9 +343,9 @@ handle_list "$FORM_landnsremove" "$FORM_landnsadd" "$FORM_landnssubmit" 'ip|FORM
 FORM_landnsadd=${FORM_landnsadd:-192.168.1.1}
 
 if empty "$FORM_submit"; then
-	FORM_lan_ipaddr=${lan_ipaddr:-$(uci get network.lan.ipaddr)}
-	FORM_lan_netmask=${lan_netmask:-$(uci get network.lan.netmask)}
-	FORM_lan_gateway=${lan_gateway:-$(uci get network.lan.gateway)}
+	FORM_lan_ipaddr="$CONFIG_lan_ipaddr"
+	FORM_lan_netmask="$CONFIG_lan_netmask"
+	FORM_lan_gateway="$CONFIG_lan_gateway"
 else
 	SAVED=1
 	validate <<EOF
