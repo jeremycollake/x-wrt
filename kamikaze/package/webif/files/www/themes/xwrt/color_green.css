@@ -40,39 +40,43 @@
 	background-color: #2b6d21;
 }
 
-#mainmenu
+
+#header-title,
+#mainmenu,
+#mainmenu a,
+#submenu,
+#submenu a,
+#save a,
+#save .page-save
 {
-	color: #C3C4D2;
-	background-color: #22491c;
+	color: #fff;
 }
 
-#mainmenu a
+#submenu,
+#mainmenu,
+#save div
 {
-	color: #C3C4D2;
+	background-color: #275820;
 }
 
 #mainmenu a:hover,
+#submenu a:hover,
 #save a:hover
 {
 	background-color: #759b7b;
 	color: #FFF;
 }
 
-#submenu,
-#save div
-{
-	background-color: #275820;
+#mainmenu .selected a,
+#submenu .selected a
+{		
+	background-color: #759b7b;
+	color: #FFF;
 }
 
 #content .settings-block .settings-block-title h2
 {
 	color: #000;
-}
-
-#submenu a:hover
-{
-	background-color: #759b7b;
-	color: #FFF;
 }
 
 #content .settings-block
@@ -132,70 +136,6 @@
 .warning
 {
 	color: red;
-}
-
-.selected-maincat
-{
-	border-color: #000;	
-	background-color: #131e12;
-}
-
-.selected-maincat a:visited
-{
-	
-}
-
-.selected-maincat a:link
-{
-	
-}
-
-.unselected-maincat
-{
-	
-}
-
-
-.unselected-maincat a:visited
-{
-
-}
-
-.unselected-maincat a:link
-{
-	
-}
-
-
-.selected-subcat
-{
-	border-color: #000;		
-	background-color: #131e12;
-}
-
-.selectedsubcat a:visited
-{
-
-}
-
-.selected-subcat a:link
-{
-	
-}
-
-.unselected-subcat
-{
-	
-}
-
-.unselected-subcat a:visited
-{
-
-}
-
-.unselected-subcat a:link
-{
-	
 }
 
 #short-status
