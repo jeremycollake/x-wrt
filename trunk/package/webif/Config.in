@@ -15,22 +15,22 @@ config BR2_PACKAGE_WEBIF_THEME_XWRT
 	depends BR2_PACKAGE_WEBIF
 	default m
 	help
-	  Original X-Wrt webif theme.
+	  Original X-Wrt webif theme
 	
 config BR2_PACKAGE_WEBIF_THEME_ZEPHYR
 	tristate "webif-theme-zephyr - Zephyr webif theme"
 	depends BR2_PACKAGE_WEBIF
 	default m
 	help
-	  Zephyr webif theme.
+	  Zephyr webif theme
 	
 config BR2_PACKAGE_WEBIF_LANG_CA
 	select BR2_PACKAGE_HASERL
-	tristate "webif-lang-ca - Canadian language file for webif"
+	tristate "webif-lang-ca - Catalan language file for webif"
 	depends BR2_PACKAGE_WEBIF
 	default m
 	help
-	  Canadian language file for webif
+	  Catalan language file for webif
 
 config BR2_PACKAGE_WEBIF_LANG_CZ
 	select BR2_PACKAGE_HASERL
