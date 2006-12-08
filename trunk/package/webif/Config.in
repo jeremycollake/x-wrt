@@ -2,9 +2,9 @@ menu "webif - OpenWrt Administrative Console"
 
 config BR2_PACKAGE_WEBIF
 	select BR2_PACKAGE_IPKG_UPGRADE_FIX
-	select BR2_PACKAGE_WEBIF_THEME_XWRT
+	depends BR2_PACKAGE_WEBIF_THEME_XWRT
 	depends BR2_PACKAGE_HASERL
-	depends BR2_PACKAGE_IPKG		
+	depends BR2_PACKAGE_IPKG	
 	tristate "webif^2 - HTTP Administrative Console"
 	default y
 	help
