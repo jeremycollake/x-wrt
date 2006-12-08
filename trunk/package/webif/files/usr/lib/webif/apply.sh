@@ -262,25 +262,27 @@ for config in $(ls config-conntrack 2>&-); do
 done
 
 # config-theme
-for config in $(ls config-theme 2>&-); do
-	echo '@TR<<Applying>> @TR<<theme>> ...'
-	for newtheme in $(grep webif_theme /tmp/.webif/config-theme |cut -d '"' -f2); do
-		# if theme isn't present, then install it		
-		! exists "/www/themes/$newtheme/webif.css" && {
-			install_package "webif-theme-$newtheme"	
-		}
-		if ! exists "/www/themes/$newtheme/webif.css"; then
-			# if theme still not installed, there was an error
-			echo "@TR<<Error>>: @TR<<installing theme package>>."
-		else
-			# create symlink to new active theme
+init_theme() {
+	echo '@TR<<Initializing theme ...>>'	
+	uci_load "webif"
+	newtheme="$CONFIG_theme_id"	
+	# if theme isn't present, then install it		
+	! exists "/www/themes/$newtheme/webif.css" && {
+		install_package "webif-theme-$newtheme"	
+	}
+	if ! exists "/www/themes/$newtheme/webif.css"; then
+		# if theme still not installed, there was an error
+		echo "@TR<<Error>>: @TR<<installing theme package>>."
+	else
+		# create symlink to new active theme if its not already set right
+		current_theme=$(ls /www/themes/active -l | cut -d '>' -f 2 | sed s/'\/www\/themes\/'//g)
+		! equal "$current_theme" "$newtheme" && {
 			rm /www/themes/active
 			ln -s /www/themes/$newtheme /www/themes/active
-		fi
-	done
-	rm -f /tmp/.webif/config-theme
+		}
+	fi		
 	echo '@TR<<Done>>'
-done
+}
 
 reload_hotspot() {
 	echo '@TR<<Reloading>> @TR<<hotspot settings>> ...'
@@ -333,7 +335,7 @@ reload_log() {
 	cd /proc/self
 	cat /tmp/.webif/config-* 2>&- | grep '=' >&- 2>&- && {
 		cat /tmp/.webif/config-* 2>&- | tee fd/1 | xargs -n1 nvram set	
-		echo "@TR<<Committing>> NVRAM ..."		
+		echo "@TR<<Committing>> NVRAM ..."
 		nvram commit
 	}
 )
@@ -354,6 +356,7 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 	case "$package" in
 		"/tmp/.uci/qos") echo "&nbsp;@TR<<Restarting>> ..."
 			qos-start;;
+		"/tmp/.uci/webif") init_theme;;			
 	esac
 done
 
