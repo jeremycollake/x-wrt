@@ -26,6 +26,14 @@
 }
 
 #header-title,
+#save .apply div
+{
+	background-color: #4d3f2a;
+}
+
+#header-title,
+#mainmenu,
+#mainmenu a,
 #submenu,
 #submenu a,
 #save a,
@@ -34,42 +42,29 @@
 	color: #fff;
 }
 
-#header-title,
-#save .apply div
-{
-	background-color: #4d3f2a;
-}
-
-#mainmenu
-{
-	color: #C3C4D2;	
-	background-color: #4d3f2a;
-}
-
-#mainmenu a
-{
-	color: #C3C4D2;
-}
-
-#mainmenu a:hover
-{
-	color: rgb(193,102,90);
-}
-
 #submenu,
+#mainmenu,
 #save div
 {
 	background-color: #978568;	
 }
 
+#mainmenu a:hover,
+#submenu a:hover,
+#save a:hover
+{
+	background-color: #343018;
+}
+
+#mainmenu .selected a,
+#submenu .selected a
+{		
+	background-color: #343018;
+}
+
 #content .settings-block .settings-block-title h2
 {
 	color: #000;
-}
-
-#submenu a:hover
-{
-	color: #FB0;
 }
 
 #content .settings-block
@@ -129,70 +124,6 @@
 .warning
 {
 	color: red;
-}
-
-.selected-maincat
-{
-	border-color: #000;	
-	background-color: #343018;
-}
-
-.selected-maincat a:visited
-{
-	
-}
-
-.selected-maincat a:link
-{
-	
-}
-
-.unselected-maincat
-{
-	
-}
-
-
-.unselected-maincat a:visited
-{
-
-}
-
-.unselected-maincat a:link
-{
-	
-}
-
-
-.selected-subcat
-{
-	border-color: #000;	
-	background-color: #343018;
-}
-
-.selectedsubcat a:visited
-{
-
-}
-
-.selected-subcat a:link
-{
-	
-}
-
-.unselected-subcat
-{
-	
-}
-
-.unselected-subcat a:visited
-{
-
-}
-
-.unselected-subcat a:link
-{
-	
 }
 
 #footer-logo

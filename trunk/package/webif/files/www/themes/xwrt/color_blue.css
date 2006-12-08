@@ -51,6 +51,19 @@
 	color: #C3C4D2;
 }
 
+#mainmenu a:hover,
+#submenu a:hover,
+#save a:hover
+{
+	background-color: #aac1d9;
+}
+
+#mainmenu .selected a,
+#submenu .selected a
+{	
+	background-color: #224054;	
+}
+
 #submenu,
 #save div
 {
@@ -60,14 +73,6 @@
 #content .settings-block .settings-block-title h2
 {
 	color: #000;
-}
-
-#mainmenu a:hover,
-#submenu a:hover,
-#save a:hover
-{
-	color: #400;
-	background-color: #aac1d9;
 }
 
 #content .settings-block
@@ -127,72 +132,6 @@
 .warning
 {
 	color: red;
-}
-
-.selected-maincat
-{
-	border-color: #CCC;		
-	background-color: #224054;		
-}
-
-.selected-maincat a:visited
-{
-	
-}
-
-.selected-maincat a:link
-{
-	
-}
-
-.unselected-maincat
-{
-	
-}
-
-
-.unselected-maincat a:visited
-{
-
-}
-
-.unselected-maincat a:link
-{
-	
-}
-
-
-.selected-subcat
-{
-	border-color: #CCC;		
-	background-color: #224054;	
-}	
-
-
-.selectedsubcat a:visited
-{
-
-}
-
-.selected-subcat a:link
-{
-	
-}
-
-.unselected-subcat
-{		
-
-	border-color: #CCC;		
-}
-
-.unselected-subcat a:visited
-{
-
-}
-
-.unselected-subcat a:link
-{
-	
 }
 
 #short-status

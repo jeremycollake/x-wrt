@@ -59,9 +59,14 @@ html, body
 	color: #C3C4D2;
 }
 
-#mainmenu a:hover
+#mainmenu a:hover,
+#submenu a:hover,
+#save a:hover,
+#mainmenu .selected a,
+#submenu .selected a
 {
-	color: rgb(193,102,90);
+	color: #000;
+	background-color: #C3C4D2;
 }
 
 #submenu,
@@ -74,11 +79,6 @@ html, body
 #content .settings-block .settings-block-title h2
 {
 	color: #CCC;	
-}
-
-#submenu a:hover
-{
-	color: #FB0;
 }
 
 #content .settings-block
@@ -145,71 +145,6 @@ html, body
 .logread
 {
 	color: #FFF;
-}
-
-
-.selected-maincat
-{
-	border-color: #CCC;	
-	background-color: #224054;	
-}
-
-.selected-maincat a:visited
-{
-	
-}
-
-.selected-maincat a:link
-{
-	
-}
-
-.unselected-maincat
-{
-	
-}
-
-
-.unselected-maincat a:visited
-{
-
-}
-
-.unselected-maincat a:link
-{
-	
-}
-
-
-.selected-subcat
-{
-	border-color: #CCC;		
-	background-color: #224054;		
-}
-
-.selectedsubcat a:visited
-{
-
-}
-
-.selected-subcat a:link
-{
-	
-}
-
-.unselected-subcat
-{
-	
-}
-
-.unselected-subcat a:visited
-{
-
-}
-
-.unselected-subcat a:link
-{
-	
 }
 
 #footer-logo
