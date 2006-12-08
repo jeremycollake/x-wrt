@@ -12,6 +12,9 @@ config webif syslog
 	option mark ""
 	option file ""
 
+config webif theme
+	option id "xwrt"
+
 config webif cron
 	option enable "1"
 	
