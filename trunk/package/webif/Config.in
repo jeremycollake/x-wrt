@@ -1,12 +1,29 @@
 menu "webif - OpenWrt Administrative Console"
 
 config BR2_PACKAGE_WEBIF
-	select BR2_PACKAGE_HASERL BR2_PACKAGE_IPKG BR2_PACKAGE_IPKG_UPGRADE_FIX
+	select BR2_PACKAGE_IPKG_UPGRADE_FIX
+	select BR2_PACKAGE_WEBIF_THEME_XWRT
+	depends BR2_PACKAGE_HASERL
+	depends BR2_PACKAGE_IPKG		
 	tristate "webif^2 - HTTP Administrative Console"
 	default y
 	help
 	  An HTTP based management console for OpenWrt.
-	  
+	
+config BR2_PACKAGE_WEBIF_THEME_XWRT
+	tristate "webif-theme-xwrt - Original X-Wrt webif theme"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  Original X-Wrt webif theme.
+	
+config BR2_PACKAGE_WEBIF_THEME_ZEPHYR
+	tristate "webif-theme-zephyr - Zephyr webif theme"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  Zephyr webif theme.
+	
 config BR2_PACKAGE_WEBIF_LANG_CA
 	select BR2_PACKAGE_HASERL
 	tristate "webif-lang-ca - Canadian language file for webif"

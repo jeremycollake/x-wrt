@@ -1,0 +1,6 @@
+Package: webif-theme-zephyr
+Maintainer: pftqg
+Section: net
+Depends: webif
+Priority: normal
+Description: Zephyr theme for webif^2.
