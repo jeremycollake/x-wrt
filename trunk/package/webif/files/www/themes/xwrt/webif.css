@@ -476,6 +476,7 @@ dt,
 .progressbar-whole
 {
 	border: dotted gray;
+	float: right;
 }
 
 .progressbar-filled
