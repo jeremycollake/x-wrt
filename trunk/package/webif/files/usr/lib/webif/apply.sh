@@ -263,11 +263,20 @@ done
 
 # config-theme
 for config in $(ls config-theme 2>&-); do
-	echo '@TR<<Applying>> @TR<<theme settings>> ...'
+	echo '@TR<<Applying>> @TR<<theme>> ...'
 	for newtheme in $(grep webif_theme /tmp/.webif/config-theme |cut -d '"' -f2); do
-		# create symlink to new active theme
-		rm /www/themes/active
-		ln -s /www/themes/$newtheme /www/themes/active
+		# if theme isn't present, then install it		
+		! exists "/www/themes/$newtheme/webif.css" && {
+			install_package "webif-theme-$newtheme"	
+		}
+		if ! exists "/www/themes/$newtheme/webif.css"; then
+			# if theme still not installed, there was an error
+			echo "@TR<<Error>>: @TR<<installing theme package>>."
+		else
+			# create symlink to new active theme
+			rm /www/themes/active
+			ln -s /www/themes/$newtheme /www/themes/active
+		fi
 	done
 	rm -f /tmp/.webif/config-theme
 	echo '@TR<<Done>>'
@@ -313,7 +322,7 @@ reload_pptp() {
 }
 
 reload_log() {
-	echo '@TR<<Reloading syslogd ...>>'
+	echo '@TR<<Reloading syslogd>> ...'
 	killall syslogd >&- 2>&- <&-
 	/sbin/runsyslogd >&- 2>&- <&-
 }

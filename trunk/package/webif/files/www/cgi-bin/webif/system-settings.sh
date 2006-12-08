@@ -151,6 +151,33 @@ is_bcm947xx && {
 	}
 
 #####################################################################
+# Initialize THEMES form
+#
+#
+# start with list of available installable theme packages
+#
+! exists "/etc/themes.lst" && {
+	# create list if it doesn't exist ..
+	/usr/lib/webif/webif-mkthemelist.sh	
+}
+THEMES=$(cat "/etc/themes.lst")
+
+# enumerate installed themes by finding all subdirectories of /www/theme
+# this lets users install themes not built into packages.
+#
+for curtheme in /www/themes/*; do
+	curtheme=$(echo "$curtheme" | sed s/'\/www\/themes\/'//g)
+	! equal "$curtheme" "active" && {
+		THEMES="$THEMES
+			option|$curtheme"
+	}
+done
+#
+# sort list and remove dupes
+#
+THEMES=$(echo "$THEMES" | sort -u)
+
+#####################################################################
 # Initialize wait_time form
 	for wtime in $(seq 1 30); do
 		FORM_wait_time="$FORM_wait_time
@@ -163,18 +190,10 @@ dangerous_form_end=""
 dangerous_form_help=""
 
 #####################################################################
-# Initialize THEMES form
-# create list if it doesn't exist ..
-! exists "/etc/themes.lst" && {
-	/usr/lib/webif/webif-mkthemelist.sh	
-}
-THEMES=$(cat "/etc/themes.lst")
-
-#####################################################################
 # Initialize LANGUAGES form
 # create list if it doesn't exist ..
 ! exists "/etc/languages.lst" && {
-	/usr/lib/webif/webif-mklanglist.sh	
+	/usr/lib/webif/webif-mklanglist.sh
 }
 LANGUAGES=$(cat "/etc/languages.lst")
 
