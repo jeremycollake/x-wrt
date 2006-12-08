@@ -1,4 +1,0 @@
-#!/bin/sh
-if [ -z "${IPKG_INSTROOT}" ]; then
-/etc/init.d/miniupnpd enable
-fi

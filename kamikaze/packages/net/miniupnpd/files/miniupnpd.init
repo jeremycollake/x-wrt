@@ -1,37 +1,33 @@
 #!/bin/sh /etc/rc.common
-. /etc/functions.sh
-. /lib/config/uci.sh
 START=95
 start() {
-	uci_load "upnpd"
-	if [ "$CONFIG_general_enable" = "1" ]; then
-		include /lib/network
-		scan_interfaces
-		config_get ifname wan ifname
-		config_get ipaddr lan ipaddr
-		
-		echo "miniupnpd starting ..."
-		stop
-		iptables_init.sh
-		# get bitspeed information, if provided
-		upnpd_up_bitspeed=$CONFIG_general_up_bitspeed
-		upnpd_down_bitspeed=$CONFIG_general_down_bitspeed
-		bitspeed_str=""
-		[ -n "$upnpd_up_bitspeed" ] && [ -n "$upnpd_down_bitspeed" ] && {
-			# covert to bytespeed
-			let upnpd_up_bytespeed=$upnpd_up_bitspeed*1024/8
-			let upnpd_down_bytespeed=$upnpd_down_bitspeed*1024/8
-			bitspeed_str="-B $upnpd_down_bytespeed $upnpd_up_bytespeed"
-		}		
-		if [ "$CONFIG_general_log_output" = "1" ]; then
-		        miniupnpd -i "$ifname" -a "$ipaddr" -p 5000 -U $bitspeed_str -d | logger -t miniupnpd &
-		else
-		        miniupnpd -i "$ifname" -a "$ipaddr" -p 5000 -U $bitspeed_str
-		fi
+	config_load "upnpd"
+	include /lib/network
+	scan_interfaces
+	config_get ifname wan ifname
+	config_get ipaddr lan ipaddr
+	
+	echo "miniupnpd starting ..."
+	stop
+	iptables_init.sh
+	# get bitspeed information, if provided
+	config_get upnp_up_bitspeed config upload
+	config_get upnp_down_bitspeed config download
+	bitspeed_str=""
+	[ -n "$upnpd_up_bitspeed" ] && [ -n "$upnpd_down_bitspeed" ] && {
+		# covert to bytespeed
+		upnpd_up_bytespeed=$(($upnpd_up_bitspeed * 1024 / 8))
+		upnpd_down_bytespeed=$(($upnpd_down_bitspeed * 1024 / 8))
+		bitspeed_str="-B $upnpd_down_bytespeed $upnpd_up_bytespeed"
+	}
+	config_get log_output config log_output
+	if [ "$log_output" = "1" ]; then
+		miniupnpd -i "$ifname" -a "$ipaddr" -p 5000 -U $bitspeed_str -d | logger -t miniupnpd &
 	else
-		echo "To enable miniupnpd set option enable = '1' in /etc/config/upnpd."
+		miniupnpd -i "$ifname" -a "$ipaddr" -p 5000 -U $bitspeed_str
 	fi
 }
+
 stop() {
 	pnpd_pid=$(cat /var/run/miniupnpd.pid) 2>&- >&-
 	iptables_flush.sh 2>&- >&-
