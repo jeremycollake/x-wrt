@@ -143,8 +143,9 @@ fi
 
 # only run below on 'real' system (not image builder)
 if [ -z "${IPKG_INSTROOT}" ]; then	
-	# force re-initialization of language list
+	# force re-initialization of extension package lists
 	rm -f "/etc/languages.lst"
+	rm -f "/etc/themes.lst"
 
 	[ "$IPKG_UPDATE_NEEDED" = "1" ] && ipkg update
 

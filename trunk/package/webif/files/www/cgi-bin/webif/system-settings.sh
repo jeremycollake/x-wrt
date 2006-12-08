@@ -151,16 +151,6 @@ is_bcm947xx && {
 	}
 
 #####################################################################
-# enumerate themes by finding all subdirectories of /www/theme
-for curtheme in /www/themes/*; do
-	curtheme=$(echo "$curtheme" | sed s/'\/www\/themes\/'//g)
-	! equal "$curtheme" "active" && {
-		THEMES="$THEMES
-			option|$curtheme"
-	}
-done
-
-#####################################################################
 # Initialize wait_time form
 	for wtime in $(seq 1 30); do
 		FORM_wait_time="$FORM_wait_time
@@ -171,6 +161,14 @@ done
 dangerous_form_start=""
 dangerous_form_end=""
 dangerous_form_help=""
+
+#####################################################################
+# Initialize THEMES form
+# create list if it doesn't exist ..
+! exists "/etc/themes.lst" && {
+	/usr/lib/webif/webif-mkthemelist.sh	
+}
+THEMES=$(cat "/etc/themes.lst")
 
 #####################################################################
 # Initialize LANGUAGES form
