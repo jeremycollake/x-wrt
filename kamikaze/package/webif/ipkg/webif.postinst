@@ -115,16 +115,12 @@ ln -sf "/www/themes/xwrt" "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
 
 # initialize webifmetabin binaries
 # todo: move back to makefile because this won't be cleaned up good
-# for RC5, do an rm first
-rm -f "${IPKG_INSTROOT}/usr/bin/bstrip"
-rm -f "${IPKG_INSTROOT}/usr/bin/webif-page"
-rm -f "${IPKG_INSTROOT}/usr/bin/wepkeygen"
-rm -f "${IPKG_INSTROOT}/usr/bin/int2human"
-# -f is not needed, but we'll keep in case above is removed
 ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/bstrip"
 ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/webif-page"
 ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/wepkeygen"
 ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/int2human"
+
+ln -sf /lib/config/uci.new /lib/config/uci.sh
 
 # initialize ipkg.conf
 AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/kamikaze/packages"
