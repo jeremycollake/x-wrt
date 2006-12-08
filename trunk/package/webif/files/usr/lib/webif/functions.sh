@@ -1,4 +1,8 @@
+# This file is compatible with White Russian and Kamikaze.
 . /etc/functions.sh
+[ -f /etc/functions_ex.sh ] && {
+. /etc/functions_ex.sh
+}
 
 #############################################################################
 # Misc. functions
