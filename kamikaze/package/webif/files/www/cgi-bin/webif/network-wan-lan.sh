@@ -52,7 +52,7 @@ if empty "$FORM_submit"; then
 	FORM_ppp_username="$CONFIG_wan_username"
 	FORM_ppp_passwd="$CONFIG_wan_passwd"
 	FORM_ppp_idletime="$CONFIG_wan_idletime"
-	FORM_ppp_redialperiod="$CONFIG_wan.redialperiod"
+	FORM_ppp_redialperiod="$CONFIG_wan_redialperiod"
 	FORM_ppp_mtu="$CONFIG_wan_mtu"
 
 	redial="$CONFIG_wan_demand"
@@ -171,12 +171,8 @@ text|pptp_server_ip|$FORM_pptp_server_ip"
 [ -x "/lib/network/pppoe.sh" ] && {
 	PPPOE_OPTION="option|pppoe|PPPoE"
 }
-[ -x "/lib/network/pppoe.sh" ] && {
+[ -x "/lib/network/pppoa.sh" ] && {
 	PPPOA_OPTION="option|pppoa|PPPoA"
-	PPPOA_VCI_OPTION="field|VCI|vci|hidden
-text|wan_vci|$FORM_wan_vci
-field|VPI|vpi|hidden
-text|wan_vpi|FORM_wan_vpi"
 }
 
 [ -x /sbin/ifup.wwan ] && {
@@ -213,7 +209,7 @@ $JS_APN_DB
 function modechange()
 {
 	var v;
-	v = (isset('wan_proto', 'pppoe') || isset('wan_proto', 'pptp')); || isset('wan_proto', 'ppoa'));
+	v = (isset('wan_proto', 'pppoe') || isset('wan_proto', 'pptp') || isset('wan_proto', 'pppoa'));
 	set_visible('ppp_settings', v);
 	set_visible('username', v);
 	set_visible('passwd', v);
@@ -330,6 +326,10 @@ field|@TR<<Password>>|passwd|hidden
 password|ppp_passwd|$FORM_ppp_passwd
 field|@TR<<MTU>>|mtu|hidden
 text|ppp_mtu|$FORM_ppp_mtu
+field|VCI|vci|hidden
+text|wan_vci|$FORM_wan_vci
+field|VPI|vpi|hidden
+text|wan_vpi|$FORM_wan_vpi
 end_form
 EOF
 
