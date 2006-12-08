@@ -1,5 +1,6 @@
-#!/bin/sh /etc/rc.common
-# This file is compatible with White Russian and Kamikaze.
+#!/bin/sh
+# This file is NOT synchronized between branches.
+#
 START=90
 . /etc/functions.sh
 . /lib/config/uci.sh
@@ -9,9 +10,10 @@ firmware_subtitle=$CONFIG_general_firmware_subtitle
 firmware_version=$CONFIG_general_firmware_version
 
 if grep -qi "KAMIKAZE" "/etc/banner"; then
-	firmware_name="OpenWrt Kamikaze"
+	firmware_name="OpenWrt Kamikaze"	
 else	
-	firmware_name="OpenWrt White Russian"		
+	firmware_name="OpenWrt White Russian"
+	1="start"
 fi	
 firmware_subtitle="With X-Wrt Extensions"
 

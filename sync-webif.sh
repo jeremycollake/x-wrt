@@ -49,6 +49,6 @@ synchronize_file "www/cgi-bin/webif/status-qos.sh"
 synchronize_file "www/cgi-bin/webif/status-usb.sh"
 synchronize_file "www/cgi-bin/webif/network-qos.sh"
 synchronize_file "www/cgi-bin/webif/network-services.sh"
-synchronize_file "etc/init.d/S90webif_deviceid"
-synchronize_file "etc/init.d/S90webif_firmwareid"
+#NOT_synchronize_file "etc/init.d/S90webif_deviceid"  # not sync'd due to rc.common
+#NOT_synchronize_file "etc/init.d/S90webif_firmwareid"# not sync'd due to rc.common
 svn ci "$BRANCH_DEST" -m "kamikaze and white russian branch synchronize"
