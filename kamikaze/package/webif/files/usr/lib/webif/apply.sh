@@ -215,12 +215,6 @@ for config in $(ls config-* 2>&-); do
 	esac'
 done
 
-get_real_interface () {
-	include /lib/network
-	scan_interfaces
-	config_get ifname "$iface" ifname
-}
-
 
 #
 # now apply any UCI config changes
@@ -231,13 +225,11 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 	case "$package" in
 		"/tmp/.uci/network")
 			echo '@TR<<Reloading network>> ...'
-			get_real_interface wan
-			ifdown $ifname
-			ifup $ifname
+			ifdown wan
+			ifup wan
 			
-			get_real_interface lan
-			ifdown $ifname
-			ifup ifname
+			ifdown lan
+			ifup lan
 			killall dnsmasq
 			/etc/init.d/dnsmasq start ;;
 		"/tmp/.uci/qos") echo "&nbsp;@TR<<Restarting>> ..."
