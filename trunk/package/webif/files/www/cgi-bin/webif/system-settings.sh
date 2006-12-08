@@ -25,7 +25,7 @@
 
 load_settings "system"
 load_settings "webif"
-load_settings "theme"
+uci_load "webif"
 
 #####################################################################
 # defaults
@@ -81,9 +81,8 @@ if empty "$FORM_submit"; then
 	exists "/usr/sbin/nvram" && {
 		FORM_language="${FORM_language:-$(nvram get language)}"
 	}
-	FORM_language="${FORM_language:-default}"
-	# get form theme by seeing where /www/themes/active/ points
-	FORM_theme=$(ls /www/themes/active -l | cut -d'>' -f 2 | sed s/'\/www\/themes\/'//g)
+	FORM_language="${FORM_language:-default}"		
+	FORM_theme=${CONFIG_theme_id:-xwrt}
 else
 #####################################################################
 # save forms
@@ -107,11 +106,12 @@ EOF
 			{
 				save_setting nvram clkfreq "$FORM_clkfreq"
 			}
-
 		}
 		# webif settings
-		save_setting webif language "$FORM_language"
-		save_setting theme webif_theme "$FORM_theme"
+		! equal "$FORM_theme" "$CONFIG_theme_id" && ! empty "$CONFIG_theme_id" && {	
+			uci_set "webif" "theme" "id" "FORM_theme"
+		}		
+		save_setting webif language "$FORM_language"		
 	else
 		echo "<br /><div class=\"warning\">Warning: Hostname failed validation. Can not be saved.</div><br />"
 	fi
@@ -161,15 +161,24 @@ is_bcm947xx && {
 	/usr/lib/webif/webif-mkthemelist.sh	
 }
 THEMES=$(cat "/etc/themes.lst")
+for str in $temp_t; do
+	THEME="$THEME
+		option|$str"
+done
 
 # enumerate installed themes by finding all subdirectories of /www/theme
 # this lets users install themes not built into packages.
 #
 for curtheme in /www/themes/*; do
 	curtheme=$(echo "$curtheme" | sed s/'\/www\/themes\/'//g)
+	if exists "/www/themes/$curtheme/name"; then
+		theme_name=$(cat "/www/themes/$curtheme/name")
+	else
+		theme_name="$curtheme"
+	fi
 	! equal "$curtheme" "active" && {
 		THEMES="$THEMES
-			option|$curtheme"
+			option|$curtheme|$theme_name"
 	}
 done
 #
