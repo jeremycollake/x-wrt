@@ -55,7 +55,7 @@ if empty "$FORM_submit"; then
 	FORM_ppp_redialperiod="$CONFIG_wan.redialperiod"
 	FORM_ppp_mtu="$CONFIG_wan_mtu"
 
-	redial=+$CONFIG_wan_demand"
+	redial="$CONFIG_wan_demand"
 	case "$redial" in
 		1|enabled|on) FORM_ppp_redial="demand";;
 		*) FORM_ppp_redial="persist";;
@@ -115,9 +115,9 @@ EOF
 			uci_set "network" "wan" "username" "$FORM_wwan_username"
 			uci_set "network" "wan" "passwd" "$FORM_wwan_passwd"
 			;;
-			pppoe)
+			pppoa)
 			uci_set "network" "wan" "vpi" "$FORM_wan_vpi"
-			uci_set "network" "wan" "vci" "$FORM_wan_vci"
+			uci_set "network" "wan" "vci" "$FORM_wan_vci" ;;
 		esac
 
 		# Common settings for PPTP, Static and DHCP
