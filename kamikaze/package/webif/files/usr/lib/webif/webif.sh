@@ -55,7 +55,7 @@ ShowUntestedWarning() {
 }
 
 ShowNotUpdatedWarning() {
-	echo "<div class=\"warning\">WARNING: This page has not been updated or checked for correct functionality under Kamikaze.</div>"
+       echo "<div class=\"warning\">WARNING: This page has not been updated or checked for correct functionality under Kamikaze.</div>"
 }
 
 update_changes() {
@@ -67,6 +67,29 @@ update_changes() {
 		CHANGES_CUR=$(cat "$uci_tmp_file" | grep CONFIG_SECTION | wc -l)
 		CHANGES=$(($CHANGES + $CHANGES_CUR))
 	done
+}
+
+pcnt=0
+nothave=0
+_savebutton_bk=""
+
+has_pkgs() {
+	retval=0;
+	for pkg in "$@"; do
+		pcnt=$((pcnt + 1))
+		empty $(ipkg list_installed | grep "^$pkg ") && {
+			echo -n "<p>Features on this page require the \"<b>$pkg</b>\" package. &nbsp;<a href=\"/cgi-bin/webif/ipkg.sh?action=install&pkg=$pkg&prev=$SCRIPT_NAME\">install now</a>.</p>"
+			retval=1;
+			nothave=$((nothave + 1))
+		}
+	done
+	[ -z "$_savebutton_bk" ] && _savebutton_bk=$_savebutton
+	if [ "$pcnt" = "$nothave" ]; then
+		_savebutton=""
+	else
+		_savebutton=$_savebutton_bk
+	fi
+	return $retval;
 }
 
 mini_header() {
@@ -81,7 +104,6 @@ Pragma: no-cache
 	<head>
 
 <link rel="stylesheet" type="text/css" href="/webif.css" />
-<link rel="stylesheet" type="text/css" href="/color_common.css" />
 	<title></title>
 </head>
 <style type="text/css">
@@ -104,9 +126,10 @@ header() {
 	}
 
 	_category="$1"
-	_firmware_name="$(uci get webif.general.firmware_name)"
-	_firmware_subtitle="$(uci get webif.general.firmware_subtitle)"
-	_version="$(uci get webif.general.firmware_version)"
+	uci_load "webif"
+	_firmware_version="$CONFIG_general_firmware_version"
+	_firmware_name="$CONFIG_general_firmware_name"
+	_firmware_subtitle="$CONFIG_general_firmware_subtitle"
 	_uptime="$(uptime)"
 	_loadavg="${_uptime#*load average: }"
 	_uptime="${_uptime#*up }"
@@ -118,16 +141,15 @@ header() {
 	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></p>}"	
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}
-
-	use_short_status_frame=$(uci get webif.general.use_short_status_frame)
-	if equal $use_short_status_frame "1"; then
+	
+	if equal $CONFIG_general_use_short_status_frame "1"; then
 		short_status_frame='<iframe src="/cgi-bin/webif/iframe.mini-info.sh"
 				width="200" height="80"  scrolling="no" frameborder="0"></iframe>'
 	else
 		short_status_frame="<div id=\"short-status\">
 						<h3><strong>Status:</strong></h3>
 						<ul>
-							<li><strong>$_firmware_name $_version </strong></li>
+							<li><strong>$_firmware_name $firmware_version </strong></li>
 							<li><strong>@TR<<Host>>:</strong> $_hostname</li>
 							<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
 							<li><strong>@TR<<Load>>:</strong> $_loadavg</li>
@@ -149,12 +171,11 @@ Pragma: no-cache
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <?xml version="1.0" encoding="@TR<<Encoding|ISO-8859-1>>"?>
 	<head>
-	<title>@TR<< $_firmware_name Administrative Console>></title>
+	<title>$_firmware_name @TR<<Administrative Console>></title>
 		<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
 		<!--[if lt IE 7]>
 			<link rel="stylesheet" type="text/css" href="/themes/active/ie_lt7.css" />
-		<![endif]-->
-		<link rel="stylesheet" type="text/css" href="/themes/active/color_common.css" />
+		<![endif]-->		
 		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
 		<meta http-equiv="expires" content="-1" />
 	</head>
