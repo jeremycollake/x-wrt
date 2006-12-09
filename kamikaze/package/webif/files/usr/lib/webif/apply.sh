@@ -173,14 +173,7 @@ done
 
 # config-theme
 for config in $(ls config-theme 2>&-); do
-	echo '@TR<<Applying>> @TR<<theme settings>> ...'
-	for newtheme in $(grep webif_theme /tmp/.webif/config-theme |cut -d '"' -f2); do
-		# create symlink to new active theme
-		rm /www/themes/active
-		ln -s /www/themes/$newtheme /www/themes/active
-	done
-	rm -f /tmp/.webif/config-theme
-	echo '@TR<<Done>>'
+	echo "This code out of date."
 done
 
 
