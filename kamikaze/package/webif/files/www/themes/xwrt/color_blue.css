@@ -26,29 +26,18 @@
 }
 
 #header-title,
+#mainmenu,
+#mainmenu a,
 #submenu,
 #submenu a,
 #save a,
-#save .page-save
-{
-	color: #fff;
-}
-
+#save .page-save,
 #header-title,
+#save div,
 #save .apply div
 {
+	color: #fff;
 	background-color: #315579;
-}
-
-#mainmenu
-{
-	color: #C3C4D2;
-	background-color: #315579;
-}
-
-#mainmenu a
-{
-	color: #C3C4D2;
 }
 
 #mainmenu a:hover,
@@ -62,12 +51,6 @@
 #submenu .selected a
 {	
 	background-color: #224054;	
-}
-
-#submenu,
-#save div
-{
-	background-color: #476889;
 }
 
 #content .settings-block .settings-block-title h2
