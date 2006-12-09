@@ -355,8 +355,7 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 	echo "@TR<<Committing>> ${package#/tmp/.uci/} ..."
 	uci_commit "$package"
 	case "$package" in
-		"/tmp/.uci/qos") echo "&nbsp;@TR<<Restarting>> ..."
-			qos-start;;
+		"/tmp/.uci/qos") qos-start;;
 		"/tmp/.uci/webif") init_theme;;			
 	esac
 done
