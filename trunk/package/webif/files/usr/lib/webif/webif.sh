@@ -104,7 +104,6 @@ Pragma: no-cache
 	<head>
 
 <link rel="stylesheet" type="text/css" href="/webif.css" />
-<link rel="stylesheet" type="text/css" href="/color_common.css" />
 	<title></title>
 </head>
 <style type="text/css">
@@ -176,8 +175,7 @@ Pragma: no-cache
 		<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
 		<!--[if lt IE 7]>
 			<link rel="stylesheet" type="text/css" href="/themes/active/ie_lt7.css" />
-		<![endif]-->
-		<link rel="stylesheet" type="text/css" href="/themes/active/color_common.css" />
+		<![endif]-->		
 		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
 		<meta http-equiv="expires" content="-1" />
 	</head>
