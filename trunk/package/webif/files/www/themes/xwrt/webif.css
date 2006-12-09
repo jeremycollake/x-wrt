@@ -109,9 +109,10 @@ option
 #mainmenu
 {
 	position: relative;
-	float: left;	
-	width: 100%;	
-	line-height: 2.5em;
+	float: left;
+	width: 100%;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
 }
 
 #submenu
@@ -119,15 +120,8 @@ option
 	position: relative;
 	float: left;
 	width: 100%;
-	line-height: 2.5em;
-}
-
-#mainmenu .seperator,
-#submenu .seperator,
-{
-	line-height: 2.5em;
-	padding: 0 0.1em 0 0.1em;
-	display: block;
+	padding-top: 0.5em;
+	padding-bottom: 0.5em;
 }
 
 #mainmenu h3
@@ -137,24 +131,50 @@ option
 	display: inline;
 }
 
-#mainmenu li,
-#submenu li
+#mainmenu li
 {
-	float: left;
-	line-height: 2.5em;
+	display: inline;
+	font-size: 0.9em;
+	padding: 0.5em;
 	list-style-type: none;
-	min-width: 4.2em;
-	text-align: center;
 }
 
-#mainmenu li a,
-#submenu li a
+#submenu li
 {
-	display: block;
-	font-size: 0.9em;
-	padding: 0 0.7em 0 0.7em;
-	line-height: 2.5em;
-	list-style-type: none;
+	display: inline;
+	position: relative;
+	list-style-type: none;	
+	padding: 0.5em;
+}
+
+
+.selected-subcat
+{
+	border-style: groove;
+	border-width: medium;
+	border-bottom-style: hidden;
+	border-top-style: hidden;
+}
+
+.unselected-subcat
+{
+	
+}
+
+
+.selected-maincat
+{
+	border-color: #CCC;
+	border-style: ridge;
+	border-width: medium;
+	background-color: #224054;
+	border-bottom-style: hidden;
+	border-top-style: hidden;
+}
+
+.seperator-maincat
+{
+	
 }
 
 #content
@@ -476,7 +496,6 @@ dt,
 .progressbar-whole
 {
 	border: dotted gray;
-	float: right;
 }
 
 .progressbar-filled
@@ -521,8 +540,9 @@ dt,
 
 #validated-text
 {
-	font-weight: lighter;
-	font-size: 0.7em;
+	display: none;	
+	/*font-weight: lighter;
+	font-size: 0.7em;*/
 }
 
 #content .settings-block .settings-block-title h2
