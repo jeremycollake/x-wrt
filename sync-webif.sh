@@ -42,6 +42,7 @@ synchronize_file "www/themes/xwrt/*"
 synchronize_file "etc/config/webif"
 synchronize_file "usr/lib/webif/functions.sh"
 #synchronize_file "usr/lib/webif/webif.sh" # WR's copy should now work in kami, just waiting to test to verify
+synchronize_file "www/index.html"
 synchronize_file "www/cgi-bin/webif/info.sh"
 synchronize_file "www/cgi-bin/webif/info-about.sh"
 synchronize_file "www/cgi-bin/webif/status-diag.sh"
@@ -49,6 +50,8 @@ synchronize_file "www/cgi-bin/webif/status-qos.sh"
 synchronize_file "www/cgi-bin/webif/status-usb.sh"
 synchronize_file "www/cgi-bin/webif/network-qos.sh"
 synchronize_file "www/cgi-bin/webif/network-services.sh"
+synchronize_file "usr/lib/webif/*categor*.awk"
+synchronize_file "usr/lib/webif/webif.sh"
 #NOT_synchronize_file "etc/init.d/S90webif_deviceid"  # not sync'd due to rc.common
 #NOT_synchronize_file "etc/init.d/S90webif_firmwareid"# not sync'd due to rc.common
 svn ci "$BRANCH_DEST" -m "kamikaze and white russian branch synchronize"
