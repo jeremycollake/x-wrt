@@ -13,8 +13,7 @@ if grep -qi "KAMIKAZE" "/etc/banner"; then
 	firmware_name="OpenWrt Kamikaze"	
 else	
 	firmware_name="OpenWrt White Russian"
-	1="start"
-fi	
+fi
 firmware_subtitle="With X-Wrt Extensions"
 
 if [ -f "/etc/openwrt_version" ]; then
