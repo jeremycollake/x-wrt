@@ -46,6 +46,7 @@ scp \
 scp \
 	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default/*.7z \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/default/
+rm imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default/*v5*.bin
 scp \
 	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default/*.bin \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/default/
