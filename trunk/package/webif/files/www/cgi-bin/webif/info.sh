@@ -7,7 +7,9 @@
 #
 # TODO: This page looks ugly anymore (rendered).
 #
-header "Info" "System" "@TR<<System>>" '' ''
+header "Info" "System" "@TR<<System Information>>" '' ''
+
+SHOW_BANNER=0	# set to show /etc/banner
 
 if is_kamikaze; then
 	XWRT_BRANCH="kamikaze"
@@ -71,28 +73,22 @@ device_string=$(echo $device_name && ! empty $device_version && echo $device_ver
 user_string=$REMOTE_USER
 equal $user_string "" && user_string="not logged in"
 
-echo "<pre>"
-cat '/etc/banner'
-echo "</pre><br />"
+equal "$SHOW_BANNER" "1" && {
+	echo "<pre>"
+	cat '/etc/banner'
+	echo "</pre><br />"
+}
 
 cat <<EOF
-<form action="" enctype="multipart/form-data" method="post">	
+
+@TR<<Welcome to your <a href="http://www.openwrt.org">OpenWrt</a> and <a href="http://www.x-wrt.org">X-Wrt</a> based router>>.
+<br /><br />
 <table>
 <tbody>
 	<tr>
-		<td><strong>@TR<<Firmware>></strong></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+		<td width="100"><strong>@TR<<Firmware>></strong></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
 		<td>$firmware_name - $firmware_subtitle $firmware_version</td>
 	</tr>
-	<tr>
-		<td><strong>@TR<<Webif>></strong></td><td>&nbsp;</td>
-		<td><a href="http://www.x-wrt.org">X-Wrt</a> Webif<sup>2</sup></td>
-<td colspan="2">
-<input type="submit" value=" @TR<<Check_Upgrade|Check For Webif Update>> " name="update_check" />
-<input type="submit" value=" @TR<<Upgrade_Webif#Update/Reinstall Webif>> "  name="install_webif" />
-</td></tr><tr><td></td><td></td><td>$revision_text</td><td>
-<input type="checkbox" $daily_checked value="1" name="check_daily" id="field_check_daily" />Include Daily Builds in Check
-</td>
-</tr>
 	<tr>
 		<td><strong>@TR<<Kernel>></strong></td><td>&nbsp;</td>
 		<td>$_kversion</td>
@@ -110,8 +106,33 @@ cat <<EOF
 	<tr>
 		<td><strong>@TR<<Username>></strong></td><td>&nbsp;</td>
 		<td>$user_string</td>
+	</tr>	
+</tbody>
+</table>
+<br />
+<table>
+<tbody>
+	<tr>
+		<td><strong>@TR<<Web mgt. console>></strong></td><td>&nbsp;</td>
+		<td>Webif<sup>2</sup></td>
 	</tr>
-	<tr><td><br /><br /></td></tr>
+	<tr>
+		<td><strong>@TR<<Version>></strong></td><td></td><td>$revision_text</td>
+	</tr>
+</tbody>
+</table>
+
+<form action="" enctype="multipart/form-data" method="post">	
+<table>
+<tbody>
+	<tr>
+		<td colspan=2">
+		<input type="submit" value=" @TR<<Check_Upgrade|Check For Webif Update>> " name="update_check" />
+		<input type="submit" value=" @TR<<Upgrade_Webif#Update/Reinstall Webif>> "  name="install_webif" />
+		</td>
+	</tr>
+<tr><td colspan="2"><input type="checkbox" $daily_checked value="1" name="check_daily" id="field_check_daily" />@TR<<Include daily builds when checking for update or installing latest webif<sup>2</sup>>></td>
+</tr>
 </tbody>
 </table>
 </form>
