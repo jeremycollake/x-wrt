@@ -169,10 +169,10 @@ option
 }
 
 #mainmenu .seperator,
-#submenu .seperator,
+#submenu .seperator
 {
 	line-height: 2.5em;
-	padding: 0 0.4em 0 0.4em;
+	padding: 0 0.1em 0 0.1em;
 	display: block;
 }
 
@@ -618,11 +618,6 @@ dt,
 .openwrt-title
 {
 	background-color: transparent;	
-}
-
-.seperator-maincat
-{
-	background-color: transparent;
 }
 
 .even
