@@ -54,7 +54,7 @@ fi
 if [ -n "$FORM_install_webif" ]; then
 	echo "Please wait, installation may take a minute ... <br />"
 	echo "<pre>"
-	ipkg install "http://ftp.berlios.de/pub/xwrt/$package_filename" | uniq
+	ipkg install "http://ftp.berlios.de/pub/xwrt/$package_filename" -force-overwrite | uniq
 	echo "</pre>"
 	this_revision=$(cat "/www/.version")
 fi
@@ -128,6 +128,7 @@ cat <<EOF
 	<tr>
 		<td colspan=2">
 		<input type="submit" value=" @TR<<Check_Upgrade|Check For Webif Update>> " name="update_check" />
+	
 		<input type="submit" value=" @TR<<Upgrade_Webif#Update/Reinstall Webif>> "  name="install_webif" />
 		</td>
 	</tr>
