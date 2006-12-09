@@ -95,8 +95,8 @@ $(PKG_BUILD_DIR)/.built:
 $(IPKG_WEBIF): 
 	$(CP) -a ./files/* $(IDIR_WEBIF)/
 	chmod -R 755 $(IDIR_WEBIF)/*
-	rm -rf $(IDIR_WEBIF)/usr/lib/webif/lang/
-	rm -rf $(IDIR_WEBIF)/www/themes/*
+	rm -rf $(IDIR_WEBIF)/usr/lib/webif/lang/	
+	rm -rf $(IDIR_WEBIF)/www/themes/zephyr
 	rm -f $(IDIR_WEBIF)/www/cgi-bin/webif/*.wip
 	./embed_rev.sh $(IDIR_WEBIF)/www/.version \
 			$(IDIR_WEBIF)/usr/lib/webif/webif.sh \
