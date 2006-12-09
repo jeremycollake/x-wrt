@@ -24,6 +24,9 @@ header "Status" "QoS" "@TR<<Quality of Service Statistics>>"
 #		none
 #
 
+uci_load "qos"
+if equal "$CONFIG_wan_enabled" "1"; then
+
 # todo: don't do these statically..
 root_class="1:"
 parent_class="1:1"
@@ -149,6 +152,9 @@ else
 #########################################
 # no QoS Service
 	echo "<br />@TR<<no_qos#No QoS Service found running so no parsed QoS statistics can be shown! We recommend to install nbd's QoS scripts.>><br />"	
+fi
+else	
+	echo "@TR<<qos_scripts_disabled#The qos-scripts package is not active. Visit the <a href=\"./network-qos.sh\">QoS page</a> to install and/or enable it.>>"
 fi
 
 show_validated_logo
