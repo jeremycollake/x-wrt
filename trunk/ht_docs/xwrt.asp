@@ -66,10 +66,8 @@ function installWebifMilestone2(form)
 						<li><font face="Verdana">
 						<a href="http://developer.berlios.de/mail/?group_id=7373">
 						Mailing Lists</a></font></li>
-						<li><font face="Verdana">Forums:
-						<a href="http://xwrt.berlios.de/forum">New</a>
-						<a href="http://www.bitsum.com/smf/index.php?board=17.0">
-						Old</a></font></li>
+						<li><font face="Verdana">
+						<a href="http://xwrt.berlios.de/forum">Forums</a></font></li>
 						<li><font face="Verdana">
 						<a href="http://www.bitsum.com/xwrt">Screenshots</a></font></li>
 						<li><font face="Verdana">
@@ -173,13 +171,6 @@ install and use X-Wrt on your router:</font></p>
 				<li><font face="Verdana">Flash a pre-built image of OpenWrt White Russian that 
 				already includes X-Wrt packages like webif<sup>2</sup>.</font></li>
 			</ol>
-			<blockquote>
-				<p><font face="Verdana" color="#FF0000"><b>WARNING:</b> All 
-				X-Wrt packages, including webif<sup>2</sup> are in <b>beta</b>. For 
-				stability we recommend you install the latest milestone build 
-				and not do any upgrades until a new milestone build is 
-				available.</font></p>
-			</blockquote>
 			<ul>
 				<li><font face="Verdana"><b><font size="4">Method #1:
 				</font></b><font size="4">
@@ -210,18 +201,46 @@ install and use X-Wrt on your router:</font></p>
 		<blockquote>
 			<blockquote>
 				<blockquote>
-					<p><font face="Verdana"><b><br></b>Your Router's IP address:
-					<input type="text" name="routerip" size="12" value="192.168.1.1"></input></font><font face="Verdana"><p>				
-					<input type="submit" value=" Install Milestone 2 Release of Webif^2 beta " name="install_webif0"  onclick="installWebifMilestone2(this.form)"></p>
-				</blockquote>
+				<p><br>
+				<font face="Verdana" color="#FF0000"><b>WARNING:</b> All 
+				X-Wrt packages, including webif<sup>2</sup> are in <b>beta</b>. 
+				The latest daily build we try to keep stable, but of course a 
+				build updated multiple times a day is difficult to guarantee the 
+				stability of.</font></p>
+			</blockquote>
+				<p><font face="Verdana">
+				<table border="0" width="100%" id="table5">
+					<tr>
+						<td width="257"><font face="Verdana"><b>Your Router's IP address:</b>
+						</font></td>
+						<td><font face="Verdana">
+						<input type="text" name="routerip" size="12" value="192.168.1.1"></input></font></td>
+						<td rowspan="2">&nbsp;</td>
+					</tr>
+					<tr>
+						<td width="257"><font face="Verdana">To install latest 
+						<b>daily</b>:</font></td>
+						<td><font face="Verdana">
+						<input type="submit" value=" Install " name="install_webif1"  onclick="installWebif(this.form)">
+						<i>less tested - more up to date - changes daily</i></font></td>
+					</tr>
+					<tr>
+						<td width="257"><font face="Verdana">To install last <b>stable</b>:</font></td>
+						<td><font face="Verdana">
+						<input type="submit" value=" Install " name="install_webif0"  onclick="installWebifMilestone2(this.form)">
+						<i>more tested - less up to date - changes never</i></font></td>
+						<td>&nbsp;</td>
+					</tr>
+				</table>
+				<p><b><i>Be warned, </i></b><i><b>the very first install of 
+		webif<sup>2</sup> will reboot your router!<br>
+&nbsp;</b></i></p>
 			</blockquote>
 		</blockquote>
 	</blockquote>
 </form>
 			<blockquote>
 	<blockquote>
-		<p><font color="#FF0000" face="Verdana"><b>WARNING: </b>The very first install of 
-		webif<sup>2</sup> will reboot your router!</font></p>
 		<p>If the display of the web pages looks funny, do a 
 		hard refresh (hold down SHIFT and click REFRESH) to clear out the old 
 		CSS.</p>
@@ -268,7 +287,8 @@ install and use X-Wrt on your router:</font></p>
 				that has problems. The best advice is:</p>
 				<ol>
 					<li>Upgrade to a newer build when it is available.</li>
-					<li>Report bugs or other errata you see if you don't find it 
+					<li>
+					<a href="http://developer.berlios.de/bugs/?group_id=7373">Report bugs</a> or other errata you see if you don't find it 
 					fixed in the next build. It's hard for us to test every 
 					build thoroughly.</li>
 					<li>If you somehow got unlucky and ended up with a daily 
@@ -336,38 +356,14 @@ install and use X-Wrt on your router:</font></p>
 				either write new code or write a translation layer to convert 
 				NVRAM to and from UCI configuration files. The end solution may 
 				be a combination of both.</p>
-				<p>While some do not approve of us maintaining support for White 
-				Russian, we believe it is important to continue to support the 
+				<p>While some developers not approve of us maintaining support for White 
+				Russian, usually because they don't want to make the extra 
+				effort, we believe it is important to continue to support the 
 				only stable branch of OpenWrt released at the time of this 
 				writing. White Russian will be around for many years and the 
 				overhead required in supporting both Kamikaze and White Russian 
 				is minimal compared to the rewards.</p>
-				<p><i>We hope to have basic Kamikaze support by the end of 2006. 
-				Join the team and help us accomplish this!</i></p>
-				<p><b>A new webif system</b> ...</p>
-				<p>This is only partially related to the Kamikaze support, but 
-				it should be mentioned somewhere.</p>
-				<p>At the core of the webif is a system that is responsible for 
-				actually rendering the webif pages (which are combinations of 
-				shell and awk code mostly). There are some in the OpenWrt 
-				community who are calling for a complete rewrite of this base 
-				webif system. The plan is to develop an AWK-only system that 
-				uses no shell scripting. This will have advantages in efficiency 
-				and resource use, but will likely not be substantially easier to 
-				code for. This rewrite of the base webif system has not yet 
-				commenced at the time of this writing. </p>
-				<p>We are proceeding in such a way that ensures backwards 
-				compatibility with existing webif pages. At first, there will be 
-				two webif systems operating together, the old and the new. There 
-				will be little to no performance overhead to this dual-system 
-				and the base webif system is so small that it will hardly occupy 
-				any flash ROM space. What small price there is to having a 
-				dual-system in place will be well worth not having to wait 
-				indefinitely for all webif pages to be rewritten from scratch.</p>
-				<p>It is important to note that nobody should wait for this new 
-				system to become available before making contributions to the 
-				webif. As stated above, this planned new system has not even 
-				been started yet, and it is possible it never will be.</p>
+				<p><i>We hope to have basic Kamikaze support by the end of 2006.</i></p>
 			</blockquote>
 			<p><font size="5" color="#666699" face="Verdana"><b><br>
 			<a name="commercial">Can I use X-Wrt 
@@ -379,14 +375,10 @@ install and use X-Wrt on your router:</font></p>
 				you to rebrand the webif and tweak it to suit your needs. Some 
 				of our developers do contract work. If you are interested in 
 				using X-Wrt as part of a commercial venture, we'd love to hear 
-				about it, and perhaps even brag about it if you give us 
-				permission to do so ;). Email us at
+				about it. Email us at
 				<a href="mailto:jeremy@bitsum.com">jeremy@bitsum.com</a> to let 
-				us know what you are using X-Wrt for.</font></p>
-				<p><font face="Verdana"><i>Note to X-Wrt developers: The above 
-				solicitation of contract work is for everyone. If you would like 
-				your name and email address listed in this space, please let me 
-				(db90h) know.</i></font></p>
+				us know what you are using X-Wrt for, or to inquire about webif 
+				related work.</font></p>
 			</blockquote>
 			<p><br>
 			<br />
