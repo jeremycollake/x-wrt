@@ -109,7 +109,7 @@ EOF
 		}
 		# webif settings
 		! equal "$FORM_theme" "$CONFIG_theme_id" && ! empty "$CONFIG_theme_id" && {	
-			uci_set "webif" "theme" "id" "FORM_theme"
+			uci_set "webif" "theme" "id" "$FORM_theme"
 		}		
 		save_setting webif language "$FORM_language"		
 	else
@@ -178,7 +178,7 @@ for curtheme in /www/themes/*; do
 	fi
 	! equal "$curtheme" "active" && {
 		THEMES="$THEMES
-			option|$curtheme|$theme_name"
+option|$curtheme|$theme_name"
 	}
 done
 #
