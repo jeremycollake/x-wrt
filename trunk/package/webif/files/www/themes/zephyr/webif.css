@@ -66,10 +66,7 @@ li.about
 	margin-left: 2em;
 }
 
-hr,
-#submenu h3,
-#short-status h3,
-#content .settings-block .settings .settings-help h3
+hr, #submenu h3, #short-status h3, #content .settings-block .settings .settings-help h3
 {
 	display: none;
 }
@@ -111,15 +108,16 @@ dt
 {
 	position: absolute;
 	top: 0em;
-	left: 80%;
+	left: 530px;
 	line-height: 1.0em;
 	margin-top: 1em;
 	padding-bottom: 0.2em;
 	padding-right: 0.5em;
 	padding-left: 1.0em;
 	float: right;
-	text-align: left;
-	color: #333;	
+	text-align: right;
+	color: #333;
+	width: 150px;
 }
 #short-status ul
 {
@@ -153,7 +151,7 @@ dt
 	overflow: hidden;
 	
 	padding-top: 7px;
-	padding-bottom: 5px;
+	padding-bottom: 1px;
 	padding-left: 5px;
 	
 	background: #F0F3E7 url(submenu-bg.gif) repeat-x left top;
@@ -184,6 +182,7 @@ dt
 	list-style-type: none;	
 	padding: 0.4em;
 	float: left;
+	font-size: 0.9em;
 }
 
 #content
@@ -193,6 +192,9 @@ dt
 	padding-right: 1em;
 	padding-left: 1em;
 	clear: both;
+}
+
+#content .settings-block {
 }
 
 #content .settings-block .settings
@@ -297,12 +299,11 @@ th
 .helpform
 {
 	position: relative;
-	float: left;
 	padding-left: 1em;
 	padding-right: 0.5em;
-	margin-right: 5em;
+	padding-top: 0.5em;
+	background-color: #F9FAF5;
 }
-
 
 #content .settings-block .settings .settings-help .more-help,
 #save
@@ -340,7 +341,7 @@ th
 .warning
 {
 	display: inline;
-	padding:  5px;
+	
 }
 
 .warning-light
@@ -498,6 +499,7 @@ th
 #content .settings-block .settings .settings-title h3
 {
 	font-size: 1.0em;
+	margin-bottom: 0;
 }
 
 .failed-validation
@@ -570,9 +572,11 @@ th
 
 #mainmenu a, #submenu a
 {
-	color: #000;
+	color: #444;
 }
-
+#mainmenu .selected a, #submenu .selected a {
+	color:  #000;
+}
 
 #content .settings-block .settings-block-title h2
 {
@@ -617,16 +621,6 @@ th
 	color: red;
 }
 
-.unselected-maincat a, .unselected-subcat a
-{	
-	color:  #444 !important;
-}
-
-.selected-maincat a, .selected-subcat a
-{	
-	color:  #000 !important;
-}
-
 .kb
 {
 	color: #222;
@@ -637,9 +631,7 @@ th
 	color: #222;
 }
 
-.warning,
-.update-available,
-.warning-light
+.warning, .update-available, .warning-light
 {
 	color: #9a2c2c;
 }
