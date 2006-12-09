@@ -26,6 +26,7 @@ scp \
 	ht_docs/xwrt.asp \
 	$SCP_USER@shell.berlios.de:/home/groups/xwrt/htdocs/
 echo "Uploading package repository ..."
+rm bin/packages/webf??e* -rf
 scp \
 	bin/packages/* \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/packages/
@@ -40,14 +41,14 @@ scp \
 	/tmp/build-date.txt \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/default/
 scp \
-	../ht_docs/howtoflash-7z.txt \
+	../../ht_docs/howtoflash-7z.txt \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/
 scp \
 	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default/*.7z \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/default/
-#scp \
-#	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default/*.bin \
-#	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/default/
+scp \
+	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default/*.bin \
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/default/
 scp \
 	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default/*.trx \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/default/
@@ -63,18 +64,20 @@ scp \
 scp \
 	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pppoe/*.7z \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/pppoe/
-#scp \
-#	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pppoe/*.bin \
-#	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/pppoe/
+rm imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pppoe/*v5*.bin
+scp \
+	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pppoe/*.bin \
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/pppoe/
 scp \
 	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pppoe/*.trx \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/pppoe/
 scp \
 	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pptp/*.7z \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/pptp/
-#scp \
-#	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pptp/*.bin \
-#	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/pptp/
+rm imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pptp/*v5*.bin
+scp \
+	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pptp/*.bin \
+	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/pptp/
 scp \
 	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pptp/*.trx \
 	$SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/images/white-russian-latest/pptp/
