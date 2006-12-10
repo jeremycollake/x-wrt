@@ -137,7 +137,7 @@ if [ "$firmware_version" = "RC5" ] || grep -q "RC5" "${IPKG_INSTROOT}/etc/banner
 elif [ "$firmware_version" = "RC6" ] || grep -q "RC6" "${IPKG_INSTROOT}/etc/banner"; then
 	DeleteRepository "http://downloads.openwrt.org/backports/rc5"
 	AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"	
-else [ "$firmware_version" = "0.9" ] || grep -q "0.9" "${IPKG_INSTROOT}/etc/banner"; then
+elif [ "$firmware_version" = "0.9" ] || grep -q "0.9" "${IPKG_INSTROOT}/etc/banner"; then
 	# todo: verify backports exists and change when they do
 	DeleteRepository "http://downloads.openwrt.org/backports/rc5"
 	AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"
