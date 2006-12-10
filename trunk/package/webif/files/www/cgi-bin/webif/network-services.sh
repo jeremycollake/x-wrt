@@ -120,10 +120,8 @@ if equal "$upnp_installed" "1" ; then
 	text|upnpd_up_bitspeed|$FORM_upnpd_up_bitspeed| @TR<<kilobits>>
 	field|@TR<<WAN Download (bits/sec)>>
 	text|upnpd_down_bitspeed|$FORM_upnpd_down_bitspeed| @TR<<kilobits>>
-	helpitem|WAN Upload Speed
-	helptext|HelpText upnpd_wan_upload#This option setting represents the WAN line upload speed in kilobits per second.
-	helpitem|WAN Download Speed
-	helptext|HelpText upnpd_wan_download#This option setting represents the WAN line download speed in kilobits per second.	
+	helpitem|WAN Speeds
+	helptext|HelpText upnpd_wan_speeds#Set your WAN speeds here, in kilobits. This is for reporting to upnp clients that request it only.
 	field|@TR<<Log Debug Output>>
 	select|upnpd_log_output|$FORM_upnpd_log_output
 	option|0|@TR<<Disabled>>
