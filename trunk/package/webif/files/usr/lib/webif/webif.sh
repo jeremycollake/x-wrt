@@ -54,10 +54,6 @@ ShowUntestedWarning() {
 	echo "<div class=\"warning\">WARNING: This page is untested and may or may not work correctly.</div>"
 }
 
-ShowNotUpdatedWarning() {
-       echo "<div class=\"warning\">WARNING: This page has not been updated or checked for correct functionality under Kamikaze.</div>"
-}
-
 update_changes() {
 	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))
 	EDITED_FILES=$(find "/tmp/.webif/edited-files" -type f 2>&- | wc -l)
@@ -66,6 +62,9 @@ update_changes() {
 	for uci_tmp_file in $(ls /tmp/.uci/* 2>&-); do
 		CHANGES_CUR=$(cat "$uci_tmp_file" | grep CONFIG_SECTION | wc -l)
 		CHANGES=$(($CHANGES + $CHANGES_CUR))
+		# force CHANGES to be non-zero since with this count method some 
+		# pending changes won't be counted.
+		equal "$CHANGES" "0" && CHANGES=1
 	done
 }
 
@@ -104,6 +103,7 @@ Pragma: no-cache
 	<head>
 
 <link rel="stylesheet" type="text/css" href="/webif.css" />
+<link rel="stylesheet" type="text/css" href="/color_common.css" />
 	<title></title>
 </head>
 <style type="text/css">
@@ -126,10 +126,9 @@ header() {
 	}
 
 	_category="$1"
-	uci_load "webif"
-	_firmware_version="$CONFIG_general_firmware_version"
-	_firmware_name="$CONFIG_general_firmware_name"
-	_firmware_subtitle="$CONFIG_general_firmware_subtitle"
+	_firmware_name="$(nvram get firmware_name)"
+	_firmware_subtitle="$(nvram get firmware_subtitle)"
+	_version="$(nvram get firmware_version)"
 	_uptime="$(uptime)"
 	_loadavg="${_uptime#*load average: }"
 	_uptime="${_uptime#*up }"
@@ -141,15 +140,16 @@ header() {
 	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></p>}"	
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}
-	
-	if equal $CONFIG_general_use_short_status_frame "1"; then
+
+	use_short_status_frame=$(nvram get webif_use_short_status_frame)
+	if equal $use_short_status_frame "1"; then
 		short_status_frame='<iframe src="/cgi-bin/webif/iframe.mini-info.sh"
 				width="200" height="80"  scrolling="no" frameborder="0"></iframe>'
 	else
 		short_status_frame="<div id=\"short-status\">
 						<h3><strong>Status:</strong></h3>
 						<ul>
-							<li><strong>$_firmware_name $firmware_version </strong></li>
+							<li><strong>$_firmware_name $_version </strong></li>
 							<li><strong>@TR<<Host>>:</strong> $_hostname</li>
 							<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
 							<li><strong>@TR<<Load>>:</strong> $_loadavg</li>
@@ -171,11 +171,12 @@ Pragma: no-cache
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <?xml version="1.0" encoding="@TR<<Encoding|ISO-8859-1>>"?>
 	<head>
-	<title>$_firmware_name @TR<<Administrative Console>></title>
+	<title>@TR<< $_firmware_name Administrative Console>></title>
 		<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
 		<!--[if lt IE 7]>
 			<link rel="stylesheet" type="text/css" href="/themes/active/ie_lt7.css" />
-		<![endif]-->		
+		<![endif]-->
+		<link rel="stylesheet" type="text/css" href="/themes/active/color_common.css" />
 		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
 		<meta http-equiv="expires" content="-1" />
 	</head>
@@ -219,6 +220,12 @@ EOF
 				sleep 1
 				echo "$FORM_passwd2"
 			) | passwd root 2>&1 && apply_passwd
+			exists "/bin/pkginit.sh" && ! exists "/etc/.pkginit-done" && {
+				/bin/pkginit.sh
+				exists "/tmp/pkg/install-update.sh" && {
+					touch "/etc/.pkginit-done"
+				}
+			}
 			echo '</pre>'
 			footer
 			exit
