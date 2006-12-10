@@ -189,14 +189,14 @@ helptext|HelpText Advanced#Normally users just use the form below to configure Q
 end_form
 EOF
 
-
 # show the current ruleset in a table
 display_form <<EOF
 start_form|@TR<<QoS Traffic Classification Rules>>
+end_form
 EOF
 
 cat <<EOF
-<table style="width: 100%; text-align: left; font-size: 0.8em;" border="0" cellpadding="2" cellspacing="1"><tbody>
+<table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;" border="0" cellpadding="3" cellspacing="2"><tbody>
 <tr>
 <th>@TR<<Group>></th>
 <th>@TR<<Src IP>></th>
@@ -272,12 +272,7 @@ done
 cat <<EOF
 <tr><td><a href="$SCRIPT_NAME?qos_add=1">@TR<<new rule>></a></td></tr>
 </tbody></table>
-EOF
-
-display_form <<EOF
-helpitem|Default QoS
-helptext|HelpText default_qos#The QoS package is pre-configured for the majority of users. Peer-2-peer traffic such as bittorrent is marked as 'bulk' and common network services that require responsiveness are marked in higher priorities. Additionally, TCP SYN/ACK packets and DNS queries are given very high priority to ensure speedy networking performance.
-end_form
+<br />
 EOF
 
 # 
