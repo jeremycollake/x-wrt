@@ -96,7 +96,6 @@ mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
 # - and we don't want duplicated code laying around. 
 # ASIDE: The new qos-scripts expects /etc/functions.sh to contain uci stuff so will not work in RC5 
 # without this.
-grep -q "config_load" "${IPKG_INSTROOT}/etc/functions.sh"
 if grep -q "config_load" "${IPKG_INSTROOT}/etc/functions.sh"; then	
 	rm "${IPKG_INSTROOT}/etc/functions_ex.sh"
 	ln -s "/etc/functions.sh" "${IPKG_INSTROOT}/etc/functions_ex.sh"
