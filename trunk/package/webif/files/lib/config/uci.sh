@@ -3,7 +3,7 @@
 #
 # Copyright (C) 2006 by Fokus Fraunhofer <carsten.tittel@fokus.fraumhofer.de>
 # Copyright (C) 2006 by Felix Fietkau <nbd@openwrt.org>
-# Docs and minor hacks by Jeremy Collake <jeremy@bitsum.com>
+# comments threw in by Jeremy Collake <jeremy@bitsum.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -56,7 +56,7 @@ uci_load() {
 	local PACKAGE_BASE="$(basename "$PACKAGE")"
 	[ -f "/tmp/.uci/${PACKAGE_BASE}" ] && {
 		# must redirect errors since config_unset and others aren't defined here
-		. "/tmp/.uci/${PACKAGE_BASE}" 2>&- >&-
+		. "/tmp/.uci/${PACKAGE_BASE}" 2>&1 > /dev/null
 		config_cb
 	}
 }
