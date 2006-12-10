@@ -120,7 +120,7 @@ ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/webif-page"
 ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/wepkeygen"
 ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/int2human"
 
-ln -sf /lib/config/uci.new /lib/config/uci.sh
+#ln -sf "${IPKG_INSTROOT}/lib/config/uci.new" "${IPKG_INSTROOT}/lib/config/uci.sh"
 
 # initialize ipkg.conf
 AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/kamikaze/packages"
