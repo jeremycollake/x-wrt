@@ -45,20 +45,36 @@ if is_package_installed "qos-scripts"; then
 		# ports list and port range with integer.				
 		ports_validate=$(echo "$FORM_current_ports" | sed s/','/'0'/g)
 		portrange_validate=$(echo "$FORM_current_portrange" | sed s/'-'/'0'/g)
-		validate <<EOF
-			int|ports_validate|Port Listing||$ports_validate
-			int|portrange_validate|Port Range||$portrange_validate				
+		echo "validating..."
+validate <<EOF
+int|ports_validate|@TR<<Port Listing>>||$ports_validate
+int|portrange_validate|@TR<<Port Range>>||$portrange_validate
+ip|FORM_current_srchost|@TR<<Source IP>>||$FORM_current_srchost
+ip|FORM_current_dsthost|@TR<<Dest IP>>||$FORM_current_dsthost
 EOF
-		equal "$?" "0" && {
-			SAVED=1							
+		if ! equal "$?" "0"; then
+			echo "FAILED"
+			echo "<div class=\"warning\">Validation of one or more fields failed! Not saving.</div>"
+		else
+			SAVED=1
 			uci_set "qos" "cfg$current_qos_item" "target" "$FORM_current_target"
+			if ! empty "$FORM_current_srchost"; then			
+				uci_set "qos" "cfg$current_qos_item" "srchost" "$FORM_current_srchost"
+			else
+				uci_remove "qos" "cfg$current_qos_item" "srchost" "$FORM_current_srchost"
+			fi
+			if ! empty "$FORM_current_dsthost"; then			
+				uci_set "qos" "cfg$current_qos_item" "dsthost" "$FORM_current_dsthost"
+			else
+				uci_remove "qos" "cfg$current_qos_item" "dsthost" "$FORM_current_dsthost"
+			fi
 			if ! empty "$FORM_current_proto"; then
 				uci_set "qos" "cfg$current_qos_item" "proto" "$FORM_current_proto"
 			else
 				uci_remove "qos" "cfg$current_qos_item" "proto"
 			fi
 			if ! empty "$FORM_current_ports"; then			
-				uci_set "qos" "cfg$current_qos_item" "ports" "$FORM_current_ports"			
+				uci_set "qos" "cfg$current_qos_item" "ports" "$FORM_current_ports"
 			else
 				uci_remove "qos" "cfg$current_qos_item" "ports" "$FORM_current_ports"
 			fi
@@ -68,17 +84,17 @@ EOF
 				uci_remove "qos" "cfg$current_qos_item" "portrange" "$FORM_current_portrange"
 			fi
 			if ! empty "$FORM_current_layer7"; then			
-				uci_set "qos" "cfg$current_qos_item" "layer7" "$FORM_current_layer7"			
+				uci_set "qos" "cfg$current_qos_item" "layer7" "$FORM_current_layer7"
 			else
 				uci_remove "qos" "cfg$current_qos_item" "layer7" "$FORM_current_layer7"
 			fi
-			if ! empty "$FORM_current_ipp2p"; then						
-				uci_set "qos" "cfg$current_qos_item" "ipp2p" "$FORM_current_ipp2p"		
+			if ! empty "$FORM_current_ipp2p"; then
+				uci_set "qos" "cfg$current_qos_item" "ipp2p" "$FORM_current_ipp2p"
 			else
 				uci_remove "qos" "cfg$current_qos_item" "ipp2p" "$FORM_current_ipp2p"
-			fi		
-		}						
-	}			
+			fi
+		fi
+	}
 	
 	validate <<EOF
 int|FORM_wan_dowload|WAN Download Speed||$FORM_wan_download
@@ -115,6 +131,8 @@ EOF
 	current_qos_item=$(echo "$QUERY_STRING" | grep "qos_remove=" | cut -d'=' -f2)	
 	! empty "$current_qos_item" && {		
 		# also manually clear the other options so they are immediately empty		
+		uci_set "qos" "cfg$current_qos_item" "srchost" ""
+		uci_set "qos" "cfg$current_qos_item" "dsthost" ""
 		uci_set "qos" "cfg$current_qos_item" "proto" ""
 		uci_set "qos" "cfg$current_qos_item" "layer7" ""
 		uci_set "qos" "cfg$current_qos_item" "ipp2p" ""
@@ -181,6 +199,8 @@ cat <<EOF
 <table style="width: 100%; text-align: left; font-size: 0.8em;" border="0" cellpadding="2" cellspacing="1"><tbody>
 <tr>
 <th>@TR<<Group>></th>
+<th>@TR<<Source IP>></th>
+<th>@TR<<Dest IP>></th>
 <th>@TR<<Protocol>></th>
 <th>@TR<<Layer7>></th>
 <th>@TR<<Port range>></th>
@@ -190,7 +210,7 @@ cat <<EOF
 EOF
 
 # outputs variable to a column
-show_column() 
+show_column()
 {
 	# cfg number
 	# option name
@@ -228,7 +248,9 @@ for count in $(seq 2 100); do 	# !! see note above for static limit rationale !!
 			cur_color="even"
 		fi
 		echo "<tr class=\"$cur_color\">"
-		show_column "$count" "target" "" "EDIT ME"	
+		show_column "$count" "target" "" "..."
+		show_column "$count" "srchost" ""
+		show_column "$count" "dsthost" ""
 		eval _val="\"\$CONFIG_cfg${count}_ipp2p\""
 		if empty "$_val"; then
 		 	show_column "$count" "proto" ""
@@ -238,13 +260,13 @@ for count in $(seq 2 100); do 	# !! see note above for static limit rationale !!
 		fi		
 		show_column "$count" "layer7" ""
 		show_column "$count" "portrange" ""
-		show_column "$count" "ports" ""		
+		show_column "$count" "ports" ""
 		echo "<td bgcolor=\"$cur_color\"><a href=\"$SCRIPT_NAME?qos_edit=$count\">@TR<<edit>></a>&nbsp;"
 		echo "<a href=\"$SCRIPT_NAME?qos_remove=$count\">@TR<<remove>></a></td>"
 		echo "</tr>"
 		# if we are adding, always keep last index in FORM_qos_edit
 		! empty "$FORM_qos_add" && FORM_qos_edit="$count"
-	}	
+	}
 done
 
 cat <<EOF
@@ -265,8 +287,7 @@ EOF
 ! empty "$FORM_qos_edit" && {	
 	#
 	# build list of available L7-protocols
-	#
-	echo "editing $FORM_qos_edit"
+	#	
 	l7_protocols="option||None"
 	for curfile in /etc/l7-protocols/*; do
 		_l7basename=$(basename "$curfile" | sed s/'.pat'//g)
@@ -276,6 +297,8 @@ EOF
 	
 	current_item="$FORM_qos_edit"
 	eval _target="\"\$CONFIG_cfg${current_item}_target\""	
+	eval _srchost="\"\$CONFIG_cfg${current_item}_srchost\""
+	eval _dsthost="\"\$CONFIG_cfg${current_item}_dsthost\""		
 	eval _proto="\"\$CONFIG_cfg${current_item}_proto\""
 	eval _ports="\"\$CONFIG_cfg${current_item}_ports\""
 	eval _portrange="\"\$CONFIG_cfg${current_item}_portrange\""
@@ -291,6 +314,10 @@ EOF
 	option|Normal|Normal
 	option|Priority|Priority
 	option|Express|Express
+	field|@TR<<Source IP>>|current_srchost
+	text|current_srchost|$_srchost
+	field|@TR<<Dest IP>>|current_dsthost
+	text|current_dsthost|$_dsthost
 	field|@TR<<Protocol>>|proto
 	select|current_proto|$_proto
 	option||Any
