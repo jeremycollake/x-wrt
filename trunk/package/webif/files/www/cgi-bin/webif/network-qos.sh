@@ -44,16 +44,14 @@ if is_package_installed "qos-scripts"; then
 		# for validation purposes, replace non-numeric stuff in
 		# ports list and port range with integer.				
 		ports_validate=$(echo "$FORM_current_ports" | sed s/','/'0'/g)
-		portrange_validate=$(echo "$FORM_current_portrange" | sed s/'-'/'0'/g)
-		echo "validating..."
+		portrange_validate=$(echo "$FORM_current_portrange" | sed s/'-'/'0'/g)		
 validate <<EOF
 int|ports_validate|@TR<<Port Listing>>||$ports_validate
 int|portrange_validate|@TR<<Port Range>>||$portrange_validate
 ip|FORM_current_srchost|@TR<<Source IP>>||$FORM_current_srchost
 ip|FORM_current_dsthost|@TR<<Dest IP>>||$FORM_current_dsthost
 EOF
-		if ! equal "$?" "0"; then
-			echo "FAILED"
+		if ! equal "$?" "0"; then			
 			echo "<div class=\"warning\">Validation of one or more fields failed! Not saving.</div>"
 		else
 			SAVED=1
