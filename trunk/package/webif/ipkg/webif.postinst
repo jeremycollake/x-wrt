@@ -3,6 +3,8 @@
 # Webif post-install script.
 #
 
+webif_installed_mark="/tmp/.webif-installed-marker"
+
 #########################################################################################
 # functions
 
@@ -129,16 +131,18 @@ ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/int2human"
 # initialize ipkg.conf
 AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/packages"
 [ -z "$IPKG_INSTROOT" ] && firmware_version=$(nvram get firmware_version)
-if [ "$firmware_version" = "RC5" ] || grep -q RC5 "${IPKG_INSTROOT}/etc/banner"; then
+if [ "$firmware_version" = "RC5" ] || grep -q "RC5" "${IPKG_INSTROOT}/etc/banner"; then
 	DeleteRepository "http://downloads.openwrt.org/backports/rc4"
 	AddRepository "rc5-backports" "http://downloads.openwrt.org/backports/rc5"
-elif [ "$firmware_version" = "RC6" ] || grep -q RC6 "${IPKG_INSTROOT}/etc/banner"; then
+elif [ "$firmware_version" = "RC6" ] || grep -q "RC6" "${IPKG_INSTROOT}/etc/banner"; then
 	DeleteRepository "http://downloads.openwrt.org/backports/rc5"
 	AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"	
+else [ "$firmware_version" = "0.9" ] || grep -q "0.9" "${IPKG_INSTROOT}/etc/banner"; then
+	# todo: verify backports exists and change when they do
+	DeleteRepository "http://downloads.openwrt.org/backports/rc5"
+	AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"
 else
-	# todo: intended for 0.9, code properly later - verify backports exists
-	DeleteRepository "http://downloads.openwrt.org/backports/rc5"
-	AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"	
+	echo "White Russian version not detected. Not installing backports repository source."
 fi
 
 # only run below on 'real' system (not image builder)
@@ -160,20 +164,12 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	httpd_2=$(cat /etc/httpd.conf)
 	rm -f /tmp/httpd.conf.old
 	[ "$httpd_1" != "$httpd_2" ] && {
-		# Note: Even if the httpd.conf is *NOT* changed the httpd still needs 
-		#  restarting when upgraded from original webif. Newly created pages 
-		#  can't be found by the httpd, not sure why. Yes, its true.
-		# 		
-		# Only sending SIGHUP to httpd does not work. Restarting httpd when
-		# upgrade is done through webif has not been successful, despite a 
-		# a number of techniques one would think would work. 
-		#
-		# Do *NOT* change this just because you think something or the other
-		# should work. We've tried about everything. Only change after you've
-		# thoroughly tested on clean, fresh installs of WR RC5 and RC6, and 
-		# when upgrading the webif through the webif (i.e. use automated install
-		# on X-Wrt home page). If you break this just because you think something
-		# should definitely work, you will die.
+		echo "Reinitializing httpd ..."		
+		killall -HUP httpd
+	}
+	[ ! -f "$webif_installed_mark"] && {
+		# webif^2 first install.. force reboot. Required, we've been through this.
+		rm -f "$webif_installed_mark"
 		echo "I'm sorry, but I must reboot your router. This is a ONE time thing and"
 		echo " future upgrades of the webif will NOT require a reboot."
 		echo "Please wait about one minute for your router to reboot ..."
