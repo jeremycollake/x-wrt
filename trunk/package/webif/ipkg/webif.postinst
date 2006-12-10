@@ -90,16 +90,23 @@ rm -f "${IPKG_INSTROOT}/etc/init.d/S60cron"
 mv -f "${IPKG_INSTROOT}/etc/init.d/x60cron.webif" "${IPKG_INSTROOT}/etc/init.d/S60cron"
 mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
 
-# if /etc/functions.sh contains uci config functions, then make /etc/functions_ex.sh a symlink
+# 1.) if /etc/functions.sh contains uci config functions, then make /etc/functions_ex.sh a symlink
 # to /etc/functions.sh. Else, keep /etc/functions_ex.sh and add a line to /etc/functions.sh 
 # that includes /etc/functions_ex.sh. This is because RC5 does not have this code, while RC6 does
 # - and we don't want duplicated code laying around. 
 # ASIDE: The new qos-scripts expects /etc/functions.sh to contain uci stuff so will not work in RC5 
 # without this.
 grep -q "config_load" "${IPKG_INSTROOT}/etc/functions.sh"
-if [ $? = 0 ]; then
+if grep -q "config_load" "${IPKG_INSTROOT}/etc/functions.sh"; then	
 	rm "${IPKG_INSTROOT}/etc/functions_ex.sh"
 	ln -s "/etc/functions.sh" "${IPKG_INSTROOT}/etc/functions_ex.sh"
+	if ! grep -q "config_unset" "${IPKG_INSTROOT}/etc/functions.sh"; then	
+		# 2.) install new /etc/functions.sh only if necessary (RC6 & 0.9), where a UCI fix
+		# needs to be made. Our /etc/functions_ex.sh provides this fix in
+		# RC5.
+		rm -f ${IPKG_INSTROOT}/etc/functions.sh
+		mv ${IPKG_INSTROOT}/etc/functions.rc6 ${IPKG_INSTROOT}/etc/functions.sh
+	fi
 else
 	FixReadOnlyLink "${IPKG_INSTROOT}/etc/functions.sh"
 	echo ". /etc/functions_ex.sh" >> "${IPKG_INSTROOT}/etc/functions.sh"
@@ -134,10 +141,10 @@ AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/packages"
 if [ "$firmware_version" = "RC5" ] || grep -q "RC5" "${IPKG_INSTROOT}/etc/banner"; then
 	DeleteRepository "http://downloads.openwrt.org/backports/rc4"
 	AddRepository "rc5-backports" "http://downloads.openwrt.org/backports/rc5"
-elif [ "$firmware_version" = "RC6" ] || grep -q "RC6" "${IPKG_INSTROOT}/etc/banner"; then
+elif [ "$firmware_version" = "RC6" ] || grep -q "RC6" "${IPKG_INSTROOT}/etc/banner"; then	
 	DeleteRepository "http://downloads.openwrt.org/backports/rc5"
 	AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"	
-elif [ "$firmware_version" = "0.9" ] || grep -q "0.9" "${IPKG_INSTROOT}/etc/banner"; then
+elif [ "$firmware_version" = "0.9" ] || grep -q "0.9" "${IPKG_INSTROOT}/etc/banner"; then	
 	# todo: verify backports exists and change when they do
 	DeleteRepository "http://downloads.openwrt.org/backports/rc5"
 	AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"
