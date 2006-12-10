@@ -54,9 +54,8 @@ uci_load() {
 	local PACKAGE="$1"			
 	config_load "$PACKAGE"
 	local PACKAGE_BASE="$(basename "$PACKAGE")"
-	[ -f "/tmp/.uci/${PACKAGE_BASE}" ] && {
-		# must redirect errors since config_unset and others aren't defined here
-		. "/tmp/.uci/${PACKAGE_BASE}" 2>&- >&-
+	[ -f "/tmp/.uci/${PACKAGE_BASE}" ] && {		
+		. "/tmp/.uci/${PACKAGE_BASE}"
 		config_cb
 	}
 }
