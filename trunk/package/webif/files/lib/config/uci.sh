@@ -56,7 +56,7 @@ uci_load() {
 	local PACKAGE_BASE="$(basename "$PACKAGE")"
 	[ -f "/tmp/.uci/${PACKAGE_BASE}" ] && {
 		# must redirect errors since config_unset and others aren't defined here
-		. "/tmp/.uci/${PACKAGE_BASE}" 2>&1 > /dev/null
+		. "/tmp/.uci/${PACKAGE_BASE}" 2>&- >&-
 		config_cb
 	}
 }
