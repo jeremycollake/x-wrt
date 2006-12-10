@@ -167,7 +167,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 		echo "Reinitializing httpd ..."		
 		killall -HUP httpd
 	}
-	[ ! -f "$webif_installed_mark"] && {
+	[ ! -f "$webif_installed_mark" ] && {
 		# webif^2 first install.. force reboot. Required, we've been through this.
 		rm -f "$webif_installed_mark"
 		echo "I'm sorry, but I must reboot your router. This is a ONE time thing and"
