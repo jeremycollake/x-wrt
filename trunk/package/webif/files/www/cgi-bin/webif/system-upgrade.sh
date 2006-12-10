@@ -133,11 +133,11 @@ EOF
 
 display_form <<EOF
 helpitem|Turn boot wait on
-helptext|HelpText Turn boot wait on#This option will cause boot_wait to be set prior to flashing the firmware image. When boot_wait is set most units will wait a few seconds at boot-up to see if anyone sends them a new firmware image via TFTP. This is useful in case the firmware upgrade flash corrupts your router's firmware.
+helptext|HelpText Turn_boot_wait_on#This option will cause boot_wait to be set prior to flashing the firmware image. When boot_wait is set most units will wait a few seconds at boot-up to see if anyone sends them a new firmware image via TFTP. This is useful in case the firmware upgrade flash corrupts your router's firmware.
 helpitem|Erase JFFS2
-helptext|HelpText Erase JFFS2#This option is only useful when flashing a third-party firmware. Always select it when doing so. When upgrading to a new OpenWrt image, the JFFS2 partition is always erased.
+helptext|HelpText Erase_JFFS2#This option is only useful when flashing a third-party firmware. Always select it when doing so. When upgrading to a new OpenWrt image, the JFFS2 partition is always erased.
 helpitem|Firmware Image
-helptext|HelpText You can choose any compatible BIN or TRX image. If you choose an incompatible image your router may become irresponsible and require a manual reboot.
+helptext|HelpText Firmware_Image#You can choose any compatible BIN or TRX image.
 end_form|
 EOF
 
