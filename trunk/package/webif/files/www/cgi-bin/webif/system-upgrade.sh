@@ -122,7 +122,7 @@ display_form <<EOF
 helpitem|Erase JFFS2
 helptext|HelpText Erase JFFS2#This option is only useful when flashing a third-party firmware. Always select it when doing so. When upgrading to a new OpenWrt image, the JFFS2 partition is always erased.
 helpitem|Firmware Image
-helptext|HelpText You can choose any compatible BIN or TRX image. If you choose an incompatible image it will simply be rejected.
+helptext|HelpText You can choose any compatible BIN or TRX image.
 end_form|
 EOF
 
