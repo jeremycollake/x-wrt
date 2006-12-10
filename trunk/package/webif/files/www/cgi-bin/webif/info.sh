@@ -81,8 +81,6 @@ equal "$SHOW_BANNER" "1" && {
 
 cat <<EOF
 
-@TR<<Welcome to your <a href="http://www.openwrt.org">OpenWrt</a> and <a href="http://www.x-wrt.org">X-Wrt</a> based router>>.
-<br /><br />
 <table>
 <tbody>
 	<tr>
