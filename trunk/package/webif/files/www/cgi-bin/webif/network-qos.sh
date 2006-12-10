@@ -199,7 +199,7 @@ cat <<EOF
 <table style="width: 100%; text-align: left; font-size: 0.8em;" border="0" cellpadding="2" cellspacing="1"><tbody>
 <tr>
 <th>@TR<<Group>></th>
-<th>@TR<<Source IP>></th>
+<th>@TR<<Src IP>></th>
 <th>@TR<<Dest IP>></th>
 <th>@TR<<Protocol>></th>
 <th>@TR<<Layer7>></th>
