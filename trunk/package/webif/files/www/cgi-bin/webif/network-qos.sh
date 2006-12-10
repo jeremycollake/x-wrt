@@ -39,12 +39,8 @@ is_package_installed "qos-re" && {
 
 if is_package_installed "qos-scripts"; then
 ! empty "$FORM_submit" && empty "$FORM_install_nbd" && {	
-	#
-	# determine if user was editing a QoS classification entry by checking
-	# HTTP_REFERER. May want to change this method.
-	#
-	current_qos_item=$(echo "$HTTP_REFERER" | grep "qos_edit=" | cut -d'=' -f2)	
-	! empty "$current_qos_item" && {				
+	current_qos_item="$FORM_current_rule_index"	
+	! equal "$current_qos_item" "0" && {		
 		# for validation purposes, replace non-numeric stuff in
 		# ports list and port range with integer.				
 		ports_validate=$(echo "$FORM_current_ports" | sed s/','/'0'/g)
@@ -130,7 +126,7 @@ EOF
 	}
 }
 	
-uci_load qos
+uci_load "qos"
 FORM_wan_enabled="$CONFIG_wan_enabled"
 FORM_wan_download="$CONFIG_wan_download"
 FORM_wan_upload="$CONFIG_wan_upload"
@@ -166,16 +162,12 @@ option|1|Enabled
 option|0|Disabled
 field|@TR<<WAN Upload Speed>>|field_n_wan_upload
 text|wan_upload|$FORM_wan_upload| @TR<<kilobits>>
-helpitem|Maximum Upload
-helptext|HelpText Maximum Upload#This should be set to your maximum sustained WAN upload throughput, in kilobits.
-helpitem|Maximum Download
-helptext|HelpText Maximum Download#This should be set to your maximum sustained WAN download throughput, in kilobits.
+helpitem|Maximum Upload/Download
+helptext|HelpText Maximum Upload#Your maximum sustained upload and download speeds, in kilobits.
 field|@TR<<WAN Download Speed>>|field_n_wan_download
 text|wan_download|$FORM_wan_download| @TR<<kilobits>>
-#field|@TR<<Advanced>>|field_n_advanced
-#helpitem|Advanced
-#helptext|HelpText Advanced#The rest of the configuration is stored in /etc/config/qos.
-#string|<a href="./system-editor.sh?path=/etc/config&amp;edit=qos">@TR<<edit_qos_cfg#Edit Config File>></a>
+helpitem|Advanced
+helptext|HelpText Advanced#Normally users just use the form below to configure QoS. Some people may need access to the more advanced settings. Most people do NOT and should NOT. <a href="./system-editor.sh?path=/etc/config&amp;edit=qos">Manually edit config</a>
 end_form
 EOF
 
@@ -217,8 +209,6 @@ show_column()
 	echo "</td>"			
 }
 
-#ALT_BACKGROUND_COLOR_1="#e5e7e9"
-
 # TODO:
 #
 # We can't just break out when we think we're at the end
@@ -253,7 +243,7 @@ for count in $(seq 2 100); do 	# !! see note above for static limit rationale !!
 		echo "<a href=\"$SCRIPT_NAME?qos_remove=$count\">@TR<<remove>></a></td>"
 		echo "</tr>"
 		# if we are adding, always keep last index in FORM_qos_edit
-		#! empty "$FORM_qos_add" && FORM_qos_edit="$count"		
+		! empty "$FORM_qos_add" && FORM_qos_edit="$count"
 	}	
 done
 
@@ -276,6 +266,7 @@ EOF
 	#
 	# build list of available L7-protocols
 	#
+	echo "editing $FORM_qos_edit"
 	l7_protocols="option||None"
 	for curfile in /etc/l7-protocols/*; do
 		_l7basename=$(basename "$curfile" | sed s/'.pat'//g)
@@ -292,6 +283,8 @@ EOF
 	eval _ipp2p="\"\$CONFIG_cfg${current_item}_ipp2p\""
 	display_form <<EOF
 	start_form|@TR<<QoS Rule Edit>>
+	field|@TR<<Rules Index>>|rule_number|hidden
+	text|current_rule_index|$current_item|hidden
 	field|@TR<<Classify As>>|current_target
 	select|current_target|$_target
 	option|Bulk|Bulk
@@ -318,7 +311,7 @@ EOF
 	option|dc|DirectConnect
 	option|edk|eDonkey
 	option|gnu|Gnutella
-	option|kazaa|Kazaa	
+	option|kazaa|Kazaa
 	end_form
 EOF
 }
