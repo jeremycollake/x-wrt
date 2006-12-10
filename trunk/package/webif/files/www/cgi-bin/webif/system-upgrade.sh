@@ -5,7 +5,12 @@ header "System" "Upgrade" "@TR<<Firmware Upgrade>>"
 
 #####################################################################
 do_upgrade() {
-	echo "<br />Upgrading firmware, please wait ... <br />"
+	! empty "$BOOT_WAIT" && {
+		echo "<br />@TR<<Turning boot_wait on>> ..."
+		nvram set boot_wait=on
+		nvram commit
+	}
+	echo "<br />@TR<<Upgrading firmware, please wait>> ... <br />"	
 	# free some memory :)
 	ps | grep -vE 'Command|init|\[[kbmj]|httpd|haserl|bin/sh|awk|kill|ps|webif' | awk '{ print $1 }' | xargs kill -KILL
 	MEMFREE="$(awk 'BEGIN{ mem = 0 } ($1 == "MemFree:") || ($1 == "Cached:") {mem += int($2)} END{print mem}' /proc/meminfo)"
@@ -64,9 +69,15 @@ function printStatus() {
 	<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
 	<tbody>
 		<tr>
-			<td>@TR<<Options>>:</td>
+			<td>@TR<<Boot_Wait_Force|Turn 'boot wait' ON>>:
 			<td>
-				<input type="checkbox" name="erase_fs" value="1" />@TR<<Erase_JFFS2|Erase JFFS2 partition>>
+				<input type="checkbox" name="boot_wait" value="1" />
+			</td>
+		</tr>				
+		<tr>
+			<td>@TR<<Erase_JFFS2|Erase JFFS2 partition>>:
+			<td>
+				<input type="checkbox" name="erase_fs" value="1" />
 			</td>
 		</tr>
 		<tr>
@@ -106,6 +117,8 @@ EOF
 		read_var
 		empty "$NAME" && exit
 		case "$NAME" in
+			boot_wait)
+				BOOT_WAIT=1;;
 			erase_fs)
 				ERASE_FS=1
 				bstrip "$BOUNDARY" > /dev/null
@@ -119,10 +132,12 @@ EOF
 }
 
 display_form <<EOF
+helpitem|Turn boot wait on
+helptext|HelpText Turn boot wait on#This option will cause boot_wait to be set prior to flashing the firmware image. When boot_wait is set most units will wait a while at bootup to see if anyone sends them a new firmware image via TFTP. This is useful in case the firmware upgrade flash corrupts your router's firmware.
 helpitem|Erase JFFS2
 helptext|HelpText Erase JFFS2#This option is only useful when flashing a third-party firmware. Always select it when doing so. When upgrading to a new OpenWrt image, the JFFS2 partition is always erased.
 helpitem|Firmware Image
-helptext|HelpText You can choose any compatible BIN or TRX image.
+helptext|HelpText You can choose any compatible BIN or TRX image. If you choose an incompatible image your router may become irresponsible and require a manual reboot.
 end_form|
 EOF
 
