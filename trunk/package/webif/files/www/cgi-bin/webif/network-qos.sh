@@ -25,6 +25,8 @@
 
 header "Network" "QoS" "@TR<<QOS Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
+MAX_QOS_RULES=50   # maximum QoS rules
+
 if ! empty "$FORM_install_nbd"; then
 	echo "Installing Nbd's QoS scripts ...<pre>"
 	! install_package "qos-scripts" && {
@@ -237,7 +239,7 @@ show_column()
 #       * variable that contains count of UCI config groups loaded
 #         (so we at least know the real end).
 #
-for count in $(seq 2 100); do 	# !! see note above for static limit rationale !!
+for count in $(seq 2 $MAX_QOS_RULES); do 	# !! see note above for static limit rationale !!
 	eval _type="\"\$CONFIG_cfg${count}_TYPE\""	
 	equal "$_type" "classify" && {
 		if equal "$cur_color" "even"; then
