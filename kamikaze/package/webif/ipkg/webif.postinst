@@ -81,10 +81,6 @@ FixReadOnlyLink "${IPKG_INSTROOT}/usr/lib/ipkg/status"
 	# S50dnsmasq renamed to S60dnsmasq in post-RC6
 #	dnsmasq_filename="S60dnsmasq"
 #}
-"${IPKG_INSTROOT}/etc/init.d/webif_firmwareid enable"
-"${IPKG_INSTROOT}/etc/init.d/webif_deviceid enable"
-"${IPKG_INSTROOT}/etc/init.d.d/custom-user-startup enable"
-"${IPKG_INSTROOT}/etc/init.d/syslog enable"
 #rm -f "${IPKG_INSTROOT}/etc/httpd.conf"
 #mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
 
@@ -130,7 +126,10 @@ AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/kamikaze/packages"
 if [ -z "${IPKG_INSTROOT}" ]; then	
 
 	[ "$IPKG_UPDATE_NEEDED" = "1" ] && ipkg update
-
+	/etc/init.d/webif_firmwareid enable
+	/etc/init.d/webif_deviceid enable
+	/etc/init.d/custom-user-startup enable
+	/etc/init.d/syslog enable
 	ExecuteIfExists "/etc/init.d/webif_deviceid start"
 #	ExecuteIfExists "/etc/init.d/firmwareinfo"	# x-wrt images use to pre-empt firmware_* set
 	ExecuteIfExists "/etc/init.d/webif_firmwareid start"
