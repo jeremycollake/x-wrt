@@ -27,5 +27,5 @@ done
 	echo "Device: $device_name" 	
 	echo "Committing new device id ..."		
 	uci_set "webif" "general" "device_name" "$device_name"
-	uci_commit # "webif"
+	uci_commit "webif"
 }
