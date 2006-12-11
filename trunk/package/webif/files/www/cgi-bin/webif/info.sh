@@ -25,6 +25,7 @@ this_revision=$(cat "/www/.version")
 revision_text=" r$this_revision "
 version_file=".version-stable"
 daily_checked=""
+upgrade_button=""
 
 equal "$FORM_check_daily" "1" && {	
 	version_file=".version"
@@ -44,6 +45,7 @@ if [ -n "$FORM_update_check" ]; then
 		latest_revision=$(cat $tmpfile)
 		if [ "$this_revision" -lt "$latest_revision" ]; then
 			revision_text="<div id=\"update-available\">webif^2 update available: r$latest_revision - <a href=\"http://svn.berlios.de/wsvn/xwrt/${XWRT_BRANCH}/package/webif/?op=log&amp;rev=0&amp;sc=0&amp;isdir=1\" target=\"_blank\">view changes</a></div>"
+			upgrade_button="<input type=\"submit\" value=\" @TR<<Upgrade_Webif#Update/Reinstall Webif>> \"  name=\"install_webif\" />"
 		else
 			revision_text="<div id=\"update-unavailable\">You have the latest webif^2: r$this_revision</div>"
 		fi
@@ -126,8 +128,7 @@ cat <<EOF
 	<tr>
 		<td colspan=2">
 		<input type="submit" value=" @TR<<Check_Upgrade|Check For Webif Update>> " name="update_check" />
-	
-		<input type="submit" value=" @TR<<Upgrade_Webif#Update/Reinstall Webif>> "  name="install_webif" />
+		$upgrade_button		
 		</td>
 	</tr>
 <tr><td colspan="2"><input type="checkbox" $daily_checked value="1" name="check_daily" id="field_check_daily" />@TR<<Include daily builds when checking for update or installing latest webif<sup>2</sup>>></td>
