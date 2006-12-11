@@ -4,6 +4,7 @@
 # identification of the device
 #
 START=90
+start () {
 . /etc/functions.sh
 . /lib/config/uci.sh
 uci_load "webif"
@@ -28,4 +29,5 @@ done
 	echo "Committing new device id ..."		
 	uci_set "webif" "general" "device_name" "$device_name"
 	uci_commit #"webif"
+}
 }

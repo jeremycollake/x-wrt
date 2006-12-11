@@ -1,6 +1,7 @@
 #!/bin/sh /etc/rc.common
 # This file is compatible with White Russian and Kamikaze.
 START=90
+start () {
 . /etc/functions.sh
 . /lib/config/uci.sh
 uci_load "webif"
@@ -37,6 +38,4 @@ if [ "$CONFIG_general_firmware_version" != "$firmware_version" ] ||
 	uci_set "webif" "general" "firmware_subtitle" "$firmware_subtitle"
 	uci_commit #"webif"
 fi
-
-
-
+}

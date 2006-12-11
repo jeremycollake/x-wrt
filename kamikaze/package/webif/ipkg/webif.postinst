@@ -84,7 +84,7 @@ FixReadOnlyLink "${IPKG_INSTROOT}/usr/lib/ipkg/status"
 "${IPKG_INSTROOT}/etc/init.d/webif_firmwareid enable"
 "${IPKG_INSTROOT}/etc/init.d/webif_deviceid enable"
 "${IPKG_INSTROOT}/etc/init.d.d/custom-user-startup enable"
-"${IPKG_INSTROOT}/etc/init.d/S01syslog enable"
+"${IPKG_INSTROOT}/etc/init.d/syslog enable"
 #rm -f "${IPKG_INSTROOT}/etc/httpd.conf"
 #mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
 
@@ -131,9 +131,9 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 
 	[ "$IPKG_UPDATE_NEEDED" = "1" ] && ipkg update
 
-	ExecuteIfExists "/etc/init.d/webif_deviceid"
-	ExecuteIfExists "/etc/init.d/firmwareinfo"	# x-wrt images use to pre-empt firmware_* set
-	ExecuteIfExists "/etc/init.d/webif_firmwareid"
+	ExecuteIfExists "/etc/init.d/webif_deviceid start"
+#	ExecuteIfExists "/etc/init.d/firmwareinfo"	# x-wrt images use to pre-empt firmware_* set
+	ExecuteIfExists "/etc/init.d/webif_firmwareid start"
 
 	# test installation successfulness
 	TestInstall
