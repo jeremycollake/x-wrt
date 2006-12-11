@@ -4,7 +4,7 @@
 # identification of the device
 #
 START=90
-start () {
+start() {
 . /etc/functions.sh
 . /lib/config/uci.sh
 uci_load "webif"
