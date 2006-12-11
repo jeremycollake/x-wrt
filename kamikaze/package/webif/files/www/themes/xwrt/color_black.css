@@ -156,3 +156,8 @@ html, body
 {
 	color: #111;
 }
+
+#mainmenu
+{
+	border-bottom-color: #CCC;	
+}
