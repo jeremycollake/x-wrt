@@ -270,7 +270,6 @@ done
 cat <<EOF
 <tr><td><a href="$SCRIPT_NAME?qos_add=1">@TR<<new rule>></a></td></tr>
 </tbody></table>
-<br />
 EOF
 
 # 
@@ -278,6 +277,11 @@ EOF
 #
 #
 ! empty "$FORM_qos_edit" && {	
+	# for padding as if the qos table was encpasulated in std form
+	display_form <<EOF
+	start_form
+	end_form
+EOF
 	#
 	# build list of available L7-protocols
 	#	
@@ -332,6 +336,12 @@ EOF
 	option|edk|eDonkey
 	option|gnu|Gnutella
 	option|kazaa|Kazaa
+	helpitem|QoS Rule Edit
+	helptext|HelPText qos_rule_edit_help#You need only set fields you wish to match traffic on. Leave the others blank.
+	helpitem|Layer-7
+	helptext|HelpText layer7_help#Layer-7 filters are used to identify types of traffic based on content inspection. Numerous layer-7 filters are available on the web, though not all are efficient and accurate. To install more filters, download them and put them in /etc/l7-protocols.
+	helpitem|Peer-2-Peer
+	helptext|HelpText p2p_help#The difference between the Peer-2-Peer field and layer-7 filters is simply that the Peer-2-Peer option uses a special tool, ipp2p, to match traffic of common p2p protocols. It is typically more efficient than layer-7 filters.
 	end_form
 EOF
 }
