@@ -78,8 +78,7 @@ option
 	position: relative;
 	width: 100%;
 	height: 5em;
-	padding-top: 0.5em;
-	padding-bottom: 1em;
+	padding-top: 0.5em;	
 }
 
 #short-status
@@ -88,39 +87,36 @@ option
 	top: 0em;
 	left: 80%;
 	line-height: 1.0em;
-	margin-top: 1em;
 	padding-bottom: 0.2em;
 	padding-right: 0.5em;
 	padding-left: 2.0em;
 	float: right;
 	background-color: inherit !important;
-	height: 5em;
+	height: 4em;
 	width: 10em;
 }
 
 .openwrt-title
 {
 	float: left;
-	width: 80%;
-	margin-top: 1em;
+	width: 80%;	
 	padding-left: 0.5em;
 	height: 5em;
 	background: url(/images/openwrt-logo.gif);
-	background-repeat: repeat-x;		
+	background-repeat: repeat-x;
 }
 
 #short-status ul 
 {
 	display: block;
-	margin-top: 1.5em;
+	margin-top: 0.5em;
 }
 
 #mainmenu,
 #submenu
-{
+{	
         width: 100%;
 	height: 2.5em;
- 	font-size: 0.9em;
 	line-height: 2.5em;
 }
 
@@ -129,6 +125,7 @@ option
 	border-bottom: solid;
 	border-bottom-color: #000;
 	border-bottom-width: thin;
+	font-size: 0.9em;
 }
 
 #mainmenu ul
@@ -141,12 +138,12 @@ option
 	float: left;
 	list-style-type: none;
 	min-width: 4.2em;
-	text-align: center;
+	text-align: center;	
 }
 
 #mainmenu li a
 {
-	line-height: 2.5em;
+	
 	padding: 0 0.7em 0 0.7em;
 	display: block;
 }
@@ -158,9 +155,11 @@ option
 }
 
 #submenu li
-{
-       float: left;
-       list-style-type: none;	
+{	
+	float: left;
+	list-style-type: none;	
+	text-align: center;	
+	font-size: 0.7em;
 }
 
 #submenu li a
@@ -171,9 +170,7 @@ option
 
 #mainmenu .seperator,
 #submenu .seperator
-{
-	line-height: 2.5em;
-	padding: 0 0.1em 0 0.1em;
+{		
 	display: block;
 }
 
@@ -370,13 +367,6 @@ body
 	font-size: 1.0em;
 }
 
-dt,
-#mainmenu a:active,
-#submenu a
-{
-	font-weight: normal;
-}
-
 #submenu
 {
 	font-size: 0.9em;
@@ -422,11 +412,6 @@ dt,
 	text-decoration: underline;
 }
 
-#mainmenu h3
-{
-	text-transform: uppercase;
-}
-
 #save a
 {
 	font-weight: normal;
@@ -435,12 +420,12 @@ dt,
 
 #categories
 {
-	font-size: 0.9em;
+	
 }
 
 #subcategories
 {
-	font-size: 0.7em;
+	
 }
 
 .webif-name-title
