@@ -32,7 +32,7 @@ define Package/miniupnpd
   URL:=http://miniupnp.tuxfamily.org/
 endef
 
-define PAckage/miniupnpd/postinst
+define Package/miniupnpd/postinst
 /etc/init.d/miniupnpd enable
 endef
 
