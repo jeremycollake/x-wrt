@@ -118,7 +118,7 @@ function addnew(new) {
 
 END {
 	if (line_down != "") print line_down
-	if (new_target == "forward") new_target = new_target "::192.168.1.1"
+	if (new_target == "forward") new_target = new_target "::"
 	if ((new != "") && (new_target != "")) print new_target
 }
 EOF
