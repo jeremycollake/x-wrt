@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# This file is compatible with White Russian and Kamikaze.
+# This file is not compatible with White Russian and Kamikaze becuase of rc.common
 START=90
 start() {
 . /etc/functions.sh
@@ -21,7 +21,9 @@ if [ -f "/etc/openwrt_version" ]; then
 elif grep -q "RC5" "/etc/banner"; then
 	firmware_version="RC5"	
 elif grep -q "RC6" "/etc/banner"; then
-	firmware_version="RC6"	
+	firmware_version="RC6"
+elif grep -q "KAMIKAZE" "/etc/banner"; then
+	firmware_version=$(cat /etc/banner |grep KAMIKAZE |cut -d ' ' -f 5 |cut -d ')' -f 1)
 else
 	firmware_version="unknown"
 fi
