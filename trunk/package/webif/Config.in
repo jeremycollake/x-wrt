@@ -31,6 +31,14 @@ config BR2_PACKAGE_WEBIF_LANG_CA
 	default m
 	help
 	  Catalan language file for webif
+	  
+config BR2_PACKAGE_WEBIF_LANG_CN
+	select BR2_PACKAGE_HASERL
+	tristate "webif-lang-cn - Chinese Simplified language file for webif"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  Chinese Simplified language file for webif
 
 config BR2_PACKAGE_WEBIF_LANG_CZ
 	select BR2_PACKAGE_HASERL
