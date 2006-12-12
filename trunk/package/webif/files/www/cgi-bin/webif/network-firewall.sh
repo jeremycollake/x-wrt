@@ -27,13 +27,12 @@ ip|FORM_dest|@TR<<Destination IP>>||$FORM_dest
 ports|FORM_sport|@TR<<Source Ports>>||$FORM_sport
 ports|FORM_dport|@TR<<Destination Ports>>||$FORM_dport
 ip|FORM_target_ip|@TR<<Forward to>>||$FORM_target_ip
-port|FORM_target_port|@TR<<Port>>||$FORM_target_port
 EOF
 	equal "$?" 0 || {
 		unset FORM_save
 	}
-	equal "$FORM_target" "forward" && empty "$FORM_target_ip$FORM_target_port" && {
-		ERROR="${ERROR}@TR<<No_Target_IP_Port|Target IP and Port cannot both be empty>><br />"
+	equal "$FORM_target" "forward" && empty "$FORM_target_ip" && {
+		ERROR="${ERROR}@TR<<No_Target_IP|Target IP can not be empty>><br />"
 		FORM_save=""
 	}
 }
@@ -247,7 +246,7 @@ function iptstr2edit(str, edit) {
 BEGIN {
 	print start_form("@TR<<Firewall Rules>>");
 	print "<table width=\\"100%\\">"
-	print "<tr><th>@TR<<Match>></th><th>@TR<<Target>></th><th>@TR<<Port>></th><th>&nbsp;</th></tr>"
+	print "<tr><th>@TR<<Match>></th><th>@TR<<Target>></th><th>&nbsp;</th></tr>"
 	FS=":"
 	n = 0
 }
@@ -284,13 +283,11 @@ BEGIN {
 
 \$1 == "forward" {
 	if (n == edit) {
-		if (target_ip == "") target_ip = \$3
-		if (target_port == "") target_port = \$4
-		print "<tr><td class=\\"edit_title\\">@TR<<Forward to>>:</b></td><td>" textinput("target_ip", target_ip) hidden("target", "forward") "</td></tr>"
-		print "<tr><td class=\\"edit_title\\">@TR<<Port>>:</b></td><td>" textinput("target_port", target_port) "</td></tr>"
+		if (target_ip == "") target_ip = \$3		
+		print "<tr><td class=\\"edit_title\\">@TR<<Forward to>>:</b></td><td>" textinput("target_ip", target_ip) hidden("target", "forward") "</td></tr>"		
 	} else {
 		if (\$3 \$4 == "") \$3 = "forward"
-		printf "<td>" \$3 "</td><td>" \$4 "</td>"
+		printf "<td>" \$3 "</td>"
 	}
 }
 
@@ -325,12 +322,15 @@ END {
 	print "</table>"
 	print "<br /><br />"
 	#print "<div class=\\"helpform\\">"
-	print "<div class=\\"helpitem\\">@TR<<Firewall>>:</div>"
-	print "<div class=\\"helptext\\">Here you can forward ports and more. If you wish to manually configure these instead, use '/etc/config/firewall', not '/etc/firewall.user'. Although either works, only the former is used by this page.</div>"
 	print "<div class=\\"helpitem\\">@TR<<Forwarding a port>>:</div>"
 	print "<div class=\\"helptext\\">If you would like to forward port 999 TCP from the internet to a local computer at 192.168.100.1, it might look like below:</div>"
 	#print "</div>"
-	print "<div class=\\"helptext\\"><br />Destination ports: 999 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Target: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: 999 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protocol: TCP</div>"
+	print "<div class=\\"helptext\\">Destination ports: 999 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Target: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protocol: TCP</div>"
+	print "<div class=\\"helpitem\\">@TR<<Forwarding a port range>>:</div>"
+	print "<div class=\\"helptext\\">If you would like to forward ports 2000-3000 TCP from the internet to a local computer at 192.168.100.1, it might look like below:</div>"
+	print "<div class=\\"helptext\\">Destination ports: 2000-3000 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Target: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protocol: TCP</div>"
+	print "<div class=\\"helpitem\\">@TR<<Firewall>>:</div>"
+	print "<div class=\\"helptext\\">Here you can forward ports and more. If you wish to manually configure these instead, use '/etc/config/firewall', not '/etc/firewall.user'. Although either works, only the former is used by this page.</div>"
 	print end_form(" ");
 }
 EOF
