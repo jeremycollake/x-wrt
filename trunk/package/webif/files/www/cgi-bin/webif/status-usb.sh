@@ -11,7 +11,7 @@ header "Status" "USB" "USB Devices"
 <tbody>
 
 	<tr><th><b>All connected devices (excluding system hubs)</b></th></tr>
-	<tr><td><table border=1>
+	<tr><td><table cellpadding="10" cellspacing="10" align="left" border="0">
 	<col style=\"text-align:center;\"><col align=center><col><col><col align=center><col align=center>
 	<tr><th>Bus</th><th>Device</th><th>Product</th><th>Manufacturer</th><th>VendorID:ProdID</th><th>USB version</th></tr>
 	<?
