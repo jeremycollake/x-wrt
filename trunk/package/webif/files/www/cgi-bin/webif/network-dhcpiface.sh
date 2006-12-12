@@ -216,7 +216,7 @@ field|@TR<<DHCP Bail>>
 text|dhcp_bail|$FORM_dhcp_bail
 field|@TR<<DHCP Lease Minutes>>
 text|dhcp_lease|$FORM_dhcp_lease
-helpitem|DCHP Start
+helpitem|DHCP Start
 helptext|HelpText DHCP_Start#Do NOT put an IP address here! If this interface's IP is 192.168.1.1 and you want to start your DHCP clients at 192.168.1.100 you'd put a simple '100' in this field.
 end_form
 EOF
