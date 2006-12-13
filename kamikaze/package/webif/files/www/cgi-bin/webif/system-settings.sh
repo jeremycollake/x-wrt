@@ -25,7 +25,7 @@
 
 load_settings "system"
 load_settings "webif"
-load_settings "theme"
+uci_load "webif"
 
 #####################################################################
 # defaults
@@ -37,11 +37,10 @@ load_settings "theme"
 #  to a limit of 250mhz. It also has a fixed divider, so sbclock
 #  frequencies are implied, and ignored if specified.
 #
-OVERCLOCKING_DISABLED="0" # set to 1 to disble OC support
+OVERCLOCKING_DISABLED="1" # set to 1 to disble OC support
 
 #####################################################################
 header "System" "Settings" "@TR<<System Settings>>" ' onload="modechange()" ' "$SCRIPT_NAME"
-ShowNotUpdatedWarning
 
 
 #####################################################################
@@ -78,10 +77,12 @@ if empty "$FORM_submit"; then
 	FORM_clkfreq="${clkfreq:-$(nvram get clkfreq)}";
 	FORM_clkfreq="${FORM_clkfreq:-200}"
 	# webif settings
-	FORM_language="${language:-$(nvram get language)}"
-	FORM_language="${FORM_language:-default}"
-	# get form theme by seeing where /www/themes/active/ points
-	FORM_theme=$(ls /www/themes/active -l | cut -d'>' -f 2 | sed s/'\/www\/themes\/'//g)
+	FORM_language="${language:-$(cat /etc/config/webif | grep lang= | cut -d'=' -f2)}"
+	exists "/usr/sbin/nvram" && {
+		FORM_language="${FORM_language:-$(nvram get language)}"
+	}
+	FORM_language="${FORM_language:-default}"		
+	FORM_theme=${CONFIG_theme_id:-xwrt}
 else
 #####################################################################
 # save forms
@@ -105,11 +106,12 @@ EOF
 			{
 				save_setting nvram clkfreq "$FORM_clkfreq"
 			}
-
 		}
 		# webif settings
-		save_setting webif language "$FORM_language"
-		save_setting theme webif_theme "$FORM_theme"
+		! equal "$FORM_theme" "$CONFIG_theme_id" && ! empty "$CONFIG_theme_id" && {	
+			uci_set "webif" "theme" "id" "$FORM_theme"
+		}		
+		save_setting webif language "$FORM_language"		
 	else
 		echo "<br /><div class=\"warning\">Warning: Hostname failed validation. Can not be saved.</div><br />"
 	fi
@@ -149,14 +151,40 @@ is_bcm947xx && {
 	}
 
 #####################################################################
-# enumerate themes by finding all subdirectories of /www/theme
+# Initialize THEMES form
+#
+#
+# start with list of available installable theme packages
+#
+! exists "/etc/themes.lst" && {
+	# create list if it doesn't exist ..
+	/usr/lib/webif/webif-mkthemelist.sh	
+}
+THEMES=$(cat "/etc/themes.lst")
+for str in $temp_t; do
+	THEME="$THEME
+		option|$str"
+done
+
+# enumerate installed themes by finding all subdirectories of /www/theme
+# this lets users install themes not built into packages.
+#
 for curtheme in /www/themes/*; do
 	curtheme=$(echo "$curtheme" | sed s/'\/www\/themes\/'//g)
+	if exists "/www/themes/$curtheme/name"; then
+		theme_name=$(cat "/www/themes/$curtheme/name")
+	else
+		theme_name="$curtheme"
+	fi
 	! equal "$curtheme" "active" && {
 		THEMES="$THEMES
-			option|$curtheme"
+option|$curtheme|$theme_name"
 	}
 done
+#
+# sort list and remove dupes
+#
+THEMES=$(echo "$THEMES" | sort -u)
 
 #####################################################################
 # Initialize wait_time form
@@ -170,7 +198,14 @@ dangerous_form_start=""
 dangerous_form_end=""
 dangerous_form_help=""
 
-LANGUAGES="$(grep -H '^[\t ]*lang[\t ]*=>' /usr/lib/webif/lang/*/*.txt 2>/dev/null | awk -f /usr/lib/webif/languages.awk)"
+#####################################################################
+# Initialize LANGUAGES form
+# create list if it doesn't exist ..
+! exists "/etc/languages.lst" && {
+	/usr/lib/webif/webif-mklanglist.sh
+}
+LANGUAGES=$(cat "/etc/languages.lst")
+
 is_bcm947xx && {
 	bootwait_form="field|Boot Wait
 	select|boot_wait|$FORM_boot_wait
