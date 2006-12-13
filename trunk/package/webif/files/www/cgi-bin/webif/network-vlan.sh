@@ -130,16 +130,24 @@ fi
 ####################################################################
 # add headers for the port numbers
 #
+uci_load "webif"
+
+wan_port="-1"
+echo "$CONFIG_general_device_name" | grep -iq "WRT54G" && {
+	wan_port="4"
+}
+
 FORM_port_headers="string|<tr><th></th>"
 for current_port in $(seq $PORT_BASE $MAX_PORT); do
 	current_hdr=""
 	case $current_port in 
+		"$wan_port") current_hdr="WAN";;
 		"0" ) current_hdr="eNet0";;
 		"1" ) current_hdr="eNet1";;
 		"2" ) current_hdr="eNet2";;
 		"3" ) current_hdr="eNet3";;
 		"4" ) current_hdr="eNet4";;
-		"5" ) current_hdr="Internal";;
+		"5" ) current_hdr="Internal";;		
 	esac
 	FORM_port_headers="${FORM_port_headers}<th>$current_hdr</th>"
 done
