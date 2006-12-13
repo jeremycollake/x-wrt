@@ -132,10 +132,17 @@ fi
 #
 uci_load "webif"
 
-wan_port="-1"
-echo "$CONFIG_general_device_name" | grep -iq "WRT54G" && {
+if echo "$CONFIG_general_device_name" | grep -iq "WRT54G"; then
 	wan_port="4"
-}
+elif echo "$CONFIG_general_device_name" | grep -iq "WL-500g"; then
+	wan_port="0"
+elif echo "$CONFIG_general_device_name" | grep -iq "WHR-G54"; then
+	wan_port="0"
+elif echo "$CONFIG_general_device_name" | grep -iq "WHR-HP-G54"; then
+	wan_port="0"
+else
+	wan_port="-1"
+fi
 
 FORM_port_headers="string|<tr><th></th>"
 for current_port in $(seq $PORT_BASE $MAX_PORT); do
