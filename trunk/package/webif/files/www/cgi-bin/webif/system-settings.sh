@@ -137,12 +137,7 @@ is_bcm947xx && {
 			option|234
 			option|238
 			option|240
-			option|250"
-		# special case for custom CFEs (like mine)
-		if [ $(nvram get clkfreq) -gt 250 ]; then
-			FORM_clkfreqs="$FORM_clkfreqs
-				option|$(nvram get clkfreq)"
-		fi
+			option|250"		
 	else
 		# BCM3302 v0.7 or other..
 		# in this case, we'll show it, but not have any options
