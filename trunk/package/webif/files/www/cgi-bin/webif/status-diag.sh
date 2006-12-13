@@ -75,7 +75,7 @@ does_process_exist() {
 	tmpfile2=$(mktemp /tmp/.webif-diag-XXXXXX)
 	$diag_command 2>&1 > "$tmpfile" &
 	ps_search=$(echo "$diag_command" | cut -c 1-15) # todo: limitation, X char match resolution
-	_pid=$(ps | grep "$ps_search" | grep -v "grep" | cut -d ' ' -f 1 | sed 2,99d)	
+	_pid=$(ps | grep "$ps_search" | grep -v "grep" | cut -d ' ' -f 1 | sed 2,99d)
 	output_snapshot_file() {
 		# output file
 		# tmpfile2
@@ -96,14 +96,19 @@ does_process_exist() {
 		# continue process..	
 		kill -25 $3 2>&- >&-
 	}
-	touch "$tmpfile2" # force to exist first iter
-	while sleep $OUTPUT_CHECK_DELAY; do
-		! does_process_exist "$_pid" && {
-			break;
-		}
-		output_snapshot_file "$tmpfile" "$tmpfile2"
-	done	
-	output_snapshot_file "$tmpfile" "$tmpfile2"
+	if empty "$_pid" || equal "$_pid" "0"; then
+		# exited before we could get PID
+		echo "Error: Utility terminated too quick."			
+	else		
+		touch "$tmpfile2" # force to exist first iter
+		while sleep $OUTPUT_CHECK_DELAY; do
+			! does_process_exist "$_pid" && {
+				break;
+			}
+			output_snapshot_file "$tmpfile" "$tmpfile2"
+		done
+		output_snapshot_file "$tmpfile" "$tmpfile2"	
+	fi	
 	rm -f "$tmpfile2"	
 	rm -f "$tmpfile"	
 }
