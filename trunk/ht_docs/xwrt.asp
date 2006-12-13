@@ -21,7 +21,7 @@ function installWebif(form)
 
 function installWebifMilestone2(form)
 {
-  var install_url= "http://" + document.instform.routerip.value + "//cgi-bin/webif/ipkg.sh?action=install&amp;pkg=http://ftp.berlios.de/pub/xwrt/packages/webif_milestone2.ipk";
+  var install_url= "http://" + document.instform.routerip.value + "//cgi-bin/webif/ipkg.sh?action=install&amp;pkg=http://ftp.berlios.de/pub/xwrt/webif_latest_stable.ipk";
   window.open(install_url,'Auto-Install','toolbar=yes,resizable=yes');
   return false;
 }
@@ -153,7 +153,7 @@ message list that archives commit logs as they happen:
 				<a href="https://lists.berlios.de/pipermail/xwrt-svncheckins/">https://lists.berlios.de/pipermail/xwrt-svncheckins</a>. 
 				</font></p>
 				<p><font face="Verdana">Our latest stable snapshot of webif<sup>2</sup> is 
-				<b>Milestone 2</b>. The 
+				<b>Milestone 2.5</b>. The 
 			install buttons below will have you install it. If you then use the 
 			webif's update feature you will get the latest internal build.<br>&nbsp;</font></p>
 			</blockquote>
@@ -165,14 +165,36 @@ message list that archives commit logs as they happen:
 install and use X-Wrt on your router:</font></p>
 			</blockquote>
 			<ol>
-				<li><font face="Verdana">Flash OpenWrt White Russian, then install webif<sup>2</sup> and any 
-				other X-Wrt packages.<br>
-				<b><i>...or...</i></b></font></li>
-				<li><font face="Verdana">Flash a pre-built image of OpenWrt White Russian that 
-				already includes X-Wrt packages like webif<sup>2</sup>.</font></li>
+				<li><font face="Verdana">Flash a pre-built image of OpenWrt White Russian 
+				with X-Wrt packages like webif<sup>2</sup> already included.</font></li>
+				<li><font face="Verdana">Flash OpenWrt White Russian stock image, then install webif<sup>2</sup> and any 
+				other X-Wrt packages.</font></li>
 			</ol>
 			<ul>
-				<li><font face="Verdana"><b><font size="4">Method #1:
+				<li><font face="Verdana">
+				<b><font size="4">Method #1: </font></b><font size="4">Flash pre-built OpenWrt White Russian images<br>
+				</font><font color="#0000FF"><b><i>Recommended</i></b></font><blockquote>
+					<ol>
+						<li>Browse the
+						<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian">
+						X-Wrt ftp directory</a> for the OpenWrt/X-Wrt firmware 
+						image appropriate for your router (based on the 
+						filename).</li>
+						<li>Flash the 
+						image to your router by using either your existing 
+						firmware's web interface to upgrade the firmware or 
+						alternate methods. If you have questions, advanced 
+						instructions are on
+						<a href="http://wiki.openwrt.org/OpenWrtDocs/Installing#head-76e6cbae21c39c506a74e7800f5ae7f93ed37d46">
+						OpenWrt's Wiki</a>.</li>
+					</ol>
+				</blockquote>
+			</font>
+				<ul>
+					<li><font face="Verdana">NOTE: Micro builds are currently under development and will be 
+					posted as soon as they are ready.<i><br>&nbsp;</i></font></li>
+				</ul></li>
+				<li><font face="Verdana"><b><font size="4">Method #2:
 				</font></b><font size="4">
 				Flash OpenWrt White Russian then 
 				install X-Wrt packages</font></font></li>
@@ -196,19 +218,11 @@ install and use X-Wrt on your router:</font></p>
 		</ol>
 	</blockquote>
 </blockquote>
-<form action="" method="get" name="instform">	
+			<form action="" method="get" name="instform">	
 	<blockquote>
 		<blockquote>
 			<blockquote>
-				<blockquote>
-				<p><br>
-				<font face="Verdana" color="#FF0000"><b>WARNING:</b> All 
-				X-Wrt packages, including webif<sup>2</sup> are in <b>beta</b>. 
-				The latest daily build we try to keep stable, but of course a 
-				build updated multiple times a day is difficult to guarantee the 
-				stability of.</font></p>
-			</blockquote>
-				<p><font face="Verdana">
+				<font face="Verdana">
 				<table border="0" width="100%" id="table5">
 					<tr>
 						<td width="257"><font face="Verdana"><b>Your Router's IP address:</b>
@@ -247,39 +261,14 @@ install and use X-Wrt on your router:</font></p>
 		<p>Instead of using this automated install procedure, you can also ssh 
 		or telnet to the router and run ...</p>
 		<p>(latest milestone): <span style="background-color: #FFFFCC">&nbsp;ipkg install 
-				<a href="http://ftp.berlios.de/pub/xwrt/webif_latest.ipk">http://ftp.berlios.de/pub/xwrt/packages/webif_milestone2.ipk</a>
+				<a href="http://ftp.berlios.de/pub/xwrt/webif_latest_stable.ipk">http://ftp.berlios.de/pub/xwrt/webif_latest_stable.ipk</a>
 		<br>
 		</span>(latest daily): <span style="background-color: #FFFFCC">&nbsp;ipkg install 
 				<a href="http://ftp.berlios.de/pub/xwrt/webif_latest.ipk">http://ftp.berlios.de/pub/xwrt/webif_latest.ipk</a>
-		</span></p>
-		<p>&nbsp;</p>
+		<br>
+&nbsp;</span></p>
 	</blockquote>
 </blockquote>
-			<ul>
-				<li><b><font size="4">Method #2: 
-				</font></b><font size="4">
-				Flash pre-built OpenWrt White Russian images<u> 
-				</u> 
-				</font> 
-				<blockquote>
-					<ol>
-						<li><font face="Verdana">Download firmware images from here:
-						<a href="ftp://ftp.berlios.de/pub/xwrt/images/">ftp://ftp.berlios.de/pub/xwrt/images/</a> 
-						. Download the one appropriate to your router. </font> </li>
-						<li><font face="Verdana">Once you've extracted the images, flash the squashfs 
-						image appropriate to your router by following the 
-						instructions on <a href="http://wiki.openwrt.org">OpenWrt's wiki</a>.</font></li>
-					</ol>
-					<p><font face="Verdana">Micro builds are currently under development and will be 
-					posted as soon as they are ready.</font></p>
-					<p><font face="Verdana"><b><i>WARNING:</i> </b><i>These images are in a non-final 
-					state and are updated several times a week. Although they 
-					should be stable, if you have any troubles with them, please 
-					report it.<br>
-&nbsp;</i></font></p>
-				</blockquote>
-				</li>
-			</ul>
 			<p><font size="5" color="#666699"><b><a name="webif_problems">
 			Webif<sup>2</sup> Problems</a></b></font></p>
 			<blockquote>
