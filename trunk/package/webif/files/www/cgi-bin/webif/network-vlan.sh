@@ -130,11 +130,20 @@ fi
 ####################################################################
 # add headers for the port numbers
 #
-FORM_port_headers="string|<tr><th>&nbsp;</th>"
+FORM_port_headers="string|<tr><th></th>"
 for current_port in $(seq $PORT_BASE $MAX_PORT); do
-	FORM_port_headers="${FORM_port_headers}<th>$current_port</th>"
+	current_hdr=""
+	case $current_port in 
+		"0" ) current_hdr="eNet0";;
+		"1" ) current_hdr="eNet1";;
+		"2" ) current_hdr="eNet2";;
+		"3" ) current_hdr="eNet3";;
+		"4" ) current_hdr="eNet4";;
+		"5" ) current_hdr="Internal/Meta";;
+	esac
+	FORM_port_headers="${FORM_port_headers}<th>$current_hdr</th>"
 done
-FORM_port_headers="${FORM_port_headers}<td>port</td></tr>"
+FORM_port_headers="${FORM_port_headers}</tr>"
 
 ####################################################################
 # now create the vlan rows, one for each set vlan variable, even
@@ -192,7 +201,8 @@ display_form <<EOF
 onchange|modechange
 start_form|@TR<<VLAN Configuration>>
 helpitem|VLAN
-helptext|Helptext VLAN#A virtual LAN is a set of ports that are bridged. In cases where a port belongs to more than one VLAN, a technique known as tagging is used to identify to which VLAN traffic on that port belongs.
+helptext|Helptext VLAN#A virtual LAN is a set of ports that are bridged to create what appears to be a LAN. Ports 0 through 4 are the 5 ports on the back of the router. Depending on the router, port 0 or port 4 is the WAN port and the others are the LAN ports. Port 5 is an internal port that connects the on-chip device to the switch itself.
+helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration?highlight=%28wl0_mode%29#head-1f582c0ad21a03a769e00c345743d6cf85ba878f
 $FORM_all_vlans
 end_form
 start_form|
