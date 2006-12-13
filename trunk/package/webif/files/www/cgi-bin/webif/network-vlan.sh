@@ -48,7 +48,8 @@ HELP_TEXT=
 #
 CountNumberOfVLANsThatContainPortX ( )
 {
-	RETURN_VAR=0
+	local lcount
+	lcount="0"
 	for count2 in $(seq "0" "$MAX_VLANS_INDEX"); do
 		if [ -z $(nvram get vlan"$count2"hwname) ]; then
 			break
@@ -56,10 +57,12 @@ CountNumberOfVLANsThatContainPortX ( )
 		eval value="\"\$FORM_vlan_${count2}_port_${1}\""
 		equal "$value" "1" &&
 		{
-			let "RETURN_VAR+=1"
-			equal "$RETURN_VAR" "2" && break
+			let "lcount+=1"
+			equal "$lcount" "2" && break
 		}
 	done
+	equal "$lcount" "1" && return 0
+	return "1"
 }
 
 ###################################################################
@@ -114,11 +117,18 @@ if ! empty "$FORM_submit"; then
 
 				#
 				# does port exist in alternate VLANs?
+				#				
+				! equal "$port_counter" "5" && {
+					CountNumberOfVLANsThatContainPortX "$port_counter" || {
+						# add 't' to indicate 'tagged'
+						current_vlan_ports="${current_vlan_ports}t"
+					}
+				}
 				#
-				CountNumberOfVLANsThatContainPortX "$port_counter"
-				equal "$RETURN_VAR" "1" ||
-				{
-					current_vlan_ports="$current_vlan_ports*"
+				# if port 5 of vlan 0, add '*'
+				# 
+				equal "$count" "0" && equal "$port_counter" "5" && {
+					current_vlan_ports="${current_vlan_ports}*"
 				}
 			fi
 		done
