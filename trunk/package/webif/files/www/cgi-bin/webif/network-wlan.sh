@@ -411,7 +411,7 @@ helptext|HelpText WLAN Mode#This sets the operation mode of your wireless networ
 helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration#head-7126c5958e237d603674b3a9739c9d23bdfdb293
 field|@TR<<Wireless Mode#Wireless Mode>>
 select|gmode|$FORM_gmode
-option|bOnly|@TR<<802.11b>>
+option|bOnly|@TR<<802.11b only>>
 option|b+g|@TR<<802.11b + 802.11g>>
 option|g|@TR<<802.11g>>
 option|bDeferred|@TR<<802.11g with 802.11b deferred>>
