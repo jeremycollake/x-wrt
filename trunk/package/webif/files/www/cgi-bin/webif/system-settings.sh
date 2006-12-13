@@ -48,6 +48,7 @@ header "System" "Settings" "@TR<<System Settings>>" ' onload="modechange()" ' "$
 equal "$OVERCLOCKING_DISABLED" "0" && {
 	CPU_MODEL=$(sed -n "/cpu model/p" "/proc/cpuinfo")
 	CPU_VERSION=$(echo "$CPU_MODEL" | sed -e "s/BCM3302//" -e "s/cpu model//" -e "s/://")
+	CPU_VERSION=${CPU_VERSION:-unknown}
 	#echo "debug.model: $CPU_MODEL <br />"
 	#echo "debug.version: $CPU_VERSION <br />"
 }
