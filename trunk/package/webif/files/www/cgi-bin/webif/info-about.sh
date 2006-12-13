@@ -24,7 +24,7 @@ this_revision=$(cat "/www/.version")
 
 ?>
 
-<div class="webif-name-title"><a href="http://www.x-wrt.org">X-Wrt Extensions</a> - webif<sup>2</sup></div>
+<div class="webif-name-title"><a href="http://www.x-wrt.org">X-Wrt @TR<<Extensions>></a> - webif<sup>2</sup></div>
 <div class="webif-name-subtitle"></div>
 <div class="webif-name-version">Milestone 2.5 - r<? echo "$this_revision" ?> </div><br />
 <table class="webif-contributors" width="70%"><tbody>
