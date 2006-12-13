@@ -38,6 +38,7 @@ if [ "$CONFIG_general_firmware_version" != "$firmware_version" ] ||
 	uci_set "webif" "general" "firmware_name" "$firmware_name"
 	uci_set "webif" "general" "firmware_version" "$firmware_version"
 	uci_set "webif" "general" "firmware_subtitle" "$firmware_subtitle"
-	uci_commit #"webif"
+	#Commit with full path untill uci_commit bug is fixed.
+	uci_commit "/tmp/.uci/webif"
 fi
 }

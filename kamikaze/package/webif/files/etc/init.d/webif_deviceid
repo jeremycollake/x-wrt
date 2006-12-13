@@ -28,6 +28,7 @@ done
 	echo "Device: $device_name" 	
 	echo "Committing new device id ..."		
 	uci_set "webif" "general" "device_name" "$device_name"
-	uci_commit #"webif"
+	#Commit with full path untill uci_commit bug is fixed.
+	uci_commit "/tmp/.uci/webif"
 }
 }
