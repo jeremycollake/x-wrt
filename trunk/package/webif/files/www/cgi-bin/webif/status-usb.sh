@@ -6,13 +6,14 @@
 #
 . /usr/lib/webif/webif.sh
 header "Status" "USB" "USB Devices"
-?>
-<table style="width: 90%; " border="0" cellpadding="2" cellspacing="2" align="center">
-<tbody>
 
-	<tr><th><b>All connected devices (excluding system hubs)</b></th></tr>
-	<tr><td><table cellpadding="10" cellspacing="10" align="left" border="0">
-	<col style=\"text-align:center;\"><col align=center><col><col><col align=center><col align=center>
+display_form <<EOF
+start_form|@TR<<All connected devices (excluding system hubs)>>
+EOF
+?>
+<table>
+<tbody>	
+	<tr><td><table cellpadding="10" cellspacing="10" align="left" border="0">	
 	<tr><th>Bus</th><th>Device</th><th>Product</th><th>Manufacturer</th><th>VendorID:ProdID</th><th>USB version</th></tr>
 	<?
 	[ -f /proc/bus/usb/devices ] && grep -e "^[TDPS]:" /proc/bus/usb/devices | sed 's/[[:space:]]*=[[:space:]]*/=/g' | sed 's/[[:space:]]\([^ |=]*\)=/|\1=/g' | sed 's/^/|/' | awk '
@@ -41,33 +42,49 @@ header "Status" "USB" "USB Devices"
 		}
 	}
 	'
-?></table></td>
-	</tr>
-	<tr><td><br /><br /></td></tr>
+?>
+</tbody>
+</table>
 
-	<tr>
-		<th><b>Mounted USB / SCSI devices</b></th>
-	</tr>
+<?
+display_form <<EOF
+end_form
+start_form|@TR<<Mounted USB / SCSI devices>>
+EOF
+?>
+
+<table>
+<tbody>
 	<tr>
 		<td><pre><? mount | grep /dev/scsi/  ?></pre></td>
 	</tr>
 
-	<tr><td><br /><br /></td></tr>
-	<tr>
+</tbody>
+</table>
 
-	<tr>
-		<th><b>Loaded USB drivers</b></th>
-	</tr>
+<?
+display_form <<EOF
+end_form
+start_form|@TR<<Loaded USB drivers>>
+EOF
+?>
+
+<table>
+<tbody>
 	<tr>
 		<td><pre><? [ -f /proc/bus/usb/drivers ] && cat /proc/bus/usb/drivers ?></pre></td>
 	</tr>
 
 	<tr><td><br /><br /></td></tr>
-
 </tbody>
 </table>
 
-<? footer ?>
+<?
+display_form <<EOF
+end_form
+EOF
+
+footer ?>
 <!--
 ##WEBIF:name:Status:454:USB
 -->
