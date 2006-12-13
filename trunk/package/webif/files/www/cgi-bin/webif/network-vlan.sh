@@ -139,7 +139,7 @@ for current_port in $(seq $PORT_BASE $MAX_PORT); do
 		"2" ) current_hdr="eNet2";;
 		"3" ) current_hdr="eNet3";;
 		"4" ) current_hdr="eNet4";;
-		"5" ) current_hdr="Internal/Meta";;
+		"5" ) current_hdr="Internal";;
 	esac
 	FORM_port_headers="${FORM_port_headers}<th>$current_hdr</th>"
 done
