@@ -196,7 +196,7 @@ uci_commit() {
 			return 0
 		}
 		
-		config_load "$PACKAGE" || CONFIG_FILENAME="$ROOT/etc/config/$PACKAGE_BASE"
+		config_load "/tmp/.uci/$PACKAGE_BASE" || CONFIG_FILENAME="$ROOT/etc/config/$PACKAGE_BASE"
 		uci_do_update "$CONFIG_FILENAME" "$updatestr" > "/tmp/.uci/$PACKAGE_BASE.new" && {
 			mv -f "/tmp/.uci/$PACKAGE_BASE.new" "$CONFIG_FILENAME" && \
 			rm -f "/tmp/.uci/$PACKAGE_BASE"
