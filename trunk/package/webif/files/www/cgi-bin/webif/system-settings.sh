@@ -124,7 +124,7 @@ fi
 is_bcm947xx && {
 	equal "$OVERCLOCKING_DISABLED" "0" &&
 	{
-	if [ $CPU_VERSION = "V0.8" ]; then
+	if equal "$CPU_VERSION" "V0.8"; then
 		FORM_clkfreqs="$FORM_clkfreq
 			option|184
 			option|188
