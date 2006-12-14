@@ -64,12 +64,9 @@ function installWebifMilestone2(form)
 						<li><font face="Verdana">
 						<a href="ftp://ftp.berlios.de/pub/xwrt">FTP Site</a></font></li>
 						<li><font face="Verdana">
-						<a href="http://developer.berlios.de/mail/?group_id=7373">
-						Mailing Lists</a></font></li>
+						<a href="http://www.bitsum.com/xwrt">Screenshots</a></font></li>
 						<li><font face="Verdana">
 						<a href="http://xwrt.berlios.de/forum">Forums</a></font></li>
-						<li><font face="Verdana">
-						<a href="http://www.bitsum.com/xwrt">Screenshots</a></font></li>
 						<li><font face="Verdana">
 						<a href="mailto:jeremy@bitsum.com">Email</a></font></li>
 						<li><font face="Verdana"><a href="#x-wrt">IRC</a></font></li>
