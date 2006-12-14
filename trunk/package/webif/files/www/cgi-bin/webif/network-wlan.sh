@@ -433,7 +433,7 @@ option|wep|WEP
 option|psk|WPA (@TR<<PSK>>)
 option|wpa|WPA (RADIUS)
 helpitem|Encryption Type
-helptext|HelpText Encryption Type#WPA (RADIUS) is only supported in Access Point mode. WPA (PSK) does not work in Ad-Hoc mode.
+helptext|HelpText Encryption Type#WPA (RADIUS) is only supported in Access Point mode. WPA (PSK) does not work in Ad-Hoc mode. WEP keys can not end with a zero.
 field|@TR<<WPA Mode>>|wpa_support|hidden
 checkbox|wpa1|$FORM_wpa1|wpa1|WPA1
 checkbox|wpa2|$FORM_wpa2|wpa2|WPA2
