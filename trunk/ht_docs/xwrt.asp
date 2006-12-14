@@ -77,14 +77,14 @@ function installWebifMilestone2(form)
 					<ol type="I">
 						<li><font face="Verdana"><a href="#About_X-Wrt">
 						Introduction</a></font></li>
-						<li><font face="Verdana"><a href="#Project_Status">
-						Status</a></font></li>
 						<li><font face="Verdana">
 						<a href="#Installation_Instructions">Installation 
 						Instructions</a></font></li>
 						<li><font face="Verdana"><a href="#webif_problems">Webif<sup>2</sup> Troubleshooting</a></font></li>
 						<li><font face="Verdana"><a href="#X-Wrt_Packages">X-Wrt 
 						Packages</a></font></li>
+						<li><font face="Verdana"><a href="#milestones">Milestone 
+						Roadmap</a></font></li>
 						<li><font face="Verdana"><a href="#kamikaze">OpenWrt 
 						Kamikaze Plans</a></font></li>
 						<li><font face="Verdana"><a href="#commercial">
@@ -140,8 +140,6 @@ function installWebifMilestone2(form)
 					all donations and what they have went towards.<br>&nbsp;</font></li>
 				</ul>
 			</blockquote>
-			<p><font size="5" color="#666699" face="Verdana"><b>
-			<a name="Project_Status">Project Status</a></b></font></p>
 			<blockquote>
 				<p><font face="Verdana">This project is still young, but we are accomplishing things at a rapid 
 pace. All our work is currently in beta, but our code can be used today and is 
@@ -170,7 +168,8 @@ install and use X-Wrt on your router:</font></p>
 			<ul>
 				<li><font face="Verdana">
 				<b><font size="4">Method #1: </font></b><font size="4">Flash pre-built OpenWrt White Russian images<br>
-				</font><font color="#0000FF"><b><i>Recommended</i></b></font><blockquote>
+				</font><font color="#800000"><b><i>**</i></b></font><font size="4">
+				</font><font color="#800000"><b><i>Recommended for most users **</i></b></font><blockquote>
 					<ol>
 						<li>Browse the
 						<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian">
@@ -181,19 +180,142 @@ install and use X-Wrt on your router:</font></p>
 						image to your router by using either your existing 
 						firmware's web interface to upgrade the firmware or 
 						alternate methods. If you have questions, advanced 
-						instructions are on
+						instructions are available on
 						<a href="http://wiki.openwrt.org/OpenWrtDocs/Installing#head-76e6cbae21c39c506a74e7800f5ae7f93ed37d46">
 						OpenWrt's Wiki</a>.</li>
 					</ol>
+					<blockquote>
+						<blockquote>
+							<p><b>Direct Firmware Links</b></p>
+							<ul>
+								<li>
+								<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/">
+								Default Firmware Images</a><ul>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-wrt54g-squashfs.bin">
+									WRT54G v1-v4 and WRT54GL</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-wrt54g3g-squashfs.bin">
+									WRT54g3g</a></li>
+									<li>WRT54G v5-v6 (not yet available)</li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-wrt54gs-squashfs.bin">
+									WRT54GS v1-v3</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-wrt54gs_v4-squashfs.bin">
+									WRT54GS v4</a></li>
+									<li>WRT54GS v5-v6 (not yet available)</li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-wrtsl54gs-squashfs.bin">
+									WRTSL54GS</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-brcm-2.4-squashfs.trx">
+									WL-500g/d/p</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-brcm-2.4-squashfs.trx">
+									WZR-HP-54GS</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-brcm-2.4-squashfs.trx">
+									WHR-54GS</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-we800g-squashfs.bin">
+									WE-800G</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-wa840g-squashfs.bin">
+									WA-840G</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-wr850g-squashfs.bin">
+									WR-850G</a></li>
+								</ul>
+								</li>
+								<li>
+								<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/">
+								PPTP Firmware Images</a><ul>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-wrt54g-squashfs.bin">
+									WRT54G v1-v4 and WRT54GL</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-wrt54g3g-squashfs.bin">
+									WRT54g3g</a></li>
+									<li>WRT54G v5-v6 (not yet available)</li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-wrt54gs-squashfs.bin">
+									WRT54GS v1-v3</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-wrt54gs_v4-squashfs.bin">
+									WRT54GS v4</a></li>
+									<li>WRT54GS v5-v6 (not yet available)</li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-wrtsl54gs-squashfs.bin">
+									WRTSL54GS</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-brcm-2.4-squashfs.trx">
+									WL-500g/d/p</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-brcm-2.4-squashfs.trx">
+									WZR-HP-54GS</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-brcm-2.4-squashfs.trx">
+									WHR-54GS</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-we800g-squashfs.bin">
+									WE-800G</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-wa840g-squashfs.bin">
+									WA-840G</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-wr850g-squashfs.bin">
+									WR-850G</a></li>
+								</ul>
+								</li>
+								<li>
+								<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/">
+								PPPOE Firmware Images</a><ul>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-wrt54g-squashfs.bin">
+									WRT54G v1-v4 and WRT54GL</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-wrt54g3g-squashfs.bin">
+									WRT54g3g</a></li>
+									<li>WRT54G v5-v6 (not yet available)</li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-wrt54gs-squashfs.bin">
+									WRT54GS v1-v3</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-wrt54gs_v4-squashfs.bin">
+									WRT54GS v4</a></li>
+									<li>WRT54GS v5-v6 (not yet available)</li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-wrtsl54gs-squashfs.bin">
+									WRTSL54GS</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-brcm-2.4-squashfs.trx">
+									WL-500g/d/p</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-brcm-2.4-squashfs.trx">
+									WZR-HP-54GS</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-brcm-2.4-squashfs.trx">
+									WHR-54GS</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-we800g-squashfs.bin">
+									WE-800G</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-wa840g-squashfs.bin">
+									WA-840G</a></li>
+									<li>
+									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-wr850g-squashfs.bin">
+									WR-850G</a></li>
+								</ul>
+								</li>
+							</ul>
+						</blockquote>
+					</blockquote>
 				</blockquote>
 			</font>
-				<ul>
-					<li><font face="Verdana">NOTE: Micro builds are currently under development and will be 
-					posted as soon as they are ready.<i><br>&nbsp;</i></font></li>
-				</ul></li>
+				</li>
 				<li><font face="Verdana"><b><font size="4">Method #2:
-				</font></b><font size="4">
-				Flash OpenWrt White Russian then 
+				</font></b><font size="4">Flash OpenWrt White Russian then 
 				install X-Wrt packages</font></font></li>
 			</ul>
 			<blockquote>
@@ -232,14 +354,12 @@ install and use X-Wrt on your router:</font></p>
 						<td width="257"><font face="Verdana">To install latest 
 						<b>daily</b>:</font></td>
 						<td><font face="Verdana">
-						<input type="submit" value=" Install " name="install_webif1"  onclick="installWebif(this.form)">
-						<i>less tested - more up to date - changes daily</i></font></td>
+						<input type="submit" value=" Install " name="install_webif1"  onclick="installWebif(this.form)"></font></td>
 					</tr>
 					<tr>
 						<td width="257"><font face="Verdana">To install last <b>stable</b>:</font></td>
 						<td><font face="Verdana">
-						<input type="submit" value=" Install " name="install_webif0"  onclick="installWebifMilestone2(this.form)">
-						<i>more tested - less up to date - changes never</i></font></td>
+						<input type="submit" value=" Install " name="install_webif0"  onclick="installWebifMilestone2(this.form)"></font></td>
 						<td>&nbsp;</td>
 					</tr>
 				</table>
@@ -310,6 +430,78 @@ install and use X-Wrt on your router:</font></p>
 					tries to run 'ipkg upgrade', something known to wreak havoc 
 					on unsuspecting users.</li>
 				</ul>
+			</blockquote>
+			<p><br>
+			<font size="5" color="#666699" face="Verdana"><b>
+			<a name="milestones"></a>Milestone Roadmap</b></font></p>
+			<blockquote>
+				<p><b><font size="4">Webif</font><sup><font size="4">2</font><br>
+				</sup>Last Release</b>: Milestone 2.5</p>
+				<p>For every Milestone there are countless updates, so this is 
+				far from a comprehensive list of changes and planned changes. 
+				However, it does give some idea of what our development plan is.</p>
+				<p>Of course, this table only shows the release we have planned 
+				in the immediate future.</p>
+				<table border="0" width="90%" id="table6">
+					<tr>
+						<td width="131" bgcolor="#FF6A59"><b>Milestone 1</b></td>
+						<td width="203" bgcolor="#FF6A59"><b>Milestone 2</b></td>
+						<td width="208" bgcolor="#FF6A59"><b>Milestone 2.5</b></td>
+						<td width="149" bgcolor="#FFBEB7"><b>Milestone 3</b></td>
+						<td bgcolor="#FFBEB7"><b>Milestone 4</b></td>
+					</tr>
+					<tr>
+						<td width="131" bgcolor="#FF6A59" height="20">Oct. 2006</td>
+						<td width="203" bgcolor="#FF6A59" height="20">
+				<font face="Verdana">
+						Nov. 2006</font></td>
+						<td width="208" bgcolor="#FF6A59" height="20">
+						<font face="Verdana">
+						Dec. 2006</font></td>
+						<td width="149" bgcolor="#FFBEB7" height="20">
+						<font face="Verdana">
+						Jan. 2007<sup><font size="2">*</font></sup></font></td>
+						<td bgcolor="#FFBEB7" height="20">Feb<font face="Verdana">. 
+						2007<sup><font size="2">*</font></sup></font></td>
+					</tr>
+					<tr>
+						<td width="131">First public stable build</td>
+						<td width="203">Many new pages</td>
+						<td width="208">Some new pages</td>
+						<td width="149">SSL support</td>
+						<td>Kamikaze support</td>
+					</tr>
+					<tr>
+						<td width="131" height="21">&nbsp;</td>
+						<td width="203" height="21">Polishing and fixes</td>
+						<td width="208" height="21">Better theme support</td>
+						<td height="21" width="149">Remote mgt</td>
+						<td height="21">&nbsp;</td>
+					</tr>
+					<tr>
+						<td width="131">&nbsp;</td>
+						<td width="203">&nbsp;</td>
+						<td width="208">Better language support</td>
+						<td width="149">&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td width="131">&nbsp;</td>
+						<td width="203">&nbsp;</td>
+						<td width="208"><font face="Verdana">Polishing and fixes</font></td>
+						<td width="149">&nbsp;</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td width="131" height="22">&nbsp;</td>
+						<td width="203" height="22">&nbsp;</td>
+						<td width="208" height="22">&nbsp;</td>
+						<td width="149" height="22">&nbsp;</td>
+						<td height="22">&nbsp;</td>
+					</tr>
+				</table>
+				<p><font size="2">* Future dates are estimates. The actual release may be before 
+				or after that date.</font></p>
 				<p>&nbsp;</p>
 			</blockquote>
 			<p><font size="5" color="#666699" face="Verdana"><b>
@@ -337,19 +529,10 @@ install and use X-Wrt on your router:</font></p>
 				<p>To make the webif work with Kamikaze we therefore have to 
 				work with this new configuration system. The good news is our 
 				webif already supports UCI. Some pages, like the QoS page, use 
-				the UCI system entirely. To finalize support for Kamikaze we 
-				simply have to take the remaining code that utilizes NVRAM and 
-				either write new code or write a translation layer to convert 
-				NVRAM to and from UCI configuration files. The end solution may 
-				be a combination of both.</p>
-				<p>While some developers not approve of us maintaining support for White 
-				Russian, usually because they don't want to make the extra 
-				effort, we believe it is important to continue to support the 
-				only stable branch of OpenWrt released at the time of this 
-				writing. White Russian will be around for many years and the 
-				overhead required in supporting both Kamikaze and White Russian 
-				is minimal compared to the rewards.</p>
-				<p><i>We hope to have basic Kamikaze support by the end of 2006.</i></p>
+				the UCI system entirely.</p>
+				<p>More and more pages utilize UCI and support kamikaze.<i> </i>
+				We hope to have basic Kamikaze support by the end of 2006 and a 
+				stable image in the first quarter of 2007.</p>
 			</blockquote>
 			<p><font size="5" color="#666699" face="Verdana"><b><br>
 			<a name="commercial">Can I use X-Wrt 
@@ -357,18 +540,14 @@ install and use X-Wrt on your router:</font></p>
 			<blockquote>
 				<p><font face="Verdana">Yes, you can use X-Wrt in whatever way 
 				you like, providing you do not violate the terms of the GPL 
-				license agreement and any other licenses applicable. We can help 
-				you to rebrand the webif and tweak it to suit your needs. Some 
-				of our developers do contract work. If you are interested in 
-				using X-Wrt as part of a commercial venture, we'd love to hear 
-				about it. Email us at
-				<a href="mailto:jeremy@bitsum.com">jeremy@bitsum.com</a> to let 
-				us know what you are using X-Wrt for, or to inquire about webif 
-				related work.</font></p>
+				license agreement. We can even help 
+				you to rebrand the webif and tweak it to suit your needs. </font>
+				<a href="mailto:jeremy@bitsum.com?subject=X-Wrt in use">Email us</a> at to inquire about webif 
+				related contract work.</p>
 			</blockquote>
 			<p><br>
 			<br />
-			<font size="5" color="#666699"><b><a name="participate">Participate in X-Wrt</a></b></font></p>
+			<font size="5" color="#666699"><b><a name="participate">Participate</a></b></font></p>
 			<blockquote>
 				<p><font face="Verdana">We always need developers, testers, documentation writers, 
 			translators, and support personnel. Our project is truly OPEN and 
@@ -385,12 +564,13 @@ install and use X-Wrt on your router:</font></p>
 					<li>development</li>
 					<li>graphic artists</li>
 					<li>localization (translation)</li>
+					<li>documentation/wiki editors</li>
 					<li>user support</li>
-					<li>documentation writers<br>&nbsp;</li>
+					<li>proliferators<br>&nbsp;</li>
 				</ul>
 			</blockquote>
 			<p><font size="5" color="#666699" face="Verdana"><b>
-			<a name="support">Support X-Wrt</a></b></font></p>
+			<a name="support">Support</a></b></font></p>
 			<blockquote>
 				<p>We do not accept monetary donations 
 				because we have no project treasurer to account for those 
@@ -421,7 +601,7 @@ install and use X-Wrt on your router:</font></p>
 		<tr>
 			<td align="left">&nbsp;</td>
 		</tr>
-	</table>
+		</table>
 	<p><font face="Verdana">X-Wrt is a free, open-source project maintained by 
 	the community that uses it.<br>
 	All our work is licensed under the GPL.<br>
