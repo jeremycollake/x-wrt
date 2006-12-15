@@ -10,12 +10,12 @@ include $(TOPDIR)/rules.mk
 include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=madwifi
-PKG_VERSION:=0.9.2
+PKG_VERSION:=0.9.2.1
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=@SF/$(PKG_NAME)
-PKG_MD5SUM:=a75baacbe07085ddc5cb28e1fb43edbb
+PKG_MD5SUM:=bf5509fccd3852e22551826063b1b61e
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(KERNEL_BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -41,7 +41,7 @@ ifeq ($(ARCH),powerpc)
 endif
 
 BUS:=PCI
-ifneq ($(CONFIG_LINUX_2_4_AR531X),)
+ifneq ($(CONFIG_LINUX_2_6_AR531X),)
   BUS:=AHB
 endif
 ifneq ($(CONFIG_LINUX_2_6_ARUBA),)

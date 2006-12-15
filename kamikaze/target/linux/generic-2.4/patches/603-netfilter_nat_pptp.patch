@@ -1052,7 +1052,7 @@ diff -urN linux-2.4.29-old/net/ipv4/netfilter/ip_nat_core.c linux-2.4.29-dev/net
 diff -urN linux-2.4.29-old/net/ipv4/netfilter/ip_nat_pptp.c linux-2.4.29-dev/net/ipv4/netfilter/ip_nat_pptp.c
 --- linux-2.4.29-old/net/ipv4/netfilter/ip_nat_pptp.c	1970-01-01 01:00:00.000000000 +0100
 +++ linux-2.4.29-dev/net/ipv4/netfilter/ip_nat_pptp.c	2005-04-02 19:14:52.000000000 +0200
-@@ -0,0 +1,475 @@
+@@ -0,0 +1,482 @@
 +/*
 + * ip_nat_pptp.c	- Version 1.5
 + *
@@ -1341,8 +1341,12 @@ diff -urN linux-2.4.29-old/net/ipv4/netfilter/ip_nat_pptp.c linux-2.4.29-dev/net
 +		} else {
 +			DEBUGP("can't change expect\n");
 +		}
-+		ip_ct_gre_keymap_change(oldexp->proto.gre.keymap_orig, &t);
-+		ip_ct_gre_keymap_change(oldexp->proto.gre.keymap_reply, &inv_t);
++		if (oldexp->proto.gre.keymap_orig)
++			ip_ct_gre_keymap_change(oldexp->proto.gre.keymap_orig, 
++						&t);
++		if (oldexp->proto.gre.keymap_reply)
++			ip_ct_gre_keymap_change(oldexp->proto.gre.keymap_reply, 
++						&inv_t);
 +		break;
 +	case PPTP_IN_CALL_CONNECT:
 +		pcid = &pptpReq.iccon->peersCallID;
@@ -1374,6 +1378,9 @@ diff -urN linux-2.4.29-old/net/ipv4/netfilter/ip_nat_pptp.c linux-2.4.29-dev/net
 +		break;
 +	case PPTP_CALL_DISCONNECT_NOTIFY:
 +		pcid = &pptpReq.disc->callID;
++		break;
++	case PPTP_SET_LINK_INFO:
++		pcid = &pptpReq.setlink->peersCallID;
 +		break;
 +
 +	default:

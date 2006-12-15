@@ -54,6 +54,7 @@ enum {
 	WRT54G,
 	WRTSL54GS,
 	WRT54G3G,
+	WRT350N,
 	
 	/* ASUS */
 	WLHDD,
@@ -91,6 +92,12 @@ enum {
 
 	/* Belkin */
 	BELKIN_UNKNOWN,
+
+	/* Netgear */
+	WGT634U,
+
+	/* Trendware */
+	TEW411BRPP,
 };
 
 static struct platform_t __initdata platforms[] = {
@@ -166,6 +173,17 @@ static struct platform_t __initdata platforms[] = {
 			{ .name = "3g_green",	.gpio = 1 << 2, .polarity = NORMAL },
 			{ .name = "3g_blue",	.gpio = 1 << 3, .polarity = NORMAL },
 			{ .name = "3g_blink",	.gpio = 1 << 5, .polarity = NORMAL },
+		},
+	},
+	[WRT350N] = {
+		.name		= "Linksys WRT350N",
+		.buttons	= {
+			{ .name = "reset",	.gpio = 1 << 6 },
+			{ .name = "ses",	.gpio = 1 << 8 },
+		},
+		.leds		= {
+			{ .name = "power",	.gpio = 1 << 1, .polarity = NORMAL },
+			{ .name = "ses",	.gpio = 1 << 3, .polarity = REVERSE },
 		},
 	},
 	/* Asus */
@@ -416,6 +434,28 @@ static struct platform_t __initdata platforms[] = {
 			{ .name = "connected",	.gpio = 1 << 0, .polarity = NORMAL },
 		},
 	},
+	/* Netgear */
+	[WGT634U] = {
+		.name		= "Netgear WGT634U",
+		.buttons	= {
+			{ .name = "reset",	.gpio = 1 << 2 },
+		},
+		.leds		= {
+			{ .name = "power",	.gpio = 1 << 3, .polarity = REVERSE },
+		},
+	},
+	/* Trendware */
+	[TEW411BRPP] = {
+		.name           = "Trendware TEW411BRP+",
+		.buttons        = {
+			{ /* No usable buttons */ },
+		},
+		.leds           = {
+			{ .name = "power",      .gpio = 1 << 7, .polarity = NORMAL },
+			{ .name = "wlan",       .gpio = 1 << 1, .polarity = NORMAL },
+			{ .name = "bridge",     .gpio = 1 << 6, .polarity = NORMAL },
+		},
+	},
 };
 
 static struct platform_t __init *platform_detect(void)
@@ -427,6 +467,9 @@ static struct platform_t __init *platform_detect(void)
 	if (strncmp(getvar("pmon_ver"), "CFE", 3) == 0) {
 		/* CFE based - newer hardware */
 		if (!strcmp(boardnum, "42")) { /* Linksys */
+			if (!strcmp(boardtype, "0x478") && !strcmp(getvar("cardbus"), 1))
+				return &platforms[WRT350N];
+
 			if (!strcmp(boardtype, "0x0101") && !strcmp(getvar("boot_ver"), "v3.6"))
 				return &platforms[WRT54G3G];
 
@@ -502,11 +545,14 @@ static struct platform_t __init *platform_detect(void)
 			return &platforms[BUFFALO_UNKNOWN];
 	}
 
-
 	if (!strcmp(getvar("CFEver"), "MotoWRv203") ||
 		!strcmp(getvar("MOTO_BOARD_TYPE"), "WR_FEM1")) {
 
 		return &platforms[WR850GV2V3];
+	}
+
+	if (!strcmp(boardnum, "44")) {  /* Trendware TEW-411BRP+ */
+		return &platforms[TEW411BRPP];
 	}
 
 	/* not found */
@@ -555,6 +601,8 @@ static irqreturn_t button_handler(int irq, void *dev_id, struct pt_regs *regs)
 	gpio_intpolarity(platform.button_mask, in);
 	changed = platform.button_polarity ^ in;
 	platform.button_polarity = in;
+
+	changed &= ~gpio_outen(0, 0);
 
 	for (b = platform.buttons; b->name; b++) { 
 		struct event_t *event;

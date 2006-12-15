@@ -66,6 +66,7 @@ setup_interface() {
 	local iface="$1"
 	local config="$2"
 	local proto
+	local macaddr
 
 	[ -n "$config" ] || {
 		config=$(find_config "$iface")
@@ -76,7 +77,8 @@ setup_interface() {
 	config_get iftype "$config" type
 	
 	ifconfig "$iface" 2>/dev/null >/dev/null && {
-		# make sure the interface is removed from any existing bridge
+		# make sure the interface is removed from any existing bridge and brought down
+		ifconfig "$iface" down
 		unbridge "$iface"
 	}
 
@@ -101,7 +103,8 @@ setup_interface() {
 	
 	# Interface settings
 	config_get mtu "$config" mtu
-	$DEBUG ifconfig "$iface" ${mtu:+mtu $mtu} up
+	config_get macaddr "$config" macaddr
+	$DEBUG ifconfig "$iface" ${macaddr:+hw ether "$macaddr"} ${mtu:+mtu $mtu} up
 
 	pidfile="/var/run/$iface.pid"
 	case "$proto" in
@@ -115,6 +118,7 @@ setup_interface() {
 			config_get dns "$config" dns
 			
 			$DEBUG ifconfig "$iface" "$ipaddr" netmask "$netmask"
+			$DEBUG ifconfig "$iface" inet6 add "$ip6addr" 
 			[ -z "$gateway" ] || route add default gw "$gateway"
 			[ -z "$dns" -o -f /tmp/resolv.conf ] || {
 				for ns in $dns; do
