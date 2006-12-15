@@ -136,7 +136,6 @@ uci_commit() {
 			uniq "/tmp/.uci/$PACKAGE_BASE.new" > "$CONFIG_FILENAME"
 			rm -f "/tmp/.uci/$PACKAGE_BASE" "/tmp/.uci/$PACKAGE_BASE.new"
 		}
-		cat "/tmp/.uci/$PACKAGE_BASE.new" "/tmp/.uci/$PACKAGE_BASE"
 	)
 	lock -u "/tmp/.uci/$PACKAGE_BASE.lock"
 }
