@@ -23,7 +23,7 @@ uci_load() {
 	config_load "$PACKAGE"
 	local PACKAGE_BASE="$(basename "$PACKAGE")"
 	[ -f "/tmp/.uci/${PACKAGE_BASE}" ] && {
-		. "/tmp/.uci/${PACKAGE_BASE}" 2>/dev/null >/dev/null
+		. "/tmp/.uci/${PACKAGE_BASE}"
 		config_cb
 	}
 }
@@ -127,12 +127,8 @@ uci_commit() {
 			return 0
 		}
 		
-<<<<<<< .mine
-		config_load "$PACKAGE" && CONFIG_FILENAME="$ROOT/etc/config/$PACKAGE_BASE"
-=======
 		config_load "$PACKAGE"
 		CONFIG_FILENAME="${CONFIG_FILENAME:-$ROOT/etc/config/$PACKAGE_BASE}"
->>>>>>> .r1877
 		uci_do_update "$CONFIG_FILENAME" "$updatestr" > "/tmp/.uci/$PACKAGE_BASE.new" && {
 			mv -f "/tmp/.uci/$PACKAGE_BASE.new" "$CONFIG_FILENAME" && \
 			rm -f "/tmp/.uci/$PACKAGE_BASE"
