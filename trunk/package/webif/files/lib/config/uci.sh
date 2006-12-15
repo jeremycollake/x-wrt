@@ -1,9 +1,8 @@
 #!/bin/sh
 # Shell script defining macros for manipulating config files
 #
-# Copyright (C) 2006 by Fokus Fraunhofer <carsten.tittel@fokus.fraumhofer.de>
+# Copyright (C) 2006 by Fokus Fraunhofer <carsten.tittel@fokus.fraunhofer.de>
 # Copyright (C) 2006 by Felix Fietkau <nbd@openwrt.org>
-# comments threw in by Jeremy Collake <jeremy@bitsum.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -19,53 +18,16 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-#
-# How the UCI system works:
-#
-#  Each package has a configuration file in standard uci format stored in
-#  /etc/config/. The configuration files are named after the base name of 
-#  their owner packages, i.e. for 'qos' package the configuration file is
-#  /etc/config/qos.
-#
-#  Changes to UCI config files are done by first saving changes to a 
-#  temporary file in /tmp/.uci/ that is named the same as the configuration 
-#  file it pertains to, i.e. /tmp/.uci/qos. The uci_add and other functions
-#  will save changes to this intermediate area. This intermediate file is
-#  a script containing function calls to adjust the uci configuration.
-# 
-#  The uci_load function will load config files and then any uncommitted
-#  changes found in /tmp/.uci. Therefore, when working with config files
-#  uncomitted changes are visible as long as you use this function.
-# 
-#  One commits pending changes by calling uci_commit. This function will
-#  write changes found in /tmp/.uci to the pertainent package configuration 
-#  file, then delete the temporary file in /tmp/.uci if successful.
-#
-#
-
-###########################################################################
-# uci_load(package)
-#
-#  This function loads config given as $1 into shell variables named 
-#   CONFIG_group_variable=value
-#  This function DOES load pending changes that haven't been committed.
-###########################################################################
 uci_load() {
-	local PACKAGE="$1"			
+	local PACKAGE="$1"
 	config_load "$PACKAGE"
 	local PACKAGE_BASE="$(basename "$PACKAGE")"
-	[ -f "/tmp/.uci/${PACKAGE_BASE}" ] && {		
-		. "/tmp/.uci/${PACKAGE_BASE}"
+	[ -f "/tmp/.uci/${PACKAGE_BASE}" ] && {
+		. "/tmp/.uci/${PACKAGE_BASE}" 2>/dev/null >/dev/null
 		config_cb
 	}
 }
 
-
-###########################################################################
-# uci_do_update(filename, update)
-#
-#  
-###########################################################################
 uci_do_update() {
 	local FILENAME="$1"
 	local UPDATE="$2"
@@ -78,11 +40,6 @@ BEGIN {
 EOF
 }
 
-###########################################################################
-# uci_add_update(filename, update)
-#
-#
-###########################################################################
 uci_add_update() {
 	local PACKAGE="$1"
 	local UPDATE="$2"
@@ -93,11 +50,6 @@ uci_add_update() {
 	echo "$UPDATE" >> "/tmp/.uci/${PACKAGE_BASE}"
 }
 
-###########################################################################
-# uci_set(package, config_group, option, value)
-#
-#  Set a particular option value.
-###########################################################################
 uci_set() {
 	local PACKAGE="$1"
 	local CONFIG="$2"
@@ -111,11 +63,6 @@ uci_set() {
 	) || uci_add_update "$PACKAGE" "CONFIG_SECTION='$CONFIG'${N}option '$OPTION' '$VALUE'"
 }
 
-###########################################################################
-# uci_add(package, type, config_group)
-#
-#  Add a new config group.
-###########################################################################
 uci_add() {
 	local PACKAGE="$1"
 	local TYPE="$2"
@@ -124,11 +71,6 @@ uci_add() {
 	uci_add_update "$PACKAGE" "config '$TYPE' '$CONFIG'"
 }
 
-###########################################################################
-# uci_rename(package, config_group, new_config_group)
-#
-#
-###########################################################################
 uci_rename() {
 	local PACKAGE="$1"
 	local CONFIG="$2"
@@ -137,11 +79,6 @@ uci_rename() {
 	uci_add_update "$PACKAGE" "config_rename '$CONFIG' '$VALUE'"
 }
 
-###########################################################################
-# uci_remove(package, config_group, option)
-#
-#
-###########################################################################
 uci_remove() {
 	local PACKAGE="$1"
 	local CONFIG="$2"
@@ -154,11 +91,6 @@ uci_remove() {
 	fi
 }
 
-###########################################################################
-# uci_commit(package)
-#
-#
-###########################################################################
 uci_commit() {
 	local PACKAGE="$1"
 	local PACKAGE_BASE="$(basename "$PACKAGE")"
@@ -185,7 +117,6 @@ uci_commit() {
 			append updatestr "config = update_config(config, \"-$1\")" "$N"
 		}
 		
-		# now execute the change script
 		. "/tmp/.uci/$PACKAGE_BASE"
 
 		# completely disable handlers so that they don't get in the way
@@ -196,9 +127,12 @@ uci_commit() {
 			return 0
 		}
 		
-		config_load "$PACKAGE" #|| CONFIG_FILENAME="$ROOT/etc/config/$PACKAGE_BASE"
-		# temporary fix since CONFIG_FILENAME isn't set in config_load
-		CONFIG_FILENAME="$ROOT/etc/config/$PACKAGE_BASE" 
+<<<<<<< .mine
+		config_load "$PACKAGE" && CONFIG_FILENAME="$ROOT/etc/config/$PACKAGE_BASE"
+=======
+		config_load "$PACKAGE"
+		CONFIG_FILENAME="${CONFIG_FILENAME:-$ROOT/etc/config/$PACKAGE_BASE}"
+>>>>>>> .r1877
 		uci_do_update "$CONFIG_FILENAME" "$updatestr" > "/tmp/.uci/$PACKAGE_BASE.new" && {
 			mv -f "/tmp/.uci/$PACKAGE_BASE.new" "$CONFIG_FILENAME" && \
 			rm -f "/tmp/.uci/$PACKAGE_BASE"
@@ -206,3 +140,5 @@ uci_commit() {
 	)
 	lock -u "/tmp/.uci/$PACKAGE_BASE.lock"
 }
+
+
