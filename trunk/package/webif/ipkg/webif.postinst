@@ -49,7 +49,10 @@ AddRepository()
 	# $2=repourl
 	cat "${IPKG_INSTROOT}/etc/ipkg.conf" | grep -q "$2"
 	[ "$?" != "0" ] && {
-		echo "src $1 $2" >> "${IPKG_INSTROOT}/etc/ipkg.conf"
+		local ltmp=$(mktemp "/tmp/.webif-XXXXXX")
+		echo "src $1 $2" >> "$ltmp"
+		cat "${IPKG_INSTROOT}/etc/ipkg.conf" >> "$ltmp"
+		mv -f "$ltmp" "${IPKG_INSTROOT}/etc/ipkg.conf"
 		IPKG_UPDATE_NEEDED="1"
 	}
 }
