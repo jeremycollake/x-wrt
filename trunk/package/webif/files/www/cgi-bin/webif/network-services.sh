@@ -27,8 +27,11 @@ uci_load "upnpd"
 
 ipkg_listinst=$(ipkg list_installed)
 upnp_installed="0"
-echo "$ipkg_listinst" | grep miniupnpd >> /dev/null
+echo "$ipkg_listinst" | grep -q "miniupnpd"
 equal "$?" "0" && upnp_installed="1"
+echo "$ipkg_listinst" | grep -q "linux-igd"
+equal "$?" "0" && upnp_installed="1"
+
 # check to see if user has old nvram based miniupnp package
 # todo: remove this check after a while, assuming everyone got new one
 exists "/etc/init.d/S95miniupnpd" && ! grep -iq "uci.sh" "/etc/init.d/S95miniupnpd" && {
@@ -40,9 +43,17 @@ exists "/etc/init.d/S95miniupnpd" && ! grep -iq "uci.sh" "/etc/init.d/S95miniupn
 EOF
 }
 
-if ! empty "$FORM_install_upnp"; then
-	echo "Installing UPNP package ...<pre>"	
+if ! empty "$FORM_install_miniupnp"; then
+	echo "Installing miniUPNPd package ...<pre>"		
 	install_package miniupnpd
+	uci_set "upnpd" "general" "enable" "1"
+	echo "</pre>"	
+fi
+
+if ! empty "$FORM_install_linuxigd"; then
+	echo "Installing linux-igd UPNPd package ...<pre>"		
+	install_package http://ftp.berlios.de/pub/xwrt/packages/libupnp_1.2.1a_mipsel.ipk
+	install_package http://ftp.berlios.de/pub/xwrt/openwrt/packages/linux-igd_1.0.1.ipk
 	uci_set "upnpd" "general" "enable" "1"
 	echo "</pre>"	
 fi
@@ -107,10 +118,6 @@ EOF
 
 #####################################################################
 
-echo "$ipkg_listinst" | grep linux-igd >> /dev/null
-if equal "$?" "0"; then
-	echo "<div class=\"warning\">You are using an old upnpd. We now recommend to use miniupnpd. To uninstall your old own remove the 'linux-igd' and 'libupnp' packages.</div>"
-else
 if equal "$upnp_installed" "1" ; then
 	install_upnp_button="field|@TR<<UPNP Daemon>>
 	select|upnp_enable|$FORM_upnp_enable
@@ -127,14 +134,17 @@ if equal "$upnp_installed" "1" ; then
 	option|0|@TR<<Disabled>>
 	option|1|@TR<<Enabled>>"
 else
-	install_upnp_button="submit|install_upnp| Install UPNP daemon |"
-fi
+	install_miniupnp_button="field|@TR<<miniupnpd>>
+submit|install_miniupnp| @TR<<Install>> |"
+	install_linuxigd_button="field|@TR<<linux-igd>>
+submit|install_linuxigd| @TR<<Install>> |"
 fi
 
 display_form <<EOF
 onchange|modechange
 start_form|@TR<<UPNP>>
-$install_upnp_button
+$install_miniupnp_button
+$install_linuxigd_button
 end_form
 EOF
 
