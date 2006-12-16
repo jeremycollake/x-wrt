@@ -131,7 +131,7 @@ cat <<EOF
 		$upgrade_button		
 		</td>
 	</tr>
-<tr><td colspan="2"><input type="checkbox" $daily_checked value="1" name="check_daily" id="field_check_daily" />@TR<<Include daily builds when checking for update or installing latest webif<sup>2</sup>>></td>
+<tr><td colspan="2"><input type="checkbox" $daily_checked value="1" name="check_daily" id="field_check_daily" />@TR<<Include daily builds when checking for update to webif<sup>2</sup>>></td>
 </tr>
 </tbody>
 </table>
