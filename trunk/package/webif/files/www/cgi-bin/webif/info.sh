@@ -18,6 +18,10 @@ if is_kamikaze; then
 	[ $? != 0 ] && {
 		version_url="http://ftp.berlios.de/pub/xwrt/kamikaze/broadcom-2.4/"
 	}
+	uname -a |grep 2.6 |grep i586
+	[ $? != 0 ] && {
+		version_url="http://ftp.berlios.de/pub/xwrt/kamikaze/x86-2.6/"
+	}
 else
 	XWRT_BRANCH="trunk"
 	package_filename="webif_latest_stable.ipk"
