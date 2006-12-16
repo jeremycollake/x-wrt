@@ -25,12 +25,53 @@ header "Network" "Services" "@TR<<Services Configuration>>" ' onload="modechange
 load_settings services
 uci_load "upnpd"
 
+
+if ! empty "$FORM_install_miniupnp"; then
+	echo "@TR<<Installing>> miniUPNPd ...<pre>"		
+	install_package miniupnpd
+	uci_set "upnpd" "general" "enable" "1"
+	echo "</pre>"	
+fi
+
+if ! empty "$FORM_install_linuxigd"; then
+	echo "@TR<<Installing>> linux-igd ...<pre>"		
+	install_package http://ftp.berlios.de/pub/xwrt/packages/libupnp_1.2.1a_mipsel.ipk
+	install_package http://ftp.berlios.de/pub/xwrt/openwrt/packages/linux-igd_1.0.1.ipk
+	uci_set "upnpd" "general" "enable" "1"
+	echo "</pre>"	
+fi
+
+if ! empty "$FORM_remove_miniupnpd"; then
+	echo "@TR<<Removing>> miniUPNPd ...<pre>"		
+	remove_package miniupnpd
+	uci_set "upnpd" "general" "enable" "0"
+	echo "</pre>"	
+fi
+
+if ! empty "$FORM_remove_linuxigd"; then
+	echo "@TR<<Removing>> linux-igd UPNPd ...<pre>"		
+	remove_package libupnp
+	remove_package linux-igd
+	uci_set "upnpd" "general" "enable" "0"
+	echo "</pre>"	
+fi
+
 ipkg_listinst=$(ipkg list_installed)
 upnp_installed="0"
+
 echo "$ipkg_listinst" | grep -q "miniupnpd"
-equal "$?" "0" && upnp_installed="1"
+equal "$?" "0" && {
+	upnp_installed="1"
+	remove_upnpd_button="field|@TR<<Remove miniupnpd>>
+	submit|remove_miniupnpd| @TR<<Remove>> |"
+}
+
 echo "$ipkg_listinst" | grep -q "linux-igd"
-equal "$?" "0" && upnp_installed="1"
+equal "$?" "0" && {
+	upnp_installed="1"
+	remove_upnpd_button="field|@TR<<Remove linux-igd>>
+	submit|remove_linuxigd| @TR<<Remove>> |"
+}
 
 # check to see if user has old nvram based miniupnp package
 # todo: remove this check after a while, assuming everyone got new one
@@ -42,21 +83,6 @@ exists "/etc/init.d/S95miniupnpd" && ! grep -iq "uci.sh" "/etc/init.d/S95miniupn
 	end_form
 EOF
 }
-
-if ! empty "$FORM_install_miniupnp"; then
-	echo "Installing miniUPNPd package ...<pre>"		
-	install_package miniupnpd
-	uci_set "upnpd" "general" "enable" "1"
-	echo "</pre>"	
-fi
-
-if ! empty "$FORM_install_linuxigd"; then
-	echo "Installing linux-igd UPNPd package ...<pre>"		
-	install_package http://ftp.berlios.de/pub/xwrt/packages/libupnp_1.2.1a_mipsel.ipk
-	install_package http://ftp.berlios.de/pub/xwrt/openwrt/packages/linux-igd_1.0.1.ipk
-	uci_set "upnpd" "general" "enable" "1"
-	echo "</pre>"	
-fi
 
 if empty "$FORM_submit"; then
 	# initialize all defaults
@@ -119,7 +145,7 @@ EOF
 #####################################################################
 
 if equal "$upnp_installed" "1" ; then
-	install_upnp_button="field|@TR<<UPNP Daemon>>
+	primary_upnpd_form="field|@TR<<UPNP Daemon>>
 	select|upnp_enable|$FORM_upnp_enable
 	option|0|@TR<<Disabled>>
 	option|1|@TR<<Enabled>>
@@ -132,19 +158,26 @@ if equal "$upnp_installed" "1" ; then
 	field|@TR<<Log Debug Output>>
 	select|upnpd_log_output|$FORM_upnpd_log_output
 	option|0|@TR<<Disabled>>
-	option|1|@TR<<Enabled>>"
+	option|1|@TR<<Enabled>>
+	$remove_upnpd_button
+	helpitem|Remove UPNPd
+	helptext|HelpText remove_upnpd_help#If you have problems you can remove your current UPNPd and try the other one to see if it works better for you."
 else
 	install_miniupnp_button="field|@TR<<miniupnpd>>
 submit|install_miniupnp| @TR<<Install>> |"
 	install_linuxigd_button="field|@TR<<linux-igd>>
 submit|install_linuxigd| @TR<<Install>> |"
+	install_help="helpitem|Which UPNPd to choose
+helptext|HelPText install_upnpd_help#There are two UPNP daemons to choose from: miniupnpd and linux-igd. Try miniupnpd first, but it if does not work for you, then remove that package and try linux-igd."
 fi
 
 display_form <<EOF
 onchange|modechange
 start_form|@TR<<UPNP>>
+$primary_upnpd_form
 $install_miniupnp_button
 $install_linuxigd_button
+$install_help
 end_form
 EOF
 
