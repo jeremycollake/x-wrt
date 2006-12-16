@@ -44,7 +44,7 @@ fi
 if ! empty "$FORM_remove_miniupnpd"; then
 	echo "@TR<<Removing>> miniUPNPd ...<pre>"		
 	remove_package miniupnpd
-	uci_set "upnpd" "general" "enable" "0"
+	#uci_set "upnpd" "general" "enable" "0"
 	echo "</pre>"	
 fi
 
@@ -52,7 +52,7 @@ if ! empty "$FORM_remove_linuxigd"; then
 	echo "@TR<<Removing>> linux-igd UPNPd ...<pre>"		
 	remove_package libupnp
 	remove_package linux-igd
-	uci_set "upnpd" "general" "enable" "0"
+	#uci_set "upnpd" "general" "enable" "0"
 	echo "</pre>"	
 fi
 
