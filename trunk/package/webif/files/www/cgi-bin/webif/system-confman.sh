@@ -80,7 +80,7 @@ start_form|Install Configuration
 EOF
 	if [ -n "$dir" ] && [ -d $dir ] && \
 		[ -e "$dir/config.name" ] && [ -e "$dir/config.boardtype" ]; then
-			echo "<tr><td colspan=2>installing configuration<br><pre>"
+			echo "<tr><td colspan=2>installing configuration<br /><pre>"
 			cd $dir
 			for file in $(find etc); do
 				if [ -d $file ]; then
@@ -121,7 +121,7 @@ EOF
 	chkconfig)
 		if [ -n "$FORM_configfile" ] && [ -e $FORM_configfile ]; then
 			cat<<EOF
-<form method="GET" name="install" action="$SCRIPT_NAME">
+<form method="GET" name="install" action="$SCRIPT_NAME" />
 EOF
 			display_form <<EOF
 start_form|Install Configuration
@@ -139,7 +139,7 @@ EOF
 				bd=$(cat $tmp/config.boardtype)
 				dt=$(cat $tmp/config.date)
 				if [ "$bd" != $(nvram get boardtype) ]; then
-					echo "<tr><td colspan=2><font color=red>WARNING</font>: different board type (ours: $(nvram get boardtype), file: $bd)!</td></tr>"
+					echo "<tr><td colspan=2><strong class=warning>WARNING:</strong> different board type (ours: $(nvram get boardtype), file: $bd)!</td></tr>"
 				else
 					echo "<tr><td colspan=2>configuration looks good!</td></tr>"
 				fi
@@ -173,25 +173,22 @@ start_form|@TR<<Download Configuration>>
 EOF
 
 cat <<EOF
-<form method="GET" name="download" action="$SCRIPT_NAME">
-<input type="hidden" name="action" value="download">
-	<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
+<tr><td>
+<form method="get" name="download" action="$SCRIPT_NAME">
+<input type="hidden" name="action" value="download" />
+        <table style="width:80%;margin-left:0.5em">
 	<tbody>
 		<tr>
-			<td>@TR<<Name this configuration>></td>
+			<td style="width:50%">@TR<<Name this configuration>></td>
 			<td>
-				<input name="name" value="${FORM_name:-$(nvram get wan_hostname)}"/>
-			</td>
-		</tr>
-		<tr>
-			<td />
-			<td>
-			<input id="form_submit" type="submit" name="submit" value="@TR<<Download>>" />
+				<input name="name" value="${FORM_name:-$(nvram get wan_hostname)}" />
+				<input type="submit" name="download" value="@TR<<Download>>" />
 			</td>
 		</tr>
 	</tbody>
 	</table>
 </form>
+</td></tr>
 EOF
 
 display_form <<EOF
@@ -203,25 +200,22 @@ start_form|@TR<<Upload Configuration>>
 EOF
 
 cat<<EOF
-<form method="POST" name="instconfig" action="$SCRIPT_NAME" enctype="multipart/form-data">
-<input type="hidden" name="action" value="chkconfig">
-	<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
+<tr><td>
+<form method="post" name="instconfig" action="$SCRIPT_NAME" enctype="multipart/form-data">
+<input type="hidden" name="action" value="chkconfig" />
+	<table style="width:80%;margin-left:0.5em">
 	<tbody>
 		<tr>
-			<td>@TR<<Saved config.tgz file:>></td>
+			<td style="width:50%">@TR<<Saved config.tgz file:>></td>
 			<td>
-				<input type="file" name="configfile" />
-			</td>
-		</tr>
-		<tr>
-			<td />
-			<td>
-			<input id="form_submit" type="submit" name="submit" value="@TR<<Submit>>" />
+				<input type="file" name="configfile" /><br />
+				<input type="submit" name="submit" value="@TR<<Submit>>" />
 			</td>
 		</tr>
 	</tbody>
 	</table>
 </form>
+</td></tr>
 EOF
 
 display_form <<EOF
