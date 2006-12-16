@@ -3,6 +3,7 @@
 #
 # Copyright (C) 2006 by Fokus Fraunhofer <carsten.tittel@fokus.fraunhofer.de>
 # Copyright (C) 2006 by Felix Fietkau <nbd@openwrt.org>
+# Copyright (C) 2006 by Jeremy Collake <jeremy@bitsum.com> (very minor changes)
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -23,7 +24,7 @@ uci_load() {
 	config_load "$PACKAGE"
 	local PACKAGE_BASE="$(basename "$PACKAGE")"
 	[ -f "/tmp/.uci/${PACKAGE_BASE}" ] && {
-		. "/tmp/.uci/${PACKAGE_BASE}" 2>/dev/null >/dev/null
+		. "/tmp/.uci/${PACKAGE_BASE}"
 		config_cb
 	}
 }
@@ -128,11 +129,13 @@ uci_commit() {
 		}
 		
 		config_load "$PACKAGE"
+		# does CONFIG_FILENAME really *ever* get set anyway?
 		CONFIG_FILENAME="${CONFIG_FILENAME:-$ROOT/etc/config/$PACKAGE_BASE}"
-		uci_do_update "$CONFIG_FILENAME" "$updatestr" > "/tmp/.uci/$PACKAGE_BASE.new" && {
-			mv -f "/tmp/.uci/$PACKAGE_BASE.new" "$CONFIG_FILENAME" && \
-			rm -f "/tmp/.uci/$PACKAGE_BASE"
-		} 
+		uci_do_update "$CONFIG_FILENAME" "$updatestr" > "/tmp/.uci/$PACKAGE_BASE.new" && {	
+			# remove extraneous blank lines and put new confg file
+			uniq "/tmp/.uci/$PACKAGE_BASE.new" > "$CONFIG_FILENAME"
+			rm -f "/tmp/.uci/$PACKAGE_BASE" "/tmp/.uci/$PACKAGE_BASE.new"
+		}
 	)
 	lock -u "/tmp/.uci/$PACKAGE_BASE.lock"
 }
