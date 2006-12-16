@@ -22,6 +22,10 @@ while [ -z "$device_name" ]; do
                device_name="ASUS WL-500gp"
                break
         }
+        if [ "${uname -m}" = "i586" ]; then
+        	device_name="Generic x86"
+        	break
+        fi
 break
 done
 [ "$device_name" != "$CONFIG_general_device_name" ] && {
