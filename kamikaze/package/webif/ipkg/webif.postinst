@@ -119,7 +119,10 @@ ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/int2human"
 #ln -sf "${IPKG_INSTROOT}/lib/config/uci.new" "${IPKG_INSTROOT}/lib/config/uci.sh"
 
 # initialize ipkg.conf
-AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/kamikaze/packages"
+uname -a |grep 2.4 |grep mips
+[ $? != 0 ] && {
+AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/kamikaze/broadcom-2.4/packages"
+}
 
 
 # only run below on 'real' system (not image builder)
