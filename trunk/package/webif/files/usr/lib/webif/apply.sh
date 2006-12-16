@@ -126,6 +126,7 @@ reload_system() {
 
 reload_upnpd() {
 	echo '@TR<<Reloading>> @TR<<UPNPd>> ...'
+	killall miniupnpd upnpd 2>&- >&-
 	exists "/etc/init.d/S95miniupnpd" && /etc/init.d/S95miniupnpd
 	exists "/etc/init.d/S65upnpd" && {
 		/etc/init.d/S65upnpd stop 2>&- >&-
