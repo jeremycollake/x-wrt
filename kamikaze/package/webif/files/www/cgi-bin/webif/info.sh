@@ -15,6 +15,10 @@ if is_kamikaze; then
 	XWRT_BRANCH="kamikaze"
 	package_filename="kamikaze/webif_latest_stable.ipk"
 	version_url="http://ftp.berlios.de/pub/xwrt/kamikaze/"
+	uname -a |grep 2.4 |grep mips
+	[ $? != 0 ] && {
+		version_url="http://ftp.berlios.de/pub/xwrt/kamikaze/broadcom-2.4/"
+	}
 else
 	XWRT_BRANCH="trunk"
 	package_filename="webif_latest_stable.ipk"
