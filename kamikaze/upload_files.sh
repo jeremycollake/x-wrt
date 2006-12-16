@@ -7,14 +7,7 @@ export SCP_USER="$1"
 rm bin/packages/w?bf??e*
 chmod -R 775 bin/*
 chmod 775 build_mipsel/webif-0.3/ipkg/webif/www/.version
-echo "Uploading webif ..."
-scp \
-        bin/packages/web* \
-        $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/packages/
 echo "Uploading webif version info ..."
-scp \
-        build_mipsel/webif-0.3/ipkg/webif/www/.version \
-        $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/
 # for my personal shit
 if [ -d "/mnt/whale/xwrt" ]; then
         cp /mnt/whale/xwrt/xwrt.htm ht_docs
@@ -26,8 +19,11 @@ fi
 #       ht_docs/xwrt.asp \
 #       $SCP_USER@shell.berlios.de:/home/groups/xwrt/htdocs/
 
-ls bin/openwrt-x86-2.6*
+ls bin/openwrt-x86-2.6* >&- 2>&-
 [ $? = "0" ] && {
+scp \
+        build_i386/webif-0.3/ipkg/webif/www/.version \
+        $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/x86-2.6/
 echo "Uploading package repository ..."
 scp \
         bin/packages/* \
@@ -45,8 +41,11 @@ scp \
 #       bin/openwrt-x86-2.6* \
 #       $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/x86-2.6/images/
 }
-ls bin/openwrt-brcm-2.4*
+ls bin/openwrt-brcm-2.4* >&- 2>&-
 [ $? = "0" ] && {
+scp \
+        build_mipsel/webif-0.3/ipkg/webif/www/.version \
+        $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/broadcom-2.4/
 echo "Uploading package repository ..."
 scp \
         bin/packages/* \
