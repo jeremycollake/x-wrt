@@ -14,7 +14,10 @@ SHOW_BANNER=0	# set to show /etc/banner
 if is_kamikaze; then
 	XWRT_BRANCH="kamikaze"
 	package_filename="kamikaze/webif_latest_stable.ipk"
-	version_url="http://ftp.berlios.de/pub/xwrt/kamikaze/"
+	uname -a |grep 2.4 |grep mips
+	[ $? != 0 ] && {
+	version_url="http://ftp.berlios.de/pub/xwrt/kamikaze/broadcom-2.4/"
+	}
 else
 	XWRT_BRANCH="trunk"
 	package_filename="webif_latest_stable.ipk"
@@ -131,7 +134,7 @@ cat <<EOF
 		$upgrade_button		
 		</td>
 	</tr>
-<tr><td colspan="2"><input type="checkbox" $daily_checked value="1" name="check_daily" id="field_check_daily" />@TR<<Include daily builds when checking for update to webif<sup>2</sup>>></td>
+<tr><td colspan="2"><input type="checkbox" $daily_checked value="1" name="check_daily" id="field_check_daily" />@TR<<Include daily builds when checking for update or installing latest webif<sup>2</sup>>></td>
 </tr>
 </tbody>
 </table>
