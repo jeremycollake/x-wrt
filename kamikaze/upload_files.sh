@@ -6,7 +6,6 @@ fi
 export SCP_USER="$1"
 rm bin/packages/w?bf??e*
 chmod -R 775 bin/*
-chmod 775 build_mipsel/webif-0.3/ipkg/webif/www/.version
 echo "Uploading webif version info ..."
 # for my personal shit
 if [ -d "/mnt/whale/xwrt" ]; then
@@ -19,8 +18,9 @@ fi
 #       ht_docs/xwrt.asp \
 #       $SCP_USER@shell.berlios.de:/home/groups/xwrt/htdocs/
 
-ls bin/openwrt-x86-2.6* >&- 2>&-
+ls bin/openwrt-x86-2.6* >/dev/null 2>&-
 [ $? = "0" ] && {
+chmod 775 build_i386/webif-0.3/ipkg/webif/www/.version
 scp \
         build_i386/webif-0.3/ipkg/webif/www/.version \
         $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/x86-2.6/
@@ -41,8 +41,9 @@ scp \
 #       bin/openwrt-x86-2.6* \
 #       $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/x86-2.6/images/
 }
-ls bin/openwrt-brcm-2.4* >&- 2>&-
+ls bin/openwrt-brcm-2.4* >/dev/null 2>&-
 [ $? = "0" ] && {
+chmod 775 build_mipsel/webif-0.3/ipkg/webif/www/.version
 scp \
         build_mipsel/webif-0.3/ipkg/webif/www/.version \
         $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/broadcom-2.4/
