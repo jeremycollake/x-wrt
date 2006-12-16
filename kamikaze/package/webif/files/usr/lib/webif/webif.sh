@@ -152,7 +152,7 @@ header() {
 		short_status_frame="<div id=\"short-status\">
 						<h3><strong>Status:</strong></h3>
 						<ul>
-							<li><strong>$_firmware_name $_firmware_version </strong></li> </strong></li>
+							<li><strong>$_firmware_name $_firmware_version</strong></li>
 							<li><strong>@TR<<Host>>:</strong> $_hostname</li>
 							<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
 							<li><strong>@TR<<Load>>:</strong> $_loadavg</li>
@@ -188,7 +188,6 @@ Pragma: no-cache
 		<script type="text/javascript"> colorize(); </script>
 
 	<div id="container">
-	  <div id="overDiv" style="position:absolute; visibility:hidden; z-index:1000;"></div>
 		<div id="header">
 					<div class="openwrt-title"></div>
 					$short_status_frame
@@ -247,8 +246,7 @@ EOF
 		<td><input type="password" name="passwd2" /></td>
 	</tr>
 	<tr>
-		<td />
-		<td><input type="submit" name="action" value="@TR<<Set>>" /></td>
+		<td colspan="2"><input type="submit" name="action" value="@TR<<Set>>" /></td>
 	</tr>
 </table>
 </form>
@@ -290,7 +288,8 @@ footer() {
 	X-Wrt
 	<div id="footer-sublogo">@TR<<making_usable#End user extensions for OpenWrt>></div>
 	</div>			
-    </div></body>
+    </div>
+</body>
 </html>
 EOF
 }
