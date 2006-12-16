@@ -332,6 +332,10 @@ END {
 	print "<div class=\\"helpitem\\">@TR<<Forwarding a port range>>:</div>"
 	print "<div class=\\"helptext\\">@TR<<firewall_help_fw_portrange|If you would like to forward ports 2000-3000 TCP from the internet to a local computer at 192.168.100.1, it might look like below:>></div>"
 	print "<div class=\\"helptext\\">@TR<<firewall_help_fw_portrange_example|Destination ports: 2000-3000 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Target: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: &lt;blank&gt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protocol: TCP>></div>"
+	print "<div class=\\"helpitem\\">@TR<<Forwarding a port to a different port>>:</div>"
+	print "<div class=\\"helptext\\">@TR<<firewall_help_fw_portrange|If you would like to forward port 8888 TCP from the internet to 192.168.100.1 at port 80, it might look like below:>></div>"
+	#print "</div>"
+	print "<div class=\\"helptext\\">@TR<<firewall_help_fw_port_example|Destination ports: 8888 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Target: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: 80 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protocol: TCP>></div>"
 	print "<div class=\\"helpitem\\">@TR<<Firewall>>:</div>"
 	print "<div class=\\"helptext\\">@TR<<firewall_help_general|Here you can forward ports and more. If you wish to manually configure these instead, use '/etc/config/firewall', not '/etc/firewall.user'. Although either works, only the former is used by this page.>></div>"
 	print end_form(" ");
