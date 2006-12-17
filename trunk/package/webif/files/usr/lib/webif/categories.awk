@@ -19,7 +19,7 @@ END {
 	print "<div id=\"mainmenu\"><ul>"
 	
 	for (i = 1; i <= n; i++) {
-		if (sel == i) print "<li class=\"selected\"><a href=\"" f[c[i]] "\">@TR<<" c[i] ">>&nbsp;</a></li>"
+		if (sel == i) print "<li class=\"selected\"><a href=\"" f[c[i]] "\">@TR<<" c[i] ">></a></li>"
 		else {
 			if (c[i] == "-") {
 				print "<li class=\"seperator\">-</li>"	
