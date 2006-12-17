@@ -18,7 +18,7 @@ install_package() {
 	# if package is not found, and it isn't a URL, then it'll
 	# try an 'ipkg update' to see if it can locate it. Does
 	# emit output to std devices.
-	ipkg install "$1" -force-overwrite
+	ipkg install "$1" -force-overwrite -force-defaults
 	! equal "$?" "0" &&
 	{
 		echo "$1" | grep "://" >> /dev/null
