@@ -2,6 +2,7 @@
 # This file includes all functions applicable to
 # package management.
 #
+# (c) 2006 Jeremy Collake - X-Wrt Project
 #
 #
 
@@ -25,7 +26,7 @@ install_package() {
 		! equal "$?" "0" && {
 			# wasn't a URL, so update
 			ipkg update
-			ipkg install "$1" -force-overwrite  -force-defaults | uniq
+			ipkg install "$1" -force-overwrite -force-defaults | uniq
 		}
 	}
 }
