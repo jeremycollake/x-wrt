@@ -21,11 +21,11 @@ submit|reinstall_ez| @TR<<Reinstall EZ-IPUPDATE>>
 end_form
 EOF
 }
-}
 
 ! empty "$FORM_reinstall_ez" && {
 	echo "@TR<<Please wait>> ...<br />"
 	install_package "http://ftp.berlios.de/pub/xwrt/packages/ez-ipupdate_3.0.11b8-2_mipsel.ipk"
+}
 }
 
 
