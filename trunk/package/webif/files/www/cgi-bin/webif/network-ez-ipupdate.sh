@@ -2,10 +2,30 @@
 <?
 ddns_dir="/etc/ez-ipupdate"
 ddns_msg="$ddns_dir/ez-ipupdate.msg"
-
 . /usr/lib/webif/webif.sh
 
+header "Network" "DynDNS" "@TR<<DynDNS Settings>>" '' "$SCRIPT_NAME"
+has_pkgs ez-ipupdate
+
 load_settings "ezipupdate"
+
+# test for broken ez-ipupdate package as found in OpenWrt's RC6 official repository
+# if found, give an option to install proper one from X-Wrt repository.
+cat "/etc/hotplug.d/iface/10-ez-ipupdate" | grep -iq "include /lib/network"
+equal "$?" "0" && {
+	echo "<div class=\"warning\">@TR<<broken_ezip|You have a partially broken ez-ipupdate package, as found in OpenWrt's official RC6 repository. To install a fixed copy of the package from X-Wrt's repository, press the button below>>.</div>"
+display_form <<EOF
+start_form
+submit|reinstall_ez| @TR<<Reinstall EZ-IPUPDATE>> 
+end_form
+EOF
+}
+
+! empty "$FORM_reinstall_ez" && {
+	echo "@TR<<Please wait>> ...<br />"
+	install_package "http://ftp.berlios.de/pub/xwrt/packages/ez-ipupdate_3.0.11b8-2_mipsel.ipk"
+}
+
 
 # todo add javascript /enable/disable for mx and wildcard / connection type
 #ezip            { "server", "user", "address", "wildcard", "mx", "url", "host", NULL };
@@ -71,10 +91,6 @@ int|FORM_ddns_max_interval|Max Interval (sec)|min=86400 max=2196000|$FORM_ddns_m
 	save_setting "ezipupdate" ddns_max_interval $FORM_ddns_max_interval
 	}
 }
-
-header "Network" "DynDNS" "@TR<<DynDNS Settings>>" '' "$SCRIPT_NAME"
-
-has_pkgs ez-ipupdate
 
 #show message from last update
 #field|Connection Type (only for TZO)
