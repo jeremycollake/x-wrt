@@ -36,7 +36,7 @@ fi
 if ! empty "$FORM_install_linuxigd"; then
 	echo "@TR<<Installing>> linux-igd ...<pre>"		
 	install_package http://ftp.berlios.de/pub/xwrt/packages/libupnp_1.2.1a_mipsel.ipk
-	install_package http://ftp.berlios.de/pub/xwrt/openwrt/packages/linux-igd_1.0.1.ipk
+	install_package http://ftp.berlios.de/pub/xwrt/packages/linux-igd_1.0.1.ipk
 	uci_set "upnpd" "general" "enable" "1"
 	echo "</pre>"	
 fi
