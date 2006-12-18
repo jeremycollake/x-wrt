@@ -26,7 +26,7 @@ scp \
         $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/x86-2.6/
 echo "Uploading package repository ..."
 scp \
-        bin/packages/* \
+        bin/packages/*i386* \
         $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/x86-2.6/packages/
 echo "Uploading X-Wrt patches ..."
 scp \
@@ -49,7 +49,7 @@ scp \
         $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/broadcom-2.4/
 echo "Uploading package repository ..."
 scp \
-        bin/packages/* \
+        bin/packages/*mipsel* \
         $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/broadcom-2.4/packages/
 echo "Uploading X-Wrt patches ..."
 scp \

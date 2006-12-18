@@ -19,7 +19,6 @@
 #
 
 header "Network" "Tweaks" "@TR<<Networking Tweaks>>" 'onload="modechange()"' "$SCRIPT_NAME"
-ShowNotUpdatedWarning
 
 ! empty "$FORM_submit" && {
 	validate <<EOF

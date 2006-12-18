@@ -13,101 +13,101 @@ include $(INCLUDE_DIR)/package.mk
 define Package/webif
   SECTION:=net
   CATEGORY:=Network
-  SUBMENU:=Webif
-  TITLE:=Webif
+  SUBMENU:=webif
+  TITLE:=An HTTP administrative console for OpenWrt.
   DESCRIPTION:=\
-	This package contains Webif^2
+	This package contains Webif^2, a web based administration console for OpenWrt.
   VERSION:=$(LINUX_VERSION) $(PKG_VERSION)-$(PKG_RELEASE)
 endef
 
 define Package/webif-lang-ca
 $(call Package/webif)
-  TITLE:=WEBIF-LANG-CA
+  TITLE:=Canadian language file for webif.
 endef
 
 define Package/webif-lang-cz
 $(call Package/webif)
-  TITLE:=WEBIF-LANG-CZ
+  TITLE:=Czech language file for webif.
 endef
 
 define Package/webif-lang-de
 $(call Package/webif)
-  TITLE:=WEBIF-LANG-DE
+  TITLE:=German language file for webif.
 endef
 
 define Package/webif-lang-dk
 $(call Package/webif)
-  TITLE:=WEBIF-LANG-DK
+  TITLE:=Danish language file for webif.
 endef
 
 define Package/webif-lang-ee
 $(call Package/webif)
-  TITLE:=WEBIF-LANG-EE
+  TITLE:=Estonian language file for webif.
 endef
 
 define Package/webif-lang-es
 $(call Package/webif)
-  TITLE:=WEBIF-LANG-ES
+  TITLE:=Spanish language file for webif.
 endef
 
 define Package/webif-lang-fr
 $(call Package/webif)
-  TITLE:=WEBIF-LANG-FR
+  TITLE:=French language file for webif.
 endef
 
 define Package/webif-lang-hr
 $(call Package/webif)
-  TITLE:=WEBIF-LANG-HR
+  TITLE:=Croatian language file for webif.
 endef
 
 define Package/webif-lang-hu
 $(call Package/webif)
-  TITLE:=WEBIF_LANG_HU
+  TITLE:=Hungarian language file for webif.
 endef
 
 define Package/webif-lang-it
 $(call Package/webif)
-  TITLE:=WEBIF-LANG-IT
+  TITLE:=wItalian language file for webif.
 endef
 
 define Package/webif-lang-nl
 $(call Package/webif)
-  TITLE:=WEBIF-LANG-NL
+  TITLE:=Dutch language file for webif.
 endef
 
 define Package/webif-lang-no
 $(call Package/webif)
-  TITLE:=WEBIF-LANG-NO
+  TITLE:=Norwegian language file for webif.
 endef
 
 define Package/webif-lang-pl
 $(call Package/webif)
-  TITLE:=WEBIF-LANG-PL
+  TITLE:=Polish language file for webif.
 endef
 
 define Package/webif-lang-pt
 $(call Package/webif)
-  TITLE:=WEBIF-LANG-PT
+  TITLE:=Portuguese language file for webif.
 endef
 
 define Package/webif-lang-ru
 $(call Package/webif)
-  TITLE:=WEBIF-LANG-RU
+  TITLE:=Russian language file for webif.
 endef
 
 define Package/webif-lang-se
 $(call Package/webif)
-  TITLE:=WEBIF-LANG-SE
+  TITLE:=Swedish language file for webif.
 endef
 
 define Package/webif-theme-zephyr
 $(call Package/webif)
-  TITLE:=WEBIF-THEME-ZEPHYR
+  TITLE:=Zephyr theme for webif^2.
 endef
 
 define Package/webif-theme-xwrt
 $(call Package/webif)
-  TITLE:=WEBIF-THEME-XWRT
+  TITLE:=Original theme for webif^2.
 endef
 
 define Build/Prepare
