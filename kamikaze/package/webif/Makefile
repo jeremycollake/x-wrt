@@ -100,6 +100,16 @@ $(call Package/webif)
   TITLE:=WEBIF-LANG-SE
 endef
 
+define Package/webif-theme-zephyr
+$(call Package/webif)
+  TITLE:=WEBIF-THEME-ZEPHYR
+endef
+
+define Package/webif-theme-xwrt
+$(call Package/webif)
+  TITLE:=WEBIF-THEME-XWRT
+endef
+
 define Build/Prepare
 	$(call Build/Prepare/Default)
 	$(CP) src/* $(PKG_BUILD_DIR)/
@@ -123,6 +133,7 @@ define Package/webif/install
 	$(CP) -a ./ipkg/webif.postinst $(1)/CONTROL/postinst
 	chmod -R 755 $(1)/*
 	rm -rf $(1)/usr/lib/webif/lang/
+	rm -rf $(1)/www/themes/zephyr/
 	rm -f $(1)/www/cgi-bin/webif/*.wip
 	./embed_rev.sh $(1)/www/.version \
 			$(1)/usr/lib/webif/webif.sh \
@@ -217,6 +228,17 @@ define Package/webif-lang-se/install
 	$(CP) -a ./files/usr/lib/webif/lang/se/common.txt $(1)/usr/lib/webif/lang/se/common.txt
 endef
 
+define Package/webif-theme-zephyr/install
+	mkdir -p $(1)/www/themes/zephyr/
+	$(CP) -a ./files/www/themes/zephyr/* $(1)/www/themes/zephyr/
+endef
+
+define Package/webif-theme-xwrt/install
+	mkdir -p $(1)/www/themes/xwrt/
+	$(CP) -a ./files/www/themes/xwrt/* $(1)/www/themes/xwrt/
+endef
+
+
 $(eval $(call BuildPackage,webif))
 $(eval $(call BuildPackage,webif-lang-ca))
 $(eval $(call BuildPackage,webif-lang-cz))
@@ -234,3 +256,5 @@ $(eval $(call BuildPackage,webif-lang-pl))
 $(eval $(call BuildPackage,webif-lang-pt))
 $(eval $(call BuildPackage,webif-lang-ru))
 $(eval $(call BuildPackage,webif-lang-se))
+$(eval $(call BuildPackage,webif-theme-zephyr))
+$(eval $(call BuildPackage,webif-theme-xwrt))
