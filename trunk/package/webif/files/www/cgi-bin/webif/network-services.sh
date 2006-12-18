@@ -22,9 +22,12 @@
 
 header "Network" "Services" "@TR<<Services Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
-load_settings services
 uci_load "upnpd"
 
+#uci_add() {
+#	local PACKAGE="$1"
+#	local TYPE="$2"
+#	local CONFIG="$3"
 
 if ! empty "$FORM_install_miniupnp"; then
 	echo "@TR<<Installing>> miniUPNPd ...<pre>"		
@@ -37,8 +40,13 @@ if ! empty "$FORM_install_linuxigd"; then
 	echo "@TR<<Installing>> linux-igd ...<pre>"		
 	install_package http://ftp.berlios.de/pub/xwrt/packages/libupnp_1.2.1a_mipsel.ipk
 	install_package http://ftp.berlios.de/pub/xwrt/packages/linux-igd_1.0.1.ipk
-	uci_set "upnpd" "general" "enable" "1"
-	echo "</pre>"	
+	# if config file doesn't exist, create it since it doesn't come with above pkg at present
+	! exists "/etc/config/upnpd" && {
+		uci_load "upnpd"
+		uci_add "upnpd" "settings" "general"
+		uci_set "upnpd" "general" "enable" "1"
+	}
+	echo "</pre>"
 fi
 
 if ! empty "$FORM_remove_miniupnpd"; then
