@@ -21,7 +21,6 @@ HANDLERS_config='
 	shape) reload_shape;;
 	pptp) reload_pptp;;
 	log) reload_log;;
-	upnpd) reload_upnpd;;
 	ezipupdate) reload_ezipupdate;;
 
 '
@@ -361,7 +360,8 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 	uci_commit "$package"
 	case "$package" in
 		"/tmp/.uci/qos") qos-start;;
-		"/tmp/.uci/webif") init_theme;;			
+		"/tmp/.uci/webif") init_theme;;
+		"/tmp/.uci/upnpd") reload_upnpd;;	
 	esac
 done
 
