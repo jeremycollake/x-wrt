@@ -56,13 +56,14 @@ empty "$FORM_remove_line" || update_dnsmasq del "$FORM_iface" "$FORM_line"
 		
 		# convert lease time to minutes
 		lease_int=$(echo "$FORM_dhcp_lease" | tr -d [a-z][A-Z])			
-		time_units=$(echo "$FORM_dhcp_lease" | tr -d [1-9])
+		time_units=$(echo "$FORM_dhcp_lease" | tr -d [0-9])
+		time_units=${time_units:-m}
 		case "$time_units" in
 			"h" | "H" ) let "FORM_dhcp_lease=$lease_int*60";;
 			"d" | "D" ) let "FORM_dhcp_lease=$lease_int*24*60";;
 			"s" | "S" ) let "FORM_dhcp_lease=$lease_int/60";;
 			"w" | "W" ) let "FORM_dhcp_lease=$lease_int*7*24*60";;
-			"m" | "M" | "" ) FORM_dhcp_lease="$lease_int";;  # minutes 			
+			"m" | "M" ) FORM_dhcp_lease="$lease_int";;  # minutes 			
 			*) FORM_dhcp_lease="$lease_int"; echo "<br />WARNING: Unknown suffix found on dhcp lease time: $FORM_dhcp_lease";;
 		esac					
 			
