@@ -24,11 +24,6 @@ header "Network" "Services" "@TR<<Services Configuration>>" ' onload="modechange
 
 uci_load "upnpd"
 
-#uci_add() {
-#	local PACKAGE="$1"
-#	local TYPE="$2"
-#	local CONFIG="$3"
-
 if ! empty "$FORM_install_miniupnp"; then
 	echo "@TR<<Installing>> miniUPNPd ...<pre>"		
 	install_package miniupnpd
