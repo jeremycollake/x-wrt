@@ -22,8 +22,8 @@ HANDLERS_config='
 	pptp) reload_pptp;;
 	log) reload_log;;
 	ezipupdate) reload_ezipupdate;;
-
 '
+
 HANDLERS_file='
 	hosts) rm -f /etc/hosts; mv $config /etc/hosts; killall -HUP dnsmasq ;;
 	ethers) rm -f /etc/ethers; mv $config /etc/ethers; killall -HUP dnsmasq ;;
