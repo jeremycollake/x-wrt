@@ -51,9 +51,9 @@ function installWebifMilestone2(form)
 				latest public release of OpenWrt - White Russian RC6. We also 
 				maintain backwards compatibility with OpenWrt White Russian RC5. 
 				Support of OpenWrt's upcoming Kamikaze firmware is
-				<a href="#kamikaze">coming soon</a>. Explore this page to learn 
+				coming soon. Explore this page to learn 
 				about our work, or just skip straight to
-				<a href="#Installation_Instructions">installing X-Wrt</a> and 
+				installing X-Wrt and 
 				see the fruits of our labor yourself.</font></p>
 				<p><b><font face="Verdana">Project Links:</font></b></p>
 				<blockquote>
@@ -67,6 +67,8 @@ function installWebifMilestone2(form)
 						<a href="http://www.bitsum.com/xwrt">Screenshots</a></font></li>
 						<li><font face="Verdana">
 						<a href="http://xwrt.berlios.de/forum">Forums</a></font></li>
+						<li><font face="Verdana">
+						<a href="http://xwrt.berlios.de/wiki/">Wiki</a></font></li>
 						<li><font face="Verdana">
 						<a href="mailto:jeremy@bitsum.com">Email</a></font></li>
 						<li><font face="Verdana"><a href="#x-wrt">IRC</a></font></li>
@@ -268,46 +270,6 @@ install and use X-Wrt on your router:</font></p>
 									WR-850G</a></li>
 								</ul>
 								</li>
-								<li>
-								<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/">
-								PPPOE Firmware Images</a><ul>
-									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-wrt54g-squashfs.bin">
-									WRT54G v1-v4 and WRT54GL</a></li>
-									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-wrt54g3g-squashfs.bin">
-									WRT54g3g</a></li>
-									<li>WRT54G v5-v6 (not yet available)</li>
-									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-wrt54gs-squashfs.bin">
-									WRT54GS v1-v3</a></li>
-									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-wrt54gs_v4-squashfs.bin">
-									WRT54GS v4</a></li>
-									<li>WRT54GS v5-v6 (not yet available)</li>
-									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-wrtsl54gs-squashfs.bin">
-									WRTSL54GS</a></li>
-									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-brcm-2.4-squashfs.trx">
-									WL-500g/d/p</a></li>
-									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-brcm-2.4-squashfs.trx">
-									WZR-HP-54GS</a></li>
-									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-brcm-2.4-squashfs.trx">
-									WHR-54GS</a></li>
-									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-we800g-squashfs.bin">
-									WE-800G</a></li>
-									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-wa840g-squashfs.bin">
-									WA-840G</a></li>
-									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pppoe/openwrt-wr850g-squashfs.bin">
-									WR-850G</a></li>
-								</ul>
-								</li>
 							</ul>
 						</blockquote>
 					</blockquote>
@@ -442,7 +404,7 @@ install and use X-Wrt on your router:</font></p>
 				However, it does give some idea of what our development plan is.</p>
 				<p>Of course, this table only shows the release we have planned 
 				in the immediate future.</p>
-				<table border="0" width="90%" id="table6">
+				<table border="1" width="90%" id="table6" bordercolor="#C0C0C0" style="border-collapse: collapse">
 					<tr>
 						<td width="131" bgcolor="#FF6A59"><b>Milestone 1</b></td>
 						<td width="203" bgcolor="#FF6A59"><b>Milestone 2</b></td>
