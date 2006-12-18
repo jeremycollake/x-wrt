@@ -27,10 +27,11 @@ is_bcm947xx && {
 	load_settings "system"
 	load_settings "webif"
 }
-uci_load "network"
+
+uci_load "webif"
 
 is_kamikaze && {
-	uci_load "webif"
+	uci_load "network"
 }
 
 #####################################################################
@@ -83,7 +84,7 @@ if empty "$FORM_submit"; then
 	}
 	
 	is_kamikaze && {
-	FORM_hostname="$CONFIG_wan_hostname)}"
+	FORM_hostname="$CONFIG_wan_hostname"
 	FORM_hostname="${FORM_hostname:-OpenWrt}"
 	#wait for ntpclient to be updated
 	#FORM_system_timezone="${FORM_system_timezone:-$(nvram get time_zone)}"
