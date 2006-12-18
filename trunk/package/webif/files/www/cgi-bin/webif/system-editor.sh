@@ -4,34 +4,6 @@
 
 header "System" "File Editor" "@TR<<File Editor>>" ''
 
-cat <<EOF
-<style><!--
-
-.c1 {
-	width: 8em;
-	font-weight: bold;
-}
-
-.fname {
-	padding-right: 3em;
-}
-
-.fsize {
-        padding-right: 3em;
-}
-        
-.c2 {
-	width: 3em;
-}
-
-textarea {
-	width: 100%;
-	height: 100%;
-}
-
---></style>
-EOF
-
 FORM_path="${FORM_path:-/}"
 cd "$FORM_path"
 FORM_path="$(pwd)"
