@@ -22,7 +22,7 @@ endef
 
 define Package/webif-lang-ca
 $(call Package/webif)
-  TITLE:=Canadian language file for webif.
+  TITLE:=Catalan language file for webif.
 endef
 
 define Package/webif-lang-cz
