@@ -152,6 +152,30 @@ for config in $(ls config-wifi-disable 2>&-); do
 	ifdown lan
 done
 
+# config-webif		Webif config
+for config in $(ls config-webif 2>&-); do
+	echo '@TR<<Applying>> @TR<<Webif settings>> ...'
+	for newlang in $(grep "language" "$config" |cut -d '"' -f2); do		
+		_tmpwebifconfig=$(mktemp "/tmp/.webif-XXXXXX")
+		touch "$_tmpwebifconfig"  # for to exist
+		exists "/etc/config/webif" && {
+			cat "/etc/config/webif" | sed /'lang='/d > "$_tmpwebifconfig"
+		}		
+		echo "lang=$newlang" >> "$_tmpwebifconfig"
+		mv "$_tmpwebifconfig" "/etc/config/webif"		
+		! equal "$newlang" "en" && {
+			# build URL for package
+			#  since the original webif may be installed to, have to make sure we get latest ver
+			webif_version=$(ipkg info webif | awk '/Version:/ { print $2 }' | sort -r | sed 2d)
+			xwrt_repo_url=$(cat /etc/ipkg.conf | grep X-Wrt | cut -d' ' -f3)
+			# always install language pack, since it may have been updated without package version change
+			ipkg install "${xwrt_repo_url}/webif-lang-${newlang}_${webif_version}_mipsel.ipk" -force-reinstall -force-overwrite | uniq
+		}
+	done
+	rm -f /tmp/.webif/config-webif
+	echo '@TR<<Done>>'
+done
+
 # config-conntrack	  Conntrack Config file
 # TODO: this must be updated to save settings to /etc/sysctl.conf. The sysctl utility only makes changes during
 #  this session.
@@ -172,9 +196,27 @@ for config in $(ls config-conntrack 2>&-); do
 done
 
 # config-theme
-for config in $(ls config-theme 2>&-); do
-	echo "This code out of date."
-done
+init_theme() {
+	echo '@TR<<Initializing theme ...>>'	
+	uci_load "webif"
+	newtheme="$CONFIG_theme_id"	
+	# if theme isn't present, then install it		
+	! exists "/www/themes/$newtheme/webif.css" && {
+		install_package "webif-theme-$newtheme"	
+	}
+	if ! exists "/www/themes/$newtheme/webif.css"; then
+		# if theme still not installed, there was an error
+		echo "@TR<<Error>>: @TR<<installing theme package>>."
+	else
+		# create symlink to new active theme if its not already set right
+		current_theme=$(ls /www/themes/active -l | cut -d '>' -f 2 | sed s/'\/www\/themes\/'//g)
+		! equal "$current_theme" "$newtheme" && {
+			rm /www/themes/active
+			ln -s /www/themes/$newtheme /www/themes/active
+		}
+	fi		
+	echo '@TR<<Done>>'
+}
 
 
 
@@ -238,6 +280,7 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 			echo '@TR<<Reloading>> @TR<<UPNPd>> ...'
 			killall openvpn >&- 2>&- <&-
 			/etc/rc.d/S??openvpn start
+		"/tmp/.uci/webif") init_theme;;
 	esac
 done
 
