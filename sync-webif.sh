@@ -49,11 +49,8 @@ synchronize_file "www/cgi-bin/webif/status-diag.sh"
 synchronize_file "www/cgi-bin/webif/status-leases.sh"
 synchronize_file "www/cgi-bin/webif/status-qos.sh"
 synchronize_file "www/cgi-bin/webif/status-usb.sh"
-<<<<<<< .mine
 synchronize_file "www/cgi-bin/webif/status-diag.sh"
-=======
 synchronize_file "www/cgi-bin/webif/status-wwaninfo.sh"
->>>>>>> .r1943
 synchronize_file "www/cgi-bin/webif/network-qos.sh"
 synchronize_file "www/cgi-bin/webif/network-services.sh"
 synchronize_file "www/cgi-bin/webif/network-firewall.sh"
