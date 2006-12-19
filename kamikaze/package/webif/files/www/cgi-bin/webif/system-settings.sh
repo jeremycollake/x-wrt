@@ -183,6 +183,14 @@ is_bcm947xx && {
 	fi
 	}
 
+	#####################################################################
+	# Initialize wait_time form
+	for wtime in $(seq 1 30); do
+		FORM_wait_time="$FORM_wait_time
+			option|$wtime"
+	done
+}
+
 #####################################################################
 # Initialize THEMES form
 #
@@ -218,14 +226,6 @@ done
 # sort list and remove dupes
 #
 THEMES=$(echo "$THEMES" | sort -u)
-
-#####################################################################
-# Initialize wait_time form
-	for wtime in $(seq 1 30); do
-		FORM_wait_time="$FORM_wait_time
-			option|$wtime"
-	done
-}
 
 dangerous_form_start=""
 dangerous_form_end=""
