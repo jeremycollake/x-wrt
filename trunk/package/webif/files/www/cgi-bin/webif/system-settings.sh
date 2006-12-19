@@ -12,6 +12,7 @@
 #   	Original webif developers -- todo
 #	Markus Wigge <markus@freewrt.org>
 #   	Jeremy Collake <jeremy.collake@gmail.com>
+#	Travis Kemen <kemen04@gmail.com>
 #
 # Major revisions:
 #
@@ -22,10 +23,16 @@
 # Configuration files referenced:
 #   none
 #
+is_bcm947xx && {
+	load_settings "system"
+	load_settings "webif"
+}
 
-load_settings "system"
-load_settings "webif"
 uci_load "webif"
+
+is_kamikaze && {
+	uci_load "network"
+}
 
 #####################################################################
 # defaults
@@ -37,7 +44,10 @@ uci_load "webif"
 #  to a limit of 250mhz. It also has a fixed divider, so sbclock
 #  frequencies are implied, and ignored if specified.
 #
-OVERCLOCKING_DISABLED="0" # set to 1 to disble OC support
+OVERCLOCKING_DISABLED="1" # set to 1 to disble OC support, we disable overclocking by default for kamikaze and only enable it for bcm947xx
+is_bcm947xx && {
+	OVERCLOCKING_DISABLED="0"
+}
 
 #####################################################################
 header "System" "Settings" "@TR<<System Settings>>" ' onload="modechange()" ' "$SCRIPT_NAME"
@@ -48,7 +58,6 @@ header "System" "Settings" "@TR<<System Settings>>" ' onload="modechange()" ' "$
 equal "$OVERCLOCKING_DISABLED" "0" && {
 	CPU_MODEL=$(sed -n "/cpu model/p" "/proc/cpuinfo")
 	CPU_VERSION=$(echo "$CPU_MODEL" | sed -e "s/BCM3302//" -e "s/cpu model//" -e "s/://")
-	CPU_VERSION=${CPU_VERSION:-unknown}
 	#echo "debug.model: $CPU_MODEL <br />"
 	#echo "debug.version: $CPU_VERSION <br />"
 }
@@ -66,17 +75,30 @@ fi
 # initialize forms
 if empty "$FORM_submit"; then
 	# initialize all defaults
+	! is_kamikaze && {	
 	FORM_hostname="${wan_hostname:-$(nvram get wan_hostname)}"
 	FORM_hostname="${FORM_hostname:-OpenWrt}"
 	FORM_system_timezone="${FORM_system_timezone:-$(nvram get time_zone)}"
 	FORM_system_timezone="${FORM_system_timezone:-""}"
 	FORM_ntp_server="${ntp_server:-$(nvram get ntp_server)}"
-	FORM_boot_wait="${boot_wait:-$(nvram get boot_wait)}"
-	FORM_boot_wait="${FORM_boot_wait:-off}"
-	FORM_wait_time="${wait_time:-$(nvram get wait_time)}"
-	FORM_wait_time="${FORM_wait_time:-1}"
-	FORM_clkfreq="${clkfreq:-$(nvram get clkfreq)}";
-	FORM_clkfreq="${FORM_clkfreq:-200}"
+	}
+	
+	is_kamikaze && {
+	FORM_hostname="$CONFIG_wan_hostname"
+	FORM_hostname="${FORM_hostname:-OpenWrt}"
+	#wait for ntpclient to be updated
+	#FORM_system_timezone="${FORM_system_timezone:-$(nvram get time_zone)}"
+	#FORM_system_timezone="${FORM_system_timezone:-""}"
+	#FORM_ntp_server="${ntp_server:-$(nvram get ntp_server)}"
+	}
+	is_bcm947xx && {
+		FORM_boot_wait="${boot_wait:-$(nvram get boot_wait)}"
+		FORM_boot_wait="${FORM_boot_wait:-off}"
+		FORM_wait_time="${wait_time:-$(nvram get wait_time)}"
+		FORM_wait_time="${FORM_wait_time:-1}"
+		FORM_clkfreq="${clkfreq:-$(nvram get clkfreq)}";
+		FORM_clkfreq="${FORM_clkfreq:-200}"
+	}
 	# webif settings
 	FORM_language="${language:-$(cat /etc/config/webif | grep lang= | cut -d'=' -f2)}"
 	exists "/usr/sbin/nvram" && {
@@ -92,9 +114,17 @@ else
 hostname|FORM_hostname|Hostname|nodots required|$FORM_hostname
 EOF
 	if equal "$?" 0 ; then
-		save_setting system wan_hostname "$FORM_hostname"
-		save_setting system time_zone "$FORM_system_timezone"
-		save_setting system ntp_server "$FORM_ntp_server"
+		is_kamikaze && {
+		uci_set "network" "wan" "hostname" "$FORM_hostname"
+		#waiting for ntpclient update
+		#save_setting system time_zone "$FORM_system_timezone"
+		#save_setting system ntp_server "$FORM_ntp_server"
+		}
+		! is_kamikaze && {
+			save_setting system wan_hostname "$FORM_hostname"
+			save_setting system time_zone "$FORM_system_timezone"
+			save_setting system ntp_server "$FORM_ntp_server"
+		}
 		is_bcm947xx && {
 			case "$FORM_boot_wait" in
 				on|off) save_setting system boot_wait "$FORM_boot_wait";;
@@ -111,8 +141,10 @@ EOF
 		# webif settings
 		! equal "$FORM_theme" "$CONFIG_theme_id" && ! empty "$CONFIG_theme_id" && {	
 			uci_set "webif" "theme" "id" "$FORM_theme"
-		}		
-		save_setting webif language "$FORM_language"		
+		}
+		exists "/usr/sbin/nvram" && {
+			save_setting webif language "$FORM_language"
+		}
 	else
 		echo "<br /><div class=\"warning\">Warning: Hostname failed validation. Can not be saved.</div><br />"
 	fi
@@ -124,7 +156,7 @@ fi
 is_bcm947xx && {
 	equal "$OVERCLOCKING_DISABLED" "0" &&
 	{
-	if equal "$CPU_VERSION" "V0.8"; then
+	if [ $CPU_VERSION = "V0.8" ]; then
 		FORM_clkfreqs="$FORM_clkfreq
 			option|184
 			option|188
@@ -137,7 +169,12 @@ is_bcm947xx && {
 			option|234
 			option|238
 			option|240
-			option|250"		
+			option|250"
+		# special case for custom CFEs (like mine)
+		if [ $(nvram get clkfreq) -gt 250 ]; then
+			FORM_clkfreqs="$FORM_clkfreqs
+				option|$(nvram get clkfreq)"
+		fi
 	else
 		# BCM3302 v0.7 or other..
 		# in this case, we'll show it, but not have any options
@@ -145,6 +182,14 @@ is_bcm947xx && {
 			option|$FORM_clkfreq"
 	fi
 	}
+
+	#####################################################################
+	# Initialize wait_time form
+	for wtime in $(seq 1 30); do
+		FORM_wait_time="$FORM_wait_time
+			option|$wtime"
+	done
+}
 
 #####################################################################
 # Initialize THEMES form
@@ -182,14 +227,6 @@ done
 #
 THEMES=$(echo "$THEMES" | sort -u)
 
-#####################################################################
-# Initialize wait_time form
-	for wtime in $(seq 1 30); do
-		FORM_wait_time="$FORM_wait_time
-			option|$wtime"
-	done
-}
-
 dangerous_form_start=""
 dangerous_form_end=""
 dangerous_form_help=""
@@ -206,10 +243,14 @@ is_bcm947xx && {
 	bootwait_form="field|Boot Wait
 	select|boot_wait|$FORM_boot_wait
 	option|on|@TR<<Enabled>>
-	option|off|@TR<<Disabled>>"
+	option|off|@TR<<Disabled>>
+	helpitem|Boot Wait
+	helptext|HelpText boot_wait#Boot wait causes the boot loader of some devices to wait a few seconds at bootup for a TFTP transfer of a new firmware image. This is a security risk to be left on."
 
 	waittime_form="field|Wait Time
-	select|wait_time|$FORM_wait_time"
+	select|wait_time|$FORM_wait_time
+	helpitem|Wait Time
+	helptext|HelpText wait_time#Number of seconds the boot loader should wait for a TFTP transfer if Boot Wait is on."
 
 	equal "$OVERCLOCKING_DISABLED" "0" &&
 	{
@@ -277,11 +318,7 @@ start_form|@TR<<System Settings>>
 field|@TR<<Host Name>>
 text|hostname|$FORM_hostname
 $bootwait_form
-helpitem|Boot Wait
-helptext|HelpText boot_wait#Boot wait causes the boot loader of some devices to wait a few seconds at bootup for a TFTP transfer of a new firmware image. This is a security risk to be left on.
 $waittime_form
-helpitem|Wait Time
-helptext|HelpText wait_time#Number of seconds the boot loader should wait for a TFTP transfer if Boot Wait is on.
 end_form
 start_form|@TR<<Time Settings>>
 field|@TR<<Timezone>>
