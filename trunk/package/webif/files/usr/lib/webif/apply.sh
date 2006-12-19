@@ -219,7 +219,7 @@ for config in $(ls config-webif 2>&-); do
 			ipkg install "${xwrt_repo_url}/webif-lang-${newlang}_${webif_version}_mipsel.ipk" -force-reinstall -force-overwrite | uniq
 		}
 	done
-	rm -f /tmp/.webif/config-conntrack
+	rm -f /tmp/.webif/config-webif
 	echo '@TR<<Done>>'
 done
 
