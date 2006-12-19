@@ -235,14 +235,14 @@ reload_pptp() {
 
 
 # config-*		simple config files
-(
-	cd /proc/self
-	cat /tmp/.webif/config-* 2>&- | grep '=' >&- 2>&- && {
-		cat /tmp/.webif/config-* 2>&- | tee fd/1 | xargs -n1 nvram set
-		echo "@TR<<Committing>> NVRAM ..."
-		nvram commit
-	}
-)
+#(
+#	cd /proc/self
+#	cat /tmp/.webif/config-* 2>&- | grep '=' >&- 2>&- && {
+#		cat /tmp/.webif/config-* 2>&- | tee fd/1 | xargs -n1 nvram set
+#		echo "@TR<<Committing>> NVRAM ..."
+#		nvram commit
+#	}
+#)
 for config in $(ls config-* 2>&-); do
 	name=${config#config-}
 	eval 'case "$name" in
