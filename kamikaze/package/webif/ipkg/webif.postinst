@@ -81,8 +81,6 @@ FixReadOnlyLink "${IPKG_INSTROOT}/usr/lib/ipkg/status"
 	# S50dnsmasq renamed to S60dnsmasq in post-RC6
 #	dnsmasq_filename="S60dnsmasq"
 #}
-#rm -f "${IPKG_INSTROOT}/etc/httpd.conf"
-#mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
 
 # if /etc/functions.sh contains uci config functions, then make /etc/functions_ex.sh a symlink
 # to /etc/functions.sh. Else, keep /etc/functions_ex.sh and add a line to /etc/functions.sh 
@@ -120,11 +118,11 @@ ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/int2human"
 
 # initialize ipkg.conf
 uname -a |grep 2.4 |grep mips
-[ $? != 0 ] && {
+[ $? = 0 ] && {
 AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/kamikaze/broadcom-2.4/packages"
 }
 uname -a |grep 2.6 |grep i586
-[ $? != 0 ] && {
+[ $? = 0 ] && {
 AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/kamikaze/x86-2.6/packages"
 }
 
@@ -143,11 +141,19 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 
 	# test installation successfulness
 	TestInstall
-
-	httpd_1=$(cat /tmp/httpd.conf.old)
-	httpd_2=$(cat /etc/httpd.conf)
-	rm -f /tmp/httpd.conf.old
-	[ "$httpd_1" != "$httpd_2" ] && {
+	if [ -e /etc/httpd.conf ]; then
+		httpd_1=$(cat /etc/httpd.conf)
+		httpd_2=$(cat /etc/httpd.webif)
+		rm -f /etc/httpd.webif
+		[ "$httpd_1" != "$httpd_2" ] && {
+			requre_reboot
+		}
+	else
+		mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
+		requre_reboot
+	fi
+	
+	require_reboot() {
 		# Note: Even if the httpd.conf is *NOT* changed the httpd still needs 
 		#  restarting when upgraded from original webif. Newly created pages 
 		#  can't be found by the httpd, not sure why. Yes, its true.
@@ -171,5 +177,6 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 		chmod +x "$reboot_file"
 		sh "$reboot_file" &	
 	}
+
 fi
 exit 0
