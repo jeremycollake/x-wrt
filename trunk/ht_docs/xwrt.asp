@@ -192,7 +192,7 @@ install and use X-Wrt on your router:</font></p>
 							<ul>
 								<li>
 								<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/">
-								Default Firmware Images</a><ul>
+								Default Firmware Images</a> (PPPOE included)<ul>
 									<li>
 									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-wrt54g-squashfs.bin">
 									WRT54G v1-v4 and WRT54GL</a></li>
@@ -287,15 +287,16 @@ install and use X-Wrt on your router:</font></p>
 			Russian on your router, download an appropriate OpenWrt White Russian image and flash it 
 		(follow instructions in <a href="http://wiki.openwrt.org">OpenWrt's wiki</a>). We recommend 
 		White Russian RC5, RC6, or 0.9 (when it is released). Kamikaze is NOT supported yet, 
-		but will be <a href="#kamikaze">soon</a>.</font></li>
+		but will be <a href="#kamikaze">soon</a>.<br>
+			<font color="#FF0000"><b>WARNING: </b>Do not install webif<sup>2</sup> on the micro images 
+			OpenWrt distributes. They lack the 'ipkg' package, which is 
+			currently critical to the proper operation of webif<sup>2</sup>.</font></font></li>
 			<li><font face="Verdana">Enter your router's IP address in the field below and click the 
 			button below to install the latest official beta release of X-Wrt's webif. 
 			After you install the latest official beta release the 'check for 
 			update' and 'upgrade' buttons you'll find in the webif itself will 
 			move you up to the latest daily build, which has more features but 
-			has been less extensively tested.<br>
-			<br>
-			This button will <b>NOT </b>work with Internet Explorer at present.</font></li>
+			has been less extensively tested.<br><br>This button will <b>NOT </b>work with Internet Explorer at present.</font></li>
 		</ol>
 	</blockquote>
 </blockquote>
@@ -368,6 +369,15 @@ install and use X-Wrt on your router:</font></p>
 					http://ftp.berlios.de/pub/xwrt/webif_latest.ipk</a> 
 					-force-reinstall</i></li>
 				</ol>
+				<p><b>Common Problems</b></p>
+				<p><b><i>Q:</i></b> I keep getting errors with 'ipkg' on pages.<br>
+				<i><b>A:</b></i> X-Wrt's webif does not currently work right on 
+				the micro images OpenWrt distributes because there is no 'ipkg' 
+				package.</p>
+				<p><b>Q</b><i><b>:</b></i> I am having some trouble or another 
+				with a page or really need newer features.<b><br>
+				<i>A:</i> </b>Try upgrading to the latest daily build of the 
+				webif if you want.</p>
 			</blockquote>
 			<p>&nbsp;</p>
 			<p><font size="5" color="#666699"><b><a name="X-Wrt_Packages">X-Wrt Packages</a></b></font></p>
@@ -404,23 +414,23 @@ install and use X-Wrt on your router:</font></p>
 				However, it does give some idea of what our development plan is.</p>
 				<p>Of course, this table only shows the release we have planned 
 				in the immediate future.</p>
-				<table border="1" width="90%" id="table6" bordercolor="#C0C0C0" style="border-collapse: collapse">
+				<table border="1" width="95%" id="table6" bordercolor="#C0C0C0" style="border-collapse: collapse">
 					<tr>
 						<td width="131" bgcolor="#FF6A59"><b>Milestone 1</b></td>
-						<td width="203" bgcolor="#FF6A59"><b>Milestone 2</b></td>
-						<td width="208" bgcolor="#FF6A59"><b>Milestone 2.5</b></td>
-						<td width="149" bgcolor="#FFBEB7"><b>Milestone 3</b></td>
+						<td width="171" bgcolor="#FF6A59"><b>Milestone 2</b></td>
+						<td width="215" bgcolor="#FF6A59"><b>Milestone 2.5</b></td>
+						<td width="163" bgcolor="#FFBEB7"><b>Milestone 3</b></td>
 						<td bgcolor="#FFBEB7"><b>Milestone 4</b></td>
 					</tr>
 					<tr>
 						<td width="131" bgcolor="#FF6A59" height="20">Oct. 2006</td>
-						<td width="203" bgcolor="#FF6A59" height="20">
+						<td width="171" bgcolor="#FF6A59" height="20">
 				<font face="Verdana">
 						Nov. 2006</font></td>
-						<td width="208" bgcolor="#FF6A59" height="20">
+						<td width="215" bgcolor="#FF6A59" height="20">
 						<font face="Verdana">
 						Dec. 2006</font></td>
-						<td width="149" bgcolor="#FFBEB7" height="20">
+						<td width="163" bgcolor="#FFBEB7" height="20">
 						<font face="Verdana">
 						Jan. 2007<sup><font size="2">*</font></sup></font></td>
 						<td bgcolor="#FFBEB7" height="20">Feb<font face="Verdana">. 
@@ -428,37 +438,37 @@ install and use X-Wrt on your router:</font></p>
 					</tr>
 					<tr>
 						<td width="131">First public stable build</td>
-						<td width="203">Many new pages</td>
-						<td width="208">Some new pages</td>
-						<td width="149">SSL support</td>
+						<td width="171">Many new pages</td>
+						<td width="215">Some new pages</td>
+						<td width="163">SSL support</td>
 						<td>Kamikaze support</td>
 					</tr>
 					<tr>
 						<td width="131" height="21">&nbsp;</td>
-						<td width="203" height="21">Polishing and fixes</td>
-						<td width="208" height="21">Better theme support</td>
-						<td height="21" width="149">Remote mgt</td>
+						<td width="171" height="21">Polishing and fixes</td>
+						<td width="215" height="21">Better theme support</td>
+						<td height="21" width="163">Remote mgt</td>
 						<td height="21">&nbsp;</td>
 					</tr>
 					<tr>
 						<td width="131">&nbsp;</td>
-						<td width="203">&nbsp;</td>
-						<td width="208">Better language support</td>
-						<td width="149">&nbsp;</td>
+						<td width="171">&nbsp;</td>
+						<td width="215">Better language support</td>
+						<td width="163">New pages</td>
 						<td>&nbsp;</td>
 					</tr>
 					<tr>
 						<td width="131">&nbsp;</td>
-						<td width="203">&nbsp;</td>
-						<td width="208"><font face="Verdana">Polishing and fixes</font></td>
-						<td width="149">&nbsp;</td>
+						<td width="171">&nbsp;</td>
+						<td width="215"><font face="Verdana">Polishing and fixes</font></td>
+						<td width="163">More Polishing</td>
 						<td>&nbsp;</td>
 					</tr>
 					<tr>
 						<td width="131" height="22">&nbsp;</td>
-						<td width="203" height="22">&nbsp;</td>
-						<td width="208" height="22">&nbsp;</td>
-						<td width="149" height="22">&nbsp;</td>
+						<td width="171" height="22">&nbsp;</td>
+						<td width="215" height="22">&nbsp;</td>
+						<td width="163" height="22">&nbsp;</td>
 						<td height="22">&nbsp;</td>
 					</tr>
 				</table>
@@ -534,26 +544,41 @@ install and use X-Wrt on your router:</font></p>
 			<p><font size="5" color="#666699" face="Verdana"><b>
 			<a name="support">Support</a></b></font></p>
 			<blockquote>
-				<p>We do not accept monetary donations 
-				because we have no project treasurer to account for those 
-				donations and where they go. However, there are some things you 
-				can help us with if you choose:</p>
+				<p>There are some things you can help us with if you choose. 
+				When a person makes a donation, that donation is cataloged and 
+				made available to whichever developer is in the most need of it 
+				at the time. We do have a public list of donators (or at least 
+				will, whenever we get some donations).</p>
 				<ul>
 					<li><font face="Verdana"><b>web hosting.</b> Berlios 
-					provides most our web services, but we may need other web 
-					hosts in the future.</font></li>
+					provides most our web services, but their servers are 
+					overwhelmed and we're out of resources. This situation will 
+					only get worse. We need an alternate host to put things like 
+					release files, forum, and wiki on.</font></li>
 					<li><font face="Verdana"><b>hardware donations. </b>You can 
 					donate routers or other hardware to our developers, who may 
 					be in need of them for testing purposes. We are currently 
 					running our poor routers into the ground, so we encourage 
-					these type of donations.</font></li>
+					these type of donations. Devices needed:</font><ul>
+					<li>Any router with a USB port.</li>
+					<li>Any router you want us to work on support for.</li>
+					<li>Anything you have left lying around.</li>
+				</ul>
+					</li>
 					<li><font face="Verdana"><b>spread the word.</b> Tell people 
 					you think might be interested about our project. Not even 
 					all OpenWrt users have heard of our project yet. You might 
 					consider mentioning X-Wrt on the OpenWrt forums and in 
 					#openwrt on freenode. </font></li>
 				</ul>
-				<p>&nbsp;</p>
+				<p>To prevent troubles with where money should go, we don't 
+				accept project-wide monetary donations. However, some developers 
+				do accept direct donations to them. We suggest you check the 
+				Berlios roster of developers of this project and develop to 
+				whichever people you choose. Also, if you want to see a 
+				particular feature developed, perhaps donating to a developer 
+				will encourage him or her to pursue that feature more quickly 
+				than he or she would have otherwise done.</p>
 			</blockquote>
 			<p><font face="Verdana"><br>
 			&nbsp;</font></p>
