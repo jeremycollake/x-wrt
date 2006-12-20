@@ -251,7 +251,7 @@ EOF
 # outputs variable to a column
 show_column()
 {
-	# cfg number
+	# section name
 	# option name
 	# cell bgcolor (optional)
 	# over-ride text (if config option is empty)
@@ -264,21 +264,21 @@ show_column()
 	echo "</td>"
 }
 
-# TODO:
 #
-# We can't just break out when we think we're at the end
-# because new classification rules get added to the very bottom.
-# Possible solutions:
-#
-#       * uci_insert function (best)
-#       * variable that contains count of UCI config groups loaded
-#         (so we at least know the real end).
+# callback for sections
 #
 local last_shown_rule="-1"
-for count in $(seq 2 $MAX_QOS_RULES); do 	# !! see note above for static limit rationale !!	
+callback_foreach_rule() {
+	local count
+	name_pre=$(echo "$1" | cut -c 1-3)	
+	if equal "$name_pre" "cfg"; then
+		count=$(echo "$1" | cut -c 4-8)
+	else
+		return
+	fi	
 	eval _type="\"\$CONFIG_cfg${count}_TYPE\""
-	equal "$_type" "classify" || equal "$G_SHOW_ADVANCED_RULES" "1" && {
-		empty "$_type" && continue;
+	equal "$_type" "classify" || equal "$G_SHOW_ADVANCED_RULES" "1" && {	
+		empty "$_type" && return;
 		## finishing previous table entry
 		# for 'down' since we didn't know index of next classify item.
 		# if there is a last shown rule, show 'up' option for PREVIOUS rule
@@ -321,7 +321,9 @@ for count in $(seq 2 $MAX_QOS_RULES); do 	# !! see note above for static limit r
 		! empty "$FORM_qos_add" && FORM_qos_edit="$count"
 		last_shown_rule="$count"
 	}
-done
+}
+
+config_foreach callback_foreach_rule
 
 # if we showed any rules, finish table row
 ! equal "$last_shown_rule" "-1" && {
