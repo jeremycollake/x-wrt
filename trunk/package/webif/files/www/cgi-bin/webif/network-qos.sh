@@ -301,10 +301,10 @@ for count in $(seq 2 $MAX_QOS_RULES); do 	# !! see note above for static limit r
 		show_column "$count" "portrange" ""
 		show_column "$count" "ports" ""
 		echo "<td bgcolor=\"$cur_color\"><a href=\"$SCRIPT_NAME?qos_edit=$count\">@TR<<edit>></a>&nbsp;"
-		echo "<a href=\"$SCRIPT_NAME?qos_remove=$count\">@TR<<delete>></a>"
+		echo "<a href=\"$SCRIPT_NAME?qos_remove=$count\">@TR<<delete>></a>&nbsp;"
 		# if there is a last shown rule, show 'up' option
 		! equal "$last_shown_rule" "-1" && {
-		 	echo "<a href=\"$SCRIPT_NAME?qos_swap_src=$count&amp;qos_swap_dest=$last_shown_rule\">@TR<<up>></a>"
+		 	echo "<a href=\"$SCRIPT_NAME?qos_swap_src=$count&amp;qos_swap_dest=$last_shown_rule\">@TR<<up>></a>&nbsp;"
 		}
 		# if we are adding, always keep last index in FORM_qos_edit
 		! empty "$FORM_qos_add" && FORM_qos_edit="$count"
