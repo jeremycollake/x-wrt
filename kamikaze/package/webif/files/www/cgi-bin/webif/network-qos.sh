@@ -23,9 +23,9 @@
 #
 . /usr/lib/webif/webif.sh
 
-header "Network" "QoS" "@TR<<QOS Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
+G_SHOW_ADVANCED_RULES="0"	# if set, 'default' and 'reclassify' rules shown too
 
-MAX_QOS_RULES=50   # maximum QoS rules
+header "Network" "QoS" "@TR<<QOS Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 if ! empty "$FORM_install_nbd"; then
 	echo "Installing Nbd's QoS scripts ...<pre>"
@@ -130,7 +130,6 @@ EOF
 	}
 }
 
-
 # copy a rule to another - used by swap_rule()
 copy_rule()
 {
@@ -233,6 +232,16 @@ cat <<EOF
 <th>@TR<<Layer-7>></th>
 <th>@TR<<Port range>></th>
 <th>@TR<<Ports>></th>
+EOF
+equal "$G_SHOW_ADVANCED_RULES" "1" && {
+	cat <<EOF
+	<th>@TR<<Type>></th>
+	<th>@TR<<Flags>></th>
+	<th>@TR<<PktSize>></th>
+	<th>@TR<<Mark>></th>
+EOF
+}
+cat <<EOF
 <th></th>
 </tr>
 EOF
@@ -240,38 +249,34 @@ EOF
 # outputs variable to a column
 show_column()
 {
-	# cfg number
+	# section name
 	# option name
 	# cell bgcolor (optional)
 	# over-ride text (if config option is empty)
 	local _val
-	eval _val="\"\$CONFIG_cfg${1}_${2}\""		
+	config_get _val "cfg$1" "$2"
 	td_start="<td>"
 	! empty "$3" && td_start="<td bgcolor=\"$3\">"
-	echo "$td_start"	
-	if empty "$_val" && ! empty "$4"; then	
-		echo "$4"
-	else
-		echo "$_val"
-	fi	
-	echo "</td>"			
+	echo "$td_start"
+	echo "${_val:-$4}"
+	echo "</td>"
 }
 
-# TODO:
 #
-# We can't just break out when we think we're at the end
-# because new classification rules get added to the very bottom.
-# Possible solutions:
-#
-#       * uci_insert function (best)
-#       * variable that contains count of UCI config groups loaded
-#         (so we at least know the real end).
+# callback for sections
 #
 local last_shown_rule="-1"
-for count in $(seq 2 $MAX_QOS_RULES); do 	# !! see note above for static limit rationale !!	
+callback_foreach_rule() {
+	local count
+	name_pre=$(echo "$1" | cut -c 1-3)	
+	if equal "$name_pre" "cfg"; then
+		count=$(echo "$1" | cut -c 4-8)
+	else
+		return
+	fi	
 	eval _type="\"\$CONFIG_cfg${count}_TYPE\""
-	equal "$_type" "classify" && {
-
+	equal "$_type" "classify" || equal "$G_SHOW_ADVANCED_RULES" "1" && {	
+		empty "$_type" && return;
 		## finishing previous table entry
 		# for 'down' since we didn't know index of next classify item.
 		# if there is a last shown rule, show 'up' option for PREVIOUS rule
@@ -286,7 +291,7 @@ for count in $(seq 2 $MAX_QOS_RULES); do 	# !! see note above for static limit r
 		else
 			cur_color="even"
 		fi
-		echo "<tr class=\"$cur_color\">"
+		echo "<tr class=\"$cur_color\">"		
 		show_column "$count" "target" "" "..."
 		show_column "$count" "srchost" ""
 		show_column "$count" "dsthost" ""
@@ -300,6 +305,10 @@ for count in $(seq 2 $MAX_QOS_RULES); do 	# !! see note above for static limit r
 		show_column "$count" "layer7" ""
 		show_column "$count" "portrange" ""
 		show_column "$count" "ports" ""
+		equal "$G_SHOW_ADVANCED_RULES" "1" && show_column "$count" "TYPE" "" ""		
+		equal "$G_SHOW_ADVANCED_RULES" "1" && show_column "$count" "tcpflags" "" ""
+		equal "$G_SHOW_ADVANCED_RULES" "1" && show_column "$count" "pktsize" "" ""
+		equal "$G_SHOW_ADVANCED_RULES" "1" && show_column "$count" "mark" "" ""
 		echo "<td bgcolor=\"$cur_color\"><a href=\"$SCRIPT_NAME?qos_edit=$count\">@TR<<edit>></a>&nbsp;"
 		echo "<a href=\"$SCRIPT_NAME?qos_remove=$count\">@TR<<delete>></a>&nbsp;"
 		# if there is a last shown rule, show 'up' option
@@ -310,7 +319,9 @@ for count in $(seq 2 $MAX_QOS_RULES); do 	# !! see note above for static limit r
 		! empty "$FORM_qos_add" && FORM_qos_edit="$count"
 		last_shown_rule="$count"
 	}
-done
+}
+
+config_foreach callback_foreach_rule
 
 # if we showed any rules, finish table row
 ! equal "$last_shown_rule" "-1" && {
@@ -343,14 +354,14 @@ EOF
 	done
 	
 	current_item="$FORM_qos_edit"
-	eval _target="\"\$CONFIG_cfg${current_item}_target\""	
-	eval _srchost="\"\$CONFIG_cfg${current_item}_srchost\""
-	eval _dsthost="\"\$CONFIG_cfg${current_item}_dsthost\""		
-	eval _proto="\"\$CONFIG_cfg${current_item}_proto\""
-	eval _ports="\"\$CONFIG_cfg${current_item}_ports\""
-	eval _portrange="\"\$CONFIG_cfg${current_item}_portrange\""
-	eval _layer7="\"\$CONFIG_cfg${current_item}_layer7\""	
-	eval _ipp2p="\"\$CONFIG_cfg${current_item}_ipp2p\""
+	config_get _target "cfg${current_item}" "target"
+	config_get _srchost "cfg${current_item}" "srchost"
+	config_get _dsthost "cfg${current_item}" "dsthost"
+	config_get _proto "cfg${current_item}" "proto"
+	config_get _ports "cfg${current_item}" "ports"
+	config_get _portrange "cfg${current_item}" "portrange"
+	config_get _layer7 "cfg${current_item}" "layer7"
+	config_get _ipp2p "cfg${current_item}" "ipp2p"
 	display_form <<EOF
 	start_form|@TR<<QoS Rule Edit>>
 	field|@TR<<Rules Index>>|rule_number|hidden
