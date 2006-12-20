@@ -2,7 +2,7 @@
 <?
 . /usr/lib/webif/webif.sh
 
-STRENGTH="n/a"
+STRENGTH="UMTS / GPRS not found."
 
 DEVICES="/dev/usb/tts/2 /dev/noz2"
 for DEV in $DEVICES
@@ -21,8 +21,7 @@ cat << EOF
 <pre>
 $INFO
 </pre>
-
-Signalstrength:
+@TR<<Signal Strength>>:
 <div>
 EOF
 

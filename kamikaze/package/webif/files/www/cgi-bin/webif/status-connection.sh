@@ -37,7 +37,7 @@ header "Status" "Netstat" "@TR<<Netstat>>"
 		<th><b>@TR<<Routing Table|Routing Table>></b></th>
 	</tr>
 	<tr>
-		<td><pre><? netstat -r ?></pre></td>
+		<td><pre><? netstat -rn ?></pre></td>
 	</tr>
 
 	<tr><td><br /><br /></td></tr>
@@ -46,7 +46,7 @@ header "Status" "Netstat" "@TR<<Netstat>>"
 		<th><b>@TR<<Router Listening Ports|Router Listening Ports>></b></th>
 	</tr>
 	<tr>
-		<td><pre><? netstat -l 2>&- | awk '$0 ~ /^Active UNIX/ {ignore = 1}; ignore != 1 { print $0 }' ?></pre></td>
+		<td><pre><? netstat -ln 2>&- | awk '$0 ~ /^Active UNIX/ {ignore = 1}; ignore != 1 { print $0 }' ?></pre></td>
 	</tr>
 
 	<tr><td><br /><br /></td></tr>
