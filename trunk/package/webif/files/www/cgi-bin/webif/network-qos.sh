@@ -23,6 +23,8 @@
 #
 . /usr/lib/webif/webif.sh
 
+G_SHOW_ADVANCED_RULES="0"	# if set, 'default' and 'reclassify' rules shown too
+
 header "Network" "QoS" "@TR<<QOS Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 MAX_QOS_RULES=50   # maximum QoS rules
@@ -130,7 +132,6 @@ EOF
 	}
 }
 
-
 # copy a rule to another - used by swap_rule()
 copy_rule()
 {
@@ -233,6 +234,16 @@ cat <<EOF
 <th>@TR<<Layer-7>></th>
 <th>@TR<<Port range>></th>
 <th>@TR<<Ports>></th>
+EOF
+equal "$G_SHOW_ADVANCED_RULES" "1" && {
+	cat <<EOF
+	<th>@TR<<Type>></th>
+	<th>@TR<<Flags>></th>
+	<th>@TR<<PktSize>></th>
+	<th>@TR<<Mark>></th>
+EOF
+}
+cat <<EOF
 <th></th>
 </tr>
 EOF
@@ -245,7 +256,11 @@ show_column()
 	# cell bgcolor (optional)
 	# over-ride text (if config option is empty)
 	local _val
-	eval _val="\"\$CONFIG_cfg${1}_${2}\""		
+	if equal "$2" "TYPE"; then
+		eval _val="\"\$CONFIG_cfg${1}_TYPE\""	
+	else
+		eval _val="\"\$CONFIG_cfg${1}_${2}\""	
+	fi
 	td_start="<td>"
 	! empty "$3" && td_start="<td bgcolor=\"$3\">"
 	echo "$td_start"	
@@ -270,8 +285,8 @@ show_column()
 local last_shown_rule="-1"
 for count in $(seq 2 $MAX_QOS_RULES); do 	# !! see note above for static limit rationale !!	
 	eval _type="\"\$CONFIG_cfg${count}_TYPE\""
-	equal "$_type" "classify" && {
-
+	equal "$_type" "classify" || equal "$G_SHOW_ADVANCED_RULES" "1" && {
+		empty "$_type" && continue;
 		## finishing previous table entry
 		# for 'down' since we didn't know index of next classify item.
 		# if there is a last shown rule, show 'up' option for PREVIOUS rule
@@ -286,7 +301,7 @@ for count in $(seq 2 $MAX_QOS_RULES); do 	# !! see note above for static limit r
 		else
 			cur_color="even"
 		fi
-		echo "<tr class=\"$cur_color\">"
+		echo "<tr class=\"$cur_color\">"		
 		show_column "$count" "target" "" "..."
 		show_column "$count" "srchost" ""
 		show_column "$count" "dsthost" ""
@@ -300,6 +315,10 @@ for count in $(seq 2 $MAX_QOS_RULES); do 	# !! see note above for static limit r
 		show_column "$count" "layer7" ""
 		show_column "$count" "portrange" ""
 		show_column "$count" "ports" ""
+		equal "$G_SHOW_ADVANCED_RULES" "1" && show_column "$count" "TYPE" "" ""		
+		equal "$G_SHOW_ADVANCED_RULES" "1" && show_column "$count" "tcpflags" "" ""
+		equal "$G_SHOW_ADVANCED_RULES" "1" && show_column "$count" "pktsize" "" ""
+		equal "$G_SHOW_ADVANCED_RULES" "1" && show_column "$count" "mark" "" ""
 		echo "<td bgcolor=\"$cur_color\"><a href=\"$SCRIPT_NAME?qos_edit=$count\">@TR<<edit>></a>&nbsp;"
 		echo "<a href=\"$SCRIPT_NAME?qos_remove=$count\">@TR<<delete>></a>&nbsp;"
 		# if there is a last shown rule, show 'up' option
