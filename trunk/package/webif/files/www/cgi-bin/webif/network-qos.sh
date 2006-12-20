@@ -256,20 +256,12 @@ show_column()
 	# cell bgcolor (optional)
 	# over-ride text (if config option is empty)
 	local _val
-	if equal "$2" "TYPE"; then
-		eval _val="\"\$CONFIG_cfg${1}_TYPE\""	
-	else
-		eval _val="\"\$CONFIG_cfg${1}_${2}\""	
-	fi
+	config_get _val "cfg$1" "$2"
 	td_start="<td>"
 	! empty "$3" && td_start="<td bgcolor=\"$3\">"
-	echo "$td_start"	
-	if empty "$_val" && ! empty "$4"; then	
-		echo "$4"
-	else
-		echo "$_val"
-	fi	
-	echo "</td>"			
+	echo "$td_start"
+	echo "${_val:-$4}"
+	echo "</td>"
 }
 
 # TODO:
@@ -362,14 +354,14 @@ EOF
 	done
 	
 	current_item="$FORM_qos_edit"
-	eval _target="\"\$CONFIG_cfg${current_item}_target\""	
-	eval _srchost="\"\$CONFIG_cfg${current_item}_srchost\""
-	eval _dsthost="\"\$CONFIG_cfg${current_item}_dsthost\""		
-	eval _proto="\"\$CONFIG_cfg${current_item}_proto\""
-	eval _ports="\"\$CONFIG_cfg${current_item}_ports\""
-	eval _portrange="\"\$CONFIG_cfg${current_item}_portrange\""
-	eval _layer7="\"\$CONFIG_cfg${current_item}_layer7\""	
-	eval _ipp2p="\"\$CONFIG_cfg${current_item}_ipp2p\""
+	config_get _target "cfg${current_item}" "target"
+	config_get _srchost "cfg${current_item}" "srchost"
+	config_get _dsthost "cfg${current_item}" "dsthost"
+	config_get _proto "cfg${current_item}" "proto"
+	config_get _ports "cfg${current_item}" "ports"
+	config_get _portrange "cfg${current_item}" "portrange"
+	config_get _layer7 "cfg${current_item}" "layer7"
+	config_get _ipp2p "cfg${current_item}" "ipp2p"
 	display_form <<EOF
 	start_form|@TR<<QoS Rule Edit>>
 	field|@TR<<Rules Index>>|rule_number|hidden
