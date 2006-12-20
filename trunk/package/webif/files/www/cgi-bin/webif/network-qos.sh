@@ -39,6 +39,20 @@ is_package_installed "qos-re" && {
 	echo "<div class=\"warning\">Rudy's QoS scripts are found installed. Be sure to uninstall Rudy's scripts before using the new qos-scripts package.</div>"
 }
 
+# TODO: move this to shared functions somewhere
+# set an option, or remove it if the value is empty
+set_value_remove_if_empty() {
+	local _package="$1"
+	local _config="$3"	
+	local _option="$2"
+	local _value="$3"
+	if ! empty "$_value"; then			
+		uci_set "$_package" "$_config" "$_option" "$_value"
+	else
+		uci_set "$_package" "$_config" "$_option"
+	fi
+}
+
 if is_package_installed "qos-scripts"; then
 ! empty "$FORM_submit" && empty "$FORM_install_nbd" && {	
 	current_qos_item="$FORM_current_rule_index"	
@@ -58,41 +72,13 @@ EOF
 		else
 			SAVED=1
 			uci_set "qos" "cfg$current_qos_item" "target" "$FORM_current_target"
-			if ! empty "$FORM_current_srchost"; then			
-				uci_set "qos" "cfg$current_qos_item" "srchost" "$FORM_current_srchost"
-			else
-				uci_remove "qos" "cfg$current_qos_item" "srchost" "$FORM_current_srchost"
-			fi
-			if ! empty "$FORM_current_dsthost"; then			
-				uci_set "qos" "cfg$current_qos_item" "dsthost" "$FORM_current_dsthost"
-			else
-				uci_remove "qos" "cfg$current_qos_item" "dsthost" "$FORM_current_dsthost"
-			fi
-			if ! empty "$FORM_current_proto"; then
-				uci_set "qos" "cfg$current_qos_item" "proto" "$FORM_current_proto"
-			else
-				uci_remove "qos" "cfg$current_qos_item" "proto"
-			fi
-			if ! empty "$FORM_current_ports"; then			
-				uci_set "qos" "cfg$current_qos_item" "ports" "$FORM_current_ports"
-			else
-				uci_remove "qos" "cfg$current_qos_item" "ports" "$FORM_current_ports"
-			fi
-			if ! empty "$FORM_current_portrange"; then
-				uci_set "qos" "cfg$current_qos_item" "portrange" "$FORM_current_portrange"
-			else
-				uci_remove "qos" "cfg$current_qos_item" "portrange" "$FORM_current_portrange"
-			fi
-			if ! empty "$FORM_current_layer7"; then			
-				uci_set "qos" "cfg$current_qos_item" "layer7" "$FORM_current_layer7"
-			else
-				uci_remove "qos" "cfg$current_qos_item" "layer7" "$FORM_current_layer7"
-			fi
-			if ! empty "$FORM_current_ipp2p"; then
-				uci_set "qos" "cfg$current_qos_item" "ipp2p" "$FORM_current_ipp2p"
-			else
-				uci_remove "qos" "cfg$current_qos_item" "ipp2p" "$FORM_current_ipp2p"
-			fi
+			set_value_remove_if_empty "qos" "cfg$current_qos_item" "srchost" "$FORM_current_srchost"
+			set_value_remove_if_empty "qos" "cfg$current_qos_item" "dsthost" "$FORM_current_dsthost"
+			set_value_remove_if_empty "qos" "cfg$current_qos_item" "proto" "$FORM_current_proto"
+			set_value_remove_if_empty "qos" "cfg$current_qos_item" "ports" "$FORM_current_ports"
+			set_value_remove_if_empty "qos" "cfg$current_qos_item" "portrange" "$FORM_current_portrange"
+			set_value_remove_if_empty "qos" "cfg$current_qos_item" "layer7" "$FORM_current_layer7"
+			set_value_remove_if_empty "qos" "cfg$current_qos_item" "ipp2p" "$FORM_current_ipp2p"
 		fi
 	}
 	
@@ -143,6 +129,48 @@ EOF
 		uci_remove "qos" "cfg$current_qos_item"
 	}
 }
+
+
+# copy a rule to another - used by swap_rule()
+copy_rule()
+{
+	local rule1_index=$1
+	local rule2_index=$2
+	eval _target="\"\$CONFIG_cfg${rule2_index}_target\""	
+	eval _srchost="\"\$CONFIG_cfg${rule2_index}_srchost\""
+	eval _dsthost="\"\$CONFIG_cfg${rule2_index}_dsthost\""		
+	eval _proto="\"\$CONFIG_cfg${rule2_index}_proto\""
+	eval _ports="\"\$CONFIG_cfg${rule2_index}_ports\""
+	eval _portrange="\"\$CONFIG_cfg${rule2_index}_portrange\""
+	eval _layer7="\"\$CONFIG_cfg${rule2_index}_layer7\""	
+	eval _ipp2p="\"\$CONFIG_cfg${rule2_index}_ipp2p\""
+	uci_set "qos" "cfg$rule1_index" "target" "$_target"	
+	uci_set "qos" "cfg$rule1_index" "srchost" "$_srchost"
+	uci_set "qos" "cfg$rule1_index" "dsthost" "$_dsthost"
+	uci_set "qos" "cfg$rule1_index" "proto" "$_proto"
+	uci_set "qos" "cfg$rule1_index" "layer7" "$_layer7"
+	uci_set "qos" "cfg$rule1_index" "ipp2p" "$_ipp2p"
+	uci_set "qos" "cfg$rule1_index" "ports" "$_ports"
+	uci_set "qos" "cfg$rule1_index" "portrange" "$_portrange"
+}
+
+# swap a rule with another - for up/down
+swap_rule()
+{
+	local rule1_index=$1
+	local rule2_index=$2
+	copy_rule "$1" "$2"
+	copy_rule "$2" "$1"
+	# now a uci_load will reload swapped rules
+}
+
+#
+# handle 'up' or 'down' (qos rule)
+#
+! empty "$FORM_qos_swap_dest" && ! empty "$FORM_qos_swap_src" && {
+	uci_load "qos"
+	swap_rule "$FORM_qos_swap_dest" "$FORM_qos_swap_src"
+}	
 	
 uci_load "qos"
 FORM_wan_enabled="$CONFIG_wan_enabled"
@@ -199,10 +227,10 @@ cat <<EOF
 <table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;" border="0" cellpadding="3" cellspacing="2"><tbody>
 <tr>
 <th>@TR<<Group>></th>
-<th>@TR<<Src IP>></th>
-<th>@TR<<Dest IP>></th>
+<th>@TR<<Source IP>></th>
+<th>@TR<<Dest. IP>></th>
 <th>@TR<<Protocol>></th>
-<th>@TR<<Layer7>></th>
+<th>@TR<<Layer-7>></th>
 <th>@TR<<Port range>></th>
 <th>@TR<<Ports>></th>
 <th></th>
@@ -239,9 +267,20 @@ show_column()
 #       * variable that contains count of UCI config groups loaded
 #         (so we at least know the real end).
 #
-for count in $(seq 2 $MAX_QOS_RULES); do 	# !! see note above for static limit rationale !!
-	eval _type="\"\$CONFIG_cfg${count}_TYPE\""	
+local last_shown_rule="-1"
+for count in $(seq 2 $MAX_QOS_RULES); do 	# !! see note above for static limit rationale !!	
+	eval _type="\"\$CONFIG_cfg${count}_TYPE\""
 	equal "$_type" "classify" && {
+
+		## finishing previous table entry
+		# for 'down' since we didn't know index of next classify item.
+		# if there is a last shown rule, show 'up' option for PREVIOUS rule
+		! equal "$last_shown_rule" "-1" && {
+		 	echo "<a href=\"$SCRIPT_NAME?qos_swap_dest=$count&amp;qos_swap_src=$last_shown_rule\">@TR<<down>></a>"
+			echo "</td></tr>"
+		}	
+		## end finishing last iteration
+
 		if equal "$cur_color" "even"; then
 			cur_color="odd"
 		else
@@ -262,12 +301,21 @@ for count in $(seq 2 $MAX_QOS_RULES); do 	# !! see note above for static limit r
 		show_column "$count" "portrange" ""
 		show_column "$count" "ports" ""
 		echo "<td bgcolor=\"$cur_color\"><a href=\"$SCRIPT_NAME?qos_edit=$count\">@TR<<edit>></a>&nbsp;"
-		echo "<a href=\"$SCRIPT_NAME?qos_remove=$count\">@TR<<remove>></a></td>"
-		echo "</tr>"
+		echo "<a href=\"$SCRIPT_NAME?qos_remove=$count\">@TR<<delete>></a>"
+		# if there is a last shown rule, show 'up' option
+		! equal "$last_shown_rule" "-1" && {
+		 	echo "<a href=\"$SCRIPT_NAME?qos_swap_src=$count&amp;qos_swap_dest=$last_shown_rule\">@TR<<up>></a>"
+		}
 		# if we are adding, always keep last index in FORM_qos_edit
 		! empty "$FORM_qos_add" && FORM_qos_edit="$count"
+		last_shown_rule="$count"
 	}
 done
+
+# if we showed any rules, finish table row
+! equal "$last_shown_rule" "-1" && {
+	echo "</td></tr>"
+}
 
 cat <<EOF
 <tr><td><a href="$SCRIPT_NAME?qos_add=1">@TR<<new rule>></a></td></tr>
