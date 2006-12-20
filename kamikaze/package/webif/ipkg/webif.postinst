@@ -105,21 +105,11 @@ FixReadOnlyLink "${IPKG_INSTROOT}/usr/lib/ipkg/status"
 	# S50dnsmasq renamed to S60dnsmasq in post-RC6
 #	dnsmasq_filename="S60dnsmasq"
 #}
-
-# if /etc/functions.sh contains uci config functions, then make /etc/functions_ex.sh a symlink
-# to /etc/functions.sh. Else, keep /etc/functions_ex.sh and add a line to /etc/functions.sh 
-# that includes /etc/functions_ex.sh. This is because RC5 does not have this code, while RC6 does
-# - and we don't want duplicated code laying around. 
-# ASIDE: The new qos-scripts expects /etc/functions.sh to contain uci stuff so will not work in RC5 
-# without this.
-#grep -q "config_load" "${IPKG_INSTROOT}/etc/functions.sh"
-#if [ $? = 0 ]; then
-#	rm "${IPKG_INSTROOT}/etc/functions_ex.sh"
-#	ln -s "/etc/functions.sh" "${IPKG_INSTROOT}/etc/functions_ex.sh"
-#else
-#	FixReadOnlyLink "${IPKG_INSTROOT}/etc/functions.sh"
-#	echo ". /etc/functions_ex.sh" >> "${IPKG_INSTROOT}/etc/functions.sh"
-#fi
+r
+# include uci-depends.sh from /etc/functions.sh if not already included.
+if ! grep -q "uci-depends.sh" "${IPKG_INSTROOT}/etc/functions.sh"; then
+	echo ". /lib/config/uci-depends.sh" >> "${IPKG_INSTROOT}/etc/functions.sh"
+fi
 
 # initialize default webif theme
 # create symlink to /www/themes/xwrt (do NOT use INSTROOT in first arg).
@@ -143,11 +133,11 @@ ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/int2human"
 # initialize ipkg.conf
 uname -a |grep 2.4 |grep mips
 [ $? = 0 ] && {
-AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/kamikaze/broadcom-2.4/packages"
+	AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/kamikaze/broadcom-2.4/packages"
 }
 uname -a |grep 2.6 |grep i586
 [ $? = 0 ] && {
-AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/kamikaze/x86-2.6/packages"
+	AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/kamikaze/x86-2.6/packages"
 }
 
 
@@ -171,11 +161,11 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 		rm -f /etc/httpd.webif
 		[ "$httpd_1" != "$httpd_2" ] && {
 			mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
-			requre_reboot
+			require_reboot
 		}
 	else
 		mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
-		requre_reboot
+		require_reboot
 	fi
 
 fi
