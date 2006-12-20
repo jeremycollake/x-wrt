@@ -40,7 +40,9 @@ synchronize_file () {
 echo "Synchronizing branches ..."
 synchronize_file "www/themes/xwrt/*"
 synchronize_file "etc/config/webif"
+synchronize_file "etc/functions-net.sh"
 synchronize_file "usr/lib/webif/functions.sh"
+synchronize_file "usr/lib/webif/pkg*.sh"
 synchronize_file "www/index.html"
 synchronize_file "www/cgi-bin/webif/info.sh"
 synchronize_file "www/cgi-bin/webif/info-about.sh"
@@ -57,6 +59,7 @@ synchronize_file "www/cgi-bin/webif/network-firewall.sh"
 synchronize_file "www/cgi-bin/webif/system-settings.sh"
 synchronize_file "usr/lib/webif/*categor*.awk"
 synchronize_file "usr/lib/webif/webif.sh"
+synchronize_file "lib/config/uci-depends.*"
 #NOT_synchronize_file "etc/init.d/S90webif_deviceid"  # not sync'd due to rc.common
 #NOT_synchronize_file "etc/init.d/S90webif_firmwareid"# not sync'd due to rc.common
 svn add "$BRANCH_DEST" 2>&-
