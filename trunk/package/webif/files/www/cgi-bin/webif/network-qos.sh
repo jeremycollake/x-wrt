@@ -41,7 +41,7 @@ is_package_installed "qos-re" && {
 
 # TODO: move this to shared functions somewhere
 # set an option, or remove it if the value is empty
-set_value_remove_if_empty() {
+uci_set_value_remove_if_empty() {
 	local _package="$1"
 	local _config="$2"	
 	local _option="$3"
@@ -72,13 +72,13 @@ EOF
 		else
 			SAVED=1
 			uci_set "qos" "cfg$current_qos_item" "target" "$FORM_current_target"
-			set_value_remove_if_empty "qos" "cfg$current_qos_item" "srchost" "$FORM_current_srchost"
-			set_value_remove_if_empty "qos" "cfg$current_qos_item" "dsthost" "$FORM_current_dsthost"
-			set_value_remove_if_empty "qos" "cfg$current_qos_item" "proto" "$FORM_current_proto"
-			set_value_remove_if_empty "qos" "cfg$current_qos_item" "ports" "$FORM_current_ports"
-			set_value_remove_if_empty "qos" "cfg$current_qos_item" "portrange" "$FORM_current_portrange"
-			set_value_remove_if_empty "qos" "cfg$current_qos_item" "layer7" "$FORM_current_layer7"
-			set_value_remove_if_empty "qos" "cfg$current_qos_item" "ipp2p" "$FORM_current_ipp2p"
+			uci_set_value_remove_if_empty "qos" "cfg$current_qos_item" "srchost" "$FORM_current_srchost"
+			uci_set_value_remove_if_empty "qos" "cfg$current_qos_item" "dsthost" "$FORM_current_dsthost"
+			uci_set_value_remove_if_empty "qos" "cfg$current_qos_item" "proto" "$FORM_current_proto"
+			uci_set_value_remove_if_empty "qos" "cfg$current_qos_item" "ports" "$FORM_current_ports"
+			uci_set_value_remove_if_empty "qos" "cfg$current_qos_item" "portrange" "$FORM_current_portrange"
+			uci_set_value_remove_if_empty "qos" "cfg$current_qos_item" "layer7" "$FORM_current_layer7"
+			uci_set_value_remove_if_empty "qos" "cfg$current_qos_item" "ipp2p" "$FORM_current_ipp2p"
 		fi
 	}
 	
@@ -144,14 +144,14 @@ copy_rule()
 	eval _portrange="\"\$CONFIG_cfg${rule2_index}_portrange\""
 	eval _layer7="\"\$CONFIG_cfg${rule2_index}_layer7\""	
 	eval _ipp2p="\"\$CONFIG_cfg${rule2_index}_ipp2p\""
-	uci_set "qos" "cfg$rule1_index" "target" "$_target"	
-	uci_set "qos" "cfg$rule1_index" "srchost" "$_srchost"
-	uci_set "qos" "cfg$rule1_index" "dsthost" "$_dsthost"
-	uci_set "qos" "cfg$rule1_index" "proto" "$_proto"
-	uci_set "qos" "cfg$rule1_index" "layer7" "$_layer7"
-	uci_set "qos" "cfg$rule1_index" "ipp2p" "$_ipp2p"
-	uci_set "qos" "cfg$rule1_index" "ports" "$_ports"
-	uci_set "qos" "cfg$rule1_index" "portrange" "$_portrange"
+	uci_set_value_remove_if_empty "qos" "cfg$rule1_index" "target" "$_target"	
+	uci_set_value_remove_if_empty "qos" "cfg$rule1_index" "srchost" "$_srchost"
+	uci_set_value_remove_if_empty "qos" "cfg$rule1_index" "dsthost" "$_dsthost"
+	uci_set_value_remove_if_empty "qos" "cfg$rule1_index" "proto" "$_proto"
+	uci_set_value_remove_if_empty "qos" "cfg$rule1_index" "layer7" "$_layer7"
+	uci_set_value_remove_if_empty "qos" "cfg$rule1_index" "ipp2p" "$_ipp2p"
+	uci_set_value_remove_if_empty "qos" "cfg$rule1_index" "ports" "$_ports"
+	uci_set_value_remove_if_empty "qos" "cfg$rule1_index" "portrange" "$_portrange"
 }
 
 # swap a rule with another - for up/down
