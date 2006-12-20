@@ -5,7 +5,6 @@
 # (c) 2006 Jeremy Collake - X-Wrt Project
 #
 #
-
 is_package_installed() {
 	# $1 = package name
 	# returns 0 if package is installed.
@@ -51,4 +50,22 @@ add_package_source() {
 	cat "$1" >> "$ipkgtmp"
 	rm "/etc/ipkg.conf"
 	mv "$ipkgtmp" "/etc/ipkg.conf"
+}
+
+has_pkgs() {
+	local pcnt=0
+	local nothave=0
+	local retval=0;
+	for pkg in "$@"; do
+		pcnt=$((pcnt + 1))
+		empty $(ipkg list_installed | grep "^$pkg ") && {
+			echo -n "<p>@TR<<Features on this page require the>> \"<b>$pkg</b>\" @TR<<package>>. &nbsp;<a href=\"/cgi-bin/webif/ipkg.sh?action=install&pkg=$pkg&prev=$SCRIPT_NAME\">@TR<<install now>></a>.</p>"
+			retval=1;
+			nothave=$((nothave + 1))
+		}
+	done	
+	if [ "$pcnt" = "$nothave" ]; then
+		_savebutton=""
+	fi
+	return $retval;
 }
