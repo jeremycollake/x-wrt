@@ -27,8 +27,6 @@ G_SHOW_ADVANCED_RULES="0"	# if set, 'default' and 'reclassify' rules shown too
 
 header "Network" "QoS" "@TR<<QOS Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
-MAX_QOS_RULES=50   # maximum QoS rules
-
 if ! empty "$FORM_install_nbd"; then
 	echo "Installing Nbd's QoS scripts ...<pre>"
 	! install_package "qos-scripts" && {
