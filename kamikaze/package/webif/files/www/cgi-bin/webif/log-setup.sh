@@ -3,24 +3,24 @@
 . /usr/lib/webif/webif.sh
 . /etc/runsyslogd.conf
 
-load_settings log
+uci_load "syslogd"
 
 if empty "$FORM_submit" ; then
-	FORM_size="${log_size:-$(uci get syslogd.general.size)}"
+	FORM_size="$CONFIG_general_size"
 	FORM_size=${FORM_size:-$DEFAULT_log_size}
-	FORM_type="${log_type:-$(uci get syslogd.general.type)}"
+	FORM_type="$CONFIG_general_type"
 	FORM_type=${FORM_type:-$DEFAULT_log_type}
-	FORM_ipaddr="${log_ipaddr:-$(uci get syslogd.general.ipaddr)}"
+	FORM_ipaddr="$CONFIG_general_ipaddr)}"
 	if equal $FORM_ipaddr 0 ; then
 		FORM_ipaddr=""
 	fi
-	FORM_log_port=${log_port:-$(uci get syslogd.general.port)}
+	FORM_log_port="$CONFIG_general_port"
 	if empty "$FORM_ipaddr" ; then
 		FORM_log_port=""
 	fi
-	FORM_log_mark=${log_mark:-$(uci get syslogd.general.mark)}
+	FORM_log_mark="$CONFIG_general_mark"
 	FORM_log_mark=${FORM_log_mark:-$DEFAULT_log_mark}
-	FORM_filename="${log_file:-$(uci get syslogd.general.file)}"
+	FORM_filename="$CONFIG_general_file)}"
 	FORM_filename=${FORM_filename:-$DEFAULT_log_file}
 else
 validate <<EOF
