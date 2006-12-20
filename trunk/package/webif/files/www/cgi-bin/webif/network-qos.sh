@@ -267,13 +267,11 @@ show_column()
 #
 local last_shown_rule="-1"
 callback_foreach_rule() {
-	local count
-	name_pre=$(echo "$1" | cut -c 1-3)	
-	if equal "$name_pre" "cfg"; then
-		count=$(echo "$1" | cut -c 4-8)
-	else
-		return
-	fi	
+	local count	
+	case "${1%%[0-9]*}" in
+		cfg) count="${section##cfg}";;
+		*) return;;
+	esac
 	eval _type="\"\$CONFIG_cfg${count}_TYPE\""
 	equal "$_type" "classify" || equal "$G_SHOW_ADVANCED_RULES" "1" && {	
 		empty "$_type" && return;
