@@ -43,13 +43,13 @@ is_package_installed "qos-re" && {
 # set an option, or remove it if the value is empty
 set_value_remove_if_empty() {
 	local _package="$1"
-	local _config="$3"	
-	local _option="$2"
-	local _value="$3"
-	if ! empty "$_value"; then			
+	local _config="$2"	
+	local _option="$3"
+	local _value="$4"
+	if ! empty "$_value"; then
 		uci_set "$_package" "$_config" "$_option" "$_value"
 	else
-		uci_set "$_package" "$_config" "$_option"
+		uci_remove "$_package" "$_config" "$_option"
 	fi
 }
 
