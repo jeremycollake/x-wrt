@@ -1,8 +1,7 @@
 #!/bin/sh
 # Copyright (C) 2006 OpenWrt.org
 # Copyright (C) 2006 Fokus Fraunhofer <carsten.tittel@fokus.fraunhofer.de>
-# Copyright (C) 2006 Jeremy Collake <jeremy.collake@gmail.com> (X-Wrt) (minor)
-
+#
 # newline (used by /lib/config/uci.sh)
 N="
 "
