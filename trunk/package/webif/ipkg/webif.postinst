@@ -21,6 +21,16 @@ TestInstall()
 	fi
 }
 
+# since at present we aren't doing a proper package upgrade when
+# the user upgrades from one webif^2 build to another, we must
+# remove some files we deleted.
+CleanupDeprecatedFiles()
+{
+	rm -f "${IPKG_INSTROOT}/www/cgi-bin/webif/qos-nbd.inc"
+	rm -f "${IPKG_INSTROOT}/www/cgi-bin/webif/qos-rudy.inc"
+	rm -f "${IPKG_INSTROOT}/etc/init.d/S41ipkg"
+}
+
 ExecuteIfExists()
 {
 	# $1 = exec name
@@ -72,6 +82,8 @@ DeleteRepository()
 
 #########################################################################################
 # entry point
+
+CleanupDeprecatedFiles
 
 # fix some links on squashfs partition that aren't properly copied instead by firstboot
 # has no effect when done in image builder.
