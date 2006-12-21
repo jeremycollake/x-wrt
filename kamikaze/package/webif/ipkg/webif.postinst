@@ -109,7 +109,7 @@ FixReadOnlyLink "${IPKG_INSTROOT}/usr/lib/ipkg/status"
 # again, we rename /lib/config/uci-depends.sh so that it doesn't get removed if webif^2 is
 # uninstalled since we've radically changed /etc/functions.sh.
 FixReadOnlyLink "${IPKG_INSTROOT}/lib/config/uci-depends.sh"
-cp "${IPKG_INSTROOT}/lib/config/uci-depends.new" "${IPKG_INSTROOT}/lib/config/uci-depends.sh"
+mv -f "${IPKG_INSTROOT}/lib/config/uci-depends.new" "${IPKG_INSTROOT}/lib/config/uci-depends.sh"
 
 # include uci-depends.sh from /etc/functions.sh if not already included.
 if ! grep -q "uci-depends.sh" "${IPKG_INSTROOT}/etc/functions.sh"; then
