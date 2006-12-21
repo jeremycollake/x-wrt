@@ -23,7 +23,7 @@
 #
 . /usr/lib/webif/webif.sh
 
-G_SHOW_ADVANCED_RULES="0"	# if set, 'default' and 'reclassify' rules shown too
+G_SHOW_ADVANCED_RULES="1"	# if set, 'default' and 'reclassify' rules shown too
 
 header "Network" "QoS" "@TR<<QOS Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
@@ -71,14 +71,14 @@ EOF
 			echo "<div class=\"warning\">Validation of one or more fields failed! Not saving.</div>"
 		else
 			SAVED=1
-			uci_set "qos" "cfg$current_qos_item" "target" "$FORM_current_target"
-			uci_set_value_remove_if_empty "qos" "cfg$current_qos_item" "srchost" "$FORM_current_srchost"
-			uci_set_value_remove_if_empty "qos" "cfg$current_qos_item" "dsthost" "$FORM_current_dsthost"
-			uci_set_value_remove_if_empty "qos" "cfg$current_qos_item" "proto" "$FORM_current_proto"
-			uci_set_value_remove_if_empty "qos" "cfg$current_qos_item" "ports" "$FORM_current_ports"
-			uci_set_value_remove_if_empty "qos" "cfg$current_qos_item" "portrange" "$FORM_current_portrange"
-			uci_set_value_remove_if_empty "qos" "cfg$current_qos_item" "layer7" "$FORM_current_layer7"
-			uci_set_value_remove_if_empty "qos" "cfg$current_qos_item" "ipp2p" "$FORM_current_ipp2p"
+			uci_set "qos" "$current_qos_item" "target" "$FORM_current_target"
+			uci_set_value_remove_if_empty "qos" "$current_qos_item" "srchost" "$FORM_current_srchost"
+			uci_set_value_remove_if_empty "qos" "$current_qos_item" "dsthost" "$FORM_current_dsthost"
+			uci_set_value_remove_if_empty "qos" "$current_qos_item" "proto" "$FORM_current_proto"
+			uci_set_value_remove_if_empty "qos" "$current_qos_item" "ports" "$FORM_current_ports"
+			uci_set_value_remove_if_empty "qos" "$current_qos_item" "portrange" "$FORM_current_portrange"
+			uci_set_value_remove_if_empty "qos" "$current_qos_item" "layer7" "$FORM_current_layer7"
+			uci_set_value_remove_if_empty "qos" "$current_qos_item" "ipp2p" "$FORM_current_ipp2p"
 		fi
 	}
 	
@@ -117,16 +117,16 @@ EOF
 	current_qos_item=$(echo "$QUERY_STRING" | grep "qos_remove=" | cut -d'=' -f2)	
 	! empty "$current_qos_item" && {		
 		# also manually clear the other options so they are immediately empty		
-		uci_set "qos" "cfg$current_qos_item" "srchost" ""
-		uci_set "qos" "cfg$current_qos_item" "dsthost" ""
-		uci_set "qos" "cfg$current_qos_item" "proto" ""
-		uci_set "qos" "cfg$current_qos_item" "layer7" ""
-		uci_set "qos" "cfg$current_qos_item" "ipp2p" ""
-		uci_set "qos" "cfg$current_qos_item" "ports" ""
-		uci_set "qos" "cfg$current_qos_item" "portrange" ""
+		uci_set "qos" "$current_qos_item" "srchost" ""
+		uci_set "qos" "$current_qos_item" "dsthost" ""
+		uci_set "qos" "$current_qos_item" "proto" ""
+		uci_set "qos" "$current_qos_item" "layer7" ""
+		uci_set "qos" "$current_qos_item" "ipp2p" ""
+		uci_set "qos" "$current_qos_item" "ports" ""
+		uci_set "qos" "$current_qos_item" "portrange" ""
 		# show 'deleted' as target to indicate pending delete
-		uci_set "qos" "cfg$current_qos_item" "target" "deleted"
-		uci_remove "qos" "cfg$current_qos_item"
+		uci_set "qos" "$current_qos_item" "target" "deleted"
+		uci_remove "qos" "$current_qos_item"
 	}
 }
 
@@ -135,22 +135,22 @@ copy_rule()
 {
 	local rule1_index=$1
 	local rule2_index=$2
-	eval _target="\"\$CONFIG_cfg${rule2_index}_target\""	
-	eval _srchost="\"\$CONFIG_cfg${rule2_index}_srchost\""
-	eval _dsthost="\"\$CONFIG_cfg${rule2_index}_dsthost\""		
-	eval _proto="\"\$CONFIG_cfg${rule2_index}_proto\""
-	eval _ports="\"\$CONFIG_cfg${rule2_index}_ports\""
-	eval _portrange="\"\$CONFIG_cfg${rule2_index}_portrange\""
-	eval _layer7="\"\$CONFIG_cfg${rule2_index}_layer7\""	
-	eval _ipp2p="\"\$CONFIG_cfg${rule2_index}_ipp2p\""
-	uci_set_value_remove_if_empty "qos" "cfg$rule1_index" "target" "$_target"	
-	uci_set_value_remove_if_empty "qos" "cfg$rule1_index" "srchost" "$_srchost"
-	uci_set_value_remove_if_empty "qos" "cfg$rule1_index" "dsthost" "$_dsthost"
-	uci_set_value_remove_if_empty "qos" "cfg$rule1_index" "proto" "$_proto"
-	uci_set_value_remove_if_empty "qos" "cfg$rule1_index" "layer7" "$_layer7"
-	uci_set_value_remove_if_empty "qos" "cfg$rule1_index" "ipp2p" "$_ipp2p"
-	uci_set_value_remove_if_empty "qos" "cfg$rule1_index" "ports" "$_ports"
-	uci_set_value_remove_if_empty "qos" "cfg$rule1_index" "portrange" "$_portrange"
+	eval _target="\"\$CONFIG_${rule2_index}_target\""	
+	eval _srchost="\"\$CONFIG_${rule2_index}_srchost\""
+	eval _dsthost="\"\$CONFIG_${rule2_index}_dsthost\""		
+	eval _proto="\"\$CONFIG_${rule2_index}_proto\""
+	eval _ports="\"\$CONFIG_${rule2_index}_ports\""
+	eval _portrange="\"\$CONFIG_${rule2_index}_portrange\""
+	eval _layer7="\"\$CONFIG_${rule2_index}_layer7\""	
+	eval _ipp2p="\"\$CONFIG_${rule2_index}_ipp2p\""
+	uci_set_value_remove_if_empty "qos" "$rule1_index" "target" "$_target"	
+	uci_set_value_remove_if_empty "qos" "$rule1_index" "srchost" "$_srchost"
+	uci_set_value_remove_if_empty "qos" "$rule1_index" "dsthost" "$_dsthost"
+	uci_set_value_remove_if_empty "qos" "$rule1_index" "proto" "$_proto"
+	uci_set_value_remove_if_empty "qos" "$rule1_index" "layer7" "$_layer7"
+	uci_set_value_remove_if_empty "qos" "$rule1_index" "ipp2p" "$_ipp2p"
+	uci_set_value_remove_if_empty "qos" "$rule1_index" "ports" "$_ports"
+	uci_set_value_remove_if_empty "qos" "$rule1_index" "portrange" "$_portrange"
 }
 
 # swap a rule with another - for up/down
@@ -254,7 +254,7 @@ show_column()
 	# cell bgcolor (optional)
 	# over-ride text (if config option is empty)
 	local _val
-	config_get _val "cfg$1" "$2"
+	config_get _val "$1" "$2"
 	td_start="<td>"
 	! empty "$3" && td_start="<td bgcolor=\"$3\">"
 	echo "$td_start"
@@ -267,14 +267,15 @@ show_column()
 #
 local last_shown_rule="-1"
 callback_foreach_rule() {
-	local count	
-	case "${1%%[0-9]*}" in
-		cfg) count="${section##cfg}";;
+	local count=$1
+	config_get _type "$count" "TYPE"
+	case $_type in
+		"classify") ;;
+		"reclassify") equal "$G_SHOW_ADVANCED_RULES" "0" && return;;
+		"default") equal "$G_SHOW_ADVANCED_RULES" "0" && return;;
 		*) return;;
 	esac
-	eval _type="\"\$CONFIG_cfg${count}_TYPE\""
-	equal "$_type" "classify" || equal "$G_SHOW_ADVANCED_RULES" "1" && {	
-		empty "$_type" && return;
+	equal "$_type" "classify" && {	
 		## finishing previous table entry
 		# for 'down' since we didn't know index of next classify item.
 		# if there is a last shown rule, show 'up' option for PREVIOUS rule
@@ -293,7 +294,7 @@ callback_foreach_rule() {
 		show_column "$count" "target" "" "..."
 		show_column "$count" "srchost" ""
 		show_column "$count" "dsthost" ""
-		eval _val="\"\$CONFIG_cfg${count}_ipp2p\""
+		eval _val="\"\$CONFIG_${count}_ipp2p\""
 		if empty "$_val"; then
 		 	show_column "$count" "proto" ""
 		else
@@ -352,14 +353,19 @@ EOF
 	done
 	
 	current_item="$FORM_qos_edit"
-	config_get _target "cfg${current_item}" "target"
-	config_get _srchost "cfg${current_item}" "srchost"
-	config_get _dsthost "cfg${current_item}" "dsthost"
-	config_get _proto "cfg${current_item}" "proto"
-	config_get _ports "cfg${current_item}" "ports"
-	config_get _portrange "cfg${current_item}" "portrange"
-	config_get _layer7 "cfg${current_item}" "layer7"
-	config_get _ipp2p "cfg${current_item}" "ipp2p"
+	config_get _target "${current_item}" "target"
+	config_get _srchost "${current_item}" "srchost"
+	config_get _dsthost "${current_item}" "dsthost"
+	config_get _proto "${current_item}" "proto"
+	config_get _ports "${current_item}" "ports"
+	config_get _portrange "${current_item}" "portrange"
+	config_get _layer7 "${current_item}" "layer7"
+	equal "$G_SHOW_ADVANCED_RULES" "1" && {
+		config_get _ipp2p "${current_item}" "ipp2p"
+		config_get _mark "${current_item}" "mark"
+		config_get _tcpflags "${current_item}" "tcpflags"
+		config_get _pktsize "${current_item}" "pktsize"
+	}
 	display_form <<EOF
 	start_form|@TR<<QoS Rule Edit>>
 	field|@TR<<Rules Index>>|rule_number|hidden
