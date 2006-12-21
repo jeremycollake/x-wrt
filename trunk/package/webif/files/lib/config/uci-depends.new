@@ -19,6 +19,39 @@ nexport() {
 	}
 }
 
+append() {
+	local var="$1"
+	local value="$2"
+	local sep="${3:- }"
+	
+	eval "export -n -- \"$var=\${$var:+\${$var}\${value:+\$sep}}\$value\""
+}
+
+reset_cb() {
+	config_cb() { return 0; }
+	option_cb() { return 0; }
+}
+reset_cb
+
+config () {
+	local cfgtype="$1"
+	local name="$2"
+    
+	_C=$((_C + 1))
+	name="${name:-cfg${_C}}"
+	config_cb "$cfgtype" "$name"
+	CONFIG_SECTION="$name"
+	nexport "CONFIG_${CONFIG_SECTION}_TYPE=$cfgtype"
+}
+
+option () {
+	local varname="$1"; shift
+	local value="$*"
+	
+	nexport "CONFIG_${CONFIG_SECTION}_${varname}=$value"
+	option_cb "$varname" "$*"
+}
+
 config_rename() {
 	local OLD="$1"
 	local NEW="$2"
@@ -90,25 +123,6 @@ config_foreach() {
 		eval "$function \"\$section\""
 	done
 }
-
-# other UCI funcs
-append() {
-	local var="$1"
-	local value="$2"
-	local sep="${3:- }"
-	eval "export ${var}=\"\${${var}:+\${${var}}${value:+$sep}}\$value\""
-}
-
-reset_cb() {
-	config_cb() {
-		return 0
-	}
-	option_cb() {
-		return 0
-	}
-}
-
-reset_cb
 
 # used by: /bin/uci
 strtok() { # <string> { <variable> [<separator>] ... }
