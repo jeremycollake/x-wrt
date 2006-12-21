@@ -41,9 +41,10 @@ reset_cb
 config () {
 	local cfgtype="$1"
 	local name="$2"
-    
-	_C=$((_C + 1))
-	name="${name:-cfg${_C}}"
+	
+	CONFIG_NUM_SECTIONS=$(($CONFIG_NUM_SECTIONS + 1))
+	name="${name:-cfg$CONFIG_NUM_SECTIONS}"
+	append CONFIG_SECTIONS "$name"
 	config_cb "$cfgtype" "$name"
 	CONFIG_SECTION="$name"
 	export "CONFIG_${CONFIG_SECTION}_TYPE=$cfgtype"
