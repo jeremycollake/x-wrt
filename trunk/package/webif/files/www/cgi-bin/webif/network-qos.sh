@@ -99,11 +99,8 @@ EOF
 		! empty "$FORM_wan_upload" && ! equal "$FORM_wan_upload" "$CONFIG_wan_upload" && {
 			uci_set "qos" "wan" "upload" "$FORM_wan_upload"
 		}		
-		! empty "$FORM_show_advanced" && ! equal "$FORM_show_advanced" "$CONFIG_show_advanced" && {		
-			# this option doensn't exist by default			
-			uci_add "qos" "webif"
-			uci_add "qos" "webif" "show_advanced" "$FORM_show_advanced"
-			uci_set "qos" "wan" "upload" "$FORM_wan_upload"
+		! empty "$FORM_webif_advanced" && ! equal "$FORM_webif_advanced" "$CONFIG_webif_advanced" && {
+			uci_set "qos" "webif" "advanced" "$FORM_webif_advanced"
 		}		
 	}
 }
@@ -199,10 +196,20 @@ swap_rule()
 }	
 	
 uci_load "qos"
+
+# force one-time initializaton of this option if it doensn't exist .. since its new to qos config
+empty "$CONFIG_webif_advanced" && {
+	echo "@TR<<Please wait>>, @TR<<performing a one-time initialization>> ... <br />"
+	uci_add "qos" "settings" "webif"
+	uci_set "qos" "webif" "advanced" "0"
+	uci_commit "qos"
+	uci_load "qos"
+}
+
 FORM_wan_enabled="$CONFIG_wan_enabled"
 FORM_wan_download="$CONFIG_wan_download"
 FORM_wan_upload="$CONFIG_wan_upload"
-FORM_show_advanced=${CONFIG_show_advanced:-$FORM_show_advanced} # since by default option doesn't exist
+FORM_webif_advanced="$CONFIG_webif_advanced"
 
 ######################################################################
 cat <<EOF
@@ -239,8 +246,8 @@ helpitem|Maximum Upload/Download
 helptext|HelpText Maximum Upload#Your maximum sustained upload and download speeds, in kilobits.
 field|@TR<<WAN Download Speed>>|field_n_wan_download
 text|wan_download|$FORM_wan_download| @TR<<kilobits>>
-field|@TR<<Show Advanced Rules>>|field_show_advanced
-select|show_advanced|$FORM_show_advanced
+field|@TR<<Show Advanced Rules>>|field_webif_advanced
+select|webif_advanced|$FORM_webif_advanced
 option|1|Enabled
 option|0|Disabled
 helpitem|Advanced
@@ -265,7 +272,7 @@ cat <<EOF
 <th>@TR<<Port range>></th>
 <th>@TR<<Ports>></th>
 EOF
-equal "$FORM_show_advanced" "1" && {
+equal "$FORM_webif_advanced" "1" && {
 	cat <<EOF
 	<th>@TR<<Type>></th>
 	<th>@TR<<Flags>></th>
@@ -303,8 +310,8 @@ callback_foreach_rule() {
 	config_get _type "$section_name" "TYPE"	
 	case $_type in
 		"classify") ;;
-		"reclassify") equal "$FORM_show_advanced" "0" && return;;
-		"default") equal "$FORM_show_advanced" "0" && return;;
+		"reclassify") equal "$FORM_webif_advanced" "0" && return;;
+		"default") equal "$FORM_webif_advanced" "0" && return;;
 		*) return;;
 	esac	
 	## finishing previous table entry
@@ -334,10 +341,10 @@ callback_foreach_rule() {
 	show_column "$section_name" "layer7" ""
 	show_column "$section_name" "portrange" ""
 	show_column "$section_name" "ports" ""
-	equal "$FORM_show_advanced" "1" && show_column "$section_name" "TYPE" "" ""		
-	equal "$FORM_show_advanced" "1" && show_column "$section_name" "tcpflags" "" ""
-	equal "$FORM_show_advanced" "1" && show_column "$section_name" "pktsize" "" ""
-	equal "$FORM_show_advanced" "1" && show_column "$section_name" "mark" "" ""
+	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "TYPE" "" ""		
+	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "tcpflags" "" ""
+	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "pktsize" "" ""
+	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "mark" "" ""
 	echo "<td bgcolor=\"$cur_color\"><a href=\"$SCRIPT_NAME?qos_edit=$section_name\">@TR<<edit>></a>&nbsp;"
 	echo "<a href=\"$SCRIPT_NAME?qos_remove=$section_name\">@TR<<delete>></a>&nbsp;"
 	# if there is a last shown rule, show 'up' option
@@ -391,7 +398,7 @@ EOF
 	config_get _layer7 "${current_item}" "layer7"
 	config_get _ipp2p "${current_item}" "ipp2p"		
 	ADVANCED_FIELD_FORM=""
-	equal "$FORM_show_advanced" "1" && {
+	equal "$FORM_webif_advanced" "1" && {
 		config_get _mark "${current_item}" "mark"
 		config_get _tcpflags "${current_item}" "tcpflags"
 		config_get _pktsize "${current_item}" "pktsize"
