@@ -316,16 +316,16 @@ install and use X-Wrt on your router:</font></p>
 						<td rowspan="2">&nbsp;</td>
 					</tr>
 					<tr>
-						<td width="257"><font face="Verdana">To install latest 
-						<b>daily</b>:</font></td>
-						<td><font face="Verdana">
-						<input type="submit" value=" Install " name="install_webif1"  onclick="installWebif(this.form)"></font></td>
-					</tr>
-					<tr>
 						<td width="257"><font face="Verdana">To install last <b>stable</b>:</font></td>
 						<td><font face="Verdana">
 						<input type="submit" value=" Install " name="install_webif0"  onclick="installWebifMilestone2(this.form)"></font></td>
 						<td>&nbsp;</td>
+					</tr>
+					<tr>
+						<td width="257"><font face="Verdana">To install latest 
+						<b>daily</b>:</font></td>
+						<td><font face="Verdana">
+						<input type="submit" value=" Install " name="install_webif1"  onclick="installWebif(this.form)"></font></td>
 					</tr>
 				</table>
 				<p><b><i>Be warned, </i></b><i><b>the very first install of 
