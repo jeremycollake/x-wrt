@@ -62,7 +62,9 @@ function installWebifMilestone2(form)
 						<a href="https://developer.berlios.de/projects/xwrt/">
 						Project Hosting</a></font></li>
 						<li><font face="Verdana">
-						<a href="ftp://ftp.berlios.de/pub/xwrt">FTP Site</a></font></li>
+						<a href="http://xwrt.kicks-ass.org/xwrt/">FTP Site #1</a>  (Firmware Images, Image Builder, SDK)</font></li>
+						<li><font face="Verdana">
+						<a href="ftp://ftp.berlios.de/pub/xwrt">FTP Site #2</a> (Source / Package Repository)</font></li>
 						<li><font face="Verdana">
 						<a href="http://www.bitsum.com/xwrt">Screenshots</a></font></li>
 						<li><font face="Verdana">
@@ -174,7 +176,7 @@ install and use X-Wrt on your router:</font></p>
 				</font><font color="#800000"><b><i>Recommended for most users **</i></b></font><blockquote>
 					<ol>
 						<li>Browse the
-						<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian">
+						<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/">
 						X-Wrt ftp directory</a> for the OpenWrt/X-Wrt firmware 
 						image appropriate for your router (based on the 
 						filename).</li>
@@ -191,82 +193,82 @@ install and use X-Wrt on your router:</font></p>
 							<p><b>Direct Firmware Links</b></p>
 							<ul>
 								<li>
-								<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/">
+								<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/default/">
 								Default Firmware Images</a> (PPPOE included)<ul>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-wrt54g-squashfs.bin">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/default/openwrt-wrt54g-squashfs.bin">
 									WRT54G v1-v4 and WRT54GL</a></li>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-wrt54g3g-squashfs.bin">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/default/openwrt-wrt54g3g-squashfs.bin">
 									WRT54g3g</a></li>
 									<li>WRT54G v5-v6 (not yet available)</li>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-wrt54gs-squashfs.bin">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/default/openwrt-wrt54gs-squashfs.bin">
 									WRT54GS v1-v3</a></li>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-wrt54gs_v4-squashfs.bin">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/default/openwrt-wrt54gs_v4-squashfs.bin">
 									WRT54GS v4</a></li>
 									<li>WRT54GS v5-v6 (not yet available)</li>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-wrtsl54gs-squashfs.bin">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/default/openwrt-wrtsl54gs-squashfs.bin">
 									WRTSL54GS</a></li>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-brcm-2.4-squashfs.trx">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/default/openwrt-brcm-2.4-squashfs.trx">
 									WL-500g/d/p</a></li>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-brcm-2.4-squashfs.trx">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/default/openwrt-brcm-2.4-squashfs.trx">
 									WZR-HP-54GS</a></li>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-brcm-2.4-squashfs.trx">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/default/openwrt-brcm-2.4-squashfs.trx">
 									WHR-54GS</a></li>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-we800g-squashfs.bin">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/default/openwrt-we800g-squashfs.bin">
 									WE-800G</a></li>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-wa840g-squashfs.bin">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/default/openwrt-wa840g-squashfs.bin">
 									WA-840G</a></li>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/default/openwrt-wr850g-squashfs.bin">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/default/openwrt-wr850g-squashfs.bin">
 									WR-850G</a></li>
 								</ul>
 								</li>
 								<li>
-								<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/">
+								<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/pptp/">
 								PPTP Firmware Images</a><ul>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-wrt54g-squashfs.bin">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/pptp/openwrt-wrt54g-squashfs.bin">
 									WRT54G v1-v4 and WRT54GL</a></li>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-wrt54g3g-squashfs.bin">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/pptp/openwrt-wrt54g3g-squashfs.bin">
 									WRT54g3g</a></li>
 									<li>WRT54G v5-v6 (not yet available)</li>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-wrt54gs-squashfs.bin">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/pptp/openwrt-wrt54gs-squashfs.bin">
 									WRT54GS v1-v3</a></li>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-wrt54gs_v4-squashfs.bin">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/pptp/openwrt-wrt54gs_v4-squashfs.bin">
 									WRT54GS v4</a></li>
 									<li>WRT54GS v5-v6 (not yet available)</li>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-wrtsl54gs-squashfs.bin">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/pptp/openwrt-wrtsl54gs-squashfs.bin">
 									WRTSL54GS</a></li>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-brcm-2.4-squashfs.trx">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/pptp/openwrt-brcm-2.4-squashfs.trx">
 									WL-500g/d/p</a></li>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-brcm-2.4-squashfs.trx">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/pptp/openwrt-brcm-2.4-squashfs.trx">
 									WZR-HP-54GS</a></li>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-brcm-2.4-squashfs.trx">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/pptp/openwrt-brcm-2.4-squashfs.trx">
 									WHR-54GS</a></li>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-we800g-squashfs.bin">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/pptp/openwrt-we800g-squashfs.bin">
 									WE-800G</a></li>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-wa840g-squashfs.bin">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/pptp/openwrt-wa840g-squashfs.bin">
 									WA-840G</a></li>
 									<li>
-									<a href="ftp://ftp.berlios.de/pub/xwrt/images/stable/whiterussian/pptp/openwrt-wr850g-squashfs.bin">
+									<a href="http://xwrt.kicks-ass.org/xwrt/firmware_images/whiterussian/pre-0.9/milestone_2-5/pptp/openwrt-wr850g-squashfs.bin">
 									WR-850G</a></li>
 								</ul>
 								</li>
