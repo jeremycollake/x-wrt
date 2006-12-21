@@ -265,6 +265,12 @@ cat <<EOF
 <table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;" border="0" cellpadding="3" cellspacing="2"><tbody>
 <tr>
 <th>@TR<<Group>></th>
+EOF
+equal "$FORM_webif_advanced" "1" && {
+	cat <<EOF
+	<th>@TR<<Type>></th>	
+EOF
+cat <<EOF
 <th>@TR<<Source IP>></th>
 <th>@TR<<Dest. IP>></th>
 <th>@TR<<Protocol>></th>
@@ -273,8 +279,7 @@ cat <<EOF
 <th>@TR<<Ports>></th>
 EOF
 equal "$FORM_webif_advanced" "1" && {
-	cat <<EOF
-	<th>@TR<<Type>></th>
+	cat <<EOF	
 	<th>@TR<<Flags>></th>
 	<th>@TR<<PktSize>></th>
 	<th>@TR<<Mark>></th>
@@ -329,6 +334,7 @@ callback_foreach_rule() {
 	fi
 	echo "<tr class=\"$cur_color\">"		
 	show_column "$section_name" "target" "" "..."
+	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "TYPE" "" ""
 	show_column "$section_name" "srchost" ""
 	show_column "$section_name" "dsthost" ""
 	eval _val="\"\$CONFIG_${section_name}_ipp2p\""
@@ -340,8 +346,7 @@ callback_foreach_rule() {
 	fi		
 	show_column "$section_name" "layer7" ""
 	show_column "$section_name" "portrange" ""
-	show_column "$section_name" "ports" ""
-	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "TYPE" "" ""		
+	show_column "$section_name" "ports" ""	
 	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "tcpflags" "" ""
 	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "pktsize" "" ""
 	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "mark" "" ""
