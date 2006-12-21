@@ -293,6 +293,8 @@ install and use X-Wrt on your router:</font></p>
 			<font color="#FF0000"><b>WARNING: </b>Do not install webif<sup>2</sup> on the micro images 
 			OpenWrt distributes. They lack the 'ipkg' package, which is 
 			currently critical to the proper operation of webif<sup>2</sup>.</font></font></li>
+			<li><font face="Verdana">Visit your router's IP with your web 
+			browser and set the password. For example, http://192.168.1.1.</font></li>
 			<li><font face="Verdana">Enter your router's IP address in the field below and click the 
 			button below to install the latest official beta release of X-Wrt's webif. 
 			After you install the latest official beta release the 'check for 
@@ -328,6 +330,10 @@ install and use X-Wrt on your router:</font></p>
 						<input type="submit" value=" Install " name="install_webif1"  onclick="installWebif(this.form)"></font></td>
 					</tr>
 				</table>
+				<p>You will not see much of anything for a minute. Just wait. If 
+				you see the password prompt, you skipped step 2 and need to come 
+				back here and click the above button again after you've set the 
+				password.</p>
 				<p><b><i>Be warned, </i></b><i><b>the very first install of 
 		webif<sup>2</sup> will reboot your router!<br>
 &nbsp;</b></i></p>
