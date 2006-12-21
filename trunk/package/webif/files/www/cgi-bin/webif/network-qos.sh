@@ -23,8 +23,6 @@
 #
 . /usr/lib/webif/webif.sh
 
-G_SHOW_ADVANCED_RULES="1"	# if set, 'default' and 'reclassify' rules shown too
-
 header "Network" "QoS" "@TR<<QOS Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 if ! empty "$FORM_install_nbd"; then
@@ -79,6 +77,9 @@ EOF
 			uci_set_value_remove_if_empty "qos" "$current_qos_item" "portrange" "$FORM_current_portrange"
 			uci_set_value_remove_if_empty "qos" "$current_qos_item" "layer7" "$FORM_current_layer7"
 			uci_set_value_remove_if_empty "qos" "$current_qos_item" "ipp2p" "$FORM_current_ipp2p"
+			uci_set_value_remove_if_empty "qos" "$current_qos_item" "mark" "$FORM_current_mark"
+			uci_set_value_remove_if_empty "qos" "$current_qos_item" "tcpflags" "$FORM_current_tcpflags"
+			uci_set_value_remove_if_empty "qos" "$current_qos_item" "pktsize" "$FORM_current_pktsize"			
 		fi
 	}
 	
@@ -97,7 +98,13 @@ EOF
 		}
 		! empty "$FORM_wan_upload" && ! equal "$FORM_wan_upload" "$CONFIG_wan_upload" && {
 			uci_set "qos" "wan" "upload" "$FORM_wan_upload"
-		}
+		}		
+		! empty "$FORM_show_advanced" && ! equal "$FORM_show_advanced" "$CONFIG_show_advanced" && {		
+			# this option doensn't exist by default			
+			uci_add "qos" "webif"
+			uci_add "qos" "webif" "show_advanced" "$FORM_show_advanced"
+			uci_set "qos" "wan" "upload" "$FORM_wan_upload"
+		}		
 	}
 }
 
@@ -124,6 +131,9 @@ EOF
 		uci_set "qos" "$current_qos_item" "ipp2p" ""
 		uci_set "qos" "$current_qos_item" "ports" ""
 		uci_set "qos" "$current_qos_item" "portrange" ""
+		uci_set "qos" "$current_qos_item" "mark" ""
+		uci_set "qos" "$current_qos_item" "tcpflags" ""
+		uci_set "qos" "$current_qos_item" "pktsize" ""
 		# show 'deleted' as target to indicate pending delete
 		uci_set "qos" "$current_qos_item" "target" "deleted"
 		uci_remove "qos" "$current_qos_item"
@@ -133,31 +143,48 @@ EOF
 # copy a rule to another - used by swap_rule()
 copy_rule()
 {
-	local rule1_index=$1
-	local rule2_index=$2
-	eval _target="\"\$CONFIG_${rule2_index}_target\""	
-	eval _srchost="\"\$CONFIG_${rule2_index}_srchost\""
-	eval _dsthost="\"\$CONFIG_${rule2_index}_dsthost\""		
-	eval _proto="\"\$CONFIG_${rule2_index}_proto\""
-	eval _ports="\"\$CONFIG_${rule2_index}_ports\""
-	eval _portrange="\"\$CONFIG_${rule2_index}_portrange\""
-	eval _layer7="\"\$CONFIG_${rule2_index}_layer7\""	
-	eval _ipp2p="\"\$CONFIG_${rule2_index}_ipp2p\""
-	uci_set_value_remove_if_empty "qos" "$rule1_index" "target" "$_target"	
-	uci_set_value_remove_if_empty "qos" "$rule1_index" "srchost" "$_srchost"
-	uci_set_value_remove_if_empty "qos" "$rule1_index" "dsthost" "$_dsthost"
-	uci_set_value_remove_if_empty "qos" "$rule1_index" "proto" "$_proto"
-	uci_set_value_remove_if_empty "qos" "$rule1_index" "layer7" "$_layer7"
-	uci_set_value_remove_if_empty "qos" "$rule1_index" "ipp2p" "$_ipp2p"
-	uci_set_value_remove_if_empty "qos" "$rule1_index" "ports" "$_ports"
-	uci_set_value_remove_if_empty "qos" "$rule1_index" "portrange" "$_portrange"
+	local section_src=$1
+	local section_dest=$2
+	local _target
+	local _srchost
+	local _dsthost
+	local _proto
+	local _ports
+	local _portrange
+	local _layer7
+	local _ipp2p
+	local _mark
+	local _tcpflags
+	local _pktsize
+	config_get _target "${section_dest}" "target"
+	config_get _srchost "${section_dest}" "srchost"
+	config_get _dsthost "${section_dest}" "dsthost"
+	config_get _proto "${section_dest}" "proto"
+	config_get _ports "${section_dest}" "ports"
+	config_get _portrange "${section_dest}" "portrange"
+	config_get _layer7 "${section_dest}" "layer7"
+	config_get _ipp2p "${section_dest}" "ipp2p"		
+	config_get _mark "${section_dest}" "mark"
+	config_get _tcpflags "${section_dest}" "tcpflags"
+	config_get _pktsize "${section_dest}" "pktsize"		
+	uci_set_value_remove_if_empty "qos" "$section_src" "target" "$_target"	
+	uci_set_value_remove_if_empty "qos" "$section_src" "srchost" "$_srchost"
+	uci_set_value_remove_if_empty "qos" "$section_src" "dsthost" "$_dsthost"
+	uci_set_value_remove_if_empty "qos" "$section_src" "proto" "$_proto"
+	uci_set_value_remove_if_empty "qos" "$section_src" "layer7" "$_layer7"
+	uci_set_value_remove_if_empty "qos" "$section_src" "ipp2p" "$_ipp2p"
+	uci_set_value_remove_if_empty "qos" "$section_src" "ports" "$_ports"
+	uci_set_value_remove_if_empty "qos" "$section_src" "portrange" "$_portrange"
+	uci_set_value_remove_if_empty "qos" "$section_src" "mark" "$_mark"
+	uci_set_value_remove_if_empty "qos" "$section_src" "tcpflags" "$_tcpflags"
+	uci_set_value_remove_if_empty "qos" "$section_src" "pktsize" "$_pktsize"
 }
 
 # swap a rule with another - for up/down
 swap_rule()
 {
-	local rule1_index=$1
-	local rule2_index=$2
+	local section_src=$1
+	local section_dest=$2
 	copy_rule "$1" "$2"
 	copy_rule "$2" "$1"
 	# now a uci_load will reload swapped rules
@@ -175,6 +202,7 @@ uci_load "qos"
 FORM_wan_enabled="$CONFIG_wan_enabled"
 FORM_wan_download="$CONFIG_wan_download"
 FORM_wan_upload="$CONFIG_wan_upload"
+FORM_show_advanced=${CONFIG_show_advanced:-$FORM_show_advanced} # since by default option doesn't exist
 
 ######################################################################
 cat <<EOF
@@ -211,8 +239,12 @@ helpitem|Maximum Upload/Download
 helptext|HelpText Maximum Upload#Your maximum sustained upload and download speeds, in kilobits.
 field|@TR<<WAN Download Speed>>|field_n_wan_download
 text|wan_download|$FORM_wan_download| @TR<<kilobits>>
+field|@TR<<Show Advanced Rules>>|field_show_advanced
+select|show_advanced|$FORM_show_advanced
+option|1|Enabled
+option|0|Disabled
 helpitem|Advanced
-helptext|HelpText Advanced#Normally users just use the form below to configure QoS. Some people may need access to the more advanced settings. Most people do NOT and should NOT. <a href="./system-editor.sh?path=/etc/config&amp;edit=qos">Manually edit config</a>
+helptext|HelpText Advanced#Normally users just use the form below to configure QoS. Some people may need access to the more advanced settings. Alternatively, you can <a href="./system-editor.sh?path=/etc/config&amp;edit=qos">manually edit the config</a>
 end_form
 EOF
 
@@ -233,7 +265,7 @@ cat <<EOF
 <th>@TR<<Port range>></th>
 <th>@TR<<Ports>></th>
 EOF
-equal "$G_SHOW_ADVANCED_RULES" "1" && {
+equal "$FORM_show_advanced" "1" && {
 	cat <<EOF
 	<th>@TR<<Type>></th>
 	<th>@TR<<Flags>></th>
@@ -267,57 +299,54 @@ show_column()
 #
 local last_shown_rule="-1"
 callback_foreach_rule() {
-	local count=$1
-	config_get _type "$count" "TYPE"
+	local section_name=$1
+	config_get _type "$section_name" "TYPE"	
 	case $_type in
 		"classify") ;;
-		"reclassify") equal "$G_SHOW_ADVANCED_RULES" "0" && return;;
-		"default") equal "$G_SHOW_ADVANCED_RULES" "0" && return;;
+		"reclassify") equal "$FORM_show_advanced" "0" && return;;
+		"default") equal "$FORM_show_advanced" "0" && return;;
 		*) return;;
-	esac
-	equal "$_type" "classify" && {	
-		## finishing previous table entry
-		# for 'down' since we didn't know index of next classify item.
-		# if there is a last shown rule, show 'up' option for PREVIOUS rule
-		! equal "$last_shown_rule" "-1" && {
-		 	echo "<a href=\"$SCRIPT_NAME?qos_swap_dest=$count&amp;qos_swap_src=$last_shown_rule\">@TR<<down>></a>"
-			echo "</td></tr>"
-		}	
-		## end finishing last iteration
-
-		if equal "$cur_color" "even"; then
-			cur_color="odd"
-		else
-			cur_color="even"
-		fi
-		echo "<tr class=\"$cur_color\">"		
-		show_column "$count" "target" "" "..."
-		show_column "$count" "srchost" ""
-		show_column "$count" "dsthost" ""
-		eval _val="\"\$CONFIG_${count}_ipp2p\""
-		if empty "$_val"; then
-		 	show_column "$count" "proto" ""
-		else
-			equal "$_val" "all" && _val="peer-2-peer"
-			show_column "$count" "proto" "" "$_val"
-		fi		
-		show_column "$count" "layer7" ""
-		show_column "$count" "portrange" ""
-		show_column "$count" "ports" ""
-		equal "$G_SHOW_ADVANCED_RULES" "1" && show_column "$count" "TYPE" "" ""		
-		equal "$G_SHOW_ADVANCED_RULES" "1" && show_column "$count" "tcpflags" "" ""
-		equal "$G_SHOW_ADVANCED_RULES" "1" && show_column "$count" "pktsize" "" ""
-		equal "$G_SHOW_ADVANCED_RULES" "1" && show_column "$count" "mark" "" ""
-		echo "<td bgcolor=\"$cur_color\"><a href=\"$SCRIPT_NAME?qos_edit=$count\">@TR<<edit>></a>&nbsp;"
-		echo "<a href=\"$SCRIPT_NAME?qos_remove=$count\">@TR<<delete>></a>&nbsp;"
-		# if there is a last shown rule, show 'up' option
-		! equal "$last_shown_rule" "-1" && {
-		 	echo "<a href=\"$SCRIPT_NAME?qos_swap_src=$count&amp;qos_swap_dest=$last_shown_rule\">@TR<<up>></a>&nbsp;"
-		}
-		# if we are adding, always keep last index in FORM_qos_edit
-		! empty "$FORM_qos_add" && FORM_qos_edit="$count"
-		last_shown_rule="$count"
+	esac	
+	## finishing previous table entry
+	# for 'down' since we didn't know index of next classify item.
+	# if there is a last shown rule, show 'up' option for PREVIOUS rule
+	! equal "$last_shown_rule" "-1" && {
+	 	echo "<a href=\"$SCRIPT_NAME?qos_swap_dest=$section_name&amp;qos_swap_src=$last_shown_rule\">@TR<<down>></a>"
+		echo "</td></tr>"
+	}	
+	## end finishing last iteration
+	if equal "$cur_color" "even"; then
+		cur_color="odd"
+	else
+		cur_color="even"
+	fi
+	echo "<tr class=\"$cur_color\">"		
+	show_column "$section_name" "target" "" "..."
+	show_column "$section_name" "srchost" ""
+	show_column "$section_name" "dsthost" ""
+	eval _val="\"\$CONFIG_${section_name}_ipp2p\""
+	if empty "$_val"; then
+	 	show_column "$section_name" "proto" ""
+	else
+		equal "$_val" "all" && _val="peer-2-peer"
+		show_column "$section_name" "proto" "" "$_val"
+	fi		
+	show_column "$section_name" "layer7" ""
+	show_column "$section_name" "portrange" ""
+	show_column "$section_name" "ports" ""
+	equal "$FORM_show_advanced" "1" && show_column "$section_name" "TYPE" "" ""		
+	equal "$FORM_show_advanced" "1" && show_column "$section_name" "tcpflags" "" ""
+	equal "$FORM_show_advanced" "1" && show_column "$section_name" "pktsize" "" ""
+	equal "$FORM_show_advanced" "1" && show_column "$section_name" "mark" "" ""
+	echo "<td bgcolor=\"$cur_color\"><a href=\"$SCRIPT_NAME?qos_edit=$section_name\">@TR<<edit>></a>&nbsp;"
+	echo "<a href=\"$SCRIPT_NAME?qos_remove=$section_name\">@TR<<delete>></a>&nbsp;"
+	# if there is a last shown rule, show 'up' option
+	! equal "$last_shown_rule" "-1" && {
+	 	echo "<a href=\"$SCRIPT_NAME?qos_swap_src=$section_name&amp;qos_swap_dest=$last_shown_rule\">@TR<<up>></a>&nbsp;"
 	}
+	# if we are adding, always keep last index in FORM_qos_edit
+	! empty "$FORM_qos_add" && FORM_qos_edit="$section_name"
+	last_shown_rule="$section_name"	
 }
 
 config_foreach callback_foreach_rule
@@ -360,12 +389,21 @@ EOF
 	config_get _ports "${current_item}" "ports"
 	config_get _portrange "${current_item}" "portrange"
 	config_get _layer7 "${current_item}" "layer7"
-	equal "$G_SHOW_ADVANCED_RULES" "1" && {
-		config_get _ipp2p "${current_item}" "ipp2p"
+	config_get _ipp2p "${current_item}" "ipp2p"		
+	ADVANCED_FIELD_FORM=""
+	equal "$FORM_show_advanced" "1" && {
 		config_get _mark "${current_item}" "mark"
 		config_get _tcpflags "${current_item}" "tcpflags"
 		config_get _pktsize "${current_item}" "pktsize"
+		ADVANCED_FIELD_FORM="
+			field|@TR<<TCP Flags>>
+			text|current_tcpflags|$_tcpflags
+			field|@TR<<Mark>>
+			text|current_mark|$_mark
+			field|@TR<<Packet Size>>
+			text|current_mark|$_pktsize"
 	}
+	
 	display_form <<EOF
 	start_form|@TR<<QoS Rule Edit>>
 	field|@TR<<Rules Index>>|rule_number|hidden
@@ -384,7 +422,9 @@ EOF
 	select|current_proto|$_proto
 	option||Any
 	option|tcp|TCP
-	option|udp|UDP	
+	option|udp|UDP
+	option|icmp|ICMP
+	$ADVANCED_FIELD_FORM
 	field|@TR<<Ports>>|current_ports
 	text|current_ports|$_ports
 	field|@TR<<Port Range>>|current_portrange
