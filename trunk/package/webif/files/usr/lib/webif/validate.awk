@@ -119,7 +119,7 @@ valid == 1 {
 			if ($1 == "int") {
 				if (value < min) { valid = 0; verr = "@TR<<Value too small>> (@TR<<minimum>>: " min ")" }
 			} else if ($1 == "string") {
-				if (length(value) < min) { valid = 0; verr = "@TR<<Value too small>> (@TR<<minimum length>>: " min ")"}
+				if (length(value) < min) { valid = 0; verr = "@TR<<String too short>> (@TR<<minimum length>>: " min ")"}
 			}
 		} else if ((options[i] ~ /^max=/) && (value != ""))  {
 			max = options[i]
@@ -128,7 +128,7 @@ valid == 1 {
 			if ($1 == "int") {
 				if (value > max) { valid = 0; verr = "@TR<<Value too large>> (@TR<<maximum>>: " max ")" }
 			} else if ($1 == "string") {
-				if (length(value) > max) { valid = 0; verr = "@TR<<String too short>> (@TR<<maximum>>: " max ")" }
+				if (length(value) > max) { valid = 0; verr = "@TR<<String too long>> (@TR<<maximum length>>: " max ")" }
 			}
 		} else if ((options[i] == "nodots") && ($1 == "hostname")) {
 			if (value ~ /\./) {

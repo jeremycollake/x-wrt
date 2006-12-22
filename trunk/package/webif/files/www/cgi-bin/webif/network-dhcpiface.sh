@@ -202,7 +202,7 @@ END {
 EOF
 
 		display_form<<EOF
-start_form|@TR<<DHCP Server For $FORM_iface>>
+start_form|@TR<<DHCP Server For>> $FORM_iface
 field|@TR<<Interface>>|iface_field|hidden
 text|iface|$FORM_iface
 field|@TR<<DHCP Service>>|dhcp_enabled_field

@@ -107,7 +107,7 @@ string|$wlan_tx_invalid
 field|@TR<<Tx Missed Beacon>>|wan_tx_missed
 string|$wlan_tx_missed
 helpitem|WLAN
-helptext|WLAN LAN#LAN stands for Wireless Local Area Network.
+helptext|WLAN LAN#WLAN stands for Wireless Local Area Network.
 field||spacer1
 string|<br /><br />
 field||show_raw
@@ -128,7 +128,7 @@ EOF
 echo "<tr><td><br /></td></tr>
 	<div class=\"smalltext\">
 		<tr>
-			<th><b>@TR<<Interfaces Status|WAN Interface>></b></th>
+			<th><b>@TR<<Interfaces Status WAN|WAN Interface>></b></th>
 		</tr>
 		<tr>
 			<td><pre>"
@@ -137,7 +137,7 @@ echo "</pre></td>
 		</tr>
 		<tr><td><br /><br /></td></tr>
 		<tr>
-			<th><b>@TR<<Interfaces Status|LAN Interface>></b></th>
+			<th><b>@TR<<Interfaces Status LAN|LAN Interface>></b></th>
 		</tr>
 		<tr>
 			<td><pre>"
@@ -146,7 +146,7 @@ echo "</pre></td>
 		</tr>
 		<tr><td><br /><br /></td></tr>
 		<tr>
-			<th><b>@TR<<Interfaces Status|Wireless Interface>></b></th>
+			<th><b>@TR<<Interfaces Status WLAN|Wireless Interface>></b></th>
 		</tr>
 		<tr>
 			<td><pre>"

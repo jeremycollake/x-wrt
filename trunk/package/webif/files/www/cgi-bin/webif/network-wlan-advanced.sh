@@ -211,7 +211,7 @@ text|wl0_maxassoc|$FORM_wl0_maxassoc
 field|Wireless Distance (In Meters)
 text|wl0_distance|$FORM_wl0_distance
 helpitem|Wireless Distance
-helptext|Helptext Wirless Distance#You must enter a number that is double the distance of your longest link.
+helptext|Helptext Wireless Distance#You must enter a number that is double the distance of your longest link.
 end_form
 EOF
 

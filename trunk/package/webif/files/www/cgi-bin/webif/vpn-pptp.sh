@@ -117,7 +117,7 @@ BEGIN {
 	print "<form enctype=\\"multipart/form-data\\" method=\\"post\\">"
 	start_form("@TR<<PPTP Client Connections>>"," style=\"display:none;\" id=\"pptppeers\"")
 	print "<table width=\\"70%\\" summary=\\"Settings\\">"
-	print "<tr><th>@TR<<Peername>></th><th>@TR<<Hostname>></th><th>@TR<<Username>></th><th>@TR<<Password>></th><th>IP Address</th><th></th></tr>"
+	print "<tr><th>@TR<<Peername>></th><th>@TR<<Hostname>></th><th>@TR<<Username>></th><th>@TR<<Password>></th><th>@TR<<IP Address>></th><th></th></tr>"
 }
 (\$4 != "") {
 	user[\$1]=\$2
@@ -160,7 +160,7 @@ BEGIN {
 	print "<form enctype=\\"multipart/form-data\\" method=\\"post\\">"
 	start_form("@TR<<PPTP VPN Users>>"," style=\"display:none;\" id=\"pptpusers\"")
 	print "<table width=\\"70%\\" summary=\\"Settings\\">"
-	print "<tr><th>@TR<<Username>></th><th>@TR<<Password>></th><th>IP Address</th><th></th></tr>"
+	print "<tr><th>@TR<<Username>></th><th>@TR<<Password>></th><th>@TR<<IP Address>></th><th></th></tr>"
 }
 
 {
