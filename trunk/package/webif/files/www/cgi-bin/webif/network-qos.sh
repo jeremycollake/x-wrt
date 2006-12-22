@@ -270,6 +270,7 @@ equal "$FORM_webif_advanced" "1" && {
 	cat <<EOF
 	<th>@TR<<Type>></th>	
 EOF
+}
 cat <<EOF
 <th>@TR<<Source IP>></th>
 <th>@TR<<Dest. IP>></th>
