@@ -26,7 +26,7 @@ add_missing_symbols() {
 		for cur_symbol in $all_symbol_names; do
 			cur_symbol=$(echo "$cur_symbol" | sed s/'%20'/' '/g) # put back spaces
 			# make sure symbol doesn't contain '$'			
-			if ! echo "$cur_symbol" | grep -q '\$' && ! echo "$cur_symbol" | grep -q '[i]'; then
+			if ! echo "$cur_symbol" | grep -q '\$' && ! echo "$cur_symbol" | grep -q 'c [i]'; then
 				sym_lookup=$(grep "$cur_symbol" "$lang_file" 2>&-)
 					[ "$?" != "0" ] && {
 						echo "adding $cur_symbol to $lang_file"
