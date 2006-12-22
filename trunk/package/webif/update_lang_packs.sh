@@ -3,11 +3,12 @@
 # (c)2006 Owen Brotherwood and Jeremy Collake - X-Wrt project
 # Released under GPL license.
 #
+ROOT="$1"
 [ "$#" != 1 ] && {
 	echo "USAGE: $0 webif_base_file_folder"	
-	exit 1
+	echo "Assuming ./files/ as base folder ..."
+	ROOT="files"
 }
-ROOT="$1"
 add_missing_symbols() {
         for dir in ${ROOT}/www/* ${ROOT}/usr/lib/webif/*; do
                 tmp_symbol_names=$(grep @TR -R "$dir" | sed -e 's/.*@TR<<\(.*\)>>.*/\1/' | tr '|' '#' | cut -f1 -d'#' | sed -e s/'"'//g -e s/' '/'%20'/g | sort -u)
@@ -19,11 +20,13 @@ add_missing_symbols() {
 	#
 	for lang_dir in ${ROOT}/usr/lib/webif/lang/*; do
 		lang_file="${lang_dir}/common.txt"
-		echo "Processing $lang_file"
+		echo
+		echo "Processing $lang_file ........."
+		echo
 		for cur_symbol in $all_symbol_names; do
 			cur_symbol=$(echo "$cur_symbol" | sed s/'%20'/' '/g) # put back spaces
 			# make sure symbol doesn't contain '$'			
-			if echo "$cur_symbol" | grep -q '$'; then
+			if ! echo "$cur_symbol" | grep -q '\$' && ! echo "$cur_symbol" | grep -q '[i]'; then
 				sym_lookup=$(grep "$cur_symbol" "$lang_file" 2>&-)
 					[ "$?" != "0" ] && {
 						echo "adding $cur_symbol to $lang_file"
@@ -34,3 +37,5 @@ add_missing_symbols() {
 	done	
 }
 add_missing_symbols
+echo "All Done."
+
