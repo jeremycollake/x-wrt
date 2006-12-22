@@ -1,7 +1,8 @@
 #!/bin/sh
-# (c)2006 Owen Brotherwood and Jeremy Collake
-# X-Wrt project
+# Add missing/new symbols from translations.
+# (c)2006 Owen Brotherwood and Jeremy Collake - X-Wrt project
 # Released under GPL license.
+#
 [ "$#" != 1 ] && {
 	echo "USAGE: $0 webif_base_file_folder"	
 	exit 1
@@ -18,20 +19,18 @@ add_missing_symbols() {
 	#
 	for lang_dir in ${ROOT}/usr/lib/webif/lang/*; do
 		lang_file="${lang_dir}/common.txt"
+		echo "Processing $lang_file"
 		for cur_symbol in $all_symbol_names; do
 			cur_symbol=$(echo "$cur_symbol" | sed s/'%20'/' '/g) # put back spaces
-			echo "$cur_symbol" | grep -q '$' # make sure symbol doesn't contain '$'
-			[ "$?" != "0" ] && {
-			sym_lookup=$(grep "$cur_symbol" "$lang_file" 2>&-)
-				[ "$?" != "0" ] && {
-					echo "adding $cur_symbol to $lang_file"
-					echo "$cur_symbol =>" >> $lang_file
-				}
-			}
+			# make sure symbol doesn't contain '$'			
+			if echo "$cur_symbol" | grep -q '$'; then
+				sym_lookup=$(grep "$cur_symbol" "$lang_file" 2>&-)
+					[ "$?" != "0" ] && {
+						echo "adding $cur_symbol to $lang_file"
+						echo "$cur_symbol =>" >> $lang_file
+					}
+			fi
 		done
-	done
-	#
-	#
-	#
+	done	
 }
-add_missing_symbols 
+add_missing_symbols
