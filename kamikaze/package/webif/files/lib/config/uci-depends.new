@@ -9,7 +9,7 @@ _C=0
 
 # perform export -n only if available
 _EXPORT_N_OPTION="-n"
-local ntest=$(export -n 2>&1)
+ntest=$(export -n 2>&1)
 if echo "$ntest" | grep -iq "Illegal option -n"; then	
 	_EXPORT_N_OPTION=""
 fi

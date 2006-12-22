@@ -5,7 +5,7 @@
 # be followed by running the webif-sync.sh script.
 #
 . /usr/lib/webif/webif.sh
-header "Status" "USB" "USB Devices"
+header "Status" "USB" "@TR<<USB Devices>>"
 
 display_form <<EOF
 start_form|@TR<<All connected devices (excluding system hubs)>>
