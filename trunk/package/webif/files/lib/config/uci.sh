@@ -129,7 +129,7 @@ uci_commit() {
 		}
 		
 		config_load "$PACKAGE"
-		# does CONFIG_FILENAME really *ever* get set anyway?
+		# todo: CONFIG_FILENAME never really gets set in config_load
 		CONFIG_FILENAME="${CONFIG_FILENAME:-$ROOT/etc/config/$PACKAGE_BASE}"
 		uci_do_update "$CONFIG_FILENAME" "$updatestr" > "/tmp/.uci/$PACKAGE_BASE.new" && {	
 			# remove extraneous blank lines and put new confg file
