@@ -12,7 +12,7 @@ load_settings "ezipupdate"
 # test for broken ez-ipupdate package as found in OpenWrt's RC6 official repository
 # if found, give an option to install proper one from X-Wrt repository.
 ! is_kamikaze && {
-cat "/etc/hotplug.d/iface/10-ez-ipupdate" | grep -iq "include /lib/network"
+cat "/etc/hotplug.d/iface/10-ez-ipupdate" 2> /dev/null | grep -iq "include /lib/network"
 equal "$?" "0" && {
 	echo "<div class=\"warning\">@TR<<broken_ezip|You have a partially broken ez-ipupdate package, as found in OpenWrt's official RC6 repository. To install a fixed copy of the package from X-Wrt's repository, press the button below>>.</div>"
 display_form <<EOF
