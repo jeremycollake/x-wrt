@@ -97,11 +97,11 @@ int|FORM_ddns_max_interval|Max Interval (sec)|min=86400 max=2196000|$FORM_ddns_m
 #field|Connection Type (only for TZO)
 #text|ddns_tzo_ctype|$FORM_ddns_tzo_ctype
 
-display_form "start_form|DynDNS
-field|ez-ipupdate
+display_form "start_form|@TR<<DynDNS>>
+field|@TR<<DynDNS>>
 radio|ddns_enable|$FORM_ddns_enable|1|Enable
 radio|ddns_enable|$FORM_ddns_enable|0|Disable
-field|Service Type
+field|@TR<<DynDNS Service>>
 select|ddns_service_type|$FORM_ddns_service_type
 option|ezip|ez-ip
 option|dyndns|dyndns
@@ -119,33 +119,24 @@ option|dyndns-static|dyndns-static
 option|dyndns-custom|dyndns-custom
 option|easydns-partner|easydns-partner
 option|dhs|dhs
-end_form
-
-start_form|Account
-field|User Name
+field|@TR<<User Name>>
 text|ddns_username|$FORM_ddns_username
 field|Password
 password|ddns_passwd|$FORM_ddns_passwd
-end_form
-
-start_form|Host
-field|Host Name
+field|@TR<<Host Name>>
 text|ddns_hostname|$FORM_ddns_hostname
 field|Wildcard
 radio|ddns_wildcard|$FORM_ddns_wildcard|1|Enable
 radio|ddns_wildcard|$FORM_ddns_wildcard|0|Disable
-end_form
-
-start_form|Server
-field|Server Name
+field|@TR<<Server Name>>
 text|ddns_server|$FORM_ddns_server
-field|Max Interval (sec)
+field|@TR<<Max Interval (sec)>>
 text|ddns_max_interval|$FORM_ddns_max_interval
-string|<br /><a href="network-logread-ez-ipupdate.sh">View DynDNS Syslog</a>
+string|<br /><a href="network-logread-ez-ipupdate.sh">@TR<<View DynDNS Syslog>></a>
 end_form"
 ?>
 <?if [ -f  $ddns_msg ] ?>
-<br/>Last update: <? cat $ddns_msg ?><br/><br/>
+<br/>@TR<<Last update>>: <? cat $ddns_msg ?><br/><br/>
 <?fi?>
 <? footer ?>
 <!--
