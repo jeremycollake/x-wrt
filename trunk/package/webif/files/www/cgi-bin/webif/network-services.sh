@@ -20,7 +20,7 @@
 #	none
 #
 
-header "Network" "Services" "@TR<<Services Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
+header "Network" "UPnP" "@TR<<UPnP Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 uci_load "upnpd"
 
@@ -186,5 +186,5 @@ EOF
 
 footer ?>
 <!--
-##WEBIF:name:Network:550:Services
+##WEBIF:name:Network:550:UPnP
 -->
