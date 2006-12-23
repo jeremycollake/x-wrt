@@ -299,6 +299,7 @@ show_column()
 	# cell bgcolor (optional)
 	# over-ride text (if config option is empty)
 	local _val
+	# config_get returns TYPE if OPTION ($2) is empty, else returns value
 	config_get _val "$1" "$2"
 	td_start="<td>"
 	! empty "$3" && td_start="<td bgcolor=\"$3\">"
@@ -351,8 +352,9 @@ callback_foreach_rule() {
 	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "tcpflags" "" ""
 	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "pktsize" "" ""
 	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "mark" "" ""
-	echo "<td bgcolor=\"$cur_color\"><a href=\"$SCRIPT_NAME?qos_edit=$section_name\">@TR<<edit>></a>&nbsp;"
-	echo "<a href=\"$SCRIPT_NAME?qos_remove=$section_name\">@TR<<delete>></a>&nbsp;"
+	echo "<td bgcolor=\"$cur_color\">"
+	echo "<a href=\"$SCRIPT_NAME?qos_remove=$section_name\"><img alt=\"@TR<<delete>>\" src=\"/images/x.gif\"></a>&nbsp;"	
+	echo "<a href=\"$SCRIPT_NAME?qos_edit=$section_name\">@TR<<edit>></a>&nbsp;"
 	# if there is a last shown rule, show 'up' option
 	! equal "$last_shown_rule" "-1" && {
 	 	echo "<a href=\"$SCRIPT_NAME?qos_swap_src=$section_name&amp;qos_swap_dest=$last_shown_rule\">@TR<<up>></a>&nbsp;"
@@ -405,10 +407,20 @@ EOF
 	config_get _ipp2p "${current_item}" "ipp2p"		
 	ADVANCED_FIELD_FORM=""
 	equal "$FORM_webif_advanced" "1" && {
+		# config_get returns TYPE if OPTION ($2) is empty, else returns value
+		#config_get _type "${current_item}"
 		config_get _mark "${current_item}" "mark"
 		config_get _tcpflags "${current_item}" "tcpflags"
 		config_get _pktsize "${current_item}" "pktsize"
-		ADVANCED_FIELD_FORM="
+		ADVANCED_FIELD_FORM1=""
+		#ADVANCED_FIELD_FORM1="
+		#	field|@TR<<Rule Type>>
+		#	select|current_type|$_type
+		#	option|classify|@TR<<Classify>>
+		#	option|default|@TR<<Default>>
+		#	option|reclassify|@TR<<Reclassify>>
+		#"
+		ADVANCED_FIELD_FORM2="
 			field|@TR<<TCP Flags>>
 			text|current_tcpflags|$_tcpflags
 			field|@TR<<Mark>>
@@ -421,12 +433,13 @@ EOF
 	start_form|@TR<<QoS Rule Edit>>
 	field|@TR<<Rules Index>>|rule_number|hidden
 	text|current_rule_index|$current_item|hidden
+	$ADVANCED_FIELD_FORM1
 	field|@TR<<Classify As>>|current_target
 	select|current_target|$_target
-	option|Bulk|Bulk
-	option|Normal|Normal
-	option|Priority|Priority
-	option|Express|Express
+	option|Bulk|@TR<<Bulk>>
+	option|Normal|@TR<<Normal>>
+	option|Priority|@TR<<Priority>>
+	option|Express|@TR<<Express>>
 	field|@TR<<Source IP>>|current_srchost
 	text|current_srchost|$_srchost
 	field|@TR<<Dest IP>>|current_dsthost
@@ -437,7 +450,7 @@ EOF
 	option|tcp|TCP
 	option|udp|UDP
 	option|icmp|ICMP
-	$ADVANCED_FIELD_FORM
+	$ADVANCED_FIELD_FORM2
 	field|@TR<<Ports>>|current_ports
 	text|current_ports|$_ports
 	field|@TR<<Port Range>>|current_portrange
