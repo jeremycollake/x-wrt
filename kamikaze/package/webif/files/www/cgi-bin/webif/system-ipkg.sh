@@ -28,7 +28,8 @@
 #
 
 header "System" "Packages" "@TR<<Packages>>" '' "$SCRIPT_NAME"
-ShowNotUpdatedWarning
+
+is_kamikaze && ShowNotUpdatedWarning
 
 ##################################################################
 #
@@ -87,7 +88,7 @@ text|repourl|$FORM_repourl|
 field|&nbsp;
 submit|install_repo| Add Repository
 helpitem|Add Repository
-helptext|Add Repository#A repository is a server that contains a list of packages that can be installed on your OpenWrt device. Adding a new one allows you to list packages here that are not shown by default.
+helptext|HelpText Add Repository#A repository is a server that contains a list of packages that can be installed on your OpenWrt device. Adding a new one allows you to list packages here that are not shown by default.
 string|<tr><td colspan="2" class="repositories"><h4>@TR<<Current Repositories>>:</h4></td></tr>
 $repo_list
 helpitem|Backports Tip
@@ -99,7 +100,7 @@ text|pkgurl|$FORM_pkgurl
 field|
 submit|install_url|Install Package From URL |
 helpitem|Install Package
-helptext|Install Package#Normally one installs a package by clicking on the install link in the list of packages below. However, you can install a package not listed in the known repositories here.
+helptext|HelpText Install Package#Normally one installs a package by clicking on the install link in the list of packages below. However, you can install a package not listed in the known repositories here.
 end_form
 EOF
 
@@ -120,10 +121,13 @@ EOF
 <?
 echo "<pre>"
 if [ "$FORM_action" = "update" ]; then
+	echo "@TR<<Please wait>> ...<br />"
 	ipkg update
 elif [ "$FORM_action" = "install" ]; then
+	echo "@TR<<Please wait>> ...<br />"
 	yes n | ipkg install `echo "$FORM_pkg" | sed -e 's, ,+,g'`
 elif [ "$FORM_action" = "remove" ]; then
+	echo "@TR<<Please wait>> ...<br />"
 	ipkg remove `echo "$FORM_pkg" | sed -e 's, ,+,g'`
 fi
 echo "</pre>"
