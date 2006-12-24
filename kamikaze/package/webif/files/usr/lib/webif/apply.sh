@@ -261,8 +261,7 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 		"/tmp/.uci/network")
 			echo '@TR<<Reloading network>> ...'
 			ifdown wan
-			ifup wan
-			
+			ifup wan			
 			ifdown lan
 			ifup lan
 			killall dnsmasq
@@ -273,13 +272,13 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 			echo '@TR<<Reloading syslogd>> ...'
 			killall syslogd >&- 2>&- <&-
 			/sbin/runsyslogd >&- 2>&- <&- ;;
-		"/tmp/.uci/miniupnpd")
+		"/tmp/.uci/upnpd")
 			echo '@TR<<Reloading>> @TR<<UPNPd>> ...'
 			/etc/rc.d/S??miniupnpd start ;;
 		"/tmp/.uci/openvpn")
-			echo '@TR<<Reloading>> @TR<<UPNPd>> ...'
+			echo '@TR<<Reloading>> @TR<<OpenVPN>> ...'
 			killall openvpn >&- 2>&- <&-
-			/etc/rc.d/S??openvpn start
+			/etc/rc.d/S??openvpn start ;;
 		"/tmp/.uci/webif") init_theme;;
 	esac
 done
