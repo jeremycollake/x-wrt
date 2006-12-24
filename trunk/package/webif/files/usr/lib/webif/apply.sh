@@ -7,7 +7,8 @@
 #   Types supported:
 #	config-*	Simple config files (tuples)
 #	uci-*		UCI config files
-#	edited-files-*  edited files
+#	file-*		Undefined format for whatever
+#	edited-files-*  raw edited files
 #
 #
 . /usr/lib/webif/functions.sh
