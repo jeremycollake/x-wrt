@@ -1,6 +1,14 @@
 #!/bin/ash
 #
-# Default handlers for config files
+# This file is compatible with both Kamikaze and White Russian.
+#
+# Handler for config application of all types.
+#
+#   Types supported:
+#	config-*	Simple config files (tuples)
+#	uci-*		UCI config files
+#	edited-files-*  edited files
+#
 #
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
@@ -26,7 +34,7 @@ HANDLERS_file='
 	hosts) rm -f /etc/hosts; mv $config /etc/hosts; killall -HUP dnsmasq ;;
 	ethers) rm -f /etc/ethers; mv $config /etc/ethers; killall -HUP dnsmasq ;;
 	firewall) mv /tmp/.webif/file-firewall /etc/config/firewall && /etc/init.d/S??firewall;;
-	dnsmasq.conf) mv /tmp/.webif/file-dnsmasq.conf /etc/dnsmasq.conf && /etc/init.d/S?0dnsmasq;;
+	dnsmasq.conf) mv /tmp/.webif/file-dnsmasq.conf /etc/dnsmasq.conf && /etc/init.d/S??dnsmasq;;
 '
 
 # for some reason a for loop with "." doesn't work
@@ -132,42 +140,43 @@ reload_upnpd() {
 }
 
 reload_ezipupdate() {
-#!/bin/sh
-initfile="/etc/init.d/S52ez-ipupdate"
+	initfile="/etc/init.d/S52ez-ipupdate"
 
-ddns_dir="/etc/ez-ipupdate"
-ddns_cache="$ddns_dir/ez-ipupdate.cache"
-ddns_conf="$ddns_dir/ez-ipupdate.conf"
-ddns_msg="$ddns_dir/ez-ipupdate.msg"
+	ddns_dir="/etc/ez-ipupdate"
+	ddns_cache="$ddns_dir/ez-ipupdate.cache"
+	ddns_conf="$ddns_dir/ez-ipupdate.conf"
+	ddns_msg="$ddns_dir/ez-ipupdate.msg"
 
-ddns_enable=$(nvram get ddns_enable)
-ddns_service_type=$(nvram get ddns_service_type)
-ddns_username=$(nvram get ddns_username)
-ddns_passwd=$(nvram get ddns_passwd)
-ddns_hostname=$(nvram get ddns_hostname)
-ddns_server=$(nvram get ddns_server)
-ddns_max_interval=$(nvram get ddns_max_interval)
+	if exists "/usr/sbin/nvram"; then
+		ddns_enable=$(nvram get ddns_enable)
+		ddns_service_type=$(nvram get ddns_service_type)
+		ddns_username=$(nvram get ddns_username)
+		ddns_passwd=$(nvram get ddns_passwd)
+		ddns_hostname=$(nvram get ddns_hostname)
+		ddns_server=$(nvram get ddns_server)
+		ddns_max_interval=$(nvram get ddns_max_interval)
+	else
+		echo "ERROR: ez-ipupdate config apply not updated for non-nvram systems."
+	fi
 
-# (re)start ez-ipupdated
-if [ "$ddns_enable" -eq "1" ]; then
-	mkdir -p $ddns_dir
-	echo "service-type=$ddns_service_type"   > $ddns_conf
-	echo "user=$ddns_username:$ddns_passwd" >> $ddns_conf
-	echo "host=$ddns_hostname"              >> $ddns_conf
-	[ -z "$ddns_server"       ] ||  echo "server=$ddns_server"             >> $ddns_conf
-	[ -z "$ddns_max_interval" ] ||  echo "max-interval=$ddns_max_interval" >> $ddns_conf
+	# (re)start ez-ipupdated
+	if [ "$ddns_enable" -eq "1" ]; then
+		mkdir -p $ddns_dir
+		echo "service-type=$ddns_service_type"   > $ddns_conf
+		echo "user=$ddns_username:$ddns_passwd" >> $ddns_conf
+		echo "host=$ddns_hostname"              >> $ddns_conf
+		[ -z "$ddns_server"       ] ||  echo "server=$ddns_server"             >> $ddns_conf
+		[ -z "$ddns_max_interval" ] ||  echo "max-interval=$ddns_max_interval" >> $ddns_conf
 
 	#[ -f $ddns_cache ] && rm -f  $ddns_cache
 
-	[ -f $ddns_cache ] && rm -f $ddns_msg
-	echo "(Re)start DynDNS ez-ipupdate" > $ddns_msg
-	#echo "(Re)start ez-ipupdate..."
-
-	$initfile restart
-else
-	#echo "Stop ez-ipupdate..."
-	$initfile stop >&- 2>&-
-fi
+		[ -f $ddns_cache ] && rm -f $ddns_msg
+		echo "(Re)start DynDNS ez-ipupdate" > $ddns_msg
+		
+		$initfile restart >&- 2>&- &
+	else		
+		$initfile stop >&- 2>&- &
+	fi
 }
 
 mkdir -p "/tmp/.webif"
@@ -182,7 +191,7 @@ for edited_file in $(find "/tmp/.webif/edited-files/" -type f 2>&-); do
 	if tr -d '\r' <"$edited_file" >"$target_file"; then
 		rm "$edited_file" 2>&-
 	else
-		echo "@TR<<Critical Error>> : Could not replace $target_file. Media full?"
+		echo "@TR<<Critical Error>> : @TR<<Could not replace>> $target_file. @TR<<Media full>>?"
 	fi
 done
 # leave if some files not applied
@@ -221,16 +230,6 @@ for config in $(ls config-webif 2>&-); do
 	echo '@TR<<Done>>'
 done
 
-# config-qos		QOS Config file
-for config in $(ls config-qos 2>&-); do
-	echo '@TR<<Applying>> @TR<<QOS settings>> ...'
-	/usr/bin/qos-stop	
-	# for Rudy's QoS scripts only, nbd's is configured via UCI
-	mv -f config-qos /etc/qos.conf 
-	/usr/bin/qos-start	
-	echo '@TR<<Done>>'
-done
-
 # config-wifi-enable		QOS Config file
 for config in $(ls config-wifi-enable 2>&-); do
 	ifdown wifi
@@ -246,8 +245,6 @@ for config in $(ls config-wifi-disable 2>&-); do
 done
 
 # config-conntrack	  Conntrack Config file
-# TODO: this must be updated to save settings to /etc/sysctl.conf. The sysctl utility only makes changes during
-#  this session.
 for config in $(ls config-conntrack 2>&-); do
 	echo '@TR<<Applying>> @TR<<conntrack settings>> ...'
 	fix_symlink_hack "/etc/sysctl.conf"
@@ -264,7 +261,7 @@ for config in $(ls config-conntrack 2>&-); do
 	echo '@TR<<Done>>'
 done
 
-# config-theme
+# init_theme - initialize a new theme
 init_theme() {
 	echo '@TR<<Initializing theme ...>>'	
 	uci_load "webif"
@@ -337,9 +334,11 @@ reload_log() {
 (
 	cd /proc/self
 	cat /tmp/.webif/config-* 2>&- | grep '=' >&- 2>&- && {
-		cat /tmp/.webif/config-* 2>&- | tee fd/1 | xargs -n1 nvram set	
-		echo "@TR<<Committing>> NVRAM ..."
-		nvram commit
+		exists "/usr/sbin/nvram" && {
+			cat /tmp/.webif/config-* 2>&- | tee fd/1 | xargs -n1 nvram set	
+			echo "@TR<<Committing>> NVRAM ..."
+			nvram commit
+		}
 	}
 )
 
@@ -359,7 +358,25 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 	case "$package" in
 		"/tmp/.uci/qos") qos-start;;
 		"/tmp/.uci/webif") init_theme;;
-		"/tmp/.uci/upnpd") reload_upnpd;;	
+		"/tmp/.uci/upnpd") reload_upnpd;;
+		"/tmp/.uci/network")
+			# for kamikaze
+			echo '@TR<<Reloading>> @TR<<network>> ...'
+			ifdown wan
+			ifup wan			
+			ifdown lan
+			ifup lan
+			killall dnsmasq
+			/etc/init.d/dnsmasq start ;;
+		"/tmp/.uci/syslog")
+			# for kamikaze
+			echo '@TR<<Reloading>> @TR<<syslogd>> ...'
+			killall syslogd >&- 2>&- <&-
+			/sbin/runsyslogd >&- 2>&- <&- ;;
+		"/tmp/.uci/openvpn")
+			echo '@TR<<Reloading>> @TR<<OpenVPN>> ...'
+			killall openvpn >&- 2>&- <&-
+			/etc/rc.d/S??openvpn start ;;
 	esac
 done
 
