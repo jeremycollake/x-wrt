@@ -29,6 +29,8 @@
 
 header "System" "Packages" "@TR<<Packages>>" '' "$SCRIPT_NAME"
 
+is_kamikaze && ShowNotUpdatedWarning
+
 ##################################################################
 #
 # Install from URL and Add Repository code - self-contained block.
@@ -119,10 +121,13 @@ EOF
 <?
 echo "<pre>"
 if [ "$FORM_action" = "update" ]; then
+	echo "@TR<<Please wait>> ...<br />"
 	ipkg update
 elif [ "$FORM_action" = "install" ]; then
+	echo "@TR<<Please wait>> ...<br />"
 	yes n | ipkg install `echo "$FORM_pkg" | sed -e 's, ,+,g'`
 elif [ "$FORM_action" = "remove" ]; then
+	echo "@TR<<Please wait>> ...<br />"
 	ipkg remove `echo "$FORM_pkg" | sed -e 's, ,+,g'`
 fi
 echo "</pre>"
