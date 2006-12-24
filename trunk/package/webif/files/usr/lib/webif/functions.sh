@@ -120,7 +120,7 @@ save_setting() {
 is_package_installed() {
 	# $1 = package name
 	# returns 0 if package is installed.
-	ipkg list_installed | grep -q "$1" >> /dev/null 2>&1
+	ipkg list_installed | grep -q "$1 " >> /dev/null 2>&1
 }
 
 install_package() {
