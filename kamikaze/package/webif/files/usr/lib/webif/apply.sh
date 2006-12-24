@@ -1,25 +1,40 @@
 #!/bin/ash
 #
-# Default handlers for config files
+# This file is compatible with both Kamikaze and White Russian.
+#
+# Handler for config application of all types.
+#
+#   Types supported:
+#	config-*	Simple config files (tuples)
+#	uci-*		UCI config files
+#	edited-files-*  edited files
+#
 #
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
+. /usr/lib/webif/pkgfuncs.sh
+cron_init="/etc/init.d/S51crond"
 
 HANDLERS_config='
 	wireless) reload_wireless;;
 	network) reload_network;;
 	system) reload_system;;
+	cron) reload_cron;;
+	syslog) reload_syslog;;
 	wifi-enable) reload_wifi_enable;;
 	wifi-disable) reload_wifi_disable;;
+	hotspot) reload_hotspot;;
+	shape) reload_shape;;
 	pptp) reload_pptp;;
-	exipupdate) reload_exipupdate;;
-
+	log) reload_log;;
+	ezipupdate) reload_ezipupdate;;
 '
+
 HANDLERS_file='
 	hosts) rm -f /etc/hosts; mv $config /etc/hosts; killall -HUP dnsmasq ;;
 	ethers) rm -f /etc/ethers; mv $config /etc/ethers; killall -HUP dnsmasq ;;
 	firewall) mv /tmp/.webif/file-firewall /etc/config/firewall && /etc/init.d/S??firewall;;
-	dnsmasq.conf) mv /tmp/.webif/file-dnsmasq.conf /etc/dnsmasq.conf && /etc/init.d/S50dnsmasq;;
+	dnsmasq.conf) mv /tmp/.webif/file-dnsmasq.conf /etc/dnsmasq.conf && /etc/init.d/S??dnsmasq;;
 '
 
 # for some reason a for loop with "." doesn't work
@@ -63,6 +78,48 @@ reload_wireless() {
 	) >&- 2>&- <&-
 }
 
+reload_cron() {
+	echo '@TR<<Reloading Cron>> ...'
+	# (re)start crond
+	if [ -x $cron_init ]; then
+		echo "(Re)start cron..."
+		$cron_init restart
+	fi
+}
+
+reload_syslog() {
+	getPID(){
+		echo `ps -elf | grep 'syslogd' | grep -v grep | awk '{ print $1 }'`
+	}
+	# (re)start syslogd
+	echo "(Re)start syslogd..."
+	pid=$(getPID)
+	if [ -n "$pid" ]; then
+		echo -n "Stopping syslogd: "
+		( {
+			kill $pid >/dev/null 2>&1
+		} && echo "OK" ) || echo "ERROR"
+	fi
+	echo -n "Start syslogd: "
+	syslog_ip=$(nvram get log_ipaddr)
+	if [ "$(nvram get firmware_version)" = "0.9" ]; then
+	ipcalc.sh -s "$syslog_ip" || syslog_ip=""
+	else
+	ipcalc -s "$syslog_ip" || syslog_ip=""
+	fi
+	log_port=$(nvram get log_port)
+	log_port=${log_port:+:$log_port}
+	log_mark=$(nvram get log_mark)
+	log_mark=${log_mark:+-m $log_mark}
+	can_prefix=`syslogd --help 2>&1 | grep -e 'PREFIX' `
+	log_prefix=""
+	[ -z "$can_prefix" ] || log_prefix=$(nvram get log_prefix)
+	log_prefix=${log_prefix:+-P "$log_prefix"}
+	syslogd -C 16 ${syslog_ip:+-L -R $syslog_ip$log_port} $log_mark $log_prefix
+
+	echo "OK"
+}
+
 reload_system() {
 	echo '@TR<<Applying>> @TR<<system settings>> ...'
 	echo "$(nvram get wan_hostname)" > /proc/sys/kernel/hostname
@@ -72,43 +129,54 @@ reload_system() {
 	}
 }
 
-reload_exipupdate() {
-#!/bin/sh
-initfile="/etc/init.d/S52ez-ipupdate"
+reload_upnpd() {
+	echo '@TR<<Reloading>> @TR<<UPNPd>> ...'
+	killall miniupnpd upnpd 2>&- >&-
+	exists "/etc/init.d/S95miniupnpd" && /etc/init.d/S95miniupnpd
+	exists "/etc/init.d/S65upnpd" && {
+		/etc/init.d/S65upnpd stop 2>&- >&-
+		/etc/init.d/S65upnpd start
+	}
+}
 
-ddns_dir="/etc/ez-ipupdate"
-ddns_cache="$ddns_dir/ez-ipupdate.cache"
-ddns_conf="$ddns_dir/ez-ipupdate.conf"
-ddns_msg="$ddns_dir/ez-ipupdate.msg"
+reload_ezipupdate() {
+	initfile="/etc/init.d/S52ez-ipupdate"
 
-ddns_enable=$(nvram get ddns_enable)
-ddns_service_type=$(nvram get ddns_service_type)
-ddns_username=$(nvram get ddns_username)
-ddns_passwd=$(nvram get ddns_passwd)
-ddns_hostname=$(nvram get ddns_hostname)
-ddns_server=$(nvram get ddns_server)
-ddns_max_interval=$(nvram get ddns_max_interval)
+	ddns_dir="/etc/ez-ipupdate"
+	ddns_cache="$ddns_dir/ez-ipupdate.cache"
+	ddns_conf="$ddns_dir/ez-ipupdate.conf"
+	ddns_msg="$ddns_dir/ez-ipupdate.msg"
 
-# (re)start ez-ipupdated
-if [ "$ddns_enable" -eq "1" ]; then
-	mkdir -p $ddns_dir
-	echo "service-type=$ddns_service_type"   > $ddns_conf
-	echo "user=$ddns_username:$ddns_passwd" >> $ddns_conf
-	echo "host=$ddns_hostname"              >> $ddns_conf
-	[ -z "$ddns_server"       ] ||  echo "server=$ddns_server"             >> $ddns_conf
-	[ -z "$ddns_max_interval" ] ||  echo "max-interval=$ddns_max_interval" >> $ddns_conf
+	if exists "/usr/sbin/nvram"; then
+		ddns_enable=$(nvram get ddns_enable)
+		ddns_service_type=$(nvram get ddns_service_type)
+		ddns_username=$(nvram get ddns_username)
+		ddns_passwd=$(nvram get ddns_passwd)
+		ddns_hostname=$(nvram get ddns_hostname)
+		ddns_server=$(nvram get ddns_server)
+		ddns_max_interval=$(nvram get ddns_max_interval)
+	else
+		echo "ERROR: ez-ipupdate config apply not updated for non-nvram systems."
+	fi
+
+	# (re)start ez-ipupdated
+	if [ "$ddns_enable" -eq "1" ]; then
+		mkdir -p $ddns_dir
+		echo "service-type=$ddns_service_type"   > $ddns_conf
+		echo "user=$ddns_username:$ddns_passwd" >> $ddns_conf
+		echo "host=$ddns_hostname"              >> $ddns_conf
+		[ -z "$ddns_server"       ] ||  echo "server=$ddns_server"             >> $ddns_conf
+		[ -z "$ddns_max_interval" ] ||  echo "max-interval=$ddns_max_interval" >> $ddns_conf
 
 	#[ -f $ddns_cache ] && rm -f  $ddns_cache
 
-	[ -f $ddns_cache ] && rm -f $ddns_msg
-	echo "(Re)start DynDNS ez-ipupdate" > $ddns_msg
-	echo "(Re)start ez-ipupdate..."
-
-	$initfile restart
-else
-	#echo "Stop ez-ipupdate..."
-	$initfile stop >&- 2>&-
-fi
+		[ -f $ddns_cache ] && rm -f $ddns_msg
+		echo "(Re)start DynDNS ez-ipupdate" > $ddns_msg
+		
+		$initfile restart >&- 2>&- &
+	else		
+		$initfile stop >&- 2>&- &
+	fi
 }
 
 mkdir -p "/tmp/.webif"
@@ -123,7 +191,7 @@ for edited_file in $(find "/tmp/.webif/edited-files/" -type f 2>&-); do
 	if tr -d '\r' <"$edited_file" >"$target_file"; then
 		rm "$edited_file" 2>&-
 	else
-		echo "@TR<<Critical Error>> : Could not replace $target_file. Media full?"
+		echo "@TR<<Critical Error>> : @TR<<Could not replace>> $target_file. @TR<<Media full>>?"
 	fi
 done
 # leave if some files not applied
@@ -136,20 +204,6 @@ for config in $(ls file-* 2>&-); do
 	eval 'case "$name" in
 		'"$HANDLERS_file"'
 	esac'
-done
-
-# config-wifi-enable		QOS Config file
-for config in $(ls config-wifi-enable 2>&-); do
-	ifdown wifi
-	ifdown lan
-done
-
-# config-wifi-disable		QOS Config file
-for config in $(ls config-wifi-disable 2>&-); do
-	ifdown wifi
-	br_int=$(nvram get wifi_ifname)
-	brctl delbr $br_int
-	ifdown lan
 done
 
 # config-webif		Webif config
@@ -176,9 +230,21 @@ for config in $(ls config-webif 2>&-); do
 	echo '@TR<<Done>>'
 done
 
+# config-wifi-enable		QOS Config file
+for config in $(ls config-wifi-enable 2>&-); do
+	ifdown wifi
+	ifdown lan
+done
+
+# config-wifi-disable		QOS Config file
+for config in $(ls config-wifi-disable 2>&-); do
+	ifdown wifi
+	br_int=$(nvram get wifi_ifname)
+	brctl delbr $br_int
+	ifdown lan
+done
+
 # config-conntrack	  Conntrack Config file
-# TODO: this must be updated to save settings to /etc/sysctl.conf. The sysctl utility only makes changes during
-#  this session.
 for config in $(ls config-conntrack 2>&-); do
 	echo '@TR<<Applying>> @TR<<conntrack settings>> ...'
 	fix_symlink_hack "/etc/sysctl.conf"
@@ -195,7 +261,7 @@ for config in $(ls config-conntrack 2>&-); do
 	echo '@TR<<Done>>'
 done
 
-# config-theme
+# init_theme - initialize a new theme
 init_theme() {
 	echo '@TR<<Initializing theme ...>>'	
 	uci_load "webif"
@@ -218,7 +284,32 @@ init_theme() {
 	echo '@TR<<Done>>'
 }
 
+reload_hotspot() {
+	echo '@TR<<Reloading>> @TR<<hotspot settings>> ...'
+	grep -v '^hs_cframe' config-hotspot | grep '^hs_' >&- 2>&- && {
+	[ -e "/usr/sbin/chilli" ] && {
+		/etc/init.d/S??chilli stop  >&- 2>&-
+		/etc/init.d/S??chilli start >&- 2>&-
+	}
+	[ -e "/usr/bin/wdctl" ] && {
+		wdctl stop >&- 2>&-
+		/etc/init.d/S??wifidog start >&- 2>&-
+	}
+	}
+	grep '^hs_cframe' config-hotspot >&- 2>&- && {
+	[ -e /etc/init.d/S??cframe ] && {
+		/etc/init.d/S??cframe stop  >&- 2>&-
+		/etc/init.d/S??cframe start >&- 2>&-
+	}
+	}
+}
 
+reload_shape() {
+	echo '@TR<<Reloading>> @TR<<traffic shaping settings>> ...'
+	grep '^shape_' config-shape >&- 2>&- && {
+		/etc/init.d/S90shape start >&- 2>&-
+	}
+}
 
 reload_pptp() {
 	echo '@TR<<Reloading>> @TR<<PPTP settings>> ...'
@@ -232,24 +323,31 @@ reload_pptp() {
 	}
 }
 
+reload_log() {
+	echo '@TR<<Reloading syslogd>> ...'
+	killall syslogd >&- 2>&- <&-
+	/sbin/runsyslogd >&- 2>&- <&-
+}
 
 
 # config-*		simple config files
-#(
-#	cd /proc/self
-#	cat /tmp/.webif/config-* 2>&- | grep '=' >&- 2>&- && {
-#		cat /tmp/.webif/config-* 2>&- | tee fd/1 | xargs -n1 nvram set
-#		echo "@TR<<Committing>> NVRAM ..."
-#		nvram commit
-#	}
-#)
+(
+	cd /proc/self
+	cat /tmp/.webif/config-* 2>&- | grep '=' >&- 2>&- && {
+		exists "/usr/sbin/nvram" && {
+			cat /tmp/.webif/config-* 2>&- | tee fd/1 | xargs -n1 nvram set	
+			echo "@TR<<Committing>> NVRAM ..."
+			nvram commit
+		}
+	}
+)
+
 for config in $(ls config-* 2>&-); do
 	name=${config#config-}
 	eval 'case "$name" in
 		'"$HANDLERS_config"'
 	esac'
 done
-
 
 #
 # now apply any UCI config changes
@@ -258,28 +356,27 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 	echo "@TR<<Committing>> ${package#/tmp/.uci/} ..."
 	uci_commit "$package"
 	case "$package" in
+		"/tmp/.uci/qos") qos-start;;
+		"/tmp/.uci/webif") init_theme;;
+		"/tmp/.uci/upnpd") reload_upnpd;;
 		"/tmp/.uci/network")
-			echo '@TR<<Reloading network>> ...'
+			# for kamikaze
+			echo '@TR<<Reloading>> @TR<<network>> ...'
 			ifdown wan
 			ifup wan			
 			ifdown lan
 			ifup lan
 			killall dnsmasq
 			/etc/init.d/dnsmasq start ;;
-		"/tmp/.uci/qos") echo "&nbsp;@TR<<Restarting>> ..."
-			qos-start;;
 		"/tmp/.uci/syslog")
-			echo '@TR<<Reloading syslogd>> ...'
+			# for kamikaze
+			echo '@TR<<Reloading>> @TR<<syslogd>> ...'
 			killall syslogd >&- 2>&- <&-
 			/sbin/runsyslogd >&- 2>&- <&- ;;
-		"/tmp/.uci/upnpd")
-			echo '@TR<<Reloading>> @TR<<UPNPd>> ...'
-			/etc/rc.d/S??miniupnpd start ;;
 		"/tmp/.uci/openvpn")
 			echo '@TR<<Reloading>> @TR<<OpenVPN>> ...'
 			killall openvpn >&- 2>&- <&-
 			/etc/rc.d/S??openvpn start ;;
-		"/tmp/.uci/webif") init_theme;;
 	esac
 done
 
