@@ -150,11 +150,11 @@ field|@TR<<WDS Watchdog Timeout>>
 text|wdstimeout|$FORM_wdstimeout
 listedit|wds|$SCRIPT_NAME?|$FORM_wds|$FORM_wdsadd
 helpitem|Wireless Distribution System
-helptext|HelpText Wireless Distribution System#This feature allows you to use multiple wireless access points to extend the range of your network without having to run wires to the access points. For more information, google.
+helptext|HelpText Wireless Distribution System#This feature allows you to use multiple wireless access points to extend the range of your network without having to run wires to the access points.
 helpitem|WDS Connections
 helptext|HelpText WDS Connections#Enter the MAC addresses of the router(s) on your network that should be wirelessly connected to. The other routers must support Lazy WDS by default (many do), else they will need to be manually reconfigured as well.
 helpitem|Lazy WDS
-helptext|HelpText Lazy WDS#When set, allow any router to initiate a WDS connection to this router. In other words, allow any range extenders to connect to this router without having to add its MAC address to the list here.
+helptext|HelpText Lazy WDS#When set, allow any router to initiate a WDS connection to this router.
 end_form
 
 start_form|@TR<<MAC Filter List>>
