@@ -77,14 +77,12 @@ remove_lines_from_file() {
 	}
 }
 
-#############################################################################
+#
 # Original config functions
 #
 #  These work with as a tuple based configuration system. apply.sh applies
 #  the changes.
 #
-#############################################################################
-[
 load_settings() {
 	equal "$1" "nvram" || {
 		exists /etc/config/$1 && . /etc/config/$1
