@@ -23,7 +23,8 @@
 load_settings "wireless"
 
 header "Network" "Advanced Wireless" "@TR<<Advanced Wireless Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
-ShowNotUpdatedWarning
+
+is_kamikaze && ShowNotUpdatedWarning
 
 #####################################################################
 # defaults - ONLY used in the rare case these nvram variables are unset
@@ -118,7 +119,7 @@ EOF
 		save_setting wireless wl0_txdiv "$FORM_txdiv"
 		save_setting wireless wl0_plcphdr "$FORM_wl0_plcphdr"
 		save_setting wireless wl0_frag  "$FORM_wl0_frag"
-		save_setting wireless wl0_rts   "$FORM_wl0_rts"
+		save_setting wireless wl0_rShowNotUpdatedWarningts   "$FORM_wl0_rts"
 		save_setting wireless wl0_dtim  "$FORM_wl0_dtim"
 		save_setting wireless wl0_bcn   "$FORM_wl0_bcn"
 		save_setting wireless wl0_distance   "$FORM_wl0_distance"
@@ -141,78 +142,72 @@ EOF
 display_form <<EOF
 onchange|modechange
 start_form|@TR<<WDS Connections>>
-listedit|wds|$SCRIPT_NAME?|$FORM_wds|$FORM_wdsadd
-end_form
-start_form|@TR<<MAC Filter List>>
-listedit|maclist|$SCRIPT_NAME?|$FORM_maclist|$FORM_maclistadd
-end_form
-
-start_form|@TR<<Settings>>
-
-field|@TR<<Automatic WDS>>
+field|@TR<<Lazy WDS>>
 select|lazywds|$FORM_lazywds
 option|1|@TR<<Enabled>>
 option|0|@TR<<Disabled>>
+field|@TR<<WDS Watchdog Timeout>>
+text|wdstimeout|$FORM_wdstimeout
+listedit|wds|$SCRIPT_NAME?|$FORM_wds|$FORM_wdsadd
+helpitem|Wireless Distribution System
+helptext|HelpText Wireless Distribution System#This feature allows you to use multiple wireless access points to extend the range of your network without having to run wires to the access points. For more information, google.
+helpitem|WDS Connections
+helptext|HelpText WDS Connections#Enter the MAC addresses of the router(s) on your network that should be wirelessly connected to. The other routers must support Lazy WDS by default (many do), else they will need to be manually reconfigured as well.
+helpitem|Lazy WDS
+helptext|HelpText Lazy WDS#When set, allow any router to initiate a WDS connection to this router. In other words, allow any range extenders to connect to this router without having to add its MAC address to the list here.
+end_form
 
+start_form|@TR<<MAC Filter List>>
 field|@TR<<Filter Mode>>
 select|macmode|$FORM_macmode
 option|disabled|@TR<<Disabled>>
 option|allow|@TR<<Allow>>
 option|deny|@TR<<Deny>>
+listedit|maclist|$SCRIPT_NAME?|$FORM_maclist|$FORM_maclistadd
+helpitem|MAC Filter List
+helptext|HelpText MAC Filter List#Here you can set a list of MAC addresses to allow or deny connection to the wireless network, depending on the 'Filter Mode' setting.
+end_form
 
+start_form|@TR<<Settings>>
 field|@TR<<Frameburst>>
 select|frameburst|$FORM_frameburst
 option|0|@TR<<Disabled>>
 option|1|@TR<<Enabled>>
-
 field|@TR<<Isolate WLAN clients>>
 select|isolate|$FORM_isolate
 option|1|@TR<<Enabled>>
 option|0|@TR<<Disabled>>
-
 field|@TR<<Transmit Power (in mw)>>
 select|txpwr|$FORM_txpwr
 $VALID_TXPWR
-
 field|@TR<<Receive Antenna Diversity>>
 select|antdiv|$FORM_antdiv
 option|3|@TR<<Diversity>>
 option|0|@TR<<Right>>
 option|1|@TR<<Left>>
-
 field|@TR<<Transmit Antenna Diversity>>
 select|txdiv|$FORM_txdiv
 option|3|@TR<<Diversity>>
 option|0|@TR<<Right>>
 option|1|@TR<<Left>>
-
 field|@TR<<Preamble (Default: Long)>>
 select|wl0_plcphdr|$FORM_wl0_plcphdr
 option|long|@TR<<Long>>
 option|short|@TR<<Short>>
-
-field|@TR<<WDS watchdog timeout>>
-text|wdstimeout|$FORM_wdstimeout
-
 field|Fragmentation Threshold (default 2346)
 text|wl0_frag|$FORM_wl0_frag
-
 field|RTS Threshold (default 2347)
 text|wl0_rts|$FORM_wl0_rts
-
 field|DTIM Period (default 1)
 text|wl0_dtim|$FORM_wl0_dtim
-
 field|Beacon Period (default 100)
 text|wl0_bcn|$FORM_wl0_bcn
-
 field|Max Associated Clients (default 128)
 text|wl0_maxassoc|$FORM_wl0_maxassoc
-
 field|Wireless Distance (In Meters)
 text|wl0_distance|$FORM_wl0_distance
 helpitem|Wireless Distance
-helptext|Helptext Wirless Distance#You must enter a number that is double the distance of your longest link.
+helptext|Helptext Wireless Distance#You must enter a number that is double the distance of your longest link.
 end_form
 EOF
 
