@@ -50,6 +50,10 @@ is_kamikaze() {
 	grep -iq "KAMIKAZE" "/etc/banner"	
 }
 
+has_nvram_support() {
+	exists "/usr/sbin/nvram"
+}
+
 fix_symlink_hack() {
 	touch "$1" >&- 2>&-
 	! equal "$?" "0" && {
