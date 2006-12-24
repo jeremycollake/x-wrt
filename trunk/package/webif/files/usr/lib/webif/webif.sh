@@ -22,7 +22,6 @@ rootdir=/cgi-bin/webif
 indexpage=index.sh
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
-. /usr/lib/webif/pkgfuncs.sh
 
 categories() {
 	grep '##WEBIF:' $cgidir/.categories $cgidir/*.sh 2>/dev/null | \
