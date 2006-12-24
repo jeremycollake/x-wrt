@@ -13,7 +13,6 @@
 #
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
-. /usr/lib/webif/pkgfuncs.sh
 cron_init="/etc/init.d/S51crond"
 
 HANDLERS_config='
