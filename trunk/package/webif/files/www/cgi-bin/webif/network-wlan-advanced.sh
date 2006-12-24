@@ -119,7 +119,7 @@ EOF
 		save_setting wireless wl0_txdiv "$FORM_txdiv"
 		save_setting wireless wl0_plcphdr "$FORM_wl0_plcphdr"
 		save_setting wireless wl0_frag  "$FORM_wl0_frag"
-		save_setting wireless wl0_rShowNotUpdatedWarningts   "$FORM_wl0_rts"
+		save_setting wireless wl0_rts   "$FORM_wl0_rts"
 		save_setting wireless wl0_dtim  "$FORM_wl0_dtim"
 		save_setting wireless wl0_bcn   "$FORM_wl0_bcn"
 		save_setting wireless wl0_distance   "$FORM_wl0_distance"
