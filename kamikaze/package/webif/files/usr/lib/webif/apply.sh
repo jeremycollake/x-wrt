@@ -7,7 +7,8 @@
 #   Types supported:
 #	config-*	Simple config files (tuples)
 #	uci-*		UCI config files
-#	edited-files-*  edited files
+#	file-*		Undefined format for whatever
+#	edited-files-*  raw edited files
 #
 #
 . /usr/lib/webif/functions.sh
@@ -24,7 +25,6 @@ HANDLERS_config='
 	wifi-enable) reload_wifi_enable;;
 	wifi-disable) reload_wifi_disable;;
 	hotspot) reload_hotspot;;
-	shape) reload_shape;;
 	pptp) reload_pptp;;
 	log) reload_log;;
 	ezipupdate) reload_ezipupdate;;
@@ -301,13 +301,6 @@ reload_hotspot() {
 		/etc/init.d/S??cframe stop  >&- 2>&-
 		/etc/init.d/S??cframe start >&- 2>&-
 	}
-	}
-}
-
-reload_shape() {
-	echo '@TR<<Reloading>> @TR<<traffic shaping settings>> ...'
-	grep '^shape_' config-shape >&- 2>&- && {
-		/etc/init.d/S90shape start >&- 2>&-
 	}
 }
 
