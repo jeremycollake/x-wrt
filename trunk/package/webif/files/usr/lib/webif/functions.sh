@@ -1,4 +1,9 @@
+#!/bin/sh
+#
+# Webif^2 utility functions - X-Wrt
+#
 # This file is compatible with White Russian and Kamikaze.
+#
 . /etc/functions.sh
 [ -f /etc/functions_ex.sh ] && {
 . /etc/functions_ex.sh
@@ -118,8 +123,7 @@ save_setting() {
 is_package_installed() {
 	# $1 = package name
 	# returns 0 if package is installed.
-
-	ipkg list_installed | grep "$1" >> /dev/null 2>&1
+	ipkg list_installed | grep -q "$1" >> /dev/null 2>&1
 }
 
 install_package() {
@@ -128,14 +132,14 @@ install_package() {
 	# if package is not found, and it isn't a URL, then it'll
 	# try an 'ipkg update' to see if it can locate it. Does
 	# emit output to std devices.
-	ipkg install "$1" -force-overwrite -force-defaults | uniq
+	ipkg install "$1" -force-overwrite -force-defaults
 	! equal "$?" "0" &&
 	{
 		echo "$1" | grep "://" >> /dev/null
 		! equal "$?" "0" && {
 			# wasn't a URL, so update
 			ipkg update
-			ipkg install "$1" -force-overwrite -force-defaults | uniq
+			ipkg install "$1" -force-overwrite -force-defaults
 		}
 	}
 }
