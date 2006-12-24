@@ -133,7 +133,7 @@ install_package() {
 	# try an 'ipkg update' to see if it can locate it. Does
 	# emit output to std devices.
 	! ipkg install "$1" -force-overwrite -force-defaults && {
-[		echo "$1" | grep "://" >> /dev/null
+		echo "$1" | grep "://" >> /dev/null
 		! equal "$?" "0" && {
 			# wasn't a URL, so update
 			ipkg update
