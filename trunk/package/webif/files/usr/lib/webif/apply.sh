@@ -7,8 +7,6 @@
 . /usr/lib/webif/pkgfuncs.sh
 cron_init="/etc/init.d/S51crond"
 
-need_nvram_commit=0
-
 HANDLERS_config='
 	wireless) reload_wireless;;
 	network) reload_network;;
