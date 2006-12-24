@@ -90,14 +90,6 @@ load_settings() {
 	exists /tmp/.webif/config-$1 && . /tmp/.webif/config-$1
 }
 
-validate() {
-	if empty "$1"; then
-		eval "$(awk -f /usr/lib/webif/validate.awk)"
-	else
-		eval "$(echo "$1" | awk -f /usr/lib/webif/validate.awk)"
-	fi
-}
-
 save_setting() {
 	# $1 = group
 	# $2 = name
@@ -111,6 +103,17 @@ save_setting() {
 		oldval=""
 	}
 	equal "$oldval" "$3" || echo "$2=\"$3\"" >> /tmp/.webif/config-$1
+}
+
+#
+# validate form variables using validate.awk
+#
+validate() {
+	if empty "$1"; then
+		eval "$(awk -f /usr/lib/webif/validate.awk)"
+	else
+		eval "$(echo "$1" | awk -f /usr/lib/webif/validate.awk)"
+	fi
 }
 
 #
