@@ -153,8 +153,8 @@ add_package_source() {
 	# $1 = new source
 	# this will not check for duplicates.
 	# for squashfs with symlink hack, rm first.
-
-	local ipkgtmp=$(mktemp /tmp/.webif-XXXXXX)
+	local ipkgtmp
+	ipkgtmp=$(mktemp /tmp/.webif-XXXXXX)
 	cp "/etc/ipkg.conf" "$ipkgtmp"
 	cat "$1" >> "$ipkgtmp"
 	rm "/etc/ipkg.conf"
