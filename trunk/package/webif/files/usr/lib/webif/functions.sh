@@ -55,8 +55,7 @@ has_nvram_support() {
 }
 
 fix_symlink_hack() {
-	touch "$1" >&- 2>&-
-	! equal "$?" "0" && {
+	! touch "$1" >&- 2>&- && {
 		local atmpfile
 		atmpfile=$(mktemp "/tmp/webif-XXXXXX")
 		cp "$1" "$atmpfile"
@@ -70,8 +69,7 @@ fix_symlink_hack() {
 remove_lines_from_file() {
 	# $1=filename
 	# $2=substring match indicating lines to remove (case sensitive)
-	cat "$1" | grep -q "$2"
-	[ "$?" = "0" ] && {
+	cat "$1" | grep -q "$2" && {
 		fix_symlink_hack "$1"
 		local _substr_sed
 		_substr_sed=$(echo "$2" |  sed s/'\/'/'\\\/'/g)
@@ -86,7 +84,7 @@ remove_lines_from_file() {
 #  the changes.
 #
 #############################################################################
-
+[
 load_settings() {
 	equal "$1" "nvram" || {
 		exists /etc/config/$1 && . /etc/config/$1
@@ -115,15 +113,12 @@ save_setting() {
 		oldval=""
 	}
 	equal "$oldval" "$3" || echo "$2=\"$3\"" >> /tmp/.webif/config-$1
-}\x
+}
 
 #
 # Functions applicable to package management.
 #
-# (c) 2006 Jeremy Collake - X-Wrt Project
-# has_pkgs func originally from Coova / dwb.
-#
-#
+
 is_package_installed() {
 	# $1 = package name
 	# returns 0 if package is installed.
@@ -136,10 +131,8 @@ install_package() {
 	# if package is not found, and it isn't a URL, then it'll
 	# try an 'ipkg update' to see if it can locate it. Does
 	# emit output to std devices.
-	ipkg install "$1" -force-overwrite -force-defaults
-	! equal "$?" "0" &&
-	{
-		echo "$1" | grep "://" >> /dev/null
+	! ipkg install "$1" -force-overwrite -force-defaults && {
+[		echo "$1" | grep "://" >> /dev/null
 		! equal "$?" "0" && {
 			# wasn't a URL, so update
 			ipkg update
@@ -182,8 +175,8 @@ has_pkgs() {
 			nothave=$((nothave + 1))
 		}
 	done	
-	if [ "$pcnt" = "$nothave" ]; then
+	equal "$pcnt" "$nothave" && {
 		_savebutton=""
-	fi
+	}
 	return $retval;
 }
