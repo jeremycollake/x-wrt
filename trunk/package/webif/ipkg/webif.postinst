@@ -21,16 +21,6 @@ TestInstall()
 	fi
 }
 
-# since at present we aren't doing a proper package upgrade when
-# the user upgrades from one webif^2 build to another, we must
-# remove some files we deleted.
-CleanupDeprecatedFiles()
-{
-	rm -f "${IPKG_INSTROOT}/www/cgi-bin/webif/qos-nbd.inc"
-	rm -f "${IPKG_INSTROOT}/www/cgi-bin/webif/qos-rudy.inc"
-	rm -f "${IPKG_INSTROOT}/etc/init.d/S41ipkg"
-}
-
 ExecuteIfExists()
 {
 	# $1 = exec name
@@ -83,8 +73,6 @@ DeleteRepository()
 #########################################################################################
 # entry point
 
-CleanupDeprecatedFiles
-
 # fix some links on squashfs partition that aren't properly copied instead by firstboot
 # has no effect when done in image builder.
 FixReadOnlyLink "${IPKG_INSTROOT}/usr/lib/ipkg/info/webif.list"
@@ -127,7 +115,7 @@ ln -sf "/www/themes/xwrt" "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
 [ $? != 0 ] && {
 	# if fs doesn't support symlinks, do a copy
 	mkdir -p "${IPKG_INSTROOT}/www/themes/active"
-	cp "${IPKG_INSTROOT}/www/themes/xwrt/*" "${IPKG_INSTROOT}/www/themes/active/"
+	cp "/www/themes/xwrt/*" "/www/themes/active/"
 }
 
 # initialize webifmetabin binaries
