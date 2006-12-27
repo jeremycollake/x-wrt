@@ -100,11 +100,11 @@ if empty "$FORM_submit"; then
 		FORM_clkfreq="${FORM_clkfreq:-200}"
 	}
 	# webif settings
-	FORM_language="${language:-$(cat /etc/config/webif | grep lang= | cut -d'=' -f2)}"
+	FORM_language="${language:-$(cat /etc/config/webif | grep lang= | cut -d'"' -f2)}"
 	exists "/usr/sbin/nvram" && {
 		FORM_language="${FORM_language:-$(nvram get language)}"
 	}
-	FORM_language="${FORM_language:-default}"		
+	FORM_language="${FORM_language:-default}"
 	FORM_theme=${CONFIG_theme_id:-xwrt}
 else
 #####################################################################

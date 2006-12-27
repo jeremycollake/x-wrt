@@ -63,9 +63,17 @@ fi
 if [ -n "$FORM_install_webif" ]; then
 	echo "Please wait, installation may take a minute ... <br />"
 	echo "<pre>"
-	ipkg install "http://ftp.berlios.de/pub/xwrt/$package_filename" -force-overwrite | uniq
+	ipkg install "${version_url}${package_filename}" -force-overwrite | uniq
 	echo "</pre>"
 	this_revision=$(cat "/www/.version")
+	# update the active language package
+	curlang="$(cat "/etc/config/webif" |grep "lang=" |cut -d'"' -f2)"
+	if [ "$(ipkg status "webif-lang-${curlang}" |grep "Status:" | grep "ok installed" )" != "" ]; then
+		webif_version=$(ipkg info webif | awk '/Version:/ { print $2 }' | sort -r | sed 2d)
+		echo "<pre>"
+		ipkg install "${version_url}packages/webif-lang-${curlang}_${webif_version}_mipsel.ipk" -force-reinstall -force-overwrite | uniq
+		echo "</pre>"
+	fi
 fi
 
 uci_load "webif"
