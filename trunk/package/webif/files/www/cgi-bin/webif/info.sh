@@ -68,12 +68,12 @@ if [ -n "$FORM_install_webif" ]; then
 	this_revision=$(cat "/www/.version")
 	# update the active language package
 	curlang="$(cat "/etc/config/webif" |grep "lang=" |cut -d'=' -f2)"
-	if [ "$(ipkg status "webif-lang-${curlang}" |grep "Status:" | grep " installed" )" != "" ]; then
+	! equal "$(ipkg status "webif-lang-${curlang}" |grep "Status:" | grep " installed" )" "" && {
 		webif_version=$(ipkg status webif | awk '/Version:/ { print $2 }')
 		echo "<pre>"
 		ipkg install "${version_url}packages/webif-lang-${curlang}_${webif_version}_mipsel.ipk" -force-reinstall -force-overwrite | uniq
 		echo "</pre>"
-	fi
+	}
 fi
 
 uci_load "webif"
