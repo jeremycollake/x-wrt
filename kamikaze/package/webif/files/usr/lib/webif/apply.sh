@@ -213,19 +213,26 @@ for config in $(ls config-webif 2>&-); do
 		touch "$_tmpwebifconfig"  # for to exist
 		exists "/etc/config/webif" && {
 			cat "/etc/config/webif" | sed /'lang='/d > "$_tmpwebifconfig"
-		}		
+		}
 		echo "lang=$newlang" >> "$_tmpwebifconfig"
-		mv "$_tmpwebifconfig" "/etc/config/webif"		
-		! equal "$newlang" "en" && {
+		if [ "$newlang" == "en" ]; then
+			mv -f "$_tmpwebifconfig" "/etc/config/webif"
+		else
 			# build URL for package
 			#  since the original webif may be installed to, have to make sure we get latest ver
-			webif_version=$(ipkg info webif | awk '/Version:/ { print $2 }' | sort -r | sed 2d)
+			webif_version=$(ipkg status webif | awk '/Version:/ { print $2 }')
 			xwrt_repo_url=$(cat /etc/ipkg.conf | grep X-Wrt | cut -d' ' -f3)
 			# always install language pack, since it may have been updated without package version change
 			ipkg install "${xwrt_repo_url}/webif-lang-${newlang}_${webif_version}_mipsel.ipk" -force-reinstall -force-overwrite | uniq
-		}
+			# switch to it if installed, even old one, otherwise return to previous
+			if [ "$(ipkg status "webif-lang-${newlang}" |grep "Status:" |grep " installed" )" != "" ]; then
+				mv -f "$_tmpwebifconfig" "/etc/config/webif"
+			else
+				rm -f "$_tmpwebifconfig" 2>/dev/null
+				rm -f "/tmp/.webif/config-webif" 2>/dev/null
+			fi
+		fi
 	done
-	rm -f /tmp/.webif/config-webif
 	echo '@TR<<Done>>'
 done
 

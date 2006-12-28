@@ -104,7 +104,7 @@ if empty "$FORM_submit"; then
 	exists "/usr/sbin/nvram" && {
 		FORM_language="${FORM_language:-$(nvram get language)}"
 	}
-	FORM_language="${FORM_language:-default}"		
+	FORM_language="${FORM_language:-default}"
 	FORM_theme=${CONFIG_theme_id:-xwrt}
 else
 #####################################################################
