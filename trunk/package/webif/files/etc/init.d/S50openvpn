@@ -15,9 +15,8 @@ case "$1" in
 		PROTO=$(nvram get openvpn_cli_proto)
 		PORT=$(nvram get openvpn_cli_port)
 
-		[ "$SERVER" ] || {
-			logger "$0: remote server not configured!"
-			exit
+		[ "$SERVER" ] && {
+			SERVER_OPTION="--remote $SERVER --nobind"
 		}
 		case "$(nvram get openvpn_cli_auth)" in
 			cert)
@@ -39,9 +38,8 @@ case "$1" in
 		}
 		openvpn --proto  "${PROTO:-udp}"		\
 			--port   "${PORT:-1194}"		\
-			--remote "$SERVER"			\
+			$SERVER_OPTION				\
 			--dev tun				\
-			--nobind				\
 			$AUTH_OPTION "$AUTH_FILE"		\
 			--comp-lzo				\
 			--daemon				\
