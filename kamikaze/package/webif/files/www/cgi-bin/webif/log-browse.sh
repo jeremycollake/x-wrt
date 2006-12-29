@@ -84,9 +84,9 @@ EOF
 # display --------------------------------
 $LOGREAD | sort -r | awk -v filter=$FORM_filter -F ' ' '
 BEGIN {
-	print "<h3>Listing</h3>";
+	print "<h3>@TR<<Listing>></h3>";
 	print "<table width=\"90%\">";
-	print "<th>Date</th><th>Prefix</th><th>Source IP</th><th>Destination IP</th><th>Proto</th><th>Source Port</th><th>Dest. Port</th><th>Type</th>";
+	print "<th>@TR<<Date>></th><th>@TR<<Prefix>></th><th>@TR<<Source IP>></th><th>@TR<<Destination IP>></th><th>@TR<<Proto>></th><th>@TR<<Source Port>></th><th>@TR<<Dest. Port>></th><th>@TR<<Type>></th>";
 	}
 
 # is this line a netfilter record ?

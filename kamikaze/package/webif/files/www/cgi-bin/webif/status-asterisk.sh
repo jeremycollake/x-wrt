@@ -1,7 +1,7 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
-header "Status" "Asterisk" "Asterisk Simple Managment"
+header "Status" "Asterisk" "@TR<<Asterisk Simple Managment>>"
 
 if [ -e /var/run/asterisk.pid ]; then
 
@@ -115,7 +115,7 @@ if [ "$FORM_action" = "edit" ]; then
 fi
 else
 has_pkgs asterisk
-echo 'Asterisk is not running.'
+echo "@TR<<Asterisk is not running.>>"
 fi
 footer ?>
 <!--

@@ -6,8 +6,7 @@
 . /usr/lib/webif/webif.sh
 . ./graphs-subcategories.sh
 
-header "Graphs" "CPU" "CPU Usage" "" "$SCRIPT_NAME"
-
+header "Graphs" "CPU" "@TR<<CPU Usage>>" "" "$SCRIPT_NAME"
 ?>
 <center>
 	<embed src="/svggraph/graph_cpu.svg?/cgi-bin/webif/data.sh"

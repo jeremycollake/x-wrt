@@ -4,7 +4,7 @@
 header "Reboot" "Reboot" ""
 timeout=45
 if empty "$FORM_reboot"; then
-	reboot_msg="<form enctype=\"multipart/form-data\" method=\"post\"><input type=\"submit\" value=\" Yes, really reboot now \" name=\"reboot\" /></form>"
+	reboot_msg="<form enctype=\"multipart/form-data\" method=\"post\"><input type=\"submit\" value=\" @TR<<Yes, really reboot now>> \" name=\"reboot\" /></form>"
 else
 	router_ip=$(nvram get lan_ipaddr)
 	echo "<meta http-equiv="refresh" content=$timeout;http://$router_ip />"

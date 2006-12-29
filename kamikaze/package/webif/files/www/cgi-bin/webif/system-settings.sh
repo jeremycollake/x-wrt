@@ -240,26 +240,26 @@ dangerous_form_help=""
 LANGUAGES=$(cat "/etc/languages.lst")
 
 is_bcm947xx && {
-	bootwait_form="field|Boot Wait
+	bootwait_form="field|@TR<<Boot Wait>>
 	select|boot_wait|$FORM_boot_wait
 	option|on|@TR<<Enabled>>
 	option|off|@TR<<Disabled>>
 	helpitem|Boot Wait
 	helptext|HelpText boot_wait#Boot wait causes the boot loader of some devices to wait a few seconds at bootup for a TFTP transfer of a new firmware image. This is a security risk to be left on."
 
-	waittime_form="field|Wait Time
+	waittime_form="field|@TR<<Wait Time>>
 	select|wait_time|$FORM_wait_time
 	helpitem|Wait Time
 	helptext|HelpText wait_time#Number of seconds the boot loader should wait for a TFTP transfer if Boot Wait is on."
 
 	equal "$OVERCLOCKING_DISABLED" "0" &&
 	{
-		clkfreq_form="field|CPU Clock Frequency
+		clkfreq_form="field|@TR<<CPU Clock Frequency>>
 		select|clkfreq|$FORM_clkfreqs"
 		dangerous_form_start="start_form|@TR<<Dangerous Settings>>"
 		dangerous_form_end="end_form"
-		dangerous_form_help="helpitem|Clock Frequency
-					helptext|HelpText Clock Frequency#Do not change this. You may brick your router if you do not know what you are doing. We've tried to disable it for all routers that can be bricked through an invalid clock frequency setting. Only Linksys WRT54G v4 units are known to be unbrickable by a bad clkfreq setting."
+		dangerous_form_help="helpitem|CPU Clock Frequency
+					helptext|HelpText CPU Clock Frequency#Do not change this. You may brick your router if you do not know what you are doing. We've tried to disable it for all routers that can be bricked through an invalid clock frequency setting. Only Linksys WRT54G v4 units are known to be unbrickable by a bad clkfreq setting."
 	}
 }
 
