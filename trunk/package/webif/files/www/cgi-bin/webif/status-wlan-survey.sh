@@ -40,7 +40,7 @@ WL0_IFNAME=$(nvram get wl0_ifname)
 # Handle switch to sta mode at user request
 #
 if empty "$FORM_clientswitch"; then
-	CLIENT_SWITCH_BUTTON="<form enctype=\"multipart/form-data\" method=\"post\"><input type=\"submit\" value=\" Scan \" name=\"clientswitch\" /></form>"
+	CLIENT_SWITCH_BUTTON="<form enctype=\"multipart/form-data\" method=\"post\"><input type=\"submit\" value=\" @TR<<Scan>> \" name=\"clientswitch\" /></form>"
 else
 	ORIGINAL_WL_MODE=$(nvram get wl0_mode)
 	nvram set wl0_mode="sta"
@@ -57,9 +57,7 @@ WL_MODE=$(nvram get wl0_mode)
 ##################################################
 #
 if equal $WL_MODE "ap" ; then
-	echo "<table><tbody><tr><td>Your wireless adaptor is not in client mode. " \
-	"To do a scan it must be put into client mode for a few seconds." \
-	"Your WLAN traffic will be interrupted during this brief period." \
+	echo "<table><tbody><tr><td>@TR<<HelpText WLAN Survey#Your wireless adaptor is not in client mode. To do a scan it must be put into client mode for a few seconds. Your WLAN traffic will be interrupted during this brief period.>>" \
 	"<tr><td><br /></td></tr><tr><td>$CLIENT_SWITCH_BUTTON</td></tr></tbody></table>"
 else
 
@@ -78,7 +76,7 @@ done
 
 first_hit=1
 if [ $counter -gt $MAX_TRIES ]; then
-	echo "<tr><td>Sorry, no scan results.</td></tr>"
+	echo "<tr><td>@TR<<Sorry, no scan results.>></td></tr>"
 else
 	current=0
 	counter=0

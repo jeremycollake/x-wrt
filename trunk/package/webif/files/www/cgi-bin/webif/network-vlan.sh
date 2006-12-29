@@ -231,8 +231,8 @@ helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration?highlight=%28wl0_mode
 $FORM_all_vlans
 end_form
 start_form|
-submit|add_vlan|Add New VLAN
-submit|remove_vlan|Remove Last VLAN
+submit|add_vlan|@TR<<Add New VLAN>>
+submit|remove_vlan|@TR<<Remove Last VLAN>>
 end_form
 EOF
 

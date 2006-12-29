@@ -80,11 +80,11 @@ elif [ "$FORM_action" = 'Change' ] || [ "$FORM_action" = 'Add' ]; then
 	fi
 else
 	echo '<h3>@TR<<General System Settings>></h3>'
-	echo '<br><font color="red" size=-1>Warning: Changing these settings may result in permenant damage to your router.</font><br><br>'
+	echo '<br><font color="red" size=-1>@TR<<warn_nvram#Warning: Changing these settings may result in permanent damage to your router.>></font><br><br>'
 	if $live; then
 		echo '<h4>Changes take effect immediately.</h4><br>'
 	else
-		echo '<h4>Changes will not take effect until you choose "Apply Changes"</h4><br>'
+		echo '<h4>@TR<<inform_apply#Changes will not take effect until you choose "Apply Changes">></h4><br>'
 	fi
 	echo '<table style="width: 90%; margin: auto;">'
 	echo '<tr><th>Setting Variable</th><th>Current Value</th></tr>'

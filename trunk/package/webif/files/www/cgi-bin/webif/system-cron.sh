@@ -38,16 +38,16 @@ load_settings "cron"
 
 header "System" "Cron" "@TR<<Cron>>" '' "$SCRIPT_NAME"
 
-display_form "start_form|Cron Settings
-field|Cron Daemon
-radio|cron_enable|$FORM_cron_enable|1|Enable
-radio|cron_enable|$FORM_cron_enable|0|Disable
+display_form "start_form|@TR<<Cron Settings>>
+field|@TR<<Cron Daemon>>
+radio|cron_enable|$FORM_cron_enable|1|@TR<<Enable>>
+radio|cron_enable|$FORM_cron_enable|0|@TR<<Disable>>
 helpitem|Cron
 helptext|HelpText Cron#Cron is a linux daemon that executes commands are desired times or intervals.
 end_form"
 ?>
 
-<a href="system-crontabs.sh">View Crontab files</a>
+<a href="system-crontabs.sh">@TR<<View Crontab files>></a>
 
 <?
 show_validated_logo

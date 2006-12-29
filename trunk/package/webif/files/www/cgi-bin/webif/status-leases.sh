@@ -32,13 +32,13 @@ $1 > 0 {
 exists /tmp/dhcp.leases && grep -q "." /tmp/dhcp.leases > /dev/null
 ! equal "$?" "0" &&
 {
-	echo "<tr><td>There are no known DHCP leases.</td></tr>"
+	echo "<tr><td>@TR<<There are no known DHCP leases.>></td></tr>"
 }
 ?>
 <tr><td><br /><br /></td></tr>
 </tbody></table>
 <table width="100%"><tbody>
-<tr><td><font size="-1"><strong>DHCP Leases:</strong>&nbsp; DHCP leases are assigned to network clients that request an IP address from the DHCP server of the router. Clients that requested their IP lease before this router was last rebooted may not be listed until they request a renewal of their lease.</font></td></tr>
+<tr><td><font size="-1"><strong>@TR<<DHCP Leases>>:</strong>&nbsp; @TR<<HelpText DHCP Leases#DHCP leases are assigned to network clients that request an IP address from the DHCP server of the router. Clients that requested their IP lease before this router was last rebooted may not be listed until they request a renewal of their lease.>></font></td></tr>
 <tr><td><br /><br /></td></tr>
 </tbody>
 </table>

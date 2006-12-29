@@ -44,25 +44,25 @@ df | uniq | awk 'BEGIN { mcount=0 };
 )
 
 display_form <<EOF
-start_form|Load Average
+start_form|@TR<<Load Average>>
 string|<tr><td><font size="+1" color="red">$_loadavg</font><tr><td>
 helpitem|Load Average
 helptext|Helptext Load Average#The load average represents the average number of active processes during the past 1, 5, and 15 minutes
 end_form|
-start_form|RAM Usage
-string|<tr><td>Total: $TOTAL_MEM KB</td></tr>
-progressbar|ramuse|Used: $USED_MEM KB ($MEM_PERCENT_USED%)|200|$MEM_PERCENT_USED|$MEM_PERCENT_USED%||
+start_form|@TR<<RAM Usage>>
+string|<tr><td>@TR<<Total>>: $TOTAL_MEM KB</td></tr>
+progressbar|ramuse|@TR<<Used>>: $USED_MEM KB ($MEM_PERCENT_USED%)|200|$MEM_PERCENT_USED|$MEM_PERCENT_USED%||
 helpitem|RAM Usage
 helptext|Helptext RAM Usage#This is the current RAM usage. The amount free represents how much applications have available.
 end_form|
-start_form|Tracked Connections
-string|<tr><td>Maximum: $MAX_CONNECTIONS</td></tr>
-progressbar|conntrackuse|Used: $ACTIVE_CONNECTIONS ($USED_CONNECTIONS_PERCENT%)|200|$USED_CONNECTIONS_PERCENT|$USED_CONNECTIONS_PERCENT%||
+start_form|@TR<<Tracked Connections>>
+string|<tr><td>@TR<<Maximum>>: $MAX_CONNECTIONS</td></tr>
+progressbar|conntrackuse|@TR<<Used>>: $ACTIVE_CONNECTIONS ($USED_CONNECTIONS_PERCENT%)|200|$USED_CONNECTIONS_PERCENT|$USED_CONNECTIONS_PERCENT%||
 helpitem|Tracked Connections
 helptext|Helptext Tracked Connections#This is the number of connections in your router's conntrack table. <a href="status-conntrackread.sh">View Conntrack Table</a>
 end_form|
 
-start_form|Mount Usage
+start_form|@TR<<Mount Usage>>
 $mounts_form
 string|<tr><td><br /></td></tr>
 helpitem|Mount Usage

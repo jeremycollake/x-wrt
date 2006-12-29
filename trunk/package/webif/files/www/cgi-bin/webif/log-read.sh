@@ -8,10 +8,9 @@ header "Log" "Syslog" "@TR<<Syslog View>>" '' "$SCRIPT_NAME"
 #| sed -e "s|<head>|<head>$meta_refresh|"
 prefix=$(nvram get log_prefix)
 ?>
-<? echo "Message Prefix: $prefix" ?><br/>
+<? echo "@TR<<Message Prefix>>: $prefix" ?><br/>
 <iframe src="log-read_frame.sh" width="90%" height="300" scrolling="auto">
-Your browser does not support frames,
-please follow this link: <a href="log-read_frame.sh" target="blank" >View Syslog</a>
+@TR<<HelpText Browser_Frames#Your browser does not support frames,<br>please follow this link>>: <a href="log-read_frame.sh" target="blank" >@TR<<View Syslog>></a>
 </iframe>
 <? footer ?>
 <!--

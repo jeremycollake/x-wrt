@@ -8,7 +8,7 @@ load_settings "cron"
 
 header "System" "Crontabs" "@TR<<Cron Tables>>" "$SCRIPT_NAME"
 
-cron_dir_text="<br/>Cron Tables Directory:<pre>$crondir</pre><br/>"
+cron_dir_text="<br/>@TR<<Cron Tables Directory>>:<pre>$crondir</pre><br/>"
 
 for crontab in $(ls $crondir/); do
 	for i in $(cat $crondir$crontab | tr ' ' '@'); do
