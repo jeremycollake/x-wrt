@@ -325,7 +325,7 @@ callback_foreach_rule() {
 	# for 'down' since we didn't know index of next classify item.
 	# if there is a last shown rule, show 'up' option for PREVIOUS rule
 	! equal "$last_shown_rule" "-1" && {
-	 	echo "<a href=\"$SCRIPT_NAME?qos_swap_dest=$section_name&amp;qos_swap_src=$last_shown_rule\">@TR<<down>></a>"
+		echo "<a href=\"$SCRIPT_NAME?qos_swap_dest=$section_name&amp;qos_swap_src=$last_shown_rule\"><img alt=\"@TR<<down>>\" src=\"/images/down.gif\"></a>"
 		echo "</td></tr>"
 	}	
 	## end finishing last iteration
@@ -352,12 +352,13 @@ callback_foreach_rule() {
 	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "tcpflags" "" ""
 	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "pktsize" "" ""
 	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "mark" "" ""
-	echo "<td bgcolor=\"$cur_color\">"
-	echo "<a href=\"$SCRIPT_NAME?qos_remove=$section_name\"><img alt=\"@TR<<delete>>\" src=\"/images/x.gif\"></a>&nbsp;"	
-	echo "<a href=\"$SCRIPT_NAME?qos_edit=$section_name\">@TR<<edit>></a>&nbsp;"
+	echo "<td bgcolor=\"$cur_color\">"	
+	echo "<a href=\"$SCRIPT_NAME?qos_remove=$section_name\"><img alt=\"@TR<<delete>>\" src=\"/images/x.gif\"></a>&nbsp;"
+	echo "<a href=\"$SCRIPT_NAME?qos_edit=$section_name\"><img alt=\"@TR<<edit>>\" src=\"/images/edit.gif\"></a>&nbsp;"
 	# if there is a last shown rule, show 'up' option
-	! equal "$last_shown_rule" "-1" && {
-	 	echo "<a href=\"$SCRIPT_NAME?qos_swap_src=$section_name&amp;qos_swap_dest=$last_shown_rule\">@TR<<up>></a>&nbsp;"
+	! equal "$last_shown_rule" "-1" && {	 	
+		echo "<a href=\"$SCRIPT_NAME?qos_swap_src=$section_name&amp;qos_swap_dest=$last_shown_rule\"><img alt=\"@TR<<up>>\" src=\"/images/up.gif\"></a>"
+
 	}
 	# if we are adding, always keep last index in FORM_qos_edit
 	! empty "$FORM_qos_add" && FORM_qos_edit="$section_name"
