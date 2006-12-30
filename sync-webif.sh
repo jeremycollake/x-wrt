@@ -38,12 +38,16 @@ synchronize_file () {
 }
 
 echo "Synchronizing branches ..."
+svn up "$BRANCH_DEST"
 synchronize_file "www/themes/xwrt/*"
 synchronize_file "etc/config/webif"
 synchronize_file "etc/functions-net.sh"
 synchronize_file "usr/lib/webif/functions.sh"
 synchronize_file "usr/lib/webif/apply.sh"
 synchronize_file "www/index.html"
+synchronize_file "www/images/*.gif"
+synchronize_file "www/images/*.png"
+synchronize_file "www/images/*.jpg"
 synchronize_file "www/cgi-bin/webif/info.sh"
 synchronize_file "www/cgi-bin/webif/info-about.sh"
 synchronize_file "www/cgi-bin/webif/status-connection.sh"
@@ -64,5 +68,4 @@ synchronize_file "usr/lib/webif/webif.sh"
 synchronize_file "lib/config/uci-depends.*"
 #NOT_synchronize_file "etc/init.d/S90webif_deviceid"  # not sync'd due to rc.common
 #NOT_synchronize_file "etc/init.d/S90webif_firmwareid"# not sync'd due to rc.common
-svn add "$BRANCH_DEST" 2>&-
 svn ci "$BRANCH_DEST" -m "kamikaze and white russian branch synchronize"
