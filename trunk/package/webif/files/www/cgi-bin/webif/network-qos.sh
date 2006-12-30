@@ -54,7 +54,7 @@ uci_set_value_remove_if_empty() {
 if is_package_installed "qos-scripts"; then
 ! empty "$FORM_submit" && empty "$FORM_install_nbd" && {	
 	current_qos_item="$FORM_current_rule_index"	
-	! equal "$current_qos_item" "0" && {		
+	! empty "$current_qos_item" && {		
 		# for validation purposes, replace non-numeric stuff in
 		# ports list and port range with integer.				
 		ports_validate=$(echo "$FORM_current_ports" | sed s/','/'0'/g)
