@@ -300,9 +300,7 @@ show_column()
 	local _val
 	# config_get returns TYPE if OPTION ($2) is empty, else returns value
 	config_get _val "$1" "$2"
-	echo "<td>"
-	echo "${_val:-$4}"
-	echo "</td>"
+	echo "<td>${_val:-$4}</td>"
 }
 
 #
@@ -326,12 +324,13 @@ callback_foreach_rule() {
 		echo "</td></tr>"
 	}	
 	## end finishing last iteration
-	if equal "$cur_color" "even"; then
-		cur_color="odd"
-	else
+	if equal "$cur_color" "odd"; then
 		cur_color="even"
+		echo "<tr>"
+	else
+		cur_color="odd"
+		echo "<tr class=\"$cur_color\">"
 	fi
-	echo "<tr class=\"$cur_color\">"		
 	show_column "$section_name" "target" "" "..."
 	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "TYPE" "" ""
 	show_column "$section_name" "srchost" ""
