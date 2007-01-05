@@ -1,6 +1,6 @@
 . /etc/functions.sh
 NAME=ez-ipupdate
-CONFIG=/etc/$NAME.conf
+CONFIG=/etc/ez-ipupdate/$NAME.conf
 COMMAND=/usr/sbin/$NAME
 [ "$ACTION" = "ifup" -a "$INTERFACE" = "wan" ] && {
         [ -x $COMMAND ] && [ -r $CONFIG ] && {
