@@ -90,6 +90,9 @@ this_revision=$(cat "/www/.version")
 <tr><td>
 @TR<<GPL_Text#This program is free software; you can redistribute it and/or <br />modify it under the terms of the GNU General Public License <br />as published by the Free Software Foundation; either version 2 <br />of the License, or (at your option) any later version.<br /> >>
 </td></tr>
+<tr><td>
+@TR<<zephyr_Text#The Zephyr theme is under the MIT licence.<br /> >>
+</td></tr>
 </tbody></table>
 <br />
 <? show_validated_logo
