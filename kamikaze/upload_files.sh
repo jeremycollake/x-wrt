@@ -6,7 +6,6 @@ fi
 export SCP_USER="$1"
 rm bin/packages/w?bf??e*
 chmod -R 775 bin/*
-echo "Uploading webif version info ..."
 # for my personal shit
 if [ -d "/mnt/whale/xwrt" ]; then
         cp /mnt/whale/xwrt/xwrt.htm ht_docs
@@ -18,49 +17,48 @@ fi
 #       ht_docs/xwrt.asp \
 #       $SCP_USER@shell.berlios.de:/home/groups/xwrt/htdocs/
 
-ls bin/openwrt-x86-2.6* >/dev/null 2>&-
-[ $? = "0" ] && {
-chmod 775 build_i386/webif-0.3/ipkg/webif/www/.version
-scp \
-        build_i386/webif-0.3/ipkg/webif/www/.version \
-        $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/x86-2.6/
-echo "Uploading package repository ..."
-scp \
-        bin/packages/*i386* \
-        $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/x86-2.6/packages/
-echo "Uploading X-Wrt patches ..."
-scp \
-        patches/* \
-        $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/x86-2.6/patches/
-#echo "Uploading firmware images ..."
-#date > /tmp/build-date.txt
-#scp \
-#       /tmp/build-date.txt \
-#       $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/x86-2.6/images/
-#scp \
-#       bin/openwrt-x86-2.6* \
-#       $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/x86-2.6/images/
-}
+
 ls bin/openwrt-brcm-2.4* >/dev/null 2>&-
 [ $? = "0" ] && {
+version="broadcom-2.4"
 chmod 775 build_mipsel/webif-0.3/ipkg/webif/www/.version
+version_file="build_mipsel/webif-0.3/ipkg/webif/www/.version"
+echo $version
+}
+
+ls bin/openwrt-x86-2.6* >/dev/null 2>&-
+[ $? = "0" ] && {
+version="x86-2.6"
+chmod 775 build_i386/webif-0.3/ipkg/webif/www/.version
+version_file="build_i386/webif-0.3/ipkg/webif/www/.version"
+echo $version
+}
+
+ls bin/openwrt-atheros-2.6* >/dev/null 2>&-
+[ $? = "0" ] && {
+version="atheros-2.6"
+chmod 775 build_mips/webif-0.3/ipkg/webif/www/.version
+version_file="build_mips/webif-0.3/ipkg/webif/www/.version"
+echo $version
+}
+
+echo "Uploading webif version info ..."
 scp \
-        build_mipsel/webif-0.3/ipkg/webif/www/.version \
-        $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/broadcom-2.4/
+	$version_file \
+        $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/$version/
 echo "Uploading package repository ..."
 scp \
-        bin/packages/*mipsel* \
-        $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/broadcom-2.4/packages/
+        bin/packages/* \
+        $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/$version/packages/
 echo "Uploading X-Wrt patches ..."
 scp \
         patches/* \
-        $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/broadcom-2.4/patches/
+        $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/$version/patches/
 #echo "Uploading firmware images ..."
 #date > /tmp/build-date.txt
 #scp \
 #       /tmp/build-date.txt \
-#       $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/broadcom-2.4/images/
+#       $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/$version/images/
 #scp \
-#       bin/openwrt-x86-2.6* \
-#       $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/broadcom-2.4/images/
-}
+#       bin/openwrt* \
+#       $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/$version/images/
