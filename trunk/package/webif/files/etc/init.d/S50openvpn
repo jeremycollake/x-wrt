@@ -20,13 +20,13 @@ case "$1" in
 		}
 		case "$(nvram get openvpn_cli_auth)" in
 			cert)
-				AUTH_OPTION="--client --pkcs12"
-				AUTH_FILE="/etc/openvpn/certificate.p12"
+				AUTH_OPTION="--client --pkcs12 /etc/openvpn/certificate.p12"
 			;;
 			psk)
-				AUTH_OPTION="--secret"
-				AUTH_FILE="/etc/openvpn/shared.key"
+				AUTH_OPTION="--secret /etc/openvpn/shared.key"
 			;;
+			pem)
+				AUTH_OPTION="--client --ca /etc/openvpn/ca.crt --cert /etc/openvpn/client.crt --key /etc/openvpn/client.key"
 			*)
 				logger "$0: unknown authentication type, aborting!"
 				exit
@@ -40,7 +40,7 @@ case "$1" in
 			--port   "${PORT:-1194}"		\
 			$SERVER_OPTION				\
 			--dev tun				\
-			$AUTH_OPTION "$AUTH_FILE"		\
+			$AUTH_OPTION				\
 			--comp-lzo				\
 			--daemon				\
 			--status /tmp/openvpn-status.log	\
