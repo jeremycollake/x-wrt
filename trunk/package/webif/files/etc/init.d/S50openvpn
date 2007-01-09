@@ -1,10 +1,10 @@
 #!/bin/sh
-
+status = 0
 file_check() {
 	for file in "$@"; do
 		if [ ! -f "$file" ]; then
-			logger "$0: no certificate/keyfile found!"
-			exit
+			logger "$0: Missing $file. Please generate and try again."
+			status = "1"
 		fi
 	done
 }
@@ -45,7 +45,8 @@ case "$1" in
 				exit
 			;;
 		esac
-
+		
+		if [ "$status" = "0" ]; then
 		openvpn --proto  "${PROTO:-udp}"		\
 			--port   "${PORT:-1194}"		\
 			$SERVER_OPTION				\
@@ -55,6 +56,7 @@ case "$1" in
 			--daemon				\
 			--status /tmp/openvpn-status.log	\
 			--verb 3
+		fi
 	;;
 	restart)
 		$0 stop
