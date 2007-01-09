@@ -1,5 +1,14 @@
 #!/bin/sh
 
+file_check() {
+	for file in "$@"; do
+		[ -f "$file" ] || {
+			logger "$0: no certificate/keyfile found!"
+			exit
+		}
+	done
+}
+
 case "$(nvram get openvpn_cli)" in
 	on|enabled|1)
 		continue
@@ -20,22 +29,22 @@ case "$1" in
 		}
 		case "$(nvram get openvpn_cli_auth)" in
 			cert)
+				file_check "/etc/openvpn/certificate.p12"
 				AUTH_OPTION="--client --pkcs12 /etc/openvpn/certificate.p12"
 			;;
 			psk)
+				file_check "/etc/openvpn/shared.key"
 				AUTH_OPTION="--secret /etc/openvpn/shared.key"
 			;;
 			pem)
+				file_check "/etc/openvpn/ca.crt /etc/openvpn/client.crt /etc/openvpn/client.key"
 				AUTH_OPTION="--client --ca /etc/openvpn/ca.crt --cert /etc/openvpn/client.crt --key /etc/openvpn/client.key"
 			*)
 				logger "$0: unknown authentication type, aborting!"
 				exit
 			;;
 		esac
-		[ -f "$AUTH_FILE" ] || {
-			logger "$0: no certificat/keyfile found!"
-			exit
-		}
+
 		openvpn --proto  "${PROTO:-udp}"		\
 			--port   "${PORT:-1194}"		\
 			$SERVER_OPTION				\
