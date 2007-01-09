@@ -78,7 +78,7 @@ this_revision=$(cat "/www/.version")
 @TR<<CSS_Layout#Layout was originally based on>> <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran.
 </td></tr>
 <tr><td>
-@TR<<UCI>> @TR<<facilitating code>> @TR<<Copyright>> (C) 2006 by Fokus Fraunhofer <carsten.tittel@fokus.fraumhofer.de>.
+@TR<<UCI>> @TR<<facilitating code>> @TR<<Copyright>> (C) 2006 by <a href="mailto:carsten.tittel@fokus.fraumhofer.de">Fokus Fraunhofer</a>.
 </td></tr>
 <tr><td>
 @TR<<Translator_Credit#The translation you are currently using is authored by (nobody)>>.
