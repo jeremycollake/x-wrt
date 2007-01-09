@@ -39,6 +39,7 @@ case "$1" in
 			pem)
 				file_check "/etc/openvpn/ca.crt /etc/openvpn/client.crt /etc/openvpn/client.key"
 				AUTH_OPTION="--client --ca /etc/openvpn/ca.crt --cert /etc/openvpn/client.crt --key /etc/openvpn/client.key"
+			;;
 			*)
 				logger "$0: unknown authentication type, aborting!"
 				exit
