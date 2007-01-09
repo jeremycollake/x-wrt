@@ -32,6 +32,17 @@ equal "$(nvram get openvpn_cli)" "1" && {
 			[ -f "/etc/openvpn/shared.key" ] ||
 				ERROR="Error, keyfile is missing!"
 		;;
+		pem)
+			if [ ! -f "/etc/openvpn/client.key" ]; then
+				ERROR="Error, client keyfile is missing!"
+			fi
+			if [ ! -f "/etc/openvpn/client.crt" ]; then
+				ERROR="Error, client certificate is missing!"
+			fi
+			if [ ! -f "/etc/openvpn/ca.crt" ]; then
+				ERROR="Error, root certificate is missing!"
+			fi
+		;;
 		*)
 			ERROR="error in OpenVPN configuration, unknown authtype"
 		;;
