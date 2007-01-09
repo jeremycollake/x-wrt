@@ -2,10 +2,10 @@
 
 file_check() {
 	for file in "$@"; do
-		[ -f "$file" ] || {
+		if [ ! -f "$file" ]; then
 			logger "$0: no certificate/keyfile found!"
 			exit
-		}
+		fi
 	done
 }
 
@@ -37,7 +37,7 @@ case "$1" in
 				AUTH_OPTION="--secret /etc/openvpn/shared.key"
 			;;
 			pem)
-				file_check "/etc/openvpn/ca.crt /etc/openvpn/client.crt /etc/openvpn/client.key"
+				file_check "/etc/openvpn/ca.crt" "/etc/openvpn/client.crt" "/etc/openvpn/client.key"
 				AUTH_OPTION="--client --ca /etc/openvpn/ca.crt --cert /etc/openvpn/client.crt --key /etc/openvpn/client.key"
 			;;
 			*)
