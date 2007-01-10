@@ -140,7 +140,7 @@ package-$(BR2_PACKAGE_WPA_SUPPLICANT) += wpa_supplicant
 package-$(BR2_PACKAGE_WPUT) += wput
 package-$(BR2_PACKAGE_XINETD) += xinetd
 package-$(BR2_PACKAGE_ZLIB) += zlib
-package-$(BR2_PACKAGE_ZLIB) += webfone
+#package-$(BR2_PACKAGE_ZLIB) += webfone
 
 DEV_LIBS:=tcp_wrappers glib ncurses openssl pcre popt zlib libnet libpcap mysql postgresql iptables matrixssl lzo gmp fuse portmap libelf uclibc++ speex libpng libgd wireless-tools nvram libusb net-snmp
 DEV_LIBS_COMPILE:=$(patsubst %,%-compile,$(DEV_LIBS))

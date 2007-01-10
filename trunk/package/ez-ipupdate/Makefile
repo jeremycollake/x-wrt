@@ -52,9 +52,9 @@ $(IPKG_EZIPUPDATE):
 	install -m0755 ./files/$(PKG_NAME).hotplug $(IDIR_EZIPUPDATE)/etc/hotplug.d/iface/10-$(PKG_NAME)
 	install -d -m0755 $(IDIR_EZIPUPDATE)/usr/sbin
 	install -m0755 $(PKG_BUILD_DIR)/$(PKG_NAME) $(IDIR_EZIPUPDATE)/usr/sbin/
-	find $(IDIR_WEBIF) -name CVS | xargs rm -rf
-	find $(IDIR_WEBIF) -name .svn | xargs rm -rf
-	find $(IDIR_WEBIF) -name *~ | xargs rm -rf
+	find $(IDIR_EZIPUPDATE) -name CVS | xargs rm -rf
+	find $(IDIR_EZIPUPDATE) -name .svn | xargs rm -rf
+	find $(IDIR_EZIPUPDATE) -name *~ | xargs rm -rf
 	$(RSTRIP) $(IDIR_EZIPUPDATE)
 	$(IPKG_BUILD) $(IDIR_EZIPUPDATE) $(PACKAGE_DIR)
 
