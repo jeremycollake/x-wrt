@@ -62,7 +62,7 @@ equal "$(nvram get openvpn_cli)" "1" && {
 		}
 		echo "<br/>"
 
-		ps | grep -q '[o]penvpn --client' && {
+		ps | grep -q '[o]penvpn --proto' && {
 			echo 'OpenVPN process is running <a href="?action=stop">[stop now]</a>'
 		} || {
 			echo 'OpenVPN is not running <a href="?action=start">[start now]</a>'
