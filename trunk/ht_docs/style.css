@@ -1,0 +1,39 @@
+body{font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;font-size:0.9em;line-height:1.5em}
+
+/* container wrapped around everything */
+#container{
+	max-width:53em;
+	margin:0 auto 0 auto;
+	/* max-width for IE */
+	width:expression(
+	    document.body.clientWidth > 1000? "53em": "auto"
+	);
+}
+
+/* styling */
+.green{background:#33FF33}
+.red{background:#FF6633}
+.warning{color:red}
+code{padding:0.2em;background:#EEE}
+em{display:block;font-weight:bold}
+h1,h2,h3{color:#666699}
+#header { font-style: oblique; height: 6em;}
+#header h1 span {	font-size: 200%;}
+
+
+/* horizontal margins */
+p,li,dt,em,dd,h4{margin-left:4em}
+h3,form,input{margin-left:2em}
+#header em {margin-left: 0;}
+
+/* vertical margins */
+h2{margin-top:2em}
+p,li,dt,input{margin-top:0.5em}
+input{margin-bottom:0.5em}
+
+/* roadmap table */
+table{margin:0 auto 0 auto}
+table li{margin:0}
+table td{border:1px solid #666699;padding:0.3em}
+table th{padding:0.3em}
+table ul{padding:0;margin:0;list-style:none}

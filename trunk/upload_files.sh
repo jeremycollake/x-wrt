@@ -24,6 +24,7 @@ echo "Uploading xwrt web pages ..."
 scp \
 	ht_docs/xwrt.htm \
 	ht_docs/xwrt.asp \
+	ht_docs/style.css \
 	$SCP_USER@shell.berlios.de:/home/groups/xwrt/htdocs/
 echo "Uploading package repository ..."
 rm bin/packages/webf??e* -rf
@@ -40,16 +41,16 @@ date > /tmp/build-date.txt
 scp \
 	/tmp/build-date.txt \
 	xwrt@xwrt.kicks-ass.org:/www/xwrt/firmware_images/whiterussian/pre-0.9/latest-daily-build/
-scp \
-	../../ht_docs/howtoflash-7z.txt \
-	xwrt@xwrt.kicks-ass.org:/www/xwrt/firmware_images/whiterussian/pre-0.9/latest-daily-build/
+#scp \
+#	../../ht_docs/howtoflash-7z.txt \
+#	xwrt@xwrt.kicks-ass.org:/www/xwrt/firmware_images/whiterussian/pre-0.9/latest-daily-build/
 md5sum imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default/* > imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default/md5sums.txt
 scp \
 	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default/md5sums.txt \
 	xwrt@xwrt.kicks-ass.org:/www/xwrt/firmware_images/whiterussian/pre-0.9/latest-daily-build/default
-scp \
-	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default/*.7z \
-	xwrt@xwrt.kicks-ass.org:/www/xwrt/firmware_images/whiterussian/pre-0.9/latest-daily-build/default
+#scp \
+#	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default/*.7z \
+#	xwrt@xwrt.kicks-ass.org:/www/xwrt/firmware_images/whiterussian/pre-0.9/latest-daily-build/default
 rm imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default/*v5*.bin
 scp \
 	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/default/*.bin \
@@ -86,9 +87,9 @@ md5sum imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pptp/* > imgbuild/OpenWrt-Im
 scp \
 	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pptp/md5sums.txt \
 	xwrt@xwrt.kicks-ass.org:/www/xwrt/firmware_images/whiterussian/pre-0.9/latest-daily-build/pptp
-scp \
-	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pptp/*.7z \
-	xwrt@xwrt.kicks-ass.org:/www/xwrt/firmware_images/whiterussian/pre-0.9/latest-daily-build/pptp
+#scp \
+#	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pptp/*.7z \
+#	xwrt@xwrt.kicks-ass.org:/www/xwrt/firmware_images/whiterussian/pre-0.9/latest-daily-build/pptp
 rm imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pptp/*v5*.bin
 scp \
 	imgbuild/OpenWrt-ImageBuilder-Linux-i686/bin/pptp/*.bin \
