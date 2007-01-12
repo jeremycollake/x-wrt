@@ -19,6 +19,49 @@
 #   none
 #
 
+
+
+
+#! /bin/sh
+. /etc/functions.sh
+config_cb() {
+config_get TYPE "$CONFIG_SECTION" TYPE
+case "$TYPE" in
+        wifi-device)
+                append DEVICES "$CONFIG_SECTION"
+        ;;
+        wifi-iface)
+                config_get device "$CONFIG_SECTION" device
+                config_get vifs "$device" vifs
+                append vifs "$CONFIG_SECTION"
+        ;;
+esac
+}
+
+config_load wireless
+include /lib/wifi
+
+echo "$DEVICES"
+echo "vifs $vifs"
+
+for device in $DEVICES; do
+	config_get $device_country $device country
+	config_get $device_channel $device channel
+	config_get $device_maxassoc $device maxassoc
+	config_get $device_distance $device distance
+
+
+done
+
+
+
+
+
+
+
+
+
+
 load_settings "wireless"
 
 header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onload="modechange()"' "$SCRIPT_NAME"
