@@ -3,7 +3,6 @@
 . /usr/lib/webif/webif.sh
 
 header "System" "File Editor" "@TR<<File Editor>>" ''
-ShowNotUpdatedWarning
 
 cat <<EOF
 <style><!--

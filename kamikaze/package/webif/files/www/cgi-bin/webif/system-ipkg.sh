@@ -29,8 +29,6 @@
 
 header "System" "Packages" "@TR<<Packages>>" '' "$SCRIPT_NAME"
 
-is_kamikaze && ShowNotUpdatedWarning
-
 ##################################################################
 #
 # Install from URL and Add Repository code - self-contained block.

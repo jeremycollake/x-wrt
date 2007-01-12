@@ -23,7 +23,6 @@ EOF
 }
 
 header "System" "Password" "@TR<<Password>>" '' "$SCRIPT_NAME"
-ShowNotUpdatedWarning
 
 display_form <<EOF
 start_form|@TR<<Password Change>>
