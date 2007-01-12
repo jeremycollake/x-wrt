@@ -50,7 +50,7 @@ wlan_txpwr="${wlan_txpwr:-0}"
 form_dns_servers=$(awk '
 	BEGIN { counter=1 }
 	/nameserver/ {print "field|@TR<<DNS Server>> " counter "|dns_server_" counter "\n string|" $2 "\n" ;counter+=1}
-	' /etc/resolv.conf)
+	' /etc/resolv.conf 2> /dev/null)
 
 if [ -n "$wan_config" ]; then
 display_form <<EOF
