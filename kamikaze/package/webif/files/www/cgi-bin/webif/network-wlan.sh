@@ -19,11 +19,6 @@
 #   none
 #
 
-
-
-
-#! /bin/sh
-. /etc/functions.sh
 config_cb() {
 config_get TYPE "$CONFIG_SECTION" TYPE
 case "$TYPE" in
@@ -33,7 +28,7 @@ case "$TYPE" in
         wifi-iface)
                 config_get device "$CONFIG_SECTION" device
                 config_get vifs "$device" vifs
-                append vifs "$CONFIG_SECTION"
+                append vifs "$CONFIG_SECTION" "$N"
         ;;
 esac
 }
@@ -44,16 +39,58 @@ include /lib/wifi
 echo "$DEVICES"
 echo "vifs $vifs"
 
+local forms save_form
 for device in $DEVICES; do
 	config_get $device_country $device country
 	config_get $device_channel $device channel
 	config_get $device_maxassoc $device maxassoc
 	config_get $device_distance $device distance
+	
+	# Initialize channels based on country code
+	# (--- hardly a switch here ---)
 
-
+	case "$device_country" in
+		All|all|ALL) CHANNELS="1 2 3 4 5 6 7 8 9 10 11 12 13 14"; CHANNEL_MAX=14 ;;
+		*) CHANNELS="1 2 3 4 5 6 7 8 9 10 11"; CHANNEL_MAX=11 ;;
+	esac
+	F_CHANNELS="field|@TR<<Channel>>
+		select|${device}_channel|$FORM_${device}_channel
+		option|0|@TR<<Auto>>"
+	for ch in $CHANNELS; do
+		F_CHANNELS="${F_CHANNELS}
+			option|$ch"
+	done
+	
+	maxassoc="field|Max Associated Clients (default 128)
+		text|${device}_maxassoc|$FORM_${device}_maxassoc"
+	append forms "field|@TR<<Wireless Interface>>" "$N"
+	
+	distance="field|Wireless Distance (In Meters)
+		text|${device}_distance|$FORM_${device}_distance"
+		
+	append forms "$F_CHANNELS" "$N"
+	append forms "$maxassoc" "$N"
+	append forms "$distance" "$N"
+	append save_form "uci_set "wireless" "$device" "channel" "$FORM_${device}_channel"
+	append save_form "uci_set "wireless" "$device" "maxassoc" "$FORM_${device}_maxassoc"
+	
 done
 
+header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onload="modechange()"' "$SCRIPT_NAME"
 
+display_form <<EOF
+onchange|modechange
+start_form|@TR<<Wireless Configuration>>
+$forms
+helpitem|Wireless Distance
+helptext|Helptext Wireless Distance#You must enter a number that is double the distance of your longest link."
+end_form
+EOF
+
+footer ?>
+<!--
+##WEBIF:name:Network:300:Wireless
+-->
 
 
 
