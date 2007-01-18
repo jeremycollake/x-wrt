@@ -28,19 +28,51 @@ case "$TYPE" in
         wifi-iface)
                 config_get device "$CONFIG_SECTION" device
                 config_get vifs "$device" vifs
-                append vifs "$CONFIG_SECTION" "$N"
+                append vface "$CONFIG_SECTION" "$N"
+        ;;
+        interface)
+	        append network_devices "$CONFIG_SECTION"
         ;;
 esac
 }
-
+config_load network
+NETWORK_DEVICES="$network_devices"
 config_load wireless
 
 #echo "$DEVICES"
-#echo "vifs $vifs"
+#echo "vifs $vface"
 
 local forms save_form
 
+#####################################################################
+#setup network device form for vfaces
+#
+for iface in $NETWORK_DEVICES; do
+	network_options="$network_options 
+			option|none|@TR<<None>>
+			option|$iface|@TR<<$iface>>"
+done
+
+#####################################################################
+# generate nas package field
+#
+nas_installed="0"
+ipkg list_installed | grep -q nas
+equal "$?" "0" && nas_installed="1"
+
+install_nas_button='field|@TR<<NAS Package>>|install_nas|hidden'
+if ! equal "$nas_installed" "1"; then
+	install_nas_button="$install_nas_button
+		string|<div class=\"warning\">WPA and WPA2 will not work until you install the NAS package. </div>
+		submit|install_nas| Install NAS Package |"
+else
+	install_nas_button="$install_nas_button
+		string|@TR<<Installed>>."
+fi
+
+#####################################################################
 # This is looped for every physical wireless card (wifi-device)
+#
 for device in $DEVICES; do
         config_get country $device country
         config_get FORM_channel $device channel
@@ -64,7 +96,6 @@ for device in $DEVICES; do
 
         maxassoc="field|Max Associated Clients (default 128)
                 text|maxassoc_${device}|$FORM_maxassoc"
-        append forms "field|@TR<<Wireless Interface>>" "$N"
 
         distance="field|Wireless Distance (In Meters)
                 text|distance_${device}|$FORM_distance"
@@ -76,25 +107,77 @@ for device in $DEVICES; do
         append forms "helptext|Helptext Wireless Distance#You must enter a number that is double the distance of your longest link." "$N"
         append forms "end_form" "$N"
         
+        for vcfg in $vface; do
+       		config_get FORM_device $vcfg device
+       		if [ "$FORM_device" = "$device" ]; then
+	        	config_get FORM_network $vcfg network
+	        	config_get FORM_mode $vcfg mode
+	        	config_get FORM_ssid $vcfg ssid
+	        	config_get FORM_encryption $vcfg encryption
+	        	config_get FORM_key $vcfg key
+	        	config_get FORM_key1 $vcfg key1
+	        	config_get FORM_key2 $vcfg key2
+	        	config_get FORM_key3 $vcfg key3
+	        	config_get FORM_key4 $vcfg key4
+	        	config_get FORM_server $vcfg server
+	        	config_get FORM_port $vcfg port
+	        	config_get FORM_hidden $vcfg hidden
+	        	config_get FORM_isolate $vcfg isolate
+			append forms "start_form|@TR<<Wireless Virtual Adaptor Configuration for Wireless Card >> $FORM_device" "$N"
+			network="field|@TR<<Network>>
+	        	        select|network_${vcfg}|$FORM_network
+	        	        $network_options"
+			append forms "$network" "$N"
+			hidden="field|@TR<<ESSID Broadcast>>
+				select|broadcast_$vcfg|$FORM_hidden
+				option|0|@TR<<Show>>
+				option|1|@TR<<Hide>>"
+			append forms "$hidden" "$N"
+			
+			ssid="field|@TR<<ESSID>>
+				text|ssid_$vcfg|$FORM_ssid"
+			append forms "$ssid" "$N"
+			
+			encryption="field|@TR<<Encryption Type>>
+				select|encryption_$vcfg|$FORM_encryption
+				option|off|@TR<<Disabled>>
+				option|wep|WEP
+				option|psk|WPA (@TR<<PSK>>)
+				option|psk2|WPA2 (@TR<<PSK>>)
+				option|wpa|WPA (RADIUS)
+				option|wpa2|WPA2 (RADIUS)"
+			
+			wep_gen="field|@TR<<Passphrase>>|wep_keyphrase|hidden
+				text|wep_passphrase|$FORM_wep_passphrase
+				string|<br />
+				field|&nbsp;|wep_generate_keys|hidden
+				submit|generate_wep_40|Generate 40bit Keys
+				submit|generate_wep_128|Generate 128bit Key
+				string|<br />
+				field|@TR<<WEP Key 1>>|wep_key_1|hidden
+				radio|key_$vcfg|$FORM_key|1
+				text|key1_$vcfg|$FORM_key1|<br />
+				field|@TR<<WEP Key 2>>|wep_key_2|hidden
+				radio|key_$vcfg|$FORM_key|2
+				text|key2_$vcfg|$FORM_key2|<br />
+				field|@TR<<WEP Key 3>>|wep_key_3|hidden
+				radio|key_$vcfg|$FORM_key|3
+				text|key3_$vcfg|$FORM_key3|<br />
+				field|@TR<<WEP Key 4>>|wep_key_4|hidden
+				radio|key_$vcfg|$FORM_key|4
+				text|key4_$vcfg|$FORM_key4|<br />"			
+			
+			append forms "helpitem|Encryption Type" "$N"
+			append forms "helptext|HelpText Encryption Type#WPA (RADIUS) is only supported in Access Point mode. WPA (PSK) does not work in Ad-Hoc mode." "$N"
+			append forms "end_form" "$N"
+		fi
+	done
+        
+        
         #fix/finish save forms and add validation
         append save_form "uci_set" "wireless" "$device" "channel" "$FORM_channel_${device}"
         append save_form "uci_set" "wireless" "$device" "maxassoc" "$FORM_maxassoc_${device}"
         append save_form "uci_set" "wireless" "$device" "distance" "$FORM_distance_${device}"
-
-done
-
-# This is looped for every virtual wireless interface (wifi-iface)
-for vcfg in $vifs; do
-        config_get FORM_network $vcfg network
-        config_get FORM_device $vcfg device
-        config_get FORM_mode $vcfg mode
-        config_get FORM_encryption $vcfg encryption
-        config_get FORM_key $vcfg key
-        config_get FORM_server $vcfg server
-        config_get FORM_port $vcfg port
-        config_get FORM_hidden $vcfg hidden
-        config_get FORM_isolate $vcfg isolate
-
 
 done
 
