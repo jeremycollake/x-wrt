@@ -27,16 +27,35 @@ $(eval $(call PKG_template,BUSYBOX,$(PKG_NAME),$(PKG_VERSION)-$(PKG_RELEASE),$(A
 
 $(PKG_BUILD_DIR)/.configured:
 	$(SCRIPT_DIR)/gen_busybox_config.pl $(TOPDIR)/.config > $(PKG_BUILD_DIR)/.config
-	yes '' | $(MAKE) CC=$(TARGET_CC) CROSS="$(TARGET_CROSS)" -C $(PKG_BUILD_DIR) oldconfig
+	yes '' | $(MAKE) -C $(PKG_BUILD_DIR) \
+		CC="$(TARGET_CC)" \
+		CROSS_COMPILE="$(TARGET_CROSS)" \
+		ARCH="$(ARCH)" \
+		oldconfig
 	touch $@
 
 $(PKG_BUILD_DIR)/.built:
-	$(MAKE) CC=$(TARGET_CC) CROSS="$(TARGET_CROSS)" PREFIX="$(IDIR_BUSYBOX)" \
-		EXTRA_CFLAGS="$(TARGET_CFLAGS)" -C $(PKG_BUILD_DIR)
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		PREFIX="$(IDIR_BUSYBOX)" \
+		CC="$(TARGET_CC)" \
+		CROSS_COMPILE="$(TARGET_CROSS)" \
+		EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
+		ARCH="$(ARCH)" \
+		IPKG_ARCH="$(ARCH)" \
+		-C $(PKG_BUILD_DIR) \
+		all
 	touch $@
 
 $(IPKG_BUSYBOX):
-	$(MAKE) CC=$(TARGET_CC) CROSS="$(TARGET_CROSS)" PREFIX="$(IDIR_BUSYBOX)" \
-		EXTRA_CFLAGS="$(TARGET_CFLAGS)" -C $(PKG_BUILD_DIR) install
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		CC="$(TARGET_CC)" \
+		CROSS_COMPILE="$(TARGET_CROSS)" \
+		EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
+		ARCH="$(ARCH)" \
+		IPKG_ARCH="$(ARCH)" \
+		CONFIG_PREFIX="$(1)" \
+		PREFIX="$(IDIR_BUSYBOX)" \
+ 		-C $(PKG_BUILD_DIR) \
+		install
 	$(STRIP) $(IDIR_BUSYBOX)/bin/busybox
 	$(IPKG_BUILD) $(IDIR_BUSYBOX) $(PACKAGE_DIR)
