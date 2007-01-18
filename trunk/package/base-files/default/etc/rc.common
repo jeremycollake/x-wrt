@@ -18,6 +18,7 @@ reload() {
 }
 
 restart() {
+	trap '' TERM
 	stop
 	start
 }
@@ -39,6 +40,11 @@ enable() {
 	name="$(basename "${initscript}")"
 	disable
 	ln -s "/etc/init.d/$name" "$IPKG_INSTROOT/etc/init.d/S${START}${name##S[0-9][0-9]}"
+}
+
+enabled() {
+	name="$(basename "${initscript}")"
+	[ -x "$IPKG_INSTROOT/etc/init.d/S${START}${name##S[0-9][0-9]}" ]
 }
 
 depends() {
@@ -77,6 +83,7 @@ eval "case \"\$action\" in
 	boot) boot;;
 	shutdown) shutdown;;
 	enable) enable;;
+	enabled) enabled;;
 	disable) disable;;
 	$cmds
 	*) help;;
