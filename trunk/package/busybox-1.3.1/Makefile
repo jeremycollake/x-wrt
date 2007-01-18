@@ -53,8 +53,7 @@ $(IPKG_BUSYBOX):
 		EXTRA_CFLAGS="$(TARGET_CFLAGS)" \
 		ARCH="$(ARCH)" \
 		IPKG_ARCH="$(ARCH)" \
-		CONFIG_PREFIX="$(1)" \
-		PREFIX="$(IDIR_BUSYBOX)" \
+		CONFIG_PREFIX="$(IDIR_BUSYBOX)" \
  		-C $(PKG_BUILD_DIR) \
 		install
 	$(STRIP) $(IDIR_BUSYBOX)/bin/busybox
