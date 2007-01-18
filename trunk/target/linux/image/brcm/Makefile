@@ -1,4 +1,4 @@
-# $Id: Makefile 3926 2006-06-09 02:59:10Z nbd $
+# $Id: Makefile 6074 2007-01-11 09:54:51Z nbd $
 #
 include $(TOPDIR)/rules.mk
 
@@ -38,8 +38,7 @@ $(KDIR)/loader.tmp.gz:
 
 $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx: $(KDIR)/loader.tmp.gz
 	$(STAGING_DIR)/bin/trx -o $@ $(KDIR)/loader.tmp.gz $(KDIR)/vmlinux.lzma $(TRXALIGN) $(KDIR)/root.$(FS)
-	cp $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx $(BIN_DIR)/openwrt-wrt54gv5-squashfs.bin
-	cp $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx $(BIN_DIR)/openwrt-wrt54gsv5-squashfs.bin
+
 
 ifeq ($(KERNEL),2.4)
 FSNAME:=$(patsubst jffs2-%,jffs2,$(FS))
@@ -55,17 +54,20 @@ FSNAME:=$(patsubst jffs2-%,jffs2,$(FS))
 $(BIN_DIR)/openwrt-wr850g-$(FS).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
 	$(STAGING_DIR)/bin/motorola-bin -1 $< $@
 
-install: $(BIN_DIR)/openwrt-wr850g-$(FS).bin
+$(BIN_DIR)/openwrt-usr5461-$(FS).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
+	$(STAGING_DIR)/bin/trx2usr $< $@
+
+install: $(BIN_DIR)/openwrt-wr850g-$(FS).bin $(BIN_DIR)/openwrt-usr5461-$(FS).bin
 
 ifneq ($(FS),jffs2-8MB)
 $(BIN_DIR)/openwrt-wrt54g3g-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
-	$(STAGING_DIR)/bin/addpattern -4 -p W54F -v v1.99.5 -i $< -o $@ -g
+	$(STAGING_DIR)/bin/addpattern -4 -p W54F -v v2.01.1 -i $< -o $@ -g
 
 $(BIN_DIR)/openwrt-wrt54g-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
-	$(STAGING_DIR)/bin/addpattern -4 -p W54G -v v4.20.6 -i $< -o $@ -g
+	$(STAGING_DIR)/bin/addpattern -4 -p W54G -v v4.60.1 -i $< -o $@ -g
 
 $(BIN_DIR)/openwrt-wrt54gs_v4-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
-	$(STAGING_DIR)/bin/addpattern -4 -p W54s -v v1.05.2 -i $< -o $@ -g
+	$(STAGING_DIR)/bin/addpattern -4 -p W54s -v v1.09.1 -i $< -o $@ -g
 
 $(BIN_DIR)/openwrt-wr850g-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
 	$(STAGING_DIR)/bin/motorola-bin -1 $< $@
@@ -81,10 +83,10 @@ endif
 
 ifneq ($(FS),jffs2-4MB)
 $(BIN_DIR)/openwrt-wrt54gs-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
-	$(STAGING_DIR)/bin/addpattern -4 -p W54S -v v4.70.6 -i $< -o $@ -g
+	$(STAGING_DIR)/bin/addpattern -4 -p W54S -v v4.80.1 -i $< -o $@ -g
 
 $(BIN_DIR)/openwrt-wrtsl54gs-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
-	$(STAGING_DIR)/bin/addpattern -4 -p W54U -v v2.00.0 -i $< -o $@ -g
+	$(STAGING_DIR)/bin/addpattern -4 -p W54U -v v2.08.1 -i $< -o $@ -g
 
 install: $(BIN_DIR)/openwrt-wrt54gs-$(FSNAME).bin $(BIN_DIR)/openwrt-wrtsl54gs-$(FSNAME).bin
 endif
@@ -102,7 +104,7 @@ endif
 install: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
 install-ib:
 	mkdir -p $(IB_DIR)/staging_dir_$(ARCH)/bin
-	cp -fpR $(STAGING_DIR)/bin/addpattern $(STAGING_DIR)/bin/trx $(STAGING_DIR)/bin/motorola-bin $(IB_DIR)/staging_dir_$(ARCH)/bin
+	cp -fpR $(STAGING_DIR)/bin/trx $(STAGING_DIR)/bin/addpattern $(STAGING_DIR)/bin/trx2usr $(STAGING_DIR)/bin/motorola-bin $(IB_DIR)/staging_dir_$(ARCH)/bin
 	mkdir -p $(IB_DIR)/build_$(ARCH)/linux-$(KERNEL)-$(BOARD)
 	cp -fpR $(BUILD_DIR)/loader.gz $(IB_DIR)/build_$(ARCH)/
 	cp -fpR $(KDIR)/vmlinux.lzma $(IB_DIR)/build_$(ARCH)/linux-$(KERNEL)-$(BOARD)/

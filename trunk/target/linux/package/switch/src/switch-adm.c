@@ -215,7 +215,7 @@ static __u32 adm_rreg(__u8 table, __u8 addr)
 	__u8 bits[6] = {
 		0xFF, 0xFF, 0xFF, 0xFF,
 		(0x06 << 4) | ((table & 0x01) << 3 | (addr&64)>>6),
-		((addr&62)<<2)
+		((addr&63)<<2)
 	};
 
 	__u8 rbits[4];
@@ -493,8 +493,17 @@ static int detect_adm()
 
 #if defined(BCMGPIO2) || defined(BCMGPIO)
 	int boardflags = atoi(nvram_get("boardflags"));
+	int boardnum = atoi(nvram_get("boardnum"));
 
-	if ((boardflags & 0x80) || force) {
+	if (boardnum == 44) {   /* trendware TEW-411BRP+ */
+		ret = 1;
+	
+		eecs = getgpiopin("adm_eecs", 2);
+		eesk = getgpiopin("adm_eesk", 3);
+		eedi = getgpiopin("adm_eedi", 4);
+		eerc = getgpiopin("adm_rc", 5);  
+
+	} else if ((boardflags & 0x80) || force) {
 		ret = 1;
 
 		eecs = getgpiopin("adm_eecs", 2);

@@ -85,6 +85,9 @@ enum {
 
 	/* Belkin */
 	BELKIN_UNKNOWN,
+
+	/* Trendware */
+	TEW411BRPP,
 };
 
 static struct platform_t __init platforms[] = {
@@ -357,7 +360,8 @@ static struct platform_t __init platforms[] = {
 			{ .name = "reset",	.gpio = 1 << 0 },
 		},
 		.leds		= {
-			{ .name = "diag",	.gpio = 1 << 7, .polarity = REVERSE },
+			{ .name = "wlan",	.gpio = 1 << 6, .polarity = REVERSE },
+			{ .name = "power",	.gpio = 1 << 7, .polarity = REVERSE },
 		},
 	},
 	/* Motorola */
@@ -410,6 +414,17 @@ static struct platform_t __init platforms[] = {
 			{ .name = "connected",	.gpio = 1 << 0, .polarity = NORMAL },
 		},
 	},
+	[TEW411BRPP] = {
+		.name           = "Trendware TEW411BRP+",
+		.buttons        = {
+		{ /* No usable buttons */ },
+		},
+		.leds           = {
+			{ .name = "power",      .gpio = 1 << 7, .polarity = NORMAL },
+			{ .name = "wlan",       .gpio = 1 << 1, .polarity = NORMAL },
+			{ .name = "bridge",     .gpio = 1 << 6, .polarity = NORMAL },
+		},
+	},
 };
 
 static inline char __init *getvar(char *str)
@@ -446,6 +461,11 @@ static struct platform_t __init *platform_detect(void)
 		if (!strcmp(boardnum, "10496"))
 			return &platforms[USR5461];
 	} else { /* PMON based - old stuff */
+
+		/* Dell TrueMobile 2300 */
+		if (!strcmp(getvar("ModelId"),"WX-5565"))
+			return &platforms[TM2300];
+	
 		if ((simple_strtoul(getvar("GemtekPmonVer"), NULL, 0) == 9) &&
 			(simple_strtoul(getvar("et0phyaddr"), NULL, 0) == 30)) {
 			if (!strncmp(getvar("ModelId"),"WE800G", 6))
@@ -506,6 +526,10 @@ static struct platform_t __init *platform_detect(void)
 		!strcmp(getvar("MOTO_BOARD_TYPE"), "WR_FEM1")) {
 
 		return &platforms[WR850GV2V3];
+	}
+
+	if (!strcmp(boardnum, "44")) {  /* trendware TEW-411BRP+ */
+		return &platforms[TEW411BRPP];
 	}
 
 	/* not found */
@@ -583,6 +607,8 @@ static void button_handler(int irq, void *dev_id, struct pt_regs *regs)
 	sb_gpiointpolarity(sbh, platform.button_mask, in);
 	changed = platform.button_polarity ^ in;
 	platform.button_polarity = in;
+
+	changed &= ~sb_gpioouten(sbh, 0, 0);
 
 	for (b = platform.buttons; b->name; b++) { 
 		struct event_t *event;

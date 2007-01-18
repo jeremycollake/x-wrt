@@ -1,5 +1,5 @@
 #############################################################
-# $Id: Makefile 5581 2006-11-19 01:03:47Z nbd $
+# $Id: Makefile 5912 2006-12-28 00:54:36Z florian $
 #
 # Linux 2.4 kernel target for the OpenWRT project
 #
@@ -78,10 +78,10 @@ $(eval $(call KMOD_template,IPT_IPSEC,ipt-ipsec,\
 ))
 $(eval $(call KMOD_template,IPT_NAT_DEFAULT,ipt-nat-default,\
 	$(foreach mod,$(IPT_NAT_DEFAULT-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
-))
+,,,10,$(IPT_NAT_DEFAULT-m)))
 $(eval $(call KMOD_template,IPT_NAT,ipt-nat,\
 	$(foreach mod,$(IPT_NAT-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
-))
+,,,20,$(IPT_NAT-m)))
 $(eval $(call KMOD_template,IPT_NAT_H323,ipt-nat-h323,\
 	$(foreach mod,$(IPT_NAT_H323-m),$(MODULES_DIR)/kernel/net/ipv4/netfilter/$(mod).o) \
 ,,,40,$(IPT_NAT_H323-m)))
@@ -145,6 +145,9 @@ $(eval $(call KMOD_template,USB,usb-core,\
 $(eval $(call KMOD_template,USB_UHCI,usb-uhci,\
 	$(MODULES_DIR)/kernel/drivers/usb/host/uhci.o \
 ,CONFIG_USB_UHCI_ALT,kmod-usb-core,60,uhci))
+$(eval $(call KMOD_template,USB_UHCI,usb-uhci-iv,\
+	$(MODULES_DIR)/kernel/drivers/usb/host/usb-uhci.o \
+,CONFIG_USB_UHCI,kmod-usb-core,60,usb-uhci-iv)) 
 $(eval $(call KMOD_template,USB_OHCI,usb-ohci,\
 	$(MODULES_DIR)/kernel/drivers/usb/host/usb-ohci.o \
 ,CONFIG_USB_OHCI,kmod-usb-core,60,usb-ohci))
@@ -185,7 +188,7 @@ $(eval $(call KMOD_template,USB_ACM,usb-acm,\
 $(eval $(call KMOD_template,IDE,ide,\
 	$(MODULES_DIR)/kernel/drivers/ide/*.o \
 	$(MODULES_DIR)/kernel/drivers/ide/*/*.o \
-,CONFIG_IDE,,20,pdc202xx_old ide-core ide-detect ide-disk))
+,CONFIG_IDE,,20,ide-core pdc202xx_old ide-detect ide-disk))
 $(eval $(call KMOD_template,LOOP,loop,\
     $(MODULES_DIR)/kernel/drivers/block/loop.o \
 ,CONFIG_BLK_DEV_LOOP,,20,loop))
@@ -209,6 +212,9 @@ $(eval $(call KMOD_template,VFAT,vfat,\
 	$(MODULES_DIR)/kernel/fs/vfat/vfat.o \
 	$(MODULES_DIR)/kernel/fs/fat/fat.o \
 ,CONFIG_VFAT_FS,,30,fat vfat))
+$(eval $(call KMOD_template,MSDOS,msdos,\
+	$(MODULES_DIR)/kernel/fs/msdos/msdos.o \
+,CONFIG_MSDOS_FS,,40,msdos))
 $(eval $(call KMOD_template,NLS_CP437,nls-cp437,\
 	$(MODULES_DIR)/kernel/fs/nls/nls_cp437.o \
 ,CONFIG_NLS_CODEPAGE_437,,40,nls_cp437.o))
