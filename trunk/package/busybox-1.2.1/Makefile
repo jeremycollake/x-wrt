@@ -3,7 +3,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=busybox
-PKG_RELEASE:=6
+PKG_RELEASE:=1
 
 ifeq ($(strip $(BR2_PACKAGE_BUSYBOX_SNAPSHOT)),y)
 # Be aware that this changes daily....
@@ -13,11 +13,11 @@ PKG_SOURCE:=$(PKG_NAME)-snapshot.tar.bz2
 PKG_SOURCE_URL:=http://www.busybox.net/downloads/snapshots
 PKG_MD5SUM:=x
 else
-PKG_VERSION:=1.2.1
+PKG_VERSION:=1.3.1
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://www.busybox.net/downloads
-PKG_MD5SUM:=362b3dc0f2023ddfda901dc1f1a74391
+PKG_MD5SUM:=571531cfa83726947ccb566de017ad4f
 endif
 PKG_CAT:=bzcat
 
