@@ -106,16 +106,6 @@ FixReadOnlyLink "${IPKG_INSTROOT}/usr/lib/ipkg/status"
 #	dnsmasq_filename="S60dnsmasq"
 #}
 
-# again, we rename /lib/config/uci-depends.sh so that it doesn't get removed if webif^2 is
-# uninstalled since we've radically changed /etc/functions.sh.
-FixReadOnlyLink "${IPKG_INSTROOT}/lib/config/uci-depends.sh"
-mv -f "${IPKG_INSTROOT}/lib/config/uci-depends.new" "${IPKG_INSTROOT}/lib/config/uci-depends.sh"
-
-# include uci-depends.sh from /etc/functions.sh if not already included.
-if ! grep -q "uci-depends.sh" "${IPKG_INSTROOT}/etc/functions.sh"; then
-	echo "[ -f /lib/config/uci-depends.sh ] && . /lib/config/uci-depends.sh" >> "${IPKG_INSTROOT}/etc/functions.sh"
-fi
-
 # initialize default webif theme
 # create symlink to /www/themes/xwrt (do NOT use INSTROOT in first arg).
 rm -rf "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
@@ -132,8 +122,6 @@ ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/bstrip"
 ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/webif-page"
 ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/wepkeygen"
 ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/int2human"
-
-#ln -sf "${IPKG_INSTROOT}/lib/config/uci.new" "${IPKG_INSTROOT}/lib/config/uci.sh"
 
 # initialize ipkg.conf
 uname -a |grep mips |grep 2.4 && cat /proc/cpuinfo |grep Broadcom
@@ -157,7 +145,10 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	/etc/init.d/webif_firmwareid enable
 	/etc/init.d/webif_deviceid enable
 	/etc/init.d/custom-user-startup enable
-	/etc/init.d/syslog enable
+	
+	#FIXME: Syslog needs to be double checked
+	#/etc/init.d/syslog enable
+	
 	ExecuteIfExists "/etc/init.d/webif_deviceid start"
 #	ExecuteIfExists "/etc/init.d/firmwareinfo"	# x-wrt images use to pre-empt firmware_* set
 	ExecuteIfExists "/etc/init.d/webif_firmwareid start"
@@ -165,15 +156,12 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	# test installation successfulness
 	TestInstall
 	if [ -e /etc/httpd.conf ]; then
-		httpd_1=$(cat /etc/httpd.conf)
-		httpd_2=$(cat /etc/httpd.webif)
-		rm -f /etc/httpd.webif
+		httpd_1=$(cat /tmp/httpd.conf.old)
+		httpd_2=$(cat /etc/httpd.conf)
 		[ "$httpd_1" != "$httpd_2" ] && {
-			mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
 			require_reboot
 		}
 	else
-		mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
 		require_reboot
 	fi
 
