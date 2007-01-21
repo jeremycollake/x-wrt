@@ -50,6 +50,9 @@ this_revision=$(cat "/www/.version")
 &nbsp;&nbsp; <a href="mailto:openwrt@kewis.ch">Philipp Kewisch</a>
 </td></tr>
 <tr><td>
+&nbsp;&nbsp; <a href="mailto:gregers@wireless-ownership.org">Gregers Petersen</a>
+</td></tr>
+<tr><td>
 &nbsp;&nbsp; <a href="mailto:mtsales@users.berlios.de">Mario Sales</a>
 </td></tr>
 <tr><td>
