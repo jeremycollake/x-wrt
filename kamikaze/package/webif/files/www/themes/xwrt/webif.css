@@ -38,6 +38,9 @@ ul
 	list-style-type: none;
 }
 
+img {
+	border: none;
+}
 ul.about
 {
 	list-style-type: disc;
@@ -606,14 +609,9 @@ body
 	background-color: transparent;	
 }
 
-.even
-{
-	background-color: #e5e7e9;
-}
-
 .odd
 {
-	background-color: transparent;
+	background-color: #e5e7e9;
 }
 
 #mainmenu
