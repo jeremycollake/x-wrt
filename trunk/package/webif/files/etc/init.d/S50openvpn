@@ -1,5 +1,5 @@
 #!/bin/sh
-status = 0
+status="0"
 file_check() {
 	for file in "$@"; do
 		if [ ! -f "$file" ]; then
