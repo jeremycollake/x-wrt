@@ -262,7 +262,7 @@ end_form
 EOF
 
 cat <<EOF
-<table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;" border="0" cellpadding="3" cellspacing="2" summary="QoS Traffic Classification Rules"><tbody>
+<table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;" border="0" cellpadding="3" cellspacing="2"><tbody>
 <tr>
 <th>@TR<<Group>></th>
 EOF
@@ -296,11 +296,16 @@ show_column()
 {
 	# section name
 	# option name
+	# cell bgcolor (optional)
 	# over-ride text (if config option is empty)
 	local _val
 	# config_get returns TYPE if OPTION ($2) is empty, else returns value
 	config_get _val "$1" "$2"
-	echo "<td>${_val:-$4}</td>"
+	td_start="<td>"
+	! empty "$3" && td_start="<td bgcolor=\"$3\">"
+	echo "$td_start"
+	echo "${_val:-$4}"
+	echo "</td>"
 }
 
 #
@@ -320,17 +325,16 @@ callback_foreach_rule() {
 	# for 'down' since we didn't know index of next classify item.
 	# if there is a last shown rule, show 'up' option for PREVIOUS rule
 	! equal "$last_shown_rule" "-1" && {
-		echo "<a href=\"$SCRIPT_NAME?qos_swap_dest=$section_name&amp;qos_swap_src=$last_shown_rule\"><img alt=\"@TR<<down>>\" src=\"/images/down.gif\" title=\"@TR<<down>>\" /></a>"
+		echo "<a href=\"$SCRIPT_NAME?qos_swap_dest=$section_name&amp;qos_swap_src=$last_shown_rule\"><img alt=\"@TR<<down>>\" src=\"/images/down.gif\" title=\"@TR<<down>>\"></a>"
 		echo "</td></tr>"
 	}	
 	## end finishing last iteration
-	if equal "$cur_color" "odd"; then
-		cur_color="even"
-		echo "<tr>"
-	else
+	if equal "$cur_color" "even"; then
 		cur_color="odd"
-		echo "<tr class=\"$cur_color\">"
+	else
+		cur_color="even"
 	fi
+	echo "<tr class=\"$cur_color\">"		
 	show_column "$section_name" "target" "" "..."
 	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "TYPE" "" ""
 	show_column "$section_name" "srchost" ""
@@ -348,12 +352,12 @@ callback_foreach_rule() {
 	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "tcpflags" "" ""
 	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "pktsize" "" ""
 	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "mark" "" ""
-	echo "<td>"	
-	echo "<a href=\"$SCRIPT_NAME?qos_remove=$section_name\"><img alt=\"@TR<<delete>>\" src=\"/images/x.gif\" title=\"@TR<<delete>>\" /></a>"
-	echo "<a href=\"$SCRIPT_NAME?qos_edit=$section_name\"><img alt=\"@TR<<edit>>\" src=\"/images/edit.gif\" title=\"@TR<<edit>>\" /></a>"
+	echo "<td bgcolor=\"$cur_color\">"	
+	echo "<a href=\"$SCRIPT_NAME?qos_remove=$section_name\"><img alt=\"@TR<<delete>>\" src=\"/images/x.gif\" title=\"@TR<<delete>>\"></a>"
+	echo "<a href=\"$SCRIPT_NAME?qos_edit=$section_name\"><img alt=\"@TR<<edit>>\" src=\"/images/edit.gif\" title=\"@TR<<edit>>\"></a>"
 	# if there is a last shown rule, show 'up' option
 	! equal "$last_shown_rule" "-1" && {	 	
-		echo "<a href=\"$SCRIPT_NAME?qos_swap_src=$section_name&amp;qos_swap_dest=$last_shown_rule\"><img alt=\"@TR<<up>>\" src=\"/images/up.gif\" title=\"@TR<<up>>\" /></a>"
+		echo "<a href=\"$SCRIPT_NAME?qos_swap_src=$section_name&amp;qos_swap_dest=$last_shown_rule\"><img alt=\"@TR<<up>>\" src=\"/images/up.gif\" title=\"@TR<<up>>\"></a>"
 
 	}
 	# if we are adding, always keep last index in FORM_qos_edit
