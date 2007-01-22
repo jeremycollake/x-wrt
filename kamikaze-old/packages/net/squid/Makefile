@@ -1,0 +1,198 @@
+#
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id: Makefile 5624 2006-11-23 00:29:07Z nbd $
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=squid
+PKG_VERSION:=2.5.STABLE13
+PKG_RELEASE:=1
+
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=http://www.squid-cache.org/Versions/v2/2.5/
+PKG_MD5SUM:=3e64468e123be1246d17486dab6bee87
+PKG_CAT:=bzcat
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/squid/Default
+  SECTION:=net
+  CATEGORY:=Network
+  URL:=http://www.squid-cache.org
+endef
+
+define Package/squid
+  $(call Package/squid/Default)
+  MENU:=1
+  DEPENDS:=+libopenssl +libpthread
+  TITLE:=full-featured Web proxy cache
+  DESCRIPTION:=\
+	Squid is a high-performance proxy caching server for web clients, \\\
+	supporting FTP, gopher, and HTTP data objects. Unlike traditional \\\
+	caching software, Squid handles all requests in a single, \\\
+	non-blocking, I/O-driven process.
+endef
+
+define Package/squid-mod-cachemgr
+  $(call Package/squid/Default)
+  DEPENDS:=squid
+  TITLE:=Web based proxy manager and reporting tool
+endef
+
+define Package/squid-mod-basic-auth-getpwnam
+  $(call Package/squid/Default)
+  DEPENDS:=squid
+  TITLE:=getpwnam basic authentication helper
+endef
+
+define Package/squid-mod-basic-auth-ncsa
+  $(call Package/squid/Default)
+  DEPENDS:=squid
+  TITLE:=NCSA basic authentication helper
+endef
+
+define Package/squid-mod-basic-auth-smb
+  $(call Package/squid/Default)
+  DEPENDS:=squid
+  TITLE:=Samba basic authentication helper
+endef
+
+define Package/squid-mod-basic-auth-winbind
+  $(call Package/squid/Default)
+  DEPENDS:=squid
+  TITLE:=Winbind basic authentication helper
+endef
+
+define Package/squid-mod-digest-auth-password
+  $(call Package/squid/Default)
+  DEPENDS:=squid
+  TITLE:=Password digest authentication helper
+endef
+
+define Package/squid-mod-external-acl-ip-user
+  $(call Package/squid/Default)
+  DEPENDS:=squid
+  TITLE:=IP user external ACL helper
+endef
+
+define Package/squid-mod-external-acl-unix-group
+  $(call Package/squid/Default)
+  DEPENDS:=squid
+  TITLE:=Unix group external ACL helper
+endef
+
+define Package/squid-mod-external-acl-winbind-group
+  $(call Package/squid/Default)
+  DEPENDS:=squid
+  TITLE:=Winbind group external ACL helper
+endef
+
+define Package/squid-mod-ntlm-auth-fakeauth
+  $(call Package/squid/Default)
+  DEPENDS:=squid
+  TITLE:=Fakeauth NTLM authentication helper
+endef
+
+define Package/squid-mod-ntlm-auth-smb-auth
+  $(call Package/squid/Default)
+  DEPENDS:=squid
+  TITLE:=Samba NTLM authentication helper
+endef
+
+define Package/squid-mod-ntlm-auth-winbind-auth
+  $(call Package/squid/Default)
+  DEPENDS:=squid
+  TITLE:=Winbind NTLM authentication helper
+endef
+
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--datadir=/usr/share/squid \
+		--libexecdir=/usr/lib/squid \
+		--sysconfdir=/etc/squid \
+		--enable-shared \
+		--enable-static \
+		--with-gnu-ld \
+		--enable-x-accelerator-vary \
+		--with-pthreads \
+		--with-dl \
+		--enable-icmp \
+		--enable-kill-parent-hack \
+		--enable-arp-acl \
+		--enable-ssl \
+		--enable-htcp \
+		--enable-err-languages=English \
+		--enable-default-err-language=English \
+		--enable-linux-netfilter \
+		--enable-icmp \
+		--enable-external-acl-helpers="" \
+		--enable-underscores \
+		--enable-cache-digests \
+		--enable-referer-log \
+		--enable-delay-pools \
+		--enable-useragent-log \
+		--with-openssl=$(STAGING_DIR)/usr \
+		--enable-auth="basic digest ntlm" \
+		--enable-basic-auth-helpers="getpwnam NCSA SMB winbind" \
+		--enable-ntlm-auth-helpers="fakeauth SMB winbind" \
+		--enable-digest-auth-helpers="password" \
+		--enable-external-acl-helpers="ip_user unix_group winbind_group" \
+	)
+endef
+	
+define Build/Compile	
+	# pass INCLUDES to compile host sources against our OpenSSL, not the host one
+	$(MAKE) -C $(PKG_BUILD_DIR)/lib \
+		INCLUDES="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+		all
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
+endef
+
+define Package/squid/install	
+	$(INSTALL_DIR) $(1)/etc/squid
+	$(CP) $(PKG_INSTALL_DIR)/etc/squid/mime.conf $(1)/etc/squid/
+	$(CP) $(PKG_INSTALL_DIR)/etc/squid/squid.conf $(1)/etc/squid/
+	$(INSTALL_DIR) $(1)/usr/share/squid
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/squid/* $(1)/usr/share/squid/
+	$(INSTALL_DIR) $(1)/usr/sbin
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/squid $(1)/usr/sbin/
+	$(INSTALL_DIR) $(1)/usr/lib/squid
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/squid/{unlinkd,pinger} $(1)/usr/lib/squid/
+endef
+
+define Package/squid-mod-cachemgr/install
+	$(INSTALL_DIR) $(1)/www/cgi-bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/squid/cachemgr.cgi $(1)/www/cgi-bin/
+endef
+
+define BuildPlugin
+  define Package/$(1)/install
+	$(INSTALL_DIR) $$(1)/usr/lib/squid
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/squid/$(2) $$(1)/usr/lib/squid/
+  endef
+
+  $$(eval $$(call BuildPackage,$(1)))
+endef
+
+$(eval $(call BuildPackage,squid))
+$(eval $(call BuildPackage,squid-mod-cachemgr))
+$(eval $(call BuildPlugin,squid-mod-basic-auth-getpwnam,getpwname_auth))
+$(eval $(call BuildPlugin,squid-mod-basic-auth-ncsa,ncsa_auth))
+$(eval $(call BuildPlugin,squid-mod-basic-auth-smb,smb_auth))
+$(eval $(call BuildPlugin,squid-mod-basic-auth-winbind,wb_auth))
+$(eval $(call BuildPlugin,squid-mod-digest-auth-password,digest_pw_auth))
+$(eval $(call BuildPlugin,squid-mod-external-acl-ip-user,ip_user_check))
+$(eval $(call BuildPlugin,squid-mod-external-acl-unix-group,squid_unix_group))
+$(eval $(call BuildPlugin,squid-mod-external-acl-winbind-group,wb_group))
+$(eval $(call BuildPlugin,squid-mod-ntlm-auth-fakeauth,fakeauth_auth))
+$(eval $(call BuildPlugin,squid-mod-ntlm-auth-smb-auth,ntlm_auth))
+$(eval $(call BuildPlugin,squid-mod-ntlm-auth-winbind-auth,wb_ntlmauth))

@@ -1,0 +1,149 @@
+#!/bin/sh /etc/rc.common
+
+#
+# ez-ipupdate     Starts ez-ipupdate
+#
+RUN_D=/var/run
+PID_F=$RUN_D/ez-ipupdate.pid
+
+ddns_dir="/etc/ez-ipupdate"
+ddns_cache="/tmp/ez-ipupdate.cache"
+ddns_msg="$ddns_dir/ez-ipupdate.msg"
+
+getPID(){
+    if [ -f $PID_F ]; then 
+        echo $(cat $PID_F)
+    else 
+        echo ""
+    fi
+}
+
+start() {
+        if [ "$(uci get ez-ipupdate.general.enable)" -eq "1" ]; then
+        include /lib/network
+	scan_interfaces
+	iface=wan
+	config_get ifname "$iface" ifname
+	config_get proto "$iface" proto
+
+         pid=$(getPID)
+         if [ -z "$pid" ]; then
+            if [ -n "$ifname" ]; then
+                echo "ez-ipupdate WAN interface: $ifname"
+                if [ -f $ddns_conf ]; then
+                   echo -n "Starting ez-ipupdate:..."
+                   /usr/sbin/ez-ipupdate -d -F $PID_F -c $ -b $ddns_cache -i $ifname
+                    echo "OK"
+                else
+                   echo "ez-ipupdate: no configuration file found"
+                fi
+             else
+                echo "ez-ipupdate: no WAN interface found"
+             fi
+           else
+                echo "ez-ipupdate is already running"
+           fi
+        else
+            echo "ez-ipupdate is disabled"
+        fi
+}
+
+stop() {
+        pid=$(getPID)
+        if [ -n "$pid" ]; then
+            echo -n "Stopping ez-ipupdate:..."
+            ( { kill -SIGINT $pid >/dev/null 2>&1
+              } && echo "OK" ) || echo "ERROR"
+        else
+            echo "ez-ipupdate is not running"
+        fi
+}
+
+restart() {
+        stop
+        start
+}
+
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  restart)
+        restart
+        ;;
+  *)
+        echo $"Usage: $0 {start|stop|restart}"
+        exit 1
+esac
+
+exit $?
+
+
+
+
+
+
+
+# Do not change the lines below
+cache-file=/tmp/ez-ipupdate.cache
+pid-file=/var/run/ez-ipupdate.pid
+
+
+
+  -a, --address <ip address>    string to send as your ip address
+  -b, --cache-file <file>       file to use for caching the ipaddress
+  -c, --config-file <file>      configuration file, almost all arguments can be
+                                given with: <name>[=<value>]
+                                to see a list of possible config commands
+                                try "echo help | ez-ipupdate -c -"
+  -d, --daemon                  run as a daemon periodicly updating if
+                                necessary
+  -e, --execute <command>       shell command to execute after a successful
+                                update
+  -f, --foreground              when running as a daemon run in the foreground
+  -F, --pidfile <file>          use <file> as a pid file
+  -g, --request-uri <uri>       URI to send updates to
+  -h, --host <host>             string to send as host parameter
+  -i, --interface <iface>       which interface to use
+  -L, --cloak_title <host>      some stupid thing for DHS only
+  -m, --mx <mail exchange>      string to send as your mail exchange
+  -M, --max-interval <# of sec> max time in between updates
+  -N, --notify-email <email>    address to send mail to if bad things happen
+  -o, --offline                 set to off line mode
+  -p, --resolv-period <sec>     period to check IP if it can't be resolved
+  -P, --period <# of sec>       period to check IP in daemon
+                                mode (default: 1800 seconds)
+  -q, --quiet                   be quiet
+  -r, --retrys <num>            number of trys (default: 1)
+  -R, --run-as-user <user>      change to <user> for running, be ware
+                                that this can cause problems with handeling
+                                SIGHUP properly if that user can't read the
+                                config file. also it can't write it's pid file
+                                to a root directory
+  -Q, --run-as-euser <user>     change to effective <user> for running,
+                                this is NOT secure but it does solve the
+                                problems with run-as-user and config files and
+                                pid files
+  -s, --server <server[:port]>  the server to connect to
+  -S, --service-type <server>   the type of service that you are using
+                                try one of: null ezip pgpow dhs
+                                dyndns dyndns-static dyndns-custom
+                                ods tzo easydns easydns-partner
+                                gnudip justlinux dyns hn zoneedit
+                                heipv6tb everydns
+  -t, --timeout <sec.millisec>  the amount of time to wait on I/O
+  -T, --connection-type <num>   number sent to TZO as your connection
+                                type (default: 1)
+  -U, --url <url>               string to send as the url parameter
+  -u, --user <user[:passwd]>    user ID and password, if either is left blank
+                                they will be prompted for
+  -w, --wildcard                set your domain to have a wildcard alias
+  -z, --partner <partner>       specify easyDNS partner (for easydns-partner
+                                services)
+      --help                    display this help and exit
+      --version                 output version information and exit
+      --credits                 print the credits and exit
+      --signalhelp              print help about signals

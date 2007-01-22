@@ -1,0 +1,534 @@
+lang => Svenska
+# Common
+Settings saved => Inst&auml;llningar sparade
+Settings not saved => Inst&auml;llningar inte sparade
+Save Changes => Spara f&ouml;r&auml;ndringar
+Apply Changes => Applicera f&ouml;r&auml;ndringar
+Clear Changes => Ta bort f&ouml;r&auml;ndringar
+Review Changes => Se gjorda f&ouml;r&auml;ndringar
+Host Name => V&auml;rdnamn
+Uptime => Tid uppe
+Load => Ladda
+Version => Version
+Categories => Kategorier
+Subcategories => Underkategorier
+more... => mer...
+Add => L&auml;gg till
+Remove => Ta bort
+Warning => Varning
+Password_warning => Du har inte satt n&aring;got l&ouml;senord f&ouml;r Web-gr&auml;nssnittet och SSH accessen <br />Var v&auml;nlig och g&ouml;r detta nu (anv&auml;ndarnamnet i din browser kommer vara 'root').
+# Categories
+Info => Info
+About => Om
+Router Info => Router Info
+
+Status => Status
+Connections => Anslutningar
+DHCP => DHCP
+Wireless => Tr&aring;dl&ouml;s
+
+System => System
+Password => L&ouml;senord
+Settings => Inst&auml;llningar
+Installed Software => Installerad mjukvara
+Firmware Upgrade => Firmware uppgradering
+
+Network => N&auml;tverk
+LAN => LAN
+WAN => WAN
+Wireless => Tr&aring;dl&ouml;s
+Advanced Wireless => Avancerad Tr&aring;dl&ouml;s
+Hosts => Konfigurerade V&auml;rdar
+
+
+# 'About' page
+Copyright => Copyright
+
+GPL_Text => Detta program &auml;r &ouml;ppen programvara; du kan &aring;terdistribuera den och/eller <br /> modifiera den under villkoren av best&auml;mmelserna i GNU General Public License <br /> publicerad av Free Software Foundation; antingen version 2 <br /> av licensen eller senare. <br />
+Contributions by => Bidrag av
+Layout based on => Layout baserad p&aring;
+by => av
+
+
+No config change. => Inga &auml;ndringar i inst&auml;llningarna gjordes.
+Config discarded. => Dina &auml;ndringar i inst&auml;llningarna har avbrutits. 
+Config changes: => Nuvarande &auml;ndringar i inst&auml;llningarna: 
+Updating config... => Uppdaterar dina inst&auml;llningar...
+
+# 'Router Info' page
+Firmware Version => Firmware Version
+Kernel Version => Kernel Version
+Current Date/Time => Nuvarande Datum/Tid
+MAC Address => Mac Adress
+
+
+# 'Connections' page
+Connection Status => Anslutningsstatus
+Physical Connections => Fysiska anslutningar
+Router Connections => Router anslutningar
+
+
+# 'DHCP' page
+DHCP leases => DHCP leases
+IP Address => IP Adress
+Name => Namn
+Expires in => Utg&aring;r om
+
+
+# 'Wireless Status' page
+Wireless Status => Tr&aring;dl&ouml;s Status
+
+# 'Password' page
+Password Change => Byt l&ouml;senord
+New Password => Nytt l&ouml;senord
+Confirm Password => Bekr&auml;fta nytt l&ouml;senord
+
+# 'System Settings' page
+System Settings => System Inst&auml;llningar
+Host Name => V&auml;rdnamn
+Language => Spr&aring;k
+
+# 'Installed Software' page
+Installed Packages => Installerade mjukvaror
+Update package lists => Uppdatera mjukvarulista
+Uninstall => Avinstallera
+Install => Installera
+
+
+# 'Firmware Upgrade' page
+Firmware format => Firmware format
+Error => Fel
+done => utf&ouml;rd
+Invalid_formt => Felaktigt Firmware Format
+Erase_JFFS2 => Ta bort JFFS2 partition
+Options => M&ouml;jligheter
+Firmware_image => Firmware att ladda upp 
+Upgrade => Uppgradering
+Upgrading... => Uppgradering...
+
+# 'LAN Settings' page
+LAN Settings => LAN Inst&auml;llningar
+LAN Configuration => LAN Inst&auml;llningar
+Netmask => Netmask
+Default Gateway => Default Gateway
+DNS Servers => DNS Servrar
+DNS Address => DNS Adress
+
+Note => Noteringar
+
+# 'WAN Settings' page
+WAN Settings => WAN Inst&auml;llningar
+WAN Configuration => WAN Inst&auml;llningar
+PPTP Server IP => PPTP Server IP
+Connection Type => Anslutningstyp
+No WAN => Ingen
+DHCP => DHCP
+Static IP => Statisk IP
+IP Settings => IP Inst&auml;llningar
+PPP Settings => PPP Inst&auml;llningar
+Redial Policy => &Aring;teruppringsnings Policy
+Connect on Demand => Anslut p&aring; beg&auml;ran 
+Keep Alive => H&aring;ll levande
+Maximum Idle Time => Maximum tid i vila
+Redial Timeout => Timeout f&ouml;r &aring;teruppringning
+MTU => MTU
+Username => Anv&auml;ndarnamn
+
+# 'Wireless Configuration' page
+Wireless Configuration => Tr&aring;dl&ouml;sa Inst&auml;llningar
+Wireless Interface => Tr&aring;dl&ouml;st Gr&auml;nssnitt
+WEP Key => WEP Nyckel
+Selected WEP Key => Vald WEP Nyckel
+WPA PSK => WPA PSK
+ESSID => ESSID
+Channel => Kanal
+RADIUS IP Address => RADIUS IP Adress
+RADIUS Server Key => RADIUS Server Nyckel
+Enabled => P&aring;satt
+Disabled => Avst&auml;ngd
+ESSID Broadcast => ESSID Broadcast
+Show => Visa
+Hide => G&ouml;m
+WLAN Mode => WLAN L&auml;ge
+Access Point => Accesspunkt 
+Client => Klient
+Bridge => Brygga
+Ad-Hoc => Ad-Hoc
+Operation mode => Tillst&aring;ndsl&auml;ge
+Encryption Settings => Krypteringsinst&auml;llningar 
+Encryption Type => Krypteringstyp
+PSK => PSK
+WPA Mode => WPA L&auml;ge
+WPA Algorithms => WPA Algoritmer
+WEP Keys => WEP Nyckel
+
+# 'Advanced Wireless Configuration' page
+Advanced Wireless Configuration => Avancerad Tr&aring;dl&ouml;s Inst&auml;llning
+WDS Connections => WDS Anslutningar
+MAC Filter List => MAC Filter Lista
+Filter Mode => Filterl&auml;ge
+Allow => Till&aring;t
+Deny => Neka
+Set => S&auml;tt
+Settings => Settings
+Automatic WDS => Automatisk WDS
+
+# "Hosts" page
+
+MAC Address => MAC Adress
+Configured Hosts => Konfigurerade V&auml;rdar
+DHCP Static => Statisk DHCP 
+Host Names => V&auml;rdnamn
+
+Up => Upp
+Down => Ned
+Edit => Editera
+Delete => Ta bort
+Save => Spara
+Cancel => Avbryt
+
+Forward => Fram&aring;t
+Accept => Acceptera
+Drop => Tappa
+
+Firewall => Brandv&auml;gg
+Firewall Rules => Brandv&auml;ggsregler 
+Firewall Configuration => Brandv&auml;ggsinst&auml;llningar
+
+New Rule => Ny Regel
+Match => Match
+Target => M&aring;l
+Port => Port
+
+Protocol => Protokoll
+Source IP => K&auml;ll IP
+Destination IP => Destinations IP
+Source Ports => K&auml;llport
+Destination Ports => Destinationsport
+
+Forward to => Skicka till
+Port => Port
+
+Helptext ESSID => Namn p&aring; ditt tr&aring;dl&ouml;sa N&auml;tverk
+Helptext DNS save => Du b&ouml;r spara dina inst&auml;llningar p&aring; denna sida f&ouml;re du l&auml;gger till/tar bort DNS servrar
+
+Helptext Operation mode => Detta s&auml;tter l&auml;gesinst&auml;llningen f&ouml;r ditt tr&aring;dl&ouml;sa n&auml;tverk. Att v&auml;lja 'Klient (Brygga)' kommer inte &auml;ndra ditt n&auml;tverks gr&auml;nssnittsinst&auml;llningar. Det kommer endast att s&auml;tta n&aring;gra parametrar i drivrutinerna som till&aring;ter en begr&auml;nsad bryggning av gr&auml;nssnittet. 
+Helptext Encryption Type => 'WPA (RADIUS)' st&ouml;djs endast i Accesspunktsl&auml;ge. <br /> 'WPA (PSK)' fungerar inte i Ad-Hoc l&auml;ge.
+Helptext IP Settings => IP inst&auml;llningar &auml;r inte obligatoriska f&ouml;r DHCP och PPTP. Om du s&auml;tter dem s&aring; anv&auml;nds de som standard om DHCP-servern inte &auml;r tillg&auml;nlig. 
+Helptext Idle Time => Antalet sekunder utan internet trafik som routern skall v&auml;nta p&aring; innan den fr&aring;nkopplar sig fr&aring;n Internet. (Anslut endast p&aring; beg&auml;ran)
+Helptext Redial Timeout => Antalet sekunder att v&auml;nta i innan f&ouml;rs&ouml;k till ny uppkoppling g&ouml;rs. (om ingen kontakt kunnat uppr&auml;ttas med tillhandah&aring;llaren)
+
+# untranslated:
+Available packages => Available packages
+
+ \$1 \ =>
+ $2  =>
+ caption  =>
+ Show raw statistics  =>
+802.11b =>
+802.11b + 802.11g =>
+802.11g (afterburner) =>
+802.11g (performance) =>
+802.11g (range - LRS) =>
+802.11g with 802.11b deferred =>
+Action =>
+Active DHCP Leases =>
+Add New NVRAM Setting =>
+Add Repository =>
+APN Name =>
+APN Settings =>
+Application Protocol =>
+Auth Servers =>
+Authentication =>
+Authentication Method =>
+Backup and Restore =>
+Board =>
+Board Type =>
+Bulk =>
+Bulk IP Address =>
+Bulk TCP Port =>
+Bulk TCP Ports =>
+Bulk UDP Port =>
+Bulk UDP Ports =>
+Bytes =>
+Cache Size =>
+Certificate (PKCS12) =>
+Certificate Status =>
+Change NVRAM Setting =>
+Check_Upgrade =>
+Circular =>
+Classify As =>
+Config Name =>
+Connection Settings =>
+Conntrack Settings =>
+Conntrack Table =>
+Cron =>
+Cron Jobs =>
+Cron Tables =>
+Current Repositories =>
+Dangerous Settings =>
+Data Rate Down =>
+Data Rate Up =>
+Delete NVRAM Setting =>
+Device =>
+Device Status =>
+DHCP Bail =>
+DHCP Configuration =>
+DHCP Interfaces =>
+DHCP Lease Minutes =>
+DHCP Num =>
+DHCP Server For $FORM_iface =>
+DHCP Service =>
+DHCP Start =>
+Distance =>
+Diversity =>
+Domain =>
+Download =>
+Download Configuration =>
+Download Speed =>
+DynDNS Settings =>
+edit =>
+edit_qos_cfg =>
+Enable/Disable Unbridged Wireless =>
+Encoding =>
+Encryption Key =>
+Everything =>
+Express =>
+Express IP Address =>
+Express TCP Port =>
+Express TCP Ports =>
+Express UDP Port =>
+Express UDP Ports =>
+EZ-IP-Update Messages =>
+File =>
+File Editor =>
+Forwarding a port =>
+Found Installed Certificate. =>
+Found Installed Keyfile =>
+Frameburst =>
+Frequency =>
+General System Settings =>
+Generated =>
+Generic Timeout =>
+G-mode Protection =>
+GPRS only =>
+Group =>
+Hostname =>
+ICMP Timeout =>
+Incoming Traffic =>
+Install Package From URL =>
+Interfaces Status =>
+Isolate WLAN clients =>
+kilobits =>
+LAN Bridge WDS Connections =>
+LAN DNS Servers =>
+LAN IP Address =>
+Layer 7 Filtering =>
+Layer 7 Protocols =>
+Layer7 =>
+Lazy WDS On/Off =>
+Lease Max =>
+Left =>
+Local Log =>
+Log Debug Output =>
+Log File =>
+Log Queries =>
+Long =>
+Maximum Connections =>
+Maximum Number Of Connections =>
+Mesh Configuration =>
+Meshing =>
+Modify =>
+Monowall_Credit =>
+Name this configuration =>
+NAS Package =>
+Netfilter Log =>
+Netstat =>
+Networking Tweaks =>
+new rule =>
+No Certificate uploaded yet! =>
+No Hosts =>
+No Keyfile uploaded yet! =>
+No Reg Cache =>
+No Resolv =>
+No WAN Proto =>
+Noise Level =>
+no_qos =>
+No_Target_IP_Port =>
+NTP Server =>
+NVRAM settings to set (by prefix; be careful!) =>
+OpenVPN =>
+OpenVPN Status =>
+Options For =>
+or a close derivative =>
+Outgoing Traffic =>
+Packages Available =>
+Parameters =>
+Passphrase =>
+Peer-2-Peer =>
+Peername =>
+PIN Code =>
+Port range =>
+Port Range =>
+PPPoE Status =>
+PPTP Client =>
+PPTP Client Connection =>
+PPTP Client Connections =>
+PPTP Status =>
+PPTP VPN Users =>
+PPTPD Server =>
+Preamble (Default: Long) =>
+Preferred Connection Type =>
+Prefix =>
+Preshared Key =>
+Preshared Key Status =>
+Priority =>
+Priority IP Address =>
+Priority $n $d Ceiling =>
+Priority $n $d Filter Sequence =>
+Priority $n $d Quantum =>
+Priority $n $d Rate =>
+Priority TCP Port =>
+Priority TCP Ports =>
+Priority UDP Port =>
+Priority UDP Ports =>
+QOS Bulk IP Addresses =>
+QOS Configuration =>
+QOS Express IP Addresses =>
+QOS Internet Speed Configuration =>
+QOS Layer & Protocol Filtering =>
+QoS Options =>
+QoS Packages =>
+QoS Packets  =>
+QOS Priority Configuration =>
+QOS Priority IP Addresses =>
+QoS Rule Edit =>
+QoS Service =>
+QoS Traffic Classification Rules =>
+Quality of Service Statistics =>
+Radus =>
+Raw Information =>
+Read Ethers =>
+Receive Antenna Diversity =>
+Received =>
+Remote host =>
+remove =>
+Repo. Name =>
+Repo. URL =>
+Repository URL =>
+Reset to Defaults =>
+Right =>
+Router Listening Ports =>
+Routing Table =>
+Rx Invalid Encryption =>
+Rx Invalid nwid =>
+Saved config.tgz file: =>
+Select Network =>
+Server Address =>
+Server Port (default: 1194) =>
+Services Configuration =>
+Shaping Status =>
+Short =>
+SIM Configuration =>
+sorted_by_name =>
+Split WLAN From Switch Bridge =>
+Start VPN Connection =>
+Startup =>
+Strict Order =>
+Submit =>
+Survey Results =>
+Syslog Messages =>
+syslog Settings =>
+Syslog View =>
+TCP Established Timeout =>
+TCP Timeout (in seconds) =>
+Theme =>
+Time Settings =>
+Timezone =>
+Traffic Shaping =>
+Traffic Shaping Settings =>
+Translator_Credit =>
+Transmit Antenna Diversity =>
+Transmit Power =>
+Transmit Power (in mw) =>
+Transmitted =>
+Tx Invalid =>
+Tx Missed Beacon =>
+Tx Retries in Excess =>
+UDP Stream Timeout =>
+UDP Timeout =>
+UDP Timeout (in seconds) =>
+UMTS first =>
+UMTS only =>
+UMTS/GPRS Status =>
+Upgrade_Webif =>
+Upload Configuration =>
+Upload PKCS12 Certificate =>
+Upload Preshared Key =>
+Upload Speed =>
+Upload Successful =>
+UPNP =>
+UPNP Daemon =>
+URL of Package =>
+Value =>
+Virtual LANs =>
+VLAN Configuration =>
+Wake-On-LAN =>
+WAN DNS Address =>
+WAN DNS Servers =>
+WAN Down Data Rate =>
+WAN Download (bits/sec) =>
+WAN Download Speed =>
+WAN IP Address =>
+WAN Netmask =>
+WAN Up Data Rate =>
+WAN Upload (bits/sec) =>
+WAN Upload Speed =>
+WAN-LAN Configuration =>
+WDS Configuration =>
+WDS Options =>
+WDS SSID =>
+WDS watchdog timeout =>
+Webif Settings =>
+Webif Upgrade =>
+WEP Key 1 =>
+WEP Key 2 =>
+WEP Key 3 =>
+WEP Key 4 =>
+Wireless Bridge Configuration =>
+Wireless LAN Configuration =>
+Wireless Mode =>
+Wireless survey =>
+wol_help =>
+Committing =>
+config file =>
+conntrack settings =>
+Critical Error =>
+Done =>
+firewall settings =>
+hotspot settings =>
+networking settings =>
+PPTP settings =>
+Processing =>
+QOS settings =>
+Reloading Cron =>
+Reloading syslogd ... =>
+Restarting =>
+system settings =>
+theme settings =>
+traffic shaping settings =>
+UPNPd =>
+wireless settings =>
+Directory =>
+Filesystem Browser =>
+Parent Directory =>
+Root =>
+ c[i]  =>
+ name  =>
+ short  =>
+Short help =>
+ $5  =>
+Invalid value =>
+maximum =>
+ $_firmware_name Administrative Console =>
+making_usable =>

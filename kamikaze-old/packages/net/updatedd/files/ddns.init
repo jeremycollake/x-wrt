@@ -1,0 +1,14 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+
+start() {
+	[ -f /etc/default/ddns ] && . /etc/default/ddns
+	
+	[ "$ddns_update" = 1 ] && {
+		/usr/bin/updatedd -Y $ddns_service -- $ddns_user:$ddns_passwd $ddns_host
+	}
+}
+
+stop() {
+	killall updatedd
+}

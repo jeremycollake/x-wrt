@@ -1,0 +1,64 @@
+#
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+# $Id: Makefile 5624 2006-11-23 00:29:07Z nbd $
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=miau
+PKG_VERSION:=0.6.0.2
+PKG_RELEASE:=1
+
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@SF/miau
+PKG_MD5SUM:=1b78d219a03655399c165eeb021cddd8
+PKG_CAT:=zcat
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/miau
+  SECTION:=net
+  CATEGORY:=Network
+  TITLE:=Another IRC-bouncer/proxy
+  DESCRIPTION:=\
+	In short, miau is an IRC-bouncer/proxy.\\\
+	Being more verbose, miau is small but quite featured \\\
+	IRC-bouncer - a service bit like HTTP-proxy, but \\\
+	for IRC-networks.
+  URL:=http://sourceforge.net/projects/miau/
+endef
+
+define Build/Configure
+	$(call Build/Configure/Default, \
+		--enable-automode \
+		--enable-releasenick \
+		--enable-uptime \
+		--enable-privlog \
+		--enable-onconnect \
+	)
+endef
+
+define Build/Compile	
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
+endef
+
+define Package/miau/install	
+	$(INSTALL_DIR) $(1)/usr/bin  	
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/$(PKG_NAME) $(1)/usr/bin/
+	$(INSTALL_DIR) $(1)/etc/init.d
+	$(INSTALL_DIR) $(1)/etc/default
+	$(INSTALL_DIR) $(1)/etc/miau
+	$(INSTALL_BIN) ./files/miau.init $(1)/etc/init.d/miau
+	$(INSTALL_DATA) ./files/miau $(1)/etc/default/miau
+	$(INSTALL_DATA) ./files/miaurc $(1)/etc/miau/miaurc
+endef
+
+$(eval $(call BuildPackage,miau))
