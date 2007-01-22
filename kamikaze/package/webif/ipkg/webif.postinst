@@ -1,0 +1,169 @@
+#!/bin/sh
+#
+# Webif post-install script.
+#
+
+#########################################################################################
+# functions
+
+TestInstall()
+{
+	this_version="__SVN_REVISION__"
+	installed_version=$(cat "${IPKG_INSTROOT}/www/.version")
+	if [ -f "/www/.version" ] && [ "$this_version" = "$installed_version" ]; then
+		echo "SUCCESS! Webif^2 installation appears OK. Welcome to X-Wrt!"
+		echo "You may need to do a hard REFRESH to clear old CSS style from your browser."
+	else
+		echo "WARNING: Installation may have failed."
+		echo " Detected r$installed_version is installed, but this is r$this_version."
+	fi
+}
+
+ExecuteIfExists()
+{
+	# $1 = exec name
+	# $2-$9 = params
+	[ -f "$1" ] && {
+		"$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9"
+	}
+}
+
+# for squashfs symlink hacks like in WR RC5 (requires rm before change)
+FixReadOnlyLink()
+{
+	touch "$1" >&- 2>&-	# test if read-only
+	[ "$?" != 0 ] && {
+		local tmpfile=$(mktemp "${IPKG_INSTROOT}/tmp/.webif-inst-XXXXXX")
+		cp "$1" "$tmpfile" >&- 2>&-
+		rm "$1"  >&- 2>&-
+		mv "$tmpfile" "$1"  >&- 2>&-
+	}
+}
+
+IPKG_UPDATE_NEEDED="0"
+AddRepository()
+{
+	# $1=reponame
+	# $2=repourl
+	cat "${IPKG_INSTROOT}/etc/ipkg.conf" | grep -q "$2"
+	[ "$?" != "0" ] && {
+		echo "src $1 $2" >> "${IPKG_INSTROOT}/etc/ipkg.conf"
+		IPKG_UPDATE_NEEDED="1"
+	}
+}
+
+IPKG_UPDATE_NEEDED="0"
+DeleteRepository()
+{
+	# $1=repourl
+	cat "${IPKG_INSTROOT}/etc/ipkg.conf" | grep -q "$1"
+	[ "$?" = "0" ] && {
+		repo_url_sed=$(echo "$1" | sed s/'\/'/'\\\/'/g)
+		cat "${IPKG_INSTROOT}/etc/ipkg.conf" |  sed /$repo_url_sed/d > "${IPKG_INSTROOT}/etc/ipkg.conf"
+		IPKG_UPDATE_NEEDED="1"
+	}
+}
+require_reboot() {
+	# Note: Even if the httpd.conf is *NOT* changed the httpd still needs 
+	#  restarting when upgraded from original webif. Newly created pages 
+	#  can't be found by the httpd, not sure why. Yes, its true.
+	# 		
+	# Only sending SIGHUP to httpd does not work. Restarting httpd when
+	# upgrade is done through webif has not been successful, despite a 
+	# a number of techniques one would think would work. 
+	#
+	# Do *NOT* change this just because you think something or the other
+	# should work. We've tried about everything. Only change after you've
+	# thoroughly tested on clean, fresh installs of WR RC5 and RC6, and 
+	# when upgrading the webif through the webif (i.e. use automated install
+	# on X-Wrt home page). If you break this just because you think something
+	# should definitely work, you will die.
+	echo "I'm sorry, but I must reboot your router. This is a ONE time thing and"
+	echo " future upgrades of the webif will NOT require a reboot."
+	echo "Please wait about one minute for your router to reboot ..."
+	reboot_file=$(mktemp /tmp/rebootme.XXXXXX)
+	echo "#!/bin/sh" > $reboot_file
+	echo "sleep 5 && reboot" >> "$reboot_file"
+	chmod +x "$reboot_file"
+	sh "$reboot_file" &	
+}
+
+
+#########################################################################################
+# entry point
+
+# fix some links on squashfs partition that aren't properly copied instead by firstboot
+# has no effect when done in image builder.
+FixReadOnlyLink "${IPKG_INSTROOT}/usr/lib/ipkg/info/webif.list"
+FixReadOnlyLink "${IPKG_INSTROOT}/etc/ipkg.conf"
+FixReadOnlyLink "${IPKG_INSTROOT}/usr/lib/ipkg/status"
+
+# copy our new httpd.conf and S50dnsmasq files - we renamed them so that the webif can
+# be uninstalled without ipkg removing these pre-existing files as well.
+#dnsmasq_filename="S50dnsmasq"
+#[ -f "${IPKG_INSTROOT}/etc/rc.d/S60dnsmasq" ] && {
+	# S50dnsmasq renamed to S60dnsmasq in post-RC6
+#	dnsmasq_filename="S60dnsmasq"
+#}
+
+# initialize default webif theme
+# create symlink to /www/themes/xwrt (do NOT use INSTROOT in first arg).
+rm -rf "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
+ln -sf "/www/themes/xwrt" "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
+[ $? != 0 ] && {
+	# if fs doesn't support symlinks, do a copy
+	mkdir -p "${IPKG_INSTROOT}/www/themes/active"
+	cp -r "${IPKG_INSTROOT}/www/themes/xwrt/" "${IPKG_INSTROOT}/www/themes/active/"
+}
+
+# initialize webifmetabin binaries
+# todo: move back to makefile because this won't be cleaned up good
+ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/bstrip"
+ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/webif-page"
+ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/wepkeygen"
+ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/int2human"
+
+# initialize ipkg.conf
+uname -a |grep mips |grep 2.4 && cat /proc/cpuinfo |grep Broadcom
+[ $? = 0 ] && {
+	AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/kamikaze/broadcom-2.4/packages"
+}
+uname -a |grep 2.6 |grep i586
+[ $? = 0 ] && {
+	AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/kamikaze/x86-2.6/packages"
+}
+uname -a |grep mips |grep 2.6 && cat /proc/cpuinfo |grep Atheros
+[ $? = 0 ] && {
+	AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/kamikaze/atheros-2.6/packages"
+}
+
+
+# only run below on 'real' system (not image builder)
+if [ -z "${IPKG_INSTROOT}" ]; then	
+
+	[ "$IPKG_UPDATE_NEEDED" = "1" ] && ipkg update
+	/etc/init.d/webif_firmwareid enable
+	/etc/init.d/webif_deviceid enable
+	/etc/init.d/custom-user-startup enable
+	
+	#FIXME: Syslog needs to be double checked
+	#/etc/init.d/syslog enable
+	
+	ExecuteIfExists "/etc/init.d/webif_deviceid start"
+#	ExecuteIfExists "/etc/init.d/firmwareinfo"	# x-wrt images use to pre-empt firmware_* set
+	ExecuteIfExists "/etc/init.d/webif_firmwareid start"
+
+	# test installation successfulness
+	TestInstall
+	if [ -e /etc/httpd.conf ]; then
+		httpd_1=$(cat /tmp/httpd.conf.old)
+		httpd_2=$(cat /etc/httpd.conf)
+		[ "$httpd_1" != "$httpd_2" ] && {
+			require_reboot
+		}
+	else
+		require_reboot
+	fi
+
+fi
+exit 0

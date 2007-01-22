@@ -1,0 +1,6 @@
+Package: webif
+Maintainer: X-Wrt Project
+Section: net
+Depends: haserl
+Priority: normal
+Description: An HTTP administrative console for OpenWrt.

@@ -1,0 +1,7 @@
+config syslogd general
+	option ipaddr ""
+	option port ""
+	option size ""
+	option type ""
+	option mark ""
+	option file ""
