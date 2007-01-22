@@ -75,7 +75,7 @@ if empty "$FORM_submit"; then
 	esac
 	FORM_wdstimeout=${wl0_wdstimeout:-$(nvram get wl0_wdstimeout)}
 	FORM_antdiv=${antdiv:-$(nvram get wl0_antdiv)}
-	FORM_txdiv=${txdiv:-$(nvram get wl0_txant)}
+	FORM_txdiv=${txdiv:-$(nvram get wl0_txdiv)}
 	FORM_txdiv=${FORM_txdiv:-3}
 	FORM_wl0_plcphdr=${wl0_plcphdr:-$(nvram get wl0_plcphdr)}
 	FORM_wl0_frag=${wl0_frag:-$(nvram get wl0_frag)}
@@ -116,7 +116,7 @@ EOF
 		save_setting wireless wl0_ap_isolate "$FORM_isolate"
 		save_setting wireless wl0_frameburst "$FORM_frameburst"
 		save_setting wireless wl0_antdiv "$FORM_antdiv"
-		save_setting wireless wl0_txant "$FORM_txdiv"
+		save_setting wireless wl0_txdiv "$FORM_txdiv"
 		save_setting wireless wl0_plcphdr "$FORM_wl0_plcphdr"
 		save_setting wireless wl0_frag  "$FORM_wl0_frag"
 		save_setting wireless wl0_rts   "$FORM_wl0_rts"
