@@ -1,7 +1,0 @@
-Package: webif-lang-pt
-Maintainer: Felix Fietkau <nbd@openwrt.org>
-Section: net
-Depends: webif
-Priority: normal
-Description: Portuguese language file for webif.
-
