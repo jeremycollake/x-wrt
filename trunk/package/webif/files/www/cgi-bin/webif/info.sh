@@ -14,12 +14,12 @@ SHOW_BANNER=0	# set to show /etc/banner
 if is_kamikaze; then
 	XWRT_BRANCH="kamikaze"
 	package_filename="kamikaze/webif_latest_stable.ipk"	
-	uname -a |grep 2.4 |grep mips
-	[ $? != 0 ] && {
+	uname -a |grep 2.4 |grep -q mips
+	[ $? = 0 ] && {
 		version_url="http://ftp.berlios.de/pub/xwrt/kamikaze/broadcom-2.4/"
 	}
-	uname -a |grep 2.6 |grep i586
-	[ $? != 0 ] && {
+	uname -a |grep 2.6 |grep -q i586
+	[ $? = 0 ] && {
 		version_url="http://ftp.berlios.de/pub/xwrt/kamikaze/x86-2.6/"
 	}
 else
@@ -42,7 +42,7 @@ equal "$FORM_check_daily" "1" && {
 
 if [ -n "$FORM_update_check" ]; then
 	echo "@TR<<Please wait>> ...<br />"
-	tmpfile=$(mktemp "/tmp/.webif.XXXXXX")	
+	tmpfile="/tmp/.webif.revcheckfile"
 	wget -q "$version_url$version_file" -O "$tmpfile" 2>&-
 	! exists "$tmpfile" && echo "doesn't exist" > "$tmpfile"
 	cat $tmpfile | grep -q "doesn't exist"
