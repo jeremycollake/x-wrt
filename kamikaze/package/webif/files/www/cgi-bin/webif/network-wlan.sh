@@ -80,6 +80,9 @@ fi
 # This is looped for every physical wireless card (wifi-device)
 #
 for device in $DEVICES; do
+	eval FORM_channel="\$FORM_channel_$device"
+	eval FORM_maxassoc="\$FORM_maxassoc_$device"
+	eval FORM_distance="\$FORM_distance_$device"
 if empty "$FORM_submit"; then
         config_get country $device country
         config_get FORM_channel $device channel
@@ -118,6 +121,25 @@ fi
         for vcfg in $vface; do
        		config_get FORM_device $vcfg device
        		if [ "$FORM_device" = "$device" ]; then
+			eval FORM_radius_key="\$FORM_radius_key_$vcfg"
+			eval FORM_radius_ipaddr="\$FORM_radius_ipaddr_$vcfg"
+			eval FORM_wpa_psk="\$FORM_wpa_psk_$vcfg"
+			eval FORM_encryption="\$FORM_encryption_$vcfg"
+			eval FORM_mode="\$FORM_mode_$vcfg"
+			eval FORM_server="\$FORM_server_$vcfg"
+			eval FORM_port="\$FORM_port_$vcfg"
+			eval FORM_hidden="\$FORM_hidden_$vcfg"
+			eval FORM_isolate="\$FORM_isolate_$vcfg"
+			eval FORM_key="\$FORM_key_$vcfg"
+			eval FORM_key1="\$FORM_key1_$vcfg"
+			eval FORM_key2="\$FORM_key2_$vcfg"
+			eval FORM_key3="\$FORM_key3_$vcfg"
+			eval FORM_key4="\$FORM_key4_$vcfg"
+			eval FORM_broadcast="\$FORM_broadcast_$vcfg"
+			eval FORM_ssid="\$FORM_ssid_$vcfg"
+			eval FORM_network="\$FORM_network_$vcfg"
+			
+			
        		if empty "$FORM_submit"; then
 	        	config_get FORM_network $vcfg network
 	        	config_get FORM_mode $vcfg mode
@@ -306,68 +328,79 @@ fi
 	done
 done
 if ! empty "$FORM_submit"; then
-	for device in $DEVICES; do
-		for vcfg in $vface; do
-			local validate_form save_form
-			# TODO: A bug exists in validate where if blank lines preceed a validation entry then it can fail validation
-			#  without any reported error, only the return value is bad. The old code here used seperate validation 
-			#  strings, i.e. V_PSK, V_WEP. This would result in blank lines in the validation call, causing this anomaly.
-			eval FORM_radius_key="\$FORM_radius_key_$vcfg"
-			eval FORM_radius_ipaddr="\$FORM_radius_ipaddr_$vcfg"
-			eval FORM_wpa_psk="\$FORM_wpa_psk_$vcfg"
-			eval FORM_encryption="\$FORM_encryption_$vcfg"
-			eval FORM_mode="\$FORM_mode_$vcfg"
-			eval FORM_server="\$FORM_server_$vcfg"
-			eval FORM_port="\$FORM_port_$vcfg"
-			eval FORM_hidden="\$FORM_hidden_$vcfg"
-			eval FORM_isolate="\$FORM_isolate_$vcfg"
-			eval FORM_key="\$FORM_key_$vcfg"
-			eval FORM_key1="\$FORM_key1_$vcfg"
-			eval FORM_key2="\$FORM_key2_$vcfg"
-			eval FORM_key3="\$FORM_key3_$vcfg"
-			eval FORM_key4="\$FORM_key4_$vcfg"
-			eval FORM_broadcast="\$FORM_broadcast_$vcfg"
-			eval FORM_ssid="\$FORM_ssid_$vcfg"
-			eval FORM_channel="\$FORM_channel_$device"
-			append validate_form "string|FORM_radius_key_$vcfg|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_radius_key" "$N"
-			append validate_form "ip|FORM_radius_ipaddr|@TR<<RADIUS IP Address>>|required|$FORM_radius_ipaddr" "$N"
-			append validate_form "wpapsk|FORM_wpa_psk|@TR<<WPA PSK#WPA Pre-Shared Key>>|required|$FORM_wpa_psk" "$N"
-			append validate_form "int|FORM_key|@TR<<Selected WEP Key>>|min=1 max=4|$FORM_key" "$N"
-			append validate_form "wep|FORM_key1_$vcfg|@TR<<WEP Key>> 1||$FORM_key1" "$N"
-			append validate_form "wep|FORM_key2_$vcfg|@TR<<WEP Key>> 2||$FORM_key2" "$N"
-			append validate_form "wep|FORM_key3_$vcfg|@TR<<WEP Key>> 3||$FORM_key3" "$N"
-			append validate_form "wep|FORM_key4_$vcfg|@TR<<WEP Key>> 4||$FORM_key4" "$N"
-			append validate_form "int|FORM_broadcast|wl0_closed|required min=0 max=1|$FORM_broadcast" "$N"
-			append validate_form "string|FORM_ssid|@TR<<ESSID>>|required|$FORM_ssid" "$N"
-			append validate_form "int|FORM_channel|@TR<<Channel>>|required min=0 max=$CHANNEL_MAX|$FORM_channel"
-			
-			append save_form "uci_set wireless $device channel $FORM_channel" "$N"
-			append save_form "uci_set wireless $device maxassoc $FORM_maxassoc" "$N"
-			append save_form "uci_set wireless $device distance $FORM_distance" "$N"
-			append save_form "uci_set wireless $vcfg ssid $FORM_ssid" "$N"
-			append save_form "uci_set wireless $vcfg mode $FORM_mode" "$N"
-			append save_form "uci_set wireless $vcfg encryption $FORM_encryption" "$N"
-			append save_form "uci_set wireless $vcfg server $FORM_server" "$N"
-			append save_form "uci_set wireless $vcfg port $FORM_port" "$N"
-			append save_form "uci_set wireless $vcfg hidden $FORM_hidden" "$N"
-			append save_form "uci_set wireless $vcfg isolate $FORM_isolate" "$N"
-			append save_form "uci_set wireless $vcfg key $FORM_key" "$N"
-			append save_form "uci_set wireless $vcfg key1 $FORM_key1" "$N"
-			append save_form "uci_set wireless $vcfg key2 $FORM_key2" "$N"
-			append save_form "uci_set wireless $vcfg key3 $FORM_key3" "$N"
-			append save_form "uci_set wireless $vcfg key4 $FORM_key4" "$N"
-		done
-	done
-
 	empty "$FORM_generate_wep_128" && empty "$FORM_generate_wep_40" &&
 	{
 		SAVED=1
 		validate <<EOF
-$validate_form
+for device in $DEVICES; do
+for vcfg in $vface; do
+config_get FORM_device $vcfg device
+if [ "$FORM_device" = "$device" ]; then
+# TODO: A bug exists in validate where if blank lines preceed a validation entry then it can fail validation
+#  without any reported error, only the return value is bad. The old code here used seperate validation 
+#  strings, i.e. V_PSK, V_WEP. This would result in blank lines in the validation call, causing this anomaly.
+string|FORM_radius_key_$vcfg|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_radius_key" "$N"
+ip|FORM_radius_ipaddr|@TR<<RADIUS IP Address>>|required|$FORM_radius_ipaddr" "$N"
+wpapsk|FORM_wpa_psk|@TR<<WPA PSK#WPA Pre-Shared Key>>|required|$FORM_wpa_psk" "$N"
+int|FORM_key|@TR<<Selected WEP Key>>|min=1 max=4|$FORM_key
+wep|FORM_key1_$vcfg|@TR<<WEP Key>> 1||$FORM_key1
+wep|FORM_key2_$vcfg|@TR<<WEP Key>> 2||$FORM_key2
+wep|FORM_key3_$vcfg|@TR<<WEP Key>> 3||$FORM_key3
+wep|FORM_key4_$vcfg|@TR<<WEP Key>> 4||$FORM_key4
+int|FORM_broadcast|wl0_closed|required min=0 max=1|$FORM_broadcast
+string|FORM_ssid|@TR<<ESSID>>|required|$FORM_ssid" "$N"
+int|FORM_channel|@TR<<Channel>>|required min=0 max=$CHANNEL_MAX|$FORM_channel
+fi
+done
+done
 EOF
-		equal "$?" 0 && {
-        		$save_form
-		}
+		#equal "$?" 0 && {
+			for device in $DEVICES; do
+				eval FORM_channel="\$FORM_channel_$device"
+				eval FORM_maxassoc="\$FORM_maxassoc_$device"
+				eval FORM_distance="\$FORM_distance_$device"
+				uci_set "wireless" "$device" "channel" "$FORM_channel"
+				uci_set "wireless" "$device" "maxassoc" "$FORM_maxassoc"
+				uci_set "wireless" "$device" "distance" "$FORM_distance"
+				
+				for vcfg in $vface; do
+     		  			config_get FORM_device $vcfg device
+     		  			if [ "$FORM_device" = "$device" ]; then
+						eval FORM_radius_key="\$FORM_radius_key_$vcfg"
+						eval FORM_radius_ipaddr="\$FORM_radius_ipaddr_$vcfg"
+						eval FORM_wpa_psk="\$FORM_wpa_psk_$vcfg"
+						eval FORM_encryption="\$FORM_encryption_$vcfg"
+						eval FORM_mode="\$FORM_mode_$vcfg"
+						eval FORM_server="\$FORM_server_$vcfg"
+						eval FORM_port="\$FORM_port_$vcfg"
+						eval FORM_hidden="\$FORM_hidden_$vcfg"
+						eval FORM_isolate="\$FORM_isolate_$vcfg"
+						eval FORM_key="\$FORM_key_$vcfg"
+						eval FORM_key1="\$FORM_key1_$vcfg"
+						eval FORM_key2="\$FORM_key2_$vcfg"
+						eval FORM_key3="\$FORM_key3_$vcfg"
+						eval FORM_key4="\$FORM_key4_$vcfg"
+						eval FORM_broadcast="\$FORM_broadcast_$vcfg"
+						eval FORM_ssid="\$FORM_ssid_$vcfg"
+						eval FORM_network="\$FORM_network_$vcfg"
+
+						uci_set "wireless" "$vcfg" "network" "$FORM_network"
+						uci_set "wireless" "$vcfg" "ssid" "$FORM_ssid"
+						uci_set "wireless" "$vcfg" "mode" "$FORM_mode"
+						uci_set "wireless" "$vcfg" "encryption" "$FORM_encryption"
+						uci_set "wireless" "$vcfg" "server" "$FORM_server"
+						uci_set "wireless" "$vcfg" "port" "$FORM_port"
+						uci_set "wireless" "$vcfg" "hidden" "$FORM_hidden"
+						uci_set "wireless" "$vcfg" "isolate" "$FORM_isolate"
+						uci_set "wireless" "$vcfg" "key" "$FORM_key"
+						uci_set "wireless" "$vcfg" "key1" "$FORM_key1"
+						uci_set "wireless" "$vcfg" "key2" "$FORM_key2"
+						uci_set "wireless" "$vcfg" "key3" "$FORM_key3"
+						uci_set "wireless" "$vcfg" "key4" "$FORM_key4"
+					fi
+				done
+			done
+		#}
 	}
 fi
 
