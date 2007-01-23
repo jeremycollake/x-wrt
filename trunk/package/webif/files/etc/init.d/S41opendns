@@ -5,7 +5,7 @@ use_opendns=$(nvram get "use_opendns")
 	! grep "208.67.222.222" "/tmp/resolv.conf" && {
 		local _ltemp
 		_ltemp=$(mktemp "/tmp/.newresolv-XXXXXX")
-		cp "/tmp/resolv.conf" "$_ltemp"
+		mv -f "/tmp/resolv.conf" "$_ltemp"
 		echo "namesever 208.67.222.222" > /tmp/resolv.conf
 		echo "namesever 208.67.220.202" >> /tmp/resolv.conf
 		cat "$_ltemp" >> "/tmp/resolv.conf"
