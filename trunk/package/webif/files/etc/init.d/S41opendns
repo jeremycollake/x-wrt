@@ -9,5 +9,6 @@ use_opendns=$(nvram get "use_opendns")
 		echo "namesever 208.67.222.222" > /tmp/resolv.conf
 		echo "namesever 208.67.220.202" >> /tmp/resolv.conf
 		cat "$_ltemp" >> "/tmp/resolv.conf"
+		rm -f "$_ltemp"
 	}
 }
