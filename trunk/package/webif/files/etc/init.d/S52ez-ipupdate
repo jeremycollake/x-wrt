@@ -68,6 +68,8 @@ restart() {
         start
 }
 
+[ ! -f "/usr/sbin/ez-ipupdate" ] && exit 0
+
 case "$1" in
   start)
         start
