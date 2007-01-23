@@ -44,9 +44,8 @@ if [ -n "$FORM_update_check" ]; then
 	echo "@TR<<Please wait>> ...<br />"
 	tmpfile=$(mkuniqfilename "/tmp/.webif-XXXXXX")
 	wget -q "$version_url$version_file" -O "$tmpfile" 2>&-
-	! exists "$tmpfile" && echo "doesn't exist" > "$tmpfile"
-	cat $tmpfile | grep -q "doesn't exist"
-	if [ $? = 0 ]; then
+	! exists "$tmpfile" && echo "doesn't exist" > "$tmpfile"	
+	if [ cat $tmpfile | grep -q "doesn't exist" ]; then
 		revision_text="<div id=\"update-error\">ERROR CHECKING FOR UPDATE</div>"
 	else
 		latest_revision=$(cat $tmpfile)
