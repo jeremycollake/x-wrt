@@ -18,7 +18,7 @@
 #   /etc/sysctl.conf
 #
 
-header "Network" "Tweaks" "@TR<<Networking Tweaks>>" 'onload="modechange()"' "$SCRIPT_NAME"
+header "Network" "Tweaks" "@TR<<Networking Tweaks>>" '' "$SCRIPT_NAME"
 
 ! empty "$FORM_submit" && {
 	validate <<EOF
