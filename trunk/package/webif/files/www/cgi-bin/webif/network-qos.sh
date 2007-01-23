@@ -198,7 +198,7 @@ swap_rule()
 uci_load "qos"
 
 # force one-time initializaton of this option if it doensn't exist .. since its new to qos config
-empty "$CONFIG_webif_advanced" && {
+empty "$CONFIG_webif_advanced" && ! empty "$FORM_qos_remove" && {
 	echo "@TR<<Please wait>>, @TR<<performing a one-time initialization>> ... <br />"
 	uci_add "qos" "settings" "webif"
 	uci_set "qos" "webif" "advanced" "0"
