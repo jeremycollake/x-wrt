@@ -77,6 +77,13 @@ remove_lines_from_file() {
 	}
 }
 
+# mktemp replacement that doesn't actually create the file (as busybox 1.3.1+ does)
+mkuniqfilename() {
+	local _lfile
+	_lfile=$(mktemp $*)
+	rm -f "$_lfile" 2>&- >&-
+}
+
 #
 # Original config functions
 #

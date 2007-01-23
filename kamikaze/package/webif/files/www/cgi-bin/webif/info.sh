@@ -42,7 +42,7 @@ equal "$FORM_check_daily" "1" && {
 
 if [ -n "$FORM_update_check" ]; then
 	echo "@TR<<Please wait>> ...<br />"
-	tmpfile="$(mktemp "/tmp/.webif-XXXXXX")
+	tmpfile="$(mkuniqfilename "/tmp/.webif-XXXXXX")
 	wget -q "$version_url$version_file" -O "$tmpfile" 2>&-
 	! exists "$tmpfile" && echo "doesn't exist" > "$tmpfile"
 	cat $tmpfile | grep -q "doesn't exist"
