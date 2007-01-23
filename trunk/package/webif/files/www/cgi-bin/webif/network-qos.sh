@@ -2,6 +2,8 @@
 <?
 ###################################################################
 # qos-scripts configuration page
+# (c)2007 X-Wrt project (http://www.x-wrt.org)
+# (c)2007 Jeremy Collake
 #
 # This page is synchronized between kamikaze and WR branches. Changes to it *must* 
 # be followed by running the webif-sync.sh script.
@@ -51,7 +53,21 @@ uci_set_value_remove_if_empty() {
 	fi
 }
 
+#########################################################################################
+# if qos-scripts installed ... (encapsulates most of remainder)
+#
 if is_package_installed "qos-scripts"; then
+
+#
+# test if show advanced rules is set
+#
+uci_load "webif"
+FORM_webif_advanced_test="$CONFIG_qos_show_advanced_rules"
+
+#
+# if form submit, then ...
+# else ...
+#
 ! empty "$FORM_submit" && empty "$FORM_install_nbd" && {	
 	current_qos_item="$FORM_current_rule_index"	
 	! empty "$current_qos_item" && {		
@@ -99,8 +115,8 @@ EOF
 		! empty "$FORM_wan_upload" && ! equal "$FORM_wan_upload" "$CONFIG_wan_upload" && {
 			uci_set "qos" "wan" "upload" "$FORM_wan_upload"
 		}		
-		! empty "$FORM_webif_advanced" && ! equal "$FORM_webif_advanced" "$CONFIG_webif_advanced" && {
-			uci_set "qos" "webif" "advanced" "$FORM_webif_advanced"
+		! empty "$FORM_webif_advanced" && ! equal "$FORM_webif_advanced" "$FORM_webif_advanced_test" && {
+			uci_set "webif" "qos" "show_advanced_rules" "$FORM_webif_advanced"
 		}		
 	}
 }
@@ -193,23 +209,21 @@ swap_rule()
 ! empty "$FORM_qos_swap_dest" && ! empty "$FORM_qos_swap_src" && {
 	uci_load "qos"
 	swap_rule "$FORM_qos_swap_dest" "$FORM_qos_swap_src"
-}	
-	
-uci_load "qos"
-
-# force one-time initializaton of this option if it doensn't exist .. since its new to qos config
-empty "$CONFIG_webif_advanced" && ! empty "$FORM_qos_remove" && {
-	echo "@TR<<Please wait>>, @TR<<performing a one-time initialization>> ... <br />"
-	uci_add "qos" "settings" "webif"
-	uci_set "qos" "webif" "advanced" "0"
-	uci_commit "qos"
-	uci_load "qos"
 }
+
+#
+# copy show advanced value
+#
+FORM_webif_advanced=$FORM_webif_advanced_test
+
+#
+# load qos-scripts config
+#
+uci_load "qos"
 
 FORM_wan_enabled="$CONFIG_wan_enabled"
 FORM_wan_download="$CONFIG_wan_download"
 FORM_wan_upload="$CONFIG_wan_upload"
-FORM_webif_advanced="$CONFIG_webif_advanced"
 
 ######################################################################
 cat <<EOF
@@ -477,6 +491,8 @@ EOF
 	end_form
 EOF
 }
+#########################################################################################
+# else if qos-scripts NOT installed 
 else
 	echo "<div class=\"warning\">A compatible QOS package was not found to be installed.</div>"
 
