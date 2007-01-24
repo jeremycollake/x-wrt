@@ -74,6 +74,27 @@ option
         width: 800px;
 }
 
+TR.wifiscantitle
+{
+   	font-family: serif;
+	font-weight: bold;
+	font-size: medium;
+	color: #ffffff;
+	text-align: center;
+
+}
+TR.wifiscanrow
+{
+
+   	font-family: serif;
+	font-size:8pt
+	font-style: normal;
+	font-size: medium;
+	color: #000000;
+
+}
+
+
 #header
 {
         position: relative;
