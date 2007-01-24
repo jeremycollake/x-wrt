@@ -18,7 +18,7 @@ config webif theme
 config webif cron
 	option enable "1"
 
-config webif qos-scripts
+config webif qos
 	option show_advanced_rules "0"
 	
 #This is to be used for webif-page until a uci library is written in C
