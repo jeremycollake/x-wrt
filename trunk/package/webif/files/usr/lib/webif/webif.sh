@@ -106,6 +106,7 @@ Pragma: no-cache
 	<head>
 
 <link rel="stylesheet" type="text/css" href="/webif.css" />
+<link rel="stylesheet" type="text/css" href="/style-extend.css" />
 	<title></title>
 </head>
 <style type="text/css">
