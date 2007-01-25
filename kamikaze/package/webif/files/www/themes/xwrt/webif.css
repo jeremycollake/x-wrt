@@ -1,12 +1,12 @@
 /* If you want to edit this file, adhere to these rules:
  *
- * CSS is seperated by layout, font, and color. It might be a little more
- * work, but keeping it grouped like this allows for easier implementation
+ * CSS is seperated by layout, font, and color.	It might be a little more
+ * work, but keeping it	grouped	like this allows for easier implementation
  * of things like the color switcher.
  *
- * The class/id layout is pretty good, though not perfect. We want the structure
+ * The class/id	layout is pretty good, though not perfect. We want the structure
  * to be flexible --- it isn't about the current theme as much as allowing future
- * themes to do whatever without changing anything but the CSS. Do NOT change
+ * themes to do	whatever without changing anything but the CSS.	Do NOT change
  * a bunch of classes and ids in the form code without some discussion with
  * the group.
  *
@@ -16,36 +16,36 @@
 
 *
 {
-        margin: 0;
-        padding: 0;
+	margin:	0;
+	padding: 0;
 }
 
 html, body
 {
-        width: inherit;
-        height: 100%;
+	width: inherit;
+	height:	100%;
 }
 
 dd
 {
-        margin-left: 1em;
-        margin-bottom: 0.2em;
+	margin-left: 1em;
+	margin-bottom: 0.2em;
 }
 
 ul
 {
-        display: inline;
-        list-style-type: none;
+	display: inline;
+	list-style-type: none;
 }
 
 ul.about
 {
-        list-style-type: disc;
+	list-style-type: disc;
 }
 
 li.about
 {
-        margin-left: 2em;
+	margin-left: 2em;
 }
 
 hr,
@@ -53,30 +53,30 @@ hr,
 #short-status h3,
 #content .settings-block .settings .settings-help h3
 {
-        display: none;
+	display: none;
 }
 
 ul.about,
 hr.separator
 {
-        display: block;
+	display: block;
 }
 
 option
 {
-        padding-right: 1em;
+	padding-right: 1em;
 }
 
 #container
 {
-        position: relative;
-        min-height: 100%;
-        width: 800px;
+	position: relative;
+	min-height: 100%;
+	width: 800px;
 }
 
 TR.wifiscantitle
 {
-   	font-family: serif;
+	font-family: serif;
 	font-weight: bold;
 	font-size: medium;
 	color: #ffffff;
@@ -86,7 +86,7 @@ TR.wifiscantitle
 TR.wifiscanrow
 {
 
-   	font-family: serif;
+	font-family: serif;
 	font-size:8pt
 	font-style: normal;
 	font-size: medium;
@@ -97,402 +97,402 @@ TR.wifiscanrow
 
 #header
 {
-        position: relative;
-        width: 100%;
-        height: 5em;
-        padding-top: 0.5em;        
+	position: relative;
+	width: 100%;
+	height:	5em;
+	padding-top: 0.5em;	   
 }
 
 #short-status
 {
-        position: absolute;
-        top: 0em;
-        left: 80%;
-        line-height: 1.0em;
-        padding-bottom: 0.2em;
-        padding-right: 0.5em;
-        padding-left: 2.0em;
-        float: right;
-        background-color: inherit !important;
-        height: 4em;
-        width: 10em;
+	position: absolute;
+	top: 0em;
+	left: 80%;
+	line-height: 1.0em;
+	padding-bottom:	0.2em;
+	padding-right: 0.5em;
+	padding-left: 2.0em;
+	float: right;
+	background-color: inherit !important;
+	height:	4em;
+	width: 10em;
 }
 
 .openwrt-title
 {
-        float: left;
-        width: 80%;        
-        padding-left: 0.5em;
-        height: 5em;
-        background: url(/images/openwrt-logo.gif);
-        background-repeat: repeat-x;
+	float: left;
+	width: 80%;	   
+	padding-left: 0.5em;
+	height:	5em;
+	background: url(/images/openwrt-logo.gif);
+	background-repeat: repeat-x;
 }
 
 #short-status ul 
 {
-        display: block;
-        margin-top: 0.5em;
+	display: block;
+	margin-top: 0.5em;
 }
 
 #mainmenu,
 #submenu
-{        
-        width: 100%;
-        height: 2.0em;
-        line-height: 2.0em;
+{	 
+	width: 100%;
+	height:	2.0em;
+	line-height: 2.0em;
 }
 
 #mainmenu
 {
-        border-bottom: solid;
-        border-bottom-color: #000;
-        border-bottom-width: thin;
-        font-size: 0.9em;
+	border-bottom: solid;
+	border-bottom-color: #000;
+	border-bottom-width: thin;
+	font-size: 0.9em;
 }
 
 #mainmenu ul
 {
-        margin-left: 0.5em;
+	margin-left: 0.5em;
 }
 
 #mainmenu li
 {
-        float: left;
-        list-style-type: none;
-        min-width: 4.2em;
-        text-align: center;        
+	float: left;
+	list-style-type: none;
+	min-width: 4.2em;
+	text-align: center;	   
 }
 
 #mainmenu li a
 {
-        
-        padding: 0 0.7em 0 0.7em;
-        display: block;
+	
+	padding: 0 0.7em 0 0.7em;
+	display: block;
 }
 
 #mainmenu .selected a,
 #submenu .selected a
 {
-        
+	
 }
 
 #submenu li
-{        
-        float: left;
-        list-style-type: none;        
-        text-align: center;        
-        font-size: 0.7em;
+{	 
+	float: left;
+	list-style-type: none;	      
+	text-align: center;	   
+	font-size: 0.7em;
 }
 
 #submenu li a
 {
-        padding: 0 0.6em 0 0.6em;
-        display: block;
+	padding: 0 0.6em 0 0.6em;
+	display: block;
 }
 
 #mainmenu .seperator,
 #submenu .seperator
-{                
-        display: block;
+{		 
+	display: block;
 }
 
 #content
 {
-        padding-top: 0.5em;
-        padding-bottom: 8em;
-        padding-right: 1em;
-        padding-left: 1em;
-        clear: both;
+	padding-top: 0.5em;
+	padding-bottom:	8em;
+	padding-right: 1em;
+	padding-left: 1em;
+	clear: both;
 }
 
 #content .settings-block .settings
 {
-        padding-left: 1.5em;
-        padding-right: 1em;
-        padding-top: 0.1em;
+	padding-left: 1.5em;
+	padding-right: 1em;
+	padding-top: 0.1em;
 }
 
 #content .settings-block .settings-block-title
 {
-        padding-bottom: 0.5em;
-        padding-top: 0.1em;
-        padding-left: 0.4em;
+	padding-bottom:	0.5em;
+	padding-top: 0.1em;
+	padding-left: 0.4em;
 }
 
 #content .settings-block .settings .settings-title
 {
-        padding-bottom: 0.1em;
-        padding-top: 0.1em;
-        padding-left: 0.4em;
+	padding-bottom:	0.1em;
+	padding-top: 0.1em;
+	padding-left: 0.4em;
 }
 
 #content .settings-block .settings .settings-content
 {
-        padding-top: 0.4em;
-        margin-left: 1em;
-        position: relative;
-        float: left;
-        width: 58%;
-        padding-bottom: 0.1em;
+	padding-top: 0.4em;
+	margin-left: 1em;
+	position: relative;
+	float: left;
+	width: 58%;
+	padding-bottom:	0.1em;
 }
 
 #content .settings-block .settings .settings-content select,
 #content .settings-block .settings .settings-content input
 {
-        margin-top: 0.1em;
+	margin-top: 0.1em;
 }
 
 #content .settings-block .settings .settings-help
 {
-        padding: 0.2em;
-        padding-bottom: 0.4em;
-        margin-left: 60%;
+	padding: 0.2em;
+	padding-bottom:	0.4em;
+	margin-left: 60%;
 }
 
-#content .settings-help .more-help
+#content .settings-help	.more-help
 {
-        margin-right: 10%;
-        text-align: right;
+	margin-right: 10%;
+	text-align: right;
 }
 
 .tip
 {
-        padding: 1.0em;
+	padding: 1.0em;
 }
 
 #save
 {
-        position: absolute;
-        bottom: 0;
-        width: 100%;
+	position: absolute;
+	bottom:	0;
+	width: 100%;
 }
 
-/* save button */
+/* save	button */
 #save .page-save div
 {
-        float: right;
-        width: 15em;
-        height: 1.5em;
-        padding-right: 1em;
-        padding-top: 0.5em;
-        padding-bottom:        0.4em;
+	float: right;
+	width: 15em;
+	height:	1.5em;
+	padding-right: 1em;
+	padding-top: 0.5em;
+	padding-bottom:	       0.4em;
 }
 
 #save .apply
 {
-        clear: both;
-        width: 100%;
-        height: 5em;
+	clear: both;
+	width: 100%;
+	height:	5em;
 }
 
 /* apply/clear/review area */
 #save .apply div
 {
-        float: right;
-        width: 15em;
-        height: 4em;
-        padding-right: 1em;
-        padding-top: 0.5em;
-        padding-bottom: 0.5em;
+	float: right;
+	width: 15em;
+	height:	4em;
+	padding-right: 1em;
+	padding-top: 0.5em;
+	padding-bottom:	0.5em;
 }
 
 th
 {
-        text-align: left;
+	text-align: left;
 }
 
 .helpform
 {
-        position: relative;
-        float: left;
-        padding-left: 1em;
-        padding-right: 0.5em;
-        margin-right: 5em;
+	position: relative;
+	float: left;
+	padding-left: 1em;
+	padding-right: 0.5em;
+	margin-right: 5em;
 }
 
 
 #content .settings-block .settings .settings-help .more-help,
 #save
 {
-        text-align: right;
+	text-align: right;
 }
 
 #short-status
 {
-        text-align: left;
+	text-align: left;
 }
 
 .helpitem
 {
-        font-weight: bold;
-        font-size: 0.9em;
+	font-weight: bold;
+	font-size: 0.9em;
 }
 
 .helptext
 {
-        font-size: 0.6em;
-        padding-bottom: 1em;
+	font-size: 0.6em;
+	padding-bottom:	1em;
 }
 
 .kb
 {
-        display: inline;
-        font-size: 0.8em;
+	display: inline;
+	font-size: 0.8em;
 }
 
 .mount-target
 {
-        display: inline;
-        padding-left: 1em;
-        font-weight: normal;
+	display: inline;
+	padding-left: 1em;
+	font-weight: normal;
 }
 
 .warning
 {
-        display: inline;
+	display: inline;
 }
 
 .warning-light
 {
-        display: inline;
+	display: inline;
 }
 
 .swatch
 {
-        display: block;
-        float: right;
-        width: 10px;
-        height: 10px;
-        margin: 0.5em;
-        border: 2px solid #000;
-        cursor: pointer;
+	display: block;
+	float: right;
+	width: 10px;
+	height:	10px;
+	margin:	0.5em;
+	border:	2px solid #000;
+	cursor:	pointer;
 }
 
 .packages
 {
-        font-size: 0.8em;
-        text-align: left;
+	font-size: 0.8em;
+	text-align: left;
 
 }
 
 .failed-validation
 {
-        display: inline;
-        width: 40%;
-        text-align: left;
+	display: inline;
+	width: 40%;
+	text-align: left;
 }
 
-/* font */
+/* font	*/
 body
 {
-        font-family: Verdana, Helvetica, sans-serif;
-        font-size: 1.0em;
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: 1.0em;
 }
 
 #submenu
 {
-        font-size: 0.9em;
+	font-size: 0.9em;
 }
 
 .selected-maincat
 {
-        font-size: 1.4em;        
+	font-size: 1.4em;	 
 }
 
 .selected-subcat
 {
-        font-size: 1.2em;        
+	font-size: 1.2em;	 
 }
 
 
 .openwrt-title h1
 {
-        font-size: 1.4em;
+	font-size: 1.4em;
 }
 
 #short-status ul
 {
-        font-size: 0.58em;
+	font-size: 0.58em;
 }
 
 #mainmenu h3,
 #mainmenu li,
 #short-status h3
 {
-        font-size: 0.9em;
+	font-size: 0.9em;
 }
 
 #mainmenu a,
 #submenu a,
 #save a
 {
-        text-decoration: none;
+	text-decoration: none;
 }
 
 #save a:hover
 {
-        text-decoration: underline;
+	text-decoration: underline;
 }
 
 #save a
 {
-        font-weight: normal;
-        font-size: 1.1em;
+	font-weight: normal;
+	font-size: 1.1em;
 }
 
 #categories
 {
-        
+	
 }
 
 #subcategories
 {
-        
+	
 }
 
 .webif-name-title
 {
-        font-weight: bold;
-        font-size: 1.0em;
+	font-weight: bold;
+	font-size: 1.0em;
 }
 
 .webif-name-subtitle
 {
-        font-size: 0.8em;
+	font-size: 0.8em;
 }
 
 .webif-name-version
 {
-        font-size: 0.8em;
+	font-size: 0.8em;
 }
 
 .webif-contributors
 {
-        font-size: 0.7em;
+	font-size: 0.7em;
 }
 
 #update-available
 {
-        font-size: 0.9em;
-        font-style: italic;
+	font-size: 0.9em;
+	font-style: italic;
 }
 
 #update-unavailable
 {
-        font-size: 0.9em;
-        font-style: italic;
+	font-size: 0.9em;
+	font-style: italic;
 }
 
 #update-error
 {
-        font-size: 0.9em;
-        font-style: italic;
+	font-size: 0.9em;
+	font-style: italic;
 }
 
 .mac-address
 {
-        font-size: 0.7em;
-        display: inline;
+	font-size: 0.7em;
+	display: inline;
 }
 
 .progressbar-title
@@ -502,115 +502,115 @@ body
 
 .progressbar-whole
 {
-        border: dotted gray;
+	border:	dotted gray;
 }
 
 .progressbar-filled
 {
-        font-size: 0.7em;
+	font-size: 0.7em;
 }
 
 .progressbar-unfilled
 {
-        font-size: 0.7em;
+	font-size: 0.7em;
 }
 
 .mount-target
 {
-        font-size: 0.8em;
+	font-size: 0.8em;
 }
 
 .smalltext
 {
-        display: inline;
-        font-size: 0.9em;
-        font-weight: lighter;
-        font-style: italic;
+	display: inline;
+	font-size: 0.9em;
+	font-weight: lighter;
+	font-style: italic;
 }
 
 .numeric-small
 {
-        display: inline;
-        font-size: 0.9em;
+	display: inline;
+	font-size: 0.9em;
 }
 
 .tip
 {
-        font-size: 0.8em;
+	font-size: 0.8em;
 }
 
 .repositories
 {
-        font-size: 0.6em;
+	font-size: 0.6em;
 }
 
 
 #validated-text
 {
-        display: none;        
-        /*font-weight: lighter;
-        font-size: 0.7em;*/
+	display: none;	      
+	/*font-weight: lighter;
+	font-size: 0.7em;*/
 }
 
 #content .settings-block .settings-block-title h2
 {
-        font-size: 1.1em;
+	font-size: 1.1em;
 }
 
 #content .settings-block .settings .settings-title h3
 {
-        font-size: 1.0em;
+	font-size: 1.0em;
 }
 
 .failed-validation
 {
-        font-size: 1.0em;
-        font-style: italic;
-        color: red;
+	font-size: 1.0em;
+	font-style: italic;
+	color: red;
 }
 
 .warning-light
 {
-        font-size: 0.em;
+	font-size: 0.em;
 }
 
 #footer-logo
 {
-        position: absolute;
-        bottom: 1em;
-        font-size: 1.5em;        
-        display: inline;
-        text-align: left;
-        margin-left: 1em;
+	position: absolute;
+	bottom:	1em;
+	font-size: 1.5em;	 
+	display: inline;
+	text-align: left;
+	margin-left: 1em;
 }
 
 #footer-logo #footer-sublogo
 {
-        font-size: 0.5em;
-        font-style: italic;
+	font-size: 0.5em;
+	font-style: italic;
 }
 
 /* common colors */
 #short-status
 {
-        background-color: transparent;
+	background-color: transparent;
 }
 
 .kb
 {
-        color: #222;
+	color: #222;
 }
 
 .mount-target
 {
-        color: #222;
+	color: #222;
 }
 
 .warning,
 .update-available,
 .warning-light
 {
-        color: #9a2c2c;
+	color: #9a2c2c;
 }
 
 .progressbar-title
@@ -625,20 +625,20 @@ body
 
 .openwrt-title
 {
-        background-color: transparent;        
+	background-color: transparent;	      
 }
 
 .even
 {
-        background-color: #e5e7e9;
+	background-color: #e5e7e9;
 }
 
 .odd
 {
-        background-color: transparent;
+	background-color: transparent;
 }
 
 #mainmenu
 {
-        border-bottom-color: #000;        
+	border-bottom-color: #000;
 }
