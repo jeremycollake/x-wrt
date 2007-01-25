@@ -164,19 +164,24 @@ fi
 			mode_fields="field|@TR<<WLAN Mode#Mode>>
 			select|mode_$vcfg|$FORM_mode
 			option|ap|@TR<<Access Point>>
+			option|wds|@TR<<WDS>>
 			option|sta|@TR<<Client>>
 			option|adhoc|@TR<<Ad-Hoc>>"
 			append forms "$mode_fields" "$N"
 
-			hidden="field|@TR<<ESSID Broadcast>>
+			hidden="field|@TR<<ESSID Broadcast>>|broadcast_$vcfg|hidden
 				select|broadcast_$vcfg|$FORM_hidden
 				option|0|@TR<<Show>>
 				option|1|@TR<<Hide>>"
 			append forms "$hidden" "$N"
 			
-			ssid="field|@TR<<ESSID>>
+			ssid="field|@TR<<ESSID>>|ssid_$vcfg|hidden
 				text|ssid_$vcfg|$FORM_ssid"
 			append forms "$ssid" "$N"
+			
+			bssid="field|@TR<<BSSID>>|bssid_$vcfg|hidden
+				text|bssid_$vcfg|$FORM_bssid"
+			append forms "$bssid" "$N"
 			
 			eval FORM_wep_passphrase="\$FORM_wep_passphrase_$vcfg"
 			eval FORM_generate_wep_128="\$FORM_generate_wep_128_$vcfg"
@@ -311,6 +316,11 @@ fi
 						document.getElementById('encryption_$vcfg').value = 'off';
 					}
 				}
+				v = (!isset('mode_$vcfg','wds'));
+				set_visible('ssid_$vcfg', v);
+				set_visible('broadcast_$vcfg', v);
+				v = (isset('mode_$vcfg','wds'));
+				set_visible('bssid_$vcfg', v);
 				v = (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2'));
 				set_visible('wpapsk_$vcfg', v);
 				v = (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2') || isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2'));
@@ -337,8 +347,7 @@ for vcfg in $vface; do
 config_get FORM_device $vcfg device
 if [ "$FORM_device" = "$device" ]; then
 # TODO: A bug exists in validate where if blank lines preceed a validation entry then it can fail validation
-#  without any reported error, only the return value is bad. The old code here used seperate validation 
-#  strings, i.e. V_PSK, V_WEP. This would result in blank lines in the validation call, causing this anomaly.
+#  without any reported error,
 string|FORM_radius_key_$vcfg|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_radius_key" "$N"
 ip|FORM_radius_ipaddr|@TR<<RADIUS IP Address>>|required|$FORM_radius_ipaddr" "$N"
 wpapsk|FORM_wpa_psk|@TR<<WPA PSK#WPA Pre-Shared Key>>|required|$FORM_wpa_psk" "$N"
@@ -382,10 +391,12 @@ EOF
 						eval FORM_key4="\$FORM_key4_$vcfg"
 						eval FORM_broadcast="\$FORM_broadcast_$vcfg"
 						eval FORM_ssid="\$FORM_ssid_$vcfg"
+						eval FORM_bssid="\$FORM_bssid_$vcfg"
 						eval FORM_network="\$FORM_network_$vcfg"
 
 						uci_set "wireless" "$vcfg" "network" "$FORM_network"
 						uci_set "wireless" "$vcfg" "ssid" "$FORM_ssid"
+						uci_set "wireless" "$vcfg" "bssid" "$FORM_bssid"
 						uci_set "wireless" "$vcfg" "mode" "$FORM_mode"
 						uci_set "wireless" "$vcfg" "encryption" "$FORM_encryption"
 						uci_set "wireless" "$vcfg" "server" "$FORM_server"
