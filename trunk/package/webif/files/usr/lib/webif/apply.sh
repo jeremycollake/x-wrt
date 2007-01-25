@@ -357,7 +357,9 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 	uci_commit "$package"
 	case "$package" in
 		"/tmp/.uci/qos") qos-start;;
-		"/tmp/.uci/webif") init_theme;;
+		"/tmp/.uci/webif") 
+			init_theme
+			/etc/init.d/S??opendns restart ;;
 		"/tmp/.uci/upnpd") reload_upnpd;;
 		"/tmp/.uci/network")
 			# for kamikaze

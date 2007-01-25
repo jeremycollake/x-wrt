@@ -31,6 +31,8 @@ handle_list "$FORM_wandnsremove" "$FORM_wandnsadd" "$FORM_wandnssubmit" 'ip|FORM
 }
 FORM_wandnsadd=${FORM_wandnsadd:-192.168.1.1}
 
+uci_load "webif"  # for opendns
+
 if empty "$FORM_submit"; then
 	FORM_wan_proto=${FORM_wan_proto:-$(nvram get wan_proto)}
 	case "$FORM_wan_proto" in
@@ -38,12 +40,12 @@ if empty "$FORM_submit"; then
 		static|dhcp|pptp|pppoe|wwan) ;;
 		# otherwise select "none"
 		*) FORM_wan_proto="none";;
-	esac
+	esac	
 
 	# pptp, dhcp and static common
 	FORM_wan_ipaddr=${wan_ipaddr:-$(nvram get wan_ipaddr)}
 	FORM_wan_netmask=${wan_netmask:-$(nvram get wan_netmask)}
-	FORM_wan_gateway=${wan_gateway:-$(nvram get wan_gateway)}
+	FORM_wan_gateway=${wan_gateway:-$(nvram get wan_gateway)}	
 
 	# ppp common
 	FORM_ppp_username=${ppp_username:-$(nvram get ppp_username)}
@@ -67,6 +69,9 @@ if empty "$FORM_submit"; then
 	FORM_wwan_apn=${wwan_apn:-$(nvram get wwan_apn)}
 	FORM_wwan_username=${wwan_username:-$(nvram get wwan_username)}
 	FORM_wwan_passwd=${wwan_passwd:-$(nvram get wwan_passwd)}
+
+	# get opendns setting (uci_load webif above)
+	FORM_opendns=${CONFIG_misc_opendns:-"0"}
 else
 	SAVED=1
 
@@ -149,6 +154,11 @@ EOF
 				}
 			;;
 		esac
+
+		# opendns
+		! equal "$CONFIG_misc_opendns" "$FORM_opendns" && {
+			uci_set "webif" "misc" "opendns" "$FORM_opendns"
+		}
 	}
 fi
 
@@ -209,10 +219,11 @@ function modechange()
 	set_visible('wan_ip_settings', v);
 	set_visible('field_wan_ipaddr', v);
 	set_visible('field_wan_netmask', v);
+	set_visible('opendns_form', v);
 
 	v = isset('wan_proto', 'static');
 	set_visible('field_wan_gateway', v);
-	set_visible('wan_dns', v);
+	set_visible('wan_dns_form', v);
 
 	v = isset('wan_proto', 'pptp');
 	set_visible('pptp_server', v);
@@ -255,8 +266,17 @@ helpitem|WAN IP Settings
 helptext|Helptext WAN IP Settings#IP Settings are optional for DHCP and PPTP. They are used as defaults in case the DHCP server is unavailable.
 end_form
 
-start_form|@TR<<WAN DNS Servers>>|wan_dns|hidden
-listedit|wandns|$SCRIPT_NAME?wan_proto=static&amp;|$FORM_wandns|$FORM_wandnsadd
+start_form|@TR<<OpenDNS Service>>|opendns_form|hidden
+field|@TR<<Utilize OpenDNS>>
+radio|opendns|$FORM_opendns|1|@TR<<Yes>>
+radio|opendns|$FORM_opendns|0|@TR<<No>>
+helpitem|OpenDNS
+helptext|HelpText OpenDNS#Enabling use of OpenDNS means that instead of your ISP's DNS servers your router will utilize the OpenDNS service for name resolution.
+helplink|http://www.opendns.org
+end_form
+
+start_form|@TR<<WAN DNS Servers>>|wan_dns_form|hidden
+listedit|wandns|$SCRIPT_NAME?wan_proto=static&amp;|$FORM_wandns|$FORM_wandnsadd|
 helpitem|Note
 helptext|Helptext WAN DNS save#You should save your settings on this page before adding/removing DNS servers
 end_form
@@ -356,6 +376,7 @@ helpitem|Note
 helptext|Helptext LAN DNS save#You need save your settings on this page before adding/removing DNS servers
 end_form
 EOF
+
 show_validated_logo
 
 footer ?>
