@@ -1,15 +1,48 @@
 #!/bin/sh
-# configure opendns nameservers if use_opendns is set
-use_opendns=$(nvram get "use_opendns")
-[ "$use_opendns" = "1" ] && {
-	! grep "208.67.222.222" "/tmp/resolv.conf" && {
-		echo "Setting OpenDNS nameservers ..."
-		local _ltemp
-		_ltemp=$(mktemp "/tmp/.newresolv-XXXXXX")
-		mv -f "/tmp/resolv.conf" "$_ltemp"
-		echo "nameserver 208.67.222.222" > /tmp/resolv.conf
-		echo "nameserver 208.67.220.202" >> /tmp/resolv.conf
-		cat "$_ltemp" >> "/tmp/resolv.conf"
-		rm -f "$_ltemp"
+# configure opendns nameservers if enabled
+. /etc/functions.sh
+. /lib/config/uci.sh
+. /usr/lib/webif/functions.sh
+
+start() {
+	uci_load "webif"
+	[ "$CONFIG_misc_opendns" = "1" ] && {
+		! grep "208.67.222.222" "/tmp/resolv.conf" && {
+			echo "Setting OpenDNS nameservers ..."
+			local _ltemp
+			_ltemp=$(mktemp "/tmp/.newresolv-XXXXXX")
+			mv -f "/tmp/resolv.conf" "$_ltemp"
+			echo "nameserver 208.67.222.222" > /tmp/resolv.conf
+			echo "nameserver 208.67.220.220" >> /tmp/resolv.conf
+			cat "$_ltemp" >> "/tmp/resolv.conf"
+			rm -f "$_ltemp"
+		}
 	}
 }
+
+stop() {
+	remove_lines_from_file "/tmp/resolv.conf" "208.67.222.222"
+	remove_lines_from_file "/tmp/resolv.conf" "208.67.220.220"
+}
+
+restart() {
+	stop
+	start
+}
+
+case "$1" in
+  start)
+        start
+        ;;
+  stop)
+        stop
+        ;;
+  restart)
+        restart
+        ;;
+  *)
+        echo $"Usage: $0 {start|stop|restart}"
+        exit 1
+esac
+
+exit $?
