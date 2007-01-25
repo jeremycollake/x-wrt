@@ -20,6 +20,9 @@ config webif cron
 
 config webif qos
 	option show_advanced_rules "0"
+
+config webif misc
+	option opendns "0"
 	
 #This is to be used for webif-page until a uci library is written in C
 lang="en"
