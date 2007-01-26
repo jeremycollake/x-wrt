@@ -1,7 +1,8 @@
 #!/usr/bin/webif-page
-
-<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
-
+<?
+. /usr/lib/webif/webif.sh
+mini_header "Info" "Credits" "" ''
+?>
 <BODY onLoad="divHeight();">
 
 <DIV ID="scrollBox" STYLE="position:relative; visibility:hidden;">
