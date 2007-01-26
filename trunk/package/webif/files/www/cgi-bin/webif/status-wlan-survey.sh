@@ -4,11 +4,11 @@
 # Wireless survey page
 #
 # Description:
-#        Perform a wireless survey and display pretty results.
+#	Perform a wireless survey and display pretty results.
 #
 # Author(s) [in order of work date]:
-#        Jeremy Collake <jeremy.collake@gmail.com>
-#        Dmytro Dykhman <dmytro@iroot.ca>
+#	Jeremy Collake <jeremy.collake@gmail.com>
+#	Dmytro Dykhman <dmytro@iroot.ca>
 #
 # Major revisions:
 #
@@ -24,23 +24,13 @@
 #
 
 . "/usr/lib/webif/webif.sh"
-header "Status" "Site Survey" "@TR<<<img src=/images/wscan.jpg align=absmiddle>&nbsp;Wireless survey>>"
+
+header "Status" "Site Survey" "<img src=/images/wscan.jpg align=absmiddle>&nbsp;@TR<<Wireless survey>>"
 ?>
 
 <?
-     if [ -s "/bin/wl" ] ; then
 
-     echo "OK, good to go"
-
-     else
-         echo "no wl package found"
-     exit
-     fi
-
-
-
-
-
+if is_package_installed "wl" ; then #--->[ -s "/usr/sbin/wl" ] ||
 
 MAX_TRIES=4
 MAX_CELLS=100
@@ -55,9 +45,9 @@ tempscan=$(mktemp /tmp/.survscan.XXXXXX)
 Dopurge ()
 {
 
-        sed 1d < $tempfile > $tempfile2
-        rm $tempfile
-        mv $tempfile2 $tempfile     
+	sed 1d < $tempfile > $tempfile2
+	rm $tempfile
+	mv $tempfile2 $tempfile     
 }
 
 counter=0
@@ -65,12 +55,12 @@ counter=0
 for counter in $(seq 1 $MAX_TRIES); do
        wl scan
        wl scanresults > $tempscan 2> /dev/null
-        if equal $(sed '2,$ d' $tempscan | cut -c0-4) "SSID" ; then break ; fi
+	if equal $(sed '2,$ d' $tempscan | cut -c0-4) "SSID" ; then break ; fi
        sleep 1
 done
 
 if [ $counter -gt $MAX_TRIES ]; then
-        echo "<tr><td>@TR<<Sorry, no scan results.>></td></tr>"
+	echo "<tr><td>@TR<<Sorry, no scan results.>></td></tr>"
 else
 
 #---------------------------------------------
@@ -83,15 +73,15 @@ rm $tempscan
 #--------------------------------------------
 current=1
 
-echo "<br><a href='' onClick='document.location.reload(true)'>Re-scan</a><table width="98%" border="0" cellspacing="1" bgcolor="#999999" >"
+echo "<br><a href='' onClick='document.location.reload(true)'>@TR<<Re-scan>></a><br><br><table width="98%" border="0" cellspacing="1" bgcolor="#999999" >"
 echo "<tr bgcolor="#999999" class="wifiscantitle" >"
-echo "<td width='32'>Signal/</td>"
-echo "<td width='32'>Noise</td>"
-echo "<td>Status</td>"
-echo "<td>SSID</td>"
-echo "<td>MAC</td>"
-echo "<td width='20'>Channel</td>"
-echo "<td>Rate</td>"
+echo "<td width='32'>@TR<<Signal>>/</td>"
+echo "<td width='32'>@TR<<Noise>></td>"
+echo "<td>@TR<<Status>></td>"
+echo "<td>@TR<<SSID>></td>"
+echo "<td>@TR<<MAC>></td>"
+echo "<td width='20'>@TR<<Channel>></td>"
+echo "<td>@TR<<Rate>></td>"
 echo "<td>&nbsp;</td>"
 echo "</tr>"
 
@@ -104,17 +94,17 @@ do
 
 # DEBUG
 #------\/
-        #echo $f "<br>"
+	#echo $f "<br>"
 
 current_line=$(sed '2,$ d' $tempfile)
 
 #echo "-> '" $current_line "'<br>"
 
 if equal "$current_line" "" ; then
-        let "current=1"
-        #echo "->" $current
+	let "current=1"
+	#echo "->" $current
 else
-        let "current=0"                
+	let "current=0"		
 fi
 
 if equal "$current" "1" ;then
@@ -124,9 +114,8 @@ Dopurge
 current_line=$(sed '2,$ d' $tempfile)
 
   if equal "$current_line" "" ;then
-        echo ""
+	echo ""
   else
-
 
 #-------------------------
 #current_line=$(sed '2,$ d' $tempfile)
@@ -201,7 +190,7 @@ fi
 
 echo "<td><center>$Wimg</center></td>"
 echo "<td><center>"
-echo "<input type='submit' style='border: 1px solid #000000; font-size:8pt; ' name='joinwifi' value='Join' disabled>"
+echo "<input type='submit' style='border: 1px solid #000000; font-size:8pt; ' name='joinwifi' value='@TR<<Join>>' disabled>"
 echo "</center></td></tr>"
 
 fi
@@ -213,10 +202,27 @@ done < $tempfile
 
 rm $tempfile
 #rm $tempfile2
-echo "</table><a href='' onClick='document.location.reload(true)'>Re-scan</a>"
+echo "</table><br><a href='' onClick='document.location.reload(true)'>@TR<<Re-scan>></a>"
+fi
+else
+
+if ! empty "$FORM_install_package"; then
+	echo "Installing wl package ...<pre>"
+	install_package "wl"
+	echo "</pre>"
 fi
 
-        
+echo "<form enctype='multipart/form-data' action='$SCRIPT_NAME' method='post'>"
+install_package_button="string|<div class=warning>Wireless Scanning will not work until you install "wl": </div>
+		submit|install_package| Install "wl" Package |"
+
+display_form <<EOF
+$install_package_button
+EOF
+echo "</form>"
+
+fi
+	
 footer ?>
 <!--
 ##WEBIF:name:Status:980:Site Survey
