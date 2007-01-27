@@ -30,10 +30,9 @@
 
 . "/usr/lib/webif/webif.sh"
 header "Status" "Site Survey" "@TR<<Wireless survey>>"
-is_kamikaze && ShowNotUpdatedWarning
-?>
 
-<?
+is_kamikaze && ShowNotUpdatedWarning
+
 MAX_TRIES=4
 MAX_CELLS=100
 WL0_IFNAME=$(nvram get wl0_ifname)
@@ -66,6 +65,7 @@ tempfile=$(mktemp /tmp/.survtemp.XXXXXX)
 tempfile2=$(mktemp /tmp/.survtemp.XXXXXX)
 
 #echo " Please wait while scan is performed ... <br /><br />"
+found_networks=0
 counter=0
 for counter in $(seq 1 $MAX_TRIES); do
 	#echo "."
@@ -169,7 +169,7 @@ else
 			string|<tr><td><br /></td></tr>"
 
 		rm -f "$tempfile"_"${current}"
-
+		let "found_networks+=1"
 		let "current+=1"
 	done
 fi # end if were scan results
@@ -184,19 +184,22 @@ if ! empty "$FORM_clientswitch"; then
 	nvram set wl0_infra=$ORIGINAL_INFRA
 	wifi up 2>/dev/null >/dev/null </dev/null
 fi
-
 fi # end if is in 'allowed to scan' mode
 ?>
 
 <br /></tbody></table>
 
 <?
-if ! empty "$FORM_clientswitch"; then
-display_form <<EOF
-start_form|@TR<<Survey Results>>
-$FORM_cells
-end_form|
-EOF
+if equal "$found_networks" "0"; then
+	echo "@TR<<No wireless networks were found>>."
+else
+	if ! empty "$FORM_clientswitch"; then
+		display_form <<EOF
+		start_form|@TR<<Survey Results>>
+		$FORM_cells
+		end_form|
+		EOF
+	fi
 fi
 ?>
 
