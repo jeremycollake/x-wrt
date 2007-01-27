@@ -103,10 +103,9 @@ Pragma: no-cache
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <?xml version="1.0" encoding="@TR<<Encoding|ISO-8859-1>>"?>
-	<head>
-
-<link rel="stylesheet" type="text/css" href="/webif.css" />
-<link rel="stylesheet" type="text/css" href="/style-extend.css" />
+<head>
+	<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
+	<link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css" />
 	<title></title>
 </head>
 <style type="text/css">
@@ -176,6 +175,7 @@ Pragma: no-cache
 	<head>
 	<title>$_firmware_name @TR<<Administrative Console>></title>
 		<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
+		<link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css" />
 		<!--[if lt IE 7]>
 			<link rel="stylesheet" type="text/css" href="/themes/active/ie_lt7.css" />
 		<![endif]-->		
