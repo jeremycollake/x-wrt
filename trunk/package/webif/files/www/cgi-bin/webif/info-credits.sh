@@ -8,7 +8,9 @@ mini_header "Info" "Credits" "" ''
 <DIV ID="scrollBox" STYLE="position:relative; visibility:hidden;">
 
 <table class="webif-contributors" width="90%"><tbody>
-<tr><th>Webif^2 Primary Developers: <div class="smalltext">(@TR<<sorted_by_name#sorted by name>>)</div></th></tr>
+<tr><th><h1>Webif^2 Credits</h1></th></tr>
+<tr></tr>
+<tr><th>@TR<<Primary Developers>>: <div class="smalltext">(@TR<<sorted_by_name#sorted by name>>)</div></th></tr>
 <tr><td>
 &nbsp;&nbsp; <a href="mailto:jeremy.collake@gmail.com">Jeremy Collake (db90h)</a>
 </td></tr>
@@ -16,7 +18,7 @@ mini_header "Info" "Credits" "" ''
 &nbsp;&nbsp; <a href="mailto:kemen04@gmail.com">Travis Kemen (thepeople)</a>
 </td></tr>
 <tr><td><br /></td></tr>
-<tr><th>Webif<sup>2</sup> @TR<<Contributing Developers>>: <div class="smalltext">(@TR<<sorted_by_name#sorted by name>>)</div></th></tr>
+<tr><th>@TR<<Contributing Developers>>: <div class="smalltext">(@TR<<sorted_by_name#sorted by name>>)</div></th></tr>
 <tr><td>
 &nbsp;&nbsp; <a href="mailto:oxo@users.berlios.de">Owen Brotherwood (oxo)</a>
 </td></tr>
