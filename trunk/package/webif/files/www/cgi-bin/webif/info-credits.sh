@@ -18,10 +18,10 @@ mini_header "Info" "Credits" "" ''
 <tr><td><br /></td></tr>
 <tr><th>Webif<sup>2</sup> @TR<<Contributing Developers>>: <div class="smalltext">(@TR<<sorted_by_name#sorted by name>>)</div></th></tr>
 <tr><td>
-&nbsp;&nbsp; <a href="mailto:dmytro@iroot.ca">Dmytro Dykhman</a>
+&nbsp;&nbsp; <a href="mailto:oxo@users.berlios.de">Owen Brotherwood (oxo)</a>
 </td></tr>
 <tr><td>
-&nbsp;&nbsp; <a href="mailto:oxo@users.berlios.de">Owen Brotherwood (oxo)</a>
+&nbsp;&nbsp; <a href="mailto:dmytro@iroot.ca">Dmytro Dykhman</a>
 </td></tr>
 <tr><td>
 &nbsp;&nbsp; <a href="mailto:openwrt@nbd.name">Felix Fietkau</a> (nbd)
