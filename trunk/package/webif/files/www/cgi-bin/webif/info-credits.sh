@@ -7,7 +7,7 @@ mini_header "Info" "Credits" "" ''
 
 <DIV ID="scrollBox" STYLE="position:relative; visibility:hidden;">
 
-<table class="webif-contributors" width="70%"><tbody>
+<table class="webif-contributors" width="90%"><tbody>
 <tr><th>Webif^2 Primary Developers: <div class="smalltext">(@TR<<sorted_by_name#sorted by name>>)</div></th></tr>
 <tr><td>
 &nbsp;&nbsp; <a href="mailto:jeremy.collake@gmail.com">Jeremy Collake (db90h)</a>
