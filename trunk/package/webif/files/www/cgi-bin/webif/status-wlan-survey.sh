@@ -198,7 +198,7 @@ else
 		start_form|@TR<<Survey Results>>
 		$FORM_cells
 		end_form|
-		EOF
+EOF
 	fi
 fi
 ?>
