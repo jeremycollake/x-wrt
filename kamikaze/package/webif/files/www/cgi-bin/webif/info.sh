@@ -7,7 +7,7 @@
 #
 # TODO: This page looks ugly anymore (rendered).
 #
-header "Info" "System" "@TR<<<img src=/images/blkbox.jpg align="absmiddle">System Information>>" '' ''
+header "Info" "System" "<img src=/images/blkbox.jpg align="absmiddle">@TR<<System Information>>" '' ''
 
 SHOW_BANNER=0	# set to show /etc/banner
 

@@ -9,8 +9,8 @@
 #
 # Author(s) [in order of work date]:
 #       Original webif authors.
-#        Jeremy Collake <jeremy.collake@gmail.com>
-#	  Dmytro Dykhman <dmytro@iroot.ca.
+#	Jeremy Collake <jeremy.collake@gmail.com>
+#	Dmytro Dykhman <dmytro@iroot.ca.
 #
 # Major revisions:
 #
@@ -19,7 +19,7 @@
 # Configuration files referenced:
 #   none
 #
-header "Info" "About" "@TR<<<img src=/images/abt.jpg align=absmiddle>&nbsp;About>>" '' ''
+header "Info" "About" "<img src=/images/abt.jpg align=absmiddle>&nbsp;@TR<<About>>" '' ''
 
 this_revision=$(cat "/www/.version")
 
@@ -28,7 +28,7 @@ this_revision=$(cat "/www/.version")
 <div class="webif-name-subtitle"></div>
 <div class="webif-name-version">Milestone 2.6 - r<? echo "$this_revision" ?> </div><br />
 <DIV>
-<IFRAME SRC="info-credits.sh" STYLE="width:90%; height:300px; border:1px dotted #888888;" FRAMEBORDER="0" SCROLLING="NO"></IFRAME>
+<IFRAME SRC="info-credits.sh" STYLE="width:600px; height:400px; border:1px dotted #888888;" FRAMEBORDER="0" SCROLLING="NO"></IFRAME>
 </DIV>
 <? show_validated_logo
 footer ?>
