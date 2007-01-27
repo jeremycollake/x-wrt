@@ -8,7 +8,7 @@ mini_header "Info" "Credits" "" ''
 <DIV ID="scrollBox" STYLE="position:relative; visibility:hidden;">
 
 <table class="webif-contributors" width="90%"><tbody>
-<tr><th><h1>Webif^2 Credits</h1></th></tr>
+<tr><th><h1>Webif<sup>2</sup> Credits</h1></th></tr>
 <tr></tr>
 <tr><th>@TR<<Primary Developers>>: <div class="smalltext">(@TR<<sorted_by_name#sorted by name>>)</div></th></tr>
 <tr><td>
