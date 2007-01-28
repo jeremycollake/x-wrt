@@ -648,3 +648,7 @@ Server Name =>
 UPnP Configuration =>
 User Name =>
 View DynDNS Syslog =>
+qos_enabled => 允许
+qos_adv_enabled => 允许
+qos_disabled => 禁止
+qos_adv_disabled => 禁止

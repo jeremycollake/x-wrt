@@ -626,3 +626,7 @@ Server Name =>
 UPnP Configuration =>
 User Name =>
 View DynDNS Syslog =>
+qos_enabled => Lubatud
+qos_adv_enabled => Lubatud
+qos_disabled => Keelatud
+qos_adv_disabled => Keelatud

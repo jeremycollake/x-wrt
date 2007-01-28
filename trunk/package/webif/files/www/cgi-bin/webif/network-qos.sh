@@ -28,7 +28,7 @@
 header "Network" "QoS" "@TR<<QOS Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 if ! empty "$FORM_install_nbd"; then
-	echo "Installing Nbd's QoS scripts ...<pre>"
+	echo "@TR<<qos_installing#Installing Nbd's QoS scripts>> ...<pre>"
 	! install_package "qos-scripts" && {
 		install_package "http://ftp.berlios.de/pub/xwrt/packages/qos-scripts_0.9.1-1_mipsel.ipk"
 	}
@@ -36,7 +36,7 @@ if ! empty "$FORM_install_nbd"; then
 fi
 
 is_package_installed "qos-re" && {
-	echo "<div class=\"warning\">Rudy's QoS scripts are found installed. Be sure to uninstall Rudy's scripts before using the new qos-scripts package.</div>"
+	echo "<div class=\"warning\">@TR<<qos_found_rudys#Rudy's QoS scripts are found installed. Be sure to uninstall Rudy's scripts before using the new qos-scripts package.>></div>"
 }
 
 # TODO: move this to shared functions somewhere
@@ -82,7 +82,7 @@ ip|FORM_current_srchost|@TR<<Source IP>>||$FORM_current_srchost
 ip|FORM_current_dsthost|@TR<<Dest IP>>||$FORM_current_dsthost
 EOF
 		if ! equal "$?" "0"; then			
-			echo "<div class=\"warning\">Validation of one or more fields failed! Not saving.</div>"
+			echo "<div class=\"warning\">@<<qos_validation_failed#Validation of one or more fields failed! Not saving.>></div>"
 		else
 			SAVED=1
 			uci_set "qos" "$current_qos_item" "target" "$FORM_current_target"
@@ -100,8 +100,8 @@ EOF
 	}
 	
 	validate <<EOF
-int|FORM_wan_dowload|WAN Download Speed||$FORM_wan_download
-int|FORM_wan_upload|WAN Upload Speed||$FORM_wan_upload
+int|FORM_wan_dowload|@TR<<WAN Download Speed>>||$FORM_wan_download
+int|FORM_wan_upload|@TR<<WAN Upload Speed>>||$FORM_wan_upload
 EOF
 	equal "$?" "0" && {
 		SAVED=1
@@ -252,8 +252,8 @@ onchange|modechange
 start_form|@TR<<QoS Options>>
 field|@TR<<QoS Service>>|field_n_enabled
 select|wan_enabled|$FORM_wan_enabled
-option|1|Enabled
-option|0|Disabled
+option|1|@TR<<qos_enabled#Enabled>>
+option|0|@TR<<qos_disabled#Disabled>>
 field|@TR<<WAN Upload Speed>>|field_n_wan_upload
 text|wan_upload|$FORM_wan_upload| @TR<<kilobits>>
 helpitem|Maximum Upload/Download
@@ -262,8 +262,8 @@ field|@TR<<WAN Download Speed>>|field_n_wan_download
 text|wan_download|$FORM_wan_download| @TR<<kilobits>>
 field|@TR<<Show Advanced Rules>>|field_webif_advanced
 select|webif_advanced|$FORM_webif_advanced
-option|1|Enabled
-option|0|Disabled
+option|1|@TR<<qos_adv_enabled#Enabled>>
+option|0|@TR<<qos_adv_disabled#Disabled>>
 helpitem|Advanced
 helptext|HelpText Advanced#Normally users just use the form below to configure QoS. Some people may need access to the more advanced settings. Alternatively, you can <a href="./system-editor.sh?path=/etc/config&amp;edit=qos">manually edit the config</a>
 end_form
@@ -461,10 +461,10 @@ EOF
 	text|current_dsthost|$_dsthost
 	field|@TR<<Protocol>>|proto
 	select|current_proto|$_proto
-	option||Any
-	option|tcp|TCP
-	option|udp|UDP
-	option|icmp|ICMP
+	option||@TR<<qos_prot_any#Any>>
+	option|tcp|@TR<<qos_prot_tcp#TCP>>
+	option|udp|@TR<<qos_prot_udp#UDP>>
+	option|icmp|@TR<<qos_prot_icmp#ICMP>>
 	$ADVANCED_FIELD_FORM2
 	field|@TR<<Ports>>|current_ports
 	text|current_ports|$_ports
@@ -475,13 +475,13 @@ EOF
 	$l7_protocols
 	field|@TR<<Peer-2-Peer>>|ipp2p
 	select|current_ipp2p|$_ipp2p
-	option||None
-	option|all|All
-	option|bit|bitTorrent
-	option|dc|DirectConnect
-	option|edk|eDonkey
-	option|gnu|Gnutella
-	option|kazaa|Kazaa
+	option||@TR<<qos_p2p_none#None>>
+	option|all|@TR<<qos_p2p_all#All>>
+	option|bit|@TR<<qos_p2p_bittorrent#bitTorrent>>
+	option|dc|@TR<<qos_p2p_dc#DirectConnect>>
+	option|edk|@TR<<qos_p2p_ed2k#eDonkey>>
+	option|gnu|@TR<<qos_p2p_gnutella#Gnutella>>
+	option|kazaa|@TR<<qos_p2p_kazaa#Kazaa>>
 	helpitem|QoS Rule Edit
 	helptext|HelPText qos_rule_edit_help#You need only set fields you wish to match traffic on. Leave the others blank.
 	helpitem|Layer-7
@@ -494,13 +494,13 @@ EOF
 #########################################################################################
 # else if qos-scripts NOT installed 
 else
-	echo "<div class=\"warning\">A compatible QOS package was not found to be installed.</div>"
+	echo "<div class=\"warning\">@TR<<qos_no_compatible#A compatible QOS package was not found to be installed.>></div>"
 
 display_form <<EOF
 onchange|modechange
 start_form|@TR<<QoS Packages>>
-field|Nbd's QoS Scripts (recommended)|nbd_qos
-submit|install_nbd|Install
+field|@TR<<qos_nbds#Nbd's QoS Scripts (recommended)>>|nbd_qos
+submit|install_nbd|@TR<<qos_nbds_install#Install>>
 end_form
 EOF
 fi

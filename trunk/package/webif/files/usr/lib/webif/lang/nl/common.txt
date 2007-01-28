@@ -620,3 +620,7 @@ Server Name =>
 UPnP Configuration =>
 User Name =>
 View DynDNS Syslog =>
+qos_enabled => Ingeschakeld
+qos_adv_enabled => Ingeschakeld
+qos_disabled => Uitgeschakeld
+qos_adv_disabled => Uitgeschakeld

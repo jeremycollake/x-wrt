@@ -632,3 +632,7 @@ Server Name =>
 UPnP Configuration =>
 User Name =>
 View DynDNS Syslog =>
+qos_enabled => Activ&eacute;
+qos_adv_enabled => Activ&eacute;
+qos_disabled => D&eacute;sactiv&eacute;
+qos_adv_disabled => D&eacute;sactiv&eacute;

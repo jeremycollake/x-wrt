@@ -623,3 +623,7 @@ Server Name =>
 UPnP Configuration =>
 User Name =>
 View DynDNS Syslog =>
+qos_enabled => Enged&eacute;lyezve
+qos_adv_enabled => Enged&eacute;lyezve
+qos_disabled => Tiltva
+qos_adv_disabled => Tiltva

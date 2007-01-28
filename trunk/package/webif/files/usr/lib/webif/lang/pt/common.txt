@@ -850,3 +850,7 @@ Server Name =>
 UPnP Configuration =>
 User Name =>
 View DynDNS Syslog =>
+qos_enabled => Activo
+qos_adv_enabled => Activo
+qos_disabled => Inactivo
+qos_adv_disabled => Inactivo

@@ -595,3 +595,7 @@ Server Name =>
 UPnP Configuration =>
 User Name =>
 View DynDNS Syslog =>
+qos_enabled => Omoguæeno
+qos_adv_enabled => Omoguæeno
+qos_disabled => Onemoguæeno
+qos_adv_disabled => Onemoguæeno
