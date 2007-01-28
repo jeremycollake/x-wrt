@@ -536,3 +536,7 @@ Invalid value =>
 maximum =>
  $_firmware_name Administrative Console =>
 making_usable =>
+qos_enabled => Enged&eacute;lyezve
+qos_adv_enabled => Enged&eacute;lyezve
+qos_disabled => Tiltva
+qos_adv_disabled => Tiltva

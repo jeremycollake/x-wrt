@@ -539,3 +539,7 @@ Invalid value =>
 maximum =>
  $_firmware_name Administrative Console =>
 making_usable =>
+qos_enabled => Lubatud
+qos_adv_enabled => Lubatud
+qos_disabled => Keelatud
+qos_adv_disabled => Keelatud

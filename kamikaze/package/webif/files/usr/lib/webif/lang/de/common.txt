@@ -536,3 +536,7 @@ Invalid value =>
 maximum =>
  $_firmware_name Administrative Console =>
 making_usable =>
+qos_enabled => Aktiviert
+qos_adv_enabled => Aktiviert
+qos_disabled => Deaktiviert
+qos_adv_disabled => Deaktiviert

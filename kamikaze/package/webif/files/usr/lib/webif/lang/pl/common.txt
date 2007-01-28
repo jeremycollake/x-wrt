@@ -536,3 +536,7 @@ Invalid value =>
 maximum =>
  $_firmware_name Administrative Console =>
 making_usable =>
+qos_enabled => W&#322;aczone
+qos_adv_enabled => W&#322;aczone
+qos_disabled => Wy&#322;&#261;czone
+qos_adv_disabled => Wy&#322;&#261;czone

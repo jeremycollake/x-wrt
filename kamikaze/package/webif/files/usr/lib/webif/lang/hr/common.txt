@@ -508,3 +508,7 @@ Invalid value =>
 maximum =>
  $_firmware_name Administrative Console =>
 making_usable =>
+qos_enabled => Omoguæeno
+qos_adv_enabled => Omoguæeno
+qos_disabled => Onemoguæeno
+qos_adv_disabled => Onemoguæeno

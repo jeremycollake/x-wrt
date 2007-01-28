@@ -532,3 +532,7 @@ Invalid value =>
 maximum =>
  $_firmware_name Administrative Console =>
 making_usable =>
+qos_enabled => P&aring;satt
+qos_adv_enabled => P&aring;satt
+qos_disabled => Avst&auml;ngd
+qos_adv_disabled => Avst&auml;ngd
