@@ -19,6 +19,16 @@
 #   wireless
 #
 
+add_vcfg() {
+echo "
+config wifi-iface
+        option device   $1
+        option mode     ap
+        option ssid     OpenWrt
+        option hidden   0
+        option encryption none">>/etc/config/wireless
+}
+
 header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onload="modechange()"' "$SCRIPT_NAME"
 config_cb() {
 config_get TYPE "$CONFIG_SECTION" TYPE
@@ -40,11 +50,27 @@ config_load network
 NETWORK_DEVICES="none $network_devices"
 config_load wireless
 
+for device in $DEVICES; do
+	for vcfg in $vface; do
+		eval FORM_add_vcfg="\$FORM_add_$vcfg"
+		eval FORM_remove_vcfg="\$FORM_remove_$vcfg"
+		
+		if ! empty "$FORM_add_vcfg"; then
+			add_vcfg $device
+			FORM_add_$vcfg=
+			config_load wireless
+		fi
+		
+		if ! empty "$FORM_add_vcfg"; then
+			uci_remove "wireless" "$vcfg"
+		fi
+	done
+done
+		
 #echo "$DEVICES"
 #echo "vifs $vface"
 
 local forms js
-
 #####################################################################
 #setup network device form for vfaces
 #
@@ -105,10 +131,10 @@ fi
                         option|$ch"
         done
 
-        maxassoc="field|Max Associated Clients (default 128)
+        maxassoc="field|@TR<<Max Associated Clients (Default 128)>>
                 text|maxassoc_${device}|$FORM_maxassoc"
 
-        distance="field|Wireless Distance (In Meters)
+        distance="field|@TR<<Wireless Distance (In Meters)>>
                 text|distance_${device}|$FORM_distance"
 
         append forms "$F_CHANNELS" "$N"
@@ -116,6 +142,7 @@ fi
         append forms "$distance" "$N"
         append forms "helpitem|Wireless Distance" "$N"
         append forms "helptext|Helptext Wireless Distance#You must enter a number that is double the distance of your longest link." "$N"
+        append forms "submit|add_$vcfg|@TR<<Add Virtual Adaptor>>"
         append forms "end_form" "$N"
         
         for vcfg in $vface; do
@@ -249,8 +276,8 @@ fi
 				text|wep_passphrase_$vcfg|$FORM_wep_passphrase
 				string|<br />
 				field|&nbsp;|wep_generate_keys_$vcfg|hidden
-				submit|generate_wep_40_$vcfg|Generate 40bit Keys
-				submit|generate_wep_128_$vcfg|Generate 128bit Key
+				submit|generate_wep_40_$vcfg|@TR<<Generate 40bit Keys>>
+				submit|generate_wep_128_$vcfg|@TR<<Generate 128bit Key>>
 				string|<br />
 				field|@TR<<WEP Key 1>>|wep_key_1_$vcfg|hidden
 				radio|key_$vcfg|$FORM_key|1
