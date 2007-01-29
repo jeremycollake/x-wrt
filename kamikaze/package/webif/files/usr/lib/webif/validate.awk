@@ -44,6 +44,9 @@ $1 == "wep" {
 	} else if ((length(value) != 0) && (length(value) != 10) && (length(value) != 26)) {
 		valid = 0
 		verr = "Invalid key length"
+	} else if (value ~ /0$/) {
+		valid = 0
+		verr = "Key must not end with '0'"
 	}
 }
 
