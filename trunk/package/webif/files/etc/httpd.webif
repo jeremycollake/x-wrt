@@ -5,4 +5,5 @@
 .png:image/png
 .gif:image/gif
 .jpg:image/jpg
+.js:application/x-javascript
 
