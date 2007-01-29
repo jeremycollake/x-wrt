@@ -1,7 +1,7 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
-header "Reboot" "Reboot" ""
+header "System" "Reboot" ""
 timeout=40
 if empty "$FORM_reboot"; then
 reboot_msg="<form enctype=\"multipart/form-data\" method=\"post\"><input type=\"submit\" value=\" @TR<<Yes, really reboot now>> \" name=\"reboot\" /></form>"
