@@ -61,7 +61,7 @@ synchronize_file "www/cgi-bin/webif/status-wwaninfo.sh"
 synchronize_file "www/cgi-bin/webif/network-qos.sh"
 synchronize_file "www/cgi-bin/webif/network-services.sh"
 synchronize_file "www/cgi-bin/webif/network-firewall.sh"
-#synchronize_file "www/cgi-bin/webif/network-wlan-advanced.sh"
+#NOT_synchronize_file "www/cgi-bin/webif/network-wlan-advanced.sh" #not in kamikaze
 synchronize_file "www/cgi-bin/webif/network-misc.sh"
 synchronize_file "www/cgi-bin/webif/system-settings.sh"
 synchronize_file "www/cgi-bin/webif/system-ipkg.sh"
