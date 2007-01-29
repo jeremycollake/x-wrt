@@ -4,10 +4,10 @@
 # Applications page
 #
 # Description:
-#	List and install additional applications.
+#        List and install additional applications.
 #
-# Author(s) [in order of work date]:	
-#	Dmytro Dykhman <dmytro@iroot.ca>
+# Author(s) [in order of work date]:        
+#        Dmytro Dykhman <dmytro@iroot.ca>
 #
 # Major revisions:
 #
@@ -28,10 +28,19 @@ HighLight="class='gradualshine' onMouseover='slowhigh(this)' onMouseout='slowlow
 
 
 if [ "$FORM_page" = "index" ]; then
-        
+echo "Content-type: text/plain"
+echo "HTTP/1.0 200 OK"
+echo ""
+#echo "<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">"
+#echo "<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">"
+
 cat <<EOF
-<html><body ></body></html>
+<html>
+<body>
+</body>
+</html>
 EOF
+exit
 elif [ "$FORM_page" = "web" ]; then
 
 cat <<EOF
@@ -45,9 +54,9 @@ $HEADER
 <table width="98%" border="0" cellspacing="1" >
 
   <tr class='appindex'>
-      <td width="20%"><center><a href="" rel="b1"><img src="/images/app.4.jpg" border="0" $HighLight ></a><br>Apache Webserver</center></td>
-      <td width="20%"><div align="center"><a href="" rel="b2"><img src="/images/app.6.jpg" border="0" $HighLight ></a><br>FTP Server</div></td>
-      <td width="20%"><div align="center"><a href="" rel="b3"><img src="/images/app.7.jpg" border="0" $HighLight ></a><br>MySQL Server</div></td>
+      <td width="20%"><center><a href="" rel="b1"><img src="/images/app.4.jpg" border="0" $HighLight ></a><br><font color=silver>Apache Webserver</font></center></td>
+      <td width="20%"><div align="center"><a href="" rel="b2"><img src="/images/app.6.jpg" border="0" $HighLight ></a><br><font color=silver>FTP Server</font></div></td>
+      <td width="20%"><div align="center"><a href="" rel="b3"><img src="/images/app.7.jpg" border="0" $HighLight ></a><br><font color=silver>MySQL Server</font></div></td>
       <td width="20%">&nbsp;</td>
       <td width="20%">&nbsp;</td>
   </tr>
@@ -83,7 +92,7 @@ $HEADER
 <center>
 <table width="98%" border="0" cellspacing="1" >
 <tr class="appindex">
-<td width="20%"><center><a href="" rel="b1"><img src="/images/app.2.jpg" border="0" $HighLight ></a><br>Hydra</center></td>
+<td width="20%"><center><a href="" rel="b1"><img src="/images/app.2.jpg" border="0" $HighLight ></a><br><font color=silver>Hydra</font></center></td>
 <td width="20%">&nbsp;</td>
 <td width="20%">&nbsp;</td>
 <td width="20%">&nbsp;</td>
@@ -174,9 +183,12 @@ EOF
 
 elif [ "$FORM_page" = "list" ]; then
 
-cat <<EOF
 
-<html>
+
+echo "<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">"
+echo "<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">"
+
+cat <<EOF
 <head>
 </head>
 
@@ -224,13 +236,13 @@ may not function. </font>
     <td width="70%">&nbsp;</td>
   </tr>
   <tr>
-    <td><DIV>
+    <td>
 <IFRAME SRC="applications.sh?page=list" STYLE="width:100%; height:350px; border:1px dotted #888888;" FRAMEBORDER="0" SCROLLING="NO" name="AppList"></IFRAME>
-</DIV>
+
 </td>
-    <td><DIV>
-<IFRAME SRC="applications.sh?page=index" STYLE="width:90%; height:350px; border:1px dotted #888888;" FRAMEBORDER="0" SCROLLING="NO" name="AppIndex"></IFRAME>
-</DIV>
+    <td>
+<IFRAME SRC="applications.sh?page=index" STYLE="width:90%; height:350px; border:1px dotted #888888;" FRAMEBORDER="0" SCROLLING="YES" name="AppIndex"></IFRAME>
+
 </td>
   </tr>
   <tr>
