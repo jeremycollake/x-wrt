@@ -16,6 +16,9 @@
 #   none
 #
 # TODO:
+
+. "/usr/lib/webif/functions.sh"
+
 HEADER="<link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css">
 <script type="text/javascript" src="/js/balloontip.js">
 </script><script type="text/javascript" src="/js/imgdepth.js">
@@ -111,13 +114,42 @@ cat <<EOF
 
 $HEADER
 
+<script type="text/javascript">
+<!--
+
+function confirmModifications() 
+ {  
+ if (window.confirm("Do you want to DELETE this account from shell? \n\n(Note: account will be terminated completely in 24-48 hours)"))
+  {  
+  window.location="app.samba.sh?package=install"
+  } else {  
+  } 
+  }  
+// --> 
+</script>
 </head>
 
 <body>
 <center>
 <table width="98%" border="0" cellspacing="1" >
   <tr class='appindex'>
-      <td width="20%"><center><a href="app.samba.sh" rel="b1"><img src="/images/app.10.jpg" border="0" $HighLight></a><br>Samba Client</center></td>
+
+EOF
+
+#--------------------------------------
+if  is_package_installed "kmod-cifs"  &&  is_package_installed "cifsmount"  ; then
+
+#<<---If package is already installed--->>
+echo "<td width='20%'><center><a href='app.samba.sh' rel='b1'><img src='/images/app.10.jpg' border='0'></a><br>Samba Client</center></td>"
+     
+else
+
+#<<---If package is NOT installed--->>
+echo "<td width='20%'><center><a href='javascript:confirmModifications()' rel='b1'><img src='/images/app.10.jpg' border='0'  $HighLight ><a><br><font color=silver>Samba Client</font></center></td>"
+
+fi
+#-------------------------------------------
+cat <<EOF
       <td width="20%">&nbsp;</td>
       <td width="20%">&nbsp;</td>
       <td width="20%">&nbsp;</td>
@@ -193,11 +225,11 @@ may not function. </font>
   </tr>
   <tr>
     <td><DIV>
-<IFRAME SRC="applications.sh?page=list" STYLE="width:100%; height:300px; border:1px dotted #888888;" FRAMEBORDER="0" SCROLLING="NO" name="AppList"></IFRAME>
+<IFRAME SRC="applications.sh?page=list" STYLE="width:100%; height:350px; border:1px dotted #888888;" FRAMEBORDER="0" SCROLLING="NO" name="AppList"></IFRAME>
 </DIV>
 </td>
     <td><DIV>
-<IFRAME SRC="applications.sh?page=index" STYLE="width:90%; height:300px; border:1px dotted #888888;" FRAMEBORDER="0" SCROLLING="NO" name="AppIndex"></IFRAME>
+<IFRAME SRC="applications.sh?page=index" STYLE="width:90%; height:350px; border:1px dotted #888888;" FRAMEBORDER="0" SCROLLING="NO" name="AppIndex"></IFRAME>
 </DIV>
 </td>
   </tr>

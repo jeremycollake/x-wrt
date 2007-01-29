@@ -30,5 +30,5 @@ reboot
 fi
 ?>
 <!--
-##WEBIF:name:Reboot:100:Are you sure?
+##WEBIF:name:System:910:Reboot
 -->

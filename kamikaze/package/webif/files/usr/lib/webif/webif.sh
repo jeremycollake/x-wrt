@@ -176,11 +176,13 @@ Pragma: no-cache
 	<title>$_firmware_name @TR<<Administrative Console>></title>
 		<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
 		<link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css" />
+		<link rel="stylesheet" type="text/css" href="/themes/active/waitbox.css" />
 		<!--[if lt IE 7]>
 			<link rel="stylesheet" type="text/css" href="/themes/active/ie_lt7.css" />
 		<![endif]-->		
 		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
 		<meta http-equiv="expires" content="-1" />
+		<script type="text/javascript" src="/js/waitbox.js"></script>
 	</head>
 	<body $4>
 
@@ -277,9 +279,10 @@ footer() {
 			</div>
 			<div class="apply">
 				<div>
-					<a href="config.sh?mode=save&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Apply Changes>> &laquo;</a><br />
+					<a href="config.sh?mode=save&amp;cat=$_category&amp;prev=$SCRIPT_NAME" rel="lightbox">@TR<<Apply Changes>> &laquo;</a><br />
 					<a href="config.sh?mode=clear&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Clear Changes>> &laquo;</a><br />
 					<a href="config.sh?mode=review&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Review Changes>> $_changes &laquo;</a>
+
 				</div>
 			</div>			
 		</div>	
