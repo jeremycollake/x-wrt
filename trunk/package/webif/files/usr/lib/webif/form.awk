@@ -116,11 +116,13 @@ $1 ~ /^txtfile/ {
 	print "<option " option_selected " value=\"" $2 "\">" option_title "&nbsp;&nbsp;</option>"
 }
 ($1 ~ /^listedit/) {
+	if (field_open == 1) print "</td></tr>"
 	n = split($4 " ", items, " ")
 	for (i = 1; i <= n; i++) {
 		if (items[i] != "") print "<tr><td width=\"50%\">" items[i] "</td><td>&nbsp;<a href=\"" $3 $2 "remove=" items[i] "\">@TR<<Remove>></a></td></tr>"
 	}
 	print "<tr><td width=\"100%\" colspan=\"2\"><input type=\"text\" name=\"" $2 "add\" value=\"" $5 "\" /><input type=\"submit\" name=\"" $2 "submit\" value=\"@TR<<Add>>\" /></td></tr>"
+	field_open=0
 }
 $1 ~ /^caption/ { print "<b>" $2 "</b>" }
 $1 ~ /^string/ { print $2 }
