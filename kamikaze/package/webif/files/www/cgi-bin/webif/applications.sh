@@ -128,7 +128,7 @@ $HEADER
 
 function confirmModifications() 
  {  
- if (window.confirm("Do you want to DELETE this account from shell? \n\n(Note: account will be terminated completely in 24-48 hours)"))
+ if (window.confirm("This package is not installed. \n\nDo you want to install it now?"))
   {  
   window.location="app.samba.sh?package=install"
   } else {  
