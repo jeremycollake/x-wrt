@@ -148,7 +148,7 @@ else
 		# only show quality if it's not 0/0
 		#
 		if ! equal "$QUALITY" "0/0"; then
-			QUALITY_STRING="string|<tr><td>Quality $QUALITY</tr></td>"
+			QUALITY_STRING="string|<tr><td>@TR<<Quality>> $QUALITY</tr></td>"
 		fi
 
 		NOISE_BASE=-99
@@ -160,12 +160,12 @@ else
 		SNR_PERCENT=$(expr 100 + $SIGNAL_INTEGRITY)
 
 		FORM_cells="$FORM_cells
-			string|<tr><td><strong>Cell</strong> $CELL_ID</td></tr>
-			string|<tr><td><strong>SSID</strong> $ESSID (<a href=\"http://standards.ieee.org/cgi-bin/ouisearch?$MAC_FIRST_THREE\" target=\"_new\">$MAC_DASHES</a>)</td></tr>
-			string|<tr><td><strong>Channel</strong> $CHANNEL_ID</td></tr>
+			string|<tr><td><strong>@TR<<Cell>></strong> $CELL_ID</td></tr>
+			string|<tr><td><strong>@TR<<SSID>></strong> $ESSID (<a href=\"http://standards.ieee.org/cgi-bin/ouisearch?$MAC_FIRST_THREE\" target=\"_new\">$MAC_DASHES</a>)</td></tr>
+			string|<tr><td><strong>@TR<<Channel>></strong> $CHANNEL_ID</td></tr>
 			$QUALITY_STRING
-			string|<tr><td><strong>Signal</strong> $SIGNAL_DBM dBm / <strong>Noise</strong> $NOISE_DBM dBm</td></tr><tr><td>
-			progressbar|SNR|<strong>SNR</strong> $SIGNAL_INTEGRITY dBm|200|$SNR_PERCENT|$SIGNAL_INTEGRITY dBm
+			string|<tr><td><strong>@TR<<Signal>></strong> $SIGNAL_DBM dBm / <strong>Noise</strong> $NOISE_DBM dBm</td></tr><tr><td>
+			progressbar|SNR|<strong>@TR<<SNR>></strong> $SIGNAL_INTEGRITY dBm|200|$SNR_PERCENT|$SIGNAL_INTEGRITY dBm
 			string|</td></tr><tr><td>&nbsp;</td></tr>"
 
 		rm -f "$tempfile"_"${current}"
