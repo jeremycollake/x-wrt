@@ -8,7 +8,7 @@ reboot_msg="<form enctype=\"multipart/form-data\" method=\"post\"><input type=\"
 else
 router_ip=$(nvram get lan_ipaddr)
 echo "<meta http-equiv="refresh" content=$timeout;http://$router_ip />"
-reboot_msg="Rebooting now...<br><br>Please wait about $timeout seconds. The webif should automatically reload.
+reboot_msg="@TR<<Rebooting now>>...<br><br>@TR<<reboot_wait#Please wait about>> $timeout @TR<<reboot_seconds#seconds.>> @TR<<reboot_reload#The webif should automatically reload.>>
 <br><br><center><script type='text/javascript'>
 var bar1= createBar(350,15,'white',1,'black','blue',85,7,3,'');
 </script></center>"
