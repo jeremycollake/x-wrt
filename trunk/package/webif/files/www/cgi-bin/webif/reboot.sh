@@ -1,7 +1,7 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
-header "Status" "Reboot" "@TR<<Are you sure you want to reboot>>?"
+header "Reboot" "Reboot" ""
 timeout=40
 if empty "$FORM_reboot"; then
 reboot_msg="<form enctype=\"multipart/form-data\" method=\"post\"><input type=\"submit\" value=\" @TR<<Yes, really reboot now>> \" name=\"reboot\" /></form>"
@@ -16,7 +16,7 @@ fi
 ?>
 <table style="width: 90%; border="0" cellpadding="2" cellspacing="2" align="center">
 <tbody>
-<br><tr><td>
+<br><br><br><tr><td>
 <script language="javascript" src="/js/progress.js">
 </script>
 <? echo "$reboot_msg" ?>
@@ -30,5 +30,5 @@ reboot
 fi
 ?>
 <!--
-##WEBIF:name:Status:999:Reboot
+##WEBIF:name:System:910:Reboot
 -->
