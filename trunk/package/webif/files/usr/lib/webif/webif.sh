@@ -209,8 +209,6 @@ Pragma: no-cache
 			<div style="background: #fff" title="white" onclick="setActiveStyleSheet('white'); return false;"></div>
 		</div>
 
-		<script type="text/javascript"> swatch(); </script>
-
 		<div id="content">
 				$_head
 				$ERROR
