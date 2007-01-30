@@ -191,9 +191,6 @@ Pragma: no-cache
 	</head>
 	<body $4>
 
-	<script type="text/javascript" src="/colorize.js"></script>
-		<script type="text/javascript"> colorize(); </script>
-
 	<div id="container">
 		<div id="header">
 			<h1>X-Wrt Administration Console</h1>
@@ -271,23 +268,23 @@ footer() {
 	_changes=${_changes:+(${_changes})}
 	_endform=${_savebutton:+</form>}
 	cat <<EOF
-		</div>
-		<br />
-		<fieldset id="save">
-		<legend><strong>Proceed Changes</strong></legend>
-			$_savebutton
-			<ul class="apply">
-				<li><a href="config.sh?mode=save&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Apply Changes>> &laquo;</a></li>
-				<li><a href="config.sh?mode=clear&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Clear Changes>> &laquo;</a></li>
-				<li><a href="config.sh?mode=review&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Review Changes>> $_changes &laquo;</a></li>
-			</ul>
-		</fieldset>	
-		$_endform
-		<hr />
-		<div id="footer">
-			<h3>X-Wrt</h3>
-			<em>@TR<<making_usable#End user extensions for OpenWrt>></em>
-		</div>
+	</div>
+	<br />
+	<fieldset id="save">
+	<legend><strong>Proceed Changes</strong></legend>
+		$_savebutton
+		<ul class="apply">
+			<li><a href="config.sh?mode=save&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Apply Changes>> &laquo;</a></li>
+			<li><a href="config.sh?mode=clear&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Clear Changes>> &laquo;</a></li>
+			<li><a href="config.sh?mode=review&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Review Changes>> $_changes &laquo;</a></li>
+		</ul>
+	</fieldset>	
+	$_endform
+	<hr />
+	<div id="footer">
+		<h3>X-Wrt</h3>
+		<em>@TR<<making_usable#End user extensions for OpenWrt>></em>
+	</div>
     </div>
 </body>
 </html>
