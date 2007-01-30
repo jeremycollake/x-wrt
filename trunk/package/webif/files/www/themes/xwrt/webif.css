@@ -52,27 +52,6 @@ hr,
 	width: 100%;
 }
 
-/* ---  Color switcher  --- */
-#colorswitcher {
-	position: absolute;
-	right: 1.5em;
-	margin-top: 1em;
-	font-weight: bold;
-	text-align: center;
-	z-index: 100;
-	speak: none;
-}
-
-#colorswitcher div {
-	display: block;
-	float: left;
-	width: 1em;
-	height: 1em;
-	margin: 0 0.4em 0 0.4em;
-	border: 1px solid Black;
-	cursor: pointer;
-}
-
 /* ---  Header  --- */
 #header {
 	clear: both;
@@ -81,6 +60,8 @@ hr,
 	color: #ccc;
 	background: #51779e url(/images/openwrt-logo.gif) left 0.5em repeat-x;
 }
+
+#header h1 { text-indent: -9000px; }
 
 /* ---  Short-status  --- */
 #header #short-status {
@@ -147,31 +128,54 @@ hr,
 	color: White;
 }
 
+/* ---  Color switcher  --- */
+#colorswitcher {
+	position: absolute;
+	top: 11em;
+	right: 1.5em;
+	z-index: 100;
+}
+
+#colorswitcher div {
+	display: block;
+	float: right;
+	width: 1em;
+	height: 1em;
+	margin-left: 0.4em;
+	border: 1px solid Black;
+	cursor: pointer;
+}
+
 /* ---  Content  --- */
 #content {
-	padding: 1.5em 1.5em 8em 2%;
 	position: relative;
+	padding: 0 2% 4em 2%;
 }
 
 #content a { text-decoration: underline; }
 
 #content h2 {
 	font-size: 1.1em;
-	margin-bottom: 0.5em;
+	margin-top: 1.5em;
+	margin-bottom: 1.5em;
 }
 
 #content h3 {
-	margin: 0.3em 0.2em 0.5em 1%;
+	margin-bottom: 0.6em;
 	padding: 0.2em;
-	line-height: 1em;
-	font-size: 1.0em;
+	font-size: 1em;
 	background-color: #aac1d9;
+}
+
+#content .settings {
+	margin-bottom: 1.5em;
+	margin-left: 1%;
 }
 
 #content .settings-content {
 	position: relative;
 	float: left;
-	width: 55%;
+	width: 54%;
 	margin-left: 2%;
 }
 
@@ -179,7 +183,6 @@ hr,
 
 /* help area */
 #content .settings-help {
-	padding: 0.2em 0.2em 0.4em 0.2em;
 	position: relative;
 	margin-left: 60%;
 }
