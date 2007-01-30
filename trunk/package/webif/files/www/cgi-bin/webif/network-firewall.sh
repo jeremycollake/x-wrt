@@ -315,7 +315,7 @@ BEGIN {
 END {
 	print "<tr><td colspan=\\"5\\"><hr class=\\"separator\\" /></td></tr>"
 	print "<tr><td class=\\"edit_title\\">@TR<<New Rule>>: </td><td colspan=\\"4\\">"
-	print "<form method=\\"POST\\" action=\\"$SCRIPT_NAME\\" enctype=\\"multipart/form-data\\">"
+	print "<form method=\\"post\\" action=\\"$SCRIPT_NAME\\" enctype=\\"multipart/form-data\\">"
 	print hidden("edit", n + 1);
 	print "<select name=\\"new_target\\">"
 	print sel_option("forward", "Forward")
@@ -324,20 +324,19 @@ END {
 	print "</select>" button("new", "Add") "</form></td></tr>"
 	print "</table>"
 	print "<br /><br />"
-	#print "<div class=\\"helpform\\">"
-	print "<div class=\\"helpitem\\">@TR<<Forwarding a port>>:</div>"
-	print "<div class=\\"helptext\\">@TR<<firewall_help_fw_port_example1|If you would like to forward port 999 TCP from the internet to a local computer at 192.168.100.1, it might look like below:>></div>"
-	#print "</div>"
-	print "<div class=\\"helptext\\">@TR<<firewall_help_fw_port_example|Destination ports: 999 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Target: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: &lt;blank&gt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protocol: TCP>></div>"
-	print "<div class=\\"helpitem\\">@TR<<Forwarding a port range>>:</div>"
-	print "<div class=\\"helptext\\">@TR<<firewall_help_fw_portrange|If you would like to forward ports 2000-3000 TCP from the internet to a local computer at 192.168.100.1, it might look like below:>></div>"
-	print "<div class=\\"helptext\\">@TR<<firewall_help_fw_portrange_example|Destination ports: 2000-3000 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Target: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: &lt;blank&gt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protocol: TCP>></div>"
-	print "<div class=\\"helpitem\\">@TR<<Forwarding a port to a different port>>:</div>"
-	print "<div class=\\"helptext\\">@TR<<firewall_help_fw_example2|If you would like to forward port 8888 TCP from the internet to 192.168.100.1 at port 80, it might look like below:>></div>"
-	#print "</div>"
-	print "<div class=\\"helptext\\">@TR<<firewall_help_fw_port_example2|Destination ports: 8888 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Target: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: 80 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protocol: TCP>></div>"
-	print "<div class=\\"helpitem\\">@TR<<Firewall>>:</div>"
-	print "<div class=\\"helptext\\">@TR<<firewall_help_general|Here you can forward ports and more. If you wish to manually configure these instead, use '/etc/config/firewall', not '/etc/firewall.user'. Although either works, only the former is used by this page.>></div>"
+	print "<div class=\\"settings-help\\" style=\\"margin-left:0;\\">"
+	print "<h4>@TR<<Firewall>>:</h4>"
+	print "<p>@TR<<firewall_help_general|Here you can forward ports and more. If you wish to manually configure these instead, use '/etc/config/firewall', not '/etc/firewall.user'. Although either works, only the former is used by this page.>></p>"
+	print "<h4>@TR<<Forwarding a port>>:</h4>"
+	print "<p>@TR<<firewall_help_fw_port_example1|If you would like to forward port 999 TCP from the internet to a local computer at 192.168.100.1, it might look like below:>></p>"
+	print "<p>@TR<<firewall_help_fw_port_example|Destination ports: 999 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Target: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: &lt;blank&gt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protocol: TCP>></p>"
+	print "<h4>@TR<<Forwarding a port range>>:</h4>"
+	print "<p>@TR<<firewall_help_fw_portrange|If you would like to forward ports 2000-3000 TCP from the internet to a local computer at 192.168.100.1, it might look like below:>></p>"
+	print "<p>@TR<<firewall_help_fw_portrange_example|Destination ports: 2000-3000 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Target: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: &lt;blank&gt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protocol: TCP>></p>"
+	print "<h4>@TR<<Forwarding a port to a different port>>:</h4>"
+	print "<p>@TR<<firewall_help_fw_example2|If you would like to forward port 8888 TCP from the internet to 192.168.100.1 at port 80, it might look like below:>></p>"
+	print "<p>@TR<<firewall_help_fw_port_example2|Destination ports: 8888 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Target: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: 80 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protocol: TCP>></p>"
+	print "</div>"
 	print end_form(" ");
 }
 EOF
