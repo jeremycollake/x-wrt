@@ -62,7 +62,7 @@ config_rename() {
 		unset "$oldvar"
 	done
 	CONFIG_SECTIONS="$(echo " $CONFIG_SECTIONS " | sed -e "s, $OLD , $NEW ,")"
-
+	
 	[ "$CONFIG_SECTION" = "$OLD" ] && CONFIG_SECTION="$NEW"
 }
 
@@ -77,7 +77,7 @@ config_clear() {
 	CONFIG_SECTIONS="$(echo " $CONFIG_SECTIONS " | sed -e "s, $OLD , ,")"
 	CONFIG_SECTIONS="${SECTION:+$CONFIG_SECTIONS}"
 
-	for oldvar in `set | grep ^CONFIG_${SECTION:+${SECTION}_} | \ 
+	for oldvar in `set | grep ^CONFIG_${SECTION:+${SECTION}_} | \
 		sed -e 's/\(.*\)=.*$/\1/'` ; do 
 		unset $oldvar 
 	done
@@ -88,6 +88,7 @@ config_load() {
 	_C=0
 	CONFIG_SECTIONS=
 	CONFIG_NUM_SECTIONS=0
+	CONFIG_SECTION=
 	
 	[ -e "$file" ] && {
 		. $file
@@ -99,7 +100,7 @@ config_load() {
 config_get() {
 	case "$3" in
 		"") eval "echo \"\${CONFIG_${1}_${2}}\"";;
-		*)  eval "export -- \"$1=\${CONFIG_${2}_${3}}\"";;
+		*)  eval "export $_EXPORT_N_OPTION -- \"$1=\${CONFIG_${2}_${3}}\"";;
 	esac
 }
 
@@ -118,6 +119,11 @@ config_foreach() {
 	for section in ${CONFIG_SECTIONS}; do
 		eval "$function \"\$section\""
 	done
+}
+
+load_modules() {
+	cd /etc/modules.d
+	sed 's/^[^#]/insmod &/' $* | ash 2>&- || :
 }
 
 # used by: /bin/uci
