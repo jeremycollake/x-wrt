@@ -51,8 +51,8 @@ hr,
 
 /* ---  Wrapper around everything  --- */
 #container {
-	width: 770px;
-	margin: 1% auto;
+	width: 90%;
+	margin: 0.8em auto;
 	border: solid 1px #AAAAAA;
 	background-color: White;
 }
@@ -231,7 +231,7 @@ hr,
 /* ---  Footer  --- */
 #footer {
 	position: absolute;
-	top: 5%;
+	top: 3em;
 	z-index: 0;
 	margin-left: 2%;
 }
