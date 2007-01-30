@@ -48,21 +48,21 @@ if [ -n "$FORM_update_check" ]; then
 	! exists "$tmpfile" && echo "doesn't exist" > "$tmpfile"		
 	cat $tmpfile | grep -q "doesn't exist"
 	if [ $? = 0 ]; then
-		revision_text="<em class="warning">ERROR CHECKING FOR UPDATE<em>"
+		revision_text="<em class="warning">@TR<<info_error_checking#ERROR CHECKING FOR UPDATE>><em>"
 	else
 		latest_revision=$(cat $tmpfile)
 		if [ "$this_revision" -lt "$latest_revision" ]; then
-			revision_text="<em class="warning">webif^2 update available: r$latest_revision - <a href=\"http://svn.berlios.de/wsvn/xwrt/${XWRT_BRANCH}/package/webif/?op=log&amp;rev=0&amp;sc=0&amp;isdir=1\" target=\"_blank\">view changes</a></em>"
-			upgrade_button="<input type=\"submit\" value=\" @TR<<Upgrade_Webif#Update/Reinstall Webif>> \"  name=\"install_webif\" />"
+			revision_text="<em class="warning">@TR<<info_update_available#webif^2 update available>>: r$latest_revision - <a href=\"http://svn.berlios.de/wsvn/xwrt/${XWRT_BRANCH}/package/webif/?op=log&amp;rev=0&amp;sc=0&amp;isdir=1\" target=\"_blank\">@TR<<info_view_changes#view changes>></a></em>"
+			upgrade_button="<input type=\"submit\" value=\" @TR<<info_upgrade_webif#Update/Reinstall Webif>> \"  name=\"install_webif\" />"
 		else
-			revision_text="<em>@TR<<already_latest#You have the latest webif^2>>: r$this_revision</em>"
+			revision_text="<em>@TR<<info_already_latest#You have the latest webif^2>>: r$this_revision</em>"
 		fi
 	fi
 	rm -f "$tmpfile"
 fi
 
 if [ -n "$FORM_install_webif" ]; then
-	echo "Please wait, installation may take a minute ... <br />"
+	echo "@TR<<info_wait_install#Please wait, installation may take a minute>> ... <br />"
 	echo "<pre>"
 	ipkg install "${version_url}${package_filename}" -force-overwrite | uniq
 	echo "</pre>"
@@ -143,11 +143,11 @@ cat <<EOF
 <tbody>
 	<tr>
 		<td colspan=2">
-		<input type="submit" value=" @TR<<Check_Upgrade|Check For Webif Update>> " name="update_check" />
+		<input type="submit" value=" @TR<<info_check_update#Check For Webif Update>> " name="update_check" />
 		$upgrade_button		
 		</td>
 	</tr>
-<tr><td colspan="2"><input type="checkbox" $daily_checked value="1" name="check_daily" id="field_check_daily" />@TR<<check_daily_text#Include daily builds when checking for update to webif<sup>2</sup>>></td>
+<tr><td colspan="2"><input type="checkbox" $daily_checked value="1" name="check_daily" id="field_check_daily" />@TR<<info_check_daily_text#Include daily builds when checking for update to webif<sup>2</sup>>></td>
 </tr>
 </tbody>
 </table>
