@@ -1,5 +1,4 @@
 /* color theme: white */
-
 body,
 #header,
 #submenu,
@@ -9,6 +8,7 @@ body,
 #footer,
 #save,
 #save a,
+#save .page-save,
 #save .apply,
 .progressbar-unfilled {
 	color: Black;
