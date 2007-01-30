@@ -1,5 +1,5 @@
  /* color theme: brown */
-#header {
+#header, #header #short-status {
 	color: Black;
 	background-color: #e8ca9e;
 }
