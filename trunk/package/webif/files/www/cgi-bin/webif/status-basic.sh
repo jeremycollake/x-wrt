@@ -39,7 +39,7 @@ df | uniq | awk 'BEGIN { mcount=0 };
 	/\// {
 		filled_caption=$5;
 		print "string|<tr><td><strong>"$6"</strong></td><td>"$1"</td></tr>"
-		print "progressbar|mount_" mcount "|" $3 "KB of " $2 "KB|200|" $5 "|" filled_caption "|"; mcount+=1
+		print "progressbar|mount_" mcount "|" $3 "KB @TR<<mount_of#of>> " $2 "KB|200|" $5 "|" filled_caption "|"; mcount+=1
 	}'
 )
 
