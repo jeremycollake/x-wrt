@@ -1,45 +1,27 @@
- /* color theme: white */
-body {
-	color: Black;
-	background-color: White;
-}
+/* color theme: white */
 
+body,
+#header,
 #submenu,
 #mainmenu,
-#save .page-save, #footer {
-	color: Black;
-	background-color: White;
-}
-
-#save .apply {
-	color: Black;
-	background-color: White;
-}
-
-#mainmenu a,
-#submenu a,
-#save a {
-	color: black;
-}
-
-#mainmenu a:hover,
-#submenu a:hover,
-#mainmenu .selected a,
-#submenu .selected a,
-#save a:hover {
-	background-color: #CCCCCC;
-	color: Black;
-}
-
-#content h3 { background-color: #ccc; }
-
-.progressbar-filled {
-	color: Black;
-	background-color: #ccc;
-}
-
+#mainmenu li a,
+#submenu li a,
+#footer,
+#save,
+#save a,
+#save .apply,
 .progressbar-unfilled {
 	color: Black;
 	background-color: White;
 }
 
+#content h3,
+#mainmenu a:hover,
+#submenu a:hover,
+#mainmenu .selected a,
+#submenu .selected a,
+#save a:hover,
+.progressbar-filled {
+	background-color: #CCCCCC;
+	color: Black;
+}

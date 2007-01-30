@@ -209,7 +209,7 @@ Pragma: no-cache
 			<div style="background: #114488" title="blue" onclick="setActiveStyleSheet('default'); return false;"></div>
 			<div style="background: #2b6d21" title="green" onclick="setActiveStyleSheet('green'); return false;"></div>
 			<div style="background: #e8ca9e" title="brown" onclick="setActiveStyleSheet('brown'); return false;"></div>
-			<div style="background: #e8ca9e" title="white" onclick="setActiveStyleSheet('white'); return false;"></div>
+			<div style="background: #fff" title="white" onclick="setActiveStyleSheet('white'); return false;"></div>
 		</div>
 
 		<script type="text/javascript"> swatch(); </script>
