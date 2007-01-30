@@ -19,15 +19,22 @@
 #   wireless
 #
 
-add_vcfg() {
-echo "
+if ! empty "$FORM_add_vcfg"; then
+	echo "
 config wifi-iface
-        option device   $1
-        option mode     ap
-        option ssid     OpenWrt
-        option hidden   0
+	option device   $FORM_add_vcfg
+	option mode     ap
+	option ssid     OpenWrt
+	option hidden   0
         option encryption none">>/etc/config/wireless
-}
+	FORM_add_vcfg=""
+fi
+
+if ! empty "$FORM_remove_vcfg"; then
+	uci_remove "wireless" "$FORM_remove_vcfg"
+	FORM_remove_vcfg=""
+fi
+
 
 header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onload="modechange()"' "$SCRIPT_NAME"
 config_cb() {
@@ -37,8 +44,6 @@ case "$TYPE" in
                 append DEVICES "$CONFIG_SECTION"
         ;;
         wifi-iface)
-                config_get device "$CONFIG_SECTION" device
-                config_get vifs "$device" vifs
                 append vface "$CONFIG_SECTION" "$N"
         ;;
         interface)
@@ -49,23 +54,6 @@ esac
 config_load network
 NETWORK_DEVICES="none $network_devices"
 config_load wireless
-
-for device in $DEVICES; do
-	for vcfg in $vface; do
-		eval FORM_add_vcfg="\$FORM_add_$vcfg"
-		eval FORM_remove_vcfg="\$FORM_remove_$vcfg"
-		
-		if ! empty "$FORM_add_vcfg"; then
-			add_vcfg $device
-			FORM_add_$vcfg=
-			config_load wireless
-		fi
-		
-		if ! empty "$FORM_add_vcfg"; then
-			uci_remove "wireless" "$vcfg"
-		fi
-	done
-done
 		
 #echo "$DEVICES"
 #echo "vifs $vface"
@@ -106,88 +94,115 @@ fi
 # This is looped for every physical wireless card (wifi-device)
 #
 for device in $DEVICES; do
-	eval FORM_channel="\$FORM_channel_$device"
-	eval FORM_maxassoc="\$FORM_maxassoc_$device"
-	eval FORM_distance="\$FORM_distance_$device"
-if empty "$FORM_submit"; then
-        config_get country $device country
-        config_get FORM_channel $device channel
-        config_get FORM_maxassoc $device maxassoc
-        config_get FORM_distance $device distance
-fi
+	if empty "$FORM_submit"; then
+		config_get mode $device mode
+	        config_get country $device country
+	        config_get FORM_channel $device channel
+	        config_get FORM_maxassoc $device maxassoc
+	        config_get FORM_distance $device distance
+	else
+		config_get country $device country
+		eval FORM_mode="\$FORM_mode_$device"
+		eval FORM_channel="\$FORM_channel_$device"
+		eval FORM_maxassoc="\$FORM_maxassoc_$device"
+		eval FORM_distance="\$FORM_distance_$device"
+	fi
         append forms "start_form|@TR<<Wireless Adapter >> $device @TR<< Configuration>>" "$N"
+        
+        mode_fields="field|@TR<<Mode>>
+                select|mode_$device|$FORM_mode
+        	option|11b|@TR<<802.11B>>
+        	option|11bg|@TR<<802.11B/G>>
+        	option|11g|@TR<<802.11G>>
+        	option|11a|@TR<<802.11A>>"
+        append forms "$mode_fields" "$N"
         
         # Initialize channels based on country code
         # (--- hardly a switch here ---)
         case "$country" in
-                All|all|ALL) CHANNELS="1 2 3 4 5 6 7 8 9 10 11 12 13 14"; CHANNEL_MAX=14 ;;
-                *) CHANNELS="1 2 3 4 5 6 7 8 9 10 11"; CHANNEL_MAX=11 ;;
+                All|all|ALL) 
+                	    BGCHANNELS="1 2 3 4 5 6 7 8 9 10 11 12 13 14"; CHANNEL_MAX=14
+                	    ACHANNELS="36 40 42 44 48 50 52 56 58 60 64 149 152 153 157 160 161 156";;
+                *) 
+                   BGCHANNELS="1 2 3 4 5 6 7 8 9 10 11"; CHANNEL_MAX=11
+                   ACHANNELS="36 40 42 44 48 50 52 56 58 60 64 149 152 153 157 160 161 156";;
         esac
-        F_CHANNELS="field|@TR<<Channel>>
-                select|channel_${device}|$FORM_channel
+        
+        BG_CHANNELS="field|@TR<<Channel>>|bgchannelform_$device|hidden
+                select|bgchannel_$device|$FORM_channel
                 option|0|@TR<<Auto>>"
-        for ch in $CHANNELS; do
-                F_CHANNELS="${F_CHANNELS}
+        for ch in $BGCHANNELS; do
+                BG_CHANNELS="$BG_CHANNELS
                         option|$ch"
         done
-
+        
+        A_CHANNELS="field|@TR<<Channel>>|achannelform_$device|hidden
+                select|achannel_$device|$FORM_channel"
+        for ch in $ACHANNELS; do
+                A_CHANNELS="$A_CHANNELS
+                        option|$ch"
+        done
+	append forms "$BG_CHANNELS" "$N"
+	append forms "$A_CHANNELS" "$N"
+	
         maxassoc="field|@TR<<Max Associated Clients (Default 128)>>
                 text|maxassoc_${device}|$FORM_maxassoc"
 
         distance="field|@TR<<Wireless Distance (In Meters)>>
                 text|distance_${device}|$FORM_distance"
 
-        append forms "$F_CHANNELS" "$N"
+	add_vcfg="string|<tr><td><a href="$SCRIPT_NAME?add_vcfg=$device">@TR<<Add Virtual Interface>></a></td></tr>
+		string|</tbody></table>"
+
         append forms "$maxassoc" "$N"
         append forms "$distance" "$N"
         append forms "helpitem|Wireless Distance" "$N"
         append forms "helptext|Helptext Wireless Distance#You must enter a number that is double the distance of your longest link." "$N"
-        append forms "submit|add_$vcfg|@TR<<Add Virtual Adaptor>>"
+        append forms "$add_vcfg" "$N"
         append forms "end_form" "$N"
         
         for vcfg in $vface; do
        		config_get FORM_device $vcfg device
        		if [ "$FORM_device" = "$device" ]; then
-			eval FORM_radius_key="\$FORM_radius_key_$vcfg"
-			eval FORM_radius_ipaddr="\$FORM_radius_ipaddr_$vcfg"
-			eval FORM_wpa_psk="\$FORM_wpa_psk_$vcfg"
-			eval FORM_encryption="\$FORM_encryption_$vcfg"
-			eval FORM_mode="\$FORM_mode_$vcfg"
-			eval FORM_server="\$FORM_server_$vcfg"
-			eval FORM_port="\$FORM_port_$vcfg"
-			eval FORM_hidden="\$FORM_broadcast_$vcfg"
-			eval FORM_isolate="\$FORM_isolate_$vcfg"
-			eval FORM_key="\$FORM_key_$vcfg"
-			eval FORM_key1="\$FORM_key1_$vcfg"
-			eval FORM_key2="\$FORM_key2_$vcfg"
-			eval FORM_key3="\$FORM_key3_$vcfg"
-			eval FORM_key4="\$FORM_key4_$vcfg"
-			eval FORM_broadcast="\$FORM_broadcast_$vcfg"
-			eval FORM_ssid="\$FORM_ssid_$vcfg"
-			eval FORM_network="\$FORM_network_$vcfg"
-			
-			
-       		if empty "$FORM_submit"; then
-	        	config_get FORM_network $vcfg network
-	        	config_get FORM_mode $vcfg mode
-	        	config_get FORM_ssid $vcfg ssid
-	        	config_get FORM_encryption $vcfg encryption
-	        	config_get FORM_key $vcfg key
-	        	config_get FORM_key1 $vcfg key1
-	        	config_get FORM_key2 $vcfg key2
-	        	config_get FORM_key3 $vcfg key3
-	        	config_get FORM_key4 $vcfg key4
-	        	config_get FORM_server $vcfg server
-	        	config_get FORM_port $vcfg port
-	        	config_get FORM_hidden $vcfg hidden
-	        	config_get FORM_isolate $vcfg isolate
-		fi
+       			if empty "$FORM_submit"; then
+	        		config_get FORM_network $vcfg network
+	        		config_get FORM_mode $vcfg mode
+	        		config_get FORM_ssid $vcfg ssid
+	        		config_get FORM_encryption $vcfg encryption
+	        		config_get FORM_key $vcfg key
+	        		config_get FORM_key1 $vcfg key1
+	        		config_get FORM_key2 $vcfg key2
+	        		config_get FORM_key3 $vcfg key3
+	        		config_get FORM_key4 $vcfg key4
+	        		config_get FORM_server $vcfg server
+	        		config_get FORM_port $vcfg port
+	        		config_get FORM_hidden $vcfg hidden
+	        		config_get FORM_isolate $vcfg isolate
+			else
+				eval FORM_radius_key="\$FORM_radius_key_$vcfg"
+				eval FORM_radius_ipaddr="\$FORM_radius_ipaddr_$vcfg"
+				eval FORM_wpa_psk="\$FORM_wpa_psk_$vcfg"
+				eval FORM_encryption="\$FORM_encryption_$vcfg"
+				eval FORM_mode="\$FORM_mode_$vcfg"
+				eval FORM_server="\$FORM_server_$vcfg"
+				eval FORM_port="\$FORM_port_$vcfg"
+				eval FORM_hidden="\$FORM_broadcast_$vcfg"
+				eval FORM_isolate="\$FORM_isolate_$vcfg"
+				eval FORM_key="\$FORM_key_$vcfg"
+				eval FORM_key1="\$FORM_key1_$vcfg"
+				eval FORM_key2="\$FORM_key2_$vcfg"
+				eval FORM_key3="\$FORM_key3_$vcfg"
+				eval FORM_key4="\$FORM_key4_$vcfg"
+				eval FORM_broadcast="\$FORM_broadcast_$vcfg"
+				eval FORM_ssid="\$FORM_ssid_$vcfg"
+				eval FORM_network="\$FORM_network_$vcfg"
+			fi
 			append forms "start_form|@TR<<Wireless Virtual Adaptor Configuration for Wireless Card >> $FORM_device" "$N"
 			network="field|@TR<<Network>>
-	        	        select|network_${vcfg}|$FORM_network
+	        	        select|network_$vcfg|$FORM_network
 	        	        $network_options"
 			append forms "$network" "$N"
-			
+
 			mode_fields="field|@TR<<WLAN Mode#Mode>>
 			select|mode_$vcfg|$FORM_mode
 			option|ap|@TR<<Access Point>>
@@ -201,7 +216,7 @@ fi
 				option|0|@TR<<Show>>
 				option|1|@TR<<Hide>>"
 			append forms "$hidden" "$N"
-			
+
 			ssid="field|@TR<<ESSID>>|ssid_$vcfg|hidden
 				text|ssid_$vcfg|$FORM_ssid"
 			append forms "$ssid" "$N"
@@ -209,7 +224,7 @@ fi
 			bssid="field|@TR<<BSSID>>|bssid_$vcfg|hidden
 				text|bssid_$vcfg|$FORM_bssid"
 			append forms "$bssid" "$N"
-			
+
 			eval FORM_wep_passphrase="\$FORM_wep_passphrase_$vcfg"
 			eval FORM_generate_wep_128="\$FORM_generate_wep_128_$vcfg"
 			eval FORM_generate_wep_40="\$FORM_generate_wep_40_$vcfg"
@@ -234,7 +249,7 @@ fi
 					FORM_encryption="wep"
 				fi
 			}
-			
+
 			! empty "$FORM_generate_wep_40" &&
 			{
 				FORM_key1=""
@@ -292,7 +307,7 @@ fi
 				radio|key_$vcfg|$FORM_key|4
 				text|key4_$vcfg|$FORM_key4|<br />"
 			append forms "$wep" "$N"
-			
+
 			install_nas_button="field|@TR<<NAS Package>>|install_nas_$vcfg|hidden"
 			if ! equal "$nas_installed" "1"; then
 				install_nas_button="$install_nas_button
@@ -302,7 +317,7 @@ fi
 				install_nas_button="$install_nas_button
 				string|@TR<<Installed>>."
 			fi
-			
+
 			wpa="field|WPA @TR<<PSK>>|wpapsk_$vcfg|hidden
 				password|wpa_psk_$vcfg|$FORM_key
 				field|@TR<<RADIUS IP Address>>|radius_ip_$vcfg|hidden
@@ -311,7 +326,7 @@ fi
 				text|radius_key_$vcfg|$FORM_key
 				$install_nas_button"
 			append forms "$wpa" "$N"
-			
+
 			javascript_forms="
 				v = isset('encryption_$vcfg','wep');
 				set_visible('wep_key_1_$vcfg', v);
@@ -343,6 +358,10 @@ fi
 						document.getElementById('encryption_$vcfg').value = 'off';
 					}
 				}
+				v = (isset('mode_$device','11b') || isset('mode_$device','11bg') || isset('mode_$device','11g'));
+				set_visible('bgchannelform_$device', v);
+				v = (isset('mode_$device','11a'));
+				set_visible('achannelform_$device', v);
 				v = (!isset('mode_$vcfg','wds'));
 				set_visible('ssid_$vcfg', v);
 				set_visible('broadcast_$vcfg', v);
@@ -357,9 +376,11 @@ fi
 				set_visible('radiuskey_$vcfg', v);
 				set_visible('radius_ip_$vcfg', v);"
 			append js "$javascript_forms" "$N"
-			
+			add_vcfg="string|<tr><td><a href="$SCRIPT_NAME?add_vcfg=$device">@TR<<Add Virtual Interface>></a></td></tr>
+			string|</tbody></table>"
 			append forms "helpitem|Encryption Type" "$N"
 			append forms "helptext|HelpText Encryption Type#WPA (RADIUS) is only supported in Access Point mode. WPA (PSK) does not work in Ad-Hoc mode." "$N"
+			append forms "remove_vcfg" "$N"
 			append forms "end_form" "$N"
 		fi
 	done
@@ -398,7 +419,7 @@ EOF
 				uci_set "wireless" "$device" "channel" "$FORM_channel"
 				uci_set "wireless" "$device" "maxassoc" "$FORM_maxassoc"
 				uci_set "wireless" "$device" "distance" "$FORM_distance"
-				
+
 				for vcfg in $vface; do
      		  			config_get FORM_device $vcfg device
      		  			if [ "$FORM_device" = "$device" ]; then
