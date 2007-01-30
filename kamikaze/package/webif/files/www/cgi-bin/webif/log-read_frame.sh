@@ -21,9 +21,9 @@ colorize_script=""
 . /usr/lib/webif/webif.sh
 . /etc/runsyslogd.conf
 uci_load "syslogd"
-prefix=$CONFIG_general_prefix)
-LOG_TYPE=$CONFIG_general_type)
-LOG_FILE=$CONFIG_general_file)
+prefix="$CONFIG_general_prefix"
+LOG_TYPE="$CONFIG_general_type"
+LOG_FILE="$CONFIG_general_file"
 if equal $LOG_TYPE "file" ; then
 	LOG_FILE=${LOG_FILE:-$DEFAULT_log_file}
 	LOGREAD="cat "$LOG_FILE
