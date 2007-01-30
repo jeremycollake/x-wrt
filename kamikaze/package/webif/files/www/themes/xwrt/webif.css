@@ -168,10 +168,13 @@ hr,
 }
 
 #content .settings {
-	margin-bottom: 1.5em;
 	margin-left: 1%;
 }
 
+#content .settings .clearfix {
+	clear: both;
+	margin-bottom: 1em;
+}
 #content .settings-content {
 	position: relative;
 	float: left;
