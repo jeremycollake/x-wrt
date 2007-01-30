@@ -7,7 +7,7 @@ function start_form(title, field_opts, field_opts2) {
 function end_form(form_help, form_help_link) {
 	print "</div>"
 	if (form_help != "") print "<blockquote class=\"settings-help\"><h3><strong>@TR<<Short help>>:</strong></h3>" form_help form_help_link "</blockquote>"
-	print "<div style=\"clear:both\"></div></div>"
+	print "<div class=\"clearfix\">&nbsp;</div></div>"
 }
 
 function textinput(name, value) {
