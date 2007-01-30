@@ -53,7 +53,6 @@ hr,
 #container {
 	width: 770px;
 	margin: 1% auto;
-	min-height: 100%;
 	border: solid 1px #AAAAAA;
 	background-color: White;
 }
