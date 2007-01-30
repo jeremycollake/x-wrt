@@ -10,7 +10,7 @@ if empty "$FORM_submit" ; then
 	FORM_size=${FORM_size:-$DEFAULT_log_size}
 	FORM_type="$CONFIG_general_type"
 	FORM_type=${FORM_type:-$DEFAULT_log_type}
-	FORM_ipaddr="$CONFIG_general_ipaddr)}"
+	FORM_ipaddr="$CONFIG_general_ipaddr"
 	if equal $FORM_ipaddr 0 ; then
 		FORM_ipaddr=""
 	fi
