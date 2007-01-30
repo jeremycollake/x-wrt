@@ -48,14 +48,14 @@ if [ -n "$FORM_update_check" ]; then
 	! exists "$tmpfile" && echo "doesn't exist" > "$tmpfile"		
 	cat $tmpfile | grep -q "doesn't exist"
 	if [ $? = 0 ]; then
-		revision_text="<div id=\"update-error\">ERROR CHECKING FOR UPDATE</div>"
+		revision_text="<em class="warning">ERROR CHECKING FOR UPDATE<em>"
 	else
 		latest_revision=$(cat $tmpfile)
 		if [ "$this_revision" -lt "$latest_revision" ]; then
-			revision_text="<div id=\"update-available\">webif^2 update available: r$latest_revision - <a href=\"http://svn.berlios.de/wsvn/xwrt/${XWRT_BRANCH}/package/webif/?op=log&amp;rev=0&amp;sc=0&amp;isdir=1\" target=\"_blank\">view changes</a></div>"
+			revision_text="<em class="warning">webif^2 update available: r$latest_revision - <a href=\"http://svn.berlios.de/wsvn/xwrt/${XWRT_BRANCH}/package/webif/?op=log&amp;rev=0&amp;sc=0&amp;isdir=1\" target=\"_blank\">view changes</a></em>"
 			upgrade_button="<input type=\"submit\" value=\" @TR<<Upgrade_Webif#Update/Reinstall Webif>> \"  name=\"install_webif\" />"
 		else
-			revision_text="<div id=\"update-unavailable\">@TR<<already_latest#You have the latest webif^2>>: r$this_revision</div>"
+			revision_text="<em>@TR<<already_latest#You have the latest webif^2>>: r$this_revision</em>"
 		fi
 	fi
 	rm -f "$tmpfile"

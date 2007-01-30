@@ -1,124 +1,29 @@
- /* color theme navy blue */
-
-#header
-{
-	color: #CCC;
+ /* color theme: brown */
+#header {
+	color: #ccc;
 	background-color: #292155;
 }
 
-#update-available
-{
-	color: #FF0000;
-}
-
-#update-unavailable
-{
-	color: #000000;
-}
-
-#update-error
-{
-	color: #FF0000;
-}
-
-.openwrt-title
-{
-	color: #FFF;
-}
-
-#header-title,
-#mainmenu,
-#mainmenu a,
-#submenu,
-#submenu a,
-#save a,
-#save .page-save,
 #submenu,
 #mainmenu,
-#save div
-{
-	color: #fff;
-	background-color: #292155;
-}
+#save .page-save, #footer { background-color: #292155; }
+
+#save .apply { background-color: #292155; }
 
 #mainmenu a:hover,
 #submenu a:hover,
-#save a:hover,
 #mainmenu .selected a,
-#submenu .selected a
-{
-	background-color: #395155;
-}
+#submenu .selected a,
+#save a:hover { background-color: #395155; }
 
-#content .settings-block .settings-block-title h2
-{
-	color: #1b205c;
-}
+#content h3 { background-color: #CCCCCC; }
 
-#content .settings-block
-{
-	color: #000;
-	background-color: #FFF;
-}
-
-#content .settings-title
-{	
-	background-color: #CCC;
-}
-
-#content .settings
-{
-	color: #000;
-}
-
-#save .page-save
-{
-	background-color: #FFF;
-}
-
-.progressbar-title
-{
-
-}
-
-.progressbar-whole
-{
-
-}
-
-.progressbar-filled
-{
-	color: #FFFFFF;
+.progressbar-filled {
+	color: White;
 	background-color: #2b1b9f;
 }
 
-.progressbar-unfilled
-{
-	color: #000;
-	background-color: #000;
-}
-
-.kb
-{
-	color: #222;
-}
-
-.mount-target
-{
-	color: #222;
-}
-
-.warning
-{
-	color: red;
-}
-
-#short-status
-{
-	color: #CCC;	
-}
-
-#footer-logo
-{
-	color: #FFF;
+.progressbar-unfilled {
+	color: Black;
+	background-color: Black;
 }

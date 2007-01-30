@@ -140,7 +140,7 @@ header() {
 	_webif_rev=$(cat /www/.version)
 	_head="${3:+<div class=\"settings-block-title\"><h2>$3$_saved_title</h2></div>}"
 	_form="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />}"
-	_savebutton="${5:+<p><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></p>}"	
+	_savebutton="${5:+<div class=\"page-save\"><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></div>}"	
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}
 
@@ -171,10 +171,13 @@ Pragma: no-cache
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-<?xml version="1.0" encoding="@TR<<Encoding|ISO-8859-1>>"?>
 	<head>
 	<title>$_firmware_name @TR<<Administrative Console>></title>
 		<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
+		<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_brown.css" title="brown" />
+		<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_green.css" title="green" />
+		<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_navyblue.css" title="navyblue" />
+		<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_black.css" title="black" />
 		<link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css" />
 		<link rel="stylesheet" type="text/css" href="/themes/active/waitbox.css" />
 		<!--[if lt IE 7]>
@@ -183,6 +186,7 @@ Pragma: no-cache
 		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
 		<meta http-equiv="expires" content="-1" />
 		<script type="text/javascript" src="/js/waitbox.js"></script>
+		<script type="text/javascript" src="/js/styleswitcher.js"></script>
 	</head>
 	<body $4>
 
@@ -198,13 +202,12 @@ Pragma: no-cache
 		<div id="categories">$_categories</div>
 		<div id="subcategories">$_subcategories</div>
 		$_form
-		<div>
-			<div class="swatch" style="background: #000000"></div>
-			<div class="swatch" style="background: #192a65"></div>
-			<div class="swatch" style="background: #114488"></div>
-			<div class="swatch" style="background: #2b6d21"></div>
-			<div class="swatch" style="background: #e8ca9e"></div>
-			<div class="swatch" style="background: #ffffff"></div>
+		<div id="colorswitcher">
+			<div style="background: #000000" title="black" onclick="setActiveStyleSheet('black'); return false;"></div>
+			<div style="background: #192a65" title="navyblue" onclick="setActiveStyleSheet('navyblue'); return false;"></div>
+			<div style="background: #114488" title="blue" onclick="setActiveStyleSheet('default'); return false;"></div>
+			<div style="background: #2b6d21" title="green" onclick="setActiveStyleSheet('green'); return false;"></div>
+			<div style="background: #e8ca9e" title="brown" onclick="setActiveStyleSheet('brown'); return false;"></div>
 		</div>
 
 		<script type="text/javascript"> swatch(); </script>
@@ -268,29 +271,23 @@ footer() {
 	_endform=${_savebutton:+</form>}
 	cat <<EOF
 			</div>
-			<hr width="40%" />
 		</div>
 		<br />
-		<div id="save">
-			<div class="page-save">
-				<div>
-					$_savebutton
-				</div>
-			</div>
-			<div class="apply">
-				<div>
-					<a href="config.sh?mode=save&amp;cat=$_category&amp;prev=$SCRIPT_NAME" rel="lightbox">@TR<<Apply Changes>> &laquo;</a><br />
-					<a href="config.sh?mode=clear&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Clear Changes>> &laquo;</a><br />
-					<a href="config.sh?mode=review&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Review Changes>> $_changes &laquo;</a>
-
-				</div>
-			</div>			
-		</div>	
+		<fieldset id="save">
+		<legend><strong>Proceed Changes</strong></legend>
+			$_savebutton
+			<ul class="apply">
+				<li><a href="config.sh?mode=save&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Apply Changes>> &laquo;</a></li>
+				<li><a href="config.sh?mode=clear&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Clear Changes>> &laquo;</a></li>
+				<li><a href="config.sh?mode=review&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Review Changes>> $_changes &laquo;</a></li>
+			</ul>
+		</fieldset>	
 		$_endform
-	<div id="footer-logo">
-	X-Wrt
-	<div id="footer-sublogo">@TR<<making_usable#End user extensions for OpenWrt>></div>
-	</div>			
+		<hr />
+		<div id="footer">
+			<h3>X-Wrt</h3>
+			<em>@TR<<making_usable#End user extensions for OpenWrt>></em>
+		</div>
     </div>
 </body>
 </html>

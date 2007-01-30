@@ -196,7 +196,7 @@ end_form|
 EOF
 
 display_form <<EOF
-start_form|@TR<<Upload Configuration>>
+start_form|@TR<<Restore Configuration>>
 EOF
 
 cat<<EOF
@@ -206,7 +206,7 @@ cat<<EOF
 	<table style="width:80%;margin-left:0.5em">
 	<tbody>
 		<tr>
-			<td style="width:50%">@TR<<Saved config.tgz file:>></td>
+			<td style="width:50%">@TR<<Select saved config.tgz>></td>
 			<td>
 				<input type="file" name="configfile" /><br />
 				<input type="submit" name="submit" value="@TR<<Submit>>" />
