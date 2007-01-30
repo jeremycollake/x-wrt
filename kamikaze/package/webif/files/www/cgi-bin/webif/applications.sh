@@ -86,13 +86,37 @@ cat <<EOF
 <html>
 <head>
 $HEADER
+<script type="text/javascript">
+<!--
+function confirmM() {  
+ if (window.confirm("This package is not installed. \n\nDo you want to install it now?")){  
+  window.location="app.hydra.sh?package=install"
+} }  
+// --></script>
+
 </head>
 
 <body>
 <center>
 <table width="98%" border="0" cellspacing="1" >
 <tr class="appindex">
-<td width="20%"><center><a href="" rel="b1"><img src="/images/app.2.jpg" border="0" $HighLight ></a><br><font color=silver>Hydra</font></center></td>
+
+EOF
+
+#--------------------------------------
+if  [ -s "/usr/sbin/hydra" ]  ; then 
+
+#<<---If package is already installed--->>
+echo "<td width='20%'><center><a href='app.hydra.sh' rel='b1'><img src='/images/app.2.jpg' border='0'></a><br>Hydra</center></td>"
+     
+else
+
+#<<---If package is NOT installed--->>
+echo "<td width='20%'><center><a href='javascript:confirmM()' rel='b1'><img src='/images/app.2.jpg' border='0'  $HighLight ><a><br><font color=silver>Hydra</font></center></td>"
+
+fi
+#-------------------------------------------
+cat <<EOF
 <td width="20%">&nbsp;</td>
 <td width="20%">&nbsp;</td>
 <td width="20%">&nbsp;</td>
@@ -125,17 +149,11 @@ $HEADER
 
 <script type="text/javascript">
 <!--
-
-function confirmModifications() 
- {  
- if (window.confirm("This package is not installed. \n\nDo you want to install it now?"))
-  {  
+function confirmModifications() {  
+ if (window.confirm("This package is not installed. \n\nDo you want to install it now?")){  
   window.location="app.samba.sh?package=install"
-  } else {  
-  } 
-  }  
-// --> 
-</script>
+} }  
+// --></script>
 </head>
 
 <body>

@@ -22,15 +22,60 @@
 #   and probably more efficient to use awk. Maybe recode someday, but
 #   why fix what's isn't broken...
 #
-
 . "/usr/lib/webif/webif.sh"
 
 header "Status" "Site Survey" "<img src=/images/wscan.jpg align=absmiddle>&nbsp;@TR<<Wireless survey>>"
-?>
 
-<?
 
 if is_package_installed "wl" ; then #--->[ -s "/usr/sbin/wl" ] ||
+
+if [ "$FORM_joinwifi" = "1" ]; then
+. "/lib/config/uci.sh"
+
+config_cb() {
+config_get TYPE "$CONFIG_SECTION" TYPE
+case "$TYPE" in
+        wifi-iface)
+                config_get device "$CONFIG_SECTION" device
+                config_get vifs "$device" vifs
+                append vface "$CONFIG_SECTION" "$N"
+        ;;
+esac
+}
+
+config_load wireless
+
+for vcfg in $vface; do
+config_get FORM_device $vcfg device
+
+	if [ "$FORM_device" = "$device" ]; then
+		uci_set "wireless" "$vcfg" "network" "lan"
+		uci_set "wireless" "$vcfg" "mode" "sta"
+		uci_set "wireless" "$vcfg" "ssid" "$FORM_wifi"
+			if [ "$FORM_wepkey" != "" ]; then
+				uci_set "wireless" "$vcfg" "encryption" "$FORM_keytype"
+				uci_set "wireless" "$vcfg" "key" "$FORM_wepkey"
+			else
+				uci_set "wireless" "$vcfg" "encryption" "none"
+				uci_set "wireless" "$vcfg" "key" ""
+			fi
+	fi
+done
+uci_commit "wireless"
+
+#iwconfig wl0 mode "repeater"
+#iwconfig wl0 ESSID "$FORM_wifi"
+
+cat <<EOF
+<meta http-equiv="refresh" content="4;url=reboot.sh?reboot=do">
+<br>
+<b>Successfully joined "$FORM_wifi" network. Router must reboot ...<b>
+EOF
+
+footer
+exit
+
+fi
 
 MAX_TRIES=4
 MAX_CELLS=100
@@ -73,7 +118,39 @@ rm $tempscan
 #--------------------------------------------
 current=1
 
-echo "<br><a href='' onClick='document.location.reload(true)'>@TR<<Re-scan>></a><br><br><table width="98%" border="0" cellspacing="1" bgcolor="#999999" >"
+echo "<script type="text/javascript" src="/js/window.js">"
+echo "</script>"
+
+cat <<EOF
+<script>
+function java1(target) {
+document.wepkeyform.wifi.value = target
+}
+
+</script>
+
+<div id="dwindow" style="position:absolute;background-color:#EBEBEB;cursor:hand;left:0px;top:0px;display:none" onMousedown="initializedrag(event)" onMouseup="stopdrag()" onSelectStart="return false">
+<table width="100%" border="0" ><tr bgcolor=navy><td><div align="right"><img src="/images/close.gif" onClick="closeit()"></div></td>
+</tr></table>
+<table width="100%" height="100%" border="0" cellspacing="1" bgcolor="#333333">
+<tr height="1"><td bgcolor="#FFFFFF"><br>
+<form action='$SCRIPT_NAME' method='post' name='wepkeyform'>
+<table width="100%" border="0" >
+<tr><td><img src="/images/wep.gif"></td>
+<td><input type="text" name="wepkey">&nbsp;&nbsp;<input name="image" TYPE="image" style='border: 1px solid #000000; font-size:8pt;' SRC="/images/join.gif"> 
+</td></tr><tr height="1"><td>Key:</td>
+<td><select name="keytype">
+<option value="wep" selected>WEP</option>
+<option value="psk">PSK</option>
+<option value="psk2">PSK2</option>
+<option value="wpa">WPA</option>
+<option value="wpa2">WPA2</option>
+</select><input type="hidden" name="wifi" value=""><input type="hidden" name="joinwifi" value="1"></td>
+</tr></table></form></td></tr></table></div>
+
+
+EOF
+echo "<br><a href='$SCRIPT_NAME'>@TR<<Re-scan>></a><br><br><table width="98%" border="0" cellspacing="1" bgcolor="#999999" >"
 echo "<tr bgcolor="#999999" class="wifiscantitle" >"
 echo "<td width='32'>@TR<<Signal>>/</td>"
 echo "<td width='32'>@TR<<Noise>></td>"
@@ -190,7 +267,16 @@ fi
 
 echo "<td><center>$Wimg</center></td>"
 echo "<td><center>"
-echo "<input type='submit' style='border: 1px solid #000000; font-size:8pt; ' name='joinwifi' value='@TR<<Join>>' disabled>"
+
+if  [ "$SEC" == "ESS WEP" ] ; then
+cat <<EOF
+<a href="javascript:loadwindow('$SCRIPT_NAME/?wep=1&ssid=$SSID',300,100)"><img src="/images/join.gif" border="1" style="border: 1px #000000" onclick="javascript:java1('$SSID')"></a>
+EOF
+
+else
+echo "<form action='$SCRIPT_NAME' method='post'><input type="hidden" name='wifi' value='$SSID'><input type='hidden' name='joinwifi' value='1'><input TYPE="image" SRC="/images/join.gif" style='border: 1px solid #000000; font-size:8pt; ' ></form>"
+fi
+
 echo "</center></td></tr>"
 
 fi
@@ -202,7 +288,7 @@ done < $tempfile
 
 rm $tempfile
 #rm $tempfile2
-echo "</table><br><a href='' onClick='document.location.reload(true)'>@TR<<Re-scan>></a>"
+echo "</table><br><a href='$SCRIPT_NAME'>@TR<<Re-scan>></a>"
 fi
 else
 
