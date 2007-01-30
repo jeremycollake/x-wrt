@@ -2,7 +2,7 @@ BEGIN {
 	gsub(/^\/\//, "/", path)
 	start_form("@TR<<Filesystem Browser>>: " path);
 	print "<table>"
-	print "<tr><td class=\"c1\">&nbsp;</td><td colspan=\"2\"><a href=\"" url "?path=/\">@TR<<Root>></a></td></tr>"
+	print "<tr><td style=\"width:8em\">&nbsp;</td><td><a href=\"" url "?path=/\">@TR<<Root>></a></td><td style=\"width:8em\" colspan="2"></td></tr>\n"
 }
 
 {
@@ -15,9 +15,9 @@ BEGIN {
 
 type == "d" {
 	if (fname == "..") {
-		line = "<tr><td class=\"c1\">&nbsp;</td><td colspan=\"2\"><a href=\"" url "?path=" path "/..\">@TR<<Parent Directory>></a></td></tr>"
+		line = "<td>&nbsp;</td><td colspan=\"3\"><a href=\"" url "?path=" path "/..\">@TR<<Parent Directory>></a></td>"
 	} else {
-		line = "<tr><td class=\"c1\">@TR<<Directory>>:</td><td class=\"fname\">"
+		line = "<td><b>@TR<<Directory>>:</b></td><td colspan=\"3\" style=\"padding-right:3em\">"
 		if ((fname == "rom") || \
 			(fname == "bin") || \
 			(fname == "sbin") || \
@@ -25,17 +25,17 @@ type == "d" {
 			(fname == "proc") || \
 			(fname == "dev")) line = line fname
 		else line = line "<a href=\"" url "?path=" path "/" fname "\">" fname "</a>"
-		line = line "</td></tr>\n"
+		line = line "</td>"
 	}
 }
 
 type == "-" {
-	line = "<tr> <td class=\"c1\">@TR<<File>>:</td> <td class=\"fname\">" fname "</td> <td class=\"fsize\">" fsize "</td> <td class=\"c2\"><a href=\"" url "?path=" path "&edit=" fname "\">@TR<<Edit>></a></td> </tr>\n"
+	line = "<td><b>@TR<<File>>:</b></td><td style=\"padding-right:3em\">" fname "</td><td>" fsize "</td><td><a href=\"" url "?path=" path "&amp;edit=" fname "\">@TR<<Edit>></a></td>"
 }
 
 (fname != ".") && (fname != "") {
-	line = line "</tr>"
-	out[type] = out[type] line
+ 	line = "<tr>" line "</tr>\n"
+ 	out[type] = out[type] line
 }
 
 END {

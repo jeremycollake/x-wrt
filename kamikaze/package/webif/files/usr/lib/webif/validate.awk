@@ -43,10 +43,10 @@ $1 == "wep" {
 		verr = "@TR<<Invalid value>>"
 	} else if ((length(value) != 0) && (length(value) != 10) && (length(value) != 26)) {
 		valid = 0
-		verr = "Invalid key length"
+		verr = "@TR<<Invalid key length>>"
 	} else if (value ~ /0$/) {
 		valid = 0
-		verr = "Key must not end with '0'"
+		verr = "@TR<<Key must not end with '0'>>"
 	}
 }
 
@@ -93,15 +93,15 @@ $1 == "wpapsk" {
 	valid_type = 1
 	if (length(value) > 64) {
 		valid = 0
-		verr = "String too long"
+		verr = "@TR<<String too long>>"
 	}
 	if ((length(value) != 0) && (length(value) < 8)) {
 		valid = 0
-		verr = "String too short"
+		verr = "@TR<<String too short>>"
 	}
 	if ((length(value) == 64) && (value ~ /[^0-9a-fA-F]/)) {
 		valid = 0
-		verr = "Invalid hex key"
+		verr = "@TR<<Invalid hex key>>"
 	}
 }
 
@@ -111,15 +111,15 @@ valid == 1 {
 	n = split($4, options, " ")
 	for (i = 1; (valid == 1) && (i <= n); i++) {
 		if (options[i] == "required") {
-			if (value == "") { valid = 0; verr = "No value entered" }
+			if (value == "") { valid = 0; verr = "@TR<<No value entered>>" }
 		} else if ((options[i] ~ /^min=/) && (value != "")) {
 			min = options[i]
 			sub(/^min=/, "", min)
 			min = int(min)
 			if ($1 == "int") {
-				if (value < min) { valid = 0; verr = "Value too small (minimum: " min ")" }
+				if (value < min) { valid = 0; verr = "@TR<<Value too small>> (@TR<<minimum>>: " min ")" }
 			} else if ($1 == "string") {
-				if (length(value) < min) { valid = 0; verr = "Value too small (minimum length: " min ")"}
+				if (length(value) < min) { valid = 0; verr = "@TR<<String too short>> (@TR<<minimum length>>: " min ")"}
 			}
 		} else if ((options[i] ~ /^max=/) && (value != ""))  {
 			max = options[i]
@@ -128,7 +128,7 @@ valid == 1 {
 			if ($1 == "int") {
 				if (value > max) { valid = 0; verr = "@TR<<Value too large>> (@TR<<maximum>>: " max ")" }
 			} else if ($1 == "string") {
-				if (length(value) > max) { valid = 0; verr = "@TR<<String too short>> (@TR<<maximum>>: " max ")" }
+				if (length(value) > max) { valid = 0; verr = "@TR<<String too long>> (@TR<<maximum length>>: " max ")" }
 			}
 		} else if ((options[i] == "nodots") && ($1 == "hostname")) {
 			if (value ~ /\./) {
