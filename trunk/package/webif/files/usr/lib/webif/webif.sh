@@ -42,19 +42,19 @@ subcategories() {
 
 show_validated_logo() {
 	echo "<br /><br />
-		<p id=\"validated-text\">This page passed W3C XHTML validation tests.</p>"
+		<p id=\"validated-text\">@TR<<page_w3c_valid#This page passed W3C XHTML validation tests.>></p>"
 }
 
 ShowWIPWarning() {
-	echo "<div class=\"warning\">WARNING: This page is incomplete and may not work correctly, or at all.</div>"
+	echo "<div class=\"warning\">@TR<<big_warning#WARNING>>: @TR<<page_incomplete#This page is incomplete and may not work correctly, or at all.>></div>"
 }
 
 ShowUntestedWarning() {
-	echo "<div class=\"warning\">WARNING: This page is untested and may or may not work correctly.</div>"
+	echo "<div class=\"warning\">@TR<<big_warning#WARNING>>: @TR<<page_untested#This page is untested and may or may not work correctly.>></div>"
 }
 
 ShowNotUpdatedWarning() {
-       echo "<div class=\"warning\">WARNING: This page has not been updated or checked for correct functionality under Kamikaze.</div>"
+       echo "<div class=\"warning\">@TR<<big_warning#WARNING>>: @TR<<page_untested_kamikaze#This page has not been updated or checked for correct functionality under Kamikaze.>></div>"
 }
 
 update_changes() {
@@ -80,7 +80,7 @@ has_pkgs() {
 	for pkg in "$@"; do
 		pcnt=$((pcnt + 1))
 		empty $(ipkg list_installed | grep "^$pkg ") && {
-			echo -n "<p>Features on this page require the \"<b>$pkg</b>\" package. &nbsp;<a href=\"/cgi-bin/webif/ipkg.sh?action=install&pkg=$pkg&prev=$SCRIPT_NAME\">install now</a>.</p>"
+			echo -n "<p>@TR<<features_require_package#Features on this page require the package>>: \"<b>$pkg</b>\". &nbsp;<a href=\"/cgi-bin/webif/ipkg.sh?action=install&pkg=$pkg&prev=$SCRIPT_NAME\">@TR<<features_install#install now>></a>.</p>"
 			retval=1;
 			nothave=$((nothave + 1))
 		}
@@ -149,7 +149,7 @@ header() {
 				width="200" height="80"  scrolling="no" frameborder="0"></iframe>'
 	else
 		short_status_frame="<div id=\"short-status\">
-				<h3><strong>Status:</strong></h3>
+				<h3><strong>@TR<<Status>>:</strong></h3>
 				<ul>
 					<li><strong>$_firmware_name $_firmware_version</strong></li>
 					<li><strong>@TR<<Host>>:</strong> $_hostname</li>
@@ -193,7 +193,7 @@ Pragma: no-cache
 
 	<div id="container">
 		<div id="header">
-			<h1>X-Wrt Administration Console</h1>
+			<h1>@TR<<X-Wrt Administration Console>></h1>
 			$short_status_frame
 		</div>
 
@@ -269,7 +269,7 @@ footer() {
 	</div>
 	<br />
 	<fieldset id="save">
-	<legend><strong>Proceed Changes</strong></legend>
+	<legend><strong>@TR<<Proceed Changes>></strong></legend>
 		$_savebutton
 		<ul class="apply">
 			<li><a href="config.sh?mode=save&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Apply Changes>> &laquo;</a></li>
