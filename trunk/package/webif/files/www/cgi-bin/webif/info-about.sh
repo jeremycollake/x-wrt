@@ -19,17 +19,59 @@
 # Configuration files referenced:
 #   none
 #
-header "Info" "About" "<img src=/images/abt.jpg align=absmiddle>&nbsp;@TR<<About>>" '' ''
+header "Info" "About" "<img src=\"/images/abt.jpg\" alt=\"@TR<<About>>\" />@TR<<About>>" '' ''
 
 this_revision=$(cat "/www/.version")
 
 ?>
-<div class="webif-name-title"><a href="http://www.x-wrt.org">X-Wrt @TR<<Extensions>></a> - webif<sup>2</sup></div>
-<div class="webif-name-subtitle"></div>
-<div class="webif-name-version">Milestone 2.6 - r<? echo "$this_revision" ?> </div><br />
-<DIV>
-<IFRAME SRC="info-credits.sh" STYLE="width:800px; height:400px; border:1px dotted #888888;" FRAMEBORDER="0" SCROLLING="NO"></IFRAME>
-</DIV>
+<script src="/js/scrollbox.js" type="text/javascript"></script>
+<h2><a href="http://www.x-wrt.org">X-Wrt @TR<<Extensions>></a> &ndash; webif&sup2;</h2>
+
+<em>Milestone 2.6 - r<? echo "$this_revision" ?></em>
+
+<div id="outerscrollBox"  onMouseOver="copyspeed=pausespeed" onMouseOut="copyspeed=marqueespeed">
+
+<div id="scrollBox">
+
+<h1>Webif<sup>2</sup> Credits</h1>
+<h2>@TR<<Primary Developers>> <em>(@TR<<sorted_by_name#sorted by name>>)</em></h2>
+<ul>
+	<li><a href="mailto:jeremy.collake@gmail.com">Jeremy Collake (db90h)</a></li>
+	<li><a href="mailto:kemen04@gmail.com">Travis Kemen (thepeople)</a></li>
+</ul>
+
+<h2>@TR<<Contributing Developers>> <em>(@TR<<sorted_by_name#sorted by name>>)</em></h2>
+
+<ul>
+	<li><a href="mailto:oxo@users.berlios.de">Owen Brotherwood (oxo)</a></li>
+	<li><a href="mailto:dmytro@iroot.ca">Dmytro Dykhman</a></li>
+	<li><a href="mailto:openwrt@nbd.name">Felix Fietkau</a> (nbd)</li>
+	<li><a href="mailto:guymarc@users.berlios.de">Guy Marcenac (guymarc)</a></li>
+	<li><a href="mailto:openwrt@kewis.ch">Philipp Kewisch</a></li>
+	<li><a href="mailto:gregers@wireless-ownership.org">Gregers Petersen</a></li>
+	<li><a href="mailto:mtsales@users.berlios.de">Mario Sales</a></li>
+	<li><a href="mailto:markus@freewrt.org">Markus Wigge</a></li>
+	<li>SeDeKy</li>
+	<li><a href="mailto:seitel@users.berlios.de">Stefan Eitel</a></li>
+	<li><a href="mailto:tyardley@users.berlios.de">Tim Yardley (lst)</a></li>
+</ul>
+
+<h2>Other Contributions</h2>
+<ul>
+	<li>Reinhold Kainhofer, ido, Strontian, Sven-Ola, redhat, Exiles, and many others.</li>
+	<li>@TR<<Monowall_Credit#CPU and Traffic graphs based on code from>> <a href="http://m0n0.ch/wall/">m0n0wall</a></li>
+	<li>@TR<<Cova_Credit#Some pages have been adopted from code written>> @TR<<by>> David Bird, <a href="http://www.coova.org">Coova Technologies</a>, @TR<<and>> <a href="http://sourceforge.net/projects/hotspot-zone">Hotspot-Zone</a></li>
+	<li>@TR<<CSS_Layout#Layout was originally based on>> <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran.</li>
+	<li>@TR<<UCI>> @TR<<facilitating code>> @TR<<Copyright>> (C) 2006 by <a href="mailto:carsten.tittel@fokus.fraumhofer.de">Fokus Fraunhofer</a>.</li>
+	<li>@TR<<Translator_Credit#The translation you are currently using is authored by (nobody).>></li>
+	<li>@TR<<zephyr_Text#The Zephyr theme is under the MIT licence.>></li>
+</ul>
+
+<p>@TR<<This device is running>> <a href="http://www.openwrt.org">OpenWrt</a> @TR<<or a close derivative>>.</p>
+
+<p>@TR<<GPL_Text#This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.>>
+
+</div></div> <!-- End scrollBox -->
 <? show_validated_logo
 footer ?>
 <!--
