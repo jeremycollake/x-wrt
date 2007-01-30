@@ -16,7 +16,7 @@ BEGIN {
 	f[$4] = rootdir "/" $1
 }
 END {
-	print "<div id=\"mainmenu\"><ul>"
+	print "<ul>"
 	
 	for (i = 1; i <= n; i++) {
 		if (sel == i) print "<li class=\"selected\"><a href=\"" f[c[i]] "\">@TR<<" c[i] ">></a></li>"
@@ -30,5 +30,5 @@ END {
 		}
 	}
   
-	print "</ul></div>"
+	print "</ul>"
 }

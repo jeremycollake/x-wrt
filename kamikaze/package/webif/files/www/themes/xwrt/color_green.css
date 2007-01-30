@@ -1,5 +1,5 @@
  /* color theme: green */
-#header {
+#header, #header #short-status {
 	color: #CCCCCC;
 	background-color: #2B6D21;
 }

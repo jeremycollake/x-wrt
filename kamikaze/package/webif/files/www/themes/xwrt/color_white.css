@@ -1,121 +1,28 @@
- /* color theme: white */
-
-html, body 
-{		
-	
-}
-
-#header
-{
-	
-}
-
-#update-available
-{	
-	color: #FF0000;	
-}
-
-#update-unavailable
-{
-	color: #000000;
-}
-
-#update-error
-{
-	color: #FF0000;
-}
-
-.openwrt-title 
-{
-	
-}
-
-#header-title,
-#mainmenu,
-#mainmenu a,
+/* color theme: white */
+body,
+#header,
+#header #short-status,
 #submenu,
-#submenu a,
+#mainmenu,
+#mainmenu li a,
+#submenu li a,
+#footer,
+#save,
 #save a,
 #save .page-save,
-#submenu,
-#mainmenu,
-#save div
-{
-	color: #000;
-	background-color: #fff;
+#save .apply,
+.progressbar-unfilled {
+	color: Black;
+	background-color: White;
 }
 
+#content h3,
 #mainmenu a:hover,
 #submenu a:hover,
-#save a:hover,
 #mainmenu .selected a,
-#submenu .selected a
-{
-	color: #000;
-	background-color: #ccc;
-}
-
-#content .settings-block .settings-block-title h2 
-{	
-	color: #000;
-}
-
-#content .settings-block
-{
-	
-}
-
-#content .settings-title 
-{
-	background-color: #CCC;
-}
-
-#content .settings 
-{
-	
-}
-
-#save .page-save 
-{
-	
-}
-
-.progressbar-title
-{
-
-}
-
-.progressbar-whole
-{	
-	
-}
-
-.progressbar-filled
-{
-	background-color: #CCC;
-}
-
-.progressbar-unfilled
-{
-	
-}
-
-.kb 
-{
-	
-}
-
-.mount-target
-{
-	
-}
-
-.warning
-{
-	
-}
-
-#footer-logo
-{
-	color: #000;
+#submenu .selected a,
+#save a:hover,
+.progressbar-filled {
+	background-color: #CCCCCC;
+	color: Black;
 }

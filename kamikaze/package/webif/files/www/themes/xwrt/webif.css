@@ -43,38 +43,13 @@ fieldset { border: 0; }
 /* Hide irrelevent elements when using CSS */
 hr,
 #submenu h3,
-#short-status h3,
-#content .settings-help h3 { display: none; }
+#short-status h3 { display: none; }
 
 /* ---  Wrapper around everything  --- */
 #container {
 	position: relative;
 	min-height: 100%;
 	width: 100%;
-}
-
-/* IE-fix */
-* html #container { height: 100%; }
-
-/* ---  Color switcher  --- */
-#colorswitcher {
-	position: absolute;
-	right: 1.5em;
-	margin-top: 1em;
-	font-weight: bold;
-	text-align: center;
-	z-index: 100;
-	speak: none;
-}
-
-#colorswitcher div {
-	display: block;
-	float: left;
-	width: 1em;
-	height: 1em;
-	margin: 0 0.4em 0 0.4em;
-	border: 1px solid Black;
-	cursor: pointer;
 }
 
 /* ---  Header  --- */
@@ -86,6 +61,8 @@ hr,
 	background: #51779e url(/images/openwrt-logo.gif) left 0.5em repeat-x;
 }
 
+#header h1 { text-indent: -9000px; }
+
 /* ---  Short-status  --- */
 #header #short-status {
 	position: absolute;
@@ -94,7 +71,7 @@ hr,
 	height: 5.5em;
 	width: 15em;
 	line-height: 1.0em;
-	background-color: inherit !important;
+	background-color: #51779e;
 }
 
 #short-status ul {
@@ -130,9 +107,6 @@ hr,
 	text-align: center;
 }
 
-/* IE-fix */
-* html #mainmenu li { width: 4.2em; }
-
 #mainmenu li, #submenu li { white-space: nowrap; }
 
 #mainmenu li a {
@@ -154,59 +128,77 @@ hr,
 	color: White;
 }
 
+/* ---  Color switcher  --- */
+#colorswitcher {
+	position: absolute;
+	top: 11em;
+	right: 1.5em;
+	z-index: 100;
+}
+
+#colorswitcher div {
+	display: block;
+	float: right;
+	width: 1em;
+	height: 1em;
+	margin-left: 0.4em;
+	border: 1px solid Black;
+	cursor: pointer;
+}
+
 /* ---  Content  --- */
 #content {
-	padding: 1.5em 1.5em 8em 2%;
 	position: relative;
+	padding: 0 2% 4em 2%;
 }
 
 #content a { text-decoration: underline; }
 
 #content h2 {
 	font-size: 1.1em;
-	margin-bottom: 0.5em;
+	margin-top: 1.5em;
+	margin-bottom: 1.5em;
 }
 
 #content h3 {
-	margin: 0.3em 0.2em 0.5em 1%;
+	margin-bottom: 0.6em;
 	padding: 0.2em;
-	line-height: 1em;
-	font-size: 1.0em;
+	font-size: 1em;
 	background-color: #aac1d9;
+}
+
+#content .settings {
+	margin-bottom: 1.5em;
+	margin-left: 1%;
 }
 
 #content .settings-content {
 	position: relative;
 	float: left;
-	width: 55%;
+	width: 54%;
 	margin-left: 2%;
 }
-
-/* IE-fix */
-* html #content .settings-content { margin-left: 1%; }
 
 #content select, #content input { margin-top: 0.1em; }
 
 /* help area */
 #content .settings-help {
-	padding: 0.2em 0.2em 0.4em 0.2em;
 	position: relative;
 	margin-left: 60%;
 }
 
-#content .helpform {
-	padding-left: 1em;
-	padding-right: 0.5em;
-}
+#content .settings-help h3 { display: none; }
 
-.helpitem {
+#content .settings-help h4 {
 	font-weight: bold;
-	font-size: 0.9em;
+	font-size: 0.8em;
+	margin-bottom: 0.2em;
 }
 
-.helptext {
-	font-size: 0.6em;
-	padding-bottom: 1em;
+#content .settings-help p {
+	margin-bottom: 0.6em;
+	font-size: 0.7em;
+	padding-right: 1em;
 }
 
 .more-help {
@@ -223,9 +215,6 @@ hr,
 	text-align: right;
 	z-index: 50;
 }
-
-/* IE-fix */
-* html #save { margin-top: -1px; }
 
 #save legend { display: none; }
 
@@ -272,9 +261,6 @@ hr,
 }
 
 #footer * { margin-left: 4%; }
-
-/* IE-fix */
-* html #footer { bottom: 0; margin-top: -1px; }
 
 /* ---  Page specific styling  --- */
 /* About page */

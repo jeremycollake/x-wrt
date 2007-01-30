@@ -138,7 +138,7 @@ header() {
 	_uptime="${_uptime%%,*}"
 	_hostname=$(cat /proc/sys/kernel/hostname)
 	_webif_rev=$(cat /www/.version)
-	_head="${3:+<div class=\"settings-block-title\"><h2>$3$_saved_title</h2></div>}"
+	_head="${3:+<h2>$3$_saved_title</h2>}"
 	_form="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />}"
 	_savebutton="${5:+<div class=\"page-save\"><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></div>}"	
 	_categories=$(categories $1)
@@ -174,6 +174,7 @@ Pragma: no-cache
 	<head>
 	<title>$_firmware_name @TR<<Administrative Console>></title>
 		<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
+		<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_white.css" title="white" />
 		<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_brown.css" title="brown" />
 		<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_green.css" title="green" />
 		<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_navyblue.css" title="navyblue" />
@@ -190,17 +191,14 @@ Pragma: no-cache
 	</head>
 	<body $4>
 
-	<script type="text/javascript" src="/colorize.js"></script>
-		<script type="text/javascript"> colorize(); </script>
-
 	<div id="container">
 		<div id="header">
-					<div class="openwrt-title"></div>
-					$short_status_frame
+			<h1>X-Wrt Administration Console</h1>
+			$short_status_frame
 		</div>
 
-		<div id="categories">$_categories</div>
-		<div id="subcategories">$_subcategories</div>
+		<div id="mainmenu">$_categories</div>
+		<div id="submenu">$_subcategories</div>
 		$_form
 		<div id="colorswitcher">
 			<div style="background: #000000" title="black" onclick="setActiveStyleSheet('black'); return false;"></div>
@@ -208,12 +206,10 @@ Pragma: no-cache
 			<div style="background: #114488" title="blue" onclick="setActiveStyleSheet('default'); return false;"></div>
 			<div style="background: #2b6d21" title="green" onclick="setActiveStyleSheet('green'); return false;"></div>
 			<div style="background: #e8ca9e" title="brown" onclick="setActiveStyleSheet('brown'); return false;"></div>
+			<div style="background: #fff" title="white" onclick="setActiveStyleSheet('white'); return false;"></div>
 		</div>
 
-		<script type="text/javascript"> swatch(); </script>
-
 		<div id="content">
-			<div class="settings-block">
 				$_head
 				$ERROR
 EOF
@@ -270,24 +266,23 @@ footer() {
 	_changes=${_changes:+(${_changes})}
 	_endform=${_savebutton:+</form>}
 	cat <<EOF
-			</div>
-		</div>
-		<br />
-		<fieldset id="save">
-		<legend><strong>Proceed Changes</strong></legend>
-			$_savebutton
-			<ul class="apply">
-				<li><a href="config.sh?mode=save&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Apply Changes>> &laquo;</a></li>
-				<li><a href="config.sh?mode=clear&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Clear Changes>> &laquo;</a></li>
-				<li><a href="config.sh?mode=review&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Review Changes>> $_changes &laquo;</a></li>
-			</ul>
-		</fieldset>	
-		$_endform
-		<hr />
-		<div id="footer">
-			<h3>X-Wrt</h3>
-			<em>@TR<<making_usable#End user extensions for OpenWrt>></em>
-		</div>
+	</div>
+	<br />
+	<fieldset id="save">
+	<legend><strong>Proceed Changes</strong></legend>
+		$_savebutton
+		<ul class="apply">
+			<li><a href="config.sh?mode=save&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Apply Changes>> &laquo;</a></li>
+			<li><a href="config.sh?mode=clear&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Clear Changes>> &laquo;</a></li>
+			<li><a href="config.sh?mode=review&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Review Changes>> $_changes &laquo;</a></li>
+		</ul>
+	</fieldset>	
+	$_endform
+	<hr />
+	<div id="footer">
+		<h3>X-Wrt</h3>
+		<em>@TR<<making_usable#End user extensions for OpenWrt>></em>
+	</div>
     </div>
 </body>
 </html>
