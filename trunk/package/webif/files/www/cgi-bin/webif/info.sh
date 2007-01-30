@@ -7,7 +7,7 @@
 #
 # TODO: This page looks ugly anymore (rendered).
 #
-header "Info" "System" "<img src=/images/blkbox.jpg align="absmiddle">@TR<<System Information>>" '' ''
+header "Info" "System" "<img src=\"/images/blkbox.jpg\" alt=\"@TR<<System Information>>\"/>@TR<<System Information>>" '' ''
 
 SHOW_BANNER=0	# set to show /etc/banner
 
@@ -99,7 +99,7 @@ equal "$SHOW_BANNER" "1" && {
 
 cat <<EOF
 
-<table>
+<table summary="System Information">
 <tbody>
 	<tr>
 		<td width="100"><strong>@TR<<Firmware>></strong></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
@@ -126,7 +126,7 @@ cat <<EOF
 </tbody>
 </table>
 <br />
-<table>
+<table summary="Webif Information">
 <tbody>
 	<tr>
 		<td><strong>@TR<<Web mgt. console>></strong></td><td>&nbsp;</td>
@@ -139,10 +139,10 @@ cat <<EOF
 </table>
 
 <form action="" enctype="multipart/form-data" method="post">	
-<table>
+<table summary="Update webif">
 <tbody>
 	<tr>
-		<td colspan=2">
+		<td colspan="2">
 		<input type="submit" value=" @TR<<info_check_update#Check For Webif Update>> " name="update_check" />
 		$upgrade_button		
 		</td>

@@ -160,6 +160,11 @@ hr,
 	margin-bottom: 1.5em;
 }
 
+/* center image and headline vertically */
+#content h2 * {
+	vertical-align: middle;
+}
+
 #content h3 {
 	margin-bottom: 0.6em;
 	padding: 0.2em;

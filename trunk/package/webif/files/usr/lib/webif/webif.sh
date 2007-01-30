@@ -149,14 +149,14 @@ header() {
 				width="200" height="80"  scrolling="no" frameborder="0"></iframe>'
 	else
 		short_status_frame="<div id=\"short-status\">
-						<h3><strong>Status:</strong></h3>
-						<ul>
-							<li><strong>$_firmware_name $_firmware_version</strong></li>
-							<li><strong>@TR<<Host>>:</strong> $_hostname</li>
-							<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
-							<li><strong>@TR<<Load>>:</strong> $_loadavg</li>
-						</ul>
-					</div>"
+				<h3><strong>Status:</strong></h3>
+				<ul>
+					<li><strong>$_firmware_name $_firmware_version</strong></li>
+					<li><strong>@TR<<Host>>:</strong> $_hostname</li>
+					<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
+					<li><strong>@TR<<Load>>:</strong> $_loadavg</li>
+				</ul>
+				</div>"
 	fi
 
 	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && grep 'root:!' /etc/passwd >&- 2>&- && {
