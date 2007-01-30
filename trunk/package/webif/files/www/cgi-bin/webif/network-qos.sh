@@ -137,18 +137,6 @@ EOF
 	current_qos_item=$(echo "$QUERY_STRING" | grep "qos_remove=" | cut -d'=' -f2)	
 	! empty "$current_qos_item" && {		
 		# also manually clear the other options so they are immediately empty		
-		uci_set "qos" "$current_qos_item" "srchost" ""
-		uci_set "qos" "$current_qos_item" "dsthost" ""
-		uci_set "qos" "$current_qos_item" "proto" ""
-		uci_set "qos" "$current_qos_item" "layer7" ""
-		uci_set "qos" "$current_qos_item" "ipp2p" ""
-		uci_set "qos" "$current_qos_item" "ports" ""
-		uci_set "qos" "$current_qos_item" "portrange" ""
-		uci_set "qos" "$current_qos_item" "mark" ""
-		uci_set "qos" "$current_qos_item" "tcpflags" ""
-		uci_set "qos" "$current_qos_item" "pktsize" ""
-		# show 'deleted' as target to indicate pending delete
-		uci_set "qos" "$current_qos_item" "target" "deleted"
 		uci_remove "qos" "$current_qos_item"
 	}
 }
