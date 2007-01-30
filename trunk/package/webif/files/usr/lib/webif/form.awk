@@ -170,9 +170,9 @@ $1 ~ /^upload/ { print "<input id=\"" $2 "\" type=\"file\" name=\"" $2 "\"/>" }
 $1 ~ /^formtag_begin/ { print "<form name=\"" $2 "\" action=\"" $3 "\" enctype=\"multipart/form-data\" method=\"post\">" }
 $1 ~ /^formtag_end/ { print "</form>" }
 $1 ~ /^submit/ { print "<input type=\"submit\" name=\"" $2 "\" value=\"" $3 "\" />" }
-$1 ~ /^helpitem/ { form_help = form_help "<div class=\"helpitem\">@TR<<" $2 ">>:</div>" }
-$1 ~ /^helptext/ { form_help = form_help "<div class=\"helptext\">@TR<<" $2 ">></div>" }
-$1 ~ /^helplink/ { form_help_link = "<div class=\"more-help\"><a href=\"" $2 "\">@TR<<more...>></a></div>" }
+$1 ~ /^helpitem/ { form_help = form_help "<h4>@TR<<" $2 ">>:</h4>" }
+$1 ~ /^helptext/ { form_help = form_help "<p>@TR<<" $2 ">></p>" }
+$1 ~ /^helplink/ { form_help_link = "<a class=\"more-help\" href=\"" $2 "\">@TR<<more...>></a>" }
 
 ($1 ~ /^checkbox/) || ($1 ~ /^radio/) {
 	print $5

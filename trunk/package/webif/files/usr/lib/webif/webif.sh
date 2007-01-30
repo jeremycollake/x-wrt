@@ -195,12 +195,12 @@ Pragma: no-cache
 
 	<div id="container">
 		<div id="header">
-					<div class="openwrt-title"></div>
-					$short_status_frame
+			<div class="openwrt-title"></div>
+			$short_status_frame
 		</div>
 
-		<div id="categories">$_categories</div>
-		<div id="subcategories">$_subcategories</div>
+		<div id="mainmenu">$_categories</div>
+		<div id="submenu">$_subcategories</div>
 		$_form
 		<div id="colorswitcher">
 			<div style="background: #000000" title="black" onclick="setActiveStyleSheet('black'); return false;"></div>

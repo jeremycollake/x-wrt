@@ -43,8 +43,7 @@ fieldset { border: 0; }
 /* Hide irrelevent elements when using CSS */
 hr,
 #submenu h3,
-#short-status h3,
-#content .settings-help h3 { display: none; }
+#short-status h3 { display: none; }
 
 /* ---  Wrapper around everything  --- */
 #container {
@@ -52,9 +51,6 @@ hr,
 	min-height: 100%;
 	width: 100%;
 }
-
-/* IE-fix */
-* html #container { height: 100%; }
 
 /* ---  Color switcher  --- */
 #colorswitcher {
@@ -130,9 +126,6 @@ hr,
 	text-align: center;
 }
 
-/* IE-fix */
-* html #mainmenu li { width: 4.2em; }
-
 #mainmenu li, #submenu li { white-space: nowrap; }
 
 #mainmenu li a {
@@ -182,9 +175,6 @@ hr,
 	margin-left: 2%;
 }
 
-/* IE-fix */
-* html #content .settings-content { margin-left: 1%; }
-
 #content select, #content input { margin-top: 0.1em; }
 
 /* help area */
@@ -194,19 +184,18 @@ hr,
 	margin-left: 60%;
 }
 
-#content .helpform {
-	padding-left: 1em;
-	padding-right: 0.5em;
-}
+#content .settings-help h3 { display: none; }
 
-.helpitem {
+#content .settings-help h4 {
 	font-weight: bold;
-	font-size: 0.9em;
+	font-size: 0.8em;
+	margin-bottom: 0.2em;
 }
 
-.helptext {
-	font-size: 0.6em;
-	padding-bottom: 1em;
+#content .settings-help p {
+	margin-bottom: 0.6em;
+	font-size: 0.7em;
+	padding-right: 1em;
 }
 
 .more-help {
@@ -223,9 +212,6 @@ hr,
 	text-align: right;
 	z-index: 50;
 }
-
-/* IE-fix */
-* html #save { margin-top: -1px; }
 
 #save legend { display: none; }
 
@@ -272,9 +258,6 @@ hr,
 }
 
 #footer * { margin-left: 4%; }
-
-/* IE-fix */
-* html #footer { bottom: 0; margin-top: -1px; }
 
 /* ---  Page specific styling  --- */
 /* About page */
