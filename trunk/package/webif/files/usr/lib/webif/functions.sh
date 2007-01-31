@@ -47,7 +47,7 @@ is_bcm947xx() {
 
 is_kamikaze() {
 	# todo: switch to a more reliable check of kamikaze
-	grep -iq "KAMIKAZE" "/etc/banner"	
+	[ -s "/etc/config/network" ] || grep -iq "KAMIKAZE" "/etc/banner"
 }
 
 has_nvram_support() {

@@ -6,7 +6,15 @@ timeout=40
 if empty "$FORM_reboot"; then
 reboot_msg="<form enctype=\"multipart/form-data\" method=\"post\"><input type=\"submit\" value=\" @TR<<Yes, really reboot now>> \" name=\"reboot\" /></form>"
 else
+
+
+if is_kamikaze; then
+uci_load "network"
+router_ip="$CONFIG_lan_ipaddr"
+else
 router_ip=$(nvram get lan_ipaddr)
+fi
+
 echo "<meta http-equiv="refresh" content='$timeout;http://$router_ip'>"
 reboot_msg="@TR<<Rebooting now>>...<br><br>@TR<<reboot_wait#Please wait about>> $timeout @TR<<reboot_seconds#seconds.>> @TR<<reboot_reload#The webif should automatically reload.>>
 <br><br><center><script type='text/javascript'>
@@ -27,7 +35,7 @@ fi
 <?
 if ! empty "$FORM_reboot"; then
 sleep 3
-reboot
+#reboot
 fi
 ?>
 <!--
