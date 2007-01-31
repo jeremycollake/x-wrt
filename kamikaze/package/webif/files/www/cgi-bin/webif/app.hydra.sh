@@ -9,8 +9,14 @@
 
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
+cat <<EOF
+HEADER="HTTP/1.0 200 OK
+Content-type: text/html
+
+EOF
 
 if ! empty "$FORM_package"; then
+
 	echo "<html><header></header><body><font size=3>Installing Hydra 4.5 package ...<br><br>"
 	wget -q http://www.hackerpimps.com/fairuzawrt/bin/hydra -P /usr/sbin/
 	chmod 755 /usr/sbin/hydra
@@ -19,6 +25,7 @@ exit
 fi
 
 if ! empty "$FORM_remove"; then
+
 	echo "<html><header></header><body><font size=3>Removing Hydra 4.5 package ...<br><br>"
 	chmod 777 /usr/sbin/hydra
 	rm /usr/sbin/hydra
@@ -42,24 +49,12 @@ echo "config hydra conf
 	option lst	'/tmp/pwd.lst'" > /etc/config/hydra
 fi
 
-######## Read config
-
-uci_load "hydra"
-CFG_IP="$CONFIG_conf_ip"
-CFG_SRV="$CONFIG_conf_service"
-CFG_PATH="$CONFIG_conf_path"
-CFG_USR="$CONFIG_conf_usr"
-CFG_LST="$CONFIG_conf_lst"
-
-
-HEADER="<link rel=stylesheet type=text/css href=/themes/active/webif.css><link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css">
-<script type="text/javascript" src="/js/balloontip.js">
-</script>"
-
 cat <<EOF
 <html>
 <head>
-$HEADER
+<link rel=stylesheet type=text/css href=/themes/active/webif.css><link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css">
+<script type="text/javascript" src="/js/balloontip.js">
+</script>
 </head>
 
 <body bgcolor="#eceeec">
@@ -89,6 +84,14 @@ uci_commit "hydra"
 exit
 fi
 
+######## Read config
+
+uci_load "hydra"
+CFG_IP="$CONFIG_conf_ip"
+CFG_SRV="$CONFIG_conf_service"
+CFG_PATH="$CONFIG_conf_path"
+CFG_USR="$CONFIG_conf_usr"
+CFG_LST="$CONFIG_conf_lst"
 
 ####### Check if hydra is running
 if [ "$(ps ax | grep -c hydra)" = '1' ]; then
@@ -104,6 +107,8 @@ EOF
 #else
 #echo "<font color="#33CC00">Hydra is running from list: $CFG_LST</font><br><br>"
 fi
+
+
 
 cat <<EOF
 <strong>Hydra Configuration</strong><br>

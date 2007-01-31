@@ -10,6 +10,12 @@
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
 
+cat <<EOF
+HEADER="HTTP/1.0 200 OK
+Content-type: text/html
+
+EOF
+
 if ! empty "$FORM_package"; then
 echo "<html><header></header><body>"
 	echo "Installing Samba packages ...<br><br><pre>"

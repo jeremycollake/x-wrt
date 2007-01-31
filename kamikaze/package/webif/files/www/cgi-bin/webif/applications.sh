@@ -1,4 +1,4 @@
-#!/usr/bin/webif-page "-U /tmp -u 4096"
+#!/usr/bin/webif-page
 <?
 ###################################################################
 # Applications page
@@ -17,9 +17,13 @@
 #
 # TODO:
 
-. "/usr/lib/webif/functions.sh"
+. /usr/lib/webif/functions.sh
 
-HEADER="<link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css">
+HEADER="HTTP/1.0 200 OK
+Content-type: text/html
+
+<html><head>
+<link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css">
 <script type="text/javascript" src="/js/balloontip.js">
 </script><script type="text/javascript" src="/js/imgdepth.js">
 </script>"
@@ -28,21 +32,13 @@ HighLight="class='gradualshine' onMouseover='slowhigh(this)' onMouseout='slowlow
 
 
 if [ "$FORM_page" = "index" ]; then
-echo "Content-type: text/plain"
-echo "HTTP/1.0 200 OK"
-echo ""
-cat <<EOF
-<html>
-<body>
-</body>
-</html>
-EOF
+echo $HEADER
+echo "</head></html>"
 exit
+
 elif [ "$FORM_page" = "web" ]; then
 
 cat <<EOF
-<html>
-<head>
 $HEADER
 </head>
 
@@ -74,9 +70,8 @@ MySQL 4.3 - Massive database server
 EOF
 
 elif [ "$FORM_page" = "security" ]; then
-
+	
 	cat <<EOF
-	<html><head>
 	$HEADER
 	<script type="text/javascript">
 	<!--
@@ -115,7 +110,6 @@ EOF
 elif [ "$FORM_page" = "network" ]; then
 
 	cat <<EOF
-	<html><head>
 	$HEADER
 	<script type="text/javascript">
 	<!--
@@ -153,9 +147,8 @@ EOF
 elif [ "$FORM_page" = "remove" ]; then
 
 	cat <<EOF
-	<html><header>
 	$HEADER
-	</header>
+	</head>
 	<table width="100%" border="0" cellspacing="1">
 EOF
 	#### Check list to remove
@@ -176,7 +169,8 @@ EOF
 elif [ "$FORM_page" = "list" ]; then
 
 	cat <<EOF
-	<head></head><body >
+	$HEADER
+	</head><body >
 	<table width="90%" border="0" cellpadding="0" cellspacing="0" >
 	<tr>
 	<td><a href="applications.sh?page=web" target="AppIndex"><img src="/images/app.8.jpg" border="0" ></a></td>
