@@ -312,21 +312,18 @@ li.about { margin-left: 2em; }
 .odd { background-color: #E5E7E9; }
 
 /* Progressbar */
-.progressbar-whole {
-	border-collapse: collapse;
-	border: 1px solid #E9F0D3;
+.progressbar {
+	border: 1px solid #55622F;
+	margin-top: 0.2em;
+	margin-bottom: 0.2em;
+	font-size: 0.8em;
 }
 
-.progressbar-filled {
-	font-size: 0.7em;
+.progress{
 	color: #55622F;
 	background-color: #C2D787;
+	padding: 0.1em 0 0.1em 0;
+	display: block;
+	text-align: center;
 	text-shadow: 2px 2px 2px #C2D787;
-}
-
-.progressbar-unfilled {
-	font-size: 0.7em;
-	color: Black;
-	background-color: #E9F0D3;
-	text-shadow: 2px 2px 2px Black;
 }
