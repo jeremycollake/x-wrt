@@ -143,19 +143,11 @@ $1 ~ /^textarea/ {
 # 
 ($1 ~ /^progressbar/) {
 	uncomplete_area=100-$5;
-	print "<div class=\"progressbar-title\">"
-	print "<tr>"
-	# show caption 	
-	if ($3 != "" ) print "<td>"$3"</td>"
-	# show progress bar
-	print "<td width=\"" $4 "\">"
-	print "<table class=\"progressbar-whole\" width=\"" $4 "\" id=\"" $2 "\"><tbody>"	
-	print "<tr  width=\"" $4 "\">"
-	print "<td class=\"progressbar-filled\" width=\"" $5 "%\"><center>" $6 "</center></td>"	
-	print "<td class=\"progressbar-unfilled\" width=\"" uncomplete_area "%\"><center>" $7 "</center></td>"	
-	print "</tr>"	
-	print "</tbody></table></td></tr>"
+	print "<div class=\"progressbar\" style=\"width:" $4 "px\">"
+	print "<span class=\"progress\" style=\"width:" $6 "\">" $6 "</span>"	
 	print "</div>"
+	#show caption
+	if ($3 != "" ) print "<em>" $3 "</em>"
 }
 $1 ~ /^text$/ { 	
 	cols = ""

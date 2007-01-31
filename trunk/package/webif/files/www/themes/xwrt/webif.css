@@ -161,9 +161,7 @@ hr,
 }
 
 /* center image and headline vertically */
-#content h2 * {
-	vertical-align: middle;
-}
+#content h2 * { vertical-align: middle; }
 
 #content h3 {
 	margin-bottom: 0.6em;
@@ -172,14 +170,13 @@ hr,
 	background-color: #aac1d9;
 }
 
-#content .settings {
-	margin-left: 1%;
-}
+#content .settings { margin-left: 1%; }
 
 #content .settings .clearfix {
 	clear: both;
 	margin-bottom: 1em;
 }
+
 #content .settings-content {
 	position: relative;
 	float: left;
@@ -334,17 +331,16 @@ li.about { margin-left: 2em; }
 .odd { background-color: #E5E7E9; }
 
 /* Progressbar */
-.progressbar-whole {
-	border: dotted Gray;
-	font-size: 0.7em;
+.progressbar {
+	border: 1px solid #315579;
+	margin-top: 0.2em;
+	margin-bottom: 0.2em;
+	padding: 3px;
 }
 
-.progressbar-filled {
-	color: White;
-	background-color: #2b1b9f;
-}
-
-.progressbar-unfilled {
-	color: Black;
-	background-color: Black;
+.progress{
+	background-color: #AAC1D9;
+	padding: 0.1em 0 0.1em 0;
+	display: block;
+	text-align: center;
 }
