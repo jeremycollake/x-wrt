@@ -31,7 +31,17 @@ config wifi-iface
 fi
 
 if ! empty "$FORM_remove_vcfg"; then
-	uci_remove "wireless" "$FORM_remove_vcfg"
+	#Ugly hack until api loads chages waiting to be applied.
+	if [ -e /tmp/.uci/wireless ]; then
+		mv /tmp/.uci/wireless /tmp/.uci/wireless-save
+		uci_remove "wireless" "$FORM_remove_vcfg"
+		uci commit wireless
+		mv /tmp/.uci/wireless-save /tmp/.uci/wireless
+		uci_remove "wireless" "$FORM_remove_vcfg"
+	else
+		uci_remove "wireless" "$FORM_remove_vcfg"
+		uci commit wireless
+	fi
 	FORM_remove_vcfg=""
 fi
 
@@ -380,7 +390,7 @@ for device in $DEVICES; do
 			string|</tbody></table>"
 			append forms "helpitem|Encryption Type" "$N"
 			append forms "helptext|HelpText Encryption Type#WPA (RADIUS) is only supported in Access Point mode. WPA (PSK) does not work in Ad-Hoc mode." "$N"
-			append forms "remove_vcfg" "$N"
+			append forms "$remove_vcfg" "$N"
 			append forms "end_form" "$N"
 		fi
 	done
