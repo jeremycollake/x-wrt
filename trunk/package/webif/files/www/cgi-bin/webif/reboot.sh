@@ -35,7 +35,7 @@ fi
 <?
 if ! empty "$FORM_reboot"; then
 sleep 3
-#reboot
+reboot
 fi
 ?>
 <!--
