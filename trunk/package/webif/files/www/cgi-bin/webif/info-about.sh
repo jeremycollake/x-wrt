@@ -27,7 +27,7 @@ this_revision=$(cat "/www/.version")
 <script src="/js/scrollbox.js" type="text/javascript"></script>
 <h2><a href="http://www.x-wrt.org">X-Wrt @TR<<Extensions>></a> &ndash; webif&sup2;</h2>
 
-<em>Milestone 2.6 - r<? echo "$this_revision" ?></em>
+<em>Milestone 2.7 - r<? echo "$this_revision" ?></em>
 
 <div id="outerscrollBox"  onMouseOver="copyspeed=pausespeed" onMouseOut="copyspeed=marqueespeed">
 
