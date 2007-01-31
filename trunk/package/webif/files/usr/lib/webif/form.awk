@@ -47,10 +47,7 @@ $1 ~ /^field/ {
 	else field_opts=""
 	if ($4 == "hidden") field_opts = field_opts " style=\"display: none\""
 	print "<tr" field_opts ">"
-	if ($2 != "") {
-		print "<td width=\"40%\""
-		print ">" $2 "</td><td width=\"60%\">"
-	}
+	if ($2 != "") print "<td width=\"40%\">" $2 "</td><td width=\"60%\">"
 	else print "<td colspan=\"2\">"
 
 	field_open=1
