@@ -38,19 +38,25 @@ visibility: hidden;
 
 TR.wifiscantitle
 {
+background-color: #999999;
 font-family: serif;
 font-weight: bold;
-font-size: medium;
 color: #ffffff;
 text-align: center;
 
 }
 
-TR.wifiscanrow
+TR.wifiscanrow1
 {
 font-family: serif;
 font-size:8pt
-font-style: normal;
-font-size: medium;
+color: #000000;
+}
+
+TR.wifiscanrow2
+{
+background-color: #E6E6E6;
+font-family: serif;
+font-size:8pt
 color: #000000;
 }

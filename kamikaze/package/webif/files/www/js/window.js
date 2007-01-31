@@ -42,7 +42,7 @@ document.getElementById("dwindow").style.display=''
 document.getElementById("dwindow").style.width=initialwidth=width+"px"
 document.getElementById("dwindow").style.height=initialheight=height+"px"
 document.getElementById("dwindow").style.left=screen.width/2 + "px"
-document.getElementById("dwindow").style.top=ns6? window.pageYOffset*1+screen.height/3 +"px" : iecompattest().scrollTop*1+screen.height/3 +"px"
+document.getElementById("dwindow").style.top=ns6? window.pageYOffset*1+document.body.clientHeight/3-height +"px" : iecompattest().scrollTop*1+document.body.clientHeight/3-height +"px"
 //document.getElementById("cframe").src=url
 }
 }

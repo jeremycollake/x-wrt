@@ -29,7 +29,7 @@ header "Status" "Site Survey" "<img src=/images/wscan.jpg align=absmiddle>&nbsp;
 
 if is_package_installed "wl" ; then #--->[ -s "/usr/sbin/wl" ] ||
 
-if [ "$FORM_joinwifi" = "1" ]; then
+if [ "$FORM_joinwifi" != "" ]; then
 . "/lib/config/uci.sh"
 
 config_cb() {
@@ -80,6 +80,9 @@ fi
 MAX_TRIES=4
 MAX_CELLS=100
 Wimg=0
+color=0
+counter=0
+current=1
 
 tempfile=$(mktemp /tmp/.survtemp.XXXXXX)
 tempfile2=$(mktemp /tmp/.survtemp.XXXXXX)
@@ -89,13 +92,10 @@ tempscan=$(mktemp /tmp/.survscan.XXXXXX)
 #
 Dopurge ()
 {
-
 	sed 1d < $tempfile > $tempfile2
 	rm $tempfile
 	mv $tempfile2 $tempfile     
 }
-
-counter=0
 
 for counter in $(seq 1 $MAX_TRIES); do
        wl scan
@@ -116,17 +116,14 @@ echo "" > $tempfile
 echo "$current_line" >> $tempfile
 rm $tempscan
 #--------------------------------------------
-current=1
-
-echo "<script type="text/javascript" src="/js/window.js">"
-echo "</script>"
 
 cat <<EOF
+<script type="text/javascript" src="/js/window.js">
+</script>
 <script>
 function java1(target) {
 document.wepkeyform.wifi.value = target
 }
-
 </script>
 
 <div id="dwindow" style="position:absolute;background-color:#EBEBEB;cursor:hand;left:0px;top:0px;display:none" onMousedown="initializedrag(event)" onMouseup="stopdrag()" onSelectStart="return false">
@@ -137,7 +134,8 @@ document.wepkeyform.wifi.value = target
 <form action='$SCRIPT_NAME' method='post' name='wepkeyform'>
 <table width="100%" border="0" >
 <tr><td><img src="/images/wep.gif"></td>
-<td><input type="text" name="wepkey">&nbsp;&nbsp;<input name="image" TYPE="image" style='border: 1px solid #000000; font-size:8pt;' SRC="/images/join.gif"> 
+<td><input type="text" name="wepkey">&nbsp;&nbsp;
+<input type='submit' style='border: 1px solid #000000; font-size:8pt; ' name='joinwifi' value='@TR<<Join>>' >
 </td></tr><tr height="1"><td>Key:</td>
 <td><select name="keytype">
 <option value="wep" selected>WEP</option>
@@ -145,23 +143,22 @@ document.wepkeyform.wifi.value = target
 <option value="psk2">PSK2</option>
 <option value="wpa">WPA</option>
 <option value="wpa2">WPA2</option>
-</select><input type="hidden" name="wifi" value=""><input type="hidden" name="joinwifi" value="1"></td>
+</select><input type="hidden" name="wifi" value=""></td>
 </tr></table></form></td></tr></table></div>
 
+<br><a href='$SCRIPT_NAME'>@TR<<Re-scan>></a><br><br><table width="98%" border="0" cellspacing="1" bgcolor="#999999" >
+<tr class="wifiscantitle" >
+<td width='32'>@TR<<Signal>>/</td>
+<td width='32'>@TR<<Noise>></td>
+<td>@TR<<Status>></td>
+<td>@TR<<SSID>></td>
+<td>@TR<<MAC>></td>
+<td width='20'>@TR<<Channel>></td>
+<td>@TR<<Rate>></td>
+<td>&nbsp;</td>
+</tr>
 
 EOF
-echo "<br><a href='$SCRIPT_NAME'>@TR<<Re-scan>></a><br><br><table width="98%" border="0" cellspacing="1" bgcolor="#999999" >"
-echo "<tr bgcolor="#999999" class="wifiscantitle" >"
-echo "<td width='32'>@TR<<Signal>>/</td>"
-echo "<td width='32'>@TR<<Noise>></td>"
-echo "<td>@TR<<Status>></td>"
-echo "<td>@TR<<SSID>></td>"
-echo "<td>@TR<<MAC>></td>"
-echo "<td width='20'>@TR<<Channel>></td>"
-echo "<td>@TR<<Rate>></td>"
-echo "<td>&nbsp;</td>"
-echo "</tr>"
-
 
 # Read File
 #-------------------------
@@ -194,7 +191,7 @@ current_line=$(sed '2,$ d' $tempfile)
 	echo ""
   else
 
-#-------------------------
+##### Set Variables
 #current_line=$(sed '2,$ d' $tempfile)
 SSID=$(sed '2,$ d' $tempfile | sed -e s/'SSID: '//g -e s/'"'//g)
 Dopurge
@@ -208,44 +205,21 @@ Dopurge
 RATE=$(sed '2,$ d' $tempfile  | wc -c)
 RATED=$(sed '2,$ d' $tempfile)
 
-echo "<tr bgcolor="#FFFFFF" class="wifiscanrow">"
-if [ $RSSI -lt 60 ]; then 
-Wimg=5
-elif [ $RSSI -lt 72 ]; then
-Wimg=4
-elif [ $RSSI -lt 81 ]; then
-Wimg=3
-elif [ $RSSI -lt 85 ]; then
-Wimg=2
-elif [ $RSSI -lt 92 ]; then
-Wimg=1
-else
-Wimg=0
-fi
 
+if [ "$color" = "1" ] ; then color=2 ; else color=1 ; fi
+
+echo "<tr bgcolor="#FFFFFF" class="wifiscanrow$color">"
+
+##### Signal Ratio
+if [ $RSSI -lt 60 ]; then Wimg=5 ; elif [ $RSSI -lt 72 ]; then Wimg=4 ; elif [ $RSSI -lt 81 ]; then Wimg=3 ; elif [ $RSSI -lt 85 ]; then Wimg=2 ; elif [ $RSSI -lt 92 ]; then Wimg=1 ; else Wimg=0 ; fi
 echo "<td><center><img src="/images/wifi$Wimg.gif" ALT='-" $RSSI "dBm'></center></td>"
 
-if [ $NOISE -gt 95 ]; then
-Wimg=0
-elif [ $NOISE -gt 92 ]; then
-Wimg=1
-elif [ $NOISE -gt 88 ]; then
-Wimg=2
-elif [ $NOISE -gt 85 ]; then
-Wimg=3
-elif [ $NOISE -gt 80 ]; then 
-Wimg=4
-else
-Wimg=5
-fi
-
+##### Noise Ratio
+if [ $NOISE -gt 95 ]; then Wimg=0 ; elif [ $NOISE -gt 92 ]; then Wimg=1 ; elif [ $NOISE -gt 88 ]; then Wimg=2 ; elif [ $NOISE -gt 85 ]; then Wimg=3 ; elif [ $NOISE -gt 80 ]; then Wimg=4 ; else Wimg=5 ; fi
 echo "<td><center><img src="/images/wifi$Wimg.gif" ALT='-" $NOISE "dBm'></center></td>"
 
-if  [ "$SEC" == "ESS WEP" ] ; then
-Wimg="wep"
-else
-Wimg="opn"
-fi
+##### Security
+if  [ "$SEC" == "ESS WEP" ] ; then Wimg="wep" ; else Wimg="opn" ; fi
 
 echo "<td><center><img src="/images/$Wimg.gif" ALT='$SEC'></center></td>"
 echo "<td>&nbsp;&nbsp;" $SSID
@@ -254,31 +228,18 @@ echo "</td>"
 echo "<td><center>" $BSSID "</center></td>"
 echo "<td><center>" $CHANNEL "</center></td>"
 
-if  [ "$RATE" == "66" ] ; then
-Wimg="54 Mbps"
-elif  [ "$RATE" == "75" ] ; then
-Wimg="54 Mbps"
-elif  [ "$RATE" == "44" ] ; then
-Wimg="11 Mbps"
-else
-#Wimg="("$RATE") $RATED"
-Wimg="(?)"
-fi
+##### Speed (needs improvements!)
+if  [ "$RATE" == "66" ] ; then Wimg="54 Mbps" ; elif  [ "$RATE" == "75" ] ; then Wimg="54 Mbps" ; elif  [ "$RATE" == "44" ] ; then Wimg="11 Mbps" ; else Wimg="(?)" ; fi
 
 echo "<td><center>$Wimg</center></td>"
 echo "<td><center>"
 
 if  [ "$SEC" == "ESS WEP" ] ; then
-cat <<EOF
-<a href="javascript:loadwindow('$SCRIPT_NAME/?wep=1&ssid=$SSID',300,100)"><img src="/images/join.gif" border="1" style="border: 1px #000000" onclick="javascript:java1('$SSID')"></a>
-EOF
-
+echo "<input type='submit' style='border: 1px solid #000000; font-size:8pt; ' name='joinwifi' value='@TR<<Join>>' onClick=loadwindow('$SCRIPT_NAME/?wep=1&ssid=$SSID',300,100);java1('$SSID')>"
 else
-echo "<form action='$SCRIPT_NAME' method='post'><input type="hidden" name='wifi' value='$SSID'><input type='hidden' name='joinwifi' value='1'><input TYPE="image" SRC="/images/join.gif" style='border: 1px solid #000000; font-size:8pt; ' ></form>"
+echo "<form action='$SCRIPT_NAME' method='post'><input type="hidden" name='wifi' value='$SSID'><input type='submit' style='border: 1px solid #000000; font-size:8pt; ' name='joinwifi' value='@TR<<Join>>'></form>"
 fi
-
 echo "</center></td></tr>"
-
 fi
 fi
 
@@ -288,7 +249,7 @@ done < $tempfile
 
 rm $tempfile
 #rm $tempfile2
-echo "</table><br><a href='$SCRIPT_NAME'>@TR<<Re-scan>></a>"
+echo "</table><br><a href='$SCRIPT_NAME'>@TR<<Re-scan>></a><br>"
 fi
 else
 
