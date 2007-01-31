@@ -1,22 +1,33 @@
 #!/usr/bin/webif-page
 <?
-# add haserl args in double quotes it has very ugly
-# command line parsing code!
-. "/usr/lib/webif/functions.sh"
+#########################################
+# About page
+#
+# Author(s) [in order of work date]:
+#        Dmytro Dykhman <dmytro@iroot.ca.
+#
+
+. /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
 
 if ! empty "$FORM_package"; then
-echo "<html><header></header><body>"
-echo "<font size=3>Installing Hydra 4.5 packages ...<br><br>"
-wget -q http://www.hackerpimps.com/fairuzawrt/bin/hydra -P /usr/sbin/
-chmod 755 /usr/sbin/hydra
-echo "Done.</font>"
-echo "</body></html>"
+	echo "<html><header></header><body><font size=3>Installing Hydra 4.5 package ...<br><br>"
+	wget -q http://www.hackerpimps.com/fairuzawrt/bin/hydra -P /usr/sbin/
+	chmod 755 /usr/sbin/hydra
+	echo "Done.</font></body></html>"
+exit
+fi
+
+if ! empty "$FORM_remove"; then
+	echo "<html><header></header><body><font size=3>Removing Hydra 4.5 package ...<br><br>"
+	chmod 777 /usr/sbin/hydra
+	rm /usr/sbin/hydra
+	rm /etc/config/hydra
+	echo "Done.</font></body></html>"
 exit
 fi
 
 if  [ -s "/usr/sbin/hydra" ]  ; then 
-
 
 ########## Check if first time /etc/config/cifs exists
 

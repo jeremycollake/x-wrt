@@ -135,7 +135,7 @@ document.wepkeyform.wifi.value = target
 <table width="100%" border="0" >
 <tr><td><img src="/images/wep.gif"></td>
 <td><input type="text" name="wepkey">&nbsp;&nbsp;
-<input type='submit' style='border: 1px solid #000000; font-size:8pt; ' name='joinwifi' value='@TR<<Join>>' >
+<input type='submit' class='flatbtn' name='joinwifi' value='@TR<<Join>>' >
 </td></tr><tr height="1"><td>Key:</td>
 <td><select name="keytype">
 <option value="wep" selected>WEP</option>

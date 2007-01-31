@@ -1,22 +1,33 @@
 #!/usr/bin/webif-page
 <?
-# add haserl args in double quotes it has very ugly
-# command line parsing code!
-. "/usr/lib/webif/functions.sh"
+#########################################
+# About page
+#
+# Author(s) [in order of work date]:
+#        Dmytro Dykhman <dmytro@iroot.ca.
+#
+
+. /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
 
 if ! empty "$FORM_package"; then
 echo "<html><header></header><body>"
-
-	echo "<font size=3>Installing Samba packages ...<br><br><pre>"
-echo "Installing kmod-cifs package ..."
+	echo "Installing Samba packages ...<br><br><pre>"
+	echo "Installing kmod-cifs package ..."
 	install_package "http://downloads.openwrt.org/whiterussian/rc6/packages/kmod-cifs_2.4.30-brcm-4_mipsel.ipk"
-echo "Installing cifsmount package ..."
-       install_package "http://downloads.openwrt.org/whiterussian/rc6/packages/cifsmount_1.5-2_mipsel.ipk"
-	echo "</pre></font>"
-echo "<br><font color=red>Router must reboot...</font>"
-echo "</body></html>"
+	echo "Installing cifsmount package ..."
+	install_package "http://downloads.openwrt.org/whiterussian/rc6/packages/cifsmount_1.5-2_mipsel.ipk"
+	echo "</pre><br><font color=red>Router must reboot...</font></body></html>"
 reboot
+exit
+fi
+
+if ! empty "$FORM_remove"; then
+	echo "<html><header></header><body><font size=3>Removing Hydra 4.5 package ...<br><br><pre>"
+	remove_package "kmod-cifs"
+	remove_package "cifsmount"
+	rm /etc/config/cifs
+	echo "</pre>Done.</font></body></html>"
 exit
 fi
 
@@ -57,7 +68,8 @@ MOUNT_MNT="$CONFIG_mount_mnt"
 
 
 
-HEADER="<link rel=stylesheet type=text/css href=/themes/active/webif.css><link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css">
+HEADER="<link rel=stylesheet type=text/css href=/themes/active/webif.css>
+<link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css">
 <script type="text/javascript" src="/js/balloontip.js">
 </script>"
 
