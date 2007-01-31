@@ -40,11 +40,6 @@ subcategories() {
 			-f /usr/lib/webif/subcategories.awk -
 }
 
-show_validated_logo() {
-	echo "<br /><br />
-		<p id=\"validated-text\">@TR<<page_w3c_valid#This page passed W3C XHTML validation tests.>></p>"
-}
-
 ShowWIPWarning() {
 	echo "<div class=\"warning\">@TR<<big_warning#WARNING>>: @TR<<page_incomplete#This page is incomplete and may not work correctly, or at all.>></div>"
 }
