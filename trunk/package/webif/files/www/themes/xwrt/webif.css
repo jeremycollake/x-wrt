@@ -335,7 +335,8 @@ li.about { margin-left: 2em; }
 	border: 1px solid #315579;
 	margin-top: 0.2em;
 	margin-bottom: 0.2em;
-	padding: 3px;
+	padding: 2px;
+	font-size: 0.8em;
 }
 
 .progress{
