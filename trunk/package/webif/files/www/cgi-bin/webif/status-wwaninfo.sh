@@ -22,7 +22,6 @@ cat << EOF
 $INFO
 </pre>
 @TR<<Signal Strength>>:
-<div>
 EOF
 
 # check if numeric
@@ -37,7 +36,7 @@ expr "$STRENGTH" + 0 >&- 2>&- && {
 		[ "$index" -ge "$STRENGTH" ] && COLOR='grey'
 		echo '<div style="background-color:' $COLOR '; width: 25px; float:left;">&nbsp;</div>'
 	done
-	echo "&nbsp</div>"
+	echo "</div>"
 	echo '<span style="font-size:smaller">(0-10: unreliable, 11-14: OK, 15-31: ideal)</span>'
 } || {
 	echo "${STRENGTH}"
