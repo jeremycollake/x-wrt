@@ -122,8 +122,6 @@ helptext|Helptext DNS save#You need save your settings on this page before addin
 end_form
 EOF
 
-show_validated_logo
-
 footer ?>
 <!--
 ##WEBIF:name:Network:200:WIFI-LAN

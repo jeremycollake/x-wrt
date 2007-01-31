@@ -211,8 +211,6 @@ helptext|Helptext Wireless Distance#You must enter a number that is double the d
 end_form
 EOF
 
-show_validated_logo
-
 footer ?>
 <!--
 ##WEBIF:name:Network:400:Advanced Wireless

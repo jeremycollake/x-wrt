@@ -155,7 +155,6 @@ cat <<EOF
 
 EOF
 
-show_validated_logo
 footer
 
 ?>

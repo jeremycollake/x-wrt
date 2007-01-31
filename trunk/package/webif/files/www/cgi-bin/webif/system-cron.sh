@@ -49,9 +49,7 @@ end_form"
 
 <a href="system-crontabs.sh">@TR<<View Crontab files>></a>
 
-<?
-show_validated_logo
-footer ?>
+<? footer ?>
 <!--
 ##WEBIF:name:System:150:Cron
 -->

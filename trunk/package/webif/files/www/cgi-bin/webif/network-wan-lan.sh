@@ -377,8 +377,6 @@ helptext|Helptext LAN DNS save#You need save your settings on this page before a
 end_form
 EOF
 
-show_validated_logo
-
 footer ?>
 
 <!--

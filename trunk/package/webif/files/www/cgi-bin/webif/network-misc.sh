@@ -78,7 +78,6 @@ end_form
 EOF
 
 echo "$tcp_warning_text"
-show_validated_logo
 
 footer ?>
 <!--
