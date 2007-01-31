@@ -161,7 +161,7 @@ for device in $DEVICES; do
         distance="field|@TR<<Wireless Distance (In Meters)>>
                 text|distance_${device}|$FORM_distance"
 
-	add_vcfg="string|<a href="$SCRIPT_NAME?add_vcfg=$device">@TR<<Add Virtual Interface>></a>"
+	add_vcfg="string|<tr><td><a href="$SCRIPT_NAME?add_vcfg=$device">@TR<<Add Virtual Interface>></a>"
 
         append forms "$maxassoc" "$N"
         append forms "$distance" "$N"
@@ -385,7 +385,7 @@ for device in $DEVICES; do
 				set_visible('radiuskey_$vcfg', v);
 				set_visible('radius_ip_$vcfg', v);"
 			append js "$javascript_forms" "$N"
-			remove_vcfg="string|<a href="$SCRIPT_NAME?remove_vcfg=$vcfg">@TR<<Remove Virtual Interface>></a>"
+			remove_vcfg="string|<tr><td><a href="$SCRIPT_NAME?remove_vcfg=$vcfg">@TR<<Remove Virtual Interface>></a>"
 			append forms "helpitem|Encryption Type" "$N"
 			append forms "helptext|HelpText Encryption Type#WPA (RADIUS) is only supported in Access Point mode. WPA (PSK) does not work in Ad-Hoc mode." "$N"
 			append forms "$remove_vcfg" "$N"
