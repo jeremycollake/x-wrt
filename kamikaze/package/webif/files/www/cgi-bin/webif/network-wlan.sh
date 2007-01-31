@@ -105,14 +105,14 @@ fi
 #
 for device in $DEVICES; do
 	if empty "$FORM_submit"; then
-		config_get mode $device mode
+		config_get FORM_ap_mode $device mode
 	        config_get country $device country
 	        config_get FORM_channel $device channel
 	        config_get FORM_maxassoc $device maxassoc
 	        config_get FORM_distance $device distance
 	else
 		config_get country $device country
-		eval FORM_mode="\$FORM_mode_$device"
+		eval FORM_ap_mode="\$FORM_ap_mode_$device"
 		eval FORM_channel="\$FORM_channel_$device"
 		eval FORM_maxassoc="\$FORM_maxassoc_$device"
 		eval FORM_distance="\$FORM_distance_$device"
@@ -120,9 +120,9 @@ for device in $DEVICES; do
         append forms "start_form|@TR<<Wireless Adapter >> $device @TR<< Configuration>>" "$N"
         
         mode_fields="field|@TR<<Mode>>
-                select|mode_$device|$FORM_mode
+		select|mode_ap_$device|$FORM_ap_mode
+		option|11bg|@TR<<802.11B/G>>
         	option|11b|@TR<<802.11B>>
-        	option|11bg|@TR<<802.11B/G>>
         	option|11g|@TR<<802.11G>>
         	option|11a|@TR<<802.11A>>"
         append forms "$mode_fields" "$N"
@@ -421,9 +421,11 @@ done
 EOF
 		#equal "$?" 0 && {
 			for device in $DEVICES; do
+				eval FORM_ap_mode="\$FORM_ap_mode_$device"
 				eval FORM_channel="\$FORM_channel_$device"
 				eval FORM_maxassoc="\$FORM_maxassoc_$device"
 				eval FORM_distance="\$FORM_distance_$device"
+				uci_set "wireless" "$device" "mode" "$FORM_ap_mode"
 				uci_set "wireless" "$device" "channel" "$FORM_channel"
 				uci_set "wireless" "$device" "maxassoc" "$FORM_maxassoc"
 				uci_set "wireless" "$device" "distance" "$FORM_distance"
