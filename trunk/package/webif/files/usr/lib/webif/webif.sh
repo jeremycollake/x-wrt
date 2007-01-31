@@ -40,11 +40,6 @@ subcategories() {
 			-f /usr/lib/webif/subcategories.awk -
 }
 
-show_validated_logo() {
-	echo "<br /><br />
-		<p id=\"validated-text\">@TR<<page_w3c_valid#This page passed W3C XHTML validation tests.>></p>"
-}
-
 ShowWIPWarning() {
 	echo "<div class=\"warning\">@TR<<big_warning#WARNING>>: @TR<<page_incomplete#This page is incomplete and may not work correctly, or at all.>></div>"
 }
@@ -149,14 +144,14 @@ header() {
 				width="200" height="80"  scrolling="no" frameborder="0"></iframe>'
 	else
 		short_status_frame="<div id=\"short-status\">
-				<h3><strong>@TR<<Status>>:</strong></h3>
-				<ul>
-					<li><strong>$_firmware_name $_firmware_version</strong></li>
-					<li><strong>@TR<<Host>>:</strong> $_hostname</li>
-					<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
-					<li><strong>@TR<<Load>>:</strong> $_loadavg</li>
-				</ul>
-				</div>"
+		<h3><strong>@TR<<Status>>:</strong></h3>
+		<ul>
+			<li><strong>$_firmware_name $_firmware_version</strong></li>
+			<li><strong>@TR<<Host>>:</strong> $_hostname</li>
+			<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
+			<li><strong>@TR<<Load>>:</strong> $_loadavg</li>
+		</ul>
+	</div>"
 	fi
 
 	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && grep 'root:!' /etc/passwd >&- 2>&- && {
@@ -171,47 +166,54 @@ Pragma: no-cache
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-	<head>
-	<title>$_firmware_name @TR<<Administrative Console>></title>
-		<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
-		<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_white.css" title="white" />
-		<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_brown.css" title="brown" />
-		<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_green.css" title="green" />
-		<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_navyblue.css" title="navyblue" />
-		<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_black.css" title="black" />
-		<link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css" />
-		<link rel="stylesheet" type="text/css" href="/themes/active/waitbox.css" />
-		<!--[if lt IE 7]>
-			<link rel="stylesheet" type="text/css" href="/themes/active/ie_lt7.css" />
-		<![endif]-->		
-		<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
-		<meta http-equiv="expires" content="-1" />
-		<script type="text/javascript" src="/js/waitbox.js"></script>
-		<script type="text/javascript" src="/js/styleswitcher.js"></script>
-	</head>
-	<body $4>
+<head>
+<title>$_firmware_name @TR<<Administrative Console>></title>
+	<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
+	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_white.css" title="white" />
+	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_brown.css" title="brown" />
+	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_green.css" title="green" />
+	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_navyblue.css" title="navyblue" />
+	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_black.css" title="black" />
+	<link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css" />
+	<link rel="stylesheet" type="text/css" href="/themes/active/waitbox.css" />
+	<!--[if lt IE 7]>
+		<link rel="stylesheet" type="text/css" href="/themes/active/ie_lt7.css" />
+	<![endif]-->		
+	<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
+	<meta http-equiv="expires" content="-1" />
+	<script type="text/javascript" src="/js/waitbox.js"></script>
+	<script type="text/javascript" src="/js/styleswitcher.js"></script>
+</head>
+<body $4>
 
-	<div id="container">
-		<div id="header">
-			<h1>@TR<<X-Wrt Administration Console>></h1>
-			$short_status_frame
-		</div>
+<div id="container">
+<div id="header">
+	<h1>@TR<<X-Wrt Administration Console>></h1>
+	$short_status_frame
+</div>
 
-		<div id="mainmenu">$_categories</div>
-		<div id="submenu">$_subcategories</div>
-		$_form
-		<div id="colorswitcher">
-			<div style="background: #000000" title="black" onclick="setActiveStyleSheet('black'); return false;"></div>
-			<div style="background: #192a65" title="navyblue" onclick="setActiveStyleSheet('navyblue'); return false;"></div>
-			<div style="background: #114488" title="blue" onclick="setActiveStyleSheet('default'); return false;"></div>
-			<div style="background: #2b6d21" title="green" onclick="setActiveStyleSheet('green'); return false;"></div>
-			<div style="background: #e8ca9e" title="brown" onclick="setActiveStyleSheet('brown'); return false;"></div>
-			<div style="background: #fff" title="white" onclick="setActiveStyleSheet('white'); return false;"></div>
-		</div>
+<div id="mainmenu">
+$_categories
+</div>
 
-		<div id="content">
-				$_head
-				$ERROR
+<div id="submenu">
+$_subcategories
+</div>
+
+<div id="colorswitcher">
+	<div style="background: #000000" title="black" onclick="setActiveStyleSheet('black'); return false;"></div>
+	<div style="background: #192a65" title="navyblue" onclick="setActiveStyleSheet('navyblue'); return false;"></div>
+	<div style="background: #114488" title="blue" onclick="setActiveStyleSheet('default'); return false;"></div>
+	<div style="background: #2b6d21" title="green" onclick="setActiveStyleSheet('green'); return false;"></div>
+	<div style="background: #e8ca9e" title="brown" onclick="setActiveStyleSheet('brown'); return false;"></div>
+	<div style="background: #fff" title="white" onclick="setActiveStyleSheet('white'); return false;"></div>
+</div>
+
+$_form
+
+<div id="content">
+	$_head
+	$ERROR
 EOF
 
 	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && {
@@ -243,7 +245,7 @@ EOF
 		<td><input type="password" name="passwd1" /></td>
 	</tr>
 	<tr>
-		<td>@TR<<Confirm Password>>: &nbsp; </td>
+		<td>@TR<<Confirm Password>>:</td>
 		<td><input type="password" name="passwd2" /></td>
 	</tr>
 	<tr>
@@ -266,9 +268,11 @@ footer() {
 	_changes=${_changes:+(${_changes})}
 	_endform=${_savebutton:+</form>}
 	cat <<EOF
-	</div>
-	<br />
-	<fieldset id="save">
+</div>
+
+<br />
+
+<fieldset id="save">
 	<legend><strong>@TR<<Proceed Changes>></strong></legend>
 		$_savebutton
 		<ul class="apply">
@@ -276,14 +280,17 @@ footer() {
 			<li><a href="config.sh?mode=clear&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Clear Changes>> &laquo;</a></li>
 			<li><a href="config.sh?mode=review&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Review Changes>> $_changes &laquo;</a></li>
 		</ul>
-	</fieldset>	
-	$_endform
-	<hr />
-	<div id="footer">
-		<h3>X-Wrt</h3>
-		<em>@TR<<making_usable#End user extensions for OpenWrt>></em>
-	</div>
-    </div>
+</fieldset>	
+$_endform
+
+<hr />
+
+<div id="footer">
+	<h3>X-Wrt</h3>
+	<em>@TR<<making_usable#End user extensions for OpenWrt>></em>
+</div>
+
+</div> <!-- End #container -->
 </body>
 </html>
 EOF
