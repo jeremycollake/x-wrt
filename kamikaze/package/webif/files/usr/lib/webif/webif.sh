@@ -102,14 +102,10 @@ Pragma: no-cache
         <link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
         <link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css" />
         <title></title>
+	<style type="text/css">
+        	html, body { background-color: transparent; }
+	</style>
 </head>
-<style type="text/css">
-        html, body {
-                background-color: transparent;
-        }
-</style>
-<script type="text/javascript" src="/colorize.js"></script>
-<script type="text/javascript"> colorize(); </script>
 EOF
 }
 
