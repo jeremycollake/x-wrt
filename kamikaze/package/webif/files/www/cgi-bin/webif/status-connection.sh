@@ -62,7 +62,6 @@ header "Status" "Netstat" "@TR<<Netstat>>"
 
 <br />
 <?
-show_validated_logo
 footer ?>
 <!--
 ##WEBIF:name:Status:400:Netstat

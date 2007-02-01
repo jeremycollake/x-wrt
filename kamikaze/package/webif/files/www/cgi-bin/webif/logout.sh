@@ -26,7 +26,6 @@ cat <<EOF
 </div>
 EOF
 #logout_user
-show_validated_logo
 footer ?>
 <!--
 ##WEBIF:name:Logout:1:Logout

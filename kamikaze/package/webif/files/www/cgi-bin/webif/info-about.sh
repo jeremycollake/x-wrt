@@ -30,7 +30,7 @@ this_revision=$(cat "/www/.version")
 <DIV>
 <IFRAME SRC="info-credits.sh" STYLE="width:800px; height:400px; border:1px dotted #888888;" FRAMEBORDER="0" SCROLLING="NO"></IFRAME>
 </DIV>
-<? show_validated_logo
+<?
 footer ?>
 <!--
 ##WEBIF:name:Info:950:About

@@ -404,17 +404,27 @@ config_get FORM_device $vcfg device
 if [ "$FORM_device" = "$device" ]; then
 # TODO: A bug exists in validate where if blank lines preceed a validation entry then it can fail validation
 #  without any reported error,
-string|FORM_radius_key_$vcfg|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_radius_key" "$N"
-ip|FORM_radius_ipaddr|@TR<<RADIUS IP Address>>|required|$FORM_radius_ipaddr" "$N"
-wpapsk|FORM_wpa_psk|@TR<<WPA PSK#WPA Pre-Shared Key>>|required|$FORM_wpa_psk" "$N"
+eval FORM_radius_key="\$FORM_radius_key_$vcfg"
+eval FORM_radius_ipaddr="\$FORM_radius_ipaddr_$vcfg"
+eval FORM_wpa_psk="\$FORM_wpa_psk_$vcfg"
+eval FORM_key="\$FORM_key_$vcfg"
+eval FORM_key1="\$FORM_key1_$vcfg"
+eval FORM_key2="\$FORM_key2_$vcfg"
+eval FORM_key3="\$FORM_key3_$vcfg"
+eval FORM_key4="\$FORM_key4_$vcfg"
+eval FORM_broadcast="\$FORM_broadcast_$vcfg"
+eval FORM_ssid="\$FORM_ssid_$vcfg"
+string|FORM_radius_key|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_radius_key
+ip|FORM_radius_ipaddr|@TR<<RADIUS IP Address>>|required|$FORM_radius_ipaddr
+wpapsk|FORM_wpa_psk|@TR<<WPA PSK#WPA Pre-Shared Key>>|required|$FORM_wpa_psk
 int|FORM_key|@TR<<Selected WEP Key>>|min=1 max=4|$FORM_key
-wep|FORM_key1_$vcfg|@TR<<WEP Key>> 1||$FORM_key1
-wep|FORM_key2_$vcfg|@TR<<WEP Key>> 2||$FORM_key2
-wep|FORM_key3_$vcfg|@TR<<WEP Key>> 3||$FORM_key3
-wep|FORM_key4_$vcfg|@TR<<WEP Key>> 4||$FORM_key4
+wep|FORM_key1|@TR<<WEP Key>> 1||$FORM_key1
+wep|FORM_key2|@TR<<WEP Key>> 2||$FORM_key2
+wep|FORM_key3|@TR<<WEP Key>> 3||$FORM_key3
+wep|FORM_key4|@TR<<WEP Key>> 4||$FORM_key4
 int|FORM_broadcast|wl0_closed|required min=0 max=1|$FORM_broadcast
-string|FORM_ssid|@TR<<ESSID>>|required|$FORM_ssid" "$N"
-int|FORM_channel|@TR<<Channel>>|required min=0 max=$CHANNEL_MAX|$FORM_channel
+string|FORM_ssid|@TR<<ESSID>>|required|$FORM_ssid
+#int|FORM_channel|@TR<<Channel>>|required min=0 max=$CHANNEL_MAX|$FORM_channel
 fi
 done
 done

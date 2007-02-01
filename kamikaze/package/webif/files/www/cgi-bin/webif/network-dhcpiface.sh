@@ -222,8 +222,6 @@ EOF
 	fi
 fi
 
-show_validated_logo
-
 footer ?>
 <!--
 ##WEBIF:name:Network:425:DHCP

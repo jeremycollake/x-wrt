@@ -157,7 +157,6 @@ else
 	echo "@TR<<qos_scripts_disabled#The qos-scripts package is not active. Visit the <a href=\"./network-qos.sh\">QoS page</a> to install and/or enable it.>>"
 fi
 
-show_validated_logo
 footer ?>
 <!--
 ##WEBIF:name:Status:425:QoS

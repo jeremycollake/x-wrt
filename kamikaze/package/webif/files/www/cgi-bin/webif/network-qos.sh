@@ -490,8 +490,6 @@ end_form
 EOF
 fi
 
-#show_validated_logo
-
 footer ?>
 <!--
 ##WEBIF:name:Network:600:QoS

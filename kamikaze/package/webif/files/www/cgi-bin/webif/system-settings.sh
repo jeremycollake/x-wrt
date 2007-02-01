@@ -346,8 +346,6 @@ $dangerous_form_help
 $dangerous_form_end
 EOF
 
-show_validated_logo
-
 footer ?>
 
 <!--
