@@ -61,7 +61,7 @@ hr,
 	background: #51779e url(/images/openwrt-logo.gif) left 0.5em repeat-x;
 }
 
-#header h1 { text-indent: -9000px; }
+#header h1 { display: none; }
 
 /* ---  Short-status  --- */
 #header #short-status {
@@ -160,6 +160,9 @@ hr,
 	margin-bottom: 1.5em;
 }
 
+/* center image and headline vertically */
+#content h2 * { vertical-align: middle; }
+
 #content h3 {
 	margin-bottom: 0.6em;
 	padding: 0.2em;
@@ -167,14 +170,13 @@ hr,
 	background-color: #aac1d9;
 }
 
-#content .settings {
-	margin-left: 1%;
-}
+#content .settings { margin-left: 1%; }
 
 #content .settings .clearfix {
 	clear: both;
 	margin-bottom: 1em;
 }
+
 #content .settings-content {
 	position: relative;
 	float: left;
@@ -266,30 +268,6 @@ hr,
 #footer * { margin-left: 4%; }
 
 /* ---  Page specific styling  --- */
-/* About page */
-ul.about { list-style-type: disc; }
-
-li.about { margin-left: 2em; }
-
-.webif-name-title {
-	font-weight: bold;
-	font-size: 1.0em;
-}
-
-.webif-name-subtitle { font-size: 0.8em; }
-
-.webif-name-version { font-size: 0.8em; }
-
-.webif-contributors { font-size: 0.7em; }
-
-/* Status page */
-.mount-target {
-	display: inline;
-	padding-left: 1em;
-	font-size: 0.8em;
-	font-weight: normal;
-}
-
 /* Packages page */
 .packages {
 	font-size: 0.8em;
@@ -308,7 +286,6 @@ li.about { margin-left: 2em; }
 	font-style: italic;
 }
 
-#validated-text { display: none; }
 
 .failed-validation {
 	display: inline;
@@ -325,21 +302,21 @@ li.about { margin-left: 2em; }
 	color: #9A2C2C;
 	display: inline;
 }
-
+/* background color for odd lines/list items */
 .odd { background-color: #E5E7E9; }
 
 /* Progressbar */
-.progressbar-whole {
-	border: dotted Gray;
-	font-size: 0.7em;
+.progressbar {
+	border: 1px solid #315579;
+	margin-top: 0.2em;
+	margin-bottom: 0.2em;
+	padding: 2px;
+	font-size: 0.8em;
 }
 
-.progressbar-filled {
-	color: White;
-	background-color: #2b1b9f;
-}
-
-.progressbar-unfilled {
-	color: Black;
-	background-color: Black;
+.progress{
+	background-color: #AAC1D9;
+	padding: 0.1em 0 0.1em 0;
+	display: block;
+	text-align: center;
 }
