@@ -195,10 +195,14 @@ for device in $DEVICES; do
 	        		config_get FORM_hidden $vcfg hidden
 	        		config_get FORM_isolate $vcfg isolate
 			else
-				eval FORM_radius_key="\$FORM_radius_key_$vcfg"
+				eval FORM_key="\$FORM_radius_key_$vcfg"
 				eval FORM_radius_ipaddr="\$FORM_radius_ipaddr_$vcfg"
-				eval FORM_wpa_psk="\$FORM_wpa_psk_$vcfg"
+				
 				eval FORM_encryption="\$FORM_encryption_$vcfg"
+				case "$FORM_encryption" in
+					psk|psk2) eval FORM_key="\$FORM_wpa_psk_$vcfg";;
+					wpa|wpa2) eval FORM_key="\$FORM_radius_key_$vcfg";;
+				esac
 				eval FORM_mode="\$FORM_mode_$vcfg"
 				eval FORM_server="\$FORM_server_$vcfg"
 				eval FORM_port="\$FORM_port_$vcfg"
@@ -214,6 +218,7 @@ for device in $DEVICES; do
 				eval FORM_ssid="\$FORM_ssid_$vcfg"
 				eval FORM_network="\$FORM_network_$vcfg"
 			fi
+			
 			append forms "start_form|@TR<<Wireless Virtual Adaptor Configuration for Wireless Card >> $FORM_device" "$N"
 			network="field|@TR<<Network>>
 	        	        select|network_$vcfg|$FORM_network
@@ -247,6 +252,7 @@ for device in $DEVICES; do
 			eval FORM_generate_wep_40="\$FORM_generate_wep_40_$vcfg"
 			! empty "$FORM_generate_wep_128" &&
 			{
+				FORM_key="1"
 				FORM_key1=""
 				FORM_key2=""
 				FORM_key3=""
@@ -269,6 +275,7 @@ for device in $DEVICES; do
 
 			! empty "$FORM_generate_wep_40" &&
 			{
+				FORM_key="1"
 				FORM_key1=""
 				FORM_key2=""
 				FORM_key3=""
@@ -400,15 +407,18 @@ for device in $DEVICES; do
 			append forms "end_form" "$N"
 			
 			#set validate forms
-			#append validate_forms "string|FORM_radius_key|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_radius_key" "$N"
-			#append validate_forms "ip|FORM_radius_ipaddr|@TR<<RADIUS IP Address>>|required|$FORM_radius_ipaddr" "$N"
-			#append validate_forms "wpapsk|FORM_wpa_psk|@TR<<WPA PSK#WPA Pre-Shared Key>>|required|$FORM_wpa_psk" "$N"
-			append validate_forms "int|FORM_wep_key|@TR<<Selected WEP Key>>|min=1 max=4|$FORM_wep_key" "$N"
-			append validate_forms "wep|FORM_key1|@TR<<WEP Key>> 1||$FORM_key1" "$N"
-			append validate_forms "wep|FORM_key2|@TR<<WEP Key>> 2||$FORM_key2" "$N"
-			append validate_forms "wep|FORM_key3|@TR<<WEP Key>> 3||$FORM_key3" "$N"
-			append validate_forms "wep|FORM_key4|@TR<<WEP Key>> 4||$FORM_key4" "$N"
-			append validate_forms "string|FORM_ssid|@TR<<ESSID>>|required|$FORM_ssid" "$N"
+			case "$FORM_encryption" in
+				psk|psk2) append validate_forms "wpapsk|FORM_wpa_psk_$vcfg|@TR<<WPA PSK#WPA Pre-Shared Key>>|required|$FORM_key" "$N";;
+				wpa|wpa2) append validate_forms "string|FORM_radius_key_$vcfg|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_key" "$N"
+					append validate_forms "ip|FORM_radius_ipaddr|@TR<<RADIUS IP Address>>|required|$FORM_radius_ipaddr" "$N";;
+				wep)
+					append validate_forms "int|FORM_wep_key_$vcfg|@TR<<Selected WEP Key>>|min=1 max=4|$FORM_wep_key" "$N"
+					append validate_forms "wep|FORM_key1_$vcfg|@TR<<WEP Key>> 1||$FORM_key1" "$N"
+					append validate_forms "wep|FORM_key2_$vcfg|@TR<<WEP Key>> 2||$FORM_key2" "$N"
+					append validate_forms "wep|FORM_key3_$vcfg|@TR<<WEP Key>> 3||$FORM_key3" "$N"
+					append validate_forms "wep|FORM_key4_$vcfg|@TR<<WEP Key>> 4||$FORM_key4" "$N";;
+			esac
+			append validate_forms "string|FORM_ssid_$vcfg|@TR<<ESSID>>|required|$FORM_ssid" "$N"
 		fi
 	done
 done
@@ -442,7 +452,7 @@ EOF
 						eval FORM_port="\$FORM_port_$vcfg"
 						eval FORM_hidden="\$FORM_broadcast_$vcfg"
 						eval FORM_isolate="\$FORM_isolate_$vcfg"
-						eval FORM_key="\$FORM_key_$vcfg"
+						eval FORM_wep_key="\$FORM_wep_key_$vcfg"
 						eval FORM_key1="\$FORM_key1_$vcfg"
 						eval FORM_key2="\$FORM_key2_$vcfg"
 						eval FORM_key3="\$FORM_key3_$vcfg"
