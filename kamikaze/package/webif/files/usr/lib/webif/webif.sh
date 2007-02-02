@@ -92,7 +92,6 @@ has_pkgs() {
 mini_header() {
 
 cat <<EOF
-HTTP/1.0 200 OK
 Content-Type: text/html
 Pragma: no-cache
 
@@ -103,9 +102,9 @@ Pragma: no-cache
         <link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
         <link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css" />
         <title></title>
-        <style type="text/css">
-                html, body { background-color: transparent; }
-        </style>
+	<style type="text/css">
+        	html, body { background-color: transparent; }
+	</style>
 </head>
 EOF
 }
@@ -157,8 +156,7 @@ header() {
                 _savebutton=""
         }
 
-cat <<EOF
-HTTP/1.0 200 OK
+        cat <<EOF
 Content-Type: text/html
 Pragma: no-cache
 
