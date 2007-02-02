@@ -68,7 +68,7 @@ config_load wireless
 #echo "$DEVICES"
 #echo "vifs $vface"
 
-local forms js
+local forms js validate_forms
 #####################################################################
 #setup network device form for vfaces
 #
@@ -179,6 +179,10 @@ for device in $DEVICES; do
 	        		config_get FORM_ssid $vcfg ssid
 	        		config_get FORM_encryption $vcfg encryption
 	        		config_get FORM_key $vcfg key
+	        		case "$FORM_key" in
+	        			1|2|3|4) FORM_wep_key="$FORM_key"
+	        				FORM_key="";;
+	        		esac
 	        		config_get FORM_key1 $vcfg key1
 	        		config_get FORM_key2 $vcfg key2
 	        		config_get FORM_key3 $vcfg key3
@@ -198,6 +202,7 @@ for device in $DEVICES; do
 				eval FORM_hidden="\$FORM_broadcast_$vcfg"
 				eval FORM_isolate="\$FORM_isolate_$vcfg"
 				eval FORM_key="\$FORM_key_$vcfg"
+				eval FORM_wep_key="\$FORM_wep_key_$vcfg"
 				eval FORM_key1="\$FORM_key1_$vcfg"
 				eval FORM_key2="\$FORM_key2_$vcfg"
 				eval FORM_key3="\$FORM_key3_$vcfg"
@@ -220,17 +225,17 @@ for device in $DEVICES; do
 			option|adhoc|@TR<<Ad-Hoc>>"
 			append forms "$mode_fields" "$N"
 
-			hidden="field|@TR<<ESSID Broadcast>>|broadcast_$vcfg|hidden
+			hidden="field|@TR<<ESSID Broadcast>>|broadcast_form_$vcfg|hidden
 				select|broadcast_$vcfg|$FORM_hidden
 				option|0|@TR<<Show>>
 				option|1|@TR<<Hide>>"
 			append forms "$hidden" "$N"
 
-			ssid="field|@TR<<ESSID>>|ssid_$vcfg|hidden
+			ssid="field|@TR<<ESSID>>|ssid_form_$vcfg|hidden
 				text|ssid_$vcfg|$FORM_ssid"
 			append forms "$ssid" "$N"
 			
-			bssid="field|@TR<<BSSID>>|bssid_$vcfg|hidden
+			bssid="field|@TR<<BSSID>>|bssid_form_$vcfg|hidden
 				text|bssid_$vcfg|$FORM_bssid"
 			append forms "$bssid" "$N"
 
@@ -304,16 +309,16 @@ for device in $DEVICES; do
 				submit|generate_wep_128_$vcfg|@TR<<Generate 128bit Key>>
 				string|<br />
 				field|@TR<<WEP Key 1>>|wep_key_1_$vcfg|hidden
-				radio|key_$vcfg|$FORM_key|1
+				radio|wep_key_$vcfg|$FORM_wep_key|1
 				text|key1_$vcfg|$FORM_key1|<br />
 				field|@TR<<WEP Key 2>>|wep_key_2_$vcfg|hidden
-				radio|key_$vcfg|$FORM_key|2
+				radio|wep_key_$vcfg|$FORM_wep_key|2
 				text|key2_$vcfg|$FORM_key2|<br />
 				field|@TR<<WEP Key 3>>|wep_key_3_$vcfg|hidden
-				radio|key_$vcfg|$FORM_key|3
+				radio|wep_key_$vcfg|$FORM_wep_key|3
 				text|key3_$vcfg|$FORM_key3|<br />
 				field|@TR<<WEP Key 4>>|wep_key_4_$vcfg|hidden
-				radio|key_$vcfg|$FORM_key|4
+				radio|wep_key_$vcfg|$FORM_wep_key|4
 				text|key4_$vcfg|$FORM_key4|<br />"
 			append forms "$wep" "$N"
 
@@ -372,10 +377,10 @@ for device in $DEVICES; do
 				v = (isset('mode_$device','11a'));
 				set_visible('achannelform_$device', v);
 				v = (!isset('mode_$vcfg','wds'));
-				set_visible('ssid_$vcfg', v);
-				set_visible('broadcast_$vcfg', v);
+				set_visible('ssid_form_$vcfg', v);
+				set_visible('broadcast_form_$vcfg', v);
 				v = (isset('mode_$vcfg','wds'));
-				set_visible('bssid_$vcfg', v);
+				set_visible('bssid_form_$vcfg', v);
 				v = (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2'));
 				set_visible('wpapsk_$vcfg', v);
 				v = (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2') || isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2'));
@@ -390,6 +395,17 @@ for device in $DEVICES; do
 			append forms "helptext|HelpText Encryption Type#WPA (RADIUS) is only supported in Access Point mode. WPA (PSK) does not work in Ad-Hoc mode." "$N"
 			append forms "$remove_vcfg" "$N"
 			append forms "end_form" "$N"
+			
+			#set validate forms
+			#append validate_forms "string|FORM_radius_key|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_radius_key" "$N"
+			#append validate_forms "ip|FORM_radius_ipaddr|@TR<<RADIUS IP Address>>|required|$FORM_radius_ipaddr" "$N"
+			#append validate_forms "wpapsk|FORM_wpa_psk|@TR<<WPA PSK#WPA Pre-Shared Key>>|required|$FORM_wpa_psk" "$N"
+			append validate_forms "int|FORM_wep_key|@TR<<Selected WEP Key>>|min=1 max=4|$FORM_wep_key" "$N"
+			append validate_forms "wep|FORM_key1|@TR<<WEP Key>> 1||$FORM_key1" "$N"
+			append validate_forms "wep|FORM_key2|@TR<<WEP Key>> 2||$FORM_key2" "$N"
+			append validate_forms "wep|FORM_key3|@TR<<WEP Key>> 3||$FORM_key3" "$N"
+			append validate_forms "wep|FORM_key4|@TR<<WEP Key>> 4||$FORM_key4" "$N"
+			append validate_forms "string|FORM_ssid|@TR<<ESSID>>|required|$FORM_ssid" "$N"
 		fi
 	done
 done
@@ -398,38 +414,9 @@ if ! empty "$FORM_submit"; then
 	{
 		SAVED=1
 		validate <<EOF
-for device in $DEVICES; do
-for vcfg in $vface; do
-config_get FORM_device $vcfg device
-if [ "$FORM_device" = "$device" ]; then
-# TODO: A bug exists in validate where if blank lines preceed a validation entry then it can fail validation
-#  without any reported error,
-eval FORM_radius_key="\$FORM_radius_key_$vcfg"
-eval FORM_radius_ipaddr="\$FORM_radius_ipaddr_$vcfg"
-eval FORM_wpa_psk="\$FORM_wpa_psk_$vcfg"
-eval FORM_key="\$FORM_key_$vcfg"
-eval FORM_key1="\$FORM_key1_$vcfg"
-eval FORM_key2="\$FORM_key2_$vcfg"
-eval FORM_key3="\$FORM_key3_$vcfg"
-eval FORM_key4="\$FORM_key4_$vcfg"
-eval FORM_broadcast="\$FORM_broadcast_$vcfg"
-eval FORM_ssid="\$FORM_ssid_$vcfg"
-string|FORM_radius_key|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_radius_key
-ip|FORM_radius_ipaddr|@TR<<RADIUS IP Address>>|required|$FORM_radius_ipaddr
-wpapsk|FORM_wpa_psk|@TR<<WPA PSK#WPA Pre-Shared Key>>|required|$FORM_wpa_psk
-int|FORM_key|@TR<<Selected WEP Key>>|min=1 max=4|$FORM_key
-wep|FORM_key1|@TR<<WEP Key>> 1||$FORM_key1
-wep|FORM_key2|@TR<<WEP Key>> 2||$FORM_key2
-wep|FORM_key3|@TR<<WEP Key>> 3||$FORM_key3
-wep|FORM_key4|@TR<<WEP Key>> 4||$FORM_key4
-int|FORM_broadcast|wl0_closed|required min=0 max=1|$FORM_broadcast
-string|FORM_ssid|@TR<<ESSID>>|required|$FORM_ssid
-#int|FORM_channel|@TR<<Channel>>|required min=0 max=$CHANNEL_MAX|$FORM_channel
-fi
-done
-done
+$validate_forms
 EOF
-		#equal "$?" 0 && {
+		equal "$?" 0 && {
 			for device in $DEVICES; do
 				eval FORM_ap_mode="\$FORM_ap_mode_$device"
 				eval FORM_channel="\$FORM_channel_$device"
@@ -471,7 +458,11 @@ EOF
 						uci_set "wireless" "$vcfg" "port" "$FORM_port"
 						uci_set "wireless" "$vcfg" "hidden" "$FORM_hidden"
 						uci_set "wireless" "$vcfg" "isolate" "$FORM_isolate"
-						uci_set "wireless" "$vcfg" "key" "$FORM_key"
+						case "$FORM_encryption" in
+							wep) uci_set "wireless" "$vcfg" "key" "$FORM_wep_key";;
+							psk|psk2) uci_set "wireless" "$vcfg" "key" "$FORM_wpa_psk";;
+							wpa|wpa2) uci_set "wireless" "$vcfg" "key" "$FORM_radius_key";;
+						esac
 						uci_set "wireless" "$vcfg" "key1" "$FORM_key1"
 						uci_set "wireless" "$vcfg" "key2" "$FORM_key2"
 						uci_set "wireless" "$vcfg" "key3" "$FORM_key3"
@@ -479,7 +470,7 @@ EOF
 					fi
 				done
 			done
-		#}
+		}
 	}
 fi
 
