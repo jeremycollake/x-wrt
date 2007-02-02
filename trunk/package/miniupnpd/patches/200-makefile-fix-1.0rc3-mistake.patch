@@ -1,0 +1,18 @@
+diff -BurN miniupnpd.orig/Makefile.openwrt miniupnpd/Makefile.openwrt
+--- miniupnpd.orig/Makefile.openwrt	2007-02-01 20:50:38.000000000 -0500
++++ miniupnpd/Makefile.openwrt	2007-02-01 20:53:22.000000000 -0500
+@@ -16,7 +16,7 @@
+ BASEOBJS = miniupnpd.o upnphttp.o upnpdescgen.o upnpsoap.o \
+            upnpreplyparse.o minixml.o \
+ 		   upnpredirect.o getifaddr.o daemonize.o upnpglobalvars.o \
+-		   options.o
++		   options.o upnppermissions.o
+ 
+ LNXOBJS = linux/getifstats.o linux/iptcrdr.o
+ 
+@@ -69,3 +69,4 @@
+ linux/iptcrdr.o: linux/iptcrdr.h
+ testupnpdescgen.o: upnpdescgen.h
+ upnpdescgen.o: upnpdescgen.h miniupnpdpath.h upnpglobalvars.h
++upnppermissions.o: upnppermissions.c
+\ No newline at end of file
