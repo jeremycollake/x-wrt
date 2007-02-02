@@ -29,34 +29,36 @@ FREE_CONNECTIONS_PERCENT=$(expr $FREE_CONNECTIONS "*" 100 / $MAX_CONNECTIONS)
 USED_CONNECTIONS_PERCENT=$(expr 100 - $FREE_CONNECTIONS_PERCENT)
 
 # _loadavg should be set by the header code..
-empty "$_loadavg" && {
-	_loadavg="${_uptime#*load average: }"
-	_uptime="${_uptime#*up }"
-}
+# empty "$_loadavg" && {
+# 	_loadavg="${_uptime#*load average: }"
+#	_uptime="${_uptime#*up }"
+#}
 
 mounts_form=$(
 df | uniq | awk 'BEGIN { mcount=0 };
 	/\// {
 		filled_caption=$5;
-		print "string|<tr><td><strong>"$6"</strong></td><td>"$1"</td></tr>"
-		print "progressbar|mount_" mcount "|&nbsp;&nbsp;" $3 "<div class=kb>KB</div> @TR<<mount_of#of>> " $2 "<div class=kb>KB</div>|200|" $5 "|" filled_caption "|"; mcount+=1
+		print "string|<tr><td><strong>"$6"</strong><br /><em>"$1"</em></td><td>"
+		print "progressbar|mount_" mcount "|" $3 "KB @TR<<mount_of#of>> " $2 "KB|200|" $5 "|" filled_caption "|"; mcount+=1
+		print "</td></tr>"
 	}'
 )
 
+#start_form|@TR<<Load Average>>
+#string|<tr><td style="font-size:1.2em;color:red;">$_loadavg</<tr><td>
+#helpitem|Load Average
+#helptext|Helptext Load Average#The load average represents the average number of active processes during the past 1, 5, and 15 minutes
+#end_form|
+
 display_form <<EOF
-start_form|@TR<<Load Average>>
-string|<tr><td><font size="+1" color="red">$_loadavg</font><tr><td>
-helpitem|Load Average
-helptext|Helptext Load Average#The load average represents the average number of active processes during the past 1, 5, and 15 minutes
-end_form|
 start_form|@TR<<RAM Usage>>
-string|<tr><td>@TR<<Total>>: $TOTAL_MEM KB</td></tr>
+string|<tr><td>@TR<<Total>>: $TOTAL_MEM KB</td><td>
 progressbar|ramuse|@TR<<Used>>: $USED_MEM KB ($MEM_PERCENT_USED%)|200|$MEM_PERCENT_USED|$MEM_PERCENT_USED%||
 helpitem|RAM Usage
 helptext|Helptext RAM Usage#This is the current RAM usage. The amount free represents how much applications have available.
 end_form|
 start_form|@TR<<Tracked Connections>>
-string|<tr><td>@TR<<Maximum>>: $MAX_CONNECTIONS</td></tr>
+string|<tr><td>@TR<<Maximum>>: $MAX_CONNECTIONS</td><td>
 progressbar|conntrackuse|@TR<<Used>>: $ACTIVE_CONNECTIONS ($USED_CONNECTIONS_PERCENT%)|200|$USED_CONNECTIONS_PERCENT|$USED_CONNECTIONS_PERCENT%||
 helpitem|Tracked Connections
 helptext|Helptext Tracked Connections#This is the number of connections in your router's conntrack table. <a href="status-conntrackread.sh">View Conntrack Table</a>
@@ -64,7 +66,6 @@ end_form|
 
 start_form|@TR<<Mount Usage>>
 $mounts_form
-string|<tr><td><br /></td></tr>
 helpitem|Mount Usage
 helptext|Helptext Mount Usage#This is the amount of space total and used on the filesystems mounted to your router.
 end_form|
