@@ -31,7 +31,7 @@ this_revision=$(cat "/www/.version")
 
 <div id="outerscrollBox"  onMouseOver="copyspeed=pausespeed" onMouseOut="copyspeed=marqueespeed">
 
-<div id="scrollBox"><div class="smalltext">
+<div id="scrollBox">
 
 <h1>@TR<<Webif<sup>2</sup> Credits>></h1>
 <h2>@TR<<Primary Developers>> <em>(@TR<<sorted_by_name#sorted by name>>)</em></h2>
@@ -71,7 +71,7 @@ this_revision=$(cat "/www/.version")
 
 <p>@TR<<GPL_Text#This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.>>
 
-</div></div></div> <!-- End scrollBox -->
+</div></div> <!-- End scrollBox -->
 <? footer ?>
 <!--
 ##WEBIF:name:Info:950:About
