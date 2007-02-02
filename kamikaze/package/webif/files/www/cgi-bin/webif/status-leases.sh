@@ -43,8 +43,7 @@ exists /tmp/dhcp.leases && grep -q "." /tmp/dhcp.leases > /dev/null
 </tbody>
 </table>
 <br />
-<?
-footer ?>
+<? footer ?>
 <!--
 ##WEBIF:name:Status:200:DHCP Clients
 -->
