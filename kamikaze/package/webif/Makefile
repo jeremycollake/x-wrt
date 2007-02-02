@@ -14,6 +14,7 @@ define Package/webif
   SECTION:=net
   CATEGORY:=Network
   SUBMENU:=webif
+  DEPENDS:=+haserl
   TITLE:=An HTTP administrative console for OpenWrt.
   DESCRIPTION:=\
 	This package contains Webif^2, a web based administration console for OpenWrt.
