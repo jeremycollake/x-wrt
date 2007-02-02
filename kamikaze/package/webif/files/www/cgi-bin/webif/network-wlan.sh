@@ -169,7 +169,10 @@ for device in $DEVICES; do
         append forms "helptext|Helptext Wireless Distance#You must enter a number that is double the distance of your longest link." "$N"
         append forms "$add_vcfg" "$N"
         append forms "end_form" "$N"
-        
+
+#####################################################################
+# This is looped for every virtual wireless interface (wifi-iface)
+#
         for vcfg in $vface; do
        		config_get FORM_device $vcfg device
        		if [ "$FORM_device" = "$device" ]; then
