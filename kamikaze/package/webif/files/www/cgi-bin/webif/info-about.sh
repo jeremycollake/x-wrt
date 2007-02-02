@@ -25,7 +25,7 @@ this_revision=$(cat "/www/.version")
 
 ?>
 <script src="/js/scrollbox.js" type="text/javascript"></script>
-<h2><a href="http://www.x-wrt.org">X-Wrt @TR<<Extensions>></a> &ndash; webif&sup2;</h2>
+<h2><a href="http://www.x-wrt.org">@TR<<X-Wrt Extensions>></a> &ndash; webif&sup2;</h2>
 
 <em>Milestone 2.7 - r<? echo "$this_revision" ?></em>
 
@@ -33,7 +33,7 @@ this_revision=$(cat "/www/.version")
 
 <div id="scrollBox"><div class="smalltext">
 
-<h1>Webif<sup>2</sup> Credits</h1>
+<h1>@TR<<Webif<sup>2</sup> Credits>></h1>
 <h2>@TR<<Primary Developers>> <em>(@TR<<sorted_by_name#sorted by name>>)</em></h2>
 <ul>
 	<li><a href="mailto:jeremy.collake@gmail.com">Jeremy Collake (db90h)</a></li>
@@ -56,13 +56,13 @@ this_revision=$(cat "/www/.version")
 	<li><a href="mailto:tyardley@users.berlios.de">Tim Yardley (lst)</a></li>
 </ul>
 
-<h2>Other Contributions</h2>
+<h2>@TR<<Other Contributions>></h2>
 <ul>
 	<li>Reinhold Kainhofer, ido, Strontian, Sven-Ola, redhat, Exiles, and many others.</li>
 	<li>@TR<<Monowall_Credit#CPU and Traffic graphs based on code from>> <a href="http://m0n0.ch/wall/">m0n0wall</a></li>
-	<li>@TR<<Cova_Credit#Some pages have been adopted from code written>> @TR<<by>> David Bird, <a href="http://www.coova.org">Coova Technologies</a>, @TR<<and>> <a href="http://sourceforge.net/projects/hotspot-zone">Hotspot-Zone</a></li>
+	<li>@TR<<Cova_Credit#Some pages have been adopted from code written by>> David Bird, <a href="http://www.coova.org">Coova Technologies</a>, @TR<<and>> <a href="http://sourceforge.net/projects/hotspot-zone">Hotspot-Zone</a></li>
 	<li>@TR<<CSS_Layout#Layout was originally based on>> <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran.</li>
-	<li>@TR<<UCI>> @TR<<facilitating code>> @TR<<Copyright>> (C) 2006 by <a href="mailto:carsten.tittel@fokus.fraumhofer.de">Fokus Fraunhofer</a>.</li>
+	<li>@TR<<UCI facilitating code>> @TR<<Copyright>> (C) 2006 by <a href="mailto:carsten.tittel@fokus.fraumhofer.de">Fokus Fraunhofer</a>.</li>
 	<li>@TR<<Translator_Credit#The translation you are currently using is authored by (nobody).>></li>
 	<li>@TR<<zephyr_Text#The Zephyr theme is under the MIT licence.>></li>
 </ul>
