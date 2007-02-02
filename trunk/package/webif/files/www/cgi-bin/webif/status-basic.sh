@@ -29,7 +29,7 @@ FREE_CONNECTIONS_PERCENT=$(expr $FREE_CONNECTIONS "*" 100 / $MAX_CONNECTIONS)
 USED_CONNECTIONS_PERCENT=$(expr 100 - $FREE_CONNECTIONS_PERCENT)
 
 # _loadavg should be set by the header code..
-#empty "$_loadavg" && {
+# empty "$_loadavg" && {
 #	_loadavg="${_uptime#*load average: }"
 #	_uptime="${_uptime#*up }"
 #}
@@ -47,21 +47,19 @@ df | uniq | awk 'BEGIN { mcount=0 };
 #start_form|@TR<<Load Average>>
 #string|<tr><td style="font-size:1.2em;color:red;">$_loadavg</<tr><td>
 #helpitem|Load Average
-#helptext|Helptext Load Average#The load average represents the average number of active processes during the past 1, #5, and 15 minutes
+#helptext|Helptext Load Average#The load average represents the average number of active processes during the past 1, 5, and 15 minutes
 #end_form|
 
 display_form <<EOF
 start_form|@TR<<RAM Usage>>
 string|<tr><td>@TR<<Total>>: $TOTAL_MEM KB</td><td>
 progressbar|ramuse|@TR<<Used>>: $USED_MEM KB ($MEM_PERCENT_USED%)|200|$MEM_PERCENT_USED|$MEM_PERCENT_USED%||
-string|</td></tr>
 helpitem|RAM Usage
 helptext|Helptext RAM Usage#This is the current RAM usage. The amount free represents how much applications have available.
 end_form|
 start_form|@TR<<Tracked Connections>>
 string|<tr><td>@TR<<Maximum>>: $MAX_CONNECTIONS</td><td>
 progressbar|conntrackuse|@TR<<Used>>: $ACTIVE_CONNECTIONS ($USED_CONNECTIONS_PERCENT%)|200|$USED_CONNECTIONS_PERCENT|$USED_CONNECTIONS_PERCENT%||
-string|</td></tr>
 helpitem|Tracked Connections
 helptext|Helptext Tracked Connections#This is the number of connections in your router's conntrack table. <a href="status-conntrackread.sh">View Conntrack Table</a>
 end_form|
