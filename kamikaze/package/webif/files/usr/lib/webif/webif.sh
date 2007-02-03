@@ -166,6 +166,7 @@ Pragma: no-cache
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>$_firmware_name @TR<<Administrative Console>></title>
+        <link rel="stylesheet" type="text/css" href="/themes/active/waitbox.css" media="screen" />
         <link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
         <link rel="alternate stylesheet" type="text/css" href="/themes/active/color_white.css" title="white" />
         <link rel="alternate stylesheet" type="text/css" href="/themes/active/color_brown.css" title="brown" />
@@ -173,13 +174,12 @@ Pragma: no-cache
         <link rel="alternate stylesheet" type="text/css" href="/themes/active/color_navyblue.css" title="navyblue" />
         <link rel="alternate stylesheet" type="text/css" href="/themes/active/color_black.css" title="black" />
         <link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css" />
-        <link rel="stylesheet" type="text/css" href="/themes/active/waitbox.css" />
+
         <!--[if lt IE 7]>
                 <link rel="stylesheet" type="text/css" href="/themes/active/ie_lt7.css" />
         <![endif]-->                
         <meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
         <meta http-equiv="expires" content="-1" />
-        <script type="text/javascript" src="/js/waitbox.js"></script>
         <script type="text/javascript" src="/js/styleswitcher.js"></script>
 </head>
 <body $4>
@@ -274,7 +274,8 @@ footer() {
         <legend><strong>@TR<<Proceed Changes>></strong></legend>
         $_savebutton
         <ul class="apply">
-                <li><a href="config.sh?mode=save&amp;cat=$_category&amp;prev=$SCRIPT_NAME" rel="lightbox">@TR<<Apply Changes>> &laquo;</a></li>
+                <script type="text/javascript" src="/js/waitbox.js"></script>
+                <li><a href="config.sh?mode=save&amp;cat=$_category&amp;prev=$SCRIPT_NAME" rel="lightbox" >@TR<<Apply Changes>> &laquo;</a></li>
                 <li><a href="config.sh?mode=clear&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Clear Changes>> &laquo;</a></li>
                 <li><a href="config.sh?mode=review&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Review Changes>> $_changes &laquo;</a></li>
         </ul>
