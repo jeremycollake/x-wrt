@@ -1,7 +1,7 @@
 #!/usr/bin/webif-page -p /bin/sh
 . /usr/lib/webif/webif.sh
 
-header "System" "Upgrade" "@TR<<Firmware Upgrade>>"
+header "System" "Upgrade" "<img src=/images/upd.jpg align=absmiddle>&nbsp;@TR<<Firmware Upgrade>>"
 ShowNotUpdatedWarning
 
 #####################################################################
