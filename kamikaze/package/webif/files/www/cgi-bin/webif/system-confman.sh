@@ -40,21 +40,31 @@ boot_wait"
 
 . /usr/lib/webif/webif.sh
 
-header "System" "Backup" "@TR<<Backup and Restore>>" ''
-ShowNotUpdatedWarning
+header "System" "Backup" "<img src=/images/bkup.jpg align=absmiddle>&nbsp;@TR<<Backup and Restore>>" ''
 
 case "$FORM_action" in
 	download)
-		tmp=/tmp/config.$$
-		tgz=/www/config.tgz
-		rm -rf $tmp 2>/dev/null
-		mkdir -p $tmp 2>/dev/null
-		date > $tmp/config.date
-		echo "$FORM_name" > $tmp/config.name
-		echo $(nvram get boardtype) > $tmp/config.boardtype
-		for pfix in $NVRAM_PREFIX $NVRAM_VARS; do
-			nvram show 2>/dev/null | grep "^$pfix" >> $tmp/nvram
-		done
+
+DOWNLOAD="&nbsp;&nbsp;&nbsp;If downloading does not start automaticly, click here ... <a href=\"/config.tgz\">config.tgz</a><br><br>
+<script language="JavaScript" type=\"text/javascript\">
+window.setTimeout('window.location=\"/config.tgz\"', 1000);
+</script>"
+
+	tmp=/tmp/config.$$
+	tgz=/www/config.tgz
+	rm -rf $tmp 2>/dev/null
+	mkdir -p $tmp 2>/dev/null
+	date > $tmp/config.date
+	echo "$FORM_name" > $tmp/config.name
+
+if is_kamikaze; then
+	echo $(dmesg | grep "CPU revision is:" | sed -e s/'CPU revision is: '//g) > $tmp/config.boardtype
+else
+	echo $(nvram get boardtype) > $tmp/config.boardtype
+	for pfix in $NVRAM_PREFIX $NVRAM_VARS; do
+		nvram show 2>/dev/null | grep "^$pfix" >> $tmp/nvram
+	done
+fi
 		for file in $COPY_FILES; do
 			[ -e $file ] && [ ! -h $file ] && {
 			d=`dirname $file`; [ -d $tmp$d ] || mkdir -p $tmp$d
@@ -67,20 +77,20 @@ case "$FORM_action" in
 			cp -r $dir/* $tmp$dir/
 			}
 		done
-		(cd $tmp; tar czf $tgz *)
-		rm -rf $tmp 2>/dev/null
-		echo "<p>Generated <a href=\"/config.tgz\">config.tgz</a></p>"
-		echo "<script language=\"JavaScript\" type=\"text/javascript\">"
-		echo "window.setTimeout('window.location=\"/config.tgz\"', 5000);"
-		echo "</script>"
-		;;
+	(cd $tmp; tar czf $tgz *)
+	rm -rf $tmp 2>/dev/null
+
+	echo $DOWNLOAD
+
+	;;
 	instconfig)
-		dir=$FORM_dir
-		display_form <<EOF
+
+
+	dir=$FORM_dir
+display_form <<EOF
 start_form|Install Configuration
 EOF
-	if [ -n "$dir" ] && [ -d $dir ] && \
-		[ -e "$dir/config.name" ] && [ -e "$dir/config.boardtype" ]; then
+	if [ -n "$dir" ] && [ -d $dir ] && [ -e "$dir/config.name" ] && [ -e "$dir/config.boardtype" ]; then
 			echo "<tr><td colspan=2>installing configuration<br><pre>"
 			cd $dir
 			for file in $(find etc); do
@@ -92,11 +102,14 @@ EOF
 					echo "restoring $file"
 				fi
 			done
+if is_kamikaze; then
+	echo "<br>@TR<<Rebooting now>>...<meta http-equiv=\"refresh\" content=\"4;url=reboot.sh?reboot=1\">"
+else
 			rm -f nvram.set
 			for pfix in $NVRAM_PREFIX $NVRAM_VARS; do
 				[ "$(eval echo \$FORM_$pfix)" = "y" ] && grep "^$pfix" nvram >> nvram.set
 			done
-			[ -e nvram.set ] && {
+		[ -e nvram.set ] && {
 			awk 'BEGIN {
 				FS="="
 				}
@@ -110,7 +123,9 @@ EOF
 		sh nvram.sh
 		echo "committing NVRAM settings"
 		nvram commit
+
 		}
+fi
 		echo "</pre></td></tr>"
 	else
 		echo "<p>bad dir: $dir</p>"
@@ -120,10 +135,12 @@ end_form
 EOF
 	;;
 	chkconfig)
+
+
 		if [ -n "$FORM_configfile" ] && [ -e $FORM_configfile ]; then
-			cat<<EOF
-<form method="GET" name="install" action="$SCRIPT_NAME">
-EOF
+			
+		echo "<form method="GET" name="install" action=\"$SCRIPT_NAME\">"
+
 			display_form <<EOF
 start_form|Install Configuration
 EOF
@@ -139,12 +156,24 @@ EOF
 				nm=$(cat $tmp/config.name)
 				bd=$(cat $tmp/config.boardtype)
 				dt=$(cat $tmp/config.date)
-				if [ "$bd" != $(nvram get boardtype) ]; then
-					echo "<tr><td colspan=2><font color=red>WARNING</font>: different board type (ours: $(nvram get boardtype), file: $bd)!</td></tr>"
-				else
-					echo "<tr><td colspan=2>configuration looks good!</td></tr>"
-				fi
-				display_form <<EOF
+
+			CFGGOOD="<tr><td colspan=2>configuration looks good!<br><br></td></tr>"
+
+if is_kamikaze; then
+	if [ "$bd" != $(dmesg | grep "CPU revision is:" | sed -e s/'CPU revision is: '//g) ]; then
+		echo "<tr><td colspan=2><font color=red>WARNING</font>: different board type (ours: $(dmesg | grep "CPU revision is:" | sed -e s/'CPU revision is: '//g), file: $bd)!</td></tr>"
+	else
+		echo $CFGGOOD
+	fi
+else
+	if [ "$bd" != $(nvram get boardtype) ]; then
+		echo "<tr><td colspan=2><font color=red>WARNING</font>: different board type (ours: $(nvram get boardtype), file: $bd)!</td></tr>"
+	else
+		echo $CFGGOOD
+	fi
+fi
+
+display_form <<EOF
 field|@TR<<Config Name>>
 string|$nm
 field|@TR<<Board Type>>
@@ -152,25 +181,32 @@ string|$bd
 field|@TR<<Generated>>
 string|$dt
 field
+EOF
+
+if is_kamikaze; then
+#cp $tmp/etc/config/network /tmp.uci
+#uci_load "network"
+#NET_IP="$CONFIG_lan_ipaddr"
+echo ""
+else
+display_form <<EOF
 string|@TR<<NVRAM settings to set (by prefix; be careful!)>><br>
 $(for pfix in $NVRAM_PREFIX $NVRAM_VARS; do echo "checkbox|$pfix|$FORM_pfix|y|$pfix<br>"; done)
 EOF
-			fi
-			display_form <<EOF
-hidden|action|instconfig
-hidden|dir|$tmp
-submit|Install Config|Install Config
-end_form
-EOF
-			cat<<EOF
-</form>
-EOF
+
+fi
+fi
+
+echo "<br><input type='hidden' name='action' value='instconfig'>"
+echo "<input type='hidden' name='dir' value=\"$tmp\">"
+echo "<input type='submit' class='flatbtn'  value='@TR<<Install Config>>'><br><br></form>"
 		fi
+
 		;;
 	esac
 
 display_form <<EOF
-start_form|@TR<<Download Configuration>>
+start_form|@TR<<Backup Configuration>>
 EOF
 
 cat <<EOF
@@ -178,20 +214,12 @@ cat <<EOF
 <input type="hidden" name="action" value="download">
 	<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
 	<tbody>
-		<tr>
-			<td>@TR<<Name this configuration>></td>
-			<td>
-				<input name="name" value="${FORM_name:-$(nvram get wan_hostname)}"/>
-			</td>
-		</tr>
-		<tr>
-			<td />
-			<td>
-			<input id="form_submit" type="submit" name="submit" value="@TR<<Download>>" />
-			</td>
-		</tr>
-	</tbody>
-	</table>
+<tr>
+	<td width=70%>@TR<<Name this configuration>>&nbsp;&nbsp;&nbsp;<input name="name" class='flatbtn' value="${FORM_name:-$(nvram get wan_hostname)}"/></td>	
+	<td><input id="form_submit" class='flatbtn' type="submit" name="submit" value="@TR<<Backup>>" /></td>
+</tr>
+</tbody>
+</table>
 </form>
 EOF
 
@@ -200,28 +228,20 @@ end_form|
 EOF
 
 display_form <<EOF
-start_form|@TR<<Upload Configuration>>
+start_form|@TR<<Restore Configuration>>
 EOF
 
 cat<<EOF
 <form method="POST" name="instconfig" action="$SCRIPT_NAME" enctype="multipart/form-data">
 <input type="hidden" name="action" value="chkconfig">
-	<table style="text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
+	<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
 	<tbody>
-		<tr>
-			<td>@TR<<Saved config.tgz file:>></td>
-			<td>
-				<input type="file" name="configfile" />
-			</td>
-		</tr>
-		<tr>
-			<td />
-			<td>
-			<input id="form_submit" type="submit" name="submit" value="@TR<<Submit>>" />
-			</td>
-		</tr>
-	</tbody>
-	</table>
+<tr>
+	<td width=70%>@TR<<Saved config.tgz file:>>&nbsp;&nbsp;&nbsp;<input type="file" class='flatbtn' name="configfile" /></td>
+	<td><input id="form_submit" class='flatbtn' type="submit" name="submit" value="@TR<<Restore>>" /></td>
+</tr>
+</tbody>
+</table>
 </form>
 EOF
 
@@ -232,5 +252,5 @@ EOF
 footer
 ?>
 <!--
-##WEBIF:name:System:450:Backup
+##WEBIF:name:System:450:Backup & Restore
 -->
