@@ -19,6 +19,10 @@
 
 . /usr/lib/webif/functions.sh
 
+count=0
+var=""
+
+
 HEADER="HTTP/1.0 200 OK
 Content-type: text/html
 
@@ -27,6 +31,19 @@ Content-type: text/html
 <script type="text/javascript" src="/js/balloontip.js">
 </script><script type="text/javascript" src="/js/imgdepth.js">
 </script>"
+
+
+CONFIRM()
+{
+echo "<script type='text/javascript'>"
+echo "<!--"
+echo "function confirm$count() {"
+echo "if (window.confirm(\"This package is not installed. \n\nDo you want to install it now?\n\n\n(Installation may include router reset) ...continue?\n\")){" 
+echo "window.location=\"$var?package=install\""
+echo "} }" 
+echo "// --></script>"
+let "count+=1"
+}
 
 HighLight="class='gradualshine' onMouseover='slowhigh(this)' onMouseout='slowlow(this)'"
 
@@ -71,18 +88,10 @@ EOF
 
 elif [ "$FORM_page" = "security" ]; then
 	
-	cat <<EOF
-	$HEADER
-	<script type="text/javascript">
-	<!--
-	function confirmM() {  
-	if (window.confirm("This package is not installed. \n\nDo you want to install it now?")){  
-	window.location="app.hydra.sh?package=install"
-	} }  
-	// --></script>
+echo "$HEADER"
+var="app.hydra.sh" ; CONFIRM
 
-	</head><body><table width="98%" border="0" cellspacing="1" ><tr class="appindex">
-EOF
+echo "</head><body><table width='98%' border='0' cellspacing='1' ><tr class='appindex'>"
 
 	#------------------------
 	if  [ -s "/usr/sbin/hydra" ]  ; then 
@@ -92,7 +101,7 @@ EOF
 	else
 
 	#<<---If package is NOT installed--->>
-	echo "<td width='20%'><center><a href='javascript:confirmM()' rel='b1'><img src='/images/app.2.jpg' border='0'  $HighLight ><a><br><font color=silver>Hydra</font></center></td>"
+	echo "<td width='20%'><center><a href='javascript:confirm0()' rel='b1'><img src='/images/app.2.jpg' border='0' $HighLight ><a><br><font color=silver>Hydra</font></center></td>"
 	fi
 	#------------------------
 	cat <<EOF
@@ -109,31 +118,26 @@ EOF
 
 elif [ "$FORM_page" = "network" ]; then
 
-	cat <<EOF
-	$HEADER
-	<script type="text/javascript">
-	<!--
-	function confirmModifications() {  
-	if (window.confirm("This package is not installed. \n\nDo you want to install it now?")){  
-	window.location="app.samba.sh?package=install"
-	} }  
-	// --></script>
-	</head><body><table width="98%" border="0" cellspacing="1" ><tr class='appindex'>
-EOF
+echo "$HEADER"
+var="app.samba.sh" ; CONFIRM
+var="app.swap.sh" ; CONFIRM
 
-	#----------------------------------
-	if  is_package_installed "kmod-cifs"  &&  is_package_installed "cifsmount"  ; then
+echo "</head><body><table width='98%' border='0' cellspacing='1' ><tr class='appindex'>"
 
-	#<<---If package is already installed--->>
+	##################################
+	if  is_package_installed "kmod-cifs" && is_package_installed "cifsmount" ; then
 	echo "<td width='20%'><center><a href='app.samba.sh' rel='b1'><img src='/images/app.10.jpg' border='0'></a><br>Samba Client</center></td>"
 	else
-
-	#<<---If package is NOT installed--->>
-	echo "<td width='20%'><center><a href='javascript:confirmModifications()' rel='b1'><img src='/images/app.10.jpg' border='0'  $HighLight ><a><br><font color=silver>Samba Client</font></center></td>"
+	echo "<td width='20%'><center><a href='javascript:confirm0()' rel='b1'><img src='/images/app.10.jpg' border='0' $HighLight ><a><br><font color=silver>Samba Client</font></center></td>"
+	fi
+	##################################
+	if  is_package_installed "kmod-loop" && is_package_installed "losetup" && is_package_installed "swap-utils" ; then
+	echo "<td width='20%'><center><a href='app.swap.sh' rel='b2'><img src='/images/app.12.jpg' border='0'></a><br>Memory SWAP</center></td>"
+	else
+	echo "<td width='20%'><center><a href='javascript:confirm1()' rel='b2'><img src='/images/app.12.jpg' border='0' $HighLight><a><br><font color=silver>Memory SWAP</font></center></td>"
 	fi
 	#--------------------------------
 	cat <<EOF
-	<td width="20%">&nbsp;</td>
 	<td width="20%">&nbsp;</td>
 	<td width="20%">&nbsp;</td>
 	<td width="20%">&nbsp;</td>
@@ -141,13 +145,16 @@ EOF
 	<div id="b1" class="balloonstyle"  style="width: 200px;">
 	Samba Client- Allows to map network drive from Windows based file system.
 	</div>
+	<div id="b2" class="balloonstyle"  style="width: 250px;">
+	Memory SWAP - Allows to set more RAM by using external storage.<br><br>Examples: Network Drive, MMC, USB
+	</div>
 	</body></html>
 EOF
 
 elif [ "$FORM_page" = "remove" ]; then
 
 	cat <<EOF
-	$HEADER
+$HEADER
 	</head>
 	<table width="100%" border="0" cellspacing="1">
 EOF
@@ -162,6 +169,8 @@ EOF
 
 	echo "<tr><td colspan=2><br><u>> Network Applications</u><br><br></td></tr>"
 	if  is_package_installed "kmod-cifs"  &&  is_package_installed "cifsmount"  ; then echo "<tr><td width=90%><img src='/images/app.10.jpg' width="22" height="22" align="absmiddle" >&nbsp;Samba Client</td><td><form action='app.samba.sh' method='post'>$pkgrmv</form></td></tr>" ; fi
+	if  is_package_installed "kmod-loop" && is_package_installed "swap-utils" &&  is_package_installed "losetup"  ; then echo "<tr><td width=90%><img src='/images/app.12.jpg' width="22" height="22" align="absmiddle" >&nbsp;Memory Swap</td><td><form action='app.swap.sh' method='post'>$pkgrmv</form></td></tr>" ; fi
+
 
 	echo "</table></html>"
 	exit
@@ -169,7 +178,7 @@ EOF
 elif [ "$FORM_page" = "list" ]; then
 
 	cat <<EOF
-	$HEADER
+$HEADER
 	</head><body >
 	<table width="90%" border="0" cellpadding="0" cellspacing="0" >
 	<tr>

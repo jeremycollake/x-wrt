@@ -10,7 +10,7 @@
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
 cat <<EOF
-HEADER="HTTP/1.0 200 OK
+HTTP/1.0 200 OK
 Content-type: text/html
 
 EOF

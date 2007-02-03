@@ -11,7 +11,7 @@
 . /lib/config/uci.sh
 
 cat <<EOF
-HEADER="HTTP/1.0 200 OK
+HTTP/1.0 200 OK
 Content-type: text/html
 
 EOF
@@ -24,12 +24,13 @@ echo "<html><header></header><body>"
 	echo "Installing cifsmount package ..."
 	install_package "http://downloads.openwrt.org/whiterussian/rc6/packages/cifsmount_1.5-2_mipsel.ipk"
 	echo "</pre><br><font color=red>Router must reboot...</font></body></html>"
+sleep 5
 reboot
 exit
 fi
 
 if ! empty "$FORM_remove"; then
-	echo "<html><header></header><body><font size=3>Removing Hydra 4.5 package ...<br><br><pre>"
+	echo "<html><header></header><body><font size=3>Removing Samba package ...<br><br><pre>"
 	remove_package "kmod-cifs"
 	remove_package "cifsmount"
 	rm /etc/config/cifs
