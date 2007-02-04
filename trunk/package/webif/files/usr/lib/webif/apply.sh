@@ -27,6 +27,7 @@ HANDLERS_config='
 	pptp) reload_pptp;;
 	log) reload_log;;
 	ezipupdate) reload_ezipupdate;;
+	snmp) reload_snmp;;
 '
 
 HANDLERS_file='
@@ -291,17 +292,29 @@ init_theme() {
 	echo '@TR<<Done>>'
 }
 
-reload_hotspot() {
-        echo '@TR<<Exporting>> @TR<<hotspot settings>> ...'
-        [ -e "/bin/save_hotspot" ] && {
-                /bin/save_hotspot >&- 2>&-
-        }
+reload_snmp() {
+	echo '@TR<<Exporting>> @TR<<snmp settings>> ...'
+	[ -e "/bin/save_snmp" ] && {
+		/bin/save_snmp >&- 2>&-
+	}
 
-        echo '@TR<<Reloading>> @TR<<hotspot settings>> ...'
-        [ -e "/usr/sbin/chilli" ] && {
-                /etc/init.d/chilli stop  >&- 2>&-
-                /etc/init.d/chilli start >&- 2>&-
-        }
+	echo '@TR<<Reloading>> @TR<<snmp settings>> ...'
+	[ -e "/usr/sbin/snmpd" ] && {
+		/etc/init.d/snmpd restart >&- 2>&-
+	}
+}
+
+reload_hotspot() {
+	echo '@TR<<Exporting>> @TR<<hotspot settings>> ...'
+	[ -e "/bin/save_hotspot" ] && {
+		/bin/save_hotspot >&- 2>&-
+	}
+
+	echo '@TR<<Reloading>> @TR<<hotspot settings>> ...'
+	[ -e "/usr/sbin/chilli" ] && {
+		/etc/init.d/chilli stop  >&- 2>&-
+		/etc/init.d/chilli start >&- 2>&-
+	}
 }
 
 
