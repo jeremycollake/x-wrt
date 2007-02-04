@@ -39,7 +39,7 @@ tempscan=$(mktemp /tmp/.survscan.XXXXXX)
 
 #######################################
 
-header "Status" "Site Survey" "<img src=/images/wscan.jpg align=absmiddle>&nbsp;@TR<<Wireless survey>>"
+header "Status" "Site Survey" "<img src=/images/wscan.jpg align=middle alt />&nbsp;@TR<<Wireless survey>>"
 
 ######## Join WIFI ########
 
@@ -85,7 +85,7 @@ config_load wireless
 
 	cat <<EOF
 	<meta http-equiv="refresh" content="4;url=$SCRIPT_NAME">
-	<br>
+	<br/>
 	<b>Successfully joined "$FORM_wifi" network...<b>
 EOF
 	footer
@@ -104,7 +104,7 @@ else #<- if kamikaze
 
 	cat <<EOF
 	<meta http-equiv="refresh" content="4;url=$SCRIPT_NAME">
-	<br>
+	<br/>
 	<b>Successfully joined "$FORM_wifi" network ...<b>
 EOF
 	footer
@@ -120,33 +120,33 @@ DisplayTable()
 cat <<EOF
 <script type="text/javascript" src="/js/window.js">
 </script>
-<script>
+<script type="text/javascript">
 function java1(target) {
 document.wepkeyform.wifi.value = target
 }
 </script>
 
-<div id="dwindow" style="position:absolute;background-color:#EBEBEB;cursor:hand;left:0px;top:0px;display:none;border: 1px solid black;" onMousedown="initializedrag(event)" onMouseup="stopdrag()" onSelectStart="return false">
-<table width="100%" border="0" ><tr bgcolor=navy><td><div align="right"><img src="/images/close.gif" onClick="closeit()"></div></td>
+<div id="dwindow" style="position:absolute;background-color:#EBEBEB;cursor:hand;left:0px;top:0px;display:none;border: 1px solid black" onMousedown="initializedrag(event)" onMouseup="stopdrag()" >
+<table width="100%" border="0" ><tr bgcolor=navy><td><div align="right"><img src="/images/close.gif" onClick="closeit()" alt /></div></td>
 </tr></table>
-<table width="100%" height="100%" border="0">
-<tr height="1"><td><br>
+<table style="height: 100%; width: 100%" border="0">
+<tr style="height: 1px"><td><br />
 <form action='$SCRIPT_NAME' method='post' name='wepkeyform'>
 <table width="100%" border="0" >
-<tr><td><img src="/images/wep.gif"></td>
-<td><input type="text" name="wepkey">&nbsp;&nbsp;
-<input type='submit' class='flatbtn' name='joinwifi' value='@TR<<Join>>' >
-</td></tr><tr height="1"><td>Key:</td>
+<tr><td><img src="/images/wep.gif" alt /></td>
+<td><input type="text" name="wepkey" />&nbsp;&nbsp;
+<input type='submit' class='flatbtn' name='joinwifi' value='@TR<<Join>>' />
+</td></tr><tr style="height: 1px"><td>Key:</td>
 <td><select name="keytype">
 <option value="wep" selected>WEP</option>
 <option value="psk">PSK</option>
 <option value="psk2">PSK2</option>
 <option value="wpa">WPA</option>
 <option value="wpa2">WPA2</option>
-</select><input type="hidden" name="wifi" value=""></td>
+</select><input type="hidden" name="wifi" value="" /></td>
 </tr></table></form></td></tr></table></div>
 
-<br><a href='$SCRIPT_NAME'>@TR<<Re-scan>></a><br><br><table width="98%" border="0" cellspacing="1" bgcolor="#999999" >
+<br/><a href='$SCRIPT_NAME'>@TR<<Re-scan>></a><br/><br/><table width="98%" border="0" cellspacing="1" bgcolor="#999999" >
 <tr class="wifiscantitle" >
 <td width='32'>@TR<<Signal>>/</td>
 <td width='32'>@TR<<Noise>></td>
@@ -171,16 +171,16 @@ echo "<tr bgcolor="#FFFFFF" class="wifiscanrow$color">"
 ##### Signal Ratio
 
 if [ $RSSI -lt 60 ]; then Wimg=5 ; elif [ $RSSI -lt 72 ]; then Wimg=4 ; elif [ $RSSI -lt 81 ]; then Wimg=3 ; elif [ $RSSI -lt 85 ]; then Wimg=2 ; elif [ $RSSI -lt 92 ]; then Wimg=1 ; else Wimg=0 ; fi
-echo "<td><center><img src="/images/wifi$Wimg.gif" ALT='-" $RSSI "dBm'></center></td>"
+echo "<td><center><img src="/images/wifi$Wimg.gif" ALT='-" $RSSI "dBm' /></center></td>"
 
 ##### Noise Ratio
 if [ $NOISE -gt 95 ]; then Wimg=0 ; elif [ $NOISE -gt 92 ]; then Wimg=1 ; elif [ $NOISE -gt 88 ]; then Wimg=2 ; elif [ $NOISE -gt 85 ]; then Wimg=3 ; elif [ $NOISE -gt 80 ]; then Wimg=4 ; else Wimg=5 ; fi
-echo "<td><center><img src="/images/wifi$Wimg.gif" ALT='-" $NOISE "dBm'></center></td>"
+echo "<td><center><img src="/images/wifi$Wimg.gif" ALT='-" $NOISE "dBm' /></center></td>"
 
 ##### Security
 if  [ "$SEC" = "ESS WEP" ] || [ "$SEC" = "on" ] ; then Wimg="wep" ; else Wimg="opn" ; fi
 
-echo "<td><center><img src="/images/$Wimg.gif" ALT='$SEC'></center></td>"
+echo "<td><center><img src="/images/$Wimg.gif" ALT='$SEC' /></center></td>"
 echo "<td>&nbsp;&nbsp;" $SSID
 #echo "$current_line" | cut -c8-20 | cut -d '"' -f1
 echo "</td>"
@@ -194,9 +194,9 @@ echo "<td><center>$Wimg</center></td>"
 echo "<td><center>"
 
 	if  [ "$SEC" = "ESS WEP" ] || [ "$SEC" = "on" ] ; then
-		echo "<input type='submit' class='flatbtn' name='joinwifi' value='@TR<<Join>>' onClick=loadwindow('$SCRIPT_NAME/?wep=1&ssid=$SSID',300,100);java1('$SSID')>"
+		echo "<input type='submit' class='flatbtn' name='joinwifi' value='@TR<<Join>>' onClick=\"loadwindow('$SCRIPT_NAME/?wep=1&ssid=$SSID',300,100);java1('$SSID')\" />"
 	else
-		echo "<form action='$SCRIPT_NAME' method='post'><input type="hidden" name='wifi' value='$SSID'><input type='submit' class='flatbtn' name='joinwifi' value='@TR<<Join>>'></form>"
+		echo "<form action='$SCRIPT_NAME' method='post'><input type="hidden" name='wifi' value='$SSID' /><input type='submit' class='flatbtn' name='joinwifi' value='@TR<<Join>>' /></form>"
 	fi
 echo "</center></td></tr>"
 
@@ -246,11 +246,11 @@ do
 
 # DEBUG
 #------\/
-#echo $f "<br>"
+#echo $f "<br/>"
 
 current_line=$(sed '2,$ d' $tempfile)
 
-#echo "-> '" $current_line "'<br>"
+#echo "-> '" $current_line "'<br/>"
 
 if equal "$current_line" "" ; then
 	let "current=1"
@@ -294,14 +294,14 @@ done < $tempfile
 
 rm $tempfile
 #rm $tempfile2
-echo "</table><br><a href='$SCRIPT_NAME'>@TR<<Re-scan>></a><br>"
+echo "</table><br/><a href='$SCRIPT_NAME'>@TR<<Re-scan>></a><br/>"
 fi
 }
 
 ######### iwlist scanning #######
 IWLIST()
 {
-#echo " Please wait while scan is performed ... <br /><br />"
+#echo " Please wait while scan is performed ... <br/><br/>"
 found_networks=0
 counter=0
 for counter in $(seq 1 $MAX_TRIES); do
@@ -387,7 +387,7 @@ let "found_networks+=1"
 let "current+=1"
 done
 
-echo "</table><br><a href='$SCRIPT_NAME'>@TR<<Re-scan>></a><br>"
+echo "</table><br/><a href='$SCRIPT_NAME'>@TR<<Re-scan>></a><br/>"
 
 fi #<- end if were scan results
 
