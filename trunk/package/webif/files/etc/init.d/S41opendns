@@ -16,7 +16,7 @@ start() {
 			echo "nameserver 208.67.220.220" >> /tmp/resolv.conf
 			cat "$_ltemp" >> "/tmp/resolv.conf"
 			rm -f "$_ltemp"
-			ln -sf /tmp/resolv.conf.auto /tmp/resolv.conf
+			ln -sf /tmp/resolv.conf /tmp/resolv.conf.auto
 		}
 	}
 }
