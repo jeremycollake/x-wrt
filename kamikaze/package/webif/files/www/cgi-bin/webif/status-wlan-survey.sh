@@ -41,27 +41,26 @@ tempscan=$(mktemp /tmp/.survscan.XXXXXX)
 
 header "Status" "Site Survey" "<img src=/images/wscan.jpg align=absmiddle>&nbsp;@TR<<Wireless survey>>"
 
-
 ######## Join WIFI ########
 
 if [ "$FORM_joinwifi" != "" ]; then
 
 if is_kamikaze; then
 
-		. "/lib/config/uci.sh"
+	. "/lib/config/uci.sh"
 
-		config_cb() {
-		config_get TYPE "$CONFIG_SECTION" TYPE
-	case "$TYPE" in
-		wifi-iface)
-		config_get device "$CONFIG_SECTION" device
-		config_get vifs "$device" vifs
-		append vface "$CONFIG_SECTION" "$N"
-		;;
-	esac
-	}
+	config_cb() {
+	config_get TYPE "$CONFIG_SECTION" TYPE
+case "$TYPE" in
+	wifi-iface)
+	config_get device "$CONFIG_SECTION" device
+	config_get vifs "$device" vifs
+	append vface "$CONFIG_SECTION" "$N"
+	;;
+esac
+}
 
-		config_load wireless
+config_load wireless
 
 	for vcfg in $vface; do
 		config_get FORM_device $vcfg device
@@ -82,12 +81,12 @@ if is_kamikaze; then
 	uci_commit "wireless"
 
 	#iwconfig wl0 mode "repeater"
-	#iwconfig wl0 ESSID "$FORM_wifi"
+	iwconfig wl0 essid "$FORM_wifi"
 
 	cat <<EOF
-	<meta http-equiv="refresh" content="4;url=reboot.sh?reboot=do">
+	<meta http-equiv="refresh" content="4;url=$SCRIPT_NAME">
 	<br>
-	<b>Successfully joined "$FORM_wifi" network. Router must reboot ...<b>
+	<b>Successfully joined "$FORM_wifi" network...<b>
 EOF
 	footer
 	exit
@@ -127,11 +126,11 @@ document.wepkeyform.wifi.value = target
 }
 </script>
 
-<div id="dwindow" style="position:absolute;background-color:#EBEBEB;cursor:hand;left:0px;top:0px;display:none" onMousedown="initializedrag(event)" onMouseup="stopdrag()" onSelectStart="return false">
+<div id="dwindow" style="position:absolute;background-color:#EBEBEB;cursor:hand;left:0px;top:0px;display:none;border: 1px solid black;" onMousedown="initializedrag(event)" onMouseup="stopdrag()" onSelectStart="return false">
 <table width="100%" border="0" ><tr bgcolor=navy><td><div align="right"><img src="/images/close.gif" onClick="closeit()"></div></td>
 </tr></table>
-<table width="100%" height="100%" border="0" cellspacing="1" bgcolor="#333333">
-<tr height="1"><td bgcolor="#FFFFFF"><br>
+<table width="100%" height="100%" border="0">
+<tr height="1"><td><br>
 <form action='$SCRIPT_NAME' method='post' name='wepkeyform'>
 <table width="100%" border="0" >
 <tr><td><img src="/images/wep.gif"></td>
@@ -195,23 +194,20 @@ echo "<td><center>$Wimg</center></td>"
 echo "<td><center>"
 
 	if  [ "$SEC" = "ESS WEP" ] || [ "$SEC" = "on" ] ; then
-		echo "<input type='submit' style='border: 1px solid #000000; font-size:8pt; ' name='joinwifi' value='@TR<<Join>>' onClick=loadwindow('$SCRIPT_NAME/?wep=1&ssid=$SSID',300,100);java1('$SSID')>"
+		echo "<input type='submit' class='flatbtn' name='joinwifi' value='@TR<<Join>>' onClick=loadwindow('$SCRIPT_NAME/?wep=1&ssid=$SSID',300,100);java1('$SSID')>"
 	else
-		echo "<form action='$SCRIPT_NAME' method='post'><input type="hidden" name='wifi' value='$SSID'><input type='submit' style='border: 1px solid #000000; font-size:8pt; ' name='joinwifi' value='@TR<<Join>>'></form>"
+		echo "<form action='$SCRIPT_NAME' method='post'><input type="hidden" name='wifi' value='$SSID'><input type='submit' class='flatbtn' name='joinwifi' value='@TR<<Join>>'></form>"
 	fi
 echo "</center></td></tr>"
 
-
 }
 
+######################### The Scanning Part >
 
-######################### The Scanning Part #####
-##### wl scanning
+##### wl scanning #######
 
 WL()
 {
-
-if is_package_installed "wl" ; then 
 
 Dopurge ()
 {
@@ -231,19 +227,19 @@ if [ $counter -gt $MAX_TRIES ]; then
 	echo "<tr><td>@TR<<Sorry, no scan results.>></td></tr>"
 else
 
-#---------------------------------------------
+#-------------------------
 # We need to add a "break" on the first line!
 
 current_line=$(grep -i '' < $tempscan)
 echo "" > $tempfile
 echo "$current_line" >> $tempfile
 rm $tempscan
-#--------------------------------------------
+#------------------------
 
 DisplayTable
 
 # Read File
-#-------------------------
+#------------------------
 
 while read f
 do
@@ -300,27 +296,9 @@ rm $tempfile
 #rm $tempfile2
 echo "</table><br><a href='$SCRIPT_NAME'>@TR<<Re-scan>></a><br>"
 fi
-else
-
-	if ! empty "$FORM_install_package"; then
-	echo "Installing wl package ...<pre>"
-	install_package "wl"
-	echo "</pre>"
-	fi
-
-echo "<form enctype='multipart/form-data' action='$SCRIPT_NAME' method='post'>"
-install_package_button="string|<div class=warning>Wireless Scanning will not work until you install "wl": </div>
-submit|install_package| Install "wl" Package |"
-
-display_form <<EOF
-$install_package_button
-EOF
-echo "</form>"
-
-fi
 }
 
-######### iwlist scanning
+######### iwlist scanning #######
 IWLIST()
 {
 #echo " Please wait while scan is performed ... <br /><br />"
@@ -383,7 +361,7 @@ DisplayTable
                         let "count+=1"
                 done
 
-####################################################
+################################
 
 SSID=$(grep -i "ESSID" < "$tempfile"_"${current}" | sed -e s/'ESSID:'//g -e s/'"'//g -e s/'  '//g)
 CHANNEL=$(grep -i "Channel" < "$tempfile"_"${current}" | sed -e s/'Channel:'//g -e s/' '//g)
@@ -408,16 +386,19 @@ rm -f "$tempfile"_"${current}"
 let "found_networks+=1"
 let "current+=1"
 done
+
+echo "</table><br><a href='$SCRIPT_NAME'>@TR<<Re-scan>></a><br>"
+
 fi #<- end if were scan results
 
 rm -f "$tempfile"
 rm -f "$tempfile2"
-}
 
+}
 
 if is_kamikaze; then
 
-	if is_package_installed "wl" ; then #<- for Broadcom units //[ -s "/usr/sbin/wl" ]
+	if is_package_installed "wl" ; then #<- for Broadcom units where iwlist is broken
 		WL
 	else
 		IWLIST
