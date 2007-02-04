@@ -40,7 +40,7 @@ boot_wait"
 
 . /usr/lib/webif/webif.sh
 
-header "System" "Backup" "<img src=/images/bkup.jpg align=absmiddle>&nbsp;@TR<<Backup and Restore>>" ''
+header "System" "Backup &amp; Restore" "<img src='/images/bkup.jpg' align='middle' alt />&nbsp;@TR<<Backup and Restore>>" ''
 
 case "$FORM_action" in
 	download)
@@ -139,7 +139,7 @@ EOF
 
 		if [ -n "$FORM_configfile" ] && [ -e $FORM_configfile ]; then
 			
-		echo "<form method="GET" name="install" action=\"$SCRIPT_NAME\">"
+		echo "<form method="get" name="install" action=\"$SCRIPT_NAME\">"
 
 			display_form <<EOF
 start_form|Install Configuration
@@ -204,53 +204,43 @@ echo "<input type='submit' class='flatbtn'  value='@TR<<Install Config>>'><br><b
 
 		;;
 	esac
-
+echo "<form method="get" name="download" action="$SCRIPT_NAME">"
 display_form <<EOF
 start_form|@TR<<Backup Configuration>>
 EOF
 
 cat <<EOF
-<form method="GET" name="download" action="$SCRIPT_NAME">
-<input type="hidden" name="action" value="download">
-	<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
-	<tbody>
 <tr>
-	<td width=70%>@TR<<Name this configuration>>&nbsp;&nbsp;&nbsp;<input name="name" class='flatbtn' value="${FORM_name:-$(nvram get wan_hostname)}"/></td>	
-	<td><input id="form_submit" class='flatbtn' type="submit" name="submit" value="@TR<<Backup>>" /></td>
+<td width=70%>@TR<<Name this configuration>>&nbsp;&nbsp;&nbsp;<input name="name" class='flatbtn' value="${FORM_name:-$(nvram get wan_hostname)}"/></td>	
+<td><input type="hidden" name="action" value="download" /><input class='flatbtn' type="submit" name="submit" value="@TR<<Backup>>" /></td>
 </tr>
-</tbody>
-</table>
-</form>
 EOF
 
 display_form <<EOF
 end_form|
+string|</form>
 EOF
 
+echo "<form method='post' name="instconfig" action="$SCRIPT_NAME" enctype="multipart/form-data">"
 display_form <<EOF
 start_form|@TR<<Restore Configuration>>
+
 EOF
 
 cat<<EOF
-<form method="POST" name="instconfig" action="$SCRIPT_NAME" enctype="multipart/form-data">
-<input type="hidden" name="action" value="chkconfig">
-	<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
-	<tbody>
 <tr>
-	<td width=70%>@TR<<Saved config.tgz file:>>&nbsp;&nbsp;&nbsp;<input type="file" class='flatbtn' name="configfile" /></td>
-	<td><input id="form_submit" class='flatbtn' type="submit" name="submit" value="@TR<<Restore>>" /></td>
+<td width=70%>@TR<<Saved config.tgz file:>>&nbsp;&nbsp;&nbsp;<input type="file" class='flatbtn' name="configfile" /></td>
+<td><input type="hidden" name="action" value="chkconfig" /><input class='flatbtn' type="submit" name="submit" value="@TR<<Restore>>" /></td>
 </tr>
-</tbody>
-</table>
-</form>
 EOF
 
 display_form <<EOF
 end_form|
+string|</form>
 EOF
 
 footer
 ?>
 <!--
-##WEBIF:name:System:450:Backup & Restore
+##WEBIF:name:System:450:Backup &amp; Restore
 -->
