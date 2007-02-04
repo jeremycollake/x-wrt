@@ -373,6 +373,9 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 			echo '@TR<<Reloading>> @TR<<OpenVPN>> ...'
 			killall openvpn >&- 2>&- <&-
 			/etc/rc.d/S??openvpn start ;;
+		"/tmp/.uci/wireless")
+			echo '@TR<<Reloading>> @TR<<Wireless>> ...'
+			wifi >&- 2>&- <&- ;;
 	esac
 done
 
