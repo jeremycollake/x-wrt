@@ -155,6 +155,7 @@ reload_ezipupdate() {
 			ddns_hostname=$(nvram get ddns_hostname)
 			ddns_server=$(nvram get ddns_server)
 			ddns_max_interval=$(nvram get ddns_max_interval)
+			ddns_wildcard=$(nvram get ddns_wildcard)
 		else
 			echo "ERROR: ez-ipupdate config apply not updated for non-nvram systems."
 		fi
@@ -167,6 +168,11 @@ reload_ezipupdate() {
 			echo "host=$ddns_hostname"              >> $ddns_conf
 			[ -z "$ddns_server"       ] ||  echo "server=$ddns_server"             >> $ddns_conf
 			[ -z "$ddns_max_interval" ] ||  echo "max-interval=$ddns_max_interval" >> $ddns_conf
+
+		if [ "$ddns_wildcard" -eq "1" ]; then
+			echo "wildcard" >> $ddns_conf
+		fi
+
 
 		#[ -f $ddns_cache ] && rm -f  $ddns_cache
 
