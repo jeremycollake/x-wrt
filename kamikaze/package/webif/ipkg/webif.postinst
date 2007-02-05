@@ -149,9 +149,9 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	#FIXME: Syslog needs to be double checked
 	#/etc/init.d/syslog enable
 	
-	ExecuteIfExists "/etc/init.d/webif_deviceid start"
+	ExecuteIfExists "/etc/init.d/webif_deviceid" start
 #	ExecuteIfExists "/etc/init.d/firmwareinfo"	# x-wrt images use to pre-empt firmware_* set
-	ExecuteIfExists "/etc/init.d/webif_firmwareid start"
+	ExecuteIfExists "/etc/init.d/webif_firmwareid" start
 
 	# test installation successfulness
 	TestInstall
