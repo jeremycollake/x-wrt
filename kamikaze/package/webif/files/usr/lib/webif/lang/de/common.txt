@@ -1,48 +1,111 @@
+# -----------------------------------------------------
+# Global Settings
+#
 lang => Deutsch
-# Common
+Encoding => ISO-8859-1
+#
+# -----------------------------------------------------
+# -----------------------------------------------------
+# Common (webif.sh)
+#
+big_warning => WARNUNG
+page_incomplete => Diese Seite ist unvollst&auml;ndig und funktioniert nicht wunschgem&auml;&szlig; oder garnicht.
+page_untested => Diese Seite ist ungetestet und funktioniert m&ouml;glicherweise nicht wunschgem&auml;&szlig;.
+page_untested_kamikaze => Diese Seite wurde noch nicht unter Kamikaze geprüft.
+#
+features_require_package => Funktionen auf dieser Seite ben&ouml;tigen das Paket
+features_install => Installieren
+#
 Settings saved => Einstellungen gespeichert
 Settings not saved => Einstellungen nicht gespeichert
 Save Changes => Speichern
+Status => Status
+Host => Host
+Uptime => Betriebszeit
+Load => Systemlast
+Administrative Console => Verwaltungs Konsole
+X-Wrt Administration Console => X-Wrt Verwaltungs Konsole
+Warning => Warnung
+Password_warning => es wurde noch kein Passwort f&uuml;r Web-Administration und SSH gesetzt.<br />Bitte geben Sie jetzt ein neues Passwort ein (Benutzername im Browser: 'root').
+#
+Proceed Changes =>
 Apply Changes => &Uuml;bernehmen
 Clear Changes => Verwerfen
 Review Changes => Anzeigen
+#
+making_usable => Benutzer Erweiterungen f&uuml;r OpenWrt
+#
+# as far unknown
 Host Name => Hostname
-Uptime => Uptime
-Load => Systemlast
-Version => Version
 Categories => Kategorien
-Subcategories => Unterkategorien
 more... => Weitere Informationen...
 Add => Hinzuf&uuml;gen
 Remove => Entfernen
-Warning => Warnung
-Password_warning => es wurde noch kein Passwort f&uuml;r Web-Administration und SSH gesetzt.<br />Bitte geben Sie jetzt ein neues Passwort ein (Benutzername im Browser: 'root').
-
+#
+# -----------------------------------------------------
+# -----------------------------------------------------
+#
 # Categories
+#
+Subcategories => Unterkategorien
+#
 Info => Info
 About => &Uuml;ber
-Router Info => Routerinformationen
-
+#Router Info => Routerinformationen
+#
+Graphs => Graphs
+#
 Status => Status
 Connections => Netzwerkverbindungen
 DHCP => DHCP
 Wireless => WLAN
-
+#
 System => System
 Password => Passwort
 Settings => Einstellungen
 Installed Software => Installierte Software
 Firmware Upgrade => Firmware aktualisieren
-
+#
 Network => Netzwerk
 LAN => LAN
 WAN => Internet
 Wireless => WLAN
 Advanced Wireless => WLAN (erweitert)
 Hosts => Host-Konfiguration
-
-
-# 'About' page
+#
+# -----------------------------------------------------
+# -----------------------------------------------------
+#
+# 'Info' -> 'System' (info.sh)
+# 
+System Information => System Informationen
+#
+Please wait => Bitte warten
+info_error_checking => ES IST EIN FEHLER AUFGETRETEN
+info_update_available => webif&sup2; Update verf&uuml;gbar
+info_view_changes => &Auml;nderungen ansehen
+info_upgrade_webif => Webif Update installieren
+info_already_latest => die aktuellste webif&sup2; Version ist bereits installiert
+#
+info_wait_install => Bitte warten, die Installation kann ein wenig dauern.
+#
+Firmware => Firmware
+Kernel => Kernel
+MAC => MAC
+Device => Ger&auml;t
+Board => Board
+Username => Benutzername
+Web mgt. console => Web Verw. Konsole
+Version => Version
+#
+info_check_update => webif&sup2; Updates suchen
+info_check_daily_text => <i>daily builds</i> bei der Suche nach webif&sup2; Updates einbeziehen
+#
+# -----------------------------------------------------
+# -----------------------------------------------------
+#
+# 'Info' -> 'About' (info_about.sh)
+# 
 Copyright => Copyright
 
 GPL_Text => Dieses Programm ist freie Software. Sie k&ouml;nnen es unter den Bedingungen der GNU General Public License,<br /> wie von der Free Software Foundation ver&ouml;ffentlicht, weitergeben und/oder modifizieren,<br /> entweder gem&auml;&szlig; Version 2 der Lizenz oder (nach Ihrer Option) jeder sp&auml;teren Version.
@@ -55,13 +118,6 @@ No config change. => Es wurden keine Konfigurations&auml;nderungen vorgenommen.
 Config discarded. => Ihre Konfigurations&auml;nderungen wurden verworfen.
 Config changes: => Aktuelle Konfigurations&auml;nderungen:
 Updating config... => Aktualisiere die Konfiguration...
-
-
-# 'Router Info' page
-Firmware Version => Firmwareversion
-Kernel Version => Kernelversion
-Current Date/Time => Datum/Uhrzeit
-MAC Address => MAC-Adresse
 
 
 # 'Connections' page
@@ -135,7 +191,7 @@ Keep Alive => Verbindung aufrechterhalten
 Maximum Idle Time => Wartezeit bei Inaktivit&auml;t
 Redial Timeout => Wartezeit bei unterbrochener Verbindung
 MTU => Maximale Paketgr&ouml;&szlig;e
-Username => Benutzername
+
 
 
 # 'Wireless Configuration' page
@@ -225,6 +281,7 @@ Helptext Redial Timeout => Maximale Zeit, die der Router auf Antwort vom Provide
 
 # untranslated:
 Available packages => Verf&uuml;gbare Pakete
+Device Status => Ger&auml;testatus
 
  \$1 \ =>
  $2  =>
@@ -275,8 +332,6 @@ Dangerous Settings =>
 Data Rate Down =>
 Data Rate Up =>
 Delete NVRAM Setting =>
-Device =>
-Device Status =>
 DHCP Bail =>
 DHCP Configuration =>
 DHCP Interfaces =>
@@ -295,7 +350,6 @@ DynDNS Settings =>
 edit =>
 edit_qos_cfg =>
 Enable/Disable Unbridged Wireless =>
-Encoding =>
 Encryption Key =>
 Everything =>
 Express =>
@@ -534,8 +588,90 @@ Short help =>
  $5  =>
 Invalid value =>
 maximum =>
- $_firmware_name Administrative Console =>
-making_usable =>
+802.11b only =>
+All connected devices (excluding system hubs) =>
+Boot_Wait_Force =>
+broken_ezip =>
+Completed successfully =>
+delete =>
+Dest. IP =>
+Dest IP =>
+Diagnostics =>
+down =>
+Extensions =>
+Failed to install =>
+firewall_help_fw_example2 =>
+firewall_help_fw_port_example =>
+firewall_help_fw_port_example1 =>
+firewall_help_fw_port_example2 =>
+firewall_help_fw_portrange =>
+firewall_help_fw_portrange_example =>
+firewall_help_general =>
+Flags =>
+Forwarding a port range =>
+Forwarding a port to a different port =>
+Include daily builds when checking for update to webif<sup>2</sup> =>
+Install Hotspot Extension Pack =>
+Installing =>
+Interfaces Status LAN =>
+Interfaces Status WAN =>
+Interfaces Status WLAN =>
+Layer-7 =>
+linux-igd =>
+Loaded USB drivers =>
+Log Size =>
+Log type =>
+Mark =>
+miniupnpd =>
+Minutes Between Marks =>
+Mounted USB / SCSI devices =>
+Network Utilities =>
+Packet Size =>
+performing a one-time initialization =>
+Ping =>
+PktSize =>
+Please wait for output of =>
+Port Listing =>
+qos_scripts_disabled =>
+Reinstall EZ-IPUPDATE =>
+Remote Syslog =>
+Remove linux-igd =>
+Remove miniupnpd =>
+Removing =>
+Rules Index =>
+Server IP Address =>
+Show Advanced Rules =>
+Signal Strength =>
+TCP Flags =>
+TraceRoute =>
+Turning boot_wait on =>
+Upgrade UPNPd =>
+Upgrading firmware, please wait =>
+USB Devices =>
+Initializing theme ... =>
+installing theme package =>
+Webif settings =>
+ c[i]  =>
+install now =>
+Invalid hex key =>
+Invalid key length =>
+Key must not end with '0' =>
+maximum length =>
+minimum =>
+minimum length =>
+No value entered =>
+String too long =>
+String too short =>
+DynDNS Service =>
+Last update =>
+Max Interval (sec) =>
+Normal =>
+Reclassify =>
+Rule Type =>
+Server Name =>
+UPnP Configuration =>
+User Name =>
+View DynDNS Syslog =>
 qos_enabled => Aktiviert
 qos_adv_enabled => Aktiviert
 qos_disabled => Deaktiviert
