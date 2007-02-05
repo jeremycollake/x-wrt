@@ -28,39 +28,6 @@ width: 200px;
 filter: progid:DXImageTransform.Microsoft.Shadow(color=gray,direction=135,Strength=5);
 }
 
-#arrowhead{
-z-index: 99;
-position:absolute;
-top: -500px;
-left: 0;
-visibility: hidden;
-}
-
-TR.wifiscantitle
-{
-background-color: #999999;
-font-family: serif;
-font-weight: bold;
-color: #ffffff;
-text-align: center;
-
-}
-
-TR.wifiscanrow1
-{
-font-family: serif;
-font-size:12pt;
-color: #000000;
-}
-
-TR.wifiscanrow2
-{
-background-color: #E6E6E6;
-font-family: serif;
-font-size:12pt;
-color: #000000;
-}
-
 input.flatbtn{
 border: 1px solid #000000;
 font-size:8pt;
