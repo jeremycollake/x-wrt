@@ -80,7 +80,10 @@ nvram_default lan_proto static
 	remap eth1 vlan1
 	nvram_default vlan1hwname "et0"
 	nvram_default vlan2hwname "et0"
-	nvram_default lan_ifnames "vlan2 eth2"
+	nvram_default lan_ifnames "vlan0 eth2"
+	nvram get lan_ifnames | grep vlan2 >/dev/null && {
+		nvram_default vlan2ports "1 2 3 4 5*"
+	}
 }
 
 # hacks for asus wl-500g deluxe
@@ -103,8 +106,17 @@ nvram_default lan_proto static
 [  "$boardnum"  = "45" \
 -a "$boardtype" = "0x042f" ] && {
 	debug "### wl-500g premium hacks ###"
+	[ -z "$(nvram get lan_ifnames_t)" || {
+		# hasn't been remapped yet, revert the vlan1 config as well, because
+		# it defaults to "0 5u", which we can't use.
+		# use lan_ifnames_t as an indicator of whether the config was made
+		# by the original firmware.
+		nvram unset vlan1ports
+		nvram unset lan_ifnames_t
+	}
 	remap eth0.1 vlan0
 	remap eth0 vlan1
+	remap eth1 eth2
 
 	nvram_default lan_ifnames "vlan0 eth2"
 	nvram_default wan_ifname "vlan1"
@@ -187,6 +199,9 @@ nvram_default wl0_ssid OpenWrt
 nvram_default wl0_mode ap
 nvram_default wl0_infra 1
 nvram_default wl0_radio 1
+
+nvram_default vlan0ports "1 2 3 4 5*"
+nvram_default vlan1ports "0 5"
 
 WAN_PROTO="$(nvram get wan_proto)"
 WAN_IFNAME="$(nvram get wan_ifname)"
