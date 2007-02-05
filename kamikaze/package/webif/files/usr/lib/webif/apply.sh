@@ -27,6 +27,7 @@ HANDLERS_config='
 	pptp) reload_pptp;;
 	log) reload_log;;
 	ezipupdate) reload_ezipupdate;;
+	snmp) reload_snmp;;
 '
 
 HANDLERS_file='
@@ -154,6 +155,7 @@ reload_ezipupdate() {
 			ddns_hostname=$(nvram get ddns_hostname)
 			ddns_server=$(nvram get ddns_server)
 			ddns_max_interval=$(nvram get ddns_max_interval)
+			ddns_wildcard=$(nvram get ddns_wildcard)
 		else
 			echo "ERROR: ez-ipupdate config apply not updated for non-nvram systems."
 		fi
@@ -166,6 +168,11 @@ reload_ezipupdate() {
 			echo "host=$ddns_hostname"              >> $ddns_conf
 			[ -z "$ddns_server"       ] ||  echo "server=$ddns_server"             >> $ddns_conf
 			[ -z "$ddns_max_interval" ] ||  echo "max-interval=$ddns_max_interval" >> $ddns_conf
+
+		if [ "$ddns_wildcard" -eq "1" ]; then
+			echo "wildcard" >> $ddns_conf
+		fi
+
 
 		#[ -f $ddns_cache ] && rm -f  $ddns_cache
 
@@ -291,17 +298,29 @@ init_theme() {
 	echo '@TR<<Done>>'
 }
 
-reload_hotspot() {
-        echo '@TR<<Exporting>> @TR<<hotspot settings>> ...'
-        [ -e "/bin/save_hotspot" ] && {
-                /bin/save_hotspot >&- 2>&-
-        }
+reload_snmp() {
+	echo '@TR<<Exporting>> @TR<<snmp settings>> ...'
+	[ -e "/bin/save_snmp" ] && {
+		/bin/save_snmp >&- 2>&-
+	}
 
-        echo '@TR<<Reloading>> @TR<<hotspot settings>> ...'
-        [ -e "/usr/sbin/chilli" ] && {
-                /etc/init.d/chilli stop  >&- 2>&-
-                /etc/init.d/chilli start >&- 2>&-
-        }
+	echo '@TR<<Reloading>> @TR<<snmp settings>> ...'
+	[ -e "/usr/sbin/snmpd" ] && {
+		/etc/init.d/snmpd restart >&- 2>&-
+	}
+}
+
+reload_hotspot() {
+	echo '@TR<<Exporting>> @TR<<hotspot settings>> ...'
+	[ -e "/bin/save_hotspot" ] && {
+		/bin/save_hotspot >&- 2>&-
+	}
+
+	echo '@TR<<Reloading>> @TR<<hotspot settings>> ...'
+	[ -e "/usr/sbin/chilli" ] && {
+		/etc/init.d/chilli stop  >&- 2>&-
+		/etc/init.d/chilli start >&- 2>&-
+	}
 }
 
 
@@ -373,9 +392,6 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 			echo '@TR<<Reloading>> @TR<<OpenVPN>> ...'
 			killall openvpn >&- 2>&- <&-
 			/etc/rc.d/S??openvpn start ;;
-		"/tmp/.uci/wireless")
-			echo '@TR<<Reloading>> @TR<<Wireless>> ...'
-			wifi >&- 2>&- <&- ;;
 	esac
 done
 

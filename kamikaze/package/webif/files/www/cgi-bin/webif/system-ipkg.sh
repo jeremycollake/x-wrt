@@ -27,7 +27,7 @@
 #
 #
 
-header "System" "Packages" "<img src=/images/pkg.jpg align=absmiddle>&nbsp;@TR<<Packages>>" '' "$SCRIPT_NAME"
+header "System" "Packages" "@TR<<Packages>>" '' "$SCRIPT_NAME"
 
 ##################################################################
 #
