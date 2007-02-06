@@ -26,7 +26,6 @@ source "package/libffi-sable/Config.in"
 endmenu
 source "package/screen/Config.in"
 source "package/webif/Config.in"
-source "package/hswebif/Config.in"
 
 comment "Networking"
 source "package/aiccu/Config.in"
