@@ -32,7 +32,7 @@ start_form|@TR<<SNMP Settings>>
 field|@TR<<SNMP Public Community Name>>|snmp_public_name
 text|snmp_public_name|$FORM_snmp_public_name
 helpitem|SNMP Community Name
-helptext|Helptext SNMP Community Name#The SNMP community name identify a group of devices and management systems that define authentication, access control of this group. Although PUBLIC and PRIVATE are commonly used, it is strongly suggested to use a hard to guess names. The only worse thing than these names mentioned earlier, is to leave the community name blank! The community name can be considered as a group password.
+helptext|Helptext SNMP Community Name#The SNMP community name identifies a group of devices and management systems that share authentication, access control of this group. Although PUBLIC and PRIVATE are commonly used, it is strongly suggested to use hard to guess names. The only worse thing than PUBLIC and PRIVATE, is to leave the community name blank! The community name can be considered a group password.
 field|@TR<<SNMP Public Source>>|snmp_public_src
 text|snmp_public_src|$FORM_snmp_public_src
 helpitem|SNMP Source
