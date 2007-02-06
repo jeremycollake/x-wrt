@@ -31,7 +31,7 @@ config wifi-iface
 fi
 
 if ! empty "$FORM_remove_vcfg"; then
-	#Ugly hack until api loads chages waiting to be applied.
+	#Ugly hack until api loads changes waiting to be applied.
 	if [ -e /tmp/.uci/wireless ]; then
 		mv /tmp/.uci/wireless /tmp/.uci/wireless-save
 		uci_remove "wireless" "$FORM_remove_vcfg"
@@ -208,7 +208,6 @@ for device in $DEVICES; do
 				eval FORM_port="\$FORM_port_$vcfg"
 				eval FORM_hidden="\$FORM_broadcast_$vcfg"
 				eval FORM_isolate="\$FORM_isolate_$vcfg"
-				eval FORM_key="\$FORM_key_$vcfg"
 				eval FORM_wep_key="\$FORM_wep_key_$vcfg"
 				eval FORM_key1="\$FORM_key1_$vcfg"
 				eval FORM_key2="\$FORM_key2_$vcfg"
@@ -252,7 +251,7 @@ for device in $DEVICES; do
 			eval FORM_generate_wep_40="\$FORM_generate_wep_40_$vcfg"
 			! empty "$FORM_generate_wep_128" &&
 			{
-				FORM_key="1"
+				FORM_wep_key="1"
 				FORM_key1=""
 				FORM_key2=""
 				FORM_key3=""
@@ -275,7 +274,7 @@ for device in $DEVICES; do
 
 			! empty "$FORM_generate_wep_40" &&
 			{
-				FORM_key="1"
+				FORM_wep_key="1"
 				FORM_key1=""
 				FORM_key2=""
 				FORM_key3=""
