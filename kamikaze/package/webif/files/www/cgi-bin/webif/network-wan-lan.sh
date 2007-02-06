@@ -23,8 +23,6 @@
 #Load settings from the network config file.	
 uci_load "network"
 
-header "Network" "WAN-LAN" "@TR<<WAN-LAN Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
-
 FORM_wandns="$CONFIG_wan_dns"
 LISTVAL="$FORM_wandns"
 handle_list "$FORM_wandnsremove" "$FORM_wandnsadd" "$FORM_wandnssubmit" 'ip|FORM_dnsadd|@TR<<WAN DNS Address>>|required' && {
@@ -191,6 +189,8 @@ text|pptp_server_ip|$FORM_pptp_server_ip"
 			 print "	apnDB." $1 ".pass = \"" $5 "\";\n"}' < /usr/lib/webif/apn.csv
 	)
 }
+
+header "Network" "WAN-LAN" "@TR<<WAN-LAN Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 cat <<EOF
 <script type="text/javascript" src="/webif.js "></script>

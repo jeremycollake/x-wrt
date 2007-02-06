@@ -49,9 +49,6 @@ if ! empty "$FORM_remove_vcfg"; then
 	FORM_remove_vcfg=""
 fi
 
-
-header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onload="modechange()"' "$SCRIPT_NAME"
-
 ###################################################################
 # Parse Settings, this function is called when doing a config_load
 config_cb() {
@@ -421,7 +418,6 @@ for device in $DEVICES; do
 			
 			###################################################################
 			# set validate forms
-			# FIXME: The validation does not diplay error when something is in error, it just doesn't save settings.
 			case "$FORM_encryption" in
 				psk|psk2) append validate_forms "wpapsk|FORM_wpa_psk_$vcfg|@TR<<WPA PSK#WPA Pre-Shared Key>>|required|$FORM_key" "$N";;
 				wpa|wpa2) append validate_forms "string|FORM_radius_key_$vcfg|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_key" "$N"
@@ -502,6 +498,8 @@ EOF
 		}
 	}
 fi
+
+header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onload="modechange()"' "$SCRIPT_NAME"
 
 #####################################################################
 # modechange script
