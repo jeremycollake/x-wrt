@@ -191,7 +191,7 @@ for device in $DEVICES; do
 	        		config_get FORM_key3 $vcfg key3
 	        		config_get FORM_key4 $vcfg key4
 	        		config_get FORM_server $vcfg server
-	        		config_get FORM_port $vcfg port
+	        		config_get FORM_radius_port $vcfg port
 	        		config_get FORM_hidden $vcfg hidden
 	        		config_get FORM_isolate $vcfg isolate
 			else
@@ -205,7 +205,7 @@ for device in $DEVICES; do
 				esac
 				eval FORM_mode="\$FORM_mode_$vcfg"
 				eval FORM_server="\$FORM_server_$vcfg"
-				eval FORM_port="\$FORM_port_$vcfg"
+				eval FORM_radius_port="\$FORM_radius_port_$vcfg"
 				eval FORM_hidden="\$FORM_broadcast_$vcfg"
 				eval FORM_isolate="\$FORM_isolate_$vcfg"
 				eval FORM_wep_key="\$FORM_wep_key_$vcfg"
@@ -344,7 +344,9 @@ for device in $DEVICES; do
 			wpa="field|WPA @TR<<PSK>>|wpapsk_$vcfg|hidden
 				password|wpa_psk_$vcfg|$FORM_key
 				field|@TR<<RADIUS IP Address>>|radius_ip_$vcfg|hidden
-				text|radius_ipaddr_$vcfg|$FORM_server
+				text|server_$vcfg|$FORM_server
+				field|@TR<<RADIUS Port>>|radius_port_form_$vcfg|hidden
+				text|radius_port_$vcfg|$FORM_radius_port
 				field|@TR<<RADIUS Server Key>>|radiuskey_$vcfg|hidden
 				text|radius_key_$vcfg|$FORM_key
 				$install_nas_button"
@@ -397,7 +399,8 @@ for device in $DEVICES; do
 
 				v = (isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2'));
 				set_visible('radiuskey_$vcfg', v);
-				set_visible('radius_ip_$vcfg', v);"
+				set_visible('radius_ip_$vcfg', v);
+				set_visible('radius_port_form_$vcfg', v);"
 			append js "$javascript_forms" "$N"
 			remove_vcfg="string|<tr><td><a href="$SCRIPT_NAME?remove_vcfg=$vcfg">@TR<<Remove Virtual Interface>></a>"
 			append forms "helpitem|Encryption Type" "$N"
@@ -409,7 +412,8 @@ for device in $DEVICES; do
 			case "$FORM_encryption" in
 				psk|psk2) append validate_forms "wpapsk|FORM_wpa_psk_$vcfg|@TR<<WPA PSK#WPA Pre-Shared Key>>|required|$FORM_key" "$N";;
 				wpa|wpa2) append validate_forms "string|FORM_radius_key_$vcfg|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_key" "$N"
-					append validate_forms "ip|FORM_radius_ipaddr|@TR<<RADIUS IP Address>>|required|$FORM_radius_ipaddr" "$N";;
+					append validate_forms "ip|FORM_server_$vcfg|@TR<<RADIUS IP Address>>|required|$FORM_server" "$N"
+					append validate_forms "port|FORM_radius_port_$vcfg|@TR<<RADIUS IP Address>>|required|$FORM_radius_port" "$N";;
 				wep)
 					append validate_forms "int|FORM_wep_key_$vcfg|@TR<<Selected WEP Key>>|min=1 max=4|$FORM_wep_key" "$N"
 					append validate_forms "wep|FORM_key1_$vcfg|@TR<<WEP Key>> 1||$FORM_key1" "$N"
@@ -448,7 +452,7 @@ EOF
 						eval FORM_encryption="\$FORM_encryption_$vcfg"
 						eval FORM_mode="\$FORM_mode_$vcfg"
 						eval FORM_server="\$FORM_server_$vcfg"
-						eval FORM_port="\$FORM_port_$vcfg"
+						eval FORM_radius_port="\$FORM_radius_port_$vcfg"
 						eval FORM_hidden="\$FORM_broadcast_$vcfg"
 						eval FORM_isolate="\$FORM_isolate_$vcfg"
 						eval FORM_wep_key="\$FORM_wep_key_$vcfg"
@@ -467,7 +471,7 @@ EOF
 						uci_set "wireless" "$vcfg" "mode" "$FORM_mode"
 						uci_set "wireless" "$vcfg" "encryption" "$FORM_encryption"
 						uci_set "wireless" "$vcfg" "server" "$FORM_server"
-						uci_set "wireless" "$vcfg" "port" "$FORM_port"
+						uci_set "wireless" "$vcfg" "port" "$FORM_radius_port"
 						uci_set "wireless" "$vcfg" "hidden" "$FORM_hidden"
 						uci_set "wireless" "$vcfg" "isolate" "$FORM_isolate"
 						case "$FORM_encryption" in
