@@ -19,6 +19,8 @@
 #   wireless
 #
 
+###################################################################
+# Add Virtual Interface
 if ! empty "$FORM_add_vcfg"; then
 	echo "
 config wifi-iface
@@ -30,6 +32,8 @@ config wifi-iface
 	FORM_add_vcfg=""
 fi
 
+###################################################################
+# Remove Virtual Interface
 if ! empty "$FORM_remove_vcfg"; then
 	#Ugly hack until api loads changes waiting to be applied.
 	if [ -e /tmp/.uci/wireless ]; then
@@ -47,6 +51,9 @@ fi
 
 
 header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onload="modechange()"' "$SCRIPT_NAME"
+
+###################################################################
+# Parse Settings, this function is called when doing a config_load
 config_cb() {
 config_get TYPE "$CONFIG_SECTION" TYPE
 case "$TYPE" in
@@ -170,9 +177,9 @@ for device in $DEVICES; do
         append forms "$add_vcfg" "$N"
         append forms "end_form" "$N"
 
-#####################################################################
-# This is looped for every virtual wireless interface (wifi-iface)
-#
+	#####################################################################
+	# This is looped for every virtual wireless interface (wifi-iface)
+	#
         for vcfg in $vface; do
        		config_get FORM_device $vcfg device
        		if [ "$FORM_device" = "$device" ]; then
@@ -246,6 +253,8 @@ for device in $DEVICES; do
 				text|bssid_$vcfg|$FORM_bssid"
 			append forms "$bssid" "$N"
 
+			###################################################################
+			# Generate 4 40-bit WEP keys or 1 128-bit WEP Key
 			eval FORM_wep_passphrase="\$FORM_wep_passphrase_$vcfg"
 			eval FORM_generate_wep_128="\$FORM_generate_wep_128_$vcfg"
 			eval FORM_generate_wep_40="\$FORM_generate_wep_40_$vcfg"
@@ -352,6 +361,8 @@ for device in $DEVICES; do
 				$install_nas_button"
 			append forms "$wpa" "$N"
 
+			###################################################################
+			# set JavaScript
 			javascript_forms="
 				v = isset('encryption_$vcfg','wep');
 				set_visible('wep_key_1_$vcfg', v);
@@ -408,7 +419,9 @@ for device in $DEVICES; do
 			append forms "$remove_vcfg" "$N"
 			append forms "end_form" "$N"
 			
-			#set validate forms
+			###################################################################
+			# set validate forms
+			# FIXME: The validation does not diplay error when something is in error, it just doesn't save settings.
 			case "$FORM_encryption" in
 				psk|psk2) append validate_forms "wpapsk|FORM_wpa_psk_$vcfg|@TR<<WPA PSK#WPA Pre-Shared Key>>|required|$FORM_key" "$N";;
 				wpa|wpa2) append validate_forms "string|FORM_radius_key_$vcfg|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_key" "$N"
