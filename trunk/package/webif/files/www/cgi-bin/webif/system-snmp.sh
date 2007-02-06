@@ -31,15 +31,18 @@ display_form <<EOF
 start_form|@TR<<SNMP Settings>>
 field|@TR<<SNMP Public Community Name>>|snmp_public_name
 text|snmp_public_name|$FORM_snmp_public_name
+helpitem|SNMP Community String
+helptext|Helptext SNMP Community String#Community string for public and private communities
 field|@TR<<SNMP Public Source>>|snmp_public_src
 text|snmp_public_src|$FORM_snmp_public_src
+helpitem|SNMP Source
+helptext|Helptext SNMP Source#Community source address, hostname or network mask.
 field|@TR<<SNMP Private Community Name>>|snmp_private_name
 text|snmp_private_name|$FORM_snmp_private_name
 field|@TR<<SNMP Private Source>>|snmp_private_src
 text|snmp_private_src|$FORM_snmp_private_src
 end_form
 EOF
-
 footer ?>
 <!--
 ##WEBIF:name:System:320:SNMP
