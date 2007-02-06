@@ -1,6 +1,0 @@
-config BR2_PACKAGE_HSWEBIF
-	select BR2_PACKAGE_WEBIF
-	tristate "hswebif - hotspot webif extensions"
-	default m
-	help
-	  A web interface for configuring Hotspots.

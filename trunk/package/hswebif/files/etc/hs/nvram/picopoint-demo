@@ -1,6 +1,0 @@
-hs_type=chillispot
-hs_mode=combined
-hs_radconf_server=rad01.coova.org
-hs_radconf_secret=coova-anonymous
-hs_radconf_user=picopoint-demo
-hs_radconf_pwd=picopoint
