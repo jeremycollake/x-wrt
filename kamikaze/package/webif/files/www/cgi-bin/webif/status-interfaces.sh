@@ -1,10 +1,11 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
+uci_load network
 header "Status" "Interfaces" "@TR<<Interfaces>>"
 
 # get WAN stats
-wan_config=$(ifconfig 2>&1 | grep -A 6 "`uci get network.wan.ifname`")
+wan_config=$(ifconfig 2>&1 | grep -A 6 "$CONFIG_wan_ifname")
 if [ -n "$wan_config" ]; then
 wan_ip_addr=$(echo "$wan_config" | grep "inet addr" | cut -d: -f 2 | sed s/Bcast//g)
 wan_mac_addr=$(echo "$wan_config" | grep "HWaddr" | cut -d'H' -f 2 | cut -d' ' -f 2)
@@ -14,7 +15,7 @@ wan_tx_bytes=$(echo "$wan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed
 wan_rx_bytes=$(echo "$wan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d'(' -f 2 | cut -d ')' -f 1)
 fi
 # get LAN stats
-lan_config=$(ifconfig 2>&1 | grep -A 6 "`uci get network.lan.ifname`")
+lan_config=$(ifconfig 2>&1 | grep -A 6 "$CONFIG_lan_ifname`")
 if [ "$(uci get network.lan.type)" = "bridge" ]; then
 lan_ip_addr=$(ifconfig br-lan 2>&1 | grep "inet addr" | cut -d: -f 2 | sed s/Bcast//g)
 else
@@ -136,7 +137,7 @@ echo "<tr><td><br /></td></tr>
 		</tr>
 		<tr>
 			<td><pre>"
-ifconfig 2>&1 | grep -A 6 "`uci get network wan ifname`"
+ifconfig 2>&1 | grep -A 6 "$CONFIG_wan_ifname`"
 echo "</pre></td>
 		</tr>
 		<tr><td><br /><br /></td></tr>
@@ -145,7 +146,7 @@ echo "</pre></td>
 		</tr>
 		<tr>
 			<td><pre>"
-ifconfig 2>&1 | grep -A 6 "`uci get network lan ifname`"
+ifconfig 2>&1 | grep -A 6 "CONFIG_lan_ifname`"
 echo "</pre></td>
 		</tr>
 		<tr><td><br /><br /></td></tr>
