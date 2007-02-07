@@ -22,7 +22,7 @@ while [ -z "$device_name" ]; do
                device_name="ASUS WL-500gp"
                break
         }
-        ifconfig eth0 |grep 00:0D:B9:**:**:**
+        ifconfig eth0 |grep -q 00:0D:B9:**:**:**
 	[ $? = "0" ] && {
 		device_name="PC Engines WRAP"
 		break
