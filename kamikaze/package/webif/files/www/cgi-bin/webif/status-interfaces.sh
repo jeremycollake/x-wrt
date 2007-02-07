@@ -15,7 +15,7 @@ wan_tx_bytes=$(echo "$wan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed
 wan_rx_bytes=$(echo "$wan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d'(' -f 2 | cut -d ')' -f 1)
 fi
 # get LAN stats
-lan_config=$(ifconfig 2>&1 | grep -A 6 "$CONFIG_lan_ifname`")
+lan_config=$(ifconfig 2>&1 | grep -A 6 "$CONFIG_lan_ifname")
 if [ "$(uci get network.lan.type)" = "bridge" ]; then
 lan_ip_addr=$(ifconfig br-lan 2>&1 | grep "inet addr" | cut -d: -f 2 | sed s/Bcast//g)
 else
