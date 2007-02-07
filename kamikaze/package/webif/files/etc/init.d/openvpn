@@ -1,19 +1,20 @@
 #!/bin/sh /etc/rc.common
 START=60
-
+. /lib/config/uci.sh
+uci_load openvpn
 case "$1" in
 	start)
-	case "$(uci get openvpn.general.mode)" in
+	case "$CONFIG_general_mode" in
 		client)
-			SERVER=$(uci get openvpn.client.ipaddr)
-			PROTO=$(uci get openvpn.general.proto)
-			PORT=$(uci get openvpn.general.port)
+			SERVER="$CONFIG_client_ipaddr"
+			PROTO="$CONFIG_general_proto"
+			PORT="$CONFIG_general_port"
 	
 			[ "$SERVER" ] || {
 				logger "$0: remote server not configured!"
 				exit
 			}
-			case "$(uci get openvpn.client.auth)" in
+			case "$CONFIG_client_auth" in
 				cert)
 					AUTH_OPTION="--client --pkcs12"
 					AUTH_FILE="/etc/openvpn/certificate.p12"
