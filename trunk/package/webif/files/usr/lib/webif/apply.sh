@@ -383,6 +383,9 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 			ifup lan
 			killall dnsmasq
 			/etc/init.d/dnsmasq start ;;
+		"/tmp/.uci/wireless")
+			echo '@TR<<Reloading>> @TR<<wireless>> ...'
+			wifi ;;
 		"/tmp/.uci/syslog")
 			# for kamikaze
 			echo '@TR<<Reloading>> @TR<<syslogd>> ...'
