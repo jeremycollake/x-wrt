@@ -10,18 +10,23 @@ snmp_private_name=`nvram show 2>1 | awk -F '=' '/snmp_private_name/ {print $2}`
 snmp_private_src=`nvram show 2>1 | awk -F '=' '/snmp_private_src/ {print $2}`
 
 cat > /etc/snmp/snmpd.conf <<EOF
-com2sec  ro  $snmp_public_src    $snmp_public_name
-com2sec  rw  $snmp_private_src  $snmp_private_name
+com2sec  local      localhost          public
+group   localrw        v1            local
+group   localrw        v2c           local
+group   localrw        usm           local
+com2sec  publicro  $snmp_public_src    $snmp_public_name
+com2sec  publicrw  $snmp_private_src  $snmp_private_name
 
-group  public   v1   ro
-group  public   v2c  ro
-group  public   usm  ro
-group  private  v1   rw
-group  private  v2c  rw
-group  private  usm  rw
+group  public   v1   publicro
+group  public   v2c  publicro
+group  public   usm  publicro
+group  private  v1   publicrw
+group  private  v2c  publicrw
+group  private  usm  publicrw
 
 view  all  included  .1
 
+access  localrw        ""      any       noauth    exact  all    all    all
 access  public   ""  any  noauth  exact  all  none  none
 access  private  ""  any  noauth  exact  all  all   all
 EOF
