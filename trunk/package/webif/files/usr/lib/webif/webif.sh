@@ -100,8 +100,7 @@ Pragma: no-cache
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <?xml version="1.0" encoding="@TR<<Encoding|ISO-8859-1>>"?>
 <head>
-        <link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
-        <link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css" />
+        <link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />        
         <title></title>
         <style type="text/css">
                 html, body { background-color: transparent; }
@@ -173,8 +172,7 @@ Pragma: no-cache
         <link rel="alternate stylesheet" type="text/css" href="/themes/active/color_green.css" title="green" />
         <link rel="alternate stylesheet" type="text/css" href="/themes/active/color_navyblue.css" title="navyblue" />
         <link rel="alternate stylesheet" type="text/css" href="/themes/active/color_black.css" title="black" />
-        <link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css" />
-
+        
         <!--[if lt IE 7]>
                 <link rel="stylesheet" type="text/css" href="/themes/active/ie_lt7.css" />
         <![endif]-->                

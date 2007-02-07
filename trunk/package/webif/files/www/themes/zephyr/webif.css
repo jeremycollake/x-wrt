@@ -301,3 +301,60 @@ hr,
 	text-align: center;
 	text-shadow: 2px 2px 2px #C2D787;
 }
+
+.gradualshine{
+filter:alpha(opacity=30);
+-moz-opacity:0.3;
+}
+
+.balloonstyle{
+position:absolute;
+top: -500px;
+left: 0;
+padding: 5px;
+visibility: hidden;
+border:1px solid black;
+font:normal 12px Verdana;
+line-height: 18px;
+z-index: 100;
+background-color: white;
+width: 200px;
+/*Remove below line to remove shadow. Below line should always appear last within this CSS*/
+filter: progid:DXImageTransform.Microsoft.Shadow(color=gray,direction=135,Strength=5);
+}
+
+input.flatbtn{
+border: 1px solid #000000;
+font-size:8pt;
+}
+
+#scrollBox {
+	position: absolute;
+	width: 90%;
+	margin 0 auto;
+	font-size: 0.7em;
+}
+#outerscrollBox{
+	position: relative;
+        width: 50%; /*marquee width */
+        height: 20em; /*marquee height */
+        overflow: hidden;
+        border: 1px solid #ccc;
+        padding: 1em;
+        margin-top: 1em;
+}
+#scrollBox h1 {
+        font-weight: bold;
+        margin-bottom: 1em;
+}
+#scrollBox h2 { margin: 2em 0 1em; }
+#scrollBox h2 em {
+        font-weight: normal;
+        font-size: 0.9em;
+}
+#scrollBox ul {
+        list-style-type: disc;
+        list-style-position: inside;
+}
+#scrollBox p { margin-bottom: 0.5em; }
+#scrollBox li { margin: 0.8em; }
