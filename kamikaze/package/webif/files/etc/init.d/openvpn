@@ -42,13 +42,14 @@ case "$1" in
 				--daemon				\
 				--status /tmp/openvpn-status.log	\
 				--verb 3
-			server)
-				echo "Not yet implimented"
-				exit 0
-			;;
-			*)
-				exit 0
+		server)
+			echo "Not yet implimented"
+			exit 0
 		;;
+		*)
+			exit 0
+		:;
+	esac	
 	;;
 	restart)
 		$0 stop
