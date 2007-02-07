@@ -1,12 +1,3 @@
-TR.appindex
-{
-font-family: serif;
-font-size:8pt
-font-style: normal;
-font-size: medium;
-color: #000000;
-}
-
 .gradualshine{
 filter:alpha(opacity=30);
 -moz-opacity:0.3;
