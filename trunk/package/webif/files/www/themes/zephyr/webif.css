@@ -358,3 +358,26 @@ font-size:8pt;
 }
 #scrollBox p { margin-bottom: 0.5em; }
 #scrollBox li { margin: 0.8em; }
+
+/* styles for dmytro's new wireless survey page. Used in Kamikaze as of 02/08/07. */
+TR.wifiscantitle
+{
+	background-color: #999999;
+	font-family: serif;
+	font-weight: bold;
+	color: #ffffff;
+	text-align: center;
+}
+TR.wifiscanrow1
+{
+	font-family: serif;
+	font-size:12pt;
+	color: #000000;
+}
+TR.wifiscanrow2
+{
+	background-color: #E6E6E6;
+	font-family: serif;
+	font-size:12pt;
+	color: #000000;
+}
