@@ -100,8 +100,7 @@ Pragma: no-cache
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <?xml version="1.0" encoding="@TR<<Encoding|ISO-8859-1>>"?>
 <head>
-        <link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
-        <link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css" />
+        <link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />        
         <title></title>
         <style type="text/css">
                 html, body { background-color: transparent; }
@@ -124,6 +123,7 @@ header() {
         _firmware_version="$CONFIG_general_firmware_version"
         _firmware_name="$CONFIG_general_firmware_name"
         _firmware_subtitle="$CONFIG_general_firmware_subtitle"
+	_use_apply_progressbar="$CONFIG_general_use_apply_progressbar"
         _uptime="$(uptime)"
         _loadavg="${_uptime#*load average: }"
         _uptime="${_uptime#*up }"
@@ -173,8 +173,6 @@ Pragma: no-cache
         <link rel="alternate stylesheet" type="text/css" href="/themes/active/color_green.css" title="green" />
         <link rel="alternate stylesheet" type="text/css" href="/themes/active/color_navyblue.css" title="navyblue" />
         <link rel="alternate stylesheet" type="text/css" href="/themes/active/color_black.css" title="black" />
-        <link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css" />
-
         <!--[if lt IE 7]>
                 <link rel="stylesheet" type="text/css" href="/themes/active/ie_lt7.css" />
         <![endif]-->                
@@ -260,41 +258,46 @@ EOF
         }
 }
 
+#######################################################
+# footer
+#
 footer() {
         update_changes
         _changes=${CHANGES#0}
         _changes=${_changes:+(${_changes})}
         _endform=${_savebutton:+</form>}
-        cat <<EOF
+        
+
+cat <<EOF
 </div>
-
 <br />
-
 <fieldset id="save">
         <legend><strong>@TR<<Proceed Changes>></strong></legend>
         $_savebutton
         <ul class="apply">
-                <li><script type="text/javascript" src="/js/waitbox.js"></script></li>
+EOF
+	equal "$_use_apply_progressbar" "1" && {
+		echo '<script type="text/javascript" src="/js/waitbox.js"></script>'
+	}
+cat <<EOF
                 <li><a href="config.sh?mode=save&amp;cat=$_category&amp;prev=$SCRIPT_NAME" rel="lightbox" >@TR<<Apply Changes>> &laquo;</a></li>
                 <li><a href="config.sh?mode=clear&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Clear Changes>> &laquo;</a></li>
                 <li><a href="config.sh?mode=review&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Review Changes>> $_changes &laquo;</a></li>
         </ul>
 </fieldset>        
 $_endform
-
 <hr />
-
 <div id="footer">
         <h3>X-Wrt</h3>
         <em>@TR<<making_usable#End user extensions for OpenWrt>></em>
 </div>
-
 </div> <!-- End #container -->
 </body>
 </html>
 EOF
 }
 
+#######################################################
 apply_passwd() {
         case ${SERVER_SOFTWARE%% *} in
                 mini_httpd/*)

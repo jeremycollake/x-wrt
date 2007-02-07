@@ -3,7 +3,8 @@ config webif general
 	option firmware_version ""
 	option firmware_subtitle "With X-Wrt Extensions"
 	option device_name ""
-	
+	option use_apply_progressbar "1"
+
 config webif syslog
 	option ipaddr ""
 	option port ""
