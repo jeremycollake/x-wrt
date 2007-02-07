@@ -3,10 +3,10 @@
 . /usr/lib/webif/webif.sh
 
 #$meta_refresh="<meta http-equiv=\"refresh\" content=\"5; URL=log-read.sh\">"
-
+uci_load "syslogd"
 header "Log" "Syslog" "@TR<<Syslog View>>" '' "$SCRIPT_NAME"
 #| sed -e "s|<head>|<head>$meta_refresh|"
-prefix=$(uci get syslogd.general.prefix)
+prefix="$CONFIG_general_prefix"
 ?>
 <? echo "@TR<<Message Prefix>>: $prefix" ?><br/>
 <iframe src="log-read_frame.sh" width="90%" height="300" scrolling="auto">

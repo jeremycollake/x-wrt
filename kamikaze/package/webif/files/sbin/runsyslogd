@@ -10,16 +10,16 @@
 # -R HOST[:PORT]  Log to IP or hostname on PORT (default PORT=514/UDP)
 # -L              Log locally and via network logging (default is network only)
 # -C [size(KiB)]  Log to a circular buffer (read the buffer using logread)
-
+. /lib/config/uci.sh
 . /etc/runsyslogd.conf
-
+uci_load "syslogd"
 # retrieve uci values
-syslog_ip=$(uci get webif syslog ipaddr)
-syslog_port=$(uci get webif syslog port)
-syslog_size=$(uci get webif syslog size)
-syslog_type=$(uci get webif syslog type)
-syslog_mark=$(uci get webif syslog mark)
-syslog_file=$(uci get webif syslog file)
+syslog_ip="$CONFIG_syslog_ipaddr"
+syslog_port="$CONFIG_syslog_port"
+syslog_size="$CONFIG_syslog_size"
+syslog_type="$CONFIG_syslog_type"
+syslog_mark="$CONFIG_syslog_mark"
+syslog_file="$CONFIG_syslog_file"
 
 # verify values
 [ $syslog_type = "circular" ] 2>>/dev/null || [ $syslog_type = "file" ] 2>>/dev/null || syslog_type=$DEFAULT_log_type
