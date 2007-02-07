@@ -1,5 +1,5 @@
 #!/bin/sh /etc/rc.common
-# This file is compatible with White Russian and Kamikaze.
+# This file is not compatible with White Russian and Kamikaze.
 #
 # identification of the device
 #
@@ -22,7 +22,12 @@ while [ -z "$device_name" ]; do
                device_name="ASUS WL-500gp"
                break
         }
-        if [ "$(uname -m)" = "i586" ]; then
+        ifconfig eth0 |grep 00:0D:B9:**:**:**
+	[ $? = "0" ] && {
+		device_name="PC Engines WRAP"
+		break
+        }
+        if [ "$(uname -m)" = "i?86" ]; then
         	device_name="Generic x86"
         	break
         fi
