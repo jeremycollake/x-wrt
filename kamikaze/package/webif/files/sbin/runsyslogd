@@ -37,7 +37,7 @@ fi
 
 # build command syslog command line
 if [ "$syslog_type" = "circular" ] ; then
-	SYSLOG_CMD="-C $syslog_size -m $syslog_mark ${syslog_ip:+-L -R $syslog_ip:$syslog_port}"
+	SYSLOG_CMD="-C$syslog_size -m $syslog_mark ${syslog_ip:+-L -R $syslog_ip:$syslog_port}"
 else	SYSLOG_CMD="-s $syslog_size -O $syslog_file -m $syslog_mark ${syslog_ip:+-L -R $syslog_ip:$syslog_port}"
 fi
 
