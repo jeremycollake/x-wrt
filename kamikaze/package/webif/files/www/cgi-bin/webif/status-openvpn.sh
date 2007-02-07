@@ -1,10 +1,10 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
-
+uci_load openvpn
 header "Status" "OpenVPN" "@TR<<OpenVPN Status>>"
 
-equal "$(uci get openvpn.general.mode)" "client" && {
+equal "$CONFIG_general_mode" "client" && {
 
 	case "$FORM_action" in
 		start)
@@ -23,7 +23,7 @@ equal "$(uci get openvpn.general.mode)" "client" && {
 		;;
 	esac
 
-	case "$(uci get openvpn.client.auth)" in
+	case "$CONFIG_client_auth" in
 		cert)
 			[ -f "/etc/openvpn/certificate.p12" ] ||
 				ERROR="Error, certificate is missing!"
