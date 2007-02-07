@@ -35,18 +35,7 @@ fi
 ###################################################################
 # Remove Virtual Interface
 if ! empty "$FORM_remove_vcfg"; then
-	#Ugly hack until api loads changes waiting to be applied.
-	if [ -e /tmp/.uci/wireless ]; then
-		mv /tmp/.uci/wireless /tmp/.uci/wireless-save
-		uci_remove "wireless" "$FORM_remove_vcfg"
-		uci commit wireless
-		mv /tmp/.uci/wireless-save /tmp/.uci/wireless
-		uci_remove "wireless" "$FORM_remove_vcfg"
-	else
-		uci_remove "wireless" "$FORM_remove_vcfg"
-		uci commit wireless
-	fi
-	FORM_remove_vcfg=""
+	uci_remove "wireless" "$FORM_remove_vcfg"
 fi
 
 ###################################################################
