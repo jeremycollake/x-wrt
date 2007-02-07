@@ -85,6 +85,9 @@ firmware_version="$CONFIG_general_firmware_version"
 _kversion="$( uname -srv )"
 _mac="$(/sbin/ifconfig eth0 | grep HWaddr | cut -b39-)"
 board_type=$(cat /proc/cpuinfo | sed 2,20d | cut -c16-)
+if [ -e $board_type ]; then
+	board_type=$(uname -m)
+fi
 device_name="$CONFIG_general_device_name"
 empty "$device_name" && device_name="unidentified"
 device_string=$(echo $device_name && ! empty $device_version && echo $device_version)
