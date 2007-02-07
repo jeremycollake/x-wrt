@@ -20,12 +20,11 @@
 . /usr/lib/webif/webif.sh
 
 header "System" "Startup" "@TR<<Startup>>" ''
-ShowNotUpdatedWarning
 
 # defaults
-custom_script_name="/etc/init.d/S95custom-user-startup"
-startup_script_template="/etc/init.d/.x95custom-user-startup-default"
-FORM_edit="S95custom-user-startup"
+custom_script_name="/etc/init.d/custom-user-startup"
+startup_script_template="/etc/init.d/custom-user-startup-default"
+FORM_edit="custom-user-startup"
 FORM_path="/etc/init.d"
 cd "$FORM_path" # editor awk code expects this
 edit_pathname="$FORM_path/$FORM_edit"
