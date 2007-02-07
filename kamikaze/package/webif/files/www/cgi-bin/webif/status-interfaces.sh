@@ -137,7 +137,7 @@ echo "<tr><td><br /></td></tr>
 		</tr>
 		<tr>
 			<td><pre>"
-ifconfig 2>&1 | grep -A 6 "$CONFIG_wan_ifname`"
+ifconfig 2>&1 | grep -A 6 "$CONFIG_wan_ifname"
 echo "</pre></td>
 		</tr>
 		<tr><td><br /><br /></td></tr>
@@ -146,7 +146,7 @@ echo "</pre></td>
 		</tr>
 		<tr>
 			<td><pre>"
-ifconfig 2>&1 | grep -A 6 "CONFIG_lan_ifname`"
+ifconfig 2>&1 | grep -A 6 "CONFIG_lan_ifname"
 echo "</pre></td>
 		</tr>
 		<tr><td><br /><br /></td></tr>
