@@ -17,7 +17,7 @@ fi
 #       ht_docs/xwrt.asp \
 #       $SCP_USER@shell.berlios.de:/home/groups/xwrt/htdocs/
 
-
+#Broadcom 2.4
 ls bin/openwrt-brcm-2.4* >/dev/null 2>&-
 [ $? = "0" ] && {
 version="broadcom-2.4"
@@ -26,6 +26,16 @@ version_file="build_mipsel/webif-0.3/ipkg/webif/www/.version"
 echo $version
 }
 
+#Broadcom 2.6
+ls bin/openwrt-brcm-2.6* >/dev/null 2>&-
+[ $? = "0" ] && {
+version="broadcom-2.6"
+chmod 775 build_mipsel/webif-0.3/ipkg/webif/www/.version
+version_file="build_mipsel/webif-0.3/ipkg/webif/www/.version"
+echo $version
+}
+
+#x86 2.6
 ls bin/openwrt-x86-2.6* >/dev/null 2>&-
 [ $? = "0" ] && {
 version="x86-2.6"
@@ -34,6 +44,7 @@ version_file="build_i386/webif-0.3/ipkg/webif/www/.version"
 echo $version
 }
 
+#Atheros 2.6
 ls bin/openwrt-atheros-2.6* >/dev/null 2>&-
 [ $? = "0" ] && {
 version="atheros-2.6"
