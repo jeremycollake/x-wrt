@@ -29,7 +29,7 @@ handle_list "$FORM_wandnsremove" "$FORM_wandnsadd" "$FORM_wandnssubmit" 'ip|FORM
 	FORM_wandns="$LISTVAL"
 	save_setting network wan_dns "$FORM_wandns"
 }
-FORM_wandnsadd=${FORM_wandnsadd:-192.168.1.1}
+FORM_wandnsadd=${FORM_wandnsadd:-""}
 
 uci_load "webif"  # for opendns
 
