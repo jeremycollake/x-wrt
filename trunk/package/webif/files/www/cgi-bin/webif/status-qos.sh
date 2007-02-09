@@ -127,7 +127,7 @@ field||spacer1
 string|<br /><br />
 field||show_raw
 formtag_begin|raw_stats|$SCRIPT_NAME
-submit|show_raw_stats| @TR<< Show raw statistics >>
+submit|show_raw_stats| @TR<<&nbsp;Show raw statistics&nbsp;>>
 formtag_end
 end_form
 EOF
