@@ -29,7 +29,7 @@ handle_list "$FORM_wandnsremove" "$FORM_wandnsadd" "$FORM_wandnssubmit" 'ip|FORM
 	FORM_wandns="$LISTVAL"
 	uci_set "network" "wan" "dns" "$FORM_wandns"
 }
-FORM_wandnsadd=${FORM_wandnsadd:-192.168.1.1}
+FORM_wandnsadd=${FORM_wandnsadd:-""}
 
 if empty "$FORM_submit"; then	
 	FORM_wan_proto="$CONFIG_wan_proto"
