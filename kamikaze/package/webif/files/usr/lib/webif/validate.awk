@@ -80,7 +80,7 @@ $1 == "port" {
 
 $1 == "ports" {
 	valid_type = 1
-	n = split(value ",", ports, ",")
+	n = split(value, ports, ",")
 	for (i = 1; i <= n; i++) {
 		if ((ports[i] !~ /^[0-9]*$/) && (ports[i] !~ /^[0-9][0-9]*-[0-9][0-9]*$/)) {
 			valid = 0
