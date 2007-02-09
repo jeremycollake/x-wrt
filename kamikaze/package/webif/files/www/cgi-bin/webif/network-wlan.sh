@@ -18,6 +18,52 @@
 # Configuration files referenced:
 #   wireless
 #
+adhoc_count=0
+ap_count=0
+sta_count=0
+local validate_error
+validate_wireless() {
+	case "$adhoc_count:$sta_count:$ap_count" in
+		1*)
+			if [ "$sta_count" != "0" ]; then
+				append validate_error "string|@TR<<Error: No other virtual adapters are allowed if one is in adhoc mode.>> <br />"
+			elif [ "$ap_count" != "0" ]; then
+				append validate_error "string|@TR<<Error: No other virtual adapters are allowed if one is in adhoc mode.>> <br />"
+			fi
+			break
+			;;
+		0:0:?)
+			if [ "$ap_count" -gt "4" ]; then
+				append validate_error "string|@TR<<Error: Only 4 virtual adapters are allowed in ap mode.>> <br />"
+			fi
+			break
+			;;
+		0:?:?)
+			if [ "$sta_count" -gt "1" ]; then
+				append validate_error "string|@TR<<Error: Only 1 adaptor is allowed in client mode.>> <br />"
+			fi
+			if [ "$1"="broadcom" ]; then
+				if [ "$ap_count" -gt "3" ]; then
+					append validate_error "string|@TR<<Error: Only 3 virtual adapters are allowed in ap mode with a adapter in client mode.>> <br />"
+				fi
+			elif [ "$1"="atheros" ]; then
+				if [ "$ap_count" -gt "4" ]; then
+					append validate_error "string|@TR<<Error: Only 4 virtual adapters are allowed in ap mode.>> <br />"
+				fi	
+			fi
+			break
+			;;
+		*)
+			if [ "$adhoc_count" -gt "1" ]; then
+				append validate_error "string|@TR<<Error: Only 1 virtual adapter is allowed to be in adhoc mode.>> <br />"
+			fi
+			;;
+	esac
+	#reset variables
+	adhoc_count=0
+	ap_count=0
+	sta_count=0
+}
 
 ###################################################################
 # Add Virtual Interface
@@ -99,18 +145,20 @@ fi
 for device in $DEVICES; do
 	if empty "$FORM_submit"; then
 		config_get FORM_ap_mode $device mode
+		config_get iftype "$device" type
 	        config_get country $device country
 	        config_get FORM_channel $device channel
 	        config_get FORM_maxassoc $device maxassoc
 	        config_get FORM_distance $device distance
 	else
 		config_get country $device country
+		config_get iftype "$device" type
 		eval FORM_ap_mode="\$FORM_ap_mode_$device"
 		eval FORM_channel="\$FORM_channel_$device"
 		eval FORM_maxassoc="\$FORM_maxassoc_$device"
 		eval FORM_distance="\$FORM_distance_$device"
 	fi
-        append forms "start_form|@TR<<Wireless Adapter >> $device @TR<< Configuration>>" "$N"
+        append forms "start_form|@TR<<Wireless Adapter>> $device @TR<< Configuration>>" "$N"
         
         mode_fields="field|@TR<<Mode>>
 		select|mode_ap_$device|$FORM_ap_mode
@@ -210,8 +258,15 @@ for device in $DEVICES; do
 				eval FORM_ssid="\$FORM_ssid_$vcfg"
 				eval FORM_network="\$FORM_network_$vcfg"
 			fi
+			if [ "$FORM_mode"="ap" ]; then
+				let "ap_count+=1"
+			elif [ "$FORM_mode"="adhoc" ]; then
+				let "adhoc_count+=1"
+			elif [ "$FORM_mode"="sta" ]; then
+				let "sta_count+=1"
+			fi
 			
-			append forms "start_form|@TR<<Wireless Virtual Adaptor Configuration for Wireless Card >> $FORM_device" "$N"
+			append forms "start_form|@TR<<Wireless Virtual Adaptor Configuration for Wireless Card>> $FORM_device" "$N"
 			network="field|@TR<<Network>>
 	        	        select|network_$vcfg|$FORM_network
 	        	        $network_options"
@@ -422,6 +477,7 @@ for device in $DEVICES; do
 			append validate_forms "string|FORM_ssid_$vcfg|@TR<<ESSID>>|required|$FORM_ssid" "$N"
 		fi
 	done
+	#validate_wireless $iftype
 done
 if ! empty "$FORM_submit"; then
 	empty "$FORM_generate_wep_128" && empty "$FORM_generate_wep_40" &&
@@ -513,6 +569,7 @@ EOF
 
 display_form <<EOF
 onchange|modechange
+$validate_error
 $forms
 EOF
 
