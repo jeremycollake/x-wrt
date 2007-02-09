@@ -23,28 +23,6 @@
 #	none
 #
 
-if empty "$FORM_submit"; then
-	FORM_snmp_private_name=${snmp_private_name:-$(nvram get snmp_private_name)}
-	FORM_snmp_private_src=${snmp_private_src:-$(nvram get snmp_private_src)}
-	FORM_snmp_public_name=${snmp_public_name:-$(nvram get snmp_public_name)}
-	FORM_snmp_public_src=${snmp_public_src:-$(nvram get snmp_public_src)}
-
-else
-	SAVED=1
-	validate <<EOF
-string|FORM_snmp_private_name|SNMP Private Community||$FORM_snmp_private_name
-string|FORM_snmp_private_src|SNMP Private Source||$FORM_snmp_private_src
-string|FORM_snmp_public_name|SNMP Public Community||$FORM_snmp_public_name
-string|FORM_snmp_public_src|SNMP Public Source||$FORM_snmp_public_src
-EOF
-	equal "$?" 0 && {
-		save_setting snmp snmp_private_name $FORM_snmp_private_name
-		save_setting snmp snmp_private_src $FORM_snmp_private_src
-		save_setting snmp snmp_public_name $FORM_snmp_public_name
-		save_setting snmp snmp_public_src $FORM_snmp_public_src
-	}
-fi
-
 header "System" "SNMP" "@TR<<SNMP Settings>>" '' "$SCRIPT_NAME"
 
 if ! empty "$FORM_install_snmpd"; then
@@ -73,6 +51,27 @@ equal "$?" "0" && {
 	remove_snmpd_button="field|@TR<<Remove SNMPd>>
 	submit|remove_snmpd| @TR<<Remove>> |"
 }
+
+if empty "$FORM_submit"; then
+	FORM_snmp_private_name=${snmp_private_name:-$(nvram get snmp_private_name)}
+	FORM_snmp_private_src=${snmp_private_src:-$(nvram get snmp_private_src)}
+	FORM_snmp_public_name=${snmp_public_name:-$(nvram get snmp_public_name)}
+	FORM_snmp_public_src=${snmp_public_src:-$(nvram get snmp_public_src)}
+else
+	SAVED=1
+	validate <<EOF
+string|FORM_snmp_private_name|SNMP Private Community||$FORM_snmp_private_name
+string|FORM_snmp_private_src|SNMP Private Source||$FORM_snmp_private_src
+string|FORM_snmp_public_name|SNMP Public Community||$FORM_snmp_public_name
+string|FORM_snmp_public_src|SNMP Public Source||$FORM_snmp_public_src
+EOF
+	equal "$?" 0 && {
+		save_setting snmp snmp_private_name $FORM_snmp_private_name
+		save_setting snmp snmp_private_src $FORM_snmp_private_src
+		save_setting snmp snmp_public_name $FORM_snmp_public_name
+		save_setting snmp snmp_public_src $FORM_snmp_public_src
+	}
+fi
 
 if equal "$snmpd_installed" "1" ; then
 	primary_snmpd_form="field|@TR<<SNMP Public Community Name>>|snmp_public_name
