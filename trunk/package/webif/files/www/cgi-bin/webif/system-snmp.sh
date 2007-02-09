@@ -60,10 +60,10 @@ if empty "$FORM_submit"; then
 else
 	SAVED=1
 	validate <<EOF
-string|FORM_snmp_private_name|SNMP Private Community||$FORM_snmp_private_name
-string|FORM_snmp_private_src|SNMP Private Source||$FORM_snmp_private_src
-string|FORM_snmp_public_name|SNMP Public Community||$FORM_snmp_public_name
-string|FORM_snmp_public_src|SNMP Public Source||$FORM_snmp_public_src
+string|FORM_snmp_private_name|@TR<<SNMP Private Community Name>>||$FORM_snmp_private_name
+string|FORM_snmp_private_src|@TR<<SNMP Private Source>>||$FORM_snmp_private_src
+string|FORM_snmp_public_name|@TR<<SNMP Public Community Name>>||$FORM_snmp_public_name
+string|FORM_snmp_public_src|@TR<<SNMP Public Source>>||$FORM_snmp_public_src
 EOF
 	equal "$?" 0 && {
 		save_setting snmp snmp_private_name $FORM_snmp_private_name
