@@ -25,8 +25,8 @@
 #endif
 
 #define HASH_MAX	1536
-#define LINE_BUF	1024	/* max. buffer allocated for one line */
-#define MAX_TR		16	/* max. translations done on one line */
+#define LINE_BUF	2048	/* max. buffer allocated for one line */
+#define MAX_TR		24	/* max. translations done on one line */
 #define TR_START	"@TR<<"
 #define TR_END		">>"
 
