@@ -305,9 +305,10 @@ reload_snmp() {
 	}
 
 	echo '@TR<<Reloading>> @TR<<snmp settings>> ...'
-	[ -e "/usr/sbin/snmpd" ] && {
-		/etc/init.d/snmpd restart >&- 2>&-
+	! exists "/etc/init.d/S??snmpd" && {
+		ln -s "/etc/init.d/snmpd" "/etc/init.d/S92snmpd"
 	}
+	/etc/init.d/S??snmpd restart >&- 2>&-
 }
 
 reload_hotspot() {
