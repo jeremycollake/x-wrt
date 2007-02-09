@@ -59,6 +59,8 @@ if ! empty "$FORM_remove_snmpd"; then
 	/etc/init.d/snmpd stop 2> /dev/null
 	rm -f "/etc/init.d/S??snmpd" 2> /dev/null
 	remove_package snmpd
+	remove_package libnetsnmp 2>/dev/null
+	remove_package libelf 2>/dev/null
 	echo "</pre>"
 fi
 
