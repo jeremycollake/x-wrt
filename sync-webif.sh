@@ -49,6 +49,7 @@ synchronize_file "www/index.html"
 synchronize_file "www/images/*.gif"
 synchronize_file "www/images/*.png"
 synchronize_file "www/images/*.jpg"
+synchronize_file "www/cgi-bin/webif/data.sh"
 synchronize_file "www/cgi-bin/webif/info.sh"
 synchronize_file "www/cgi-bin/webif/info-about.sh"
 synchronize_file "www/cgi-bin/webif/info-credits.sh"
@@ -71,4 +72,4 @@ synchronize_file "usr/lib/webif/webif.sh"
 #NOT_synchronize_file "lib/config/uci-depends.*" #not needed in kamikaze
 #NOT_synchronize_file "etc/init.d/S90webif_deviceid"  # not sync'd due to rc.common
 #NOT_synchronize_file "etc/init.d/S90webif_firmwareid"# not sync'd due to rc.common
-svn ci "$BRANCH_DEST" -m "kamikaze and white russian branch synchronize"
+svn ci "$BRANCH_DEST" -m "automated branch synchronize"
