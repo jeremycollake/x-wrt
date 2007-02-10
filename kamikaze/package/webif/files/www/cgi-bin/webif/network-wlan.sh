@@ -100,9 +100,9 @@ case "$TYPE" in
         ;;
 esac
 }
-config_load network
+uci_load network
 NETWORK_DEVICES="none $network_devices"
-config_load wireless
+uci_load wireless
 		
 #echo "$DEVICES"
 #echo "vifs $vface"
