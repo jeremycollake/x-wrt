@@ -92,6 +92,9 @@ has_pkgs() {
 mini_header() {
 
 cat <<EOF
+Content-Type: text/html
+Pragma: no-cache
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <?xml version="1.0" encoding="@TR<<Encoding|ISO-8859-1>>"?>
@@ -154,6 +157,9 @@ header() {
 	}
 
 cat <<EOF
+Content-Type: text/html
+Pragma: no-cache
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
