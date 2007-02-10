@@ -27,6 +27,11 @@ while [ -z "$device_name" ]; do
 		device_name="PC Engines WRAP"
 		break
         }
+        dd bs=1 count=19 skip=5 if=/dev/mtd/5 2>/dev/null | strings | grep "MR3201A-FLF-FON"
+	[ $? = "0" ] && {
+		device_name="La Fonera (ACCTON MR3201A)"
+		break
+	}
         if [ "$(uname -m)" = "i?86" ]; then
         	device_name="Generic x86"
         	break
