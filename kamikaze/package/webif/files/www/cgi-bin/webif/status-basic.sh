@@ -6,7 +6,7 @@ header "Status" "System" "@TR<<Device Status>>"
 
 <meta http-equiv="refresh" content="20" />
 <?
-MEMINFO=$(free | sed 1,3d)
+MEMINFO=$(busybox free | sed 1,3d)
 nI="0"
 for CUR_VAR in $MEMINFO; do
 	case "$nI" in
