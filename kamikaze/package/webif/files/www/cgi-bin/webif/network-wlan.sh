@@ -258,13 +258,12 @@ for device in $DEVICES; do
 				eval FORM_ssid="\$FORM_ssid_$vcfg"
 				eval FORM_network="\$FORM_network_$vcfg"
 			fi
-			if [ "$FORM_mode"="ap" ]; then
-				let "ap_count+=1"
-			elif [ "$FORM_mode"="adhoc" ]; then
-				let "adhoc_count+=1"
-			elif [ "$FORM_mode"="sta" ]; then
-				let "sta_count+=1"
-			fi
+			
+			case "$FORM_mode" in
+				ap) let "ap_count+=1";;
+				sta) let "sta_count+=1";;
+				adhoc) let "adhoc_count+=1";;
+			esac
 			
 			append forms "start_form|@TR<<Wireless Virtual Adaptor Configuration for Wireless Card>> $FORM_device" "$N"
 			network="field|@TR<<Network>>
@@ -477,7 +476,7 @@ for device in $DEVICES; do
 			append validate_forms "string|FORM_ssid_$vcfg|@TR<<ESSID>>|required|$FORM_ssid" "$N"
 		fi
 	done
-	#validate_wireless $iftype
+	validate_wireless $iftype
 done
 if ! empty "$FORM_submit"; then
 	empty "$FORM_generate_wep_128" && empty "$FORM_generate_wep_40" &&
