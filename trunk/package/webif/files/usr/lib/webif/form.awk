@@ -145,13 +145,8 @@ $1 ~ /^textarea/ {
 	#show caption
 	if ($3 != "" ) print "<em>" $3 "</em>"
 }
-$1 ~ /^text$/ { 	
-	cols = ""
-	if ($5 != "") {
-		cols = "<tr><td colspan=\"" $5 "\">"
-		cols_end= "</td></tr>"	
-	}
-	print cols "<input id=\"" $2 "\" type=\"text\" name=\"" $2 "\" value=\"" $3 "\" />" $4 cols_end
+$1 ~ /^text$/ {
+	print "<input id=\"" $2 "\" type=\"text\" name=\"" $2 "\" value=\"" $3 "\" " $5 " />" $4
 }
 $1 ~ /^password/ { print "<input id=\"" $2 "\" type=\"password\" name=\"" $2 "\" value=\"" $3 "\" />" $4 }
 $1 ~ /^upload/ { print "<input id=\"" $2 "\" type=\"file\" name=\"" $2 "\"/>" }
