@@ -148,7 +148,7 @@ $1 ~ /^textarea/ {
 $1 ~ /^text$/ { 	
 	cols = ""
 	if ($5 != "") {
-		cols = "<tr><td colspan=\"" $5 "\""
+		cols = "<tr><td colspan=\"" $5 "\">"
 		cols_end= "</td></tr>"	
 	}
 	print cols "<input id=\"" $2 "\" type=\"text\" name=\"" $2 "\" value=\"" $3 "\" />" $4 cols_end
