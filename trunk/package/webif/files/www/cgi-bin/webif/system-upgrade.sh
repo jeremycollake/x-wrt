@@ -45,7 +45,7 @@ else
 	display_form <<EOF
 	start_form
 	field|@TR<<URL of New Firmware>>
-	text|firmware_url|$FORM_firmware_url||40%
+	text|firmware_url|$FORM_firmware_url
 	field|@TR<<Turn boot wait on>>
 	radio|boot_wait|$FORM_boot_wait|1|@TR<<Yes>>
 	radio|boot_wait|$FORM_boot_wait|0|@TR<<No>>
