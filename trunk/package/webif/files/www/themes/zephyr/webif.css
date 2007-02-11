@@ -331,7 +331,7 @@ font-size:8pt;
 #scrollBox {
 	position: absolute;
 	width: 90%;
-	margin 0 auto;
+	margin: 0 auto;
 	font-size: 0.7em;
 }
 #outerscrollBox{
