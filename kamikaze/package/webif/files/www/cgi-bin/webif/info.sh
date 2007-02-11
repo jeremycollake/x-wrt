@@ -64,7 +64,8 @@ fi
 if [ -n "$FORM_install_webif" ]; then
 	echo "@TR<<info_wait_install#Please wait, installation may take a minute>> ... <br />"
 	echo "<pre>"
-	ipkg install "${version_url}${package_filename}" -force-overwrite | uniq
+	ipkg -V 0 update
+	ipkg install "${version_url}${package_filename}" -force-overwrite -force-reinstall| uniq
 	echo "</pre>"
 	this_revision=$(cat "/www/.version")
 	# update the active language package
