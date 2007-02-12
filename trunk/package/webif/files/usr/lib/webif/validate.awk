@@ -23,7 +23,8 @@ $1 == "int" {
 	if (value !~ /^[0-9]*$/) { valid = 0; verr = "@TR<<Invalid value>>" }
 }
 
-$1 == "ip" {
+# FIXME: add proper netmask validation
+($1 == "ip") || ($1 == "netmask") {
 	valid_type = 1
 	if ((value != "") && (value !~ /^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$/)) valid = 0
 	else {
@@ -33,47 +34,6 @@ $1 == "ip" {
 		}
 	}
 	if (valid == 0) verr = "@TR<<Invalid value>>"
-}
-
-function dec2binstr(dec, data)
-{
-	if (dec ==0) return "00000000"
-	mask = 1
-	for (; dec != 0; dec = rshift(dec, 1))
-		data = (and(dec, mask) ? "1" : "0") data
-	while ((length(data) % 8) != 0)
-		data = "0" data
-	return data
-}
-
-# dotted decimal netmask
-$1 == "netmask" {
-        valid_type = 1
-	if ((value != "") && (value !~ /^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$/)) {
-		valid = 0
-	} else {
-                split(value, ipaddr, "\\.")
-		binaddr = ""
-                for (i = 1; i <= 4; i++) {
-                        if ((ipaddr[i] < 0) || (ipaddr[i] > 255)) {
-				valid = 0
-				break
-			} else 	binaddr = binaddr dec2binstr(ipaddr[i])
-                }
-		if (valid != 0) {
-			nm = split(binaddr, binmask, "0")
-			for (i = 2; i <= nm; i++) {
-				if (index(binmask[i], "1") > 0) {
-					valid = 0
-					break
-				}
-			}
-			if (valid != 0) {
-				if (length(binmask[1]) < 0 || length(binmask[1]) > 32) valid = 0
-			}
-		}
-        }
-        if (valid == 0) verr = "@TR<<Invalid value>>"
 }
 
 $1 == "wep" {
