@@ -68,13 +68,22 @@ validate_wireless() {
 ###################################################################
 # Add Virtual Interface
 if ! empty "$FORM_add_vcfg"; then
+#Currently breaks things
+#	uci_add "wireless" "wifi-iface" ""
+#	uci_set "wireless" "cfg$FORM_add_vcfg_number" "device" "$FORM_add_vcfg"
+#	uci_set "wireless" "cfg$FORM_add_vcfg_number" "mode" "ap"
+#	uci_set "wireless" "cfg$FORM_add_vcfg_number" "ssid" "OpenWrt$FORM_add_vcfg_number"
+#	uci_set "wireless" "cfg$FORM_add_vcfg_number" "hidden" "0"
+#	uci_set "wireless" "cfg$FORM_add_vcfg_number" "encryption" "none"
+
+#Use until uci_load is fixed.
 	echo "
 config wifi-iface
 	option device   $FORM_add_vcfg
 	option mode     ap
 	option ssid     OpenWrt
 	option hidden   0
-        option encryption none">>/etc/config/wireless
+	option encryption none">>/etc/config/wireless
 	FORM_add_vcfg=""
 fi
 
@@ -106,6 +115,8 @@ uci_load wireless
 		
 #echo "$DEVICES"
 #echo "vifs $vface"
+vcfg_number=$(echo "$DEVICES $N $vface" |wc -l)
+let "vcfg_number+=1"
 
 local forms js validate_forms
 #####################################################################
@@ -202,7 +213,7 @@ for device in $DEVICES; do
         distance="field|@TR<<Wireless Distance (In Meters)>>
                 text|distance_${device}|$FORM_distance"
 
-	add_vcfg="string|<tr><td><a href="$SCRIPT_NAME?add_vcfg=$device">@TR<<Add Virtual Interface>></a>"
+	add_vcfg="string|<tr><td><a href=$SCRIPT_NAME?add_vcfg=$device&amp;add_vcfg_number=$vcfg_number>@TR<<Add Virtual Interface>></a>"
 
         append forms "$maxassoc" "$N"
         append forms "$distance" "$N"
