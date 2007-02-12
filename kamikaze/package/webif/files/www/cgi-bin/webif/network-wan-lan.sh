@@ -33,7 +33,7 @@ FORM_wandnsadd=${FORM_wandnsadd:-""}
 
 FORM_landns="$CONFIG_lan_dns"
 LISTVAL="$FORM_landns"
-handle_list "$FORM_landnsremove" "$FORM_landnsadd" "$FORM_landnssubmit" 'ip|FORM_dnsadd|@TR<<DNS Address>>|required' && {
+handle_list "$FORM_landnsremove" "$FORM_landnsadd" "$FORM_landnssubmit" 'ip|FORM_dnsadd|@TR<<LAN DNS Address>>|required' && {
 	FORM_landns="$LISTVAL"
 	uci_set "network" "lan" "dns" "$FORM_landns"
 }
@@ -183,19 +183,19 @@ fi
 
 # detect pptp package and compile option
 [ -x "/sbin/ifup.pptp" ] && {
-	PPTP_OPTION="option|pptp|PPTP"
-	PPTP_SERVER_OPTION="field|PPTP Server IP|pptp_server|hidden
+	PPTP_OPTION="option|pptp|@TR<<PPTP>>"
+	PPTP_SERVER_OPTION="field|@TR<<PPTP Server IP>>|pptp_server|hidden
 text|pptp_server_ip|$FORM_pptp_server_ip"
 }
 [ -x "/lib/network/pppoe.sh" ] && {
-	PPPOE_OPTION="option|pppoe|PPPoE"
+	PPPOE_OPTION="option|pppoe|@TR<<PPPoE>>"
 }
 [ -x "/lib/network/pppoa.sh" ] && {
-	PPPOA_OPTION="option|pppoa|PPPoA"
+	PPPOA_OPTION="option|pppoa|@TR<<PPPoA>>"
 }
 
 [ -x /sbin/ifup.wwan ] && {
-	WWAN_OPTION="option|wwan|UMTS/GPRS"
+	WWAN_OPTION="option|wwan|@TR<<UMTS/GPRS>>"
 	WWAN_COUNTRY_LIST=$(
 		awk '	BEGIN{FS=":"}
 			$1 ~ /[ \t]*#/ {next}
