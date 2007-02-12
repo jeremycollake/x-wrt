@@ -22,6 +22,10 @@ if is_kamikaze; then
 	[ $? = 0 ] && {
 		version_url="http://ftp.berlios.de/pub/xwrt/kamikaze/x86-2.6/"
 	}
+	uname -a |grep mips |grep 2.6 && cat /proc/cpuinfo |grep Atheros
+	[ $? = 0 ] && {
+		version_url="http://ftp.berlios.de/pub/xwrt/kamikaze/atheros-2.6/"
+	}
 else
 	XWRT_BRANCH="trunk"
 	package_filename="webif_latest_stable.ipk"
