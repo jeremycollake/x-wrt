@@ -31,7 +31,7 @@ Authentication => Ov&#283;&#345;en&iacute;
 Auto =>
 Available packages => Dostupn&eacute; bal&iacute;&#269;ky
 Backports Tip => Tipy pro Backport
-Backup &amp;amp; Restore => Z&aacute;loha a obnova
+Backup &amp; Restore => Z&aacute;loha a obnova
 Backup and Restore => Z&aacute;loha a obnova
 Backup Configuration => Z&aacute;lohovat konfiguraci
 Backup => Z&aacute;lohovat
@@ -214,7 +214,7 @@ GPRS only => Jen GPRS
 Graphs => Grafy
 Group => Skupina
 HelpText Add Repository => Repozit&aacute;&#345; je server, kter&yacute; obsahuje seznam bal&iacute;&#269;k&#367;, kter&eacute; mohou b&yacute;t nainstalov&aacute;ny na va&scaron;e za&#345;&iacute;zen&iacute; s OpenWrt. P&#345;id&aacute;n&iacute; dal&scaron;&iacute;ho repozit&aacute;&#345;e v&aacute;m zde umo&#382;n&iacute; zobrazit bal&iacute;&#269;ky, kter&eacute; nejsou zobrazeny ve v&yacute;choz&iacute;m nastaven&iacute;.
-HelpText Advanced => Norm&aacute;ln&#283; u&#382;ivatel&#367;m sta&#269;&iacute; pou&#382;&iacute;t formul&aacute;&#345; n&iacute;&#382;e ke konfiguraci QoS. N&#283;kte&#345;&iacute; lid&eacute; mohou pot&#345;ebovat p&#345;&iacute;stup k mnohem pokro&#269;ilej&scaron;&iacute;m nastaven&iacute;m. Alternativn&#283; m&#367;&#382;ete <a href="./system-editor.sh?path=/etc/config&amp;amp;edit=qos">ru&#269;n&#283; upravit konfiguraci</a
+HelpText Advanced => Norm&aacute;ln&#283; u&#382;ivatel&#367;m sta&#269;&iacute; pou&#382;&iacute;t formul&aacute;&#345; n&iacute;&#382;e ke konfiguraci QoS. N&#283;kte&#345;&iacute; lid&eacute; mohou pot&#345;ebovat p&#345;&iacute;stup k mnohem pokro&#269;ilej&scaron;&iacute;m nastaven&iacute;m. Alternativn&#283; m&#367;&#382;ete <a href="./system-editor.sh?path=/etc/config&amp;edit=qos">ru&#269;n&#283; upravit konfiguraci</a
 HelpText Backports Tip => Pro daleko v&#283;t&scaron;&iacute; kolekci bal&iacute;&#269;k&#367; zjist&#283;te, jestli je dostupn&yacute; repozit&aacute;&#345; backports pro v&aacute;&scaron; firmware.
 HelpText boot_wait => &#268;ek&aacute;n&iacute; p&#345;i bootov&aacute;n&iacute; zp&#367;sob&iacute;, &#382;e boot loader n&#283;kter&yacute;ch za&#345;&iacute;zen&iacute; bude n&#283;kolik sekund p&#345;i bootov&aacute;n&iacute; &#269;ekat na TFTP p&#345;enos nov&eacute;ho obrazu firmware. Je bezpe&#269;nostn&iacute;m rizikem ponechat tuto mo&#382;nost zapnutou.
 HelpText Browser_Frames => V&aacute;&scaron; prohl&iacute;&#382;e&#269; nepodporuje r&aacute;mce,<br>pokra&#269;ujte t&iacute;mto odkazem
@@ -286,7 +286,7 @@ ICMP Timeout => &#268;asov&yacute; limit pro ICMP
 Incoming Traffic => P&#345;&iacute;choz&iacute; provoz
 info_already_latest => M&aacute;te aktu&aacute;ln&iacute; webif^2
 info_error_checking => CHYBA P&#344;I KONTROLE AKTUALIZACE
-info_check_daily_text => Zahrnout denn&iacute; sestaven&iacute; p&#345;i kontrole aktualizace pro webif&amp;sup2;
+info_check_daily_text => Zahrnout denn&iacute; sestaven&iacute; p&#345;i kontrole aktualizace pro webif&sup2;
 info_check_update => Zkontrolovat aktualizaci pro Webif
 Info => Info
 inform_apply => Zm&#283;ny se neprojev&iacute;, dokud nezvol&iacute;te "Prov&eacute;st zm&#283;ny"
@@ -330,7 +330,7 @@ LAN Configuration => Konfigurace LAN
 LAN DNS Address => Adresa DNS LAN
 LAN DNS Servers => Servery DNS pro LAN
 LAN Gateway => Br&aacute;na LAN
-lang_for_svn => 2583
+lang_for_svn => 2586
 Language => Jazyk
 lang => &#268;e&scaron;tina
 LAN IP Address => Adresa IP LAN
@@ -662,7 +662,7 @@ Traffic ppp0 => Provoz ppp0
 Traffic vlan0 => Provoz vlan0
 Traffic vlan1 => Provoz vlan1
 Traffic vlan2 => Provoz vlan2
-Translator_Credit => Pr&aacute;v&#283; pou&#382;&iacute;van&yacute; p&#345;eklad vytvo&#345;il(i): <a href="mailto:lubek@users.sourceforge.net">Lubo&scaron; Stan&#283;k</a> (tak&eacute; lokalizace wiki X-Wrt), nobody(tm)
+Translator_Credit => Pr&aacute;v&#283; pou&#382;&iacute;van&yacute; p&#345;eklad vytvo&#345;il(i): <a href="mailto:lubek@users.berlios.de">Lubo&scaron; Stan&#283;k</a> (tak&eacute; lokalizace wiki X-Wrt), nobody(tm)
 Transmit Antenna Diversity => Rozd&#283;len&iacute; vys&iacute;lac&iacute;ch ant&eacute;n
 Transmit Power (in mw) => Vys&iacute;lac&iacute; v&yacute;kon (v mw)
 Transmit Power => Vys&iacute;lac&iacute; v&yacute;kon
