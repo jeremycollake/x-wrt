@@ -31,6 +31,14 @@ handle_list "$FORM_wandnsremove" "$FORM_wandnsadd" "$FORM_wandnssubmit" 'ip|FORM
 }
 FORM_wandnsadd=${FORM_wandnsadd:-""}
 
+FORM_landns="$CONFIG_lan_dns"
+LISTVAL="$FORM_landns"
+handle_list "$FORM_landnsremove" "$FORM_landnsadd" "$FORM_landnssubmit" 'ip|FORM_dnsadd|@TR<<DNS Address>>|required' && {
+	FORM_landns="$LISTVAL"
+	uci_set "network" "lan" "dns" "$FORM_landns"
+}
+FORM_landnsadd=${FORM_landnsadd:-192.168.1.1}
+
 if empty "$FORM_submit"; then	
 	FORM_wan_proto="$CONFIG_wan_proto"
 	case "$FORM_wan_proto" in
@@ -72,6 +80,11 @@ if empty "$FORM_submit"; then
 	FORM_wwan_apn="$CONFIG_wan_apn"
 	FORM_wwan_username="$CONFIG_wan_username"
 	FORM_wwan_passwd="$CONFIG_wan_passwd"
+	
+	# lan
+	FORM_lan_ipaddr="$CONFIG_lan_ipaddr"
+	FORM_lan_netmask="$CONFIG_lan_netmask"
+	FORM_lan_gateway="$CONFIG_lan_gateway"
 else
 	SAVED=1
 
@@ -91,10 +104,13 @@ else
 	esac
 
 validate <<EOF
-ip|FORM_wan_ipaddr|@TR<<IP Address>>|$V_IP|$FORM_wan_ipaddr
+ip|FORM_wan_ipaddr|@TR<<WAN IP Address>>|$V_IP|$FORM_wan_ipaddr
 netmask|FORM_wan_netmask|@TR<<WAN Netmask>>|$V_NM|$FORM_wan_netmask
-ip|FORM_wan_gateway|@TR<<Default Gateway>>||$FORM_wan_gateway
-ip|FORM_pptp_server_ip|@TR<<PPTP Server IP>>|$V_PPTP|$FORM_pptp_server_ip
+ip|FORM_wan_gateway|@TR<<WAN Default Gateway>>||$FORM_wan_gateway
+ip|FORM_pptp_server_ip|@TR<<WAN PPTP Server IP>>|$V_PPTP|$FORM_pptp_server_ip
+ip|FORM_lan_ipaddr|@TR<<LAN IP Address>>|required|$FORM_lan_ipaddr
+netmask|FORM_lan_netmask|@TR<<LAN Netmask>>|required|$FORM_lan_netmask
+ip|FORM_lan_gateway|@TR<<LAN Gateway>>||$FORM_lan_gateway
 EOF
 	equal "$?" 0 && {
 		uci_set "network" "wan" "proto" "$FORM_wan_proto"
@@ -157,6 +173,11 @@ EOF
 				}
 			;;
 		esac
+
+		# lan settings
+		uci_set "network" "lan" "ipaddr" "$FORM_lan_ipaddr"
+		uci_set "network" "lan" "netmask" "$FORM_lan_netmask"
+		uci_set "network" "lan" "gateway" "$FORM_lan_gateway"
 	}
 fi
 
@@ -332,33 +353,6 @@ field|VPI|vpi|hidden
 text|wan_vpi|$FORM_wan_vpi
 end_form
 EOF
-
-
-FORM_landns="$CONFIG_lan_dns"
-LISTVAL="$FORM_landns"
-handle_list "$FORM_landnsremove" "$FORM_landnsadd" "$FORM_landnssubmit" 'ip|FORM_dnsadd|@TR<<DNS Address>>|required' && {
-	FORM_landns="$LISTVAL"
-	uci_set "network" "lan" "dns" "$FORM_landns"
-}
-FORM_landnsadd=${FORM_landnsadd:-192.168.1.1}
-
-if empty "$FORM_submit"; then
-	FORM_lan_ipaddr="$CONFIG_lan_ipaddr"
-	FORM_lan_netmask="$CONFIG_lan_netmask"
-	FORM_lan_gateway="$CONFIG_lan_gateway"
-else
-	SAVED=1
-	validate <<EOF
-ip|FORM_lan_ipaddr|@TR<<IP Address>>|required|$FORM_lan_ipaddr
-netmask|FORM_lan_netmask|@TR<<Netmask>>|required|$FORM_lan_netmask
-ip|FORM_lan_gateway|@TR<<Gateway>>||$FORM_lan_gateway
-EOF
-	equal "$?" 0 && {
-		uci_set "network" "lan" "ipaddr" "$FORM_lan_ipaddr"
-		uci_set "network" "lan" "netmask" "$FORM_lan_netmask"
-		uci_set "network" "lan" "gateway" "$FORM_lan_gateway"
-	}
-fi
 
 display_form <<EOF
 start_form|@TR<<LAN Configuration>>
