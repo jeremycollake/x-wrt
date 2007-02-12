@@ -19,8 +19,6 @@
 #   none
 #
 
-header "Network" "WAN-LAN" "@TR<<WAN-LAN Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
-
 load_settings network
 
 FORM_wandns="${wan_dns:-$(nvram get wan_dns)}"
@@ -32,6 +30,14 @@ handle_list "$FORM_wandnsremove" "$FORM_wandnsadd" "$FORM_wandnssubmit" 'ip|FORM
 FORM_wandnsadd=${FORM_wandnsadd:-""}
 
 uci_load "webif"  # for opendns
+
+FORM_landns="${lan_dns:-$(nvram get lan_dns)}"
+LISTVAL="$FORM_landns"
+handle_list "$FORM_landnsremove" "$FORM_landnsadd" "$FORM_landnssubmit" 'ip|FORM_dnsadd|@TR<<DNS Address>>|required' && {
+	FORM_landns="$LISTVAL"
+	save_setting network lan_dns "$FORM_landns"
+}
+FORM_landnsadd=${FORM_landnsadd:-192.168.1.1}
 
 if empty "$FORM_submit"; then
 	FORM_wan_proto=${FORM_wan_proto:-$(nvram get wan_proto)}
@@ -72,6 +78,11 @@ if empty "$FORM_submit"; then
 
 	# get opendns setting (uci_load webif above)
 	FORM_opendns=${CONFIG_misc_opendns:-"0"}
+
+	# get local lan
+	FORM_lan_ipaddr=${lan_ipaddr:-$(nvram get lan_ipaddr)}
+	FORM_lan_netmask=${lan_netmask:-$(nvram get lan_netmask)}
+	FORM_lan_gateway=${lan_gateway:-$(nvram get lan_gateway)}
 else
 	SAVED=1
 
@@ -91,10 +102,13 @@ else
 	esac
 
 validate <<EOF
-ip|FORM_wan_ipaddr|@TR<<IP Address>>|$V_IP|$FORM_wan_ipaddr
+ip|FORM_wan_ipaddr|@TR<<WAN IP Address>>|$V_IP|$FORM_wan_ipaddr
 netmask|FORM_wan_netmask|@TR<<WAN Netmask>>|$V_NM|$FORM_wan_netmask
-ip|FORM_wan_gateway|@TR<<Default Gateway>>||$FORM_wan_gateway
-ip|FORM_pptp_server_ip|@TR<<PPTP Server IP>>|$V_PPTP|$FORM_pptp_server_ip
+ip|FORM_wan_gateway|@TR<<WAN Default Gateway>>||$FORM_wan_gateway
+ip|FORM_pptp_server_ip|@TR<<WAN PPTP Server IP>>|$V_PPTP|$FORM_pptp_server_ip
+ip|FORM_lan_ipaddr|@TR<<LAN IP Address>>|required|$FORM_lan_ipaddr
+netmask|FORM_lan_netmask|@TR<<LAN Netmask>>|required|$FORM_lan_netmask
+ip|FORM_lan_gateway|@TR<<LAN Gateway>>||$FORM_lan_gateway
 EOF
 	equal "$?" 0 && {
 		save_setting network wan_proto $FORM_wan_proto
@@ -159,6 +173,11 @@ EOF
 		! equal "$CONFIG_misc_opendns" "$FORM_opendns" && {
 			uci_set "webif" "misc" "opendns" "$FORM_opendns"
 		}
+
+		# lan settings
+		save_setting network lan_ipaddr $FORM_lan_ipaddr
+		save_setting network lan_netmask $FORM_lan_netmask
+		save_setting network lan_gateway $FORM_lan_gateway
 	}
 fi
 
@@ -188,6 +207,8 @@ text|pptp_server_ip|$FORM_pptp_server_ip"
 			 print "	apnDB." $1 ".pass = \"" $5 "\";\n"}' < /usr/lib/webif/apn.csv
 	)
 }
+
+header "Network" "WAN-LAN" "@TR<<WAN-LAN Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 cat <<EOF
 <script type="text/javascript" src="/webif.js "></script>
@@ -329,33 +350,6 @@ field|@TR<<MTU>>|mtu|hidden
 text|ppp_mtu|$FORM_ppp_mtu
 end_form
 EOF
-
-
-FORM_landns="${lan_dns:-$(nvram get lan_dns)}"
-LISTVAL="$FORM_landns"
-handle_list "$FORM_landnsremove" "$FORM_landnsadd" "$FORM_landnssubmit" 'ip|FORM_dnsadd|@TR<<DNS Address>>|required' && {
-	FORM_landns="$LISTVAL"
-	save_setting network lan_dns "$FORM_landns"
-}
-FORM_landnsadd=${FORM_landnsadd:-192.168.1.1}
-
-if empty "$FORM_submit"; then
-	FORM_lan_ipaddr=${lan_ipaddr:-$(nvram get lan_ipaddr)}
-	FORM_lan_netmask=${lan_netmask:-$(nvram get lan_netmask)}
-	FORM_lan_gateway=${lan_gateway:-$(nvram get lan_gateway)}
-else
-	SAVED=1
-	validate <<EOF
-ip|FORM_lan_ipaddr|@TR<<IP Address>>|required|$FORM_lan_ipaddr
-netmask|FORM_lan_netmask|@TR<<Netmask>>|required|$FORM_lan_netmask
-ip|FORM_lan_gateway|@TR<<Gateway>>||$FORM_lan_gateway
-EOF
-	equal "$?" 0 && {
-		save_setting network lan_ipaddr $FORM_lan_ipaddr
-		save_setting network lan_netmask $FORM_lan_netmask
-		save_setting network lan_gateway $FORM_lan_gateway
-	}
-fi
 
 display_form <<EOF
 start_form|@TR<<LAN Configuration>>
