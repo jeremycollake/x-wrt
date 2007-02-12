@@ -19,13 +19,18 @@ tempy=parseInt(document.getElementById("dwindow").style.top)
 dragapproved=true
 document.getElementById("dwindow").onmousemove=drag_drop
 }
-function loadwindow(url,width,height){ if (!ie5&&!ns6)
+function loadwindow(url,width,height,tX,tY){ if (!ie5&&!ns6)
 window.open(url,"","width=width,height=height,scrollbars=1")
 else{ document.getElementById("dwindow").style.display=''
+w =  window.innerWidth-16 || document.body.offsetWidth-20;
+h =  window.innerHeight-220 || document.documentElement.clientHeight-220;
+//alert(w+' '+h)
+if ( tX == 0 ){ tX = (w/2)-(width/2); }
+if ( tY == 0 ){ tY = (h/2)-(height); }
 document.getElementById("dwindow").style.width=initialwidth=width+"px"
 document.getElementById("dwindow").style.height=initialheight=height+"px"
-document.getElementById("dwindow").style.left=screen.width/2 + "px"
-document.getElementById("dwindow").style.top=ns6? window.pageYOffset*1+document.body.clientHeight/3-height +"px" : iecompattest().scrollTop*1+document.body.clientHeight/3-height +"px"
+document.getElementById("dwindow").style.left=tX + "px"
+document.getElementById("dwindow").style.top=ns6? window.pageYOffset*1+tY +"px" : iecompattest().scrollTop*1+tY +"px"
 }
 }
 function maximize(){ if (minrestore==0){ minrestore=1

@@ -16,18 +16,18 @@
 * { margin: 0; padding: 0; }
 
 html, body {
-	height: 100%;
-	font-family: Verdana, Helvetica, sans-serif;
-	font-size: 1.0em;
-	color: Black;
-	background-color: White;
+        height: 100%;
+        font-family: Verdana, Helvetica, sans-serif;
+        font-size: 1.0em;
+        color: Black;
+        background-color: White;
 }
 
 a { text-decoration: none; }
 
 dd {
-	margin-left: 1em;
-	margin-bottom: 0.2em;
+        margin-left: 1em;
+        margin-bottom: 0.2em;
 }
 
 img { border: 0; }
@@ -47,46 +47,46 @@ hr,
 
 /* ---  Wrapper around everything  --- */
 #container {
-	position: relative;
-	min-height: 100%;
-	width: 100%;
+        position: relative;
+        min-height: 100%;
+        width: 100%;
 }
 
 /* ---  Header  --- */
 #header {
-	clear: both;
-	width: 100%;
-	height: 5.5em;
-	color: #ccc;
-	background: #51779e url(/images/openwrt-logo.gif) left 0.5em repeat-x;
+        clear: both;
+        width: 100%;
+        height: 5.5em;
+        color: #ccc;
+        background: #51779e url(/images/openwrt-logo.gif) left 0.5em repeat-x;
 }
 
 #header h1 { display: none; }
 
 /* ---  Short-status  --- */
 #header #short-status {
-	position: absolute;
-	top: 0;
-	right: 0;
-	height: 5.5em;
-	width: 15em;
-	line-height: 1.0em;
-	background-color: #51779e;
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 5.5em;
+        width: 15em;
+        line-height: 1.0em;
+        background-color: #51779e;
 }
 
 #short-status ul {
-	white-space: nowrap;
-	margin: 1em 0 0 2em;
-	font-size: 0.58em;
+        white-space: nowrap;
+        margin: 1em 0 0 2em;
+        font-size: 0.58em;
 }
 
 /* ---  Navigation  --- */
 #mainmenu, #submenu {
-	color: White;
-	width: 100%;
-	height: 2.0em;
-	line-height: 2.0em;
-	background-color: #315579;
+        color: White;
+        width: 100%;
+        height: 2.0em;
+        line-height: 2.0em;
+        background-color: #315579;
 }
 
 #mainmenu a:hover,
@@ -96,173 +96,173 @@ hr,
 #submenu .selected a { background-color: #224054; }
 
 #mainmenu {
-	border-bottom: solid 1px Black;
-	font-size: 0.8em;
+        border-bottom: solid 1px Black;
+        font-size: 0.8em;
 }
 
 #mainmenu li {
-	float: left;
-	list-style-type: none;
-	min-width: 4.2em;
-	text-align: center;
+        float: left;
+        list-style-type: none;
+        min-width: 4.2em;
+        text-align: center;
 }
 
 #mainmenu li, #submenu li { white-space: nowrap; }
 
 #mainmenu li a {
-	padding: 0 0.7em 0 0.7em;
-	display: block;
-	color: White;
+        padding: 0 0.7em 0 0.7em;
+        display: block;
+        color: White;
 }
 
 #submenu li {
-	float: left;
-	list-style-type: none;
-	text-align: center;
-	font-size: 0.6em;
+        float: left;
+        list-style-type: none;
+        text-align: center;
+        font-size: 0.6em;
 }
 
 #submenu li a {
-	padding: 0 0.6em 0 0.6em;
-	display: block;
-	color: White;
+        padding: 0 0.6em 0 0.6em;
+        display: block;
+        color: White;
 }
 
 /* ---  Color switcher  --- */
 #colorswitcher {
-	position: absolute;
-	top: 11em;
-	right: 1.5em;
-	z-index: 100;
+        position: absolute;
+        top: 11em;
+        right: 1.5em;
+        z-index: 100;
 }
 
 #colorswitcher div {
-	display: block;
-	float: right;
-	width: 1em;
-	height: 1em;
-	margin-left: 0.4em;
-	border: 1px solid Black;
-	cursor: pointer;
+        display: block;
+        float: right;
+        width: 1em;
+        height: 1em;
+        margin-left: 0.4em;
+        border: 1px solid Black;
+        cursor: pointer;
 }
 
 /* ---  Content  --- */
 #content {
-	position: relative;
-	padding: 0 2% 6.5em 2%;
+        position: relative;
+        padding: 0 2% 6.5em 2%;
 }
 
 #content a { text-decoration: underline; }
 
 #content h2 {
-	font-size: 1.1em;
-	margin-top: 1.5em;
-	margin-bottom: 1.5em;
+        font-size: 1.1em;
+        margin-top: 1.5em;
+        margin-bottom: 1.5em;
 }
 
 /* center image and headline vertically */
 #content h2 * { vertical-align: middle; }
 
 #content h3 {
-	margin-bottom: 0.6em;
-	padding: 0.2em;
-	font-size: 1em;
-	background-color: #aac1d9;
+        margin-bottom: 0.6em;
+        padding: 0.2em;
+        font-size: 1em;
+        background-color: #aac1d9;
 }
 
 #content .settings { margin-left: 1%; }
 
 #content .settings .clearfix {
-	clear: both;
-	margin-bottom: 1em;
+        clear: both;
+        margin-bottom: 1em;
 }
 
 #content .settings-content {
-	position: relative;
-	float: left;
-	width: 54%;
-	margin-left: 2%;
+        position: relative;
+        float: left;
+        width: 54%;
+        margin-left: 2%;
 }
 
 #content select, #content input { margin-top: 0.1em; }
 
 /* help area */
 #content .settings-help {
-	position: relative;
-	margin-left: 60%;
+        position: relative;
+        margin-left: 60%;
 }
 
 #content .settings-help h3 { display: none; }
 
 #content .settings-help h4 {
-	font-weight: bold;
-	font-size: 0.8em;
-	margin-bottom: 0.2em;
+        font-weight: bold;
+        font-size: 0.8em;
+        margin-bottom: 0.2em;
 }
 
 #content .settings-help p {
-	margin-bottom: 0.6em;
-	font-size: 0.7em;
-	padding-right: 1em;
+        margin-bottom: 0.6em;
+        font-size: 0.7em;
+        padding-right: 1em;
 }
 
 .more-help {
-	margin-right: 10%;
-	text-align: right;
+        margin-right: 10%;
+        text-align: right;
 }
 
 /* ---  Save buttons  --- */
 #save {
-	position: absolute;
-	bottom: 0;
-	right: 0;
-	width: 15em;
-	text-align: right;
-	z-index: 50;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 15em;
+        text-align: right;
+        z-index: 50;
 }
 
 #save legend { display: none; }
 
 #save .page-save {
-	margin-right: 0;
-	padding: 0.5em 1em 0.5em 0;
-	background-color: #315579;
-	clear: both;
+        margin-right: 0;
+        padding: 0.5em 1em 0.5em 0;
+        background-color: #315579;
+        clear: both;
 }
 
 /* apply/clear/review area */
 #save .apply {
-	height: 4em;
-	background-color: #315579;
-	padding: 0.5em 1em 0.5em 0;
-	font-weight: bold;
-	line-height: 1.3em;
+        height: 4em;
+        background-color: #315579;
+        padding: 0.5em 1em 0.5em 0;
+        font-weight: bold;
+        line-height: 1.3em;
 }
 
 #save a { color: White; }
 
 #save a:hover {
-	background-color: #aac1d9;
-	text-decoration: underline;
+        background-color: #aac1d9;
+        text-decoration: underline;
 }
 
 /* ---  Footer  --- */
 #footer {
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	height: 3.5em;
-	z-index: 0;
-	color: White;
-	background-color: #315579;
-	padding: 1em 0 0.5em 0;
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        height: 3.5em;
+        z-index: 0;
+        color: White;
+        background-color: #315579;
+        padding: 1em 0 0.5em 0;
 }
 
 #footer em { font-size: 0.8em; }
 
 #footer h3 {
-	font-weight: lighter;
-	font-size: 1.3em;
+        font-weight: lighter;
+        font-size: 1.3em;
 }
 
 #footer * { margin-left: 4%; }
@@ -270,8 +270,8 @@ hr,
 /* ---  Page specific styling  --- */
 /* Packages page */
 .packages {
-	font-size: 0.8em;
-	text-align: left;
+        font-size: 0.8em;
+        text-align: left;
 }
 
 .repositories { font-size: 0.6em; }
@@ -280,81 +280,89 @@ hr,
 .separator { display: block; }
 
 .smalltext {
-	display: inline;
-	font-size: 0.9em;
-	font-weight: lighter;
-	font-style: italic;
+        display: inline;
+        font-size: 0.9em;
+        font-weight: lighter;
+        font-style: italic;
 }
 
 
 .failed-validation {
-	display: inline;
-	width: 40%;
-	text-align: left;
-	font-size: 1.0em;
-	font-style: italic;
-	color: Red;
+        display: inline;
+        width: 40%;
+        text-align: left;
+        font-size: 1.0em;
+        font-style: italic;
+        color: Red;
 }
 
 .warning,
 .update-available,
 .warning-light {
-	color: #9A2C2C;
-	display: inline;
+        color: #9A2C2C;
+        display: inline;
 }
 /* background color for odd lines/list items */
 .odd { background-color: #E5E7E9; }
 
 /* Progressbar */
 .progressbar {
-	border: 1px solid #315579;
-	margin-top: 0.2em;
-	margin-bottom: 0.2em;
-	padding: 2px;
-	font-size: 0.8em;
+        border: 1px solid #315579;
+        margin-top: 0.2em;
+        margin-bottom: 0.2em;
+        padding: 2px;
+        font-size: 0.8em;
 }
 
 .progress {
-	background-color: #AAC1D9;
-	padding: 0.1em 0 0.1em 0;
-	display: block;
-	text-align: center;
+        background-color: #AAC1D9;
+        padding: 0.1em 0 0.1em 0;
+        display: block;
+        text-align: center;
 }
 
 .gradualshine {
-	filter:alpha(opacity=30);
-	-moz-opacity:0.3;
+        filter:alpha(opacity=30);
+        -moz-opacity:0.3;
 }
 
 .balloonstyle{
-	position:absolute;
-	top: -500px;
-	left: 0;
-	padding: 5px;
-	visibility: hidden;
-	border:1px solid black;
-	font:normal 12px Verdana;
-	line-height: 18px;
-	z-index: 100;
-	background-color: white;
-	width: 200px;
-	/*Remove below line to remove shadow. Below line should always appear last within this CSS*/
-	filter: progid:DXImageTransform.Microsoft.Shadow(color=gray,direction=135,Strength=5);
+        position:absolute;
+        top: -500px;
+        left: 0;
+        padding: 5px;
+        visibility: hidden;
+        border:1px solid black;
+        font:normal 12px Verdana;
+        line-height: 18px;
+        z-index: 100;
+        background-color: white;
+        width: 200px;
+        /*Remove below line to remove shadow. Below line should always appear last within this CSS*/
+        filter: progid:DXImageTransform.Microsoft.Shadow(color=gray,direction=135,Strength=5);
+}
+
+#arrowhead{
+z-index: 99;
+position:absolute;
+top: -500px;
+left: 0;
+visibility: hidden;
 }
 
 input.flatbtn {
-	border: 1px solid #000000;
-	font-size:8pt;
+        border: 1px solid #000000;
+        font-size:8pt;
 }
 
 #scrollBox {
-	position: absolute;
-	width: 90%;
-	margin: 0 auto;
-	font-size: 0.7em;
+        position: absolute;
+        width: 90%;
+        margin: 0 auto;
+        font-size: 0.7em;
 }
 #outerscrollBox{
-	position: relative;
+        position: relative;
         width: 50%; /*marquee width */
         height: 20em; /*marquee height */
         overflow: hidden;
@@ -381,23 +389,23 @@ input.flatbtn {
 /* styles for dmytro's new wireless survey page. Used in Kamikaze as of 02/08/07. */
 TR.wifiscantitle
 {
-	background-color: #999999;
-	font-family: serif;
-	font-weight: bold;
-	color: #ffffff;
-	text-align: center;
+        background-color: #999999;
+        font-family: serif;
+        font-weight: bold;
+        color: #ffffff;
+        text-align: center;
 }
 TR.wifiscanrow1
 {
-	font-family: serif;
-	font-size:12pt;
-	color: #000000;
+        font-family: serif;
+        font-size:12pt;
+        color: #000000;
 }
 TR.wifiscanrow2
 {
-	background-color: #E6E6E6;
-	font-family: serif;
-	font-size:12pt;
-	color: #000000;
+        background-color: #E6E6E6;
+        font-family: serif;
+        font-size:12pt;
+        color: #000000;
 }
 

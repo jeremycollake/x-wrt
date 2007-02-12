@@ -56,7 +56,6 @@ SET_PATH="$CONFIG_set_path"
 SET_RAM="$CONFIG_set_ram"
 
 HEADER="<link rel=stylesheet type=text/css href=/themes/active/webif.css>
-<link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css">
 <script type="text/javascript" src="/js/balloontip.js">
 </script>"
 
@@ -74,7 +73,7 @@ losetup /dev/loop/0 /$SET_PATH/swapfile
 mkswap /dev/loop/0
 swapon /dev/loop/0
 echo "<META http-equiv="refresh" content='2;URL=$SCRIPT_NAME'>"
-echo "<br><br>changing current RAM ..."
+echo "<br><br>Changing current RAM ..."
 exit
 fi
 
@@ -115,16 +114,16 @@ cat <<EOF
 <tr>
 <td colspan="2" height="1"  bgcolor="#333333"></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td width="200px">&nbsp;<a href="" rel="b1">Swap file Location:</a></td>
+<tr><td width="200px">&nbsp;<a href="#" rel="b1">Swap file Location:</a></td>
 <td><input name="swap_path" type="text" value=$SET_PATH></td></tr>
-<tr><td width="200px">&nbsp;<a href="" rel="b2">Size (blocks):</a></td>
+<tr><td width="200px">&nbsp;<a href="#" rel="b2">Size (blocks):</a></td>
 <td><input name="swap_ram" type="text" value=$SET_RAM></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td>&nbsp;</td>
 <td><input type="submit" style='border: 1px solid #000000;' name="save_swap" value="Save"></td>
 </tr></table></form>
 
-<div id="b1" class="balloonstyle" style="width: 450px;">
+<div id="b1" class="balloonstyle" style="width: 250px;">
 Location where swap file will be stored.<br><br>Example: /mnt
 </div>
 <div id="b2" class="balloonstyle" style="width: 450px;">
