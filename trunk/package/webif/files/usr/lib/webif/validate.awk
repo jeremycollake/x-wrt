@@ -52,7 +52,7 @@ $1 == "wep" {
 
 $1 == "hostname" {
 	valid_type = 1
-	if (value !~ /^[0-9a-zA-z\.\-]*$/) {
+	if (value !~ /^[0-9a-zA-Z\.\-]*$/) {
 		valid = 0
 		verr = "@TR<<Invalid value>>"
 	}
