@@ -24,6 +24,11 @@ if empty "$FORM_submit"; then
 		NOCERT=1
 	[ -f /etc/openvpn/shared.key ] ||
 		NOPSK=1
+	[ -f /etc/openvpn/client.crt ] ||
+		NOCLIENTCERT=1
+	[ -f /etc/openvpn/client.key ] ||
+		NOCLIENTKEY=1
+
 	FORM_openvpn_cli="$CONFIG_general_mode"
 	FORM_openvpn_cli_server="$CONFIG_client_ipaddr"
 	FORM_openvpn_cli_proto="$CONFIG_general_proto"
@@ -41,6 +46,19 @@ else
 	[ -f "$FORM_openvpn_pskfile" ] && {
 		cp "$FORM_openvpn_pskfile" /etc/openvpn/shared.key &&
 			UPLOAD_PSK=1
+	}
+	#PEM Cert
+	[ -f "$FORM_openvpn_rootcafile" ] && {
+		cp "$FORM_openvpn_rootcafile" /etc/openvpn/ca.crt &&
+			UPLOAD_ROOTCACERT=1
+	}
+	[ -f "$FORM_openvpn_clientcertfile" ] && {
+		cp "$FORM_openvpn_clientcertfile" /etc/openvpn/client.crt &&
+			UPLOAD_CLIENTCERT=1
+	}
+	[ -f "$FORM_openvpn_clientkeyfile" ] && {
+		cp "$FORM_openvpn_clientkeyfile" /etc/openvpn/client.key &&
+			UPLOAD_CLIENTKEY=1
 	}
 	uci_set "openvpn" "general" "mode" "$FORM_openvpn_cli"
 	uci_set "openvpn" "client" "ipaddr" "$FORM_openvpn_cli_server"
@@ -101,6 +119,7 @@ onchange|modechange
 select|openvpn_cli_auth|$FORM_openvpn_cli_auth
 option|psk|@TR<<Preshared Key>>
 option|cert|@TR<<Certificate (PKCS12)>>
+option|pem|@TR<<Certificate (PEM)>>
 onchange|
 end_form
 
@@ -118,6 +137,28 @@ $(empty "$UPLOAD_CERT" || echo 'string|<span style="color:green">@TR<<Upload Suc
 $(empty "$NOCERT" && echo 'string|@TR<<Found Installed Certificate.>>')
 field|@TR<<Upload PKCS12 Certificate>>|certificate|hidden
 upload|openvpn_pkcs12file
+
+# PEM Cert
+field|@TR<<Certificate Status>>|root_ca_status|hidden
+$(empty "$NOROOTCACERT" || echo 'string|<span style="color:red">@TR<<Root CA certificate uploaded yet!>></span>')
+$(empty "$UPLOAD_ROOTCACERT" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
+$(empty "$NOROOTCACERT" && echo 'string|@TR<<Found Installed Certificate.>>')
+field|@TR<<Upload Root CA certificate>>|root_ca|hidden
+upload|openvpn_rootcafile
+
+field|@TR<<Certificate Status>>|client_certificate_status|hidden
+$(empty "$NOCLIENTCERT" || echo 'string|<span style="color:red">@TR<<No client certificate uploaded yet!>></span>')
+$(empty "$UPLOAD_CLIENTCERT" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
+$(empty "$NOCLIENTCERT" && echo 'string|@TR<<Found Installed Certificate.>>')
+field|@TR<<Upload Client Certificate>>|client_certificate|hidden
+upload|openvpn_clientcertfile
+
+field|@TR<<Certificate Status>>|client_key_status|hidden
+$(empty "$NOCLIENTKEY" || echo 'string|<span style="color:red">@TR<<No client key uploaded yet!>></span>')
+$(empty "$UPLOAD_CLIENTKEY" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
+$(empty "$NOCLIENTKEY" && echo 'string|@TR<<Found installed client key.>>')
+field|@TR<<Upload Client Key>>|client_key|hidden
+upload|openvpn_clientkeyfile
 end_form
 
 EOF

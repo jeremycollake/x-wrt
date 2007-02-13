@@ -23,6 +23,10 @@ case "$1" in
 					AUTH_OPTION="--secret"
 					AUTH_FILE="/etc/openvpn/shared.key"
 				;;
+				pem)
+					AUTH_FILE=""
+					AUTH_OPTION="--client --ca /etc/openvpn/ca.crt --cert /etc/openvpn/client.crt --key /etc/openvpn/client.key"
+				;;
 				*)
 					logger "$0: unknown authentication type, aborting!"
 					exit
@@ -37,7 +41,7 @@ case "$1" in
 				--remote "$SERVER"			\
 				--dev tun				\
 				--nobind				\
-				$AUTH_OPTION "$AUTH_FILE"		\
+				"$AUTH_OPTION" "$AUTH_FILE"		\
 				--comp-lzo				\
 				--daemon				\
 				--status /tmp/openvpn-status.log	\
