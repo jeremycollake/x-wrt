@@ -68,22 +68,13 @@ validate_wireless() {
 ###################################################################
 # Add Virtual Interface
 if ! empty "$FORM_add_vcfg"; then
-#Currently breaks things
-#	uci_add "wireless" "wifi-iface" ""
-#	uci_set "wireless" "cfg$FORM_add_vcfg_number" "device" "$FORM_add_vcfg"
-#	uci_set "wireless" "cfg$FORM_add_vcfg_number" "mode" "ap"
-#	uci_set "wireless" "cfg$FORM_add_vcfg_number" "ssid" "OpenWrt$FORM_add_vcfg_number"
-#	uci_set "wireless" "cfg$FORM_add_vcfg_number" "hidden" "0"
-#	uci_set "wireless" "cfg$FORM_add_vcfg_number" "encryption" "none"
 
-#Use until uci_load is fixed.
-	echo "
-config wifi-iface
-	option device   $FORM_add_vcfg
-	option mode     ap
-	option ssid     OpenWrt
-	option hidden   0
-	option encryption none">>/etc/config/wireless
+	uci_add "wireless" "wifi-iface" ""
+	uci_set "wireless" "cfg$FORM_add_vcfg_number" "device" "$FORM_add_vcfg"
+	uci_set "wireless" "cfg$FORM_add_vcfg_number" "mode" "ap"
+	uci_set "wireless" "cfg$FORM_add_vcfg_number" "ssid" "OpenWrt$FORM_add_vcfg_number"
+	uci_set "wireless" "cfg$FORM_add_vcfg_number" "hidden" "0"
+	uci_set "wireless" "cfg$FORM_add_vcfg_number" "encryption" "none"
 	FORM_add_vcfg=""
 fi
 
@@ -112,7 +103,12 @@ esac
 uci_load network
 NETWORK_DEVICES="none $network_devices"
 uci_load wireless
-		
+
+#FIXME: uci_load bug
+#uci_load will pass the same config twice when there is a section to be added by using uci_add before a uci_commit happens
+#we will use uniq so we don't try to parse the same config section twice.
+vface=$(echo "$vface" |uniq)
+
 #echo "$DEVICES"
 #echo "vifs $vface"
 vcfg_number=$(echo "$DEVICES $N $vface" |wc -l)
