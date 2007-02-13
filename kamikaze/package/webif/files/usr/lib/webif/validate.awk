@@ -112,7 +112,7 @@ $1 == "mac" {
 
 $1 == "port" {
 	valid_type = 1
-	if (value !~ /^[0-9]*$/) {
+	if ((value != "") && (value !~ /^[0-9]*$/)) {
 		valid = 0
 		verr = "@TR<<Invalid value>>"
 	}
