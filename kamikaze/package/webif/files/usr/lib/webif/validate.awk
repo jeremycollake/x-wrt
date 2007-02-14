@@ -63,7 +63,7 @@ $1 == "netmask" {
 		if (valid != 0) {
 			nm = split(binaddr, binmask, "0")
 			for (i = 2; i <= nm; i++) {
-				if (index(binmask[i], "1") > 0) {
+				if (length(binmask[i]) > 0) {
 					valid = 0
 					break
 				}
