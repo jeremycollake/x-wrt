@@ -20,7 +20,7 @@ BEGIN {
 
 $1 == "int" {
 	valid_type = 1
-	if (value !~ /^[0-9]*$/) { valid = 0; verr = "@TR<<Invalid value>>" }
+	if ((value != "") && (value !~ /^[0-9]*$/)) { valid = 0; verr = "@TR<<Invalid value>>" }
 }
 
 # FIXME: add proper netmask validation
@@ -52,7 +52,7 @@ $1 == "wep" {
 
 $1 == "hostname" {
 	valid_type = 1
-	if (value !~ /^[0-9a-zA-Z\.\-]*$/) {
+	if ((value != "") && (value !~ /^[0-9a-zA-Z\.\-]*$/)) {
 		valid = 0
 		verr = "@TR<<Invalid value>>"
 	}
@@ -80,11 +80,13 @@ $1 == "port" {
 
 $1 == "ports" {
 	valid_type = 1
-	n = split(value, ports, ",")
-	for (i = 1; i <= n; i++) {
-		if ((ports[i] !~ /^[0-9]*$/) && (ports[i] !~ /^[0-9][0-9]*-[0-9][0-9]*$/)) {
-			valid = 0
-			verr = "@TR<<Invalid value>>"
+	if (value != "") {
+		n = split(value, ports, ",")
+		for (i = 1; i <= n; i++) {
+			if ((ports[i] !~ /^[0-9]*$/) && (ports[i] !~ /^[0-9][0-9]*-[0-9][0-9]*$/)) {
+				valid = 0
+				verr = "@TR<<Invalid value>>"
+			}
 		}
 	}
 }
