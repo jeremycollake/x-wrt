@@ -142,8 +142,8 @@ elif [ "$firmware_version" = "RC6" ] || grep -q "RC6" "${IPKG_INSTROOT}/etc/bann
 	AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"	
 elif [ "$firmware_version" = "0.9" ] || grep -q "0.9" "${IPKG_INSTROOT}/etc/banner"; then	
 	# todo: verify backports exists and change when they do
-	DeleteRepository "http://downloads.openwrt.org/backports/rc5"
-	AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"
+	DeleteRepository "http://downloads.openwrt.org/backports/rc6"
+	AddRepository "0.9-backports" "http://downloads.openwrt.org/backports/0.9"
 else
 	echo "White Russian version not detected. Not installing backports repository source."
 fi
