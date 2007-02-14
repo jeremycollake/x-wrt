@@ -30,7 +30,7 @@ if equal $LOG_TYPE "file" ; then
 else LOGREAD="logread"
 fi
 
-$LOGREAD | sort -r  | sed -e "s| $prefix| |"
+$LOGREAD | awk '{a[i++]=$0} END {for (j=i-1; j>=0;) print a[j--] }' | sed -e "s| $prefix| |"
 ?>
 </pre></div>
 </body>
