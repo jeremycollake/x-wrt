@@ -20,13 +20,13 @@ BEGIN {
 
 $1 == "int" {
 	valid_type = 1
-	if ((value != "") && (value !~ /^[0-9]*$/)) { valid = 0; verr = "@TR<<Invalid value>>" }
+	if ((value != "") && (value !~ /^[[:digit:]]*$/)) { valid = 0; verr = "@TR<<Invalid value>>" }
 }
 
 # FIXME: add proper netmask validation
 ($1 == "ip") || ($1 == "netmask") {
 	valid_type = 1
-	if ((value != "") && (value !~ /^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$/)) valid = 0
+	if ((value != "") && (value !~ /^[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}$/)) valid = 0
 	else {
 		split(value, ipaddr, "\\.")
 		for (i = 1; i <= 4; i++) {
@@ -64,7 +64,7 @@ $1 == "string" {
 
 $1 == "mac" {
 	valid_type = 1
-	if ((value != "") && (value !~ /^[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]:[0-9a-fA-F][0-9a-fA-F]$/)) {
+	if ((value != "") && (value !~ /^[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}$/)) {
 		valid = 0
 		verr = "@TR<<Invalid value>>"
 	}
@@ -72,7 +72,7 @@ $1 == "mac" {
 
 $1 == "port" {
 	valid_type = 1
-	if ((value != "") && (value !~ /^[0-9]*$/)) {
+	if ((value != "") && (value !~ /^[[:digit:]]{1,5}$/)) {
 		valid = 0
 		verr = "@TR<<Invalid value>>"
 	}
@@ -83,7 +83,7 @@ $1 == "ports" {
 	if (value != "") {
 		n = split(value, ports, ",")
 		for (i = 1; i <= n; i++) {
-			if ((ports[i] !~ /^[0-9]*$/) && (ports[i] !~ /^[0-9][0-9]*-[0-9][0-9]*$/)) {
+			if ((ports[i] !~ /^[[:digit:]]{1,5}$/) && (ports[i] !~ /^[[:digit:]]{1,5}-[[:digit:]]{1,5}$/)) {
 				valid = 0
 				verr = "@TR<<Invalid value>>"
 			}
