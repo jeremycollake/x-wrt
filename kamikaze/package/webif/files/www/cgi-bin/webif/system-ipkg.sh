@@ -27,7 +27,21 @@
 #
 #
 
-header "System" "Packages" "@TR<<Packages>>" '' "$SCRIPT_NAME"
+header "System" "Packages" "<img src=/images/pkg.jpg align=middle alt />&nbsp;@TR<<Packages>>" '' "$SCRIPT_NAME"
+
+cat <<EOF
+<script type="text/javascript">
+<!--
+function confirmT(action,pkg) {
+if ( pkg == "uclibc" || pkg == "base-files" || pkg == "base-files-brcm-2.4" || pkg == "bridge" || pkg == "busybox" || pkg == "dnsmasq" || pkg == "dropbear" || pkg == "haserl" || pkg == "hotplug" || pkg == "iptables" || pkg == "kernel" || pkg == "mtd" || pkg == "wireless-tools" || pkg == "zlib") {
+alert ("              <<< WARNING >>> \n\nPackage \"" + pkg + "\" should not be removed!\n\n>>> Removing may brick your router. <<<\n\nSystem requires \"" + pkg + "\" package to run.\n\n") ;
+}
+if (window.confirm("Please Confirm! \n\nDo you want to " + action + " \"" + pkg + "\" package?")){
+window.location="ipkg.sh?action=" + action + "&pkg=" + pkg
+} }
+// -->
+</script>
+EOF
 
 ##################################################################
 #
@@ -142,7 +156,7 @@ $2 !~ /terminated/ {
 	gsub(/\+/,"%2B",link)
 	version=$3
 	desc=$5 " " $6 " " $7 " " $8 " " $9 " " $10 " " $11 " " $12 " " $13 " " $14 " " $15 " " $16 " " $17 " " $18 " " $19 " " $20 " " $21 " " $22 " " $23 " " $24 " " $25 " " $26 " " $27
-	print "<tr class=\"packages\"><td><a href=\"ipkg.sh?action=remove&pkg=" link "\">@TR<<Uninstall>></td><td>" $1 "</td><td>" version "</td><td>" desc "</td></tr>"
+	print "<tr class=\"packages\"><td><a href=javascript:confirmT(\"remove\",\"" link "\")>@TR<<Uninstall>></a></td><td>" $1 "</td><td>" version "</td><td>" desc "</td></tr>"
 }
 '
 ?>
@@ -164,7 +178,7 @@ $1 ~ /status/ {
 	split(verline,ver,":")
 	getline descline
 	split(descline,desc,":")
-	print "<tr class=\"packages\"><td><a href=\"ipkg.sh?action=install&pkg=" link "\">@TR<<Install>></td><td>" $3 "</td><td>" ver[3] "</td><td>" desc[3] "</td></tr>"
+	print "<tr class=\"packages\"><td><a href=javascript:confirmT(\"install\",\"" link "\")>@TR<<Install>></td><td>" $3 "</td><td>" ver[3] "</td><td>" desc[3] "</td></tr>"
 	current=$1
 }
 '
