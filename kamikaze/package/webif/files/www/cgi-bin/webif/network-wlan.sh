@@ -26,36 +26,36 @@ validate_wireless() {
 	case "$adhoc_count:$sta_count:$ap_count" in
 		1*)
 			if [ "$sta_count" != "0" ]; then
-				append validate_error "string|@TR<<Error: No other virtual adapters are allowed if one is in adhoc mode.>> <br />"
+				append validate_error "string|<h3>@TR<<Error: No other virtual adapters are allowed if one is in adhoc mode.>></h3><br />"
 			elif [ "$ap_count" != "0" ]; then
-				append validate_error "string|@TR<<Error: No other virtual adapters are allowed if one is in adhoc mode.>> <br />"
+				append validate_error "string|<h3>@TR<<Error: No other virtual adapters are allowed if one is in adhoc mode.>></h3><br />"
 			fi
 			break
 			;;
 		0:0:?)
 			if [ "$ap_count" -gt "4" ]; then
-				append validate_error "string|@TR<<Error: Only 4 virtual adapters are allowed in ap mode.>> <br />"
+				append validate_error "string|<h3>@TR<<Error: Only 4 virtual adapters are allowed in ap mode.>></h3><br />"
 			fi
 			break
 			;;
 		0:?:?)
 			if [ "$sta_count" -gt "1" ]; then
-				append validate_error "string|@TR<<Error: Only 1 adaptor is allowed in client mode.>> <br />"
+				append validate_error "string|<h3>@TR<<Error: Only 1 adaptor is allowed in client mode.>></h3><br />"
 			fi
 			if [ "$1"="broadcom" ]; then
 				if [ "$ap_count" -gt "3" ]; then
-					append validate_error "string|@TR<<Error: Only 3 virtual adapters are allowed in ap mode with a adapter in client mode.>> <br />"
+					append validate_error "string|<h3>@TR<<Error: Only 3 virtual adapters are allowed in ap mode with a adapter in client mode.>></h3><br />"
 				fi
 			elif [ "$1"="atheros" ]; then
 				if [ "$ap_count" -gt "4" ]; then
-					append validate_error "string|@TR<<Error: Only 4 virtual adapters are allowed in ap mode.>> <br />"
+					append validate_error "string|<h3>@TR<<Error: Only 4 virtual adapters are allowed in ap mode.>></h3><br />"
 				fi	
 			fi
 			break
 			;;
 		*)
 			if [ "$adhoc_count" -gt "1" ]; then
-				append validate_error "string|@TR<<Error: Only 1 virtual adapter is allowed to be in adhoc mode.>> <br />"
+				append validate_error "string|<h3>@TR<<Error: Only 1 virtual adapter is allowed to be in adhoc mode.>></h3><br />"
 			fi
 			;;
 	esac
