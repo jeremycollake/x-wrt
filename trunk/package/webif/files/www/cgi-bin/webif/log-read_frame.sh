@@ -4,6 +4,9 @@
 . /etc/runsyslogd.conf
 colorize_script=""
 
+mini_header
+echo -n "<body><div class=\"logread\"><pre>
+
 prefix=$(nvram get log_prefix)
 LOG_TYPE=$(nvram get log_type)
 LOG_FILE=$(nvram get log_file)
@@ -13,5 +16,7 @@ if equal $LOG_TYPE "file" ; then
 else LOGREAD="logread"
 fi
 
-$LOGREAD | sort -r  | sed -e "s| $prefix| |"
-?>
+$LOGREAD | awk '{a[i++]=$0} END {for (j=i-1; j>=0;) print a[j--] }' | sed -e "s| $prefix| |"?></pre>
+</div>
+</body>
+</html>
