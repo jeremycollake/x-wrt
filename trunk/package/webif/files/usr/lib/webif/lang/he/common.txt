@@ -52,33 +52,33 @@ by => realitzat per
 
 
 No config change. => No hi ha hagut canvis a la configuració.
-Config discarded. => Els canvis no s'han acceptat.
-Config changes: => Configuració actual:
-Updating config... => Actualitzant la configuració...
+Config discarded. => קונפיגורציה לא שונתה
+Config changes: => שינויים בקונפיגורציה:
+Updating config... => מעדכן קונפיגורציה...
 
 
 # 'Router Info' page
-Firmware Version => Versió del firmware
-Kernel Version => Versió del Kernel
-Current Date/Time => Data/Hora
-MAC Address => Adreça MAC
+Firmware Version => גרסת קושחה
+Kernel Version => גרסת ליבה
+Current Date/Time => זמן/תאריך
+MAC Address => כתובת MAC
 
 
 # 'Connections' page
-Connection Status => Estat de les connexions
-Physical Connections => Connexions físiques
-Router Connections => Connexions del router
+Connection Status => מצב התקשרויות
+Physical Connections => התקשרויות פיזיות
+Router Connections => התקשרויות נתב
 
 
 # 'DHCP' page
-DHCP leases => Préstecs DHCP
-IP Address => Adreça IP
-Name => Nom
-Expires in => Caduca d'ara a
+DHCP leases => כתובת DHCP
+IP Address => כתובת IP
+Name => שם
+Expires in => פג תוקף ב
 
 
 # 'Wireless Status' page
-Wireless Status => Estat del Wi-Fi
+Wireless Status => מצב אלחוט
 
 # 'Password' page
 Password Change => Canvi de la clau
