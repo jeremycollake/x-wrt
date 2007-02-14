@@ -23,8 +23,48 @@ $1 == "int" {
 	if ((value != "") && (value !~ /^[[:digit:]]*$/)) { valid = 0; verr = "@TR<<Invalid value>>" }
 }
 
-# FIXME: add proper netmask validation
-($1 == "ip") || ($1 == "netmask") {
+function dec2binstr(dec, data)
+{
+	for (j = 7; j >= 0; j--) {
+		if (dec > 0) {
+			ptwo = 2^j
+			if (dec >= ptwo) {
+				data = data "1"
+				dec = dec - ptwo
+			} else data = data "0"
+		} else data = data "0"
+	}
+	return data
+}
+
+# dotted decimal netmask
+$1 == "netmask" {
+        valid_type = 1
+	if ((value != "") && (value !~ /^[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}$/)) valid = 0
+	else {
+                split(value, ipaddr, "\\.")
+		binaddr = ""
+                for (i = 1; i <= 4; i++) {
+                        if ((ipaddr[i] < 0) || (ipaddr[i] > 255)) {
+				valid = 0
+				break
+			} else binaddr = dec2binstr(ipaddr[i], binaddr)
+                }
+		if (valid != 0) {
+			nm = split(binaddr, binmask, "0")
+			for (i = 2; i <= nm; i++) {
+				if (length(binmask[i]) > 0) {
+					valid = 0
+					break
+				}
+			}
+			if (valid != 0) if ((length(binmask[1]) < 0) || (length(binmask[1]) > 32)) valid = 0
+		}
+        }
+        if (valid == 0) verr = "@TR<<Invalid value>>"
+}
+
+$1 == "ip" {
 	valid_type = 1
 	if ((value != "") && (value !~ /^[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}$/)) valid = 0
 	else {
