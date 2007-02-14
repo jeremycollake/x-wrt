@@ -2,11 +2,7 @@
 <?
 . /usr/lib/webif/webif.sh
 
-header "Network" "Hosts" "@TR<<Configured Hosts>>" '' "$SCRIPT_NAME"
-
-display_form <<EOF
-start_form|
-EOF
+# header "Network" "Hosts"...
 
 exists /tmp/.webif/file-hosts  && HOSTS_FILE=/tmp/.webif/file-hosts || HOSTS_FILE=/etc/hosts
 exists /tmp/.webif/file-ethers  && ETHERS_FILE=/tmp/.webif/file-ethers || ETHERS_FILE=/etc/ethers
@@ -85,9 +81,11 @@ EOF
 empty "$FORM_remove_host" || update_hosts del "$FORM_remove_ip" "$FORM_remove_name"
 empty "$FORM_remove_dhcp" || update_ethers del "$FORM_remove_mac"
 
-?>
+header "Network" "Hosts" "@TR<<Configured Hosts>>" '' "$SCRIPT_NAME"
 
-<?
+display_form <<EOF
+start_form|
+EOF
 
 # Hosts in /etc/hosts
 awk -v "url=$SCRIPT_NAME" \
@@ -104,7 +102,7 @@ BEGIN {
 }
 
 # only for valid IPv4 addresses
-(\$1 ~ /^[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$/) {
+(\$1 ~ /^[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}$/) {
 	gsub(/#.*$/, "");
 	output = ""
 	names_found = 0
@@ -144,7 +142,7 @@ BEGIN {
 }
 
 # only for valid MAC addresses
-(\$1 ~ /^[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]:[0-9A-Fa-f][0-9A-Fa-f]$/) {
+(\$1 ~ /^[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}$/) {
 	gsub(/#.*$/, "");
 	print "<tr><td>" \$1 "</td><td>" \$2 "</td><td align=\\"right\\" width=\\"10%\\"><a href=\\"" url "?remove_dhcp=1&remove_mac=" \$1 "\\">@TR<<Remove>></a></td></tr>"
 }
