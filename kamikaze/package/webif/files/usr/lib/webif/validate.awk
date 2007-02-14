@@ -49,16 +49,15 @@ function dec2binstr(dec, data)
 # dotted decimal netmask
 $1 == "netmask" {
         valid_type = 1
-	if ((value != "") && (value !~ /^[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}$/)) {
-		valid = 0
-	} else {
+	if ((value != "") && (value !~ /^[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}$/)) valid = 0
+	else {
                 split(value, ipaddr, "\\.")
 		binaddr = ""
                 for (i = 1; i <= 4; i++) {
                         if ((ipaddr[i] < 0) || (ipaddr[i] > 255)) {
 				valid = 0
 				break
-			} else 	binaddr = binaddr dec2binstr(ipaddr[i])
+			} else binaddr = dec2binstr(ipaddr[i], binaddr)
                 }
 		if (valid != 0) {
 			nm = split(binaddr, binmask, "0")
@@ -68,9 +67,7 @@ $1 == "netmask" {
 					break
 				}
 			}
-			if (valid != 0) {
-				if (length(binmask[1]) < 0 || length(binmask[1]) > 32) valid = 0
-			}
+			if (valid != 0) if ((length(binmask[1]) < 0) || (length(binmask[1]) > 32)) valid = 0
 		}
         }
         if (valid == 0) verr = "@TR<<Invalid value>>"
