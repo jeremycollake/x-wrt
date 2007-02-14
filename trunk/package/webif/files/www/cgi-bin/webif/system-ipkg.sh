@@ -145,10 +145,9 @@ fi
 echo "</pre>"
 ?>
 </pre>
-<table>
 	<h3>@TR<<Installed Packages>></h3>
 	<br />
-	<table class=\"packages\"><tr class=\"packages\"><th width="150">Action</th><th width="200">Package</th><th width=150>Version</th><th>Description</th></tr>
+	<table><table class=\"packages\"><tr class=\"packages\"><th width="150">Action</th><th width="200">Package</th><th width=150>Version</th><th>Description</th></tr>
 <?
 ipkg list_installed | awk -F ' ' '
 $2 !~ /terminated/ {
