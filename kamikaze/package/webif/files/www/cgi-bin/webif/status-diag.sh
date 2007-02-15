@@ -75,7 +75,10 @@ does_process_exist() {
 	tmpfile2=$(mktemp /tmp/.webif-diag-XXXXXX)
 	$diag_command 2>&1 > "$tmpfile" &
 	ps_search=$(echo "$diag_command" | cut -c 1-15) # todo: limitation, X char match resolution
-	_pid=$(ps | grep "$ps_search" | grep -v "grep" | cut -d ' ' -f 1 | sed 2,99d)
+	echo "ps search is $ps_search"
+	ps_results=$(ps | grep "$ps_search" | grep -v "grep")
+	! is_kamikaze && _pid=$(echo $ps_results | cut -d ' ' -f 1 | sed 2,99d)    # older busybox
+	equal $_pid "0" && _pid=$(echo $ps_results | cut -d ' ' -f 1 | sed 2,99d)  # newer busybox
 	output_snapshot_file() {
 		# output file
 		# tmpfile2
