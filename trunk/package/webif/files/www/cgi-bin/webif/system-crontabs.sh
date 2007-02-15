@@ -1,6 +1,6 @@
 #!/usr/bin/webif-page
 <?
-crondir="/var/spool/cron/crontabs/"
+crondir="/etc/crontabs/"
 
 . /usr/lib/webif/webif.sh
 
