@@ -140,7 +140,7 @@ elif [ "$FORM_page" = "web" ]; then
 	#	  \/		  	\/
 	let "ct1=4000" ; let "ct2=2000" ; var="applications-httpd.sh?ipkg=" ; CHECK_FREE_MEM #<- WebServer
 	let "ct1=4500" ; let "ct2=4600" ; var="applications-proftpd.sh?ipkg=" ; CHECK_FREE_MEM #<-FTP Server
-	let "ct1=100"	 ; let "ct2=100" ; var="applications-sql.sh?ipkg=" ; CHECK_FREE_MEM #<-SQL Server
+	let "ct1=100"	 ; let "ct2=10000000" ; var="applications-sql.sh?ipkg=" ; CHECK_FREE_MEM #<-SQL Server
 cat <<EOF
 </head><body><center>
 
@@ -236,7 +236,7 @@ echo "</head><body>$LoadingJAVA<table width='98%' border='0' cellspacing='1' ><t
 	var3="Samba Client"
 	var2="app.10.jpg"
 	var4="b1"
-	if is_package_installed "kmod-cifs" && is_package_installed "cifsmount" ; then
+	if is_package_installed "kmod-fs-cifs" && is_package_installed "cifsmount" ; then
 	var1="applications-samba.sh" ; var5=0 ; TR_APP
 	else var1="javascript:confirm0()" ; var5=1 ; TR_APP
 	fi
@@ -316,7 +316,7 @@ EOF
 
 	echo "<tr><td colspan=2><br><u>> Network Applications</u><br><br></td></tr>"
 
-	if  is_package_installed "kmod-cifs"  &&  is_package_installed "cifsmount"  ; then var1="app.10.jpg" ; var2="Samba Client" ; var3="applications-samba.sh" ; var4="" ; var5=0 ; TR_Remove_APP ; fi
+	if  is_package_installed "kmod-fs-cifs"  &&  is_package_installed "cifsmount"  ; then var1="app.10.jpg" ; var2="Samba Client" ; var3="applications-samba.sh" ; var4="" ; var5=0 ; TR_Remove_APP ; fi
 	if  is_package_installed "kmod-loop" && is_package_installed "swap-utils" &&  is_package_installed "losetup"  ; then var1="app.12.jpg" ; var2="Memory Swap" ; var3="applications-swap.sh" ; var4="" ; var5=0 ; TR_Remove_APP	; fi
 
 	echo "</table></html>"
