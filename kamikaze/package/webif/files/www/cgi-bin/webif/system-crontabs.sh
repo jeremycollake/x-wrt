@@ -4,8 +4,6 @@ crondir="/etc/crontabs/"
 
 . /usr/lib/webif/webif.sh
 
-load_settings "cron"
-
 header "System" "Crontabs" "@TR<<Cron Tables>>" "$SCRIPT_NAME"
 
 cron_dir_text="<br/>@TR<<Cron Tables Directory>>:<pre>$crondir</pre><br/>"
