@@ -19,7 +19,8 @@ colorize_script=""
 <div class="logread"><pre>
 <?
 . /usr/lib/webif/webif.sh
-. /etc/runsyslogd.conf
+DEFAULT_log_file="/var/log/messages"
+DEFAULT_log_type="circular"
 uci_load "syslogd"
 prefix="$CONFIG_general_prefix"
 LOG_TYPE="$CONFIG_general_type"
