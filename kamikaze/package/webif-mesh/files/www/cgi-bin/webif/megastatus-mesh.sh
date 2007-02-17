@@ -1,9 +1,8 @@
 #!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
-eval $(/usr/bin/megaparam)
 
-header "Status" "Mesh-Topology" "Mesh monitor"
+header "Mesh" "Topology" "Network Topology"
 
 if [ ".$mn_enable" = ".1" ]; then
 
@@ -23,5 +22,5 @@ fi
 
 footer ?>
 <!--
-##WEBIF:name:Status:994:Mesh-Topology
+##WEBIF:name:Mesh:14:Topology
 -->

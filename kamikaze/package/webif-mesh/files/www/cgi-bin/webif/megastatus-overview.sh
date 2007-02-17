@@ -1,7 +1,7 @@
 #!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
-header "Status" "Mesh-Overview" "System overview"
+header "Mesh" "Overview" "System overview"
 WAN=$(uci show network.wan.ifname)
 PAN=$(uci show network.lan.ifname)
 WIFI=$(uci show network.wifi.ifname)
@@ -87,5 +87,5 @@ END {
 
 <? footer ?>
 <!--
-##WEBIF:name:Status:991:Mesh-Overview
+##WEBIF:name:Mesh:10:Overview
 -->

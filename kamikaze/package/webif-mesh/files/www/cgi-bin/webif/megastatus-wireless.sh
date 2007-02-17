@@ -1,9 +1,8 @@
 #!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
-eval $(/usr/bin/megaparam)
 
-header "Status" "Mesh-Wireless" "Wireless monitor"
+header "Mesh" "Monitor" "Wireless monitor"
 
 if [ ".$mn_enable" = ".1" ]; then
 
@@ -87,5 +86,5 @@ fi
 
 footer ?>
 <!--
-##WEBIF:name:Status:993:Mesh-Wireless
+##WEBIF:name:Mesh:13:Monitor
 -->
