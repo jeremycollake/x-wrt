@@ -3,7 +3,7 @@
 . /usr/lib/webif/webif.sh
 eval $(/usr/bin/megaparam)
 
-header "MegaStatus" "Traffic" "Traffic counters"
+header "Status" "Mesh-Traffic" "Traffic counters"
 
 if [ ".$mn_enable" = ".1" ]; then
 
@@ -17,5 +17,5 @@ fi
 
  footer ?>
 <!--
-##WEBIF:name:MegaStatus:5:Traffic
+##WEBIF:name:Status:995:Mesh-Traffic
 -->

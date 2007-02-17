@@ -20,7 +20,7 @@ EOF
 	}
 fi
 
-header "MegaNetwork" "PAN" "Private Area Network" '' "$SCRIPT_NAME"
+header "Mesh" "PAN" "Private Area Network" '' "$SCRIPT_NAME"
 
 if [ ".$mn_enable" = ".1" ]; then
 
@@ -57,5 +57,5 @@ fi
 
 footer ?>
 <!--
-##WEBIF:name:MegaNetwork:2:PAN
+##WEBIF:name:Mesh:2:PAN
 -->

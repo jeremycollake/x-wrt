@@ -20,7 +20,7 @@ EOF
 	}
 fi
 
-header "MegaNetwork" "Gateway" "Internet port (TODO)" '' "$SCRIPT_NAME"
+header "Mesh" "Gateway" "Internet port (TODO)" '' "$SCRIPT_NAME"
 
 if [ ".$mn_enable" = ".1" ]; then
 
@@ -53,5 +53,5 @@ fi
 
 footer ?>
 <!--
-##WEBIF:name:MegaNetwork:4:Gateway
+##WEBIF:name:Mesh:4:Gateway
 -->

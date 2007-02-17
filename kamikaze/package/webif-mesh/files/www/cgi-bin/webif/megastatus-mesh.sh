@@ -3,7 +3,7 @@
 . /usr/lib/webif/webif.sh
 eval $(/usr/bin/megaparam)
 
-header "MegaStatus" "Mesh" "Mesh monitor"
+header "Status" "Mesh-Topology" "Mesh monitor"
 
 if [ ".$mn_enable" = ".1" ]; then
 
@@ -23,5 +23,5 @@ fi
 
 footer ?>
 <!--
-##WEBIF:name:MegaStatus:4:Mesh
+##WEBIF:name:Status:994:Mesh-Topology
 -->

@@ -50,7 +50,7 @@ EOF
 	}
 fi 
  
-header "MegaNetwork" "P2P" "P2P Network" '' "$SCRIPT_NAME"
+header "Mesh" "P2P" "P2P Network" '' "$SCRIPT_NAME"
 
 if [ ".$mn_enable" = ".1" ]; then
 
@@ -135,6 +135,6 @@ fi
 
 footer ?>
 <!-- 
-##WEBIF:name:MegaNetwork:3:P2P
+##WEBIF:name:Mesh:3:P2P
 -->
 

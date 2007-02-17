@@ -3,7 +3,7 @@
 . /usr/lib/webif/webif.sh
 eval $(/usr/bin/megaparam)
 
-header "MegaStatus" "Wireless" "Wireless monitor"
+header "Status" "Mesh-Wireless" "Wireless monitor"
 
 if [ ".$mn_enable" = ".1" ]; then
 
@@ -87,5 +87,5 @@ fi
 
 footer ?>
 <!--
-##WEBIF:name:MegaStatus:3:Wireless
+##WEBIF:name:Status:993:Mesh-Wireless
 -->
