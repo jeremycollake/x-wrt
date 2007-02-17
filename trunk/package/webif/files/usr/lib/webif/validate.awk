@@ -172,10 +172,15 @@ valid == 1 {
 			} else if ($1 == "string") {
 				if (length(value) > max) { valid = 0; verr = "@TR<<String too long>> (@TR<<maximum length>>: " max ")" }
 			}
-		} else if ((options[i] == "nodots") && ($1 == "hostname")) {
+		} else if (options[i] == "nodots") {
 			if (value ~ /\./) {
 				valid = 0
-				verr = "@TR<<Invalid value>>"
+				verr = "@TR<<Invalid dots>>"
+			}
+		} else if (options[i] == "nospaces") {
+			if (value ~ /[[:space:]]/) {
+				valid = 0
+				verr = "@TR<<Invalid spaces>>"
 			}
 		}
 	}
