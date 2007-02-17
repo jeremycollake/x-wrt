@@ -5,7 +5,7 @@ load_settings mn_pan
 eval $(/usr/bin/megaparam)
 
 if empty "$FORM_submit"; then 
-	FORM_static_routes=${static_route:-$(nvram get static_route)}
+	FORM_static_routes=${static_route:-$(route -n | awk ' /\./ {ORS=" ";print $1":"$3":"$2":"$5":"$8} END {printf"\n"}')}
 	FORM_hna4=$mn_hna4
 	FORM_dmz=$mn_dmz
 else

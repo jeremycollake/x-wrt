@@ -24,7 +24,7 @@ header "MegaNetwork" "Gateway" "Internet port (TODO)" '' "$SCRIPT_NAME"
 
 if [ ".$mn_enable" = ".1" ]; then
 
-if [ ".$(nvram get wan_proto)" != "." ] && [ ".$(nvram get wan_proto)" != ".none" ]; then
+if [ ".$(uci show network.wan.proto)" != "." ] && [ ".$(uci show network.wan.proto)" != ".none" ]; then
 	echo "<p>You can now configure download/upload speed and the DMZ of the WAN side.</p><br>"
 	display_form <<EOF
 start_form|Line speed and DMZ

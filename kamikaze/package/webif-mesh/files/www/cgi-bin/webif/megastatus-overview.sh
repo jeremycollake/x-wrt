@@ -2,9 +2,9 @@
 <? 
 . /usr/lib/webif/webif.sh
 header "MegaStatus" "Overview" "System overview"
-WAN=$(nvram get wan_ifname)
-PAN=$(nvram get lan_ifname)
-WIFI=$(nvram get wifi_ifname)
+WAN=$(uci show network.wan.ifname)
+PAN=$(uci show network.lan.ifname)
+WIFI=$(uci show network.wifi.ifname)
 ?>
 
 <SCRIPT LANGUAGE="JavaScript"><!--
@@ -36,10 +36,10 @@ logread
 <tr><td align=center><b>Interfaces</b></td><td colspan=2 align=center><A HREF="#" ONCLICK="return fold('interfaces')">Show / Hide</A></td></tr>
 <tr><td colspan="3"><PRE STYLE="display:none" ID="interfaces">
 <?
-echo "lan_ifnames=$(nvram get lan_ifnames)"
-echo "lan_ifname=$(nvram get lan_ifname)"
+echo "lan_ifnames=$(uci show network.lan.ifnames)"
+echo "lan_ifname=$(uci show network.lan.ifname)"
 echo "wl0_ifname=$(nvram get wl0_ifname)"
-echo "wifi_ifname=$(nvram get wifi_ifname)"
+echo "wifi_ifname=$(uci show network.wifi.ifname)"
 echo "wan_ifname=$(nvram get wan_ifname)"
 echo
 brctl show 2>&1
