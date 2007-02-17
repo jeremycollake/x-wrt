@@ -1,6 +1,7 @@
 #!/usr/bin/webif-page
 <?
-###################################################################
+. /usr/lib/webif/webif.sh
+############ KAMIKAZE ONLY #####################
 # Wireless survey page
 #
 # Description:
@@ -10,142 +11,269 @@
 #	Jeremy Collake <jeremy.collake@gmail.com>
 #	Dmytro Dykhman <dmytro@iroot.ca>
 #
-# Major revisions:
-#
-#
-# Configuration files referenced:
-#   none
-#
 # TODO:
 #   I originally wrote this before I had bothered to learn much about
 #   awk, so it uses 'pure' shell scripting. It would be much simpler
 #   and probably more efficient to use awk. Maybe recode someday, but
 #   why fix what's isn't broken...
 #
-. "/usr/lib/webif/webif.sh"
 
 ##### Variables
 
 MAX_TRIES=4
 MAX_CELLS=100
 Wimg=0
+var1=0
 color=0
 counter=0
 current=1
-
 tempfile=$(mktemp /tmp/.survtemp.XXXXXX)
 tempfile2=$(mktemp /tmp/.survtemp.XXXXXX)
 tempscan=$(mktemp /tmp/.survscan.XXXXXX)
 
-#######################################
+LoadSettings()
+{
+################ CODE DIRECTLY FROM network-wlan.sh (r2620) ###########
+
+# Parse Settings, this function is called when doing a config_load
+config_cb() {
+config_get TYPE "$CONFIG_SECTION" TYPE
+case "$TYPE" in
+        wifi-device)
+                append DEVICES "$CONFIG_SECTION"
+        ;;
+        wifi-iface)
+                append vface "$CONFIG_SECTION" "$N"
+        ;;
+        interface)
+	        append network_devices "$CONFIG_SECTION"
+        ;;
+esac
+}
+uci_load network
+NETWORK_DEVICES="none $network_devices"
+uci_load wireless
+
+#FIXME: uci_load bug
+#uci_load will pass the same config twice when there is a section to be added by using uci_add before a uci_commit happens
+#we will use uniq so we don't try to parse the same config section twice.
+vface=$(echo "$vface" |uniq)
+
+vcfg_number=$(echo "$DEVICES $N $vface" |wc -l)
+let "vcfg_number+=1"
+#####################################################################
+}
+LoadSettings
 
 header "Status" "Site Survey" "<img src=/images/wscan.jpg align=middle alt />&nbsp;@TR<<Wireless survey>>"
 
+if ! empty "$FORM_install_nas"; then
+
+	echo "Installing NAS package ...<pre>"
+	install_package "nas"
+	echo "</pre>"
+	echo "<META http-equiv="refresh" content='5;URL=$SCRIPT_NAME'>"
+exit
+fi
 ######## Join WIFI ########
 
 if [ "$FORM_joinwifi" != "" ]; then
 
-if is_kamikaze; then
+	for vcfg in $vface; do
+	let "counter+=1"
+	done
 
-	. "/lib/config/uci.sh"
+	if [ "$FORM_wepkey" != "" ] ; then wkey=$FORM_wepkey; elif [ "$FORM_pskkey" != "" ] ; then wkey=$FORM_pskkey; elif [ "$FORM_psk2key" != "" ] ; then wkey=$FORM_psk2key; elif [ "$FORM_wpakey" != "" ] ; then wkey=$FORM_wpakey; elif [ "$FORM_wpa2key" != "" ] ; then wkey=$FORM_wpa2key; fi
+	if [ "$FORM_wpaip" != "" ] ; then wip=$FORM_wpaip; elif [ "$FORM_wpa2ip" != "" ] ; then wip=$FORM_wpa2ip; fi
+	if [ "$FORM_wpaport" != "" ] ; then wprt=$FORM_wpaport; elif [ "$FORM_wpa2port" != "" ] ; then wprt=$FORM_wpa2port; fi
 
-	config_cb() {
-	config_get TYPE "$CONFIG_SECTION" TYPE
-case "$TYPE" in
-	wifi-iface)
-	config_get device "$CONFIG_SECTION" device
-	config_get vifs "$device" vifs
-	append vface "$CONFIG_SECTION" "$N"
-	;;
-esac
-}
 
-config_load wireless
+if [ "$FORM_wlmode" = "repeater" ]; then
+	if [ $counter = "1" ] ; then
+	##################################
+	# Add Virtual Interface
+	uci_add "wireless" "wifi-iface" ""
+	fi
+
+	LoadSettings
 
 	for vcfg in $vface; do
 		config_get FORM_device $vcfg device
 
-		if [ "$FORM_device" = "$device" ]; then
-			uci_set "wireless" "$vcfg" "network" "lan"
+		if [ "$vcfg" = "cfg2" ]; then
 			uci_set "wireless" "$vcfg" "mode" "sta"
 			uci_set "wireless" "$vcfg" "ssid" "$FORM_wifi"
-				if [ "$FORM_wepkey" != "" ]; then
+			uci_set "wireless" "$vcfg" "network" "lan"
+				if [ "$wkey" != "" ]; then
 					uci_set "wireless" "$vcfg" "encryption" "$FORM_keytype"
-					uci_set "wireless" "$vcfg" "key" "$FORM_wepkey"
+					uci_set "wireless" "$vcfg" "server" "$wip"
+					uci_set "wireless" "$vcfg" "port" "$wprt"
+					uci_set "wireless" "$vcfg" "key" "$wkey"
 				else
 					uci_set "wireless" "$vcfg" "encryption" "none"
+					uci_set "wireless" "$vcfg" "server" ""
+					uci_set "wireless" "$vcfg" "port" ""
+					uci_set "wireless" "$vcfg" "key" ""
+				fi
+		fi
+
+		if [ "$vcfg" = "cfg3" ]; then # - set second virtual adapter as AP
+			uci_set "wireless" "$vcfg" "device" "$( echo $DEVICES | awk '{ print $1  }')"
+			uci_set "wireless" "$vcfg" "mode" "ap"
+			uci_set "wireless" "$vcfg" "ssid" "$FORM_new_ssid"
+			uci_set "wireless" "$vcfg" "hidden" "0"
+			uci_set "wireless" "$vcfg" "network" "lan"
+		fi
+	done
+else
+	for vcfg in $vface; do
+		config_get FORM_device $vcfg device
+
+		if [ "$FORM_virtual_wl" = "$vcfg" ]; then # - do it for selected virtual adapter
+			uci_set "wireless" "$vcfg" "mode" "sta"
+			uci_set "wireless" "$vcfg" "ssid" "$FORM_wifi"
+			uci_set "wireless" "$vcfg" "network" "lan"
+				if [ "$wkey" != "" ]; then
+					uci_set "wireless" "$vcfg" "encryption" "$FORM_keytype"
+					uci_set "wireless" "$vcfg" "server" "$wip"
+					uci_set "wireless" "$vcfg" "port" "$wprt"
+					uci_set "wireless" "$vcfg" "key" "$wkey"
+				else
+					uci_set "wireless" "$vcfg" "encryption" "none"
+					uci_set "wireless" "$vcfg" "server" ""
+					uci_set "wireless" "$vcfg" "port" ""
 					uci_set "wireless" "$vcfg" "key" ""
 				fi
 		fi
 	done
-	uci_commit "wireless"
-
+	
 	#iwconfig wl0 mode "repeater"
 	iwconfig wl0 essid "$FORM_wifi"
+fi
 
-	cat <<EOF
-	<meta http-equiv="refresh" content="4;url=$SCRIPT_NAME">
-	<br/>
-	<b>Successfully joined "$FORM_wifi" network...<b>
-EOF
+uci_commit "wireless"
+
+	echo "<meta http-equiv=\"refresh\" content=\"4;url=$SCRIPT_NAME\"><br/><b>Successfully joined \"$FORM_wifi\" network...<b>"
 	footer
 	exit
-
-else #<- if kamikaze
-
-	nvram set wl0_mode="sta"
-	nvram set wl0_infra="1"
-	nvram set wl_ssid="$FORM_wifi"
-	nvram commit
-
-	WL_MODE=$(nvram get wl0_ifname)
-	#wifi up 2>/dev/null >/dev/null </dev/null
-	iwconfig $WL_MODE essid "$FORM_wifi"
-
-	cat <<EOF
-	<meta http-equiv="refresh" content="4;url=$SCRIPT_NAME">
-	<br/>
-	<b>Successfully joined "$FORM_wifi" network ...<b>
-EOF
-	footer
-	exit
-fi #<- end if kamikaze
-
 fi #<- end if Join WIFI
-
 
 DisplayTable()
 {
-
 cat <<EOF
-<script type="text/javascript" src="/js/window.js">
-</script>
+<script type="text/javascript" src="/js/window.js"></script>
+<script type="text/javascript" src="/js/forms.js"></script>
+
 <script type="text/javascript">
-function java1(target) {
-document.wepkeyform.wifi.value = target
+function java1(target,sec) {
+document.keyform0.network.value = sec 
+document.keyform0.wifi.value = target 
+document.keyform1.network.value = sec 
+document.keyform1.wifi.value = target 
+
+if ( sec == "enc" ) {
+document.keyform0.img1.src = "/images/wep.gif"
+document.keyform1.img1.src = "/images/wep.gif"
+}else{
+document.keyform0.img1.src = "/images/opn.gif"
+document.keyform1.img1.src = "/images/opn.gif"
+}
+}
+window.onload = function() {
+setupDependencies('keyform0','keyform1');
 }
 </script>
+EOF
 
-<div id="dwindow" style="position:absolute;background-color:#EBEBEB;cursor:hand;left:0px;top:0px;display:none;border: 1px solid black" onMousedown="initializedrag(event)" onMouseup="stopdrag()" >
-<table width="100%" border="0" ><tr bgcolor=navy><td><div align="right"><img src="/images/close.gif" onClick="closeit()" alt /></div></td>
+##### Check if NAS installed
+nas_installed="0"
+ipkg list_installed | grep -q nas
+equal "$?" "0" && nas_installed="1"
+
+##### DIV window common header
+DIVWINDOW()
+{
+cat <<EOF
+<div id="dwindow$var1" style="position:absolute;background-color:#EBEBEB;cursor:hand;left:0px;top:0px;display:none;border: 1px solid black" onMousedown="initializedrag(event)" onMouseup="stopdrag()" >
+<table width='100%' border='0' ><tr bgcolor=navy><td><div align='right'><img src="/images/close.gif" onClick="closeit()" alt /></div></td>
 </tr></table>
-<table style="height: 100%; width: 100%" border="0">
-<tr style="height: 1px"><td><br />
-<form action='$SCRIPT_NAME' method='post' name='wepkeyform'>
-<table width="100%" border="0" >
-<tr><td><img src="/images/wep.gif" alt /></td>
-<td><input type="text" name="wepkey" />&nbsp;&nbsp;
-<input type='submit' class='flatbtn' name='joinwifi' value='@TR<<Join>>' />
-</td></tr><tr style="height: 1px"><td>Key:</td>
-<td><select name="keytype">
-<option value="wep" selected>WEP</option>
-<option value="psk">PSK</option>
-<option value="psk2">PSK2</option>
-<option value="wpa">WPA</option>
-<option value="wpa2">WPA2</option>
-</select><input type="hidden" name="wifi" value="" /></td>
-</tr></table></form></td></tr></table></div>
+<table style="height: 100%; width: 100%" border='0'>
+<tr><td valign='top'>
+<form action='$SCRIPT_NAME' method='post' name='keyform$var1'>
+<input type='hidden' name='wifi' value="" />
+<input type='hidden' name='network' value="" />
+<table width='100%' border='0' >
+<tr><td width=120><img src="" name="img1" alt /></td><td></td></tr>
+<tr><td align='right'>Mode:</td>
+<td><label><select name='wlmode' STYLE='width: 150px'>
+<option value='client' selected>Client</option>
+<option value='repeater'>Repeater</option>
+</select></label></td></tr>
+EOF
 
+if ! equal "$nas_installed" "1"; then
+echo "<tr><td colspan=2><font color=red>Repeater mode requires NAS package.</font><input type='submit' name='install_nas' value='@TR<<Install NAS>>' ></td>"
+else echo "<tr><td align='right' height=1><label>SSID:<input type='hidden' class=\"DEPENDS ON wlmode BEING repeater\"></label></td>
+<td height=1><label><input type='text' name='new_ssid' class=\"DEPENDS ON wlmode BEING repeater\"></label>
+</td></tr>"
+fi
+
+echo "<tr><td align='right' height=1><label>Interface:<input type='hidden' class=\"DEPENDS ON wlmode BEING client\"></label></td><td><label><select name='virtual_wl' STYLE=\"width: 150px\">"
+counter=0
+        for vcfg in $vface; do
+       		config_get FORM_device $vcfg device
+       	echo "<option value='$vcfg'>Virtual Adapter $counter</option>"
+		let "counter+=1"
+	done
+echo "</select><input type='hidden' class=\"DEPENDS ON wlmode BEING client\"></label></td></tr>"
+}
+DIVWINDOWFOOTER="<tr><td></td><td><br/><input type='submit' class='flatbtn' name='joinwifi' value='@TR<<Join Network>>' /></td></tr></table></form></td></tr></table></div>"
+
+var1=0 ; DIVWINDOW
+echo $DIVWINDOWFOOTER
+
+var1=1 ; DIVWINDOW
+cat <<EOF
+<tr><td align="right">Key Type:</td>
+<td><select name="keytype" STYLE="width: 150px">
+<option value="wep" selected>WEP</option>
+<option value="psk">WPA (PSK)</option>
+<option value="psk2">WPA2 (PSK)</option>
+<option value="wpa">WPA (RADIUS)</option>
+<option value="wpa2">WPA2 (RADIUS)</option>
+</select><br/></td></tr>
+
+<tr><td align="right">
+<label>WEP Key:<input type="hidden" class="DEPENDS ON keytype BEING wep"></label>
+<label>WPA Key:<input type="hidden" class="DEPENDS ON keytype BEING psk"></label>
+<label>WPA2 Key:<input type="hidden" class="DEPENDS ON keytype BEING psk2"></label>
+<label>RADIUS IP:<br/>Port:<br/>Key:<input type="hidden" class="DEPENDS ON keytype BEING wpa"></label>
+<label>RADIUS IP:<br/>Port:<br/>Key:<input type="hidden" class="DEPENDS ON keytype BEING wpa2"></label></td>
+<td><label><input type="text" name="wepkey" class="DEPENDS ON keytype BEING wep"></label>
+<label><input type="text" name="pskkey" class="DEPENDS ON keytype BEING psk"></label>
+<label><input type="text" name="psk2key" class="DEPENDS ON keytype BEING psk2"></label>
+EOF
+
+	if ! equal "$nas_installed" "1"; then
+		echo "<label><font color=red>RADIUS requires NAS package.</font><input type='submit' name='install_nas' value='@TR<<Install NAS>>' class=\"DEPENDS ON keytype BEING wpa\"></label>"
+	else
+cat <<EOF
+<label><input type="text" name="wpaip" class="DEPENDS ON keytype BEING wpa"></label>
+<label><input type="text" name="wpaport" class="DEPENDS ON keytype BEING wpa"></label>
+<label><input type="text" name="wpakey" class="DEPENDS ON keytype BEING wpa"></label>
+EOF
+	fi
+
+cat <<EOF
+<label><input type="text" name="wpa2ip" class="DEPENDS ON keytype BEING wpa2"></label>
+<label><input type="text" name="wpa2port" class="DEPENDS ON keytype BEING wpa2"></label>
+<label><input type="text" name="wpa2key" class="DEPENDS ON keytype BEING wpa2"></label>
+</td></tr>
+EOF
+
+echo $DIVWINDOWFOOTER
+
+cat <<EOF
 <br/><a href='$SCRIPT_NAME'>@TR<<Re-scan>></a><br/><br/><table width="98%" border="0" cellspacing="1" bgcolor="#999999" >
 <tr class="wifiscantitle" >
 <td width='32'>@TR<<Signal>>/</td>
@@ -155,15 +283,12 @@ document.wepkeyform.wifi.value = target
 <td>@TR<<MAC>></td>
 <td width='20'>@TR<<Channel>></td>
 <td>@TR<<Rate>></td>
-<td>&nbsp;</td>
-</tr>
+<td>&nbsp;</td></tr>
 EOF
-
 }
 
 DisplayTR()
 {
-
 if [ "$color" = "1" ] ; then color="2" ; else color="1" ; fi
 
 echo "<tr bgcolor="#FFFFFF" class="wifiscanrow$color">"
@@ -194,12 +319,11 @@ echo "<td><center>$Wimg</center></td>"
 echo "<td><center>"
 
 	if  [ "$SEC" = "ESS WEP" ] || [ "$SEC" = "on" ] ; then
-		echo "<input type='submit' class='flatbtn' name='joinwifi' value='@TR<<Join>>' onClick=\"loadwindow('$SCRIPT_NAME/?wep=1&ssid=$SSID',300,100);java1('$SSID')\" />"
+		echo "<input type='submit' class='flatbtn' name='joinwifi' value='@TR<<Join>>' onClick=\"loadwindow(1,'$SCRIPT_NAME/?wep=1&ssid=$SSID',300,260,0,0);java1('$SSID','enc')\" />"
 	else
-		echo "<form action='$SCRIPT_NAME' method='post'><input type="hidden" name='wifi' value='$SSID' /><input type='submit' class='flatbtn' name='joinwifi' value='@TR<<Join>>' /></form>"
+		echo "<input type='submit' class='flatbtn' name='joinwifi' value='@TR<<Join>>' onClick=\"loadwindow(0,'$SCRIPT_NAME/?wep=1&ssid=$SSID',300,160,0,0);java1('$SSID','opn')\" />"
 	fi
 echo "</center></td></tr>"
-
 }
 
 ######################### The Scanning Part >
@@ -215,9 +339,9 @@ sed 1d < $tempfile > $tempfile2
 rm $tempfile
 mv $tempfile2 $tempfile     
 }
-
+counter=0
 for counter in $(seq 1 $MAX_TRIES); do
-	wl scan
+	wl scan 2> /dev/null
 	wl scanresults > $tempscan 2> /dev/null
 	if equal $(sed '2,$ d' $tempscan | cut -c0-4) "SSID" ; then break ; fi
 	sleep 1
@@ -305,7 +429,6 @@ IWLIST()
 found_networks=0
 counter=0
 for counter in $(seq 1 $MAX_TRIES); do
-        #echo "."
         iwlist scan > $tempfile 2> /dev/null
         grep -i "Address" < $tempfile >> /dev/null
         equal "$?" "0" && break
@@ -360,7 +483,6 @@ DisplayTable
                         esac
                         let "count+=1"
                 done
-
 ################################
 
 SSID=$(grep -i "ESSID" < "$tempfile"_"${current}" | sed -e s/'ESSID:'//g -e s/'"'//g -e s/'  '//g)
@@ -395,17 +517,11 @@ rm -f "$tempfile"
 rm -f "$tempfile2"
 
 }
-
-if is_kamikaze; then
-
 	if is_package_installed "wl" ; then #<- for Broadcom units where iwlist is broken
 		WL
 	else
 		IWLIST
 	fi
-else
-	IWLIST
-fi
 
 footer ?>
 <!--

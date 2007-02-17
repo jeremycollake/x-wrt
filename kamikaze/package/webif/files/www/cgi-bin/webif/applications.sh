@@ -45,7 +45,7 @@ ct1=0
 ct2=0
 count=0
 
-LoadingJAVA="<div id=\"dwindow\" style=\"position:absolute;background-color:#EBEBEB;cursor:hand;left:0px;top:0px;display:none;border: 1px solid black\" onMousedown=\"initializedrag(event)\" onMouseup=\"stopdrag()\" >
+LoadingJAVA="<div id=\"dwindow0\" style=\"position:absolute;background-color:#EBEBEB;cursor:hand;left:0px;top:0px;display:none;border: 1px solid black\" onMousedown=\"initializedrag(event)\" onMouseup=\"stopdrag()\" >
 <table width="100%" border="0"><tr bgcolor=navy><td><div align=\"right\"><img src=\"/images/close.gif\" onClick=\"closeit()\" alt /></div></td>
 </tr></table><table border="0">
 <tr><td><br/>Please Wait ...<br/><script language=\"Javascript\" src=\"/js/progress.js\"></script><script type='text/javascript'>
@@ -61,7 +61,7 @@ if [ $var = "applications.sh?ipkg=" ] ; then echo "alert (\"Not enough memory to
 echo "if (window.confirm(\"$txt1\")){" 
 echo "var ap='null';"
 if [ $var = "applications.sh?ipkg=" ] ; then echo "ap= prompt('Enter path to external storage. Example /mnt/mmc', ' ');" ; fi
-echo "loadwindow('$SCRIPT_NAME',355,100,0,5);"
+echo "loadwindow(0,'$SCRIPT_NAME',355,100,0,5);"
 echo "window.location=\"$var&package=install&prompt=\" + ap"
 echo "} }" 
 echo "// -->
