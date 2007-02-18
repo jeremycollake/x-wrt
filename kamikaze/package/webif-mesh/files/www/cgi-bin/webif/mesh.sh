@@ -4,14 +4,15 @@
 . /usr/lib/webif/webif.sh
 uci_load "mesh"
 
-header "Mesh" "Intro" "@TR<<Mesh Start>>" ' onload="modechange()" ' "$SCRIPT_NAME"
+header "Mesh" "Start" "@TR<<Mesh Start>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 echo "<div class=warning>Mesh pages are very alpha state: nothing is working and they can brick your router, explore at your own risk!<br></div>"
-echo "<p>Please choose one of the following mesh technologies.</p><br>"
+echo "<p>Mesh networks are a revolutionary networking architecture that allows direct connection between users (remember that once mesh mode is enabled some networking options are forced).</p>"
 
 if equal "$mesh_installed" "1" ; then
 	echo "TODO: write the basic options form"
 else
+	echo "<p>Please choose one of the following mesh technologies.</p><br>"
 	install_olsr_button="field|@TR<<olsr>>
 submit|install_olsr| @TR<<Install>> |"
 	install_batman_button="field|@TR<<batman>>
@@ -38,5 +39,5 @@ EOF
 
 footer ?>
 <!--
-##WEBIF:name:Mesh:100:Intro
+##WEBIF:name:Mesh:100:Start
 -->

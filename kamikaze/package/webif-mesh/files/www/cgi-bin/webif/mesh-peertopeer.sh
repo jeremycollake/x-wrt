@@ -4,9 +4,6 @@
 load_settings mn_p2p
 
 if empty "$FORM_submit"; then
-#        FORM_rxant=${wl0_antdiv:-$(nvram get wl0_antdiv)}
-        FORM_txant=$mn_txant
-        FORM_txpwr=$mn_txpwr
 #        FORM_gmode=${wl0_gmode:-$(nvram get wl0_gmode)}
         FORM_ip4broad=$mn_ip4broad
         FORM_ign=$mn_ign
@@ -21,7 +18,6 @@ else
         SAVED=1
         validate <<EOF
 int|FORM_will|Willingness|required min=0 max=8|$FORM_will
-int|FORM_txpwr|TX Power|min=10 max=100|$FORM_txpwr
 mac|FORM_client1|Client 1||$FORM_client1
 mac|FORM_client2|Client 2||$FORM_client2
 mac|FORM_client3|Client 3||$FORM_client3
@@ -29,9 +25,6 @@ mac|FORM_client4|Client 4||$FORM_client4
 mac|FORM_client5|Client 5||$FORM_client5
 EOF
         equal "$?" 0 && {
-  		save_setting mn_p2p wl0_antdiv "$FORM_rxant"
-  		save_setting mn_p2p mn_txant "$FORM_txant"
-  		save_setting mn_p2p mn_txpwr "$FORM_txpwr"
   		save_setting mn_p2p wl0_gmode "$FORM_gmode"
                 save_setting mn_p2p mn_ip4broad "$FORM_ip4broad"
                 save_setting mn_p2p mn_ign "$FORM_ign"
@@ -49,32 +42,14 @@ EOF
 	}
 fi 
  
-header "Mesh" "P2P" "P2P Network" '' "$SCRIPT_NAME"
+header "Mesh" "Public" "Public network" '' "$SCRIPT_NAME"
 
 if [ ".$(uci get mesh.general.enable)" = ".1" ]; then
 
-echo "<P>P2P is the wireless side of the network. (TODO: spread wireless clients macs, to obtain the desired \"roaming effect\")</P><BR>"
+echo "<P>The \"public network\" is the wireless side of the network.</P><BR>"
 
 display_form <<EOF
 start_form|Radio Tuning
-field|RX Antenna
-radio|rxant|$FORM_rxant|-1|Auto
-radio|rxant|$FORM_rxant|0|Main
-radio|rxant|$FORM_rxant|1|Aux
-radio|rxant|$FORM_rxant|3|Diversity
-helpitem|RX Antenna
-helptext|Select receiving antenna. Auto=automatic selection, Main="near power jack", Aux="near reset button", Diversity=both. Starting with WRT54G v2.0 and WRT54GS V1.1 these are reversed Main="near reset button" and Aux="near power jack".
-field|TX Antenna
-radio|txant|$FORM_txant|-1|Auto
-radio|txant|$FORM_txant|0|Main
-radio|txant|$FORM_txant|1|Aux
-radio|txant|$FORM_txant|3|Diversity
-helpitem|TX Antenna
-helptext|Select transmitting antenna. Options are the same of RX Antenna.
-field|TX Power
-text|txpwr|$FORM_txpwr
-helpitem|TX Power
-helptext|Select transmitting power (10-100 mWatt).
 field|802.11 mode
 select|gmode|$FORM_gmode
 option|0|B-only
@@ -96,20 +71,25 @@ option|5
 option|6
 option|7
 helpitem|Willingness
-helptext|Changes the willingness to a fixed value (0-7). Leave the input field empty to use a dynamic willingness value based on battery/power status.
+helptext|Helptext olsr_willingness#Changes the willingness to a fixed value (0-7). Leave the input field empty to use a dynamic willingness value based on battery/power status.
 field|Peers Quality Multiplier
 text|lqmult|$FORM_lqmult
 helpitem|Peers Quality Multiplier
-helptext|This setting will lower the LQ value of a specific neighbour station. If two neighbours with approximately the same link quality are present, this setting prevents frequent route changes. Example: '10.1.2.3:0.5' will inhibit a route through this station as long as other neighbours with better LQ value are present. Enter an IP address followed by a colon and a multiplicator value between 0.1 and 1.0. Separate multiple entries with semicolon.
+helptext|Helptext olsr_lqmult#This setting will lower the LQ value of a specific neighbour station. If two neighbours with approximately the same link quality are present, this setting prevents frequent route changes. Example: '10.1.2.3:0.5' will inhibit a route through this station as long as other neighbours with better LQ value are present. Enter an IP address followed by a colon and a multiplicator value between 0.1 and 1.0. Separate multiple entries with semicolon.
 field|Peers Filter
 text|ign|$FORM_ign
 helpitem|Peers Filter
-helptext|In case a specific OLSR node is better reached indirect, the OLSR broadcasts from this node can be ignored. Enter the IP address to filter here. Separate multiple IP addresses with semicolon.
+helptext|Helptext olsr_ign#In case a specific OLSR node is better reached indirect, the OLSR broadcasts from this node can be ignored. Enter the IP address to filter here. Separate multiple IP addresses with semicolon.
 field|P2P Broadcast
 text|ip4broad|$FORM_ip4broad
 helpitem|P2P Broadcast
-helptext|Changes the IP broadcast address for OLSR announcements. Leave the input field empty to use the broadcast address of the device.
+helptext|Helptext olsr_ip4broad#Change the IP broadcast address for OLSR announcements. It defaults to the device broadcast addresss.
+field|Maximum troughput
+text|maxtp|$FORM_maxtp
+helpitem|Maximum troughput
+helptext|Helptext mesh_maxtp#Maximum troughput depends on the amount of nodes in your area, the distance of your peers and meteo phenomenons. If you are experiencing choppy telephone calls or high pings try lowering this value.
 end_form
+
 start_form|Wireless clients
 helpitem|Wireless clients
 helptext|In this form you can define clients allowed to connect wirelessy, without password, to the entire P2P network. Please note that wireless connection is for emergency purposes only and can use a limited set of low speed services only.
@@ -129,10 +109,10 @@ end_form
 EOF
 
 else
-	echo "<P>In order to use this page you must enable mesh mode; go to Mesh --> Intro page first.</P>"
+	echo "<P>In order to use this page you must enable mesh mode; go to Mesh --> Start page first.</P>"
 fi
 
 footer ?>
 <!-- 
-##WEBIF:name:Mesh:700:P2P
+##WEBIF:name:Mesh:300:Public
 -->

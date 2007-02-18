@@ -2,9 +2,11 @@
 <? 
 . /usr/lib/webif/webif.sh
 
-header "Mesh" "Topology" "Network Topology"
+header "Mesh" "Topology" "Mesh Topology"
 
 if [ ".$(uci get mesh.general.enable)" = ".1" ]; then
+
+echo "<p>This page shows you the \"shape\" of the wireless network you are part of.</p><br>"
 
 echo "<DIV><TABLE><TR><TD>"
 wget -O - http://127.0.0.1:8080/all|awk '
@@ -17,7 +19,7 @@ print
 echo "</TD></TR></TABLE></DIV>"
 
 else
-	echo "<P>In order to use this page you must enable mesh mode; go to Mesh --> Intro page first.</P>"
+	echo "<P>In order to use this page you must enable mesh mode; go to Mesh --> Start page first.</P>"
 fi
 
 footer ?>

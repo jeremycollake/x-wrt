@@ -2,9 +2,11 @@
 <? 
 . /usr/lib/webif/webif.sh
 
-header "Mesh" "Monitor" "Wireless monitor"
+header "Mesh" "Remove2" "was \"Wireless monitor\""
 
 if [ ".$(uci get mesh.general.enable)" = ".1" ]; then
+
+echo "<div class=warning>This page is redundant but contains features that must be added to the pages in the Status section.</div>"
 
 WLDEV=$(nvram get wifi_ifname)
 
@@ -86,5 +88,5 @@ fi
 
 footer ?>
 <!--
-##WEBIF:name:Mesh:300:Monitor
+##WEBIF:name:Mesh:900:Remove2
 -->
