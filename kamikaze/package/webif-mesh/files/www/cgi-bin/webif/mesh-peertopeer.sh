@@ -2,13 +2,12 @@
 <?
 . /usr/lib/webif/webif.sh
 load_settings mn_p2p
-eval $(/usr/bin/megaparam)
 
 if empty "$FORM_submit"; then
-        FORM_rxant=${wl0_antdiv:-$(nvram get wl0_antdiv)}
+#        FORM_rxant=${wl0_antdiv:-$(nvram get wl0_antdiv)}
         FORM_txant=$mn_txant
         FORM_txpwr=$mn_txpwr
-        FORM_gmode=${wl0_gmode:-$(nvram get wl0_gmode)}
+#        FORM_gmode=${wl0_gmode:-$(nvram get wl0_gmode)}
         FORM_ip4broad=$mn_ip4broad
         FORM_ign=$mn_ign
         FORM_will=$mn_will
@@ -52,7 +51,7 @@ fi
  
 header "Mesh" "P2P" "P2P Network" '' "$SCRIPT_NAME"
 
-if [ ".$mn_enable" = ".1" ]; then
+if [ ".$(uci get mesh.general.enable)" = ".1" ]; then
 
 echo "<P>P2P is the wireless side of the network. (TODO: spread wireless clients macs, to obtain the desired \"roaming effect\")</P><BR>"
 
@@ -130,11 +129,10 @@ end_form
 EOF
 
 else
-	echo "<P>You must enable Meganetwork.org; go to MegaNetwork-->Intro page first.</P>"
+	echo "<P>In order to use this page you must enable mesh mode; go to Mesh --> Intro page first.</P>"
 fi
 
 footer ?>
 <!-- 
-##WEBIF:name:Mesh:3:P2P
+##WEBIF:name:Mesh:700:P2P
 -->
-

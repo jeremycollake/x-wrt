@@ -15,6 +15,8 @@ return false;
 }
 //--></SCRIPT>
 
+<div class=warning>This page has status infos that need to be moved to the proper locations.</div>
+
 <div><table border=1 cellpadding=0 cellspacing=0 width=\"90%\">
 <tr><td align=center><b>uptime</b></td><td colspan=2><pre><? uptime ?></pre></td></tr>
 <tr><td align=center><b>free</b></td><td colspan=2><pre><? free ?></pre></td></tr>
@@ -87,5 +89,5 @@ END {
 
 <? footer ?>
 <!--
-##WEBIF:name:Mesh:10:Overview
+##WEBIF:name:Mesh:200:Overview
 -->

@@ -17,5 +17,5 @@ fi
 
  footer ?>
 <!--
-##WEBIF:name:Mesh:15:Traffic
+##WEBIF:name:Mesh:500:Traffic
 -->

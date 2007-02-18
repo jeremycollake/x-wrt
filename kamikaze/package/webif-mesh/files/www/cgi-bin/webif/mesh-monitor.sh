@@ -4,7 +4,7 @@
 
 header "Mesh" "Monitor" "Wireless monitor"
 
-if [ ".$mn_enable" = ".1" ]; then
+if [ ".$(uci get mesh.general.enable)" = ".1" ]; then
 
 WLDEV=$(nvram get wifi_ifname)
 
@@ -81,10 +81,10 @@ END {
 }'
 
 else
-	echo "<P>You must enable Meganetwork.org; go to MegaNetwork-->Intro page first.</P>"
+	echo "<P>In order to use this page you must enable mesh mode; go to Mesh --> Intro page first.</P>"
 fi
 
 footer ?>
 <!--
-##WEBIF:name:Mesh:13:Monitor
+##WEBIF:name:Mesh:300:Monitor
 -->

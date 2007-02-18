@@ -2,7 +2,6 @@
 <? 
 . /usr/lib/webif/webif.sh
 load_settings mn_pan
-eval $(/usr/bin/megaparam)
 
 if empty "$FORM_submit"; then 
 	FORM_static_routes=${static_route:-$(route -n | awk ' /\./ {ORS=" ";print $1":"$3":"$2":"$5":"$8} END {printf"\n"}')}
@@ -22,7 +21,7 @@ fi
 
 header "Mesh" "PAN" "Private Area Network" '' "$SCRIPT_NAME"
 
-if [ ".$mn_enable" = ".1" ]; then
+if [ ".$(uci get mesh.general.enable)" = ".1" ]; then
 
 echo "<P>PAN is the cable side of the network. All hosts on this side are protected both from the internet and the wireless side.<BR>
 <BR>Addresses in use:<BR>
@@ -52,10 +51,10 @@ end_form
 EOF
 
 else
-	echo "<P>You must enable Meganetwork.org; go to MegaNetwork-->Intro page first.</P>"
+	echo "<P>In order to use this page you must enable mesh mode; go to Mesh --> Intro page first.</P>"
 fi
 
 footer ?>
 <!--
-##WEBIF:name:Mesh:2:PAN
+##WEBIF:name:Mesh:600:PAN
 -->

@@ -4,7 +4,7 @@
 
 header "Mesh" "Topology" "Network Topology"
 
-if [ ".$mn_enable" = ".1" ]; then
+if [ ".$(uci get mesh.general.enable)" = ".1" ]; then
 
 echo "<DIV><TABLE><TR><TD>"
 wget -O - http://127.0.0.1:8080/all|awk '
@@ -17,10 +17,10 @@ print
 echo "</TD></TR></TABLE></DIV>"
 
 else
-	echo "<P>You must enable Meganetwork.org; go to MegaNetwork-->Intro page first.</P>"
+	echo "<P>In order to use this page you must enable mesh mode; go to Mesh --> Intro page first.</P>"
 fi
 
 footer ?>
 <!--
-##WEBIF:name:Mesh:14:Topology
+##WEBIF:name:Mesh:400:Topology
 -->
