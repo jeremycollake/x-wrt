@@ -71,10 +71,11 @@ Router Connections => Conexiones del router
 
 
 # 'DHCP' page
-DHCP leases => Pr&eacute;stamos DHCP
-IP Address => Direcci&oacute;n IP
-Name => Nombre
-Expires in => Expira en
+status_leases_dhcp_leases => Pr&eacute;stamos DHCP
+status_leases_IP => Direcci&oacute;n IP
+status_leases_MAC => Direcci&oacute;n MAC
+status_leases_Name => Nombre
+status_leases_Expires => Expira en
 
 
 # 'Wireless Status' page

@@ -71,10 +71,11 @@ Router Connections => Routerens forbindelser
 
 
 # 'DHCP' page
-DHCP leases => DHCP leasinger
-IP Address => IP adresse
-Name => Navn
-Expires in => Utl&oslash;pstid
+status_leases_dhcp_leases => DHCP leasinger
+status_leases_IP => IP adresse
+status_leases_MAC => MAC adresse
+status_leases_Name => Navn
+status_leases_Expires => Utl&oslash;pstid
 
 
 # 'Wireless Status' page

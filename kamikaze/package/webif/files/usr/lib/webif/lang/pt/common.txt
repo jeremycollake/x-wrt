@@ -144,13 +144,15 @@ Router Connections => Ligações do router
 
 # 'DHCP' page
 
-DHCP leases => Préstimos de DHCP
+status_leases_dhcp_leases => Préstimos de DHCP
 
-IP Address => Endereço IP
+status_leases_IP => Endereço IP
 
-Name => Nome
+status_leases_MAC => Endereço MAC
 
-Expires in => Expira em
+status_leases_Name => Nome
+
+status_leases_Expires => Expira em
 
  
 

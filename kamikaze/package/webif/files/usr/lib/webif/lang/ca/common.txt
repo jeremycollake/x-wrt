@@ -71,10 +71,11 @@ Router Connections => Connexions del router
 
 
 # 'DHCP' page
-DHCP leases => Préstecs DHCP
-IP Address => Adreça IP
-Name => Nom
-Expires in => Caduca d'ara a
+status_leases_dhcp_leases => Préstecs DHCP
+status_leases_IP => Adreça IP
+status_leases_MAC => Adreça MAC
+status_leases_Name => Nom
+status_leases_Expires => Caduca d'ara a
 
 
 # 'Wireless Status' page

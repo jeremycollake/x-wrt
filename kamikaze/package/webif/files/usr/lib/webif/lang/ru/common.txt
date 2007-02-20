@@ -70,10 +70,11 @@ Router Connections => &#x41F;&#x440;&#x43E;&#x433;&#x440;&#x430;&#x43C;&#x43C;&#
 
 
 # 'DHCP' page
-DHCP leases => DHCP &#x43A;&#x43B;&#x438;&#x435;&#x43D;&#x442;&#x44B;
-IP Address => IP &#x430;&#x434;&#x440;&#x435;&#x441;
-Name => &#x418;&#x43C;&#x44F;
-Expires in => &#x418;&#x441;&#x442;&#x435;&#x43A;&#x430;&#x435;&#x442;
+status_leases_dhcp_leases => DHCP &#x43A;&#x43B;&#x438;&#x435;&#x43D;&#x442;&#x44B;
+status_leases_IP => IP &#x430;&#x434;&#x440;&#x435;&#x441;
+status_leases_MAC => MAC-&#x430;&#x434;&#x440;&#x435;&#x441;
+status_leases_Name => &#x418;&#x43C;&#x44F;
+status_leases_Expires => &#x418;&#x441;&#x442;&#x435;&#x43A;&#x430;&#x435;&#x442;
 
 
 # 'Wireless Status' page

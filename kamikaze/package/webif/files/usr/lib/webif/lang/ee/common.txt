@@ -71,10 +71,11 @@ Router Connections => Marsruuteri&uuml;hendused
  
  
 # DHCP page 
-DHCP leases => DHCP antud aadressid 
-IP Address => IP-aadress
-Name => Nimi
-Expires in => Aegub
+status_leases_dhcp_leases => DHCP antud aadressid 
+status_leases_IP => IP-aadress
+status_leases_MAC => MAC-aadress 
+status_leases_Name => Nimi
+status_leases_Expires => Aegub
  
  
 # Wireless Status page 

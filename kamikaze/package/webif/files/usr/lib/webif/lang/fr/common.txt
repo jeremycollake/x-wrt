@@ -77,10 +77,11 @@ Router Connections => Connexions au routeur
 
 
 # 'DHCP' page
-DHCP leases => Baux DHCP
-IP Address => Adresse IP
-Name => Nom
-Expires in => Expire dans
+status_leases_dhcp_leases => Baux DHCP
+status_leases_IP => Adresse IP
+status_leases_MAC => Adresse MAC
+status_leases_Name => Nom
+status_leases_Expires => Expire dans
 
 
 # 'Wireless Status' page
