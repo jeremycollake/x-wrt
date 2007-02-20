@@ -27,7 +27,7 @@
 #
 #
 
-header "System" "Packages" "@TR<<Packages>>" '' "$SCRIPT_NAME"
+header "System" "Packages" "@TR<<system_ipkg_Packages#Packages>>" '' "$SCRIPT_NAME"
 
 cat <<EOF
 <script type="text/javascript">
@@ -36,7 +36,7 @@ function confirmT(action,pkg) {
 if ( pkg == "uclibc" || pkg == "base-files" || pkg == "base-files-brcm-2.4" || pkg == "bridge" || pkg == "busybox" || pkg == "dnsmasq" || pkg == "dropbear" || pkg == "haserl" || pkg == "hotplug" || pkg == "iptables" || pkg == "kernel" || pkg == "mtd" || pkg == "wireless-tools" || pkg == "zlib") {
 alert ("              <<< WARNING >>> \n\nPackage \"" + pkg + "\" should not be removed!\n\n>>> Removing may brick your router. <<<\n\nSystem requires \"" + pkg + "\" package to run.\n\n") ;
 }
-if (window.confirm("Please Confirm! \n\nDo you want to " + action + " \"" + pkg + "\" package?")){
+if (window.confirm("Please Confirm!\n\nDo you want to " + action + " \"" + pkg + "\" package?")){
 window.location="ipkg.sh?action=" + action + "&pkg=" + pkg
 } }
 // -->
@@ -57,7 +57,7 @@ repo_update_needed=0
 }
 
 ! empty "$FORM_install_repo" && {
-	validate "string|FORM_repourl|@TR<<Repository URL>>|min=4 max=4096 required|$FORM_repourl"
+	validate "string|FORM_repourl|@TR<<system_ipkg_repositoryurl#Repository URL>>|min=4 max=4096 required|$FORM_repourl"
 	if equal "$?" "0"; then
 		repo_update_needed=1
 		# since firstboot doesn't make a copy of ipkg.conf, we must do it
@@ -89,28 +89,32 @@ equal "$repo_update_needed" "1" && {
 	echo "</pre>"
 }
 
-repo_list=$(awk '/src/ { print "string|<tr class=\"repositories\"><td><a href=./system-ipkg.sh?remove_repo_name=" $2 "&amp;remove_repo_url=" $3 ">remove</a>&nbsp;&nbsp;" $2 "</td><td colspan=\"2\">" $3 "</td></tr>"}' /etc/ipkg.conf)
+repo_list=$(awk '/src/ { print "<tr class=\"repositories\"><td><a href=\"./system-ipkg.sh?remove_repo_name=" $2 "&amp;remove_repo_url=" $3 "\">@TR<<system_ipkg_removerepo#remove>></a>&nbsp;&nbsp;" $2 "</td><td colspan=\"2\">" $3 "</td></tr>"}' /etc/ipkg.conf)
 
 display_form <<EOF
-start_form|@TR<<Add Repository>>
-field|@TR<<Repo. Name>>
+start_form|@TR<<system_ipkg_addrepo#Add Repository>>
+field|@TR<<system_ipkg_reponame#Repo. Name>>
 text|reponame|$FORM_reponame|
-field|@TR<<Repo. URL>>
+field|@TR<<system_ipkg_repourl#Repo. URL>>
 text|repourl|$FORM_repourl|
 field|&nbsp;
-submit|install_repo| Add Repository
+submit|install_repo|@TR<<system_ipkg_addrepo#Add Repository>>|
+EOF
+?>
+</td></tr><tr><td colspan="2" class="repositories"><h4>@TR<<system_ipkg_currentrepos#Current Repositories>>:</h4></td></tr>
+<?
+echo "${repo_list}"
+display_form <<EOF
 helpitem|Add Repository
 helptext|HelpText Add Repository#A repository is a server that contains a list of packages that can be installed on your OpenWrt device. Adding a new one allows you to list packages here that are not shown by default.
-string|<tr><td colspan="2" class="repositories"><h4>@TR<<Current Repositories>>:</h4></td></tr>
-$repo_list
 helpitem|Backports Tip
 helptext|HelpText Backports Tip#For a much larger assortment of packages, see if there is a backports repository available for your firmware.
 end_form
-start_form|@TR<<Install Package From URL>>
-field|@TR<<URL of Package>>
+start_form|@TR<<system_ipkg_installfromurl#Install Package From URL>>
+field|@TR<<system_ipkg_packageurl#URL of Package>>
 text|pkgurl|$FORM_pkgurl
 field|
-submit|install_url|Install Package From URL |
+submit|install_url|@TR<<system_ipkg_installfromurl#Install Package From URL>>|
 helpitem|Install Package
 helptext|HelpText Install Package#Normally one installs a package by clicking on the install link in the list of packages below. However, you can install a package not listed in the known repositories here.
 end_form
@@ -120,10 +124,10 @@ EOF
 ##################################################################
 
 display_form <<EOF
-start_form|@TR<<Packages Available>>|||nohelp
+start_form|@TR<<system_ipkg_packagesavailable#Packages Available>>|||nohelp
 EOF
 ?>
-<table text-align="left" width="90%"><a href="ipkg.sh?action=update">@TR<<Update package lists>></a></table>
+<tr><td><a href="ipkg.sh?action=update">@TR<<system_ipkg_updatelists#Update package lists>></a></td></tr>
 <?
 display_form <<EOF
 end_form
@@ -131,23 +135,23 @@ EOF
 ?>
 
 <?
-echo "<pre>"
 if [ "$FORM_action" = "update" ]; then
-	echo "@TR<<Please wait>> ...<br />"
+	echo "<pre>@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
 	ipkg update
+	echo "</pre>"
 elif [ "$FORM_action" = "install" ]; then
-	echo "@TR<<Please wait>> ...<br />"
+	echo "<pre>@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
 	yes n | ipkg install `echo "$FORM_pkg" | sed -e 's, ,+,g'`
+	echo "</pre>"
 elif [ "$FORM_action" = "remove" ]; then
-	echo "@TR<<Please wait>> ...<br />"
+	echo "<pre>@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
 	ipkg remove `echo "$FORM_pkg" | sed -e 's, ,+,g'`
+	echo "</pre>"
 fi
-echo "</pre>"
 ?>
-</pre>
-	<h3>@TR<<Installed Packages>></h3>
+	<h3>@TR<<system_ipkg_installedpackages#Installed Packages>></h3>
 	<br />
-	<table><table class=\"packages\"><tr class=\"packages\"><th width="150">Action</th><th width="200">Package</th><th width=150>Version</th><th>Description</th></tr>
+	<table class="packages"><tr class="packages"><th width="150">@TR<<system_ipkg_th_action#Action>></th><th width="200">@TR<<system_ipkg_th_package#Package>></th><th width=150>@TR<<system_ipkg_th_version#Version>></th><th>@TR<<system_ipkg_th_desc#Description>></th></tr>
 <?
 ipkg list_installed | awk -F ' ' '
 $2 !~ /terminated/ {
@@ -155,15 +159,15 @@ $2 !~ /terminated/ {
 	gsub(/\+/,"%2B",link)
 	version=$3
 	desc=$5 " " $6 " " $7 " " $8 " " $9 " " $10 " " $11 " " $12 " " $13 " " $14 " " $15 " " $16 " " $17 " " $18 " " $19 " " $20 " " $21 " " $22 " " $23 " " $24 " " $25 " " $26 " " $27
-	print "<tr class=\"packages\"><td><a href=javascript:confirmT(\"remove\",\"" link "\")>@TR<<Uninstall>></a></td><td>" $1 "</td><td>" version "</td><td>" desc "</td></tr>"
+	print "<tr class=\"packages\"><td><a href=\"javascript:confirmT('\''remove'\'','\''" link "'\'')\">@TR<<system_ipkg_Uninstall#Uninstall>></a></td><td>" $1 "</td><td>" version "</td><td>" desc "</td></tr>"
 }
 '
 ?>
 	</table>
 	<br />
-	<h3>@TR<<Available packages>></h3>
+	<h3>@TR<<system_ipkg_availablepackages#Available packages>></h3>
 	<br />
-	<table><tr class=\"packages\"><th width="150">Action</th><th width="250">Package</th><th width=150>Version</th><th>Description</th></tr>
+	<table class="packages"><tr class="packages"><th width="150">@TR<<system_ipkg_th_action#Action>></th><th width="250">@TR<<system_ipkg_th_package#Package>></th><th width=150>@TR<<system_ipkg_th_version#Version>></th><th>@TR<<system_ipkg_th_desc#Description>></th></tr>
 <?
 egrep 'Package:|Description:|Version:' /usr/lib/ipkg/status /usr/lib/ipkg/lists/* 2>&- | sed -e 's, ,,' -e 's,/usr/lib/ipkg/lists/,,' | awk -F: '
 $1 ~ /status/ {
@@ -177,7 +181,7 @@ $1 ~ /status/ {
 	split(verline,ver,":")
 	getline descline
 	split(descline,desc,":")
-	print "<tr class=\"packages\"><td><a href=javascript:confirmT(\"install\",\"" link "\")>@TR<<Install>></td><td>" $3 "</td><td>" ver[3] "</td><td>" desc[3] "</td></tr>"
+	print "<tr class=\"packages\"><td><a href=\"javascript:confirmT('\''install'\'','\''" link "'\'')\">@TR<<system_ipkg_Install#Install>></a></td><td>" $3 "</td><td>" ver[3] "</td><td>" desc[3] "</td></tr>"
 	current=$1
 }
 '
