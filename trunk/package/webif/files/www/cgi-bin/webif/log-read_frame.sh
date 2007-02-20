@@ -5,7 +5,7 @@
 colorize_script=""
 
 mini_header
-echo -n "<body><div class=\"logread\"><pre>
+echo -n "<body><div class=\"logread\"><pre>"
 
 prefix=$(nvram get log_prefix)
 LOG_TYPE=$(nvram get log_type)
