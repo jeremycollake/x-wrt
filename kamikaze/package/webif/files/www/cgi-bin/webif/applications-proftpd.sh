@@ -4,65 +4,23 @@
 # About page
 #
 # Author(s) [in order of work date]:
-#        Dmytro Dykhman <dmytro@iroot.ca.
+#        Dmytro Dykhman <dmytro@iroot.ca>
 #
 
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
+. /www/cgi-bin/webif/applications-shell.sh
 
-cat <<EOF
-HTTP/1.0 200 OK
-Content-type: text/html
-
-EOF
-
-ipkg_LIB()
-{
-
-uci_load "app.ipkg"
-loc="$CONFIG_int_location"
-
-echo "#!/bin/sh" > /tmp/.D43S.tmp
-echo "START=98" > /tmp/.D43S.tmp
-echo "find $loc/usr/lib/ |grep \".so\" |cut -d / -f 5 | awk '{print \" if [ ! -f /usr/lib/\"\$1\" ] \\n then \\n ln -s $loc/usr/lib/\"\$1\" /usr/lib/\"\$1\" \\n fi\"}' > /tmp/lib1.tmp" >> /tmp/.D43S.tmp
-echo "find $loc/opt/lib/ |grep \".so\" |cut -d / -f 5 | awk '{print \" if [ ! -f /usr/lib/\"\$1\" ] \\n then \\n ln -s $loc/opt/lib/\"\$1\" /usr/lib/\"\$1\" \\n fi\"}' > /tmp/lib2.tmp" >> /tmp/.D43S.tmp
-echo "sh /tmp/lib1.tmp ; rm /tmp/lib1.tmp" >> /tmp/.D43S.tmp
-echo "sh /tmp/lib2.tmp ; rm /tmp/lib2.tmp" >> /tmp/.D43S.tmp
-
-# EXPERIMENTAL!!!
-#cp /tmp/.D43S.tmp /etc/init.d/mountlibs
-#chmod 755 /etc/init.d/mountlibs
-#ln -s /etc/init.d/mountlibs /etc/rc.d/S98mountlibs
-}
-
-url1="http://ftp.osuosl.org/pub/nslu2/feeds/unslung/wl500g/"
-#url1="http://192.168.0.8/"
-
-loc=""
+echo "$HEADER"
 
 if ! empty "$FORM_package"; then
-if ! empty "$FORM_ipkg"; then loc="-d "$FORM_ipkg ; fi
 
-echo "<html><header></header><body>Installing FTP Server packages ...<br><br><pre>"
-echo "Installing openssl package ..."
+	App_package_install "FTP Server" "http://ftp.osuosl.org/pub/nslu2/feeds/unslung/wl500g/" "openssl_0.9.7l-3_mipsel.ipk" "proftpd_1.2.10-5_mipsel.ipk"
 
-ipkg $loc install $url1"openssl_0.9.7l-3_mipsel.ipk" -force-overwrite -force-defaults 
+	#ipkg $loc install $url1"proftpd_1.3.0a-1_mipsel.ipk" -force-overwrite -force-defaults
 
-echo "Installing proftpd package ..."
-
-ipkg $loc install $url1"proftpd_1.2.10-5_mipsel.ipk" -force-overwrite -force-defaults
-#ipkg $loc install $url1"proftpd_1.3.0a-1_mipsel.ipk" -force-overwrite -force-defaults
-
-echo "</pre></body></html>"
-
-#### Make sure installation completed sucessfully
-if  is_package_installed "openssl"  &&  is_package_installed "proftpd"  ; then 
+	if  is_package_installed "openssl"  &&  is_package_installed "proftpd"  ; then 
 	
-	#### Load libraries that we just installed
-
-	ipkg_LIB
-	sh /tmp/.D43S.tmp ; rm /tmp/.D43S.tmp
-
 	#### Small patches to get it working with webif^2
 	#cp $loc/opt/etc/proftpd.conf /etc/proftpd.conf
 
@@ -103,7 +61,7 @@ Group				root
 
 AllowOverwrite		on" > /etc/proftpd.conf
 
-#if equal $(grep "nobody:" < /etc/group) "" ; then echo "nobody:x:65535:" >> /etc/group ; fi
+	#if equal $(grep "nobody:" < /etc/group) "" ; then echo "nobody:x:65535:" >> /etc/group ; fi
 	mkdir /opt
 	mkdir /opt/var
 	mkdir /opt/var/proftpd
@@ -117,6 +75,9 @@ AllowOverwrite		on" > /etc/proftpd.conf
 	echo "config proftpd net
 	option port	'21'" > /etc/config/app.proftpd
 	fi
+
+	Load_remote_libs
+	echo_install_complete
 fi
 exit
 fi
@@ -145,9 +106,7 @@ HEADER="<link rel=stylesheet type=text/css href=/themes/active/webif.css>
 </script>"
 
 cat <<EOF
-<html><head><title></title>
-$HEADER
-</head><body bgcolor="#eceeec">
+$HTMLHEAD</head><body bgcolor="#eceeec">
 <strong>Status</strong><br><br><hr>
 EOF
 
@@ -210,12 +169,10 @@ cat <<EOF
 </tr>
 </table>
 </form>
-
-<div id="b1" class="balloonstyle" style="width: 450px;">
-Port number<br><br>Default: 21
-</div>
-</body></html>
 EOF
+
+TIP 450 "Port number<br><br>Default: 21"
+echo "</body></html>"
 
 fi
 ?>

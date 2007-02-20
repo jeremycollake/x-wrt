@@ -13,20 +13,12 @@
 #
 #
 # Configuration files referenced:
-#   none
+#
 #
 # TODO:
 
+. /www/cgi-bin/webif/applications-shell.sh
 . /usr/lib/webif/functions.sh
-
-HEADER="HTTP/1.0 200 OK
-Content-type: text/html
-
-<html><head>
-<link rel='stylesheet' type='text/css' href='/themes/active/webif.css' />
-<script type='text/javascript' src='/js/balloontip.js'></script>
-<script type="text/javascript" src="/js/window.js"></script>
-<script type='text/javascript' src='/js/imgdepth.js'></script>"
 
 var="#"
 var1=""
@@ -44,18 +36,18 @@ txt5=$txt1"\n---------------------------------------------\n!!! Device is runnin
 ct1=0
 ct2=0
 count=0
+count1=1
 
 LoadingJAVA="<div id=\"dwindow0\" style=\"position:absolute;background-color:#EBEBEB;cursor:hand;left:0px;top:0px;display:none;border: 1px solid black\" onMousedown=\"initializedrag(event)\" onMouseup=\"stopdrag()\" >
 <table width="100%" border="0"><tr bgcolor=navy><td><div align=\"right\"><img src=\"/images/close.gif\" onClick=\"closeit()\" alt /></div></td>
 </tr></table><table border="0">
-<tr><td><br/>Please Wait ...<br/><script language=\"Javascript\" src=\"/js/progress.js\"></script><script type='text/javascript'>
+<tr><td><br/>Please Wait ...<br/><script type="text/javascript" src=\"/js/progress.js\"></script><script type='text/javascript'>
 var bar1= createBar(350,15,'white',1,'black','blue',85,7,3,'');
 </script></td></tr></table></div>"
 
 CONFIRM()
 {
 echo "<script type='text/javascript'>"
-echo "<!--"
 echo "function confirm$count() {"
 if [ $var = "applications.sh?ipkg=" ] ; then echo "alert (\"Not enough memory to install!\")" ; fi
 echo "if (window.confirm(\"$txt1\")){" 
@@ -63,9 +55,8 @@ echo "var ap='null';"
 if [ $var = "applications.sh?ipkg=" ] ; then echo "ap= prompt('Enter path to external storage. Example /mnt/mmc', ' ');" ; fi
 echo "loadwindow(0,'$SCRIPT_NAME',355,100,0,5);"
 echo "window.location=\"$var&package=install&prompt=\" + ap"
-echo "} }" 
-echo "// -->
-</script>"
+echo "} }"
+echo "</script>"
 let "count+=1"
 }
 
@@ -108,32 +99,30 @@ done
 let "count+=1"
 }
 
-
 TR_Remove_APP()
 {
-if [ $var5 = 1 ] ; then txt4="<br/><font size=1 color=red>$txt3</font></b><br/><br/>" ; else txt4="" ; fi
-echo "<tr><td width=90%><img src='/images/$var1' width="22" height="22" align="middle" />&nbsp;$var2 $(echo $txt4 | sed -e s/'\\n\\n'/'<br\/>'/g )</td><td><form action='$var3' method='post'><input type='hidden' name='remove' value='1'><input type=submit class='flatbtn' name=rmvapp value='@TR<<Remove Application>>' $var4></form></td></tr>"
+if [ $4 = 1 ] ; then txt4="<br/><font size=1 color=red>$txt3</font></b><br/><br/>" ; else txt4="" ; fi
+echo "<tr><td width=90%><img src='/images/$1' width="22" height="22" align="middle" alt />&nbsp;$2$(echo $txt4 | sed -e s/'\\n\\n'/'<br\/>'/g )</td><td><form action='$3' method='post'><input type='hidden' name='remove' value='1' /><input type=submit class='flatbtn' name=rmvapp value='@TR<<Remove Application>>' $5 /></form></td></tr>"
 }
 
 TR_APP()
 {
 if [ $var5 = 1 ] ; then var3="<font color=silver>"$var3"</font>" ; txt4="class='gradualshine' onMouseover='slowhigh(this)' onMouseout='slowlow(this)'" ; else txt4="" ; fi
-echo "<td width=\"20%\"><center><a href=\"$var1\" rel=\"$var4\"><img src=\"/images/$var2\" border=\"0\" $txt4/></a><br/>$var3</center></td>"
+echo "<td width=\"20%\"><center><a href=\"$var1\" rel=\"$var4\"><img src=\"/images/$var2\" border=\"0\" $txt4 alt /></a><br/>$var3</center></td>"
 }
 
-
-	HighLight="class='gradualshine' onMouseover='slowhigh(this)' onMouseout='slowlow(this)'"
-
-
+HighLight="class='gradualshine' onMouseover='slowhigh(this)' onMouseout='slowlow(this)'"
 
 if [ "$FORM_page" = "index" ]; then
-echo $HEADER
+echo "$HEADER"
+echo "$HTMLHEAD"
 echo "</head><body></body></html>"
 exit
 
 elif [ "$FORM_page" = "web" ]; then
 
 	echo "$HEADER"
+	echo "$HTMLHEAD"
 	#	   /- Space in KB
 	#	  |
 	#	  |	   	  	 /- RAM in KB
@@ -141,6 +130,8 @@ elif [ "$FORM_page" = "web" ]; then
 	let "ct1=4000" ; let "ct2=2000" ; var="applications-httpd.sh?ipkg=" ; CHECK_FREE_MEM #<- WebServer
 	let "ct1=4500" ; let "ct2=4600" ; var="applications-proftpd.sh?ipkg=" ; CHECK_FREE_MEM #<-FTP Server
 	let "ct1=100"	 ; let "ct2=10000000" ; var="applications-sql.sh?ipkg=" ; CHECK_FREE_MEM #<-SQL Server
+	let "ct1=2000" ; let "ct2=800" ; var="applications-dlmanager.sh?ipkg=" ; CHECK_FREE_MEM #<-DL MANAGER
+
 cat <<EOF
 </head><body><center>
 
@@ -175,30 +166,38 @@ EOF
 	fi
 
 	#------------------------
-	var3="SQL Server"
-	var2="app.7.jpg"
-	var4="b3"
-	if is_package_installed "ftgpd" && is_package_installed "blahbalh" ; then
+	var3="SQL Server" ; var2="app.7.jpg" ; var4="b3"
+	if is_package_installed "sql" && is_package_installed "sql2" ; then
 	var1="applications-db.sh" ; var5=0 ; TR_APP
-	else
-	var1="javascript:confirm2()" ; var5=1 ; TR_APP
+	else var1="javascript:confirm2()" ; var5=1 ; TR_APP
+	fi
+	#------------------------
+	var3="Download Manager" ; var2="bkup.jpg" ; var4="b4"
+	if is_package_installed "ctorrent" ; then
+	var1="applications-dlmanager.sh" ; var5=0 ; TR_APP
+	else var1="javascript:confirm3()" ; var5=1 ; TR_APP
 	fi
 	#------------------------
 
 cat <<EOF
 <td width="20%">&nbsp;</td><td width="20%">&nbsp;</td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-</tr></table>
-<div id="b1" class="balloonstyle">Apache 2.2 - Powerfull webserver to serve web pages on World Wide Web.</div>
-<div id="b2" class="balloonstyle">ProFTPD 1.3a - Powerfull FTP server for sharing files globally.</div>
-<div id="b3" class="balloonstyle">SQL - Massive database server</div></center></body></html>
+</tr></table></center>
 EOF
+
+TIP 0 "Apache 2.2 - Powerfull webserver to serve web pages on World Wide Web."
+TIP 0 "ProFTPD 1.3a - Powerfull FTP server for sharing files globally."
+TIP 0 "SQL - Massive database server"
+TIP 0 "Download Manager - Alows unattended downloads http,ftp,torrents"
+echo "</body></html>"
+
 exit
 
 elif [ "$FORM_page" = "security" ]; then
 	
 echo "$HEADER"
-var="applications-hydra.sh?ipkg=" ; CONFIRM
+echo "$HTMLHEAD"
+let "ct1=150" ; let "ct2=800" ; var="applications-hydra.sh?ipkg=" ; CHECK_FREE_MEM
 
 echo "</head><body>$LoadingJAVA<table width='98%' border='0' cellspacing='1' ><tr class='appindex'>"
 
@@ -218,15 +217,15 @@ echo "</head><body>$LoadingJAVA<table width='98%' border='0' cellspacing='1' ><t
 	<td width="20%">&nbsp;</td>
 	<td width="20%">&nbsp;</td>
 	</tr></table>
-	<div id="b1" class="balloonstyle"  style="width: 300px;">
-	Hydra 4.5 - "Password Brute Force" - attacker for checking weak passwords. Great utility to check your (http,ftp,ssh) services.
-	</div>
-	</body></html>
 EOF
+TIP "300" "Hydra 4.5 - \"Password Brute Force\" - attacker for checking weak passwords. Great utility to check your (http,ftp,ssh) services."
+echo "</body></html>"
 
 elif [ "$FORM_page" = "network" ]; then
 
 echo "$HEADER"
+echo "$HTMLHEAD"
+var="applications-cifs.sh?ipkg=" ; CONFIRM
 var="applications-samba.sh?ipkg=" ; CONFIRM
 var="applications-swap.sh?ipkg=" ; CONFIRM
 
@@ -237,17 +236,23 @@ echo "</head><body>$LoadingJAVA<table width='98%' border='0' cellspacing='1' ><t
 	var2="app.10.jpg"
 	var4="b1"
 	if is_package_installed "kmod-fs-cifs" && is_package_installed "cifsmount" ; then
-	var1="applications-samba.sh" ; var5=0 ; TR_APP
+	var1="applications-cifs.sh" ; var5=0 ; TR_APP
 	else var1="javascript:confirm0()" ; var5=1 ; TR_APP
+	fi
+	#------------------------
+	var3="Samba Server" ; var2="app.10.jpg" ; var4="b2"
+	if is_package_installed "samba" ; then
+	var1="applications-samba.sh" ; var5=0 ; TR_APP
+	else var1="javascript:confirm1()" ; var5=1 ; TR_APP
 	fi
 
 	#------------------------
 	var3="Memory Swap"
 	var2="app.12.jpg"
-	var4="b2"
+	var4="b3"
 	if is_package_installed "kmod-loop" && is_package_installed "losetup" && is_package_installed "swap-utils" ; then
 	var1="applications-swap.sh" ; var5=0 ; TR_APP	
-	else var1="javascript:confirm1()" ; var5=1 ; TR_APP
+	else var1="javascript:confirm2()" ; var5=1 ; TR_APP
 	fi
 	
 	cat <<EOF
@@ -257,23 +262,22 @@ echo "</head><body>$LoadingJAVA<table width='98%' border='0' cellspacing='1' ><t
 	</tr>
 EOF
 	#------- ipkg settings -------
-	if  [ -s "/etc/config/app.ipkg" ]  ; then echo "<tr class='appindex'><td width='20%'><center><a href='applications-ipkg.sh'><img src='/images/pkg.jpg' border='0' /></a><br>ipkg</center></td>" ; else echo "<td width="20%">&nbsp;</td>" ; fi
+	if  [ -s "/etc/config/app.ipkg" ]  ; then echo "<tr class='appindex'><td width='20%'><center><a href='applications-ipkg.sh'><img src='/images/pkg.jpg' border='0' alt /></a><br/>ipkg</center></td>" ; else echo "<td width="20%">&nbsp;</td>" ; fi
 cat <<EOF
 	<td width="20%">&nbsp;</td><td width="20%">&nbsp;</td><td width="20%">&nbsp;</td><td width="20%">&nbsp;</td></tr>
 	
 	</table>
-	<div id="b1" class="balloonstyle"  style="width: 200px;">
-	Samba Client- Allows to map network drive from Windows based file system.
-	</div>
-	<div id="b2" class="balloonstyle"  style="width: 250px;">
-	Memory SWAP - Allows to set more RAM by using external storage.<br><br>Examples: Network Drive, MMC, USB
-	</div>
-	</body></html>
 EOF
+
+TIP 200 "Samba Client- Allows to map network drive from Windows based file system."
+TIP 250 "Samba Server - Allows to share directories over network."
+TIP 250 "Memory SWAP - Allows to set more RAM by using external storage.<br/><br/>Examples: Network Drive, MMC, USB"
+echo "</body></html>"
 exit
 elif [ "$FORM_page" = "wireless" ]; then
 
 echo "$HEADER"
+echo "$HTMLHEAD"
 
 echo "</head><body>$LoadingJAVA<table width='98%' border='0' cellspacing='1' ><tr class='appindex'>"
 
@@ -288,109 +292,92 @@ echo "</head><body>$LoadingJAVA<table width='98%' border='0' cellspacing='1' ><t
 EOF
 
 elif [ "$FORM_page" = "remove" ]; then
+echo "$HEADER"
+echo "$HTMLHEAD"
 
-	cat <<EOF
-$HEADER
-	</head>
+cat <<EOF
+</head>
 	<table width="100%" border="0" cellspacing="1">
 EOF
 	#### Check list to remove
 
 	pkgrmv="<input type='hidden' name='remove' value='1'><input type=submit class='flatbtn' name=rmvapp value='@TR<<Remove Application>>'>"
 
-	echo "<tr><td colspan=2><br><u>> Web Applications</u><br><br></td></tr>"
+	echo "<tr><td colspan=2><br/><u>> Web Applications</u><br/><br/></td></tr>"
 	
-	if  is_package_installed "apr" && is_package_installed "gdbm" && is_package_installed "expat" && is_package_installed "libdb" && is_package_installed "apr-util" && is_package_installed "apache" ; then
-	var1="app.4.jpg" ; var2="Web Server" ; var3="applications-httpd.sh" ; var4="" ; var5=0 ; TR_Remove_APP 
-	else if  [ -s "/etc/config/app.httpd" ]  ; then var1="app.4.jpg" ; var2="Web Server" ; var3="applications-httpd.sh" ; var4="disabled" ; var5=1 ; TR_Remove_APP ; fi
+	if is_package_installed "apr" && is_package_installed "gdbm" && is_package_installed "expat" && is_package_installed "libdb" && is_package_installed "apr-util" && is_package_installed "apache" ; then
+	TR_Remove_APP "app.4.jpg" "Web Server" "applications-httpd.sh" 0 "" 
+	else if  [ -s "/etc/config/app.httpd" ]  ; then TR_Remove_APP	"app.4.jpg" "Web Server" "applications-httpd.sh" 1 "disabled" ; fi
 	fi
 
-	if  is_package_installed "openssl" &&  is_package_installed "proftpd" ; then
-	var1="app.6.jpg" ; var2="FTP Server" ; var3="applications-proftpd.sh" ; var4="" ; var5=0 ; TR_Remove_APP	
-	else if  [ -s "/etc/config/app.proftpd" ]  ; then var1="app.6.jpg" ; var2="FTP Server" ; var3="applications-proftpd.sh" ; var4="disabled" ; var5=1 ; TR_Remove_APP ; fi
+	if is_package_installed "proftpd" ; then
+	TR_Remove_APP "app.6.jpg" "FTP Server" "applications-proftpd.sh" 0 ""
+	else if  [ -s "/etc/config/app.proftpd" ]  ; then TR_Remove_APP "app.6.jpg" "FTP Server" "applications-proftpd.sh" 1 "disabled" ; fi
 	fi
 
-	echo "<tr><td colspan=2><br><u>> Security Applications</u><br><br></td></tr>"
+	if is_package_installed "ctorrent" ; then
+	TR_Remove_APP "bkup.jpg" "Download Manager" "applications-dlmanager.sh" 0 ""
+	else if  [ -s "/etc/config/app.dlmanager" ]  ; then TR_Remove_APP "bkup.jpg" "Download Manager" "applications-dlmanager.sh" 1 "disabled" ; fi
+	fi
+
+	echo "<tr><td colspan=2><br/><u>> Security Applications</u><br/><br/></td></tr>"
 	
-	if  [ -s "/usr/sbin/hydra" ]  ; then var1="app.2.jpg" ; var2="Hydra" ; var3="applications-hydra.sh" ; var4="" ; var5=0 ; TR_Remove_APP ; fi
+	if  [ -s "/usr/sbin/hydra" ]  ; then TR_Remove_APP "app.2.jpg" "Hydra" "applications-hydra.sh" 0 "" ; fi
 
-	echo "<tr><td colspan=2><br><u>> Network Applications</u><br><br></td></tr>"
+	echo "<tr><td colspan=2><br/><u>> Network Applications</u><br/><br/></td></tr>"
 
-	if  is_package_installed "kmod-fs-cifs"  &&  is_package_installed "cifsmount"  ; then var1="app.10.jpg" ; var2="Samba Client" ; var3="applications-samba.sh" ; var4="" ; var5=0 ; TR_Remove_APP ; fi
-	if  is_package_installed "kmod-loop" && is_package_installed "swap-utils" &&  is_package_installed "losetup"  ; then var1="app.12.jpg" ; var2="Memory Swap" ; var3="applications-swap.sh" ; var4="" ; var5=0 ; TR_Remove_APP	; fi
+	if is_package_installed "kmod-fs-cifs"  &&  is_package_installed "cifsmount"  ; then TR_Remove_APP "app.10.jpg" "Samba Client" "applications-cifs.sh" 0 "" ; fi
+	if is_package_installed "kmod-loop" && is_package_installed "swap-utils" &&  is_package_installed "losetup"  ; then TR_Remove_APP	 "app.12.jpg" "Memory Swap" "applications-swap.sh" 0 "" ; fi
 
 	echo "</table></html>"
 	exit
 
 elif [ "$FORM_page" = "list" ]; then
+echo "$HEADER"
+echo "$HTMLHEAD"
 
-	cat <<EOF
-$HEADER
-<title></title></head><body >
+cat <<EOF
+</head><body>
 	<table width="90%" border="0" cellpadding="0" cellspacing="0" >
 	<tr>
 	<td><a href="applications.sh?page=web" target="AppIndex"><img src="/images/app.8.jpg" border="0" alt /></a></td>
-	<td><strong>Web Applications</strong></td>
-	</tr>
-	<tr>
-	<td colspan="2">&nbsp;</td>
-	</tr>
+	<td><strong>Web Applications</strong></td></tr>
+	<tr><td colspan="2">&nbsp;</td></tr>
 	<tr>
 	<td><a href="applications.sh?page=security" target="AppIndex"><img src="/images/app.5.jpg" border="0" alt /></a></td>
 	<td><strong>Security Applications</strong></td>
 	</tr>
-	<tr>
-	<td colspan="2">&nbsp;</td>
-	</tr>
+	<tr><td colspan="2">&nbsp;</td></tr>
 	<tr>
 	<td><a href="applications.sh?page=network" target="AppIndex"><img src="/images/app.9.jpg" border="0" alt /></a></td>
 	<td><strong>Network Applications</strong></td>
 	</tr>
-	<tr>
-	<td colspan="2">&nbsp;</td>
-	</tr>
+	<tr><td colspan="2">&nbsp;</td></tr>
 	<tr>
 	<td><a href="applications.sh?page=wireless" target="AppIndex"><img src="/images/wscan.jpg" border="0" alt /></a></td>
 	<td><strong>Wireless Applications</strong></td>
 	</tr>
-	<tr>
-	<td colspan="2">&nbsp;</td>
-	</tr>
-	<tr>
-	<td colspan=2 height=1 bgcolor="#CCCCCC"></td>
-	</tr>
+	<tr><td colspan="2">&nbsp;</td></tr>
+	<tr><td colspan=2 height=1 bgcolor="#CCCCCC"></td></tr>
 	<tr>
 	<td><a href="applications.sh?page=remove" target="AppIndex"><img src="/images/app.11.jpg" border="0" alt /></a></td>
 	<td><strong>Remove Applications</strong></td>
 	</tr>
-	<tr>
-	<td colspan="2">&nbsp;</td>
-	</tr>
-	</table></body></html>
+	<tr><td colspan="2">&nbsp;</td></tr></table></body></html>
 EOF
 
-else
+elif [ "$FORM_page" = "" ] && [ "$FORM_package" = "" ]; then
 
 . /usr/lib/webif/webif.sh
 
 header "Applications" "List" "<img src=/images/app.jpg align='middle' alt />&nbsp;@TR<<List of Applications>>"
 
 	cat <<EOF
-
 	<font color="#FF0000">This page is currently in development process. Some features may not function. </font><br/>
-	<table width="95%" border="0" cellspacing="1">
+	<table width="100%" border="0" cellspacing="1">
 	<tr><td width="35%">&nbsp;</td><td width="65%">&nbsp;</td></tr>
-	<tr>
-	<td>
-	<IFRAME SRC="applications.sh?page=list" STYLE="width:100%; height:350px; border:1px dotted #888888;" FRAMEBORDER="0" SCROLLING="no" name="AppList"></IFRAME>
-	</td>
-	<td>
-	<IFRAME SRC="applications.sh?page=index" STYLE="width:98%; height:350px; border:1px dotted #888888;" FRAMEBORDER="0" SCROLLING="yes" name="AppIndex"></IFRAME>
-	</td>
-	</tr>
-	<tr>
-	<td>&nbsp;</td>
-	<td>&nbsp;</td>
+	<tr><td><IFRAME SRC="applications.sh?page=list" STYLE="width:100%; height:350px; border:1px dotted #888888;" FRAMEBORDER="0" SCROLLING="no" name="AppList"></IFRAME></td>
+	<td><IFRAME SRC="applications.sh?page=index" STYLE="width:98%; height:350px; border:1px dotted #888888;" FRAMEBORDER="0" SCROLLING="yes" name="AppIndex"></IFRAME></td>
 	</tr></table>
 EOF
 footer
@@ -398,7 +385,7 @@ fi
 
 if [ "$FORM_package" = "install" ]; then
 
-	echo "<html><head><META http-equiv="refresh" content='10;URL=applications.sh?page=index'></head>"
+	echo "<html><head><META http-equiv="refresh" content=\"10;URL=applications.sh?page=index\"></head>"
 	if [ ! -d $FORM_prompt ] || [ "$FORM_prompt" = "" ]  || [ "$FORM_prompt" = " " ]  ; then
 		echo "Directory <b>'$FORM_prompt'</b> missing - I will try to mount it (hint: Samba Client)"
 		exit

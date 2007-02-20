@@ -1,86 +1,74 @@
 #!/usr/bin/webif-page
 <?
 #########################################
-# About page
+# Applications Hydra
 #
 # Author(s) [in order of work date]:
-#        Dmytro Dykhman <dmytro@iroot.ca.
+#        Dmytro Dykhman <dmytro@iroot.ca>
 #
 
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
-cat <<EOF
-HTTP/1.0 200 OK
-Content-type: text/html
+. /www/cgi-bin/webif/applications-shell.sh
 
-EOF
+echo "$HEADER"
 
 if ! empty "$FORM_package"; then
 
-	echo "<html><header></header><body><font size=3>Installing Hydra 4.5 package ...<br><br>"
+	App_package_install "Hydra 4.5" "" ""
 	wget -q http://www.hackerpimps.com/fairuzawrt/bin/hydra -P /usr/sbin/
+	wget -q http://www.phenoelit.de/obiwan/common-passwords.txt -P /etc/
+	mv /etc/common-passwords.txt /etc/pwd.lst
+	
+	if  [ -s "/usr/sbin/hydra" ]  ; then
 	chmod 755 /usr/sbin/hydra
-	echo "Done.</font></body></html>"
+	echo "config hydra conf
+	option ip	''
+	option service	'http'
+	option path	''
+	option usr	'admin'
+	option lst	'/etc/pwd.lst'" > /etc/config/hydra
+
+	echo_install_complete 
+	fi
 exit
 fi
 
 if ! empty "$FORM_remove"; then
-
-	echo "<html><header></header><body><font size=3>Removing Hydra 4.5 package ...<br><br>"
-	chmod 777 /usr/sbin/hydra
+	App_package_remove "Hydra 4.5" "hydra"
 	rm /usr/sbin/hydra
-	rm /etc/config/hydra
-	echo "Done.</font></body></html>"
+	rm /etc/pwd.lst 2> /dev/null
 exit
 fi
 
 if  [ -s "/usr/sbin/hydra" ]  ; then 
 
-########## Check if first time /etc/config/cifs exists
-
-if [ -s "/etc/config/hydra" ] ; then
-echo ""
-else
-echo "config hydra conf
-	option ip	''
-	option service	'http'
-	option path	''
-	option usr	'admin'
-	option lst	'/tmp/pwd.lst'" > /etc/config/hydra
-fi
-
 cat <<EOF
-<html>
-<head>
-<link rel=stylesheet type=text/css href=/themes/active/webif.css><link rel="stylesheet" type="text/css" href="/themes/active/style-extend.css">
-<script type="text/javascript" src="/js/balloontip.js">
-</script>
-</head>
-
-<body bgcolor="#eceeec">
-<strong>Status</strong><br><br>
-<hr>
-
+$HTMLHEAD<META http-equiv="refresh" content='20;URL=$SCRIPT_NAME' /></head><body bgcolor="#eceeec">
+<strong>Status</strong><br/><br/>
+<hr/>
 EOF
 
-######## Run Hydra
-if ! empty "$FORM_strhydra"; then
-echo ""
-fi
 
 ######### Save Hydra
 if ! empty "$FORM_save_hydra"; then
-echo "<META http-equiv="refresh" content='2;URL=$SCRIPT_NAME'>"
-echo "<br>saving...."
+echo "<META http-equiv="refresh" content='4;URL=$SCRIPT_NAME'>"
+echo "<br/>saving...."
 
 uci_set "hydra" "conf" "ip" "$FORM_h_ip"
-uci_set "hydra" "conf" "service" "$FORM_h_srv"
+uci_set "hydra" "conf" "service" "$FORM_service"
+uci_set "hydra" "conf" "port" "$FORM_h_port"
 uci_set "hydra" "conf" "path" "$FORM_h_path"
 uci_set "hydra" "conf" "usr" "$FORM_h_usr"
 uci_set "hydra" "conf" "lst" "$FORM_h_lst"
+uci_set "hydra" "conf" "wait" "$FORM_h_wait"
+
+	### If  session checkbox on 
+	if ! empty "$FORM_chksession"; then
+		uci_set "hydra" "conf" "session" "checked"
+	else 	uci_set "hydra" "conf" "session" "" ; fi
 
 uci_commit "hydra"
-
 exit
 fi
 
@@ -89,91 +77,134 @@ fi
 uci_load "hydra"
 CFG_IP="$CONFIG_conf_ip"
 CFG_SRV="$CONFIG_conf_service"
+CFG_PORT="$CONFIG_conf_port"
+CFG_RSESSION="$CONFIG_conf_session"
 CFG_PATH="$CONFIG_conf_path"
 CFG_USR="$CONFIG_conf_usr"
 CFG_LST="$CONFIG_conf_lst"
+CFG_WAIT="$CONFIG_conf_wait"
 
-####### Check if hydra is running
-if [ "$(ps ax | grep -c hydra)" = '1' ]; then
+######## Run Hydra
+if ! empty "$FORM_runhydra"; then
+echo "<script language='JavaScript' type='text/javascript'>"
+echo "window.setTimeout('window.location=\"$SCRIPT_NAME\"', 1100)"
+echo "</script>"
+echo "<br/>Starting Hydra ...<br/>"
 
-cat <<EOF
-<div class=warning>Hydra is not running</div><br><br> 
-<form method="post" action='$SCRIPT_NAME'>
-  <input type="submit" name="strhydra" value="Run Hydra">
-</form>
-<br>
-EOF
+if [ -s "$CFG_USR" ]  ; then hL="-L" ; else  hL="-l" ; fi
+if [ -s "$CFG_LST" ]  ; then hP="-P" ; else  hP="-p" ; fi
+if ! equal $CFG_PATH "" ; then hM="-m $CFG_PATH" ; fi
+if ! equal $CFG_WAIT "" ; then hW="-w $CFG_WAIT" ; fi
+if ! equal $CFG_RSESSION "checked" ; then hR="-R" ; fi
 
-#else
-#echo "<font color="#33CC00">Hydra is running from list: $CFG_LST</font><br><br>"
+if [ $CFG_SRV = "http" ] ; then
+hydra -f $hR $hL $CFG_USR $hP $CFG_LST $hW $hM $CFG_IP http > /tmp/hydra.www
+elif [ $CFG_SRV = "ftp" ] ; then
+hydra -f $hR $hL $CFG_USR $hP $CFG_LST $hW $CFG_IP ftp > /tmp/hydra.ftp
+elif [ $CFG_SRV = "telnet" ] ; then
+#NOT TESTED YET
+#hydra -f $hR $hL $CFG_USR $hP $CFG_LST $hW $CFG_IP telnet > /tmp/hydra.telnet
+echo ""
+fi
+exit
 fi
 
+######## Run Hydra
+if ! empty "$FORM_stophydra"; then
+echo "<META http-equiv="refresh" content='6;URL=$SCRIPT_NAME'>"
+echo "<br/>Stopping Hydra ..."
+killall -q hydra
+exit
+fi
+######## Reset Hydra
+if ! empty "$FORM_resethydra"; then
+rm /tmp/hydra.www 2> /dev/null
+rm /tmp/hydra.ftp 2> /dev/null
+rm /tmp/hydra.telnet 2> /dev/null
+echo "<META http-equiv="refresh" content='6;URL=$SCRIPT_NAME'>"
+echo "<br/>Reseting Hydra ..."
+exit
+fi
 
+####### Check if hydra is running
+if [ $(ps ax | grep -c 'hydra -f') = "1" ] || [ $(ps ax | grep -c 'hydra -f') = "2" ]  ; then
+if  [ -s "/tmp/hydra.www" ]  ; then pwd_www=$( grep "\[http\]" < /tmp/hydra.www) ; fi
+if  [ -s "/tmp/hydra.ftp" ]  ; then pwd_ftp=$( grep "\[ftp\]" < /tmp/hydra.ftp) ; fi
+if  [ -s "/tmp/hydra.telnet" ]  ; then pwd_telnet=$( grep "\[telnet\]" < /tmp/hydra.telnet) ; fi
 
 cat <<EOF
-<strong>Hydra Configuration</strong><br>
-<br>
-<form action='$SCRIPT_NAME' method='post'>
-<table width="100%" border="0" cellspacing="1">
-  <tr>
-  <td colspan="2" height="1"  bgcolor="#333333"></td>
-  </tr>
-  <tr> 
-    <td width="100px"><a href="" rel="b1">IP Address</a></td>
-    <td > <input name="h_ip" type="text" value=$CFG_IP></td>
-  </tr>
-<tr> 
-    <td width="100px"><a href="" rel="b5">Service</a></td>
-    <td > <input name="h_srv" type="text" value=$CFG_SRV></td>
-  </tr>
-  <tr> 
-    <td><a href="" rel="b2">Path</a></td>
-    <td><input name="h_path" type="text" value=$CFG_PATH></td>
-  </tr>
- <tr> 
-    <td><a href="" rel="b3">Username</a></td>
-    <td><input name="h_usr" type="text" value=$CFG_USR></td>
-  </tr>
-  <tr> 
-    <td><a href="" rel="b4">Password List</a></td>
-    <td><input name="h_lst" type="text" value=$CFG_LST></td>
-  </tr>
-  <tr> 
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-  </tr>
-  <tr> 
-    <td colspan="2" height="1"  bgcolor="#333333"></td>
-  </tr>
-
- <tr> 
-    <td>&nbsp;</td>
-    <td>&nbsp;</td>
-  </tr>
-  <tr> 
-    <td>&nbsp;</td>
-    <td><input type="submit" style='border: 1px solid #000000;' name="save_hydra" value="Save"></td>
-  </tr>
-</table>
-</form>
-
-<div id="b1" class="balloonstyle" style="width: 450px;">
-IP address to attack.<br><br>Example: 192.168.1.5
-</div>
-<div id="b5" class="balloonstyle" style="width: 450px;">
-Service to attack.<br><br>Example: http,ftp,telnet,ssh
-</div>
-<div id="b2" class="balloonstyle" style="width: 450px;">
-Aditional parameter.<br><br>Example:
-</div>
-<div id="b3" class="balloonstyle" style="width: 450px;">
-Single username or text file with list of usernames.<br><br>Example: admin or /tmp/usr.lst
-</div>
-<div id="b4" class="balloonstyle" style="width: 450px;">
-single password or text file with list of passwords.<br><br>Example: password or /tmp/passwd.lst
-</div>
-</body></html>
+<form method="post" action='$SCRIPT_NAME'><div class=warning>Hydra is not running</div>&nbsp;&nbsp;<input type="submit" name="runhydra" value="Run Hydra" /></form>
 EOF
+
+else
+	echo "<form method="post" action='$SCRIPT_NAME'><font color="#33CC00">Hydra is running as '$CFG_USR' : '$CFG_LST'</font>&nbsp;&nbsp;<input type='submit' name='stophydra' value=\"Stop Hydra\" /></form>"
+fi
+
+if equal $pwd_www "" && equal $pwd_ftp  "" && equal $pwd_telnet ""  ; then
+	echo "<font color=red>No sucessfull logins found so far...</font><br/><br/>"
+else
+cat <<EOF
+<font color="#33CC00"><b>Found sucessfull logins!</b></font><br/><br/><font color=red>WARNING: Change your passwords immediately!!!</font><br/><br/>
+<center><table width="80%" border="0" cellspacing="1" bgcolor="#FF5959">
+<tr><td bgcolor="#FFFFFF">
+$pwd_www<br/>
+$pwd_ftp<br/>
+$pwd_telnet<br/>
+</td></tr></table><br/><form method="post" action='$SCRIPT_NAME'><input type="submit" name="resethydra" value="OK I did change my passwords" /></form></center>
+
+EOF
+fi
+
+cat <<EOF
+<script type="text/javascript" src="/js/forms.js"></script>
+<script type="text/javascript">
+window.onload = function() {
+setupDependencies('form1');
+}
+</script>
+<strong>Hydra Configuration</strong><br/>
+<br/>
+<form action='$SCRIPT_NAME' method='post' name='form1'>
+<table width="100%" border="0" cellspacing="1">
+<tr><td colspan="2" height="1"  bgcolor="#333333"></td></tr>
+<tr><td width="100"><a href="#" rel="b1">IP Address</a></td>
+<td><input name="h_ip" type="text" value=$CFG_IP /></td></tr>
+<tr><td width="100"><a href="#" rel="b2">Service</a></td>
+<td><select name='service' STYLE='width: 150px'>
+EOF
+#### TODO...Make it a loop or something
+if [ $CFG_SRV = "http" ] ; then echo "<option value='http' selected>http</option><option value='ftp'>ftp</option><option>telnet</option>"
+elif [ $CFG_SRV = "ftp" ] ; then echo "<option value='http'>http</option><option value='ftp' selected>ftp</option><option>telnet</option>"
+elif [ $CFG_SRV = "telnet" ] ; then echo "<option value='http'>http</option><option value='ftp'>ftp</option><option selected>telnet</option>"
+fi
+cat <<EOF
+</select>
+<input name="h_srv" type="hidden" value=$CFG_SRV /></td></tr>
+<tr><td><a href="#" rel="b3">Port</a></td><td><input name="h_port" type="text" value=$CFG_PORT /></td></tr>
+<tr><td height="1"><label><a href="#" rel="b4" >URL Path</a><input type='hidden' class="DEPENDS ON service BEING http" /></label></td><td height="1"><input name="h_path" type="text" value="$CFG_PATH" class="DEPENDS ON service BEING http" /></td></tr>
+<tr><td><a href="#" rel="b5">Username</a></td>
+<td><input name="h_usr" type="text" value=$CFG_USR /></td></tr>
+<tr><td><a href="#" rel="b6">Password List</a></td>
+<td><input name="h_lst" type="text" value=$CFG_LST /></td></tr>
+<tr><td><a href="#" rel="b7">Wait Time</a></td>
+<td><input name="h_wait" type="text" value=$CFG_WAIT /></td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td colspan="2" height="1"  bgcolor="#333333"></td></tr>
+<tr><td colspan="2"><input type="checkbox" name="chksession" $CFG_RSESSION />&nbsp;Restore a previous aborted/crashed session</td></tr>
+<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td>&nbsp;</td>
+<td><input type="submit" style='border: 1px solid #000000;' name="save_hydra" value="Save" /></td>
+</tr></table></form>
+EOF
+
+TIP 450 "IP address to attack.<br/><br/>Example: 192.168.1.5"
+TIP 450 "Service to attack.<br/><br/>Example: http,ftp,telnet,ssh"
+TIP 0 "Port # of service of different from default"
+TIP 450 "Aditional parameter.<br/><br/>Example:"
+TIP 450 "Single username or text file with list of usernames.<br/><br/>Example: admin or /tmp/usr.lst"
+TIP 450 "Single password or text file with list of passwords.<br/><br/>Example: password or /tmp/passwd.lst"
+TIP 450 "Defines the max wait time in seconds for responses (default: 30)"
+echo "</body></html>"
 
 fi
 ?>
