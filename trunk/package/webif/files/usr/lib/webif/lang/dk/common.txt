@@ -92,10 +92,10 @@ Host Name => V&aelig;rtsnavn
 Language => Sprog
 
 # 'Installed Software' page
-Installed Packages => Installerede pakker
-Update package lists => Opdater pakkelisten
-Uninstall => Afindstaller
-Install => Installer
+system_ipkg_installedpackages => Installerede pakker
+system_ipkg_updatelists => Opdater pakkelisten
+system_ipkg_Uninstall => Afindstaller
+system_ipkg_Install => Installer
 
 
 # 'Firmware Upgrade' page
@@ -229,10 +229,7 @@ Helptext Idle Time => Ventetid i sekunder f&oslash;r inaktivitet bliver &aring;r
 Helptext Redial Timeout => Ventetid f&oslash;r der pr&oslash;ves at ringe op igen.
 
 # untranslated:
-Available packages => Available packages
- \$1 \ =>
- $2  =>
- caption  =>
+Available packages =>
  Show raw statistics  =>
 802.11b =>
 802.11b + 802.11g =>
@@ -532,14 +529,10 @@ Directory =>
 Filesystem Browser =>
 Parent Directory =>
 Root =>
- c[i]  =>
- name  =>
- short  =>
 Short help =>
- $5  =>
 Invalid value =>
 maximum =>
- $_firmware_name Administrative Console =>
+Administrative Console =>
 making_usable =>
 802.11b only =>
 All connected devices (excluding system hubs) =>
@@ -607,7 +600,6 @@ Web mgt. console =>
 Initializing theme ... =>
 installing theme package =>
 Webif settings =>
- c[i]  =>
 install now =>
 Invalid hex key =>
 Invalid key length =>

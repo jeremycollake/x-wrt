@@ -90,10 +90,10 @@ Host Name => V&auml;rdnamn
 Language => Spr&aring;k
 
 # 'Installed Software' page
-Installed Packages => Installerade mjukvaror
-Update package lists => Uppdatera mjukvarulista
-Uninstall => Avinstallera
-Install => Installera
+system_ipkg_installedpackages => Installerade mjukvaror
+system_ipkg_updatelists => Uppdatera mjukvarulista
+system_ipkg_Uninstall => Avinstallera
+system_ipkg_Install => Installera
 
 
 # 'Firmware Upgrade' page
@@ -220,11 +220,8 @@ Helptext Idle Time => Antalet sekunder utan internet trafik som routern skall v&
 Helptext Redial Timeout => Antalet sekunder att v&auml;nta i innan f&ouml;rs&ouml;k till ny uppkoppling g&ouml;rs. (om ingen kontakt kunnat uppr&auml;ttas med tillhandah&aring;llaren)
 
 # untranslated:
-Available packages => Available packages
+Available packages =>
 
- \$1 \ =>
- $2  =>
- caption  =>
  Show raw statistics  =>
 802.11b =>
 802.11b + 802.11g =>
@@ -278,7 +275,7 @@ DHCP Configuration =>
 DHCP Interfaces =>
 DHCP Lease Minutes =>
 DHCP Num =>
-DHCP Server For $FORM_iface =>
+DHCP Server For =>
 DHCP Service =>
 DHCP Start =>
 Distance =>
@@ -524,14 +521,10 @@ Directory =>
 Filesystem Browser =>
 Parent Directory =>
 Root =>
- c[i]  =>
- name  =>
- short  =>
 Short help =>
- $5  =>
 Invalid value =>
 maximum =>
- $_firmware_name Administrative Console =>
+Administrative Console =>
 making_usable =>
 802.11b only =>
 All connected devices (excluding system hubs) =>
@@ -599,7 +592,6 @@ Web mgt. console =>
 Initializing theme ... =>
 installing theme package =>
 Webif settings =>
- c[i]  =>
 install now =>
 Invalid hex key =>
 Invalid key length =>

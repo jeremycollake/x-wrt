@@ -92,11 +92,11 @@ Host Name => Vertsnavn
 Language => Spr&aring;k
 
 # 'Installed Software' page
-Installed Packages => Installerte pakker
-Update package lists => Oppdater pakkelisten
-Uninstall => Avinstaller
-Install => Installer
-Available packages => Tilgjengelige pakker
+system_ipkg_installedpackages => Installerte pakker
+system_ipkg_updatelists => Oppdater pakkelisten
+system_ipkg_Uninstall => Avinstaller
+system_ipkg_Install => Installer
+system_ipkg_availablepackages => Tilgjengelige pakker
 
 
 # 'Firmware Upgrade' page
@@ -229,9 +229,6 @@ Helptext Idle Time => Ventetid med inaktivitet f&oslash;r routeren kobler ned fo
 
 Helptext Redial Timeout => Ventetid f&oslash;r routeren fors&oslash;ker &aring; ringe opp igjen.
 
- \$1 \ =>
- $2  =>
- caption  =>
  Show raw statistics  =>
 802.11b =>
 802.11b + 802.11g =>
@@ -285,7 +282,7 @@ DHCP Configuration =>
 DHCP Interfaces =>
 DHCP Lease Minutes =>
 DHCP Num =>
-DHCP Server For $FORM_iface =>
+DHCP Server For =>
 DHCP Service =>
 DHCP Start =>
 Distance =>
@@ -531,14 +528,10 @@ Directory =>
 Filesystem Browser =>
 Parent Directory =>
 Root =>
- c[i]  =>
- name  =>
- short  =>
 Short help =>
- $5  =>
 Invalid value =>
 maximum =>
- $_firmware_name Administrative Console =>
+Administrative Console =>
 making_usable =>
 802.11b only =>
 All connected devices (excluding system hubs) =>
@@ -606,7 +599,6 @@ Web mgt. console =>
 Initializing theme ... =>
 installing theme package =>
 Webif settings =>
- c[i]  =>
 install now =>
 Invalid hex key =>
 Invalid key length =>

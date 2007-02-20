@@ -96,10 +96,10 @@ Host Name => 主机名字
 Language => 语言
 
 # 'Installed Software' page
-Installed Packages => 已安装的包
-Update package lists => 更新包列表
-Uninstall => 删除
-Install => 安装
+system_ipkg_installedpackages => 已安装的包
+system_ipkg_updatelists => 更新包列表
+system_ipkg_Uninstall => 删除
+system_ipkg_Install => 安装
 
 
 # 'Firmware Upgrade' page
@@ -234,9 +234,6 @@ Helptext Redial Timeout =>
 
 Available packages =>
 
- \$1 \ =>
- $2  =>
- caption  =>
  Show raw statistics =>
 802.11b =>
 802.11b + 802.11g =>
@@ -290,7 +287,7 @@ DHCP Configuration => DHCP设置
 DHCP Interfaces => DHCP网卡
 DHCP Lease Minutes => DHCP 超时分钟
 DHCP Num => DHCP Num
-DHCP Server For $FORM_iface =>
+DHCP Server For =>
 DHCP Service => DHCP服务
 DHCP Start =>
 Distance =>
@@ -534,14 +531,10 @@ Directory => 目录
 Filesystem Browser => 文件系统浏览
 Parent Directory =>
 Root =>
- c[i]  =>
- name  =>
- short  =>
 Short help =>
- $5  =>
 Invalid value =>
 maximum => maximum
- $_firmware_name Administrative Console =>
+Administrative Console =>
 making_usable =>
 
 Log => 日志

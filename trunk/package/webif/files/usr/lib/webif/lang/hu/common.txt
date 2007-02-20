@@ -91,10 +91,10 @@ Host Name => Host n&eacute;v
 Language => Nyelv
 
 # 'Installed Software' page
-Installed Packages => Telep&iacute;tett csomagok
-Update package lists => Csomaglista friss&iacute;t&eacute;se
-Uninstall => Elt&aacute;vol&iacute;t&aacute;s
-Install => Telep&iacute;t&eacute;s
+system_ipkg_installedpackages => Telep&iacute;tett csomagok
+system_ipkg_updatelists => Csomaglista friss&iacute;t&eacute;se
+system_ipkg_Uninstall => Elt&aacute;vol&iacute;t&aacute;s
+system_ipkg_Install => Telep&iacute;t&eacute;s
 
 
 # 'Firmware Upgrade' page
@@ -224,11 +224,8 @@ Helptext Idle Time => Maxim&aacute;lis id&#337; m&aacute;sodpercben internet for
 Helptext Redial Timeout => Maxim&aacute;lis id&#337; m&aacute;sodpercben az &uacute;jrat&aacute;rcs&aacute;z&aacute;s el&#337;tt, ha a szolg&aacute;ltat&oacute; nem v&aacute;laszol.
 
 # untranslated:
-Available packages => Haszn&aacute;lhat&oacute; csomagok
+system_ipkg_availablepackages => Haszn&aacute;lhat&oacute; csomagok
 
- \$1 \ =>
- $2  =>
- caption  =>
  Show raw statistics  =>
 802.11b =>
 802.11b + 802.11g =>
@@ -282,7 +279,7 @@ DHCP Configuration =>
 DHCP Interfaces =>
 DHCP Lease Minutes =>
 DHCP Num =>
-DHCP Server For $FORM_iface =>
+DHCP Server For =>
 DHCP Service =>
 DHCP Start =>
 Distance =>
@@ -528,14 +525,10 @@ Directory =>
 Filesystem Browser =>
 Parent Directory =>
 Root =>
- c[i]  =>
- name  =>
- short  =>
 Short help =>
- $5  =>
 Invalid value =>
 maximum =>
- $_firmware_name Administrative Console =>
+Administrative Console =>
 making_usable =>
 802.11b only =>
 All connected devices (excluding system hubs) =>
@@ -603,7 +596,6 @@ Web mgt. console =>
 Initializing theme ... =>
 installing theme package =>
 Webif settings =>
- c[i]  =>
 install now =>
 Invalid hex key =>
 Invalid key length =>

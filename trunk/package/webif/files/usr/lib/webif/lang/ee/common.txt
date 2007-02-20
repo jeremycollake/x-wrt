@@ -92,11 +92,11 @@ Host Name => Hostinimi
 Language => Keel
  
 # Installed Software page 
-Installed Packages => Installitud paketid
-Update package lists => V&auml;rskenda paketiloendit
-Uninstall => Desinstalli
-Install => Installi
-Available packages => Saadaolevad paketid 
+system_ipkg_installedpackages => Installitud paketid
+system_ipkg_updatelists => V&auml;rskenda paketiloendit
+system_ipkg_Uninstall => Desinstalli
+system_ipkg_Install => Installi
+system_ipkg_availablepackages => Saadaolevad paketid 
  
 # Firmware Upgrade page 
 Firmware format => P&uuml;sivara vorming
@@ -229,9 +229,6 @@ Helptext Idle Time => Aeg sekundites, mille v&auml;ltel marsruuter enne Internet
  
 Helptext Redial Timeout => Aeg sekundites, kui kaua marsruuter p&auml;rast teenusepakkuja v&otilde;rgust teate "pole vastust" saamist ootab, enne kui asub &uuml;hendust taastama.
 
- \$1 \ =>
- $2  =>
- caption  =>
  Show raw statistics  =>
 802.11b =>
 802.11b + 802.11g =>
@@ -285,7 +282,7 @@ DHCP Configuration =>
 DHCP Interfaces =>
 DHCP Lease Minutes =>
 DHCP Num =>
-DHCP Server For $FORM_iface =>
+DHCP Server For =>
 DHCP Service =>
 DHCP Start =>
 Distance =>
@@ -531,14 +528,10 @@ Directory =>
 Filesystem Browser =>
 Parent Directory =>
 Root =>
- c[i]  =>
- name  =>
- short  =>
 Short help =>
- $5  =>
 Invalid value =>
 maximum =>
- $_firmware_name Administrative Console =>
+Administrative Console =>
 making_usable =>
 802.11b only =>
 All connected devices (excluding system hubs) =>
@@ -606,7 +599,6 @@ Web mgt. console =>
 Initializing theme ... =>
 installing theme package =>
 Webif settings =>
- c[i]  =>
 install now =>
 Invalid hex key =>
 Invalid key length =>

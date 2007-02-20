@@ -98,10 +98,10 @@ Host Name => Nom d'h&ocirc;te
 Language => Langue
 
 # 'Installed Software' page
-Installed Packages => Paquets logiciels install&eacute;s
-Update package lists => Mise &agrave; jour de la liste des paquets
-Uninstall => D&eacute;sinstaller
-Install => Installer
+system_ipkg_installedpackages => Paquets logiciels install&eacute;s
+system_ipkg_updatelists => Mise &agrave; jour de la liste des paquets
+system_ipkg_Uninstall => D&eacute;sinstaller
+system_ipkg_Install => Installer
 
 
 # 'Firmware Upgrade' page
@@ -234,11 +234,8 @@ Helptext Idle Time => Nombre de secondes sans traffic internet &agrave; attendre
 Helptext Redial Timeout => Nombre de secondes &agrave; attendre apr&egrave;s n'avoir recu aucune r&eacute;ponse du fournisseur avant un nouvel &eacute;ssai de connexion.
 
 
-Available packages => Paquetages disponibles
+system_ipkg_availablepackages => Paquetages disponibles
 
- \$1 \ =>
- $2  =>
- caption  =>
  Show raw statistics => Affichage des statistiques brutes
 802.11b =>
 802.11b + 802.11g =>
@@ -292,7 +289,7 @@ DHCP Configuration => Configuration DHCP
 DHCP Interfaces => Interfaces DHCP
 DHCP Lease Minutes => Dur&eacute;es du bail DHCP en minutes
 DHCP Num => Nombre d'adresses DHCP disponibles
-DHCP Server For $FORM_iface => Server DHCP pour $FORM_iface
+DHCP Server For => Server DHCP pour
 DHCP Service => Service DHCP
 DHCP Start => Premi&egrave;re adresse IP disponible par DHCP
 Distance => Distance
@@ -536,14 +533,10 @@ Directory => R&eacute;pertoire
 Filesystem Browser => Navigateur de fichiers
 Parent Directory => R&eacute;pertoire parent
 Root => Racine
- c[i]  =>
- name  => nom
- short  => court
 Short help => aide synth&eacute;tique
- $5  =>
 Invalid value => valeur invalide
 maximum => maximum
- $_firmware_name Administrative Console =>  $_firmware_name Console d'administration
+Administrative Console => Console d'administration
 making_usable =>
 
 802.11b only =>
@@ -612,7 +605,6 @@ Web mgt. console =>
 Initializing theme ... =>
 installing theme package =>
 Webif settings =>
- c[i]  =>
 install now =>
 Invalid hex key =>
 Invalid key length =>

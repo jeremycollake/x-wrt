@@ -148,10 +148,10 @@ Host Name => Hostname
 Language => Sprache
 
 # 'Installed Software' page
-Installed Packages => Installierte Pakete
-Update package lists => Paketlisten aktualisieren
-Uninstall => Deinstallieren
-Install => Installieren
+system_ipkg_installedpackages => Installierte Pakete
+system_ipkg_updatelists => Paketlisten aktualisieren
+system_ipkg_Uninstall => Deinstallieren
+system_ipkg_Install#Install => Installieren
 
 
 # 'Firmware Upgrade' page
@@ -281,12 +281,9 @@ Helptext Idle Time => Wartezeit in Sekunden, nach der bei Inaktivität die Intern
 Helptext Redial Timeout => Maximale Zeit, die der Router auf Antwort vom Provider warten soll, bevor die Verbindung neu aufgebaut wird.
 
 # untranslated:
-Available packages => Verf&uuml;gbare Pakete
+system_ipkg_availablepackages => Verf&uuml;gbare Pakete
 Device Status => Ger&auml;testatus
 
- \$1 \ =>
- $2  =>
- caption  =>
  Show raw statistics  =>
 802.11b =>
 802.11b + 802.11g =>
@@ -582,11 +579,7 @@ Directory =>
 Filesystem Browser =>
 Parent Directory =>
 Root =>
- c[i]  =>
- name  =>
- short  =>
 Short help =>
- $5  =>
 Invalid value =>
 maximum =>
 802.11b only =>
@@ -652,7 +645,6 @@ USB Devices =>
 Initializing theme ... =>
 installing theme package =>
 Webif settings =>
- c[i]  =>
 install now =>
 Invalid hex key =>
 Invalid key length =>

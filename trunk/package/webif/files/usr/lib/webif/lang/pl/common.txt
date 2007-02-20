@@ -92,10 +92,10 @@ Host Name => Hostname
 Language => J&#281;zyk
 
 # 'Installed Software' page
-Installed Packages => Zainstalowane pakiety
-Update package lists => Aktualizuj liste pakietów
-Uninstall => Usu&#324;
-Install => Instaluj
+system_ipkg_installedpackages => Zainstalowane pakiety
+system_ipkg_updatelists => Aktualizuj liste pakietów
+system_ipkg_Uninstall => Usu&#324;
+system_ipkg_Install => Instaluj
 
 
 # 'Firmware Upgrade' page
@@ -225,11 +225,8 @@ Helptext Idle Time => Czas w sekundach bezruchu internetowego, po up&#322;ywie k
 Helptext Redial Timeout => Liczba sekund, kt&#243;re trzeba odczekac po tym, jak nie otrzymales odpowiedzi od providera (przed ponowna proba podlaczenia)
 
 # untranslated:
-Available packages => Available packages
+Available packages =>
 
- \$1 \ =>
- $2  =>
- caption  =>
  Show raw statistics  =>
 802.11b =>
 802.11b + 802.11g =>
@@ -283,7 +280,7 @@ DHCP Configuration =>
 DHCP Interfaces =>
 DHCP Lease Minutes =>
 DHCP Num =>
-DHCP Server For $FORM_iface =>
+DHCP Server For =>
 DHCP Service =>
 DHCP Start =>
 Distance =>
@@ -528,14 +525,10 @@ Directory =>
 Filesystem Browser =>
 Parent Directory =>
 Root =>
- c[i]  =>
- name  =>
- short  =>
 Short help =>
- $5  =>
 Invalid value =>
 maximum =>
- $_firmware_name Administrative Console =>
+Administrative Console =>
 making_usable =>
 802.11b only =>
 All connected devices (excluding system hubs) =>
@@ -603,7 +596,6 @@ Web mgt. console =>
 Initializing theme ... =>
 installing theme package =>
 Webif settings =>
- c[i]  =>
 install now =>
 Invalid hex key =>
 Invalid key length =>
