@@ -66,10 +66,11 @@ Physical Connections => Fizièke Veze
 Router Connections => Usmjeravanje
 
 # 'DHCP' page
-DHCP leases => DHCP dodjela
-IP Address => IP Adresa
-Name => Naziv
-Expires in => Rok istjecanja
+status_leases_dhcp_leases => DHCP dodjela
+status_leases_IP => IP Adresa
+status_leases_MAC => Mac Adresa
+status_leases_Name => Naziv
+status_leases_Expires => Rok istjecanja
 
 # 'Wireless Status' page
 Wireless Status => Wireless Status

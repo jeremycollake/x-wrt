@@ -127,10 +127,11 @@ Router Connections => Netzwerkverbindungen auf dem Router
 
 
 # 'DHCP' page
-DHCP leases => DHCP-Leases
-IP Address => IP-Adresse
-Name => Name
-Expires in => G&uuml;ltigkeitsdauer
+status_leases_dhcp_leases => DHCP-Leases
+status_leases_IP => IP-Adresse
+status_leases_MAC => MAC-Adresse
+status_leases_Name => Name
+status_leases_Expires => G&uuml;ltigkeitsdauer
 
 
 # 'Wireless Status' page

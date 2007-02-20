@@ -69,10 +69,11 @@ Router Connections => Router anslutningar
 
 
 # 'DHCP' page
-DHCP leases => DHCP leases
-IP Address => IP Adress
-Name => Namn
-Expires in => Utg&aring;r om
+status_leases_dhcp_leases => DHCP leases
+status_leases_IP => IP Adress
+status_leases_MAC => Mac Adress
+status_leases_Name => Namn
+status_leases_Expires => Utg&aring;r om
 
 
 # 'Wireless Status' page

@@ -75,10 +75,11 @@ Router Connections => 路由连接
 
 
 # 'DHCP' page
-DHCP leases => DHCP租约
-IP Address => IP地址
-Name => 名字
-Expires in => 超时
+status_leases_dhcp_leases => DHCP租约
+status_leases_MAC => MAC地址
+status_leases_IP => IP地址
+status_leases_Name => 名字
+status_leases_Expires => 超时
 
 
 # 'Wireless Status' page

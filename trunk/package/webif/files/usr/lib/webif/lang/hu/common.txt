@@ -70,10 +70,11 @@ Router Connections => Router kapcsolatok
 
 
 # 'DHCP' page
-DHCP leases => DHCP b&eacute;rletek
-IP Address => IP c&iacute;m
-Name => N&eacute;v
-Expires in => Lej&aacute;r
+status_leases_dhcp_leases => DHCP b&eacute;rletek
+status_leases_IP => IP c&iacute;m
+status_leases_MAC => MAC Address
+status_leases_Name => N&eacute;v
+status_leases_Expires => Lej&aacute;r
 
 
 # 'Wireless Status' page

@@ -71,10 +71,11 @@ Router Connections => התקשרויות נתב
 
 
 # 'DHCP' page
-DHCP leases => כתובת DHCP
-IP Address => כתובת IP
-Name => שם
-Expires in => פג תוקף ב
+status_leases_dhcp_leases => כתובת DHCP
+status_leases_IP => כתובת IP
+status_leases_MAC => כתובת MAC
+status_leases_Name => שם
+status_leases_Expires => פג תוקף ב
 
 
 # 'Wireless Status' page

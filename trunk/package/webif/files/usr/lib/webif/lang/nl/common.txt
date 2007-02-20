@@ -72,10 +72,11 @@ Router Connections => Router Verbindingen
 
 
 # 'DHCP' page
-DHCP leases => DHCP leases
-IP Address => IP Adres
-Name => Naam
-Expires in => Vervalt binnen
+status_leases_dhcp_leases => DHCP leases
+status_leases_IP => IP Adres
+status_leases_MAC => MAC Adres
+status_leases_Name => Naam
+status_leases_Expires => Vervalt binnen
 
 
 # 'Wireless Status' page
