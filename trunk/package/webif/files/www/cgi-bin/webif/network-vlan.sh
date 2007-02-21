@@ -41,7 +41,7 @@ HELP_TEXT=
 ###################################################################
 # CountNumberOfVLANsThatContainPortX ( ### )
 #
-# used to test is a port is in another vlan, so we know if we should
+# used to test if a port is in another vlan, so we know if we should
 # tag it or not. Returns count in RETURN_VAR.
 #
 # stops when it encounters more than 1...
@@ -80,6 +80,7 @@ if ! empty "$FORM_submit"; then
 			break
 		fi
 	done
+	let "count-=1"
 
 	#
 	# now add or remove if appropriate.. we use vlanXhwname variable
@@ -88,13 +89,18 @@ if ! empty "$FORM_submit"; then
 	#
 	! empty "$FORM_add_vlan" &&
 	{
+		let "count+=1"
 		nvram set vlan"$count"hwname=et0
 	}
 	! empty "$FORM_remove_vlan" &&
 	{
 		# todo: will not work if vlan0 doesn't exist..
+		# nvram unset vlan"$count"hwname
+		# better set it empty to force the user to save changes
+		# where is the 'unset_setting' function?
+		save_setting network "vlan${count}hwname" ""
+		save_setting network "vlan${count}ports" ""
 		let "count-=1"
-		nvram unset vlan"$count"hwname
 	}
 	highest_vlan=$count
 
@@ -135,6 +141,8 @@ if ! empty "$FORM_submit"; then
 		save_setting network "$current_vlan_hw_nvram_name" "et0"
 		save_setting network "$current_vlan_nvram_name" "$current_vlan_ports"
 	done
+
+	load_settings network
 fi
 
 ####################################################################
