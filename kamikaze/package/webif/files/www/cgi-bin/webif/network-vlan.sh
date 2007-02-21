@@ -75,6 +75,7 @@ if ! empty "$FORM_submit"; then
 	for count in $(seq 0 $MAX_VLANS_INDEX); do
 		current_vlan_hw_nvram_name=vlan"$count"hwname
 		if [ -z $(nvram get $current_vlan_hw_nvram_name) ]; then
+			let "count-=1"
 			break
 		fi
 	done
@@ -86,13 +87,18 @@ if ! empty "$FORM_submit"; then
 	#
 	! empty "$FORM_add_vlan" &&
 	{
+		let "count+=1"
 		nvram set vlan"$count"hwname=et0
 	}
 	! empty "$FORM_remove_vlan" &&
 	{
 		# todo: will not work if vlan0 doesn't exist..
+		# nvram unset vlan"$count"hwname
+		# better set it empty to force the user to save changes
+		# where is the 'unset_setting' function?
+		save_setting network "vlan${count}hwname" ""
+		save_setting network "vlan${count}ports" ""
 		let "count-=1"
-		nvram unset vlan"$count"hwname
 	}
 	highest_vlan=$count
 
@@ -126,6 +132,8 @@ if ! empty "$FORM_submit"; then
 		save_setting network "$current_vlan_hw_nvram_name" "et0"
 		save_setting network "$current_vlan_nvram_name" "$current_vlan_ports"
 	done
+
+	load_settings network
 fi
 
 ####################################################################
