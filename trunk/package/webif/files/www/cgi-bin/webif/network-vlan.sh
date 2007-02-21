@@ -77,10 +77,10 @@ if ! empty "$FORM_submit"; then
 	for count in $(seq 0 $MAX_VLANS_INDEX); do
 		current_vlan_hw_nvram_name=vlan"$count"hwname
 		if [ -z $(nvram get $current_vlan_hw_nvram_name) ]; then
+			let "count-=1"
 			break
 		fi
 	done
-	let "count-=1"
 
 	#
 	# now add or remove if appropriate.. we use vlanXhwname variable
