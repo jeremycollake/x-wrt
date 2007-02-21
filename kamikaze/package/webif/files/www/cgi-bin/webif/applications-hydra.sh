@@ -167,9 +167,9 @@ setupDependencies('form1');
 <form action='$SCRIPT_NAME' method='post' name='form1'>
 <table width="100%" border="0" cellspacing="1">
 <tr><td colspan="2" height="1"  bgcolor="#333333"></td></tr>
-<tr><td width="100"><a href="#" rel="b1">IP Address</a></td>
+<tr><td width="200"><a href="#" rel="b1">IP Address</a></td>
 <td><input name="h_ip" type="text" value=$CFG_IP /></td></tr>
-<tr><td width="100"><a href="#" rel="b2">Service</a></td>
+<tr><td><a href="#" rel="b2">Service</a></td>
 <td><select name='service' STYLE='width: 150px'>
 EOF
 #### TODO...Make it a loop or something
@@ -180,16 +180,16 @@ fi
 cat <<EOF
 </select>
 <input name="h_srv" type="hidden" value=$CFG_SRV /></td></tr>
-<tr><td><a href="#" rel="b3">Port</a></td><td><input name="h_port" type="text" value=$CFG_PORT /></td></tr>
+<tr><td><a href="#" rel="b3">Port</a></td><td><input name="h_port" type="text" value="$CFG_PORT" /></td></tr>
 <tr><td height="1"><label><a href="#" rel="b4" >URL Path</a><input type='hidden' class="DEPENDS ON service BEING http" /></label></td><td height="1"><input name="h_path" type="text" value="$CFG_PATH" class="DEPENDS ON service BEING http" /></td></tr>
 <tr><td><a href="#" rel="b5">Username</a></td>
-<td><input name="h_usr" type="text" value=$CFG_USR /></td></tr>
+<td><input name="h_usr" type="text" value="$CFG_USR" /></td></tr>
 <tr><td><a href="#" rel="b6">Password List</a></td>
-<td><input name="h_lst" type="text" value=$CFG_LST /></td></tr>
+<td><input name="h_lst" type="text" value="$CFG_LST" /></td></tr>
 <tr><td><a href="#" rel="b7">Wait Time</a></td>
-<td><input name="h_wait" type="text" value=$CFG_WAIT /></td></tr>
+<td><input name="h_wait" type="text" value="$CFG_WAIT" /></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td colspan="2" height="1"  bgcolor="#333333"></td></tr>
+<tr><td colspan="2" height="1" bgcolor="#333333"></td></tr>
 <tr><td colspan="2"><input type="checkbox" name="chksession" $CFG_RSESSION />&nbsp;Restore a previous aborted/crashed session</td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td>&nbsp;</td>

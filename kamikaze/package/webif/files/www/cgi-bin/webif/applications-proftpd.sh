@@ -15,8 +15,9 @@ echo "$HEADER"
 
 if ! empty "$FORM_package"; then
 
-	App_package_install "FTP Server" "http://ftp.osuosl.org/pub/nslu2/feeds/unslung/wl500g/" "openssl_0.9.7l-3_mipsel.ipk" "proftpd_1.2.10-5_mipsel.ipk"
+	#App_package_install "FTP Server" "http://ftp.osuosl.org/pub/nslu2/feeds/unslung/wl500g/" "openssl_0.9.7l-3_mipsel.ipk" "proftpd_1.2.10-5_mipsel.ipk"
 
+	App_package_install "FTP Server" "http://192.168.0.7/" "openssl_0.9.7l-3_mipsel.ipk" "proftpd_1.2.10-5_mipsel.ipk"
 	#ipkg $loc install $url1"proftpd_1.3.0a-1_mipsel.ipk" -force-overwrite -force-defaults
 
 	if  is_package_installed "openssl"  &&  is_package_installed "proftpd"  ; then 

@@ -114,10 +114,9 @@ echo "<td width=\"20%\"><center><a href=\"$var1\" rel=\"$var4\"><img src=\"/imag
 HighLight="class='gradualshine' onMouseover='slowhigh(this)' onMouseout='slowlow(this)'"
 
 if [ "$FORM_page" = "index" ]; then
-echo "$HEADER"
-echo "$HTMLHEAD"
-echo "</head><body></body></html>"
-exit
+	echo "$HEADER"
+	echo "$HTMLHEAD</head><body></body></html>"
+	exit
 
 elif [ "$FORM_page" = "web" ]; then
 
@@ -132,12 +131,10 @@ elif [ "$FORM_page" = "web" ]; then
 	let "ct1=100"	 ; let "ct2=10000000" ; var="applications-sql.sh?ipkg=" ; CHECK_FREE_MEM #<-SQL Server
 	let "ct1=2000" ; let "ct2=800" ; var="applications-dlmanager.sh?ipkg=" ; CHECK_FREE_MEM #<-DL MANAGER
 
-cat <<EOF
-</head><body><center>
-
-$LoadingJAVA
-
-	<table width="98%" border="0" cellspacing="1" >
+	cat <<EOF
+	</head><body><center>
+	$LoadingJAVA
+	<table width="98%" border="0" cellspacing="10" >
 	<tr class='appindex'>
 EOF
 
@@ -175,31 +172,33 @@ EOF
 	var3="Download Manager" ; var2="bkup.jpg" ; var4="b4"
 	if is_package_installed "ctorrent" ; then
 	var1="applications-dlmanager.sh" ; var5=0 ; TR_APP
+	else if  [ -s "/etc/config/app.dlmanager" ]  ; then 
+	var1="javascript:alert('$txt3');" ; var5=0 ; TR_APP
 	else var1="javascript:confirm3()" ; var5=1 ; TR_APP
 	fi
-	#------------------------
+	fi
 
-cat <<EOF
-<td width="20%">&nbsp;</td><td width="20%">&nbsp;</td></tr>
-<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-</tr></table></center>
+	cat <<EOF
+	<td width="20%">&nbsp;</td><td width="20%">&nbsp;</td></tr>
+	<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+	</tr></table></center>
 EOF
 
 TIP 0 "Apache 2.2 - Powerfull webserver to serve web pages on World Wide Web."
 TIP 0 "ProFTPD 1.3a - Powerfull FTP server for sharing files globally."
 TIP 0 "SQL - Massive database server"
-TIP 0 "Download Manager - Alows unattended downloads http,ftp,torrents"
+TIP 0 "Download Manager - Allows unattended downloads http,ftp,torrents"
 echo "</body></html>"
 
 exit
 
 elif [ "$FORM_page" = "security" ]; then
 	
-echo "$HEADER"
-echo "$HTMLHEAD"
-let "ct1=150" ; let "ct2=800" ; var="applications-hydra.sh?ipkg=" ; CHECK_FREE_MEM
+	echo "$HEADER"
+	echo "$HTMLHEAD"
+	let "ct1=150" ; let "ct2=800" ; var="applications-hydra.sh?ipkg=" ; CHECK_FREE_MEM
 
-echo "</head><body>$LoadingJAVA<table width='98%' border='0' cellspacing='1' ><tr class='appindex'>"
+	echo "</head><body>$LoadingJAVA<table width='98%' border='0' cellspacing='10' ><tr class='appindex'>"
 
 	#------------------------
 	var3="Hydra"
@@ -218,18 +217,17 @@ echo "</head><body>$LoadingJAVA<table width='98%' border='0' cellspacing='1' ><t
 	<td width="20%">&nbsp;</td>
 	</tr></table>
 EOF
-TIP "300" "Hydra 4.5 - \"Password Brute Force\" - attacker for checking weak passwords. Great utility to check your (http,ftp,ssh) services."
-echo "</body></html>"
+	TIP "300" "Hydra 4.5 - \"Password Brute Force\" - attacker for checking weak passwords. Great utility to check your (http,ftp,ssh) services."
+	echo "</body></html>"
 
 elif [ "$FORM_page" = "network" ]; then
 
-echo "$HEADER"
-echo "$HTMLHEAD"
-var="applications-cifs.sh?ipkg=" ; CONFIRM
-var="applications-samba.sh?ipkg=" ; CONFIRM
-var="applications-swap.sh?ipkg=" ; CONFIRM
-
-echo "</head><body>$LoadingJAVA<table width='98%' border='0' cellspacing='1' ><tr class='appindex'>"
+	echo "$HEADER"
+	echo "$HTMLHEAD"
+	var="applications-cifs.sh?ipkg=" ; CONFIRM
+	let "ct1=2000" ; let "ct2=1000" ; var="applications-samba.sh?ipkg=" ; CHECK_FREE_MEM
+	var="applications-swap.sh?ipkg=" ; CONFIRM
+	echo "</head><body>$LoadingJAVA<table width='98%' border='0' cellspacing='10' ><tr class='appindex'>"
 
 	#------------------------
 	var3="Samba Client"
@@ -274,12 +272,27 @@ TIP 250 "Samba Server - Allows to share directories over network."
 TIP 250 "Memory SWAP - Allows to set more RAM by using external storage.<br/><br/>Examples: Network Drive, MMC, USB"
 echo "</body></html>"
 exit
+
 elif [ "$FORM_page" = "wireless" ]; then
 
-echo "$HEADER"
-echo "$HTMLHEAD"
-
-echo "</head><body>$LoadingJAVA<table width='98%' border='0' cellspacing='1' ><tr class='appindex'>"
+	echo "$HEADER"
+	echo "$HTMLHEAD"
+	let "ct1=800" ; let "ct2=100" ; var="applications-aircrack.sh?ipkg=" ; CHECK_FREE_MEM
+	let "ct1=2000" ; let "ct2=100000" ; var="applications-chilispot.sh?ipkg=" ; CHECK_FREE_MEM
+	echo "</head><body>$LoadingJAVA<table width='98%' border='0' cellspacing='10'><tr class='appindex'>"
+	
+	#------------------------
+	var3="AirCrack" ; var2="app.1.jpg" ; var4="b1"
+	if is_package_installed "aircrack-ng" ; then
+	var1="applications-aircrack.sh" ; var5=0 ; TR_APP
+	else var1="javascript:confirm0()" ; var5=1 ; TR_APP
+	fi
+	#------------------------
+	var3="ChiliSpot" ; var2="app.14.gif" ; var4="b2"
+	if is_package_installed "chilispot" ; then
+	var1="applications-chilispot.sh" ; var5=0 ; TR_APP
+	else var1="javascript:confirm1()" ; var5=1 ; TR_APP
+	fi
 
 	cat <<EOF
 	<td width="20%">&nbsp;</td>
@@ -290,19 +303,15 @@ echo "</head><body>$LoadingJAVA<table width='98%' border='0' cellspacing='1' ><t
 	</tr></table>
 	</body></html>
 EOF
+	exit
 
 elif [ "$FORM_page" = "remove" ]; then
-echo "$HEADER"
-echo "$HTMLHEAD"
-
-cat <<EOF
-</head>
-	<table width="100%" border="0" cellspacing="1">
-EOF
+	echo "$HEADER"
+	echo "$HTMLHEAD"
+	echo "</head><table width='100%' border='0' cellspacing='5'>"
 	#### Check list to remove
-
 	pkgrmv="<input type='hidden' name='remove' value='1'><input type=submit class='flatbtn' name=rmvapp value='@TR<<Remove Application>>'>"
-
+#------------------------
 	echo "<tr><td colspan=2><br/><u>> Web Applications</u><br/><br/></td></tr>"
 	
 	if is_package_installed "apr" && is_package_installed "gdbm" && is_package_installed "expat" && is_package_installed "libdb" && is_package_installed "apr-util" && is_package_installed "apache" ; then
@@ -319,26 +328,29 @@ EOF
 	TR_Remove_APP "bkup.jpg" "Download Manager" "applications-dlmanager.sh" 0 ""
 	else if  [ -s "/etc/config/app.dlmanager" ]  ; then TR_Remove_APP "bkup.jpg" "Download Manager" "applications-dlmanager.sh" 1 "disabled" ; fi
 	fi
-
+#------------------------
 	echo "<tr><td colspan=2><br/><u>> Security Applications</u><br/><br/></td></tr>"
-	
 	if  [ -s "/usr/sbin/hydra" ]  ; then TR_Remove_APP "app.2.jpg" "Hydra" "applications-hydra.sh" 0 "" ; fi
-
+#------------------------
 	echo "<tr><td colspan=2><br/><u>> Network Applications</u><br/><br/></td></tr>"
-
 	if is_package_installed "kmod-fs-cifs"  &&  is_package_installed "cifsmount"  ; then TR_Remove_APP "app.10.jpg" "Samba Client" "applications-cifs.sh" 0 "" ; fi
 	if is_package_installed "kmod-loop" && is_package_installed "swap-utils" &&  is_package_installed "losetup"  ; then TR_Remove_APP	 "app.12.jpg" "Memory Swap" "applications-swap.sh" 0 "" ; fi
+#------------------------
+	echo "<tr><td colspan=2><br/><u>> Wireless Applications</u><br/><br/></td></tr>"
+	if is_package_installed "aircrack-ng" ; then
+	TR_Remove_APP "app.1.jpg" "AirCrack" "applications-aircrack.sh" 0 ""
+	else if  [ -s "/etc/config/app.aicrack" ]  ; then TR_Remove_APP "app.1.jpg" "AirCrack" "applications-aircrack.sh" 1 "disabled" ; fi
+	fi
 
 	echo "</table></html>"
 	exit
 
 elif [ "$FORM_page" = "list" ]; then
-echo "$HEADER"
-echo "$HTMLHEAD"
+	echo "$HEADER"
+	echo "$HTMLHEAD"
 
-cat <<EOF
-</head><body>
-	<table width="90%" border="0" cellpadding="0" cellspacing="0" >
+	cat <<EOF
+	</head><body><table width="98%" border="0" align="right" >
 	<tr>
 	<td><a href="applications.sh?page=web" target="AppIndex"><img src="/images/app.8.jpg" border="0" alt /></a></td>
 	<td><strong>Web Applications</strong></td></tr>
@@ -369,18 +381,18 @@ EOF
 elif [ "$FORM_page" = "" ] && [ "$FORM_package" = "" ]; then
 
 . /usr/lib/webif/webif.sh
+	header "Applications" "" ""
 
-header "Applications" "List" "<img src=/images/app.jpg align='middle' alt />&nbsp;@TR<<List of Applications>>"
 
 	cat <<EOF
-	<font color="#FF0000">This page is currently in development process. Some features may not function. </font><br/>
+	<br/><font color="#FF0000">This page is currently in development process. Some features may not function. </font><br/>
 	<table width="100%" border="0" cellspacing="1">
 	<tr><td width="35%">&nbsp;</td><td width="65%">&nbsp;</td></tr>
-	<tr><td><IFRAME SRC="applications.sh?page=list" STYLE="width:100%; height:350px; border:1px dotted #888888;" FRAMEBORDER="0" SCROLLING="no" name="AppList"></IFRAME></td>
-	<td><IFRAME SRC="applications.sh?page=index" STYLE="width:98%; height:350px; border:1px dotted #888888;" FRAMEBORDER="0" SCROLLING="yes" name="AppIndex"></IFRAME></td>
-	</tr></table>
+	<tr><td><IFRAME SRC="applications.sh?page=list" STYLE="width:100%; height:450px; border:1px dotted #888888;" FRAMEBORDER="0" SCROLLING="no" name="AppList"></IFRAME></td>
+	<td><IFRAME SRC="applications.sh?page=index" STYLE="width:98%; height:450px; border:1px dotted #888888;" FRAMEBORDER="0" SCROLLING="yes" name="AppIndex"></IFRAME></td>
+	</tr></table></div></div></body></html>
 EOF
-footer
+
 fi
 
 if [ "$FORM_package" = "install" ]; then

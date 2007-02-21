@@ -140,7 +140,7 @@ cat <<EOF
 <br/><form action='$SCRIPT_NAME' method='post'>
 <table width="100%" border="0" cellspacing="1">
 <tr><td colspan="2" height="1"  bgcolor="#333333"></td></tr>
-<tr><td><a href="#" rel="b1">IP Address</a></td><td><input name="smb_ip" type="text" value=$NET_IP /></td></tr>
+<tr><td width="200"><a href="#" rel="b1">IP Address</a></td><td><input name="smb_ip" type="text" value=$NET_IP /></td></tr>
 <tr><td><a href="#" rel="b2">PC name</a></td><td><input name="smb_pc" type="text" value=$NET_PC /></td></tr>
 <tr><td><a href="#" rel="b3">Workgroup</a></td><td><input name="smb_wrkgrp" type="text" value=$NET_GRP /></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
