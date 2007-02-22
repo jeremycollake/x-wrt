@@ -197,9 +197,31 @@ Helptext Encryption Type => 'WPA (RADIUS)' je podržan samo u Access Point modu.
 Helptext IP Settings => IP Postavke su opcionalne za DHCP i PPTP. Ukoliko su postavljene, koriste se kao pretpostavljene, u sluèaju kada  DHCP poslužitelj nije dostupan.
 Helptext Idle Time => Vrijeme u sekundama bez internet prometa do kojeg ureðaj treba èekati prije prekida veze (samo kod Spajanja na Zahtjev)
 Helptext Redial Timeout => Vrijeme u sekundama za prijem odgovora od prividera prije ponovnog spajanja
- \$1 \ =>
- $2  =>
- caption  =>
+
+## new format
+
+
+## status-leases.sh
+status_leases_dhcp_leases => DHCP dodjela
+status_leases_IP => IP Adresa
+status_leases_MAC => Mac Adresa
+status_leases_Name => Naziv
+status_leases_Expires => Rok istjecanja
+
+
+## network-hosts.sh
+network_hosts_Add => Dodaj
+network_hosts_Configured_Hosts => Konfigurirani Hostovi
+network_hosts_Host_Name => Naziv Hosta
+network_hosts_Host_Names => Nazivi Hostova
+network_hosts_IP => IP Adresa
+network_hosts_MAC => MAC Adresa
+network_hosts_Name => Naziv
+network_hosts_Remove => Makni
+network_hosts_Expires => Rok istjecanja
+
+
+
  Show raw statistics  =>
 802.11b =>
 802.11b + 802.11g =>
@@ -254,7 +276,7 @@ DHCP Configuration =>
 DHCP Interfaces =>
 DHCP Lease Minutes =>
 DHCP Num =>
-DHCP Server For $FORM_iface =>
+DHCP Server For =>
 DHCP Service =>
 DHCP Start =>
 Distance =>
@@ -500,14 +522,10 @@ Directory =>
 Filesystem Browser =>
 Parent Directory =>
 Root =>
- c[i]  =>
- name  =>
- short  =>
 Short help =>
- $5  =>
 Invalid value =>
 maximum =>
- $_firmware_name Administrative Console =>
+Administrative Console =>
 making_usable =>
 qos_enabled => Omoguæeno
 qos_adv_enabled => Omoguæeno

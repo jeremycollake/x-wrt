@@ -222,12 +222,32 @@ Helptext IP Settings => Le opzioni IP sono opzioni per DHCP e PPTP.
 Helptext Idle Time => Numero di secondi che deve aspettare il router prima di disconnettersi. (Solo nel metodo ' Connessione su richiesta').
 Helptext Redial Timeout => Numero di secondi che il router deve aspettare per effettuare una nuova riconnessione.
 
+
+## new format
+
+
+## status-leases.sh
+status_leases_dhcp_leases => lease DHCP
+status_leases_IP => Indirizzo IP
+status_leases_MAC => Indirizzo MAC
+status_leases_Name => Nome
+status_leases_Expires => Scade il
+
+
+## network-hosts.sh
+network_hosts_Add => Aggiungi
+network_hosts_Configured_Hosts => Host configurati
+network_hosts_Host_Name => Nome Host
+network_hosts_Host_Names => Nome Host
+network_hosts_IP => Indirizzo IP
+network_hosts_MAC => Indirizzo MAC
+network_hosts_Name => Nome
+network_hosts_Remove => Elimina
+network_hosts_Expires => Scade il
+
+
 # untranslated:
 Available packages => Available packages
-
- \$1 \ =>
- $2  =>
- caption  =>
  Show raw statistics  =>
 802.11b =>
 802.11b + 802.11g =>
@@ -281,7 +301,7 @@ DHCP Configuration =>
 DHCP Interfaces =>
 DHCP Lease Minutes =>
 DHCP Num =>
-DHCP Server For $FORM_iface =>
+DHCP Server For =>
 DHCP Service =>
 DHCP Start =>
 Distance =>
@@ -527,14 +547,10 @@ Directory =>
 Filesystem Browser =>
 Parent Directory =>
 Root =>
- c[i]  =>
- name  =>
- short  =>
 Short help =>
- $5  =>
 Invalid value =>
 maximum =>
- $_firmware_name Administrative Console =>
+Administrative Console =>
 making_usable =>
 qos_enabled => Attivato
 qos_adv_enabled => Attivato

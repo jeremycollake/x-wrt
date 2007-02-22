@@ -228,11 +228,32 @@ Helptext Idle Time => Ventetid i sekunder f&oslash;r inaktivitet bliver &aring;r
 
 Helptext Redial Timeout => Ventetid f&oslash;r der pr&oslash;ves at ringe op igen.
 
+
+## new format
+
+
+## status-leases.sh
+status_leases_dhcp_leases => DHCP leasinger
+status_leases_IP => IP adresse
+status_leases_MAC => MAC adresse
+status_leases_Name => Navn
+status_leases_Expires => Udl&oslash;bstid
+
+
+## network-hosts.sh
+network_hosts_Add => Tilf&oslash;je
+network_hosts_Configured_Hosts => V&aelig;rtsnavne
+network_hosts_Host_Name => V&aelig;rtsnavn
+network_hosts_Host_Names => V&aelig;rtsnavne
+network_hosts_IP => IP adresse
+network_hosts_MAC => MAC adresse
+network_hosts_Name => Navn
+network_hosts_Remove => Fjern
+network_hosts_Expires => Udl&oslash;bstid
+
+
 # untranslated:
 Available packages => Available packages
- \$1 \ =>
- $2  =>
- caption  =>
  Show raw statistics  =>
 802.11b =>
 802.11b + 802.11g =>
@@ -286,7 +307,7 @@ DHCP Configuration =>
 DHCP Interfaces =>
 DHCP Lease Minutes =>
 DHCP Num =>
-DHCP Server For $FORM_iface =>
+DHCP Server For =>
 DHCP Service =>
 DHCP Start =>
 Distance =>
@@ -532,14 +553,10 @@ Directory =>
 Filesystem Browser =>
 Parent Directory =>
 Root =>
- c[i]  =>
- name  =>
- short  =>
 Short help =>
- $5  =>
 Invalid value =>
 maximum =>
- $_firmware_name Administrative Console =>
+Administrative Console =>
 making_usable =>
 qos_enabled => Aktiveret
 qos_adv_enabled => Aktiveret

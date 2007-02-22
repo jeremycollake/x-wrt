@@ -280,13 +280,31 @@ Helptext IP Settings => IP-Einstellungen sind optional für DHCP und PPTP. Wenn s
 Helptext Idle Time => Wartezeit in Sekunden, nach der bei Inaktivität die Internetverbindung getrennt wird.
 Helptext Redial Timeout => Maximale Zeit, die der Router auf Antwort vom Provider warten soll, bevor die Verbindung neu aufgebaut wird.
 
+
+## new format
+
+
+## status-leases.sh
+status_leases_dhcp_leases => DHCP-Leases
+status_leases_IP => IP-Adresse
+status_leases_MAC => MAC-Adresse
+status_leases_Name => Name
+status_leases_Expires => G&uuml;ltigkeitsdauer
+
+
+## network-hosts.sh
+network_hosts_Add => Hinzuf&uuml;gen
+network_hosts_Configured_Hosts => Konfigurierte Hosts
+network_hosts_Host_Name => Hostname
+network_hosts_Host_Names => Host-Eintr&auml;ge
+network_hosts_MAC => MAC-Adresse
+network_hosts_Name => Name
+network_hosts_Remove => Entfernen
+network_hosts_Expires => G&uuml;ltigkeitsdauer
+
 # untranslated:
-Available packages => Verf&uuml;gbare Pakete
 Device Status => Ger&auml;testatus
 
- \$1 \ =>
- $2  =>
- caption  =>
  Show raw statistics  =>
 802.11b =>
 802.11b + 802.11g =>
@@ -338,7 +356,7 @@ DHCP Configuration =>
 DHCP Interfaces =>
 DHCP Lease Minutes =>
 DHCP Num =>
-DHCP Server For $FORM_iface =>
+DHCP Server For =>
 DHCP Service =>
 DHCP Start =>
 Distance =>
@@ -582,11 +600,7 @@ Directory =>
 Filesystem Browser =>
 Parent Directory =>
 Root =>
- c[i]  =>
- name  =>
- short  =>
 Short help =>
- $5  =>
 Invalid value =>
 maximum =>
 802.11b only =>
@@ -652,7 +666,6 @@ USB Devices =>
 Initializing theme ... =>
 installing theme package =>
 Webif settings =>
- c[i]  =>
 install now =>
 Invalid hex key =>
 Invalid key length =>

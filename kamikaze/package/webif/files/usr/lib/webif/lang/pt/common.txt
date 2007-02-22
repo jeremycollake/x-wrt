@@ -454,9 +454,32 @@ Helptext Idle Time => Número de segundos sem actividade na Internet que o router
 
  
 Helptext Redial Timeout => Número de segundo sem receber resposta que o router deve esperar para voltar a estabelecer ligação à Internet.
- \$1 \ =>
- $2  =>
- caption  =>
+
+
+## new format
+
+
+## status-leases.sh
+status_leases_dhcp_leases => Préstimos de DHCP
+status_leases_IP => Endereço IP
+status_leases_MAC => Endereço MAC
+status_leases_Name => Nome
+status_leases_Expires => Expira em
+
+
+## network-hosts.sh
+network_hosts_Add => Adicionar
+network_hosts_Configured_Hosts => Sistemas configurados
+network_hosts_Host_Name => Nome do sistema
+network_hosts_Host_Names => Nome dos sistemas
+network_hosts_IP => Endereço IP
+network_hosts_MAC => Endereço MAC
+network_hosts_Name => Nome
+network_hosts_Remove => Eliminar
+network_hosts_Expires => Expira em
+
+
+
  Show raw statistics  =>
 802.11b =>
 802.11b + 802.11g =>
@@ -510,7 +533,7 @@ DHCP Configuration =>
 DHCP Interfaces =>
 DHCP Lease Minutes =>
 DHCP Num =>
-DHCP Server For $FORM_iface =>
+DHCP Server For =>
 DHCP Service =>
 DHCP Start =>
 Distance =>
@@ -756,14 +779,10 @@ Directory =>
 Filesystem Browser =>
 Parent Directory =>
 Root =>
- c[i]  =>
- name  =>
- short  =>
 Short help =>
- $5  =>
 Invalid value =>
 maximum =>
- $_firmware_name Administrative Console =>
+Administrative Console =>
 making_usable =>
 qos_enabled => Activo
 qos_adv_enabled => Activo

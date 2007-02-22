@@ -223,12 +223,32 @@ Helptext IP Settings => IP be&aacute;ll&iacute;t&aacute;sok opcion&aacute;lisak 
 Helptext Idle Time => Maxim&aacute;lis id&#337; m&aacute;sodpercben internet forgalom n&eacute;lk&uuml;l, amennyit a router v&aacute;r miel&#337;tt bontja a kapcsolatot (csak 'Csatlakoz&aacute;s k&eacute;r&eacute;s eset&eacute;n' m&oacute;dban).
 Helptext Redial Timeout => Maxim&aacute;lis id&#337; m&aacute;sodpercben az &uacute;jrat&aacute;rcs&aacute;z&aacute;s el&#337;tt, ha a szolg&aacute;ltat&oacute; nem v&aacute;laszol.
 
+
+## new format
+
+
+## status-leases.sh
+status_leases_dhcp_leases => DHCP b&eacute;rletek
+status_leases_IP => IP c&iacute;m
+status_leases_MAC => MAC Address
+status_leases_Name => N&eacute;v
+status_leases_Expires => Lej&aacute;r
+
+
+## network-hosts.sh
+network_hosts_Add => Hozz&aacute;ad
+network_hosts_Configured_Hosts => Konfigur&aacute;lt g&eacute;pek
+network_hosts_Host_Name => Host n&eacute;v
+network_hosts_Host_Names => Host nevek
+network_hosts_IP => IP-Address
+network_hosts_MAC => MAC-Address
+network_hosts_Name => N&eacute;v
+network_hosts_Remove => Elt&aacute;vol&iacute;t
+network_hosts_Expires => Lej&aacute;r
+
+
 # untranslated:
 Available packages => Haszn&aacute;lhat&oacute; csomagok
-
- \$1 \ =>
- $2  =>
- caption  =>
  Show raw statistics  =>
 802.11b =>
 802.11b + 802.11g =>
@@ -282,7 +302,7 @@ DHCP Configuration =>
 DHCP Interfaces =>
 DHCP Lease Minutes =>
 DHCP Num =>
-DHCP Server For $FORM_iface =>
+DHCP Server For =>
 DHCP Service =>
 DHCP Start =>
 Distance =>
@@ -528,14 +548,10 @@ Directory =>
 Filesystem Browser =>
 Parent Directory =>
 Root =>
- c[i]  =>
- name  =>
- short  =>
 Short help =>
- $5  =>
 Invalid value =>
 maximum =>
- $_firmware_name Administrative Console =>
+Administrative Console =>
 making_usable =>
 qos_enabled => Enged&eacute;lyezve
 qos_adv_enabled => Enged&eacute;lyezve

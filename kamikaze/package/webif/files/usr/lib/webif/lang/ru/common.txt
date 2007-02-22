@@ -222,9 +222,32 @@ Helptext Encryption Type => 'WPA (RADIUS)' &#x43F;&#x43E;&#x434;&#x434;&#x435;&#
 Helptext IP Settings => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438; IP &#x43C;&#x43E;&#x433;&#x443;&#x442; &#x43D;&#x435; &#x437;&#x430;&#x434;&#x430;&#x432;&#x430;&#x442;&#x44C;&#x441;&#x44F; &#x432; &#x440;&#x435;&#x436;&#x438;&#x43C;&#x430;&#x445; DHCP &#x438; PPTP. &#x415;&#x441;&#x43B;&#x438; DHCP &#x441;&#x435;&#x440;&#x432;&#x435;&#x440; &#x431;&#x443;&#x434;&#x435;&#x442; &#x43D;&#x435;&#x434;&#x43E;&#x441;&#x442;&#x443;&#x43F;&#x435;&#x43D;, &#x431;&#x443;&#x434;&#x443;&#x442; &#x438;&#x441;&#x43F;&#x43E;&#x43B;&#x44C;&#x437;&#x43E;&#x432;&#x430;&#x442;&#x44C;&#x441;&#x44F; &#x437;&#x430;&#x434;&#x430;&#x43D;&#x43D;&#x44B;&#x435; &#x43D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x439;&#x43A;&#x438;.
 Helptext Idle Time => &#x41F;&#x440;&#x43E;&#x43C;&#x435;&#x436;&#x443;&#x442;&#x43E;&#x43A; &#x432;&#x440;&#x435;&#x43C;&#x435;&#x43D;&#x438; &#x432; &#x441;&#x435;&#x43A;&#x443;&#x43D;&#x434;&#x430;&#x445; &#x43F;&#x43E; &#x438;&#x441;&#x442;&#x435;&#x447;&#x435;&#x43D;&#x438;&#x44E; &#x43A;&#x43E;&#x442;&#x43E;&#x440;&#x43E;&#x433;&#x43E; &#x441;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x435; &#x431;&#x443;&#x434;&#x435;&#x442; &#x440;&#x430;&#x437;&#x43E;&#x440;&#x432;&#x430;&#x43D;&#x43E;, &#x435;&#x441;&#x43B;&#x438; &#x434;&#x430;&#x43D;&#x43D;&#x44B;&#x435; &#x43D;&#x435; &#x43F;&#x435;&#x440;&#x435;&#x434;&#x43E;&#x432;&#x430;&#x43B;&#x438;&#x441;&#x44C; &#x43F;&#x43E; &#x432;&#x43D;&#x435;&#x448;&#x43D;&#x435;&#x43C;&#x443; &#x438;&#x43D;&#x442;&#x435;&#x440;&#x444;&#x435;&#x439;&#x441;&#x443; (&#x438;&#x441;&#x43F;&#x43E;&#x43B;&#x44C;&#x437;&#x443;&#x435;&#x442;&#x441;&#x44F; &#x442;&#x43E;&#x43B;&#x44C;&#x43A;&#x43E; &#x432; &#x440;&#x435;&#x436;&#x438;&#x43C;&#x435; &#x441;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x44F; &#x43F;&#x43E; &#x437;&#x430;&#x43F;&#x440;&#x43E;&#x441;&#x443;).
 Helptext Redial Timeout => &#x417;&#x430;&#x434;&#x435;&#x440;&#x436;&#x43A;&#x430; &#x432; &#x441;&#x435;&#x43A;&#x443;&#x43D;&#x434;&#x430;&#x445; &#x43F;&#x435;&#x440;&#x435;&#x434; &#x43F;&#x43E;&#x43F;&#x44B;&#x442;&#x43A;&#x43E;&#x439; &#x443;&#x441;&#x442;&#x430;&#x43D;&#x43E;&#x432;&#x43A;&#x438; &#x43F;&#x43E;&#x432;&#x442;&#x43E;&#x440;&#x43D;&#x43E;&#x433;&#x43E; &#x441;&#x43E;&#x435;&#x434;&#x438;&#x43D;&#x435;&#x43D;&#x438;&#x44F; &#x441; &#x43F;&#x440;&#x43E;&#x432;&#x430;&#x439;&#x434;&#x435;&#x440;&#x43E;&#x43C;.
- \$1 \ =>
- $2  =>
- caption  =>
+
+
+## new format
+
+
+## status-leases.sh
+status_leases_dhcp_leases => DHCP &#x43A;&#x43B;&#x438;&#x435;&#x43D;&#x442;&#x44B;
+status_leases_IP => IP &#x430;&#x434;&#x440;&#x435;&#x441;
+status_leases_MAC => MAC-&#x430;&#x434;&#x440;&#x435;&#x441;
+status_leases_Name => &#x418;&#x43C;&#x44F;
+status_leases_Expires => &#x418;&#x441;&#x442;&#x435;&#x43A;&#x430;&#x435;&#x442;
+
+
+## network-hosts.sh
+network_hosts_Add => &#x414;&#x43E;&#x431;&#x430;&#x432;&#x438;&#x442;&#x44C;
+network_hosts_Configured_Hosts => &#x41D;&#x430;&#x441;&#x442;&#x440;&#x43E;&#x435;&#x43D;&#x43D;&#x44B;&#x435; &#x443;&#x437;&#x43B;&#x44B;
+network_hosts_Host_Name => &#x418;&#x43C;&#x44F; &#x443;&#x437;&#x43B;&#x430;
+network_hosts_Host_Names => &#x418;&#x43C;&#x435;&#x43D;&#x430; &#x443;&#x437;&#x43B;&#x43E;&#x432;
+network_hosts_IP => IP &#x430;&#x434;&#x440;&#x435;&#x441;
+network_hosts_MAC => MAC-&#x430;&#x434;&#x440;&#x435;&#x441;
+network_hosts_Name => &#x418;&#x43C;&#x44F;
+network_hosts_Remove => &#x423;&#x434;&#x430;&#x43B;&#x438;&#x442;&#x44C;
+network_hosts_Expires => &#x418;&#x441;&#x442;&#x435;&#x43A;&#x430;&#x435;&#x442;
+
+
+
  Show raw statistics  =>
 802.11b =>
 802.11b + 802.11g =>
@@ -278,7 +301,7 @@ DHCP Configuration =>
 DHCP Interfaces =>
 DHCP Lease Minutes =>
 DHCP Num =>
-DHCP Server For $FORM_iface =>
+DHCP Server For =>
 DHCP Service =>
 DHCP Start =>
 Distance =>
@@ -524,14 +547,10 @@ Directory =>
 Filesystem Browser =>
 Parent Directory =>
 Root =>
- c[i]  =>
- name  =>
- short  =>
 Short help =>
- $5  =>
 Invalid value =>
 maximum =>
- $_firmware_name Administrative Console =>
+Administrative Console =>
 making_usable =>
 qos_enabled => &#x412;&#x43A;&#x43B;&#x44E;&#x447;&#x451;&#x43D;
 qos_adv_enabled => &#x412;&#x43A;&#x43B;&#x44E;&#x447;&#x451;&#x43D;

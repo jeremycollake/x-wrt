@@ -219,12 +219,32 @@ Helptext IP Settings => IP inst&auml;llningar &auml;r inte obligatoriska f&ouml;
 Helptext Idle Time => Antalet sekunder utan internet trafik som routern skall v&auml;nta p&aring; innan den fr&aring;nkopplar sig fr&aring;n Internet. (Anslut endast p&aring; beg&auml;ran)
 Helptext Redial Timeout => Antalet sekunder att v&auml;nta i innan f&ouml;rs&ouml;k till ny uppkoppling g&ouml;rs. (om ingen kontakt kunnat uppr&auml;ttas med tillhandah&aring;llaren)
 
+
+## new format
+
+
+## status-leases.sh
+status_leases_dhcp_leases => DHCP leases
+status_leases_IP => IP Adress
+status_leases_MAC => Mac Adress
+status_leases_Name => Namn
+status_leases_Expires => Utg&aring;r om
+
+
+## network-hosts.sh
+network_hosts_Add => L&auml;gg till
+network_hosts_Configured_Hosts => Konfigurerade V&auml;rdar
+network_hosts_Host_Name => V&auml;rdnamn
+network_hosts_Host_Names => V&auml;rdnamn
+network_hosts_IP => IP Adress
+network_hosts_MAC => Mac Adress
+network_hosts_Name => Namn
+network_hosts_Remove => Ta bort
+network_hosts_Expires => Utg&aring;r om
+
+
 # untranslated:
 Available packages => Available packages
-
- \$1 \ =>
- $2  =>
- caption  =>
  Show raw statistics  =>
 802.11b =>
 802.11b + 802.11g =>
@@ -278,7 +298,7 @@ DHCP Configuration =>
 DHCP Interfaces =>
 DHCP Lease Minutes =>
 DHCP Num =>
-DHCP Server For $FORM_iface =>
+DHCP Server For =>
 DHCP Service =>
 DHCP Start =>
 Distance =>
@@ -524,14 +544,10 @@ Directory =>
 Filesystem Browser =>
 Parent Directory =>
 Root =>
- c[i]  =>
- name  =>
- short  =>
 Short help =>
- $5  =>
 Invalid value =>
 maximum =>
- $_firmware_name Administrative Console =>
+Administrative Console =>
 making_usable =>
 qos_enabled => P&aring;satt
 qos_adv_enabled => P&aring;satt
