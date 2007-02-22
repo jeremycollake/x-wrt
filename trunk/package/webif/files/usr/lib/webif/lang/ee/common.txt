@@ -70,14 +70,6 @@ Physical Connections => F&uuml;&uuml;silised &uuml;hendused
 Router Connections => Marsruuteri&uuml;hendused
  
  
-# DHCP page 
-status_leases_dhcp_leases => DHCP antud aadressid 
-status_leases_IP => IP-aadress
-status_leases_MAC => MAC-aadress 
-status_leases_Name => Nimi
-status_leases_Expires => Aegub
- 
- 
 # Wireless Status page 
 Wireless Status => Raadioliidese olek
  
@@ -90,13 +82,6 @@ Confirm Password => Korrake parooli
 System Settings => S&uuml;steemi s&auml;tted
 Host Name => Hostinimi
 Language => Keel
- 
-# Installed Software page 
-system_ipkg_installedpackages => Installitud paketid
-system_ipkg_updatelists => V&auml;rskenda paketiloendit
-system_ipkg_Uninstall => Desinstalli
-system_ipkg_Install => Installi
-system_ipkg_availablepackages => Saadaolevad paketid 
  
 # Firmware Upgrade page 
 Firmware format => P&uuml;sivara vorming
@@ -228,6 +213,38 @@ Helptext IP Settings => IP-s&auml;tted on DHCP ja PPTP puhul valikulised. Kui mu
 Helptext Idle Time => Aeg sekundites, mille v&auml;ltel marsruuter enne Interneti-&uuml;henduse katkestamist ootab (ainult s&auml;tte Connect on Demand puhul).
  
 Helptext Redial Timeout => Aeg sekundites, kui kaua marsruuter p&auml;rast teenusepakkuja v&otilde;rgust teate "pole vastust" saamist ootab, enne kui asub &uuml;hendust taastama.
+
+
+## new format
+
+## system-ipkg.sh
+system_ipkg_installedpackages => Installitud paketid
+system_ipkg_updatelists => V&auml;rskenda paketiloendit
+system_ipkg_Uninstall => Desinstalli
+system_ipkg_Install => Installi
+system_ipkg_availablepackages => Saadaolevad paketid 
+
+
+## status-leases.sh
+status_leases_dhcp_leases => DHCP antud aadressid 
+status_leases_IP => IP-aadress
+status_leases_MAC => MAC-aadress 
+status_leases_Name => Nimi
+status_leases_Expires => Aegub
+
+
+## network-hosts.sh
+network_hosts_Add => Lisa
+network_hosts_Configured_Hosts => Konfigureeritud hostid
+network_hosts_Host_Name => Hostinimi
+network_hosts_Host_Names => Hostinimed
+network_hosts_IP => IP-aadress
+network_hosts_MAC => MAC-aadress 
+network_hosts_Name => Nimi
+network_hosts_Remove => Eemalda
+network_hosts_Expires => Aegub
+
+
 
  Show raw statistics  =>
 802.11b =>

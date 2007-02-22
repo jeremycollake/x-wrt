@@ -70,14 +70,6 @@ Physical Connections => Connexions físiques
 Router Connections => Connexions del router
 
 
-# 'DHCP' page
-status_leases_dhcp_leases => Préstecs DHCP
-status_leases_IP => Adreça IP
-status_leases_MAC => Adreça MAC
-status_leases_Name => Nom
-status_leases_Expires => Caduca d'ara a
-
-
 # 'Wireless Status' page
 Wireless Status => Estat del Wi-Fi
 
@@ -91,12 +83,6 @@ System Settings => Paràmetres del sistema
 Host Name => Nom de l'host
 Language => Idioma
 
-# 'Installed Software' page
-system_ipkg_installedpackages => Paquets instal·lats
-system_ipkg_updatelists => Actualització de la llista de paquets
-system_ipkg_Uninstall => Desinstal·lar
-system_ipkg_Install => Instal·lar
-
 
 # 'Firmware Upgrade' page
 Firmware format => Format del firmware
@@ -108,6 +94,7 @@ Options => Opcions
 Firmware_image => Fitxer del firmware
 Upgrade => Actualitzar
 Upgrading... => Actualitzant...
+
 
 # 'LAN Settings' page
 LAN Settings => Opcions LAN
@@ -221,6 +208,36 @@ Helptext Encryption Type => 'WPA (RADIUS)' només pot emprar-se en mode Punt d'Ac
 Helptext IP Settings => Les opcions IP són opcionals per a DHCP y PPTP. Si les elegiu, s'empraran per defecte en cas de que la configuració automàtica falli.
 Helptext Idle Time => Nombre de segons sense activitat amb Internet que ha d'esperar el router abans de desconectar-se. (Només pel mode Baix Demanda).
 Helptext Redial Timeout => Nombre de segons sense rebre resposta del servidor que ha d'esperar el router per a tornar a connectar-se.
+
+
+## new format
+
+## system-ipkg.sh
+system_ipkg_installedpackages => Paquets instal·lats
+system_ipkg_updatelists => Actualització de la llista de paquets
+system_ipkg_Uninstall => Desinstal·lar
+system_ipkg_Install => Instal·lar
+
+
+## status-leases.sh
+status_leases_dhcp_leases => Préstecs DHCP
+status_leases_IP => Adreça IP
+status_leases_MAC => Adreça MAC
+status_leases_Name => Nom
+status_leases_Expires => Caduca d'ara a
+
+
+## network-hosts.sh
+network_hosts_Add => Afegir
+network_hosts_Configured_Hosts => Equips configurats
+network_hosts_Host_Name => Nom de l'equip
+network_hosts_Host_Names => Nom dels equips
+network_hosts_IP => Adreça IP
+network_hosts_MAC => Adreça MAC
+network_hosts_Name => Nom
+network_hosts_Remove => Eliminar
+network_hosts_Expires => Caduca d'ara a
+
 
 # untranslated:
 system_ipkg_availablepackages => Paquets disponibles

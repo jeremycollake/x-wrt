@@ -76,14 +76,6 @@ Physical Connections => Connexions physiques
 Router Connections => Connexions au routeur
 
 
-# 'DHCP' page
-status_leases_dhcp_leases => Baux DHCP
-status_leases_IP => Adresse IP
-status_leases_MAC => Adresse MAC
-status_leases_Name => Nom
-status_leases_Expires => Expire dans
-
-
 # 'Wireless Status' page
 Wireless Status => Etat du Wi-Fi
 
@@ -96,13 +88,6 @@ Confirm Password => Confirmez le mot de passe
 System Settings => Param&egrave;tres du syst&egrave;me
 Host Name => Nom d'h&ocirc;te
 Language => Langue
-
-# 'Installed Software' page
-system_ipkg_installedpackages => Paquets logiciels install&eacute;s
-system_ipkg_updatelists => Mise &agrave; jour de la liste des paquets
-system_ipkg_Uninstall => D&eacute;sinstaller
-system_ipkg_Install => Installer
-
 
 # 'Firmware Upgrade' page
 Firmware format => Format du firmware
@@ -234,7 +219,37 @@ Helptext Idle Time => Nombre de secondes sans traffic internet &agrave; attendre
 Helptext Redial Timeout => Nombre de secondes &agrave; attendre apr&egrave;s n'avoir recu aucune r&eacute;ponse du fournisseur avant un nouvel &eacute;ssai de connexion.
 
 
+## new format
+
+## system-ipkg.sh
+system_ipkg_installedpackages => Paquets logiciels install&eacute;s
+system_ipkg_updatelists => Mise &agrave; jour de la liste des paquets
+system_ipkg_Uninstall => D&eacute;sinstaller
+system_ipkg_Install => Installer
 system_ipkg_availablepackages => Paquetages disponibles
+
+
+## status-leases.sh
+status_leases_dhcp_leases => Baux DHCP
+status_leases_IP => Adresse IP
+status_leases_MAC => Adresse MAC
+status_leases_Name => Nom
+status_leases_Expires => Expire dans
+
+
+## network-hosts.sh
+network_hosts_Add => Ajouter
+network_hosts_Configured_Hosts => H&ocirc;tes configur&eacute;s
+network_hosts_Host_Name => Nom de machine
+network_hosts_Host_Names => Noms d'h&ocirc;tes
+network_hosts_IP => Adresse IP
+network_hosts_MAC => Adresse MAC
+network_hosts_Name => Nom
+network_hosts_Remove => Enlever
+network_hosts_Expires => Expire dans
+
+
+
 
  Show raw statistics => Affichage des statistiques brutes
 802.11b =>

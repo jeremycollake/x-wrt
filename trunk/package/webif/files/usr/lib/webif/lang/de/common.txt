@@ -126,14 +126,6 @@ Physical Connections => Netzwerkschnittstellen
 Router Connections => Netzwerkverbindungen auf dem Router
 
 
-# 'DHCP' page
-status_leases_dhcp_leases => DHCP-Leases
-status_leases_IP => IP-Adresse
-status_leases_MAC => MAC-Adresse
-status_leases_Name => Name
-status_leases_Expires => G&uuml;ltigkeitsdauer
-
-
 # 'Wireless Status' page
 Wireless Status => WLAN-Status
 
@@ -146,12 +138,6 @@ Confirm Password => Passwort best&auml;tigen
 System Settings => Systemeinstellungen
 Host Name => Hostname
 Language => Sprache
-
-# 'Installed Software' page
-system_ipkg_installedpackages => Installierte Pakete
-system_ipkg_updatelists => Paketlisten aktualisieren
-system_ipkg_Uninstall => Deinstallieren
-system_ipkg_Install#Install => Installieren
 
 
 # 'Firmware Upgrade' page
@@ -280,8 +266,38 @@ Helptext IP Settings => IP-Einstellungen sind optional für DHCP und PPTP. Wenn s
 Helptext Idle Time => Wartezeit in Sekunden, nach der bei Inaktivität die Internetverbindung getrennt wird.
 Helptext Redial Timeout => Maximale Zeit, die der Router auf Antwort vom Provider warten soll, bevor die Verbindung neu aufgebaut wird.
 
-# untranslated:
+
+## new format
+
+## system-ipkg.sh
+system_ipkg_installedpackages => Installierte Pakete
+system_ipkg_updatelists => Paketlisten aktualisieren
+system_ipkg_Uninstall => Deinstallieren
+system_ipkg_Install#Install => Installieren
 system_ipkg_availablepackages => Verf&uuml;gbare Pakete
+
+
+## status-leases.sh
+status_leases_dhcp_leases => DHCP-Leases
+status_leases_IP => IP-Adresse
+status_leases_MAC => MAC-Adresse
+status_leases_Name => Name
+status_leases_Expires => G&uuml;ltigkeitsdauer
+
+
+## network-hosts.sh
+network_hosts_Add => Hinzuf&uuml;gen
+network_hosts_Configured_Hosts => Konfigurierte Hosts
+network_hosts_Host_Name => Hostname
+network_hosts_Host_Names => Host-Eintr&auml;ge
+network_hosts_MAC => MAC-Adresse
+network_hosts_Name => Name
+network_hosts_Remove => Entfernen
+network_hosts_Expires => G&uuml;ltigkeitsdauer
+
+
+
+# untranslated:
 Device Status => Ger&auml;testatus
 
  Show raw statistics  =>

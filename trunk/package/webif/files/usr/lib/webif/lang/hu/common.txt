@@ -69,14 +69,6 @@ Physical Connections => Fizikai kapcsolatok
 Router Connections => Router kapcsolatok
 
 
-# 'DHCP' page
-status_leases_dhcp_leases => DHCP b&eacute;rletek
-status_leases_IP => IP c&iacute;m
-status_leases_MAC => MAC Address
-status_leases_Name => N&eacute;v
-status_leases_Expires => Lej&aacute;r
-
-
 # 'Wireless Status' page
 Wireless Status => WLAN &aacute;llapot
 
@@ -89,13 +81,6 @@ Confirm Password => Jelsz&oacute; m&eacute;gegyszer
 System Settings => Rendszer be&aacute;ll&iacute;t&aacute;sok
 Host Name => Host n&eacute;v
 Language => Nyelv
-
-# 'Installed Software' page
-system_ipkg_installedpackages => Telep&iacute;tett csomagok
-system_ipkg_updatelists => Csomaglista friss&iacute;t&eacute;se
-system_ipkg_Uninstall => Elt&aacute;vol&iacute;t&aacute;s
-system_ipkg_Install => Telep&iacute;t&eacute;s
-
 
 # 'Firmware Upgrade' page
 Firmware format => Firmware format
@@ -223,8 +208,39 @@ Helptext IP Settings => IP be&aacute;ll&iacute;t&aacute;sok opcion&aacute;lisak 
 Helptext Idle Time => Maxim&aacute;lis id&#337; m&aacute;sodpercben internet forgalom n&eacute;lk&uuml;l, amennyit a router v&aacute;r miel&#337;tt bontja a kapcsolatot (csak 'Csatlakoz&aacute;s k&eacute;r&eacute;s eset&eacute;n' m&oacute;dban).
 Helptext Redial Timeout => Maxim&aacute;lis id&#337; m&aacute;sodpercben az &uacute;jrat&aacute;rcs&aacute;z&aacute;s el&#337;tt, ha a szolg&aacute;ltat&oacute; nem v&aacute;laszol.
 
-# untranslated:
+
+## new format
+
+
+## system-ipkg.sh
+system_ipkg_installedpackages => Telep&iacute;tett csomagok
+system_ipkg_updatelists => Csomaglista friss&iacute;t&eacute;se
+system_ipkg_Uninstall => Elt&aacute;vol&iacute;t&aacute;s
+system_ipkg_Install => Telep&iacute;t&eacute;s
 system_ipkg_availablepackages => Haszn&aacute;lhat&oacute; csomagok
+
+
+## status-leases.sh
+status_leases_dhcp_leases => DHCP b&eacute;rletek
+status_leases_IP => IP c&iacute;m
+status_leases_MAC => MAC Address
+status_leases_Name => N&eacute;v
+status_leases_Expires => Lej&aacute;r
+
+
+## network-hosts.sh
+network_hosts_Add => Hozz&aacute;ad
+network_hosts_Configured_Hosts => Konfigur&aacute;lt g&eacute;pek
+network_hosts_Host_Name => Host n&eacute;v
+network_hosts_Host_Names => Host nevek
+network_hosts_IP => IP-Address
+network_hosts_MAC => MAC-Address
+network_hosts_Name => N&eacute;v
+network_hosts_Remove => Elt&aacute;vol&iacute;t
+network_hosts_Expires => Lej&aacute;r
+
+
+# untranslated:
 
  Show raw statistics  =>
 802.11b =>

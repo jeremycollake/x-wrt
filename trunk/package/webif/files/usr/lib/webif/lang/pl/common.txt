@@ -70,14 +70,6 @@ Physical Connections => Po&#322;&#261;czenia fizyczne
 Router Connections => Po&#322;&#261;czenia do routera
 
 
-# 'DHCP' page
-status_leases_dhcp_leases => Dzier&#380;awa DHCP
-status_leases_IP => Adres IP
-status_leases_MAC => Adres MAC
-status_leases_Name => Nazwa
-status_leases_Expires => Wygasa za
-
-
 # 'Wireless Status' page
 Wireless Status => Status WLAN
 
@@ -90,13 +82,6 @@ Confirm Password => Potwierdz has&#322;o
 System Settings => Ustawienia Systemu
 Host Name => Hostname
 Language => J&#281;zyk
-
-# 'Installed Software' page
-system_ipkg_installedpackages => Zainstalowane pakiety
-system_ipkg_updatelists => Aktualizuj liste pakietów
-system_ipkg_Uninstall => Usu&#324;
-system_ipkg_Install => Instaluj
-
 
 # 'Firmware Upgrade' page
 Firmware format => Format pliku firmware
@@ -223,6 +208,38 @@ Helptext Encryption Type => 'WPA (RADIUS)' dzia&#322;a tylko w trybie Access Poi
 Helptext IP Settings => Ustawienia numeru IP dla DHCP i PPTP jest niekonieczne. Je&#380;eli je ustawisz, b&#281;da u&#380;ywane jako domy&#347;lnje w przypadku , gdy serwer DHCP bedzie niedost&#281;pny.
 Helptext Idle Time => Czas w sekundach bezruchu internetowego, po up&#322;ywie kt&#243;rych nast&#281;puje roz&#322;aczenie (tylko Po&#322;&#261;czenie na z&#261;danie)
 Helptext Redial Timeout => Liczba sekund, kt&#243;re trzeba odczekac po tym, jak nie otrzymales odpowiedzi od providera (przed ponowna proba podlaczenia)
+
+
+
+## new format
+
+## system-ipkg.sh
+system_ipkg_installedpackages => Zainstalowane pakiety
+system_ipkg_updatelists => Aktualizuj liste pakietów
+system_ipkg_Uninstall => Usu&#324;
+system_ipkg_Install => Instaluj
+
+
+## status-leases.sh
+status_leases_dhcp_leases => Dzier&#380;awa DHCP
+status_leases_IP => Adres IP
+status_leases_MAC => Adres MAC
+status_leases_Name => Nazwa
+status_leases_Expires => Wygasa za
+
+
+## network-hosts.sh
+network_hosts_Add => Dodaj
+network_hosts_Configured_Hosts => Konfiguracja Host&#243;w
+network_hosts_Host_Name => Hostname
+network_hosts_Host_Names => Lista Host&#243;w
+network_hosts_IP => Adres IP
+network_hosts_MAC => Adres MAC
+network_hosts_Name => Nazwa
+network_hosts_Remove => Usu&#324;
+network_hosts_Expires => Wygasa za
+
+
 
 # untranslated:
 Available packages =>

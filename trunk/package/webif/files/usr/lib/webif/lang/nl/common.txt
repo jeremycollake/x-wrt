@@ -71,14 +71,6 @@ Physical Connections => Fysieke Verbindingen
 Router Connections => Router Verbindingen
 
 
-# 'DHCP' page
-status_leases_dhcp_leases => DHCP leases
-status_leases_IP => IP Adres
-status_leases_MAC => MAC Adres
-status_leases_Name => Naam
-status_leases_Expires => Vervalt binnen
-
-
 # 'Wireless Status' page
 Wireless Status => Draadloos Status
 
@@ -91,14 +83,6 @@ Confirm Password => Bevestig Wachtwoord
 System Settings => Systeem Instellingen
 Host Name => Host naam
 Language => Taal
-
-# 'Installed Software' page
-system_ipkg_installedpackages => Geinstalleerde Pakketten
-system_ipkg_availablepackages => Beschikbare pakketten
-system_ipkg_updatelists => Aanpassen Pakketlijst
-system_ipkg_Uninstall => Deinstalleren
-system_ipkg_Install => Installeren
-
 
 # 'Firmware Upgrade' page
 Firmware format => Firmware Formaat
@@ -223,6 +207,40 @@ Helptext Encryption Type => 'WPA (RADIUS)' wordt enkel ondersteund in de Toegang
 Helptext IP Settings => IP instellingen zijn optioneel voor DHCP en PPTP. Indien U ze instelt dan worden ze als standaardwaarden gebruikt indien de DHCP server onbeschikbaar is.
 Helptext Idle Time => Het aantal seconden zonder internet verkeer dat de router zou moeten wachten alvorens zich af te sluiten van het Internet (Alleen bij Verbinden op Aanvraag)
 Helptext Redial Timeout => Het aantal seconden dat gewacht moet worden alvorens opnieuw een verbinding wordt gemaakt indien deze geweigerd werd door uw ISP.
+
+
+## new format
+
+
+## system-ipkg.sh
+system_ipkg_installedpackages => Geinstalleerde Pakketten
+system_ipkg_availablepackages => Beschikbare pakketten
+system_ipkg_updatelists => Aanpassen Pakketlijst
+system_ipkg_Uninstall => Deinstalleren
+system_ipkg_Install => Installeren
+
+
+## status-leases.sh
+status_leases_dhcp_leases => DHCP leases
+status_leases_IP => IP Adres
+status_leases_MAC => MAC Adres
+status_leases_Name => Naam
+status_leases_Expires => Vervalt binnen
+
+
+## network-hosts.sh
+network_hosts_Add => Bijvoegen
+network_hosts_Configured_Hosts => Geconfigureerde Hosts
+network_hosts_Host_Name => Host naam
+network_hosts_Host_Names => Host Namen
+network_hosts_IP => IP Adres
+network_hosts_MAC => MAC Adres
+network_hosts_Name => Naam
+network_hosts_Remove => Verwijder
+network_hosts_Expires => Vervalt binnen
+
+
+
  Show raw statistics  =>
 802.11b =>
 802.11b + 802.11g =>

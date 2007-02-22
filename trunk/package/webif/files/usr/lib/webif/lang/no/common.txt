@@ -70,14 +70,6 @@ Physical Connections => Fysiske forbindelser
 Router Connections => Routerens forbindelser
 
 
-# 'DHCP' page
-status_leases_dhcp_leases => DHCP leasinger
-status_leases_IP => IP adresse
-status_leases_MAC => MAC adresse
-status_leases_Name => Navn
-status_leases_Expires => Utl&oslash;pstid
-
-
 # 'Wireless Status' page
 Wireless Status => Tr&aring;dl&oslash;s status
 
@@ -90,14 +82,6 @@ Confirm Password => Nytt passord igjen
 System Settings => Systeminnstillinger
 Host Name => Vertsnavn
 Language => Spr&aring;k
-
-# 'Installed Software' page
-system_ipkg_installedpackages => Installerte pakker
-system_ipkg_updatelists => Oppdater pakkelisten
-system_ipkg_Uninstall => Avinstaller
-system_ipkg_Install => Installer
-system_ipkg_availablepackages => Tilgjengelige pakker
-
 
 # 'Firmware Upgrade' page
 Firmware format => Firmwareformat
@@ -228,6 +212,39 @@ Helptext IP Settings => IP-innstillinger er frivillig for DHCP og PPTP. N&aring;
 Helptext Idle Time => Ventetid med inaktivitet f&oslash;r routeren kobler ned forbindelesen.
 
 Helptext Redial Timeout => Ventetid f&oslash;r routeren fors&oslash;ker &aring; ringe opp igjen.
+
+
+## new format
+
+
+## system-ipkg.sh
+system_ipkg_installedpackages => Installerte pakker
+system_ipkg_updatelists => Oppdater pakkelisten
+system_ipkg_Uninstall => Avinstaller
+system_ipkg_Install => Installer
+system_ipkg_availablepackages => Tilgjengelige pakker
+
+
+## status-leases.sh
+status_leases_dhcp_leases => DHCP leasinger
+status_leases_IP => IP adresse
+status_leases_MAC => MAC adresse
+status_leases_Name => Navn
+status_leases_Expires => Utl&oslash;pstid
+
+
+## network-hosts.sh
+network_hosts_Add => Legg til
+network_hosts_Configured_Hosts => Vertsnavn
+network_hosts_Host_Name => Vertsnavn
+network_hosts_Host_Names => Vertsnavn
+network_hosts_IP => IP adresse
+network_hosts_MAC => MAC adresse
+network_hosts_Name => Navn
+network_hosts_Remove => Fjern
+network_hosts_Expires => Utl&oslash;pstid
+
+
 
  Show raw statistics  =>
 802.11b =>

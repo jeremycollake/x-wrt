@@ -70,12 +70,6 @@ Physical Connections => Fysiske forbindelser
 Router Connections => Routerens forbindelser
 
 
-# 'DHCP' page
-status_leases_dhcp_leases => DHCP leasinger
-status_leases_IP => IP adresse
-status_leases_MAC => MAC adresse
-status_leases_Name => Navn
-status_leases_Expires => Udl&oslash;bstid
 
 
 # 'Wireless Status' page
@@ -91,11 +85,6 @@ System Settings => Systemindstillinger
 Host Name => V&aelig;rtsnavn
 Language => Sprog
 
-# 'Installed Software' page
-system_ipkg_installedpackages => Installerede pakker
-system_ipkg_updatelists => Opdater pakkelisten
-system_ipkg_Uninstall => Afindstaller
-system_ipkg_Install => Installer
 
 
 # 'Firmware Upgrade' page
@@ -227,6 +216,37 @@ Helptext IP Settings => IP indstilinger er frivillig for DHCP og PPTP.  N&aring;
 Helptext Idle Time => Ventetid i sekunder f&oslash;r inaktivitet bliver &aring;rsagen til at forbindelsen afbrydes.
 
 Helptext Redial Timeout => Ventetid f&oslash;r der pr&oslash;ves at ringe op igen.
+
+
+## new format
+
+## system-ipkg.sh
+system_ipkg_installedpackages => Installerede pakker
+system_ipkg_updatelists => Opdater pakkelisten
+system_ipkg_Uninstall => Afindstaller
+system_ipkg_Install => Installer
+
+
+## status-leases.sh
+status_leases_dhcp_leases => DHCP leasinger
+status_leases_IP => IP adresse
+status_leases_MAC => MAC adresse
+status_leases_Name => Navn
+status_leases_Expires => Udl&oslash;bstid
+
+
+## network-hosts.sh
+network_hosts_Add => Tilf&oslash;je
+network_hosts_Configured_Hosts => V&aelig;rtsnavne
+network_hosts_Host_Name => V&aelig;rtsnavn
+network_hosts_Host_Names => V&aelig;rtsnavne
+network_hosts_IP => IP adresse
+network_hosts_MAC => MAC adresse
+network_hosts_Name => Navn
+network_hosts_Remove => Fjern
+network_hosts_Expires => Udl&oslash;bstid
+
+
 
 # untranslated:
 Available packages =>

@@ -68,14 +68,6 @@ Physical Connections => Fysiska anslutningar
 Router Connections => Router anslutningar
 
 
-# 'DHCP' page
-status_leases_dhcp_leases => DHCP leases
-status_leases_IP => IP Adress
-status_leases_MAC => Mac Adress
-status_leases_Name => Namn
-status_leases_Expires => Utg&aring;r om
-
-
 # 'Wireless Status' page
 Wireless Status => Tr&aring;dl&ouml;s Status
 
@@ -88,13 +80,6 @@ Confirm Password => Bekr&auml;fta nytt l&ouml;senord
 System Settings => System Inst&auml;llningar
 Host Name => V&auml;rdnamn
 Language => Spr&aring;k
-
-# 'Installed Software' page
-system_ipkg_installedpackages => Installerade mjukvaror
-system_ipkg_updatelists => Uppdatera mjukvarulista
-system_ipkg_Uninstall => Avinstallera
-system_ipkg_Install => Installera
-
 
 # 'Firmware Upgrade' page
 Firmware format => Firmware format
@@ -218,6 +203,37 @@ Helptext Encryption Type => 'WPA (RADIUS)' st&ouml;djs endast i Accesspunktsl&au
 Helptext IP Settings => IP inst&auml;llningar &auml;r inte obligatoriska f&ouml;r DHCP och PPTP. Om du s&auml;tter dem s&aring; anv&auml;nds de som standard om DHCP-servern inte &auml;r tillg&auml;nlig. 
 Helptext Idle Time => Antalet sekunder utan internet trafik som routern skall v&auml;nta p&aring; innan den fr&aring;nkopplar sig fr&aring;n Internet. (Anslut endast p&aring; beg&auml;ran)
 Helptext Redial Timeout => Antalet sekunder att v&auml;nta i innan f&ouml;rs&ouml;k till ny uppkoppling g&ouml;rs. (om ingen kontakt kunnat uppr&auml;ttas med tillhandah&aring;llaren)
+
+
+## new format
+
+
+## system-ipkg.sh
+system_ipkg_installedpackages => Installerade mjukvaror
+system_ipkg_updatelists => Uppdatera mjukvarulista
+system_ipkg_Uninstall => Avinstallera
+system_ipkg_Install => Installera
+
+
+## status-leases.sh
+status_leases_dhcp_leases => DHCP leases
+status_leases_IP => IP Adress
+status_leases_MAC => Mac Adress
+status_leases_Name => Namn
+status_leases_Expires => Utg&aring;r om
+
+
+## network-hosts.sh
+network_hosts_Add => L&auml;gg till
+network_hosts_Configured_Hosts => Konfigurerade V&auml;rdar
+network_hosts_Host_Name => V&auml;rdnamn
+network_hosts_Host_Names => V&auml;rdnamn
+network_hosts_IP => IP Adress
+network_hosts_MAC => Mac Adress
+network_hosts_Name => Namn
+network_hosts_Remove => Ta bort
+network_hosts_Expires => Utg&aring;r om
+
 
 # untranslated:
 Available packages =>
