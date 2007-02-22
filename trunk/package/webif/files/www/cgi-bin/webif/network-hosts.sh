@@ -131,7 +131,7 @@ BEGIN {
 	}
 }
 END {
-	print "	<tr>\\n		<td>" textinput("host_ip", ip) "</td>\\n		<td>" textinput("host_name", name) "</td>\\n		<td style=\\"width: 10em\\">" button("add_host", "@TR<<network_hosts_Add#Add>>") "</td>\\n	</tr>"
+	print "	<tr>\\n		<td>" textinput("host_ip", ip) "</td>\\n		<td>" textinput("host_name", name) "</td>\\n		<td style=\\"width: 10em\\">" button("add_host", "network_hosts_Add#Add") "</td>\\n	</tr>"
 }
 EOF
 
@@ -172,7 +172,7 @@ BEGIN {
 	print "	</tr>"
 }
 END {
-	print "	<tr>\\n		<td>" textinput("dhcp_mac", mac) "</td>\\n		<td>" textinput("dhcp_ip", ip) "</td>\\n		<td style=\\"width: 10em\\">" button("add_dhcp", "@TR<<network_hosts_Add#Add>>") "</td>\\n	</tr>"
+	print "	<tr>\\n		<td>" textinput("dhcp_mac", mac) "</td>\\n		<td>" textinput("dhcp_ip", ip) "</td>\\n		<td style=\\"width: 10em\\">" button("add_dhcp", "network_hosts_Add#Add") "</td>\\n	</tr>"
 }
 EOF
 
