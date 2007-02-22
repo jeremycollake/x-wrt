@@ -13,7 +13,6 @@
 
 echo "$HEADER"
 
-
 if ! empty "$FORM_remove" ; then
 	echo "<html><header><META http-equiv="refresh" content='4;URL=$SCRIPT_NAME'></header><body>Restoring ipkg configuration ...<br/><br/><pre>"
 
@@ -61,9 +60,9 @@ cat <<EOF
 <br/>
 <form action='$SCRIPT_NAME' method='post'>
 <table width="100%" border="0" cellspacing="1">
-<tr><td colspan="2" height="1"  bgcolor="#333333"></td></tr>
+<tr><td colspan="2" height="1" bgcolor="#333333"></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-<tr><td width="100"><a href="#" rel="b1">Location</a></td><td><input name="location" type="text" value=$LOC /></td></tr>
+<tr><td width="100"><a href="#" rel="b1">Location</a></td><td><input name="location" type="text" value="$location" /></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
 <tr> <td>&nbsp;</td>
 <td><input type="submit" style='border: 1px solid #000000;' name="save_ipkg" value="Save" /></td>

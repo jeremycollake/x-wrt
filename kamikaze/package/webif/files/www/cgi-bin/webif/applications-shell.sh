@@ -100,3 +100,16 @@ echo_install_complete() {
 echo_remove_complete() {
 	echo "</pre><br/><u>Uninstall Complete</u>"
 }
+
+DIV_Windows_Header()
+{
+	echo "<div id=\"dwindow$1\" style=\"position:absolute;background-color:#EBEBEB;cursor:hand;left:0px;top:0px;display:none;border: 1px solid black\" onMousedown=\"initializedrag(event)\" onMouseup=\"stopdrag()\" >"
+	echo "<table width='100%' border='0' ><tr bgcolor=navy><td><div align='right'><img src='/images/close.gif' onClick=\"closeit()\" alt /></div></td>"
+	echo "</tr></table>"
+}
+APP_Refresh_Page()
+{
+	echo "<script language='JavaScript' type='text/javascript'>"
+	echo "window.setTimeout('window.location=\"$1\"', 3000)"
+	echo "</script>$2"
+}

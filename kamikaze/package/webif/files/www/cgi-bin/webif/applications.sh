@@ -38,12 +38,10 @@ ct2=0
 count=0
 count1=1
 
-LoadingJAVA="<div id=\"dwindow0\" style=\"position:absolute;background-color:#EBEBEB;cursor:hand;left:0px;top:0px;display:none;border: 1px solid black\" onMousedown=\"initializedrag(event)\" onMouseup=\"stopdrag()\" >
-<table width="100%" border="0"><tr bgcolor=navy><td><div align=\"right\"><img src=\"/images/close.gif\" onClick=\"closeit()\" alt /></div></td>
-</tr></table><table border="0">
-<tr><td><br/>Please Wait ...<br/><script type="text/javascript" src=\"/js/progress.js\"></script><script type='text/javascript'>
+LoadingJAVA="<table border='0'><tr><td><br/>Please Wait ...<br/><script type="text/javascript" src=\"/js/progress.js\"></script><script type='text/javascript'>
 var bar1= createBar(350,15,'white',1,'black','blue',85,7,3,'');
-</script></td></tr></table></div>"
+</script></td></tr></table></div>
+<table width='98%' border='0' cellspacing='10' ><tr class='appindex'>"
 
 CONFIRM()
 {
@@ -131,12 +129,9 @@ elif [ "$FORM_page" = "web" ]; then
 	let "ct1=100"	 ; let "ct2=10000000" ; var="applications-sql.sh?ipkg=" ; CHECK_FREE_MEM #<-SQL Server
 	let "ct1=2000" ; let "ct2=800" ; var="applications-dlmanager.sh?ipkg=" ; CHECK_FREE_MEM #<-DL MANAGER
 
-	cat <<EOF
-	</head><body><center>
-	$LoadingJAVA
-	<table width="98%" border="0" cellspacing="10" >
-	<tr class='appindex'>
-EOF
+	echo "</head><body>"
+	DIV_Windows_Header 0
+	echo $LoadingJAVA
 
 	#------------------------
 	var3="Web Server"
@@ -181,7 +176,7 @@ EOF
 	cat <<EOF
 	<td width="20%">&nbsp;</td><td width="20%">&nbsp;</td></tr>
 	<tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
-	</tr></table></center>
+	</tr></table>
 EOF
 
 TIP 0 "Apache 2.2 - Powerfull webserver to serve web pages on World Wide Web."
@@ -198,7 +193,9 @@ elif [ "$FORM_page" = "security" ]; then
 	echo "$HTMLHEAD"
 	let "ct1=150" ; let "ct2=800" ; var="applications-hydra.sh?ipkg=" ; CHECK_FREE_MEM
 
-	echo "</head><body>$LoadingJAVA<table width='98%' border='0' cellspacing='10' ><tr class='appindex'>"
+	echo "</head><body>"
+	DIV_Windows_Header 0
+	echo $LoadingJAVA
 
 	#------------------------
 	var3="Hydra"
@@ -219,6 +216,7 @@ elif [ "$FORM_page" = "security" ]; then
 EOF
 	TIP "300" "Hydra 4.5 - \"Password Brute Force\" - attacker for checking weak passwords. Great utility to check your (http,ftp,ssh) services."
 	echo "</body></html>"
+exit
 
 elif [ "$FORM_page" = "network" ]; then
 
@@ -227,7 +225,9 @@ elif [ "$FORM_page" = "network" ]; then
 	var="applications-cifs.sh?ipkg=" ; CONFIRM
 	let "ct1=2000" ; let "ct2=1000" ; var="applications-samba.sh?ipkg=" ; CHECK_FREE_MEM
 	var="applications-swap.sh?ipkg=" ; CONFIRM
-	echo "</head><body>$LoadingJAVA<table width='98%' border='0' cellspacing='10' ><tr class='appindex'>"
+	echo "</head><body>"
+	DIV_Windows_Header 0
+	echo $LoadingJAVA
 
 	#------------------------
 	var3="Samba Client"
@@ -279,7 +279,9 @@ elif [ "$FORM_page" = "wireless" ]; then
 	echo "$HTMLHEAD"
 	let "ct1=800" ; let "ct2=100" ; var="applications-aircrack.sh?ipkg=" ; CHECK_FREE_MEM
 	let "ct1=2000" ; let "ct2=100000" ; var="applications-chilispot.sh?ipkg=" ; CHECK_FREE_MEM
-	echo "</head><body>$LoadingJAVA<table width='98%' border='0' cellspacing='10'><tr class='appindex'>"
+	echo "</head><body>"
+	DIV_Windows_Header 0
+	echo $LoadingJAVA
 	
 	#------------------------
 	var3="AirCrack" ; var2="app.1.jpg" ; var4="b1"
