@@ -4,7 +4,6 @@
 # reference the config file with its startup script. Need
 # to create new linux-igd package with proper startup script.
 #
-. /etc/functions.sh
 . /lib/config/uci.sh
 uci_load "upnpd"
 if [ $CONFIG_general_enable = "0" ] && [ -f "/etc/init.d/S65upnpd" ]; then

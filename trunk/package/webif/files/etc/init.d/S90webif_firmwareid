@@ -2,7 +2,6 @@
 # This file is NOT synchronized between branches.
 #
 START=90
-. /etc/functions.sh
 . /lib/config/uci.sh
 uci_load "webif"
 firmware_name=$CONFIG_general_firmware_name
