@@ -167,6 +167,7 @@ for device in $DEVICES; do
 	fi
         append forms "start_form|@TR<<Wireless Adapter>> $device @TR<< Configuration>>" "$N"
         
+        if [ "iftype" = "atheros" ]; then
         mode_fields="field|@TR<<Mode>>
 		select|mode_ap_$device|$FORM_ap_mode
 		option|11bg|@TR<<802.11B/G>>
@@ -174,6 +175,7 @@ for device in $DEVICES; do
         	option|11g|@TR<<802.11G>>
         	option|11a|@TR<<802.11A>>"
         append forms "$mode_fields" "$N"
+        fi
         
         # Initialize channels based on country code
         # (--- hardly a switch here ---)
