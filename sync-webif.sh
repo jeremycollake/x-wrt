@@ -45,7 +45,7 @@ synchronize_file "etc/functions-net.sh"
 synchronize_file "usr/lib/webif/functions.sh"
 synchronize_file "usr/lib/webif/apply.sh"
 #NOT_synchronize_file "usr/lib/webif/validate.awk" # kamikaze and white russian are different
-synchronize_file "usr/lib/webif/lang/de/common.txt"
+#NOT_synchronize_lang_files_now synchronize_file "usr/lib/webif/lang/de/common.txt"
 synchronize_file "www/index.html"
 synchronize_file "www/images/*.gif"
 synchronize_file "www/images/*.png"
