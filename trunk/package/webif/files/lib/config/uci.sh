@@ -19,8 +19,6 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
 
-. /lib/config/uci-depends.sh 
-
 uci_load() {
 	local PACKAGE="$1"
 	config_load "$PACKAGE"
