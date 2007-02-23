@@ -1,6 +1,6 @@
  /* color theme: brown */
  body {
- 	background-color: black;
+ 	background-color: Black;
  }
 #header, #header #short-status {
 	color: #ccc;
@@ -8,10 +8,11 @@
 }
 
 a {
-	color: white;
+	color: White;
 }
+
 #mainmenu {
-	border-bottom: 1px solid grey;
+	border-bottom: 1px solid Gray;
 }
 
 #submenu,
@@ -24,16 +25,24 @@ a {
 #submenu a:hover,
 #mainmenu .selected a,
 #submenu .selected a,
-#save a:hover { background-color: #C3C4D2; color: black; }
+#save a:hover { background-color: #C3C4D2; color: Black; }
 
 #content {
 	background-color: #000;
 	color: #ccc;
 }
 #content h3 {
-color: white;
+	color: White;
 	background-color: transparent;
 }
+
+#content h3.warning {
+	color: White;
+	border-color: White;
+}
+
+.warning { color: White; }
+
 .progressbar-filled {
 	color: White;
 	background-color: #2b1b9f;

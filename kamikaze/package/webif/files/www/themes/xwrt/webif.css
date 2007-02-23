@@ -170,6 +170,18 @@ hr,
         background-color: #aac1d9;
 }
 
+#content h3.warning {
+	display: block;
+	color: #E7292C;
+	margin-bottom: 1em;
+	margin-left: 1%;
+	padding: 0.4em;
+	padding-left: 0.8em;
+	border-left: 0.5em solid #E7292C;
+	border-bottom: 1px solid #E7292C;
+	background-color: transparent;
+}
+
 #content .settings { margin-left: 1%; }
 
 #content .settings .clearfix {
