@@ -443,9 +443,9 @@ for device in $DEVICES; do
 						document.getElementById('encryption_$vcfg').value = 'off';
 					}
 				}
-				v = (isset('mode_$device','11b') || isset('mode_$device','11bg') || isset('mode_$device','11g'));
+				v = (isset('mode_ap_$device','11b') || isset('mode_ap_$device','11bg') || isset('mode_ap_$device','11g'));
 				set_visible('bgchannelform_$device', v);
-				v = (isset('mode_$device','11a'));
+				v = (isset('mode_ap_$device','11a'));
 				set_visible('achannelform_$device', v);
 				v = (!isset('mode_$vcfg','wds'));
 				set_visible('ssid_form_$vcfg', v);
