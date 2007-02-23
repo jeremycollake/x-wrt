@@ -1,11 +1,12 @@
 #!/usr/bin/webif-page
+<?
 #
 # Static routes page for X-WRT
 # * still in-development
 #
 # Liran Tal <liran@enginx.com>
 #           <liran.tal@gmail.com>
-<?
+
 . /usr/lib/webif/webif.sh
 
 header "Network" "Routes" "@TR<<Configured Routes>>" '' "$SCRIPT_NAME"
