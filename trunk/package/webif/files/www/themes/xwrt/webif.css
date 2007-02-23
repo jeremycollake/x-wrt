@@ -172,13 +172,13 @@ hr,
 
 #content h3.warning {
 	display: block;
-	color: #9A2C2C;
+	color: #E7292C;
 	margin-bottom: 1em;
 	margin-left: 1%;
 	padding: 0.4em;
 	padding-left: 0.8em;
-	border-left: 0.5em solid #9A2C2C;
-	border-bottom: 1px solid #9A2C2C;
+	border-left: 0.5em solid #E7292C;
+	border-bottom: 1px solid #E7292C;
 	background-color: transparent;
 }
 
