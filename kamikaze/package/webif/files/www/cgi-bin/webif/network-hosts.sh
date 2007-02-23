@@ -64,18 +64,24 @@ update_ethers() {
 empty "$FORM_add_host" || {
 	# add a host to /etc/hosts
 	validate <<EOF
-ip|FORM_host_ip|@TR<<network_hosts_IP#IP Address>>|required|$FORM_host_ip
+ip|FORM_host_ip|@TR<<network_hosts_host_IP_invalid#Host's IP Address>>|required|$FORM_host_ip
 hostname|FORM_host_name|@TR<<network_hosts_Host_Name#Host Name>>|required|$FORM_host_name
 EOF
-	equal "$?" 0 && update_hosts add "$FORM_host_ip" "$FORM_host_name"
+	equal "$?" 0 && {
+		update_hosts add "$FORM_host_ip" "$FORM_host_name"
+		unset FORM_host_ip FORM_host_name
+	}
 }
 empty "$FORM_add_dhcp" || {
 	# add a host to /etc/ethers
 	validate <<EOF
 mac|FORM_dhcp_mac|@TR<<network_hosts_MAC#MAC Address>>|required|$FORM_dhcp_mac
-ip|FORM_dhcp_ip|@TR<<network_hosts_IP#IP Address>>|required|$FORM_dhcp_ip
+ip|FORM_dhcp_ip|@TR<<network_hosts_static_IP_invalid#Static IP Address>>|required|$FORM_dhcp_ip
 EOF
-	equal "$?" 0 && update_ethers add "$FORM_dhcp_mac" "$FORM_dhcp_ip"
+	equal "$?" 0 && {
+		update_ethers add "$FORM_dhcp_mac" "$FORM_dhcp_ip"
+		unset FORM_dhcp_mac FORM_dhcp_ip
+	}
 }
 
 empty "$FORM_remove_host" || update_hosts del "$FORM_remove_ip" "$FORM_remove_name"
