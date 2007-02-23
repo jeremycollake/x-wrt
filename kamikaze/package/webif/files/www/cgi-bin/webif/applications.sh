@@ -262,23 +262,20 @@ EOF
 	#------- ipkg settings -------
 	if  [ -s "/etc/config/app.ipkg" ]  ; then echo "<tr class='appindex'><td width='20%'><center><a href='applications-ipkg.sh'><img src='/images/pkg.jpg' border='0' alt /></a><br/>ipkg</center></td>" ; else echo "<td width="20%">&nbsp;</td>" ; fi
 cat <<EOF
-	<td width="20%">&nbsp;</td><td width="20%">&nbsp;</td><td width="20%">&nbsp;</td><td width="20%">&nbsp;</td></tr>
-	
-	</table>
+	<td width="20%">&nbsp;</td><td width="20%">&nbsp;</td><td width="20%">&nbsp;</td><td width="20%">&nbsp;</td></tr></table>
 EOF
-
-TIP 200 "Samba Client- Allows to map network drive from Windows based file system."
-TIP 250 "Samba Server - Allows to share directories over network."
-TIP 250 "Memory SWAP - Allows to set more RAM by using external storage.<br/><br/>Examples: Network Drive, MMC, USB"
-echo "</body></html>"
-exit
+	TIP 200 "Samba Client - Allows to map network drive from Windows based file system."
+	TIP 250 "Samba Server - Allows to share directories over network."
+	TIP 250 "Memory SWAP - Allows to set more RAM by using external storage.<br/><br/>Examples: Network Drive, MMC, USB"
+	echo "</body></html>"
+	exit
 
 elif [ "$FORM_page" = "wireless" ]; then
 
 	echo "$HEADER"
 	echo "$HTMLHEAD"
-	let "ct1=800" ; let "ct2=100" ; var="applications-aircrack.sh?ipkg=" ; CHECK_FREE_MEM
-	let "ct1=2000" ; let "ct2=100000" ; var="applications-chilispot.sh?ipkg=" ; CHECK_FREE_MEM
+	let "ct1=200" ; let "ct2=100" ; var="applications-aircrack.sh?ipkg=" ; CHECK_FREE_MEM
+	let "ct1=500" ; let "ct2=100" ; var="applications-chillispot.sh?ipkg=" ; CHECK_FREE_MEM
 	echo "</head><body>"
 	DIV_Windows_Header 0
 	echo $LoadingJAVA
@@ -290,9 +287,9 @@ elif [ "$FORM_page" = "wireless" ]; then
 	else var1="javascript:confirm0()" ; var5=1 ; TR_APP
 	fi
 	#------------------------
-	var3="ChiliSpot" ; var2="app.14.gif" ; var4="b2"
-	if is_package_installed "chilispot" ; then
-	var1="applications-chilispot.sh" ; var5=0 ; TR_APP
+	var3="ChilliSpot" ; var2="app.14.gif" ; var4="b2"
+	if is_package_installed "chillispot" ; then
+	var1="applications-chillispot.sh" ; var5=0 ; TR_APP
 	else var1="javascript:confirm1()" ; var5=1 ; TR_APP
 	fi
 
@@ -303,8 +300,9 @@ elif [ "$FORM_page" = "wireless" ]; then
 	<td width="20%">&nbsp;</td>
 	<td width="20%">&nbsp;</td>
 	</tr></table>
-	</body></html>
 EOF
+	TIP 0 "Aircrack-ng - Tools for wireless traffic monitoring and penetration/security testing."
+	echo "</body></html>"
 	exit
 
 elif [ "$FORM_page" = "remove" ]; then
@@ -339,9 +337,11 @@ elif [ "$FORM_page" = "remove" ]; then
 	if is_package_installed "kmod-loop" && is_package_installed "swap-utils" &&  is_package_installed "losetup"  ; then TR_Remove_APP	 "app.12.jpg" "Memory Swap" "applications-swap.sh" 0 "" ; fi
 #------------------------
 	echo "<tr><td colspan=2><br/><u>> Wireless Applications</u><br/><br/></td></tr>"
-	if is_package_installed "aircrack-ng" ; then
-	TR_Remove_APP "app.1.jpg" "AirCrack" "applications-aircrack.sh" 0 ""
+	if is_package_installed "aircrack-ng" ; then TR_Remove_APP "app.1.jpg" "AirCrack" "applications-aircrack.sh" 0 ""
 	else if  [ -s "/etc/config/app.aicrack" ]  ; then TR_Remove_APP "app.1.jpg" "AirCrack" "applications-aircrack.sh" 1 "disabled" ; fi
+	fi
+	if is_package_installed "chillispot" ; then TR_Remove_APP "app.14.gif" "ChilliSpot" "applications-chillispot.sh" 0 ""
+	else if  [ -s "/etc/config/app.chillispot" ]  ; then TR_Remove_APP "app.14.gif" "ChilliSpot" "applications-chillispot.sh" 1 "disabled" ; fi
 	fi
 
 	echo "</table></html>"
