@@ -256,7 +256,7 @@ function modechange()
 	set_visible('vpi', v);
 	
 	v = isset('wan_proto', 'wwan');
-	set_visible('wwan_service', v);
+	set_visible('wwan_service_field', v);
 	set_visible('wwan_sim_settings', v);
 	set_visible('apn_settings', v);
 
@@ -301,7 +301,7 @@ helpitem|Note
 helptext|Helptext WAN DNS save#You should save your settings on this page before adding/removing DNS servers
 end_form
 
-start_form|@TR<<Preferred Connection Type>>|wwan_service|hidden
+start_form|@TR<<Preferred Connection Type>>|wwan_service_field|hidden
 field|@TR<<Connection Type>>
 select|wwan_service|$FORM_wwan_service
 option|umts_first|@TR<<UMTS first>>
