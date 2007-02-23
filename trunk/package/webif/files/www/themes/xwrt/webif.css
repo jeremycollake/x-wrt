@@ -170,6 +170,18 @@ hr,
 	background-color: #aac1d9;
 }
 
+#content h3.warning {
+	display: block;
+	color: #9A2C2C;
+	margin-bottom: 1em;
+	margin-left: 1%;
+	padding: 0.4em;
+	padding-left: 0.8em;
+	border-left: 0.5em solid #9A2C2C;
+	border-bottom: 1px solid #9A2C2C;
+	background-color: transparent;
+}
+
 #content .settings { margin-left: 1%; }
 
 #content .settings .clearfix {
@@ -302,6 +314,7 @@ hr,
 	color: #9A2C2C;
 	display: inline;
 }
+
 /* background color for odd lines/list items */
 .odd { background-color: #E5E7E9; }
 

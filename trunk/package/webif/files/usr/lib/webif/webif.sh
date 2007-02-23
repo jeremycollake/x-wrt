@@ -113,7 +113,7 @@ header() {
 		_saved_title="${SAVED:+: @TR<<Settings saved>>}"
 	} || {
 		FORM_submit="";
-		ERROR="<h3>$ERROR</h3><br /><br />"
+		ERROR="<h3 class="warning">$ERROR</h3>"
 		_saved_title=": @TR<<Settings not saved>>"
 	}
 
