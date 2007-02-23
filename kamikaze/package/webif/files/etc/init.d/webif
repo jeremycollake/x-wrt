@@ -8,6 +8,8 @@ start() {
 . /etc/functions.sh
 . /lib/config/uci.sh
 uci_load "webif"
+
+#detect device
 device_name="$CONFIG_general_device_name"
 
 [ -z "$device_name" ] && [ -f "/proc/diag/model" ] && device_name=$(cat "/proc/diag/model")
@@ -38,6 +40,45 @@ while [ -z "$device_name" ]; do
         fi
 break
 done
+
+#detect firmware info
+firmware_name=$CONFIG_general_firmware_name
+firmware_subtitle=$CONFIG_general_firmware_subtitle
+firmware_version=$CONFIG_general_firmware_version
+
+if grep -qi "KAMIKAZE" "/etc/banner"; then
+	firmware_name="OpenWrt Kamikaze"
+else	
+	firmware_name="OpenWrt White Russian"		
+fi	
+firmware_subtitle="With X-Wrt Extensions"
+
+if [ -f "/etc/openwrt_version" ]; then
+	firmware_version=$(cat "/etc/openwrt_version")
+elif grep -q "RC5" "/etc/banner"; then
+	firmware_version="RC5"	
+elif grep -q "RC6" "/etc/banner"; then
+	firmware_version="RC6"
+elif grep -q "KAMIKAZE" "/etc/banner"; then
+	firmware_version=$(cat /etc/banner |grep KAMIKAZE |cut -d ' ' -f 5 |cut -d ')' -f 1)
+else
+	firmware_version="unknown"
+fi
+
+#
+# if any variables changed, commit the change
+#
+if [ "$CONFIG_general_firmware_version" != "$firmware_version" ] ||
+	[ "$CONFIG_general_firmware_name" != "$firmware_name" ] ||
+	[ "$CONFIG_general_firmware_subtitle" != "$firmware_subtitle" ]; then
+	echo "Committing new firmware id ..."
+	uci_set "webif" "general" "firmware_name" "$firmware_name"
+	uci_set "webif" "general" "firmware_version" "$firmware_version"
+	uci_set "webif" "general" "firmware_subtitle" "$firmware_subtitle"
+	#Commit with full path untill uci_commit bug is fixed.
+	uci_commit "/tmp/.uci/webif"
+fi
+
 [ "$device_name" != "$CONFIG_general_device_name" ] && {
 	echo "Device: $device_name" 	
 	echo "Committing new device id ..."		
@@ -45,4 +86,9 @@ done
 	#Commit with full path untill uci_commit bug is fixed.
 	uci_commit "/tmp/.uci/webif"
 }
+
+# Start stunnel if ssl is enabled
+if [ "$CONFIG_ssl_enable" = "1" ]; then
+	stunnel &
+fi
 }

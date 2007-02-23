@@ -25,5 +25,8 @@ config webif qos
 config webif misc
 	option opendns "0"
 	
+config webif ssl
+	option enable '0'
+	
 #This is to be used for webif-page until a uci library is written in C
 lang="en"

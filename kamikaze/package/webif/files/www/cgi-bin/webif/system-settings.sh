@@ -32,6 +32,14 @@ uci_load "webif"
 
 is_kamikaze && {
 	uci_load "network"
+	SSL="field|@TR<<Webif SSL>>
+select|ssl_enable|$CONFIG_ssl_enable
+option|0|@TR<<Off>>
+option|1|@TR<<On>>"
+if [ -n "$(has_pkgs stunnelt)" ]; then
+	STUNNEL_INSTALL_FORM="string|<div class=\"warning\">Stunnel package is not installed. For ssl support you need to install stunnel:</div>
+		submit|install_stunnel| Install Stunnel |"
+fi
 }
 
 #####################################################################
@@ -68,6 +76,16 @@ if ! empty "$FORM_install_ntpclient"; then
 	tmpfile=$(mktemp "/tmp/.webif_ntp-XXXXXX")
 	echo "Installing NTPCLIENT package ...<pre>"
 	install_package "ntpclient"
+	echo "</pre>"
+fi
+
+if ! empty "$FORM_install_stunnel"; then
+	echo "Installing STunnel package ...<pre>"
+	install_package "stunnel"
+	if [ ! -e "/etc/stunnel/stunnel.pem" ]; then
+		install_package "openssl-util"
+		rdate -s pool.ntp.org; openssl req -new -x509 -days 3650 -nodes -config /etc/stunnel/ssl.conf -batch -out /etc/stunnel/stunnel.pem -keyout /etc/stunnel/stunnel.pem; chmod 600 /etc/stunnel/stunnel.pem
+	fi
 	echo "</pre>"
 fi
 
@@ -116,6 +134,7 @@ EOF
 	if equal "$?" 0 ; then
 		is_kamikaze && {
 		uci_set "network" "wan" "hostname" "$FORM_hostname"
+		uci_set "webif" "ssl" "enable" "$FORM_ssl_enable"
 		#waiting for ntpclient update
 		#save_setting system time_zone "$FORM_system_timezone"
 		#save_setting system ntp_server "$FORM_ntp_server"
@@ -337,7 +356,9 @@ $LANGUAGES
 field|@TR<<Theme>>
 select|theme|$FORM_theme
 $THEMES
+$SSL
 end_form
+$STUNNEL_INSTALL_FORM
 # end webif settings
 ###########################
 $dangerous_form_start
