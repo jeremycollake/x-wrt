@@ -36,7 +36,7 @@ is_kamikaze && {
 select|ssl_enable|$CONFIG_ssl_enable
 option|0|@TR<<Off>>
 option|1|@TR<<On>>"
-if [ -n "$(has_pkgs stunnelt)" ]; then
+if [ -n "$(has_pkgs stunnel)" ]; then
 	STUNNEL_INSTALL_FORM="string|<div class=\"warning\">Stunnel package is not installed. For ssl support you need to install stunnel:</div>
 		submit|install_stunnel| Install Stunnel |"
 fi
@@ -84,7 +84,7 @@ if ! empty "$FORM_install_stunnel"; then
 	install_package "stunnel"
 	if [ ! -e "/etc/stunnel/stunnel.pem" ]; then
 		install_package "openssl-util"
-		rdate -s pool.ntp.org; openssl req -new -x509 -days 3650 -nodes -config /etc/stunnel/ssl.conf -batch -out /etc/stunnel/stunnel.pem -keyout /etc/stunnel/stunnel.pem; chmod 600 /etc/stunnel/stunnel.pem
+		rdate -s pool.ntp.org; openssl req -new -x509 -days 3650 -nodes -config /etc/ssl/stunnel.conf -batch -out /etc/stunnel/stunnel.pem -keyout /etc/stunnel/stunnel.pem; chmod 600 /etc/stunnel/stunnel.pem
 	fi
 	echo "</pre>"
 fi
