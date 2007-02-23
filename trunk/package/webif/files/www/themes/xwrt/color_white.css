@@ -26,3 +26,10 @@ body,
 	background-color: #CCCCCC;
 	color: Black;
 }
+
+#content h3.warning {
+	color: Black;
+	border-color: Black;
+}
+
+.warning { color: Black; }
