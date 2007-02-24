@@ -345,7 +345,7 @@ WL()
 Dopurge ()
 {
 sed 1d < $tempfile > $tempfile2
-rm $tempfile
+rm $tempfile 2> /dev/null
 mv $tempfile2 $tempfile     
 }
 counter=0
@@ -360,14 +360,14 @@ if [ $counter -gt $MAX_TRIES ]; then
 	echo "<tr><td>@TR<<Sorry, no scan results.>></td></tr>"
 else
 
-#-------------------------
-# We need to add a "break" on the first line!
+	#-------------------------
+	# We need to add a "break" on the first line!
 
-current_line=$(grep -i '' < $tempscan)
-echo "" > $tempfile
-echo "$current_line" >> $tempfile
-rm $tempscan
-#------------------------
+	current_line=$(grep -i '' < $tempscan)
+	echo "" > $tempfile
+	echo "$current_line" >> $tempfile
+	rm $tempscan 2> /dev/null
+	#------------------------
 
 DisplayTable
 
@@ -425,8 +425,8 @@ Dopurge
 
 done < $tempfile
 
-rm $tempfile
-#rm $tempfile2
+rm $tempfile 2> /dev/null
+rm $tempfile2 2> /dev/null
 echo "</table><br/><a href='$SCRIPT_NAME'>@TR<<Re-scan>></a><br/>"
 fi
 }
@@ -434,7 +434,6 @@ fi
 ######### iwlist scanning #######
 IWLIST()
 {
-#echo " Please wait while scan is performed ... <br/><br/>"
 found_networks=0
 counter=0
 for counter in $(seq 1 $MAX_TRIES); do
@@ -452,7 +451,9 @@ else
 DisplayTable
         current=0
         counter=0
+
         for counter in $(seq 1 $MAX_CELLS); do
+
                 current_line=$(sed '2,$ d' < $tempfile)
                 empty "$current_line" && break
                 # line must contain both "Cell" and "Address" to be considered
@@ -472,7 +473,7 @@ DisplayTable
                 fi
 
                 sed 1d < $tempfile > $tempfile2
-                rm $tempfile
+                rm $tempfile 2> /dev/null
                 mv $tempfile2 $tempfile
         done
 
@@ -494,10 +495,12 @@ DisplayTable
                 done
 ################################
 
-SSID=$(grep -i "ESSID" < "$tempfile"_"${current}" | sed -e s/'ESSID:'//g -e s/'"'//g -e s/'  '//g)
-CHANNEL=$(grep -i "Channel" < "$tempfile"_"${current}" | sed -e s/'Channel:'//g -e s/' '//g)
+SSID=$(grep -i "ESSID" < "$tempfile"_"${current}" | sed -e s/'ESSID:'//g  -e s/'"'//g | awk '{ print $1 }' )
 
-	quality_pre=$(grep -i "Quality" < "$tempfile"_"${current}" | sed -e s/'Quality:'//g -e s/'Signal level:'//g  -e s/'dBm'//g -e s/'Noise level:'//g -e s/'-'//g)
+CHANNEL=$(grep -i "Channel:" < "$tempfile"_"${current}" | sed -e s/'Channel:'//g -e s/' '//g)
+if equal $CHANNEL "" ; then CHANNEL=$(grep -i "Frequency:" < "$tempfile"_"${current}" | awk '{ print $4  }' | sed -e s/')'//g ) ; fi
+	
+	quality_pre=$(grep -i "Quality" < "$tempfile"_"${current}" | sed -e s/'Quality'//g -e s/'Signal level'//g  -e s/'dBm'//g -e s/'Noise level'//g -e s/'-'//g -e s/'='//g -e s/':'//g)
                 count=0
 	for i in $quality_pre; do
 		case $count in
@@ -509,10 +512,11 @@ CHANNEL=$(grep -i "Channel" < "$tempfile"_"${current}" | sed -e s/'Channel:'//g 
 			let "count+=1"
 	done
 
-SEC=$(grep -i "Encryption key" < "$tempfile"_"${current}" | sed -e s/'Encryption key:'//g -e s/' '//g)
+SEC=$(grep -i "Encryption key" < "$tempfile"_"${current}" | sed -e s/'Encryption key:'//g | awk '{ print $1 }')
 RATE=1
 
 DisplayTR
+
 rm -f "$tempfile"_"${current}"
 let "found_networks+=1"
 let "current+=1"
@@ -522,8 +526,8 @@ echo "</table><br/><a href='$SCRIPT_NAME'>@TR<<Re-scan>></a><br/>"
 
 fi #<- end if were scan results
 
-rm -f "$tempfile"
-rm -f "$tempfile2"
+rm $tempfile 2> /dev/null
+rm $tempfile2 2> /dev/null
 
 }
 	if is_package_installed "wl" ; then #<- for Broadcom units where iwlist is broken
