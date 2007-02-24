@@ -7,6 +7,12 @@
 . /usr/lib/webif/webif.sh
 header "Status" "USB" "@TR<<USB Devices>>"
 
+if ! empty "$FORM_umount"; then
+	if ! empty "$FORM_mountpoint"; then
+		umount $FORM_mountpoint
+	fi
+fi
+
 display_form <<EOF
 start_form|@TR<<All connected devices (excluding system hubs)>>
 EOF
@@ -55,10 +61,16 @@ EOF
 
 <table>
 <tbody>
-	<tr>
-		<td><pre><? mount | grep /dev/scsi/  ?></pre></td>
-	</tr>
-
+<?
+mount | grep /dev/scsi/ | while read _dev _foo1 _mount _foo2 _foo3 _foo4; do
+	echo "<tr><td>"
+	echo "<pre>$_dev</pre></td><td><pre>$_mount</pre></td>"
+	echo "<td><form method=\"post\" action='$SCRIPT_NAME'>"
+	echo "<input type=\"submit\" value=\" @TR<<umount>> \" name=\"umount\" />"
+	echo "<input type=\"hidden\" value=\"$_mount\" name=\"mountpoint\" />"
+	echo "</form></td></tr>"
+done
+?>
 </tbody>
 </table>
 
