@@ -396,6 +396,8 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 			echo '@TR<<Reloading>> @TR<<OpenVPN>> ...'
 			killall openvpn >&- 2>&- <&-
 			/etc/rc.d/S??openvpn start ;;
+		"/tmp/.uci/webif")
+			/etc/init.d/webif start ;;
 	esac
 done
 
