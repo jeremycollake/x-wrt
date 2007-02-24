@@ -13,7 +13,7 @@
 #
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
-cron_init="/etc/init.d/S60cron"
+cron_init="/etc/init.d/S51crond"
 
 HANDLERS_config='
 	wireless) reload_wireless;;
@@ -396,6 +396,8 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 			echo '@TR<<Reloading>> @TR<<OpenVPN>> ...'
 			killall openvpn >&- 2>&- <&-
 			/etc/rc.d/S??openvpn start ;;
+		"/tmp/.uci/webif")
+			/etc/init.d/webif start ;;
 	esac
 done
 
