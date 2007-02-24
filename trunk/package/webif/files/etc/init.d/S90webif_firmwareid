@@ -3,6 +3,7 @@
 #
 START=90
 . /etc/functions.sh
+. /lib/config/uci.sh
 uci_load "webif"
 firmware_name=$CONFIG_general_firmware_name
 firmware_subtitle=$CONFIG_general_firmware_subtitle

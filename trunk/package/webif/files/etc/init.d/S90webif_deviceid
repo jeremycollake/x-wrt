@@ -5,6 +5,7 @@
 #
 START=90
 . /etc/functions.sh
+. /lib/config/uci.sh
 uci_load "webif"
 device_name="$CONFIG_general_device_name"
 
