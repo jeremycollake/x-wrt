@@ -5,25 +5,33 @@
 # be followed by running the webif-sync.sh script.
 #
 . /usr/lib/webif/webif.sh
-header "Status" "USB" "@TR<<USB Devices>>"
+header "Status" "USB" "@TR<<status_usb_USB_Devices#USB Devices>>"
 
 if ! empty "$FORM_umount"; then
 	if ! empty "$FORM_mountpoint"; then
 		umount $FORM_mountpoint
 	fi
 fi
-
-display_form <<EOF
-start_form|@TR<<All connected devices (excluding system hubs)>>
-EOF
 ?>
-<table>
-<tbody>	
-	<tr><td><table cellpadding="10" cellspacing="10" align="left" border="0">	
-	<tr><th>Bus</th><th>Device</th><th>Product</th><th>Manufacturer</th><th>VendorID:ProdID</th><th>USB version</th></tr>
-	<?
-	[ -f /proc/bus/usb/devices ] && grep -e "^[TDPS]:" /proc/bus/usb/devices | sed 's/[[:space:]]*=[[:space:]]*/=/g' | sed 's/[[:space:]]\([^ |=]*\)=/|\1=/g' | sed 's/^/|/' | awk '
-	BEGIN { i=0; RS="|"; FS="=";}
+<div class="settings">
+<h3>@TR<<status_usb_All_connected_devices#All connected devices (excluding system hubs)>></h3>
+<div>
+<table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.9em;" border="0" cellpadding="3" cellspacing="2">
+<?
+[ -f /proc/bus/usb/devices ] && grep -e "^[TDPS]:" /proc/bus/usb/devices | sed 's/[[:space:]]*=[[:space:]]*/=/g' | sed 's/[[:space:]]\([^ |=]*\)=/|\1=/g' | sed 's/^/|/' | awk '
+	BEGIN {
+		i=0; RS="|"; FS="=";
+		odd=1
+		print "<tbody>"
+		print "	<tr>"
+		print "		<th>@TR<<status_usb_Bus#Bus>></th>"
+		print "		<th>@TR<<status_usb_Device#Device>></th>"
+		print "		<th>@TR<<status_usb_Product#Product>></th>"
+		print "		<th>@TR<<status_usb_Manufacturer#Manufacturer>></th>"
+		print "		<th>@TR<<status_usb_VPIDs#VendorID:ProdID>></th>"
+		print "		<th>@TR<<status_usb_USB_vesrsion#USB version>></th>"
+		print "	</tr>"
+	}
 	$1 ~ /^T: / { i++; }
 	$1 ~ /^Bus/ { bus[i]=$2; }
 	$1 ~ /^Dev#/ { device[i]=$2; }
@@ -43,55 +51,92 @@ EOF
 				"[ -f /usr/share/usb.ids ] && grep -e \"^"pid"\" /usr/share/usb.ids | sed \"s/^"pid" *//\"" | getline manufacturer[j];
 			}
 			if ( vpID != "0000:0000" ) {
-				print "<tr><td>" bus[j] "</td><td>" device[j] "</td><td>" product[j] "</td><td>" manufacturer[j] "</td><td>" vpID "</td><td>" usbversion[j] "</td></tr>";
+				if (odd == 1) {
+					print "	<tr>"
+					odd--
+				} else {
+					print "	<tr class=\"odd\">"
+					odd++
+				}
+				print "		<td>" bus[j] "</td>"
+				print "		<td>" device[j] "</td>"
+				print "		<td>" product[j] "</td>"
+				print "		<td>" manufacturer[j] "</td>"
+				print "		<td>" vpID "</td>"
+				print "		<td>" usbversion[j] "</td>"
+				print "	</tr>"
 			}
 		}
+		print "</tbody>"
+	}'
+display_form <<EOF
+end_form
+EOF
+?>
+<div class="settings">
+<h3>@TR<<status_usb_Mounted_USB_SCSI#Mounted USB / SCSI devices>></h3>
+<div>
+<table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.9em;" border="0" cellpadding="3" cellspacing="2">
+<?
+mounted_devices="$(mount | grep "/dev/scsi/")"
+! equal "$mounted_devices" "" && {
+	echo "$mounted_devices" | awk '
+	BEGIN {
+		odd=1
+		print "<tbody>"
+		print "	<tr>"
+		print "		<th>@TR<<status_usb_Device_Path#Device Path>></th>"
+		print "		<th>@TR<<status_usb_Mount_Point#Mount Point>></th>"
+		print "		<th>@TR<<status_usb_File_System#File System>></th>"
+		print "		<th>@TR<<status_usb_Read_Write#Read/Write>></th>"
+		print "		<th>@TR<<status_usb_Action#Action>></th>"
+		print "	</tr>"
 	}
-	'
-?>
-</tbody>
-</table>
-
-<?
+	{
+		if (odd == 1) {
+			print "	<tr>"
+			odd--
+		} else {
+			print "	<tr class=\"odd\">"
+			odd++
+		}
+		print "		<td>" $1 "</td>"
+		print "		<td>" $3 "</td>"
+		print "		<td>" $5 "</td>"
+		if ($6 == "(ro)")
+			print "		<td>@TR<<status_usb_ro#Read only>></td>"
+		else if ($6 == "(rw)")
+			print "		<td>@TR<<status_usb_rw#Read/Write>></td>"
+		else
+			print "		<td>" $6 "</td>"
+		print "		<td><form method=\"post\" action='$SCRIPT_NAME'><input type=\"submit\" value=\" @TR<<status_usb_umount#umount>> \" name=\"umount\" /><input type=\"hidden\" value=\"" $3 "\" name=\"mountpoint\" /></form></td>"
+	}
+	END {
+		print "</tbody>"
+	}'
+}
 display_form <<EOF
 end_form
-start_form|@TR<<Mounted USB / SCSI devices>>
 EOF
 ?>
-
-<table>
-<tbody>
+<div class="settings">
+<h3>@TR<<status_usb_Loaded_USB_drivers#Loaded USB drivers>></h3>
+<div>
+<table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.9em;" border="0" cellpadding="3" cellspacing="2">
 <?
-mount | grep /dev/scsi/ | while read _dev _foo1 _mount _foo2 _foo3 _foo4; do
-	echo "<tr><td>"
-	echo "<pre>$_dev</pre></td><td><pre>$_mount</pre></td>"
-	echo "<td><form method=\"post\" action='$SCRIPT_NAME'>"
-	echo "<input type=\"submit\" value=\" @TR<<umount>> \" name=\"umount\" />"
-	echo "<input type=\"hidden\" value=\"$_mount\" name=\"mountpoint\" />"
-	echo "</form></td></tr>"
-done
-?>
-</tbody>
-</table>
+[ -f /proc/bus/usb/drivers ] && cat /proc/bus/usb/drivers | awk '
+BEGIN {
+		print "<tbody>"
+}
+{
+	print "	<tr>"
+		print "		<td>" $1 "</td>"
+	print "	</tr>"
+}
+END {
+	print "</tbody>"
+}'
 
-<?
-display_form <<EOF
-end_form
-start_form|@TR<<Loaded USB drivers>>
-EOF
-?>
-
-<table>
-<tbody>
-	<tr>
-		<td><pre><? [ -f /proc/bus/usb/drivers ] && cat /proc/bus/usb/drivers ?></pre></td>
-	</tr>
-
-	<tr><td><br /><br /></td></tr>
-</tbody>
-</table>
-
-<?
 display_form <<EOF
 end_form
 EOF
@@ -100,4 +145,3 @@ footer ?>
 <!--
 ##WEBIF:name:Status:454:USB
 -->
-
