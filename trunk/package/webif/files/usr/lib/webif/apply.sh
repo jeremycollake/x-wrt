@@ -13,7 +13,7 @@
 #
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
-cron_init="/etc/init.d/S51crond"
+cron_init="/etc/init.d/S60cron"
 
 HANDLERS_config='
 	wireless) reload_wireless;;
