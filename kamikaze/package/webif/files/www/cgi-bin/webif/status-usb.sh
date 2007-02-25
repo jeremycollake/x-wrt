@@ -68,7 +68,8 @@ fi
 			}
 		}
 		print "</tbody>"
-	}'
+	}
+'
 display_form <<EOF
 end_form
 EOF
@@ -125,17 +126,18 @@ EOF
 <table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.9em;" border="0" cellpadding="3" cellspacing="2">
 <?
 [ -f /proc/bus/usb/drivers ] && cat /proc/bus/usb/drivers | awk '
-BEGIN {
+	BEGIN {
 		print "<tbody>"
-}
-{
-	print "	<tr>"
+	}
+	{
+		print "	<tr>"
 		print "		<td>" $1 "</td>"
-	print "	</tr>"
-}
-END {
-	print "</tbody>"
-}'
+		print "	</tr>"
+	}
+	END {
+		print "</tbody>"
+	}
+'
 
 display_form <<EOF
 end_form
