@@ -131,20 +131,36 @@ if ! empty "$FORM_install_nas"; then
 	install_package "nas"
 	echo "</pre>"
 fi
+if ! empty "$FORM_install_hostapd"; then
+	echo "Installing HostAPD package ...<pre>"
+	install_package "hostapd"
+	echo "</pre>"
+fi
 nas_installed="0"
 ipkg list_installed | grep -q nas
 equal "$?" "0" && nas_installed="1"
 
-install_nas_button='field|@TR<<NAS Package>>|install_nas|hidden'
-if ! equal "$nas_installed" "1"; then
-	install_nas_button="$install_nas_button
-		string|<div class=\"warning\">WPA and WPA2 will not work until you install the NAS package. </div>
-		submit|install_nas| Install NAS Package |"
-else
-	install_nas_button="$install_nas_button
-		string|@TR<<Installed>>."
+if [ "$iftype" = "broadcom" ]; then
+	install_nas_button='field|@TR<<NAS Package>>|install_nas|hidden'
+	if ! equal "$nas_installed" "1"; then
+		install_nas_button="$install_nas_button
+			string|<div class=\"warning\">WPA and WPA2 will not work until you install the NAS package. </div>
+			submit|install_nas| Install NAS Package |"
+	else
+		install_nas_button="$install_nas_button
+			string|@TR<<Installed>>."
+	fi
+elif [ "$iftype" = "atheros ]; then
+	install_nas_button='field|@TR<<HostAPD Package>>|install_nas|hidden'
+	if ! equal "$nas_installed" "1"; then
+		install_nas_button="$install_nas_button
+			string|<div class=\"warning\">WPA and WPA2 will not work until you install the HostAPD package. </div>
+			submit|install_hostapd| Install HostAPD Package |"
+	else
+		install_nas_button="$install_nas_button
+			string|@TR<<Installed>>."
+	fi
 fi
-
 
 #####################################################################
 # This is looped for every physical wireless card (wifi-device)
