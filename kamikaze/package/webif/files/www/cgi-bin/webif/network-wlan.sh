@@ -140,27 +140,9 @@ nas_installed="0"
 ipkg list_installed | grep -q nas
 equal "$?" "0" && nas_installed="1"
 
-if [ "$iftype" = "broadcom" ]; then
-	install_nas_button='field|@TR<<NAS Package>>|install_nas|hidden'
-	if ! equal "$nas_installed" "1"; then
-		install_nas_button="$install_nas_button
-			string|<div class=\"warning\">WPA and WPA2 will not work until you install the NAS package. </div>
-			submit|install_nas| Install NAS Package |"
-	else
-		install_nas_button="$install_nas_button
-			string|@TR<<Installed>>."
-	fi
-elif [ "$iftype" = "atheros" ]; then
-	install_nas_button='field|@TR<<HostAPD Package>>|install_nas|hidden'
-	if ! equal "$nas_installed" "1"; then
-		install_nas_button="$install_nas_button
-			string|<div class=\"warning\">WPA and WPA2 will not work until you install the HostAPD package. </div>
-			submit|install_hostapd| Install HostAPD Package |"
-	else
-		install_nas_button="$install_nas_button
-			string|@TR<<Installed>>."
-	fi
-fi
+hostapd_installed="0"
+ipkg list_installed | grep -q hostapd
+equal "$?" "0" && hostapd_installed="1"
 
 #####################################################################
 # This is looped for every physical wireless card (wifi-device)
@@ -414,6 +396,16 @@ for device in $DEVICES; do
 				install_nas_button="$install_nas_button
 				string|@TR<<Installed>>."
 			fi
+			
+			install_hostapd_button="field|@TR<<HostAPD Package>>|install_nas_$vcfg|hidden"
+			if ! equal "$hostapd_installed" "1"; then
+				install_hostapd_button="$install_hostapd_button
+					string|<div class=\"warning\">WPA and WPA2 will not work until you install the HostAPD package. </div>
+					submit|install_hostapd| Install HostAPD Package |"
+			else
+				install_hostapd_button="$install_hostapd_button
+					string|@TR<<Installed>>."
+			fi
 
 			wpa="field|WPA @TR<<PSK>>|wpapsk_$vcfg|hidden
 				password|wpa_psk_$vcfg|$FORM_key
@@ -423,7 +415,11 @@ for device in $DEVICES; do
 				text|radius_port_$vcfg|$FORM_radius_port
 				field|@TR<<RADIUS Server Key>>|radiuskey_$vcfg|hidden
 				text|radius_key_$vcfg|$FORM_key
+				if [ "$iftype" = "broadcom" ]; then
 				$install_nas_button"
+				elif [ "$iftype" = "atheros" ]; then
+				$install_hostapd_button
+				fi
 			append forms "$wpa" "$N"
 
 			###################################################################
