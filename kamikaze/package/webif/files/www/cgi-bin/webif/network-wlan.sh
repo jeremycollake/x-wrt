@@ -150,7 +150,7 @@ if [ "$iftype" = "broadcom" ]; then
 		install_nas_button="$install_nas_button
 			string|@TR<<Installed>>."
 	fi
-elif [ "$iftype" = "atheros ]; then
+elif [ "$iftype" = "atheros" ]; then
 	install_nas_button='field|@TR<<HostAPD Package>>|install_nas|hidden'
 	if ! equal "$nas_installed" "1"; then
 		install_nas_button="$install_nas_button
