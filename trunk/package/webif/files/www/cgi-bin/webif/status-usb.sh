@@ -29,7 +29,7 @@ fi
 		print "		<th>@TR<<status_usb_Product#Product>></th>"
 		print "		<th>@TR<<status_usb_Manufacturer#Manufacturer>></th>"
 		print "		<th>@TR<<status_usb_VPIDs#VendorID:ProdID>></th>"
-		print "		<th>@TR<<status_usb_USB_vesrsion#USB version>></th>"
+		print "		<th>@TR<<status_usb_USB_version#USB version>></th>"
 		print "	</tr>"
 	}
 	$1 ~ /^T: / { i++; }
@@ -79,12 +79,15 @@ EOF
 <div>
 <table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.9em;" border="0" cellpadding="3" cellspacing="2">
 <?
-mounted_devices="$(mount | grep "/dev/scsi/")"
+mounted_devices="$(cat /proc/mounts | grep "^/dev/scsi/")"
 ! equal "$mounted_devices" "" && {
 	echo "$mounted_devices" | awk '
 	BEGIN {
 		odd=1
 		print "<tbody>"
+		print "	<tr>"
+		print "		<td colspan=\"5\"><h3>@TR<<status_usb_filesystems#File systems>></h3></td>"
+		print "	</tr>"
 		print "	<tr>"
 		print "		<th>@TR<<status_usb_Device_Path#Device Path>></th>"
 		print "		<th>@TR<<status_usb_Mount_Point#Mount Point>></th>"
@@ -102,15 +105,76 @@ mounted_devices="$(mount | grep "/dev/scsi/")"
 			odd++
 		}
 		print "		<td>" $1 "</td>"
+		print "		<td>" $2 "</td>"
 		print "		<td>" $3 "</td>"
-		print "		<td>" $5 "</td>"
-		if ($6 == "(ro)")
+		if ($4 == "ro")
 			print "		<td>@TR<<status_usb_ro#Read only>></td>"
-		else if ($6 == "(rw)")
+		else if ($4 == "rw")
 			print "		<td>@TR<<status_usb_rw#Read/Write>></td>"
 		else
-			print "		<td>" $6 "</td>"
+			print "		<td>" $4 "</td>"
 		print "		<td><form method=\"post\" action='$SCRIPT_NAME'><input type=\"submit\" value=\" @TR<<status_usb_umount#umount>> \" name=\"umount\" /><input type=\"hidden\" value=\"" $3 "\" name=\"mountpoint\" /></form></td>"
+	}
+	END {
+		print "</tbody>"
+	}'
+}
+mnts="$(echo "$mounted_devices" | awk '
+{
+        sub(/part[[:digit:]]{1,2}/, "", $1)
+        print $1
+        print $2
+}' | sort -u | awk '
+BEGIN {
+        OFS = ""
+        ORS = ""
+        print "("
+}
+{
+        if (FNR > 1) print "|"
+        gsub(/\//, "\\/")
+        print "^" $1
+}
+END {
+        print ")"
+}')"
+swap_devices="$(cat "/proc/swaps" 2>/dev/null | egrep "$mnts")"
+! equal "$swap_devices" "" && {
+	echo "$swap_devices" | awk '
+	BEGIN {
+		odd=1
+		print "</table>"
+		print "<br />"
+		print "<table style=\"width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.9em;\" border=\"0\" cellpadding=\"3\" cellspacing=\"2\">"
+		print "<tbody>"
+		print "	<tr>"
+		print "		<td colspan=\"5\"><h3>@TR<<status_usb_swaps#Swap>></h3></td>"
+		print "	</tr>"
+		print "	<tr>"
+		print "		<th>@TR<<status_usb_swap_PartitionFilename#Partition/Filename>></th>"
+		print "		<th>@TR<<status_usb_swap_Type#Type>></th>"
+		print "		<th>@TR<<status_usb_swap_Size#Size>></th>"
+		print "		<th>@TR<<status_usb_swap_Used#Used>></th>"
+		print "		<th>@TR<<status_usb_swap_Priority#Priority>></th>"
+	}
+	{
+		if (odd == 1) {
+			print "	<tr>"
+			odd--
+		} else {
+			print "	<tr class=\"odd\">"
+			odd++
+		}
+		print "		<td>" $1 "</td>"
+		if ($2 == "partition")
+			print "		<td>@TR<<status_usb_swap_partition#partition>></td>"
+		else if ($2 == "file")
+			print "		<td>@TR<<status_usb_swap_file#file>></td>"
+		else
+			print "		<td>" $2 "</td>"
+		print "		<td align=\"right\">" $3 "</td>"
+		print "		<td align=\"right\">" $4 "</td>"
+		print "		<td align=\"right\">" $5 "</td>"
 	}
 	END {
 		print "</tbody>"
