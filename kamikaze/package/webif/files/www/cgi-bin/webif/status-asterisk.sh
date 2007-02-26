@@ -17,7 +17,7 @@ fi
 
 ast_conf_file="$(echo $ast_proc_info | awk '{for (i=2; i<=NF; i++) if ($i == "-C") print $(i+1)}')"
 
-if [ -e $ast_conf_file ]; then
+if [ -e "$ast_conf_file" ]; then
 	ast_conf_path="$(cat $ast_conf_file | grep '^astetcdir => ')"
 
 	if [ -n "$ast_conf_path" ]; then
