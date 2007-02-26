@@ -373,7 +373,8 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 		"/tmp/.uci/qos") qos-start;;
 		"/tmp/.uci/webif") 
 			init_theme
-			/etc/init.d/S??opendns restart ;;
+			/etc/init.d/S??opendns restart
+			/etc/init.d/webif start ;;
 		"/tmp/.uci/upnpd") reload_upnpd;;
 		"/tmp/.uci/network")
 			# for kamikaze
@@ -395,9 +396,7 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 		"/tmp/.uci/openvpn")
 			echo '@TR<<Reloading>> @TR<<OpenVPN>> ...'
 			killall openvpn >&- 2>&- <&-
-			/etc/rc.d/S??openvpn start ;;
-		"/tmp/.uci/webif")
-			/etc/init.d/webif start ;;
+			/etc/init.d/openvpn start ;;
 	esac
 done
 
