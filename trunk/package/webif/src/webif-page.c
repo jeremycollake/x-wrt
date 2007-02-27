@@ -2,6 +2,7 @@
  * Webif page translator
  *
  * Copyright (C) 2005 Felix Fietkau <nbd@openwrt.org>
+ * Copyright (c) 2007 Jeremy Collake <jeremy@bitsum.com>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -39,6 +40,114 @@ typedef struct lstr lstr;
 
 static lstr *ltable[HASH_MAX];
 static char buf[LINE_BUF], buf2[LINE_BUF];
+
+/* lang parsing code block begin - doesn't really fully parse UCI
+   (c) Jeremy Collake, released under GPL as rest of source
+  **************************************************************** */
+
+#define MAX_TOKEN_SIZE 256  /* maximum UCI token size (for extract_lang) */
+#define LANG_TYPE_MAX 32    /* maximum language name size (for main) */
+
+/* strip_next_token -
+ *  specialized tokenization - handles quoted strings, 
+ *  whitespace as delimiter (hard coded, todo: change) */
+char *strip_next_token(char *pszSource, char *pszToken, int nTokenLen)
+{
+	char cClosingQuote=0; /* set to ' or " when quoted string encountered */
+	int nTokenIndex=0;
+	int bInLeadingWhitespace=1;
+	int nI;
+	for(nI=0;nI<nTokenLen && pszSource[nI];nI++)
+	{		
+		if(!cClosingQuote)	/* if not in quoted string */
+		{						
+			switch(pszSource[nI])
+			{
+				/* if opening quote */
+				case '\'':
+				case '\"':
+					bInLeadingWhitespace=0;
+					cClosingQuote=pszSource[nI];
+					continue;
+				/* if whitespace */
+				case ' ':
+				case '\t':
+					if(bInLeadingWhitespace) 
+					{
+						continue;
+					}
+					/* fall-through */
+				case '\n':				
+					pszToken[nTokenIndex]=0; /* terminate token */
+					return pszSource+nI;					
+					break;
+				default:
+					bInLeadingWhitespace=0;
+					break;					
+			}	
+		}
+		else if(pszSource[nI]==cClosingQuote) /* if in quoted string, and ending quote */
+		{			
+			pszToken[nTokenIndex]=0; /* terminate token */
+			break;
+		}
+		pszToken[nTokenIndex]=pszSource[nI];
+		nTokenIndex++;
+	}
+	pszToken[nTokenIndex]=0; /* terminate token */					
+	return pszSource+nI;
+}
+
+char *extract_lang(char *pszLine, char *pszBuffer, int nBufLen) 
+{
+	char *pszDelims=" \t";
+	char szTokenBuffer[MAX_TOKEN_SIZE];
+	char *pszToken=szTokenBuffer;
+	int nCount;
+	pszLine=strip_next_token(pszLine, szTokenBuffer, MAX_TOKEN_SIZE); 	
+	for(nCount=0;pszToken[0];)
+	{		
+		switch(nCount) 
+		{
+			case 0:
+				/* if first argument is 'option' */
+				if(!strcasecmp(pszToken, "option")) 
+				{
+					nCount++;
+				}
+				/* if first argument not 'option' */
+				else
+				{
+					return NULL;
+				}
+				break;
+			case 1:
+				/* if first non-empty argument is 'lang' */
+				if(!strcasecmp(pszToken, "lang")) 
+				{
+					nCount++;
+				}
+				/* if first argument not 'lang' */
+				else
+				{
+					return NULL;
+				}				
+				break;
+			case 2:
+				if(strlen(pszToken)>nBufLen) 
+				{
+					/* truncate string if can't fit in buffer */
+					pszToken[nBufLen-1]=0;
+				}
+				strcpy(pszBuffer,pszToken);
+				return pszBuffer;				
+		}
+		pszLine=strip_next_token(pszLine, szTokenBuffer, MAX_TOKEN_SIZE);
+	}	
+	return NULL; 
+}
+/* lang parsing code block end 
+   **************************************************************** */
 
 /* djb2 hash function */
 static inline unsigned long hash(char *str)
@@ -190,6 +299,7 @@ main
 	int len, i, done;
 	char line[LINE_BUF], *tmp, *arg;
 	glob_t langfiles;
+	char szLangBuffer[LANG_TYPE_MAX];
 	char *lang = NULL;
 	char *proc = "/usr/bin/haserl";
 
@@ -202,27 +312,7 @@ main
 		
 		while (!feof(f) && (lang == NULL)) {
 			fgets(line, LINE_BUF - 1, f);
-			
-			if (strncasecmp(line, "lang", 4) != 0)
-				goto nomatch;
-			
-			lang = line + 4;
-			while (isspace(*lang))
-				lang++;
-			
-			if (*lang != '=')
-				goto nomatch;
-
-			lang++;
-
-			while (isspace(*lang))
-				lang++;
-
-			for (i = 0; isalpha(lang[i]) && (i < 32); i++);
-			lang[i] = 0;
-			continue;
-nomatch:
-			lang = NULL;
+			lang=extract_lang(line, szLangBuffer, LANG_TYPE_MAX);
 		}
 		fclose(f);
 #endif

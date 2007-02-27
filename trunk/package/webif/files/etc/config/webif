@@ -1,4 +1,5 @@
 config webif general
+	option lang "en"
 	option firmware_name ""
 	option firmware_version ""
 	option firmware_subtitle "With X-Wrt Extensions"
@@ -24,6 +25,4 @@ config webif qos
 
 config webif misc
 	option opendns "0"
-	
-#This is to be used for webif-page until a uci library is written in C
-lang="en"
+
