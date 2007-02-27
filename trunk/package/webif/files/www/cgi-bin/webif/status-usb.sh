@@ -114,6 +114,7 @@ mounted_devices="$(cat /proc/mounts | grep "^/dev/scsi/")"
 		else
 			print "		<td>" $4 "</td>"
 		print "		<td><form method=\"post\" action='$SCRIPT_NAME'><input type=\"submit\" value=\" @TR<<status_usb_umount#umount>> \" name=\"umount\" /><input type=\"hidden\" value=\"" $3 "\" name=\"mountpoint\" /></form></td>"
+		print "	</tr>"
 	}
 	END {
 		print "</tbody>"
@@ -175,6 +176,7 @@ swap_devices="$(cat "/proc/swaps" 2>/dev/null | egrep "$mnts")"
 		print "		<td align=\"right\">" $3 "</td>"
 		print "		<td align=\"right\">" $4 "</td>"
 		print "		<td align=\"right\">" $5 "</td>"
+		print "	</tr>"
 	}
 	END {
 		print "</tbody>"
