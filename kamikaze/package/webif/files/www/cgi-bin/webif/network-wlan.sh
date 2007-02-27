@@ -18,6 +18,7 @@
 # Configuration files referenced:
 #   wireless
 #
+header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onload="modechange()"' "$SCRIPT_NAME"
 adhoc_count=0
 ap_count=0
 sta_count=0
@@ -566,7 +567,7 @@ EOF
 	}
 fi
 
-header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onload="modechange()"' "$SCRIPT_NAME"
+
 
 #####################################################################
 # modechange script
