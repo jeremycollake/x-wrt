@@ -304,9 +304,6 @@ main
 	char *proc = "/usr/bin/haserl";
 
 	memset(ltable, 0, HASH_MAX * sizeof(lstr *));
-#ifdef NVRAM
-	if ((lang = nvram_get("language")) != NULL) {
-#else
 	if ((f = fopen("/etc/config/webif", "r")) != NULL) {
 		int n, i;
 		
@@ -315,7 +312,6 @@ main
 			lang=extract_lang(line, szLangBuffer, LANG_TYPE_MAX);
 		}
 		fclose(f);
-#endif
 
 		sprintf(buf, "/usr/lib/webif/lang/%s/*.txt", lang);
 		i = glob(buf, GLOB_ERR | GLOB_MARK, NULL, &langfiles);
