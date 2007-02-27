@@ -164,12 +164,6 @@ Set => Establir
 Settings => Paràmetres
 Automatic WDS => WDS automàtic
 
-# "Hosts" page
-
-MAC Address => Adreça MAC
-Configured Hosts => Equips configurats
-DHCP Static => Entrades DHCP estàtiques
-Host Names => Nom dels equips
 
 Up => Pujar
 Down => Baixar
@@ -211,32 +205,97 @@ Helptext Redial Timeout => Nombre de segons sense rebre resposta del servidor qu
 
 
 ## new format
+## you are free to translate the part between "new format comments"
+## replace any text after "=" and ">" with your translation
 
-## system-ipkg.sh
-system_ipkg_installedpackages => Paquets instal·lats
-system_ipkg_updatelists => Actualització de la llista de paquets
-system_ipkg_Uninstall => Desinstal·lar
-system_ipkg_Install => Instal·lar
+
+## network hosts
+network_hosts_host_IP_invalid => Host's IP Address
+network_hosts_Host_Name => Nom de l'equip
+network_hosts_MAC => Adreça MAC
+network_hosts_static_IP_invalid => Static IP Address
+network_hosts_Configured_Hosts => Equips configurats
+network_hosts_Host_Names => Nom dels equips
+network_hosts_IP => Adreça IP
+network_hosts_Remove => Eliminar
+network_hosts_Add => Afegir
+network_hosts_Host_Names_helptext => The file /etc/hosts is used to look up the IP address of a device connected to a computer network. The hosts file describes a many-to-one mapping of device names to IP addresses. When accessing a device by name, the networking system attempts to locate the name within the hosts file before accessing the Internet domain name system.
+network_hosts_DHCP_Static_IPs => Static IP addresses (for DHCP)
+network_hosts_Static_IPs => Static IP addresses
+network_hosts_Static_IPs_helptext => The file /etc/ethers contains database information regarding known 48-bit ethernet addresses of hosts on an Internetwork. The DHCP server uses the matching IP address instead of allocating a new one from the pool for any MAC address listed in this file.
+network_hosts_Active_Leases => Active DHCP Leases
+network_hosts_Name => Nom
+network_hosts_Expires => Caduca d'ara a
+network_hosts_h => h
+network_hosts_min => min
+network_hosts_sec => sec
+network_hosts_No_leases => There are no known DHCP leases.
+Network => Xarxa
+Hosts => Configuració de hosts
 
 
 ## status-leases.sh
+Status => Estat
+DHCP Clients => DHCP Clients
 status_leases_dhcp_leases => Préstecs DHCP
-status_leases_IP => Adreça IP
 status_leases_MAC => Adreça MAC
+status_leases_IP => Adreça IP
 status_leases_Name => Nom
 status_leases_Expires => Caduca d'ara a
+status_leases_h => h
+status_leases_min => min
+status_leases_sec => sec
+status_leases_no_leases => There are no known DHCP leases.
+status_leases_dhcp_leases => DHCP Leases
+status_leases_dhcp_leases_helptext => DHCP leases are assigned to network clients that request an IP address from the DHCP server of the router. Clients that requested their IP lease before this router was last rebooted may not be listed until they request a renewal of their lease.
+status_leases_additional => Additional information
+status_leases_arp_title => Address Resolution Protocol Cache (ARP)
+status_leases_HW => HW Type
+status_leases_Flags => Flags
+status_leases_Mask => Mask
+status_leases_completed => completed
+status_leases_permanent => permanent
+status_leases_published => published
+status_leases_no_arp_record => ARP Cache does not contain any correspondent record.
+status_leases_ethers_title => Ethernet Address to IP Number Database (/etc/ethers)
+status_leases_ethers_empty => File /etc/ethers does not contain any Ethernet address/IP address pair.
+status_leases_no_ethers => File /etc/ethers does not exist.
 
 
-## network-hosts.sh
-network_hosts_Add => Afegir
-network_hosts_Configured_Hosts => Equips configurats
-network_hosts_Host_Name => Nom de l'equip
-network_hosts_Host_Names => Nom dels equips
-network_hosts_IP => Adreça IP
-network_hosts_MAC => Adreça MAC
-network_hosts_Name => Nom
-network_hosts_Remove => Eliminar
-network_hosts_Expires => Caduca d'ara a
+## status-usb.sh
+Status => Estat
+USB => USB
+status_usb_USB_Devices => USB Devices
+status_usb_All_connected_devices => All connected devices (excluding system hubs)
+status_usb_Bus => Bus
+status_usb_Device => Device
+status_usb_Product => Product
+status_usb_Manufacturer => Manufacturer
+status_usb_VPIDs => VendorID:ProdID
+status_usb_USB_version => USB version
+status_usb_Mounted_USB_SCSI => Mounted USB / SCSI devices
+status_usb_filesystems => File systems
+status_usb_Device_Path => Device Path
+status_usb_Mount_Point => Mount Point
+status_usb_File_System => File System
+status_usb_Read_Write => Read/Write
+status_usb_Action => Action
+status_usb_ro => Read only
+status_usb_rw => Read/Write
+status_usb_umount => umount
+status_usb_swaps => Swaps
+status_usb_swap_PartitionFilename => Partition/Filename
+status_usb_swap_Type => Type
+status_usb_swap_Size => Size
+status_usb_swap_Used => Used
+status_usb_swap_Priority => Priority
+status_usb_swap_partition => partition
+status_usb_swap_file => file
+status_usb_Loaded_USB_drivers => Loaded USB drivers
+
+
+## new format
+
 
 
 # untranslated:
