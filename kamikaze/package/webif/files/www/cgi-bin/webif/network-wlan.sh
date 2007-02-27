@@ -165,7 +165,7 @@ for device in $DEVICES; do
 	fi
         append forms "start_form|@TR<<Wireless Adapter>> $device @TR<< Configuration>>" "$N"
         
-        if [ "iftype" = "atheros" ]; then
+        if [ "$iftype" = "atheros" ]; then
         mode_fields="field|@TR<<Mode>>
 		select|mode_ap_$device|$FORM_ap_mode
 		option|11bg|@TR<<802.11B/G>>
@@ -416,10 +416,10 @@ for device in $DEVICES; do
 				field|@TR<<RADIUS Server Key>>|radiuskey_$vcfg|hidden
 				text|radius_key_$vcfg|$FORM_key
 				if [ "$iftype" = "broadcom" ]; then
-				$install_nas_button"
+				$install_nas_button
 				elif [ "$iftype" = "atheros" ]; then
 				$install_hostapd_button
-				fi
+				fi"
 			append forms "$wpa" "$N"
 
 			###################################################################
