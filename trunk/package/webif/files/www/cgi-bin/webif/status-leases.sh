@@ -75,7 +75,7 @@ exists /tmp/dhcp.leases && grep -q "." /tmp/dhcp.leases > /dev/null
 <table width="100%">
 <tbody>
 	<tr>
-		<td><font size="-1"><strong>@TR<<status_leases_dhcp_leases#DHCP Leases>>:</strong>&nbsp; @TR<<HelpText status_leases_dhcp_leases#DHCP leases are assigned to network clients that request an IP address from the DHCP server of the router. Clients that requested their IP lease before this router was last rebooted may not be listed until they request a renewal of their lease.>></font></td>
+		<td><font size="-1"><strong>@TR<<status_leases_dhcp_leases#DHCP Leases>>:</strong>&nbsp; @TR<<status_leases_dhcp_leases_helptext#DHCP leases are assigned to network clients that request an IP address from the DHCP server of the router. Clients that requested their IP lease before this router was last rebooted may not be listed until they request a renewal of their lease.>></font></td>
 	</tr>
 </tbody>
 </table>
