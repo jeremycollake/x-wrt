@@ -2,6 +2,7 @@
 #
 # Webif post-install script.
 #
+. /lib/config/uci.sh
 
 #########################################################################################
 # functions
@@ -91,6 +92,11 @@ require_reboot() {
 
 #########################################################################################
 # entry point
+
+#commit our old webif settings if they exist
+if [ -e /tmp/.uci/webif ]; then
+	uci_commit "webif"
+fi
 
 # fix some links on squashfs partition that aren't properly copied instead by firstboot
 # has no effect when done in image builder.
