@@ -213,37 +213,6 @@ for config in $(ls file-* 2>&-); do
 	esac'
 done
 
-# config-webif		Webif config
-for config in $(ls config-webif 2>&-); do
-	echo '@TR<<Applying>> @TR<<Webif settings>> ...'
-	for newlang in $(grep "language" "$config" |cut -d '"' -f2); do
-		_tmpwebifconfig=$(mktemp "/tmp/.webif-XXXXXX")
-		touch "$_tmpwebifconfig"  # for to exist
-		exists "/etc/config/webif" && {
-			cat "/etc/config/webif" | sed /'lang='/d > "$_tmpwebifconfig"
-		}
-		echo "lang=$newlang" >> "$_tmpwebifconfig"
-		if equal "$newlang" "en"; then
-			mv -f "$_tmpwebifconfig" "/etc/config/webif"
-		else
-			# build URL for package
-			#  since the original webif may be installed to, have to make sure we get latest ver
-			webif_version=$(ipkg status webif | awk '/Version:/ { print $2 }')
-			xwrt_repo_url=$(cat /etc/ipkg.conf | grep X-Wrt | cut -d' ' -f3)
-			# always install language pack, since it may have been updated without package version change
-			ipkg install "${xwrt_repo_url}/webif-lang-${newlang}_${webif_version}_mipsel.ipk" -force-reinstall -force-overwrite | uniq
-			# switch to it if installed, even old one, otherwise return to previous
-			if ! equal "$(ipkg status "webif-lang-${newlang}" |grep "Status:" |grep " installed" )" ""; then
-				mv -f "$_tmpwebifconfig" "/etc/config/webif"
-			else
-				rm -f "$_tmpwebifconfig" 2>/dev/null
-				rm -f "/tmp/.webif/config-webif" 2>/dev/null
-			fi
-		fi
-	done
-	echo '@TR<<Done>>'
-done
-
 # config-wifi-enable		QOS Config file
 for config in $(ls config-wifi-enable 2>&-); do
 	ifdown wifi
@@ -343,6 +312,29 @@ reload_log() {
 	/sbin/runsyslogd >&- 2>&- <&-
 }
 
+# switch_language (old_lang)  - switches language if changed
+switch_language() {
+	oldlang="$1"
+	uci_load "webif"
+	newlang="$CONFIG_general_lang"
+	! equal "$newlang" "$oldlang" && {
+		echo '@TR<<Applying>> @TR<<Installing language pack>> ...'
+		# if not English then we install language pack
+		! equal "$newlang" "en" && {
+			# build URL for package
+			#  since the original webif may be installed to, have to make sure we get latest ver
+			webif_version=$(ipkg status webif | awk '/Version:/ { print $2 }')
+			xwrt_repo_url=$(cat /etc/ipkg.conf | grep X-Wrt | cut -d' ' -f3)
+			# always install language pack, since it may have been updated without package version change
+			ipkg install "${xwrt_repo_url}/webif-lang-${newlang}_${webif_version}_mipsel.ipk" -force-reinstall force-overwrite | uniq
+			# switch to it if installed, even old one, otherwise return to previous
+			if equal "$(ipkg status "webif-lang-${newlang}" |grep "Status:" |grep " installed" )" ""; then
+				echo '@TR<<Error installing language pack>>!'
+			fi
+		}
+		echo '@TR<<Done>>'
+	}
+done
 
 # config-*		simple config files
 (
@@ -367,11 +359,17 @@ done
 # now apply any UCI config changes
 #
 for package in $(ls /tmp/.uci/* 2>&-); do
+	# store original language before committing new one so we know if changed
+	equal "$package" "webif" && {
+		uci_load "webif"
+		oldlang="$CONFIG_general_lang"
+	}
 	echo "@TR<<Committing>> ${package#/tmp/.uci/} ..."
-	uci_commit "$package"
+	uci_commit "$package"	
 	case "$package" in
 		"/tmp/.uci/qos") qos-start;;
 		"/tmp/.uci/webif") 
+			switch_language "$oldlang"
 			init_theme
 			#whiterussian only
 			if [ -e "/etc/init.d/S??opendns" ]; then
