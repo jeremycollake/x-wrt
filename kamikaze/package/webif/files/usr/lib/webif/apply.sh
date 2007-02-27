@@ -373,8 +373,14 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 		"/tmp/.uci/qos") qos-start;;
 		"/tmp/.uci/webif") 
 			init_theme
-			/etc/init.d/S??opendns restart
-			/etc/init.d/webif start ;;
+			#whiterussian only
+			if [ -e "/etc/init.d/S??opendns" ]; then
+				/etc/init.d/S??opendns restart
+			fi
+			if [ -e "/etc/init.d/webif" ]; then
+				/etc/init.d/webif start
+			fi
+			;;
 		"/tmp/.uci/upnpd") reload_upnpd;;
 		"/tmp/.uci/network")
 			# for kamikaze
