@@ -143,7 +143,7 @@ EOF
 
 display_form <<EOF
 helpitem|network_hosts_Host_Names#Host Names
-helptext|Helptext network_hosts_Host_Names#The file /etc/hosts is used to look up the IP address of a device connected to a computer network. The hosts file describes a many-to-one mapping of device names to IP addresses. When accessing a device by name, the networking system attempts to locate the name within the hosts file before accessing the Internet domain name system.
+helptext|network_hosts_Host_Names_helptext#The file /etc/hosts is used to look up the IP address of a device connected to a computer network. The hosts file describes a many-to-one mapping of device names to IP addresses. When accessing a device by name, the networking system attempts to locate the name within the hosts file before accessing the Internet domain name system.
 end_form
 
 start_form|@TR<<network_hosts_DHCP_Static_IPs#Static IP addresses (for DHCP)>>
@@ -184,7 +184,7 @@ EOF
 
 display_form <<EOF
 helpitem|network_hosts_Static_IPs#Static IP addresses
-helptext|Helptext network_hosts_Static_IPs#The file /etc/ethers contains database information regarding known 48-bit ethernet addresses of hosts on an Internetwork. The DHCP server uses the matching IP address instead of allocating a new one from the pool for any MAC address listed in this file.
+helptext|network_hosts_Static_IPs_helptext#The file /etc/ethers contains database information regarding known 48-bit ethernet addresses of hosts on an Internetwork. The DHCP server uses the matching IP address instead of allocating a new one from the pool for any MAC address listed in this file.
 end_form
 EOF
 
