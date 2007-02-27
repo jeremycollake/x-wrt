@@ -75,17 +75,17 @@ if [ "$CONFIG_general_firmware_version" != "$firmware_version" ] ||
 	uci_set "webif" "general" "firmware_name" "$firmware_name"
 	uci_set "webif" "general" "firmware_version" "$firmware_version"
 	uci_set "webif" "general" "firmware_subtitle" "$firmware_subtitle"
-	#Commit with full path untill uci_commit bug is fixed.
-	uci_commit "/tmp/.uci/webif"
 fi
 
 [ "$device_name" != "$CONFIG_general_device_name" ] && {
 	echo "Device: $device_name" 	
 	echo "Committing new device id ..."		
 	uci_set "webif" "general" "device_name" "$device_name"
-	#Commit with full path untill uci_commit bug is fixed.
-	uci_commit "/tmp/.uci/webif"
 }
+
+if [ -e "/tmp/.uci/webif" ]; then
+	uci_commit "webif"
+fi
 
 # Start stunnel if ssl is enabled
 if [ "$CONFIG_ssl_enable" = "1" ]; then
