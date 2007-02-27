@@ -414,13 +414,15 @@ for device in $DEVICES; do
 				field|@TR<<RADIUS Port>>|radius_port_form_$vcfg|hidden
 				text|radius_port_$vcfg|$FORM_radius_port
 				field|@TR<<RADIUS Server Key>>|radiuskey_$vcfg|hidden
-				text|radius_key_$vcfg|$FORM_key
-				if [ "$iftype" = "broadcom" ]; then
-				$install_nas_button
-				elif [ "$iftype" = "atheros" ]; then
-				$install_hostapd_button
-				fi"
+				text|radius_key_$vcfg|$FORM_key"
 			append forms "$wpa" "$N"
+			
+			if [ "$iftype" = "broadcom" ]; then
+				append forms "$install_nas_button" "$N"
+			elif [ "$iftype" = "atheros" ]; then
+				append forms "$install_hostapd_button" "$N"
+			fi
+			
 
 			###################################################################
 			# set JavaScript
