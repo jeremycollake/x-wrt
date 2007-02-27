@@ -143,7 +143,7 @@ uname -a |grep mips |grep 2.6 && cat /proc/cpuinfo |grep Atheros
 if [ -z "${IPKG_INSTROOT}" ]; then
 
 #commit our old webif settings if they exist
-if [ -e /tmp/.uci/webif ]; then
+if [ -e "/tmp/.uci/webif" ]; then
 . /lib/config/uci.sh
 	uci_commit "webif"
 fi
