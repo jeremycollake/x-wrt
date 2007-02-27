@@ -11,5 +11,9 @@ fi
 
 #Save current webif settings
 if [ -e "/etc/config/webif" ]; then
+	if [ ! -e /tmp/.uci ]; then
+                mkdir /tmp/.uci
+        fi
+
 	cp /etc/config/webif /tmp/.uci/webif
 fi
