@@ -89,6 +89,7 @@ fi
 
 # Start stunnel if ssl is enabled
 if [ "$CONFIG_ssl_enable" = "1" ]; then
+	killall stunnel
 	stunnel &
 else
 	killall stunnel
