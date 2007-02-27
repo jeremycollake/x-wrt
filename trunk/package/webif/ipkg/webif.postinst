@@ -170,17 +170,18 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 		echo "Reinitializing httpd ..."		
 		killall -HUP httpd
 	}
-	[ ! -f "$webif_installed_mark" ] && {
-		# webif^2 first install.. force reboot. Required, we've been through this.
-		rm -f "$webif_installed_mark"
-		echo "I'm sorry, but I must reboot your router. This is a ONE time thing and"
-		echo " future upgrades of the webif will NOT require a reboot."
-		echo "Please wait about one minute for your router to reboot ..."
-		reboot_file=$(mktemp /tmp/rebootme.XXXXXX)
-		echo "#!/bin/sh" > $reboot_file
-		echo "sleep 5 && reboot" >> "$reboot_file"
-		chmod +x "$reboot_file"
-		sh "$reboot_file" &	
-	}
+	#commented out for now as it may no longer be needed in kamikaze.
+	#[ ! -f "$webif_installed_mark" ] && {
+	#	# webif^2 first install.. force reboot. Required, we've been through this.
+	#	rm -f "$webif_installed_mark"
+	#	echo "I'm sorry, but I must reboot your router. This is a ONE time thing and"
+	#	echo " future upgrades of the webif will NOT require a reboot."
+	#	echo "Please wait about one minute for your router to reboot ..."
+	#	reboot_file=$(mktemp /tmp/rebootme.XXXXXX)
+	#	echo "#!/bin/sh" > $reboot_file
+	#	echo "sleep 5 && reboot" >> "$reboot_file"
+	#	chmod +x "$reboot_file"
+	#	sh "$reboot_file" &	
+	#}
 fi
 exit 0
