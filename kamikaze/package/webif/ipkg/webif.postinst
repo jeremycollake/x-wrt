@@ -157,10 +157,12 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 		httpd_1=$(cat /tmp/httpd.conf.old)
 		httpd_2=$(cat /etc/httpd.conf)
 		[ "$httpd_1" != "$httpd_2" ] && {
-			require_reboot
+			echo "Reinitializing httpd ..."		
+			killall -HUP httpd
 		}
-	else
-		require_reboot
+	#comment out reboot for now to test if it is still needed in kamikaze
+	#else
+		#require_reboot
 	fi
 
 fi
