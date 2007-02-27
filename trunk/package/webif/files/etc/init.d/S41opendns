@@ -1,5 +1,6 @@
 #!/bin/sh
 # configure opendns nameservers if enabled
+. /etc/functions.sh
 . /lib/config/uci.sh
 . /usr/lib/webif/functions.sh
 
