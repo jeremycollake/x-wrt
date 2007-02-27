@@ -334,7 +334,7 @@ switch_language() {
 		}
 		echo '@TR<<Done>>'
 	}
-done
+}
 
 # config-*		simple config files
 (
