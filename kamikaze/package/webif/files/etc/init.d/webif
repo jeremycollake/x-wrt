@@ -89,9 +89,9 @@ fi
 
 # Start stunnel if ssl is enabled
 if [ "$CONFIG_ssl_enable" = "1" ]; then
-	killall stunnel
-	stunnel &
+	killall matrixtunnel
+	matrixtunnel -A /etc/ssl/matrixtunnel.cert  -p /etc/ssl/matrixtunnel.key -d 443 -r 80
 else
-	killall stunnel
+	killall matrixtunnel
 fi
 }
