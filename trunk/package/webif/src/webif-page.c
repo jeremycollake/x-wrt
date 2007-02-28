@@ -254,9 +254,14 @@ static void load_lang(char *file)
 	FILE *f;
 	char *b, *name, *value;
 
-	f = fopen(file, "r");
+	if ((f = fopen(file, "r")) == NULL)
+		return;
+
 	while (!feof(f) && (fgets(buf, LINE_BUF - 1, f) != NULL)) {
 		b = buf;
+		if (*b == '#')
+			continue; /* skip comments */
+
 		while (isspace(*b))
 			b++; /* skip leading spaces */
 		if (!*b)
@@ -285,6 +290,8 @@ static void load_lang(char *file)
 
 		add_line(name, value);
 	}
+
+	fclose(f);
 }
 
 int
@@ -302,6 +309,7 @@ main
 	char szLangBuffer[LANG_TYPE_MAX];
 	char *lang = NULL;
 	char *proc = "/usr/bin/haserl";
+	const char *langfmt = "/usr/lib/webif/lang/%s/%s.txt";
 
 	memset(ltable, 0, HASH_MAX * sizeof(lstr *));
 	if ((f = fopen("/etc/config/webif", "r")) != NULL) {
@@ -313,14 +321,9 @@ main
 		}
 		fclose(f);
 
-		sprintf(buf, "/usr/lib/webif/lang/%s/*.txt", lang);
-		i = glob(buf, GLOB_ERR | GLOB_MARK, NULL, &langfiles);
-		if (i == GLOB_NOSPACE || i == GLOB_ABORTED || i == GLOB_NOMATCH) {
-			// no language files found
-		} else {
-			for (i = 0; i < langfiles.gl_pathc; i++) {
-				load_lang(langfiles.gl_pathv[i]);
-			}
+		if (lang != NULL) {
+			sprintf(buf, langfmt, lang, "common");
+			load_lang(buf);
 		}
 	}
 
@@ -370,6 +373,26 @@ main
 	while (argv[i]) {
 		sprintf(buf + strlen(buf), " %s", argv[i++]);
 	}
+
+	/*
+	 * Load standalone translation file
+	 */
+	if (lang != NULL) {
+		if ((arg = strdup(buf)) != NULL) {
+			if ((tmp = strrchr(arg, '.')) != NULL)
+				*tmp = 0;
+
+			if ((tmp = strrchr(arg, '/')) != NULL)
+				tmp++;
+			else
+				tmp = arg;
+
+			sprintf(buf2, langfmt, lang, tmp);
+			load_lang(buf2);
+			free(arg);
+		}
+	}
+
 	f = popen(buf, "r");
 	
 	while (!feof(f) && (fgets(buf, LINE_BUF - 1, f)) != NULL) {
