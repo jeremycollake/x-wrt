@@ -158,7 +158,12 @@ $2 !~ /terminated/ {
 	link=$1
 	gsub(/\+/,"%2B",link)
 	version=$3
-	desc=$5 " " $6 " " $7 " " $8 " " $9 " " $10 " " $11 " " $12 " " $13 " " $14 " " $15 " " $16 " " $17 " " $18 " " $19 " " $20 " " $21 " " $22 " " $23 " " $24 " " $25 " " $26 " " $27
+	desc=$5
+	for (i=6; i <= NF; i++)
+			desc = desc " " $i
+	gsub(/&/, "&amp;", desc)
+	gsub(/</, "&lt;", desc)
+	gsub(/>/, "&gt;", desc)
 	print "<tr class=\"packages\"><td><a href=\"javascript:confirmT('\''remove'\'','\''" link "'\'')\">@TR<<system_ipkg_Uninstall#Uninstall>></a></td><td>" $1 "</td><td>" version "</td><td>" desc "</td></tr>"
 }
 '
@@ -181,6 +186,9 @@ $1 ~ /status/ {
 	split(verline,ver,":")
 	getline descline
 	split(descline,desc,":")
+	gsub(/&/, "&amp;", desc[3])
+	gsub(/</, "&lt;", desc[3])
+	gsub(/>/, "&gt;", desc[3])
 	print "<tr class=\"packages\"><td><a href=\"javascript:confirmT('\''install'\'','\''" link "'\'')\">@TR<<system_ipkg_Install#Install>></a></td><td>" $3 "</td><td>" ver[3] "</td><td>" desc[3] "</td></tr>"
 	current=$1
 }
