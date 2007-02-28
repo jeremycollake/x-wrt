@@ -115,7 +115,7 @@ EOF
 		chmod 755 /etc/init.d/aircrack
 		else
 		uci_set "app.aircrack" "set" "bootaircrack" ""
-		if [ -s "/etc/init.d/aircrack" ] ; then rm /etc/init.d/aircrack ; rm /etc/rc.d/S50aircrack; fi
+		if [ -s "/etc/init.d/aircrack" ] ; then rm /etc/init.d/aircrack ; rm /etc/rc.d/S95aircrack; fi
 		fi	#-----------------------------------
 
 		uci_commit "app.aircrack"
@@ -140,11 +140,11 @@ EOF
 		wlc monitor 1
 		airodump-ng $hIVS -w $CFG_PATH/key prism0" > /etc/init.d/airodump
 
-		ln -s /etc/init.d/aircrack /etc/rc.d/S95airodump
+		ln -s /etc/init.d/airodump /etc/rc.d/S95airodump
 		chmod 755 /etc/init.d/airodump
 		else
 		uci_set "app.aircrack" "set" "bootairodump" ""
-		if [ -s "/etc/init.d/airodump" ] ; then rm /etc/init.d/airodump ; rm /etc/rc.d/S50airodump; fi
+		if [ -s "/etc/init.d/airodump" ] ; then rm /etc/init.d/airodump ; rm /etc/rc.d/S95airodump; fi
 		fi	#-----------------------------------
 
 		if ! empty "$FORM_chkivs"; then
