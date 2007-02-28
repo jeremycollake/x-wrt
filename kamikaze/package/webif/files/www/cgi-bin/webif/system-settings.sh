@@ -36,7 +36,7 @@ is_kamikaze && {
 select|ssl_enable|$CONFIG_ssl_enable
 option|0|@TR<<Off>>
 option|1|@TR<<On>>"
-if [ -n "$(has_pkgs stunnel)" ]; then
+if [ -n "$(has_pkgs matrixtunnel)" ]; then
 	STUNNEL_INSTALL_FORM="string|<div class=\"warning\">MatrixTunnel package is not installed. For ssl support you need to install MatrixTunnel:</div>
 		submit|install_stunnel| @TR<<Install MatrixTunnel>> |"
 fi
