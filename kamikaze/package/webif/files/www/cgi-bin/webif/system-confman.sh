@@ -1,92 +1,69 @@
 #!/usr/bin/webif-page "-U /tmp -u 4096"
 <?
 
-COPY_FILES="\
-/etc/hosts \
-/etc/ethers \
-/etc/ppp/options.* \
-/etc/ppp/users.* \
-/etc/ppp/peers.* \
-/etc/openvpn/ca.crt \
-/etc/openvpn/client.crt \
-/etc/openvpn/client.key \
-/etc/openvpn/client.p12 \
-/etc/openvpn/secret.key \
-/etc/dyndns.org-ip*"
+COPY_FILES="/etc/*"
 
-COPY_DIRS="\
-/etc/ipkg \
-/etc/chilli \
-/etc/wifidog \
-/etc/dropbear \
-/etc/config"
-
-NVRAM_PREFIX="\
-wan_ \
-lan_ \
-wl0_ \
-wl_ \
-dhcp_ \
-ipkg_ \
-shape_ \
-pptp_ \
-ppp_ \
-wifi_ \
-openvpn_ \
-hs_"
-
-NVRAM_VARS="\
-boot_wait"
+COPY_DIRS="/etc"
 
 . /usr/lib/webif/webif.sh
 
-header "System" "Backup &amp; Restore" "<img src=\"/images/bkup.jpg\" align=\"middle\" alt=\"@TR<<Backup and Restore>>\" />&nbsp;@TR<<Backup and Restore>>" ''
+header "System" "Backup &amp; Restore" "<img src=\"/images/bkup.jpg\" alt=\"@TR<<Backup and Restore>>\" />&nbsp;@TR<<Backup and Restore>>" ''
 
-case "$FORM_action" in
-	download)
+DOWNLOAD()
+{
+cat <<EOF
+&nbsp;&nbsp;&nbsp;@TR<<confman_noauto_click#If downloading does not start automatically, click here>> ... <a href="/$1">$1</a><br><br>
+<script language="JavaScript" type="text/javascript">
+setTimeout('top.location.href=\"/$1\"',"300")
+</script>
+EOF
+}
+if ! equal $FORM_download "" ; then
+	
+	if equal $FORM_rdflash "1" ; then
 
-DOWNLOAD="&nbsp;&nbsp;&nbsp;@TR<<confman_noauto_click#If downloading does not start automatically, click here>> ... <a href=\"/config.tgz\">config.tgz</a><br><br>
-<script language=\"JavaScript\" type=\"text/javascript\">
-window.setTimeout('window.location=\"/config.tgz\"', 1000);
-</script>"
+		mount -o remount,ro /dev/mtdblock/4 / 2>/dev/null
+		dd if=/dev/mtdblock/1 > /tmp/flash_$FORM_name.trx 2>/dev/null
+		ln -s /tmp/flash_$FORM_name.trx /www/flash_$FORM_name.trx 2>/dev/null
+		DOWNLOAD flash_$FORM_name.trx
+		sleep 25 ; rm /tmp/flash_$FORM_name.trx
+	else
 
-	tmp=/tmp/config.$$
-	tgz=/www/config.tgz
-	rm -rf $tmp 2>/dev/null
-	mkdir -p $tmp 2>/dev/null
-	date > $tmp/config.date
-	echo "$FORM_name" > $tmp/config.name
+		tmp=/tmp/config.$$
+		tgz=/www/config.tgz
+		rm -rf $tmp 2>/dev/null
+		mkdir -p $tmp 2>/dev/null
+		date > $tmp/config.date
+		echo "$FORM_name" > $tmp/config.name
 
-if is_kamikaze; then
 	echo $(dmesg | grep "CPU revision is:" | sed -e s/'CPU revision is: '//g) > $tmp/config.boardtype
-else
-	echo $(nvram get boardtype) > $tmp/config.boardtype
-	for pfix in $NVRAM_PREFIX $NVRAM_VARS; do
-		nvram show 2>/dev/null | grep "^$pfix" >> $tmp/nvram
-	done
-fi
+
 		for file in $COPY_FILES; do
 			[ -e $file ] && [ ! -h $file ] && {
 			d=`dirname $file`; [ -d $tmp$d ] || mkdir -p $tmp$d
-			cp $file $tmp$file
+			cp $file $tmp$file 2>/dev/null
 			}
 		done
 		for dir in $COPY_DIRS; do
 			[ -e $dir ] && {
 			mkdir -p $tmp$dir
-			cp -r $dir/* $tmp$dir/
+			cp -r $dir/* $tmp$dir/ 2>/dev/null
 			}
 		done
-	(cd $tmp; tar czf $tgz *)
-	rm -rf $tmp 2>/dev/null
+		(cd $tmp; tar czf $tgz *)
+		rm -rf $tmp 2>/dev/null
+		DOWNLOAD config.tgz
+		sleep 25 ; rm $tgz
+	fi
 
-	echo $DOWNLOAD
+elif ! equal $FORM_instconfig "" ; then
 
-	;;
-	instconfig)
+if equal $FORM_rdflash "1" ; then
+	echo "<br />Restoring firmware, please wait ... <br />"
+	mtd -r write $FORM_file linux
+else
 
-
-	dir=$FORM_dir
+dir=$FORM_dir
 display_form <<EOF
 start_form|@TR<<Restore Configuration>>
 EOF
@@ -102,46 +79,28 @@ EOF
 					echo "@TR<<confman_restoring_file#restoring>> $file"
 				fi
 			done
-if is_kamikaze; then
-	echo "<br>@TR<<Rebooting now>>...<meta http-equiv=\"refresh\" content=\"4;url=reboot.sh?reboot=1\">"
-else
-			rm -f nvram.set
-			for pfix in $NVRAM_PREFIX $NVRAM_VARS; do
-				[ "$(eval echo \$FORM_$pfix)" = "y" ] && grep "^$pfix" nvram >> nvram.set
-			done
-		[ -e nvram.set ] && {
-			awk 'BEGIN {
-				FS="="
-				}
-				{
-					v=$2
-					gsub(/[$]/,"\\$",v)
-					print "echo \"@TR<<confman_setting#setting>> " $1 "=\\\"" $2 "\\\"\"" >> "nvram.sh"
-					print "nvram set " $1 "=\"" v "\"" >> "nvram.sh"
-				}
-			' nvram.set
-		sh nvram.sh
-		echo "@TR<<confman_comitting_nvram#Committing NVRAM settings.>>"
-		nvram commit
 
-		}
-fi
+		echo "<br>@TR<<Rebooting now>>...<meta http-equiv=\"refresh\" content=\"4;url=reboot.sh?reboot=1\">"
 		echo "</pre></td></tr>"
 	else
 		echo "<p>bad dir: $dir</p>"
 	fi
-	display_form <<EOF
+
+display_form <<EOF
 end_form
 EOF
-	;;
-	chkconfig)
+fi
 
+elif ! equal $FORM_chkconfig "" ; then
 
 		if [ -n "$FORM_configfile" ] && [ -e "$FORM_configfile" ]; then
 			
 		echo "<form method=\"get\" name=\"install\" action=\"$SCRIPT_NAME\">"
-
-			display_form <<EOF
+if equal $FORM_rdflash "1" ; then
+	echo "<h2><font color=red>WARNING !!! This operation will erase current flash.</font></h2>"
+	echo "<input type='hidden' name='rdflash' value='1'><input type='hidden' name='file' value=\"$FORM_configfile\">"	
+else
+display_form <<EOF
 start_form|@TR<<Restore Configuration>>
 EOF
 			rm -rf /tmp/config.* 2>/dev/null
@@ -159,20 +118,11 @@ EOF
 
 			CFGGOOD="<tr><td colspan=\"2\">@TR<<confman_good_conf#The configuration looks good>>!<br><br></td></tr>"
 
-if is_kamikaze; then
-	if [ "$bd" != $(dmesg | grep "CPU revision is:" | sed -e s/'CPU revision is: '//g) ]; then
-		echo "<tr><td colspan=\"2\"><font color=\"red\">@TR<<big_warning#WARNING>></font>: @TR<<confman_other_board#different board type>> (@TR<<confman_board_ours#ours>>: $(dmesg | grep "CPU revision is:" | sed -e s/'CPU revision is: '//g), @TR<<confman_board_file#file>>: $bd)!</td></tr>"
-	else
-		echo $CFGGOOD
-	fi
-else
-	if [ "$bd" != $(nvram get boardtype) ]; then
-		echo "<tr><td colspan=\"2\"><font color=\"red\">@TR<<big_warning#WARNING>></font>: @TR<<confman_other_board#different board type>> (@TR<<confman_board_ours#ours>>: $(nvram get boardtype), @TR<<confman_board_file#file>>: $bd)!</td></tr>"
-	else
-		echo $CFGGOOD
-	fi
-fi
-
+			if [ "$bd" != $(dmesg | grep "CPU revision is:" | sed -e s/'CPU revision is: '//g) ]; then
+				echo "<tr><td colspan=\"2\"><font color=\"red\">@TR<<big_warning#WARNING>></font>: @TR<<confman_other_board#different board type>> (@TR<<confman_board_ours#ours>>: $(dmesg | grep "CPU revision is:" | sed -e s/'CPU revision is: '//g), @TR<<confman_board_file#file>>: $bd)!</td></tr>"
+			else
+				echo $CFGGOOD
+			fi
 display_form <<EOF
 field|@TR<<Config Name>>
 string|$nm
@@ -182,54 +132,44 @@ field|@TR<<Generated>>
 string|$dt
 field
 EOF
+			fi
+fi
+		echo "<input type='hidden' name='dir' value=\"$tmp\">"
+		echo "<input type=\"submit\" class=\"flatbtn\" name=\"instconfig\" value=\"@TR<<Restore>>\"><br><br></form>"
+		fi
+footer
+exit
+fi
 
-if is_kamikaze; then
-#cp $tmp/etc/config/network /tmp.uci
-#uci_load "network"
-#NET_IP="$CONFIG_lan_ipaddr"
-echo ""
-else
-display_form <<EOF
-string|@TR<<NVRAM settings to set (by prefix; be careful!)>><br>
-$(for pfix in $NVRAM_PREFIX $NVRAM_VARS; do echo "checkbox|$pfix|$FORM_pfix|y|$pfix<br>"; done)
+cat <<EOF
+<form method="post" name="download" action="$SCRIPT_NAME" enctype="multipart/form-data">
+&nbsp;&nbsp;&nbsp;<img src="/images/app.2.jpg" width="24" height="24" alt />&nbsp;<input type="radio" name="rdflash" value="0" checked />&nbsp;Configuration
+<br/>
+&nbsp;&nbsp;&nbsp;<img src="/images/app.12.jpg" width="25" height="25" alt />&nbsp;<input type="radio" name="rdflash" value="1" />&nbsp;Entire Flash<br/><br/>
 EOF
 
-fi
-fi
-
-echo "<br><input type=\"hidden\" name=\"action\" value=\"instconfig\">"
-echo "<input type=\"hidden\" name=\"dir\" value=\"$tmp\">"
-echo "<input type=\"submit\" class=\"flatbtn\"  value=\"@TR<<Restore>>\"><br><br></form>"
-		fi
-
-		;;
-	esac
-echo "<form method=\"get\" name=\"download\" action=\"$SCRIPT_NAME\">"
 display_form <<EOF
 start_form|@TR<<Backup Configuration>>
 EOF
 
 cat <<EOF
-<tr>
-<td width="70%">@TR<<Name this configuration>>&nbsp;&nbsp;&nbsp;<input name="name" class="flatbtn" value="${FORM_name:-$(nvram get wan_hostname)}"/></td>
-<td><input type="hidden" name="action" value="download" /><input class="flatbtn" type="submit" name="submit" value="@TR<<Backup>>" /></td>
+<tr><td width="70%">@TR<<Name this configuration>>:&nbsp;&nbsp;&nbsp;<input name="name" value="${FORM_name:-$(nvram get wan_hostname)}"/></td>
+<td><input class="flatbtn" type="submit" name="download" value="@TR<<Backup>>" /></td>
 </tr>
 EOF
 
 display_form <<EOF
-end_form|
-string|</form>
+end_form
 EOF
 
-echo "<form method=\"post\" name=\"instconfig\" action=\"$SCRIPT_NAME\" enctype=\"multipart/form-data\">"
 display_form <<EOF
 start_form|@TR<<Restore Configuration>>
 EOF
 
 cat<<EOF
 <tr>
-<td width="70%">@TR<<Saved config.tgz file:>>&nbsp;&nbsp;&nbsp;<input type="file" class="flatbtn" name="configfile" /></td>
-<td><input type="hidden" name="action" value="chkconfig" /><input class="flatbtn" type="submit" name="submit" value="@TR<<Restore>>" /></td>
+<td width="70%">@TR<<Saved config.tgz file>>:&nbsp;&nbsp;&nbsp;<input type="file" class="flatbtn" name="configfile" /></td>
+<td><input class="flatbtn" type="submit" name="chkconfig" value="@TR<<Restore>>" /></td>
 </tr>
 EOF
 
