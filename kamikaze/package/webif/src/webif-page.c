@@ -384,8 +384,12 @@ main
 
 			if ((tmp = strrchr(arg, '/')) != NULL)
 				tmp++;
-			else
-				tmp = arg;
+			else {
+				if ((tmp = strrchr(arg, ' ')) != NULL)
+					tmp++;
+				else
+					tmp = arg;
+			}
 
 			sprintf(buf2, langfmt, lang, tmp);
 			load_lang(buf2);
