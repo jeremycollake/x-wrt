@@ -144,6 +144,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 
 #commit our old webif settings if they exist
 if [ -e "/tmp/.uci/webif" ]; then
+. /etc/functions.sh
 . /lib/config/uci.sh
 	uci_commit "webif"
 fi
