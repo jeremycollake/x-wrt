@@ -57,7 +57,10 @@ repo_update_needed=0
 }
 
 ! empty "$FORM_install_repo" && {
-	validate "string|FORM_repourl|@TR<<system_ipkg_repositoryurl#Repository URL>>|min=4 max=4096 required|$FORM_repourl"
+	validate << EOF
+string|FORM_reponame|@TR<<system_ipkg_reponame#Repo. Name>>|min=4 max=40 required nospaces|$FORM_reponame
+string|FORM_repourl|@TR<<system_ipkg_repourl#Repo. URL>>|min=4 max=4096 required|$FORM_repourl
+EOF
 	if equal "$?" "0"; then
 		repo_update_needed=1
 		# since firstboot doesn't make a copy of ipkg.conf, we must do it
@@ -68,7 +71,7 @@ repo_update_needed=0
 		rm "/etc/ipkg.conf"
 		mv "$tmpfile" "/etc/ipkg.conf"				
 	else
-		echo "<div class=\"warning\">ERROR: You did not specify all necessary repository fields.</div>"
+		echo "<h3 class=\"warning\">$ERROR</h3>"
 	fi
 }
 
@@ -157,6 +160,8 @@ ipkg list_installed | awk -F ' ' '
 $2 !~ /terminated/ {
 	link=$1
 	gsub(/\+/,"%2B",link)
+	gsub(/^ */,"",link)
+	gsub(/ *$/,"",link)
 	version=$3
 	desc=$5
 	for (i=6; i <= NF; i++)
@@ -182,6 +187,8 @@ $1 ~ /status/ {
 	if (current != $1) print "<tr><th>" $1 "</th></tr>"
 	link=$3
 	gsub(/\+/,"%2B",link)
+	gsub(/^ */,"",link)
+	gsub(/ *$/,"",link)
 	getline verline
 	split(verline,ver,":")
 	getline descline
