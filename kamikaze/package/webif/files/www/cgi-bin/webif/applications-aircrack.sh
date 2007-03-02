@@ -109,7 +109,10 @@ EOF
 
 		if  [ -s "/etc/init.d/aircrack" ] ; then rm /etc/init.d/aircrack ; fi
 		echo "#!/bin/sh
-		START=95" > /etc/init.d/aircrack
+		START=95
+		start() {
+		echo 0
+		}" > /etc/init.d/aircrack
 
 		ln -s /etc/init.d/aircrack /etc/rc.d/S95aircrack
 		chmod 755 /etc/init.d/aircrack
@@ -137,8 +140,10 @@ EOF
 	
 		echo "#!/bin/sh
 		START=95
+		start() {
 		wlc monitor 1
-		airodump-ng $hIVS -w $CFG_PATH/key prism0" > /etc/init.d/airodump
+		airodump-ng $hIVS -w $CFG_PATH/key prism0
+		}" > /etc/init.d/airodump
 
 		ln -s /etc/init.d/airodump /etc/rc.d/S95airodump
 		chmod 755 /etc/init.d/airodump

@@ -152,23 +152,23 @@ else
 fi
 
 uci_commit "wireless"
-	echo '@TR<<Reloading>> @TR<<wireless settings>> ...'
-	killall nas >&- 2>&- && sleep 2
-	(
-		/sbin/wifi
-		[ -f /etc/init.d/S41wpa ] && /etc/init.d/S41wpa
-	) >&- 2>&- <&-
-
 	echo "<br/><b>Successfully joined \"$FORM_wifi\" network...</b><br/><br/>"
+
 	if [ "$FORM_wlmode" = "repeater" ]; then 
 	cat <<EOF
 	<center><table border="0" cellspacing="1" bgcolor="#000000">
 	<tr bgcolor='#FFFF00'><td><img src="/images/wep.gif" alt />&nbsp;You can set Security Settings for new SSID: "$FORM_new_ssid" in <b>Network > Wireless</b></td></tr>
 	</table></center>
 EOF
-
 	fi
 	footer
+	sleep 6
+	killall nas >&- 2>&- && sleep 2
+	(
+		/sbin/wifi
+		[ -f /etc/init.d/S41wpa ] && /etc/init.d/S41wpa
+	) >&- 2>&- <&-
+
 	exit
 fi #<- end if Join WIFI
 
