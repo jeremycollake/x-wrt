@@ -1,8 +1,8 @@
 BEGIN {
 	gsub(/^\/\//, "/", path)
 	start_form("@TR<<Filesystem Browser>>: " path);
-	print "<table>"
-	print "<tr><td style=\"width:8em\">&nbsp;</td><td><a href=\"" url "?path=/\">@TR<<Root>></a></td><td style=\"width:8em\" colspan="2"></td></tr>\n"
+	print "<table width=\"100%\" border=\"0\" cellspacing=\"0\">"
+	print "<tr><td style=\"width:3em\">&nbsp;</td><td><a href=\"" url "?path=/\">@TR<<Root>></a></td><td style=\"width:8em\" colspan="2"></td></tr>\n"
 }
 
 {
@@ -17,7 +17,7 @@ type == "d" {
 	if (fname == "..") {
 		line = "<td>&nbsp;</td><td colspan=\"3\"><a href=\"" url "?path=" path "/..\">@TR<<Parent Directory>></a></td>"
 	} else {
-		line = "<td><b>@TR<<Directory>>:</b></td><td colspan=\"3\" style=\"padding-right:3em\">"
+		line = "<td><img src='/images/dir.gif' alt /></td><td colspan=\"3\" style=\"padding-right:3em\">"
 		if ((fname == "rom") || \
 			(fname == "bin") || \
 			(fname == "sbin") || \
@@ -30,11 +30,12 @@ type == "d" {
 }
 
 type == "-" {
-	line = "<td><b>@TR<<File>>:</b></td><td style=\"padding-right:3em\">" fname "</td><td>" fsize "</td><td><a href=\"" url "?path=" path "&amp;edit=" fname "\">@TR<<Edit>></a></td>"
+	line = "<td><img src='/images/file.gif' alt /></td><td style=\"padding-right:3em\">" fname "</td><td>" fsize "</td><td><a href=\"" url "?path=" path "&amp;edit=" fname "\"><img src='/images/action_edit.gif' alt /></a>&nbsp;<a href=\"" url "?path=" path "&amp;savefile=" fname "\"><img src='/images/action_sv.gif' alt /></a>&nbsp;<a href=javascript:confirmT(\"" path  "\",\"" fname "\")><img src='/images/action_x.gif' alt /></a></td>"
 }
 
 (fname != ".") && (fname != "") {
- 	line = "<tr>" line "</tr>\n"
+	if ( color == "1" ) { color="2" } else { color="1" }
+ 	line = "<tr class=\"CommonRow" color "\">" line "</tr>\n"
  	out[type] = out[type] line
 }
 
