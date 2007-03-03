@@ -6,11 +6,9 @@ DEVICES="/dev/usb/tts/2 /dev/noz2"
 for DEV in $DEVICES
 do
 	[ -c $DEV ] && {
-		INFO=$([ -f /tmp/wwan_cardinfo.txt ] && cat /tmp/wwan_cardinfo.txt)
 		INFO=$(gcom -d $DEV -s /etc/gcom/getstrength.gcom 2>/dev/null)
 		STRENGTH=$(gcom -d $DEV -s /etc/gcom/getstrength.gcom 2>/dev/null |
 					grep "CSQ:" | cut -d: -f2 | cut -d, -f1)
-		STRENGTH="$STRENGTH"
 	}
 done
 
@@ -23,20 +21,20 @@ equal "$INFO" "" && equal "$INFO" "$STRENGTH" && {
 }
 
 display_form <<EOF
-start_form|@TR<<status_wwaninfo_Device_Information#Device Information>>
+start_form|@TR<<status_wwaninfo_device_info#Device Information>>
 EOF
 
-if ! equal "$INFO" ""; then
+if ! empty "$INFO"; then
 	echo "$INFO" | awk -F ":" '
 		BEGIN {
 			print "	<tr>"
 			print "		<th>@TR<<status_wwaninfo_dev_th_Information#Information>></th>"
-			print "		<th>@TR<<status_wwaninfo_dev_th_Reported_Value#Reported Value>></th>"
+			print "		<th>@TR<<status_wwaninfo_dev_th_Value#Value>></th>"
 			print "	</tr>"
 		}
 		{
 			print "	<tr>"
-			print "		<td>" $1 "</td>"
+			printf "%s%02d%s%s%s\n", "		<td>@TR<<status_wwaninfo_dev_td_info", FNR, "#", $1, ">></td>"
 			col2=$2
 			for (i=3; i<=NF; i++)
 				col2 = col2 ":" $i
@@ -45,7 +43,7 @@ if ! equal "$INFO" ""; then
 		}'
 else
 	echo "	<tr>"
-	echo "		<td colspan=\"2\">@TR<<status_wwaninfo_No_device_info#No device information reported.>></td>"
+	echo "		<td colspan=\"2\">@TR<<status_wwaninfo_no_UG_device_info#No device information reported.>></td>"
 	echo "	</tr>"
 fi
 
@@ -53,33 +51,163 @@ display_form <<EOF
 end_form
 EOF
 
-echo "<div class="settings">"
-echo "<h3>@TR<<status_wwaninfo_Signal_Strength#Signal Strength>></h3>"
-echo "<p>@TR<<status_wwaninfo_Signal_Strength#Signal Strength>>:"
+! empty "$STRENGTH" && {
+	cat <<EOF
+<h3>@TR<<status_wwaninfo_Signal_Quality#Signal Quality>></h3>
+EOF
 
-# check if numeric
-expr "$STRENGTH" + 0 >&- 2>&- && {
-	if [ "$STRENGTH" -eq 99 ]; then
-		echo "${STRENGTH} (@TR<<status_wwaninfo_rssi_unknown#unknown>>)</p>"
-	else
-		echo "${STRENGTH}</p>"
-		echo "<div>"
-		for index in $(seq 0 31)
-		do
-			COLOR='red'
-			[ "$STRENGTH" -gt 10 ] && COLOR='yellow'
-			[ "$STRENGTH" -gt 14 ] && COLOR='green'
-			[ "$index" -ge "$STRENGTH" ] && COLOR='grey'
-			echo "<div style=\"background-color:" $COLOR "; width: 20px; float:left;\">&nbsp;</div>"
-		done
-		echo "</div>"
-		echo "<br />"
-		echo "<div><span style=\"font-size: smaller\">(<span style=\"background-color: red;\">&nbsp;</span> 0-10: unreliable, <span style=\"background-color: yellow;\">&nbsp;</span> 11-14: OK, <span style=\"background-color: green;\">&nbsp;</span> 15-31: ideal)</span></div>"
-	fi
-} || {
-	echo "${STRENGTH} (@TR<<status_wwaninfo_rssi_wrong_value#wrong value reported)>></p>"
+	# check if numeric
+	expr "$STRENGTH" + 1 >&- 2>&- && {
+		if [ "$STRENGTH" -gt 31 ]; then
+			echo "<p>@TR<<status_wwaninfo_quality_unknown#Signal quality is invalid/unknown>>: ${STRENGTH}</p>"
+		else
+			progress_type="unreliable"
+			[ "$STRENGTH" -gt 9 ] && progress_type="workable"
+			[ "$STRENGTH" -gt 14 ] && progress_type="good"
+			[ "$STRENGTH" -gt 19 ] && progress_type="excellent"
+			cat << EOF
+<style type="text/css">
+/*<![CDATA[*/
+<!--
+
+#wwanbars * { padding: 0; margin: 0; }
+
+#wwanbars body {
+	font-family: Verdana;
+	font-size: 1em;
+	line-height: 1em;
+	padding: 1em;
 }
-echo "</div>"
+
+#wwanbars .wwan_status { padding-top: 5em; }
+
+#wwanbars ul { list-style-type: none; }
+
+#wwanbars ul li { clear: both; height: 1.2em; }
+
+#wwanbars .title { width: 10em; float: left; }
+
+#wwanbars .progress {
+	text-align: right;
+	display: block;
+	float: left;
+	clear: right;
+	font-size: 0.964em;
+	padding: 0.1em;
+	margin-bottom: 0.2em;
+}
+
+#wwanbars h4 { display: none; }
+
+/* Legend */
+
+#wwanbars .legend {
+	position: absolute;
+	margin-top: -5.3em;
+	margin-left: 10em;
+	clear: both;
+	width: 30em;
+	border-left: 1px solid Gray;
+	border-right: 1px solid Gray;
+}
+
+#wwanbars dl {
+	float: left;
+	text-align: center;
+	width: 30%;
+	font-size: 0.8em;
+	line-height: 1.5em;
+}
+
+#wwanbars dl.workable { width: 16%; }
+
+#wwanbars dl.good { width: 16%; }
+
+#wwanbars dl.excellent { width: 38%; }
+
+#wwanbars dl+dl dt, dl+dl dd { border-left: 1px solid Gray; }
+
+#wwanbars dd .title { display: none; }
+
+#wwanbars dd.dbm { margin-top: 4em; }
+
+/* Colors for status health */
+
+#wwanbars dl.unreliable dt, span.progress.unreliable { background-color: #ff7474; }
+
+#wwanbars dl.workable dt, span.progress.workable { background-color: #fffa74; }
+
+#wwanbars dl.good dt, span.progress.good { background-color: #ace4ff; }
+
+#wwanbars dl.excellent dt, span.progress.excellent { background-color: #6fff6c; }
+
+-->
+/*]]>*/
+</style>
+<div id="wwanbars"><div class="wwan_status">
+	<ul>
+		<li>
+			<span class="title">@TR<<status_wwaninfo_Signal_Quality#Signal Quality>>:</span> <span class="progress ${progress_type}" style="width: ${STRENGTH}em;">${STRENGTH}</span>
+		</li>
+		<li>
+			<span class="title">@TR<<status_wwaninfo_Power_Ratio#Power Ratio (dBm)>>:</span> <span class="progress ${progress_type}" style="width: ${STRENGTH}em;">$((-113 + $STRENGTH * 2))</span>
+		</li>
+	</ul>
+	<h4>@TR<<status_wwaninfo_Legend#Legend>>:</h4>
+	<div class="legend">
+		<dl class="unreliable">
+EOF
+			if equal "$progress_type" "unreliable"; then
+				echo "			<dt><strong>@TR<<status_wwaninfo_quality_Unreliable#Unreliable>></strong></dt>"
+			else
+				echo "			<dt>@TR<<status_wwaninfo_quality_Unreliable#Unreliable>></dt>"
+			fi
+			cat << EOF
+			<dd><span class="title">@TR<<status_wwaninfo_Signal_Quality#Signal Quality>>:</span> 0..9</dd>
+			<dd class="dbm"><span class="title">@TR<<status_wwaninfo_Power_Ratio#Power Ratio (dBm)>>:</span> -113..-95</dd>
+		</dl>
+		<dl class="workable">
+EOF
+			if equal "$progress_type" "workable"; then
+				echo "			<dt><strong>@TR<<status_wwaninfo_quality_Workable#Workable>></strong></dt>"
+			else
+				echo "			<dt>@TR<<status_wwaninfo_quality_Workable#Workable>></dt>"
+			fi
+			cat << EOF
+ 			<dd><span class="title">@TR<<status_wwaninfo_Signal_Quality#Signal Quality>>:</span> 10..14</dd>
+			<dd class="dbm"><span class="title">@TR<<status_wwaninfo_Power_Ratio#Power Ratio (dBm)>>:</span> -93..-85</dd>
+		</dl>
+		<dl class="good">
+EOF
+			if equal "$progress_type" "good"; then
+				echo "			<dt><strong>@TR<<status_wwaninfo_quality_Good#Good>></strong></dt>"
+			else
+				echo "			<dt>@TR<<status_wwaninfo_quality_Good#Good>></dt>"
+			fi
+			cat << EOF
+			<dd><span class="title">@TR<<status_wwaninfo_Signal_Quality#Signal Quality>>:</span> 15..19</dd>
+			<dd class="dbm"><span class="title">@TR<<status_wwaninfo_Power_Ratio#Power Ratio (dBm)>>:</span> -83..-75</dd>
+		</dl>
+		<dl class="excellent">
+EOF
+			if equal "$progress_type" "excellent"; then
+				echo "			<dt><strong>@TR<<status_wwaninfo_quality_Excellent#Excellent>></strong></dt>"
+			else
+				echo "			<dt>@TR<<status_wwaninfo_quality_Excellent#Excellent>></dt>"
+			fi
+			cat << EOF
+			<dd><span class="title">@TR<<status_wwaninfo_Signal_Quality#Signal Quality>>:</span> 20..31</dd>
+			<dd class="dbm"><span class="title">@TR<<status_wwaninfo_Power_Ratio#Power Ratio (dBm)>>:</span> -73..-51</dd>
+		</dl>
+	</div>
+</div></div>
+<br />
+EOF
+		fi
+	} || {
+		echo "<p>@TR<<status_wwaninfo_wrong_value#Wrong signal quality value>>: ${STRENGTH}</p>"
+	}
+}
 
 footer
 ?>
