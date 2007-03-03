@@ -301,6 +301,34 @@ status_usb_swap_file => file
 status_usb_Loaded_USB_drivers => Loaded USB drivers
 
 
+## status-wwaninfo.sh
+Status => Status
+UMTS => UMTS
+status_wwaninfo_UG_Status => UMTS/GPRS Status
+status_wwaninfo_no_UG_device => UMTS / GPRS device not found.
+status_wwaninfo_device_info => Device Information
+status_wwaninfo_dev_th_Information => Information
+status_wwaninfo_dev_th_Value => Value
+status_wwaninfo_dev_td_info01 => Manufacturer Text
+status_wwaninfo_dev_td_info02 => IMEI and Serial Number
+status_wwaninfo_dev_td_info03 => Manufacturer's Revision
+status_wwaninfo_dev_td_info04 => Hardware Revision
+status_wwaninfo_dev_td_info05 => Network Locked
+status_wwaninfo_dev_td_info06 => Customisation
+status_wwaninfo_dev_td_info07 => Band settings
+status_wwaninfo_dev_td_info08 => Auto Attach
+status_wwaninfo_no_UG_device_info => No device information reported.
+status_wwaninfo_Signal_Quality => Signal Quality
+status_wwaninfo_quality_unknown => Signal quality is invalid/unknown
+status_wwaninfo_Power_Ratio => Power Ratio (dBm)
+status_wwaninfo_Legend => Legend
+status_wwaninfo_quality_Unreliable => Unreliable
+status_wwaninfo_quality_Workable => Workable
+status_wwaninfo_quality_Good => Good
+status_wwaninfo_quality_Excellent => Excellent
+status_wwaninfo_wrong_value => Wrong signal quality value
+
+
 ## system-ipkg.sh
 system_ipkg_installedpackages => Zainstalowane pakiety
 system_ipkg_updatelists => Aktualizuj liste pakietów
