@@ -36,9 +36,9 @@ is_kamikaze && {
 select|ssl_enable|$CONFIG_ssl_enable
 option|0|@TR<<Off>>
 option|1|@TR<<On>>"
-if [ -n "$(has_pkgs stunnel)" ]; then
-	STUNNEL_INSTALL_FORM="string|<div class=\"warning\">Stunnel package is not installed. For ssl support you need to install stunnel:</div>
-		submit|install_stunnel| Install Stunnel |"
+if [ -n "$(has_pkgs matrixtunnel)" ]; then
+	STUNNEL_INSTALL_FORM="string|<div class=\"warning\">MatrixTunnel package is not installed. For ssl support you need to install MatrixTunnel:</div>
+		submit|install_stunnel| @TR<<Install MatrixTunnel>> |"
 fi
 }
 
@@ -80,11 +80,17 @@ if ! empty "$FORM_install_ntpclient"; then
 fi
 
 if ! empty "$FORM_install_stunnel"; then
-	echo "Installing STunnel package ...<pre>"
-	install_package "stunnel"
-	if [ ! -e "/etc/stunnel/stunnel.pem" ]; then
-		install_package "openssl-util"
-		rdate -s pool.ntp.org; openssl req -new -x509 -days 3650 -nodes -config /etc/ssl/stunnel.conf -batch -out /etc/stunnel/stunnel.pem -keyout /etc/stunnel/stunnel.pem; chmod 600 /etc/stunnel/stunnel.pem
+	echo "Installing MatrixTunnel package ...<pre>"
+	install_package "matrixtunnel"
+	if [ ! -e "/etc/matrixtunnel/matrixtunnel.key" ]; then
+		ipkg -d ram install "openssl-util"
+		ln -s ~/usr/lib/libssl.so.0.9.8 /lib/libssl.so.0.9.8
+		ln -s ~/usr/lib/libcrypto.so.0.9.8 /lib/libcrypto.so.0.9.8
+		rdate -s pool.ntp.org; /tmp/usr/bin/openssl genrsa -out /etc/ssl/matrixtunnel.key 2048; /tmp/usr/bin/openssl req -new -batch -nodes -key /etc/ssl/matrixtunnel.key -out /etc/ssl/matrixtunnel.csr; /tmp/usr/bin/openssl x509 -req -days 365 -in /etc/ssl/matrixtunnel.csr -signkey /etc/ssl/matrixtunnel.key -out /etc/ssl/matrixtunnel.cert
+		ipkg install matrixtunnel
+		rm /lib/libcrypto.so.0.9.8
+		rm /lib/libssl.so.0.9.8
+		ipkg remove openssl-util libopenssl zlib
 	fi
 	echo "</pre>"
 fi
