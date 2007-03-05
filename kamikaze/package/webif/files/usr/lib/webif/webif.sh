@@ -1,4 +1,4 @@
-###################################################################
+########################################################
 # Webif base
 #
 # Description:
@@ -297,7 +297,7 @@ $_endform
 </div>
 </div> <!-- End #container -->
 EOF
-	equal "$_use_progressbar" "1" && ! equal _pageload "" && {
+	equal "$_use_progressbar" "1" && ! equal $_pageload "" && {
 	echo '</DIV><!-- End of hideall SPAN //--><SCRIPT type='text/javascript'>complete()</SCRIPT>'
 	}
 	echo "</body></html>"
