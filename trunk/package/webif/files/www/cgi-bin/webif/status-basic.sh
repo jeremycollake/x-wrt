@@ -2,11 +2,10 @@
 <?
 . "/usr/lib/webif/webif.sh"
 header "Status" "System" "@TR<<Device Status>>"
-?>
 
-<meta http-equiv="refresh" content="20" />
-<?
-MEMINFO=$(free | sed 1,3d)
+echo "<meta http-equiv=\"refresh\" content=\"20\" />"
+
+MEMINFO=$(free | grep "Mem:")
 nI="0"
 for CUR_VAR in $MEMINFO; do
 	case "$nI" in
@@ -20,6 +19,29 @@ done
 USED_MEM=$(expr $TOTAL_MEM - $FREE_MEM)
 MEM_PERCENT_FREE=$(expr $FREE_MEM "*" 100 / $TOTAL_MEM)
 MEM_PERCENT_USED=$(expr 100 - $MEM_PERCENT_FREE)
+
+SWAPINFO=$(free | grep "Swap:")
+nI="0"
+for CUR_VAR in $SWAPINFO; do
+	case "$nI" in
+		1)	TOTAL_SWAP=$CUR_VAR;;
+		3)	FREE_SWAP=$CUR_VAR
+			break;;
+	esac
+	let "nI+=1"
+done
+
+[ "$TOTAL_SWAP" -gt 0 ] 2>/dev/null && {
+	USED_SWAP=$(expr $TOTAL_SWAP - $FREE_SWAP)
+	SWAP_PERCENT_FREE=$(expr $FREE_SWAP "*" 100 / $TOTAL_SWAP)
+	SWAP_PERCENT_USED=$(expr 100 - $SWAP_PERCENT_FREE)
+	swap_usage="
+string|<tr><td>@TR<<Swap>>: $TOTAL_SWAP KB</td><td>
+progressbar|swapuse|@TR<<Used>>: $USED_SWAP KB ($SWAP_PERCENT_USED%)|200|$SWAP_PERCENT_USED|$SWAP_PERCENT_USED%||"
+	swap_usage_help="
+helpitem|Swap
+helptext|Helptext Swap#When a program requires more memory than is physically available in the computer, currently unused information can be written to a temporary buffer on the hard disk, called swap, thereby freeing memory."
+}
 
 #todo: if we're not going to use 'free' vars, remove from calculatin
 ACTIVE_CONNECTIONS=$(cat "/proc/net/ip_conntrack" | wc -l)
@@ -43,6 +65,19 @@ df | uniq | awk 'BEGIN { mcount=0 };
 		print "</td></tr>"
 	}'
 )
+swap_form=$(cat /proc/swaps | awk 'BEGIN { mcount=0 };
+	/\// {
+		filled_caption=int($4 / ($3 / 100));
+		if (int(filled_caption) > 0.5) filled_caption+=1;
+		if ($2 == "partition")
+			swap_type="@TR<<status_basic_swap_partition#swap partition>>"
+		else
+			swap_type="@TR<<status_basic_swap_file#swap file>>"
+		print "string|<tr><td><strong>"swap_type" "$5"</strong><br /><em>"$1"</em></td><td>"
+		print "progressbar|swap_" mcount "|" $4 "KB @TR<<mount_of#of>> " $3 "KB|200|" $4 "|" filled_caption "%|"; mcount+=1
+		print "</td></tr>"
+	}'
+)
 
 #start_form|@TR<<Load Average>>
 #string|<tr><td style="font-size:1.2em;color:red;">$_loadavg</<tr><td>
@@ -54,9 +89,12 @@ display_form <<EOF
 start_form|@TR<<RAM Usage>>
 string|<tr><td>@TR<<Total>>: $TOTAL_MEM KB</td><td>
 progressbar|ramuse|@TR<<Used>>: $USED_MEM KB ($MEM_PERCENT_USED%)|200|$MEM_PERCENT_USED|$MEM_PERCENT_USED%||
+$swap_usage
 helpitem|RAM Usage
 helptext|Helptext RAM Usage#This is the current RAM usage. The amount free represents how much applications have available.
+$swap_usage_help
 end_form|
+
 start_form|@TR<<Tracked Connections>>
 string|<tr><td>@TR<<Maximum>>: $MAX_CONNECTIONS</td><td>
 progressbar|conntrackuse|@TR<<Used>>: $ACTIVE_CONNECTIONS ($USED_CONNECTIONS_PERCENT%)|200|$USED_CONNECTIONS_PERCENT|$USED_CONNECTIONS_PERCENT%||
@@ -66,13 +104,13 @@ end_form|
 
 start_form|@TR<<Mount Usage>>
 $mounts_form
+$swap_form
 helpitem|Mount Usage
 helptext|Helptext Mount Usage#This is the amount of space total and used on the filesystems mounted to your router.
 end_form|
 EOF
-?>
 
-<? footer ?>
+footer ?>
 <!--
 ##WEBIF:name:Status:100:System
 -->
