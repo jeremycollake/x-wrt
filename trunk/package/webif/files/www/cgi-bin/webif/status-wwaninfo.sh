@@ -6,9 +6,9 @@ DEVICES="/dev/usb/tts/2 /dev/noz2"
 for DEV in $DEVICES
 do
 	[ -c $DEV ] && {
-		INFO=$(gcom -d $DEV -s /etc/gcom/getstrength.gcom 2>/dev/null)
-		STRENGTH=$(gcom -d $DEV -s /etc/gcom/getstrength.gcom 2>/dev/null |
-					grep "CSQ:" | cut -d: -f2 | cut -d, -f1)
+		INFO=$(gcom -d $DEV info 2>/dev/null | grep -v "^####")
+		STRENGTH=$(gcom -d $DEV -s /etc/gcom/getstrength.gcom 2>/dev/null | grep "CSQ:" |
+			cut -d: -f2 | cut -d, -f1 | sed 's/[^[:digit:]]\{1,\}\([[:digit:]]\{1,2\}\)$/\1/')
 	}
 done
 
@@ -34,7 +34,7 @@ if ! empty "$INFO"; then
 		}
 		{
 			print "	<tr>"
-			printf "%s%02d%s%s%s\n", "		<td>@TR<<status_wwaninfo_dev_td_info", FNR, "#", $1, ">></td>"
+			print "		<td>" $1 "</td>"
 			col2=$2
 			for (i=3; i<=NF; i++)
 				col2 = col2 ":" $i
