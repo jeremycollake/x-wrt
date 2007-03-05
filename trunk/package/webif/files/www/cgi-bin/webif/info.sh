@@ -16,11 +16,15 @@ if is_kamikaze; then
 	package_filename="kamikaze/webif_latest_stable.ipk"	
 	uname -a |grep 2.4 |grep -q mips
 	[ $? = 0 ] && {
-		version_url="http://ftp.berlios.de/pub/xwrt/kamikaze/broadcom-2.4/"
+		version_url="http://downloads.x-wrt.org/xwrt/kamikaze/brcm-2.4/"
 	}
 	uname -a |grep 2.6 |grep -q i586
 	[ $? = 0 ] && {
-		version_url="http://ftp.berlios.de/pub/xwrt/kamikaze/x86-2.6/"
+		version_url="http://downloads.x-wrt.org/xwrt/kamikaze/x86-2.6/"
+	}
+	uname -a |grep mips |grep 2.6 && cat /proc/cpuinfo |grep Atheros
+	[ $? = 0 ] && {
+		version_url="http://downloads.x-wrt.org/xwrt/kamikaze/atheros-2.6/"
 	}
 else
 	XWRT_BRANCH="trunk"
