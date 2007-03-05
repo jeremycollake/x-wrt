@@ -37,7 +37,7 @@ while read line ; do let "pagesize+=$line"
 done ; exec 0<&3 ; rm /tmp/.pagesize ; let "pagesize*=2"
 ############## ESTIMATE PAGE SIZE ##########
 
-header "System" "Packages" "<img src=\"/images/pkg.jpg\" alt />&nbsp;@TR<<system_ipkg_Packages#Packages>>" '' "$SCRIPT_NAME" "$(expr $pagesize / 1024)"
+header "System" "Packages" "@TR<<system_ipkg_Packages#Packages>>" '' "$SCRIPT_NAME" "$(expr $pagesize / 1024)"
 
 cat <<EOF
 <script type="text/javascript">
