@@ -97,14 +97,13 @@ uci_set "cifs" "login" "pwd" "$FORM_smb_pwd"
 		if  [ -s "/etc/init.d/cifs" ]  ; then rm /etc/init.d/cifs ; fi
 	echo "#!/bin/sh
 
-START=50
-mount -t cifs //$NET_IP/$MOUNT_SHARE /$MOUNT_MNT -o unc=\\\\$NET_PC\\$MOUNT_SHARE,ip=$NET_IP,user=$LOGIN_USR,pass=$LOGIN_PWD,dom=$NET_GRP
-" > /etc/init.d/cifs
-		ln -s /etc/init.d/cifs /etc/rc.d/S55cifs
+START=96
+mount -t cifs //$NET_IP/$MOUNT_SHARE /$MOUNT_MNT -o unc=\\\\\\\\$NET_PC\\\\$MOUNT_SHARE,ip=$NET_IP,user=$LOGIN_USR,pass=$LOGIN_PWD,dom=$NET_GRP" > /etc/init.d/cifs
+		ln -s /etc/init.d/cifs /etc/rc.d/S96cifs
 		chmod 755 /etc/init.d/cifs
 	else 	### else
 		uci_set "cifs" "mount" "startup" ""
-		if [ -s "/etc/init.d/cifs" ] ; then rm /etc/init.d/cifs ; rm /etc/rc.d/S50cifs; fi
+		if [ -s "/etc/init.d/cifs" ] ; then rm /etc/init.d/cifs ; rm /etc/rc.d/S96cifs; fi
 	fi 	### end if checkbox on startup
 
 uci_set "cifs" "mount" "share" "$FORM_smb_dir"
@@ -140,18 +139,18 @@ cat <<EOF
 <br/><form action='$SCRIPT_NAME' method='post'>
 <table width="100%" border="0" cellspacing="1">
 <tr><td colspan="2" height="1"  bgcolor="#333333"></td></tr>
-<tr><td width="200"><a href="#" rel="b1">IP Address</a></td><td><input name="smb_ip" type="text" value=$NET_IP /></td></tr>
-<tr><td><a href="#" rel="b2">PC name</a></td><td><input name="smb_pc" type="text" value=$NET_PC /></td></tr>
-<tr><td><a href="#" rel="b3">Workgroup</a></td><td><input name="smb_wrkgrp" type="text" value=$NET_GRP /></td></tr>
+<tr><td width="200"><a href="#" rel="b1">IP Address</a></td><td><input name="smb_ip" type="text" value="$NET_IP" /></td></tr>
+<tr><td><a href="#" rel="b2">PC name</a></td><td><input name="smb_pc" type="text" value="$NET_PC" /></td></tr>
+<tr><td><a href="#" rel="b3">Workgroup</a></td><td><input name="smb_wrkgrp" type="text" value="$NET_GRP" /></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td colspan="2" height="1" bgcolor="#333333"></td></tr>
-<tr><td><a href="#" rel="b6">Username</a></td><td><input name="smb_usr" type="text" value=$LOGIN_USR /></td></tr>
-<tr><td><a href="#" rel="b7">Password</a></td><td><input name="smb_pwd" type="password" value=$LOGIN_PWD /></td></tr>
+<tr><td><a href="#" rel="b6">Username</a></td><td><input name="smb_usr" type="text" value="$LOGIN_USR" /></td></tr>
+<tr><td><a href="#" rel="b7">Password</a></td><td><input name="smb_pwd" type="password" value="$LOGIN_PWD" /></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td colspan="2" height="1" bgcolor="#333333"></td></tr>
 <tr><td>&nbsp;</td><td><input type="checkbox" name="chkstartup" $MOUNT_SRT />&nbsp;mount on boot</td></tr>
-<tr><td><a href="#" rel="b4">Shared Folder</a></td><td><input name="smb_dir" type="text" value=$MOUNT_SHARE /></td></tr>
-<tr><td><a href="#" rel="b5">Mount Path</a></td><td><input name="smb_mnt" type="text" value=$MOUNT_MNT /></td></tr>
+<tr><td><a href="#" rel="b4">Shared Folder</a></td><td><input name="smb_dir" type="text" value="$MOUNT_SHARE" /></td></tr>
+<tr><td><a href="#" rel="b5">Mount Path</a></td><td><input name="smb_mnt" type="text" value="$MOUNT_MNT" /></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
 <tr><td>&nbsp;</td><td><input type="submit" style='border: 1px solid #000000;' name="save_cifs" value="Save" /></td>
 </tr></table></form>

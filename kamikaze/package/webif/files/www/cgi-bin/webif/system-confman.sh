@@ -22,11 +22,13 @@ if ! equal $FORM_download "" ; then
 	
 	if equal $FORM_rdflash "1" ; then
 
+		tmp=/tmp/flash_$FORM_name.trx
+		tgz=/www/flash_$FORM_name.trx
 		mount -o remount,ro /dev/mtdblock/4 / 2>/dev/null
-		dd if=/dev/mtdblock/1 > /tmp/flash_$FORM_name.trx 2>/dev/null
-		ln -s /tmp/flash_$FORM_name.trx /www/flash_$FORM_name.trx 2>/dev/null
+		dd if=/dev/mtdblock/1 > $tmp 2>/dev/null
+		ln -s $tmp $tgz 2>/dev/null
 		DOWNLOAD flash_$FORM_name.trx
-		sleep 25 ; rm /tmp/flash_$FORM_name.trx
+		sleep 25 ; rm $tmp ; rm $tgz
 	else
 
 		tmp=/tmp/config.$$

@@ -41,6 +41,7 @@ if  is_package_installed "kmod-loop" && is_package_installed "losetup" &&  is_pa
 uci_load "swap"
 SET_PATH="$CONFIG_set_path"
 SET_RAM="$CONFIG_set_ram"
+SET_BOOT="$CONFIG_set_startup"
 
 cat <<EOF
 $HTMLHEAD</head>
@@ -70,6 +71,26 @@ echo "<br/>saving ..."
 
 uci_set "swap" "set" "path" "$FORM_swap_path"
 uci_set "swap" "set" "ram" "$FORM_swap_ram"
+
+	### If checkbox on startup
+	if ! empty "$FORM_chkstartup"; then
+		uci_set "swap" "set" "startup" "checked"
+		if  [ -s "/etc/init.d/swap" ]  ; then rm /etc/init.d/swap ; fi
+	echo "#!/bin/sh
+
+START=98
+sleep 5
+dd if=/dev/zero of=/$SET_PATH/swapfile count=$SET_RAM
+losetup /dev/loop/0 /$SET_PATH/swapfile
+mkswap /dev/loop/0
+swapon /dev/loop/0" > /etc/init.d/swap
+		ln -s /etc/init.d/swap /etc/rc.d/S98swap
+		chmod 755 /etc/init.d/swap
+	else 	### else
+		uci_set "swap" "set" "startup" ""
+		if [ -s "/etc/init.d/swap" ] ; then rm /etc/init.d/swap ; rm /etc/rc.d/S98swap; fi
+	fi 	### end if checkbox on startup
+
 uci_commit "swap"
 exit
 fi
@@ -98,6 +119,8 @@ cat <<EOF
 <tr><td width="200">&nbsp;<a href="#" rel="b2">Size (blocks):</a></td>
 <td><input name="swap_ram" type="text" value=$SET_RAM /></td></tr>
 <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+<tr><td colspan="2" height="1" bgcolor="#333333"></td></tr>
+<tr><td>&nbsp;</td><td><input type="checkbox" name="chkstartup" $SET_BOOT />&nbsp;mount on boot<br/><br/></td></tr>
 <tr><td>&nbsp;</td><td><input type="submit" style='border: 1px solid #000000;' name="save_swap" value="Save" /></td>
 </tr></table></form>
 EOF
