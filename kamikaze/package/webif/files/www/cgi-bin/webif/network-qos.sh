@@ -82,7 +82,7 @@ ip|FORM_current_srchost|@TR<<Source IP>>||$FORM_current_srchost
 ip|FORM_current_dsthost|@TR<<Dest IP>>||$FORM_current_dsthost
 EOF
 		if ! equal "$?" "0"; then			
-			echo "<div class=\"warning\">@<<qos_validation_failed#Validation of one or more fields failed! Not saving.>></div>"
+			echo "<div class=\"warning\">@TR<<qos_validation_failed#Validation of one or more fields failed! Not saving.>></div>"
 		else
 			SAVED=1
 			uci_set "qos" "$current_qos_item" "target" "$FORM_current_target"
