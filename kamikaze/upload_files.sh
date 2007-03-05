@@ -20,7 +20,7 @@ fi
 #Broadcom 2.4
 ls bin/openwrt-brcm-2.4* >/dev/null 2>&-
 [ $? = "0" ] && {
-version="broadcom-2.4"
+version="brcm-2.4"
 chmod 775 build_mipsel/webif-0.3/ipkg/webif/www/.version
 version_file="build_mipsel/webif-0.3/ipkg/webif/www/.version"
 echo $version
@@ -29,7 +29,7 @@ echo $version
 #Broadcom 2.6
 ls bin/openwrt-brcm-2.6* >/dev/null 2>&-
 [ $? = "0" ] && {
-version="broadcom-2.6"
+version="brcm-2.6"
 chmod 775 build_mipsel/webif-0.3/ipkg/webif/www/.version
 version_file="build_mipsel/webif-0.3/ipkg/webif/www/.version"
 echo $version
@@ -56,20 +56,20 @@ echo $version
 echo "Uploading webif version info ..."
 scp \
 	$version_file \
-        $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/$version/
+        $SCP_USER@downloads.x-wrt.org:/www/xwrt/kamikaze/$version/
 echo "Uploading package repository ..."
 scp \
         bin/packages/* \
-        $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/$version/packages/
+        $SCP_USER@downloads.x-wrt.org:/www/xwrt/kamikaze/$version/packages/
 echo "Uploading X-Wrt patches ..."
 scp \
         patches/* \
-        $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/$version/patches/
+        $SCP_USER@downloads.x-wrt.org:/www/xwrt/kamikaze/$version/patches/
 #echo "Uploading firmware images ..."
 #date > /tmp/build-date.txt
 #scp \
 #       /tmp/build-date.txt \
-#       $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/$version/images/
+#       $SCP_USER@downloads.x-wrt.org:/www/xwrt/kamikaze/$version/images/
 #scp \
 #       bin/openwrt* \
-#       $SCP_USER@shell.berlios.de:/home/groups/ftp/pub/xwrt/kamikaze/$version/images/
+#       $SCP_USER@downloads.x-wrt.org:/www/xwrt/kamikaze/$version/images/
