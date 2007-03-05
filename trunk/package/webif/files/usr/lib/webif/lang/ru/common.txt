@@ -307,14 +307,6 @@ status_wwaninfo_no_UG_device => UMTS / GPRS device not found.
 status_wwaninfo_device_info => Device Information
 status_wwaninfo_dev_th_Information => Information
 status_wwaninfo_dev_th_Value => Value
-status_wwaninfo_dev_td_info01 => Manufacturer Text
-status_wwaninfo_dev_td_info02 => IMEI and Serial Number
-status_wwaninfo_dev_td_info03 => Manufacturer's Revision
-status_wwaninfo_dev_td_info04 => Hardware Revision
-status_wwaninfo_dev_td_info05 => Network Locked
-status_wwaninfo_dev_td_info06 => Customisation
-status_wwaninfo_dev_td_info07 => Band settings
-status_wwaninfo_dev_td_info08 => Auto Attach
 status_wwaninfo_no_UG_device_info => No device information reported.
 status_wwaninfo_Signal_Quality => Signal Quality
 status_wwaninfo_quality_unknown => Signal quality is invalid/unknown
@@ -327,15 +319,15 @@ status_wwaninfo_quality_Excellent => Excellent
 status_wwaninfo_wrong_value => Wrong signal quality value
 
 
+## new format
+
+
 ## system-ipkg.sh
 system_ipkg_installedpackages => &#x423;&#x441;&#x442;&#x430;&#x43D;&#x43E;&#x432;&#x43B;&#x435;&#x43D;&#x43D;&#x44B;&#x435; &#x43F;&#x430;&#x43A;&#x435;&#x442;&#x44B;
 system_ipkg_updatelists => &#x41E;&#x431;&#x43D;&#x43E;&#x432;&#x438;&#x442;&#x44C; &#x441;&#x43F;&#x438;&#x441;&#x43E;&#x43A; &#x43F;&#x430;&#x43A;&#x435;&#x442;&#x43E;&#x432;
 system_ipkg_availablepackages => &#x414;&#x43E;&#x441;&#x442;&#x443;&#x43F;&#x43D;&#x44B;&#x435; &#x43F;&#x430;&#x43A;&#x435;&#x442;&#x44B;
 system_ipkg_Uninstall => &#x423;&#x434;&#x430;&#x43B;&#x438;&#x442;&#x44C;
 system_ipkg_Install => &#x423;&#x441;&#x442;&#x430;&#x43D;&#x43E;&#x432;&#x438;&#x442;&#x44C;
-
-
-## new format
 
 
 
