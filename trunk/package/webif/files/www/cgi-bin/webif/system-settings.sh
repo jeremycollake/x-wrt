@@ -354,7 +354,7 @@ $NTPCLIENT_INSTALL_FORM
 # webif settings
 start_form|@TR<<Webif Settings>>
 field| 
-string|<input type="checkbox" name="effect_enable" value="1" $FORM_effect />@TR<<Enable visual effects>><br/><br/>
+string|<input type="checkbox" name="effect_enable" value="1" $FORM_effect />&nbsp;@TR<<Enable visual effects>><br/><br/>
 field|@TR<<Language>>
 select|language|$FORM_language
 $LANGUAGES

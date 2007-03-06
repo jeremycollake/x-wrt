@@ -28,16 +28,15 @@
 #
 #
 ############## ESTIMATE PAGE SIZE ##########
-ls /usr/lib/ipkg/lists -l | awk '{ print $5 }' | while read output;
-do echo $output >> /tmp/.pagesize ; done
-ipkg list_installed | while read output;
-do echo "550" >> /tmp/.pagesize ; done
-exec 3<&0 ; exec 0</tmp/.pagesize
-while read line ; do let "pagesize+=$line"
-done ; exec 0<&3 ; rm /tmp/.pagesize ; let "pagesize*=2"
+uci_load "webif"
+if equal "$CONFIG_general_use_progressbar" "1" ; then
+pagesize=$(grep 'Package:' -c < /usr/lib/ipkg/lists/snapshots)
+let "pagesize+=$(grep 'Package:' -c < /usr/lib/ipkg/lists/X-Wrt)"
+let "pagesize+=$(ipkg list_installed | grep '' -c )"
+let "pagesize-=60"; fi
 ############## ESTIMATE PAGE SIZE ##########
 
-header "System" "Packages" "@TR<<system_ipkg_Packages#Packages>>" '' "$SCRIPT_NAME" "$(expr $pagesize / 1024)"
+header "System" "Packages" "@TR<<system_ipkg_Packages#Packages>>" '' "$SCRIPT_NAME" "$pagesize"
 
 cat <<EOF
 <script type="text/javascript">
