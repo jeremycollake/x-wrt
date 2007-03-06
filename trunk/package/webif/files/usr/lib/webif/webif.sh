@@ -1,4 +1,4 @@
-######################################################
+###################################################################
 # Webif base
 #
 # Description:
@@ -12,6 +12,7 @@
 # NVRAM variables referenced:
 #
 # Configuration files referenced:
+#
 #
 
 libdir=/usr/lib/webif
@@ -121,7 +122,7 @@ header() {
 	_firmware_version="$CONFIG_general_firmware_version"
 	_firmware_name="$CONFIG_general_firmware_name"
 	_firmware_subtitle="$CONFIG_general_firmware_subtitle"
-	_use_progressbar="$CONFIG_general_use_progressbar"
+	_use_apply_progressbar="$CONFIG_general_use_apply_progressbar"
 	_uptime="$(uptime)"
 	_loadavg="${_uptime#*load average: }"
 	_uptime="${_uptime#*up }"
@@ -133,7 +134,7 @@ header() {
 	_savebutton="${5:+<div class=\"page-save\"><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></div>}"        
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}
-	if ! equal "$6" "" && ! equal "$6" "0" ; then _pageload="<SCRIPT type='text/javascript'>start=0; end=$6</SCRIPT><SCRIPT src='/js/pageload.js' type='text/javascript'></SCRIPT><DIV id='loadmain'><!-- Start of hideall SPAN //--><SCRIPT type='text/javascript'>document.getElementById(\"loadmain\").style.display = \"none\";</SCRIPT>"; _JSload="<SCRIPT type='text/javascript'>load()</SCRIPT>"; fi
+
 	if equal $CONFIG_general_use_short_status_frame "1"; then
 		short_status_frame='<iframe src="/cgi-bin/webif/iframe.mini-info.sh"
 				width="200" height="80"  scrolling="no" frameborder="0"></iframe>'
@@ -201,19 +202,14 @@ $_subcategories
 	<div style="background: #e8ca9e" title="brown" onclick="setActiveStyleSheet('brown'); return false;"></div>
 	<div style="background: #fff" title="white" onclick="setActiveStyleSheet('white'); return false;"></div>
 </div>
-EOF
 
-if equal "$_use_progressbar" "1" ; then echo $_pageload 
-else echo "<script type='text/javascript'>function load() { }</script>"
-fi
-
-cat <<EOF
 $_form
 
 <div id="content">
 	$_head
 	$ERROR
 EOF
+
 	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && {
 		empty "$FORM_passwd1" || {
 			echo '<pre>'
@@ -269,6 +265,7 @@ footer() {
 	_changes=${_changes:+(${_changes})}
 	_endform=${_savebutton:+</form>}
 	
+
 cat <<EOF
 </div>
 <br />
@@ -276,7 +273,7 @@ cat <<EOF
 	<legend><strong>@TR<<Proceed Changes>></strong></legend>
 	$_savebutton
 EOF
-	equal "$_use_progressbar" "1" && {
+	equal "$_use_apply_progressbar" "1" && {
 	echo '<script type="text/javascript" src="/js/waitbox.js"></script>'
 	}
 cat <<EOF
@@ -293,11 +290,9 @@ $_endform
 	<em>@TR<<making_usable#End user extensions for OpenWrt>></em>
 </div>
 </div> <!-- End #container -->
+</body>
+</html>
 EOF
-	equal "$_use_progressbar" "1" && ! equal $_pageload "" && {
-	echo '</DIV><!-- End of hideall SPAN //--><SCRIPT type='text/javascript'>complete()</SCRIPT>'
-	}
-	echo "</body></html>"
 }
 
 #######################################################
@@ -360,3 +355,4 @@ handle_list() {
 		return 0
 	fi
 }
+

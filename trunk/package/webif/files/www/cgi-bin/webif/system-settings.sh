@@ -60,6 +60,7 @@ is_bcm947xx && {
 #####################################################################
 header "System" "Settings" "@TR<<System Settings>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
+
 #####################################################################
 # todo: CPU_MODEL not actually used atm (except in building version)
 equal "$OVERCLOCKING_DISABLED" "0" && {
@@ -124,8 +125,6 @@ if empty "$FORM_submit"; then
 	}
 	# webif settings
 	uci_load "webif"
-	FORM_effect="${CONFIG_general_use_progressbar}"		# -- effects checkbox	
-	if equal $FORM_effect "1" ; then FORM_effect="checked" ; fi	# -- effects checkbox	
 	FORM_language="${CONFIG_general_lang:-default}"	
 	FORM_theme=${CONFIG_theme_id:-xwrt}
 else
@@ -137,10 +136,7 @@ hostname|FORM_hostname|Hostname|nodots required|$FORM_hostname
 EOF
 	if equal "$?" 0 ; then
 		is_kamikaze && {
-		#to check if we actually changed hostname, else donot reload network for no reason!
-		uci_load "network"
-		if ! equal "$FORM_hostname" "$CONFIG_wan_hostname" ; then uci_set "network" "wan" "hostname" "$FORM_hostname" ; fi
-
+		uci_set "network" "wan" "hostname" "$FORM_hostname"
 		uci_set "webif" "ssl" "enable" "$FORM_ssl_enable"
 		#waiting for ntpclient update
 		#save_setting system time_zone "$FORM_system_timezone"
@@ -168,9 +164,7 @@ EOF
 		! equal "$FORM_theme" "$CONFIG_theme_id" && ! empty "$CONFIG_theme_id" && {	
 			uci_set "webif" "theme" "id" "$FORM_theme"
 		}
-		uci_set "webif" "general" "lang" "$FORM_language"
-		uci_set "webif" "general" "use_progressbar" "$FORM_effect_enable"
-		FORM_effect=$FORM_effect_enable ; if equal $FORM_effect "1" ; then FORM_effect="checked" ; fi
+		uci_set "webif" "general" "lang" "$FORM_language"		
 	else
 		echo "<br /><div class=\"warning\">Warning: Hostname failed validation. Can not be saved.</div><br />"
 	fi
@@ -296,6 +290,7 @@ if [ -n "$(has_pkgs ntpclient)" -a -n "$(has_pkgs openntpd)" ]; then
 		submit|install_ntpclient| Install NTP Client |"
 fi
 
+
 #####################################################################
 # initialize time zones
 
@@ -315,10 +310,12 @@ TIMEZONE_OPTS=$(
 		}' < /usr/lib/webif/timezones.csv
 
 )
-#######################################################
+
+######################################################################
 cat <<EOF
 <script type="text/javascript" src="/webif.js"></script>
 <script type="text/javascript">
+
 function modechange()
 {
 	if(isset('boot_wait','on'))
@@ -332,7 +329,8 @@ function modechange()
 }
 </script>
 EOF
-#######################################################
+
+#####################################################################
 # Show form
 display_form <<EOF
 onchange|modechange
@@ -353,8 +351,6 @@ $NTPCLIENT_INSTALL_FORM
 ##########################
 # webif settings
 start_form|@TR<<Webif Settings>>
-field| 
-string|<input type="checkbox" name="effect_enable" value="1" $FORM_effect />&nbsp;@TR<<Enable visual effects>><br/><br/>
 field|@TR<<Language>>
 select|language|$FORM_language
 $LANGUAGES

@@ -10,7 +10,6 @@
 # Author(s) [in order of work date]:
 #   OpenWrt developers (??)
 #   todo: person who added descriptions..
-#   Dmytro
 #   eJunky
 #   emag
 #   Jeremy Collake <jeremy.collake@gmail.com>
@@ -27,26 +26,20 @@
 #   ipkg
 #
 #
-############## ESTIMATE PAGE SIZE ##########
-uci_load "webif"
-if equal "$CONFIG_general_use_progressbar" "1" ; then
-pagesize=$(grep 'Package:' -c < /usr/lib/ipkg/lists/snapshots)
-let "pagesize+=$(grep 'Package:' -c < /usr/lib/ipkg/lists/X-Wrt)"
-let "pagesize+=$(ipkg list_installed | grep '' -c )"
-let "pagesize-=60"; fi
-############## ESTIMATE PAGE SIZE ##########
 
-header "System" "Packages" "@TR<<system_ipkg_Packages#Packages>>" '' "$SCRIPT_NAME" "$pagesize"
+header "System" "Packages" "@TR<<system_ipkg_Packages#Packages>>" '' "$SCRIPT_NAME"
 
 cat <<EOF
 <script type="text/javascript">
+<!--
 function confirmT(action,pkg) {
-if ( pkg == "uclibc" || pkg == "base-files" || pkg == "base-files-brcm-2.4" || pkg == "bridge" || pkg == "busybox" || pkg == "dnsmasq" || pkg == "dropbear" || pkg == "haserl" || pkg == "hotplug" || pkg == "iptables" || pkg == "kernel" || pkg == "mtd" || pkg == "wireless-tools" || pkg == "wlc") {
-alert ("             <<< WARNING >>> \n\nPackage \"" + pkg + "\" should not be removed!\n\n>>> Removing may brick your router. <<<\n\nSystem requires \"" + pkg + "\" package to run.\n\n") ;
+if ( pkg == "uclibc" || pkg == "base-files" || pkg == "base-files-brcm-2.4" || pkg == "bridge" || pkg == "busybox" || pkg == "dnsmasq" || pkg == "dropbear" || pkg == "haserl" || pkg == "hotplug" || pkg == "iptables" || pkg == "kernel" || pkg == "mtd" || pkg == "wireless-tools" || pkg == "zlib") {
+alert ("              <<< WARNING >>> \n\nPackage \"" + pkg + "\" should not be removed!\n\n>>> Removing may brick your router. <<<\n\nSystem requires \"" + pkg + "\" package to run.\n\n") ;
 }
 if (window.confirm("Please Confirm!\n\nDo you want to " + action + " \"" + pkg + "\" package?")){
 window.location="ipkg.sh?action=" + action + "&pkg=" + pkg
 } }
+// -->
 </script>
 EOF
 
@@ -64,7 +57,7 @@ repo_update_needed=0
 }
 
 ! empty "$FORM_install_repo" && {
-validate << EOF
+	validate << EOF
 string|FORM_reponame|@TR<<system_ipkg_reponame#Repo. Name>>|min=4 max=40 required nospaces|$FORM_reponame
 string|FORM_repourl|@TR<<system_ipkg_repourl#Repo. URL>>|min=4 max=4096 required|$FORM_repourl
 EOF
@@ -176,7 +169,7 @@ $2 !~ /terminated/ {
 	gsub(/&/, "&amp;", desc)
 	gsub(/</, "&lt;", desc)
 	gsub(/>/, "&gt;", desc)
-	print "<tr class=\"packages\"><td><SCRIPT type='text/javascript'>load()</SCRIPT><a href=\"javascript:confirmT('\''remove'\'','\''" link "'\'')\">@TR<<system_ipkg_Uninstall#Uninstall>></a></td><td>" $1 "</td><td>" version "</td><td>" desc "</td></tr>"
+	print "<tr class=\"packages\"><td><a href=\"javascript:confirmT('\''remove'\'','\''" link "'\'')\">@TR<<system_ipkg_Uninstall#Uninstall>></a></td><td>" $1 "</td><td>" version "</td><td>" desc "</td></tr>"
 }
 '
 ?>
@@ -203,12 +196,13 @@ $1 ~ /status/ {
 	gsub(/&/, "&amp;", desc[3])
 	gsub(/</, "&lt;", desc[3])
 	gsub(/>/, "&gt;", desc[3])
-	print "<tr class=\"packages\"><td><SCRIPT type='text/javascript'>load()</SCRIPT><a href=\"javascript:confirmT('\''install'\'','\''" link "'\'')\">@TR<<system_ipkg_Install#Install>></a></td><td>" $3 "</td><td>" ver[3] "</td><td>" desc[3] "</td></tr>"
+	print "<tr class=\"packages\"><td><a href=\"javascript:confirmT('\''install'\'','\''" link "'\'')\">@TR<<system_ipkg_Install#Install>></a></td><td>" $3 "</td><td>" ver[3] "</td><td>" desc[3] "</td></tr>"
 	current=$1
 }
 '
 ?>
 </table>
+
 <?
 # todo: temporary fix for a display error in Opera
 display_form <<EOF
@@ -216,9 +210,7 @@ start_form||||nohelp
 end_form
 EOF
 
-footer 
-#echo "</SPAN><!-- End of hideall SPAN //-->"
-?>
+footer ?>
 <!--
 ##WEBIF:name:System:300:Packages
 -->
