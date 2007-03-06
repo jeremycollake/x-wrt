@@ -101,6 +101,11 @@ $(call Package/webif)
   TITLE:=Swedish language file for webif.
 endef
 
+define Package/webif-lang-sq
+$(call Package/webif)
+  TITLE:=Albanian language file for webif.
+endef
+
 define Package/webif-theme-zephyr
 $(call Package/webif)
   TITLE:=Zephyr theme for webif^2.
@@ -230,6 +235,11 @@ define Package/webif-lang-se/install
 	$(CP) -a ./files/usr/lib/webif/lang/se/common.txt $(1)/usr/lib/webif/lang/se/common.txt
 endef
 
+define Package/webif-lang-sq/install
+	mkdir -p $(1)/usr/lib/webif/lang/sq/
+	$(CP) -a ./files/usr/lib/webif/lang/sq/common.txt $(1)/usr/lib/webif/lang/sq/common.txt
+endef
+
 define Package/webif-theme-zephyr/install
 	mkdir -p $(1)/www/themes/zephyr/
 	$(CP) -a ./files/www/themes/zephyr/* $(1)/www/themes/zephyr/
@@ -258,5 +268,6 @@ $(eval $(call BuildPackage,webif-lang-pl))
 $(eval $(call BuildPackage,webif-lang-pt))
 $(eval $(call BuildPackage,webif-lang-ru))
 $(eval $(call BuildPackage,webif-lang-se))
+$(eval $(call BuildPackage,webif-lang-sq))
 $(eval $(call BuildPackage,webif-theme-zephyr))
 $(eval $(call BuildPackage,webif-theme-xwrt))
