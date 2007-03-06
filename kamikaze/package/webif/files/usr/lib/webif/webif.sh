@@ -1,4 +1,4 @@
-########################################################
+######################################################
 # Webif base
 #
 # Description:
@@ -12,7 +12,6 @@
 # NVRAM variables referenced:
 #
 # Configuration files referenced:
-#
 #
 
 libdir=/usr/lib/webif
@@ -134,7 +133,7 @@ header() {
 	_savebutton="${5:+<div class=\"page-save\"><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></div>}"        
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}
-	if ! equal $6 "" ; then _pageload="<SCRIPT type='text/javascript'>start=0; end=$6</SCRIPT><SCRIPT src='/js/pageload.js' type='text/javascript'></SCRIPT><DIV id='loadmain'><!-- Start of hideall SPAN //--><SCRIPT type='text/javascript'>document.getElementById(\"loadmain\").style.display = \"none\";</SCRIPT>" ; fi
+	if ! equal "$6" "" && ! equal "$6" "0" ; then _pageload="<SCRIPT type='text/javascript'>start=0; end=$6</SCRIPT><SCRIPT src='/js/pageload.js' type='text/javascript'></SCRIPT><DIV id='loadmain'><!-- Start of hideall SPAN //--><SCRIPT type='text/javascript'>document.getElementById(\"loadmain\").style.display = \"none\";</SCRIPT>"; _JSload="<SCRIPT type='text/javascript'>load()</SCRIPT>"; fi
 	if equal $CONFIG_general_use_short_status_frame "1"; then
 		short_status_frame='<iframe src="/cgi-bin/webif/iframe.mini-info.sh"
 				width="200" height="80"  scrolling="no" frameborder="0"></iframe>'
@@ -204,9 +203,9 @@ $_subcategories
 </div>
 EOF
 
-equal "$_use_progressbar" "1" && {
-echo $_pageload 
-}
+if equal "$_use_progressbar" "1" ; then echo $_pageload 
+else echo "<script type='text/javascript'>function load() { }</script>"
+fi
 
 cat <<EOF
 $_form
@@ -215,7 +214,6 @@ $_form
 	$_head
 	$ERROR
 EOF
-
 	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && {
 		empty "$FORM_passwd1" || {
 			echo '<pre>'
@@ -271,7 +269,6 @@ footer() {
 	_changes=${_changes:+(${_changes})}
 	_endform=${_savebutton:+</form>}
 	
-
 cat <<EOF
 </div>
 <br />
@@ -363,4 +360,3 @@ handle_list() {
 		return 0
 	fi
 }
-

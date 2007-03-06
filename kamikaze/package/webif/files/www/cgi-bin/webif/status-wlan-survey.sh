@@ -63,9 +63,6 @@ vcfg_number=$(echo "$DEVICES $N $vface" |wc -l)
 let "vcfg_number+=1"
 #####################################################################
 }
-LoadSettings
-
-header "Status" "Site Survey" "<img src=/images/wscan.jpg align=middle alt />&nbsp;@TR<<Wireless survey>>"
 
 if ! empty "$FORM_install_nas"; then
 
@@ -337,44 +334,43 @@ echo "<td><center>"
 	else
 		echo "<input type='submit' class='flatbtn' name='joinwifi' value='@TR<<Join>>' onClick=\"loadwindow(0,'$SCRIPT_NAME/?wep=1&ssid=$SSID',300,160,0,0);java1('$SSID','opn')\" />"
 	fi
-echo "</center></td></tr>"
+echo "</center>$_JSload</td></tr>"
 }
 
 ######################### The Scanning Part >
 
 ##### wl scanning #######
+	WLSCAN(){
+	counter=0
+		for counter in $(seq 1 $MAX_TRIES); do
+			wl scan 2> /dev/null
+			wl scanresults > $tempscan 2> /dev/null
+			if equal $(sed '2,$ d' $tempscan | cut -c0-4) "SSID" ; then break ; fi
+			sleep 1
+		done
+		#-------------------------
+		# We need to add a "break" on the first line!
 
+		current_line=$(grep -i '' < $tempscan)
+		echo "" > $tempfile
+		echo "$current_line" >> $tempfile
+		rm $tempscan 2> /dev/null
+		#------------------------
+	}
 WL()
 {
-
-Dopurge ()
-{
-sed 1d < $tempfile > $tempfile2
-rm $tempfile 2> /dev/null
-mv $tempfile2 $tempfile     
-}
-counter=0
-for counter in $(seq 1 $MAX_TRIES); do
-	wl scan 2> /dev/null
-	wl scanresults > $tempscan 2> /dev/null
-	if equal $(sed '2,$ d' $tempscan | cut -c0-4) "SSID" ; then break ; fi
-	sleep 1
-done
+	Dopurge ()
+	{
+		sed 1d < $tempfile > $tempfile2
+		rm $tempfile 2> /dev/null
+		mv $tempfile2 $tempfile     
+	}
+	
 
 if [ $counter -gt $MAX_TRIES ]; then
 	echo "<tr><td>@TR<<Sorry, no scan results.>></td></tr>"
 else
-
-	#-------------------------
-	# We need to add a "break" on the first line!
-
-	current_line=$(grep -i '' < $tempscan)
-	echo "" > $tempfile
-	echo "$current_line" >> $tempfile
-	rm $tempscan 2> /dev/null
-	#------------------------
-
-DisplayTable
+	DisplayTable
 
 # Read File
 #------------------------
@@ -437,23 +433,26 @@ fi
 }
 
 ######### iwlist scanning #######
+	IWLISTSCAN()
+	{
+		counter=0
+		for counter in $(seq 1 $MAX_TRIES); do
+			iwlist scan > $tempfile 2> /dev/null
+			grep -i "Address" < $tempfile >> /dev/null
+			equal "$?" "0" && break
+			sleep 1
+		done
+	}
 IWLIST()
 {
 found_networks=0
-counter=0
-for counter in $(seq 1 $MAX_TRIES); do
-        iwlist scan > $tempfile 2> /dev/null
-        grep -i "Address" < $tempfile >> /dev/null
-        equal "$?" "0" && break
-        sleep 1
-done
-
 first_hit=1
+
 if [ $counter -gt $MAX_TRIES ]; then
         echo "<tr><td>@TR<<Sorry, no scan results.>></td></tr>"
 else
+	DisplayTable
 
-DisplayTable
         current=0
         counter=0
 
@@ -536,10 +535,16 @@ rm $tempfile2 2> /dev/null
 
 }
 	if is_package_installed "wl" ; then #<- for Broadcom units where iwlist is broken
-		WL
-	else
-		IWLIST
+		WLSCAN
+	else	IWLISTSCAN
 	fi
+
+	pagesize=$(grep -i -c "dbm" < $tempfile)
+	LoadSettings
+	header "Status" "Site Survey" "<img src='/images/wscan.jpg' alt />&nbsp;@TR<<Wireless survey>>" '' '' "$pagesize"
+
+	if is_package_installed "wl" ; then WL
+	else	IWLIST ; fi
 
 footer ?>
 <!--
