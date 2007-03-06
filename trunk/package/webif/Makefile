@@ -53,6 +53,7 @@ $(eval $(call PKG_template,WEBIF_LANG_PL,webif-lang-pl,$(PKG_VERSION)-$(PKG_RELE
 $(eval $(call PKG_template,WEBIF_LANG_PT,webif-lang-pt,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,WEBIF_LANG_RU,webif-lang-ru,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,WEBIF_LANG_SE,webif-lang-se,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,WEBIF_LANG_SQ,webif-lang-sq,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
 $(eval $(call PKG_theme_template,WEBIF_THEME_XWRT,xwrt))
 $(eval $(call PKG_theme_template,WEBIF_THEME_ZEPHYR,zephyr))
@@ -74,6 +75,7 @@ $(eval $(call PKG_mod_template,WEBIF_LANG_PL,pl))
 $(eval $(call PKG_mod_template,WEBIF_LANG_PT,pt))
 $(eval $(call PKG_mod_template,WEBIF_LANG_RU,ru))
 $(eval $(call PKG_mod_template,WEBIF_LANG_SE,se))
+$(eval $(call PKG_mod_template,WEBIF_LANG_SQ,sq))
 
 $(PKG_BUILD_DIR)/.prepared:
 	mkdir -p $(PKG_BUILD_DIR)

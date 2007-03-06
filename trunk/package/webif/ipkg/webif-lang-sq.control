@@ -1,0 +1,7 @@
+Package: webif-lang-sq
+Maintainer: Felix Fietkau <nbd@openwrt.org>
+Section: net
+Depends: webif
+Priority: normal
+Description: Albanian language file for webif.
+
