@@ -67,8 +67,11 @@ df | uniq | awk 'BEGIN { mcount=0 };
 )
 swap_form=$(cat /proc/swaps | awk 'BEGIN { mcount=0 };
 	/\// {
-		filled_caption=int($4 / ($3 / 100));
-		if (int(filled_caption) > 0.5) filled_caption+=1;
+		filled_caption = $4 / ($3 / 100);
+		if (filled_caption - int(filled_caption) > 0)
+			filled_caption = int(filled_caption + 1)
+		else
+			filled_caption = int(filled_caption)
 		if ($2 == "partition")
 			swap_type="@TR<<status_basic_swap_partition#swap partition>>"
 		else
