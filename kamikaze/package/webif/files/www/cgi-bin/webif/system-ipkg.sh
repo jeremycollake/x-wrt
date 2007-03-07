@@ -27,16 +27,8 @@
 #   ipkg
 #
 #
-############## ESTIMATE PAGE SIZE ##########
-uci_load "webif"
-if equal "$CONFIG_general_use_progressbar" "1" ; then
-pagesize=$(grep 'Package:' -c < /usr/lib/ipkg/lists/snapshots)
-let "pagesize+=$(grep 'Package:' -c < /usr/lib/ipkg/lists/X-Wrt)"
-let "pagesize+=$(ipkg list_installed | grep '' -c )"
-let "pagesize-=60"; fi
-############## ESTIMATE PAGE SIZE ##########
 
-header "System" "Packages" "<img src=\"/images/pkg.jpg\" alt />&nbsp;@TR<<system_ipkg_Packages#Packages>>" '' "$SCRIPT_NAME" "$pagesize"
+header "System" "Packages" "<img src=\"/images/pkg.jpg\" alt />&nbsp;@TR<<system_ipkg_Packages#Packages>>" '' "$SCRIPT_NAME" "300"
 
 cat <<EOF
 <script type="text/javascript">

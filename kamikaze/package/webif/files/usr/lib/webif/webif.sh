@@ -133,7 +133,7 @@ header() {
 	_savebutton="${5:+<div class=\"page-save\"><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></div>}"        
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}
-	if ! equal "$6" "" && ! equal "$6" "0" ; then _pageload="<SCRIPT type='text/javascript'>start=0; end=$6</SCRIPT><SCRIPT src='/js/pageload.js' type='text/javascript'></SCRIPT><DIV id='loadmain'><!-- Start of hideall SPAN //--><SCRIPT type='text/javascript'>document.getElementById(\"loadmain\").style.display = \"none\";</SCRIPT>"; _JSload="<SCRIPT type='text/javascript'>load()</SCRIPT>"; fi
+	if ! equal $6 "" && ! equal $6 "0" ; then _pageload="<SCRIPT type='text/javascript'>start=0; end=$6</SCRIPT><SCRIPT src='/js/pageload.js' type='text/javascript'></SCRIPT><DIV id='loadmain'><SCRIPT type='text/javascript'>document.getElementById(\"loadmain\").style.display = \"none\";</SCRIPT>"; _JSload="<SCRIPT type='text/javascript'>load()</SCRIPT>"; fi
 	if equal $CONFIG_general_use_short_status_frame "1"; then
 		short_status_frame='<iframe src="/cgi-bin/webif/iframe.mini-info.sh"
 				width="200" height="80"  scrolling="no" frameborder="0"></iframe>'
@@ -203,7 +203,7 @@ $_subcategories
 </div>
 EOF
 
-if equal "$_use_progressbar" "1" ; then echo $_pageload 
+if equal $_use_progressbar "1" ; then echo $_pageload
 else echo "<script type='text/javascript'>function load() { }</script>"
 fi
 
@@ -294,8 +294,8 @@ $_endform
 </div>
 </div> <!-- End #container -->
 EOF
-	equal "$_use_progressbar" "1" && ! equal $_pageload "" && {
-	echo '</DIV><!-- End of hideall SPAN //--><SCRIPT type='text/javascript'>complete()</SCRIPT>'
+	equal $_use_progressbar "1" && ! equal $_pageload "" && {
+	echo '</DIV><SCRIPT type='text/javascript'>complete()</SCRIPT>'
 	}
 	echo "</body></html>"
 }
