@@ -22,10 +22,14 @@ if is_kamikaze; then
 	[ $? = 0 ] && {
 		version_url="http://downloads.x-wrt.org/xwrt/kamikaze/x86-2.6/"
 	}
-	uname -a |grep mips |grep 2.6 && cat /proc/cpuinfo |grep Atheros
+	uname -a |grep mips |grep -q 2.6 && cat /proc/cpuinfo |grep -q Atheros
 	[ $? = 0 ] && {
 		version_url="http://downloads.x-wrt.org/xwrt/kamikaze/atheros-2.6/"
 	}
+	cat /proc/cpuinfo |grep -q "IXP4\?\?"
+        [ $? = "0" ] && {
+        	version_url="http://downloads.x-wrt.org/xwrt/kamikaze/ixp4xx-2.6/"
+        }
 else
 	XWRT_BRANCH="trunk"
 	package_filename="webif_latest_stable.ipk"

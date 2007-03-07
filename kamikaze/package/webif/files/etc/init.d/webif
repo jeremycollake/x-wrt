@@ -34,10 +34,22 @@ while [ -z "$device_name" ]; do
 		device_name="La Fonera (ACCTON MR3201A)"
 		break
 	}
+	cat /proc/cpuinfo |grep "Gateway 7001 AP"
+	[ $? = "0" ] && {
+		device_name="Gateway 7001 AP"
+		break
+	}
+	
+	#Generic detection in case the router is not caught by the above rules.
         if [ "$(uname -m)" = "i?86" ]; then
         	device_name="Generic x86"
         	break
         fi
+        cat /proc/cpuinfo |grep "IXP4\?\?"
+        [ $? = "0" ] && {
+		device_name="Unknown IXPxx Device"
+		break
+	}
 break
 done
 
