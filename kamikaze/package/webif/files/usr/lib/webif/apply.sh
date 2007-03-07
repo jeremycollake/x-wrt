@@ -401,6 +401,8 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 			echo '@TR<<Reloading>> @TR<<OpenVPN>> ...'
 			killall openvpn >&- 2>&- <&-
 			/etc/init.d/openvpn start ;;
+		"/tmp/.uci/system")
+			/etc/init.d/boot start ;;
 	esac
 done
 

@@ -31,6 +31,7 @@ is_bcm947xx && {
 uci_load "webif"
 
 is_kamikaze && {
+	uci_load "system"
 	uci_load "network"
 	SSL="field|@TR<<Webif SSL>>
 select|ssl_enable|$CONFIG_ssl_enable
@@ -107,7 +108,7 @@ if empty "$FORM_submit"; then
 	}
 	
 	is_kamikaze && {
-	FORM_hostname="$CONFIG_wan_hostname"
+	FORM_hostname="$CONFIG_system_hostname"
 	FORM_hostname="${FORM_hostname:-OpenWrt}"
 	#wait for ntpclient to be updated
 	#FORM_system_timezone="${FORM_system_timezone:-$(nvram get time_zone)}"
@@ -139,7 +140,7 @@ EOF
 		is_kamikaze && {
 		#to check if we actually changed hostname, else donot reload network for no reason!
 		uci_load "network"
-		if ! equal "$FORM_hostname" "$CONFIG_wan_hostname" ; then uci_set "network" "wan" "hostname" "$FORM_hostname" ; fi
+		if ! equal "$FORM_hostname" "$CONFIG_system_hostname" ; then uci_set "system" "system" "hostname" "$FORM_hostname" ; fi
 
 		uci_set "webif" "ssl" "enable" "$FORM_ssl_enable"
 		#waiting for ntpclient update
