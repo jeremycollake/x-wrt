@@ -18,7 +18,7 @@ if is_kamikaze; then
 	[ $? = 0 ] && {
 		version_url="http://downloads.x-wrt.org/xwrt/kamikaze/brcm-2.4/"
 	}
-	uname -a |grep 2.6 |grep -q i586
+	uname -a |grep 2.6 |grep -q "i\?86"
 	[ $? = 0 ] && {
 		version_url="http://downloads.x-wrt.org/xwrt/kamikaze/x86-2.6/"
 	}
