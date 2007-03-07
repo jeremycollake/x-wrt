@@ -45,7 +45,8 @@ empty "$FORM_cancel" || FORM_edit=""
 }
 
 if empty "$FORM_edit"; then
-	ls -halLe "$FORM_path" | awk \
+	(ls -halLe "$FORM_path" | grep "^[d]";
+		ls -halLe "$FORM_path" | grep "^[^d]") | awk \
 		-v url="$SCRIPT_NAME" \
 		-v path="$FORM_path" \
 		-f /usr/lib/webif/common.awk \
