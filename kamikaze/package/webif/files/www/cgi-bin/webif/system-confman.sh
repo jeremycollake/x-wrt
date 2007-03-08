@@ -6,6 +6,7 @@ COPY_FILES="/etc/*"
 COPY_DIRS="/etc"
 
 . /usr/lib/webif/webif.sh
+uci_load "system"
 
 header "System" "Backup &amp; Restore" "<img src=\"/images/bkup.jpg\" alt=\"@TR<<Backup and Restore>>\" />&nbsp;@TR<<Backup and Restore>>" ''
 
@@ -155,7 +156,7 @@ start_form|@TR<<Backup Configuration>>
 EOF
 
 cat <<EOF
-<tr><td width="70%">@TR<<Name this configuration>>:&nbsp;&nbsp;&nbsp;<input name="name" value="${FORM_name:-$(nvram get wan_hostname)}"/></td>
+<tr><td width="70%">@TR<<Name this configuration>>:&nbsp;&nbsp;&nbsp;<input name="name" value="${FORM_name:-$$CONFIG_system_hostname}"/></td>
 <td><input class="flatbtn" type="submit" name="download" value="@TR<<Backup>>" /></td>
 </tr>
 EOF
