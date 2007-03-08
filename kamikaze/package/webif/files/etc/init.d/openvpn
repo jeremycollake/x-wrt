@@ -3,6 +3,16 @@ START=60
 . /lib/config/uci.sh
 uci_load openvpn
 
+status="0"
+file_check() {
+	for file in "$@"; do
+		if [ ! -f "$file" ]; then
+			logger "$0: Missing $file. Please generate and try again."
+			status = "1"
+		fi
+	done
+}
+
 start() {
 	case "$CONFIG_general_mode" in
 		client)
@@ -14,17 +24,22 @@ start() {
 				logger "$0: remote server not configured!"
 				exit
 			}
+
+			[ "$SERVER" ] && {
+				SERVER_OPTION="--remote $SERVER --nobind"
+			}
+
 			case "$CONFIG_client_auth" in
 				cert)
-					AUTH_OPTION="--client --pkcs12"
-					AUTH_FILE="/etc/openvpn/certificate.p12"
+					file_check "/etc/openvpn/certificate.p12"
+					AUTH_OPTION="--client --pkcs12 /etc/openvpn/certificate.p12"
 				;;
 				psk)
-					AUTH_OPTION="--secret"
-					AUTH_FILE="/etc/openvpn/shared.key"
+					file_check "/etc/openvpn/shared.key"
+					AUTH_OPTION="--secret /etc/openvpn/shared.key"
 				;;
 				pem)
-					AUTH_FILE=""
+					file_check "/etc/openvpn/ca.crt" "/etc/openvpn/client.crt" "/etc/openvpn/client.key"
 					AUTH_OPTION="--client --ca /etc/openvpn/ca.crt --cert /etc/openvpn/client.crt --key /etc/openvpn/client.key"
 				;;
 				*)
@@ -32,20 +47,18 @@ start() {
 					exit
 				;;
 			esac
-			[ -f "$AUTH_FILE" ] || {
-				logger "$0: no certificat/keyfile found!"
-				exit
-			}
+
+			if [ "$status" = "0" ]; then
 			openvpn --proto  "${PROTO:-udp}"		\
 				--port   "${PORT:-1194}"		\
-				--remote "$SERVER"			\
+				$SERVER_OPTION				\
 				--dev tun				\
-				--nobind				\
-				"$AUTH_OPTION" "$AUTH_FILE"		\
+				$AUTH_OPTION				\
 				--comp-lzo				\
 				--daemon				\
 				--status /tmp/openvpn-status.log	\
 				--verb 3
+			fi
 		;;
 		server)
 			echo "Not yet implimented"
