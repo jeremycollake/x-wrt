@@ -2,8 +2,8 @@
 START=60
 . /lib/config/uci.sh
 uci_load openvpn
-case "$1" in
-	start)
+
+start() {
 	case "$CONFIG_general_mode" in
 		client)
 			SERVER="$CONFIG_client_ipaddr"
@@ -55,16 +55,15 @@ case "$1" in
 			exit 0
 		:;
 	esac	
-	;;
-	restart)
+}
+restart() {
 		$0 stop
 		sleep 3
 		$0 start
-	;;
-	reload)
+}
+reload() {
 		killall -SIGHUP openvpn
-	;;
-	stop)
+}
+stop() {
 		killall openvpn
-	;;
-esac
+}
