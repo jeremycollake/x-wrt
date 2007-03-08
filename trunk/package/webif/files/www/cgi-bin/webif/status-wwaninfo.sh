@@ -2,12 +2,16 @@
 <?
 . /usr/lib/webif/webif.sh
 
+# the comgt package has changed
+COMGT=$(which comgt)
+empty "$COMGT" && COMGT=$(which gcom)
+
 DEVICES="/dev/usb/tts/2 /dev/noz2"
 for DEV in $DEVICES
 do
-	[ -c $DEV ] && {
-		INFO=$(gcom -d $DEV info 2>/dev/null | grep -v "^####")
-		STRENGTH=$(gcom -d $DEV -s /etc/gcom/getstrength.gcom 2>/dev/null | grep "CSQ:" |
+	[ -c $DEV ] && [ -x "$COMGT" ] && {
+		INFO=$($COMGT -d $DEV info 2>/dev/null | grep -v "^####")
+		STRENGTH=$($COMGT -d $DEV -s /etc/gcom/getstrength.gcom 2>/dev/null | grep "CSQ:" |
 			cut -d: -f2 | cut -d, -f1 | sed 's/[^[:digit:]]\{1,\}\([[:digit:]]\{1,2\}\)$/\1/')
 	}
 done
@@ -25,7 +29,7 @@ start_form|@TR<<status_wwaninfo_device_info#Device Information>>
 EOF
 
 if ! empty "$INFO"; then
-	echo "$INFO" | awk -F ":" '
+	echo "$INFO" | awk -F: '
 		BEGIN {
 			print "	<tr>"
 			print "		<th>@TR<<status_wwaninfo_dev_th_Information#Information>></th>"
@@ -57,7 +61,7 @@ EOF
 EOF
 
 	# check if numeric
-	expr "$STRENGTH" + 1 >&- 2>&- && {
+	[ "$STRENGTH" -ge 0 ] 2>/dev/null && {
 		if [ "$STRENGTH" -gt 31 ]; then
 			echo "<p>@TR<<status_wwaninfo_quality_unknown#Signal quality is invalid/unknown>>: ${STRENGTH}</p>"
 		else
