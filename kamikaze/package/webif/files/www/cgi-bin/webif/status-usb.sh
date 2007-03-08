@@ -5,13 +5,18 @@
 # be followed by running the webif-sync.sh script.
 #
 . /usr/lib/webif/webif.sh
-header "Status" "USB" "@TR<<status_usb_USB_Devices#USB Devices>>"
 
 if ! empty "$FORM_umount"; then
 	if ! empty "$FORM_mountpoint"; then
-		umount $FORM_mountpoint
+		err_umount=$(umount $FORM_mountpoint 2>&1)
+		! equal "$?" "0" && {
+			ERROR="@TR<<status_usb_umount_error_in#Error in>> $err_umount"
+		}
 	fi
 fi
+
+header "Status" "USB" "@TR<<status_usb_USB_Devices#USB Devices>>"
+
 ?>
 <div class="settings">
 <h3>@TR<<status_usb_All_connected_devices#All connected devices (excluding system hubs)>></h3>
@@ -113,34 +118,39 @@ mounted_devices="$(cat /proc/mounts | grep "^/dev/scsi/")"
 			print "		<td>@TR<<status_usb_rw#Read/Write>></td>"
 		else
 			print "		<td>" $4 "</td>"
-		print "		<td><form method=\"post\" action='$SCRIPT_NAME'><input type=\"submit\" value=\" @TR<<status_usb_umount#umount>> \" name=\"umount\" /><input type=\"hidden\" value=\"" $3 "\" name=\"mountpoint\" /></form></td>"
+		print "		<td><form method=\"post\" action='$SCRIPT_NAME'><input type=\"submit\" value=\" @TR<<status_usb_umount#umount>> \" name=\"umount\" /><input type=\"hidden\" value=\"" $2 "\" name=\"mountpoint\" /></form></td>"
 		print "	</tr>"
 	}
 	END {
 		print "</tbody>"
 	}'
-}
-mnts="$(echo "$mounted_devices" | awk '
-{
-        sub(/part[[:digit:]]{1,2}/, "", $1)
-        print $1
-        print $2
-}' | sort -u | awk '
-BEGIN {
-        OFS = ""
-        ORS = ""
-        print "("
-}
-{
+
+	mnts="$(echo "$mounted_devices" | awk '
+	{
+	        sub(/\/part[[:digit:]]{1,2}.*$/, "", $1)
+    	    print $1
+    	    print $2
+	}' | sort -u | awk '
+		BEGIN {
+	        OFS = ""
+    	    ORS = ""
+    	    print "("
+	}
+	{
         if (FNR > 1) print "|"
         gsub(/\//, "\\/")
         print "^" $1
-}
-END {
+	}
+	END {
         print ")"
-}')"
-swap_devices="$(cat "/proc/swaps" 2>/dev/null | egrep "$mnts")"
-! equal "$swap_devices" "" && {
+	}')"
+}
+! empty "$mnts" && {
+	swap_devices="$(cat "/proc/swaps" 2>/dev/null | egrep "$mnts")"
+} || {
+	swap_devices="$(cat "/proc/swaps" 2>/dev/null | grep "^/dev/scsi/")"
+}
+! empty "$swap_devices" && {
 	echo "$swap_devices" | awk '
 	BEGIN {
 		odd=1
