@@ -131,6 +131,12 @@ uname -a |grep mips |grep 2.4 && cat /proc/cpuinfo |grep Broadcom
 	DeleteRepository "ftp://ftp.berlios.de/pub/xwrt/kamikaze/broadcom-2.4/packages"
 	AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/brcm-2.4/packages"
 }
+uname -a |grep mips |grep "2.6.*" && cat /proc/cpuinfo |grep Broadcom
+[ $? = 0 ] && {
+	#Delete old berlios repo before adding new repo
+	DeleteRepository "ftp://ftp.berlios.de/pub/xwrt/kamikaze/broadcom-2.6/packages"
+	AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/brcm-2.6/packages"
+}
 uname -a |grep "2.6" |grep "i\?86"
 [ $? = 0 ] && {
 	#Delete old berlios repo before adding new repo
