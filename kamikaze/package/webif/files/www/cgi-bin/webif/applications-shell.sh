@@ -22,7 +22,7 @@ HTMLHEAD="<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"htt
 <script type="text/javascript" src="/js/window.js"></script>
 <script type='text/javascript' src='/js/imgdepth.js'></script>"
 
-TIP() { 
+TIP(){ 
 if [ $1 != 0 ]; then
 style="style='width: $1px;'"
 fi
@@ -30,8 +30,7 @@ echo "<div id=\"b$tipcount\" class=\"balloonstyle\" $style>$2</div>"
 let "tipcount+=1" 
 }
 
-Load_remote_libs()
-{
+Load_remote_libs(){
 	uci_load "app.ipkg"
 	loc="$CONFIG_int_location"
 
@@ -43,20 +42,14 @@ Load_remote_libs()
 	echo "sh /tmp/.lib1.tmp ; rm /tmp/.lib1.tmp" >> /tmp/.D43S.tmp
 	echo "sh /tmp/.lib2.tmp ; rm /tmp/.lib2.tmp" >> /tmp/.D43S.tmp
 	echo "sh /tmp/.lib3.tmp ; rm /tmp/.lib3.tmp" >> /tmp/.D43S.tmp
-
-# EXPERIMENTAL!!!
-#cp /tmp/.D43S.tmp /etc/init.d/mountlibs
-#chmod 755 /etc/init.d/mountlibs
-#ln -s /etc/init.d/mountlibs /etc/rc.d/S98mountlibs
 	sh /tmp/.D43S.tmp 2> /dev/null ; rm /tmp/.D43S.tmp
 }
 
-Check_ipkg_update()
-{
+Check_ipkg_update(){
 	if  [ ! -s "/usr/lib/ipkg/lists/X-Wrt" ] || [ ! -s "/usr/lib/ipkg/lists/snapshots" ] ; then ipkg update ; fi
 }
 
-App_package_install() {
+App_package_install(){
 	if ! empty "$FORM_ipkg"; then location="-d "$FORM_ipkg ; fi
 
 	uci_load "app.ipkg"
@@ -80,36 +73,52 @@ App_package_install() {
 	if ! equal $9 "" ; then ipkg $location install $url1"$9" -force-overwrite ; fi
 }
 
-App_package_remove()
-{
+App_package_remove(){
 	echo "<font size=3>Removing $1 packag(e) ...<br><br><pre>"
 	rm /etc/config/$2 2> /dev/null
-	if ! equal $3 "" ; then remove_package "$3" ; fi
-	if ! equal $4 "" ; then remove_package "$4" ; fi
-	if ! equal $5 "" ; then remove_package "$5" ; fi
-	if ! equal $6 "" ; then remove_package "$6" ; fi
-	if ! equal $7 "" ; then remove_package "$7" ; fi
-	if ! equal $8 "" ; then remove_package "$8" ; fi
-	if ! equal $9 "" ; then remove_package "$9" ; fi
+	if ! equal $3 "" ; then ipkg remove "$3" ; fi
+	if ! equal $4 "" ; then ipkg remove "$4" ; fi
+	if ! equal $5 "" ; then ipkg remove "$5" ; fi
+	if ! equal $6 "" ; then ipkg remove "$6" ; fi
+	if ! equal $7 "" ; then ipkg remove "$7" ; fi
+	if ! equal $8 "" ; then ipkg remove "$8" ; fi
+	if ! equal $9 "" ; then ipkg remove "$9" ; fi
 	echo_remove_complete
 }
 
-echo_install_complete() {
+echo_install_complete(){
 	echo "</pre><br/><u>Installation Complete</u>"
 }
-echo_remove_complete() {
+echo_remove_complete(){
 	echo "</pre><br/><u>Uninstall Complete</u>"
 }
 
-DIV_Windows_Header()
-{
+DIV_Windows_Header(){
 	echo "<div id=\"dwindow$1\" style=\"position:absolute;background-color:#EBEBEB;cursor:hand;left:0px;top:0px;display:none;border: 1px solid black\" onMousedown=\"initializedrag(event)\" onMouseup=\"stopdrag()\" >"
 	echo "<table width='100%' border='0' ><tr bgcolor=navy><td><div align='right'><img src='/images/close.gif' onClick=\"closeit()\" alt /></div></td>"
 	echo "</tr></table>"
 }
-APP_Refresh_Page()
-{
+APP_Refresh_Page(){
 	echo "<script language='JavaScript' type='text/javascript'>"
 	echo "window.setTimeout('window.location=\"$1\"', 3000)"
 	echo "</script>$2"
+}
+
+HTML_key_option(){
+	echo "<option value='64' $1>WEP 64 bit</option><option value='128' $2>WEP 128 bit</option><option value='wpa' $3>WPA / WPA2</option>"
+}
+
+HTML_Table_TR(){
+	echo "<tr><td width='$4'><a href='#' rel='$1'>$2</a></td><td>$3</td></tr>"
+}
+
+HTML_label(){
+	if [ $2 == 0 ] ; then type="hidden" ; else type="text" ; fi
+	echo "<label>$1<input type='$type' name='$5' class='DEPENDS ON $4 BEING $3'></label>"
+}
+HTML_Table_Line(){
+	echo "<tr><td colspan='$1' height='1' bgcolor='#333333'></td></tr>"
+}
+HTML_Form(){
+	echo"<form method='post' name='$2' action='$1'>"
 }

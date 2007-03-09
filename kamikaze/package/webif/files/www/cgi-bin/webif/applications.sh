@@ -179,7 +179,7 @@ elif [ "$FORM_page" = "web" ]; then
 	</tr></table>
 EOF
 
-TIP 0 "Apache 2.2 - Powerfull webserver to serve web pages on World Wide Web."
+TIP 0 "Lighttpd 1.4 - Powerfull webserver to serve web pages on World Wide Web."
 TIP 0 "ProFTPD 1.3a - Powerfull FTP server for sharing files globally."
 TIP 0 "SQL - Massive database server"
 TIP 0 "Download Manager - Allows unattended downloads http,ftp,torrents"

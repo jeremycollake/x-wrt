@@ -6,8 +6,7 @@
 # Author(s) [in order of work date]:
 #        Dmytro Dykhman <dmytro@iroot.ca>
 #
-. /usr/lib/webif/functions.sh
-. /lib/config/uci.sh
+. /usr/lib/webif/webif.sh
 . /www/cgi-bin/webif/applications-shell.sh
 
 echo "$HEADER"
@@ -154,7 +153,7 @@ EOF
 
 		if ! empty "$FORM_chkivs"; then
 			uci_set "app.aircrack" "set" "ivs" "checked"
-		else uci_set "app.aircrack" "set" "ivs" "" ; fi
+		else	uci_set "app.aircrack" "set" "ivs" "" ; fi
 
 		uci_commit "app.aircrack"
 		exit
@@ -217,30 +216,30 @@ fi
 	}
 	</script>
 	<br/><form action='$SCRIPT_NAME' method='post' name='aircrack_cfg'>
+
 	<table width="100%" border="0" cellspacing="1">
-	<tr><td colspan="2" height="1"  bgcolor="#333333"></td></tr>
-	<tr><td><a href="#" rel="b1">Key Type:</a></td>
-	<td><select name='keytype' STYLE='width: 150px'>
 EOF
-	#### TODO...Make it a loop or something
-if [ $CFG_KEY = "64" ] ; then echo "<option value='64' selected>WEP 64 bit</option><option value='128'>WEP 128 bit</option><option value='wpa'>WPA / WPA2</option>"
-elif [ $CFG_KEY = "128" ] ; then echo "<option value='64'>WEP 64 bit</option><option value='128' selected>WEP 128 bit</option><option value='wpa'>WPA / WPA2</option>"
-elif [ $CFG_KEY = "wpa" ] ; then echo "<option value='64'>WEP 64 bit</option><option value='128'>WEP 128 bit</option><option value='wpa' selected>WPA / WPA2</option>"
-fi
-	cat <<EOF
-	</select></td></tr>
-	<tr><td width="200"><a href="#" rel="b2">CAP/IVS File:</a></td><td><input name="aircpath" type="text" value="$CFG_CPATH" /></td></tr>
-	<tr><td width="200"><a href="#" rel="b3"><label>WPA Keys File:<input type='hidden' class="DEPENDS ON keytype BEING wpa" /></label></a></td><td><input name='wpapath' type='text' value="$CFG_WPATH" class="DEPENDS ON keytype BEING wpa" /></td></tr>
-	<tr><td>&nbsp;</td><td><input type="checkbox" name="aircrack_startup" $CFG_BOOTAIR />&nbsp;Run on boot</td></tr>
-	<tr><td colspan="2" height="1" bgcolor="#333333"></td></tr>	
-	<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-	<tr><td>&nbsp;</td><td><input name="page" type="hidden" value="$FORM_page" /><input type="submit" class='flatbtn' name="save_aircrack" value="Save" /></td>
-	</tr></table></form>
-EOF
+	HTML_Table_Line 2
+	echo "<tr><td><a href='#' rel='b1'><br/>Key Type:</a></td><td><br/><select name='keytype' STYLE='width: 150px'>"
+	if [ $CFG_KEY = "64" ] ; then HTML_key_option "selected"
+	elif [ $CFG_KEY = "128" ] ; then HTML_key_option "" "selected"
+	elif [ $CFG_KEY = "wpa" ] ; then HTML_key_option "" "" "selected"
+	fi
+	echo "</select></td></tr>"
+
+	HTML_Table_TR "b2" "CAP/IVS File:" "<input name='aircpath' type='text' value='$CFG_CPATH' />" 200
+	HTML_Table_TR "b3" "<label>WPA Keys File:<input type='hidden' class='DEPENDS ON keytype BEING wpa' /></label>" "<input name='wpapath' type='text' value='$CFG_WPATH' class='DEPENDS ON keytype BEING wpa' /><br/>" 
+	HTML_Table_Line 2
+	HTML_Table_TR "" "" "<input type="checkbox" name="aircrack_startup" $CFG_BOOTAIR />&nbsp;Run on boot<br/><br/>"
+	HTML_Table_TR "" "" "<input name='page' type='hidden' value='$FORM_page' /><input type='submit' class='flatbtn' name='save_aircrack' value='Save' />"
+
+	echo "</table></form>"
+
 	TIP 0 "Encryption key"
 	TIP 0 "Path to captured .cap or .ivs file"
 exit
 elif [ "$FORM_page" = "airodump" ]; then ########################
+
 
 	####### Check if airodump is running
 	if [ $(ps ax | grep -c airodump-ng) = "1" ] ; then
@@ -257,16 +256,16 @@ EOF
 	<strong>AiroDump Configuration</strong><br/>
 	<br/><form action='$SCRIPT_NAME' method='post'>
 	<table width="100%" border="0" cellspacing="1">
-	<tr><td colspan="2" height="1"  bgcolor="#333333"></td></tr>
-	<tr><td width="200"><a href="#" rel="b1">Storage Path</a></td><td><input name="airdpath" type="text" value="$CFG_PATH" /></td></tr>
-	<tr><td width="200"><a href="#" rel="b2">Channel</a></td><td><input name="airchannel" type="text" value="$CFG_CHANNEL" /></td></tr>
-	<tr><td>&nbsp;</td><td><input type="checkbox" name="chkivs" $CFG_IVS />&nbsp;Save only captured IVs</td></tr>		
-	<tr><td>&nbsp;</td><td><input type="checkbox" name="airodump_startup" $CFG_BOOTDUMP />&nbsp;Run on boot</td></tr>
-	<tr><td colspan="2" height="1" bgcolor="#333333"></td></tr>	
-	<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-	<tr><td>&nbsp;</td><td><input name="page" type="hidden" value="$FORM_page" /><input type="submit" class='flatbtn' name="save_airodump" value="Save" /></td>
-	</tr></table></form>
 EOF
+	HTML_Table_Line 2
+	HTML_Table_TR "b1" "<br/>Storage Path:" "<br/><input name='airdpath' type='text' value='$CFG_PATH' />" 200
+	HTML_Table_TR "b2" "Channel:" "<input name='airchannel' type='text' value='$CFG_CHANNEL' />"
+	HTML_Table_TR "" "" "<input type='checkbox' name='chkivs' $CFG_IVS />&nbsp;Save only captured IVs"
+	HTML_Table_Line 2
+	HTML_Table_TR "" "" "<input type='checkbox' name='airodump_startup' $CFG_BOOTDUMP />&nbsp;Run on boot<br/><br/>"
+	HTML_Table_TR "" "" "<input name='page' type='hidden' value='$FORM_page' /><input type='submit' class='flatbtn' name='save_airodump' value='Save' />"
+	echo "</table></form>"
+
 	TIP 0 "Path where airodump-ng will store IVS."
 	TIP 0 "Set specific channel to scan. [nothing = all]"
 exit
