@@ -37,7 +37,7 @@ string|<div class=\"warning\">$service will not work until you install the $serv
 submit|install_$service|@TR<<Install>> $service @TR<<Package>>|"
 
 		js="$js
-v = isset('FORM_ddns_service','$service');
+v = isset('ddns_service','$service');
 set_visible('install_$service', v);"
 
 		eval FORM_installer="\$FORM_install_$service"
@@ -51,7 +51,7 @@ set_visible('install_$service', v);"
 done
 
 if empty "$FORM_submit"; then
-	uci_load "ddns"
+	uci_load "updatedd"
 	config_get FORM_ddns_service cfg1 ddns_service 
 	config_get FORM_ddns_user    cfg1 ddns_user
 	config_get FORM_ddns_passwd  cfg1 ddns_passwd
@@ -68,11 +68,11 @@ string|FORM_ddns_host|@TR<<Host Name>>||$FORM_ddns_host
 #int|FORM_ddns_max_interval|@TR<<Max Interval (sec)>>|min=86400 max=2196000|$FORM_ddns_max_interval
 EOF
 	equal "$?" 0 && {
-		uci_set "ddns" "cfg1" "update" "$FORM_ddns_update"
-		uci_set "ddns" "cfg1" "service" "$FORM_ddns_service"
-		uci_set "ddns" "cfg1" "user" "$FORM_ddns_user"
-		uci_set "ddns" "cfg1" "passwd" "$FORM_ddns_passwd"
-		uci_set "ddns" "cfg1" "host" "$FORM_ddns_host"
+		uci_set "updatedd" "cfg1" "ddns_update" "$FORM_ddns_update"
+		uci_set "updatedd" "cfg1" "ddns_service" "$FORM_ddns_service"
+		uci_set "updatedd" "cfg1" "ddns_user" "$FORM_ddns_user"
+		uci_set "updatedd" "cfg1" "ddns_passwd" "$FORM_ddns_passwd"
+		uci_set "updatedd" "cfg1" "ddns_host" "$FORM_ddns_host"
 	}
 fi
 
@@ -97,24 +97,24 @@ display_form <<EOF
 onchange|modechange
 start_form|@TR<<DynDNS>>
 field|@TR<<Dynamic DNS Update>>
-radio|FORM_ddns_update|$FORM_ddns_update|1|@TR<<Enable>>
-radio|FORM_ddns_update|$FORM_ddns_update|0|@TR<<Disable>>
+radio|ddns_update|$FORM_ddns_update|1|@TR<<Enable>>
+radio|ddns_update|$FORM_ddns_update|0|@TR<<Disable>>
 field|@TR<<Service Type>>
-select|FORM_ddns_service|$FORM_ddns_service
+select|ddns_service|$FORM_ddns_service
 $service_option
 $package_checker
 end_form
 
 start_form|@TR<<Account>>
 field|@TR<<User Name>>
-text|FORM_ddns_user|$FORM_ddns_user
+text|ddns_user|$FORM_ddns_user
 field|@TR<<Password>>
-password|FORM_ddns_passwd|$FORM_ddns_passwd
+password|ddns_passwd|$FORM_ddns_passwd
 end_form
 
 start_form|@TR<<Host>>
 field|@TR<<Host Name>>
-text|FORM_ddns_host|$FORM_ddns_host
+text|ddns_host|$FORM_ddns_host
 
 #field|@TR<<Wildcard>>
 #radio|ddns_wildcard|$FORM_ddns_wildcard|1|@TR<<Enable>>

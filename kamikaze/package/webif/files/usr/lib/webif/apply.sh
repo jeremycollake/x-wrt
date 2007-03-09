@@ -403,9 +403,9 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 			/etc/init.d/openvpn start ;;
 		"/tmp/.uci/system")
 			/etc/init.d/boot start ;;
-		"/tmp/.uci/ddns")
-			/etc/init.d/ddns stop
-			/etc/init.d/ddns start;;
+		"/tmp/.uci/updatedd")
+			/etc/init.d/ddns stop >&- 2>&- <&-
+			/etc/init.d/ddns start >&- 2>&- <&- ;;
 	esac
 done
 
