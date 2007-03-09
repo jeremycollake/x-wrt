@@ -165,7 +165,14 @@ for device in $DEVICES; do
 		eval FORM_distance="\$FORM_distance_$device"
 	fi
         append forms "start_form|@TR<<Wireless Adapter>> $device @TR<< Configuration>>" "$N"
-        
+        if [ "$iftype" = "broadcom" ]; then
+        	append forms "helpitem|Broadcom Wireless Configuration" "$N"
+		append forms "helptext|Helptext Broadcom Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-3x ap or 1-4x ap or 1x adhoc" "$N"
+	elif [ "$iftype" = "atheros" ]; then
+        	append forms "helpitem|Atheros Wireless Configuration" "$N"
+		append forms "helptext|Helptext Atheros Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-4x ap or 1-4x ap or 1x adhoc" "$N"
+	fi
+	
         if [ "$iftype" = "atheros" ]; then
         mode_fields="field|@TR<<Mode>>
 		select|mode_ap_$device|$FORM_ap_mode
@@ -204,18 +211,21 @@ for device in $DEVICES; do
 	append forms "$BG_CHANNELS" "$N"
 	append forms "$A_CHANNELS" "$N"
 	
+	#Currently broadcom only.
+	if [ "$iftype" = "broadcom" ]; then
         maxassoc="field|@TR<<Max Associated Clients (Default 128)>>
                 text|maxassoc_${device}|$FORM_maxassoc"
 
         distance="field|@TR<<Wireless Distance (In Meters)>>
                 text|distance_${device}|$FORM_distance"
 
-	add_vcfg="string|<tr><td><a href=$SCRIPT_NAME?add_vcfg=$device&amp;add_vcfg_number=$vcfg_number>@TR<<Add Virtual Interface>></a>"
+	        append forms "$maxassoc" "$N"
+	        append forms "$distance" "$N"
+	        append forms "helpitem|Wireless Distance" "$N"
+        	append forms "helptext|Helptext Wireless Distance#You must enter a number that is double the distance of your longest link." "$N"
+        fi
 
-        append forms "$maxassoc" "$N"
-        append forms "$distance" "$N"
-        append forms "helpitem|Wireless Distance" "$N"
-        append forms "helptext|Helptext Wireless Distance#You must enter a number that is double the distance of your longest link." "$N"
+	add_vcfg="string|<tr><td><a href=$SCRIPT_NAME?add_vcfg=$device&amp;add_vcfg_number=$vcfg_number>@TR<<Add Virtual Interface>></a>"
         append forms "$add_vcfg" "$N"
         append forms "end_form" "$N"
 
@@ -286,6 +296,8 @@ for device in $DEVICES; do
 			option|sta|@TR<<Client>>
 			option|adhoc|@TR<<Ad-Hoc>>"
 			append forms "$mode_fields" "$N"
+			append forms "helpitem|WDS Connections" "$N"
+			append forms "helptext|Helptext WDS Connections#Enter the MAC addresse of the router on your network that should be wirelessly connected to. The other router must also support wds and have the mac address of this router entered." "$N"
 
 			hidden="field|@TR<<ESSID Broadcast>>|broadcast_form_$vcfg|hidden
 				select|broadcast_$vcfg|$FORM_hidden
