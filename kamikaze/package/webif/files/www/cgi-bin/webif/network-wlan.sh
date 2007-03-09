@@ -222,7 +222,7 @@ for device in $DEVICES; do
 	        append forms "$maxassoc" "$N"
 	        append forms "$distance" "$N"
 	        append forms "helpitem|Wireless Distance" "$N"
-        	append forms "helptext|Helptext Wireless Distance#You must enter a number that is double the distance of your longest link." "$N"
+        	append forms "helptext|Helptext Wireless Distance#You must enter a number that is the distance of your longest link." "$N"
         fi
 
 	add_vcfg="string|<tr><td><a href=$SCRIPT_NAME?add_vcfg=$device&amp;add_vcfg_number=$vcfg_number>@TR<<Add Virtual Interface>></a>"
