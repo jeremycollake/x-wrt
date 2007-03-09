@@ -297,7 +297,7 @@ for device in $DEVICES; do
 			option|adhoc|@TR<<Ad-Hoc>>"
 			append forms "$mode_fields" "$N"
 			append forms "helpitem|WDS Connections" "$N"
-			append forms "helptext|Helptext WDS Connections#Enter the MAC addresse of the router on your network that should be wirelessly connected to. The other router must also support wds and have the mac address of this router entered." "$N"
+			append forms "helptext|Helptext WDS Connections#Enter the MAC address of the router on your network that should be wirelessly connected to. The other router must also support wds and have the mac address of this router entered." "$N"
 
 			hidden="field|@TR<<ESSID Broadcast>>|broadcast_form_$vcfg|hidden
 				select|broadcast_$vcfg|$FORM_hidden
