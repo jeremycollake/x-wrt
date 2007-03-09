@@ -1,3 +1,68 @@
+BEGIN {
+	cgidir="/www/cgi-bin/webif"
+	rootdir="/cgi-bin/webif"
+	indexpage="index.sh"
+}
+
+function categories(n, i, sel, categories) {
+	n = 0
+	sel = 0
+	FS = ":"
+	
+	while (("grep '##WEBIF:' "cgidir"/.categories "cgidir"/*.awx "cgidir"/*.sh 2>/dev/null" | getline) == 1) {
+		if (($3 == "category") && (categories !~ /:$4:/)) {
+			categories = categories ":" $4 ":";
+			n++
+			if ($4 ~ "^" CATEGORY "$") sel = n
+			c[n] = $4
+			if (f[$4] == "") f[$4] = rootdir "/" indexpage "?cat=" $4
+		}
+		if (($3 == "name") && ((p[$4] == 0) || (p[$4] > int($5)))) {
+			gsub(/^.*\//, "", $1)
+			p[$4] = int($5) + 1
+			f[$4] = rootdir "/" $1
+		}
+	}
+	print "<ul>"
+	for (i = 1; i <= n; i++) {
+		if (sel == i) print "   <li class=\"selected\"><a href=\"" f[c[i]] "\">@TR<<" c[i] ">></a></li>"
+		else {
+			if (c[i] == "-") print " <li class=\"separator\">-</li>" 
+			else print " <li><a href=\"" f[c[i]] "\">@TR<<" c[i] ">></a></li>";
+		}
+	}
+	print "</ul>"
+	return ""
+}
+
+function subcategories() {
+	FS = ":"
+	print "<h3><strong>@TR<<Subcategories>>:</strong></h3>"
+	print "<ul>"
+	while (("grep -H '##WEBIF:name:"CATEGORY":' "cgidir"/*.awx "cgidir"/*.sh 2>/dev/null | sed -e 's,^.*/\\([a-zA-Z\\.\\-]*\\):\\(.*\\)$,\\2:\\1,' | sort -n" | getline) == 1) {
+		if ($5 ~ "^"PAGENAME"$") print "	<li class=\"selected\"><a href=\"" rootdir "/" $6 "\">@TR<<" $5 ">></a></li>"
+		else print "	<li><a href=\"" rootdir "/" $6 "\">@TR<<" $5 ">></a></li>"
+	}
+	print "</ul>"
+	return ""
+}
+
+function status() {
+	return ""
+}
+
+function num_changes(counter) {
+	counter=0
+	while (("(cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*; find '/tmp/.webif/edited-files' -type f) 2>&-" | getline) == 1) {
+		counter++
+	}
+	while (("grep -E '(CONFIG_SECTION|uci_)' /tmp/.uci/* 2>&-" | getline) == 1) {
+		counter++
+	}
+	return counter
+}
+
+
 function start_form(title, field_opts, field_opts2) {
 	print "<div class=\"settings\"" field_opts ">"
 	if (title != "") print "<h3><strong>" title "</strong></h3>"

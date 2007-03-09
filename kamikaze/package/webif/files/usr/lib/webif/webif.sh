@@ -22,21 +22,21 @@ indexpage=index.sh
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
 
+awk_call() {
+	local cmd="$1"; shift
+	awk "$@" -f /usr/lib/webif/common.awk -f - <<EOF
+BEGIN {
+	$cmd
+}
+EOF
+}
+
 categories() {
-	grep '##WEBIF:' $cgidir/.categories $cgidir/*.sh 2>/dev/null | \
-		awk -v "selected=$1" \
-			-v "rootdir=$rootdir" \
-			-v "indexpage=$indexpage" \
-			-f /usr/lib/webif/categories.awk -
+	awk_call 'categories()' -v CATEGORY="$1" 
 }
 
 subcategories() {
-	grep -H "##WEBIF:name:$1:" $cgidir/*.sh 2>/dev/null | \
-		sed -e 's,^.*/\([a-zA-Z\.\-]*\):\(.*\)$,\2:\1,' | \
-		sort -n | \
-		awk -v "selected=$2" \
-			-v "rootdir=$rootdir" \
-			-f /usr/lib/webif/subcategories.awk -
+	awk_call 'subcategories()' -v CATEGORY="$1" -v PAGENAME="$2" 
 }
 
 ShowWIPWarning() {
@@ -52,17 +52,7 @@ ShowNotUpdatedWarning() {
 }
 
 update_changes() {
-	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))
-	EDITED_FILES=$(find "/tmp/.webif/edited-files" -type f 2>&- | wc -l)
-	CHANGES=$(($CHANGES + $EDITED_FILES))
-	# calculate and add number of pending uci changes
-	for uci_tmp_file in $(ls /tmp/.uci/* 2>&-); do
-		CHANGES_CUR=$(cat "$uci_tmp_file" | grep CONFIG_SECTION | wc -l)
-		CHANGES=$(($CHANGES + $CHANGES_CUR))
-		# force CHANGES to be non-zero since with this count method some 
-		# pending changes won't be counted.
-		equal "$CHANGES" "0" && CHANGES=1
-	done
+	CHANGES="$(awk_call 'print num_changes()')"
 }
 
 pcnt=0
@@ -360,3 +350,4 @@ handle_list() {
 		return 0
 	fi
 }
+
