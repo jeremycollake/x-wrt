@@ -3,7 +3,7 @@ BEGIN {
 	gsub(/^\/\//, "/", path)
 	print "<div class=\"settings\">"
 	print "<h3><strong>@TR<<browser_Filesystem_Browser#Filesystem Browser>>: " path "</strong></h3>"
-	print "<table style=\"margin-left: 2.5em; text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"3\" cellspacing=\"3\" summary=\"@TR<<browser_Filesystem_Browser#Filesystem Browser>>\">"
+	print "<table style=\"margin-left: 2.5em; text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"3\" cellspacing=\"1\" summary=\"@TR<<browser_Filesystem_Browser#Filesystem Browser>>\">"
 	print "<tbody>"
 	print "	<tr>"
 	print "		<td><img src=\"/images/dir.gif\" alt=\"\" /></td>"
@@ -42,11 +42,10 @@ type == "d" {
 
 type == "-" {
 	line = "		<td><img src=\"/images/file.gif\" alt=\"@TR<<browser_File#File>>\" /></td>\n"
-	line = line "		<td>" fname "</td>\n"
+	line = line "		<td><a href=\"/cgi-bin/webif/download.sh?script=" url "&amp;path=" path "&amp;savefile=" fname "\">" fname "</a></td>\n"
 	line = line "		<td align=\"right\">" fsize "</td>\n"
 	line = line "		<td><a href=\"" url "?path=" path "&amp;edit=" fname "\"><img src=\"/images/action_edit.gif\" alt=\"@TR<<browser_Edit#Edit>>\" /></a></td>\n"
-	line = line "		<td><a href=\"" url "?path=" path "&amp;savefile=" fname "\"><img src=\"/images/action_sv.gif\" alt=\"@TR<<browser_Download#Download>>\" /></a></td>\n"
-	line = line "		<td><a href=\"javascript:confirmT('" path  "','" fname "')\"><img src=\"/images/action_x.gif\" alt=\"@TR<<browser_Delete#Delete>>\" /></a></td>"
+	line = line "		<td><a href=\"javascript:confirm_delete('" path  "','" fname "')\"><img src=\"/images/action_x.gif\" alt=\"@TR<<browser_Delete#Delete>>\" /></a></td>\n"
 }
 
 (fname != ".") && (fname != "") {
@@ -58,7 +57,7 @@ type == "-" {
 		odd++
 	}
 	print line
-	print "	</tr>\n"
+	print "	</tr>"
 }
 
 END {

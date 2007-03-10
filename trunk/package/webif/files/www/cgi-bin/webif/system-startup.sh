@@ -19,6 +19,38 @@
 #
 . /usr/lib/webif/webif.sh
 
+header_inject_head=$(cat <<EOF
+<script type="text/javascript">
+<!--
+function webif_entityDecode(s) {
+    var e = document.createElement("div");
+    e.innerHTML = s;
+    return e.firstChild.nodeValue;
+}
+
+webif_printf = function() {
+	var num = arguments.length;
+	var output = arguments[0];
+	for (var i = 1; i < num; i++) {
+		var pattern = "\\\{" + (i-1) + "\\\}";
+		var re = new RegExp(pattern, "g");
+		output = output.replace(re, arguments[i]);
+	}
+	return output;
+}
+
+function confirm_delete(path,file) {
+	if (window.confirm(webif_entityDecode(webif_printf("@TR<<big_warning#WARNING>>!\n\n@TR<<system_startup_ask_deletition#Do you really want to delete the '{0}' file>>?", file)))) {
+		window.location=escape("$SCRIPT_NAME?path=" + path + "&delfile=" + file);
+	}
+}
+-->
+</script>
+
+EOF
+)
+
+
 header "System" "Startup" "@TR<<Startup>>" ''
 
 # defaults
@@ -45,8 +77,8 @@ empty "$FORM_cancel" || FORM_edit=""
 }
 
 if empty "$FORM_edit"; then
-	(ls -halLe "$FORM_path" | grep "^[d]";
-		ls -halLe "$FORM_path" | grep "^[^d]") | awk \
+	(ls -halLe "$FORM_path" 2>/dev/null | grep "^[d]";
+		ls -halLe "$FORM_path" 2>/dev/null | grep "^[^d]") | awk \
 		-v url="$SCRIPT_NAME" \
 		-v path="$FORM_path" \
 		-f /usr/lib/webif/common.awk \
@@ -63,7 +95,6 @@ else
 		-f /usr/lib/webif/common.awk \
 		-f /usr/lib/webif/editor.awk
 fi
-
 
 footer ?>
 <!--
