@@ -108,6 +108,14 @@ HTML_key_option(){
 	echo "<option value='64' $1>WEP 64 bit</option><option value='128' $2>WEP 128 bit</option><option value='wpa' $3>WPA / WPA2</option>"
 }
 
+HTML_Table(){
+	if equal $1 "1" ; then echo "<table width='$2' border='0' cellspacing='1' bgcolor='#000000'><tr bgcolor='#FFFFFF'><td>" ; fi
+	echo "<table width='$2' border='0' cellspacing='1'><tr bgcolor='#$3' $4>"
+	for i in `seq 1 $5`; do
+	if [ $i -eq 1 ]; then n=$6; elif [ $i -eq 2 ]; then n=$7; elif [ $i -eq 3 ]; then n=$8; elif [ $i -eq 4 ]; then n=$9; else n=""; fi
+	echo "<td $(echo $n | awk '{ print $2 }')>&nbsp;$(echo $n | awk '{ print $1 }' | sed -e s/'_'/' '/g)&nbsp;</td>"
+	done; echo "</tr>"
+}
 HTML_Table_TR(){
 	echo "<tr><td width='$4'><a href='#' rel='$1'>$2</a></td><td>$3</td></tr>"
 }
@@ -120,5 +128,5 @@ HTML_Table_Line(){
 	echo "<tr><td colspan='$1' height='1' bgcolor='#333333'></td></tr>"
 }
 HTML_Form(){
-	echo"<form method='post' name='$2' action='$1'>"
+	echo "<form method='post' name='$2' action='$1' enctype='multipart/form-data'>"
 }

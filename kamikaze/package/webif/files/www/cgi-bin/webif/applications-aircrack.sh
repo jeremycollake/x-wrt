@@ -274,8 +274,7 @@ elif [ "$FORM_page" = "airoplay" ]; then ########################
 exit
 else						########################
 
-	echo "<table width="85%" border="0" cellspacing="1" bgcolor="#000000" align='center'><tr bgcolor='#FFFFFF'><td><table width='100%' border='0'>"
-	echo "<tr bgcolor='#999999'><td width='80%'><center>Captured File</center></td><td><center>IVs</center></td><td><center>Action</center></td></tr>"
+	HTML_Table 1 "100%" "999999" "align='center'" 3 "Captured_File width='80%'" "IVS" "Action"
 
 	if [ "$FORM_page" = "showstatus" ]; then
 		echo "<tr><td bgcolor="#FFFFFF"><pre><font size=2>$(grep '' < $CFG_PATH/$FORM_file.txt)</font></pre></td></tr>"

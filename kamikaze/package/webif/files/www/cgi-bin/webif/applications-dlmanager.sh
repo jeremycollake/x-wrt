@@ -1,4 +1,4 @@
-#!/usr/bin/webif-page "-U /tmp"
+#!/usr/bin/webif-page "-U /tmp -u 4096"
 <?
 #########################################
 # Applications Download Manager
@@ -22,7 +22,9 @@ if ! empty "$FORM_package"; then
 	##### Make config file
 
 	if [ ! -s "/etc/config/app.dlmanager" ] ; then 
-	echo "config dlmanager http
+	echo "config dlmanager general
+	option tmp	'/etc/dlmanager'
+config dlmanager http
 	option destination	'/mnt/sd'
 config dlmanager ftp
 	option destination	'/mnt/sd'
@@ -59,6 +61,7 @@ if  is_package_installed "ctorrent"  &&  is_package_installed "curl"  ; then
 
 	######## Read config
 	uci_load "app.dlmanager"
+	TMP_PATH="$CONFIG_general_tmp"
 	HTTP_PATH="$CONFIG_http_destination"
 	TORRENT_PATH="$CONFIG_torrent_destination"
 
@@ -75,24 +78,22 @@ if  is_package_installed "ctorrent"  &&  is_package_installed "curl"  ; then
 	</ul></div><br/>
 EOF
 GetFilenameFromPath(){
-
-	echo $1 | sed -e s/' '/'_'/g -e s/'\\'/'\n'/g | awk '{ print $1 }' | while read output;
+	echo $1 | sed -e s/'\\'/'\n'/g | awk '{ print $1 }' | while read output;
 	do echo $output > /tmp/.filename
 	done
 	filename=$(grep '' < /tmp/.filename)
 }
-##################################################################
+##########################################################
 	if ! equal "$FORM_uploadbt" ""; then
 		APP_Refresh_Page $SCRIPT_NAME?page=$FORM_page "<br/>File sucessfully uploaded ...</br>"
-		GetFilenameFromPath $FORM_uploadname
-
-		mv  $FORM_uploadbt /etc/dlmanager/torrents/$filename
+		GetFilenameFromPath $(echo $FORM_uploadname | sed -e s/' '/'_'/g)
+		mv  $FORM_uploadbt $TMP_PATH/torrents/$filename
 		exit
 	fi
 
 	if ! equal "$FORM_urlbt" ""; then
 		APP_Refresh_Page $SCRIPT_NAME?page=$FORM_page "<br/>File is downloading ...</br>"
-		wget -q $FORM_urlbt -P /etc/dlmanager/torrents/
+		wget -q $FORM_urlbt -P $TMP_PATH/torrents/
 		exit
 	fi
 
@@ -101,24 +102,24 @@ GetFilenameFromPath(){
 		if  [ -s "$HTTP_PATH/$filename" ]  ; then
 			APP_Refresh_Page $SCRIPT_NAME?page=$FORM_page "<br/><font color=red>File already exist in \"$HTTP_PATH\" ...</font></br>"
 		else	APP_Refresh_Page $SCRIPT_NAME?page=$FORM_page "<br/>Adding File to List ...</br>"
-			echo "$FORM_urlhttp" > /etc/dlmanager/http/$filename
+			echo "$FORM_urlhttp" > $TMP_PATH/http/$filename
 		fi
 		exit
 	fi
 
 	if ! equal "$FORM_start_torrent" ""; then
 		APP_Refresh_Page $SCRIPT_NAME?page=$FORM_page "<br/>Starting torrent download ...</br>"
-		ctorrent -e 0 -s /mnt/ /etc/dlmanager/torrents/$FORM_file
+		ctorrent -e 0 -s /mnt/ $TMP_PATH/torrents/$FORM_file
 		exit
 	fi
 
 	if ! equal "$FORM_start_http" ""; then
 		APP_Refresh_Page $SCRIPT_NAME?page=$FORM_page "<br/>Starting HTTP download ...</br>"
-		FILE_PATH=$(grep '' < /etc/dlmanager/http/$FORM_file )
-		curl -I $FILE_PATH > /etc/dlmanager/http/.$FORM_file 2> /dev/null ###To read the HTTP header first for fileinfo (size)
+		FILE_PATH=$(grep '' < $TMP_PATH/http/$FORM_file )
+		curl -I $FILE_PATH > $TMP_PATH/http/.$FORM_file 2> /dev/null ###To read the HTTP header first for fileinfo (size)
 		curl -o $HTTP_PATH/$FORM_file $FILE_PATH 2> /dev/null
-		mv /etc/dlmanager/http/$FORM_file /etc/dlmanager/history/$FORM_file
-		rm /etc/dlmanager/http/.$FORM_file
+		mv $TMP_PATH/http/$FORM_file $TMP_PATH/history/$FORM_file
+		rm $TMP_PATH/http/.$FORM_file
 		exit
 	fi
 
@@ -136,7 +137,7 @@ GetFilenameFromPath(){
 	fi
 if [ "$FORM_page" = "http" ]; then
 
-	echo "<strong>Status</strong><br><br><hr>"
+	echo "<strong>Status</strong><br/><br/>"
 	if [ $(ps ax | grep -c curl) = "1" ] ; then 
 		echo "<div class=warning>HTTP downloading stopped</div><br/><br/>"
 	else echo "<form method="post" action='$SCRIPT_NAME'><font color="#33CC00">HTTP downloading sucessfully started</font>&nbsp;&nbsp;<input type="submit" name="stop_http" class='flatbtn' value='Stop All Downloads' /></form><br/><br/>"
@@ -147,18 +148,16 @@ function java1() {
 document.addnew.uploadname.value = document.addnew.urlhttp.value;
 }
 </script>
-
-<form method='post'  name='addnew' action='$SCRIPT_NAME' enctype='multipart/form-data' >
-<strong>Add New File</strong><br/><br/>
-<table width="100%" border="0" cellspacing="1">
 EOF
+	HTML_Form $SCRIPT_NAME "addnew"
+	echo "<strong>Add New File</strong><br/><br/><table width='100%' border='0'>"
 	HTML_Table_Line 2
-	HTML_Table_TR "b1" "URL Address:" "<input type="text" name='urlhttp' /><input type="hidden" name="uploadname" />&nbsp;&nbsp;<input type="submit" class='flatbtn' value='Add to List' onClick='java1()' />"
+	HTML_Table_TR "b1" "URL Address:" "<input type="text" name='urlhttp' /><input type="hidden" name="uploadname" />&nbsp;&nbsp;<input type="submit" class='flatbtn' value='Add to List' onClick='java1()' />" 200
 	HTML_Table_Line 2
-	HTML_Table_TR "b2" "Destination:" "<br/><input type="text" name='dest' value='$HTTP_PATH' /><br/><br/>"
+	HTML_Table_TR "b2" "Destination:" "<br/><input type="text" name='dest' value='$HTTP_PATH' /><br/><br/>" 0
 	HTML_Table_Line 2
-	HTML_Table_TR "" "" "<input type="checkbox" name="http_startup" $CFG_BOOTAIR />&nbsp;Start downloading on boot<br/><br/>"
-	HTML_Table_TR "" "" "<input name='page' type='hidden' value='$FORM_page' /><input type='submit' class='flatbtn' name='save_http' value='Save Settings' />"
+	HTML_Table_TR "" "" "<input type="checkbox" name="http_startup" $CFG_BOOTAIR />&nbsp;Start downloading on boot<br/><br/>" 0
+	HTML_Table_TR "" "" "<input name='page' type='hidden' value='$FORM_page' /><input type='submit' class='flatbtn' name='save_http' value='Save Settings' />" 0
 	echo "</table></form>"
 
 	TIP 0 "Specify URL address of web file"
@@ -166,18 +165,14 @@ EOF
 
 	if [ "$FORM_do" = "del_http" ]; then
 		echo "<br/><font color=red>Web File \"$FORM_file\" deleted</font></br/><br/>"
-		rm /etc/dlmanager/http/$FORM_file
+		rm $TMP_PATH/http/$FORM_file
 	fi
 
-	cat <<EOF
-Web File List:<br/><br/>
-<table width="100%" border="0" cellspacing="1" bgcolor="#000000" align='center'><tr bgcolor='#FFFFFF'><td><table width='100%' border='0'>
-<tr bgcolor='#999999'><td width='80%'><center>File Name</center></td><td><center>Status</center></td><td><center>Action</center></td></tr>
-EOF
+	echo "Web File List:<br/><br/>"
+	HTML_Table 1 "100%" "999999" "align='center'" 3 "File_Name width='80%'" "Status" "Action"
 
-	ls /etc/dlmanager/http | while read output;
-	do
-		if [ "$color" = "#FFFFFF" ] ; then color="#E6E6E6" ; else color="#FFFFFF" ; fi
+	ls $TMP_PATH/http | while read output;
+	do	if [ "$color" = "#FFFFFF" ] ; then color="#E6E6E6" ; else color="#FFFFFF" ; fi
 		echo "<tr bgcolor='$color'><td>&nbsp;$output</td><td><center>?</center></td><td><center><a href='$SCRIPT_NAME?page=http&start_http=1&file=$output'><img src='/images/action_ok.gif' alt='Start Download' /></a>&nbsp;<a href='$SCRIPT_NAME?page=http&do=del_http&file=$output'><img src='/images/action_x.gif' alt='Delete' /></a></center></td></tr>"	
 	done
 
@@ -186,7 +181,7 @@ elif [ "$FORM_page" = "ftp" ]; then
 
 elif [ "$FORM_page" = "torrent" ]; then
 
-	echo "<strong>Status</strong><br><br><hr>"
+	echo "<strong>Status</strong><br/><br/>"
 	if [ $(ps ax | grep -c ctorrent) = "1" ] ; then 
 		echo "<div class=warning>Torrent downloading stopped</div><br/><br/>"
 	else echo "<form method="post" action='$SCRIPT_NAME'><font color="#33CC00">Torrent Client is sucessfully started</font>&nbsp;&nbsp;<input type="submit" name="stop_torrent" class='flatbtn' value='Stop All Downloads' /></form><br/><br/>"
@@ -198,20 +193,18 @@ function java1() {
 document.addnew.uploadname.value = document.addnew.uploadbt.value;
 }
 </script>
-
-<form method='post' name='addnew' action='$SCRIPT_NAME' enctype='multipart/form-data' >
-<strong>Add New Torrent</strong><br/><br/>
-<table width="100%" border="0" cellspacing="1">
 EOF
+	HTML_Form $SCRIPT_NAME "addnew"
+	echo "<strong>Add New Torrent</strong><br/><br/><table width='100%' border='0'>"
 
 	HTML_Table_Line 2
-	HTML_Table_TR "b1" "Local torrent:" "<input type="file" class="flatbtn" name="uploadbt" /><input type="hidden" name="uploadname" />&nbsp;&nbsp;<input type='submit' class='flatbtn' value='   Upload  ' onClick='java1()' />" 200
-	HTML_Table_TR "b2" "Web torrent:" "<input type="text" class="flatbtn" name='urlbt' size='34' />&nbsp;&nbsp;<input type="submit" class='flatbtn' value='Download' />"
+	HTML_Table_TR "b1" "Local torrent:" "<input type='file' class='flatbtn' name='uploadbt' /><input type='hidden' name='uploadname' />&nbsp;&nbsp;<input type='submit' class='flatbtn' value='   Upload  ' onClick='java1()' />" 200
+	HTML_Table_TR "b2" "Web torrent:" "<input type="text" class="flatbtn" name='urlbt' size='34' />&nbsp;&nbsp;<input type="submit" class='flatbtn' value='Download' />" 0
 	HTML_Table_Line 2
-	HTML_Table_TR "b3" "Destination:" "<br/><input type="text" name='dest' value='$TORRENT_PATH' /><br/><br/>"
+	HTML_Table_TR "b3" "Destination:" "<br/><input type="text" name='dest' value='$TORRENT_PATH' /><br/><br/>" 0
 	HTML_Table_Line 2
-	HTML_Table_TR "" "" "<input type="checkbox" name="torrent_startup" $CFG_BOOTAIR />&nbsp;Start downloading on boot<br/><br/>"
-	HTML_Table_TR "" "" "<input name='page' type='hidden' value='$FORM_page' /><input type='submit' class='flatbtn' name='save_torrent' value='Save Settings' />"
+	HTML_Table_TR "" "" "<input type="checkbox" name="torrent_startup" $CFG_BOOTAIR />&nbsp;Start downloading on boot<br/><br/>" 0
+	HTML_Table_TR "" "" "<input name='page' type='hidden' value='$FORM_page' /><input type='submit' class='flatbtn' name='save_torrent' value='Save Settings' />" 0
 	echo "</table></form>"
 
 	TIP 0 "You may upload new torrents from local disk"
@@ -220,52 +213,41 @@ EOF
 
 	if [ "$FORM_do" = "delete" ]; then
 		echo "<br/><font color=red>Torrent \"$FORM_file\" deleted</font></br/><br/>"
-		rm /etc/dlmanager/torrents/$FORM_file
+		rm $TMP_PATH/torrents/$FORM_file
 	fi
 
-cat <<EOF
-Torrents List:<br/><br/>
-<table width="100%" border="0" cellspacing="1" bgcolor="#000000" align='center'><tr bgcolor='#FFFFFF'><td><table width='100%' border='0'>
-<tr bgcolor='#999999'><td width='80%'><center>File Name</center></td><td><center>Status</center></td><td><center>Action</center></td></tr>
-EOF
+	echo "Torrents List:<br/><br/>"
+	HTML_Table 1 "100%" "999999" "align='center'" 3 "File_Name width='80%'" "Status" "Action"
 
-ls /etc/dlmanager/torrents | while read output;
-do
-	if [ "$color" = "#FFFFFF" ] ; then color="#E6E6E6" ; else color="#FFFFFF" ; fi
-	echo "<tr bgcolor='$color'><td>&nbsp;$output</td><td><center>?</center></td><td><center><a href='$SCRIPT_NAME?page=torrent&start_torrent=1&file=$output'><img src='/images/action_ok.gif' alt='Start Download' /></a>&nbsp;<a href='$SCRIPT_NAME?page=torrent&do=delete&file=$output'><img src='/images/action_x.gif' alt='Delete' /></a></center></td></tr>"	
-done
+	ls $TMP_PATH/torrents | while read output;
+	do	if [ "$color" = "#FFFFFF" ] ; then color="#E6E6E6" ; else color="#FFFFFF" ; fi
+		echo "<tr bgcolor='$color'><td>&nbsp;$output</td><td><center>?</center></td><td><center><a href='$SCRIPT_NAME?page=torrent&start_torrent=1&file=$output'><img src='/images/action_ok.gif' alt='Start Download' /></a>&nbsp;<a href='$SCRIPT_NAME?page=torrent&do=delete&file=$output'><img src='/images/action_x.gif' alt='Delete' /></a></center></td></tr>"	
+	done
 	
 elif [ "$FORM_page" = "history" ]; then
 	if [ "$FORM_do" = "delete" ]; then
 		echo "<font color=red>History \"$FORM_file\" cleaned</font></br/><br/>"
-		rm /etc/dlmanager/history/$FORM_file
+		rm $TMP_PATH/history/$FORM_file
 	fi
-		cat <<EOF
-History List:<br/><br/>
-<table width="100%" border="0" cellspacing="1" bgcolor="#000000" align='center'><tr bgcolor='#FFFFFF'><td><table width='100%' border='0'>
-<tr bgcolor='#999999' align='center'><td>Type</td><td width='80%'>File Name</td><td>Status</td><td>Action</td></tr>
-EOF
+	echo "History List:<br/><br/>"
+	HTML_Table 1 "100%" "999999" "align='center'" 4 "Type" "File_Name width='80%'" "Status" "Action"
 
-	ls /etc/dlmanager/history | while read output;
+	ls $TMP_PATH/history | while read output;
 	do
 		if [ "$color" = "#FFFFFF" ] ; then color="#E6E6E6" ; else color="#FFFFFF" ; fi
-		echo "<tr bgcolor='$color' align='center'><td>?</td><td align='left'>&nbsp;$output</td><td>100%</td><td><a href='$SCRIPT_NAME?page=history&start_type=1&file=$output'><img src='/images/action_ok.gif' alt='Re Download' /></a>&nbsp;<a href='$SCRIPT_NAME?page=history&do=delete&file=$output'><img src='/images/action_x.gif' alt='Delete' /></a></td></tr>"	
+		echo "<tr bgcolor='$color' align='center'><td>?</td><td align='left'>&nbsp;$output</td><td>100%</td><td><a href=\"$SCRIPT_NAME?page=history&start_type=1&file=$output\"><img src='/images/action_ok.gif' alt='Re Download' /></a>&nbsp;<a href=\"$SCRIPT_NAME?page=history&do=delete&file=$output\"><img src='/images/action_x.gif' alt='Delete' /></a></td></tr>"	
 	done
+
 else
-cat <<EOF
-Files currently downloading:<br/><br/>
-<table width="100%" border="0" cellspacing="1" bgcolor="#000000" align='center'><tr bgcolor='#FFFFFF'><td><table width='100%' border='0'>
-<tr bgcolor='#999999' align='center'><td width='60%' align='left'>File Name</td><td>Status</td><td>Action</td></tr>
-EOF
+	echo "Files currently downloading:<br/><br/>"
+	echo "<IFRAME STYLE=\"width:0px; height:0px;\" FRAMEBORDER='0' SCROLLING='no' name='DLFILE'></IFRAME>"
+	HTML_Table 1 "100%" "999999" "align='center'" 3 "File_Name width='80%'" "Status" "Action"
+
 	ls -a $CFG_PATH | grep ".txt" | sed -e s/'.txt'//g | awk '{ print $1 }' | while read output;
-	do
-		if [ "$color" = "#FFFFFF" ] ; then color="#E6E6E6" ; else color="#FFFFFF" ; fi
-		echo "<tr bgcolor='$color'><td>&nbsp;<a href=\"$SCRIPT_NAME?page=showstatus&file=$output\">$output</a></td><td><center>?</center></td><td><center><a href='$SCRIPT_NAME?page=savestatus&file=$output' target='DLIVS'><img src='/images/action_sv.gif' alt='Save' /></a>&nbsp;<a href='$SCRIPT_NAME?page=aircrackit&file=$output'><img src='/images/action_ok.gif' alt='AirCrack' /></a>&nbsp;<a href='$SCRIPT_NAME?page=deletestatus&file=$output'><img src='/images/action_x.gif' alt='Delete' /></a></center></td></tr>"
+	do	if [ "$color" = "#FFFFFF" ] ; then color="#E6E6E6" ; else color="#FFFFFF" ; fi
+		echo "<tr bgcolor='$color'><td>&nbsp;<a href=\"$SCRIPT_NAME?page=showstatus&file=$output\">$output</a></td><td><center>?</center></td><td><center><a href=\"$SCRIPT_NAME?page=savestatus&file=$output\" target='DLIVS'><img src='/images/action_sv.gif' alt='Save' /></a>&nbsp;<a href=\"$SCRIPT_NAME?page=aircrackit&file=$output\"><img src='/images/action_ok.gif' alt='AirCrack' /></a>&nbsp;<a href=\"$SCRIPT_NAME?page=deletestatus&file=$output\"><img src='/images/action_x.gif' alt='Delete' /></a></center></td></tr>"
 	done
-	echo "</table></td></tr></table><IFRAME STYLE=\"width:0px; height:0px;\" FRAMEBORDER='0' SCROLLING='no' name='DLFILE'></IFRAME>"
-
-
-	fi
-echo "</body></html>"
+fi
+echo "</table></td></tr></table></body></html>"
 fi
 ?>
