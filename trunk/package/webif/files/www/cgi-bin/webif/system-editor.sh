@@ -58,14 +58,12 @@ saved_filename="/tmp/.webif/edited-files/$edit_pathname"
 empty "$FORM_cancel" || FORM_edit=""
 
 if empty "$FORM_edit"; then
-	echo "<div id=\"filebrowser\" class=\"browse_table\">"
 	(ls -halLe "$FORM_path" | grep "^[d]";
 		ls -halLe "$FORM_path" | grep "^[^d]") | awk \
 		-v url="$SCRIPT_NAME" \
 		-v path="$FORM_path" \
 		-f /usr/lib/webif/common.awk \
 		-f /usr/lib/webif/browser.awk
-	echo "</div>"
 else
 	edit_filename="$FORM_edit"
 	exists "$saved_filename" && {
