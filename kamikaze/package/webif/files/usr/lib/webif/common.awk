@@ -56,14 +56,25 @@ function categories(n, i, sel, categories) {
 	return ""
 }
 
-# parameters: 0
-function subcategories() {
+function print_subcategory() {
+	if ($5 ~ "^"PAGENAME"$") print "	<li class=\"selected\"><a href=\"" rootdir "/" $6 "\">@TR<<" $5 ">></a></li>"
+	else print "	<li><a href=\"" rootdir "/" $6 "\">@TR<<" $5 ">></a></li>"
+}
+
+# parameters: 0-1
+function subcategories(extra, a, n, i) {
 	FS = ":"
 	print "<h3><strong>@TR<<Subcategories>>:</strong></h3>"
 	print "<ul>"
 	while (("grep -H '^##WEBIF:name:"CATEGORY":' "cgidir"/*.awx "cgidir"/*.sh 2>/dev/null | sed -e 's,^.*/\\([a-zA-Z\\.\\-]*\\):\\(.*\\)$,\\2:\\1,' | sort -n" | getline) == 1) {
-		if ($5 ~ "^"PAGENAME"$") print "	<li class=\"selected\"><a href=\"" rootdir "/" $6 "\">@TR<<" $5 ">></a></li>"
-		else print "	<li><a href=\"" rootdir "/" $6 "\">@TR<<" $5 ">></a></li>"
+		print_subcategory()
+	}
+	if (extra) {
+		n = split(extra, a, "\n")
+		for (i = 1; i <= n; i++) {
+			$0 = a[i]
+			print_subcategory()
+		}
 	}
 	print "</ul>"
 	return ""
