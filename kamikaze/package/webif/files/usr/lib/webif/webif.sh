@@ -124,6 +124,7 @@ header() {
 	awx_call "render(\"views/header.ahtml\")" \
 		-v CATEGORY="$1" \
 		-v PAGENAME="$2" \
+		-v page_title="$3" \
 		-v show_info="$_show_info" \
 		-v show_error="$ERROR" \
 		-v use_form="$_use_form" \

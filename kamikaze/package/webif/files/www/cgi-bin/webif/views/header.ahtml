@@ -4,7 +4,7 @@ Pragma: no-cache
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title><% (page_title ? page_title " - " : "") config_get("general", "firmware_title") %></title>
+<title><% (page_title ? page_title " - " : "") config_get("general", "firmware_name") %> @TR<<Administrative Console>></title>
 	<link rel="stylesheet" type="text/css" href="/themes/active/waitbox.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
 	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_white.css" title="white" />
@@ -25,7 +25,7 @@ Pragma: no-cache
 
 <div id="container">
 <div id="header">
-	<h1><% config_get("general", "firmware_title") (page_title ? " - " page_title : "") %></h1>
+	<h1>@TR<<X-Wrt Administration Console>></h1>
 	<% status() %>
 </div>
 
@@ -48,4 +48,5 @@ Pragma: no-cache
 <% ( config_get_bool("general", "use_progressbar") && use_progressbar ? "<SCRIPT type='text/javascript'>start=0; end="use_progressbar"</SCRIPT><SCRIPT src='/js/pageload.js' type='text/javascript'></SCRIPT><DIV id='loadmain'><SCRIPT type='text/javascript'>document.getElementById(\"loadmain\").style.display = \"none\";</SCRIPT>" : "" ) %>
 <% ( use_form ? "<form enctype=\"multipart/form-data\" action=\""use_form"\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />" : "") %>
 <div id="content">
-	<h2><% ( show_error ? "<h3 class=\"warning\">"show_error"</h3>" (show_info ? ": " show_info : "") : show_info) %></h2>
+	<h2><% page_title ((show_info != "") ? (page_title ? ": ": "") show_info : "" ) %></h2>
+	<% ((show_error != "") ? "<h3 class=\"warning\">"show_error"</h3>" : "" ) %>
