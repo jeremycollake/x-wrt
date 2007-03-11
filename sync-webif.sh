@@ -71,7 +71,6 @@ synchronize_file "www/cgi-bin/webif/network-firewall.sh"
 synchronize_file "www/cgi-bin/webif/network-misc.sh"
 synchronize_file "www/cgi-bin/webif/system-settings.sh"
 #NOT_synchronize_file "www/cgi-bin/webif/system-ipkg.sh"
-synchronize_file "usr/lib/webif/*categor*.awk"
 #NOT_synchronize_file "usr/lib/webif/webif.sh"
 #NOT_synchronize_file "lib/config/uci-depends.*" #not needed in kamikaze
 #NOT_synchronize_file "etc/init.d/S90webif_deviceid"  # not sync'd due to rc.common
