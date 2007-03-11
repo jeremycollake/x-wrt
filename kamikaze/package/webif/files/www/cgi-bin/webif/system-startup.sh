@@ -63,7 +63,6 @@ else
 		-f /usr/lib/webif/editor.awk
 fi
 
-
 footer ?>
 <!--
 ##WEBIF:name:System:125:Startup

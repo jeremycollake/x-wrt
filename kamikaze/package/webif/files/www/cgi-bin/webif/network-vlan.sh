@@ -42,7 +42,7 @@ HELP_TEXT=
 ###################################################################
 # CountNumberOfVLANsThatContainPortX ( ### )
 #
-# used to test is a port is in another vlan, so we know if we should
+# used to test if a port is in another vlan, so we know if we should
 # tag it or not. Returns count in RETURN_VAR.
 #
 # stops when it encounters more than 1...

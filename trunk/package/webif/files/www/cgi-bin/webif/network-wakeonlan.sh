@@ -18,7 +18,7 @@ header "Network" "WoL" "@TR<<Wake-On-LAN>>" ''
 wokeup=""
 empty "$FORM_wakecustom" || {
 	validate <<EOF
-mac|FORM_mac|Hardware (MAC) address||$FORM_mac
+mac|FORM_mac|@TR<<Hardware (MAC) address>>||$FORM_mac
 EOF
 	mac=$FORM_mac;
 }
@@ -38,7 +38,7 @@ empty $ERROR || { echo "<h3 class=Error>$ERROR</h3>"; }
 ?>
 
 <form>
-<table><tr><th>WOL application:</th><td><select name="wolapp">
+<table><tr><th>@TR<<WOL application>>:</th><td><select name="wolapp">
 <?
 	for i in ether-wake wol; do
 		[ -n `which $i` ] && {
@@ -50,7 +50,7 @@ empty $ERROR || { echo "<h3 class=Error>$ERROR</h3>"; }
 ?>
 </select></td></tr></table>
 <table border=1>
-<tr><th>Machine</th><th>IP Address</th><th>MAC Address</th><th></th></tr>
+<tr><th>Machine</th><th>@TR<<IP Address>></th><th>@TR<<MAC Address>></th><th></th></tr>
 <tr><td></td><td></td><td><input type="text" name="mac" value=<?
 if [ -n "$FORM_mac" ]; then echo "\"$FORM_mac\""; else echo "\"00:00:00:00:00:00\""; fi ?>
 ></td><td><button name="wakecustom" type="submit" value="wakecustom">Wake up</button></td></tr>

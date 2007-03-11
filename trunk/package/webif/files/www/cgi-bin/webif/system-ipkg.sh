@@ -10,6 +10,7 @@
 # Author(s) [in order of work date]:
 #   OpenWrt developers (??)
 #   todo: person who added descriptions..
+#   Dmytro
 #   eJunky
 #   emag
 #   Jeremy Collake <jeremy.collake@gmail.com>
@@ -31,15 +32,13 @@ header "System" "Packages" "@TR<<system_ipkg_Packages#Packages>>" '' "$SCRIPT_NA
 
 cat <<EOF
 <script type="text/javascript">
-<!--
 function confirmT(action,pkg) {
-if ( pkg == "uclibc" || pkg == "base-files" || pkg == "base-files-brcm-2.4" || pkg == "bridge" || pkg == "busybox" || pkg == "dnsmasq" || pkg == "dropbear" || pkg == "haserl" || pkg == "hotplug" || pkg == "iptables" || pkg == "kernel" || pkg == "mtd" || pkg == "wireless-tools" || pkg == "zlib") {
-alert ("              <<< WARNING >>> \n\nPackage \"" + pkg + "\" should not be removed!\n\n>>> Removing may brick your router. <<<\n\nSystem requires \"" + pkg + "\" package to run.\n\n") ;
+if ( pkg == "uclibc" || pkg == "base-files" || pkg == "base-files-brcm-2.4" || pkg == "bridge" || pkg == "busybox" || pkg == "dnsmasq" || pkg == "dropbear" || pkg == "haserl" || pkg == "hotplug" || pkg == "iptables" || pkg == "kernel" || pkg == "mtd" || pkg == "wireless-tools" || pkg == "wlc") {
+alert ("             <<< WARNING >>> \n\nPackage \"" + pkg + "\" should not be removed!\n\n>>> Removing may brick your router. <<<\n\nSystem requires \"" + pkg + "\" package to run.\n\n") ;
 }
 if (window.confirm("Please Confirm!\n\nDo you want to " + action + " \"" + pkg + "\" package?")){
 window.location="ipkg.sh?action=" + action + "&pkg=" + pkg
 } }
-// -->
 </script>
 EOF
 
@@ -57,7 +56,7 @@ repo_update_needed=0
 }
 
 ! empty "$FORM_install_repo" && {
-	validate << EOF
+validate << EOF
 string|FORM_reponame|@TR<<system_ipkg_reponame#Repo. Name>>|min=4 max=40 required nospaces|$FORM_reponame
 string|FORM_repourl|@TR<<system_ipkg_repourl#Repo. URL>>|min=4 max=4096 required|$FORM_repourl
 EOF
@@ -202,7 +201,6 @@ $1 ~ /status/ {
 '
 ?>
 </table>
-
 <?
 # todo: temporary fix for a display error in Opera
 display_form <<EOF

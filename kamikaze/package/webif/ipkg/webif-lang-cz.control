@@ -1,5 +1,5 @@
 Package: webif-lang-cz
-Maintainer: Felix Fietkau <nbd@openwrt.org>
+Maintainer: Lubos Stanek <lubek@users.berlios.de>
 Section: net
 Depends: webif
 Priority: normal

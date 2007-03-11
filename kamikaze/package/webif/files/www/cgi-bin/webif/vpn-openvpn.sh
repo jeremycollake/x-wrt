@@ -38,11 +38,13 @@ if empty "$FORM_submit"; then
 	FORM_openvpn_cli_auth=${FORM_openvpn_cli_auth:-cert)}
 	FORM_openvpn_cli_psk="$CONFIG_client_psk"
 else
+	#PKCS12
 	[ -d /etc/openvpn ] || mkdir /etc/openvpn
 	[ -f "$FORM_openvpn_pkcs12file" ] && {
 		cp "$FORM_openvpn_pkcs12file" /etc/openvpn/certificate.p12 &&
 			UPLOAD_CERT=1
 	}
+	#PreShared Key
 	[ -f "$FORM_openvpn_pskfile" ] && {
 		cp "$FORM_openvpn_pskfile" /etc/openvpn/shared.key &&
 			UPLOAD_PSK=1
@@ -123,6 +125,7 @@ option|pem|@TR<<Certificate (PEM)>>
 onchange|
 end_form
 
+#PreShared Key
 start_form|@TR<<Authentication>>|authentication|hidden
 field|@TR<<Preshared Key Status>>|psk_status|hidden
 $(empty "$NOPSK" || echo 'string|<span style="color:red">@TR<<No Keyfile uploaded yet!>></span>')
@@ -131,6 +134,7 @@ $(empty "$NOPSK" && echo 'string|@TR<<Found Installed Keyfile>>')
 field|@TR<<Upload Preshared Key>>|psk|hidden
 upload|openvpn_pskfile
 
+#PKCS12 Cert
 field|@TR<<Certificate Status>>|certificate_status|hidden
 $(empty "$NOCERT" || echo 'string|<span style="color:red">@TR<<No Certificate uploaded yet!>></span>')
 $(empty "$UPLOAD_CERT" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')

@@ -208,9 +208,7 @@ start_form||||nohelp
 end_form
 EOF
 
-footer 
-#echo "</SPAN><!-- End of hideall SPAN //-->"
-?>
+footer ?>
 <!--
 ##WEBIF:name:System:300:Packages
 -->
