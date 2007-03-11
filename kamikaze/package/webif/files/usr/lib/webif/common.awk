@@ -25,7 +25,7 @@ function config_get_bool(package, option, default, var) {
 }
 
 # parameters: 0
-function categories(n, i, sel, categories) {
+function categories(n, i, sel, categories, f, c) {
 	n = 0
 	sel = 0
 	FS = ":"
@@ -57,8 +57,8 @@ function categories(n, i, sel, categories) {
 }
 
 function print_subcategory() {
-	if ($5 ~ "^"PAGENAME"$") print "	<li class=\"selected\"><a href=\"" rootdir "/" $6 "\">@TR<<" $5 ">></a></li>"
-	else print "	<li><a href=\"" rootdir "/" $6 "\">@TR<<" $5 ">></a></li>"
+	if ($5 ~ "^"PAGENAME"$") print "	<li class=\"selected\"><a href=\"" rootdir "/" ($7 ? $7"?action="$6 : $6) "\">@TR<<" $5 ">></a></li>"
+	else print "	<li><a href=\"" rootdir "/" ($7 ? $7"?action="$6 : $6) "\">@TR<<" $5 ">></a></li>"
 }
 
 # parameters: 0-1

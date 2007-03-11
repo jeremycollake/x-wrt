@@ -1,0 +1,61 @@
+<table summary="System Information">
+<tbody>
+	<tr>
+		<td width="100"><strong>@TR<<Firmware>></strong></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
+		<td><% firmwarestr %></td>
+	</tr>
+	<tr>
+		<td><strong>@TR<<Kernel>></strong></td><td>&nbsp;</td>
+		<td><% kver %></td>
+	</tr>
+	<tr>
+		<td><strong>@TR<<MAC>></strong></td><td>&nbsp;</td>
+		<td><% mac %></td>
+	</tr>
+	<tr>
+		<td><strong>@TR<<Device>></strong></td><td>&nbsp;</td><td><% devname %></td>
+	</tr>
+	<tr>
+		<td><strong>@TR<<Board>></strong></td><td>&nbsp;</td><td><% boardtype %></td>
+	</tr>
+	<tr>
+		<td><strong>@TR<<Username>></strong></td><td>&nbsp;</td>
+		<td><% username %></td>
+	</tr>	
+</tbody>
+</table>
+<br />
+<table summary="Webif Information">
+<tbody>
+	<tr>
+		<td><strong>@TR<<Web mgt. console>></strong></td><td>&nbsp;</td>
+		<td>Webif<sup>2</sup></td>
+	</tr>
+	<tr>
+		<td><strong>@TR<<Version>></strong></td><td></td>
+		<td>
+			<% ( show_rev ? "r" show_rev : "" ) %>
+			<% ( newrev ? "<em class=\"warning\">@TR<<info_update_available#webif^2 update available>>: r"rev" - <a href=\"http://svn.berlios.de/wsvn/xwrt/kamikaze/package/webif/?op=log&amp;rev=0&amp;sc=0&amp;isdir=1\" target=\"_blank\">@TR<<info_view_changes#view changes>></a></em>" : "" ) %>
+			<% ( upgrade_error ? "<em class=\"warning\">@TR<<info_error_checking#ERROR CHECKING FOR UPDATE>><em>" : "" ) %>
+			<% ( no_new_ver ? "<em>@TR<<info_already_latest#You have the latest webif^2>>: r"rev"</em>" : "" ) %>
+		</td>
+	</tr>
+</tbody>
+</table>
+
+<form action="<% ENVIRON["SCRIPT_NAME"] %>" enctype="multipart/form-data" method="post">	
+<table summary="Update webif">
+<tbody>
+	<tr>
+		<td colspan="2">
+		<input type="submit" value=" @TR<<info_check_update#Check For Webif Update>> " name="update_check" />
+		<% ( newrev ? "<input type=\"submit\" value=\" @TR<<info_upgrade_webif#Update/Reinstall Webif>> \"  name=\"install_webif\" />" : "" ) %>
+		</td>
+	</tr>
+<tr><td colspan="2"><input type="checkbox" $daily_checked value="1" name="check_daily" id="field_check_daily" />@TR<<info_check_daily_text#Include daily builds when checking for update to webif&sup2;>></td>
+</tr>
+</tbody>
+</table>
+</form>
+
+
