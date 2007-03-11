@@ -3,6 +3,7 @@ BEGIN {
 	include("/usr/lib/webif/common.awk")
 	config_load("webif")
 	load_lang(config_get("general", "lang") "/common")
+	load_lang(config_get("general", "lang") "/" PAGENAME)
 	_changes = num_changes()
 	if (_changes > 0) _changes = " ("_changes")"
 	else _changes = ""
