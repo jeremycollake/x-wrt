@@ -1,0 +1,118 @@
+#!/usr/bin/webif-page
+<?
+. /usr/lib/webif/webif.sh
+
+header "Mesh" "BATMAN" "@TR<<BATMAN status and configuration>>"
+
+uci_load "batman"
+
+#####################################################################
+# Prepare form Batman status: batman nodes and gateways
+
+batmanstatus=""
+if [ -e "/var/run/batmand.socket" ]; then
+	batmantmpfile=$(mktemp "/tmp/webif-XXXXXX")
+	batmand -c -b -d 1 | grep -v WARNING > "$batmantmpfile"
+	# cat /www/cgi-bin/webif/output | grep -v WARNING > "$batmantmpfile"
+	
+	if equal "$( cat "$batmantmpfile" | grep "No batman")" ""; then
+		batmanstatus=$batmanstatus"string|<div><table border=0 cellpadding=0 cellspacing=0 width=\"100%\">"
+		batmanstatus=$batmanstatus"<tr><td>BATMAN node</td><td>Gateway</td><td>Through</td></tr>"
+		batmanstatus=$batmanstatus$(cat "$batmantmpfile" | awk ' {printf "%s %s %s %s %s","<tr><td width=\"30%\">",$1,"</td><td width=\"35%\">",$3,"</td><td width=\"35%\">"} {for (i = 5; i <= NF; i++) printf " %s <br>",$i } { printf "</td></tr>"}')
+		batmanstatus=$batmanstatus"</table>"
+	else
+		batmanstatus="string|No BATMAN nodes in range"
+	fi
+else
+	batmanstatus="string|BATMAN daemon not running or daemon socket not available<br>"
+fi
+
+
+#####################################################################
+# Prepare form Batman configuration
+batman_interface=$(uci get batman.general.interface)
+batman_announce=$(uci get batman.general.announce)
+batman_gateway_class=$(uci get batman.general.gateway_class)
+if equal $batman_gateway_class ""; then 
+	batman_gateway_class="0"
+fi
+batman_originator_interval=$(uci get batman.general.originator_interval)
+batman_preferred_gateway=$(uci get batman.general.preferred_gateway)
+batman_routing_class=$(uci get batman.general.routing_class)
+if equal $batman_routing_class ""; then 
+	batman_routing_class="0"
+fi
+batman_visualisation_srv=$(uci get batman.general.visualisation_srv)
+
+
+#####################################################################
+# Page show
+display_form <<EOF
+onchange|modechange
+
+start_form|@TR<<BATMAN status>>
+$batmanstatus
+end_form
+
+start_form|@TR<<BATMAN configuration>>
+string|<br>
+
+field|@TR<<Batman interface>>
+text|batman_interface|$batman_interface|
+helpitem|Batman interface
+helptext|HelpText interface on which BATMAN will work.
+
+field|@TR<<Announce networks>>
+text|batman_announce|$batman_announce|
+helpitem|Announce networks
+helptext|HelpText type here networks/netmasks that this node has to annonce to be a gateway for.
+
+field|@TR<<Gateway class>>
+select|batman_gateway_class|$batman_gateway_class
+option|0|@TR<<0: Not an internet gateway (default)>>
+option|1|@TR<<1: Modem line>>
+option|2|@TR<<2: ISDN line>>
+option|3|@TR<<3: Double ISDN>>
+option|4|@TR<<4: 256 KBit>>
+option|5|@TR<<5: UMTS / 0.5 MBit>>
+option|6|@TR<<6: 1 MBit>>
+option|7|@TR<<7: 2 MBit>>
+option|8|@TR<<8: 3 MBit>>
+option|9|@TR<<9: 5 MBit>>
+option|10|@TR<<10:6 MBit>>
+option|11|@TR<<>11: 6 MBit>>|	
+helpitem|Gateway class
+helptext|HelpText Specify here if this node offers a internet gateway and tell clients how much bandwidth is available.
+
+field|@TR<<Originator interval>>
+text|batman_originator_interval|$batman_originator_interval|
+helpitem|Originator interval
+helptext|HelpText milliseconds beetween originator packets sent by this node.
+
+field|@TR<<Preferred gateway>>
+text|batman_preferred_gateway|$batman_preferred_gateway|
+helpitem|Preferred gateway
+helptext|HelpText IP address of the preferred internet gateway, this will create an IP tunnel to the specified IP.
+
+field|@TR<<Routing class>>
+select|batman_routing_class|$batman_routing_class
+option|0|@TR<<0: No default route>>
+option|1|@TR<<1: Fast internet connection>>
+option|2|@TR<<2: Stable internet connection>>
+option|3|@TR<<3: Best statistic internet connection (olsr style)>>|
+helpitem|Routing class
+helptext|HelpText Only needed if this node is not an internet gateway (Gateway class). Option 0 is not really usable yet. Option 1 use best connection to gateway, faster gateway class will be    preferred if connection quality is similar. Option 3 let this node use nearest gateway.
+
+field|@TR<<Visualisation server>>
+text|batman_visualisation_srv|$batman_visualisation_srv|
+helpitem|Visualisation server
+helptext|HelpText IP of the server that collects the topology information for        topology-visualisation, default none.
+
+end_form
+
+EOF
+
+footer ?>
+<!--
+##WEBIF:name:Mesh:750:BATMAN
+-->
