@@ -13,12 +13,13 @@ batmanstatus=""
 if [ -e "/var/run/batmand.socket" ]; then
 	batmantmpfile=$(mktemp "/tmp/webif-XXXXXX")
 	batmand -c -b -d 1 | grep -v WARNING > "$batmantmpfile"
-	# cat /www/cgi-bin/webif/output | grep -v WARNING > "$batmantmpfile"
+	# leave here, just for testing purpose :o)
+	#cat /www/cgi-bin/webif/output | grep -v WARNING > "$batmantmpfile"
 	
 	if equal "$( cat "$batmantmpfile" | grep "No batman")" ""; then
 		batmanstatus=$batmanstatus"string|<div><table border=0 cellpadding=0 cellspacing=0 width=\"100%\">"
 		batmanstatus=$batmanstatus"<tr><td>BATMAN node</td><td>Gateway</td><td>Through</td></tr>"
-		batmanstatus=$batmanstatus$(cat "$batmantmpfile" | awk ' {printf "%s %s %s %s %s","<tr><td width=\"30%\">",$1,"</td><td width=\"35%\">",$3,"</td><td width=\"35%\">"} {for (i = 5; i <= NF; i++) printf " %s <br>",$i } { printf "</td></tr>"}')
+		batmanstatus=$batmanstatus$(cat "$batmantmpfile" | awk ' {printf "%s %s %s %s %s","<tr><td width=\"30%\">",$1,"</td><td width=\"35%\">",$3,"</td><td width=\"35%\">"} {for (i = 5; i <= NF; i++) printf " %s <br>",$i } { printf "<br></td></tr>"}')
 		batmanstatus=$batmanstatus"</table>"
 	else
 		batmanstatus="string|No BATMAN nodes in range"
@@ -30,7 +31,19 @@ fi
 
 #####################################################################
 # Prepare form Batman configuration
-batman_interface=$(uci get batman.general.interface)
+
+form_batman_interface=""
+available_interfaces=$(ifconfig | grep HWaddr | awk '{printf "%s ",$1}')
+for interface in $available_interfaces; do
+	form_batman_interface=$form_batman_interface$(printf "field| - %s\ncheckbox|batman_interface_%s|"  $interface $interface)
+	if uci get batman.general.interface | grep -q $interface; then
+		form_batman_interface=$form_batman_interface"1"
+	else
+		form_batman_interface=$form_batman_interface"0"
+	fi
+	form_batman_interface=$form_batman_interface$(printf "|1|\n ")
+done
+
 batman_announce=$(uci get batman.general.announce)
 batman_gateway_class=$(uci get batman.general.gateway_class)
 if equal $batman_gateway_class ""; then 
@@ -55,17 +68,16 @@ $batmanstatus
 end_form
 
 start_form|@TR<<BATMAN configuration>>
-string|<br>
 
-field|@TR<<Batman interface>>
-text|batman_interface|$batman_interface|
+field|@TR<<Batman interfaces>>
+$form_batman_interface
 helpitem|Batman interface
-helptext|HelpText interface on which BATMAN will work.
+helptext| interface on which BATMAN will work.
 
 field|@TR<<Announce networks>>
 text|batman_announce|$batman_announce|
 helpitem|Announce networks
-helptext|HelpText type here networks/netmasks that this node has to annonce to be a gateway for.
+helptext|type here networks/netmasks that this node has to annonce to be a gateway for.
 
 field|@TR<<Gateway class>>
 select|batman_gateway_class|$batman_gateway_class
@@ -82,17 +94,17 @@ option|9|@TR<<9: 5 MBit>>
 option|10|@TR<<10:6 MBit>>
 option|11|@TR<<>11: 6 MBit>>|	
 helpitem|Gateway class
-helptext|HelpText Specify here if this node offers a internet gateway and tell clients how much bandwidth is available.
+helptext| Specify here if this node offers a internet gateway and tell clients how much bandwidth is available.
 
 field|@TR<<Originator interval>>
 text|batman_originator_interval|$batman_originator_interval|
 helpitem|Originator interval
-helptext|HelpText milliseconds beetween originator packets sent by this node.
+helptext| milliseconds beetween originator packets sent by this node.
 
 field|@TR<<Preferred gateway>>
 text|batman_preferred_gateway|$batman_preferred_gateway|
 helpitem|Preferred gateway
-helptext|HelpText IP address of the preferred internet gateway, this will create an IP tunnel to the specified IP.
+helptext| IP address of the preferred internet gateway, this will create an IP tunnel to the specified IP.
 
 field|@TR<<Routing class>>
 select|batman_routing_class|$batman_routing_class
@@ -101,12 +113,12 @@ option|1|@TR<<1: Fast internet connection>>
 option|2|@TR<<2: Stable internet connection>>
 option|3|@TR<<3: Best statistic internet connection (olsr style)>>|
 helpitem|Routing class
-helptext|HelpText Only needed if this node is not an internet gateway (Gateway class). Option 0 is not really usable yet. Option 1 use best connection to gateway, faster gateway class will be    preferred if connection quality is similar. Option 3 let this node use nearest gateway.
+helptext| Only needed if this node is not an internet gateway (Gateway class). Option 0 is not really usable yet. Option 1 use best connection to gateway, faster gateway class will be    preferred if connection quality is similar. Option 3 let this node use nearest gateway.
 
 field|@TR<<Visualisation server>>
 text|batman_visualisation_srv|$batman_visualisation_srv|
 helpitem|Visualisation server
-helptext|HelpText IP of the server that collects the topology information for        topology-visualisation, default none.
+helptext| IP of the server that collects the topology information for        topology-visualisation, default none.
 
 end_form
 
