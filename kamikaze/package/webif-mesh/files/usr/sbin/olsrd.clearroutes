@@ -1,8 +1,0 @@
-#!/bin/sh
-
-eval $(ip route ls|sed -ne'
-/ metric [0-9]\+ *$/{
-s/.*/ip route del &;/
-p
-}
-')
