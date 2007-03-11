@@ -1,0 +1,15 @@
+#!/usr/bin/awx
+BEGIN {
+	CATEGORY="Info"
+	PAGENAME="About"
+	page_title="<img src=\"/images/abt.jpg\" alt=\"@TR<<About>>\" />@TR<<About>>"
+	include("/usr/lib/webif/common.awx")
+}
+
+function handle_default() {
+	getline < "/www/.version"
+	rev=$0
+	RENDER = "views/info-about.ahtml"
+}
+
+##WEBIF:name:Info:950:About
