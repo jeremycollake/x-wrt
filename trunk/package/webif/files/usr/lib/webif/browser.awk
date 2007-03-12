@@ -36,6 +36,8 @@ BEGIN {
 		hsize = fsize / (2 ** 10)
 		hsize = int(hsize * 10) / 10
 		hsize = hsize " kB"
+	} else {
+		hsize = fsize
 	}
 	fname = $11
 	for (i = 12; i <= NF; i++)
