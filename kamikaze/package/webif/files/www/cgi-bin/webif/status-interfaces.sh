@@ -28,7 +28,7 @@ lan_tx_bytes=$(echo "$lan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed
 lan_rx_bytes=$(echo "$lan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d'(' -f 2 | cut -d ')' -f 1)
 # get wifi stats
 wlan_config=$(iwconfig 2>&1 | grep -v 'no wireless' | grep '\w')
-wlan_ssid=$(echo "$wlan_config" | grep 'ESSID' | cut -d':' -f 2 | sed s/'"'//g)
+wlan_ssid=$(echo "$wlan_config" | grep 'ESSID' | cut -d':' -f 2 | cut -d' ' -f 1 | sed s/'"'//g)
 wlan_mode=$(echo "$wlan_config" | grep "Mode:" | cut -d':' -f 2 | cut -d' ' -f 1)
 wlan_freq=$(echo "$wlan_config" | grep "Mode:" | cut -d':' -f 3 | cut -d' ' -f 1)
 wlan_ap=$(echo "$wlan_config" | grep "Mode:" | cut -d' ' -f 18)
