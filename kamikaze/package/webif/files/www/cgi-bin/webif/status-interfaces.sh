@@ -80,32 +80,32 @@ fi
 display_form <<EOF
 start_form|@TR<<LAN>>
 field|@TR<<MAC Address>>|lan_mac_addr
-string|<div class="mac-address">$lan_mac_addr</div>
+string|$lan_mac_addr
 field|@TR<<IP Address>>|lan_ip_addr
 string|$lan_ip_addr
 field|@TR<<Received>>|lan_rx
-string|$lan_rx_packets <div class="kb">pkts</div>&nbsp;<div class="numeric-small">($lan_rx_bytes</div>)
+string|$lan_rx_packets pkts &nbsp;($lan_rx_bytes)
 field|@TR<<Transmitted>>|lan_tx
-string|$lan_tx_packets <div class="kb">pkts</div>&nbsp;<div class="numeric-small">($lan_tx_bytes</div>
+string|$lan_tx_packets pkts &nbsp;($lan_tx_bytes
 helpitem|LAN
 helptext|LAN LAN#LAN stands for Local Area Network.
 end_form
 
 start_form|@TR<<WLAN>>
 field|@TR<<Access Point>>|wlan_ap
-string|<div class="mac-address">$wlan_ap</div>
+string|$wlan_ap
 field|@TR<<Mode>>|wlan_mode
 string|$wlan_mode
 field|@TR<<ESSID>>|wlan_ssid
 string|$wlan_ssid
 field|@TR<<Frequency>>|wlan_freq
-string|$wlan_freq <div class="kb">Ghz</div>
+string|$wlan_freq Ghz
 field|@TR<<Transmit Power>>|wlan_txpwr
-string|$wlan_txpwr <div class="kb">dBm</div>
+string|$wlan_txpwr dBm
 field|@TR<<Noise Level>>|wlan_noise
-string|$wlan_noise <div class="kb">dBm</div>
+string|$wlan_noise dBm
 field|@TR<<Encryption Key>>|wlan_key
-string|<div class="numeric-small">$wlan_key</div>
+string|$wlan_key
 field|@TR<<Rx Invalid nwid>>|wlan_rx_invalid_nwid
 string|$wlan_rx_invalid_nwid
 field|@TR<<Rx Invalid Encryption>>|wlan_rx_invalid_crypt
