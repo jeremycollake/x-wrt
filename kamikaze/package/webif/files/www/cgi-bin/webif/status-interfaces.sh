@@ -32,7 +32,7 @@ wlan_ssid=$(echo "$wlan_config" | grep 'ESSID' | cut -d':' -f 2 | cut -d' ' -f 1
 wlan_mode=$(echo "$wlan_config" | grep "Mode:" | cut -d':' -f 2 | cut -d' ' -f 1)
 wlan_freq=$(echo "$wlan_config" | grep "Mode:" | cut -d':' -f 3 | cut -d' ' -f 1)
 wlan_ap=$(echo "$wlan_config" | grep "Mode:" | cut -d' ' -f 18)
-wlan_txpwr=$(echo "$wlan_config" | grep Tx-Power | cut -d'-' -f2 | cut -d':' -f 2 | sed s/"dBm"//g)
+wlan_txpwr=$(echo "$wlan_config" | grep Tx-Power | cut -d'-' -f2 | cut -d':' -f 2 | cut -d' ' -f 1 | sed s/"dBm"//g)
 wlan_key=$(echo "$wlan_config" | grep "Encryption key:" | sed s/"Encryption key:"//)
 wlan_tx_retries=$(echo "$wlan_config" | grep "Tx excessive retries" | cut -d':' -f 2 | cut -d' ' -f 1)
 wlan_tx_invalid=$(echo "$wlan_config" | grep "Tx excessive retries" | cut -d':' -f 3 | cut -d' ' -f 1)
@@ -41,6 +41,11 @@ wlan_rx_invalid_nwid=$(echo "$wlan_config" | grep "Rx invalid nwid:" | cut -d':'
 wlan_rx_invalid_crypt=$(echo "$wlan_config" | grep "Rx invalid nwid:" | cut -d':' -f 3 | cut -d' ' -f 1)
 wlan_rx_invalid_frag=$(echo "$wlan_config" | grep "Rx invalid nwid:" | cut -d':' -f 4 | cut -d' ' -f 1)
 wlan_noise=$(echo "$wlan_config" | grep "Link Noise level:" | cut -d':' -f 2 | cut -d' ' -f 1)
+#Find noise for atheros cards
+if [ ! -e "$wlan_noise" ]; then
+	wlan_noise=$(echo "$wlan_config" | grep "Noise level" | cut -d'=' -f 4 | cut -d' ' -f 1)
+fi
+
 
 # set unset vars
 wlan_freq="${wlan_freq:-0}"
