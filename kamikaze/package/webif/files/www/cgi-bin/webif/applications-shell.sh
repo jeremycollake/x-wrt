@@ -64,13 +64,13 @@ App_package_install(){
 	
 	Check_ipkg_update
 
-	if ! equal $3 "" ; then ipkg $location install $url1"$3" -force-overwrite ; fi
-	if ! equal $4 "" ; then ipkg $location install $url1"$4" -force-overwrite ; fi
-	if ! equal $5 "" ; then ipkg $location install $url1"$5" -force-overwrite ; fi
-	if ! equal $6 "" ; then ipkg $location install $url1"$6" -force-overwrite ; fi
-	if ! equal $7 "" ; then ipkg $location install $url1"$7" -force-overwrite ; fi
-	if ! equal $8 "" ; then ipkg $location install $url1"$8" -force-overwrite ; fi
-	if ! equal $9 "" ; then ipkg $location install $url1"$9" -force-overwrite ; fi
+	if ! equal $3 "" ; then ipkg $location install $url1$3 -force-overwrite ; fi
+	if ! equal $4 "" ; then ipkg $location install $url1$4 -force-overwrite ; fi
+	if ! equal $5 "" ; then ipkg $location install $url1$5 -force-overwrite ; fi
+	if ! equal $6 "" ; then ipkg $location install $url1$6 -force-overwrite ; fi
+	if ! equal $7 "" ; then ipkg $location install $url1$7 -force-overwrite ; fi
+	if ! equal $8 "" ; then ipkg $location install $url1$8 -force-overwrite ; fi
+	if ! equal $9 "" ; then ipkg $location install $url1$9 -force-overwrite ; fi
 }
 
 App_package_remove(){
@@ -100,7 +100,7 @@ DIV_Windows_Header(){
 }
 APP_Refresh_Page(){
 	echo "<script language='JavaScript' type='text/javascript'>"
-	echo "window.setTimeout('window.location=\"$1\"', 3000)"
+	echo "window.setTimeout('window.location=\"$1\"', 4000)"
 	echo "</script>$2"
 }
 

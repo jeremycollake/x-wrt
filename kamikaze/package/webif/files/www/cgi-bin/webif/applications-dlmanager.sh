@@ -83,6 +83,20 @@ GetFilenameFromPath(){
 	done
 	filename=$(grep '' < /tmp/.filename)
 }
+HTTP_Download(){
+		_HTTP=$(grep '' < $1$2 )
+		_HTTPS=$(echo $_HTTP | cut -c1-5)
+		if equal $_HTTPS "https"; then _K="-k -3"; fi
+
+	if equal $3 1 ; then
+		if  [ -s "$HTTP_PATH/$2" ] ; then _RESUME="-C $(ls -l $HTTP_PATH/$2 | awk '{ print $5 }')" ; fi
+		curl $_RESUME $_K -o $HTTP_PATH/$2 $_HTTP 2> /dev/null
+	else	curl -I $_K $_HTTP > $1.$2 2> /dev/null ###To read the HTTP header first for fileinfo (size)
+	fi
+}
+HTTP_DL_Detail(){
+	TIP 500 "<table width='100%' border='0' cellspacing=1 bgcolor='#333333'><tr><td bgcolor='#FFFFFF'>$1</td></tr></table>"
+}
 ##########################################################
 	if ! equal "$FORM_uploadbt" ""; then
 		APP_Refresh_Page $SCRIPT_NAME?page=$FORM_page "<br/>File sucessfully uploaded ...</br>"
@@ -99,10 +113,12 @@ GetFilenameFromPath(){
 
 	if ! equal "$FORM_urlhttp" ""; then
 		GetFilenameFromPath $(echo $FORM_uploadname | sed -e s/'\/'/'\\'/g)
+
 		if  [ -s "$HTTP_PATH/$filename" ]  ; then
 			APP_Refresh_Page $SCRIPT_NAME?page=$FORM_page "<br/><font color=red>File already exist in \"$HTTP_PATH\" ...</font></br>"
 		else	APP_Refresh_Page $SCRIPT_NAME?page=$FORM_page "<br/>Adding File to List ...</br>"
 			echo "$FORM_urlhttp" > $TMP_PATH/http/$filename
+			HTTP_Download $TMP_PATH/http/ $filename
 		fi
 		exit
 	fi
@@ -114,12 +130,17 @@ GetFilenameFromPath(){
 	fi
 
 	if ! equal "$FORM_start_http" ""; then
-		APP_Refresh_Page $SCRIPT_NAME?page=$FORM_page "<br/>Starting HTTP download ...</br>"
+		APP_Refresh_Page $SCRIPT_NAME?page=http "<br/>Starting HTTP download ...</br>"
 		FILE_PATH=$(grep '' < $TMP_PATH/http/$FORM_file )
-		curl -I $FILE_PATH > $TMP_PATH/http/.$FORM_file 2> /dev/null ###To read the HTTP header first for fileinfo (size)
-		curl -o $HTTP_PATH/$FORM_file $FILE_PATH 2> /dev/null
-		mv $TMP_PATH/http/$FORM_file $TMP_PATH/history/$FORM_file
-		rm $TMP_PATH/http/.$FORM_file
+		HTTP_Download $TMP_PATH/http/ $FORM_file
+		HTTP_Download $TMP_PATH/http/ $FORM_file 1
+		#mv $TMP_PATH/http/$FORM_file $TMP_PATH/history/$FORM_file
+		#rm $TMP_PATH/http/.$FORM_file
+		exit
+	fi
+	if ! equal "$FORM_stop_http" ""; then
+		APP_Refresh_Page $SCRIPT_NAME?page=http "<br/>Stopping HTTP downloads ...</br>"
+		killall -q curl
 		exit
 	fi
 
@@ -171,9 +192,15 @@ EOF
 	echo "Web File List:<br/><br/>"
 	HTML_Table 1 "100%" "999999" "align='center'" 3 "File_Name width='80%'" "Status" "Action"
 
+
 	ls $TMP_PATH/http | while read output;
 	do	if [ "$color" = "#FFFFFF" ] ; then color="#E6E6E6" ; else color="#FFFFFF" ; fi
-		echo "<tr bgcolor='$color'><td>&nbsp;$output</td><td><center>?</center></td><td><center><a href='$SCRIPT_NAME?page=http&start_http=1&file=$output'><img src='/images/action_ok.gif' alt='Start Download' /></a>&nbsp;<a href='$SCRIPT_NAME?page=http&do=del_http&file=$output'><img src='/images/action_x.gif' alt='Delete' /></a></center></td></tr>"	
+		FILE_SIZE=$(grep 'ength:' < $TMP_PATH/http/.$output | sed -e s/'Content-Length:'//g -e s/'Content-length:'//g | awk '{ print $1 }')
+		FILE_SIZE_ONDISK=$(ls -l $HTTP_PATH/$output | awk '{ print $5 }') 2> /dev/null
+		if equal $FILE_SIZE_ONDISK "" ; then FILE_SIZE_ONDISK=0; fi
+		echo "<tr bgcolor='$color'><td>"
+		HTTP_DL_Detail "File: $output<br/>Location: $(grep '' < $TMP_PATH/http/$output)<br/>Total Size: $FILE_SIZE (bytes) - $(expr $FILE_SIZE / 1024 / 1024 2> /dev/null) (MB)<br/>Downloaded: $FILE_SIZE_ONDISK (bytes)"
+		echo "&nbsp;<a href='#' rel='b3'>$output</a></td><td>$(expr $FILE_SIZE_ONDISK \* 100 / $FILE_SIZE 2> /dev/null)%</td><td><a href='$SCRIPT_NAME?page=http&start_http=1&file=$output'><img src='/images/action_ok.gif' alt='Start Download' /></a>&nbsp;<a href='$SCRIPT_NAME?page=http&do=del_http&file=$output'><img src='/images/action_x.gif' alt='Delete' /></a></td></tr>"	
 	done
 
 elif [ "$FORM_page" = "ftp" ]; then
@@ -243,9 +270,9 @@ else
 	echo "<IFRAME STYLE=\"width:0px; height:0px;\" FRAMEBORDER='0' SCROLLING='no' name='DLFILE'></IFRAME>"
 	HTML_Table 1 "100%" "999999" "align='center'" 3 "File_Name width='80%'" "Status" "Action"
 
-	ls -a $CFG_PATH | grep ".txt" | sed -e s/'.txt'//g | awk '{ print $1 }' | while read output;
+	ps | grep 'curl' | awk '{ print $1 }' | while read output;
 	do	if [ "$color" = "#FFFFFF" ] ; then color="#E6E6E6" ; else color="#FFFFFF" ; fi
-		echo "<tr bgcolor='$color'><td>&nbsp;<a href=\"$SCRIPT_NAME?page=showstatus&file=$output\">$output</a></td><td><center>?</center></td><td><center><a href=\"$SCRIPT_NAME?page=savestatus&file=$output\" target='DLIVS'><img src='/images/action_sv.gif' alt='Save' /></a>&nbsp;<a href=\"$SCRIPT_NAME?page=aircrackit&file=$output\"><img src='/images/action_ok.gif' alt='AirCrack' /></a>&nbsp;<a href=\"$SCRIPT_NAME?page=deletestatus&file=$output\"><img src='/images/action_x.gif' alt='Delete' /></a></center></td></tr>"
+		echo "<tr bgcolor='$color'><td>&nbsp;<a href=\"$SCRIPT_NAME?page=&file=$output\">$output</a></td><td>?</td><td>&nbsp;<a href=\"$SCRIPT_NAME?page=&file=$output\"><img src='/images/action_x.gif' alt='Stop' /></a></td></tr>"
 	done
 fi
 echo "</table></td></tr></table></body></html>"

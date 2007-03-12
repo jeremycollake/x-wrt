@@ -15,7 +15,7 @@ echo "$HEADER"
 
 if ! empty "$FORM_package"; then
 
-	App_package_install "Samba Client" "" "kmod-fs-cifs" "cifsmount"
+	App_package_install "Samba Client" "" "kmod-fs-cifs -force-depends" "cifsmount"
 	
 	if  is_package_installed "kmod-fs-cifs"  &&  is_package_installed "cifsmount"  ; then 
 	
