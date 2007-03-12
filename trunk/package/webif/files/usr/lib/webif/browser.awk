@@ -23,74 +23,13 @@ BEGIN {
 
 {
 	type = substr($1, 1, 1);
-	fsize = $5
-	if (fsize >= 2 ** 30) {
-		hsize = fsize / (2 ** 30)
-		hsize = int(hsize * 10)/10
-		hsize = hsize " GB"
-	} else if (fsize >= 2 ** 20) {
-		hsize = fsize / (2 ** 20)
-		hsize = int(hsize * 10) / 10
-		hsize = hsize " MB"
-	} else if (fsize >= 2 ** 15) {
-		hsize = fsize / (2 ** 10)
-		hsize = int(hsize * 10) / 10
-		hsize = hsize " kB"
-	} else {
-		hsize = fsize
-	}
 	fname = $11
 	for (i = 12; i <= NF; i++)
 		fname = fname " " $i
 	line = ""
 	fullpath = path "/" fname
 	gsub(/^\/\//, "/", fullpath)
-}
 
-type == "d" {
-	if (fname == "..") {
-		fullpath = path "/.."
-		gsub(/^\/\//, "/", fullpath)
-		line = "		<td class=\"leftimage\"><img src=\"/images/dir.gif\" alt=\"@TR<<browser_Directory#Directory>>\" /></td>\n"
-		line = line "		<td><a href=\"" url "?path=" fullpath "\">@TR<<browser_Parent_Directory#Parent Directory>></a>\n"
-		line = line "		<td>&nbsp;</td>\n"
-		line = line "		<td>&nbsp;</td>\n"
-		line = line "		<td>&nbsp;</td>"
-	} else {
-		line = "		<td class=\"leftimage\"><img src=\"/images/dir.gif\" alt=\"@TR<<browser_Directory#Directory>>\" /></td>\n"
-		if (fullpath ~ xdirectory) {
-			line = line "		<td><a href=\"" url "?path=" fullpath "\">" fname "</a></td>\n"
-			line = line "		<td>&nbsp;</td>\n"
-			line = line "		<td>&nbsp;</td>\n"
-			line = line "		<td class=\"rightimage\"><img src=\"/images/action_x_no.gif\" alt=\"@TR<<browser_Delete#Delete>>\" />"
-		} else {
-			line = line "		<td><a href=\"" url "?path=" fullpath "\">" fname "</a></td>\n"
-			line = line "		<td>&nbsp;</td>\n"
-			line = line "		<td>&nbsp;</td>\n"
-			line = line "		<td class=\"rightimage\"><a href=\"javascript:confirm_deldir('" path  "','" fullpath "')\"><img src=\"/images/action_x.gif\" alt=\"@TR<<browser_Delete#Delete>>\" /></a>"
-		}
-		line = line "</td>"
-	}
-}
-
-type == "-" {
-	line = "		<td class=\"leftimage\"><img src=\"/images/file.gif\" alt=\"@TR<<browser_File#File>>\" /></td>\n"
-	if (path ~ xdownload) {
-		line = line "		<td>" fname "</td>\n"
-	} else {
-		line = line "		<td><a href=\"/cgi-bin/webif/download.sh?script=" url "&amp;path=" path "&amp;savefile=" fname "\">" fname "</a></td>\n"
-	}
-	line = line "		<td class=\"number\">" hsize "</td>\n"
-	if ((path ~ xedit) || fsize >= 2 ** 15) {
-		line = line "		<td class=\"image\"><img src=\"/images/action_edit_no.gif\" alt=\"@TR<<browser_Edit#Edit>>\" /></td>\n"
-	} else {
-		line = line "		<td class=\"image\"><a href=\"" url "?path=" path "&amp;edit=" fname "\"><img src=\"/images/action_edit.gif\" alt=\"@TR<<browser_Edit#Edit>>\" /></a></td>\n"
-	}
-	if (path ~ xdelete) {
-		line = line "		<td class=\"image\"><img src=\"/images/action_x_no.gif\" alt=\"@TR<<browser_Delete#Delete>>\" /></td>\n"
-	} else {
-		line = line "		<td class=\"rightimage\"><a href=\"javascript:confirm_delfile('" path  "','" fname "')\"><img src=\"/images/action_x.gif\" alt=\"@TR<<browser_Delete#Delete>>\" /></a></td>\n"
-	}
 }
 
 (fname != ".") && (fname != "") {
@@ -101,7 +40,61 @@ type == "-" {
 		print "	<tr class=\"odd\">"
 		odd++
 	}
-	print line
+}
+
+type == "d" {
+	if (fname == "..") {
+		fullpath = path "/.."
+		gsub(/^\/\//, "/", fullpath)
+		print "		<td class=\"leftimage\"><img src=\"/images/dir.gif\" alt=\"@TR<<browser_Directory#Directory>>\" /></td>"
+		print "		<td><a href=\"" url "?path=" fullpath "\">@TR<<browser_Parent_Directory#Parent Directory>></a>"
+		print "		<td>&nbsp;</td>"
+		print "		<td>&nbsp;</td>"
+		print "		<td>&nbsp;</td>"
+	} else if (fname != ".") {
+		print "		<td class=\"leftimage\"><img src=\"/images/dir.gif\" alt=\"@TR<<browser_Directory#Directory>>\" /></td>"
+		print "		<td><a href=\"" url "?path=" fullpath "\">" fname "</a></td>"
+		print "		<td>&nbsp;</td>"
+		print "		<td>&nbsp;</td>"
+		if (fullpath ~ xdirectory) {
+			print "		<td class=\"rightimage\"><img src=\"/images/action_x_no.gif\" alt=\"@TR<<browser_Delete#Delete>>\" /></td>"
+		} else {
+			print "		<td class=\"rightimage\"><a href=\"javascript:confirm_deldir('" path  "','" fullpath "')\"><img src=\"/images/action_x.gif\" alt=\"@TR<<browser_Delete#Delete>>\" /></a></td>"
+		}
+	}
+}
+
+type == "-" {
+	print "		<td class=\"leftimage\"><img src=\"/images/file.gif\" alt=\"@TR<<browser_File#File>>\" /></td>"
+	if (path ~ xdownload) {
+		print "		<td>" fname "</td>"
+	} else {
+		print "		<td><a href=\"/cgi-bin/webif/download.sh?script=" url "&amp;path=" path "&amp;savefile=" fname "\">" fname "</a></td>"
+	}
+	printf "		<td class=\"number\">"
+	if ($5 >= 2 ** 30) {
+		printf "%.1f GB", $5 / (2 ** 30)
+	} else if ($5 >= 2 ** 20) {
+		printf "%.1f MB", $5 / (2 ** 20)
+	} else if ($5 >= 2 ** 15) {
+		printf "%.1f kB", $5 / (2 ** 10)
+	} else {
+		printf "%d", $5
+	}
+	print "</td>"
+	if ((path ~ xedit) || $5 >= 2 ** 15) {
+		print "		<td class=\"image\"><img src=\"/images/action_edit_no.gif\" alt=\"@TR<<browser_Edit#Edit>>\" /></td>"
+	} else {
+		print "		<td class=\"image\"><a href=\"" url "?path=" path "&amp;edit=" fname "\"><img src=\"/images/action_edit.gif\" alt=\"@TR<<browser_Edit#Edit>>\" /></a></td>"
+	}
+	if (path ~ xdelete) {
+		print "		<td class=\"image\"><img src=\"/images/action_x_no.gif\" alt=\"@TR<<browser_Delete#Delete>>\" /></td>"
+	} else {
+		print "		<td class=\"rightimage\"><a href=\"javascript:confirm_delfile('" path  "','" fname "')\"><img src=\"/images/action_x.gif\" alt=\"@TR<<browser_Delete#Delete>>\" /></a></td>"
+	}
+}
+
+(fname != ".") && (fname != "") {
 	print "	</tr>"
 }
 
