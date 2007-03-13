@@ -2,7 +2,6 @@
 . /usr/lib/webif/webif.sh
 
 header "System" "Upgrade" "<img src=/images/upd.jpg align=absmiddle>&nbsp;@TR<<Firmware Upgrade>>"
-ShowNotUpdatedWarning
 
 #####################################################################
 do_upgrade() {
