@@ -1,6 +1,46 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
+
+header_inject_head=$(cat <<EOF
+<style type="text/css">
+<!--
+.qostable table {
+	margin-left: 2em;
+	margin-right: 2em;
+	border-style: none;
+	border-spacing: 0;
+	padding: 0.5em;
+	padding-bottom: 1em;
+}
+.qostable th,
+.qostable td {
+	text-align: right;
+	padding-top: 0.30em;
+	padding-bottom: 0.30em;
+	padding-left: 0.30em;
+	padding-right: 0.30em;
+}
+.qostable th.text,
+.qostable td.text {
+	text-align: left;
+}
+.qosraw table {
+	width: 90%;
+	border-style: none;
+	border-spacing: 0;
+}
+.qosraw th,
+.qosraw td {
+	text-align: left;
+}
+-->
+</style>
+
+EOF
+)
+
+
 header "Status" "QoS" "@TR<<Quality of Service Statistics>>"
 ###################################################################
 # TCP/IP status page
@@ -62,26 +102,41 @@ ingress_stats_table=$(echo "$ingress_status" |
 					class="Unknown" $3
 				}														
 				getline		
-				print "<tr><td>" class "</td><td>" 
-				print $4
-				print "</td><td>" 
-				print $2
-				print "</td></tr>"
+				print "<tr>"
+				print "	<td class=\"text\">" class "</td>"
+				print "	<td>" $4 "</td>"
+				printf "	<td>%d</td>\n", $2
+				if ($2 >= 2 ** 30) {
+					printf "	<td>(%.1f GB)</td>\n", $2 / (2 ** 30)
+				} else if ($2 >= 2 ** 20) {
+					printf "	<td>(%.1f MB)</td>\n", $2 / (2 ** 20)
+				} else if ($2 >= 2 ** 10) {
+					printf "	<td>(%.1f kB)</td>\n", $2 / (2 ** 10)
+				} else {
+					print "	<td>&nbsp;</td>"
+				}
+				print "</tr>"
 			}
 		}'))
 
-display_form <<EOF
-start_form|@TR<<Incoming Traffic>>
+cat <<EOF
+<div class="settings">
+<h3><strong>@TR<<Incoming Traffic>></strong></h3>
+<div id="qostable1" class="qostable">
+<table summary="@TR<<Incoming Traffic>>">
+<tbody>
+<tr>
+	<th class="text">@TR<<Class>></th>
+	<th>@TR<<Packets>></th>
+	<th>@TR<<Bytes>></th>
+	<th>&nbsp;</th>
+</tr>
+$ingress_stats_table
+</tbody>
+</table>
+</div>
 EOF
 
-echo "<table cellspacing=\"10\" cellpadding=\"10\">
-	<tbody>	
-	<tr><th>@TR<<Class>></th><th>@TR<<Packets>></th><th>@TR<<Bytes>></th></tr>
-	$ingress_stats_table</tbody></table>"
-
-display_form <<EOF
-end_form
-EOF
 
 egress_stats_table=$(echo "$egress_status" | 
 	(awk \
@@ -105,22 +160,41 @@ egress_stats_table=$(echo "$egress_status" |
 					class="Unknown" $3
 				}										
 				getline
-				print "<tr><td>" class "</td><td>" 
-				print $4
-				print "</td><td>" 
-				print $2
-				print "</td></tr>"
+				print "<tr>"
+				print "	<td class=\"text\">" class "</td>"
+				print "	<td>" $4 "</td>"
+				printf "	<td>%d</td>\n", $2
+				if ($2 >= 2 ** 30) {
+					printf "	<td>(%.1f GB)</td>\n", $2 / (2 ** 30)
+				} else if ($2 >= 2 ** 20) {
+					printf "	<td>(%.1f MB)</td>\n", $2 / (2 ** 20)
+				} else if ($2 >= 2 ** 10) {
+					printf "	<td>(%.1f kB)</td>\n", $2 / (2 ** 10)
+				} else {
+					print "	<td>&nbsp;</td>"
+				}
+				print "</tr>"
 			}
 		}'))
 
-display_form <<EOF
-start_form|@TR<<Outgoing Traffic>>
+cat <<EOF
+<h3><strong>@TR<<Outgoing Traffic>></strong></h3>
+<div id="qostable2" class="qostable">
+<table summary="@TR<<Outgoing Traffic>>">
+<tbody>
+<tr>
+	<th class="text">@TR<<Class>></th>
+	<th>@TR<<Packets>></th>
+	<th>@TR<<Bytes>></th>
+	<th>&nbsp;</th>
+</tr>
+$egress_stats_table
+</tbody>
+</table>
+</div>
+<div class="settings-content">
+<table>
 EOF
-
-echo "<table cellspacing=\"10\" cellpadding=\"10\">
-	<tbody>	
-	<tr><th>@TR<<Class>></th><th>@TR<<Packets>></th><th>@TR<<Bytes>></th></tr>
-	$egress_stats_table</tbody></table>"
 
 display_form <<EOF
 field||spacer1
@@ -135,18 +209,24 @@ EOF
 #########################################
 # raw stats
 ! empty "$FORM_show_raw_stats" && {
-	echo "<br />
-	<table style=\"width: 90%; text-align: left;\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\">
-	<tbody>
-	<tr>
-		<th>@TR<<QoS Packets | Raw Stats>></th>
-	</tr>
-	<tr>
-	<td>"
-	echo "<br /><div class=\"smalltext\"><pre>"
+	echo "<br />"
+	echo "<div id=\"qostable3\" class=\"qosraw\">"
+	echo "<table>"
+	echo "<tbody>"
+	echo "<tr>"
+	echo "	<th>@TR<<QoS Packets | Raw Stats>></th>"
+	echo "</tr>"
+	echo "<tr>"
+	echo "	<td><br /><div class=\"smalltext\"><pre>"
 	qos-stat
-	echo "</pre></div>"
-	echo "</td></tr><tr><td><br /><br /></td></tr></tbody></table>"
+	echo "</pre></div></td>"
+	echo "</tr>"
+	echo "<tr>"
+	echo "<td><br /></td>"
+	echo "</tr>"
+	echo "</tbody>"
+	echo "</table>"
+	echo "</div>"
 }
 else
 #########################################
