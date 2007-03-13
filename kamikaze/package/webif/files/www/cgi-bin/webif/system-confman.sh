@@ -156,7 +156,7 @@ start_form|@TR<<Backup Configuration>>
 EOF
 
 cat <<EOF
-<tr><td width="70%">@TR<<Name this configuration>>:&nbsp;&nbsp;&nbsp;<input name="name" value="${FORM_name:-$$CONFIG_system_hostname}"/></td>
+<tr><td width="70%">@TR<<Name this configuration>>:&nbsp;&nbsp;&nbsp;<input name="name" value="${FORM_name:-$CONFIG_system_hostname}"/></td>
 <td><input class="flatbtn" type="submit" name="download" value="@TR<<Backup>>" /></td>
 </tr>
 EOF
