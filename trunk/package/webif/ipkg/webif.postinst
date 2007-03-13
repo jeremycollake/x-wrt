@@ -152,8 +152,10 @@ fi
 if [ -z "${IPKG_INSTROOT}" ]; then	
 	# force re-initialization of extension package lists
 	rm -f "/etc/languages.lst"
+	/usr/lib/webif/webif-mklanglist.sh
 	rm -f "/etc/themes.lst"
-
+	/usr/lib/webif/webif-mkthemelist.sh
+	
 	[ "$IPKG_UPDATE_NEEDED" = "1" ] && ipkg update
 
 	# todo: merge these two files so two uci commits don't get done
