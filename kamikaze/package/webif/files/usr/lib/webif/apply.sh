@@ -365,7 +365,7 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 		oldlang="$CONFIG_general_lang"
 	}
 	echo "@TR<<Committing>> ${package#/tmp/.uci/} ..."
-	uci_commit "$package"	
+	uci_commit "$package"
 	case "$package" in
 		"/tmp/.uci/qos") qos-start;;
 		"/tmp/.uci/webif") 
@@ -388,8 +388,7 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 			ifdown lan
 			ifup lan
 			killall dnsmasq
-			ls /etc/rc.d/ |grep -q dnsmasq
-			if [ "$?" = "0" ]; then
+			if exists "/etc/rc.d/S??dnsmasq"; then
 				/etc/init.d/dnsmasq start ;;
 			fi
 		"/tmp/.uci/wireless")
@@ -407,8 +406,16 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 		"/tmp/.uci/system")
 			/etc/init.d/boot start ;;
 		"/tmp/.uci/updatedd")
-			/etc/init.d/ddns stop >&- 2>&- <&-
-			/etc/init.d/ddns start >&- 2>&- <&- ;;
+			uci_load "updatedd"
+			if [ "$CONFIG_ddns_update" = "1" ]; then
+				/etc/init.d/ddns enable >&- 2>&- <&-
+				/etc/init.d/ddns stop >&- 2>&- <&-
+				/etc/init.d/ddns start >&- 2>&- <&-
+			else
+				/etc/init.d/ddns disable >&- 2>&- <&-
+				/etc/init.d/ddns stop >&- 2>&- <&-
+			fi
+		 	;;
 	esac
 done
 
