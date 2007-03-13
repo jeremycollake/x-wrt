@@ -165,6 +165,13 @@ if [ -e "/tmp/.uci/webif" ]; then
 fi
 
 	[ "$IPKG_UPDATE_NEEDED" = "1" ] && ipkg update
+	
+	# force re-initialization of extension package lists
+	rm -f "/etc/languages.lst"
+	/usr/lib/webif/webif-mklanglist.sh
+	rm -f "/etc/themes.lst"
+	/usr/lib/webif/webif-mkthemelist.sh
+
 	/etc/init.d/webif enable
 	/etc/init.d/custom-user-startup enable
 	
