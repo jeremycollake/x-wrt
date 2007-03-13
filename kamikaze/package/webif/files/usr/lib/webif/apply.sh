@@ -388,7 +388,10 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 			ifdown lan
 			ifup lan
 			killall dnsmasq
-			/etc/init.d/dnsmasq start ;;
+			ls /etc/rc.d/ |grep -q dnsmasq
+			if [ "$?" = "0" ]; then
+				/etc/init.d/dnsmasq start ;;
+			fi
 		"/tmp/.uci/wireless")
 			echo '@TR<<Reloading>> @TR<<wireless>> ...'
 			wifi ;;
@@ -419,4 +422,5 @@ done
 #
 cd "$pushed_dir"
 rm /tmp/.webif/* >&- 2>&-
+rm /tmp/.uci/* >&- 2>&-
 
