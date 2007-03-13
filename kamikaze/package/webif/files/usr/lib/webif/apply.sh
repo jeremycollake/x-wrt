@@ -389,8 +389,9 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 			ifup lan
 			killall dnsmasq
 			if exists "/etc/rc.d/S??dnsmasq"; then
-				/etc/init.d/dnsmasq start ;;
+				/etc/init.d/dnsmasq start
 			fi
+			;;
 		"/tmp/.uci/wireless")
 			echo '@TR<<Reloading>> @TR<<wireless>> ...'
 			wifi ;;
