@@ -68,6 +68,7 @@ EOF
 )
 
 ! empty "$FORM_delpath" && {
+	cd / 2>/dev/null
 	ERROR=$(rmdir "$FORM_delpath" 2>&1)
 	equal "$?" "0" && {
 		SUCCESS=$(cat <<EOF
@@ -88,13 +89,22 @@ EOF
 	}
 }
 
+! equal "$ERROR" "" && ERROR="$ERROR<br />"
+
+FORM_path="${FORM_path:-/}"
+ERROR="$ERROR$(cd "$FORM_path" 2>&1)"
+cd "$FORM_path" 2>/dev/null
+while [ "$?" != "0" ]; do
+	FORM_path="${FORM_path%/*}"
+	FORM_path="${FORM_path:-/}"
+	cd "$FORM_path" 2>/dev/null
+done
+FORM_path="$(pwd)"
+
 header "System" "File Editor" "@TR<<system_editor_File_Editor#File Editor>>" ''
 
 ! empty "$SUCCESS" && echo "$SUCCESS"
 
-FORM_path="${FORM_path:-/}"
-cd "$FORM_path"
-FORM_path="$(pwd)"
 edit_pathname="$FORM_path/$FORM_edit"
 saved_filename="/tmp/.webif/edited-files/$edit_pathname"
 
@@ -108,7 +118,7 @@ empty "$FORM_cancel" || FORM_edit=""
 
 if empty "$FORM_edit"; then
 	(ls -alLe "$FORM_path" | grep "^[d]";
-		ls -alLe "$FORM_path" | grep "^[^d]") | awk \
+		ls -alLe "$FORM_path" | grep "^[^d]") 2>/dev/null | awk \
 		-v url="$SCRIPT_NAME" \
 		-v path="$FORM_path" \
 		-f /usr/lib/webif/common.awk \

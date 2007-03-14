@@ -85,6 +85,7 @@ EOF
 )
 
 ! empty "$FORM_delpath" && {
+	cd / 2>/dev/null
 	ERROR=$(rmdir "$FORM_delpath" 2>&1)
 	equal "$?" "0" && {
 		SUCCESS=$(cat <<EOF
@@ -104,6 +105,18 @@ EOF
 )
 	}
 }
+
+! equal "$ERROR" "" && ERROR="$ERROR<br />"
+
+FORM_path="${FORM_path:-/}"
+ERROR="$ERROR$(cd "$FORM_path" 2>&1)"
+cd "$FORM_path" 2>/dev/null
+while [ "$?" != "0" ]; do
+	FORM_path="${FORM_path%/*}"
+	FORM_path="${FORM_path:-/}"
+	cd "$FORM_path" 2>/dev/null
+done
+FORM_path="$(pwd)"
 
 header "System" "Startup" "@TR<<Startup>>" ''
 
@@ -133,8 +146,8 @@ empty "$FORM_cancel" || FORM_edit=""
 }
 
 if empty "$FORM_edit"; then
-	(ls -alLe "$FORM_path" 2>/dev/null | grep "^[d]";
-		ls -alLe "$FORM_path" 2>/dev/null | grep "^[^d]") | awk \
+	(ls -halLe "$FORM_path" 2>/dev/null | grep "^[d]";
+		ls -halLe "$FORM_path" 2>/dev/null | grep "^[^d]") 2>/dev/null | awk \
 		-v url="$SCRIPT_NAME" \
 		-v path="$FORM_path" \
 		-f /usr/lib/webif/common.awk \
