@@ -156,6 +156,9 @@ for device in $DEVICES; do
 	        config_get FORM_channel $device channel
 	        config_get FORM_maxassoc $device maxassoc
 	        config_get FORM_distance $device distance
+	        config_get FORM_diversity $device diversity
+	        config_get FORM_txantenna $device txantenna
+	        config_get FORM_rxantenna $device rxantenna
 	else
 		config_get country $device country
 		config_get iftype "$device" type
@@ -163,7 +166,11 @@ for device in $DEVICES; do
 		eval FORM_channel="\$FORM_channel_$device"
 		eval FORM_maxassoc="\$FORM_maxassoc_$device"
 		eval FORM_distance="\$FORM_distance_$device"
+		eval FORM_diversity="\$FORM_diversity_$device"
+		eval FORM_txantenna="\$FORM_txantenna_$device"
+		eval FORM_txantenna="\$FORM_txantenna_$device"		
 	fi
+	
         append forms "start_form|@TR<<Wireless Adapter>> $device @TR<< Configuration>>" "$N"
         if [ "$iftype" = "broadcom" ]; then
         	append forms "helpitem|Broadcom Wireless Configuration" "$N"
@@ -211,19 +218,42 @@ for device in $DEVICES; do
 	append forms "$BG_CHANNELS" "$N"
 	append forms "$A_CHANNELS" "$N"
 	
+	if [ "$iftype" = "atheros" ]; then
+        	mode_diversity="field|@TR<<Diversity>>
+			select|diversity_$device|$FORM_diversity
+			option|1|@TR<<On>>
+        		option|0|@TR<<Off>>"        	
+        	append forms "$mode_diversity" "$N"
+
+        	form_txant="field|@TR<<TX Antenna>>
+			select|txantenna_$device|$FORM_txantenna
+			option|0|@TR<<Auto>>
+        		option|1|@TR<<Antenna 1>>
+        		option|2|@TR<<Antenna 2>>"
+        	append forms "$form_txant" "$N"
+
+        	form_rxant="field|@TR<<RX Antenna>>
+			select|rxantenna_$device|$FORM_rxantenna
+			option|0|@TR<<Auto>>
+        		option|1|@TR<<Antenna 1>>
+        		option|2|@TR<<Antenna 2>>"
+        	append forms "$form_rxant" "$N"
+        fi
+        
+	
 	#Currently broadcom only.
 	if [ "$iftype" = "broadcom" ]; then
         maxassoc="field|@TR<<Max Associated Clients (Default 128)>>
                 text|maxassoc_${device}|$FORM_maxassoc"
-
+	append forms "$maxassoc" "$N"
+	fi
+	
         distance="field|@TR<<Wireless Distance (In Meters)>>
                 text|distance_${device}|$FORM_distance"
 
-	        append forms "$maxassoc" "$N"
-	        append forms "$distance" "$N"
-	        append forms "helpitem|Wireless Distance" "$N"
-        	append forms "helptext|Helptext Wireless Distance#You must enter a number that is the distance of your longest link." "$N"
-        fi
+	append forms "$distance" "$N"
+	append forms "helpitem|Wireless Distance" "$N"
+        append forms "helptext|Helptext Wireless Distance#You must enter a number that is the distance of your longest link." "$N"
 
 	add_vcfg="string|<tr><td><a href=$SCRIPT_NAME?add_vcfg=$device&amp;add_vcfg_number=$vcfg_number>@TR<<Add Virtual Interface>></a>"
         append forms "$add_vcfg" "$N"
@@ -253,6 +283,8 @@ for device in $DEVICES; do
 	        		config_get FORM_radius_port $vcfg port
 	        		config_get FORM_hidden $vcfg hidden
 	        		config_get FORM_isolate $vcfg isolate
+	        		config_get FORM_txpower $vcfg txpower
+	        		config_get FORM_bgscan $vcfg bgscan
 			else
 				eval FORM_key="\$FORM_radius_key_$vcfg"
 				eval FORM_radius_ipaddr="\$FORM_radius_ipaddr_$vcfg"
@@ -275,6 +307,8 @@ for device in $DEVICES; do
 				eval FORM_broadcast="\$FORM_broadcast_$vcfg"
 				eval FORM_ssid="\$FORM_ssid_$vcfg"
 				eval FORM_network="\$FORM_network_$vcfg"
+				eval FORM_txpower="\$FORM_txpower_$vcfg"
+				eval FORM_bgscan="\$FORM_bgscan_$vcfg"
 			fi
 			
 			case "$FORM_mode" in
@@ -304,6 +338,23 @@ for device in $DEVICES; do
 				option|0|@TR<<Show>>
 				option|1|@TR<<Hide>>"
 			append forms "$hidden" "$N"
+			
+			if [ "$iftype" = "atheros" ]; then
+			txpowers="$(iwlist ath0 txpower |grep "Current Tx-Power" -v |grep "ath0" -v | cut -d'd' -f 1 |cut -d' ' -f 3)"
+			txpower_field="field|@TR<<Tx Power>>
+					select|txpower_$vcfg|$FORM_txpower"
+			for txpower in $txpowers; do
+				txpower_field="$txpower_field
+						option|$txpower|$txpower dbm"
+			done
+			append forms "$txpower_field" "$N"
+			
+			bgscan_field="field|@TR<<Backround Client Scanning>>|bgscan_form_$vcfg|hidden
+					select|bgscan_$vcfg|$FORM_bgscan
+					option|1|@TR<<On>>
+					option|0|@TR<<Off>>"
+			append forms "$bgscan_field" "$N"
+			fi
 
 			ssid="field|@TR<<ESSID>>|ssid_form_$vcfg|hidden
 				text|ssid_$vcfg|$FORM_ssid"
@@ -479,6 +530,8 @@ for device in $DEVICES; do
 				set_visible('broadcast_form_$vcfg', v);
 				v = (isset('mode_$vcfg','wds'));
 				set_visible('bssid_form_$vcfg', v);
+				v = (isset('mode_$vcfg','sta'));
+				set_visible('bgscan_form_$vcfg', v);
 				v = (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2'));
 				set_visible('wpapsk_$vcfg', v);
 				v = (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2') || isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2'));
@@ -527,10 +580,16 @@ EOF
 				eval FORM_channel="\$FORM_channel_$device"
 				eval FORM_maxassoc="\$FORM_maxassoc_$device"
 				eval FORM_distance="\$FORM_distance_$device"
+				eval FORM_diversity="\$FORM_diversity_$device"
+				eval FORM_txantenna="\$FORM_txantenna_$device"
+				eval FORM_rxantenna="\$FORM_rxantenna_$device"
 				uci_set "wireless" "$device" "mode" "$FORM_ap_mode"
 				uci_set "wireless" "$device" "channel" "$FORM_channel"
 				uci_set "wireless" "$device" "maxassoc" "$FORM_maxassoc"
 				uci_set "wireless" "$device" "distance" "$FORM_distance"
+				uci_set "wireless" "$device" "diversity" "$FORM_diversity"
+				uci_set "wireless" "$device" "txantenna" "$FORM_txantenna"
+				uci_set "wireless" "$device" "rxantenna" "$FORM_rxantenna"
 
 				for vcfg in $vface; do
      		  			config_get FORM_device $vcfg device
@@ -553,6 +612,8 @@ EOF
 						eval FORM_ssid="\$FORM_ssid_$vcfg"
 						eval FORM_bssid="\$FORM_bssid_$vcfg"
 						eval FORM_network="\$FORM_network_$vcfg"
+						eval FORM_txpower="\$FORM_txpower_$vcfg"
+						eval FORM_bgscan="\$FORM_bgscan_$vcfg"
 
 						uci_set "wireless" "$vcfg" "network" "$FORM_network"
 						uci_set "wireless" "$vcfg" "ssid" "$FORM_ssid"
@@ -563,6 +624,9 @@ EOF
 						uci_set "wireless" "$vcfg" "port" "$FORM_radius_port"
 						uci_set "wireless" "$vcfg" "hidden" "$FORM_hidden"
 						uci_set "wireless" "$vcfg" "isolate" "$FORM_isolate"
+						uci_set "wireless" "$vcfg" "txpower" "$FORM_txpower"
+						uci_set "wireless" "$vcfg" "bgscan" "$FORM_bgscan"
+						
 						case "$FORM_encryption" in
 							wep) uci_set "wireless" "$vcfg" "key" "$FORM_wep_key";;
 							psk|psk2) uci_set "wireless" "$vcfg" "key" "$FORM_wpa_psk";;
