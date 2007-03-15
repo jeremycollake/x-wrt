@@ -25,7 +25,7 @@
 #
 
 ###### This nightmare's author is lubek
-###### This is the ugly hack to get the old value of 
+###### This is the ugly hack to get the old value of
 ###### a config variable and set its value only once.
 ###### It is currently used only for the language setting.
 ###### Try setting the different language several times and save
@@ -224,7 +224,7 @@ fi
 is_kamikaze && {	
 	effect_field=$(cat <<EOF
 field| 
-string|<input type="checkbox" name="effect_enable" value="1" $FORM_effect />&nbsp;@TR<<Enable visual effects>><br/><br/>"
+string|<input type="checkbox" name="effect_enable" value="1" $FORM_effect />&nbsp;@TR<<Enable visual effects>><br/><br/>
 EOF
 )
 }
