@@ -23,6 +23,46 @@
 # Configuration files referenced:
 #   none
 #
+
+###### This nightmare's author is lubek
+###### This is the ugly hack to get the old value of 
+###### a config variable and set its value only once.
+###### It is currently used only for the language setting.
+###### Try setting the different language several times and save
+###### changes, repeat the same with themes to see what is wrong!
+###### These functions should be offered by the UCI!
+###### Remove this hack after the proper implementation in UCI!
+. /lib/config/uci.sh
+. /lib/config/uci-depends.sh
+uci_get_original_value() {
+	local PACKAGE="$1"
+	local CONFIG="$2"
+	local OPTION="$3"
+	local VALUE=
+
+	VALUE=$(
+		config_load "$PACKAGE" 2>/dev/null
+		eval "CONFORIG=\$CONFIG_${CONFIG}_${OPTION}" 2>/dev/null
+		echo "$CONFORIG"
+	)
+	eval "CONFORIG_${CONFIG}_${OPTION}=$VALUE" 2>/dev/null
+}
+uci_set_replace_value() {
+	local OLDVALUE
+	uci_get_original_value "$1" "$2" "$3"
+	#remove every section with the lang setting
+	! equal "$(grep -q "^option[ \t'\"]*$3[ \t'\"]*" "/tmp/.uci/$1" 2>/dev/null)" "0" && {
+		awk 'ORS=NR%2?"|":"\n"' "/tmp/.uci/$1" 2>/dev/null |
+			sed "s/^CONFIG_SECTION=['\''\"]$2\>.*|option[ \t'\''\"]*$3[ '\''\"]*.*\$//" |
+			awk -F "|" ' { if (length($1)>0) print$1"\n"$2 } ' > "/tmp/.uci/$1.new"
+		mv -f "/tmp/.uci/$1.new" "/tmp/.uci/$1" 2>/dev/null
+		[ -s "/tmp/.uci/$1" ] || rm -f "/tmp/.uci/$1" 2>/dev/null
+	}
+	eval "OLDVALUE=\$CONFORIG_${2}_${3}"
+	! equal "$OLDVALUE" "$4" && uci_set "$1" "$2" "$3" "$4"
+}
+###### This is the ugly hack
+
 is_bcm947xx && {
 	load_settings "system"
 	load_settings "webif"
@@ -125,8 +165,10 @@ if empty "$FORM_submit"; then
 	}
 	# webif settings
 	uci_load "webif"
-	FORM_effect="${CONFIG_general_use_progressbar}"		# -- effects checkbox	
-	if equal $FORM_effect "1" ; then FORM_effect="checked" ; fi	# -- effects checkbox	
+	is_kamikaze && {	
+		FORM_effect="${CONFIG_general_use_progressbar}"		# -- effects checkbox
+		if equal $FORM_effect "1" ; then FORM_effect="checked" ; fi	# -- effects checkbox
+	}
 	FORM_language="${CONFIG_general_lang:-default}"	
 	FORM_theme=${CONFIG_theme_id:-xwrt}
 else
@@ -169,13 +211,23 @@ EOF
 		! equal "$FORM_theme" "$CONFIG_theme_id" && ! empty "$CONFIG_theme_id" && {	
 			uci_set "webif" "theme" "id" "$FORM_theme"
 		}
-		uci_set "webif" "general" "lang" "$FORM_language"
-		uci_set "webif" "general" "use_progressbar" "$FORM_effect_enable"
-		FORM_effect=$FORM_effect_enable ; if equal $FORM_effect "1" ; then FORM_effect="checked" ; fi
+		uci_set_replace_value "webif" "general" "lang" "$FORM_language"
+		is_kamikaze && {	
+			uci_set "webif" "general" "use_progressbar" "$FORM_effect_enable"
+			FORM_effect=$FORM_effect_enable ; if equal $FORM_effect "1" ; then FORM_effect="checked" ; fi
+		}
 	else
 		echo "<br /><div class=\"warning\">Warning: Hostname failed validation. Can not be saved.</div><br />"
 	fi
 fi
+
+is_kamikaze && {	
+	effect_field=$(cat <<EOF
+field| 
+string|<input type="checkbox" name="effect_enable" value="1" $FORM_effect />&nbsp;@TR<<Enable visual effects>><br/><br/>"
+EOF
+)
+}
 
 #####################################################################
 # over/underclocking
@@ -354,8 +406,7 @@ $NTPCLIENT_INSTALL_FORM
 ##########################
 # webif settings
 start_form|@TR<<Webif Settings>>
-field| 
-string|<input type="checkbox" name="effect_enable" value="1" $FORM_effect />&nbsp;@TR<<Enable visual effects>><br/><br/>
+$effect_field
 field|@TR<<Language>>
 select|language|$FORM_language
 $LANGUAGES
