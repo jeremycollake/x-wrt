@@ -32,8 +32,10 @@
 ###### changes, repeat the same with themes to see what is wrong!
 ###### These functions should be offered by the UCI!
 ###### Remove this hack after the proper implementation in UCI!
+! is_kamikaze && {
 . /lib/config/uci.sh
 . /lib/config/uci-depends.sh
+}
 uci_get_original_value() {
 	local PACKAGE="$1"
 	local CONFIG="$2"
