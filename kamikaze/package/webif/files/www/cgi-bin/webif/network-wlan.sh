@@ -367,7 +367,7 @@ for device in $DEVICES; do
 			append forms "$bgscan_field" "$N"
 			append forms "helpitem|Backround Client Scanning" "$N"
 			append forms "helptext|Helptext Backround Client Scanning#Enables or disables the ablility of a virtual interface to scan for other access points while in client mode. Disabling this allows for higher throughput but keeps your card from roaming to other access points with a higher signal strength." "$N"
-			append forms "helplink|http://madwifi.org/wiki/UserDocs/PerformanceTuning" " "$N"
+			append forms "helplink|http://madwifi.org/wiki/UserDocs/PerformanceTuning" "$N"
 			fi
 
 			ssid="field|@TR<<ESSID>>|ssid_form_$vcfg|hidden
