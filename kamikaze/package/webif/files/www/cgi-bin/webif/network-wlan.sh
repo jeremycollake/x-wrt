@@ -159,6 +159,7 @@ for device in $DEVICES; do
 	        config_get FORM_diversity $device diversity
 	        config_get FORM_txantenna $device txantenna
 	        config_get FORM_rxantenna $device rxantenna
+	        config_get FORM_disabled $device disabled
 	else
 		config_get country $device country
 		config_get iftype "$device" type
@@ -168,7 +169,8 @@ for device in $DEVICES; do
 		eval FORM_distance="\$FORM_distance_$device"
 		eval FORM_diversity="\$FORM_diversity_$device"
 		eval FORM_txantenna="\$FORM_txantenna_$device"
-		eval FORM_txantenna="\$FORM_txantenna_$device"		
+		eval FORM_rxantenna="\$FORM_rxantenna_$device"
+		eval FORM_disabled="\$FORM_disabled_$device"
 	fi
 	
         append forms "start_form|@TR<<Wireless Adapter>> $device @TR<< Configuration>>" "$N"
@@ -180,6 +182,11 @@ for device in $DEVICES; do
 		append forms "helptext|Helptext Atheros Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-4x ap or 1-4x ap or 1x adhoc" "$N"
 	fi
 	
+        mode_fields="field|@TR<<Radio>>
+		select|disabled_$device|$FORM_disabled
+		option|1|@TR<<Off>>
+        	option|0|@TR<<On>>"
+        	
         if [ "$iftype" = "atheros" ]; then
         mode_fields="field|@TR<<Mode>>
 		select|mode_ap_$device|$FORM_ap_mode
@@ -224,6 +231,8 @@ for device in $DEVICES; do
 			option|1|@TR<<On>>
         		option|0|@TR<<Off>>"        	
         	append forms "$mode_diversity" "$N"
+        	append forms "helpitem|Diversity" "$N"
+		append forms "helptext|Helptext Diversity#You
 
         	form_txant="field|@TR<<TX Antenna>>
 			select|txantenna_$device|$FORM_txantenna
@@ -583,6 +592,8 @@ EOF
 				eval FORM_diversity="\$FORM_diversity_$device"
 				eval FORM_txantenna="\$FORM_txantenna_$device"
 				eval FORM_rxantenna="\$FORM_rxantenna_$device"
+				eval FORM_disabled="\$FORM_disabled_$device"
+				
 				uci_set "wireless" "$device" "mode" "$FORM_ap_mode"
 				uci_set "wireless" "$device" "channel" "$FORM_channel"
 				uci_set "wireless" "$device" "maxassoc" "$FORM_maxassoc"
@@ -590,6 +601,7 @@ EOF
 				uci_set "wireless" "$device" "diversity" "$FORM_diversity"
 				uci_set "wireless" "$device" "txantenna" "$FORM_txantenna"
 				uci_set "wireless" "$device" "rxantenna" "$FORM_rxantenna"
+				uci_set "wireless" "$device" "disabled" "$FORM_disabled"
 
 				for vcfg in $vface; do
      		  			config_get FORM_device $vcfg device
