@@ -231,8 +231,6 @@ for device in $DEVICES; do
 			option|1|@TR<<On>>
         		option|0|@TR<<Off>>"        	
         	append forms "$mode_diversity" "$N"
-        	append forms "helpitem|Diversity" "$N"
-		append forms "helptext|Helptext Diversity#You
 
         	form_txant="field|@TR<<TX Antenna>>
 			select|txantenna_$device|$FORM_txantenna
