@@ -65,19 +65,43 @@ function confirm_delfile(path,file) {
 #filebrowser td {
 	padding-left: 0.1em;
 	padding-right: 0.1em;
-	}
+}
 #filebrowser td.number {
 	text-align: right;
-	}
+}
 #filebrowser td.leftimage {
 	padding-left: 0em;
-	}
+}
 #filebrowser td.image {
 	text-align: center;
-	}
+}
 #filebrowser td.rightimage {
 	padding-right: 0em;
-	}
+}
+#filebrowser a.tooltip {
+	cursor: help;
+	z-index: 24;
+	position: relative;
+	text-decoration: none;
+}
+#filebrowser a.tooltip:hover {
+	z-index: 25;
+	text-decoration: none;
+}
+#filebrowser a.tooltip span {
+	display:none;
+}
+#filebrowser a.tooltip:hover span {
+	position: absolute;
+	top: 1.1em;
+	left: 0em;
+	border: 1px solid;
+	padding: 3px;
+	display: block;
+	width: 245px;
+	color: Black;
+	background-color: White;
+}
 -->
 </style>
 
@@ -146,8 +170,8 @@ empty "$FORM_cancel" || FORM_edit=""
 }
 
 if empty "$FORM_edit"; then
-	(ls -halLe "$FORM_path" 2>/dev/null | grep "^[d]";
-		ls -halLe "$FORM_path" 2>/dev/null | grep "^[^d]") 2>/dev/null | awk \
+	(ls -alLe "$FORM_path" 2>/dev/null | grep "^[d]";
+		ls -alLe "$FORM_path" 2>/dev/null | grep "^[^d]") 2>/dev/null | awk \
 		-v url="$SCRIPT_NAME" \
 		-v path="$FORM_path" \
 		-f /usr/lib/webif/common.awk \

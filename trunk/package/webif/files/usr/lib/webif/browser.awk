@@ -31,7 +31,6 @@ BEGIN {
 	line = ""
 	fullpath = path "/" fname
 	gsub(/^\/\//, "/", fullpath)
-
 }
 
 (fname != ".") && (fname != "") {
@@ -42,6 +41,8 @@ BEGIN {
 		print tr_ind "<tr class=\"odd\">"
 		odd++
 	}
+	finfo = "@TR<<browser_Permissions#Permissions>>: " substr($1,2) "<br />@TR<<browser_Owner#Owner>>: " $3 "<br />@TR<<browser_Group#Group>>: " $4 "<br />@TR<<browser_Time#Time>>: " $6
+	for (i=7; i<=10; i++) finfo = finfo " " $i
 }
 
 type == "d" {
@@ -54,7 +55,7 @@ type == "d" {
 		print td_ind "<td>&nbsp;</td>"
 		print td_ind "<td>&nbsp;</td>"
 	} else if (fname != ".") {
-		print td_ind "<td class=\"leftimage\"><img src=\"/images/dir.gif\" alt=\"@TR<<browser_Directory#Directory>>\" /></td>"
+		print td_ind "<td class=\"leftimage\"><a class=\"tooltip\" href=\"#\"><img src=\"/images/dir.gif\" alt=\"@TR<<browser_Directory#Directory>>\" /><span>" finfo "</span></a></td>"
 		print td_ind "<td><a href=\"" url "?path=" fullpath "\">" fname "</a></td>"
 		print td_ind "<td>&nbsp;</td>"
 		print td_ind "<td>&nbsp;</td>"
@@ -67,7 +68,7 @@ type == "d" {
 }
 
 type == "-" {
-	print td_ind "<td class=\"leftimage\"><img src=\"/images/file.gif\" alt=\"@TR<<browser_File#File>>\" /></td>"
+	print td_ind "<td class=\"leftimage\"><a class=\"tooltip\" href=\"#\"><img src=\"/images/file.gif\" alt=\"@TR<<browser_File#File>>\" /><span>" finfo "</span></a></td>"
 	if (path ~ xdownload) {
 		print td_ind "<td>" fname "</td>"
 	} else {
