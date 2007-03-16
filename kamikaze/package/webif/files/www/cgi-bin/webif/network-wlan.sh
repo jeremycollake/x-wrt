@@ -182,10 +182,11 @@ for device in $DEVICES; do
 		append forms "helptext|Helptext Atheros Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-4x ap or 1-4x ap or 1x adhoc" "$N"
 	fi
 	
-        mode_fields="field|@TR<<Radio>>
+        mode_disabled="field|@TR<<Radio>>
 		select|disabled_$device|$FORM_disabled
 		option|1|@TR<<Off>>
         	option|0|@TR<<On>>"
+        append forms "$mode_disabled" "$N"
         	
         if [ "$iftype" = "atheros" ]; then
         mode_fields="field|@TR<<Mode>>
@@ -231,6 +232,9 @@ for device in $DEVICES; do
 			option|1|@TR<<On>>
         		option|0|@TR<<Off>>"        	
         	append forms "$mode_diversity" "$N"
+        	append forms "helpitem|Diversity" "$N"
+		append forms "helptext|Helptext Diversity#Used on systems with multiple antennas to help improve reception. Disable if you only have one antenna." "$N"
+		append forms "helplink|http://madwifi.org/wiki/UserDocs/AntennaDiversity" "$N"
 
         	form_txant="field|@TR<<TX Antenna>>
 			select|txantenna_$device|$FORM_txantenna
@@ -361,6 +365,9 @@ for device in $DEVICES; do
 					option|1|@TR<<On>>
 					option|0|@TR<<Off>>"
 			append forms "$bgscan_field" "$N"
+			append forms "helpitem|Backround Client Scanning" "$N"
+			append forms "helptext|Helptext Backround Client Scanning#Enables or disables the ablility of a virtual interface to scan for other access points while in client mode. Disabling this allows for higher throughput but keeps your card from roaming to other access points with a higher signal strength." "$N"
+			append forms "helplink|http://madwifi.org/wiki/UserDocs/PerformanceTuning" " "$N"
 			fi
 
 			ssid="field|@TR<<ESSID>>|ssid_form_$vcfg|hidden
