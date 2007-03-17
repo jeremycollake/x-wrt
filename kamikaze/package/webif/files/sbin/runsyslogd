@@ -23,12 +23,12 @@ DEFAULT_log_port=514
 DEFAULT_log_file="/var/log/messages"
 
 # retrieve uci values
-syslog_ip="$CONFIG_syslog_ipaddr"
-syslog_port="$CONFIG_syslog_port"
-syslog_size="$CONFIG_syslog_size"
-syslog_type="$CONFIG_syslog_type"
-syslog_mark="$CONFIG_syslog_mark"
-syslog_file="$CONFIG_syslog_file"
+syslog_ip="$CONFIG_general_ipaddr"
+syslog_port="$CONFIG_general_port"
+syslog_size="$CONFIG_general_size"
+syslog_type="$CONFIG_general_type"
+syslog_mark="$CONFIG_general_mark"
+syslog_file="$CONFIG_general_file"
 
 # verify values
 [ $syslog_type = "circular" ] 2>>/dev/null || [ $syslog_type = "file" ] 2>>/dev/null || syslog_type=$DEFAULT_log_type
