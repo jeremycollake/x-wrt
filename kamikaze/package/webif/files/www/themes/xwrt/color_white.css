@@ -31,5 +31,5 @@ body,
 	color: Black;
 	border-color: Black;
 }
-
+.odd {	background-color: #eee }
 .warning { color: Black; }
