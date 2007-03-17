@@ -10,7 +10,7 @@
 # -R HOST[:PORT]  Log to IP or hostname on PORT (default PORT=514/UDP)
 # -L              Log locally and via network logging (default is network only)
 # -C [size(KiB)]  Log to a circular buffer (read the buffer using logread)
-
+. /etc/functions.sh
 . /etc/runsyslogd.conf
 
 # retrieve nvram values
