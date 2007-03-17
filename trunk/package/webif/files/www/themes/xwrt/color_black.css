@@ -40,7 +40,7 @@ a {
 	color: White;
 	border-color: White;
 }
-
+.odd {	background-color: #222 }
 .warning { color: White; }
 
 .progressbar-filled {
