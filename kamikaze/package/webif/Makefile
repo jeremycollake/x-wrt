@@ -21,98 +21,103 @@ define Package/webif
   VERSION:=$(LINUX_VERSION) $(PKG_VERSION)-$(PKG_RELEASE)
 endef
 
-define Package/webif-lang-ca
+define Package/webif-lang
 $(call Package/webif)
+  PKGARCH:=all
+endef
+
+define Package/webif-lang-ca
+$(call Package/webif-lang)
   TITLE:=Catalan language file for webif.
 endef
 
 define Package/webif-lang-cz
-$(call Package/webif)
+$(call Package/webif-lang)
   TITLE:=Czech language file for webif.
 endef
 
 define Package/webif-lang-de
-$(call Package/webif)
+$(call Package/webif-lang)
   TITLE:=German language file for webif.
 endef
 
 define Package/webif-lang-dk
-$(call Package/webif)
+$(call Package/webif-lang)
   TITLE:=Danish language file for webif.
 endef
 
 define Package/webif-lang-ee
-$(call Package/webif)
+$(call Package/webif-lang)
   TITLE:=Estonian language file for webif.
 endef
 
 define Package/webif-lang-es
-$(call Package/webif)
+$(call Package/webif-lang)
   TITLE:=Spanish language file for webif.
 endef
 
 define Package/webif-lang-fr
-$(call Package/webif)
+$(call Package/webif-lang)
   TITLE:=French language file for webif.
 endef
 
 define Package/webif-lang-hr
-$(call Package/webif)
+$(call Package/webif-lang)
   TITLE:=Croatian language file for webif.
 endef
 
 define Package/webif-lang-hu
-$(call Package/webif)
+$(call Package/webif-lang)
   TITLE:=Hungarian language file for webif.
 endef
 
 define Package/webif-lang-it
-$(call Package/webif)
+$(call Package/webif-lang)
   TITLE:=wItalian language file for webif.
 endef
 
 define Package/webif-lang-nl
-$(call Package/webif)
+$(call Package/webif-lang)
   TITLE:=Dutch language file for webif.
 endef
 
 define Package/webif-lang-no
-$(call Package/webif)
+$(call Package/webif-lang)
   TITLE:=Norwegian language file for webif.
 endef
 
 define Package/webif-lang-pl
-$(call Package/webif)
+$(call Package/webif-lang)
   TITLE:=Polish language file for webif.
 endef
 
 define Package/webif-lang-pt
-$(call Package/webif)
+$(call Package/webif-lang)
   TITLE:=Portuguese language file for webif.
 endef
 
 define Package/webif-lang-ru
-$(call Package/webif)
+$(call Package/webif-lang)
   TITLE:=Russian language file for webif.
 endef
 
 define Package/webif-lang-se
-$(call Package/webif)
+$(call Package/webif-lang)
   TITLE:=Swedish language file for webif.
 endef
 
 define Package/webif-lang-sq
-$(call Package/webif)
+$(call Package/webif-lang)
   TITLE:=Albanian language file for webif.
 endef
 
 define Package/webif-theme-zephyr
-$(call Package/webif)
+$(call Package/webif-lang)
   TITLE:=Zephyr theme for webif^2.
 endef
 
 define Package/webif-theme-xwrt
-$(call Package/webif)
+$(call Package/webif-lang)
   TITLE:=Original theme for webif^2.
 endef
 
