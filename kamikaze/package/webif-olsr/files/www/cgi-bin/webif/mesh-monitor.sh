@@ -4,6 +4,8 @@
 
 header "Mesh" "Remove2" "was \"Wireless monitor\""
 
+echo "<div class=warning>This page is actually at very alpha state, few functinalities are working, explore at your own risk!</div><br><br>"
+
 if [ ".$(uci get mesh.general.enable)" = ".1" ]; then
 
 echo "<div class=warning>This page is redundant but contains features that must be added to the pages in the Status section.</div>"

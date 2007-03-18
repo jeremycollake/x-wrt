@@ -44,6 +44,8 @@ fi
  
 header "Mesh" "Public" "Public network" '' "$SCRIPT_NAME"
 
+echo "<div class=warning>This page is actually at very alpha state, few functinalities are working, explore at your own risk!</div><br><br>"
+
 if [ ".$(uci get mesh.general.enable)" = ".1" ]; then
 
 echo "<P>The \"public network\" is the wireless side of the network.</P><BR>"

@@ -4,6 +4,8 @@
 
 header "Mesh" "Topology" "Mesh Topology"
 
+echo "<div class=warning>This page is actually at very alpha state, few functinalities are working, explore at your own risk!</div><br><br>"
+
 if [ ".$(uci get mesh.general.enable)" = ".1" ]; then
 
 echo "<p>This page shows you the \"shape\" of the wireless network you are part of.</p><br>"

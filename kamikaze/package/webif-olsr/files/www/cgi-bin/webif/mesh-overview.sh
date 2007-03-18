@@ -2,6 +2,9 @@
 <? 
 . /usr/lib/webif/webif.sh
 header "Mesh" "Remove1" "was \"System overview\""
+
+echo "<div class=warning>This page is actually at very alpha state, few functinalities are working, explore at your own risk!</div><br><br>"
+
 WAN=$(uci show network.wan.ifname)
 PAN=$(uci show network.lan.ifname)
 WIFI=$(uci show network.wifi.ifname)

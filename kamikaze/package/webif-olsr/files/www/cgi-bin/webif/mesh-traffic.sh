@@ -1,9 +1,11 @@
 #!/usr/bin/webif-page
 <? 
 . /usr/lib/webif/webif.sh
-eval $(/usr/bin/megaparam)
+# eval $(/usr/bin/megaparam)
 
 header "Mesh" "Traffic" "Mesh traffic counters"
+
+echo "<div class=warning>This page is actually at very alpha state, few functinalities are working, explore at your own risk!</div><br><br>"
 
 if [ ".$mn_enable" = ".1" ]; then
 
