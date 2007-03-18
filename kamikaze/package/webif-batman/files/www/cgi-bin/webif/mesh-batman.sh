@@ -2,9 +2,67 @@
 <?
 . /usr/lib/webif/webif.sh
 
-header "Mesh" "BATMAN" "@TR<<BATMAN status and configuration>>"
+header "Mesh" "BATMAN" "@TR<<BATMAN status and configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 uci_load "batman"
+
+#####################################################################
+# If this is a form submit..
+! empty "$FORM_submit" && {
+	# TODO: validate input 
+	#validate << EOF
+	#string|FORM_reponame|@TR<<system_ipkg_reponame#Repo. Name>>|min=4 max=40 required #nospaces|$FORM_reponame
+	#string|FORM_repourl|@TR<<system_ipkg_repourl#Repo. URL>>|min=4 max=4096 #required|$FORM_repourl
+	#EOF
+
+	# Get interfaces selected in the form
+	interfaces_to_configure=""
+	available_interfaces=$(ifconfig | grep HWaddr | awk '{printf "%s ",$1}')
+	for interface in $available_interfaces; do
+		eval checkbox_status="\$FORM_batman_interface_$interface"
+		if equal "$checkbox_status" "1";then
+			interfaces_to_configure=$interfaces_to_configure" "$interface
+		fi
+	done
+
+	# Get current configured values
+	batman_interfaces=$(uci get batman.general.interface)
+	batman_announce=$(uci get batman.general.announce)
+	batman_gateway_class=$(uci get batman.general.gateway_class)
+	if equal $batman_gateway_class ""; then 
+		batman_gateway_class="0"
+	fi
+	batman_originator_interval=$(uci get batman.general.originator_interval)
+	batman_preferred_gateway=$(uci get batman.general.preferred_gateway)
+	batman_routing_class=$(uci get batman.general.routing_class)
+	if equal $batman_routing_class ""; then 
+		batman_routing_class="0"
+	fi
+	batman_visualisation_srv=$(uci get batman.general.visualisation_srv)
+
+	# Find differences and apply
+	if ! equal "$batman_interfaces" "$interfaces_to_configure"; then
+		uci set batman.general.interface="$interfaces_to_configure"
+	fi
+	if ! equal "$FORM_batman_announce" "$batman_announce"; then
+		uci set batman.general.announce="$FORM_batman_announce"
+	fi
+	if ! equal "$FORM_batman_gateway_class" "$batman_gateway_class"; then
+		uci set batman.general.gateway_class="$FORM_batman_gateway_class"
+	fi
+	if ! equal "$FORM_batman_originator_interval" "$batman_originator_interval"; then
+		uci set batman.general.originator_interval="$FORM_batman_originator_interval"
+	fi
+	if ! equal "$FORM_batman_preferred_gateway" "$batman_preferred_gateway"; then
+		uci set batman.general.preferred_gateway="$FORM_batman_preferred_gateway"
+	fi
+	if ! equal "$FORM_batman_routing_class" "$batman_routing_class"; then
+		uci set batman.general.routing_class="$FORM_batman_routing_class"
+	fi
+	if ! equal "$FORM_batman_visualisation_srv" "$batman_visualisation_srv"; then
+		uci set batman.general.visualisation_srv="$FORM_batman_visualisation_srv"
+	fi
+}
 
 #####################################################################
 # Prepare form Batman status: batman nodes and gateways
@@ -56,7 +114,6 @@ if equal $batman_routing_class ""; then
 	batman_routing_class="0"
 fi
 batman_visualisation_srv=$(uci get batman.general.visualisation_srv)
-
 
 #####################################################################
 # Page show
