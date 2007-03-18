@@ -6,16 +6,37 @@ uci_load "mesh"
 
 header "Mesh" "Start" "@TR<<Mesh Start>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
-echo "<div class=warning>Mesh pages are very alpha state: few functinalities are working and they can brick your router, explore at your own risk!<br></div>"
-echo "<p>Mesh networks are a revolutionary networking architecture that allows direct connection between users (remember that once mesh mode is enabled some networking options are forced).</p>"
+echo "<h5><p>Mesh networks are a revolutionary networking architecture that allows direct connection between users.<br>Remember, once mesh mode is enabled, some networking options are forced.</p></h5>"
 
 if equal "$mesh_installed" "1" ; then
 	echo "TODO: write the basic options form"
 else
-	echo "<p>Please choose one of the following mesh technologies.</p><br>"
+	echo "<p><h5>Please choose one of the following mesh technologies.</p></h5><br>"
 
 #####################################################################
 # install OLSR daemon and Webif-olsr if asked
+
+	if ! empty "$FORM_install_olsrd"; then
+		tmpfile=$(mktemp "/tmp/.webif_olsrd-XXXXXX")
+		echo "Installing OLSRD package ...<pre>"
+		install_package "olsrd"
+		install_package "olsrd-mod-dyn-gw"
+		install_package "olsrd-mod-httpinfo"
+		install_package "olsrd-mod-nameservice"
+		install_package "olsrd-mod-secure"
+		install_package "olsrd-mod-tas"
+		echo "</pre>"
+	fi
+
+	if ! empty "$FORM_install_webifolsr"; then
+		tmpfile=$(mktemp "/tmp/.webif_webifolsr-XXXXXX")
+		echo "Installing webif-olsr package ...<pre>"
+		install_package "webif-olsr"
+		echo "</pre>"
+	fi
+
+#####################################################################
+# check that OLSR daemon and Webif-olsr are installed or prepare install button
 
 	install_olsrd_button=""
 	! is_package_installed "olsrd" && install_olsrd_button="field|@TR<<OLSR daemon>>
@@ -31,6 +52,23 @@ else
 #####################################################################
 # install BATMAN daemon and Webif-batman if asked
 
+	if ! empty "$FORM_install_batman"; then
+		tmpfile=$(mktemp "/tmp/.webif_batman-XXXXXX")
+		echo "Installing BATMAN package ...<pre>"
+		install_package "batman"
+		echo "</pre>"
+	fi
+
+	if ! empty "$FORM_install_webifbatman"; then
+		tmpfile=$(mktemp "/tmp/.webif_webifbatman-XXXXXX")
+		echo "Installing webif-batman package ...<pre>"
+		install_package "webif-batman"
+		echo "</pre>"
+	fi
+
+#####################################################################
+# check that BATMAN daemon and Webif-batman are installed or prepare install button
+
 	install_batman_button=""
 	! is_package_installed "batman" && install_batman_button="field|@TR<<BATMAN daemon>>
 		submit|install_batman| @TR<<Install>> |"
@@ -45,6 +83,23 @@ else
 #####################################################################
 # install Netsukuku daemon and Webif-netsukuku if asked
 
+	if ! empty "$FORM_install_netsukuku"; then
+		tmpfile=$(mktemp "/tmp/.webif_netsukuku-XXXXXX")
+		echo "Installing Netsukuku package ...<pre>"
+		install_package "netsukuku"
+		echo "</pre>"
+	fi
+
+	if ! empty "$FORM_install_webifnetsukuku"; then
+		tmpfile=$(mktemp "/tmp/.webif_webifnetsukuku-XXXXXX")
+		echo "Installing webif-netsukuku package ...<pre>"
+		install_package "webif-netsukuku"
+		echo "</pre>"
+	fi
+
+#####################################################################
+# check that Netsukuku daemon and Webif-netsukuku are installed or prepare install button
+
 	install_netsukuku_button=""
 	! is_package_installed "netsukuku" && install_netsukuku_button="field|@TR<<Netsukuku daemon>>
 		submit|install_netsukuku| @TR<<Install>> |"
@@ -58,6 +113,16 @@ else
 
 #####################################################################
 # install Webif-meganetwork if asked
+
+	if ! empty "$FORM_install_webifmeganetwork"; then
+		tmpfile=$(mktemp "/tmp/.webif_webifmeganetwork-XXXXXX")
+		echo "Installing Webif-meganetwork package ...<pre>"
+		install_package "webif-meganetwork"
+		echo "</pre>"
+	fi
+
+#####################################################################
+# check that Webif-meganetwork is installed or prepare install button
 
 	install_webifmeganetwork_button=""
 	! is_package_installed "webif-meganetwork" && install_webifmeganetwork_button="field|@TR<<webif-meganetwork>>
@@ -98,6 +163,7 @@ $install_netsukuku_help
 end_form
 
 start_form|@TR<<Meganetwork>>
+$install_webifmeganetwork_button
 $(empty "$install_webifmeganetwork_button" && echo 'string|@TR<<X-Wrt Meganetwork page installed>><br>')
 $install_meganetwork_button
 $install_meganetwork_help
