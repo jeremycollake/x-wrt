@@ -58,7 +58,7 @@ hr,
 	width: 100%;
 	height: 5.5em;
 	color: #ccc;
-	background: #51779e url(/images/openwrt-logo.gif) left 0.5em repeat-x;
+	background-color: #51779e;
 }
 
 #header h1 { display: none; }
