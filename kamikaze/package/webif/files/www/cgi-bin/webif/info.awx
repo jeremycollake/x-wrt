@@ -7,8 +7,15 @@ BEGIN {
 }
 
 function update_check() {
-	version_url = "http://downloads.x-wrt.org/xwrt/kamikaze/" repo
-	"wget -O- -q "version_url"/.version-stable 2>&1" | getline
+	if (getvar("check_daily") != "") {
+		versionfile="/.version"
+		daily_checked=1
+	} else {
+		versionfile="/.version-stable"
+	}
+
+	print "@TR<<Please wait>> ...<br />"
+	"wget -O- -q "version_url versionfile" 2>&1" | getline
 	newrev=$0
 	if ((newrev ~ /doesn't exist/) || (newrev ~ /not found/)) {
 		upgrade_error = 1
@@ -18,6 +25,38 @@ function update_check() {
 			no_new_ver = 1
 		}
 	}
+}
+
+function do_update() {
+	package_filename="webif_latest.ipk"
+	print "@TR<<info_wait_install#Please wait, installation may take a minute>> ... <br />"
+	print "<pre>"
+	system("ipkg -V 0 update")
+	system("ipkg install \""version_url "/" package_filename"\" -force-overwrite -force-reinstall| uniq")
+	print "</pre>"
+
+	getline < "/www/.version"
+	this_rev=$0
+	lang=config_get("general", "lang")
+	"ipkg status \"webif-lang-"lang"\" |grep \"Status:\" | grep \" installed\"" | getline
+	if ($0 != "") {
+		webif_version="r" this_rev
+		while (("ipkg status webif" | getline) == 1) {
+			if (/^Version:/) {
+				webif_version=$2
+				gsub(/ /,"",webif_version)
+			}
+		}
+		print "<pre>"
+		system("ipkg install \""version_url"/packages/webif-lang-"lang"_"webif_version"_all.ipk\" -force-reinstall -force-overwrite | uniq")
+		print "</pre>"
+	}
+}
+
+function do_action() {
+	if (repo && (getvar("update_check") != "")) update_check()
+	else show_rev = rev
+	if (getvar("install_webif") != "") do_update()	
 }
 
 function handle_default() {
@@ -43,9 +82,7 @@ function handle_default() {
 		"cat /proc/cpuinfo" | getline
 		if ($0 ~ /IXP4/) repo = "ixp4xx-2.6"
 	}
-
-	if (repo && (getvar("update_check") != "")) update_check()
-	else show_rev = rev
+	version_url = "http://downloads.x-wrt.org/xwrt/kamikaze/" repo
 
 	PAGENAME = "System"
 	page_title = "<img src=\"/images/blkbox.jpg\" alt=\"@TR<<System Information>>\"/>@TR<<System Information>>"
