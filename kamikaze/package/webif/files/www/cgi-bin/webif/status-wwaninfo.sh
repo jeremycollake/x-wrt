@@ -2,74 +2,7 @@
 <?
 . /usr/lib/webif/webif.sh
 
-# the comgt package has changed
-COMGT=$(which comgt)
-empty "$COMGT" && COMGT=$(which gcom)
-
-DEVICES="/dev/usb/tts/2 /dev/noz2"
-for DEV in $DEVICES
-do
-	[ -c $DEV ] && [ -x "$COMGT" ] && {
-		INFO=$($COMGT -d $DEV info 2>/dev/null | grep -v "^####")
-		STRENGTH=$($COMGT -d $DEV -s /etc/gcom/getstrength.gcom 2>/dev/null | grep "CSQ:" |
-			cut -d: -f2 | cut -d, -f1 | sed 's/[^[:digit:]]\{1,\}\([[:digit:]]\{1,2\}\)$/\1/')
-	}
-done
-
-header "Status" "UMTS" "@TR<<status_wwaninfo_UG_Status#UMTS/GPRS Status>>"
-
-equal "$INFO" "" && equal "$INFO" "$STRENGTH" && {
-	echo "<p>@TR<<status_wwaninfo_no_UG_device#UMTS / GPRS device not found.>></p>"
-	footer
-	exit
-}
-
-display_form <<EOF
-start_form|@TR<<status_wwaninfo_device_info#Device Information>>
-EOF
-
-if ! empty "$INFO"; then
-	echo "$INFO" | awk -F: '
-		BEGIN {
-			print "	<tr>"
-			print "		<th>@TR<<status_wwaninfo_dev_th_Information#Information>></th>"
-			print "		<th>@TR<<status_wwaninfo_dev_th_Value#Value>></th>"
-			print "	</tr>"
-		}
-		{
-			print "	<tr>"
-			print "		<td>" $1 "</td>"
-			col2=$2
-			for (i=3; i<=NF; i++)
-				col2 = col2 ":" $i
-			print "		<td>" col2 "</td>"
-			print "	</tr>"
-		}'
-else
-	echo "	<tr>"
-	echo "		<td colspan=\"2\">@TR<<status_wwaninfo_no_UG_device_info#No device information reported.>></td>"
-	echo "	</tr>"
-fi
-
-display_form <<EOF
-end_form
-EOF
-
-! empty "$STRENGTH" && {
-	cat <<EOF
-<h3>@TR<<status_wwaninfo_Signal_Quality#Signal Quality>></h3>
-EOF
-
-	# check if numeric
-	[ "$STRENGTH" -ge 0 ] 2>/dev/null && {
-		if [ "$STRENGTH" -gt 31 ]; then
-			echo "<p>@TR<<status_wwaninfo_quality_unknown#Signal quality is invalid/unknown>>: ${STRENGTH}</p>"
-		else
-			progress_type="unreliable"
-			[ "$STRENGTH" -gt 9 ] && progress_type="workable"
-			[ "$STRENGTH" -gt 14 ] && progress_type="good"
-			[ "$STRENGTH" -gt 19 ] && progress_type="excellent"
-			cat << EOF
+header_inject_head=$(cat <<EOF
 <style type="text/css">
 /*<![CDATA[*/
 <!--
@@ -148,13 +81,128 @@ EOF
 -->
 /*]]>*/
 </style>
+
+EOF
+)
+
+# the comgt package has changed the executable
+COMGT=$(which comgt 2>/dev/null)
+empty "$COMGT" && COMGT=$(which gcom 2>/dev/null)
+# the webif^2's comgt query script
+COMGTWEBIF="/usr/lib/webif/comgt.webif"
+
+[ -x "$COMGT" ] && [ -s "$COMGTWEBIF" ] && {
+	DEVICES="/dev/usb/tts/2 /dev/noz2"
+	for DEV in $DEVICES
+	do
+		[ -c "$DEV" ] && [ -x "$COMGT" ] && {
+			INFO=$($COMGT -d "$DEV" -s "$COMGTWEBIF" 2>/dev/null)
+			STRENGTH=$(echo "$INFO" | grep "+CSQ:" | cut -d: -f2 | cut -d, -f1)
+			CHARGING=$(echo "$INFO" | grep "+CBC:" | cut -d: -f2 | cut -d, -f1)
+			CAPACITY=$(echo "$INFO" | grep "+CBC:" | cut -d: -f2 | cut -d, -f2)
+		}
+	done
+}
+
+header "Status" "UMTS" "@TR<<status_wwaninfo_UG_Status#UMTS/GPRS Status>>"
+
+equal "$INFO" "" && {
+	cat << EOF
+<p>@TR<<status_wwaninfo_no_UG_device#UMTS / GPRS device not found.>></p>
+EOF
+	equal "$COMGT" "" || equal "$COMGTWEBIF" "" && {
+		cat << EOF
+<p>@TR<<status_wwaninfo_no_req_app#The required components are missing. Please install the latest '<a href="system-ipkg.sh">comgt</a>' package and <a href="info.sh">webif<sup>2</sup></a>.>></p>
+EOF
+	}
+	footer
+	exit
+}
+
+cat << EOF
+<div class="settings">
+<h3><strong>@TR<<status_wwaninfo_device_info#Device Information>></strong></h3>
+<table style="text-align: left;" border="0" cellpadding="3" cellspacing="3">
+<tbody>
+EOF
+
+if ! empty "$INFO"; then
+	echo "$INFO" | awk -F: '
+		BEGIN {
+			print "	<tr>"
+			print "		<th>@TR<<status_wwaninfo_dev_th_Information#Information>></th>"
+			print "		<th>@TR<<status_wwaninfo_dev_th_Value#Value>></th>"
+			print "	</tr>"
+			odd=1
+		}
+		/^[#+ ]/ {next}
+		{
+			if (length($2) > 0) {
+				if (odd == 1) {
+					print "	<tr>"
+					odd--
+				} else {
+					print "	<tr class=\"odd\">"
+					odd++
+				}
+				col2=$2
+				for (i=3; i<=NF; i++)
+					col2 = col2 ":" $i
+				print "		<td>" $1 "</td>"
+				print "		<td>" col2 "</td>"
+				print "	</tr>"
+			}
+		}'
+else
+	cat << EOF
+	<tr>
+		<td colspan="2">@TR<<status_wwaninfo_no_UG_device_info#No device information reported.>></td>
+	</tr>
+EOF
+fi
+
+cat << EOF
+</tbody>
+</table>
+</div>
+<br />
+EOF
+
+[ "$CHARGING" -ge 0 ] >/dev/null 2>&1 &&  [ "$CAPACITY" -ge 0 ] >/dev/null 2>&1 && {
+	[  "$CHARGING" -eq 0 ] && charg_text="@TR<<status_wwaninfo_Notcharging#Not charging>>" || charg_text="@TR<<status_wwaninfo_Charging#Charging>>"
+	display_form << EOF
+start_form|@TR<<status_wwaninfo_Battery_Status#Battery Status>>
+field|@TR<<status_wwaninfo_Status#Status>>
+string|<div style="text-align: left">$charg_text</div>
+field|@TR<<status_wwaninfo_Capacity#Capacity>>
+progressbar|capacity||200|$CAPACITY|${CAPACITY}%||
+end_form
+EOF
+}
+
+! empty "$STRENGTH" && {
+	cat << EOF
+<div class="settings">
+<h3><strong>@TR<<status_wwaninfo_Signal_Quality#Signal Quality>></strong></h3>
+EOF
+
+	# check if numeric
+	[ "$STRENGTH" -ge 0 ] >/dev/null 2>&1 && {
+		if [ "$STRENGTH" -gt 31 ]; then
+			echo "<p>@TR<<status_wwaninfo_quality_unknown#Signal quality is invalid/unknown>>: ${STRENGTH}</p>"
+		else
+			progress_type="unreliable"
+			[ "$STRENGTH" -gt 9 ] && progress_type="workable"
+			[ "$STRENGTH" -gt 14 ] && progress_type="good"
+			[ "$STRENGTH" -gt 19 ] && progress_type="excellent"
+			cat << EOF
 <div id="wwanbars"><div class="wwan_status">
 	<ul>
 		<li>
 			<span class="title">@TR<<status_wwaninfo_Signal_Quality#Signal Quality>>:</span> <span class="progress ${progress_type}" style="width: ${STRENGTH}em;">${STRENGTH}</span>
 		</li>
 		<li>
-			<span class="title">@TR<<status_wwaninfo_Power_Ratio#Power Ratio (dBm)>>:</span> <span class="progress ${progress_type}" style="width: ${STRENGTH}em;">$((-113 + $STRENGTH * 2))</span>
+			<span class="title">@TR<<status_wwaninfo_Power_Ratio#Power (dBm)>>:</span> <span class="progress ${progress_type}" style="width: ${STRENGTH}em;">$((-113 + $STRENGTH * 2))</span>
 		</li>
 	</ul>
 	<h4>@TR<<status_wwaninfo_Legend#Legend>>:</h4>
@@ -168,7 +216,7 @@ EOF
 			fi
 			cat << EOF
 			<dd><span class="title">@TR<<status_wwaninfo_Signal_Quality#Signal Quality>>:</span> 0..9</dd>
-			<dd class="dbm"><span class="title">@TR<<status_wwaninfo_Power_Ratio#Power Ratio (dBm)>>:</span> -113..-95</dd>
+			<dd class="dbm"><span class="title">@TR<<status_wwaninfo_Power_Ratio#Power (dBm)>>:</span> -113..-95</dd>
 		</dl>
 		<dl class="workable">
 EOF
@@ -179,7 +227,7 @@ EOF
 			fi
 			cat << EOF
  			<dd><span class="title">@TR<<status_wwaninfo_Signal_Quality#Signal Quality>>:</span> 10..14</dd>
-			<dd class="dbm"><span class="title">@TR<<status_wwaninfo_Power_Ratio#Power Ratio (dBm)>>:</span> -93..-85</dd>
+			<dd class="dbm"><span class="title">@TR<<status_wwaninfo_Power_Ratio#Power (dBm)>>:</span> -93..-85</dd>
 		</dl>
 		<dl class="good">
 EOF
@@ -190,7 +238,7 @@ EOF
 			fi
 			cat << EOF
 			<dd><span class="title">@TR<<status_wwaninfo_Signal_Quality#Signal Quality>>:</span> 15..19</dd>
-			<dd class="dbm"><span class="title">@TR<<status_wwaninfo_Power_Ratio#Power Ratio (dBm)>>:</span> -83..-75</dd>
+			<dd class="dbm"><span class="title">@TR<<status_wwaninfo_Power_Ratio#Power (dBm)>>:</span> -83..-75</dd>
 		</dl>
 		<dl class="excellent">
 EOF
@@ -201,7 +249,7 @@ EOF
 			fi
 			cat << EOF
 			<dd><span class="title">@TR<<status_wwaninfo_Signal_Quality#Signal Quality>>:</span> 20..31</dd>
-			<dd class="dbm"><span class="title">@TR<<status_wwaninfo_Power_Ratio#Power Ratio (dBm)>>:</span> -73..-51</dd>
+			<dd class="dbm"><span class="title">@TR<<status_wwaninfo_Power_Ratio#Power (dBm)>>:</span> -73..-51</dd>
 		</dl>
 	</div>
 </div></div>
@@ -212,6 +260,11 @@ EOF
 		echo "<p>@TR<<status_wwaninfo_wrong_value#Wrong signal quality value>>: ${STRENGTH}</p>"
 	}
 }
+
+cat << EOF
+</div>
+<br />
+EOF
 
 footer
 ?>
