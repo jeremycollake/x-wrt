@@ -351,7 +351,10 @@ for device in $DEVICES; do
 			append forms "$hidden" "$N"
 			
 			if [ "$iftype" = "atheros" ]; then
-			txpowers="$(iwlist ath0 txpower |grep "Current Tx-Power" -v |grep "ath0" -v | cut -d'd' -f 1 |cut -d' ' -f 3)"
+			txpowers="$(iwlist ath0 txpower 2>&-|grep "Current Tx-Power" -v |grep "ath0" -v | cut -d'd' -f 1 |cut -d' ' -f 3)"
+			if [ -z "$txpowers" ];then
+				txpowers="1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16"
+			fi
 			txpower_field="field|@TR<<Tx Power>>
 					select|txpower_$vcfg|$FORM_txpower"
 			for txpower in $txpowers; do
