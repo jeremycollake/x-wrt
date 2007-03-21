@@ -46,7 +46,7 @@ Pragma: no-cache
 	<div style="background: #fff" title="white" onclick="setActiveStyleSheet('white'); return false;"></div>
 </div>
 <% ( config_get_bool("general", "use_progressbar") && use_progressbar ? "<SCRIPT type='text/javascript'>start=0; end="use_progressbar"</SCRIPT><SCRIPT src='/js/pageload.js' type='text/javascript'></SCRIPT><DIV id='loadmain'><SCRIPT type='text/javascript'>document.getElementById(\"loadmain\").style.display = \"none\";</SCRIPT>" : "" ) %>
-<% ( use_form ? "<form enctype=\"multipart/form-data\" action=\""use_form"\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />" : "") %>
+<% ( use_form ? "<form enctype=\"multipart/form-data\" action=\""use_form"\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" /></form>" : "") %>
 <div id="content">
 	<h2><% page_title ((show_info != "") ? (page_title ? ": ": "") show_info : "" ) %></h2>
 	<% ((show_error != "") ? "<h3 class=\"warning\">"show_error"</h3>" : "" ) %>
