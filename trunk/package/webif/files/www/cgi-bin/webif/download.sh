@@ -71,7 +71,7 @@ redir="${script}?path=$FORM_path"
 		}
 		equal "$locked" "1" && {
 			set - INT TERM EXIT
-		} || exit
+		} || exit
 	}
 }
 echo "Content-Type: text/html"
