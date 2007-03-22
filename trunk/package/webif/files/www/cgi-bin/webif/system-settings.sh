@@ -53,7 +53,7 @@ uci_set_replace_value() {
 	local OLDVALUE
 	uci_get_original_value "$1" "$2" "$3"
 	#remove every section with the lang setting
-	! equal "$(grep -q "^option[ \t'\"]*$3[ \t'\"]*" "/tmp/.uci/$1" 2>/dev/null)" "0" && {
+	equal "$(grep -q "^option[ \t'\"]*$3[ \t'\"]*" "/tmp/.uci/$1" 2>/dev/null)" "0" && {
 		awk 'ORS=NR%2?"|":"\n"' "/tmp/.uci/$1" 2>/dev/null |
 			sed "s/^CONFIG_SECTION=['\''\"]$2\>.*|option[ \t'\''\"]*$3[ '\''\"]*.*\$//" |
 			awk -F "|" ' { if (length($1)>0) print$1"\n"$2 } ' > "/tmp/.uci/$1.new"
@@ -144,8 +144,12 @@ if empty "$FORM_submit"; then
 	! is_kamikaze && {	
 	FORM_hostname="${wan_hostname:-$(nvram get wan_hostname)}"
 	FORM_hostname="${FORM_hostname:-OpenWrt}"
-	FORM_system_timezone="${FORM_system_timezone:-$(nvram get time_zone)}"
-	FORM_system_timezone="${FORM_system_timezone:-""}"
+	time_zone_part="${FORM_system_timezone#*@}"
+	time_zone_part="${time_zone_part:-$(nvram get time_zone)}"
+	time_zoneinfo_part="${FORM_system_timezone%@*}"
+	time_zoneinfo_part="${time_zoneinfo_part:-$(nvram get time_zoneinfo)}"
+	time_zoneinfo_part="${time_zoneinfo_part:-"-"}"
+	FORM_system_timezone="${time_zoneinfo_part}@${time_zone_part}"
 	FORM_ntp_server="${ntp_server:-$(nvram get ntp_server)}"
 	}
 	
@@ -166,7 +170,6 @@ if empty "$FORM_submit"; then
 		FORM_clkfreq="${FORM_clkfreq:-200}"
 	}
 	# webif settings
-	uci_load "webif"
 	is_kamikaze && {	
 		FORM_effect="${CONFIG_general_use_progressbar}"		# -- effects checkbox
 		if equal $FORM_effect "1" ; then FORM_effect="checked" ; fi	# -- effects checkbox
@@ -193,7 +196,10 @@ EOF
 		}
 		! is_kamikaze && {
 			save_setting system wan_hostname "$FORM_hostname"
-			save_setting system time_zone "$FORM_system_timezone"
+			time_zone_part="${FORM_system_timezone#*@}"
+			time_zoneinfo_part="${FORM_system_timezone%@*}"
+			save_setting timezone time_zone "$time_zone_part"
+			save_setting timezone time_zoneinfo "$time_zoneinfo_part"
 			save_setting system ntp_server "$FORM_ntp_server"
 		}
 		is_bcm947xx && {
@@ -355,10 +361,11 @@ fi
 # initialize time zones
 
 TIMEZONE_OPTS=$(
-	awk '
+	awk -v timezoneinfo="$FORM_system_timezone" '
 		BEGIN {
 			FS="	"
 			last_group=""
+			defined = 0
 		}
 		/^(#.*)?$/ {next}
 		$1 != last_group {
@@ -366,14 +373,27 @@ TIMEZONE_OPTS=$(
 			print "optgroup|" $1
 		}
 		{
-			print "option|" $3 "|" $2
-		}' < /usr/lib/webif/timezones.csv
+			list_timezone = $4 "@" $3
+			if (list_timezone == timezoneinfo)
+				defined = defined + 1
+			print "option|" list_timezone "|@TR<<" $2 ">>"
+		}
+		END {
+			if (defined == 0) {
+				split(timezoneinfo, oldtz, "@")
+				print "optgroup|@TR<<system_settings_group_unknown_TZ#Unknown>>"
+				if (oldtz[1] == "-") oldtz[1] = "@TR<<system_settings_User_or_old_TZ#User defined (or out of date)>>"
+				print "option|" timezoneinfo "|" oldtz[1]
+			}
+		}' < /usr/lib/webif/timezones.csv 2>/dev/null
 
 )
+## selected=\"selected\"
 #######################################################
 cat <<EOF
 <script type="text/javascript" src="/webif.js"></script>
 <script type="text/javascript">
+<!--
 function modechange()
 {
 	if(isset('boot_wait','on'))
@@ -384,7 +404,24 @@ function modechange()
 	{
 		document.getElementById('wait_time').disabled = true;
 	}
+
+	var tz_info = value('system_timezone');
+	if ((tz_info=='') || (tz_info==null)){
+		set_value('show_TZ', tz_info);
+	}
+	else {
+		var tz_split = tz_info.split('@');
+		set_value('show_TZ', tz_split[1]);
+	}
 }
+
+function setup()
+{
+	show('view_tz_string');
+}
+
+window.onload=setup
+-->
 </script>
 EOF
 #######################################################
@@ -401,6 +438,8 @@ start_form|@TR<<Time Settings>>
 field|@TR<<Timezone>>
 select|system_timezone|$FORM_system_timezone
 $TIMEZONE_OPTS
+field|@TR<<system_settings_POSIX_TZ_String#POSIX TZ String>>|view_tz_string|hidden
+string|<input id="show_TZ" type="text" style="width: 96%; height: 1.2em" name="show_TZ" readonly="readonly" disabled="disabled" value="$time_zone_part" />
 field|@TR<<NTP Server>>
 text|ntp_server|$FORM_ntp_server
 end_form
