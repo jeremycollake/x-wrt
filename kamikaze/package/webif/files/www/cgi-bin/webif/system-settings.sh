@@ -417,6 +417,7 @@ function modechange()
 
 function setup()
 {
+	modechange();
 	show('view_tz_string');
 }
 
@@ -439,7 +440,9 @@ field|@TR<<Timezone>>
 select|system_timezone|$FORM_system_timezone
 $TIMEZONE_OPTS
 field|@TR<<system_settings_POSIX_TZ_String#POSIX TZ String>>|view_tz_string|hidden
-string|<input id="show_TZ" type="text" style="width: 96%; height: 1.2em" name="show_TZ" readonly="readonly" disabled="disabled" value="$time_zone_part" />
+string|<input id="show_TZ" type="text" style="width: 96%; height: 1.2em" name="show_TZ" readonly="readonly" disabled="diabled" value="@TR<<system_settings_js_required#This field requires the JavaScript support.>>" />
+helpitem|Timezone
+helptext|Timezone_helptext#Set up your time zone according to the nearest city of your region from the predefined list.
 field|@TR<<NTP Server>>
 text|ntp_server|$FORM_ntp_server
 end_form
