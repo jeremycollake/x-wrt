@@ -17,28 +17,29 @@
 # Configuration files referenced:
 #   /etc/sysctl.conf
 #
+conntrack_path="/proc/sys/net/ipv4/netfilter"
 
-save_setting_sysctl() {
-	# $1 = group
-	# $2 = name
-	# $3 = value
-	# $4 = old value
+save_setting_ip_conntrack() {
+	local group="conntrack"
+	# $1 = name
+	# $2 = value
 	exists /tmp/.webif/* || mkdir -p /tmp/.webif
-	grep "^$2=" /tmp/.webif/config-$1 >&- 2>&- && {
-		grep -v "^$2=" /tmp/.webif/config-$1 > /tmp/.webif/config-$1-new 2>&-
-		mv /tmp/.webif/config-$1-new /tmp/.webif/config-$1 2>&- >&-
+	oldval=$(cat "$conntrack_path/$1" 2>/dev/null)
+	grep "^$1=" /tmp/.webif/config-${group} >&- 2>&- && {
+		grep -v "^$1=" /tmp/.webif/config-${group} > /tmp/.webif/config-${group}-new 2>&-
+		mv /tmp/.webif/config-${group}-new /tmp/.webif/config-${group} 2>&- >&-
 	}
-	equal "$4" "$3" || echo "$2=\"$3\"" >> /tmp/.webif/config-$1
+	equal "$oldval" "$2" || echo "$1=\"$2\"" >> /tmp/.webif/config-${group} 2>/dev/null
 }
 
 empty "$FORM_submit" && {
 	load_settings "conntrack"
-	FORM_ip_conntrack_max="${ip_conntrack_max:-$(cat /proc/sys/net/ipv4/netfilter/ip_conntrack_max)}"
-	FORM_ip_conntrack_generic_timeout="${ip_conntrack_generic_timeout:-$(cat /proc/sys/net/ipv4/netfilter/ip_conntrack_generic_timeout)}"
-	FORM_ip_conntrack_icmp_timeout="${ip_conntrack_icmp_timeout:-$(cat /proc/sys/net/ipv4/netfilter/ip_conntrack_icmp_timeout)}"
-	FORM_ip_conntrack_tcp_timeout_established="${ip_conntrack_tcp_timeout_established:-$(cat /proc/sys/net/ipv4/netfilter/ip_conntrack_tcp_timeout_established)}"
-	FORM_ip_conntrack_udp_timeout="${ip_conntrack_udp_timeout:-$(cat /proc/sys/net/ipv4/netfilter/ip_conntrack_udp_timeout)}"
-	FORM_ip_conntrack_udp_timeout_stream="${ip_conntrack_udp_timeout_stream:-$(cat /proc/sys/net/ipv4/netfilter/ip_conntrack_udp_timeout_stream)}"
+	FORM_ip_conntrack_max="${ip_conntrack_max:-$(cat "$conntrack_path/ip_conntrack_max" 2>/dev/null)}"
+	FORM_ip_conntrack_generic_timeout="${ip_conntrack_generic_timeout:-$(cat "$conntrack_path/ip_conntrack_generic_timeout" 2>/dev/null)}"
+	FORM_ip_conntrack_icmp_timeout="${ip_conntrack_icmp_timeout:-$(cat "$conntrack_path/ip_conntrack_icmp_timeout" 2>/dev/null)}"
+	FORM_ip_conntrack_tcp_timeout_established="${ip_conntrack_tcp_timeout_established:-$(cat "$conntrack_path/ip_conntrack_tcp_timeout_established" 2>/dev/null)}"
+	FORM_ip_conntrack_udp_timeout="${ip_conntrack_udp_timeout:-$(cat "$conntrack_path/ip_conntrack_udp_timeout" 2>/dev/null)}"
+	FORM_ip_conntrack_udp_timeout_stream="${ip_conntrack_udp_timeout_stream:-$(cat "$conntrack_path/ip_conntrack_udp_timeout_stream" 2>/dev/null)}"
 } || {
 	SAVED=1
 	validate <<EOF
@@ -50,18 +51,18 @@ int|FORM_ip_conntrack_udp_timeout|@TR<<UDP Timeout>>|min=30 max=134217728|$FORM_
 int|FORM_ip_conntrack_udp_timeout_stream|@TR<<UDP Stream Timeout>>|min=30 max=134217728|$FORM_ip_conntrack_udp_timeout_stream
 EOF
 	equal "$?" "0" && {
-		save_setting_sysctl conntrack ip_conntrack_max "$FORM_ip_conntrack_max" "$(cat /proc/sys/net/ipv4/netfilter/ip_conntrack_max)"
-		save_setting_sysctl conntrack ip_conntrack_generic_timeout "$FORM_ip_conntrack_generic_timeout" "$(cat /proc/sys/net/ipv4/netfilter/ip_conntrack_generic_timeout)"
-		save_setting_sysctl conntrack ip_conntrack_icmp_timeout "$FORM_ip_conntrack_icmp_timeout" "$(cat /proc/sys/net/ipv4/netfilter/ip_conntrack_icmp_timeout)"
-		save_setting_sysctl conntrack ip_conntrack_tcp_timeout_established "$FORM_ip_conntrack_tcp_timeout_established" "$(cat /proc/sys/net/ipv4/netfilter/ip_conntrack_tcp_timeout_established)"
-		save_setting_sysctl conntrack ip_conntrack_udp_timeout "$FORM_ip_conntrack_udp_timeout" "$(cat /proc/sys/net/ipv4/netfilter/ip_conntrack_udp_timeout)"
-		save_setting_sysctl conntrack ip_conntrack_udp_timeout_stream "$FORM_ip_conntrack_udp_timeout_stream" "$(cat /proc/sys/net/ipv4/netfilter/ip_conntrack_udp_timeout_stream)"
+		save_setting_ip_conntrack ip_conntrack_max "$FORM_ip_conntrack_max"
+		save_setting_ip_conntrack ip_conntrack_generic_timeout "$FORM_ip_conntrack_generic_timeout"
+		save_setting_ip_conntrack ip_conntrack_icmp_timeout "$FORM_ip_conntrack_icmp_timeout"
+		save_setting_ip_conntrack ip_conntrack_tcp_timeout_established "$FORM_ip_conntrack_tcp_timeout_established"
+		save_setting_ip_conntrack ip_conntrack_udp_timeout "$FORM_ip_conntrack_udp_timeout"
+		save_setting_ip_conntrack ip_conntrack_udp_timeout_stream "$FORM_ip_conntrack_udp_timeout_stream"
 	}
 }
 
 equal "$FORM_ip_conntrack_tcp_timeout_established" "432000" && {
 	tcp_warning_text='<table width="55%"><tbody><tr><td>
-<div class="warning">@TR<<big_warning#WARNING>>: @TR<<network_misc_too_bi_timeout#Your default TCP established timeout value is very high (5 days). Most peer-2-peer users should lower it. A safe setting is probably 1 day (86400), though some users prefer 1 hour (3600).>></div>
+<div class="warning">@TR<<big_warning#WARNING>>: @TR<<network_misc_too_big_timeout#Your default TCP established timeout value is very high (5 days). Most peer-2-peer users should lower it. A safe setting is probably 1 day (86400), though some users prefer 1 hour (3600).>></div>
 </td></tr></tbody></table>'
 }
 
