@@ -40,6 +40,7 @@ function confirm_delfile(path,file) {
 #filebrowser table {
 	margin-left: 1em;
 	margin-right: 1em;
+	margin-bottom: 2.2em;
 	text-align: left;
 	font-size: 0.8em;
 	border-style: none;
@@ -62,26 +63,24 @@ function confirm_delfile(path,file) {
 	padding-right: 0em;
 }
 #filebrowser a.tooltip {
-	cursor: help;
-	z-index: 24;
+	z-index: 3;
+}
+#filebrowser span.tooltip {
+	display: none;
+}
+#filebrowser a:hover.tooltip {
 	position: relative;
-	text-decoration: none;
 }
-#filebrowser a.tooltip:hover {
-	z-index: 25;
-	text-decoration: none;
-}
-#filebrowser a.tooltip span {
-	display:none;
-}
-#filebrowser a.tooltip:hover span {
+#filebrowser a:hover.tooltip span.tooltip {
+	z-index: 5;
+	display: block;
 	position: absolute;
 	top: 1.1em;
-	left: 0em;
-	border: 1px solid;
+	left: 1.8em;
+	width: 20em;
+	text-decoration: none;
 	padding: 3px;
-	display: block;
-	width: 245px;
+	border: 1px solid;
 	color: Black;
 	background-color: White;
 }

@@ -6,10 +6,10 @@ BEGIN {
 	print "<div class=\"settings\">"
 	print "<h3><strong>@TR<<browser_Filesystem_Browser#Filesystem Browser>>: " path "</strong></h3>"
 	print "<div id=\"filebrowser\">"
-	print "<table summary=\"@TR<<browser_Filesystem_Browser#Filesystem Browser>>\">"
+	print "<table cellspacing=\"0\" summary=\"@TR<<browser_Filesystem_Browser#Filesystem Browser>>\">"
 	print "<tbody>"
 	print tr_ind "<tr>"
-	print td_ind "<td class=\"leftimage\"><img src=\"/images/dir.gif\" alt=\"\" /></td>"
+	print td_ind "<td class=\"leftimage\"><a href=\"" url "?path=/\"><img src=\"/images/dir.gif\" alt=\"\" /></a></td>"
 	print td_ind "<td><a href=\"" url "?path=/\">@TR<<browser_Root#Root>></a></td>"
 	print td_ind "<td>&nbsp;</td>"
 	print td_ind "<td>&nbsp;</td>"
@@ -49,13 +49,13 @@ type == "d" {
 	if (fname == "..") {
 		fullpath = path "/.."
 		gsub(/^\/\//, "/", fullpath)
-		print td_ind "<td class=\"leftimage\"><img src=\"/images/dir.gif\" alt=\"@TR<<browser_Parent_Directory#Parent Directory>>\" /></td>"
+		print td_ind "<td class=\"leftimage\"><a href=\"" url "?path=" fullpath "\"><img src=\"/images/dir.gif\" alt=\"@TR<<browser_Parent_Directory#Parent Directory>>\" /></a></td>"
 		print td_ind "<td><a href=\"" url "?path=" fullpath "\">@TR<<browser_Parent_Directory#Parent Directory>></a>"
 		print td_ind "<td>&nbsp;</td>"
 		print td_ind "<td>&nbsp;</td>"
 		print td_ind "<td>&nbsp;</td>"
 	} else if (fname != ".") {
-		print td_ind "<td class=\"leftimage\"><a class=\"tooltip\" href=\"#\"><img src=\"/images/dir.gif\" alt=\"@TR<<browser_Directory#Directory>>\" /><span>" finfo "</span></a></td>"
+		print td_ind "<td class=\"leftimage\"><a class=\"tooltip\" href=\"" url "?path=" fullpath "\"><img src=\"/images/dir.gif\" alt=\"@TR<<browser_Directory#Directory>>\" /><span class=\"tooltip\">" finfo "</span></a></td>"
 		print td_ind "<td><a href=\"" url "?path=" fullpath "\">" fname "</a></td>"
 		print td_ind "<td>&nbsp;</td>"
 		print td_ind "<td>&nbsp;</td>"
@@ -68,7 +68,7 @@ type == "d" {
 }
 
 type == "-" {
-	print td_ind "<td class=\"leftimage\"><a class=\"tooltip\" href=\"#\"><img src=\"/images/file.gif\" alt=\"@TR<<browser_File#File>>\" /><span>" finfo "</span></a></td>"
+	print td_ind "<td class=\"leftimage\"><a class=\"tooltip\" href=\"/cgi-bin/webif/download.sh?script=" url "&amp;path=" path "&amp;savefile=" fname "\"><img src=\"/images/file.gif\" alt=\"@TR<<browser_File#File>>\" /><span class=\"tooltip\">" finfo "</span></a></td>"
 	if (path ~ xdownload) {
 		print td_ind "<td>" fname "</td>"
 	} else {
