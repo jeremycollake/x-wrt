@@ -125,6 +125,7 @@ header() {
 		-v CATEGORY="$1" \
 		-v PAGENAME="$2" \
 		-v page_title="$3" \
+		-v html_body_args="$4" \
 		-v show_info="$_show_info" \
 		-v show_error="$ERROR" \
 		-v use_form="$_use_form" \
