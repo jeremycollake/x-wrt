@@ -229,115 +229,117 @@ Helptext Redial Timeout => Numri i sekondave për pritje pasi që të mos pranoj
 
 
 ## new format
+## format i ri
 ## you are free to translate the part between "new format comments"
 ## replace any text after "=" and ">" with your translation
+## perkthyer nga webmaster@truri.com
 
 
 ## network hosts
-network_hosts_host_IP_invalid => Host's IP Address
-network_hosts_Host_Name => Host Name
-network_hosts_MAC => MAC Address
-network_hosts_static_IP_invalid => Static IP Address
+network_hosts_host_IP_invalid => IP Adresa e Hostit
+network_hosts_Host_Name => Host Emri
+network_hosts_MAC => MAC Adresa
+network_hosts_static_IP_invalid => IP Adresa Statike
 Network => Rrjeti
 Hosts => Hostet e Konfiguruar
-network_hosts_Configured_Hosts => Configured Hosts
-network_hosts_Host_Names => Host Names
-network_hosts_IP => IP Address
-network_hosts_Host_Name => Host Name
-network_hosts_Remove => Remove
-network_hosts_Add => Add
-network_hosts_Host_Names_helptext => The file /etc/hosts is used to look up the IP address of a device connected to a computer network. The hosts file describes a many-to-one mapping of device names to IP addresses. When accessing a device by name, the networking system attempts to locate the name within the hosts file before accessing the Internet domain name system.
-network_hosts_DHCP_Static_IPs => Static IP addresses (for DHCP)
-network_hosts_Static_IPs => Static IP addresses
-network_hosts_Static_IPs_helptext => The file /etc/ethers contains database information regarding known 48-bit ethernet addresses of hosts on an Internetwork. The DHCP server uses the matching IP address instead of allocating a new one from the pool for any MAC address listed in this file.
-network_hosts_Active_Leases => Active DHCP Leases
-network_hosts_Name => Name
-network_hosts_Expires => Expires in
+network_hosts_Configured_Hosts => Hostet e Konfiguruar
+network_hosts_Host_Names => Host Emrat
+network_hosts_IP => IP Adresat
+network_hosts_Host_Name => Host Emri
+network_hosts_Remove => Fshij
+network_hosts_Add => Shto
+network_hosts_Host_Names_helptext => Fajlli ne /etc/hosts eshte i perdorur per te shiquar IP Adresen e nje paisje te konektuar ne rrjetin kompjuterik. Fajlli hosts pershkruan many-to-one harte te emrave e paisjeve ne IP adresat. Kur futesh ne paisje nga emri, sistemi i rrjetit provon te gjej emrin me host fajllin para se te kyqet ne internet domain name sistemin.
+network_hosts_DHCP_Static_IPs => IP Adresat Statike (per DHCP)
+network_hosts_Static_IPs => IP Adresat Statike
+network_hosts_Static_IPs_helptext => Fajlli /etc/ethers permban nje informate te databazes e njohur si 48-bit ethernet adresa te hosteve te nje Internet rrjeti.. Ndersa DHCP Serveri perdor maqinen per te gjetur nje IP adrese te re ne vend te pishines se MAC adresave te listara ne kete fajll.
+network_hosts_Active_Leases => DHCP Leshimet Aktive
+network_hosts_Name => Emri
+network_hosts_Expires => Mbaron Afati ne
 network_hosts_h => h
 network_hosts_min => min
-network_hosts_sec => sec
-network_hosts_No_leases#There are no known DHCP leases.
+network_hosts_sec => sek
+network_hosts_No_leases#Aty ska asnje DHCP Leshim
 
 
 ## status-leases.sh
 Status => Statusi
-DHCP Clients => DHCP Clients
-status_leases_dhcp_leases => DHCP Leases
-status_leases_MAC => MAC Address
-status_leases_IP => IP Address
-status_leases_Name => Name
-status_leases_Expires => Expires in
+DHCP Clients => DHCP Klientet
+status_leases_dhcp_leases => DHCP Leshimet
+status_leases_MAC => MAC Adresa
+status_leases_IP => IP Adresa
+status_leases_Name => Emri
+status_leases_Expires => Mbaron Afati ne
 status_leases_h => h
 status_leases_min => min
-status_leases_sec => sec
-status_leases_no_leases => There are no known DHCP leases.
-status_leases_dhcp_leases => DHCP Leases
-status_leases_dhcp_leases_helptext => DHCP leases are assigned to network clients that request an IP address from the DHCP server of the router. Clients that requested their IP lease before this router was last rebooted may not be listed until they request a renewal of their lease.
-status_leases_additional => Additional information
+status_leases_sec => sek
+status_leases_no_leases => Aty Ska asnje DHCP Leshim
+status_leases_dhcp_leases => DHCP Leshimet
+status_leases_dhcp_leases_helptext => DHCP leshimet jane shtuar ne rrjet te klienteve ne ata te cilet kerkojne IP adrese nga DHCP serveri i ketij ruteri. Klientet te cilet kerkojne IP leshim nuk jane leshuar gjer kur u ka be restart ruteri mund te mos jene ne liste gjer sa te marin IP leshim te rij.
+status_leases_additional => Informacion Shtese
 status_leases_arp_title => Address Resolution Protocol Cache (ARP)
-status_leases_HW => HW Type
-status_leases_Flags => Flags
-status_leases_Mask => Mask
-status_leases_completed => completed
-status_leases_permanent => permanent
-status_leases_published => published
-status_leases_no_arp_record => ARP Cache does not contain any correspondent record.
-status_leases_ethers_title => Ethernet Address to IP Number Database (/etc/ethers)
-status_leases_ethers_empty => File /etc/ethers does not contain any Ethernet address/IP address pair.
-status_leases_no_ethers => File /etc/ethers does not exist.
+status_leases_HW => HW Tipi
+status_leases_Flags => Flamujt
+status_leases_Mask => Maska
+status_leases_completed => kompletuar
+status_leases_permanent => permanente
+status_leases_published => publikuar
+status_leases_no_arp_record => ARP Cache nuk permban asnje raport inqizimi.
+status_leases_ethers_title => Ethernet Adresa ne IP numer te Databazes (/etc/ethers)
+status_leases_ethers_empty => Fajlli /etc/ethers nuk permban asnje Ethernet IP/adresse qift.
+status_leases_no_ethers => Fajlli /etc/ethers nuk egziston.
 
 
 ## status-usb.sh
-status_usb_umount_error_in => Error in
+status_usb_umount_error_in => Gabim ne
 Status => Statusi
 USB => USB
-status_usb_USB_Devices => USB Devices
-status_usb_All_connected_devices => All connected devices (excluding system hubs)
+status_usb_USB_Devices => USB Paisjet
+status_usb_All_connected_devices => Te gjith paisjet te konektuara (duke perjashtuar system hubs)
 status_usb_Bus => Bus
-status_usb_Device => Device
-status_usb_Product => Product
-status_usb_Manufacturer => Manufacturer
+status_usb_Device => Paisja
+status_usb_Product => Produkti
+status_usb_Manufacturer => Prodhues
 status_usb_VPIDs => VendorID:ProdID
-status_usb_USB_version => USB version
-status_usb_Mounted_USB_SCSI => Mounted USB / SCSI devices
-status_usb_filesystems => File systems
-status_usb_Device_Path => Device Path
+status_usb_USB_version => USB verzioni
+status_usb_Mounted_USB_SCSI => Kyqur USB / SCSI paisje
+status_usb_filesystems => Fajllat e Sistemit
+status_usb_Device_Path => Rruga e Paisjes
 status_usb_Mount_Point => Mount Point
-status_usb_File_System => File System
-status_usb_Read_Write => Read/Write
-status_usb_Action => Action
-status_usb_ro => Read only
-status_usb_rw => Read/Write
+status_usb_File_System => Fajllat e Sistemit
+status_usb_Read_Write => Lexo/Shkruaj
+status_usb_Action => Akcioni
+status_usb_ro => Vetem Lexo
+status_usb_rw => Lexo/Shkruaj
 status_usb_umount => umount
 status_usb_swaps => Swaps
-status_usb_swap_PartitionFilename => Partition/Filename
-status_usb_swap_Type => Type
-status_usb_swap_Size => Size
-status_usb_swap_Used => Used
-status_usb_swap_Priority => Priority
-status_usb_swap_partition => partition
-status_usb_swap_file => file
-status_usb_Loaded_USB_drivers => Loaded USB drivers
+status_usb_swap_PartitionFilename => Particioni/Emrifajllit
+status_usb_swap_Type => Tipi
+status_usb_swap_Size => Madhesia
+status_usb_swap_Used => I Perdorur
+status_usb_swap_Priority => Prioriteti
+status_usb_swap_partition => particioni
+status_usb_swap_file => fajlli
+status_usb_Loaded_USB_drivers => U Mbushen USB drajverat
 
 
 ## status-wwaninfo.sh
 Status => Statusi
 UMTS => UMTS
-status_wwaninfo_UG_Status => UMTS/GPRS Status
-status_wwaninfo_no_UG_device => UMTS / GPRS device not found.
-status_wwaninfo_device_info => Device Information
-status_wwaninfo_dev_th_Information => Information
-status_wwaninfo_dev_th_Value => Value
-status_wwaninfo_no_UG_device_info => No device information reported.
-status_wwaninfo_Signal_Quality => Signal Quality
-status_wwaninfo_quality_unknown => Signal quality is invalid/unknown
-status_wwaninfo_Power_Ratio => Power Ratio (dBm)
-status_wwaninfo_Legend => Legend
-status_wwaninfo_quality_Unreliable => Unreliable
-status_wwaninfo_quality_Workable => Workable
-status_wwaninfo_quality_Good => Good
-status_wwaninfo_quality_Excellent => Excellent
-status_wwaninfo_wrong_value => Wrong signal quality value
+status_wwaninfo_UG_Status => UMTS/GPRS Statusi
+status_wwaninfo_no_UG_device => UMTS / GPRS paisje nuk u gjet.
+status_wwaninfo_device_info => Informacion i Paisjes
+status_wwaninfo_dev_th_Information => Informacion
+status_wwaninfo_dev_th_Value => Vlera
+status_wwaninfo_no_UG_device_info => Nuk u raportua asnje informacion rreth paisjes.
+status_wwaninfo_Signal_Quality => Kualiteti i Sinjalit
+status_wwaninfo_quality_unknown => Kualiteti i Sinjalit eshte invalud/ipanjofshem
+status_wwaninfo_Power_Ratio => Fuqia e (dBm)
+status_wwaninfo_Legend => Legjenda
+status_wwaninfo_quality_Unreliable => I Dyshimte
+status_wwaninfo_quality_Workable => I Realizueshem
+status_wwaninfo_quality_Good => Mire
+status_wwaninfo_quality_Excellent => I Shkelqyer
+status_wwaninfo_wrong_value => Vlera e kualitetit te sinjalit eshte gabim
 
 
 ## new format
