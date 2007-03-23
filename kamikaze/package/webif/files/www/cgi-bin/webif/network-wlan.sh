@@ -137,16 +137,21 @@ if ! empty "$FORM_install_hostapd"; then
 	install_package "hostapd"
 	echo "</pre>"
 fi
+if ! empty "$FORM_install_wpa_supplicant"; then
+	echo "Installing wpa_supplicant package ...<pre>"
+	install_package "wpa_supplicant"
+	echo "</pre>"
+fi
 nas_installed="0"
-is_installed nas
+is_package_installed nas
 equal "$?" "0" && nas_installed="1"
 
 hostapd_installed="0"
-is_installed hostapd
+is_package_installed hostapd
 equal "$?" "0" && hostapd_installed="1"
 
 wpa_supplicant_installed="0"
-is_installed wpa_supplicant
+is_package_installed wpa_supplicant
 equal "$?" "0" && wpa_supplicant_installed="1"
 
 #####################################################################
@@ -494,7 +499,7 @@ for device in $DEVICES; do
 				fi
 				append forms "$install_nas_button" "$N"
 			elif [ "$iftype" = "atheros" ]; then
-				install_hostapd_button="field|@TR<<HostAPD Package>>|install_nas_$vcfg|hidden"
+				install_hostapd_button="field|@TR<<HostAPD Package>>|install_hostapd_$vcfg|hidden"
 				if ! equal "$hostapd_installed" "1"; then
 					install_hostapd_button="$install_hostapd_button
 						string|<div class=\"warning\">WPA and WPA2 will not work until you install the HostAPD package. </div>
@@ -504,11 +509,11 @@ for device in $DEVICES; do
 						string|@TR<<Installed>>."
 				fi
 
-				install_hostapd_button="field|@TR<<HostAPD Package>>|install_wpa_supplicant_$vcfg|hidden"
+				install_wpa_supplicant_button="field|@TR<<wpa_supplicant Package>>|install_wpa_supplicant_$vcfg|hidden"
 				if ! equal "$wpa_supplicant_installed" "1"; then
 					install_wpa_supplicant_button="$install_wpa_supplicant_button
 						string|<div class=\"warning\">WPA and WPA2 will not work until you install the wpa_supplicant package. </div>
-						submit|install_hostapd| Install wpa_supplicant Package |"
+						submit|install_wpa_supplicant| Install wpa_supplicant Package |"
 				else
 					install_wpa_supplicant_button="$install_wpa_supplicant_button
 						string|@TR<<Installed>>."
