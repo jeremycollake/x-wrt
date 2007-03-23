@@ -18,7 +18,7 @@ Pragma: no-cache
 	<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
 	<meta http-equiv="expires" content="-1" />
 	<script type="text/javascript" src="/js/styleswitcher.js"></script>
-	<% html_header %>
+	<% html_head %>
 </head>
 <body <% html_body_args %>>
 <% html_body %>
