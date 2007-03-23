@@ -138,12 +138,16 @@ if ! empty "$FORM_install_hostapd"; then
 	echo "</pre>"
 fi
 nas_installed="0"
-ipkg list_installed | grep -q nas
+is_installed nas
 equal "$?" "0" && nas_installed="1"
 
 hostapd_installed="0"
-ipkg list_installed | grep -q hostapd
+is_installed hostapd
 equal "$?" "0" && hostapd_installed="1"
+
+wpa_supplicant_installed="0"
+is_installed wpa_supplicant
+equal "$?" "0" && wpa_supplicant_installed="1"
 
 #####################################################################
 # This is looped for every physical wireless card (wifi-device)
@@ -468,26 +472,6 @@ for device in $DEVICES; do
 				text|key4_$vcfg|$FORM_key4|<br />"
 			append forms "$wep" "$N"
 
-			install_nas_button="field|@TR<<NAS Package>>|install_nas_$vcfg|hidden"
-			if ! equal "$nas_installed" "1"; then
-				install_nas_button="$install_nas_button
-					string|<div class=\"warning\">WPA and WPA2 will not work until you install the NAS package. </div>
-					submit|install_nas| Install NAS Package |"
-			else
-				install_nas_button="$install_nas_button
-				string|@TR<<Installed>>."
-			fi
-			
-			install_hostapd_button="field|@TR<<HostAPD Package>>|install_nas_$vcfg|hidden"
-			if ! equal "$hostapd_installed" "1"; then
-				install_hostapd_button="$install_hostapd_button
-					string|<div class=\"warning\">WPA and WPA2 will not work until you install the HostAPD package. </div>
-					submit|install_hostapd| Install HostAPD Package |"
-			else
-				install_hostapd_button="$install_hostapd_button
-					string|@TR<<Installed>>."
-			fi
-
 			wpa="field|WPA @TR<<PSK>>|wpapsk_$vcfg|hidden
 				password|wpa_psk_$vcfg|$FORM_key
 				field|@TR<<RADIUS IP Address>>|radius_ip_$vcfg|hidden
@@ -499,11 +483,39 @@ for device in $DEVICES; do
 			append forms "$wpa" "$N"
 			
 			if [ "$iftype" = "broadcom" ]; then
+				install_nas_button="field|@TR<<NAS Package>>|install_nas_$vcfg|hidden"
+				if ! equal "$nas_installed" "1"; then
+					install_nas_button="$install_nas_button
+						string|<div class=\"warning\">WPA and WPA2 will not work until you install the NAS package. </div>
+						submit|install_nas| Install NAS Package |"
+				else
+					install_nas_button="$install_nas_button
+					string|@TR<<Installed>>."
+				fi
 				append forms "$install_nas_button" "$N"
 			elif [ "$iftype" = "atheros" ]; then
+				install_hostapd_button="field|@TR<<HostAPD Package>>|install_nas_$vcfg|hidden"
+				if ! equal "$hostapd_installed" "1"; then
+					install_hostapd_button="$install_hostapd_button
+						string|<div class=\"warning\">WPA and WPA2 will not work until you install the HostAPD package. </div>
+						submit|install_hostapd| Install HostAPD Package |"
+				else
+					install_hostapd_button="$install_hostapd_button
+						string|@TR<<Installed>>."
+				fi
+
+				install_hostapd_button="field|@TR<<HostAPD Package>>|install_wpa_supplicant_$vcfg|hidden"
+				if ! equal "$wpa_supplicant_installed" "1"; then
+					install_wpa_supplicant_button="$install_wpa_supplicant_button
+						string|<div class=\"warning\">WPA and WPA2 will not work until you install the wpa_supplicant package. </div>
+						submit|install_hostapd| Install wpa_supplicant Package |"
+				else
+					install_wpa_supplicant_button="$install_wpa_supplicant_button
+						string|@TR<<Installed>>."
+				fi
 				append forms "$install_hostapd_button" "$N"
+				append forms "$install_wpa_supplicant_button" "$N"
 			fi
-			
 
 			###################################################################
 			# set JavaScript
@@ -551,9 +563,12 @@ for device in $DEVICES; do
 				set_visible('bgscan_form_$vcfg', v);
 				v = (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2'));
 				set_visible('wpapsk_$vcfg', v);
-				v = (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2') || isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2'));
+				v = (isset('$iftype','broadcom') || isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2') || isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2'));
 				set_visible('install_nas_$vcfg', v);
-
+				v = (isset('$iftype','atheros') || !isset('mode_$vcfg','sta') || isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2') || isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2'));
+				set_visible('install_hostapd_$vcfg', v);
+				v = (isset('$iftype','atheros') || isset('mode_$vcfg','sta') || isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2') || isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2'));
+				set_visible('install_wpa_supplicant_$vcfg', v);
 				v = (isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2'));
 				set_visible('radiuskey_$vcfg', v);
 				set_visible('radius_ip_$vcfg', v);
