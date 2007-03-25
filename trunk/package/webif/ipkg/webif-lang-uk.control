@@ -1,0 +1,7 @@
+Package: webif-lang-uk
+Maintainer: Dmytro Dykhman <dmytro@iroot.ca>
+Section: net
+Depends: webif
+Priority: normal
+Description: Ukrainian language file for webif.
+
