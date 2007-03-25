@@ -109,16 +109,24 @@ if ! [ -f $DOWNLOAD_DESTINATION/suspend.lock ]; then
 					#Get this exitcode 
 					EXITCODE=$?
 				elif [ "$EXT_DOWNLOADFILE" = "link" ]; then
-					#download the desired file with curl and log the output to the logfile
 
+					#remove the \r (^M) from the .link file for dos-text uploads via FTP.
+					tr -d '\r' < "$QUEUE_DIR/$DOWNLOADFILE" > "$QUEUE_DIR/$DOWNLOADFILE.tmp" 
+					mv "$QUEUE_DIR/$DOWNLOADFILE.tmp" "$QUEUE_DIR/$DOWNLOADFILE"
+
+					#get the username password from resp. line 1 and line2
 					URL_USERNAME=`sed -n 1p "$QUEUE_DIR/$DOWNLOADFILE"|awk '{n=split($0,fn,"="); print fn[n]}'`
 					URL_PASSWORD=`sed -n 2p "$QUEUE_DIR/$DOWNLOADFILE"|awk '{n=split($0,fn,"="); print fn[n]}'`
+					
+					#if both (username/pasword) are filled then set the URL_OPTIONS
 					if [ -n "$URL_USERNAME" ] && [ -n "$URL_PASSWORD" ]; then
 						URL_OPTIONS="-u $URL_USERNAME:$URL_PASSWORD"
 					fi
-
+					
+					#get the link from line 3.
 					URL=`sed -n 3p "$QUEUE_DIR/$DOWNLOADFILE"`
 
+					#download the desired file with curl and log the output to the logfile
 					curl -C - -O $URL_OPTIONS $URL --stderr "$LOG_DIRECTORY/$DOWNLOADFILE.log"
 			
 					#Get this exitcode 
