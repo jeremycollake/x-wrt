@@ -110,8 +110,16 @@ if ! [ -f $DOWNLOAD_DESTINATION/suspend.lock ]; then
 					EXITCODE=$?
 				elif [ "$EXT_DOWNLOADFILE" = "link" ]; then
 					#download the desired file with curl and log the output to the logfile
-					URL=`sed -n 1p "$QUEUE_DIR/$DOWNLOADFILE"`
-					curl -C - -O $URL --stderr "$LOG_DIRECTORY/$DOWNLOADFILE.log"
+
+					URL_USERNAME=`sed -n 1p "$QUEUE_DIR/$DOWNLOADFILE"|awk '{n=split($0,fn,"="); print fn[n]}'`
+					URL_PASSWORD=`sed -n 2p "$QUEUE_DIR/$DOWNLOADFILE"|awk '{n=split($0,fn,"="); print fn[n]}'`
+					if [ -n "$URL_USERNAME" ] && [ -n "$URL_PASSWORD" ]; then
+						URL_OPTIONS="-u $URL_USERNAME:$URL_PASSWORD"
+					fi
+
+					URL=`sed -n 3p "$QUEUE_DIR/$DOWNLOADFILE"`
+
+					curl -C - -O $URL_OPTIONS $URL --stderr "$LOG_DIRECTORY/$DOWNLOADFILE.log"
 			
 					#Get this exitcode 
 					EXITCODE=$?

@@ -5,7 +5,7 @@
 # (c)2007 X-Wrt project (http://www.x-wrt.org)
 # (c)2007-03-11 m4rc0
 #
-#	version 1.2
+#	version 1.3
 #
 # Description:
 #	Gives functionality to upload torrent/nzb and url info to freeloader.
@@ -14,7 +14,7 @@
 #	m4rc0 <janssenmaj@gmail.com>
 #
 # Major revisions:
-#	
+#		1.3 Added username/password - m4rc0 25-3-2007
 #
 #
 # NVRAM variables referenced:
@@ -36,15 +36,28 @@ function checkformURL(form) {
     form.uploadURL.focus();
     return false ;
   }
+  
+	if (form.username.value != "" && form.password.value == "") {
+  	alert ( "You forgot to enter a password, please enter one." );
+  	form.password.focus();
+  	return false;
+  }
+
+	if (form.username.value == "" && form.password.value != "") {
+  	alert ( "You forgot to enter a username, please enter one." );
+  	form.username.focus();
+  	return false;
+  }
+  
   return true ;
 }
 
-function checkformTorrent(form) {
+function checkformTorrentNZB(form) {
   if (form.uploadfile.value == "") {
-    alert( "Please select a .torrent file for uploading to the router." );
+    alert( "Please select a .torrent or .nzb file for uploading to the router." );
     form.uploadfile.focus();
     return false ;
-  }
+  }   
   return true ;
 }
 
@@ -67,7 +80,7 @@ cat <<EOF
 <div class="settings">
 <h3>Upload ctorrent and nzbget</h3>
 <div class="settings-content">
-<form action="freeloader-uploadcallback.sh" method="POST" enctype="multipart/form-data" onsubmit="return checkformTorrent(this);">
+<form action="freeloader-uploadcallback.sh" method="POST" enctype="multipart/form-data" onsubmit="return checkformTorrentNZB(this);">
 <table border="0" class="packages" width="100%">
 <tr>
 	<td width="40%"><b>File</b></td>
@@ -116,6 +129,14 @@ cat <<EOF
 		<input type="radio" name="queue" value="prio" />prio
 	</td>
 </tr>
+<tr>
+	<td width="40%"><b>Username</b></td>
+	<td><input type="text" name="username" /></td>
+</tr>
+<tr>
+	<td width="40%"><b>Password</b></td>
+	<td><input type="text" name="password" /></td>
+</tr>
 </table>
 </form>
 </div>
@@ -123,6 +144,7 @@ cat <<EOF
 <h3><strong>Short help:</strong></h3>
 <h4>URL:</h4><p>Give the URL of the file you want to download.</p>
 <h4>Priority:</h4><p>With the priority switch you can select to which queue the file is uploaded.</p>
+<h4>Username/password:</h4><p>The credentials needed to download the file from the server.</p>
 </blockquote>
 <div class="clearfix">&nbsp;</div></div>
 EOF
