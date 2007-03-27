@@ -2,4 +2,10 @@ Package: libmatrixssl
 Priority: optional
 Depends: libpthread
 Section: libs
-Description: Embedded SSL implementation
+Description: An embedded SSL implementation
+ PeerSec Networks open source MatrixSSL™ is an embedded SSL implementation 
+ designed for  small footprint applications and devices. PeerSec MatrixSSL 
+ allows secure management of remote devices. Several secure embedded Web 
+ servers also use MatrixSSL for their encryption layer.
+ .
+ http://www.matrixssl.org/

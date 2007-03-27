@@ -2,8 +2,8 @@ Package: matrixtunnel
 Priority: optional
 Depends: libmatrixssl
 Section: net
-Description: SSL tunnel based on matrixssl
+Description: The SSL tunnel based on matrixssl
  matrixtunnel is a stripped down version of stunnel 
  based on matrixssl library.
-
+ .
  http://znerol.ch/svn/matrixtunnel/trunk/
