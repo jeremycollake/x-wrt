@@ -3,39 +3,34 @@
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
 #
-# $Id: Makefile 4681 2006-08-26 14:26:12Z florian $
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ctorrent
-PKG_VERSION:=1.3.4-dnh2
+PKG_VERSION:=1.3.4-dnh2.2
 PKG_RELEASE:=1
-PKG_MD5SUM:=6635e2d0d0ee21faeb85d95cd93c137b
+PKG_MD5SUM:=76484082d3d44d7d1fbc9f2e0e33440f
 
-PKG_SOURCE_URL:=http://www.rahul.net/dholmes/ctorrent/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-dnh2
-PKG_CAT:=zcat
+PKG_SOURCE_URL:=http://www.rahul.net/dholmes/ctorrent/
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-dnh2.2
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_CAT:=zcat
 
-include $(INCLUDE_DIR)/package.mk
 
-define Package/ctorrent
-  SECTION:=net
-  CATEGORY:=Network
-  TITLE:=console-based BitTorrent client
-  DESCRIPTION:=CTorrent is a BitTorrent client written in the C programming language, known to\\\
-	be a very robust and mature programming language, which produces fast and\\\
-	optimized application.\\\
-  URL:=http://www.rahul.net/dholmes/ctorrent/
-endef
-   
-define Build/Configure
+include $(TOPDIR)/package/rules.mk
+
+$(eval $(call PKG_template,CTORRENT,$(PKG_NAME),$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+
+
+$(PKG_BUILD_DIR)/.configured:
 	(cd $(PKG_BUILD_DIR); rm -rf config.cache; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include/openssl" \
-		LDFLAGS="-static -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+		CPPFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include/openssl" \
+		CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++" \
+		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+		LIBS="-nodefaultlibs -lcrypto -luClibc++ -lm -lc -lgcc" \
 		./configure \
 		--target=$(GNU_TARGET_NAME) \
 		--host=$(GNU_TARGET_NAME) \
@@ -52,16 +47,22 @@ define Build/Configure
 		--infodir=/usr/info \
 		--program-prefix="" \
 		--with-gnu-ld \
+		--disable-nls \
 	);
-endef
+	touch $@
 
-define Build/Compile	
-  $(call Build/Compile/Default, DESTDIR=$(PKG_INSTALL_DIR)  install)
-endef
-	
-define Package/ctorrent/install	
-	mkdir -p $(1)
-	$(CP) $(PKG_INSTALL_DIR)/* $(1)/
-endef
+$(PKG_BUILD_DIR)/.built:
+	rm -rf $(PKG_INSTALL_DIR)
+	mkdir -p $(PKG_INSTALL_DIR)
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		$(TARGET_CONFIGURE_OPTS) \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
+	touch $@
 
-$(eval $(call BuildPackage,ctorrent))
+$(IPKG_CTORRENT):
+	install -m0755 -d $(IDIR_CTORRENT)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/ctorrent $(IDIR_CTORRENT)/usr/bin/
+	$(RSTRIP) $(IDIR_CTORRENT)
+	$(IPKG_BUILD) $(IDIR_CTORRENT) $(PACKAGE_DIR)
+
