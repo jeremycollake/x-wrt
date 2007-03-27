@@ -1,0 +1,10 @@
+config BR2_PACKAGE_MATRIXTUNNEL
+	prompt "SSL tunnel based on matrixssl"
+	tristate
+	default m if CONFIG_DEVEL
+	help
+	  matrixtunnel is a stripped down version of stunnel 
+	  based on matrixssl library.
+	  
+	  http://znerol.ch/svn/matrixtunnel/trunk/
+
