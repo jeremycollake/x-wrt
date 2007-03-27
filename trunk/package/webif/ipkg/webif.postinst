@@ -132,7 +132,6 @@ ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/wepkeygen"
 ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/int2human"
 
 # initialize ipkg.conf
-AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/packages"
 [ -z "$IPKG_INSTROOT" ] && firmware_version=$(nvram get firmware_version)
 if [ "$firmware_version" = "RC5" ] || grep -q "RC5" "${IPKG_INSTROOT}/etc/banner"; then
 	DeleteRepository "http://downloads.openwrt.org/backports/rc4"
@@ -147,6 +146,8 @@ elif [ "$firmware_version" = "0.9" ] || grep -q "0.9" "${IPKG_INSTROOT}/etc/bann
 else
 	echo "White Russian version not detected. Not installing backports repository source."
 fi
+# add our repository as the last and preferred one
+AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/packages"
 
 # only run below on 'real' system (not image builder)
 if [ -z "${IPKG_INSTROOT}" ]; then	
