@@ -56,6 +56,7 @@ pkg_ctorrent=$?
 is_package_installed "nzbget"
 pkg_nzbget=$?
 
+#if one of the packages is installed the page can be displayed
 if [ $pkg_nzbget -eq "0" ] || [ $pkg_ctorrent -eq "0" ] || [ $pkg_curl -eq "0" ]; then
 cat <<EOF
 <div ID="viewarea" style="overflow: auto; width: 100%;">
@@ -75,9 +76,10 @@ EOF
 else
 	echo "None of the required packages is installed, check the upload-page to install the packages."
 fi
-?>
 
-<? footer ?>
+footer
+
+?>
 <!--
 ##WEBIF:name:Freeloader:40:Log
 -->

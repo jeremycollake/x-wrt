@@ -35,9 +35,9 @@ DOWNLOAD_TEMP="$DOWNLOAD_ROOT/downloadtemp"
 DOWNLOAD_DESTINATION="$DOWNLOAD_ROOT"
 
 # Set email settings
-EMAIL_FROM="freeloader@zonnet.nl"
-EMAIL_TO="janssenmaj@hotmail.com"
-EMAIL_SMTP="smtp.versatel.nl"
+EMAIL_FROM="freeloader@provider.nl"
+EMAIL_TO="name@hotmail.com"
+EMAIL_SMTP="smtp.provider.nl"
 
 #functions
 mailstatus()

@@ -114,9 +114,18 @@ if ! [ -f $DOWNLOAD_DESTINATION/suspend.lock ]; then
 					tr -d '\r' < "$QUEUE_DIR/$DOWNLOADFILE" > "$QUEUE_DIR/$DOWNLOADFILE.tmp" 
 					mv "$QUEUE_DIR/$DOWNLOADFILE.tmp" "$QUEUE_DIR/$DOWNLOADFILE"
 
+					#this LS command is needed because otherwise the .fci will not be found, some kind of caching problem on CIFS shares
+					ls "$QUEUE_DIR"  > /dev/null 2>&1
+
+					if [ -f "$QUEUE_DIR/$DOWNLOADFILE.fci" ]; then
+						#remove the \r (^M) from the .fci file for dos-text uploads via FTP.
+						tr -d '\r' < "$QUEUE_DIR/$DOWNLOADFILE.fci" > "$QUEUE_DIR/$DOWNLOADFILE.tmp" 
+						mv "$QUEUE_DIR/$DOWNLOADFILE.tmp" "$QUEUE_DIR/$DOWNLOADFILE.fci"
+					fi
+
 					#get the username password from resp. line 1 and line2
-					URL_USERNAME=`sed -n 1p "$QUEUE_DIR/$DOWNLOADFILE"|awk '{n=split($0,fn,"="); print fn[n]}'`
-					URL_PASSWORD=`sed -n 2p "$QUEUE_DIR/$DOWNLOADFILE"|awk '{n=split($0,fn,"="); print fn[n]}'`
+					URL_USERNAME=`sed -n 1p "$QUEUE_DIR/$DOWNLOADFILE.fci"|awk '{n=split($0,fn,"="); print fn[n]}'`
+					URL_PASSWORD=`sed -n 2p "$QUEUE_DIR/$DOWNLOADFILE.fci"|awk '{n=split($0,fn,"="); print fn[n]}'`
 					
 					#if both (username/pasword) are filled then set the URL_OPTIONS
 					if [ -n "$URL_USERNAME" ] && [ -n "$URL_PASSWORD" ]; then
@@ -124,7 +133,7 @@ if ! [ -f $DOWNLOAD_DESTINATION/suspend.lock ]; then
 					fi
 					
 					#get the link from line 3.
-					URL=`sed -n 3p "$QUEUE_DIR/$DOWNLOADFILE"`
+					URL=`sed -n 1p "$QUEUE_DIR/$DOWNLOADFILE"`
 
 					#download the desired file with curl and log the output to the logfile
 					curl -C - -O $URL_OPTIONS $URL --stderr "$LOG_DIRECTORY/$DOWNLOADFILE.log"
@@ -148,14 +157,23 @@ if ! [ -f $DOWNLOAD_DESTINATION/suspend.lock ]; then
 				#if terminated normal mail this status and moce the .torrent file the done directory
 				if [ "$EXITCODE" -eq '0' ]; then 
 					mv "$QUEUE_DIR/$DOWNLOADFILE" "$QUEUE_DONE/$DOWNLOADFILE"
+					if [ -f "$QUEUE_DIR/$DOWNLOADFILE.fci" ]; then
+						mv "$QUEUE_DIR/$DOWNLOADFILE.fci" "$QUEUE_DONE/$DOWNLOADFILE.fci"
+					fi
 					mailstatus "$DOWNLOADFILE is succesfully finished."
 	
 				#if termimanted by a "KILL" move the .torrent/.link file to the abort directory and this status
 				elif [ "$EXITCODE" -eq '137' ]; then
 					mv "$QUEUE_DIR/$DOWNLOADFILE" "$QUEUE_ABORT/$DOWNLOADFILE"
+					if [ -f "$QUEUE_DIR/$DOWNLOADFILE.fci" ]; then
+						mv "$QUEUE_DIR/$DOWNLOADFILE.fci" "$QUEUE_ABORT/$DOWNLOADFILE.fci"
+					fi
 					mailstatus "$DOWNLOADFILE is aborted." 	
 				else
 					mv "$QUEUE_DIR/$DOWNLOADFILE" "$QUEUE_ABORT/$DOWNLOADFILE"
+					if [ -f "$QUEUE_DIR/$DOWNLOADFILE.fci" ]; then
+						mv "$QUEUE_DIR/$DOWNLOADFILE.fci" "$QUEUE_ABORT/$DOWNLOADFILE.fci"
+					fi
 					mailstatus "An error has been reported for $DOWNLOADFILE (errorcode=$EXITCODE)." 	
 				fi 
 			else

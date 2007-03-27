@@ -75,6 +75,7 @@ pkg_nzbget=$?
 is_package_installed "mini-sendmail"
 pkg_minisendmail=$?
 
+#if one of the packages is installed the page can be displayed
 if [ $pkg_nzbget -eq "0" ] || [ $pkg_ctorrent -eq "0" ]; then
 cat <<EOF
 <div class="settings">
@@ -108,6 +109,7 @@ cat <<EOF
 EOF
 fi
 
+#if the curl package is installed the page can be displayed
 if [ $pkg_curl -eq "0" ]; then
 cat <<EOF
 <div class="settings">
@@ -181,10 +183,9 @@ if [ $cron_getfreeloader -eq "1" ] || [ $cron_killfreeloader -eq "1" ]; then
 	echo "</pre>"
 fi
 
+footer 
+
 ?>
-
-
-<? footer ?>
 <!--
 ##WEBIF:name:Freeloader:10:Upload
 -->
