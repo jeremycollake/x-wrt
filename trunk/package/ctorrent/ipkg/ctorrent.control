@@ -6,6 +6,5 @@ Description: console-based BitTorrent client
  CTorrent is a BitTorrent client written in the C programming language, known to 
  be a very robust and mature programming language, which produces fast and 
  optimized application.
- 
+ .
  http://www.rahul.net/dholmes/ctorrent/
-

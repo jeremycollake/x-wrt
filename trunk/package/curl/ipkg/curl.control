@@ -3,4 +3,3 @@ Depends: libcurl
 Section: net
 Priority: optional
 Description: A client-side URL transfer library
-
