@@ -2,6 +2,7 @@ config BR2_PACKAGE_LIBMATRIXSSL
 	prompt "Embedded SSL implementation"
 	tristate
 	default m if CONFIG_DEVEL
+	select BR2_PACKAGE_LIBPTHREAD
 	help
 	  PeerSec Networks open source MatrixSSL™ is an embedded SSL implementation 
 	  designed for  small footprint applications and devices. PeerSec MatrixSSL 

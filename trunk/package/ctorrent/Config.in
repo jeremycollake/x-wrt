@@ -2,6 +2,8 @@ config BR2_PACKAGE_CTORRENT
 	prompt "ctorrent - console-based BitTorrent client"
 	tristate
 	default m if CONFIG_DEVEL
+	select BR2_PACKAGE_LIBOPENSSL
+	select BR2_PACKAGE_UCLIBCXX
 	help
 	  CTorrent is a BitTorrent client written in the C programming language, known to
 	  be a very robust and mature programming language, which produces fast and
