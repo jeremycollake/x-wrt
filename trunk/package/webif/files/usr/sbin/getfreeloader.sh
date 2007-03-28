@@ -133,10 +133,15 @@ if ! [ -f $DOWNLOAD_DESTINATION/suspend.lock ]; then
 					fi
 					
 					#get the link from line 3.
-					URL=`sed -n 1p "$QUEUE_DIR/$DOWNLOADFILE"`
-
+					#URL=`sed -n 1p "$QUEUE_DIR/$DOWNLOADFILE"`
 					#download the desired file with curl and log the output to the logfile
-					curl -C - -O $URL_OPTIONS $URL --stderr "$LOG_DIRECTORY/$DOWNLOADFILE.log"
+					#curl -C - -O $URL_OPTIONS $URL --stderr "$LOG_DIRECTORY/$DOWNLOADFILE.log"
+
+					while read URL
+					do
+						#download the desired file with curl and log the output to the logfile
+						curl -C - -O $URL_OPTIONS $URL --stderr "$LOG_DIRECTORY/$DOWNLOADFILE.log"
+					done < "$QUEUE_DIR/$DOWNLOADFILE"
 			
 					#Get this exitcode 
 					EXITCODE=$?
