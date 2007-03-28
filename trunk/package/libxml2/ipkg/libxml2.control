@@ -1,0 +1,8 @@
+Package: libxml2
+Priority: optional
+Depends: libpthread, zlib
+Section: libs
+Description: Gnome XML library
+ A library for manipulating XML and HTML resources.
+ .
+ http://xmlsoft.org/
