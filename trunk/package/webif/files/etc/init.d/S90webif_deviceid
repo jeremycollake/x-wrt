@@ -29,3 +29,11 @@ done
 	uci_set "webif" "general" "device_name" "$device_name"
 	uci_commit "webif"
 }
+
+#Start matrix tunnel if needed
+if [ "$CONFIG_ssl_enable" = "1" ]; then
+	killall matrixtunnel
+	matrixtunnel -A /etc/ssl/matrixtunnel.cert  -p /etc/ssl/matrixtunnel.key -d 443 -r 80
+else
+	killall matrixtunnel
+fi
