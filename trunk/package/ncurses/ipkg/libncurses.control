@@ -1,4 +1,7 @@
 Package: libncurses
 Priority: optional
 Section: libs
-Description: a terminal handling library and common terminal definitions
+Description: Terminal handling library
+ Terminal handling library
+ .
+ http://www.gnu.org/software/ncurses/
