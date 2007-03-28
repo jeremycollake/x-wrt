@@ -372,6 +372,9 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 			switch_language "$oldlang"
 			init_theme
 			#whiterussian only
+			if exists "/etc/init.d/S??webif_deviceid"; then
+				/etc/init.d/S??webif_deviceid
+			fi
 			if exists "/etc/init.d/S??opendns"; then
 				/etc/init.d/S??opendns restart
 			fi

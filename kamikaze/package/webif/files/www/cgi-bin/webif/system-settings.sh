@@ -75,7 +75,9 @@ uci_load "webif"
 is_kamikaze && {
 	uci_load "system"
 	uci_load "network"
-	SSL="field|@TR<<Webif SSL>>
+}
+	
+SSL="field|@TR<<Webif SSL>>
 select|ssl_enable|$CONFIG_ssl_enable
 option|0|@TR<<Off>>
 option|1|@TR<<On>>"
@@ -83,7 +85,6 @@ if [ -n "$(has_pkgs matrixtunnel)" ]; then
 	STUNNEL_INSTALL_FORM="string|<div class=\"warning\">MatrixTunnel package is not installed. For ssl support you need to install MatrixTunnel:</div>
 		submit|install_stunnel| @TR<<Install MatrixTunnel>> |"
 fi
-}
 
 #####################################################################
 # defaults
@@ -189,7 +190,6 @@ EOF
 		uci_load "network"
 		if ! equal "$FORM_hostname" "$CONFIG_system_hostname" ; then uci_set "system" "system" "hostname" "$FORM_hostname" ; fi
 
-		uci_set "webif" "ssl" "enable" "$FORM_ssl_enable"
 		#waiting for ntpclient update
 		#save_setting system time_zone "$FORM_system_timezone"
 		#save_setting system ntp_server "$FORM_ntp_server"
@@ -216,6 +216,7 @@ EOF
 			}
 		}
 		# webif settings
+		uci_set "webif" "ssl" "enable" "$FORM_ssl_enable"
 		! equal "$FORM_theme" "$CONFIG_theme_id" && ! empty "$CONFIG_theme_id" && {	
 			uci_set "webif" "theme" "id" "$FORM_theme"
 		}
