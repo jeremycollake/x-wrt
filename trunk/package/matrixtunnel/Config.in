@@ -1,5 +1,5 @@
 config BR2_PACKAGE_MATRIXTUNNEL
-	prompt "SSL tunnel based on matrixssl"
+	prompt "matrixtunnel - SSL tunnel based on matrixssl"
 	tristate
 	default m if CONFIG_DEVEL
 	select BR2_PACKAGE_LIBMATRIXSSL
