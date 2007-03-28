@@ -1,5 +1,5 @@
 config BR2_PACKAGE_LIBNCURSES
-	prompt "libncurses - Terminal handling library"
+	tristate "libncurses - Terminal handling library"
 	default m if CONFIG_DEVEL
 	help
 	  Terminal handling library

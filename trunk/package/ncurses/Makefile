@@ -24,7 +24,10 @@ include $(TOPDIR)/package/rules.mk
 
 $(eval $(call PKG_template,LIBNCURSES,$(PKG_NAME),$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
-$(PKG_BUILD_DIR)/.built:
+$(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
+	touch $@
+
+$(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	-$(MAKE) -C $(PKG_BUILD_DIR) distclean
@@ -136,7 +139,7 @@ $(IPKG_LIBNCURSES):
 	$(RSTRIP) $(IDIR_LIBNCURSES)
 	$(IPKG_BUILD) $(IDIR_LIBNCURSES) $(PACKAGE_DIR)
 
-$(STAGING_DIR)/usr/lib/libcurses.so: $(PKG_BUILD_DIR)/.built
+$(STAGING_DIR)/usr/lib/libncurses.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/curses.h $(STAGING_DIR)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/ncurses.h $(STAGING_DIR)/usr/include/
@@ -151,7 +154,7 @@ $(STAGING_DIR)/usr/lib/libcurses.so: $(PKG_BUILD_DIR)/.built
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{ncurses,panel,menu,form}.{a,so*} $(STAGING_DIR)/usr/lib/
 	touch $@
 
-install-dev: $(STAGING_DIR)/usr/lib/libcurses.so
+install-dev: $(STAGING_DIR)/usr/lib/libncurses.so
 
 uninstall-dev:
 	rm -rf \
