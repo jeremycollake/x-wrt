@@ -5,7 +5,7 @@
 # (c)2007 X-Wrt project (http://www.x-wrt.org)
 # (c)2007-02-15 m4rc0
 #
-#	version 1.22
+#	version 1.23
 #
 # Description:
 #	Checks for files in the queues and downloads them.
@@ -14,7 +14,7 @@
 #	m4rc0 <janssenmaj@gmail.com>
 #
 # Major revisions:
-#	
+#		1.23 - change the errorhandle & added linklist functionality for curl. - m4rc0	
 #
 #
 # NVRAM variables referenced:
@@ -28,9 +28,57 @@
 #Include settings
 . /etc/freeloader-include.sh
 
-#Get the WAN IP address
-WAN=$(nvram get wan_ifname)
-WAN_IP=`/sbin/ifconfig | grep -A 4 $WAN | awk '/inet/ { print $2 } ' | sed -e s/addr://` 
+
+#####################################################################################
+#	signal_startdownload(download_name)
+#
+#
+signal_startdownload()
+{
+	#mail the currently downloading filename 
+	mailstatus "The download $1 is started."
+	#log status
+	logstatus "The download $1 is started."
+}
+
+#####################################################################################
+#	errorhandler(download_name,errorcode,move_file)
+#
+#
+signal_finishdownload()
+{
+	#log status
+	logstatus "The download $1 exited with exitcode $2"
+	
+	#if terminated normal mail this status and moce the .torrent file the done directory
+	if [ "$2" -eq '0' ]; then 
+		if [ "$3" = "TRUE" ]; then
+			mv "$QUEUE_DIR/$1" "$QUEUE_DONE/$1"
+			if [ -f "$QUEUE_DIR/$1.fci" ]; then
+				mv "$QUEUE_DIR/$1.fci" "$QUEUE_DONE/$1.fci"
+			fi
+		fi
+		mailstatus "$1 is succesfully finished."
+	
+	#if termimanted by a "KILL" move the .torrent/.link file to the abort directory and this status
+	elif [ "$2" -eq '137' ]; then
+		if [ "$3" = "TRUE" ]; then
+			mv "$QUEUE_DIR/$1" "$QUEUE_ABORT/$1"
+			if [ -f "$QUEUE_DIR/$1.fci" ]; then
+				mv "$QUEUE_DIR/$1.fci" "$QUEUE_ABORT/$1.fci"
+			fi
+		fi
+		mailstatus "$1 is aborted." 	
+	else
+		if [ "$3" = "TRUE" ]; then
+			mv "$QUEUE_DIR/$1" "$QUEUE_ABORT/$1"
+			if [ -f "$QUEUE_DIR/$1.fci" ]; then
+				mv "$QUEUE_DIR/$1.fci" "$QUEUE_ABORT/$1.fci"
+			fi
+		fi
+		mailstatus "An error has been reported for $1 (errorcode=$2)." 	
+	fi 
+}
 
 
 #this LS command is needed because otherwise the abort.lock and suspend.lock will not be found, some kind of caching problem on CIFS shares
@@ -88,13 +136,6 @@ if ! [ -f $DOWNLOAD_DESTINATION/suspend.lock ]; then
 			mkdir "$DOWNLOAD_DESTINATION/$DOWNLOADFILE"
 			cd "$DOWNLOAD_DESTINATION/$DOWNLOADFILE"
 
-			#mail the currently downloading filename 
-			mailstatus "The download $DOWNLOADFILE is started."
-
-			#log status
-			logstatus "The download $DOWNLOADFILE is started."
-
-			
 			#set the 'current' files for further processing by other scripts 
 			echo "$DOWNLOADFILE.log" > /tmp/currentlogfile
 			echo "$DOWNLOADFILE" > /tmp/currentdownloadfile
@@ -103,11 +144,18 @@ if ! [ -f $DOWNLOAD_DESTINATION/suspend.lock ]; then
 			#check if the downfile still exists in the queue
 			if [ -f "$QUEUE_DIR/$DOWNLOADFILE" ]; then
 				if [ "$EXT_DOWNLOADFILE" = "torrent" ]; then
+					
+					signal_startdownload "$DOWNLOADFILE"
+
+					#Get the WAN IP address
+					WAN=$(nvram get wan_ifname)
+					WAN_IP=`/sbin/ifconfig | grep -A 4 $WAN | awk '/inet/ { print $2 } ' | sed -e s/addr://` 
+
 					#download the desired file with ctorrent and log the output to the logfile
 					ctorrent -C 0 -e 0 -i $WAN_IP -M 20 "$QUEUE_DIR/$DOWNLOADFILE" > "$LOG_DIRECTORY/$DOWNLOADFILE.log" 2>&1
-		
-					#Get this exitcode 
-					EXITCODE=$?
+
+					signal_finishdownload "$DOWNLOADFILE" $? "TRUE"
+
 				elif [ "$EXT_DOWNLOADFILE" = "link" ]; then
 
 					#remove the \r (^M) from the .link file for dos-text uploads via FTP.
@@ -121,66 +169,63 @@ if ! [ -f $DOWNLOAD_DESTINATION/suspend.lock ]; then
 						#remove the \r (^M) from the .fci file for dos-text uploads via FTP.
 						tr -d '\r' < "$QUEUE_DIR/$DOWNLOADFILE.fci" > "$QUEUE_DIR/$DOWNLOADFILE.tmp" 
 						mv "$QUEUE_DIR/$DOWNLOADFILE.tmp" "$QUEUE_DIR/$DOWNLOADFILE.fci"
+
+						#get the username password from resp. line 1 and line2
+						URL_USERNAME=`sed -n 1p "$QUEUE_DIR/$DOWNLOADFILE.fci"|awk '{n=split($0,fn,"="); print fn[n]}'`
+						URL_PASSWORD=`sed -n 2p "$QUEUE_DIR/$DOWNLOADFILE.fci"|awk '{n=split($0,fn,"="); print fn[n]}'`
+					
+						#if both (username/pasword) are filled then set the URL_OPTIONS
+						if [ -n "$URL_USERNAME" ] && [ -n "$URL_PASSWORD" ]; then
+							URL_OPTIONS="-u $URL_USERNAME:$URL_PASSWORD"
+						fi
 					fi
 
-					#get the username password from resp. line 1 and line2
-					URL_USERNAME=`sed -n 1p "$QUEUE_DIR/$DOWNLOADFILE.fci"|awk '{n=split($0,fn,"="); print fn[n]}'`
-					URL_PASSWORD=`sed -n 2p "$QUEUE_DIR/$DOWNLOADFILE.fci"|awk '{n=split($0,fn,"="); print fn[n]}'`
-					
-					#if both (username/pasword) are filled then set the URL_OPTIONS
-					if [ -n "$URL_USERNAME" ] && [ -n "$URL_PASSWORD" ]; then
-						URL_OPTIONS="-u $URL_USERNAME:$URL_PASSWORD"
-					fi
-					
-					#get the link from line 3.
-					#URL=`sed -n 1p "$QUEUE_DIR/$DOWNLOADFILE"`
-					#download the desired file with curl and log the output to the logfile
-					#curl -C - -O $URL_OPTIONS $URL --stderr "$LOG_DIRECTORY/$DOWNLOADFILE.log"
+					#signal the start of the linklist
+					signal_startdownload "$DOWNLOADFILE"
+					sleep 5
 
+#TODO: determine the exitcode of the complete list, to handle where the linlist should moved.
+					#Start reading all the lines from the linklist
 					while read URL
 					do
-						#download the desired file with curl and log the output to the logfile
-						curl -C - -O $URL_OPTIONS $URL --stderr "$LOG_DIRECTORY/$DOWNLOADFILE.log"
-					done < "$QUEUE_DIR/$DOWNLOADFILE"
+						#Get the filename from the URL
+						URL_FILENAME=`echo $URL|awk '{n=split($0,fn,"/"); print fn[n]}'`
+
+						#signal start of n-download of the linklist
+						signal_startdownload "$URL_FILENAME"
+	
+						#set the current file as logfile, every link will get it's own log file.
+						echo "$URL_FILENAME.log" > /tmp/currentlogfile
 			
-					#Get this exitcode 
-					EXITCODE=$?
+						#download the desired file with curl and log the output to the logfile
+						curl -C - -O $URL_OPTIONS $URL --stderr "$LOG_DIRECTORY/$URL_FILENAME.log"
+
+						#Get this exitcode 
+						EXITCODE=$?
+
+						signal_finishdownload "$URL_FILENAME" $EXITCODE "FALSE"
+						
+						sleep 5
+
+					done < "$QUEUE_DIR/$DOWNLOADFILE"
+
+					#The last download will move the download file to it's destination
+					signal_finishdownload "$DOWNLOADFILE" $EXITCODE "TRUE"
+			
+								
 				elif [ "$EXT_DOWNLOADFILE" = "nzb" ]; then
+
+					signal_startdownload "$DOWNLOADFILE"
+					
 					nzbget -n -c /etc/nzbget.cfg -d "$DOWNLOAD_DESTINATION/$DOWNLOADFILE" -t "$DOWNLOAD_TEMP" -m colored "$QUEUE_DIR/$DOWNLOADFILE" > $LOG_DIRECTORY/$DOWNLOADFILE.log 2>&1
 
-					#Get this exitcode 
-					EXITCODE=$?
+					signal_finishdownload "$DOWNLOADFILE" $? "TRUE"
 
 					#Clean up the TEMP directory
 					rm "$DOWNLOAD_TEMP"/*
 				fi
-		
-				#log status
-				logstatus "The download $DOWNLOADFILE exited with exitcode $EXITCODE"
-
-
-				#if terminated normal mail this status and moce the .torrent file the done directory
-				if [ "$EXITCODE" -eq '0' ]; then 
-					mv "$QUEUE_DIR/$DOWNLOADFILE" "$QUEUE_DONE/$DOWNLOADFILE"
-					if [ -f "$QUEUE_DIR/$DOWNLOADFILE.fci" ]; then
-						mv "$QUEUE_DIR/$DOWNLOADFILE.fci" "$QUEUE_DONE/$DOWNLOADFILE.fci"
-					fi
-					mailstatus "$DOWNLOADFILE is succesfully finished."
-	
-				#if termimanted by a "KILL" move the .torrent/.link file to the abort directory and this status
-				elif [ "$EXITCODE" -eq '137' ]; then
-					mv "$QUEUE_DIR/$DOWNLOADFILE" "$QUEUE_ABORT/$DOWNLOADFILE"
-					if [ -f "$QUEUE_DIR/$DOWNLOADFILE.fci" ]; then
-						mv "$QUEUE_DIR/$DOWNLOADFILE.fci" "$QUEUE_ABORT/$DOWNLOADFILE.fci"
-					fi
-					mailstatus "$DOWNLOADFILE is aborted." 	
-				else
-					mv "$QUEUE_DIR/$DOWNLOADFILE" "$QUEUE_ABORT/$DOWNLOADFILE"
-					if [ -f "$QUEUE_DIR/$DOWNLOADFILE.fci" ]; then
-						mv "$QUEUE_DIR/$DOWNLOADFILE.fci" "$QUEUE_ABORT/$DOWNLOADFILE.fci"
-					fi
-					mailstatus "An error has been reported for $DOWNLOADFILE (errorcode=$EXITCODE)." 	
-				fi 
+				
+				
 			else
 				#log status
 				logstatus "The download $DOWNLOADFILE was not found in the queue."
