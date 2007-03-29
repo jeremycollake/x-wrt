@@ -24,7 +24,7 @@ indexpage=index.sh
 
 awk_call() {
 	local cmd="$1"; shift
-	awk "$@" -f /usr/lib/webif/common.awk -f - <<EOF
+	/usr/bin/awk "$@" -f /usr/lib/webif/common.awk -f - <<EOF
 BEGIN {
 	$cmd
 }
@@ -33,7 +33,7 @@ EOF
 
 awx_call() {
 	local cmd="$1"; shift
-	awk "$@" -f /usr/lib/webif/common.awx -f - <<EOF
+	/usr/bin/awk "$@" -f /usr/lib/webif/common.awx -f - <<EOF
 BEGIN {
 	$cmd
 }
