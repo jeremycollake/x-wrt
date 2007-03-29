@@ -124,9 +124,14 @@ ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/webif-page"
 ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/wepkeygen"
 ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/int2human"
 
+# don't run below on 'real' system
+if [ -n "${IPKG_INSTROOT}" ]; then
+	AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$S/packages"
+fi
+
 # only run below on 'real' system (not image builder)
 if [ -z "${IPKG_INSTROOT}" ]; then
-
+	
 	# initialize ipkg.conf
 	uname -a |grep mips |grep 2.4 && cat /proc/cpuinfo |grep Broadcom
 	[ $? = 0 ] && {
