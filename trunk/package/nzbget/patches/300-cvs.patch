@@ -1,0 +1,218 @@
+diff -ruN nzbget-0.2.3/ArticleDownloader.cpp nzbget-cvs/ArticleDownloader.cpp
+--- nzbget-0.2.3/ArticleDownloader.cpp	2007-03-28 21:02:43.000000000 +0200
++++ nzbget-cvs/ArticleDownloader.cpp	2007-03-28 21:04:12.000000000 +0200
+@@ -17,8 +17,8 @@
+  *  along with this program; if not, write to the Free Software
+  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  *
+- * $Revision: 1.24 $
+- * $Date: 2005/08/07 19:43:13 $
++ * $Revision: 1.26 $
++ * $Date: 2006/01/05 01:59:08 $
+  *
+  */
+ 
+@@ -89,6 +89,7 @@
+ //	m_pJob->SetStatus( JOBSTATUS_RUNNING );
+ 	
+ 	int level = 0;
++	int numRetries = 0;
+ 	int iNumberOfServers = MultiServerPool::GetInstance()->GetNumberServers();
+ 	while( !m_bCancelDownload && (level < iNumberOfServers) )
+ 	{
+@@ -100,7 +101,7 @@
+ 		{
+ 			// all pConnectionection-levels passed, still not finished...
+ 			// seems like we failed.
+-			m_pJob->SetStatus(JOBSTATUS_FAILED);
++			m_pJob->SetStatus(JOBSTATUS_UNAVAILABLE);
+ 			error("%s FAILED! Article unavailable on all servers.", m_pJob->GetMessageID());
+ 			break;
+         }
+@@ -187,7 +188,7 @@
+ 						if( (long)line == EOF )
+ 						{
+ 							perror( "pConnection->ReadLine() encountered error" );
+-							m_pJob->SetStatus(JOBSTATUS_FAILED);
++							m_pJob->SetStatus(JOBSTATUS_UNEXPECTED_EOF);
+ 							break;
+ 							
+ 						}
+@@ -272,7 +273,7 @@
+ 					else
+ 					{
+ 						warn("Unexpected end of %s", m_pJob->GetMessageID());
+-						m_pJob->SetStatus( JOBSTATUS_FAILED );  // Set as failed
++						m_pJob->SetStatus( JOBSTATUS_UNEXPECTED_EOF );  // Set as failed
+ 					}
+ 
+ 					remove(tmpfilename);
+@@ -297,7 +298,7 @@
+ 			
+ 				g_pNZBQueueCoordinator->JobFinished( m_pJob, pConnection );
+ 
+-				m_pJob->SetStatus( JOBSTATUS_FAILED );  // Set as failed
++				m_pJob->SetStatus( JOBSTATUS_UNEXPECTED_EOF );  // Set as failed
+ 			}
+ 		}
+ 		else
+@@ -308,8 +309,19 @@
+ 
+ 		MultiServerPool::GetInstance()->FreeConnection(level,pConnection);
+ 		g_pNZBQueueCoordinator->JobFinished( m_pJob, pConnection );
++		if ((m_pJob->GetStatus() != JOBSTATUS_UNEXPECTED_EOF) ||
++			(++numRetries > 3))
++		{
++			// retry at same level 3 times on network I/O errors
++			level++;
++			numRetries = 0;
++		}
++	}
+ 
+-		level++;
++	if (m_pJob->GetStatus() != JOBSTATUS_FINISHED &&
++		m_pJob->GetStatus() != JOBSTATUS_UNAVAILABLE)
++	{
++		m_pJob->SetStatus(JOBSTATUS_UNAVAILABLE);
+ 	}
+ 
+ #ifndef USE_SINGLETHREADED_DOWNLOAD
+@@ -319,7 +331,7 @@
+ 
+ void ArticleDownloader::LogDebugInfo()
+ {
+-	const char* szJobStatus[] = { "JOBSTATUS_WAITING ", "JOBSTATUS_ASSIGNED", "JOBSTATUS_RUNNING ", "JOBSTATUS_FINISHED", "JOBSTATUS_FAILED  ", "JOBSTATUS_DECODING" };
++	const char* szJobStatus[] = { "JOBSTATUS_WAITING ", "JOBSTATUS_ASSIGNED", "JOBSTATUS_RUNNING ", "JOBSTATUS_FINISHED", "JOBSTATUS_FAILED  ", "JOBSTATUS_DECODING", "JOBSTATUS_UNAVAILABLE", "JOBSTATUS_UNEXPECTED_EOF" };
+ 
+ 	char szTime[512];
+ 	ctime_r( &m_tLastUpdateTime, szTime );
+diff -ruN nzbget-0.2.3/Coordinator.cpp nzbget-cvs/Coordinator.cpp
+--- nzbget-0.2.3/Coordinator.cpp	2005-09-02 09:00:41.000000000 +0200
++++ nzbget-cvs/Coordinator.cpp	2006-01-02 23:48:40.000000000 +0100
+@@ -17,8 +17,8 @@
+  *  along with this program; if not, write to the Free Software
+  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  *
+- * $Revision: 1.22 $
+- * $Date: 2005/09/01 15:42:47 $
++ * $Revision: 1.23 $
++ * $Date: 2006/01/02 22:48:40 $
+  *
+  */
+ 
+@@ -138,36 +138,36 @@
+ 		const char* szBaseName = basename( szFileName );
+ 		
+ 		// if .nzb file has a certain structure, try to strip out certain elements
+-		if (sscanf(szBaseName,"msgid_%*d_%1023s", postname) == 1)
++		if (sscanf(szBaseName,"msgid_%*d_%1023s", postname) != 1)
+ 		{
+-			char* tmp1;
+-			char* tmp2;
++			// name is not in the form "msgid_######_stuff.nzb", so
++			// assume it is "stuff.nzb" instead.
++			strncpy(postname, szBaseName, 1023);
++			postname[1023] = 0;
++		}
++
++		char* tmp1;
++		char* tmp2;
+ 			
+-			// wipe out ".nzb"
+-			memset(rindex(postname, '.'), 0, postname+strlen(postname)-rindex(postname, '.'));
++		// wipe out ".nzb"
++		memset(rindex(postname, '.'), 0, postname+strlen(postname)-rindex(postname, '.'));
+ 			
+-			tmp1 = m_pOptions->getOption(OPTION_REALDESTDIR, ".");
+-			int slen = strlen(tmp1) + 1 + strlen(postname) + 3;
+-			tmp2 = (char*) malloc(slen);
+-			memset(tmp2, 0, slen);
+-			if (tmp1[strlen(tmp1) - 1] != '/')
+-			{
+-				strcpy(tmp2, tmp1);
+-				strcat(tmp2, "/");
+-				strcat(tmp2, postname);
+-			}
+-			else
+-			{
+-				strcpy(tmp2, tmp1);
+-				strcat(tmp2, postname);
+-			}
+-			strcpy( szBuffer, tmp2);
++		tmp1 = m_pOptions->getOption(OPTION_REALDESTDIR, ".");
++		int slen = strlen(tmp1) + 1 + strlen(postname) + 3;
++		tmp2 = (char*) malloc(slen);
++		memset(tmp2, 0, slen);
++		if (tmp1[strlen(tmp1) - 1] != '/')
++		{
++			strcpy(tmp2, tmp1);
++			strcat(tmp2, "/");
++			strcat(tmp2, postname);
+ 		}
+ 		else
+ 		{
+-			// Just use the name of the .nzb file as a directory
+-			strcpy( szBuffer, szBaseName );
++			strcpy(tmp2, tmp1);
++			strcat(tmp2, postname);
+ 		}
++		strcpy( szBuffer, tmp2);
+ 	}
+ 	else
+ 	{
+diff -ruN nzbget-0.2.3/FileDownloader.cpp nzbget-cvs/FileDownloader.cpp
+--- nzbget-0.2.3/FileDownloader.cpp	2005-09-02 09:00:41.000000000 +0200
++++ nzbget-cvs/FileDownloader.cpp	2006-01-02 23:29:02.000000000 +0100
+@@ -17,8 +17,8 @@
+  *  along with this program; if not, write to the Free Software
+  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  *
+- * $Revision: 1.32 $
+- * $Date: 2005/08/07 19:43:13 $
++ * $Revision: 1.33 $
++ * $Date: 2006/01/02 22:29:02 $
+  *
+  */
+ 
+@@ -215,7 +215,8 @@
+ 	// all child-jobs ready?
+ 	for (unsigned int i = 0; i < m_ArticleJobs.size(); i++)
+ 	{
+-		if((m_ArticleJobs[i]->GetStatus() != JOBSTATUS_FINISHED)&& (m_ArticleJobs[i]->GetStatus() != JOBSTATUS_FAILED))
++		if((m_ArticleJobs[i]->GetStatus() != JOBSTATUS_FINISHED) && 
++		   (m_ArticleJobs[i]->GetStatus() != JOBSTATUS_UNAVAILABLE))
+ 		{
+ 			return;
+ 		}
+@@ -535,7 +536,7 @@
+ //				// Do nothing if waiting for decoding
+ //				break;
+ 			case JOBSTATUS_FINISHED:
+-			case JOBSTATUS_FAILED:
++			case JOBSTATUS_UNAVAILABLE:
+ 			{
+ 				// Stop the thread
+ #ifndef DEBUG_SINGLE_THREADED_DOWNLOAD
+diff -ruN nzbget-0.2.3/Job.h nzbget-cvs/Job.h
+--- nzbget-0.2.3/Job.h	2005-09-02 09:00:41.000000000 +0200
++++ nzbget-cvs/Job.h	2006-01-02 23:29:02.000000000 +0100
+@@ -17,8 +17,8 @@
+  *  along with this program; if not, write to the Free Software
+  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+  *
+- * $Revision: 1.6 $
+- * $Date: 2005/07/28 20:38:27 $
++ * $Revision: 1.7 $
++ * $Date: 2006/01/02 22:29:02 $
+  *
+  */
+ 
+@@ -37,6 +37,8 @@
+ #define JOBSTATUS_FINISHED 3
+ #define JOBSTATUS_FAILED 4
+ #define JOBSTATUS_DECODING	5
++#define JOBSTATUS_UNAVAILABLE	6
++#define JOBSTATUS_UNEXPECTED_EOF 7
+ 
+ class Job : public Observable
+ {

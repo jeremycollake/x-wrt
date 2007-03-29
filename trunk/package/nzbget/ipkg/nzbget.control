@@ -1,0 +1,10 @@
+Package: nzbget
+Priority: optional
+Depends: libncurses, libxml2
+Section: net
+Description: A command-line based binary newsgrabber
+ NZBGet is a binary newsgrabber for Linux (and Unix and MacOS X where 
+ compatible), which downloads files from usenet based on information 
+ given in nzb-files.
+ .
+ http://sourceforge.net/projects/nzbget/ 

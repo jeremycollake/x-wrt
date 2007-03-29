@@ -1,71 +1,77 @@
-#############################################################
+# Copyright (C) 2006 OpenWrt.org
 #
-# nzbget 
-#
-#############################################################
-NZBGET_SOURCE:=nzbget-0.2.0.tar.gz
-NZBGET_SITE:=http://ovh.dl.sourceforge.net/sourceforge/nzbget/
-NZBGET_DIR:=$(BUILD_DIR)/nzbget-0.2.0
-NZBGET_CAT:=zcat
-NZBGET_BINARY:=nzbget
-NZBGET_TARGET_BINARY:=usr/bin/nzbget
-NZBGET_IPK:=$(BUILD_DIR)/nzbget_0.2.0_mipsel.ipk
-NZBGET_IPK_DIR:=$(BUILD_DIR)/nzbget-0.2.0-ipk
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
 
-$(DL_DIR)/$(NZBGET_SOURCE):
-	 $(WGET) -P $(DL_DIR) $(NZBGET_SITE)/$(NZBGET_SOURCE)
+include $(TOPDIR)/rules.mk
 
-nzbget-source: $(DL_DIR)/$(NZBGET_SOURCE)
+PKG_NAME:=nzbget
+PKG_VERSION:=0.2.3
+PKG_RELEASE:=1
+PKG_MD5SUM:=25554537c7641bd36f573a5f7c89b449
 
-$(NZBGET_DIR)/.unpacked: $(DL_DIR)/$(NZBGET_SOURCE)
-	$(NZBGET_CAT) $(DL_DIR)/$(NZBGET_SOURCE) | tar -C $(BUILD_DIR) -xvf -
-	touch $(NZBGET_DIR)/.unpacked
+PKG_SOURCE_URL:=@SF/$(PKG_NAME)
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_CAT:=zcat
 
-$(NZBGET_DIR)/.configured: $(NZBGET_DIR)/.unpacked
-	(cd $(NZBGET_DIR); rm -rf config.cache; \
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+
+include $(TOPDIR)/package/rules.mk
+
+$(eval $(call PKG_template,NZBGET,$(PKG_NAME),$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+
+$(PKG_BUILD_DIR)/.configured:
+	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
+		CFLAGS="$(TARGET_CFLAGS)" \
+		CPPFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -fno-builtin -fno-rtti -nostdinc++" \
+		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+		LIBS="-nodefaultlibs -luClibc++ -lgcc" \
+		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
 		./configure \
-		--target=$(GNU_TARGET_NAME) \
-		--host=$(GNU_TARGET_NAME) \
-		--build=$(GNU_HOST_NAME) \
-		--prefix=/usr \
-		--exec-prefix=/usr \
-		--bindir=/usr/bin \
-		--sbindir=/usr/sbin \
-		--libexecdir=/usr/lib \
-		--sysconfdir=/etc \
-		--datadir=/usr/share \
-		--localstatedir=/var \
-		--mandir=/usr/man \
-		--infodir=/usr/info \
-		--with-gnu-ld \
-		--with-libxml2-includes=$(STAGING_DIR)/include/libxml2 \
-	);
-	touch  $(NZBGET_DIR)/.configured
+			--target=$(GNU_TARGET_NAME) \
+			--host=$(GNU_TARGET_NAME) \
+			--build=$(GNU_HOST_NAME) \
+			--program-prefix="" \
+			--program-suffix="" \
+			--prefix=/usr \
+			--exec-prefix=/usr \
+			--bindir=/usr/bin \
+			--datadir=/usr/share \
+			--includedir=/usr/include \
+			--infodir=/usr/share/info \
+			--libdir=/usr/lib \
+			--libexecdir=/usr/lib \
+			--localstatedir=/var \
+			--mandir=/usr/share/man \
+			--sbindir=/usr/sbin \
+			--sysconfdir=/etc \
+			$(DISABLE_LARGEFILE) \
+			$(DISABLE_NLS) \
+			--disable-rpath \
+			--with-gnu-ld \
+			--with-libxml2-includes=$(STAGING_DIR)/usr/include/libxml2 \
+			--with-libxml2-libraries=$(STAGING_DIR)/usr/lib \
+	)
+	touch $@
 
-$(NZBGET_DIR)/$(NZBGET_BINARY): $(NZBGET_DIR)/.configured
-	$(MAKE) CC=$(TARGET_CC) -C $(NZBGET_DIR)
-	$(STRIP) $(NZBGET_DIR)/nzbget
+$(PKG_BUILD_DIR)/.built:
+	rm -rf $(PKG_INSTALL_DIR)
+	mkdir -p $(PKG_INSTALL_DIR)
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		all
+	touch $@
 
-$(TARGET_DIR)/$(NZBGET_TARGET_BINARY): $(NZBGET_DIR)/$(NZBGET_BINARY)
-	cp $(NZBGET_DIR)/nzbget $(TARGET_DIR)/usr/sbin
+$(IPKG_NZBGET):
+	install -m0755 -d $(IDIR_NZBGET)/usr/sbin
+	$(CP) $(PKG_BUILD_DIR)/nzbget $(IDIR_NZBGET)/usr/sbin/
+	install -m0755 -d $(IDIR_NZBGET)/etc
+	cp $(PKG_BUILD_DIR)/nzbget.cfg.example $(IDIR_NZBGET)/etc/nzbget.cfg
+	$(RSTRIP) $(IDIR_NZBGET)
+	$(IPKG_BUILD) $(IDIR_NZBGET) $(PACKAGE_DIR)
 
-$(NZBGET_IPK): $(NZBGET_DIR)/$(NZBGET_TARGET)
-	mkdir -p $(NZBGET_IPK_DIR)/CONTROL
-	cp $(SOURCE_DIR)/openwrt/ipkg/nzbget/CONTROL/* $(NZBGET_IPK_DIR)/CONTROL
-	mkdir -p $(NZBGET_IPK_DIR)/usr/sbin
-	mkdir -p $(NZBGET_IPK_DIR)/etc
-	mkdir -p $(NZBGET_IPK_DIR)/tmp/.nzbget/
-	cp $(NZBGET_DIR)/nzbget $(NZBGET_IPK_DIR)/usr/sbin
-	cp $(NZBGET_DIR)/nzbget.cfg.example $(NZBGET_IPK_DIR)/etc/nzbget.cfg
-	chmod -R 755 $(NZBGET_IPK_DIR)/*
-	cd $(BUILD_DIR); $(IPKG_BUILD) $(NZBGET_IPK_DIR)
-	
-nzbget: uclibc $(TARGET_DIR)/$(NZBGET_TARGET_BINARY)
-nzbget-ipk: $(NZBGET_IPK)
-nzbget-clean:
-	$(MAKE) DESTDIR=$(TARGET_DIR) CC=$(TARGET_CC) -C $(NZBGET_DIR) uninstall
-	-$(MAKE) -C $(NZBGET_DIR) clean
+mostlyclean:
+	-$(MAKE) -C $(PKG_BUILD_DIR) clean
+	rm -f $(PKG_BUILD_DIR)/.built
 
-nzbget-dirclean:
-	rm -rf $(NZBGET_DIR)
