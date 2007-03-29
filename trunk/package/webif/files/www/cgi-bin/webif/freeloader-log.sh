@@ -32,34 +32,15 @@ header_inject_head=$(cat <<EOF
 <script type="text/javascript">
 <!--
 function setDiv() {
-	if (document.getElementById('logpre')) {
-		var viewarea = document.getElementById('viewarea'); 
-		var windowheight = document.documentElement.clientHeight;
-		viewarea.style.height = (windowheight - 344) + "px";
-	}
+	var viewarea = document.getElementById('viewarea'); 
+	var windowheight = document.documentElement.clientHeight;
+	viewarea.style.height = (windowheight - 344) + "px";
 }
 
 window.onload=setDiv
 window.onresize=setDiv
 // -->
 </script>
-
-<style type="text/css">
-<!--
-#viewarea {
-	width: 100%;
-	height: 100%;
-	overflow: auto;
-}
-#viewarea .prelog {
-	border: 1px solid;
-	height: 100%;
-	font-size: 0.9em;
-	white-space: pre;
-	padding: 3px;
-}
-// -->
-</style>
 
 EOF
 )
@@ -79,13 +60,11 @@ pkg_nzbget=$?
 
 if [ $pkg_nzbget -eq "0" ] || [ $pkg_ctorrent -eq "0" ] || [ $pkg_curl -eq "0" ]; then
 cat <<EOF
-<div id="viewarea">
+<div id="viewarea" style="overflow: auto; width: 100%;">
+<pre>
 EOF
-	if  [ -f "$LOG_DIRECTORY/freeloader.log" ] &&
-		[ -s "$LOG_DIRECTORY/freeloader.log" ]; then
-		echo -n "<pre id=\"logpre\" class=\"prelog\">"
+	if  [ -f "$LOG_DIRECTORY/freeloader.log" ]; then
 		cat "$LOG_DIRECTORY/freeloader.log" | sed 's/&/\&amp;/; s/</\&lt;/; s/>/\&gt;/;'
-		echo "</pre>"
 	else
 		echo "<p>@TR<<freeloader-log_No_entries_log#No entries in the log>></p>"
 	fi
@@ -93,6 +72,7 @@ else
 	echo "@TR<<freeloader-common_None_required_installed#None of the required packages is installed, check the upload-page to install the packages.>>"
 fi
 cat <<EOF
+</pre>
 </div>
 EOF
 
