@@ -33,11 +33,9 @@ case "$FORM_mode" in
 			}
 		done		
 		for configname in $(ls /tmp/.uci/* 2>&-); do
-			grep = $configname >&- 2>&- && {
 				echo -n "<h3>${configname#/tmp/.uci/}</h3><br /><pre>"
 				cat $configname
 				echo '</pre><br />'
-			}
 		done
 		CONFIGFILES="${CONFIGFILES:+<h3 style="display:inline">Config files: </h3>$CONFIGFILES<br />}"
 		echo "$CONFIGFILES"

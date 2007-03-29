@@ -113,7 +113,7 @@ function num_changes(counter) {
 	while (("(cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*; find '/tmp/.webif/edited-files' -type f) 2>&-" | getline) == 1) {
 		counter++
 	}
-	while (("grep -E '(CONFIG_SECTION|uci_)' /tmp/.uci/* 2>&-" | getline) == 1) {
+	while (("cat /tmp/.uci/* 2>&-" | getline) == 1) {
 		counter++
 	}
 	return counter
