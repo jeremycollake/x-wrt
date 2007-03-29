@@ -5,7 +5,7 @@
 # (c)2007 X-Wrt project (http://www.x-wrt.org)
 # (c)2007-03-11 m4rc0
 #
-#	version 1.3
+#	version 1.4
 #
 # Description:
 #	Gives functionality to upload torrent/nzb and url info to freeloader.
@@ -15,6 +15,7 @@
 #
 # Major revisions:
 #		1.3 Added username/password - m4rc0 25-3-2007
+#		1.4 Added multiple url list - m4rc0 29-3-2007
 #
 #
 # NVRAM variables referenced:
@@ -31,23 +32,29 @@ cat <<EOF
 <script type="text/javascript">
 <!--
 function checkformURL(form) {
-  if (form.uploadURL.value == "") {
-    alert( "Please enter a URL for uploading to the router." );
-    form.uploadURL.focus();
-    return false ;
-  }
+	if (form.uploadURL.value == "" && document.getElementById("divurl1").style.display == "block") {
+		alert( "Please enter a URL for uploading to the router." );
+		form.uploadURL.focus();
+    		return false ;
+		}
   
+	if (form.uploadURLlist.value == "" && document.getElementById("divurl2").style.display == "block") {
+		alert( "Please enter a list of URLs for uploading to the router." );
+		form.uploadURLlist.focus();
+    		return false ;
+		}
+
 	if (form.username.value != "" && form.password.value == "") {
-  	alert ( "You forgot to enter a password, please enter one." );
-  	form.password.focus();
-  	return false;
-  }
+  		alert ( "You forgot to enter a password, please enter one." );
+  		form.password.focus();
+  		return false;
+  		}
 
 	if (form.username.value == "" && form.password.value != "") {
-  	alert ( "You forgot to enter a username, please enter one." );
-  	form.username.focus();
-  	return false;
-  }
+  		alert ( "You forgot to enter a username, please enter one." );
+  		form.username.focus();
+  		return false;
+  		}
   
   return true ;
 }
@@ -59,6 +66,16 @@ function checkformTorrentNZB(form) {
     return false ;
   }   
   return true ;
+}
+
+function togglediv(selecteddiv) {
+	document.getElementById("divurl1").style.display = "none";
+	document.getElementById("divurl2").style.display = "none";
+	document.getElementById(selecteddiv).style.display = "block";
+	
+	document.getElementById("uploadURL").value = "";
+	document.getElementById("uploadURLlist").value = "";
+	
 }
 
 // -->
@@ -117,11 +134,19 @@ cat <<EOF
 <div class="settings-content">
 <form action="freeloader-uploadcallback.sh" method="POST" onsubmit="return checkformURL(this);">
 <table border="0" class="packages" width="100%">
+
 <tr>
-	<td width="40%"><b>URL</b></td>
+	<td valign="top" width="40%"><b>URL</b></td>
 	<td>
-		<input type="text" name="uploadURL" />
-		<input type=submit value="GO" />
+		<div id="divurl1" style="display:block;"><input type="text" name="uploadURL" id="uploadURL" /><input type=submit value="GO" /></div>
+		<div id="divurl2" style="display:none;"><textarea name="uploadURLlist" id="uploadURLlist" rows="6" cols="40"></textarea><input type=submit value="GO" /></div>
+	</td>
+</tr>
+<tr>
+	<td width="40%"></td>
+	<td>
+		<input type="radio" name="inputtype" value="single" onclick="togglediv('divurl1');" checked />single url
+		<input type="radio" name="inputtype" value="multiple" onclick="togglediv('divurl2');" />multiple urls
 	</td>
 </tr>
 <tr>
@@ -144,7 +169,7 @@ cat <<EOF
 </div>
 <blockquote class="settings-help">
 <h3><strong>Short help:</strong></h3>
-<h4>URL:</h4><p>Give the URL of the file you want to download.</p>
+<h4>URL:</h4><p>Give the URL of the file you want to download. In case you enter multiple urls, every url should be placed on a new line.</p>
 <h4>Priority:</h4><p>With the priority switch you can select to which queue the file is uploaded.</p>
 <h4>Username/password:</h4><p>The credentials needed to download the file from the server.</p>
 </blockquote>

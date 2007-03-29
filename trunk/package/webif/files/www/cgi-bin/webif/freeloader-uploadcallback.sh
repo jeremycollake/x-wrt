@@ -7,7 +7,7 @@ content-type: text/html
 # (c)2007 X-Wrt project (http://www.x-wrt.org)
 # (c)2007-03-02 m4rc0
 #
-#	version 1.6
+#	version 1.7
 #
 # Description:
 #	When the file is uploaded this page makes sure the file placed in the right directory.
@@ -17,6 +17,7 @@ content-type: text/html
 #
 # Major revisions:
 #		1.5 Added Username/password - m4rc0 25-3-2007
+#		1.7 Added multiple url list - m4rc0 29-3-2007
 #
 #
 # NVRAM variables referenced:
@@ -42,23 +43,51 @@ if [ -n "$FORM_uploadfile" ]; then
 		mv  $FORM_uploadfile "$QUEUE_PRIO/$FORM_uploadfile_name"
 	fi
 	
-	logstatus "$FORM_uploadfile_name has been uploaded to the $FORM_queue queue"
+	logstatus "$FORM_uploadfile_name has been uploaded to the $FORM_queue queue."
 fi
 
 if [ -n "$FORM_uploadURL" ]; then 
 	URL_FILENAME=`echo $FORM_uploadURL | awk '{n=split($0,fn,"/"); print fn[n]}'`
 	if [ "$FORM_queue" = "normal" ]; then
-		echo "username=$FORM_username" > "$QUEUE_NORMAL/$URL_FILENAME.link.fci"
-		echo "password=$FORM_password" >> "$QUEUE_NORMAL/$URL_FILENAME.link.fci"
+		if [ -n "$FORM_username" ] && [ -n "$FORM_password" ]; then		
+			echo "username=$FORM_username" > "$QUEUE_NORMAL/$URL_FILENAME.link.fci"
+			echo "password=$FORM_password" >> "$QUEUE_NORMAL/$URL_FILENAME.link.fci"
+		fi
 		echo "$FORM_uploadURL" > "$QUEUE_NORMAL/$URL_FILENAME.link"
 	else
-		echo "username=$FORM_username" > "$QUEUE_PRIO/$URL_FILENAME.link.fci"
-		echo "password=$FORM_password" >> "$QUEUE_PRIO/$URL_FILENAME.link.fci"
+		if [ -n "$FORM_username" ] && [ -n "$FORM_password" ]; then		
+			echo "username=$FORM_username" > "$QUEUE_PRIO/$URL_FILENAME.link.fci"
+			echo "password=$FORM_password" >> "$QUEUE_PRIO/$URL_FILENAME.link.fci"
+		fi
 		echo "$FORM_uploadURL" > "$QUEUE_PRIO/$URL_FILENAME.link"
 	fi
 	
-	logstatus "$URL_FILENAME has been uploaded to the $FORM_queue queue"
+	logstatus "$URL_FILENAME has been uploaded to the $FORM_queue queue."
 fi
+
+if [ -n "$FORM_uploadURLlist" ]; then 
+	
+	#generate a random number to make the filename unique when a user uploads a multiple url list
+	RANDOMNUMBER=`dd if=/dev/urandom bs=2 count=1 2>/dev/null | hexdump -d | awk 'int($1) == 0 { print (($2 % 254) + 1) }'`
+	URL_FILENAME="freeloader_url_list${RANDOMNUMBER}"
+
+	if [ "$FORM_queue" = "normal" ]; then
+		if [ -n "$FORM_username" ] && [ -n "$FORM_password" ]; then		
+			echo "username=$FORM_username" > "$QUEUE_NORMAL/$URL_FILENAME.link.fci"
+			echo "password=$FORM_password" >> "$QUEUE_NORMAL/$URL_FILENAME.link.fci"
+		fi
+		echo "$FORM_uploadURLlist" > "$QUEUE_NORMAL/$URL_FILENAME.link"
+	else
+		if [ -n "$FORM_username" ] && [ -n "$FORM_password" ]; then		
+			echo "username=$FORM_username" > "$QUEUE_PRIO/$URL_FILENAME.link.fci"
+			echo "password=$FORM_password" >> "$QUEUE_PRIO/$URL_FILENAME.link.fci"
+		fi
+		echo "$FORM_uploadURList" > "$QUEUE_PRIO/$URL_FILENAME.link"
+	fi
+
+	logstatus "$URL_FILENAME has been uploaded to the $FORM_queue queue."
+fi
+
 
 echo "<html><body>"
 cat <<EOF
