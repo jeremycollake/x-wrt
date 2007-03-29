@@ -1,6 +1,6 @@
 #!/usr/bin/webif-page
 <? 
-
+. /usr/lib/webif/webif.sh
 ###################################################################
 # freeloader-log.sh
 # (c)2007 X-Wrt project (http://www.x-wrt.org)
@@ -26,27 +26,48 @@
 #
 #
 
-. /usr/lib/webif/webif.sh
-header "Freeloader" "Freeloader log" "@TR<<Freeloader log>>" ' onresize="setDiv()" onload="setDiv()" '
+header_inject_head=$(cat <<EOF
+<meta http-equiv="refresh" content="60;url=$SCRIPT_NAME" />
+
+<script type="text/javascript">
+<!--
+function setDiv() {
+	if (document.getElementById('logpre')) {
+		var viewarea = document.getElementById('viewarea'); 
+		var windowheight = document.documentElement.clientHeight;
+		viewarea.style.height = (windowheight - 344) + "px";
+	}
+}
+
+window.onload=setDiv
+window.onresize=setDiv
+// -->
+</script>
+
+<style type="text/css">
+<!--
+#viewarea {
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}
+#viewarea .prelog {
+	border: 1px solid;
+	height: 100%;
+	font-size: 0.9em;
+	white-space: pre;
+	padding: 3px;
+}
+// -->
+</style>
+
+EOF
+)
+
+header "Freeloader" "freeloader-log_subcategory#Log" "@TR<<freeloader-log_Freeloader_log#Freeloader log>>"
 
 #Include settings
 . /etc/freeloader-include.sh
-
-cat <<EOF
-<script type="text/javascript">
-<!--
-//Set refresh timer for page (need to do this way, IE had problem with HTML refresh)
-setTimeout("window.location='freeloader-log.sh';", 60000);
-
-function setDiv()
-{
-var viewarea = document.getElementById("viewarea"); 
-var windowheight = document.body.clientHeight;
-viewarea.style.height = (windowheight - 344) + "px"; 
-}
-// -->
-</script>
-EOF
 
 #Check the required packages
 is_package_installed "curl"
@@ -56,30 +77,26 @@ pkg_ctorrent=$?
 is_package_installed "nzbget"
 pkg_nzbget=$?
 
-#if one of the packages is installed the page can be displayed
 if [ $pkg_nzbget -eq "0" ] || [ $pkg_ctorrent -eq "0" ] || [ $pkg_curl -eq "0" ]; then
 cat <<EOF
-<div ID="viewarea" style="overflow: auto; width: 100%;">
-<pre>
+<div id="viewarea">
 EOF
-	
-	if  [ -f "$LOG_DIRECTORY/freeloader.log" ]; then
-		cat "$LOG_DIRECTORY/freeloader.log" 
+	if  [ -f "$LOG_DIRECTORY/freeloader.log" ] &&
+		[ -s "$LOG_DIRECTORY/freeloader.log" ]; then
+		echo -n "<pre id=\"logpre\" class=\"prelog\">"
+		cat "$LOG_DIRECTORY/freeloader.log" | sed 's/&/\&amp;/; s/</\&lt;/; s/>/\&gt;/;'
+		echo "</pre>"
 	else
-		echo "No entries in the log"
+		echo "<p>@TR<<freeloader-log_No_entries_log#No entries in the log>></p>"
 	fi
-	
+else
+	echo "@TR<<freeloader-common_None_required_installed#None of the required packages is installed, check the upload-page to install the packages.>>"
+fi
 cat <<EOF
-</pre>
 </div>
 EOF
-else
-	echo "None of the required packages is installed, check the upload-page to install the packages."
-fi
 
-footer
-
-?>
+footer ?>
 <!--
-##WEBIF:name:Freeloader:40:Log
+##WEBIF:name:Freeloader:40:freeloader-log_subcategory#Log
 -->
