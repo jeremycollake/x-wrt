@@ -1,7 +1,0 @@
-Package: webif-lang-ru
-Maintainer: Felix Fietkau <nbd@openwrt.org>,Dmytro Dykhman <dmytro@iroot.ca>
-Section: net
-Depends: webif
-Priority: normal
-Description: Russian language file for webif.
-
