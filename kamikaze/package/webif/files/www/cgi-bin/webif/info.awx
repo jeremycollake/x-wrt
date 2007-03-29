@@ -74,7 +74,7 @@ function handle_default() {
 	"uname -a" | getline
 	machinfo = $0
 	if (machinfo ~ /mips/) {
-		if (machinfo ~ /Atheros/) repo = "atheros-2.6"
+		if (boardtype ~ /Atheros/) repo = "atheros-2.6"
 		else if (machinfo ~ /2\.4/) repo = "brcm-2.4"
 		else if (machinfo ~ /2\.6/) repo = "brcm-2.6"
 	} else if (machinfo ~ / i[0-9]86 /) repo = "x86-2.6"
