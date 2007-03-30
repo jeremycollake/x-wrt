@@ -74,10 +74,6 @@ function togglediv(selecteddiv) {
 	
 	document.getElementById("uploadURL").value = "";
 	document.getElementById("uploadURLlist").value = "";
-	
-	//if (document.getElementById("divurl1").style.display == "block"){
-	//	document.formuploadurllist.inputtype[0].checked = true;
-	//	}
 }
 
 
