@@ -75,7 +75,14 @@ function togglediv(selecteddiv) {
 	document.getElementById("uploadURL").value = "";
 	document.getElementById("uploadURLlist").value = "";
 	
+	//if (document.getElementById("divurl1").style.display == "block"){
+	//	document.formuploadurllist.inputtype[0].checked = true;
+	//	}
 }
+
+
+
+
 
 // -->
 </script>
@@ -101,7 +108,7 @@ cat <<EOF
 <div class="settings">
 <h3>@TR<<freeloader-upload_Upload_c_n#Upload ctorrent and nzbget>></h3>
 <div class="settings-content">
-<form action="freeloader-uploadcallback.sh" method="post" enctype="multipart/form-data" onsubmit="return checkformTorrentNZB(this);">
+<form name="formuploadfile" action="freeloader-uploadcallback.sh" method="post" enctype="multipart/form-data" onsubmit="return checkformTorrentNZB(this);">
 <table border="0" class="packages" width="100%">
 <tr>
 	<td width="40%"><b>@TR<<freeloader-upload_File#File>></b></td>
@@ -113,7 +120,7 @@ cat <<EOF
 <tr>
 	<td width="40%"><b>@TR<<freeloader-upload_Priority#Priority>></b></td>
 	<td>
-		<input type="radio" name="queue" value="normal" checked />@TR<<freeloader-upload_Priority_normal#normal>>
+		<input type="radio" name="queue" value="normal" checked="checked"/>@TR<<freeloader-upload_Priority_normal#normal>>
 		<input type="radio" name="queue" value="prio" />@TR<<freeloader-upload_Priority_prio#prio>>
 	</td>
 </tr>
@@ -135,7 +142,7 @@ cat <<EOF
 <div class="settings">
 <h3>@TR<<freeloader-upload_Upload_curl#Upload curl>></h3>
 <div class="settings-content">
-<form action="freeloader-uploadcallback.sh" method="post" onsubmit="return checkformURL(this);">
+<form name="formuploadurllist" action="freeloader-uploadcallback.sh" method="post" onsubmit="return checkformURL(this);">
 <table border="0" class="packages" width="100%">
 <tr>
 	<td valign="top" width="40%"><b>@TR<<freeloader-upload_URL#URL>></b></td>
@@ -147,14 +154,14 @@ cat <<EOF
 <tr>
 	<td width="40%"></td>
 	<td>
-		<input type="radio" name="inputtype" value="single" onclick="togglediv('divurl1');" checked />@TR<<freeloader-upload_single_url#single url>>
+		<input type="radio" name="inputtype" value="single" onclick="togglediv('divurl1');" checked="checked"/>@TR<<freeloader-upload_single_url#single url>>
 		<input type="radio" name="inputtype" value="multiple" onclick="togglediv('divurl2');" />@TR<<freeloader-upload_multiple_urls#multiple urls>>
 	</td>
 </tr>
 <tr>
 	<td width="40%"><b>@TR<<freeloader-upload_Priority#Priority>></b></td>
 	<td>
-		<input type="radio" name="queue" value="normal" checked />@TR<<freeloader-upload_Priority_normal#normal>>
+		<input type="radio" name="queue" value="normal" checked="checked"/>@TR<<freeloader-upload_Priority_normal#normal>>
 		<input type="radio" name="queue" value="prio" />@TR<<freeloader-upload_Priority_prio#prio>>
 	</td>
 </tr>
@@ -211,8 +218,15 @@ if [ $cron_getfreeloader -eq "1" ] || [ $cron_killfreeloader -eq "1" ]; then
 	echo "</pre>"
 fi
 
-footer 
+#somehow firefox does not reset the radiobuttons after a reload of the page.
+cat <<EOF
+<script type="text/javascript">
+document.formuploadurllist.inputtype[0].checked = true;
+</script>
 
+
+EOF
+footer 
 ?>
 <!--
 ##WEBIF:name:Freeloader:10:freeloader-upload_subcategory#Upload
