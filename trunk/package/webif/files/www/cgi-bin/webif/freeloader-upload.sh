@@ -1,5 +1,6 @@
 #!/usr/bin/webif-page
 <? 
+. /usr/lib/webif/webif.sh
 ###################################################################
 # freeloader-upload.sh
 # (c)2007 X-Wrt project (http://www.x-wrt.org)
@@ -25,10 +26,8 @@
 #   /etc/freeloader-include.sh
 #
 #
-. /usr/lib/webif/webif.sh
-header "Freeloader" "Freeloader upload" "@TR<<Freeloader upload>>"
 
-cat <<EOF
+header_inject_head=$(cat <<EOF
 <script type="text/javascript">
 <!--
 function checkformURL(form) {
@@ -80,7 +79,11 @@ function togglediv(selecteddiv) {
 
 // -->
 </script>
+
 EOF
+)
+
+header "Freeloader" "freeloader-upload_subcategory#Upload" "@TR<<freeloader-upload_Freeloader_upload#Freeloader upload>>"
 
 #check for installed packages and store the status
 is_package_installed "curl"
@@ -96,31 +99,31 @@ pkg_minisendmail=$?
 if [ $pkg_nzbget -eq "0" ] || [ $pkg_ctorrent -eq "0" ]; then
 cat <<EOF
 <div class="settings">
-<h3>Upload ctorrent and nzbget</h3>
+<h3>@TR<<freeloader-upload_Upload_c_n#Upload ctorrent and nzbget>></h3>
 <div class="settings-content">
-<form action="freeloader-uploadcallback.sh" method="POST" enctype="multipart/form-data" onsubmit="return checkformTorrentNZB(this);">
+<form action="freeloader-uploadcallback.sh" method="post" enctype="multipart/form-data" onsubmit="return checkformTorrentNZB(this);">
 <table border="0" class="packages" width="100%">
 <tr>
-	<td width="40%"><b>File</b></td>
+	<td width="40%"><b>@TR<<freeloader-upload_File#File>></b></td>
 	<td>
 		<input type="file" name="uploadfile" />
 		<input type="submit" value="GO" />
 	</td>
 </tr>
 <tr>
-	<td width="40%"><b>Priority</b></td>
+	<td width="40%"><b>@TR<<freeloader-upload_Priority#Priority>></b></td>
 	<td>
-		<input type="radio" name="queue" value="normal" checked />normal
-		<input type="radio" name="queue" value="prio" />prio
+		<input type="radio" name="queue" value="normal" checked />@TR<<freeloader-upload_Priority_normal#normal>>
+		<input type="radio" name="queue" value="prio" />@TR<<freeloader-upload_Priority_prio#prio>>
 	</td>
 </tr>
 </table>
 </form>
 </div>
 <blockquote class="settings-help">
-<h3><strong>Short help:</strong></h3>
-<h4>File:</h4><p>Here you can upload .torrent and .nzb files for downloading by pressing the browse button. When the GO button is pressed the file is uploaded to the router.</p>
-<h4>Priority:</h4><p>With the priority switch you can select to which queue the file is uploaded.</p>
+<h3><strong>@TR<<Short help>>:</strong></h3>
+<h4>@TR<<freeloader-upload_File#File>>:</h4><p>@TR<<freeloader-upload_File_helptext#Here you can upload .torrent and .nzb files for downloading by pressing the browse button. When the GO button is pressed the file is uploaded to the router.>></p>
+<h4>@TR<<freeloader-upload_Priority#Priority>>:</h4><p>@TR<<freeloader-upload_Priority_helptext#With the priority switch you can select to which queue the file is uploaded.>></p>
 </blockquote>
 <div class="clearfix">&nbsp;</div></div>
 EOF
@@ -130,13 +133,12 @@ fi
 if [ $pkg_curl -eq "0" ]; then
 cat <<EOF
 <div class="settings">
-<h3>Upload curl</h3>
+<h3>@TR<<freeloader-upload_Upload_curl#Upload curl>></h3>
 <div class="settings-content">
-<form action="freeloader-uploadcallback.sh" method="POST" onsubmit="return checkformURL(this);">
+<form action="freeloader-uploadcallback.sh" method="post" onsubmit="return checkformURL(this);">
 <table border="0" class="packages" width="100%">
-
 <tr>
-	<td valign="top" width="40%"><b>URL</b></td>
+	<td valign="top" width="40%"><b>@TR<<freeloader-upload_URL#URL>></b></td>
 	<td>
 		<div id="divurl1" style="display:block;"><input type="text" name="uploadURL" id="uploadURL" /><input type=submit value="GO" /></div>
 		<div id="divurl2" style="display:none;"><textarea name="uploadURLlist" id="uploadURLlist" rows="6" cols="40"></textarea><input type=submit value="GO" /></div>
@@ -145,33 +147,34 @@ cat <<EOF
 <tr>
 	<td width="40%"></td>
 	<td>
-		<input type="radio" name="inputtype" value="single" onclick="togglediv('divurl1');" checked />single url
-		<input type="radio" name="inputtype" value="multiple" onclick="togglediv('divurl2');" />multiple urls
+		<input type="radio" name="inputtype" value="single" onclick="togglediv('divurl1');" checked />@TR<<freeloader-upload_single_url#single url>>
+		<input type="radio" name="inputtype" value="multiple" onclick="togglediv('divurl2');" />@TR<<freeloader-upload_multiple_urls#multiple urls>>
 	</td>
 </tr>
 <tr>
-	<td width="40%"><b>Priority</b></td>
+	<td width="40%"><b>@TR<<freeloader-upload_Priority#Priority>></b></td>
 	<td>
-		<input type="radio" name="queue" value="normal" checked />normal
-		<input type="radio" name="queue" value="prio" />prio
+		<input type="radio" name="queue" value="normal" checked />@TR<<freeloader-upload_Priority_normal#normal>>
+		<input type="radio" name="queue" value="prio" />@TR<<freeloader-upload_Priority_prio#prio>>
 	</td>
 </tr>
 <tr>
-	<td width="40%"><b>Username</b></td>
+	<td width="40%"><b>@TR<<freeloader-upload_Username#Username>></b></td>
 	<td><input type="text" name="username" /></td>
 </tr>
 <tr>
-	<td width="40%"><b>Password</b></td>
+	<td width="40%"><b>@TR<<freeloader-upload_Password#Password>></b></td>
 	<td><input type="text" name="password" /></td>
 </tr>
 </table>
 </form>
 </div>
 <blockquote class="settings-help">
-<h3><strong>Short help:</strong></h3>
-<h4>URL:</h4><p>Give the URL of the file you want to download. In case you enter multiple urls, every url should be placed on a new line.</p>
-<h4>Priority:</h4><p>With the priority switch you can select to which queue the file is uploaded.</p>
-<h4>Username/password:</h4><p>The credentials needed to download the file from the server.</p>
+<h3><strong>@TR<<Short help>>:</strong></h3>
+<h4>@TR<<freeloader-upload_URL#URL>>:</h4><p>@TR<<freeloader-upload_URL_helptext#Give the URL of the file you want to download. In case you enter multiple urls, every url should be placed on a new line.>></p>
+<h4>@TR<<freeloader-upload_Priority#Priority>>:</h4><p>@TR<<freeloader-upload_Priority_helptext#With the priority switch you can select to which queue the file is uploaded.>></p>
+<h4>@TR<<freeloader-upload_Username#Username>>:</h4>
+<h4>@TR<<freeloader-upload_Password#Password>>:</h4><p>@TR<<freeloader-upload_Credentials_helptext#The credentials needed to download the file from the server.>></p>
 </blockquote>
 <div class="clearfix">&nbsp;</div></div>
 EOF
@@ -212,5 +215,5 @@ footer
 
 ?>
 <!--
-##WEBIF:name:Freeloader:10:Upload
+##WEBIF:name:Freeloader:10:freeloader-upload_subcategory#Upload
 -->
