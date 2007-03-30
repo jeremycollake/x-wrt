@@ -38,7 +38,7 @@ $(IPKG_LIBMATRIXSSL):
 	$(IPKG_BUILD) $(IDIR_LIBMATRIXSSL) $(PACKAGE_DIR)
 
 $(STAGING_DIR)/usr/lib/libmatrixssl.so: $(PKG_BUILD_DIR)/.built
-	mkdir -p $(STAGING_DIR)/usr/include
+	mkdir -p $(STAGING_DIR)/usr/include/matrixSsl
 	$(CP) $(PKG_BUILD_DIR)/matrixSsl.h $(STAGING_DIR)/usr/include/matrixSsl/
 	ln -sf matrixSsl/matrixSsl.h $(STAGING_DIR)/usr/include/matrixSsl.h
 	mkdir -p $(STAGING_DIR)/usr/lib
