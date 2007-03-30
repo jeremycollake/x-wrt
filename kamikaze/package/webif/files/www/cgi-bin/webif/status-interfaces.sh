@@ -68,9 +68,9 @@ field|@TR<<IP Address>>|wan_ip_addr
 string|$wan_ip_addr
 $form_dns_servers
 field|@TR<<Received>>|wan_rx
-string|$wan_rx_packets <div class="kb">pkts</div>&nbsp;<div class="numeric-small">($wan_rx_bytes</div>)
+string|$wan_rx_packets pkts &nbsp;($wan_rx_bytes)
 field|@TR<<Transmitted>>|wan_tx
-string|$wan_tx_packets <div class="kb">pkts</div>&nbsp;<div class="numeric-small">($wan_tx_bytes</div>
+string|$wan_tx_packets pkts &nbsp; ($wan_tx_bytes
 helpitem|WAN
 helptext|WAN WAN#WAN stands for Wide Area Network and is usually the upstream connection to the internet.
 end_form
