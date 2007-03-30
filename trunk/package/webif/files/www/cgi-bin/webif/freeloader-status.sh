@@ -315,7 +315,7 @@ cat <<EOF
 </div>
 EOF
 else
-	echo "@TR<<freeloader-common_None_required_installed#None of the required packages is installed, check the upload-page to install the packages.>>"
+	echo "@TR<<freeloader-common_None_required_installed#None of the required packages are installed, check the upload-page to install the packages.>>"
 fi
 
 footer ?>
