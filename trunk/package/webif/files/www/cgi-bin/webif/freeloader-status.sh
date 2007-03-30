@@ -32,7 +32,8 @@ header_inject_head=$(cat <<EOF
 function setDiv() {
 	var viewarea = document.getElementById('viewarea'); 
 	var windowheight = document.documentElement.clientHeight;
-	viewarea.style.height = (windowheight - 344) + "px";
+	viewarea.style.height = (windowheight - 344) + "px"; 
+	viewarea.style.display = "block";
 }
 
 window.onload=setDiv
@@ -43,9 +44,8 @@ window.onresize=setDiv
 <style type="text/css">
 <!--
 #viewarea {
-	width: 100%;
-	height: 100%;
-	overflow: auto;
+	overflow: scroll;
+	display: none;
 }
 #viewarea table {
 	width: 100%;
