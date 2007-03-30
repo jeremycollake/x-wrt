@@ -88,6 +88,14 @@ function modechange()
 	v = isset('openvpn_cli_auth', 'cert');
 	set_visible('certificate_status', v);
 	set_visible('certificate', v);
+	
+	v = isset('openvpn_cli_auth', 'pem');
+	set_visible('root_ca_status', v);
+	set_visible('root_ca', v);
+	set_visible('client_certificate_status', v);
+	set_visible('client_certificate', v);
+	set_visible('client_key_status', v);
+	set_visible('client_key', v);
 
 	hide('save');
 	show('save');
@@ -104,7 +112,6 @@ field|@TR<<Start VPN Connection>>
 select|openvpn_cli|$FORM_openvpn_cli
 option|0|@TR<<Disabled>>
 option|client|@TR<<Enabled>>
-onchange|
 end_form
 
 start_form|@TR<<Connection Settings>>|connection_settings|hidden
@@ -122,7 +129,6 @@ select|openvpn_cli_auth|$FORM_openvpn_cli_auth
 option|psk|@TR<<Preshared Key>>
 option|cert|@TR<<Certificate (PKCS12)>>
 option|pem|@TR<<Certificate (PEM)>>
-onchange|
 end_form
 
 #PreShared Key
