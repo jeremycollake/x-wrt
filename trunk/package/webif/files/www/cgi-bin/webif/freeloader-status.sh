@@ -288,11 +288,11 @@ if [ -f /tmp/currentlogfile ]; then
 	if [ $EXTENSION = 'torrent' ]; then
 		echo "<fieldset><legend>@TR<<freeloader-status_Torrent_log#Torrent log>></legend>"
 		echo -n "<pre class=\"logfonts prelog\" title=\"@TR<<freeloader-status_Start_log#Start of the log>>\">"
-		head -c 2000 "$LOG_DIRECTORY/$CURRENT_LOGFILE" | tr '\r' '\n'| sed '/Check exists:/d; s/&/\&amp;/; s/</\&lt;/; s/>/\&gt;/;' | sed 24q
+		head -c 2000 "$LOG_DIRECTORY/$CURRENT_LOGFILE" | tr '\r' '\n'| sed '/Check exist:/d; s/&/\&amp;/; s/</\&lt;/; s/>/\&gt;/;' | sed 24q
 		echo
 		echo "</pre>"
 		echo -n "<pre class=\"prelog\" title=\"@TR<<freeloader-status_End_log#End of the reversed log>>\">"
-		tail -c 5000 "$LOG_DIRECTORY/$CURRENT_LOGFILE" | tr '\r' '\n' | sed '/Check exists:/d; s/&/\&amp;/; s/</\&lt;/; s/>/\&gt;/; 1!G;h;$!d;' | sed 70q
+		tail -c 5000 "$LOG_DIRECTORY/$CURRENT_LOGFILE" | tr '\r' '\n' | sed '/Check exist:/d; s/&/\&amp;/; s/</\&lt;/; s/>/\&gt;/; 1!G;h;$!d;' | sed 70q
 		echo
 		echo "</pre>"
 		echo "<p class=\"logfonts leglog\"><u>@TR<<freeloader-status_Torrent_Legend#Legend>></u>:<br />"
