@@ -40,7 +40,7 @@ WL0_IFNAME=$(nvram get wl0_ifname)
 # Handle switch to sta mode at user request
 #
 if empty "$FORM_clientswitch"; then
-	CLIENT_SWITCH_BUTTON="<form enctype=\"multipart/form-data\" method=\"post\"><input type=\"submit\" value=\" @TR<<Scan>> \" name=\"clientswitch\" /></form>"
+	CLIENT_SWITCH_BUTTON="<form enctype=\"multipart/form-data\" method=\"post\" action=\"$SCRIPT_NAME\"><input type=\"submit\" value=\" @TR<<Scan>> \" name=\"clientswitch\" /></form>"
 else
 	ORIGINAL_WL_MODE=$(nvram get wl0_mode)
 	nvram set wl0_mode="sta"
@@ -50,10 +50,7 @@ else
 	wifi up 2>/dev/null >/dev/null </dev/null
 fi
 WL_MODE=$(nvram get wl0_mode)
-?>
-<table style="width: 90%; text-align: center;" border="0" cellpadding="2" cellspacing="2">
-<tbody>
-<?
+
 ##################################################
 #
 if equal $WL_MODE "ap" ; then
@@ -161,7 +158,7 @@ else
 
 		FORM_cells="$FORM_cells
 			string|<tr><td><strong>@TR<<Cell>></strong> $CELL_ID</td></tr>
-			string|<tr><td><strong>@TR<<SSID>></strong> $ESSID (<a href=\"http://standards.ieee.org/cgi-bin/ouisearch?$MAC_FIRST_THREE\" target=\"_new\">$MAC_DASHES</a>)</td></tr>
+			string|<tr><td><strong>@TR<<SSID>></strong> $ESSID (<a href=\"http://standards.ieee.org/cgi-bin/ouisearch?$MAC_FIRST_THREE\" target=\"_blank\">$MAC_DASHES</a>)</td></tr>
 			string|<tr><td><strong>@TR<<Channel>></strong> $CHANNEL_ID</td></tr>
 			$QUALITY_STRING
 			string|<tr><td><strong>@TR<<Signal>></strong> $SIGNAL_DBM dBm / <strong>@TR<<Noise>></strong> $NOISE_DBM dBm</td></tr><tr><td>
@@ -185,15 +182,11 @@ if ! empty "$FORM_clientswitch"; then
 	wifi up 2>/dev/null >/dev/null </dev/null
 fi
 fi # end if is in 'allowed to scan' mode
-?>
 
-</tbody></table>
-
-<?
-if equal "$found_networks" "0"; then
-	echo "@TR<<No wireless networks were found>>."
-else
-	if ! empty "$FORM_clientswitch"; then
+if ! equal $WL_MODE "ap" ; then
+	if equal "$found_networks" "0"; then
+		echo "@TR<<No wireless networks were found>>."
+	else
 		display_form <<EOF
 		start_form|@TR<<Survey Results>>
 		$FORM_cells
@@ -201,9 +194,8 @@ else
 EOF
 	fi
 fi
-?>
 
-<? footer ?>
+footer ?>
 <!--
 ##WEBIF:name:Status:980:Site Survey
 -->
