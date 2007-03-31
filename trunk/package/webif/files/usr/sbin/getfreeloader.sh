@@ -89,7 +89,7 @@ if ! [ -f $DOWNLOAD_DESTINATION/suspend.lock ]; then
 	#check if ctorrent is running
 	if ! [ -f /tmp/freeloader.lock ]; then
 
-		#Get the PID of this running script
+		#Set the lock file to signal the script is running
 		touch /tmp/freeloader.lock
 
 		#check if there are .torrent or .link files in the PRIO queue
@@ -253,7 +253,7 @@ if ! [ -f $DOWNLOAD_DESTINATION/suspend.lock ]; then
 
 		done
 		
-		#remove the PID file of getdownload
+		#remove the lock file of getdownload
 		rm /tmp/freeloader.lock
 
 		#if the prio.lock file exists remove it.
