@@ -76,15 +76,7 @@ is_kamikaze && {
 	uci_load "system"
 	uci_load "network"
 }
-	
-SSL="field|@TR<<Webif SSL>>
-select|ssl_enable|$CONFIG_ssl_enable
-option|0|@TR<<Off>>
-option|1|@TR<<On>>"
-if [ -n "$(has_pkgs matrixtunnel)" ]; then
-	STUNNEL_INSTALL_FORM="string|<div class=\"warning\">MatrixTunnel package is not installed. For ssl support you need to install MatrixTunnel:</div>
-		submit|install_stunnel| @TR<<Install MatrixTunnel>> |"
-fi
+
 
 #####################################################################
 # defaults
@@ -129,13 +121,30 @@ if ! empty "$FORM_install_stunnel"; then
 		ipkg -d ram install "openssl-util"
 		ln -s ~/usr/lib/libssl.so.0.9.8 /lib/libssl.so.0.9.8
 		ln -s ~/usr/lib/libcrypto.so.0.9.8 /lib/libcrypto.so.0.9.8
+		export RANDFILE="/tmp/.rnd"
+		dd if=/dev/urandom of="$RANDFILE" count=1 bs=512 2>/dev/null
 		rdate -s pool.ntp.org; /tmp/usr/bin/openssl genrsa -out /etc/ssl/matrixtunnel.key 2048; /tmp/usr/bin/openssl req -new -batch -nodes -key /etc/ssl/matrixtunnel.key -out /etc/ssl/matrixtunnel.csr; /tmp/usr/bin/openssl x509 -req -days 365 -in /etc/ssl/matrixtunnel.csr -signkey /etc/ssl/matrixtunnel.key -out /etc/ssl/matrixtunnel.cert
+		rm -f "$RANDFILE" 2>/dev/null
+		unset RANDFILE
 		ipkg install matrixtunnel
 		rm /lib/libcrypto.so.0.9.8
 		rm /lib/libssl.so.0.9.8
 		ipkg remove openssl-util libopenssl zlib
 	fi
-	echo "</pre>"
+	echo "</pre><br />"
+fi
+
+WEBIF_SSL="field|@TR<<system_settings_Webif_SSL#Webif SSL>>"
+is_package_installed "matrixtunnel"
+if [ "$?" == "1" ]; then
+	WEBIF_SSL="$WEBIF_SSL
+string|<div class=\"warning\">@TR<<system_settings_Feature_requires_matrixtunnel#MatrixTunnel package is not installed. You need to install it for ssl support>>:</div>
+submit|install_stunnel| @TR<<@TR<<system_settings_Install_MatrixTunnel#Install MatrixTunnel>> |"
+else
+	WEBIF_SSL="$WEBIF_SSL
+select|ssl_enable|$CONFIG_ssl_enable
+option|0|@TR<<system_settings_webifssl_Off#Off>>
+option|1|@TR<<system_settings_webifssl_On#On>>"
 fi
 
 #####################################################################
@@ -217,7 +226,7 @@ EOF
 		}
 		# webif settings
 		uci_set "webif" "ssl" "enable" "$FORM_ssl_enable"
-		! equal "$FORM_theme" "$CONFIG_theme_id" && ! empty "$CONFIG_theme_id" && {	
+		! equal "$FORM_theme" "$CONFIG_theme_id" && ! empty "$CONFIG_theme_id" && {
 			uci_set "webif" "theme" "id" "$FORM_theme"
 		}
 		uci_set_replace_value "webif" "general" "lang" "$FORM_language"
@@ -458,9 +467,8 @@ $LANGUAGES
 field|@TR<<Theme>>
 select|theme|$FORM_theme
 $THEMES
-$SSL
+$WEBIF_SSL
 end_form
-$STUNNEL_INSTALL_FORM
 # end webif settings
 ###########################
 $dangerous_form_start
