@@ -29,7 +29,7 @@ while [ -z "$device_name" ]; do
 		device_name="PC Engines WRAP"
 		break
         }
-        dd bs=1 count=19 skip=5 if=/dev/mtd/5 2>/dev/null | strings | grep "MR3201A-FLF-FON"
+        dd bs=1 count=19 skip=5 if=/dev/mtd/5 2>/dev/null | strings | grep "MR3201A-FLF-FON" || ifconfig eth0 |grep -q 00:18:84:**:**:**
 	[ $? = "0" ] && {
 		device_name="La Fonera (ACCTON MR3201A)"
 		break
