@@ -117,7 +117,7 @@ fi
 if ! empty "$FORM_install_stunnel"; then
 	echo "Installing MatrixTunnel package ...<pre>"
 	install_package "matrixtunnel"
-	if [ ! -e "/etc/matrixtunnel/matrixtunnel.key" ]; then
+	if [ ! -e "/etc/ssl/matrixtunnel.key" ]; then
 		ipkg -d ram install "openssl-util"
 		ln -s ~/usr/lib/libssl.so.0.9.8 /lib/libssl.so.0.9.8
 		ln -s ~/usr/lib/libcrypto.so.0.9.8 /lib/libcrypto.so.0.9.8
