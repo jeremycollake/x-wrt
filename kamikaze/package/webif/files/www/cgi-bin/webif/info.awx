@@ -38,10 +38,10 @@ function do_update() {
 	getline < "/www/.version"
 	this_rev=$0
 	lang=config_get("general", "lang")
-	"ipkg status \"webif-lang-"lang"\" |grep \"Status:\" | grep \" installed\"" | getline
+	"ipkg status \"webif-lang-"lang"\" 2>/dev/null |grep \"Status:\" | grep \" installed\"" | getline
 	if ($0 != "") {
 		webif_version="r" this_rev
-		while (("ipkg status webif" | getline) == 1) {
+		while (("ipkg status webif" 2>/dev/null | getline) == 1) {
 			if (/^Version:/) {
 				webif_version=$2
 				gsub(/ /,"",webif_version)
