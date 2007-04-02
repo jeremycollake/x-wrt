@@ -147,7 +147,9 @@ if ! empty "$FORM_install_stunnel"; then
 			rm /lib/libcrypto.so.0.9.8
 			rm /lib/libssl.so.0.9.8
 		fi
-		ipkg remove "$inst_packages"
+		if [ -n "$inst_packages" ]; then
+			ipkg remove "$inst_packages"
+		fi
 	fi
 	echo "</pre><br />"
 fi
