@@ -118,18 +118,36 @@ if ! empty "$FORM_install_stunnel"; then
 	echo "Installing MatrixTunnel package ...<pre>"
 	install_package "matrixtunnel"
 	if [ ! -e "/etc/ssl/matrixtunnel.key" ]; then
-		ipkg -d ram install "openssl-util"
-		ln -s ~/usr/lib/libssl.so.0.9.8 /lib/libssl.so.0.9.8
-		ln -s ~/usr/lib/libcrypto.so.0.9.8 /lib/libcrypto.so.0.9.8
+		is_package_installed "openssl-util"
+		if [ "$?" == "1" ]; then
+			inst_packages="$inst_packages openssl-util"
+			openssl_install="1"
+		fi
+		is_package_installed "libopenssl"
+		if [ "$?" == "1" ]; then
+			inst_packages="$inst_packages libopenssl"
+			ln -s ~/usr/lib/libssl.so.0.9.8 /lib/libssl.so.0.9.8
+			ln -s ~/usr/lib/libcrypto.so.0.9.8 /lib/libcrypto.so.0.9.8
+			libsslsymlink=1
+		fi
+		is_package_installed "zlib"
+		if [ "$?" == "1" ]; then
+			inst_packages="$inst_packages zlib"
+		fi
+		if [ "$openssl_install" == "1" ]; then
+			ipkg -d ram install "openssl-util"
+		fi
 		export RANDFILE="/tmp/.rnd"
 		dd if=/dev/urandom of="$RANDFILE" count=1 bs=512 2>/dev/null
 		rdate -s pool.ntp.org; /tmp/usr/bin/openssl genrsa -out /etc/ssl/matrixtunnel.key 2048; /tmp/usr/bin/openssl req -new -batch -nodes -key /etc/ssl/matrixtunnel.key -out /etc/ssl/matrixtunnel.csr; /tmp/usr/bin/openssl x509 -req -days 365 -in /etc/ssl/matrixtunnel.csr -signkey /etc/ssl/matrixtunnel.key -out /etc/ssl/matrixtunnel.cert
 		rm -f "$RANDFILE" 2>/dev/null
 		unset RANDFILE
 		ipkg install matrixtunnel
-		rm /lib/libcrypto.so.0.9.8
-		rm /lib/libssl.so.0.9.8
-		ipkg remove openssl-util libopenssl zlib
+		if [ "$libsslsymlink" == "1" ]; then
+			rm /lib/libcrypto.so.0.9.8
+			rm /lib/libssl.so.0.9.8
+		fi
+		ipkg remove "$inst_packages"
 	fi
 	echo "</pre><br />"
 fi
