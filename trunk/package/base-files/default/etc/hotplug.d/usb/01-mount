@@ -8,12 +8,13 @@ mount_storage() {
 					mkdir -p /tmp/mnt
 					ln -s /tmp/mnt /
 				}
+				fulldev="/dev$(ls -l "$dev" | sed 's/^.*\.\.//')"
 				cd $dev
 				for part in part*; do
 					if [ $part != "part*" ] ; then
 						path=/mnt/${dev}_${part##*part}
 						mkdir -p ${path}
-						mount ${part} ${path}
+						mount ${fulldev}/${part} ${path}
 					fi
 				done
 			)
