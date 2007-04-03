@@ -109,7 +109,7 @@ equal "$OVERCLOCKING_DISABLED" "0" && {
 # install NTP client if asked
 if ! empty "$FORM_install_ntpclient"; then
 	tmpfile=$(mktemp "/tmp/.webif_ntp-XXXXXX")
-	echo "Installing NTPCLIENT package ...<pre>"
+	echo "@TR<<system_settings_Installing_NTPCLIENT_package#Installing NTPCLIENT package>> ...<pre>"
 	install_package "ntpclient"
 	echo "</pre>"
 fi
@@ -159,7 +159,7 @@ is_package_installed "matrixtunnel"
 if [ "$?" == "1" ]; then
 	WEBIF_SSL="$WEBIF_SSL
 string|<div class=\"warning\">@TR<<system_settings_Feature_requires_matrixtunnel#MatrixTunnel package is not installed. You need to install it for ssl support>>:</div>
-submit|install_stunnel| @TR<<@TR<<system_settings_Install_MatrixTunnel#Install MatrixTunnel>> |"
+submit|install_stunnel| @TR<<system_settings_Install_MatrixTunnel#Install MatrixTunnel>> |"
 else
 	WEBIF_SSL="$WEBIF_SSL
 select|ssl_enable|$CONFIG_ssl_enable
@@ -211,7 +211,7 @@ else
 # save forms
 	SAVED=1
 	validate <<EOF
-hostname|FORM_hostname|Hostname|nodots required|$FORM_hostname
+hostname|FORM_hostname|@TR<<Host Name>>|nodots required|$FORM_hostname
 EOF
 	if equal "$?" 0 ; then
 		is_kamikaze && {
@@ -255,7 +255,7 @@ EOF
 			FORM_effect=$FORM_effect_enable ; if equal $FORM_effect "1" ; then FORM_effect="checked" ; fi
 		}
 	else
-		echo "<br /><div class=\"warning\">Warning: Hostname failed validation. Can not be saved.</div><br />"
+		echo "<br /><div class=\"warning\">@TR<<Warning>>: @TR<<system_settings_Hostname_failed_validation#Hostname failed validation. Can not be saved.>></div><br />"
 	fi
 fi
 
@@ -383,8 +383,8 @@ is_bcm947xx && {
 #####################################################################
 # check if ntpclient or opennptd is installed and give user option to install ntpclient if neither are installed.
 if [ -n "$(has_pkgs ntpclient)" -a -n "$(has_pkgs openntpd)" ]; then
-	NTPCLIENT_INSTALL_FORM="string|<div class=\"warning\">No NTP client is installed. For correct time support you need to install one:</div>
-		submit|install_ntpclient| Install NTP Client |"
+	NTPCLIENT_INSTALL_FORM="string|<div class=\"warning\">@TR<<Warning>>: @TR<<system_settings_feature_requires_ntpclient#No NTP client is installed. For correct time support you need to install one>>:</div>
+		submit|install_ntpclient| @TR<<system_settings_Install_NTP_Client#Install NTP Client>> |"
 fi
 
 #####################################################################
