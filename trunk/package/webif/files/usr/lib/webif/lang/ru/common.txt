@@ -103,10 +103,6 @@ Password Change => Смена пароля
 New Password => Новый пароль
 Confirm Password => Подтвердите пароль
 
-# 'System Settings' page
-System Settings => Настройки системы
-Language => Язык
-
 # 'Installed Software' page
 Installed Packages => Установленные пакеты
 Update package lists => Обновить список пакетов
@@ -331,6 +327,52 @@ status_wwaninfo_quality_Workable => Рабочий
 status_wwaninfo_quality_Good => Хороший
 status_wwaninfo_quality_Excellent => Отличный
 status_wwaninfo_wrong_value => Неправильный сигнал
+
+
+## system-settings.sh
+System => Система
+Settings => Параметры
+System Settings => Настройки системы
+system_settings_Installing_NTPCLIENT_package => Installing NTPCLIENT package
+system_settings_Installing_MatrixTunnel_package => Installing MatrixTunnel package
+system_settings_Webif_SSL => Webif SSL
+system_settings_Feature_requires_matrixtunnel => MatrixTunnel package is not installed. You need to install it for ssl support
+system_settings_Install_MatrixTunnel => Install MatrixTunnel
+system_settings_webifssl_Off => Off
+system_settings_webifssl_On => On
+Host Name => Имя узла
+Warning => Внимание
+system_settings_Hostname_failed_validation => Hostname failed validation. Can not be saved.
+Enable visual effects => Enable visual effects
+Boot Wait => Boot Wait
+Enabled => Enabled
+Disabled => Disabled
+## duplicate ##Boot Wait => Boot Wait
+HelpText boot_wait => Boot Wait (Ожидание загрузки) заставляет загрузчик устройства ждать несколько секунд при загрузке передачи новой прошивки по TFTP. Это потенциальная проблема безопасности.
+Wait Time => Время ожидания
+## duplicate ##Wait Time => Wait Time
+HelpText wait_time => Число секунд, которое загрузчик будет ждать передачу по TFTP, если Boot Wait включен.
+CPU Clock Frequency => Частота процессора
+Dangerous Settings => Dangerous Settings
+## duplicate ##CPU Clock Frequency => CPU Clock Frequency
+HelpText CPU Clock Frequency => Не изменяйте это значение. Вы можете привести свой маршрутизатор в нерабочее состояние, если не знаете, что делаете. Мы пытались выключить эту возможность для всех маршрутизаторов, которые могут быть приведены в нерабочее состояние путем неправильной установки частоты процессора. Только Linksys WRT54G v4 устройства известны как не имеющие проблем с некорректными установками частоты.
+## duplicate ##Warning => Warning
+system_settings_feature_requires_ntpclient => No NTP client is installed. For correct time support you need to install one
+system_settings_Install_NTP_Client => Install NTP Client
+system_settings_group_unknown_TZ => Unknown
+system_settings_User_or_old_TZ => User defined (or out of date)
+## duplicate ##System Settings => System Settings
+## duplicate ##Host Name => Host Name
+Time Settings => Time Settings
+Timezone => Timezone
+system_settings_POSIX_TZ_String => POSIX TZ String
+system_settings_js_required => This field requires the JavaScript support.
+## duplicate ##Timezone => Timezone
+Timezone_helptext => Установите часовой пояс в соответствии с ближайшим городом в Вашем регионе из предопределенного списка.
+NTP Server => NTP Server
+Webif Settings => Webif Settings
+Language => Язык
+Theme => Theme
 
 
 ## new format
@@ -822,15 +864,6 @@ Backports Tip => Совет по портам
 HelpText Backports Tip => Для намного большего выбора пакетов посмотрите, нет ли репозитория портов (портированного ПО), доступного для Вашей прошивки.
 Install Package => Установка Пакета
 HelpText Install Package => Обычно пакет устанавливается, нажимая на ссылку установка в списке пакетов ниже. Однако Вы можете установить пакет, не показанный здесь в известных репозиториях.
-
-#system-settings.sh
-Boot Wait => Boot Wait
-HelpText boot_wait => Boot Wait (Ожидание загрузки) заставляет загрузчик устройства ждать несколько секунд при загрузке передачи новой прошивки по TFTP. Это потенциальная проблема безопасности.
-Wait Time => Время ожидания
-HelpText wait_time => Число секунд, которое загрузчик будет ждать передачу по TFTP, если Boot Wait включен.
-CPU Clock Frequency => Частота процессора
-HelpText CPU Clock Frequency => Не изменяйте это значение. Вы можете привести свой маршрутизатор в нерабочее состояние, если не знаете, что делаете. Мы пытались выключить эту возможность для всех маршрутизаторов, которые могут быть приведены в нерабочее состояние путем неправильной установки частоты процессора. Только Linksys WRT54G v4 устройства известны как не имеющие проблем с некорректными установками частоты.
-Timezone_helptext => Установите часовой пояс в соответствии с ближайшим городом в Вашем регионе из предопределенного списка.
 
 #log-dmesg.sh
 HelpText Browser_Frames => Ваш броузер не поддерживает фреймы,<br>пожалуйста перейдите по следующей ссылке
