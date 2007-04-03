@@ -7,103 +7,121 @@ START=90
 start() {
 . /etc/functions.sh
 . /lib/config/uci.sh
+. /usr/lib/webif/functions.sh
 uci_load "webif"
 
-#detect device
-device_name="$CONFIG_general_device_name"
-
-[ -z "$device_name" ] && [ -f "/proc/diag/model" ] && device_name=$(cat "/proc/diag/model")
-while [ -z "$device_name" ]; do  
-        dd bs=1024 skip=212 count=16 if=/dev/mtd/0 2>/dev/null | strings | grep -q W54G
-        [ $? = "0" ] && {
-               device_name="Linksys WRT54G"
-               break
-        }
-        dd bs=1024 count=1 skip=5 if=/dev/mtd/0 2>/dev/null | strings | grep "WL500gp"
-        [ $? = "0" ] && {
-               device_name="ASUS WL-500gp"
-               break
-        }
-        ifconfig eth0 |grep -q 00:0D:B9:**:**:**
-	[ $? = "0" ] && {
-		device_name="PC Engines WRAP"
-		break
-        }
-        dd bs=1 count=19 skip=5 if=/dev/mtd/5 2>/dev/null | strings | grep "MR3201A-FLF-FON" || ifconfig eth0 |grep -q 00:18:84:**:**:**
-	[ $? = "0" ] && {
-		device_name="La Fonera (ACCTON MR3201A)"
-		break
-	}
-	cat /proc/cpuinfo |grep "Gateway 7001 AP"
-	[ $? = "0" ] && {
-		device_name="Gateway 7001 AP"
-		break
-	}
+	#detect device
+	device_name="$CONFIG_general_device_name"
 	
-	#Generic detection in case the router is not caught by the above rules.
-        if [ "$(uname -m)" = "i?86" ]; then
-        	device_name="Generic x86"
-        	break
-        fi
-        cat /proc/cpuinfo |grep "IXP4\?\?"
-        [ $? = "0" ] && {
-		device_name="Unknown IXPxx Device"
-		break
+	[ -z "$device_name" ] && [ -f "/proc/diag/model" ] && device_name=$(cat "/proc/diag/model")
+	while [ -z "$device_name" ]; do  
+	        dd bs=1024 skip=212 count=16 if=/dev/mtd/0 2>/dev/null | strings | grep -q W54G
+	        [ $? = "0" ] && {
+	               device_name="Linksys WRT54G"
+	               break
+	        }
+	        dd bs=1024 count=1 skip=5 if=/dev/mtd/0 2>/dev/null | strings | grep "WL500gp"
+	        [ $? = "0" ] && {
+	               device_name="ASUS WL-500gp"
+	               break
+	        }
+	        ifconfig eth0 |grep -q 00:0D:B9:**:**:**
+		[ $? = "0" ] && {
+			device_name="PC Engines WRAP"
+			break
+	        }
+	        dd bs=1 count=19 skip=5 if=/dev/mtd/5 2>/dev/null | strings | grep "MR3201A-FLF-FON" || ifconfig eth0 |grep -q 00:18:84:**:**:**
+		[ $? = "0" ] && {
+			device_name="La Fonera (ACCTON MR3201A)"
+			break
+		}
+		cat /proc/cpuinfo |grep "Gateway 7001 AP"
+		[ $? = "0" ] && {
+			device_name="Gateway 7001 AP"
+			break
+		}
+	
+		#Generic detection in case the router is not caught by the above rules.
+	        if [ "$(uname -m)" = "i?86" ]; then
+	        	device_name="Generic x86"
+	        	break
+	        fi
+	        cat /proc/cpuinfo |grep "IXP4\?\?"
+	        [ $? = "0" ] && {
+			device_name="Unknown IXPxx Device"
+			break
+		}
+	break
+	done
+
+	#detect firmware info
+	firmware_name=$CONFIG_general_firmware_name
+	firmware_subtitle=$CONFIG_general_firmware_subtitle
+	firmware_version=$CONFIG_general_firmware_version
+	
+	if grep -qi "KAMIKAZE" "/etc/banner"; then
+		firmware_name="OpenWrt Kamikaze"
+	else	
+		firmware_name="OpenWrt White Russian"		
+	fi	
+	firmware_subtitle="With X-Wrt Extensions"
+
+	if [ -f "/etc/openwrt_version" ]; then
+		firmware_version=$(cat "/etc/openwrt_version")
+	elif grep -q "RC5" "/etc/banner"; then
+		firmware_version="RC5"	
+	elif grep -q "RC6" "/etc/banner"; then
+		firmware_version="RC6"
+	elif grep -q "KAMIKAZE" "/etc/banner"; then
+		firmware_version=$(cat /etc/banner |grep KAMIKAZE |cut -d ' ' -f 5 |cut -d ')' -f 1)
+	else
+		firmware_version="unknown"
+	fi
+
+	#
+	# if any variables changed, commit the change
+	#
+	if [ "$CONFIG_general_firmware_version" != "$firmware_version" ] ||
+		[ "$CONFIG_general_firmware_name" != "$firmware_name" ] ||
+		[ "$CONFIG_general_firmware_subtitle" != "$firmware_subtitle" ]; then
+		echo "Committing new firmware id ..."
+		uci_set "webif" "general" "firmware_name" "$firmware_name"
+		uci_set "webif" "general" "firmware_version" "$firmware_version"
+		uci_set "webif" "general" "firmware_subtitle" "$firmware_subtitle"
+	fi
+
+	[ "$device_name" != "$CONFIG_general_device_name" ] && {
+		echo "Device: $device_name" 	
+		echo "Committing new device id ..."		
+		uci_set "webif" "general" "device_name" "$device_name"
 	}
-break
-done
 
-#detect firmware info
-firmware_name=$CONFIG_general_firmware_name
-firmware_subtitle=$CONFIG_general_firmware_subtitle
-firmware_version=$CONFIG_general_firmware_version
+	# Start stunnel if ssl is enabled
+	if [ "$CONFIG_ssl_enable" = "1" ]; then
+		killall matrixtunnel
+		matrixtunnel -A /etc/ssl/matrixtunnel.cert  -p /etc/ssl/matrixtunnel.key -d 443 -r 80
+	else
+		killall matrixtunnel
+	fi
 
-if grep -qi "KAMIKAZE" "/etc/banner"; then
-	firmware_name="OpenWrt Kamikaze"
-else	
-	firmware_name="OpenWrt White Russian"		
-fi	
-firmware_subtitle="With X-Wrt Extensions"
-
-if [ -f "/etc/openwrt_version" ]; then
-	firmware_version=$(cat "/etc/openwrt_version")
-elif grep -q "RC5" "/etc/banner"; then
-	firmware_version="RC5"	
-elif grep -q "RC6" "/etc/banner"; then
-	firmware_version="RC6"
-elif grep -q "KAMIKAZE" "/etc/banner"; then
-	firmware_version=$(cat /etc/banner |grep KAMIKAZE |cut -d ' ' -f 5 |cut -d ')' -f 1)
-else
-	firmware_version="unknown"
-fi
-
-#
-# if any variables changed, commit the change
-#
-if [ "$CONFIG_general_firmware_version" != "$firmware_version" ] ||
-	[ "$CONFIG_general_firmware_name" != "$firmware_name" ] ||
-	[ "$CONFIG_general_firmware_subtitle" != "$firmware_subtitle" ]; then
-	echo "Committing new firmware id ..."
-	uci_set "webif" "general" "firmware_name" "$firmware_name"
-	uci_set "webif" "general" "firmware_version" "$firmware_version"
-	uci_set "webif" "general" "firmware_subtitle" "$firmware_subtitle"
-fi
-
-[ "$device_name" != "$CONFIG_general_device_name" ] && {
-	echo "Device: $device_name" 	
-	echo "Committing new device id ..."		
-	uci_set "webif" "general" "device_name" "$device_name"
-}
-
-if [ -e "/tmp/.uci/webif" ]; then
-	uci_commit "webif"
-fi
-
-# Start stunnel if ssl is enabled
-if [ "$CONFIG_ssl_enable" = "1" ]; then
-	killall matrixtunnel
-	matrixtunnel -A /etc/ssl/matrixtunnel.cert  -p /etc/ssl/matrixtunnel.key -d 443 -r 80
-else
-	killall matrixtunnel
-fi
+	#get txpower for each wireless card and store it becuase madwifi doesn't allow you to get valid txpower 
+	#settings without a ath interface being created
+	is_package_installed "kmod-madwifi"
+	if [ "$?" = "0" ]; then
+		for wifi in `ifconfig |grep "wifi" |cut -d' ' -f 1`; do
+			athname=$(wlanconfig ath create wlandev $wifi wlanmode ap)
+			for power in `iwlist ath0 txpower 2>&-|grep "Current Tx-Power" -v |grep "ath0" -v | cut -d'd' -f 1 |cut -d' ' -f 3`; do
+				txpower="$txpower $power"
+			done
+			wlanconfig "$athname" destroy
+			eval FORM_power="\$CONFIG_wireless_${wifi}_txpower"
+			if [ "$FORM_power" != "$txpower" ]; then
+				uci_set "webif" "wireless" "${wifi}_txpower" "$txpower"
+			fi
+		done
+	fi
+	
+	if [ -e "/tmp/.uci/webif" ]; then
+		uci_commit "webif"
+	fi
 }
