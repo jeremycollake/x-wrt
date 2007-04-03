@@ -7,7 +7,7 @@ if [ -f "/usr/sbin/ntpclient" ] || \
 	
 	# create symlink to /tmp/TZ if /etc/TZ doesn't exist
 	# todo: -e | -f | -d didn't seem to work here, so I used find
-	if [ -z $(find "/etc/TZ") ]; then 
+	if [ -z $(find "/etc/TZ" 2>/dev/null) ]; then 
 		ln -s /tmp/TZ /etc/TZ
 	fi
 	
