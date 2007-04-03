@@ -195,29 +195,27 @@ mounted_devices="$(cat /proc/mounts | grep "^/dev/scsi/")"
 display_form <<EOF
 end_form
 EOF
-?>
+
+if [ -f /proc/bus/usb/drivers ]; then
+	cat <<EOF
 <div class="settings">
 <h3>@TR<<status_usb_Loaded_USB_drivers#Loaded USB drivers>></h3>
 <div>
 <table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.9em;" border="0" cellpadding="3" cellspacing="2">
-<?
-[ -f /proc/bus/usb/drivers ] && cat /proc/bus/usb/drivers | awk '
-	BEGIN {
-		print "<tbody>"
-	}
+<tbody>
+EOF
+	sed -e 's/.*://; s/ //g;' /proc/bus/usb/drivers | sort | awk '
 	{
-		print "	<tr>"
-		print "		<td>" $1 "</td>"
-		print "	</tr>"
+		print "	<tr><td>" $1 "</td></tr>"
 	}
 	END {
-		print "</tbody>"
-	}
-'
-
-display_form <<EOF
+		if (NR<1) print "	<tr><td>&nbsp;</td></tr>"
+	}'
+	display_form <<EOF
+</tbody>
 end_form
 EOF
+fi
 
 footer ?>
 <!--
