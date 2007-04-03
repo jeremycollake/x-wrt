@@ -30,27 +30,33 @@
 header_inject_head=$(cat <<EOF
 <script type="text/javascript">
 <!--
+function webif_entityDecode(s) {
+    var e = document.createElement("div");
+    e.innerHTML = s;
+    return e.firstChild.nodeValue;
+}
+
 function checkformURL(form) {
 	if (form.uploadURL.value == "" && document.getElementById("divurl1").style.display == "block") {
-		alert( "Please enter a URL for uploading to the router." );
+		alert( webif_entityDecode( "@TR<<freeloader-upload_Enter_URL#Please enter a URL for uploading to the router.>>" ) );
 		form.uploadURL.focus();
     		return false ;
 		}
   
 	if (form.uploadURLlist.value == "" && document.getElementById("divurl2").style.display == "block") {
-		alert( "Please enter a list of URLs for uploading to the router." );
+		alert( webif_entityDecode( "@TR<<freeloader-upload_Enter_URL_list#Please enter a list of URLs for uploading to the router.>>" ) );
 		form.uploadURLlist.focus();
     		return false ;
 		}
 
 	if (form.username.value != "" && form.password.value == "") {
-  		alert ( "You forgot to enter a password, please enter one." );
+  		alert ( webif_entityDecode( "@TR<<freeloader-upload_Enter_password#You forgot to enter a password, please enter one.>>" ) );
   		form.password.focus();
   		return false;
   		}
 
 	if (form.username.value == "" && form.password.value != "") {
-  		alert ( "You forgot to enter a username, please enter one." );
+  		alert ( webif_entityDecode( "@TR<<freeloader-upload_Enter_username#You forgot to enter a username, please enter one.>>" ) );
   		form.username.focus();
   		return false;
   		}
@@ -60,7 +66,7 @@ function checkformURL(form) {
 
 function checkformTorrentNZB(form) {
   if (form.uploadfile.value == "") {
-    alert( "Please select a .torrent or .nzb file for uploading to the router." );
+    alert( webif_entityDecode( "@TR<<freeloader-upload_Select_a_file#Please select a .torrent or .nzb file for uploading to the router.>>" ) );
     form.uploadfile.focus();
     return false ;
   }   
@@ -75,10 +81,6 @@ function togglediv(selecteddiv) {
 	document.getElementById("uploadURL").value = "";
 	document.getElementById("uploadURLlist").value = "";
 }
-
-
-
-
 
 // -->
 </script>
@@ -110,7 +112,7 @@ cat <<EOF
 	<td width="40%"><b>@TR<<freeloader-upload_File#File>></b></td>
 	<td>
 		<input type="file" name="uploadfile" />
-		<input type="submit" value="GO" />
+		<input type="submit" value="@TR<<freeloader-upload_GO#GO>>" />
 	</td>
 </tr>
 <tr>
@@ -143,8 +145,8 @@ cat <<EOF
 <tr>
 	<td valign="top" width="40%"><b>@TR<<freeloader-upload_URL#URL>></b></td>
 	<td>
-		<div id="divurl1" style="display:block;"><input type="text" name="uploadURL" id="uploadURL" /><input type=submit value="GO" /></div>
-		<div id="divurl2" style="display:none;"><textarea name="uploadURLlist" id="uploadURLlist" rows="6" cols="40"></textarea><input type=submit value="GO" /></div>
+		<div id="divurl1" style="display:block;"><input type="text" name="uploadURL" id="uploadURL" /><input type=submit value="@TR<<freeloader-upload_GO#GO>>" /></div>
+		<div id="divurl2" style="display:none;"><textarea name="uploadURLlist" id="uploadURLlist" rows="6" cols="40"></textarea><input type=submit value="@TR<<freeloader-upload_GO#GO>>" /></div>
 	</td>
 </tr>
 <tr>
@@ -209,8 +211,8 @@ if [ $cron_getfreeloader -eq "1" ] || [ $cron_killfreeloader -eq "1" ]; then
 	echo "<pre>"
 	echo "Add the following lines to crontab"
 	echo ""
-	echo "*/1 * * * * getfreeloader.sh"
-	echo "*/1 * * * * killfreeloader.sh"
+	echo "*/1 * * * * /usr/sbin/getfreeloader.sh"
+	echo "*/1 * * * * /usr/sbin/killfreeloader.sh"
 	echo "</pre>"
 fi
 
