@@ -115,7 +115,7 @@ if ! empty "$FORM_install_ntpclient"; then
 fi
 
 if ! empty "$FORM_install_stunnel"; then
-	echo "Installing MatrixTunnel package ...<pre>"
+	echo "@TR<<system_settings_Installing_MatrixTunnel_package#Installing MatrixTunnel package>> ...<pre>"
 	install_package "matrixtunnel"
 	if [ ! -e "/etc/ssl/matrixtunnel.key" ]; then
 		is_package_installed "openssl-util"
