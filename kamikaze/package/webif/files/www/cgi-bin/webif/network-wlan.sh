@@ -100,6 +100,7 @@ esac
 }
 uci_load network
 NETWORK_DEVICES="none $network_devices"
+uci_load webif
 uci_load wireless
 
 #FIXME: uci_load bug
