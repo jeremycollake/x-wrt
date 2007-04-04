@@ -85,7 +85,7 @@ type == "-" {
 		printf "%d", $5
 	}
 	print "</td>"
-	if ((path ~ xedit) || $5 >= 2 ** 15) {
+	if ((path ~ xedit) || $5 >= 2 ** 16) {
 		print td_ind "<td class=\"image\"><img src=\"/images/action_edit_no.gif\" alt=\"@TR<<browser_Edit#Edit>>\" /></td>"
 	} else {
 		print td_ind "<td class=\"image\"><a href=\"" url "?path=" path "&amp;edit=" fname "\"><img src=\"/images/action_edit.gif\" alt=\"@TR<<browser_Edit#Edit>>\" /></a></td>"
