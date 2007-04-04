@@ -15,29 +15,29 @@ echo "$HEADER"
 
 if ! empty "$FORM_package"; then
 
-	App_package_install "Hydra 4.5" "" ""
-	wget -q http://www.hackerpimps.com/fairuzawrt/bin/hydra -P /usr/sbin/
-	wget -q http://www.phenoelit.de/obiwan/common-passwords.txt -P /etc/
-	mv /etc/common-passwords.txt /etc/pwd.lst
-	
-	if  [ -s "/usr/sbin/hydra" ]  ; then
-	chmod 755 /usr/sbin/hydra
-	echo "config hydra conf
-	option ip	''
-	option service	'http'
-	option path	''
-	option usr	'admin'
-	option pwd	'/etc/pwd.lst'" > /etc/config/hydra
+        App_package_install "Hydra 4.5" "" ""
+        wget -q http://www.hackerpimps.com/fairuzawrt/bin/hydra -P /usr/sbin/
+        wget -q http://www.phenoelit.de/obiwan/common-passwords.txt -P /etc/
+        mv /etc/common-passwords.txt /etc/pwd.lst
+        
+        if  [ -s "/usr/sbin/hydra" ]  ; then
+        chmod 755 /usr/sbin/hydra
+        echo "config hydra conf
+        option ip        ''
+        option service        'http'
+        option path        ''
+        option usr        'admin'
+        option pwd        '/etc/pwd.lst'" > /etc/config/hydra
 
-	echo_install_complete 
-	fi
+        echo_install_complete 
+        fi
 exit
 fi
 
 if ! empty "$FORM_remove"; then
-	App_package_remove "Hydra 4.5" "hydra"
-	rm /usr/sbin/hydra
-	rm /etc/pwd.lst 2> /dev/null
+        App_package_remove "Hydra 4.5" "hydra"
+        rm /usr/sbin/hydra
+        rm /etc/pwd.lst 2> /dev/null
 exit
 fi
 
@@ -47,13 +47,13 @@ echo "$HTMLHEAD<META http-equiv='refresh' content='30;URL=$SCRIPT_NAME' /></head
 
 if equal $FORM_action  "upload" ; then echo "... File sucessfully uploaded</br>"
 
-	if [ $FORM_usrorpwd = "usr" ] ; then
-	mv $FORM_uploadfile /etc/usr.lst
-	uci_set "hydra" "conf" "usr" "/etc/usr.lst"
-	else mv $FORM_uploadfile /etc/pwd.lst
-	uci_set "hydra" "conf" "pwd" "/etc/pwd.lst"
-	fi
-	uci_commit "hydra"
+        if [ $FORM_usrorpwd = "usr" ] ; then
+        mv $FORM_uploadfile /etc/usr.lst
+        uci_set "hydra" "conf" "usr" "/etc/usr.lst"
+        else mv $FORM_uploadfile /etc/pwd.lst
+        uci_set "hydra" "conf" "pwd" "/etc/pwd.lst"
+        fi
+        uci_commit "hydra"
 fi
 
 ######### Save Hydra
@@ -69,77 +69,77 @@ uci_set "hydra" "conf" "usr" "$FORM_h_usr"
 uci_set "hydra" "conf" "pwd" "$FORM_h_pwd"
 uci_set "hydra" "conf" "wait" "$FORM_h_wait"
 
-	### If  session checkbox on 
-	if ! empty "$FORM_chksession"; then
-		uci_set "hydra" "conf" "session" "checked"
-	else 	uci_set "hydra" "conf" "session" "" ; fi
+        ### If  session checkbox on 
+        if ! empty "$FORM_chksession"; then
+                uci_set "hydra" "conf" "session" "checked"
+        else         uci_set "hydra" "conf" "session" "" ; fi
 
 uci_commit "hydra"
 exit
 fi
-	######## Read config
+        ######## Read config
 
-	uci_load "hydra"
-	CFG_IP="$CONFIG_conf_ip"
-	CFG_SRV="$CONFIG_conf_service"
-	CFG_PORT="$CONFIG_conf_port"
-	CFG_RSESSION="$CONFIG_conf_session"
-	CFG_PATH="$CONFIG_conf_path"
-	CFG_USR="$CONFIG_conf_usr"
-	CFG_PWD="$CONFIG_conf_pwd"
-	CFG_WAIT="$CONFIG_conf_wait"
+        uci_load "hydra"
+        CFG_IP="$CONFIG_conf_ip"
+        CFG_SRV="$CONFIG_conf_service"
+        CFG_PORT="$CONFIG_conf_port"
+        CFG_RSESSION="$CONFIG_conf_session"
+        CFG_PATH="$CONFIG_conf_path"
+        CFG_USR="$CONFIG_conf_usr"
+        CFG_PWD="$CONFIG_conf_pwd"
+        CFG_WAIT="$CONFIG_conf_wait"
 
-	######## Run Hydra
-	if ! empty "$FORM_runhydra"; then
-	APP_Refresh_Page $SCRIPT_NAME "<br/>Starting Hydra ...</br/>"
+        ######## Run Hydra
+        if ! empty "$FORM_runhydra"; then
+        APP_Refresh_Page $SCRIPT_NAME "<br/>Starting Hydra ...</br/>"
 
-	if [ -s "$CFG_USR" ]  ; then hL="-L" ; else  hL="-l" ; fi
-	if [ -s "$CFG_PWD" ]  ; then hP="-P" ; else  hP="-p" ; fi
-	if ! equal $CFG_PATH "" ; then hM="-m $CFG_PATH" ; fi
-	if ! equal $CFG_WAIT "" ; then hW="-w $CFG_WAIT" ; fi
-	if equal $CFG_RSESSION "checked" ; then hR="-R" ; fi
+        if [ -s "$CFG_USR" ]  ; then hL="-L" ; else  hL="-l" ; fi
+        if [ -s "$CFG_PWD" ]  ; then hP="-P" ; else  hP="-p" ; fi
+        if ! equal $CFG_PATH "" ; then hM="-m $CFG_PATH" ; fi
+        if ! equal $CFG_WAIT "" ; then hW="-w $CFG_WAIT" ; fi
+        if equal $CFG_RSESSION "checked" ; then hR="-R" ; fi
 
-	if [ $CFG_SRV = "http" ] ; then
-		hydra -f $hR $hL $CFG_USR $hP $CFG_PWD $hW -e ns $CFG_IP http $hM > /tmp/hydra.www
-	elif [ $CFG_SRV = "ftp" ] ; then
-		hydra -f $hR $hL $CFG_USR $hP $CFG_PWD $hW -e ns $CFG_IP ftp > /tmp/hydra.ftp
-	elif [ $CFG_SRV = "telnet" ] ; then
-		#NOT TESTED YET
-		#hydra -f $hR $hL $CFG_USR $hP $CFG_PWD $hW -e ns $CFG_IP telnet > /tmp/hydra.telnet
-		echo ""
-	fi
-	exit
-	fi
+        if [ $CFG_SRV = "http" ] ; then
+                hydra -f $hR $hL $CFG_USR $hP $CFG_PWD $hW -e ns $CFG_IP http $hM > /tmp/hydra.www
+        elif [ $CFG_SRV = "ftp" ] ; then
+                hydra -f $hR $hL $CFG_USR $hP $CFG_PWD $hW -e ns $CFG_IP ftp > /tmp/hydra.ftp
+        elif [ $CFG_SRV = "telnet" ] ; then
+                #NOT TESTED YET
+                #hydra -f $hR $hL $CFG_USR $hP $CFG_PWD $hW -e ns $CFG_IP telnet > /tmp/hydra.telnet
+                echo ""
+        fi
+        exit
+        fi
 
-	######## Stop Hydra
-	if ! empty "$FORM_stophydra"; then
-	echo "<META http-equiv="refresh" content='3;URL=$SCRIPT_NAME' /><br/>Stopping Hydra ..."
-	killall -q hydra
-	exit
-	fi
-	######## Reset Hydra
-	if ! empty "$FORM_resethydra"; then
-	rm /tmp/hydra.www 2> /dev/null
-	rm /tmp/hydra.ftp 2> /dev/null
-	rm /tmp/hydra.telnet 2> /dev/null
-	echo "<META http-equiv="refresh" content='3;URL=$SCRIPT_NAME'>"
-	echo "<br/>Reseting Hydra ..."
-	exit
-	fi
+        ######## Stop Hydra
+        if ! empty "$FORM_stophydra"; then
+        echo "<META http-equiv="refresh" content='3;URL=$SCRIPT_NAME' /><br/>Stopping Hydra ..."
+        killall -q hydra
+        exit
+        fi
+        ######## Reset Hydra
+        if ! empty "$FORM_resethydra"; then
+        rm /tmp/hydra.www 2> /dev/null
+        rm /tmp/hydra.ftp 2> /dev/null
+        rm /tmp/hydra.telnet 2> /dev/null
+        echo "<META http-equiv="refresh" content='3;URL=$SCRIPT_NAME'>"
+        echo "<br/>Reseting Hydra ..."
+        exit
+        fi
 
-	####### Check if hydra is running
-	pscheck=$(ps ax | grep -c 'hydra -f')
-	if [ $pscheck = "1" ] ; then
-	if  [ -s "/tmp/hydra.www" ]  ; then pwd_www=$( grep "\[www\]" < /tmp/hydra.www) ; fi
-	if  [ -s "/tmp/hydra.ftp" ]  ; then pwd_ftp=$( grep "\[ftp\]" < /tmp/hydra.ftp) ; fi
-	if  [ -s "/tmp/hydra.telnet" ]  ; then pwd_telnet=$( grep "\[telnet\]" < /tmp/hydra.telnet) ; fi
-		echo "<form method='post' action='$SCRIPT_NAME'><div class=warning>Hydra is not running</div>&nbsp;&nbsp;<input type='submit' name='runhydra' value=\"Run Hydra\" /></form>"
-	else
-		echo "<form method="post" action='$SCRIPT_NAME'><font color="#33CC00">Hydra is running as '$CFG_USR' : '$CFG_PWD'</font>&nbsp;&nbsp;<input type='submit' name='stophydra' value=\"Stop Hydra\" /></form>"
-	fi
+        ####### Check if hydra is running
+        pscheck=$(ps ax | grep -c 'hydra -f')
+        if [ $pscheck = "1" ] ; then
+        if  [ -s "/tmp/hydra.www" ]  ; then pwd_www=$( grep "\[www\]" < /tmp/hydra.www) ; fi
+        if  [ -s "/tmp/hydra.ftp" ]  ; then pwd_ftp=$( grep "\[ftp\]" < /tmp/hydra.ftp) ; fi
+        if  [ -s "/tmp/hydra.telnet" ]  ; then pwd_telnet=$( grep "\[telnet\]" < /tmp/hydra.telnet) ; fi
+                echo "<form method='post' action='$SCRIPT_NAME'><div class=warning>Hydra is not running</div>&nbsp;&nbsp;<input type='submit' name='runhydra' value=\"Run Hydra\" /></form>"
+        else
+                echo "<form method="post" action='$SCRIPT_NAME'><font color="#33CC00">Hydra is running as '$CFG_USR' : '$CFG_PWD'</font>&nbsp;&nbsp;<input type='submit' name='stophydra' value=\"Stop Hydra\" /></form>"
+        fi
 
 if equal $pwd_www "" && equal $pwd_ftp  "" && equal $pwd_telnet ""  ; then
-	echo "<font color=red>No sucessfull logins found so far...</font><br/><br/>"
+        echo "<font color=red>No sucessfull logins found so far...</font><br/><br/>"
 else
 cat <<EOF
 <font color="#33CC00"><b>Found sucessfull logins!</b></font><br/><br/><font color=red>WARNING: Change your passwords immediately!!!</font><br/><br/>
@@ -184,7 +184,7 @@ cat <<EOF
 <table width="100%" border="0" cellspacing="1">
 <tr><td colspan="2" height="1"  bgcolor="#333333"></td></tr>
 <tr><td width="200"><a href="#" rel="b1">IP Address</a></td>
-<td><input name="h_ip" type="text" value=$CFG_IP /></td></tr>
+<td><input name="h_ip" type="text" value='$CFG_IP' /></td></tr>
 <tr><td><a href="#" rel="b2">Service</a></td>
 <td><select name='service' STYLE='width: 150px'>
 EOF
