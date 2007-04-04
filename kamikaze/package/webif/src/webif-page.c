@@ -369,16 +369,16 @@ main
 		}
 	}
 
-	strcpy(buf, proc);
+	strcpy(line, proc);
 	while (argv[i]) {
-		sprintf(buf + strlen(buf), " %s", argv[i++]);
+		sprintf(line + strlen(line), " %s", argv[i++]);
 	}
 
 	/*
 	 * Load standalone translation file
 	 */
 	if (lang != NULL) {
-		if ((arg = strdup(buf)) != NULL) {
+		if ((arg = strdup(line)) != NULL) {
 			if ((tmp = strrchr(arg, '.')) != NULL)
 				*tmp = 0;
 
@@ -397,7 +397,7 @@ main
 		}
 	}
 
-	f = popen(buf, "r");
+	f = popen(line, "r");
 	
 	while (!feof(f) && (fgets(buf, LINE_BUF - 1, f)) != NULL) {
 		fprintf(stdout, "%s", translate_line(buf));
