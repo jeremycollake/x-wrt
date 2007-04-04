@@ -88,6 +88,14 @@ config BR2_PACKAGE_WEBIF_LANG_FR
 	help
 	  French language file for webif
 
+config BR2_PACKAGE_WEBIF_LANG_HE
+	select BR2_PACKAGE_HASERL
+	tristate "webif-lang-he - Hebrew language file for webif"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  Hebrew language file for webif
+
 config BR2_PACKAGE_WEBIF_LANG_HR
 	select BR2_PACKAGE_HASERL
 	tristate "webif-lang-hr - Croatian language file for webif"
@@ -159,4 +167,12 @@ config BR2_PACKAGE_WEBIF_LANG_SE
 	default m
 	help
 	  Swedish language file for webif
+	  
+config BR2_PACKAGE_WEBIF_LANG_UK
+	select BR2_PACKAGE_HASERL
+	tristate "webif-lang-uk - Ukrainian language file for webif"
+	depends BR2_PACKAGE_WEBIF
+	default m
+	help
+	  Ukrainian language file for webif
 endmenu

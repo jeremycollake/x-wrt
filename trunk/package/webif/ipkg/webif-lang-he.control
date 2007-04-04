@@ -1,0 +1,7 @@
+Package: webif-lang-he
+Maintainer: Liran Tal <liran@mail.berlios.de>
+Section: net
+Depends: webif
+Priority: normal
+Description: Hebrew language file for webif.
+
