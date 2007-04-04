@@ -159,16 +159,16 @@ EOF
 if [ -f /tmp/currentdownloadfile ]; then
 	CURRENT_DOWNLOADFILE=`sed -n 1p /tmp/currentdownloadfile`
 	if [ "`ls -l $QUEUE_NORMAL | grep -v "$CURRENT_DOWNLOADFILE"`" != '' ]; then
-		ls -l $QUEUE_NORMAL | grep -v "$CURRENT_DOWNLOADFILE" | awk 'NF == 9 {print "<tr><td>",$9,"</td><td>",$7,$6,$8,"</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=prio&amp;queue=normal&amp;torrent=" $9 "\">prio</a>","</td><td>","<a href=\"freeloader-status.sh?action=remove&amp;queue=normal&amp;torrent=" $9 "\">remove</a>","</td></tr>"};NF > 9 {filename=$9;for (i=10;i<= NF; i++){filename = filename " " $i};print "<tr><td>",filename,"</td><td>",$7,$6,$8,"</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=prio&amp;queue=normal&amp;torrent="filename"\">prio</a>","</td><td>","<a href=\"freeloader-status.sh?action=remove&amp;queue=normal&amp;torrent="filename"\">remove</a>","</td></tr>"}'
+		ls -l $QUEUE_NORMAL | grep -v "$CURRENT_DOWNLOADFILE" | awk 'NF == 9 {print "<tr><td>",$9,"</td><td>",$7,$6,$8,"</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=prio&amp;queue=normal&amp;torrent=" $9 "\">@TR<<freeloader-status_action_prio#prio>></a>","</td><td>","<a href=\"freeloader-status.sh?action=remove&amp;queue=normal&amp;torrent=" $9 "\">@TR<<freeloader-status_action_remove#remove>></a>","</td></tr>"};NF > 9 {filename=$9;for (i=10;i<= NF; i++){filename = filename " " $i};print "<tr><td>",filename,"</td><td>",$7,$6,$8,"</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=prio&amp;queue=normal&amp;torrent="filename"\">@TR<<freeloader-status_action_prio#prio>></a>","</td><td>","<a href=\"freeloader-status.sh?action=remove&amp;queue=normal&amp;torrent="filename"\">@TR<<freeloader-status_action_remove#remove>></a>","</td></tr>"}'
 	else
 
-	   echo "<tr><td colspan="5">@TR<<freeloader-status_No_files_in_queue#There are currently no files in the queue.>></td></tr>"
+	   echo "<tr><td colspan=\"5\">@TR<<freeloader-status_No_files_in_queue#There are currently no files in the queue.>></td></tr>"
 	fi
 else
 	if [ "`ls -l $QUEUE_NORMAL`" != '' ]; then
-		ls -l $QUEUE_NORMAL | awk 'NF == 9 {print "<tr><td>",$9,"</td><td>",$7,$6,$8,"</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=prio&amp;queue=normal&amp;torrent=" $9 "\">prio</a>","</td><td>","<a href=\"freeloader-status.sh?action=remove&amp;queue=normal&amp;torrent=" $9 "\">remove</a>","</td></tr>"};NF > 9 {filename=$9;for (i=10;i<= NF; i++){filename = filename " " $i};print "<tr><td>",filename,"</td><td>",$7,$6,$8,"</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=prio&amp;queue=normal&amp;torrent="filename"\">prio</a>","</td><td>","<a href=\"freeloader-status.sh?action=remove&amp;queue=normal&amp;torrent="filename"\">remove</a>","</td></tr>"}'
+		ls -l $QUEUE_NORMAL | awk 'NF == 9 {print "<tr><td>",$9,"</td><td>",$7,$6,$8,"</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=prio&amp;queue=normal&amp;torrent=" $9 "\">@TR<<freeloader-status_action_prio#prio>></a>","</td><td>","<a href=\"freeloader-status.sh?action=remove&amp;queue=normal&amp;torrent=" $9 "\">@TR<<freeloader-status_action_remove#remove>></a>","</td></tr>"};NF > 9 {filename=$9;for (i=10;i<= NF; i++){filename = filename " " $i};print "<tr><td>",filename,"</td><td>",$7,$6,$8,"</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=prio&amp;queue=normal&amp;torrent="filename"\">@TR<<freeloader-status_action_prio#prio>></a>","</td><td>","<a href=\"freeloader-status.sh?action=remove&amp;queue=normal&amp;torrent="filename"\">@TR<<freeloader-status_action_remove#remove>></a>","</td></tr>"}'
 	else
-	   echo "<tr><td colspan="5">@TR<<freeloader-status_No_files_in_queue#There are currently no files in the queue.>></td></tr>"
+	   echo "<tr><td colspan=\"5\">@TR<<freeloader-status_No_files_in_queue#There are currently no files in the queue.>></td></tr>"
 	fi
 
 fi
@@ -191,15 +191,15 @@ EOF
 if [ -f /tmp/currentdownloadfile ]; then
 	CURRENT_DOWNLOADFILE=`sed -n 1p /tmp/currentdownloadfile`
 	if [ "`ls -l $QUEUE_PRIO | grep -v "$CURRENT_DOWNLOADFILE"`" != '' ]; then
-		ls -l $QUEUE_PRIO | grep -v "$CURRENT_DOWNLOADFILE" | awk 'NF == 9 {print "<tr><td>",$9,"</td><td>",$7,$6,$8,"</td><td>","<a href=\"freeloader-status.sh?action=normal&amp;queue=prio&amp;torrent=" $9 "\">normal</a>","</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=remove&amp;queue=prio&amp;torrent=" $9 "\">remove</a>","</td></tr>"};NF > 9 {filename=$9;for (i=10;i<= NF; i++){filename = filename " " $i};print "<tr><td>",filename,"</td><td>",$7,$6,$8,"</td><td>","<a href=\"freeloader-status.sh?action=normal&amp;queue=prio&amp;torrent="filename"\">normal</a>","</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=remove&amp;queue=prio&amp;torrent="filename"\">remove</a>","</td></tr>"}'
+		ls -l $QUEUE_PRIO | grep -v "$CURRENT_DOWNLOADFILE" | awk 'NF == 9 {print "<tr><td>",$9,"</td><td>",$7,$6,$8,"</td><td>","<a href=\"freeloader-status.sh?action=normal&amp;queue=prio&amp;torrent=" $9 "\">@TR<<freeloader-status_action_normal#normal>></a>","</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=remove&amp;queue=prio&amp;torrent=" $9 "\">@TR<<freeloader-status_action_remove#remove>></a>","</td></tr>"};NF > 9 {filename=$9;for (i=10;i<= NF; i++){filename = filename " " $i};print "<tr><td>",filename,"</td><td>",$7,$6,$8,"</td><td>","<a href=\"freeloader-status.sh?action=normal&amp;queue=prio&amp;torrent="filename"\">@TR<<freeloader-status_action_normal#normal>></a>","</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=remove&amp;queue=prio&amp;torrent="filename"\">@TR<<freeloader-status_action_remove#remove>></a>","</td></tr>"}'
 	else
-	   echo "<tr><td colspan="5">@TR<<freeloader-status_No_files_in_queue#There are currently no files in the queue.>></td></tr>"
+	   echo "<tr><td colspan=\"5\">@TR<<freeloader-status_No_files_in_queue#There are currently no files in the queue.>></td></tr>"
 	fi
 else
 	if [ "`ls -l $QUEUE_PRIO`" != '' ]; then
-		ls -l $QUEUE_PRIO | awk 'NF == 9 {print "<tr><td>",$9,"</td><td>",$7,$6,$8,"</td><td>","<a href=\"freeloader-status.sh?action=normal&amp;queue=prio&amp;torrent=" $9 "\">normal</a>","</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=remove&amp;queue=prio&amp;torrent=" $9 "\">remove</a>","</td></tr>"};NF > 9 {filename=$9;for (i=10;i<= NF; i++){filename = filename " " $i};print "<tr><td>",filename,"</td><td>",$7,$6,$8,"</td><td>","<a href=\"freeloader-status.sh?action=normal&amp;queue=prio&amp;torrent="filename"\">normal</a>","</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=remove&amp;queue=prio&amp;torrent="filename"\">remove</a>","</td></tr>"}'
+		ls -l $QUEUE_PRIO | awk 'NF == 9 {print "<tr><td>",$9,"</td><td>",$7,$6,$8,"</td><td>","<a href=\"freeloader-status.sh?action=normal&amp;queue=prio&amp;torrent=" $9 "\">@TR<<freeloader-status_action_normal#normal>></a>","</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=remove&amp;queue=prio&amp;torrent=" $9 "\">@TR<<freeloader-status_action_remove#remove>></a>","</td></tr>"};NF > 9 {filename=$9;for (i=10;i<= NF; i++){filename = filename " " $i};print "<tr><td>",filename,"</td><td>",$7,$6,$8,"</td><td>","<a href=\"freeloader-status.sh?action=normal&amp;queue=prio&amp;torrent="filename"\">@TR<<freeloader-status_action_normal#normal>></a>","</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=remove&amp;queue=prio&amp;torrent="filename"\">@TR<<freeloader-status_action_remove#remove>></a>","</td></tr>"}'
 	else
-	   echo "<tr><td colspan="5">@TR<<freeloader-status_No_files_in_queue#There are currently no files in the queue.>></td></tr>"
+	   echo "<tr><td colspan=\"5\">@TR<<freeloader-status_No_files_in_queue#There are currently no files in the queue.>></td></tr>"
 	fi
 fi
 cat <<EOF
@@ -218,9 +218,9 @@ cat <<EOF
 EOF
 
 if [ "`ls -l $QUEUE_DONE`" != '' ]; then
-	ls -l $QUEUE_DONE  | awk 'NF == 9 {print "<tr><td>",$9,"</td><td>",$7,$6,$8,"</td><td>","&nbsp;","</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=purge&amp;queue=done&amp;torrent=" $9 "\">purge</a>","</td></tr>"};NF > 9 {filename=$9;for (i=10;i<= NF; i++){filename = filename " " $i};print "<tr><td>",filename,"</td><td>",$7,$6,$8,"</td><td>","&nbsp;","</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=purge&amp;queue=done&amp;torrent="filename"\">purge</a>","</td></tr>"}'
+	ls -l $QUEUE_DONE  | awk 'NF == 9 {print "<tr><td>",$9,"</td><td>",$7,$6,$8,"</td><td>","&nbsp;","</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=purge&amp;queue=done&amp;torrent=" $9 "\">@TR<<freeloader-status_action_purge#purge>></a>","</td></tr>"};NF > 9 {filename=$9;for (i=10;i<= NF; i++){filename = filename " " $i};print "<tr><td>",filename,"</td><td>",$7,$6,$8,"</td><td>","&nbsp;","</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=purge&amp;queue=done&amp;torrent="filename"\">@TR<<freeloader-status_action_purge#purge>></a>","</td></tr>"}'
 else
-	echo "<tr><td colspan="5">@TR<<freeloader-status_No_finished_torrents#There are no finished downloads at the moment.>></td></tr>"
+	echo "<tr><td colspan=\"5\">@TR<<freeloader-status_No_finished_torrents#There are no finished downloads at the moment.>></td></tr>"
 fi
 
 cat <<EOF
@@ -239,9 +239,9 @@ cat <<EOF
 EOF
 
 if [ "`ls -l $QUEUE_ABORT`" != '' ]; then
-	ls -l $QUEUE_ABORT | awk 'NF == 9 {print "<tr><td>",$9,"</td><td>",$7,$6,$8,"</td><td>","<a href=\"freeloader-status.sh?action=normal&amp;queue=abort&amp;torrent=" $9 "\">normal</a>","</td><td>","<a href=\"freeloader-status.sh?action=prio&amp;queue=abort&amp;torrent=" $9 "\">prio</a>","</td><td>","<a href=\"freeloader-status.sh?action=purge&amp;queue=abort&amp;torrent=" $9 "\">purge</a>","</td></tr>"};NF > 9 {filename=$9;for (i=10;i<= NF; i++){filename = filename " " $i};print "<tr><td>",filename,"</td><td>",$7,$6,$8,"</td><td>","<a href=\"freeloader-status.sh?action=normal&amp;queue=abort&amp;torrent="filename"\">normal</a>","</td><td>","<a href=\"freeloader-status.sh?action=prio&amp;queue=abort&amp;torrent="filename"\">prio</a>","</td><td>","<a href=\"freeloader-status.sh?action=purge&amp;queue=abort&amp;torrent="filename"\">purge</a>","</td></tr>"}'
+	ls -l $QUEUE_ABORT | awk 'NF == 9 {print "<tr><td>",$9,"</td><td>",$7,$6,$8,"</td><td>","<a href=\"freeloader-status.sh?action=normal&amp;queue=abort&amp;torrent=" $9 "\">@TR<<freeloader-status_action_normal#normal>></a>","</td><td>","<a href=\"freeloader-status.sh?action=prio&amp;queue=abort&amp;torrent=" $9 "\">@TR<<freeloader-status_action_prio#prio>></a>","</td><td>","<a href=\"freeloader-status.sh?action=purge&amp;queue=abort&amp;torrent=" $9 "\">@TR<<freeloader-status_action_purge#purge>></a>","</td></tr>"};NF > 9 {filename=$9;for (i=10;i<= NF; i++){filename = filename " " $i};print "<tr><td>",filename,"</td><td>",$7,$6,$8,"</td><td>","<a href=\"freeloader-status.sh?action=normal&amp;queue=abort&amp;torrent="filename"\">@TR<<freeloader-status_action_normal#normal>></a>","</td><td>","<a href=\"freeloader-status.sh?action=prio&amp;queue=abort&amp;torrent="filename"\">@TR<<freeloader-status_action_prio#prio>></a>","</td><td>","<a href=\"freeloader-status.sh?action=purge&amp;queue=abort&amp;torrent="filename"\">@TR<<freeloader-status_action_purge#purge>></a>","</td></tr>"}'
 else
-	echo "<tr><td colspan="5">@TR<<freeloader-status_No_aborted_downloads#There are no aborted downloads at the moment.>></td></tr>"
+	echo "<tr><td colspan=\"5\">@TR<<freeloader-status_No_aborted_downloads#There are no aborted downloads at the moment.>></td></tr>"
 fi
 
 cat <<EOF
@@ -262,17 +262,17 @@ EOF
 if [ -f /tmp/currentdownloadfile ]; then
 	CURRENT_DOWNLOADFILE=`sed -n 1p /tmp/currentdownloadfile`
 	if [ -f $DOWNLOAD_DESTINATION/suspend.lock ]; then
-		echo "<tr><td colspan="5"><font color="red">@TR<<freeloader-status_Suspending_process#The proces is being suspend at the moment, please wait...>><font></td></tr>"
-		echo "<tr><td colspan="5">&nbsp;<td></tr>"
+		echo "<tr><td colspan=\"5\"><font color=\"red\">@TR<<freeloader-status_Suspending_process#The process is being suspend at the moment, please wait...>><font></td></tr>"
+		echo "<tr><td colspan=\"5\">&nbsp;<td></tr>"
 		ls -l $QUEUE_DIR | grep "$CURRENT_DOWNLOADFILE\$" | awk 'NF == 9 {print "<tr><td>",$9,"</td><td>",$7,$6,$8,"</td><td>","&nbsp;","</td><td>","&nbsp;","</td><td>","&nbsp;","</td></tr>"};NF > 9 {filename=$9;for (i=10;i<= NF; i++){filename = filename " " $i};print "<tr><td>",filename,"</td><td>",$7,$6,$8,"</td><td>","&nbsp;","</td><td>","&nbsp;","</td><td>","&nbsp;","</td></tr>"}'
 	else
-		ls -l $QUEUE_DIR | grep "$CURRENT_DOWNLOADFILE\$" | awk 'NF == 9 {print "<tr><td>",$9,"</td><td>",$7,$6,$8,"</td><td>","<a href=\"freeloader-status.sh?action=abort&amp;queue=current&amp;torrent=" $9 "\">abort</a>","</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=suspend\">suspend</a>","</td></tr>"};NF > 9 {filename=$9;for (i=10;i<= NF; i++){filename = filename " " $i};print "<tr><td>",filename,"</td><td>",$7,$6,$8,"</td><td>","<a href=\"freeloader-status.sh?action=abort&amp;queue=current&amp;torrent="filename"\">abort</a>","</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=suspend\">suspend</a>","</td></tr>"}'
+		ls -l $QUEUE_DIR | grep "$CURRENT_DOWNLOADFILE\$" | awk 'NF == 9 {print "<tr><td>",$9,"</td><td>",$7,$6,$8,"</td><td>","<a href=\"freeloader-status.sh?action=abort&amp;queue=current&amp;torrent=" $9 "\">@TR<<freeloader-status_action_abort#abort>></a>","</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=suspend\">@<<freeloader-status_action_suspend#suspend>></a>","</td></tr>"};NF > 9 {filename=$9;for (i=10;i<= NF; i++){filename = filename " " $i};print "<tr><td>",filename,"</td><td>",$7,$6,$8,"</td><td>","<a href=\"freeloader-status.sh?action=abort&amp;queue=current&amp;torrent="filename"\">@TR<<freeloader-status_action_abort#abort>></a>","</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=suspend\">@<<freeloader-status_action_suspend#suspend>></a>","</td></tr>"}'
 	fi
 else
 	if [ -f $DOWNLOAD_DESTINATION/suspend.lock ]; then
-		echo "<tr><td colspan="4">@TR<<freeloader-status_Download_suspended#Download queue is suspended.>></td><td><a href="freeloader-status.sh?action=resume">resume</a></td></tr>"
+		echo "<tr><td colspan=\"4\">@TR<<freeloader-status_Download_suspended#Download queue is suspended.>></td><td><a href=\"freeloader-status.sh?action=resume\">@TR<<freeloader-status_action_resume#resume>></a></td></tr>"
 	else
-		echo "<tr><td colspan="5">@TR<<freeloader-status_No_downloaded_files#There are no files being downloaded at the moment.>></td></tr>"
+		echo "<tr><td colspan=\"5\">@TR<<freeloader-status_No_downloaded_files#There are no files being downloaded at the moment.>></td></tr>"
 	fi
 fi
 
@@ -295,6 +295,7 @@ if [ -f /tmp/currentlogfile ]; then
 		tail -c 5000 "$LOG_DIRECTORY/$CURRENT_LOGFILE" | tr '\r' '\n' | sed '/Check exist:/d; s/&/\&amp;/; s/</\&lt;/; s/>/\&gt;/; 1!G;h;$!d;' | sed 70q
 		echo
 		echo "</pre>"
+### notice: this part will be probably changed with more advanced parser
 		echo "<p class=\"logfonts leglog\"><u>@TR<<freeloader-status_Torrent_Legend#Legend>></u>:<br />"
 		echo "/ 0/3/50 [672/672/672] 0MB,1130MB | 0,20K/s | 0,0K E:0,31 P:4/10<br />"
 		echo "- - - -- &nbsp;--- --- --- &nbsp;--- ------ &nbsp;&nbsp;- -- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- - &nbsp;&nbsp;&nbsp;- -- &nbsp;&nbsp;----<br />"
@@ -316,6 +317,7 @@ if [ -f /tmp/currentlogfile ]; then
 		echo "@TR<<freeloader-status_torrent_leg_O#O: Number of successful tracker connections.>><br />"
 		echo "@TR<<freeloader-status_torrent_leg_P#P: Completion ratio of current file (when -n is used).>><br />"
 		echo "@TR<<freeloader-status_torrent_leg_Additional#Additional information such as tracker connection status may be displayed at the end of the status line when appropriate.>></p>"
+### end of notice
 		echo "</fieldset>"
 	elif [ $EXTENSION = 'link' ]; then
 		echo "<fieldset><legend>@TR<<freeloader-status_Link_log#Link log>></legend>"
@@ -339,7 +341,7 @@ cat <<EOF
 </div>
 EOF
 else
-	echo "@TR<<freeloader-common_None_required_installed#None of the required packages are installed, check the upload-page to install the packages.>>"
+	echo "<p>@TR<<freeloader-common_None_required_installed#None of the required packages are installed, check the <a href=\"freeloader-upload.sh\">upload-page</a> to install the packages.>></p>"
 fi
 
 footer ?>

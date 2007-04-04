@@ -209,7 +209,7 @@ cron_killfreeloader=$?
 
 if [ $cron_getfreeloader -eq "1" ] || [ $cron_killfreeloader -eq "1" ]; then
 	echo "<pre>"
-	echo "Add the following lines to crontab"
+	echo "@TR<<freeloader-upload_Add_crontab#Add the following lines to crontab>>:"
 	echo ""
 	echo "*/1 * * * * /usr/sbin/getfreeloader.sh"
 	echo "*/1 * * * * /usr/sbin/killfreeloader.sh"

@@ -60,22 +60,19 @@ is_package_installed "nzbget"
 pkg_nzbget=$?
 
 if [ $pkg_nzbget -eq "0" ] || [ $pkg_ctorrent -eq "0" ] || [ $pkg_curl -eq "0" ]; then
-cat <<EOF
-<div id="viewarea" style="overflow: scroll; width: 100%; display: none;">
-<pre>
-EOF
 	if  [ -f "$LOG_DIRECTORY/freeloader.log" ]; then
+		echo "<div id=\"viewarea\" style=\"overflow: scroll; width: 100%; display: none;\">"
+		echo "<pre>"
 		cat "$LOG_DIRECTORY/freeloader.log" | sed 's/&/\&amp;/; s/</\&lt;/; s/>/\&gt;/;'
+		echo ""
+		echo "</pre>"
+		echo "</div>"
 	else
 		echo "<p>@TR<<freeloader-log_No_entries_log#No entries in the log>></p>"
 	fi
 else
-	echo "@TR<<freeloader-common_None_required_installed#None of the required packages is installed, check the upload-page to install the packages.>>"
+	echo "<p>@TR<<freeloader-common_None_required_installed#None of the required packages are installed, check the <a href=\"freeloader-upload.sh\">upload-page</a> to install the packages.>></p>"
 fi
-cat <<EOF
-</pre>
-</div>
-EOF
 
 footer ?>
 <!--
