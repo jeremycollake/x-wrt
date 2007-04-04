@@ -1,4 +1,4 @@
-Package: webif-lang-cz
+Package: webif-lang-cs
 Maintainer: Lubos Stanek <lubek@users.berlios.de>
 Section: net
 Depends: webif

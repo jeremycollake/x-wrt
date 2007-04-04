@@ -1,7 +1,7 @@
-Package: webif-lang-cn
+Package: webif-lang-da
 Maintainer: Felix Fietkau <nbd@openwrt.org>
 Section: net
 Depends: webif
 Priority: normal
-Description: Chinese language file for webif.
+Description: Danish language file for webif.
 

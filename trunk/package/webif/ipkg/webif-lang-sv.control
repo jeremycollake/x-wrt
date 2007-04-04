@@ -1,4 +1,4 @@
-Package: webif-lang-se
+Package: webif-lang-sv
 Maintainer: Felix Fietkau <nbd@openwrt.org>
 Section: net
 Depends: webif

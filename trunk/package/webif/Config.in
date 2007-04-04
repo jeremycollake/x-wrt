@@ -32,17 +32,17 @@ config BR2_PACKAGE_WEBIF_LANG_CA
 	help
 	  Catalan language file for webif
 	  
-config BR2_PACKAGE_WEBIF_LANG_CN
+config BR2_PACKAGE_WEBIF_LANG_ZH
 	select BR2_PACKAGE_HASERL
-	tristate "webif-lang-cn - Chinese Simplified language file for webif"
+	tristate "webif-lang-zh - Chinese Simplified language file for webif"
 	depends BR2_PACKAGE_WEBIF
 	default m
 	help
 	  Chinese Simplified language file for webif
 
-config BR2_PACKAGE_WEBIF_LANG_CZ
+config BR2_PACKAGE_WEBIF_LANG_CS
 	select BR2_PACKAGE_HASERL
-	tristate "webif-lang-cz - Czech language file for webif"
+	tristate "webif-lang-cs - Czech language file for webif"
 	depends BR2_PACKAGE_WEBIF
 	default m
 	help
@@ -56,9 +56,9 @@ config BR2_PACKAGE_WEBIF_LANG_DE
 	help
 	  German language file for webif
 
-config BR2_PACKAGE_WEBIF_LANG_DK
+config BR2_PACKAGE_WEBIF_LANG_DA
 	select BR2_PACKAGE_HASERL
-	tristate "webif-lang-dk - Danish language file for webif"
+	tristate "webif-lang-da - Danish language file for webif"
 	depends BR2_PACKAGE_WEBIF
 	default m
 	help
@@ -160,9 +160,9 @@ config BR2_PACKAGE_WEBIF_LANG_RU
 	help
 	  Russian language file for webif
 
-config BR2_PACKAGE_WEBIF_LANG_SE
+config BR2_PACKAGE_WEBIF_LANG_SV
 	select BR2_PACKAGE_HASERL
-	tristate "webif-lang-se - Swedish language file for webif"
+	tristate "webif-lang-sv - Swedish language file for webif"
 	depends BR2_PACKAGE_WEBIF
 	default m
 	help

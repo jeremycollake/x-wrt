@@ -31,7 +31,7 @@ $(call Package/webif-lang)
   TITLE:=Catalan language file for webif.
 endef
 
-define Package/webif-lang-cz
+define Package/webif-lang-cs
 $(call Package/webif-lang)
   TITLE:=Czech language file for webif.
 endef
@@ -41,7 +41,7 @@ $(call Package/webif-lang)
   TITLE:=German language file for webif.
 endef
 
-define Package/webif-lang-dk
+define Package/webif-lang-da
 $(call Package/webif-lang)
   TITLE:=Danish language file for webif.
 endef
@@ -101,7 +101,7 @@ $(call Package/webif-lang)
   TITLE:=Russian language file for webif.
 endef
 
-define Package/webif-lang-se
+define Package/webif-lang-sv
 $(call Package/webif-lang)
   TITLE:=Swedish language file for webif.
 endef
@@ -176,9 +176,9 @@ define Package/webif-lang-ca/install
 	$(CP) -a ./files/usr/lib/webif/lang/ca/common.txt $(1)/usr/lib/webif/lang/ca/common.txt
 endef
 
-define Package/webif-lang-cz/install
-	mkdir -p $(1)/usr/lib/webif/lang/cz/
-	$(CP) -a ./files/usr/lib/webif/lang/cz/common.txt $(1)/usr/lib/webif/lang/cz/common.txt
+define Package/webif-lang-cs/install
+	mkdir -p $(1)/usr/lib/webif/lang/cs/
+	$(CP) -a ./files/usr/lib/webif/lang/cs/common.txt $(1)/usr/lib/webif/lang/cs/common.txt
 endef
 
 define Package/webif-lang-de/install
@@ -186,9 +186,9 @@ define Package/webif-lang-de/install
 	$(CP) -a ./files/usr/lib/webif/lang/de/common.txt $(1)/usr/lib/webif/lang/de/common.txt
 endef
 
-define Package/webif-lang-dk/install
-	mkdir -p $(1)/usr/lib/webif/lang/dk/
-	$(CP) -a ./files/usr/lib/webif/lang/dk/common.txt $(1)/usr/lib/webif/lang/dk/common.txt
+define Package/webif-lang-da/install
+	mkdir -p $(1)/usr/lib/webif/lang/da/
+	$(CP) -a ./files/usr/lib/webif/lang/da/common.txt $(1)/usr/lib/webif/lang/da/common.txt
 endef
 
 define Package/webif-lang-ee/install
@@ -246,9 +246,9 @@ define Package/webif-lang-ru/install
 	$(CP) -a ./files/usr/lib/webif/lang/ru/common.txt $(1)/usr/lib/webif/lang/ru/common.txt
 endef
 
-define Package/webif-lang-se/install
-	mkdir -p $(1)/usr/lib/webif/lang/se/
-	$(CP) -a ./files/usr/lib/webif/lang/se/common.txt $(1)/usr/lib/webif/lang/se/common.txt
+define Package/webif-lang-sv/install
+	mkdir -p $(1)/usr/lib/webif/lang/sv/
+	$(CP) -a ./files/usr/lib/webif/lang/sv/common.txt $(1)/usr/lib/webif/lang/sv/common.txt
 endef
 
 define Package/webif-lang-sq/install
@@ -279,9 +279,9 @@ endef
 
 $(eval $(call BuildPackage,webif))
 $(eval $(call BuildPackage,webif-lang-ca))
-$(eval $(call BuildPackage,webif-lang-cz))
+$(eval $(call BuildPackage,webif-lang-cs))
 $(eval $(call BuildPackage,webif-lang-de))
-$(eval $(call BuildPackage,webif-lang-dk))
+$(eval $(call BuildPackage,webif-lang-da))
 $(eval $(call BuildPackage,webif-lang-ee))
 $(eval $(call BuildPackage,webif-lang-es))
 $(eval $(call BuildPackage,webif-lang-fr))
@@ -293,7 +293,7 @@ $(eval $(call BuildPackage,webif-lang-no))
 $(eval $(call BuildPackage,webif-lang-pl))
 $(eval $(call BuildPackage,webif-lang-pt))
 $(eval $(call BuildPackage,webif-lang-ru))
-$(eval $(call BuildPackage,webif-lang-se))
+$(eval $(call BuildPackage,webif-lang-sv))
 $(eval $(call BuildPackage,webif-lang-sq))
 $(eval $(call BuildPackage,webif-lang-uk))
 $(eval $(call BuildPackage,webif-lang-zh))
