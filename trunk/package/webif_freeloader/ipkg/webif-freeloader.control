@@ -1,0 +1,6 @@
+Package: webif-freeloader
+Maintainer: X-Wrt Project
+Section: net
+Depends: webif
+Priority: normal
+Description: Download manager addon for the webif.

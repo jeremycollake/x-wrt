@@ -137,6 +137,7 @@ package-$(BR2_PACKAGE_USBUTILS) += usbutils
 package-$(BR2_PACKAGE_VTUN) += vtun
 package-$(BR2_PACKAGE_VSFTPD) += vsftpd
 package-$(BR2_PACKAGE_WEBIF) += webif
+package-$(BR2_PACKAGE_WEBIF_FREELOADER) += webif_freeloader
 package-$(BR2_PACKAGE_WEPKEYGEN) += wepkeygen
 package-$(BR2_PACKAGE_WIFICONF) += wificonf
 package-$(BR2_COMPILE_WIRELESS_TOOLS) += wireless-tools
