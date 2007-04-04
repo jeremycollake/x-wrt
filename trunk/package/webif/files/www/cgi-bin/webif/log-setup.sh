@@ -27,9 +27,9 @@ if empty "$FORM_submit" ; then
 else
 validate <<EOF
 ip|FORM_ipaddr|@TR<<Remote host>>||$FORM_ipaddr
-int|FORM_log_port|Remote Port|min=0 max=65535|$FORM_log_port
-int|FORM_log_mark|Minutes Between Marks||$FORM_log_mark
-int|FORM_size|Log Size||$FORM_size
+int|FORM_log_port|@TR<<Remote Port>>|min=0 max=65535|$FORM_log_port
+int|FORM_log_mark|@TR<<Minutes Between Marks>>||$FORM_log_mark
+int|FORM_size|@TR<<Log Size>>||$FORM_size
 EOF
 	
 	if equal "$?" 0 ; then
@@ -66,11 +66,11 @@ field|@TR<<Server IP Address>>
 text|ipaddr|$FORM_ipaddr
 helpitem|Remote Syslog
 helptext|HelpText Remote Syslog#IP address and port of the remote logging host. Leave this address blank for no remote logging. The port is set to $DEFAULT_log_port by default
-field|Server Port
+field|@TR<<Server Port>>
 text|log_port|$FORM_log_port
 end_form
 
-start_form|Syslog Marks
+start_form|@TR<<Syslog Marks>>
 field|@TR<<Minutes Between Marks>>
 text|log_mark|$FORM_log_mark
 helpitem|Syslog Marks
@@ -83,7 +83,7 @@ select|type|$FORM_type
 option|circular|@TR<<Circular>>
 option|file|@TR<<File>>
 helpitem|Log Type
-helptext|HelpText Log Type#Wether your log will be stored in a memory circular buffer or in a file. Beware that files are stored in a memory filesystem which will be lost if you reboot your router. Default value: $DEFAULT_log_type.
+helptext|HelpText Log Type#Whether your log will be stored in a memory circular buffer or in a file. Beware that files are stored in a memory filesystem which will be lost if you reboot your router. Default value: $DEFAULT_log_type.
 field|@TR<<Log File>>|logname|hidden
 text|filename|$FORM_filename
 helpitem|Log File
