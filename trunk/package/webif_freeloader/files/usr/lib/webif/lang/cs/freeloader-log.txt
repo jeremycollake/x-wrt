@@ -1,0 +1,7 @@
+freeloader-common_None_required_installed => Nen&iacute; nainstalov&aacute;n &#382;&aacute;dn&yacute; z po&#382;adovan&yacute;ch bal&iacute;&#269;k&#367;, pro instalaci bal&iacute;&#269;k&#367; p&#345;ejd&#283;te na str&aacute;nku <a href="freeloader-upload.sh">odesl&aacute;n&iacute;</a>.
+Freeloader => Freeloader
+freeloader-log_Freeloader_log => Z&aacute;znam Freeloaderu
+freeloader-log_No_entries_log => V z&aacute;znamu nejsou &#382;&aacute;dn&eacute; polo&#382;ky
+freeloader-log_subcategory => Z&aacute;znam
+freeloader-status_subcategory => Stav
+freeloader-upload_subcategory => Odesl&aacute;n&iacute;
