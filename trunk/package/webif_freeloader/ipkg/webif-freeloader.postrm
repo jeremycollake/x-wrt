@@ -2,4 +2,4 @@
 #
 # Webif post-removal script.
 #
-cat /www/cgi-bin/webif/.categories | sed '/##WEBIF:category:Freeloader/ d'>"/www/cgi-bin/webif/.categories"
+sed -e '/##WEBIF:category:Freeloader/d' -i /www/cgi-bin/webif/.categories 2>/dev/null
