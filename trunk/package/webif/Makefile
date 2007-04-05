@@ -77,7 +77,7 @@ $(eval $(call PKG_mod_template,WEBIF_LANG_PL,pl))
 $(eval $(call PKG_mod_template,WEBIF_LANG_PT,pt))
 $(eval $(call PKG_mod_template,WEBIF_LANG_RU,ru))
 $(eval $(call PKG_mod_template,WEBIF_LANG_SQ,sq))
-$(eval $(call PKG_mod_template,WEBIF_LANG_SV,se))
+$(eval $(call PKG_mod_template,WEBIF_LANG_SV,sv))
 $(eval $(call PKG_mod_template,WEBIF_LANG_UK,uk))
 $(eval $(call PKG_mod_template,WEBIF_LANG_ZH,zh))
 
