@@ -1,0 +1,5 @@
+#!/bin/sh
+#
+# Webif post-removal script.
+#
+cat /www/cgi-bin/webif/.categories | sed '/##WEBIF:category:Freeloader/ d'>"/www/cgi-bin/webif/.categories"
