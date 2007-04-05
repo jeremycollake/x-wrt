@@ -3,7 +3,7 @@ menu "webif-freeloader"
 config BR2_PACKAGE_WEBIF_FREELOADER
 	depends BR2_PACKAGE_WEBIF	
 	tristate "webif_freeloader - Download manager addon for the webif"
-	default y
+	default m
 	help
 	  A download manager for the webif.
 
