@@ -326,6 +326,12 @@ config BR2_PACKAGE_KMOD_IDE
 	    - ide-disk
 	    - pdc202xx_old
 
+config BR2_PACKAGE_KMOD_NLS_CP1250
+	tristate "Codepage 1250 (Slavic/Central European Languages)"
+	default m
+	help
+	  Kernel module for NLS Codepage 1250 (Slavic/Central European Languages)
+
 config BR2_PACKAGE_KMOD_NLS_CP437
 	tristate "Codepage 437 (United States, Canada)"
 	default m
@@ -343,6 +349,12 @@ config BR2_PACKAGE_KMOD_NLS_ISO8859_1
 	default m
 	help
 	  Kernel module for ISO 8859-1 (Latin 1)
+
+config BR2_PACKAGE_KMOD_NLS_ISO8859_2
+	tristate "ISO 8859-2 (Latin 2; Eastern European Languages)"
+	default m
+	help
+	  Kernel module for ISO 8859-2 (Latin 2)
 
 config BR2_PACKAGE_KMOD_NLS_ISO8859_15
 	tristate "ISO 8859-15 (Latin 9; Western, with Euro symbol)"

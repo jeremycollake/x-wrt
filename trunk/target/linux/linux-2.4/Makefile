@@ -215,6 +215,9 @@ $(eval $(call KMOD_template,VFAT,vfat,\
 $(eval $(call KMOD_template,MSDOS,msdos,\
 	$(MODULES_DIR)/kernel/fs/msdos/msdos.o \
 ,CONFIG_MSDOS_FS,,40,msdos))
+$(eval $(call KMOD_template,NLS_CP1250,nls-cp1250,\
+	$(MODULES_DIR)/kernel/fs/nls/nls_cp1250.o \
+,CONFIG_NLS_CODEPAGE_1250,,40,nls_cp1250.o))
 $(eval $(call KMOD_template,NLS_CP437,nls-cp437,\
 	$(MODULES_DIR)/kernel/fs/nls/nls_cp437.o \
 ,CONFIG_NLS_CODEPAGE_437,,40,nls_cp437.o))
@@ -224,6 +227,9 @@ $(eval $(call KMOD_template,NLS_CP850,nls-cp850,\
 $(eval $(call KMOD_template,NLS_ISO8859_1,nls-iso8859-1,\
 	$(MODULES_DIR)/kernel/fs/nls/nls_iso8859-1.o \
 ,CONFIG_NLS_ISO8859_1,,40,nls_iso8859-1.o))
+$(eval $(call KMOD_template,NLS_ISO8859_2,nls-iso8859-2,\
+	$(MODULES_DIR)/kernel/fs/nls/nls_iso8859-2.o \
+,CONFIG_NLS_ISO8859_2,,40,nls_iso8859-2.o))
 $(eval $(call KMOD_template,NLS_ISO8859_15,nls-iso8859-15,\
 	$(MODULES_DIR)/kernel/fs/nls/nls_iso8859-15.o \
 ,CONFIG_NLS_ISO8859_15,,40,nls_iso8859-15.o))
