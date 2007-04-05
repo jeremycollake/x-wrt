@@ -76,7 +76,7 @@ empty "$FORM_add_host" || {
 ip|FORM_host_ip|@TR<<IP Address>>|required|$FORM_host_ip
 hostname|FORM_host_name|@TR<<Host Name>>|required|$FORM_host_name
 EOF
-	equal "$?" 0 && update_hosts add "$FORM_host_ip" "$FORM_host_name"
+	#equal "$?" 0 && update_hosts add "$FORM_host_ip" "$FORM_host_name"
 }
 
 empty "$FORM_remove_host" || update_hosts del "$FORM_remove_ip" "$FORM_remove_name"
