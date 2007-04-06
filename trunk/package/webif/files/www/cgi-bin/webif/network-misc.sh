@@ -103,18 +103,18 @@ header_inject_head=$(cat <<EOF
 <style type="text/css">
 <!--
 #stylebuttons .cssbutton {
-	background-color: #c0c0c0;
-	border: 2px #c0c0c0 outset;
+	background-color: #dddddd;
+	border: 2px #dddddd outset;
 	padding: 1px 4px;
 	font-size: 0.83em;
 	text-decoration: none;
 }
 #stylebuttons .cssbutton, .cssbutton:visited {
-	color: #df0000;
+	color: #cf0000;
 }
 #stylebuttons .cssbutton:active {
 	border-style: inset;
-	background-color: #df0000;
+	background-color: #cf0000;
 	padding: 2px 3px 0 4px;
 	color: White;
 }
