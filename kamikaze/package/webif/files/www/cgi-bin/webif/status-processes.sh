@@ -35,12 +35,22 @@
 header_inject_head=$(cat <<EOF
 $meta_refresh
 
+<script type="text/javascript">
+<!--
+function targetwindow(url) {
+	wasOpen  = false;
+	win = window.open(url);    
+	return (typeof(win)=='object')?true:false;
+}
+-->
+</script>
+
 <style type="text/css">
 <!--
 #proctable table {
-	width: 90%;
-	margin-left: 1em;
-	margin-right: 1em;
+	width: 98%;
+	margin-left: auto;
+	margin-right: auto;
 	text-align: left;
 	font-size: 0.9em;
 	border-style: none;
@@ -50,7 +60,7 @@ $meta_refresh
 	padding-left: 0.2em;
 	padding-right: 0.2em;
 }
-#proctable td.number, td.buttons {
+#proctable .number, .buttons {
 	text-align: right;
 }
 #content .procwarn {
@@ -104,7 +114,8 @@ echo "</form>"
 	echo "<blockquote class=\"procwarn\">"
 	echo "<p><strong>@TR<<big_warning#WARNING>></strong>: @TR<<status_processes_warniinfo#Sending a signal to the application may result in the system malfunction! You should be pretty sure what you are doing before firing the button. <a href=\"#signallegend\">See the most used signal descriptions</a>...>></p>"
 	echo "</blockquote>"
-	signal_list=$(kill -l 2>/dev/null | awk '{ print "<option value=\"" FNR "\">" $1 " (" FNR ")</option>" }')
+	signal_list=$(echo "1)SIGHUP|2)SIGINT|3)SIGQUIT|4)SIGILL|5)SIGTRAP|6)SIGABRT|7)SIGBUS|8)SIGFPE|9)SIGKILL|10)SIGUSR1|11)SIGSEGV|12)SIGUSR2|13)SIGPIPE|14)SIGALRM|15)SIGTERM|17)SIGCHLD|18)SIGCONT|19)SIGSTOP|20)SIGTSTP|21)SIGTTIN|22)SIGTTOU|23)SIGURG|24)SIGXCPU|25)SIGXFSZ|26)SIGVTALRM|27)SIGPROF|28)SIGWINCH|29)SIGIO|30)SIGPWR|31)SIGSYS" |
+		 awk 'BEGIN{ RS="|"; FS=")" } { print "<option value=\"" $1 "\">" $2 " (" $1 ")</option>" }')
 	signal_list="<select name=\"signal\">$signal_list</select>"
 }
 ?>
@@ -116,7 +127,7 @@ echo "</form>"
 <tbody>
 <?
 
-proclist=$(ps)
+proclist=$(echo -n "";ps)
 echo "$proclist" | grep -v "[p]s " | sed 's/\(.\{5\}\)[[:space:]]\(.\{8\}\)[[:space:]]\(.\{6\}\)[[:space:]]\(.\{4\}\)/\1|\2|\3|\4|/' |
 	awk -F "|" -v interval="$FORM_interval" -v siglist="$signal_list" '
 BEGIN {
@@ -182,13 +193,13 @@ EOF
 	cat <<EOF
 <a name="pslegend"></a>
 <h4>@TR<<status_processes_Legend#Legend>>:</h4>
-<p>@TR<<status_processes_ps_Legend_Text#Memory sizes are in kB units.<br />Stat shortcuts meaning: A=Active, I=Idle (waiting for startup), O=Nonexistent, R=Running, S=Sleeping, T=Stopped, W=Swapped, Z=Canceled.<br />Commands enclosed in &quot;[...]&quot; are kernel threads.<br />For more information see the <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/ps.html">ps command description</a>.>></p>
+<p>@TR<<status_processes_ps_Legend_Text#Memory sizes are in kB units.<br />Stat shortcuts meaning: A=Active, I=Idle (waiting for startup), O=Nonexistent, R=Running, S=Sleeping, T=Stopped, W=Swapped, Z=Canceled.<br />Commands enclosed in &quot;[...]&quot; are kernel threads.<br />For more information see the <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/ps.html" onclick="return !targetwindow(this.href);">ps command description</a>.>></p>
 EOF
 } || {
 	cat <<EOF
 <a name="signallegend"></a>
 <h4>@TR<<status_processes_Legend#Most used signals>>:</h4>
-<p>@TR<<status_processes_signal_Legend_Text#1) SIGHUP - Hangup<br />9) SIGKILL - Kill (can't be caught or ignored)<br />15) SIGTERM - Termination<br />10) SIGUSR1/12) SIGUSR2 - User-defined signals.<br />For more information see the <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/kill.html">kill command description</a>.>></p>
+<p>@TR<<status_processes_signal_Legend_Text#1) SIGHUP - Hangup<br />9) SIGKILL - Kill (can't be caught or ignored)<br />15) SIGTERM - Termination<br />10) SIGUSR1/12) SIGUSR2 - User-defined signals.<br />For more information see the <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/kill.html" onclick="return !targetwindow(this.href);">kill command description</a>.>></p>
 
 EOF
 }
