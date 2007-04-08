@@ -1,0 +1,4 @@
+Package: swap-utils
+Priority: optional
+Section: admin
+Description: Swap space management utilities

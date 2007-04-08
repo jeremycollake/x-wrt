@@ -1,0 +1,4 @@
+Package: fdisk
+Priority: optional
+Section: admin
+Description: Partition table manipulation utility
