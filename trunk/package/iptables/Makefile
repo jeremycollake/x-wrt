@@ -1,10 +1,10 @@
-# $Id: Makefile 5837 2006-12-18 12:24:24Z nico $
+# $Id: Makefile 6726 2007-03-27 16:45:10Z nbd $
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=iptables
 PKG_VERSION:=1.3.3
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_MD5SUM:=86d88455520cfdc56fd7ae27897a80a4
 
 PKG_SOURCE_URL:=http://www.netfilter.org/files \
