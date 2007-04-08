@@ -1,0 +1,6 @@
+Package: tune2fs
+Depends: e2fsprogs
+Section: utils
+Priority: optional
+Description: Ext2 Filesystem tune utility
+ Ext2 Filesystem tune utility

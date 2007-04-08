@@ -1,0 +1,6 @@
+Package: resize2fs
+Depends: e2fsprogs
+Section: utils
+Priority: optional
+Description: Ext2 Filesystem resize utility
+ Ext2 Filesystem resize utility

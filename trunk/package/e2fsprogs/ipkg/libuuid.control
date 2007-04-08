@@ -1,0 +1,5 @@
+Package: libuuid
+Section: libs
+Priority: optional
+Description: DCE compatible Universally Unique Identifier library
+ Library for generating DCE compatible Universally Unique Identifiers

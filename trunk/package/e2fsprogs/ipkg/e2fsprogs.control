@@ -1,0 +1,8 @@
+Package: e2fsprogs
+Depends: libuuid
+Section: utils
+Priority: optional
+Description: Ext2/3 filesystem utilities
+ This package contains essential ext2 filesystem utilities which consists of 
+ e2fsck, mke2fs, badblocks, e2label, filefrag, and most of the other core ext2 
+ filesystem utilities.
