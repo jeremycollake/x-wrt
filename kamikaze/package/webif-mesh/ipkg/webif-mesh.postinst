@@ -2,5 +2,6 @@
 #
 # Webif post-install script.
 #
-cat "/www/cgi-bin/webif/.categories" |sed '/##WEBIF:category:Network/a\
-##WEBIF:category:Mesh'>"/www/cgi-bin/webif/.categories"
+
+cat "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories" |sed '/##WEBIF:category:Network/a\
+##WEBIF:category:Mesh'>"${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"
