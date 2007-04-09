@@ -35,8 +35,8 @@ endef
 define Package/webif-mesh/install
 	$(CP) -a ./files/* $(1)/
 	chmod -R 755 $(1)/*
-	$(CP) -a ./ipkg/webif-mesh.preinst $(1)/CONTROL/preinst
-	$(CP) -a ./ipkg/webif-mesh.postinst $(1)/CONTROL/postinst
+	$(CP) -a ./ipkg/webif-mesh.postinst $(1)/CONTROL/preinst
+	$(CP) -a ./ipkg/webif-mesh.postrm $(1)/CONTROL/postinst
 endef
 
 $(eval $(call BuildPackage,webif-mesh))
