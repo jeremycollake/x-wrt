@@ -22,8 +22,6 @@ MAX_VALUE_LEN=248
 header_inject_head=$(cat <<EOF
 <style type="text/css">
 <!--
-#nvramtable * {
-}
 #nvramtable table {
 	width: 96%;
 	margin-left: auto;
