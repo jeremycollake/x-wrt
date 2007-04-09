@@ -60,6 +60,8 @@ case "$FORM_mode" in
 		;;
 esac
 
+SCRIPT_NAME=${FORM_prev:-$SCRIPT_NAME}
+
 footer
 
 ?>
