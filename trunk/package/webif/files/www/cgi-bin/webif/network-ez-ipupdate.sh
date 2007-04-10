@@ -118,6 +118,7 @@ option|heipv6tb|heipv6tb
 option|dyndns-static|dyndns-static
 option|dyndns-custom|dyndns-custom
 option|easydns-partner|easydns-partner
+option|dnsexit|dnsexit
 option|dhs|dhs
 field|@TR<<User Name>>
 text|ddns_username|$FORM_ddns_username
