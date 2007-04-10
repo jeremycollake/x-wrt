@@ -27,6 +27,7 @@ endmenu
 source "package/screen/Config.in"
 source "package/webif/Config.in"
 source "package/webif_freeloader/Config.in"
+source "package/webif_hotspot/Config.in"
 
 comment "Networking"
 source "package/aiccu/Config.in"

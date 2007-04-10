@@ -1,0 +1,9 @@
+menu "webif-hotspot"
+
+config BR2_PACKAGE_WEBIF_HOTSPOT
+	depends BR2_PACKAGE_WEBIF	
+	tristate "webif_freeloader - HotSpot manager addon for the webif"
+	default m
+	help
+	  A hotspot manager for the webif.
+endmenu
