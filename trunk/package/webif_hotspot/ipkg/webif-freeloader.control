@@ -1,0 +1,6 @@
+Package: webif-hotspot
+Maintainer: X-Wrt Project
+Section: net
+Depends: webif
+Priority: normal
+Description: Hotspot manager addon for the webif.
