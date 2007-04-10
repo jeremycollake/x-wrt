@@ -20,8 +20,8 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 include $(INCLUDE_DIR)/package.mk
 
 define Package/webif-olsr
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=admin
+  CATEGORY:=Administration
   SUBMENU:=webif
   DEPENDS:=+webif +webif-mesh +ip +olsrd +olsrd-mod-dyn-gw +olsrd-mod-httpinfo +olsrd-mod-nameservice +olsrd-mod-secure +olsrd-mod-tas
   TITLE:=XWrt olsr mesh plugin

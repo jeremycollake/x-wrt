@@ -11,8 +11,8 @@ include $(INCLUDE_DIR)/package.mk
 
 
 define Package/webif
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=admin
+  CATEGORY:=Administration
   SUBMENU:=webif
   DEPENDS:=+haserl
   TITLE:=An HTTP administrative console for OpenWrt.

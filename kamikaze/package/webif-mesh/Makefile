@@ -20,8 +20,8 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 include $(INCLUDE_DIR)/package.mk
 
 define Package/webif-mesh
-  SECTION:=net
-  CATEGORY:=Network
+  SECTION:=admin
+  CATEGORY:=Administration
   SUBMENU:=webif
   DEPENDS:=+webif
   TITLE:=XWrt mesh installation page
