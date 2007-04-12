@@ -90,6 +90,9 @@ EOF
 
 header "Freeloader" "freeloader-upload_subcategory#Upload" "@TR<<freeloader-upload_Freeloader_upload#Freeloader upload>>"
 
+#Include settings
+. /etc/freeloader-include.sh
+
 #check for installed packages and store the status
 is_package_installed "curl"
 pkg_curl=$?
@@ -202,18 +205,25 @@ if [ $pkg_minisendmail -eq "1" ]; then
 	has_pkgs "mini-sendmail"
 fi
 
-crontab -l | grep -q "getfreeloader.sh\$"
+crontab -l | grep -q "^[^#].*/getfreeloader.sh"
 cron_getfreeloader=$?
-crontab -l | grep -q "killfreeloader.sh\$"
+crontab -l | grep -q "^[^#].*/killfreeloader.sh"
 cron_killfreeloader=$?
 
 if [ $cron_getfreeloader -eq "1" ] || [ $cron_killfreeloader -eq "1" ]; then
+	cat << EOF
+<div class="settings">
+<h3>@TR<<freeloader-upload_Cron_setup#Cron setup>></h3>
+<div class="settings-content">
+EOF
 	echo "<pre>"
 	echo "@TR<<freeloader-upload_Add_crontab#Add the following lines to crontab>>:"
 	echo ""
 	echo "*/1 * * * * /usr/sbin/getfreeloader.sh"
 	echo "*/1 * * * * /usr/sbin/killfreeloader.sh"
 	echo "</pre>"
+	echo "</div>"
+	echo "<div class=\"clearfix\">&nbsp;</div></div>"
 fi
 
 #somehow firefox does not reset the radiobuttons after a reload of the page.

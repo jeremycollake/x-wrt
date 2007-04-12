@@ -63,7 +63,7 @@ if [ $pkg_nzbget -eq "0" ] || [ $pkg_ctorrent -eq "0" ] || [ $pkg_curl -eq "0" ]
 	if  [ -f "$LOG_DIRECTORY/freeloader.log" ]; then
 		echo "<div id=\"viewarea\" style=\"overflow: scroll; width: 100%; display: none;\">"
 		echo "<pre>"
-		cat "$LOG_DIRECTORY/freeloader.log" | sed 's/&/\&amp;/; s/</\&lt;/; s/>/\&gt;/;'
+		cat "$LOG_DIRECTORY/freeloader.log" 2>/dev/null | sed 's/&/\&amp;/; s/</\&lt;/; s/>/\&gt;/;'
 		echo ""
 		echo "</pre>"
 		echo "</div>"

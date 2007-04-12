@@ -35,4 +35,5 @@ freeloader-upload_Username => Username
 freeloader-upload_Password => Password
 freeloader-upload_URL_helptext => Give the URL of the file you want to download. In case you enter multiple urls, every url should be placed on a new line.
 freeloader-upload_Credentials_helptext => The credentials needed to download the file from the server.
+freeloader-upload_Cron_setup => Cron setup
 freeloader-upload_Add_crontab => Add the following lines to crontab

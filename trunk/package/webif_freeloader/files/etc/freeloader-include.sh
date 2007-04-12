@@ -80,7 +80,6 @@ DOWNLOAD_TEMP="$DOWNLOAD_ROOT/downloadtemp"
 DOWNLOAD_DESTINATION="$DOWNLOAD_ROOT"
 
 # Initialize the directory structure
-[ ! -d "$DOWNLOAD_ROOT" ] &&  mkdir -p "$DOWNLOAD_ROOT" > /dev/null 2>&1
 [ -d "$DOWNLOAD_ROOT" ] && {
 	[ ! -d "$QUEUE_NORMAL" ] && mkdir -p "$QUEUE_NORMAL" > /dev/null 2>&1
 	[ ! -d "$QUEUE_PRIO" ] && mkdir -p "$QUEUE_PRIO" > /dev/null 2>&1
