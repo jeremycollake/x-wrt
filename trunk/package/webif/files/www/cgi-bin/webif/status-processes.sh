@@ -138,10 +138,10 @@ BEGIN {
 {
 	for (i=1; i<=NF; i++) {
 		gsub(/^ */, "", $i)
-		gsub(/ *\$/, "", $i)
-		gsub(/&/, "&amp;", $i)
-		gsub(/</, "&lt;", $i)
-		gsub(/>/, "&gt;", $i)
+		gsub(/ *$/, "", $i)
+		gsub(/&/, "\\&amp;", $i)
+		gsub(/</, "\\&lt;", $i)
+		gsub(/>/, "\\&gt;", $i)
 	}
 	if ($1 == "PID") {
 		print tr_ind "<tr>"
