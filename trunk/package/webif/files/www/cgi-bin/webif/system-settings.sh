@@ -119,22 +119,22 @@ if ! empty "$FORM_install_stunnel"; then
 	install_package "matrixtunnel"
 	if [ ! -e "/etc/ssl/matrixtunnel.key" ]; then
 		is_package_installed "openssl-util"
-		if [ "$?" == "1" ]; then
+		if [ "$?" = "1" ]; then
 			inst_packages="$inst_packages openssl-util"
 			openssl_install="1"
 		fi
 		is_package_installed "libopenssl"
-		if [ "$?" == "1" ]; then
+		if [ "$?" = "1" ]; then
 			inst_packages="$inst_packages libopenssl"
 			ln -s ~/usr/lib/libssl.so.0.9.8 /lib/libssl.so.0.9.8
 			ln -s ~/usr/lib/libcrypto.so.0.9.8 /lib/libcrypto.so.0.9.8
 			libsslsymlink=1
 		fi
 		is_package_installed "zlib"
-		if [ "$?" == "1" ]; then
+		if [ "$?" = "1" ]; then
 			inst_packages="$inst_packages zlib"
 		fi
-		if [ "$openssl_install" == "1" ]; then
+		if [ "$openssl_install" = "1" ]; then
 			ipkg -d ram install "openssl-util"
 		fi
 		export RANDFILE="/tmp/.rnd"
@@ -143,7 +143,7 @@ if ! empty "$FORM_install_stunnel"; then
 		rm -f "$RANDFILE" 2>/dev/null
 		unset RANDFILE
 		ipkg install matrixtunnel
-		if [ "$libsslsymlink" == "1" ]; then
+		if [ "$libsslsymlink" = "1" ]; then
 			rm /lib/libcrypto.so.0.9.8
 			rm /lib/libssl.so.0.9.8
 		fi
@@ -156,7 +156,7 @@ fi
 
 WEBIF_SSL="field|@TR<<system_settings_Webif_SSL#Webif SSL>>"
 is_package_installed "matrixtunnel"
-if [ "$?" == "1" ]; then
+if [ "$?" = "1" ]; then
 	WEBIF_SSL="$WEBIF_SSL
 string|<div class=\"warning\">@TR<<system_settings_Feature_requires_matrixtunnel#MatrixTunnel package is not installed. You need to install it for ssl support>>:</div>
 submit|install_stunnel| @TR<<system_settings_Install_MatrixTunnel#Install MatrixTunnel>> |"

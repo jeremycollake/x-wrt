@@ -34,7 +34,7 @@ save_setting_ip_conntrack() {
 
 ! empty "$FORM_reset" && {
 	SUGGESTREB="<p>@TR<<network_misc_Suggest_restart#The required setting was removed from the configuration file, you should <a href=\"reboot.sh\">restart</a> the device now for the kernel to compute new values.>></p><br />"
-	if [ "$FORM_reset" == "all" ]; then
+	if [ "$FORM_reset" = "all" ]; then
 		sed -e "/^net\.ipv4\.netfilter\.\(ip_conntrack_max\|ip_conntrack_generic_timeout\|ip_conntrack_icmp_timeout\|ip_conntrack_tcp_timeout_established\|ip_conntrack_udp_timeout\|ip_conntrack_udp_timeout_stream\)=/d" -i /etc/sysctl.conf 2>/dev/null
 		SUGGESTREBOOT="$SUGGESTREB"
 	else
@@ -78,7 +78,7 @@ conntracks="ip_conntrack_max ip_conntrack_generic_timeout ip_conntrack_icmp_time
 for partconntrack in $conntracks
 do
 	grep -q "^net\.ipv4\.netfilter\.${partconntrack}=" /etc/sysctl.conf 2>/dev/null
-	[ "$?" == "0" ] && {
+	[ "$?" = "0" ] && {
 		eval "reset_${partconntrack}=\"string|<a class=\\\"cssbutton\\\" href=\\\"$SCRIPT_NAME?reset=${partconntrack}\\\" title=\\\"@TR<<Reset to a default value>>\\\">X<span>&nbsp;@TR<<network_misc_Reset_field#Reset the field>></span></a>\""
 		ctracknr=$(($ctracknr +1))
 	}
