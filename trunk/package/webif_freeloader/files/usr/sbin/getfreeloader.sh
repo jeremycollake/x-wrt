@@ -149,10 +149,16 @@ if ! [ -f $DOWNLOAD_DESTINATION/suspend.lock ]; then
 
 					#Get the WAN IP address
 					WAN=$(nvram get wan_ifname)
-					WAN_IP=`/sbin/ifconfig | grep -A 4 $WAN | awk '/inet/ { print $2 } ' | sed -e s/addr://` 
+					WAN_IP=`/sbin/ifconfig | grep -A 4 $WAN | awk '/inet/ { print $2 } ' | sed -e s/addr://`
+					if [ -n "$WAN_IP" ]; then
+						OPTIONS="-i $WAN_IP"
+					else
+						OPTIONS=""
+					fi 
 
 					#download the desired file with ctorrent and log the output to the logfile
-					ctorrent -C 0 -e 0 -i $WAN_IP -M 20 "$QUEUE_DIR/$DOWNLOADFILE" > "$LOG_DIRECTORY/$DOWNLOADFILE.log" 2>&1
+					ctorrent -C 0 -e 0 $OPTIONS -M 20 "$QUEUE_DIR/$DOWNLOADFILE" > "$LOG_DIRECTORY/$DOWNLOADFILE.log" 2>&1
+
 
 					signal_finishdownload "$DOWNLOADFILE" $? "TRUE"
 
