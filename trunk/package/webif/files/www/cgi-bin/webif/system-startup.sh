@@ -1,5 +1,6 @@
 #!/usr/bin/webif-page
 <?
+. /usr/lib/webif/webif.sh
 ###################################################################
 # startup
 #
@@ -8,16 +9,28 @@
 #
 # Author(s) [in order of work date]:
 #       Jeremy Collake
+#       Lubos Stanek <lubek@users.berlios.de>
 #
-# Major revisions:
+# Major revisions (ISO 8601):
+#       2007-04-14 - major update with enhancements
+#                    and port to Kamikaze
 #
 # NVRAM variables referenced:
-#
+#       none
 #
 # Configuration files referenced:
-#   none
+#   Kamikaze:
+#       /etc/init.d/custom-user-startup
+#	/etc/init.d/custom-user-startup-default
+#   White Russian:
+#	/etc/init.d/S95custom-user-startup
+#	/etc/init.d/.x95custom-user-startup-default
 #
-. /usr/lib/webif/webif.sh
+# Required components:
+#       /usr/lib/webif/common.awk
+#       /usr/lib/webif/browser.awk
+#       /usr/lib/webif/editor.awk
+#
 
 header_inject_head=$(cat <<EOF
 <script type="text/javascript">
@@ -89,8 +102,8 @@ function confirm_delfile(path,file) {
 	position: relative;
 }
 #filebrowser a:hover.tooltip span.tooltip {
-	display: block;
 	z-index: 5;
+	display: block;
 	position: absolute;
 	top: 1.1em;
 	left: 1.8em;
@@ -140,17 +153,24 @@ while [ "$?" != "0" ]; do
 	cd "$FORM_path" 2>/dev/null
 done
 FORM_path="$(pwd)"
+# return to the cgi dir
+cd "${SCRIPT_NAME%/*}" 2>/dev/null
 
 header "System" "Startup" "@TR<<Startup>>" ''
 
 ! empty "$SUCCESS" && echo "$SUCCESS"
 
 # defaults
-custom_script_name="/etc/init.d/S95custom-user-startup"
-startup_script_template="/etc/init.d/.x95custom-user-startup-default"
-FORM_edit="S95custom-user-startup"
+is_kamikaze && {
+	custom_script_name="/etc/init.d/custom-user-startup"
+	startup_script_template="/etc/init.d/custom-user-startup-default"
+	FORM_edit="custom-user-startup"
+} || {
+	custom_script_name="/etc/init.d/S95custom-user-startup"
+	startup_script_template="/etc/init.d/.x95custom-user-startup-default"
+	FORM_edit="S95custom-user-startup"
+}
 FORM_path="/etc/init.d"
-cd "$FORM_path" # editor awk code expects this
 edit_pathname="$FORM_path/$FORM_edit"
 saved_filename="/tmp/.webif/edited-files/$edit_pathname"
 
@@ -169,18 +189,19 @@ empty "$FORM_cancel" || FORM_edit=""
 }
 
 if empty "$FORM_edit"; then
-	(ls -alLe "$FORM_path" 2>/dev/null | grep "^[d]";
-		ls -alLe "$FORM_path" 2>/dev/null | grep "^[^d]") 2>/dev/null | awk \
+	(ls -alLe "$FORM_path" 2>/dev/null | sed '/^[^d]/d';
+		ls -alLe "$FORM_path" 2>/dev/null | sed '/^[d]/d') 2>/dev/null | awk \
 		-v url="$SCRIPT_NAME" \
 		-v path="$FORM_path" \
 		-f /usr/lib/webif/common.awk \
 		-f /usr/lib/webif/browser.awk
 else
-	edit_filename="$FORM_edit"
 	exists "$saved_filename" && {
 		edit_filename="$saved_filename"
+	} || {
+		edit_filename="$edit_pathname"
 	}
-	cat "$edit_filename" | awk \
+	cat "$edit_filename" 2>/dev/null | awk \
 		-v url="$SCRIPT_NAME" \
 		-v path="$FORM_path" \
 		-v file="$FORM_edit" \

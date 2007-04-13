@@ -1,6 +1,33 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
+###################################################################
+# system-editor
+#
+# Description:
+#	Filesystem browser/File editor.
+#       This file is compatible with both branches and
+#       should be synchronized between branches
+#
+# Author(s) [in order of work date]:
+#       unknown
+#       Lubos Stanek <lubek@users.berlios.de>
+#
+# Major revisions (ISO 8601):
+#       2007-04-14 - major update with enhancements
+#                    and port to Kamikaze
+#
+# NVRAM variables referenced:
+#       none
+#
+# Configuration files referenced:
+#       none
+#
+# Required components:
+#       /usr/lib/webif/common.awk
+#       /usr/lib/webif/browser.awk
+#       /usr/lib/webif/editor.awk
+#
 
 header_inject_head=$(cat <<EOF
 <script type="text/javascript">
@@ -123,6 +150,8 @@ while [ "$?" != "0" ]; do
 	cd "$FORM_path" 2>/dev/null
 done
 FORM_path="$(pwd)"
+# return to the cgi dir
+cd "${SCRIPT_NAME%/*}" 2>/dev/null
 
 header "System" "File Editor" "@TR<<system_editor_File_Editor#File Editor>>" ''
 
@@ -140,18 +169,19 @@ saved_filename="/tmp/.webif/edited-files/$edit_pathname"
 empty "$FORM_cancel" || FORM_edit=""
 
 if empty "$FORM_edit"; then
-	(ls -alLe "$FORM_path" | grep "^[d]";
-		ls -alLe "$FORM_path" | grep "^[^d]") 2>/dev/null | awk \
+	(ls -alLe "$FORM_path" 2>/dev/null | sed '/^[^d]/d';
+		ls -alLe "$FORM_path" 2>/dev/null | sed '/^[d]/d') 2>/dev/null | awk \
 		-v url="$SCRIPT_NAME" \
 		-v path="$FORM_path" \
 		-f /usr/lib/webif/common.awk \
 		-f /usr/lib/webif/browser.awk
 else
-	edit_filename="$FORM_edit"
 	exists "$saved_filename" && {
 		edit_filename="$saved_filename"
+	} || {
+		edit_filename="$edit_pathname"
 	}
-	cat "$edit_filename" | awk \
+	cat "$edit_filename" 2>/dev/null | awk \
 		-v url="$SCRIPT_NAME" \
 		-v path="$FORM_path" \
 		-v file="$FORM_edit" \
