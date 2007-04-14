@@ -47,7 +47,7 @@ Log => Журнал
 Logout => Выход
 Reboot => Перезагрузка
 Packages => Пакеты
-Startup => Загрузить
+Startup => При старте
 VPN => VPN
 Site Survey => Сканирование сетей
 Diagnostics => Проверка
@@ -124,7 +124,7 @@ Erase_JFFS2 => Очистить раздел jffs2
 Options => Параметры
 Firmware_image => Прошивка:
 Upgrade => Обновить
-Upgrading... => Обновляет...
+Upgrading... => Обновляется...
 
 # 'LAN Settings' page
 LAN Settings => Настройки сети
@@ -157,7 +157,7 @@ Wireless Configuration => Конфигурация беспроводной се
 Wireless Interface => Беспроводной интерфейс
 WEP Key => Ключ WEP
 Selected WEP Key => Выбранный ключ WEP
-WPA PSK => WPA разделяемый ключ
+WPA PSK => WPA общий ключ
 ESSID => ESSID
 Channel => Канал
 RADIUS IP Address => Адрес IP сервера RADIUS
@@ -167,7 +167,7 @@ Disabled => Выключен
 ESSID Broadcast => Вещание ESSID
 Show => Показать
 Hide => Скрыть
-WLAN Mode => Режим беспроводной сети
+WLAN Mode => Режим
 Access Point => Точка доступа
 Client => Клиент
 Bridge => Мост
@@ -332,7 +332,12 @@ status_wwaninfo_quality_Workable => Рабочий
 status_wwaninfo_quality_Good => Хороший
 status_wwaninfo_quality_Excellent => Отличный
 status_wwaninfo_wrong_value => Неправильный сигнал
-
+status_wwaninfo_no_req_app => Требуемые компоненты не установлены. Пожалуйста установите последние пакет '<a href="system-ipkg.sh">comgt</a>' и <a href="info.awx">webif<sup>2</sup></a>.
+status_wwaninfo_Notcharging => Не заряжает
+status_wwaninfo_Charging => Заряжает
+status_wwaninfo_Battery_Status => Статус батареи
+status_wwaninfo_Status => Статус
+status_wwaninfo_Capacity => Емкость
 
 ## system-settings.sh
 ## duplicate ##System => Система
@@ -452,7 +457,7 @@ Express UDP Port => Express UDP порт
 Express UDP Ports => Express UDP порт
 EZ-IP-Update Messages => EZ-IP-Update сообщения
 File => Файл
-File Editor => Редактор Файлов
+File Editor => Редактор файлов
 Forwarding a port => Перенаправление порта
 Found Installed Certificate. => Найдены установленные сертификаты
 Found Installed Keyfile => Найдены установленные ключи
@@ -522,10 +527,10 @@ PIN Code => Пин
 Port range => Диапазон портов
 Port Range => Диапазон портов
 PPPoE Status => Статус PPPoE
-PPTP Client => PPTP Клиент
+PPTP Client => PPTP клиент
 PPTP Client Connection => PPTP клиентское соединение
 PPTP Client Connections => PPTP клиентские соединения
-PPTP Status => PPTP статус
+PPTP Status => Статус PPTP
 PPTP VPN Users => Пользователи PPTP VPN
 PPTPD Server => PPTPD сервер
 Preamble (Default: Long) => Preamble (По умолчанию: длинный)
@@ -584,7 +589,7 @@ SIM Configuration => Конфигурация SIM
 ## duplicate ##sorted_by_name => сортировка по имени
 Split WLAN From Switch Bridge => Отделить WLAN от Switch Bridge
 Start VPN Connection => Запустить VPN соединение
-Startup => При старте
+## duplicate ##Startup => При старте
 Strict Order => Строгий порядок
 Submit => Послать
 Survey Results => Результаты сканирования
@@ -846,7 +851,6 @@ Broadcom Wireless Configuration => Конфигурация беспроводн
 Helptext Broadcom Wireless Configuration => Маршрутизатор может поддерживать несколько виртуальных интерфейсов которые могут работать в разных режимах и с разным шифрованием. Ограничения: 1x sta + 0-3x ap или 1-4x ap или 1x adhoc
 Atheros Wireless Configuration => Конфигурация беспроводной сети для Atheros
 Helptext Atheros Wireless Configuration => Маршрутизатор может поддерживать несколько виртуальных интерфейсов которые могут работать в разных режимах и с разным шифрованием. Ограничения: 1x sta + 0-4x ap или 1-4x ap или 1x adhoc
-Diversity => Отличие
 Helptext Diversity => Используется в системах с несколькими антеннами для улучшения приема. Выключите, если у Вас только одна антенна.
 Wireless Distance => Беспроводное расстояние
 Helptext Wireless Distance => Вы должны ввести число - расстояние до самого удаленного устройства.
@@ -866,6 +870,26 @@ Add Virtual Interface => Добавить виртуальный интерфе�
 Remove Virtual Interface => Удалить виртуальный интерфейс
 Generate 40bit Keys => Создать 40-битные ключи
 Generate 128bit Key => Создать 128-битные ключи
+Antenna 1 => Антенна 1
+Antenna 2 =>  Антенна 2
+Auto => Авто
+Error: No other virtual adapters are allowed if one is in adhoc mode. => Ошибка: Других виртуальных адаптеров быть не может, если один работает в режиме по запросу.
+Error: Only 1 adaptor is allowed in client mode. => Ошибка: В режиме клиета может быть только 1 адаптер.
+Error: Only 1 virtual adapter is allowed to be in adhoc mode. => Ошибка: В режиме по запросу может быть только 1 виртуальный адаптер.
+Error: Only 3 virtual adapters are allowed in ap mode with a adapter in client mode. => Ошибка: В режиме точки доступа могут быть только 3 виртуальных адаптера, если адаптер работает в режиме клиента.
+Error: Only 4 virtual adapters are allowed in ap mode. => Ошибка: В режиме точки доступа могут быть только 4 виртуальных адаптера.
+HostAPD Package => пакет HostAPD
+Installed => Установленный
+RADIUS Port => Порт сервера RADIUS
+RX Antenna => Приемная антенна
+TX Antenna => Передающая антенна
+Tx Power => Мощность передачи
+WDS => WDS
+wpa_supplicant Package => Пакет wpa_supplicant
+
+#status-asterisk.sh
+Asterisk Simple Managment => Asterisk - простое управление
+Asterisk is not running. => Asterisk не запущен.
 
 #status-basic.sh
 Swap => Своп
@@ -890,11 +914,30 @@ WLAN => Беспроводная сеть
 WLAN LAN => WLAN (Wireless Local Area Network) - беспроводная локальная сеть.
 DNS Server => Сервер имен
 Mode => Режим
-#TODO: separate the below
-#Interfaces Status|WAN Interface
-#Interfaces Status|LAN Interface
-#Interfaces Status|Wireless Interface
+#TODO: translate the below
+Interfaces Status WAN => WAN Interface
+Interfaces Status LAN => LAN Interface
+Interfaces Status WLAN => Wireless Interface
 &nbsp;Show raw statistics&nbsp; => &nbsp;Показать необработанную статистику&nbsp;
+
+#status-iptables.sh
+status_iptables_IPTStatus => Статус Iptables
+status_iptables_col", i, " => ", $i, "
+status_iptables_col_options => options
+status_iptables_Target_Filter => Target Filter
+status_iptables_Target_NAT => Target NAT
+status_iptables_Target_Mangle => Target Mangle
+status_iptables_Target_Raw => Target Raw
+
+#status-openvpn.sh
+#TODO introduce tr. symbols
+
+#status-pppoe.sh
+#TODO, WIP
+#TODO introduce tr. symbols
+
+#status-pptp.sh
+PPTP Server => PPTP сервер
 
 # status-processes.sh
 Processes => Процессы
@@ -910,10 +953,9 @@ status_processes_Processes_Status => Статус процессов
 status_processes_Signal => Сигнал
 status_processes_Send_signal => Послать
 status_processes_Legend => Легенда
-status_processes_ps_Legend_Text => Размеры памяти в единицах кБ.<br />Значения значков статистики: A=Активный, I=Пустой (ожидает старта), O=Не существующий, R=Выполняющийся, S=Спящий, T=Остановленный, W=В свопе, Z=Отмененный.<br />Команды, заключенные в &quot;[...]&quot; - нити ядра.<br />Подробнее смотрите <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/ps.html">описание команды ps</a>.
-status_processes_Legend => Наиболее используемые сигналы
-status_processes_signal_Legend_Text => 1) SIGHUP - Приостановить<br />9) SIGKILL - Убить (не может быть пойман или проигнорирован)<br />15) SIGTERM - Завершить<br />10) SIGUSR1/12) SIGUSR2 - Сигналы, определенные пользователем.<br />Подробнее смотрите <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/kill.html">описание команды kill</a>.
-#TODO: 'status_processes_Legend' same twice with different meaning
+status_processes_Legend_Text => Размеры памяти в единицах кБ.<br />Значения значков статистики: A=Активный, I=Пустой (ожидает старта), O=Не существующий, R=Выполняющийся, S=Спящий, T=Остановленный, W=В свопе, Z=Отмененный.<br />Команды, заключенные в &quot;[...]&quot; - нити ядра.<br />Подробнее смотрите <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/ps.html">описание команды ps</a>.
+status_processes_Signals_Legend => Наиболее используемые сигналы
+status_processes_Signals_Legend_Text => 1) SIGHUP - Приостановить<br />9) SIGKILL - Убить (не может быть пойман или проигнорирован)<br />15) SIGTERM - Завершить<br />10) SIGUSR1/12) SIGUSR2 - Сигналы, определенные пользователем.<br />Подробнее смотрите <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/kill.html">описание команды kill</a>.
 
 #status-wlan-survey.sh
 HelpText WLAN Survey => Беспроводный адаптер не в режиме клиента. Для сканирования он должен перейти в режим клиента на несколько секунд. Ваш WLAN трафик будет прерван на этот короткий промежуток времени.
@@ -938,6 +980,13 @@ Backup Configuration => Сохранить конфигурацию
 #system-crontabs.sh
 Cron Tables Directory => Папка таблиц Cron
 HelpText crontabs => Таблицы Cron - это список задач, которые демон cron (crond) должен выполнить в заданные интервалы времени или время.
+
+#system-editor.sh
+system_editor_File_Editor => Редактор файлов
+system_editor_ask_dir_deletition => Вы действительно хотите удалить папку '{0}'
+system_editor_ask_file_deletition => Вы действительно хотите удалить файл '{0}/{1}'
+system_editor_info_dir_deleted => Папка успешно удалена
+system_editor_info_file_deleted => Файл успешно удален
 
 #system-ipkg.sh
 system_ipkg_Packages => Пакеты
@@ -1034,13 +1083,31 @@ Invalid dots => Недопустимые точки
 Invalid spaces => Недопустимые пробелы
 
 #common.awk
+## TODO: translate, check duplicates
+##Subcategories => Subcategories
+##Status => Status
 Host => Узел
-" caption " => " лейбл "
-" name " => " имя "
-" short "|" name " => " короткое "|" имя "
+##Uptime => Uptime
+##Load => Load
+##Short help => Short help
+
+#browser.awk
+browser_Delete => Удалить
+browser_Directory => Папка
+browser_Edit => Редактировать
+browser_File => Файл
+browser_Filesystem_Browser => Просмотр файлов
+browser_Group => Группа
+browser_Owner => Владелец
+browser_Parent_Directory => Родительская папка
+browser_Permissions => Права
+browser_Root => Корень
+browser_Time => Время
 
 # editor.awk
-#TODO introduce tr. symbols
+#TODO introduce more tr. symbols (e.g. Button labels)
+editor_File => Файл
+editor_click_apply => После того как Вы закончили редактировать файлы и делать другие изменения конфигурации, Вы должны нажать на ссылку "Применить изменения", чтобы сделать изменения постоянными.
 
 #comgt.webif
 status_wwaninfo_comgt_PManufacturer => Производитель
