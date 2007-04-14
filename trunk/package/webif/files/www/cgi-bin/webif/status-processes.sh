@@ -193,13 +193,13 @@ EOF
 	cat <<EOF
 <a name="pslegend"></a>
 <h4>@TR<<status_processes_Legend#Legend>>:</h4>
-<p>@TR<<status_processes_ps_Legend_Text#Memory sizes are in kB units.<br />Stat shortcuts meaning: A=Active, I=Idle (waiting for startup), O=Nonexistent, R=Running, S=Sleeping, T=Stopped, W=Swapped, Z=Canceled.<br />Commands enclosed in &quot;[...]&quot; are kernel threads.<br />For more information see the <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/ps.html" onclick="return !targetwindow(this.href);">ps command description</a>.>></p>
+<p>@TR<<status_processes_Legend_Text#Memory sizes are in kB units.<br />Stat shortcuts meaning: A=Active, I=Idle (waiting for startup), O=Nonexistent, R=Running, S=Sleeping, T=Stopped, W=Swapped, Z=Canceled.<br />Commands enclosed in &quot;[...]&quot; are kernel threads.<br />For more information see the <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/ps.html" onclick="return !targetwindow(this.href);">ps command description</a>.>></p>
 EOF
 } || {
 	cat <<EOF
 <a name="signallegend"></a>
-<h4>@TR<<status_processes_Legend#Most used signals>>:</h4>
-<p>@TR<<status_processes_signal_Legend_Text#1) SIGHUP - Hangup<br />9) SIGKILL - Kill (can't be caught or ignored)<br />15) SIGTERM - Termination<br />10) SIGUSR1/12) SIGUSR2 - User-defined signals.<br />For more information see the <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/kill.html" onclick="return !targetwindow(this.href);">kill command description</a>.>></p>
+<h4>@TR<<status_processes_Signals_Legend#Most used signals>>:</h4>
+<p>@TR<<status_processes_Signals_Legend_Text#1) SIGHUP - Hangup<br />9) SIGKILL - Kill (can't be caught or ignored)<br />15) SIGTERM - Termination<br />10) SIGUSR1/12) SIGUSR2 - User-defined signals.<br />For more information see the <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/kill.html" onclick="return !targetwindow(this.href);">kill command description</a>.>></p>
 
 EOF
 }

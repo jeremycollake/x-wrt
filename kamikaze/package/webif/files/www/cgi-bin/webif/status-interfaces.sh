@@ -138,7 +138,7 @@ EOF
 echo "<tr><td><br /></td></tr>
 	<div class=\"smalltext\">
 		<tr>
-			<th><b>@TR<<Interfaces Status|WAN Interface>></b></th>
+			<th><b>@TR<<Interfaces Status WAN|WAN Interface>></b></th>
 		</tr>
 		<tr>
 			<td><pre>"
@@ -147,7 +147,7 @@ echo "</pre></td>
 		</tr>
 		<tr><td><br /><br /></td></tr>
 		<tr>
-			<th><b>@TR<<Interfaces Status|LAN Interface>></b></th>
+			<th><b>@TR<<Interfaces Status LAN|LAN Interface>></b></th>
 		</tr>
 		<tr>
 			<td><pre>"
@@ -156,7 +156,7 @@ echo "</pre></td>
 		</tr>
 		<tr><td><br /><br /></td></tr>
 		<tr>
-			<th><b>@TR<<Interfaces Status|Wireless Interface>></b></th>
+			<th><b>@TR<<Interfaces Status WLAN|Wireless Interface>></b></th>
 		</tr>
 		<tr>
 			<td><pre>"
