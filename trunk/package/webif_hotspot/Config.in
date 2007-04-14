@@ -6,4 +6,13 @@ config BR2_PACKAGE_WEBIF_HOTSPOT
 	default m
 	help
 	  A hotspot manager for the webif.
+
+#config BR2_PACKAGE_WEBIF_HOTSPOT_LANG_*
+#	select BR2_PACKAGE_WEBIF_HOTSPOT
+#	tristate "webif-freeloader-lang-* - * language file for webif freeloader"
+#	depends BR2_PACKAGE_WEBIF_HOTSPOT
+#	default m
+#	help
+#	  * language file for webif freeloader
+
 endmenu

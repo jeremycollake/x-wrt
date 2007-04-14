@@ -15,7 +15,7 @@ define PKG_mod_template
 $$(IPKG_$(1)):
 	[ -z "$(2)" ] || install -d -m0755 $$(IDIR_$(1))/usr/lib/webif/lang/$(2)
 	$(CP) ./files/usr/lib/webif/lang/$(2)/*.txt $$(IDIR_$(1))/usr/lib/webif/lang/$(2)/
-	rm -rf $(IDIR_WEBIF_FREELOADER)/usr/lib/webif/lang/template/
+	rm -rf $$(IDIR_$(1))/usr/lib/webif/lang/template/
 	$(RSTRIP) $$(IDIR_$(1))
 	$(IPKG_BUILD) $$(IDIR_$(1)) $(PACKAGE_DIR)
 
@@ -78,7 +78,7 @@ $(PKG_BUILD_DIR)/.built:
 $(IPKG_WEBIF_FREELOADER): 
 	$(CP) -a ./files/* $(IDIR_WEBIF_FREELOADER)/
 	chmod -R 755 $(IDIR_WEBIF_FREELOADER)/*
-	rm -rf $(IDIR_WEBIF_FREELOADER)/usr/lib/webif/lang/
+	rm -rf $(IDIR_WEBIF_FREELOADER)/usr/lib/
 	rm -f $(IDIR_WEBIF_FREELOADER)/www/cgi-bin/webif/*.wip
 	chmod 755 $(IDIR_WEBIF_FREELOADER)/CONTROL/*inst
 	find $(IDIR_WEBIF_FREELOADER) -name CVS | xargs rm -rf
