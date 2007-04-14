@@ -151,9 +151,9 @@ endef
 
 define Package/webif/install
 	$(CP) -a ./files/* $(1)/
-	$(SED) 's,$$$$S,$(BOARD)-$(KERNEL),g' ./ipkg/webif.postinst
 	$(CP) -a ./ipkg/webif.preinst $(1)/CONTROL/preinst
 	$(CP) -a ./ipkg/webif.postinst $(1)/CONTROL/postinst
+	$(SED) 's,$$$$S,$(BOARD)-$(KERNEL),g' $(1)/CONTROL/postinst
 	chmod -R 755 $(1)/*
 	rm -rf $(1)/usr/lib/webif/lang/
 	rm -rf $(1)/www/themes/zephyr/
