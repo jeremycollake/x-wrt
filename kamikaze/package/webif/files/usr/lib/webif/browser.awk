@@ -4,7 +4,7 @@ BEGIN {
 	print "<div class=\"settings\">"
 	print "<h3><strong>@TR<<browser_Filesystem_Browser#Filesystem Browser>>: <a href=\"" url "?path=" path "\">" path "</a></strong></h3>"
 	print "<div id=\"filebrowser\">"
-	print "<table summary=\"@TR<<browser_Filesystem_Browser#Filesystem Browser>>\">"
+	print "<table cellspacing=\"0\" summary=\"@TR<<browser_Filesystem_Browser#Filesystem Browser>>\">"
 	print "<tbody>"
 	print "<tr>"
 	print "<td class=\"leftimage\"><a href=\"" url "?path=/\"><img src=\"/images/dir.gif\" alt=\"\" /></a></td>"

@@ -38,8 +38,8 @@ $meta_refresh
 <script type="text/javascript">
 <!--
 function targetwindow(url) {
-	wasOpen  = false;
-	win = window.open(url);    
+	var wasOpen  = false;
+	var win = window.open(url);    
 	return (typeof(win)=='object')?true:false;
 }
 -->

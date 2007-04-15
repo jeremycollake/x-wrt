@@ -38,7 +38,7 @@ function webif_entityDecode(s) {
     return e.firstChild.nodeValue;
 }
 
-webif_printf = function() {
+var webif_printf=function() {
 	var num = arguments.length;
 	var output = arguments[0];
 	for (var i = 1; i < num; i++) {
