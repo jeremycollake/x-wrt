@@ -64,7 +64,7 @@ this_revision=$(cat "/www/.version")
 	<li>@TR<<CSS_Layout#Layout was originally based on>> <a href="http://www.openwebdesign.org/design/1773/prosimii/">&quot;Prosimii&quot;</a> @TR<<by>> haran.</li>
 	<li>@TR<<UCI facilitating code>> @TR<<Copyright>> (C) 2006 by <a href="mailto:carsten.tittel@fokus.fraumhofer.de">Fokus Fraunhofer</a>.</li>
 	<li>@TR<<Translator_Credit#The translation you are currently using is authored by (nobody).>></li>
-	<li>@TR<<zephyr_Text#The Zephyr theme is under the MIT licence.>></li>
+	<li>@TR<<zephyr_Text#The Zephyr theme is under the MIT licence.>> Copyright &copy; 2006 <a href="mailto:make-contact@pftqg.com">Patrick Quinn-Graham</a>.</li>
 </ul>
 
 <p>@TR<<This device is running>> <a href="http://www.openwrt.org">OpenWrt</a> @TR<<or a close derivative>>.</p>
