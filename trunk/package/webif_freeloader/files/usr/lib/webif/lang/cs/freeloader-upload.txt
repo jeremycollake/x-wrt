@@ -1,9 +1,9 @@
 Freeloader => Freeloader
 freeloader-log_subcategory => Z&aacute;znam
 freeloader-status_subcategory => Stav
-freeloader-upload_Add_crontab => P&#345;idejte n&aacute;sleduj&iacute;c&iacute; &#345;&aacute;dky do souboru crontab.
+freeloader-upload_Add_crontab => P&#345;idejte n&aacute;sleduj&iacute;c&iacute; &#345;&aacute;dky do souboru crontab
 freeloader-upload_Credentials_helptext => Ov&#283;&#345;ovac&iacute; &uacute;daje pro sta&#382;en&iacute; souboru ze serveru.
-freeloader-upload_Cron_setup => Nastavení cronu
+freeloader-upload_Cron_setup => Nastaven&iacute; cronu
 freeloader-upload_Enter_password => Zapomn&#283;li jste zadat heslo, pros&iacute;m vlo&#382;te jej.
 freeloader-upload_Enter_URL_list => Zadejte pros&iacute;m seznam URL k odesl&aacute;n&iacute; do routeru.
 freeloader-upload_Enter_URL => Zadejte pros&iacute;m URL k odesl&aacute;n&iacute; do routeru.
