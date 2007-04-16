@@ -205,9 +205,9 @@ if [ $pkg_minisendmail -eq "1" ]; then
 	has_pkgs "mini-sendmail"
 fi
 
-crontab -l | grep -q "^[^#].*/getfreeloader.sh"
+crontab -l 2>/dev/null | grep -q "^[^#].*/getfreeloader.sh"
 cron_getfreeloader=$?
-crontab -l | grep -q "^[^#].*/killfreeloader.sh"
+crontab -l 2>/dev/null | grep -q "^[^#].*/killfreeloader.sh"
 cron_killfreeloader=$?
 
 if [ $cron_getfreeloader -eq "1" ] || [ $cron_killfreeloader -eq "1" ]; then
