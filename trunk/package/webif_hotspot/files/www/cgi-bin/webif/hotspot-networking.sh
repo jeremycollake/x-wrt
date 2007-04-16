@@ -24,7 +24,7 @@ if empty "$FORM_submit"; then
 		FORM_chilli_proxyport="$CONFIG_chilli_proxyport"
 		FORM_chilli_proxyclient="$CONFIG_chilli_proxyclient"
 		FORM_chilli_proxysecret="$CONFIG_chilli_proxysecret"
-	} || {
+	} || {
 		FORM_chilli_radiusserver1="${chilli_radiusserver1:-$(nvram get chilli_radiusserver1)}"
 		FORM_chilli_radiusserver2="${chilli_radiusserver2:-$(nvram get chilli_radiusserver2)}"
 		FORM_chilli_radiussecret="${chilli_radiussecret:-$(nvram get chilli_radiussecret)}"
