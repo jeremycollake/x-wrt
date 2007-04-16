@@ -78,7 +78,7 @@ $(PKG_BUILD_DIR)/.built:
 $(IPKG_WEBIF_HOTSPOT): 
 	$(CP) -a ./files/* $(IDIR_WEBIF_HOTSPOT)/
 	chmod -R 755 $(IDIR_WEBIF_HOTSPOT)/*
-	rm -rf $(IDIR_WEBIF_HOTSPOT)/usr/
+	rm -rf $(IDIR_WEBIF_HOTSPOT)/usr/lib/webif/lang/
 	rm -f $(IDIR_WEBIF_HOTSPOT)/www/cgi-bin/webif/*.wip
 	chmod 755 $(IDIR_WEBIF_HOTSPOT)/CONTROL/*inst
 	find $(IDIR_WEBIF_HOTSPOT) -name CVS | xargs rm -rf

@@ -9,10 +9,10 @@ config BR2_PACKAGE_WEBIF_HOTSPOT
 
 #config BR2_PACKAGE_WEBIF_HOTSPOT_LANG_*
 #	select BR2_PACKAGE_WEBIF_HOTSPOT
-#	tristate "webif-freeloader-lang-* - * language file for webif freeloader"
+#	tristate "webif-hotspot-lang-* - * language file for webif hotspot"
 #	depends BR2_PACKAGE_WEBIF_HOTSPOT
 #	default m
 #	help
-#	  * language file for webif freeloader
+#	  * language file for webif hotspot
 
 endmenu
