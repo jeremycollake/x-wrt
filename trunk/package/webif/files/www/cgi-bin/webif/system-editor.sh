@@ -50,12 +50,12 @@ var webif_printf=function() {
 }
 
 function confirm_deldir(path,file) {
-	if (window.confirm(webif_entityDecode(webif_printf("@TR<<big_warning#WARNING>>!\n\n@TR<<system_editor_ask_dir_deletition#Do you really want to delete the '{0}' directory>>?", file)))) {
+	if (window.confirm(webif_entityDecode(webif_printf("@TR<<big_warning#WARNING>>!\\n\\n@TR<<system_editor_ask_dir_deletition#Do you really want to delete the '{0}' directory>>?", file)))) {
 		window.location="$SCRIPT_NAME?path=" + escape(path) + "&amp;delpath=" + escape(file);
 	}
 }
 function confirm_delfile(path,file) {
-	if (window.confirm(webif_entityDecode(webif_printf("@TR<<big_warning#WARNING>>!\n\n@TR<<system_editor_ask_file_deletition#Do you really want to delete the '{0}/{1}' file>>?", path, file)))) {
+	if (window.confirm(webif_entityDecode(webif_printf("@TR<<big_warning#WARNING>>!\\n\\n@TR<<system_editor_ask_file_deletition#Do you really want to delete the '{0}/{1}' file>>?", path, file)))) {
 		window.location="$SCRIPT_NAME?path=" + escape(path) + "&amp;delfile=" + escape(file);
 	}
 }
