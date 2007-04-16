@@ -188,7 +188,7 @@ valid == 1 {
 
 valid_type == 1 {
 	if (valid == 1) output = output $2 "=\"" value "\";\n"
-	else error = error "Error in " $3 ": " verr "<br />"
+	else error = error "@TR<<Error in>> " $3 ": " verr "<br />"
 }
 
 END {
