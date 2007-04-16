@@ -44,7 +44,7 @@ uci_add_option_if_not_exists() {
 	equal "$_val" "" && {
 		uci_set "$PACKAGE" "$CONFIG" "$OPTION" "$VALUE"
 	}
-	[ "$_val" = "" ]
+	[ "$_val" != "" ]
 }
 
 freeloader_commit=0
