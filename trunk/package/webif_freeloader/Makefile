@@ -78,7 +78,7 @@ $(PKG_BUILD_DIR)/.built:
 $(IPKG_WEBIF_FREELOADER): 
 	$(CP) -a ./files/* $(IDIR_WEBIF_FREELOADER)/
 	chmod -R 755 $(IDIR_WEBIF_FREELOADER)/*
-	rm -rf $(IDIR_WEBIF_FREELOADER)/usr/lib/
+	rm -rf $(IDIR_WEBIF_FREELOADER)/usr/lib/webif/lang/
 	rm -f $(IDIR_WEBIF_FREELOADER)/www/cgi-bin/webif/*.wip
 	chmod 755 $(IDIR_WEBIF_FREELOADER)/CONTROL/*inst
 	find $(IDIR_WEBIF_FREELOADER) -name CVS | xargs rm -rf

@@ -25,7 +25,7 @@
 #
 
 #Include settings
-. /etc/freeloader-include.sh
+. /usr/lib/webif/freeloader-include.sh
 
 #this LS command is needed because otherwise the abort.lock and suspend.lock will not be found, some kind of caching problem on CIFS shares
 ls "$DOWNLOAD_DESTINATION"  > /dev/null 2>&1

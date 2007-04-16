@@ -75,7 +75,7 @@ EOF
 header "Freeloader" "freeloader-status_subcategory#Status" "@TR<<freeloader-status_Freeloader_status#Freeloader status>>"
 
 #Include settings
-. /etc/freeloader-include.sh
+. /usr/lib/webif/freeloader-include.sh
 
 #Check the required packages
 is_package_installed "curl"

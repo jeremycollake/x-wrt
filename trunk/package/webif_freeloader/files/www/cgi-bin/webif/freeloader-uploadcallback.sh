@@ -29,7 +29,7 @@ content-type: text/html
 #
 
 #Include settings
-. /etc/freeloader-include.sh
+. /usr/lib/webif/freeloader-include.sh
 
 
 if [ -n "$FORM_uploadfile" ]; then

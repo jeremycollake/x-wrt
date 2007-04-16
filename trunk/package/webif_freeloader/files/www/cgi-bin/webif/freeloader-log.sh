@@ -49,7 +49,7 @@ EOF
 
 header "Freeloader" "freeloader-log_subcategory#Log" "@TR<<freeloader-log_Freeloader_log#Freeloader log>>"
 #Include settings
-. /etc/freeloader-include.sh
+. /usr/lib/webif/freeloader-include.sh
 
 #Check the required packages
 is_package_installed "curl"

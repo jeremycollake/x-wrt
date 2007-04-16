@@ -26,7 +26,7 @@
 #
 
 #Include settings
-. /etc/freeloader-include.sh
+. /usr/lib/webif/freeloader-include.sh
 
 
 #####################################################################################

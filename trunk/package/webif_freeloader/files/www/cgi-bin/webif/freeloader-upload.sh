@@ -91,7 +91,7 @@ EOF
 header "Freeloader" "freeloader-upload_subcategory#Upload" "@TR<<freeloader-upload_Freeloader_upload#Freeloader upload>>"
 
 #Include settings
-. /etc/freeloader-include.sh
+. /usr/lib/webif/freeloader-include.sh
 
 #check for installed packages and store the status
 is_package_installed "curl"
