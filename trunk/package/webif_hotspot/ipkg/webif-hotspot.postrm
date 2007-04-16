@@ -2,4 +2,4 @@
 #
 # Webif post-removal script.
 #
-sed -e '/##WEBIF:category:Hotspot/d' -i /www/cgi-bin/webif/.categories 2>/dev/null
+sed -e '/##WEBIF:category:Hotspot/d' -i ${IPKG_INSTROOT}/www/cgi-bin/webif/.categories 2>/dev/null
