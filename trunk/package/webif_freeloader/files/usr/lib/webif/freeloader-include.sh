@@ -31,7 +31,7 @@ uci_add_section_if_not_exists() {
 	! equal "$_val" "$PACKAGE" && {
 		uci_add "$PACKAGE" "$PACKAGE" "$SECTION"
 	}
-	[ "$_val" == "$PACKAGE" ]
+	[ "$_val" = "$PACKAGE" ]
 }
 
 uci_add_option_if_not_exists() {
@@ -44,25 +44,36 @@ uci_add_option_if_not_exists() {
 	equal "$_val" "" && {
 		uci_set "$PACKAGE" "$CONFIG" "$OPTION" "$VALUE"
 	}
-	[ "$_val" == "$PACKAGE" ]
+	[ "$_val" = "" ]
 }
 
 freeloader_commit=0
 uci_load "freeloader"
 uci_add_section_if_not_exists "freeloader" "download"
-[ "$?" != "0" ] && freeloader_commit=1
-uci_add_option_if_not_exists "freeloader" "download" "root" "/mnt/disc0_1/freeloader"
-[ "$?" != "0" ] && freeloader_commit=1
+[ "$?" != "0" ] && {
+	uci_set "freeloader" "download" "root" "/mnt/disc0_1/freeloader"
+	freeloader_commit=1
+} || {
+	uci_add_option_if_not_exists "freeloader" "download" "root" "/mnt/disc0_1/freeloader"
+	[ "$?" != "0" ] && freeloader_commit=1
+}
 uci_add_section_if_not_exists "freeloader" "email"
-[ "$?" != "0" ] && freeloader_commit=1
-uci_add_option_if_not_exists "freeloader" "email" "enable" "0"
-[ "$?" != "0" ] && freeloader_commit=1
-uci_add_option_if_not_exists "freeloader" "email" "emailfrom" "root@localhost"
-[ "$?" != "0" ] && freeloader_commit=1
-uci_add_option_if_not_exists "freeloader" "email" "emailto" "root@localhost"
-[ "$?" != "0" ] && freeloader_commit=1
-uci_add_option_if_not_exists "freeloader" "email" "smtpserver" "127.0.0.1"
-[ "$?" != "0" ] && freeloader_commit=1
+[ "$?" != "0" ] && {
+	uci_set "freeloader" "email" "enable" "0"
+	uci_set "freeloader" "email" "emailfrom" "root@localhost"
+	uci_set "freeloader" "email" "emailto" "root@localhost"
+	uci_set "freeloader" "email" "smtpserver" "127.0.0.1"
+	freeloader_commit=1
+} || {
+	uci_add_option_if_not_exists "freeloader" "email" "enable" "0"
+	[ "$?" != "0" ] && freeloader_commit=1
+	uci_add_option_if_not_exists "freeloader" "email" "emailfrom" "root@localhost"
+	[ "$?" != "0" ] && freeloader_commit=1
+	uci_add_option_if_not_exists "freeloader" "email" "emailto" "root@localhost"
+	[ "$?" != "0" ] && freeloader_commit=1
+	uci_add_option_if_not_exists "freeloader" "email" "smtpserver" "127.0.0.1"
+	[ "$?" != "0" ] && freeloader_commit=1
+}
 [ "$freeloader_commit" -gt 0 ] && {
 	uci_commit "freeloader"
 	uci_load "freeloader"
