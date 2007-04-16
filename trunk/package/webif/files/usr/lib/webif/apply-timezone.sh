@@ -4,7 +4,7 @@
 #
 # Handler for timezone setting.
 
-reload_ntp() {
+reload_timezone() {
 	# create symlink to /tmp/TZ if /etc/TZ doesn't exist
 	# todo: -e | -f | -d didn't seem to work here, so I used find
 	if [ -z $(find "/etc/TZ") ]; then 
@@ -16,5 +16,5 @@ reload_ntp() {
 }
 
 HANDLERS_config="$HANDLERS_config
-	timezone) reload_ntp;;
+	timezone) reload_timezone;;
 "
