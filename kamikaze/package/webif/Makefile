@@ -1,4 +1,5 @@
 include $(TOPDIR)/rules.mk
+include $(INCLUDE_DIR)/kernel.mk
 
 PKG_NAME:=webif
 PKG_VERSION:=0.3
