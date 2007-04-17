@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!--
 OpenWRT port of this file based originally on the following:
 
@@ -41,11 +41,11 @@ POSSIBILITY OF SUCH DAMAGE.
 <g id='graph'>
 	<rect id='bg' x1='0' y1='0' width='600' height='300' fill='white' />
 
-	<text id='graph_lbl'  x='50' y='15' fill='#435370' text-anchor='end'>CPU</text>
+	<text id='graph_lbl'  x='50' y='15' fill='#435370' text-anchor='end'>@TR<<graph_cpu_CPU#CPU>></text>
 	<text id='graph_txt'  x='54' y='15' fill='#435370'>--</text>
 
-	<text id='error' x='300' y='125' text-anchor='middle' visibility='hidden' fill='blue'>Cannot get data about interface</text>
-	<text id='collect_initial' x='300' y='125' text-anchor='middle' visibility='hidden' fill='gray'>Collecting initial data, please wait...</text>
+	<text id='error' x='300' y='125' text-anchor='middle' visibility='hidden' fill='blue'>@TR<<graph_cpu_Cannot_get_data_CPU#Cannot get data about CPU>></text>
+	<text id='collect_initial' x='300' y='125' text-anchor='middle' visibility='hidden' fill='gray'>@TR<<graph_Collecting_initial_data#Collecting initial data, please wait...>></text>
 
 	<path id='grid' d='M 2 75 L 600 75 M 2 150 L 600 150 M 2 225 L 600 225' stroke='gray' stroke-opacity='0.5' />
 	<text id='grid_txt3' x='600' y='223' fill='gray' text-anchor='end'>25%</text>
@@ -62,14 +62,14 @@ POSSIBILITY OF SUCH DAMAGE.
 if (typeof getURL == 'undefined') {
   getURL = function(url, callback) {
     if (!url)
-      throw 'No URL for getURL';
+      throw '@TR<<graph_No_URL_getURL#No URL for getURL>>';
 
     try {
       if (typeof callback.operationComplete == 'function')
         callback = callback.operationComplete;
     } catch (e) {}
     if (typeof callback != 'function')
-      throw 'No callback function for getURL';
+      throw '@TR<<graph_No_callback_function#No callback function for getURL>>';
 
     var http_request = null;
     if (typeof XMLHttpRequest != 'undefined') {
@@ -85,7 +85,7 @@ if (typeof getURL == 'undefined') {
       }
     }
     if (!http_request)
-      throw 'Both getURL and XMLHttpRequest are undefined';
+      throw '@TR<<graph_Both_undefined#Both getURL and XMLHttpRequest are undefined>>';
 
     http_request.onreadystatechange = function() {
       if (http_request.readyState == 4) {
