@@ -1,4 +1,4 @@
-﻿lang => Русский
+lang => Русский
 Encoding => utf-8
 
 # Common
