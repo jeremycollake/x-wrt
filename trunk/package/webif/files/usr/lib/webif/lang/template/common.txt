@@ -1,0 +1,318 @@
+## it is the work in the progress
+##
+## this file will contain all translations
+## for the translators to be able to sync
+## with page changes
+##
+## every page author MUST reflect the changes
+## in this file
+##
+
+## new format
+## you are free to translate the part between "new format comments"
+## replace any text after "=" and ">" with your translation
+
+
+## browser.awk
+browser_Filesystem_Browser => Filesystem Browser
+browser_Root => Root
+browser_Permissions => Permissions
+browser_Owner => Owner
+browser_Group => Group
+browser_Time => Time
+browser_Parent_Directory => Parent Directory
+browser_Directory => Directory
+browser_Delete => Delete
+browser_File => File
+browser_Edit => Edit
+
+
+## comgt.webif
+status_wwaninfo_comgt_PManufacturer => Product Manufacturer
+status_wwaninfo_comgt_ModelInfo => Model Information
+status_wwaninfo_comgt_IMEISN => IMEI and Serial Number
+status_wwaninfo_comgt_PRevision => Product Revision
+status_wwaninfo_comgt_HRevision => Hardware Revision
+status_wwaninfo_comgt_NLock => Network Locked
+status_wwaninfo_comgt_No => No
+status_wwaninfo_comgt_Yes => Yes
+status_wwaninfo_comgt_Custom => Customization
+status_wwaninfo_comgt_BandSettings => Band settings
+status_wwaninfo_comgt_Band_Unknown => Unknown
+status_wwaninfo_comgt_Band_900 => Single band 900 MHz
+status_wwaninfo_comgt_Band_1800 => Single band 1800 MHz (Europe)
+status_wwaninfo_comgt_Band_1900 => Single band 1900 MHz (USA)
+status_wwaninfo_comgt_Band_9_18 => Dual band 900/1800 MHz (Europe)
+status_wwaninfo_comgt_Band_9_19 => Dual band 900/1900 MHz (USA)
+status_wwaninfo_comgt_APN => Access Point Name
+
+
+## common.awk
+Short help => Short help
+
+
+## editor.awk
+editor_File => File
+&nbsp;Save Changes&nbsp; => &nbsp;Save Changes&nbsp;
+&nbsp;Back&nbsp; => &nbsp;Back&nbsp;
+editor_click_apply => After you are done changing files and making other configuration adjustments, you must click the Apply link to make the changes permanent.
+
+
+## form.awk
+Remove => Remove
+Add => Add
+more... => more...
+
+
+## functions.awk
+features_require_package => Features on this page require the package
+features_install => install now
+
+
+## subcategories.awk
+Subcategories => Subcategories
+
+
+## validate.awk
+Invalid value => Invalid value
+Invalid key length => Invalid key length
+Key must not end with '0' => Key must not end with '0'
+String too long => String too long
+String too short => String too short
+Invalid hex key => Invalid hex key
+No value entered => No value entered
+Value too small => Value too small
+minimum => minimum
+minimum length => minimum length
+Value too large => Value too large
+maximum => maximum
+maximum length => maximum length
+Invalid dots => Invalid dots
+Invalid spaces => Invalid spaces
+Error in => Error in
+
+
+## webif.sh
+big_warning => WARNING
+page_incomplete => This page is incomplete and may not work correctly, or at all.
+page_untested => This page is untested and may or may not work correctly.
+page_untested_kamikaze => This page has not been updated or checked for correct functionality under Kamikaze.
+features_require_package => Features on this page require the package
+features_install => install now
+Encoding => ISO-8859-1
+Settings saved => Settings saved
+Settings not saved => Settings not saved
+Save Changes => Save Changes
+Status => Status
+Host => Host
+Uptime => Uptime
+Load => Load
+Administrative Console => Administrative Console
+X-Wrt Administration Console => X-Wrt Administration Console
+Warning => Warning
+Password_warning => you haven't set a password for the Web interface and SSH access<br />Please enter one now (the user name in your browser will be 'root').
+New Password => New Password
+Confirm Password => Confirm Password
+Set => Set
+Proceed Changes => Proceed Changes
+Apply Changes => Apply Changes
+Clear Changes => Clear Changes
+Review Changes => Review Changes
+making_usable => End user extensions for OpenWrt
+
+
+## graphs-cpu.sh
+Graphs => Graphs
+graphs_cpu_subcategory => CPU
+graphs_cpu_CPU_Usage => CPU Usage
+graphs_svg_required => This object requires the SVG support.
+
+
+## graphs-if.sh
+## duplicate ##Graphs => Graphs
+graphs_if_Traffic => Traffic
+graphs_if_Traffic_of_Interface => Traffic of Interface
+## duplicate ##graphs_svg_required => This object requires the SVG support.
+
+
+## network-hosts.sh
+network_hosts_host_IP_invalid => Host's IP Address
+network_hosts_Host_Name => Host Name
+network_hosts_MAC => MAC Address
+network_hosts_static_IP_invalid => Static IP Address
+Network => Network
+Hosts => Hosts
+network_hosts_Configured_Hosts => Configured Hosts
+network_hosts_Host_Names => Host Names
+network_hosts_IP => IP Address
+network_hosts_Host_Name => Host Name
+network_hosts_Remove => Remove
+network_hosts_Add => Add
+network_hosts_Host_Names_helptext => The file /etc/hosts is used to look up the IP address of a device connected to a computer network. The hosts file describes a many-to-one mapping of device names to IP addresses. When accessing a device by name, the networking system attempts to locate the name within the hosts file before accessing the Internet domain name system.
+network_hosts_DHCP_Static_IPs => Static IP addresses (for DHCP)
+network_hosts_Static_IPs => Static IP addresses
+network_hosts_Static_IPs_helptext => The file /etc/ethers contains database information regarding known 48-bit ethernet addresses of hosts on an Internetwork. The DHCP server uses the matching IP address instead of allocating a new one from the pool for any MAC address listed in this file.
+network_hosts_Active_Leases => Active DHCP Leases
+network_hosts_Name => Name
+network_hosts_Expires => Expires in
+network_hosts_h => h
+network_hosts_min => min
+network_hosts_sec => sec
+network_hosts_No_leases => There are no known DHCP leases.
+
+
+## status-leases.sh
+Status => Status
+DHCP Clients =>
+status_leases_dhcp_leases => DHCP Leases
+status_leases_MAC => MAC Address
+status_leases_IP => IP Address
+status_leases_Name => Name
+status_leases_Expires => Expires in
+status_leases_h => h
+status_leases_min => min
+status_leases_sec => sec
+status_leases_no_leases => There are no known DHCP leases.
+status_leases_dhcp_leases => DHCP Leases
+status_leases_dhcp_leases_helptext => DHCP leases are assigned to network clients that request an IP address from the DHCP server of the router. Clients that requested their IP lease before this router was last rebooted may not be listed until they request a renewal of their lease.
+status_leases_additional => Additional information
+status_leases_arp_title => Address Resolution Protocol Cache (ARP)
+status_leases_HW => HW Type
+status_leases_Flags => Flags
+status_leases_Mask => Mask
+status_leases_completed => completed
+status_leases_permanent => permanent
+status_leases_published => published
+status_leases_no_arp_record => ARP Cache does not contain any correspondent record.
+status_leases_ethers_title => Ethernet Address to IP Number Database (/etc/ethers)
+status_leases_ethers_empty => File /etc/ethers does not contain any Ethernet address/IP address pair.
+status_leases_no_ethers => File /etc/ethers does not exist.
+
+
+## status-usb.sh
+status_usb_umount_error_in => Error in
+Status => Status
+USB => USB
+status_usb_USB_Devices => USB Devices
+status_usb_All_connected_devices => All connected devices (excluding system hubs)
+status_usb_Bus => Bus
+status_usb_Device => Device
+status_usb_Product => Product
+status_usb_Manufacturer => Manufacturer
+status_usb_VPIDs => VendorID:ProdID
+status_usb_USB_version => USB version
+status_usb_Mounted_USB_SCSI => Mounted USB / SCSI devices
+status_usb_filesystems => File systems
+status_usb_Device_Path => Device Path
+status_usb_Mount_Point => Mount Point
+status_usb_File_System => File System
+status_usb_Read_Write => Read/Write
+status_usb_Action => Action
+status_usb_ro => Read only
+status_usb_rw => Read/Write
+status_usb_umount => umount
+status_usb_swaps => Swaps
+status_usb_swap_PartitionFilename => Partition/Filename
+status_usb_swap_Type => Type
+status_usb_swap_Size => Size
+status_usb_swap_Used => Used
+status_usb_swap_Priority => Priority
+status_usb_swap_partition => partition
+status_usb_swap_file => file
+status_usb_Loaded_USB_drivers => Loaded USB drivers
+
+
+## status-wwaninfo.sh
+Status => Status
+UMTS => UMTS
+status_wwaninfo_UG_Status => UMTS/GPRS Status
+status_wwaninfo_no_UG_device => UMTS / GPRS device not found.
+status_wwaninfo_device_info => Device Information
+status_wwaninfo_dev_th_Information => Information
+status_wwaninfo_dev_th_Value => Value
+status_wwaninfo_no_UG_device_info => No device information reported.
+status_wwaninfo_Signal_Quality => Signal Quality
+status_wwaninfo_quality_unknown => Signal quality is invalid/unknown
+status_wwaninfo_Power_Ratio => Power Ratio (dBm)
+status_wwaninfo_Legend => Legend
+status_wwaninfo_quality_Unreliable => Unreliable
+status_wwaninfo_quality_Workable => Workable
+status_wwaninfo_quality_Good => Good
+status_wwaninfo_quality_Excellent => Excellent
+status_wwaninfo_wrong_value => Wrong signal quality value
+
+
+## system-settings.sh
+System => System
+Settings => Settings
+System Settings => System Settings
+system_settings_Installing_NTPCLIENT_package => Installing NTPCLIENT package
+system_settings_Installing_MatrixTunnel_package => Installing MatrixTunnel package
+system_settings_Webif_SSL => Webif SSL
+system_settings_Feature_requires_matrixtunnel => MatrixTunnel package is not installed. You need to install it for ssl support
+system_settings_Install_MatrixTunnel => Install MatrixTunnel
+system_settings_webifssl_Off => Off
+system_settings_webifssl_On => On
+Host Name => Host Name
+Warning => Warning
+system_settings_Hostname_failed_validation => Hostname failed validation. Can not be saved.
+Enable visual effects => Enable visual effects
+Boot Wait => Boot Wait
+Enabled => Enabled
+Disabled => Disabled
+HelpText boot_wait => Boot wait causes the boot loader of some devices to wait a few seconds at bootup for a TFTP transfer of a new firmware image. This is a security risk to be left on.
+Wait Time => Wait Time
+HelpText wait_time => Number of seconds the boot loader should wait for a TFTP transfer if Boot Wait is on.
+CPU Clock Frequency => CPU Clock Frequency
+Dangerous Settings => Dangerous Settings
+HelpText CPU Clock Frequency => Do not change this. You may brick your router if you do not know what you are doing. We've tried to disable it for all routers that can be bricked through an invalid clock frequency setting. Only Linksys WRT54G v4 units are known to be unbrickable by a bad clkfreq setting.
+system_settings_feature_requires_ntpclient => No NTP client is installed. For correct time support you need to install one
+system_settings_Install_NTP_Client => Install NTP Client
+system_settings_group_unknown_TZ => Unknown
+system_settings_User_or_old_TZ => User defined (or out of date)
+Time Settings => Time Settings
+Timezone => Timezone
+system_settings_POSIX_TZ_String => POSIX TZ String
+system_settings_js_required => This field requires the JavaScript support.
+Timezone_helptext => Set up your time zone according to the nearest city of your region from the predefined list.
+NTP Server => NTP Server
+Webif Settings => Webif Settings
+Language => Language
+Theme => Theme
+
+
+## graph_cpu.svg
+graph_cpu_CPU => CPU
+graph_cpu_Cannot_get_data_CPU => Cannot get data about CPU
+graph_Collecting_initial_data => Collecting initial data, please wait...
+graph_No_URL_getURL => No URL for getURL
+graph_No_callback_function => No callback function for getURL
+graph_Both_undefined => Both getURL and XMLHttpRequest are undefined
+
+
+## graph_if.svg
+graph_if_In => In
+graph_if_Out => Out
+graph_if_Switch_to_bytes_s => Switch to bytes/s
+graph_if_Autoscale_follow => Autoscale (follow)
+graph_if_Cannot_get_data_iface => Cannot get data about interface
+## duplicate ##graph_Collecting_initial_data => Collecting initial data, please wait...
+## duplicate ##graph_No_URL_getURL => No URL for getURL
+## duplicate ##graph_No_callback_function => No callback function for getURL
+## duplicate ##graph_Both_undefined => Both getURL and XMLHttpRequest are undefined
+graph_if_bits => bits
+graph_if_follow => follow
+graph_if_Switch_to => Switch to
+graph_if_s => s
+graph_if_bytes => bytes
+graph_if_AutoScale => AutoScale
+graph_if_up => up
+graph_if_Kbps => Kbps
+graph_if_Mbps => Mbps
+graph_if_Gbps => Gbps
+graph_if_KB_s => KB/s
+graph_if_MB_s => MB/s
+graph_if_GB_s => GB/s
+
+
+## new format
