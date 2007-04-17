@@ -1,5 +1,6 @@
 #!/usr/bin/webif-page
-content-type: image/svg+xml 
+Content-Type: image/svg+xml 
+Content-Disposition: inline
+Pragma: no-cache
 
 <? cat /www/svggraph/graph_cpu.svg ?>
-

@@ -6,16 +6,13 @@
 . /usr/lib/webif/webif.sh
 . ./graphs-subcategories.sh
 
-header "Graphs" "Traffic $FORM_if" "@TR<<Traffic of Interface>> $FORM_if" "" "$SCRIPT_NAME"
-
-echo "<center>"
-#cat /proc/net/dev|sed -n '/:/{s/:.*//;s/^ *//;s/\(.*\)/<a href="\/cgi-bin\/webif\/graphs-if.sh?if=\1">\1<\/a>/p}'
+header "Graphs" "graphs_if_Traffic#Traffic>> $FORM_if@TR<<" "@TR<<graphs_if_Traffic_of_Interface#Traffic of Interface>> $FORM_if" "" ""
 ?>
 <br /><br />
+<center>
 <?if [ "$FORM_if" ] ?>
-	<embed src="/cgi-bin/webif/graph_if_svg.sh?if=<? echo -n ${FORM_if} ?>"
-		width="500" height="250" type="image/svg+xml"
-	/>
+	<object data="/cgi-bin/webif/graph_if_svg.sh?if=<? echo -n ${FORM_if} ?>"
+		width="500" height="250" type="image/svg+xml">@TR<<graphs_svg_required#This object requires the SVG support.>></object>
 <?fi?>
 </center>
 <? footer ?>
