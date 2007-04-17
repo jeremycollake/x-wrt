@@ -28,15 +28,15 @@
 #
 #
 
-header "System" "Packages" "@TR<<system_ipkg_Packages#Packages>>" '' "$SCRIPT_NAME"
+header "System" "Packages" "<img src=\"/images/pkg.jpg\" alt />&nbsp;@TR<<system_ipkg_Packages#Packages>>" '' "$SCRIPT_NAME"
 
 cat <<EOF
 <script type="text/javascript">
 function confirmT(action,pkg) {
-if ( pkg == "base-files" || pkg == "base-files-brcm-2.4" || pkg == "bridge" || pkg == "busybox" || pkg == "dnsmasq" || pkg == "dropbear" || pkg == "haserl" || pkg == "hotplug" || pkg == "ipkg" || pkg == "ipkg-upgrade-fix" || pkg == "iptables" || pkg == "iwlib" || pkg == "kernel" || pkg == "kmod-brcm-wl" || pkg == "kmod-switch" || pkg == "kmod-wl-compat" || pkg == "mtd" || pkg == "nvram" || pkg == "uclibc" || pkg == "webif" || pkg == "wificonf" || pkg == "wireless-tools") {
-alert ("             <<< WARNING >>> \\n\\nPackage \"" + pkg + "\" should not be removed!\\n\\n>>> Removing may brick your router. <<<\\n\\nSystem requires \"" + pkg + "\" package to run.\\n\\n") ;
+if ( pkg == "uclibc" || pkg == "base-files" || pkg == "bridge" || pkg == "busybox" || pkg == "dnsmasq" || pkg == "dropbear" || pkg == "haserl" || pkg == "hotplug" || pkg == "iptables" || pkg == "kernel" || pkg == "mtd" || pkg == "wireless-tools" || pkg == "wlc") {
+alert ("             <<< WARNING >>> \n\nPackage \"" + pkg + "\" should not be removed!\n\n>>> Removing may brick your router. <<<\n\nSystem requires \"" + pkg + "\" package to run.\n\n") ;
 }
-if (window.confirm("Please Confirm!\\n\\nDo you want to " + action + " \"" + pkg + "\" package?")){
+if (window.confirm("Please Confirm!\n\nDo you want to " + action + " \"" + pkg + "\" package?")){
 window.location="ipkg.sh?action=" + action + "&pkg=" + pkg
 } }
 </script>
@@ -143,7 +143,11 @@ if [ "$FORM_action" = "update" ]; then
 	echo "</pre>"
 elif [ "$FORM_action" = "install" ]; then
 	echo "<pre>@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
-	yes n | ipkg install `echo "$FORM_pkg" | sed -e 's, ,+,g'`
+	install_package `echo "$FORM_pkg" | sed -e 's, ,+,g'`
+	if [ "$?" != "0" ]; then
+		ipkg update
+		install_package `echo "$FORM_pkg" | sed -e 's, ,+,g'`
+	fi
 	echo "</pre>"
 elif [ "$FORM_action" = "remove" ]; then
 	echo "<pre>@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
