@@ -34,9 +34,11 @@ cat <<EOF
 <script type="text/javascript">
 function confirmT(action,pkg) {
 if ( pkg == "uclibc" || pkg == "base-files" || pkg == "bridge" || pkg == "busybox" || pkg == "dnsmasq" || pkg == "dropbear" || pkg == "haserl" || pkg == "hotplug" || pkg == "iptables" || pkg == "kernel" || pkg == "mtd" || pkg == "wireless-tools" || pkg == "wlc") {
-alert ("             <<< WARNING >>> \n\nPackage \"" + pkg + "\" should not be removed!\n\n>>> Removing may brick your router. <<<\n\nSystem requires \"" + pkg + "\" package to run.\n\n") ;
+alert ("             <<< @TR<<big_warning|WARNING>> >>> \n\n@TR<<system_ipkg_Package|Package>> \"" + pkg + "\" @TR<<should not be removed>>!\n\n>>> @TR<<Removing may brick your router.>> <<<\n\n@TR<<System requires>> \"" + pkg + "\" @TR<<package to run.>>\n\n") ;
 }
-if (window.confirm("Please Confirm!\n\nDo you want to " + action + " \"" + pkg + "\" package?")){
+var actionStr = action=="install" ? "@TR<<system_ipkg_install|install>>" : 
+	(action=="remove" ? "@TR<<system_ipkg_remove|remove>>" : action);
+if (window.confirm("@TR<<Please Confirm>>!\n\n@TR<<Do you want to>> " + actionStr + " \"" + pkg + "\" @TR<<system_ipkg_package|package>>?")){
 window.location="ipkg.sh?action=" + action + "&pkg=" + pkg
 } }
 </script>

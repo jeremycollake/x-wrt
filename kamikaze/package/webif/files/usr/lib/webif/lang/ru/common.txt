@@ -1011,6 +1011,17 @@ HelpText Backports Tip => Для намного большего выбора п
 Install Package => Установка Пакета
 HelpText Install Package => Обычно пакет устанавливается, нажимая на ссылку установка в списке пакетов ниже. Однако Вы можете установить пакет, не показанный здесь в известных репозиториях.
 
+system_ipkg_Package => Пакет
+should not be removed => не должен удаляться
+Removing may brick your router. => Удаление может привести маршрутизатор в нерабочее состояние.
+System requires => Системе необходим
+package to run. => пакет для функционирования.
+Please Confirm => Пожалуйста подтвердите
+Do you want to => Вы хотите
+system_ipkg_package => пакет
+system_ipkg_install => установить
+system_ipkg_remove => удалить
+
 #log-browse.sh
 Firewall Log View => Файервол
 Filter => Фильтр
