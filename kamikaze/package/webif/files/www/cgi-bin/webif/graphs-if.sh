@@ -13,7 +13,7 @@ echo "<center>"
 ?>
 <br /><br />
 <?if [ "$FORM_if" ] ?>
-	<embed src="/svggraph/graph_if.svg?if=<? echo -n ${FORM_if} ?>"
+	<embed src="/cgi-bin/webif/graph_if_svg.sh?if=<? echo -n ${FORM_if} ?>"
 		width="500" height="250" type="image/svg+xml"
 	/>
 <?fi?>

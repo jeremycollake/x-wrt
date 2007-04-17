@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
+<?xml version="1.0" encoding="@TR<<Encoding|iso-8859-1>>"?>
 <!--
 OpenWRT port of this file based originally on the following:
 
@@ -41,17 +41,17 @@ POSSIBILITY OF SUCH DAMAGE.
 <g id='graph'>
 	<rect id='bg' x1='0' y1='0' width='600' height='300' fill='white' />
 
-	<text id='graph_in_lbl'  x='50' y='15' fill='#435370' text-anchor='end'>In</text>
-	<text id='graph_out_lbl' x='50' y='35' fill='#8092B3' text-anchor='end'>Out</text>
+	<text id='graph_in_lbl'  x='50' y='15' fill='#435370' text-anchor='end'>@TR<<In>></text>
+	<text id='graph_out_lbl' x='50' y='35' fill='#8092B3' text-anchor='end'>@TR<<Out>></text>
 
 	<text id='graph_in_txt'  x='54' y='15' fill='#435370'>--</text>
 	<text id='graph_out_txt' x='54' y='35' fill='#8092B3'>--</text>
 
-	<text id='switch_unit'  x='200' y='15' fill='#435370' cursor='pointer'>Switch to bytes/s</text>
-	<text id='switch_scale' x='200' y='35' fill='#435370' cursor='pointer'>Autoscale (follow)</text>
+	<text id='switch_unit'  x='200' y='15' fill='#435370' cursor='pointer'>@TR<<Switch to bytes/s>></text>
+	<text id='switch_scale' x='200' y='35' fill='#435370' cursor='pointer'>@TR<<Autoscale (follow)>></text>
 
-	<text id='error'           x='300' y='125' text-anchor='middle' visibility='hidden' fill='blue'>Cannot get data about interface</text>
-	<text id='collect_initial' x='300' y='125' text-anchor='middle' visibility='hidden' fill='gray'>Collecting initial data, please wait...</text>
+	<text id='error'           x='300' y='125' text-anchor='middle' visibility='hidden' fill='blue'>@TR<<Cannot get data about interface>></text>
+	<text id='collect_initial' x='300' y='125' text-anchor='middle' visibility='hidden' fill='gray'>@TR<<Collecting initial data, please wait...>></text>
 
 	<path id='grid' d='M 2 75 L 600 75 M 2 150 L 600 150 M 2 225 L 600 225' stroke='gray' stroke-opacity='0.5' />
 	<text id='grid_txt3' x='600' y='223' fill='gray' text-anchor='end'>--</text>
@@ -68,7 +68,7 @@ POSSIBILITY OF SUCH DAMAGE.
 <![CDATA[
 if (typeof getURL == 'undefined') {
 	getURL = function(url, callback) {
-		if (!url) throw 'No URL for getURL';
+		if (!url) throw '@TR<<No URL for getURL>>';
 
 		try {
 			if (typeof callback.operationComplete == 'function') {
@@ -77,7 +77,7 @@ if (typeof getURL == 'undefined') {
 		} catch (e) {}
 
 		if (typeof callback != 'function') {
-			throw 'No callback function for getURL';
+			throw '@TR<<No callback function for getURL>>';
 		}
 
 		var http_request = null;
@@ -93,7 +93,7 @@ if (typeof getURL == 'undefined') {
 			}
 		}
 		if (!http_request) {
-			throw 'Both getURL and XMLHttpRequest are undefined';
+			throw '@TR<<Both getURL and XMLHttpRequest are undefined>>';
 		}
 
 		http_request.onreadystatechange = function() {
@@ -122,8 +122,8 @@ var plot_out = new Array();
 
 var max_num_points = 120;  // maximum number of plot data points
 var step = 600 / max_num_points ;
-var unit = 'bits';
-var scale_type = 'follow';
+var unit = '@TR<<bits>>';
+var scale_type = '@TR<<follow>>';
 
 var fetch_url='';
 
@@ -142,13 +142,13 @@ function init(evt) {
 }
 
 function switch_unit(event) {
-	SVGDoc.getElementById('switch_unit').firstChild.data = 'Switch to ' + unit + '/s';
-	unit = (unit == 'bits') ? 'bytes' : 'bits';
+	SVGDoc.getElementById('switch_unit').firstChild.data = '@TR<<Switch to>> ' + unit + '/@TR<<s>>';
+	unit = (unit == '@TR<<bits>>') ? '@TR<<bytes>>' : '@TR<<bits>>';
 }
 
 function switch_scale(event) {
-	scale_type = (scale_type == 'up') ? 'follow' : 'up';
-	SVGDoc.getElementById('switch_scale').firstChild.data = 'AutoScale (' + scale_type + ')';
+	scale_type = (scale_type == '@TR<<up>>') ? '@TR<<follow>>' : '@TR<<up>>';
+	SVGDoc.getElementById('switch_scale').firstChild.data = '@TR<<AutoScale>> (' + scale_type + ')';
 }
 
 function fetch_data() {
@@ -221,10 +221,10 @@ function plot_data(obj) {
 	SVGDoc.getElementById('graph_out_txt').firstChild.data = formatSpeed(plot_out[index_plot], unit);
 
 	// determine peak for sensible scaling
-	if (scale_type == 'up') {
+	if (scale_type == '@TR<<up>>') {
 		if (plot_in[index_plot] > max) max = plot_in[index_plot];
 		if (plot_out[index_plot] > max) max = plot_out[index_plot];
-	} else if (scale_type == 'follow') {
+	} else if (scale_type == '@TR<<follow>>') {
 		i = 0;
 		max = 0;
 		while (i < plot_in.length) {
@@ -259,7 +259,7 @@ function plot_data(obj) {
 }
 
 function makeRoundMax(max) {
-	if (unit == 'bits') {
+	if (unit == '@TR<<bits>>') {
 		rmax = 1250;
 		i = 0;
 		while (max > rmax) {
@@ -297,24 +297,24 @@ function isNumber(a) {
 }
 
 function formatSpeed(speed, unit) {
-	if (unit == 'bits') return formatSpeedBits(speed);
-	if (unit == 'bytes') return formatSpeedBytes(speed);
+	if (unit == '@TR<<bits>>') return formatSpeedBits(speed);
+	if (unit == '@TR<<bytes>>') return formatSpeedBytes(speed);
 }
 
 function formatSpeedBits(speed) {
 	// format speed in bits/sec, input: bytes/sec
-	if (speed < 125000) return Math.round(speed / 125) + " Kbps";
-	if (speed < 125000000) return Math.round(speed / 1250)/100 + " Mbps";
+	if (speed < 125000) return Math.round(speed / 125) + " @TR<<Kbps>>";
+	if (speed < 125000000) return Math.round(speed / 1250)/100 + " @TR<<Mbps>>";
 	// else
-	return Math.round(speed / 1250000)/100 + " Gbps";  // wow!
+	return Math.round(speed / 1250000)/100 + " @TR<<Gbps>>";  // wow!
 }
 
 function formatSpeedBytes(speed) {
 	// format speed in bytes/sec, input:  bytes/sec
-	if (speed < 1048576) return Math.round(speed / 10.24)/100 + " KB/s";
-	if (speed < 1073741824) return Math.round(speed / 10485.76)/100 + " MB/s";
+	if (speed < 1048576) return Math.round(speed / 10.24)/100 + " @TR<<KB/s>>";
+	if (speed < 1073741824) return Math.round(speed / 10485.76)/100 + " @TR<<MB/s>>";
 	// else
-	return Math.round(speed / 10737418.24)/100 + " GB/s";  // wow!
+	return Math.round(speed / 10737418.24)/100 + " @TR<<GB/s>>";  // wow!
 }
 
 ]]>
