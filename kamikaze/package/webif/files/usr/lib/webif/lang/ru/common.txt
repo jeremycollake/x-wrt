@@ -1071,36 +1071,49 @@ install_package => Установить пакет OpenVPN
 #header.ahtml
 X-Wrt Administration Console => Административная консоль X-Wrt
 
-#graphs-cpu.sh
-CPU Usage => Использование процессора
+## graphs-cpu.sh
+## duplicate ##Graphs => Графики
+graphs_cpu_subcategory => Процессор
+graphs_cpu_CPU_Usage => Использование процессора
+graphs_svg_required => This object requires the SVG support.
 
-#graphs-if.sh
-Traffic of Interface => Трафик интерфейса
+## graphs-if.sh
+## duplicate ##Graphs => Графики
+graphs_if_Traffic => Трафик
+graphs_if_Traffic_of_Interface => Трафик интерфейса
+## duplicate ##graphs_svg_required => This object requires the SVG support.
 
-#graph_cpu.svg and graph_if.svg
-AutoScale => АвтоМасштаб
-Autoscale (follow) => АвтоМасштаб (следовать)
-Both getURL and XMLHttpRequest are undefined => И getURL, и XMLHttpRequest не определены
-Cannot get data about interface => Невозможно получить данные об интерфейсе
-Collecting initial data, please wait... => Получаются исходные данные, пожалуйста подождите...
-GB/s => ГБ/с
-Gbps => Гбит/с
-graph_cpu_cpu => Проц.
-In => Вх.
-KB/s => КБ/с
-Kbps => Кбит/с
-MB/s => МБ/с
-Mbps => Мбит/с
-No callback function for getURL => Нет callback функции для getURL
-No URL for getURL => Нет URL для getURL
-Out => Исх.
-s => с
-Switch to bytes/s => Переключить на байт/с
-Switch to => Переключить на
-bits => бит
-bytes => байт
-follow => следовать
-up => верх
+## graph_cpu.svg
+graph_cpu_CPU => Проц.
+graph_cpu_Cannot_get_data_CPU => Невозможно получить данные об процессоре
+graph_Collecting_initial_data => Получаются исходные данные, пожалуйста подождите...
+graph_No_URL_getURL => Нет URL для getURL
+graph_No_callback_function => Нет callback функции для getURL
+graph_Both_undefined => И getURL, и XMLHttpRequest не определены
+
+## graph_if.svg
+graph_if_In => Вх.
+graph_if_Out => Исх.
+graph_if_Switch_to_bytes_s => Переключить на байт/с
+graph_if_Autoscale_follow => АвтоМасштаб (следовать)
+graph_if_Cannot_get_data_iface => Невозможно получить данные об интерфейсе
+## duplicate ##graph_Collecting_initial_data => Получаются исходные данные, пожалуйста подождите...
+## duplicate ##graph_No_URL_getURL => Нет URL для getURL
+## duplicate ##graph_No_callback_function => Нет callback функции для getURL
+## duplicate ##graph_Both_undefined => И getURL, и XMLHttpRequest не определены
+graph_if_bits => бит
+graph_if_follow => следовать
+graph_if_Switch_to => Переключить на
+graph_if_s => с
+graph_if_bytes => байт
+graph_if_AutoScale => АвтоМасштаб
+graph_if_up => верх
+graph_if_Kbps => Кбит/с
+graph_if_Mbps => Мбит/с
+graph_if_Gbps => Гбит/с
+graph_if_KB_s => КБ/с
+graph_if_MB_s => МБ/с
+graph_if_GB_s => ГБ/с
 
 #webif.sh
 page_incomplete => Эта страница не доделана и может не работать правильно, или вовсе не работать.
