@@ -8,7 +8,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
-
+include $(INCLUDE_DIR)/kernel.mk
 
 define Package/webif
   SECTION:=admin
@@ -18,7 +18,7 @@ define Package/webif
   TITLE:=An HTTP administrative console for OpenWrt.
   DESCRIPTION:=\
 	This package contains Webif^2, a web based administration console for OpenWrt.
-  VERSION:=$(LINUX_VERSION) $(PKG_VERSION)-$(PKG_RELEASE)
+  VERSION:=$(PKG_VERSION)-$(PKG_RELEASE)
 endef
 
 define Package/webif-lang
