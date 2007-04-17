@@ -426,6 +426,8 @@ cat <<EOF
 <!--
 function modechange()
 {
+EOF
+is_bcm947xx && cat <<EOF
 	if(isset('boot_wait','on'))
 	{
 		document.getElementById('wait_time').disabled = false;
@@ -435,6 +437,8 @@ function modechange()
 		document.getElementById('wait_time').disabled = true;
 	}
 
+EOF
+cat <<EOF
 	var tz_info = value('system_timezone');
 	if ((tz_info=='') || (tz_info==null)){
 		set_value('show_TZ', tz_info);
