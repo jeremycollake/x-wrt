@@ -86,47 +86,47 @@ header "HotSpot" "hotspot_captive_Captive_Portal#Captive Portal" "@TR<<hotspot_c
 
 display_form <<EOF
 start_form|@TR<<hotspot_captive_Captive_Portal_Settings#Captive Portal Settings>>
-field|@TR<<hotspot_captive_UAM_Server#UAM Server>>|chilli_uamserver
+field|@TR<<hotspot_captive_UAM_Server#UAM Server>>
 text|chilli_uamserver|$FORM_chilli_uamserver
 helpitem|hotspot_captive_UAM_Server#UAM Server
 helptext|hotspot_captive_UAM_Server_helptext#URL of a Webserver handling the authentication.
-field|@TR<<hotspot_captive_UAM_Port#UAM Port>>|chilli_uamport
+field|@TR<<hotspot_captive_UAM_Port#UAM Port>>
 text|chilli_uamport|$FORM_chilli_uamport
 helpitem|hotspot_captive_UAM_Port#UAM Port
 helptext|hotspot_captive_UAM_Port_helptext#TCP port to listen to for authentication requests.
-field|@TR<<hotspot_captive_UAM_Secret#UAM Secret>>|chilli_uamsecret
+field|@TR<<hotspot_captive_UAM_Secret#UAM Secret>>
 text|chilli_uamsecret|$FORM_chilli_uamsecret
 helpitem|hotspot_captive_UAM_Secret#UAM Secret
 helptext|hotspot_captive_UAM_Secret_helptext#Shared secret between HotSpot and Webserver (UAM Server).
-field|@TR<<hotspot_captive_UAM_Homepage#UAM Homepage>>|chilli_homepage
+field|@TR<<hotspot_captive_UAM_Homepage#UAM Homepage>>
 text|chilli_homepage|$FORM_chilli_homepage
 helpitem|hotspot_captive_UAM_Homepage#UAM Homepage
 helptext|hotspot_captive_UAM_Homepage_helptext#URL of Welcome Page. Unauthenticated users will be redirected to this address, otherwise specified, they will be redirected to UAM Server instead.
-field|@TR<<hotspot_captive_UAM_Allowed#UAM Allowed>>|chilli_uamallowed
+field|@TR<<hotspot_captive_UAM_Allowed#UAM Allowed>>
 text|chilli_uamallowed|$FORM_chilli_uamallowed
 helpitem|hotspot_captive_UAM_Allowed#UAM Allowed
 helptext|hotspot_captive_UAM_Allowed_helptext#Comma-seperated list of domain names, urls or network subnets the client can access without authentication (walled gardened).
-field|@TR<<hotspot_captive_UAM_Listen#UAM Listen>>|chilli_uamlisten
+field|@TR<<hotspot_captive_UAM_Listen#UAM Listen>>
 text|chilli_uamlisten|$FORM_chilli_uamlisten
 helpitem|hotspot_captive_UAM_Listen#UAM Listen
 helptext|hotspot_captive_UAM_Listen_helptext#IP Address to listen to for authentication requests.
-field|@TR<<hotspot_captive_UAM_Any_DNS#UAM Any DNS>>|chilli_uamanydns
+field|@TR<<hotspot_captive_UAM_Any_DNS#UAM Any DNS>>
 checkbox|chilli_uamanydns|$FORM_chilli_uamanydns|1
 helpitem|hotspot_captive_UAM_Any_DNS#UAM Any DNS
 helptext|hotspot_captive_UAM_Any_DNS_helptext#If enabled, users will be allowed to user any other dns server they specify.
-field|@TR<<hotspot_captive_MAC_Auth#MAC Authentication>>|chilli_macauth
+field|@TR<<hotspot_captive_MAC_Auth#MAC Authentication>>
 checkbox|chilli_macauth|$FORM_chilli_macauth|1
 helpitem|hotspot_captive_MAC_Auth#MAC Authentication
 helptext|hotspot_captive_MAC_Auth_helptext#If enabled, users will be authenticated only based on their MAC Address.
-field|@TR<<hotspot_captive_MAC_Allowed#MAC Allowed>>|chilli_macallowed
+field|@TR<<hotspot_captive_MAC_Allowed#MAC Allowed>>
 text|chilli_macallowed|$FORM_chilli_macallowed
 helpitem|hotspot_captive_MAC_Allowed#MAC Allowed
 helptext|hotspot_captive_MAC_Allowed_helptext#List of allowed MAC Addresses.
-field|@TR<<hotspot_captive_MAC_Password#MAC Password>>|chilli_macpasswd
+field|@TR<<hotspot_captive_MAC_Password#MAC Password>>
 text|chilli_macpasswd|$FORM_chilli_macpasswd
 helpitem|hotspot_captive_MAC_Password#MAC Password
 helptext|hotspot_captive_MAC_Password_helptext#Password to use for MAC authentication.
-field|@TR<<hotspot_captive_MAC_Suffix#MAC Suffix>>|chilli_macsuffix
+field|@TR<<hotspot_captive_MAC_Suffix#MAC Suffix>>
 text|chilli_macsuffix|$FORM_chilli_macsuffix
 helpitem|hotspot_captive_MAC_Suffix#MAC Suffix
 helptext|hotspot_captive_MAC_Suffix_helptext#Suffix to add to the username in-order to form the username.

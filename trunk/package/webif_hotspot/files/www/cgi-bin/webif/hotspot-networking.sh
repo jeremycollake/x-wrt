@@ -81,37 +81,37 @@ header "HotSpot" "hotspot_networking_Networking#Networking" "@TR<<hotspot_networ
 
 display_form <<EOF
 start_form|@TR<<hotspot_networking_Network_Settings#Network Settings>>
-field|@TR<<hotspot_networking_RADIUS_Server_1#RADIUS Server 1>>|chilli_radiusserver1
+field|@TR<<hotspot_networking_RADIUS_Server_1#RADIUS Server 1>>
 text|chilli_radiusserver1|$FORM_chilli_radiusserver1
-field|@TR<<hotspot_networking_RADIUS_Server_2#RADIUS Server 2>>|chilli_radiusserver2
+field|@TR<<hotspot_networking_RADIUS_Server_2#RADIUS Server 2>>
 text|chilli_radiusserver2|$FORM_chilli_radiusserver2
 helpitem|hotspot_networking_RADIUS_Server#RADIUS Server
 helptext|hotspot_networking_RADIUS_Server_helptext#Primary and Secondary RADIUS Server.
-field|@TR<<hotspot_networking_RADIUS_Secret#RADIUS Secret>>|chilli_radiussecret
+field|@TR<<hotspot_networking_RADIUS_Secret#RADIUS Secret>>
 text|chilli_radiussecret|$FORM_chilli_radiussecret
 helpitem|hotspot_networking_RADIUS_Secret#RADIUS Secret
 helptext|hotspot_networking_RADIUS_Secret_helptext#RADIUS Shared Secret.
-field|@TR<<hotspot_networking_RADIUS_Auth_Port#RADIUS Auth Port>>|chilli_radiusauthport
+field|@TR<<hotspot_networking_RADIUS_Auth_Port#RADIUS Auth Port>>
 text|chilli_radiusauthport|$FORM_chilli_radiusauthport
-field|@TR<<hotspot_networking_RADIUS Acct Port#RADIUS Acct Port>>|chilli_radiusacctport
+field|@TR<<hotspot_networking_RADIUS Acct Port#RADIUS Acct Port>>
 text|chilli_radiusacctport|$FORM_chilli_radiusacctport
-field|@TR<<hotspot_networking_RADIUS_NAS_Id#RADIUS NAS Id>>|chilli_radiusnasid
+field|@TR<<hotspot_networking_RADIUS_NAS_Id#RADIUS NAS Id>>
 text|chilli_radiusnasid|$FORM_chilli_radiusnasid
 helpitem|hotspot_networking_RADIUS_NAS_Id#RADIUS NAS Id
 helptext|hotspot_networking_RADIUS_NAS_Id_helptext#RADIUS NAS Id.
-field|@TR<<hotspot_networking_Proxy_Listen#Proxy Listen>>|chilli_proxylisten
+field|@TR<<hotspot_networking_Proxy_Listen#Proxy Listen>>
 text|chilli_proxylisten|$FORM_chilli_proxylisten
 helpitem|hotspot_networking_Proxy_Listen#Proxy Listen
 helptext|hotspot_networking_Proxy_Listen_helptext#IP Address to listen to (advanced uses only).
-field|@TR<<hotspot_networking_Proxy Client#Proxy Client>>|chilli_proxyclient
+field|@TR<<hotspot_networking_Proxy Client#Proxy Client>>
 text|chilli_proxyclient|$FORM_chilli_proxyclient
 helpitem|hotspot_networking_Proxy Client#Proxy Client
 helptext|hotspot_networking_Proxy Client_helptext#Clients from which we accept RADIUS Requests.
-field|@TR<<hotspot_networking_Proxy_Port#Proxy Port>>|chilli_proxyport
+field|@TR<<hotspot_networking_Proxy_Port#Proxy Port>>
 text|chilli_proxyport|$FORM_chilli_proxyport
 helpitem|hotspot_networking_Proxy_Port#Proxy Port
 helptext|hotspot_networking_Proxy_Port_heltext#UDP port to listen to.
-field|@TR<<hotspot_networking_Proxy_Secret#Proxy Secret>>|chilli_proxysecret
+field|@TR<<hotspot_networking_Proxy_Secret#Proxy Secret>>
 text|chilli_proxysecret|$FORM_chilli_proxysecret
 helpitem|hotspot_networking_Proxy_Secret#Proxy Secret
 helptext|hotspot_networking_Proxy_Secret_helptext#RADIUS Shared Secret to accept for all clients.

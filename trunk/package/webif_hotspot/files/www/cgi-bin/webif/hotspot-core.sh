@@ -89,41 +89,41 @@ header "HotSpot" "hotspot_core_Core#Core" "@TR<<hotspot_core_Core_Settings#Core 
 
 display_form <<EOF
 start_form|@TR<<hotspot_core_Core_Settings#Core Settings>>
-field|@TR<<hotspot_core_Debug#Debug>>|chilli_debug
+field|@TR<<hotspot_core_Debug#Debug>>
 checkbox|chilli_debug|$FORM_chilli_debug|1
 helpitem|hotspot_core_Debug#Debug
 helptext|hotspot_core_Debug_helptext#Enable/Disable debugging.
-field|@TR<<hotspot_core_DHCP_Network#DHCP Network>>|chilli_net
+field|@TR<<hotspot_core_DHCP_Network#DHCP Network>>
 text|chilli_net|$FORM_chilli_net
 helpitem|hotspot_core_DHCP_Network#DHCP Network
 helptext|hotspot_core_DHCP_Network_helptext#Client's DHCP Network IP Subnet (192.168.182.0/24 by default).
-field|@TR<<hotspot_core_DHCP_Interface#DHCP Interface>>|chilli_dhcpif
+field|@TR<<hotspot_core_DHCP_Interface#DHCP Interface>>
 text|chilli_dhcpif|$FORM_chilli_dhcpif
-field|@TR<<hotspot_core_DHCP_MAC#DHCP MAC>>|chilli_dhcpmac
+field|@TR<<hotspot_core_DHCP_MAC#DHCP MAC>>
 text|chilli_dhcpmac|$FORM_chilli_dhcpmac
-field|@TR<<hotspot_core_DHCP_Lease#DHCP Lease>>|chilli_lease
+field|@TR<<hotspot_core_DHCP_Lease#DHCP Lease>>
 text|chilli_lease|$FORM_chilli_lease
 helpitem|hotspot_core_DHCP_Lease#DHCP Lease
 helptext|hotspot_core_DHCP_Lease_helptext#DHCP Lease time for clients before expires (default is 600).
-field|@TR<<hotspot_core_DNS1#DNS1>>|chilli_dns1
+field|@TR<<hotspot_core_DNS1#DNS1>>
 text|chilli_dns1|$FORM_chilli_dns1
-field|@TR<<hotspot_core_DNS2#DNS2>>|chilli_dns2
+field|@TR<<hotspot_core_DNS2#DNS2>>
 text|chilli_dns2|$FORM_chilli_dns2
-field|@TR<<hotspot_core_Domain#Domain>>|chilli_domain
+field|@TR<<hotspot_core_Domain#Domain>>
 text|chilli_domain|$FORM_chilli_domain
 helpitem|hotspot_core_DHCP_DNS#DHCP DNS
 helptext|hotspot_core_DHCP_DNS_helptext#DNS Servers offered to clients (if omitted system default will be used).
-field|@TR<<hotspot_core_Interval#Interval>>|chilli_interval
+field|@TR<<hotspot_core_Interval#Interval>>
 text|chilli_interval|$FORM_chilli_interval
-field|@TR<<hotspot_core_Pidfile#Pidfile>>|chilli_pidfile
+field|@TR<<hotspot_core_Pidfile#Pidfile>>
 text|chilli_pidfile|$FORM_chilli_pidfile
 helpitem|hotspot_core_Pidfile#Pidfile
 helptext|hotspot_core_Pidfile_helptext#File to store information about the process id.
-field|@TR<<hotspot_core_Dynamic_IP_Pool#Dynamic IP Pool>>|chilli_dynip
+field|@TR<<hotspot_core_Dynamic_IP_Pool#Dynamic IP Pool>>
 text|chilli_dynip|$FORM_chilli_dynip
 helpitem|hotspot_core_Dynamic_IP_Pool#Dynamic IP Pool
 helptext|hotspot_core_Dynamic_IP_Pool_helptext#Allocation of dynamic IP Addresses to clients.
-field|@TR<<hotspot_core_Static_IP_Pool#Static IP Pool>>|chilli_statip
+field|@TR<<hotspot_core_Static_IP_Pool#Static IP Pool>>
 text|chilli_statip|$FORM_chilli_statip
 helpitem|hotspot_core_Static_IP_Pool#Static IP Pool
 helptext|hotspot_core_Static_IP_Pool_helptext#Allocation of static IP Addresses.
