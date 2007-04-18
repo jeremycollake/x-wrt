@@ -95,7 +95,7 @@ Pragma: no-cache
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-<?xml version="1.0" encoding="@TR<<Encoding|ISO-8859-1>>"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <head>
 	<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />        
 	<title></title>
@@ -150,7 +150,7 @@ header() {
 <br />
 <br />
 <br />
-<h3>@TR<<Warning>>: @TR<<Password_warning|you haven't set a password for the Web interface and SSH access<br />Please enter one now (the user name in your browser will be 'root').>></h3>
+<h3>@TR<<Warning>>: @TR<<Password_warning|You haven't set a password for the Web interface and SSH access.<br />Please enter one now (the user name in your browser will be 'root').>></h3>
 <br />
 <br />
 EOF

@@ -15,7 +15,7 @@ else
 	header_inject_head="<meta http-equiv=\"refresh\" content=\"$timeout;http://$router_ip\" />"
 	reboot_msg="@TR<<Rebooting now>>...
 <br/><br/>
-@TR<<reboot_wait#Please wait about>> $timeout @TR<<reboot_seconds#seconds.>> @TR<<reboot_reload#The webif should automatically reload.>>
+@TR<<reboot_wait#Please wait about>> $timeout @TR<<reboot_seconds#seconds.>> @TR<<reboot_reload#The webif&sup2; should automatically reload.>>
 <br/><br/>
 <center>
 <script type=\"text/javascript\">

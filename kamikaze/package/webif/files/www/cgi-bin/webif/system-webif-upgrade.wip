@@ -34,7 +34,7 @@ this_revision=$(cat "/www/.version")
 display_form <<EOF
 start_form|@TR<<Webif Upgrade>>
 field|Installed Version|field_installed_version
-string|Webif<sup>2</sup> r$this_revision
+string|Webif&sup2; r$this_revision
 field|Upgrade Webif|field_upgrade_webif
 submit|install_webif|Upgrade Webif||
 end_form|

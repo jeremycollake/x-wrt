@@ -30,15 +30,15 @@
 <tbody>
 	<tr>
 		<td><strong>@TR<<Web mgt. console>></strong></td><td>&nbsp;</td>
-		<td>Webif<sup>2</sup></td>
+		<td>Webif&sup2;</td>
 	</tr>
 	<tr>
 		<td><strong>@TR<<Version>></strong></td><td></td>
 		<td>
 			<% ( show_rev ? "r" show_rev : "" ) %>
-			<% ( newrev ? "<em class=\"warning\">@TR<<info_update_available#webif^2 update available>>: r"newrev" - <a href=\"http://svn.berlios.de/wsvn/xwrt/kamikaze/package/webif/?op=log&amp;rev=0&amp;sc=0&amp;isdir=1\" target=\"_blank\">@TR<<info_view_changes#view changes>></a></em>" : "" ) %>
+			<% ( newrev ? "<em class=\"warning\">@TR<<info_update_available#webif&sup2; update available>>: r"newrev" - <a href=\"http://svn.berlios.de/wsvn/xwrt/kamikaze/package/webif/?op=log&amp;rev=0&amp;sc=0&amp;isdir=1\" target=\"_blank\">@TR<<info_view_changes#view changes>></a></em>" : "" ) %>
 			<% ( upgrade_error ? "<em class=\"warning\">@TR<<info_error_checking#ERROR CHECKING FOR UPDATE>><em>" : "" ) %>
-			<% ( no_new_ver ? "<em>@TR<<info_already_latest#You have the latest webif^2>>: r"rev"</em>" : "" ) %>
+			<% ( no_new_ver ? "<em>@TR<<info_already_latest#You have the latest webif&sup2;>>: r"rev"</em>" : "" ) %>
 		</td>
 	</tr>
 </tbody>
@@ -49,8 +49,8 @@
 <tbody>
 	<tr>
 		<td colspan="2">
-		<input type="submit" value=" @TR<<info_check_update#Check For Webif Update>> " name="update_check" />
-		<% ( newrev ? "<input type=\"submit\" value=\" @TR<<info_upgrade_webif#Update/Reinstall Webif>> \"  name=\"install_webif\" />" : "" ) %>
+		<input type="submit" value=" @TR<<info_check_update#Check For Webif&sup2; Update>> " name="update_check" />
+		<% ( newrev ? "<input type=\"submit\" value=\" @TR<<info_upgrade_webif#Update/Reinstall Webif&sup2;>> \"  name=\"install_webif\" />" : "" ) %>
 		</td>
 	</tr>
 <tr><td colspan="2"><input type="checkbox" <% ( daily_checked ? "checked=\"checked\"" : "" ) %> value="1" name="check_daily" id="field_check_daily" />@TR<<info_check_daily_text#Include daily builds when checking for update to webif&sup2;>></td>

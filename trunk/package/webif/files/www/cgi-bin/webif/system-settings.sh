@@ -154,7 +154,7 @@ if ! empty "$FORM_install_stunnel"; then
 	echo "</pre><br />"
 fi
 
-WEBIF_SSL="field|@TR<<system_settings_Webif_SSL#Webif SSL>>"
+WEBIF_SSL="field|@TR<<system_settings_Webif_SSL#Webif&sup2; SSL>>"
 is_package_installed "matrixtunnel"
 if [ "$?" = "1" ]; then
 	WEBIF_SSL="$WEBIF_SSL
@@ -483,7 +483,7 @@ end_form
 $NTPCLIENT_INSTALL_FORM
 ##########################
 # webif settings
-start_form|@TR<<Webif Settings>>
+start_form|@TR<<Webif&sup2; Settings>>
 $effect_field
 field|@TR<<Language>>
 select|language|$FORM_language
