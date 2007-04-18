@@ -99,7 +99,6 @@ page_untested => This page is untested and may or may not work correctly.
 page_untested_kamikaze => This page has not been updated or checked for correct functionality under Kamikaze.
 features_require_package => Features on this page require the package
 features_install => install now
-Encoding => ISO-8859-1
 Settings saved => Settings saved
 Settings not saved => Settings not saved
 Save Changes => Save Changes
