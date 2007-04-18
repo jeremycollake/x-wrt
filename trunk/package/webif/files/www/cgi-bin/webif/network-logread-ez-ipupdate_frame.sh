@@ -10,7 +10,7 @@ colorize_script=""
 	<!--[if lt IE 7]>
 		<link rel="stylesheet" type="text/css" href="/ie_lt7.css" />
 	<![endif]-->
-	<meta http-equiv="Content-Type" content="text/html; charset=@TR<<Encoding|ISO-8859-1>>" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="expires" content="-1" />
 	<script type="text/javascript" src="/colorize.js"></script>
 		<script type="text/javascript"> colorize(); </script>
