@@ -1,7 +1,17 @@
-freeloader-common_None_required_installed => Nen&iacute; nainstalov&aacute;n &#382;&aacute;dn&yacute; z po&#382;adovan&yacute;ch bal&iacute;&#269;k&#367;, pro instalaci bal&iacute;&#269;k&#367; p&#345;ejd&#283;te na str&aacute;nku <a href="freeloader-upload.sh">odesl&aacute;n&iacute;</a>.
+# translation for the standalone third party page
+# must contain all subcategories of the main category
+
+# category
 Freeloader => Freeloader
-freeloader-log_Freeloader_log => Z&aacute;znam Freeloaderu
-freeloader-log_No_entries_log => V z&aacute;znamu nejsou &#382;&aacute;dn&eacute; polo&#382;ky
-freeloader-log_subcategory => Z&aacute;znam
+
+# other subcategories
 freeloader-status_subcategory => Stav
-freeloader-upload_subcategory => Odesl&aacute;n&iacute;
+freeloader-upload_subcategory => Odeslání
+
+# this page subcategory
+freeloader-log_subcategory => Záznam
+
+# page dependent translations
+freeloader-log_Freeloader_log => Záznam Freeloaderu
+freeloader-log_No_entries_log => V záznamu nejsou žádné položky
+freeloader-common_None_required_installed => Není nainstalován žádný z požadovaných balíčků, pro instalaci balíčků přejděte na stránku <a href="freeloader-upload.sh">Odeslání</a>.

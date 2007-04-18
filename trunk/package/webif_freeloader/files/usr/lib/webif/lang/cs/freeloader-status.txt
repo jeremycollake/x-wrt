@@ -1,38 +1,46 @@
-freeloader-common_None_required_installed => Nen&iacute; nainstalov&aacute;n &#382;&aacute;dn&yacute; z po&#382;adovan&yacute;ch bal&iacute;&#269;k&#367;, pro instalaci bal&iacute;&#269;k&#367; p&#345;ejd&#283;te na str&aacute;nku <a href="freeloader-upload.sh">Odesl&aacute;n&iacute;</a>.
+# translation for the standalone third party page
+# must contain all subcategories of its category
+
+# category
 Freeloader => Freeloader
-freeloader-log_subcategory => Z&aacute;znam
-freeloader-status_Aborted_torrents => P&#345;eru&scaron;en&eacute; torrenty
-freeloader-status_action_abort => p&#345;eru&scaron;it
-freeloader-status_action_normal => norm&aacute;ln&iacute;
-freeloader-status_action_prio => p&#345;ednostn&iacute;
-freeloader-status_action_purge => vy&#269;istit
-freeloader-status_action_remove => odstranit
-freeloader-status_action_suspend => pozastavit
-freeloader-status_Currently_downloading => Pr&aacute;v&#283; se stahuje
-freeloader-status_Download_suspended => Fronta stahov&aacute;n&iacute; je pozastavena.
-freeloader-status_End_log => Konec obr&aacute;cen&eacute;ho z&aacute;znamu
-freeloader-status_Finished_torrents => Dokon&#269;en&eacute; torrenty
-freeloader-status_Freeloader_status => Stav Freeloaderu
-freeloader-status_Link_log => Z&aacute;znam linku
-freeloader-status_No_aborted_downloads =>&nbsp;Nyn&iacute; neexistuj&iacute; &#382;&aacute;dn&aacute; p&#345;eru&scaron;en&aacute; stahov&aacute;n&iacute;.
-freeloader-status_No_downloaded_files => V tuto chv&iacute;li se nestahuj&iacute; &#382;&aacute;dn&eacute; soubory.
-freeloader-status_No_files_in_queue => Ve front&#283; nyn&iacute; nejsou &#382;&aacute;dn&eacute; soubory.
-freeloader-status_No_finished_torrents => Nyn&iacute; neexistuj&iacute; &#382;&aacute;dn&aacute; dokon&#269;en&aacute; stahov&aacute;n&iacute;.
-freeloader-status_Normal_queue => Norm&aacute;ln&iacute; fronta
-freeloader-status_Nzb_log => Z&aacute;znam nzb
-freeloader-status_Prio_queue => P&#345;ednostn&iacute; fronta
-freeloader-status_Start_log => Za&#269;&aacute;tek z&aacute;znamu
+
+# other subcategories
+freeloader-upload_subcategory => Odeslání
+freeloader-log_subcategory => Záznam
+
+# this page subcategory
 freeloader-status_subcategory => Stav
-freeloader-status_Suspending_process => Proces bude za okam&#382;ik pozastaven, po&#269;kejte pros&iacute;m...
-freeloader-status_th_Date =>&nbsp;Datum
-freeloader-status_th_Torrent =>&nbsp;Torrent
+
+# page dependent translations
+freeloader-status_Freeloader_status => Stav Freeloaderu
+freeloader-status_Normal_queue => Normální fronta
+freeloader-status_th_Torrent => Torrent
+freeloader-status_th_Date => Datum
+freeloader-status_action_prio => přednostní
+freeloader-status_action_remove => odstranit
+freeloader-status_No_files_in_queue => Ve frontě nyní nejsou žádné soubory.
+freeloader-status_Prio_queue => Přednostní fronta
+freeloader-status_action_normal => normální
+freeloader-status_Finished_torrents => Dokončené torrenty
+freeloader-status_action_purge => vyčistit
+freeloader-status_No_finished_torrents => Nyní neexistují žádná dokončená stahování.
+freeloader-status_Aborted_torrents => Přerušené torrenty
+freeloader-status_No_aborted_downloads => Nyní neexistují žádná přerušená stahování.
+freeloader-status_Currently_downloading => Právě se stahuje
+freeloader-status_Suspending_process => Proces bude za okamžik pozastaven, počkejte prosím...
+freeloader-status_action_abort => přerušit
+freeloader-status_action_suspend => pozastavit
+freeloader-status_Download_suspended => Fronta stahování je pozastavena.
+freeloader-status_No_downloaded_files => V tuto chvíli se nestahují žádné soubory.
+freeloader-status_Torrent_log => Záznam torrentu
+freeloader-status_Start_log => Začátek záznamu
+freeloader-status_End_log => Konec obráceného záznamu
+freeloader-status_Torrent_Legend => Legenda
 freeloader-status_torrent_leg_A => A: Ticker; this character changes to indicate that the client is running.
-freeloader-status_torrent_leg_Additional => Additional information such as tracker connection status may be displayed at the end of the status line when appropriate.
 freeloader-status_torrent_leg_B => B: Number of seeders (complete peers) to which you are connected.
 freeloader-status_torrent_leg_C => C: Number of leechers (incomplete peers) to which you are connected.
 freeloader-status_torrent_leg_D => D: Total number of peers in the swarm, as last reported by the tracker.
 freeloader-status_torrent_leg_E => E: Number of pieces of the torrent that you have completed.
-freeloader-status_Torrent_Legend => Legenda
 freeloader-status_torrent_leg_F => F: Total number of pieces in the torrent.
 freeloader-status_torrent_leg_G => G: Number of pieces currently available from you and your connected peers.
 freeloader-status_torrent_leg_H => H: Total amount of data you have downloaded.
@@ -44,5 +52,7 @@ freeloader-status_torrent_leg_M => M: Amount of data uploaded since the last sta
 freeloader-status_torrent_leg_N => N: Number of tracker connection errors.
 freeloader-status_torrent_leg_O => O: Number of successful tracker connections.
 freeloader-status_torrent_leg_P => P: Completion ratio of current file (when -n is used).
-freeloader-status_Torrent_log => Z&aacute;znam torrentu
-freeloader-upload_subcategory => Odesl&aacute;n&iacute;
+freeloader-status_torrent_leg_Additional => Additional information such as tracker connection status may be displayed at the end of the status line when appropriate.
+freeloader-status_Link_log => Záznam linku
+freeloader-status_Nzb_log => Záznam nzb
+freeloader-common_None_required_installed => Není nainstalován žádný z požadovaných balíčků, pro instalaci balíčků přejděte na stránku <a href="freeloader-upload.sh">Odeslání</a>.
