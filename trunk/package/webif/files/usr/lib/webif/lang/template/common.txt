@@ -160,6 +160,30 @@ network_hosts_sec => sec
 network_hosts_No_leases => There are no known DHCP leases.
 
 
+## network-misc.sh
+network_misc_Suggest_restart => The required setting was removed from the configuration file, you should <a href="reboot.sh">restart</a> the device now for the kernel to compute new values.
+Maximum Connections => Maximum Connections
+Generic Timeout => Generic Timeout
+ICMP Timeout => ICMP Timeout
+TCP Established Timeout => TCP Established Timeout
+UDP Timeout => UDP Timeout
+UDP Stream Timeout => UDP Stream Timeout
+Reset to a default value => Reset to a default value
+network_misc_Reset_field => Reset the field
+network_misc_Reset_all_settings => Reset all settings
+network_misc_Reset__all_fields => Reset all fields
+network_misc_Reset_to_defaults => Reset one or all fields to defaults
+network_misc_Reset_to_defaults_helpitem => All displayed values are computed at boot time by the kernel from predefined defaults in relation to the available memory or set up according to the configuration file. If you want to reset the field to its boot time computed value, do not save settings, press the Reset button near the field and restart your device.
+## duplicate ##big_warning => WARNING
+network_misc_too_big_timeout => Your default TCP established timeout value is very high (5 days). Most peer-2-peer users should lower it. A safe setting is probably 1 day (86400), though some users prefer 1 hour (3600).
+## duplicate ##Network => Network
+Tweaks => Tweaks
+Networking Tweaks => Networking Tweaks
+Conntrack Settings => Conntrack Settings
+HelpText maximum_connections => This is the maximum number of simultaneous connections your router can track. A larger number means more RAM use and higher CPU utilization if that many connections actually end up used. It is usually best to leave this at its default value.
+HelpText tcp_established_timeout => This is the number of seconds that a established connection can be idle before it is forcibly closed. Sometimes connections are not properly closed and can fill up your conntrack table if these values are too high. If they are too low, then connections can be disconnected simply because they are idle.
+
+
 ## status-leases.sh
 Status => Status
 DHCP Clients =>
@@ -186,6 +210,32 @@ status_leases_no_arp_record => ARP Cache does not contain any correspondent reco
 status_leases_ethers_title => Ethernet Address to IP Number Database (/etc/ethers)
 status_leases_ethers_empty => File /etc/ethers does not contain any Ethernet address/IP address pair.
 status_leases_no_ethers => File /etc/ethers does not exist.
+
+
+## status-processes.sh
+status_processes_kill_error => Error in
+Status => Status
+Processes => Processes
+status_processes_Running_Processes => Running Processes
+status_processes_Stop_Refreshing => Stop Refreshing
+status_processes_Interval => Interval
+status_processes_in_seconds => in seconds
+status_processes_Auto_Refresh => Auto Refresh
+status_processes_moreinfo => For more information about fields <a href="#pslegend">see the legend</a>...
+## duplicate ##big_warning => WARNING
+status_processes_warniinfo => Sending a signal to the application may result in the system malfunction! You should be pretty sure what you are doing before firing the button. <a href="#signallegend">See the most used signal descriptions</a>...
+status_processes_Processes_Status => Processes Status
+status_processes_PID => PID
+status_processes_Uid => Uid
+status_processes_VmSize => VmSize
+status_processes_Stat => VmSize
+status_processes_Command => Command
+status_processes_Signal => Signal
+status_processes_Send_signal => Send
+status_processes_Legend => Legend
+status_processes_Legend_Text => Memory sizes are in kB units.<br />Stat shortcuts meaning: A=Active, I=Idle (waiting for startup), O=Nonexistent, R=Running, S=Sleeping, T=Stopped, W=Swapped, Z=Canceled.<br />Commands enclosed in &quot;[...]&quot; are kernel threads.<br />For more information see the <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/ps.html" onclick="return !targetwindow(this.href);">ps command description</a>.
+status_processes_Signals_Legend => Most used signals
+status_processes_Signals_Legend_Text => 1) SIGHUP - Hangup<br />9) SIGKILL - Kill (can't be caught or ignored)<br />15) SIGTERM - Termination<br />10) SIGUSR1/12) SIGUSR2 - User-defined signals.<br />For more information see the <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/kill.html" onclick="return !targetwindow(this.href);">kill command description</a>.
 
 
 ## status-usb.sh
@@ -226,19 +276,64 @@ Status => Status
 UMTS => UMTS
 status_wwaninfo_UG_Status => UMTS/GPRS Status
 status_wwaninfo_no_UG_device => UMTS / GPRS device not found.
+status_wwaninfo_no_req_app => The required components are missing. Please install the latest <a href="system-ipkg.sh">comgt</a> package and <a href="info.sh">webif&sup2;</a>.
 status_wwaninfo_device_info => Device Information
 status_wwaninfo_dev_th_Information => Information
 status_wwaninfo_dev_th_Value => Value
 status_wwaninfo_no_UG_device_info => No device information reported.
+status_wwaninfo_Notcharging => Not charging
+status_wwaninfo_Charging => Charging
+status_wwaninfo_Battery_Status => Battery Status
+status_wwaninfo_Status => Status
+status_wwaninfo_Capacity => Capacity
 status_wwaninfo_Signal_Quality => Signal Quality
 status_wwaninfo_quality_unknown => Signal quality is invalid/unknown
-status_wwaninfo_Power_Ratio => Power Ratio (dBm)
+status_wwaninfo_Power_Ratio => Power (dBm)
 status_wwaninfo_Legend => Legend
 status_wwaninfo_quality_Unreliable => Unreliable
 status_wwaninfo_quality_Workable => Workable
 status_wwaninfo_quality_Good => Good
 status_wwaninfo_quality_Excellent => Excellent
 status_wwaninfo_wrong_value => Wrong signal quality value
+
+
+## system-nvram.sh
+system_nvram_Error_in => Error in
+system_nvram_New_Variable => New Variable Name
+system_nvram_Invalid_characters => Invalid characters
+system_nvram_Variable_Value => Variable Value
+System => System
+system_nvram_NVRAM => NVRAM
+system_nvram_Delete_Setting => Delete NVRAM Setting
+system_nvram_Variable_Name => Variable Name
+system_nvram_Variable_Value => Variable Value
+system_nvram_Are_you_sure => Are you sure you wish to delete the variable&#63;
+system_nvram_action_Delete => Delete
+system_nvram_action_Cancel => Cancel
+system_nvram_Delete_Setting_helptext => The variable will be deleted by this page immediately after pressing the Delete button. Be sure you know what you are doing before pressing it!<br />If you only want to remove the value, return back and modify the variable's value by clearing it.
+system_nvram_Add_New_NVRAM_Setting => Add New NVRAM Setting
+system_nvram_Change_NVRAM_Setting => Change NVRAM Setting
+system_nvram_action_Change => Change
+system_nvram_Variable_Value_helptext => Enter the desired value into the input box. The value cannot contain the single quote <b>&#39;</b> (apostrophe) and quotes <b>&quot;</b> symbols.
+system_nvram_Add_System_Setting => Add System Setting
+system_nvram_Add_new_variable => Add new variable
+system_nvram_Add_System_Setting_helptext => Enter the name of the new variable into the input box. The value cannot contain spaces, the single quote <b>&#39;</b> (apostrophe) and quotes <b>&quot;</b> symbols.
+system_nvram_General_System_Settings => General System Settings
+system_nvram_General_System_Settings_helptext => General System Settings are stored in the NVRAM. NVRAM stands for Non-Volatile RAM, in this case the last 64K of the flash chip used to store various configuration information in a name=value format.
+## duplicate ##Warning => Warning
+system_nvram_warn_nvram => Changing these settings may result in permanent damage to your device.
+system_nvram_inform_apply => Changes will not take effect until you choose
+## duplicate ##Apply Changes => Apply Changes
+system_nvram_th_Change_Variable => Change Variable
+system_nvram_th_Current_Value => Current Value
+system_nvram_th_Action => Action
+system_nvram_th_Nr => Nr.
+system_nvram_Change_the_value => Change the value
+system_nvram_Delete_the_variable => Delete the variable
+system_nvram_NVRAM_Usage => NVRAM Usage
+system_nvram_Total => Total
+system_nvram_Used => Used
+system_nvram_NVRAM_Usage_helptext => This is the current NVRAM usage. The graph shows how much memory is used and how much memory is available for other variables.
 
 
 ## system-settings.sh
