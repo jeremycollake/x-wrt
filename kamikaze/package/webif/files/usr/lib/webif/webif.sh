@@ -130,8 +130,8 @@ header() {
 		-v show_error="$ERROR" \
 		-v use_form="$_use_form" \
 		-v subcategories_extra="$SUBCATEGORIES_EXTRA" \
-		-v html_head="$header_inject_head" \
-		-v html_body="$header_inject_body"
+		-v html_head="$(echo "$header_inject_head" | sed 's/\\/\\\\/g;')" \
+		-v html_body="$(echo "$header_inject_body" | sed 's/\\/\\\\/g;')"
 
 	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && {
 		empty "$FORM_passwd1" || {
