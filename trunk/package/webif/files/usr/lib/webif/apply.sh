@@ -1,6 +1,5 @@
 #!/bin/ash
 #
-# This file is compatible with both Kamikaze and White Russian.
 #
 # Handler for config application of all types.
 #
@@ -363,48 +362,8 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 			if exists "/etc/init.d/S??opendns"; then
 				/etc/init.d/S??opendns restart
 			fi
-			if exists "/etc/init.d/webif"; then
-				/etc/init.d/webif start
-			fi
 			;;
 		"/tmp/.uci/upnpd") reload_upnpd;;
-		"/tmp/.uci/network")
-			# for kamikaze
-			echo '@TR<<Reloading>> @TR<<network>> ...'
-			ifdown wan
-			ifup wan			
-			ifdown lan
-			ifup lan
-			killall dnsmasq
-			if exists "/etc/rc.d/S??dnsmasq"; then
-				/etc/init.d/dnsmasq start
-			fi
-			;;
-		"/tmp/.uci/wireless")
-			echo '@TR<<Reloading>> @TR<<wireless>> ...'
-			wifi ;;
-		"/tmp/.uci/syslog")
-			# for kamikaze
-			echo '@TR<<Reloading>> @TR<<syslogd>> ...'
-			killall syslogd >&- 2>&- <&-
-			/sbin/runsyslogd >&- 2>&- <&- ;;
-		"/tmp/.uci/openvpn")
-			echo '@TR<<Reloading>> @TR<<OpenVPN>> ...'
-			killall openvpn >&- 2>&- <&-
-			/etc/init.d/openvpn start ;;
-		"/tmp/.uci/system")
-			/etc/init.d/boot start ;;
-		"/tmp/.uci/updatedd")
-			uci_load "updatedd"
-			if [ "$CONFIG_ddns_update" = "1" ]; then
-				/etc/init.d/ddns enable >&- 2>&- <&-
-				/etc/init.d/ddns stop >&- 2>&- <&-
-				/etc/init.d/ddns start >&- 2>&- <&-
-			else
-				/etc/init.d/ddns disable >&- 2>&- <&-
-				/etc/init.d/ddns stop >&- 2>&- <&-
-			fi
-		 	;;
 	esac
 done
 

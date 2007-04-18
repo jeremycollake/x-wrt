@@ -45,7 +45,7 @@ synchronize_file "etc/functions-net.sh"
 #NOT_synchronize_file "etc/init.d/S90webif_deviceid"  # not sync'd due to rc.common
 #NOT_synchronize_file "etc/init.d/S90webif_firmwareid"# not sync'd due to rc.common
 #NOT_synchronize_file "lib/config/uci-depends.*" #not needed in kamikaze
-synchronize_file "usr/lib/webif/apply.sh"
+#NOT_synchronize_file "usr/lib/webif/apply.sh"
 synchronize_file "usr/lib/webif/browser.awk"
 synchronize_file "usr/lib/webif/editor.awk"
 synchronize_file "usr/lib/webif/functions.sh"
