@@ -248,7 +248,7 @@ Settings => Settings
 System Settings => System Settings
 system_settings_Installing_NTPCLIENT_package => Installing NTPCLIENT package
 system_settings_Installing_MatrixTunnel_package => Installing MatrixTunnel package
-system_settings_Webif_SSL => Webif SSL
+system_settings_Webif_SSL => Webif&sup2; SSL
 system_settings_Feature_requires_matrixtunnel => MatrixTunnel package is not installed. You need to install it for ssl support
 system_settings_Install_MatrixTunnel => Install MatrixTunnel
 system_settings_webifssl_Off => Off
@@ -276,7 +276,7 @@ system_settings_POSIX_TZ_String => POSIX TZ String
 system_settings_js_required => This field requires the JavaScript support.
 Timezone_helptext => Set up your time zone according to the nearest city of your region from the predefined list.
 NTP Server => NTP Server
-Webif Settings => Webif Settings
+Webif&sup2; Settings => Webif&sup2; Settings
 Language => Language
 Theme => Theme
 

@@ -1,5 +1,4 @@
 lang => Albanian
-Encoding => UTF-8
 
 # Common
 Settings saved => Ndryshimet u ruajtën

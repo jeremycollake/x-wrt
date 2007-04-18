@@ -1,4 +1,4 @@
-lang => Espa&ntilde;ol
+lang => Español
 # Common
 Settings saved => Cambios guardados
 Settings not saved => No se han podido guardar los cambios
@@ -9,28 +9,28 @@ Review Changes => Comprobar cambios
 Host Name => Nombre del equipo
 Uptime => Uptime
 Load => Carga del sistema
-Version => Versi&oacute;n
-Categories => Categor&iacute;as
-Subcategories => Subcategor&iacute;s
-more... => m&aacute;s...
-Add => A&ntilde;adir
+Version => Versión
+Categories => Categorías
+Subcategories => Subcategorís
+more... => más...
+Add => Añadir
 Remove => Eliminar
-Warning => Atenci&oacute;n
-Password_warning => no has establecido una contrase&ntilde;a de protecci&oacute;n para el router (acceso web y ssh). Por favor, elija una ahora (el nombre de usuario ser&aacute; 'root')
+Warning => Atención
+Password_warning => No has establecido una contraseña de protección para el router (acceso web y ssh).<br />Por favor, elija una ahora (el nombre de usuario será 'root')
 
 # Categories
 Info => Info
 About => Acerca de
-Router Info => Informaci&oacute;n del router
+Router Info => Información del router
 
 Status => Estado
 Connections => Conexiones
 DHCP => DHCP
-Wireless => Wireless (Anal&aacute;mbrico)
+Wireless => Wireless (Analámbrico)
 
 System => Sistema
-Password => Contrase&ntilde;a
-Settings => Configuraci&oacute;n
+Password => Contraseña
+Settings => Configuración
 Installed Software => Programas instalados
 Firmware Upgrade => Actualizar Firmware
 
@@ -39,41 +39,41 @@ LAN => LAN
 WAN => Internet (WAN)
 Wireless => Wireless
 Advanced Wireless => Wireless (avanzado)
-Hosts => Configuraci&oacute;n de hosts
+Hosts => Configuración de hosts
 
 
 # 'About' page
 Copyright => Copyright
 
-GPL_Text => Este programa es software libre; Usted puede distribuirlo y/o <br />modificarlo bajo los t&eacute;rminos de la General Public License<br />como est&aacute; publicada por la Free Sofware Foundation; bien de la versi&oacute;n 2 de dicha Licencia o bien (seg&uacute;n su elecci&oacute;n) de cualquier versi&oacute;n posterior.
+GPL_Text => Este programa es software libre; Usted puede distribuirlo y/o <br />modificarlo bajo los términos de la General Public License<br />como está publicada por la Free Sofware Foundation; bien de la versión 2 de dicha Licencia o bien (según su elección) de cualquier versión posterior.
 Contributions by => Contribuciones de
 Layout based on => Aspecto basado en
 by => por
 
 
-No config change. => No hay cambios de configuraci&oacute;n.
+No config change. => No hay cambios de configuración.
 Config discarded. => Los cambios no se han aceptado.
-Config changes: => Configuraci&oacute;n actual:
-Updating config... => Actualizando la configuraci&oacute;n...
+Config changes: => Configuración actual:
+Updating config... => Actualizando la configuración...
 
 
 # 'Router Info' page
-Firmware Version => Versi&oacute;n del firmware
-Kernel Version => Versi&oacute;n del Kernel
+Firmware Version => Versión del firmware
+Kernel Version => Versión del Kernel
 Current Date/Time => Fecha y Hora Actual
-MAC Address => Direcci&oacute;n MAC
+MAC Address => Dirección MAC
 
 
 # 'Connections' page
 Connection Status => Estado de las conexiones
-Physical Connections => Conexiones f&iacute;sicas
+Physical Connections => Conexiones físicas
 Router Connections => Conexiones del router
 
 
 # 'DHCP' page
-status_leases_dhcp_leases => Pr&eacute;stamos DHCP
-status_leases_IP => Direcci&oacute;n IP
-status_leases_MAC => Direcci&oacute;n MAC
+status_leases_dhcp_leases => Préstamos DHCP
+status_leases_IP => Dirección IP
+status_leases_MAC => Dirección MAC
 status_leases_Name => Nombre
 status_leases_Expires => Expira en
 
@@ -82,12 +82,12 @@ status_leases_Expires => Expira en
 Wireless Status => Estado del Wireless
 
 # 'Password' page
-Password Change => Cambiar contrase&ntilde;a
-New Password => Nueva contrase&ntilde;a
-Confirm Password => Confirmar la contrase&ntilde;a
+Password Change => Cambiar contraseña
+New Password => Nueva contraseña
+Confirm Password => Confirmar la contraseña
 
 # 'System Settings' page
-System Settings => Par&aacute;metros del sistema
+System Settings => Parámetros del sistema
 Host Name => Nombre del host
 Language => Idioma
 
@@ -102,55 +102,55 @@ Install => Instalar
 Firmware format => Formato del firmware
 Error => Error
 done => Finalizado
-Invalid_formt => Formato del firmware inv&aacute;lido
-Erase_JFFS2 => Borrar la partici&oacute;n JFFS2
+Invalid_formt => Formato del firmware inválido
+Erase_JFFS2 => Borrar la partición JFFS2
 Options => Opciones
 Firmware_image => Archivo del firmware
 Upgrade => Actualizar
 Upgrading... => Actualizando...
 
 # 'LAN Settings' page
-LAN Settings => Par&aacute;metros LAN
-LAN Configuration => Configuraci&oacute;n LAN
-Netmask => M&aacute;scara de subred
+LAN Settings => Parámetros LAN
+LAN Configuration => Configuración LAN
+Netmask => Máscara de subred
 Default Gateway => Puerta de enlace (gateway)
 DNS Servers => Servidores DNS
-DNS Address => Direcci&oacute;nes IP del DNS
+DNS Address => Direcciónes IP del DNS
 
 Note => Nota
 
 # 'WAN Settings' page
 WAN Settings => Parametros de Internet (WAN)
-WAN Configuration => Configuraci&oacute;n de Internet (WAN)
-PPTP Server IP => Direcci&oacute;n IP del servidor PPTP
-Connection Type => Tipo de conexi&oacute;n
-No WAN => Sin configuraci&oacute;n de Internet (WAN)
+WAN Configuration => Configuración de Internet (WAN)
+PPTP Server IP => Dirección IP del servidor PPTP
+Connection Type => Tipo de conexión
+No WAN => Sin configuración de Internet (WAN)
 DHCP => DHCP
-Static IP => IP est&aacute;tica
-IP Settings => Configuraci&oacute;n IP
-PPP Settings => Configuraci&oacute;n PPP
-Redial Policy => Opciones de reconexi&oacute;n
+Static IP => IP estática
+IP Settings => Configuración IP
+PPP Settings => Configuración PPP
+Redial Policy => Opciones de reconexión
 Connect on Demand => Conectar bajo demanda
-Keep Alive => Conexi&oacute;n permanente
-Maximum Idle Time => Tiempo m&aacute;ximo de inactividad
-Redial Timeout => Tiempo de reconexi&oacute;n
-MTU => MTU (tama&ntilde;o de los paquetes)
+Keep Alive => Conexión permanente
+Maximum Idle Time => Tiempo máximo de inactividad
+Redial Timeout => Tiempo de reconexión
+MTU => MTU (tamaño de los paquetes)
 Username => Nombre de usuario
 
 
 # 'Wireless Configuration' page
-Wireless Configuration => Configuraci&oacute;n Wireless
+Wireless Configuration => Configuración Wireless
 Wireless Interface => Interfaz Wireless
 WEP Key => Clave WEP
 Selected WEP Key => Clave WEP seleccionada
 WPA PSK => WPA-PSK
 ESSID => ESSID
 Channel => Canal
-RADIUS IP Address => Direcci&oacute;n IP del servidor RADIUS
+RADIUS IP Address => Dirección IP del servidor RADIUS
 RADIUS Server Key => Clave de Servidor RADIUS
 Enabled => Activado
 Disabled => Desactivado
-ESSID Broadcast => Difusi&oacute;n del SSID
+ESSID Broadcast => Difusión del SSID
 Show => Mostrar
 Hide => Ocultar
 WLAN Mode => Modo Wireless
@@ -159,29 +159,29 @@ Client => Cliente
 Bridge => Bridge (puente)
 Ad-Hoc => Ad-Hoc
 Operation mode => Modo de funcionamiento
-Encryption Settings => Par&aacute;metros de enriptaci&oacute;n
-Encryption Type => Tipo de encriptaci&oacute;n
+Encryption Settings => Parámetros de enriptación
+Encryption Type => Tipo de encriptación
 PSK => PSK
 WPA Mode => Modo WPA
 WPA Algorithms => Algoritmos WPA
 WEP Keys => Claves WEP
 
 # 'Advanced Wireless Configuration' page
-Advanced Wireless Configuration => Configuraci&oacute;n Wireless avanzada
+Advanced Wireless Configuration => Configuración Wireless avanzada
 WDS Connections => Conexiones WDS
-MAC Filter List => Filtrar por direcci&oacute;n MAC
+MAC Filter List => Filtrar por dirección MAC
 Filter Mode => Modo de filtrado
 Allow => Autorizar
 Deny => Denegar
 Set => Establecer
-Settings => Par&aacute;metros
-Automatic WDS => WDS autom&aacute;tico
+Settings => Parámetros
+Automatic WDS => WDS automático
 
 # "Hosts" page
 
-MAC Address => Direcci&oacute;n MAC
+MAC Address => Dirección MAC
 Configured Hosts => Equipos configurados
-DHCP Static => Entradas DHCP est&aacute;ticas
+DHCP Static => Entradas DHCP estáticas
 Host Names => Nombre de los equipos
 
 Up => Subir
@@ -197,11 +197,11 @@ Drop => Descartar
 
 Firewall => Firewall
 Firewall Rules => Reglas del Firewall
-Firewall Configuration => Configuraci&oacute;n del Firewall
+Firewall Configuration => Configuración del Firewall
 
 New Rule => Nueva regla
 Match => Filtrar
-Target => Acci&oacute;n
+Target => Acción
 Port => Puerto
 
 Protocol => Protocolo
@@ -213,14 +213,14 @@ Destination Ports => Puertos destino
 Forward to => Redirigir a
 Port => Puerto
 
-Helptext ESSID =>El ESSID o SSID (Service Set IDentifier) es un c&oacute;digo incluido en todos los paquetes de una red inal&aacute;mbrica (Wi-Fi) para identificarlos como parte de esa red. El c&oacute;digo consiste en un m&aacute;ximo de 32 caracteres alfanum&eacute;ricos. Todos los dispositivos inal&aacute;mbricos que intentan comunicarse entre s&iacute; deben compartir el mismo SSID.
-Helptext DNS save => Es recomendable guardar los cambios antes de a&ntilde;adir o eliminar servidores de DNS de la lista
+Helptext ESSID =>El ESSID o SSID (Service Set IDentifier) es un código incluido en todos los paquetes de una red inalámbrica (Wi-Fi) para identificarlos como parte de esa red. El código consiste en un máximo de 32 caracteres alfanuméricos. Todos los dispositivos inalámbricos que intentan comunicarse entre sí deben compartir el mismo SSID.
+Helptext DNS save => Es recomendable guardar los cambios antes de añadir o eliminar servidores de DNS de la lista
 
-Helptext Operation mode => Establece el modo de operaci&oacute;n de tu red wireless. Eligiendo 'Client (bridge)' no cambiar&aacute; la configuraci&oacute;n de la interfaz de red. Simplemente a&ntilde;adir&aacute; unos par&aacute;metros que permitir&aacute;n que la interfaz wireless act&uacute;e en cierta medida en modo bridge.
-Helptext Encryption Type => 'WPA (RADIUS)' s&oacute;lo puede usarse en modo Punto de Acceso.<br /> 'WPA (PSK)' no funciona en modo Ad-Hoc.
-Helptext IP Settings => Las opciones IP son opcionales para DHCP y PPTP. Si las eliges, se utilizar&aacute;n por defecto en caso de que la configuraci&oacute;n autom&aacute;tica falle.
-Helptext Idle Time => N&uacute;mero de segundos sin actividad con Internet que debe esperar el router antes de desconectarse. (S&oacute;lo para el modo Bajo Demanda).
-Helptext Redial Timeout => N&uacute;mero de segundos sin recibir respuesta del servidor que debe esperar el router para volver a conectarse.
+Helptext Operation mode => Establece el modo de operación de tu red wireless. Eligiendo 'Client (bridge)' no cambiará la configuración de la interfaz de red. Simplemente añadirá unos parámetros que permitirán que la interfaz wireless actúe en cierta medida en modo bridge.
+Helptext Encryption Type => 'WPA (RADIUS)' sólo puede usarse en modo Punto de Acceso.<br /> 'WPA (PSK)' no funciona en modo Ad-Hoc.
+Helptext IP Settings => Las opciones IP son opcionales para DHCP y PPTP. Si las eliges, se utilizarán por defecto en caso de que la configuración automática falle.
+Helptext Idle Time => Número de segundos sin actividad con Internet que debe esperar el router antes de desconectarse. (Sólo para el modo Bajo Demanda).
+Helptext Redial Timeout => Número de segundos sin recibir respuesta del servidor que debe esperar el router para volver a conectarse.
 
 
 
@@ -232,13 +232,13 @@ Helptext Redial Timeout => N&uacute;mero de segundos sin recibir respuesta del s
 ## network hosts
 network_hosts_host_IP_invalid => Host's IP Address
 network_hosts_Host_Name => Nombre del equipo
-network_hosts_MAC => Direcci&oacute;n MAC
+network_hosts_MAC => Dirección MAC
 network_hosts_static_IP_invalid => Static IP Address
 network_hosts_Configured_Hosts => Equipos configurados
 network_hosts_Host_Names => Nombre de los equipos
-network_hosts_IP => Direcci&oacute;n IP
+network_hosts_IP => Dirección IP
 network_hosts_Remove => Eliminar
-network_hosts_Add => A&ntilde;adir
+network_hosts_Add => Añadir
 network_hosts_Host_Names_helptext => The file /etc/hosts is used to look up the IP address of a device connected to a computer network. The hosts file describes a many-to-one mapping of device names to IP addresses. When accessing a device by name, the networking system attempts to locate the name within the hosts file before accessing the Internet domain name system.
 network_hosts_DHCP_Static_IPs => Static IP addresses (for DHCP)
 network_hosts_Static_IPs => Static IP addresses
@@ -251,15 +251,15 @@ network_hosts_min => min
 network_hosts_sec => sec
 network_hosts_No_leases => There are no known DHCP leases.
 Network => Red
-Hosts => Configuraci&oacute;n de hosts
+Hosts => Configuración de hosts
 
 
 ## status-leases.sh
 Status => Estado
 DHCP Clients => DHCP Clients
-status_leases_dhcp_leases => Pr&eacute;stamos DHCP
-status_leases_MAC => Direcci&oacute;n MAC
-status_leases_IP => Direcci&oacute;n IP
+status_leases_dhcp_leases => Préstamos DHCP
+status_leases_MAC => Dirección MAC
+status_leases_IP => Dirección IP
 status_leases_Name => Nombre
 status_leases_Expires => Expira en
 status_leases_h => h
@@ -342,7 +342,7 @@ status_wwaninfo_wrong_value => Wrong signal quality value
 # translated:
 Available packages => Paquetes Disponibles
 
-# Revised & Updated
+# Revised  Updated
  Show raw statistics  =>
 802.11b =>
 802.11b + 802.11g =>
@@ -409,7 +409,6 @@ DynDNS Settings =>
 edit =>
 edit_qos_cfg =>
 Enable/Disable Unbridged Wireless =>
-Encoding =>
 Encryption Key =>
 Everything =>
 Express =>
@@ -515,7 +514,7 @@ QOS Bulk IP Addresses =>
 QOS Configuration =>
 QOS Express IP Addresses =>
 QOS Internet Speed Configuration =>
-QOS Layer & Protocol Filtering =>
+QOS Layer  Protocol Filtering =>
 QoS Options =>
 QoS Packages =>
 QoS Packets  =>
@@ -608,8 +607,8 @@ WDS Configuration =>
 WDS Options =>
 WDS SSID =>
 WDS watchdog timeout =>
-Webif Settings =>
-Webif Upgrade =>
+Webif&sup2; Settings =>
+Webif&sup2; Upgrade =>
 WEP Key 1 =>
 WEP Key 2 =>
 WEP Key 3 =>
