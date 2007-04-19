@@ -37,13 +37,14 @@ $1 == "ip" {
 
 function dec2binstr(dec, data)
 {
-	if (dec ==0) return "00000000"
+	if (dec == 0) return  data "00000000"
 	mask = 1
+	tdata = ""
 	for (; dec != 0; dec = rshift(dec, 1))
-		data = (and(dec, mask) ? "1" : "0") data
-	while ((length(data) % 8) != 0)
-		data = "0" data
-	return data
+		tdata = (and(dec, mask) ? "1" : "0") tdata
+	while ((length(tdata) % 8) != 0)
+		tdata = "0" tdata
+	return data tdata
 }
 
 # dotted decimal netmask
