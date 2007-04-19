@@ -153,8 +153,6 @@ EOF
 				uci_set "network" "wan" "redialperiod" "$FORM_ppp_redialperiod"
 				uci_set "network" "wan" "mtu" "$FORM_ppp_mtu"
 
-				uci_set "network" "wan" "ifname" "ppp0"
-
 				case "$FORM_ppp_redial" in
 					demand)
 						uci_set "network" "wan" "demand" "1"
