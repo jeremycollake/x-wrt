@@ -1,4 +1,7 @@
 #!/usr/bin/webif-page
+Content-Type: text/html 
+Pragma: no-cache
+
 <?
 colorize_script=""
 ?>
