@@ -7,7 +7,7 @@
 . /lib/config/uci-depends.sh
 . /lib/config/uci.sh
 uci_load "upnpd"
-if [ $CONFIG_general_enable = "0" ] && [ -f "/etc/init.d/S65upnpd" ]; then
+if [ "$CONFIG_general_enable" = "0" ] && [ -f "/etc/init.d/S65upnpd" ]; then
 	echo "Stopping UPNP daemon ..."
 	# try to do it right
 	./S65upnpd stop
