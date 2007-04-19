@@ -9,15 +9,15 @@ load_settings "openvpn"
 header "VPN" "OpenVPN" "@TR<<OpenVPN>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 if ! empty "$FORM_install_package"; then
-	echo "Installing openvpn package ...<pre>"
+	echo "@TR<<vpn_openvpn_Installing_package#Installing openvpn package ...>><pre>"
 	install_package "openvpn"
 	echo "</pre>"
 fi
 
 install_package_button=""
 ! is_package_installed "openvpn" &&
-	install_package_button="string|<div class=warning>VPN will not work until you install OpenVPN: </div>
-		submit|install_package| Install OpenVPN Package |"
+	install_package_button="string|<div class=warning>@TR<<vpn_openvpn_warn#VPN will not work until you install OpenVPN:>> </div>
+		submit|install_package| @TR<<vpn_openvpn_install_package#Install OpenVPN Package>> |"
 
 if empty "$FORM_submit"; then
 	[ -f /etc/openvpn/certificate.p12 ] ||

@@ -375,6 +375,12 @@ Language => Language
 Theme => Theme
 
 
+## vpn-openvpn.sh
+vpn_openvpn_Installing_package => Installing openvpn package ...
+vpn_openvpn_warn => VPN will not work until you install OpenVPN:
+vpn_openvpn_install_package => Install OpenVPN Package
+
+
 ## graph_cpu.svg
 graph_cpu_CPU => CPU
 graph_cpu_Cannot_get_data_CPU => Cannot get data about CPU

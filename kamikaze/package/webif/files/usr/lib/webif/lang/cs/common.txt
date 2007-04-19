@@ -1400,6 +1400,9 @@ HelpText Firmware_Image => Můžete zvolit jakýkoli BIN nebo TRX kompatibilní 
 
 
 ## /www/cgi-bin/webif/vpn-openvpn.sh
+vpn_openvpn_Installing_package => Instaluje se balíček openvpn ...
+vpn_openvpn_warn => VPN nebude pracovat, dokud nenainstalujete OpenVPN:
+vpn_openvpn_install_package => Nainstalovat balíček OpenVPN
 VPN => VPN
 OpenVPN => OpenVPN
 Start VPN Connection => Připojit VPN
