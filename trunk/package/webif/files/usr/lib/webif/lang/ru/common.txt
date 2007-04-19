@@ -457,8 +457,8 @@ EZ-IP-Update Messages => EZ-IP-Update сообщения
 File => Файл
 File Editor => Редактор файлов
 Forwarding a port => Перенаправление порта
-Found Installed Certificate. => Найдены установленные сертификаты
-Found Installed Keyfile => Найдены установленные ключи
+Found Installed Certificate. => Найден установленный сертификат.
+Found Installed Keyfile => Найден установленный файл ключей
 Frameburst => Frameburst
 Frequency => Частота
 General System Settings => Основные настройки системы
@@ -499,9 +499,9 @@ Netfilter Log => Журнал Netfilter
 Netstat => Netstat
 Networking Tweaks => Сетевые уловки
 new rule => новое правило
-No Certificate uploaded yet! => Сертификат еще не загружен!
+No Certificate uploaded yet! => Сертификат пока не загружен!
 No Hosts => Нет узлов
-No Keyfile uploaded yet! => Файл ключей еще не загружен!
+No Keyfile uploaded yet! => Файл ключей пока не загружен!
 No Reg Cache => Нет Reg Cache
 No Resolv => Нет Resolv
 No WAN Proto => Нет WAN Proto
@@ -533,8 +533,8 @@ PPTPD Server => PPTPD сервер
 Preamble (Default: Long) => Preamble (По умолчанию: длинный)
 Preferred Connection Type => Предпочтительный тип соединения
 Prefix => Префикс
-Preshared Key => Заглавный ключ
-Preshared Key Status => Статус заглавного ключа
+Preshared Key => Общий ключ
+Preshared Key Status => Статус общего ключа
 Priority => Главный
 Priority IP Address => Главный IP адрес
 Priority TCP Port => Главный TCP порт
@@ -573,7 +573,7 @@ Rx Invalid nwid => Rx неверный nwid
 Saved config.tgz file: => Сохраненный config.tgz файл
 Select Network => Выберите сеть
 Server Address => Адрес сервера
-Server Port (default: 1194) => Порт сервера (По умолчанию: 1194)
+Server Port (default: 1194) => Порт сервера (по умолчанию: 1194)
 Services Configuration => Конфигурация сервисов
 Shaping Status => Статус Shaping
 Short => Короткий
@@ -654,8 +654,8 @@ networking settings => настройки сети
 PPTP settings => настройки PPTP
 Processing => Обрабатывается
 QOS settings => настройки QOS
-Reloading Cron => Перегружается Cron
-Reloading syslogd ... => Перегружается syslogd ...
+Reloading Cron => Перезагружается Cron
+Reloading syslogd ... => Перезагружается syslogd ...
 Restarting => Перезагрузка
 system settings => настройки системы
 theme settings => настройки темы
@@ -1052,8 +1052,19 @@ reboot_seconds => секунд.
 reboot_reload => Webif&sup2; должен автоматически перезагрузится.
 
 # vpn-openvpn.sh
-#TODO introduce tr. symbols
+#TODO: the below - install_package - does not work. Should it?
 install_package => Установить пакет OpenVPN
+vpn_openvpn_install_package => Установить пакет OpenVPN
+vpn_openvpn_warn => VPN не сможет работать пока Вы не установите OpenVPN:
+vpn_openvpn_Installing_package => Устанавливается пакет openvpn ...
+Certificate (PEM) => Сертификат (PEM)
+Found installed client key. => Найден установленный ключ клиента.
+No client certificate uploaded yet! => Сертификат клиента пока не загружен!
+No client key uploaded yet! => Ключ клиента пока не загружен!
+Root CA certificate uploaded yet! => Сертификат Root CA пока не загружен!
+Upload Client Certificate => Загрузить сертификат клиента
+Upload Client Key => Загрузить ключ клиента
+Upload Root CA certificate => Загрузить сертификат Root CA
 
 #header.ahtml
 X-Wrt Administration Console => Административная консоль X-Wrt
@@ -1062,13 +1073,13 @@ X-Wrt Administration Console => Административная консоль 
 ## duplicate ##Graphs => Графики
 graphs_cpu_subcategory => Процессор
 graphs_cpu_CPU_Usage => Использование процессора
-graphs_svg_required => This object requires the SVG support.
+graphs_svg_required => Объекту необходима функциональность SVG.
 
 ## graphs-if.sh
 ## duplicate ##Graphs => Графики
 graphs_if_Traffic => Трафик
 graphs_if_Traffic_of_Interface => Трафик интерфейса
-## duplicate ##graphs_svg_required => This object requires the SVG support.
+## duplicate ##graphs_svg_required => Объекту необходима функциональность SVG.
 
 ## graph_cpu.svg
 graph_cpu_CPU => Проц.
@@ -1163,13 +1174,13 @@ status_wwaninfo_comgt_Band_9_19 => Два диапазона 900/1900 MHz (СШ�
 status_wwaninfo_comgt_APN => Имя точки доступа
 
 #apply.sh
-Reloading => Перегружается
+Reloading => Перезагружается
 Applying => Применяется
 Could not replace => Не может заменить
 Media full => Носитель полон
 Exporting => Экспортируется
 snmp settings => настройки snmp
-Reloading syslogd => Перегружается syslogd
+Reloading syslogd => Перезагружается syslogd
 Installing language pack => Устанавливается пакет языка
 Error installing language pack => Ошибка установки пакета языка
 network => сеть
