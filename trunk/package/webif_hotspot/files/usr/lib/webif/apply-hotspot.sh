@@ -15,6 +15,14 @@ reload_hotspot() {
 	}
 }
 
-HANDLERS_config="$HANDLERS_config
+[ -f /tmp/.uci/hotspot ] && {
+	# save settings
+	uci_commit "hotspot"
+	reload_hotspot
+	# and do not save it twice
+	rm -f /tmp/.uci/hotspot 2>/dev/null
+} || {
+	HANDLERS_config="$HANDLERS_config
 	hotspot) reload_hotspot;;
 "
+}
