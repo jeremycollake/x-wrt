@@ -210,8 +210,8 @@ EOF
 
 		display_form <<EOF
 start_form|@TR<<system_nvram_NVRAM_Usage#NVRAM Usage>>
-string|<tr><td>@TR<<system_nvram_Total#Total>>: $TOTAL_NVRAM B</td><td>
-progressbar|nvramuse|@TR<<system_nvram_Used#Used>>: $USED_NVRAM B ($NVRAM_PERCENT_USED%)|200|$MEM_PERCENT_USED|$NVRAM_PERCENT_USED%||
+string|<tr><td>@TR<<system_nvram_Total#Total>>: $TOTAL_NVRAM @TR<<system_nvram_B#B>></td><td>
+progressbar|nvramuse|@TR<<system_nvram_Used#Used>>: $USED_NVRAM @TR<<system_nvram_B#B>> ($NVRAM_PERCENT_USED%)|200|$MEM_PERCENT_USED|$NVRAM_PERCENT_USED%||
 helpitem|system_nvram_NVRAM_Usage#NVRAM Usage
 helptext|system_nvram_NVRAM_Usage_helptext#This is the current NVRAM usage. The graph shows how much memory is used and how much memory is available for other variables.
 end_form

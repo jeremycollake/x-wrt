@@ -1292,6 +1292,7 @@ system_nvram_Change_the_value => Změnit hodnotu
 system_nvram_Delete_the_variable => Smazat tuto proměnnou
 system_nvram_NVRAM_Usage => Využití NVRAM
 system_nvram_Total => Celkem
+system_nvram_B => B
 system_nvram_Used => Použito
 system_nvram_NVRAM_Usage_helptext => Toto je aktuální využití paměti NVRAM. Graf zobrazuje, kolik paměti je použito a kolik paměti je k dispozici pro další proměnné.
 

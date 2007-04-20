@@ -332,6 +332,7 @@ system_nvram_Change_the_value => Change the value
 system_nvram_Delete_the_variable => Delete the variable
 system_nvram_NVRAM_Usage => NVRAM Usage
 system_nvram_Total => Total
+system_nvram_B => B
 system_nvram_Used => Used
 system_nvram_NVRAM_Usage_helptext => This is the current NVRAM usage. The graph shows how much memory is used and how much memory is available for other variables.
 
