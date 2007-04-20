@@ -277,14 +277,14 @@ select|wan_proto|$FORM_wan_proto
 option|none|@TR<<No WAN#None>>
 option|dhcp|@TR<<DHCP>>
 option|static|@TR<<Static IP>>
-field|@TR<<Interface>>|ifname|hidden
-text|wan_ifname|$FORM_wan_ifname
-helpitem|Interface
-helptext|Helptext Interface#Your WAN interface(eth0,eth1,...)
 $PPPOE_OPTION
 $PPPOA_OPTION
 $WWAN_OPTION
 $PPTP_OPTION
+field|@TR<<Interface>>|ifname|hidden
+text|wan_ifname|$FORM_wan_ifname
+helpitem|Interface
+helptext|Helptext Interface#Your WAN interface(eth0,eth1,...)
 helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration#head-b62c144b9886b221e0c4b870edb0dd23a7b6acab
 end_form
 
