@@ -255,7 +255,7 @@ Hosts => Узлы
 
 ## status-leases.sh
 ## duplicate ##Status => Статус
-DHCP Clients => DHCP Клиенты
+DHCP Clients => DHCP клиенты
 status_leases_dhcp_leases => DHCP клиенты
 status_leases_MAC => MAC-адрес
 status_leases_IP => IP адрес
@@ -312,7 +312,6 @@ status_usb_swap_Priority => Приоритет
 status_usb_swap_partition => раздел
 status_usb_swap_file => файл
 status_usb_Loaded_USB_drivers => Загружены USB драйверы
-
 
 ## status-wwaninfo.sh
 ## duplicate ##Status => Статус
@@ -941,8 +940,38 @@ status_processes_Legend_Text => Размер памяти показан в ед
 status_processes_Signals_Legend => Наиболее часто используемые сигналы
 status_processes_Signals_Legend_Text => 1) SIGHUP - Приостановить<br />9) SIGKILL - Убить (не может быть пойман или проигнорирован)<br />15) SIGTERM - Завершить<br />10) SIGUSR1/12) SIGUSR2 - Сигналы, определенные пользователем.<br />Подробнее смотрите <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/kill.html">описание команды kill</a>.
 
-#status-wlan-survey.sh
+## status-wlan-survey.sh
+Channel => Канал
+Install NAS => Установить NAS
 HelpText WLAN Survey => Беспроводный адаптер не в режиме клиента. Для сканирования он должен перейти в режим клиента на несколько секунд. Ваш WLAN трафик будет прерван на этот короткий промежуток времени.
+Join Network => Присоединиться к Сети
+Join => Присоединиться
+MAC => МАС
+Noise => Шум
+Rate => Рейт
+Re-scan => Пересканировать
+SSID => SSID
+Signal => Сигнал
+Sorry, no scan results. => Извините, результатов сканирования нет.
+Status => Статус
+status_wlan_survey_Client => Клиент
+status_wlan_survey_Interface => Интерфейс:
+status_wlan_survey_Installing_NAS=> Устанавливается пакет NAS...
+status_wlan_survey_Key_Type => Тип ключа:
+status_wlan_survey_Mode => Режим:
+status_wlan_survey_NAS_required => Режиму повторителя необходим пакет NAS.
+status_wlan_survey_NAS_required_by_RADIUS => RADIUS необходим пакет NAS.
+status_wlan_survey_RADIUS_IP_Port_Key => RADIUS IP:<br/>Порт:<br/>Ключ:
+status_wlan_survey_Repeater => Повторитель
+status_wlan_survey_Virtual_Adapter => Вирт. адаптер
+status_wlan_survey_WEP_Key => Ключ WEP:
+status_wlan_survey_WPA2_Key => Ключ WPA2:
+status_wlan_survey_WPA_Key => Ключ WPA:
+status_wlan_survey_Successfully_joined => Успешно присоединились к сети
+status_wlan_survey_network => ...
+status_wlan_survey_Set_Security => &nbsp;Вы можете установить настройки безапасности для сети:
+status_wlan_survey_Network_Wireless => в разделе <b>Сеть &gt; Беспроводная сеть</b>&nbsp;
+Wireless survey => Сканирование беспроводных сетей
 
 # system-confman.sh
 confman_noauto_click => Если загрузка не начинается автоматически, нажмите сюда

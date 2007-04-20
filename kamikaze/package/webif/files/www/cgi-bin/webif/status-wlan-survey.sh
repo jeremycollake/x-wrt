@@ -119,25 +119,25 @@ cat <<EOF
 <input type='hidden' name='network' value="" />
 <table width='100%' border='0' >
 <tr><td width=120><img src="" name="img1" alt /></td><td></td></tr>
-<tr><td align='right'>Mode:</td>
+<tr><td align='right'>@TR<<status_wlan_survey_Mode#Mode:>></td>
 <td><label><select name='wlmode' STYLE='width: 150px'>
 EOF
-HTML_option "client" "Client"
-HTML_option "repeater" "Repeater"
+HTML_option "client" "@TR<<status_wlan_survey_Client#Client>>"
+HTML_option "repeater" "@TR<<status_wlan_survey_Repeater#Repeater>>"
 echo "</select></label></td></tr>"
 
 if ! equal "$nas_installed" "1"; then
-echo "<tr><td colspan=2><font color=red>Repeater mode requires NAS package.</font><input type='submit' name='install_nas' value='@TR<<Install NAS>>' ></td>"
+echo "<tr><td colspan=2><font color=red>@TR<<status_wlan_survey_NAS_required#Repeater mode requires NAS package.>></font><input type='submit' name='install_nas' value='@TR<<Install NAS>>' ></td>"
 else echo "<tr><td align='right' height=1><label>SSID:<input type='hidden' class=\"DEPENDS ON wlmode BEING repeater\"></label></td>
 <td height=1><label><input type='text' name='new_ssid' class=\"DEPENDS ON wlmode BEING repeater\"></label>
 </td></tr>"
 fi
 
-echo "<tr><td align='right' height=1><label>Interface:<input type='hidden' class=\"DEPENDS ON wlmode BEING client\"></label></td><td><label><select name='virtual_wl' STYLE=\"width: 150px\">"
+echo "<tr><td align='right' height=1><label>@TR<<status_wlan_survey_Interface#Interface:>><input type='hidden' class=\"DEPENDS ON wlmode BEING client\"></label></td><td><label><select name='virtual_wl' STYLE=\"width: 150px\">"
 counter=0
         for vcfg in $vface; do
        		config_get FORM_device $vcfg device
-       	echo "<option value='$vcfg'>Virtual Adapter $counter</option>"
+       	echo "<option value='$vcfg'>@TR<<status_wlan_survey_Virtual_Adapter#Virtual Adapter>> $counter</option>"
 		let "counter+=1"
 	done
 echo "</select><input type='hidden' class=\"DEPENDS ON wlmode BEING client\"></label></td></tr>"
@@ -148,7 +148,7 @@ var1=0 ; DIVWINDOW
 echo $DIVWINDOWFOOTER
 
 var1=1 ; DIVWINDOW
-	echo "<tr><td align='right'>Key Type:</td><td><select name='keytype' STYLE='width: 150px'>"
+	echo "<tr><td align='right'>@TR<<status_wlan_survey_Key_Type#Key Type:>></td><td><select name='keytype' STYLE='width: 150px'>"
 	HTML_option "wep" "WEP"
 	HTML_option "psk" "WPA (PSK)"
 	HTML_option "psk2" "WPA2 (PSK)"
@@ -156,18 +156,18 @@ var1=1 ; DIVWINDOW
 	HTML_option "wpa2" "WPA2 (RADIUS)"
 	echo "</select><br/></td></tr><tr><td align='right'>"
 
-	HTML_label "WEP Key:" 0 "wep" "keytype"
-	HTML_label "WPA Key:" 0 "psk" "keytype"
-	HTML_label "WPA2 Key:" 0 "psk2" "keytype"
-	HTML_label "RADIUS IP:<br/>Port:<br/>Key:" 0 "wpa" "keytype"
-	HTML_label "RADIUS IP:<br/>Port:<br/>Key:" 0 "wpa2" "keytype"
+	HTML_label "@TR<<status_wlan_survey_WEP_Key#WEP Key:>>" 0 "wep" "keytype"
+	HTML_label "@TR<<status_wlan_survey_WPA_Key#WPA Key:>>" 0 "psk" "keytype"
+	HTML_label "@TR<<status_wlan_survey_WPA2_Key#WPA2 Key:>>" 0 "psk2" "keytype"
+	HTML_label "@TR<<status_wlan_survey_RADIUS_IP_Port_Key#RADIUS IP:<br/>Port:<br/>Key:>>" 0 "wpa" "keytype"
+	HTML_label "@TR<<status_wlan_survey_RADIUS_IP_Port_Key#RADIUS IP:<br/>Port:<br/>Key:>>" 0 "wpa2" "keytype"
 	echo "</td><td>"
 	HTML_label "" 1 "wep" "keytype" "wepkey"
 	HTML_label "" 1 "psk" "keytype" "pskkey"
 	HTML_label "" 1 "psk2" "keytype" "psk2key"
 
 	if ! equal "$nas_installed" "1"; then
-		echo "<label><font color=red>RADIUS requires NAS package.</font><input type='submit' name='install_nas' value='@TR<<Install NAS>>' class=\"DEPENDS ON keytype BEING wpa\"></label>"
+		echo "<label><font color=red>@TR<<status_wlan_survey_NAS_required_by_RADIUS#RADIUS requires NAS package.>></font><input type='submit' name='install_nas' value='@TR<<Install NAS>>' class=\"DEPENDS ON keytype BEING wpa\"></label>"
 	else	HTML_label "" 1 "wpa" "keytype" "wpaip"
 		HTML_label "" 1 "wpa" "keytype" "wpaport"
 		HTML_label "" 1 "wpa" "keytype" "wpakey"
@@ -426,7 +426,7 @@ header "Status" "Site Survey" "<img src='/images/wscan.jpg' alt />&nbsp;@TR<<Wir
 ###########################################
 if ! empty "$FORM_install_nas"; then
 
-	echo "Installing NAS package ...<pre>"
+	echo "@TR<<status_wlan_survey_Installing_NAS#Installing NAS package ...>><pre>"
 	install_package "nas"
 	echo "</pre>"
 	echo "<META http-equiv="refresh" content='5;URL=$SCRIPT_NAME'>"
@@ -509,12 +509,12 @@ else
 fi
 
 uci_commit "wireless"
-	echo "<br/><b>Successfully joined \"$FORM_wifi\" network...</b><br/><br/>"
+	echo "<br/><b>@TR<<status_wlan_survey_Successfully_joined#Successfully joined>> \"$FORM_wifi\" @TR<<status_wlan_survey_network#network...>></b><br/><br/>"
 
 	if [ "$FORM_wlmode" = "repeater" ]; then 
 	cat <<EOF
 	<center><table border="0" cellspacing="1" bgcolor="#000000">
-	<tr bgcolor='#FFFF00'><td><img src="/images/wep.gif" alt />&nbsp;You can set Security Settings for new SSID: "$FORM_new_ssid" in <b>Network > Wireless</b></td></tr>
+	<tr bgcolor='#FFFF00'><td><img src="/images/wep.gif" alt />@TR<<status_wlan_survey_Set_Security#&nbsp;You can set Security Settings for new SSID:>> "$FORM_new_ssid" @TR<<status_wlan_survey_Network_Wireless#in <b>Network &gt; Wireless</b>&nbsp;>></td></tr>
 	</table></center>
 EOF
 	fi
