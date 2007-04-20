@@ -76,7 +76,6 @@ synchronize_file "www/cgi-bin/webif/graphs-cpu.sh"
 synchronize_file "www/cgi-bin/webif/graphs-if.sh"
 #NOT_synchronize_file "www/cgi-bin/webif/graphs-subcategories.sh"
 #NOT_synchronize_file "www/cgi-bin/webif/info.sh" # kamikaze uses awx
-synchronize_file "www/cgi-bin/webif/info-credits.sh"
 synchronize_file "www/cgi-bin/webif/log-dmesg.sh"
 synchronize_file "www/cgi-bin/webif/log-dmesg_frame.sh"
 synchronize_file "www/cgi-bin/webif/network-firewall.sh"
