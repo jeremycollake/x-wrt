@@ -184,6 +184,27 @@ HelpText maximum_connections => This is the maximum number of simultaneous conne
 HelpText tcp_established_timeout => This is the number of seconds that a established connection can be idle before it is forcibly closed. Sometimes connections are not properly closed and can fill up your conntrack table if these values are too high. If they are too low, then connections can be disconnected simply because they are idle.
 
 
+## status-iptables.sh
+Status => Status
+Iptables => Iptables
+status_iptables_IPTStatus => Iptables status
+status_iptables_col1 => num
+status_iptables_col2 => pkts
+status_iptables_col3 => bytes
+status_iptables_col4 => target
+status_iptables_col5 => prot
+status_iptables_col6 => opt
+status_iptables_col7 => in
+status_iptables_col8 => out
+status_iptables_col9 => source
+status_iptables_col10 => destination
+status_iptables_col_options => options
+status_iptables_Target_Filter=> Target Filter
+status_iptables_Target_NAT => Target NAT
+status_iptables_Target_Mangle => Target Mangle
+status_iptables_Target_Raw => Target Raw
+
+
 ## status-leases.sh
 Status => Status
 DHCP Clients =>
