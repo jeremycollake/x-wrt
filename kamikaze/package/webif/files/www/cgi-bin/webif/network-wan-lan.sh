@@ -52,6 +52,7 @@ if empty "$FORM_submit"; then
 	FORM_wan_ipaddr="$CONFIG_wan_ipaddr"
 	FORM_wan_netmask="$CONFIG_wan_netmask"
 	FORM_wan_gateway="$CONFIG_wan_gateway"
+	FORM_wan_ifname="$CONFIG_wan_ifname"
 
 	# ppp common
 	#TODO: verify all ppp variables still work under kamikaze.
@@ -114,6 +115,7 @@ ip|FORM_lan_gateway|@TR<<LAN Gateway>>||$FORM_lan_gateway
 EOF
 	equal "$?" 0 && {
 		uci_set "network" "wan" "proto" "$FORM_wan_proto"
+		uci_set "network" "wan" "ifname" "$FORM_wan_ifname"
 
 		# Settings specific to one protocol type
 		case "$FORM_wan_proto" in
@@ -229,6 +231,7 @@ function modechange()
 {
 	var v;
 	v = (isset('wan_proto', 'pppoe') || isset('wan_proto', 'pptp') || isset('wan_proto', 'pppoa'));
+	set_visible('ifname', v);
 	set_visible('ppp_settings', v);
 	set_visible('username', v);
 	set_visible('passwd', v);
@@ -241,6 +244,7 @@ function modechange()
 	set_visible('wan_ip_settings', v);
 	set_visible('field_wan_ipaddr', v);
 	set_visible('field_wan_netmask', v);
+	set_visible('ifname', v);
 
 	v = isset('wan_proto', 'static');
 	set_visible('field_wan_gateway', v);
@@ -273,6 +277,10 @@ select|wan_proto|$FORM_wan_proto
 option|none|@TR<<No WAN#None>>
 option|dhcp|@TR<<DHCP>>
 option|static|@TR<<Static IP>>
+field|@TR<<Interface>>|ifname|hidden
+text|wan_ifname|$FORM_wan_ifname
+helpitem|Interface
+helptext|Helptext Interface#Your WAN interface(eth0,eth1,...)
 $PPPOE_OPTION
 $PPPOA_OPTION
 $WWAN_OPTION
