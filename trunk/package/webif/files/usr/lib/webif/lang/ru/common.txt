@@ -510,7 +510,6 @@ No_Target_IP_Port => Нет IP порта назначения
 ## duplicate ##NTP Server => NTP сервер
 NVRAM settings to set (by prefix; be careful!) => Настройки NVRAM для установки (по префиксу; будьте осторожны!)
 OpenVPN => OpenVPN
-OpenVPN Status => Статус OpenVPN
 Options For => Параметры для
 or a close derivative => или близкая производная
 Outgoing Traffic => Выходящий трафик
@@ -912,8 +911,24 @@ status_iptables_Target_NAT => Target NAT
 status_iptables_Target_Mangle => Target Mangle
 status_iptables_Target_Raw => Target Raw
 
-#status-openvpn.sh
-#TODO introduce tr. symbols
+## status-openvpn.sh
+OpenVPN Status => Статус OpenVPN
+status_openvpn_Err_cert_missing => Ошибка, нет сертификата!
+status_openvpn_Err_client_keyfile_missing => Ошибка, нет файла ключей клиента!
+status_openvpn_Err_client_cert_missing => Ошибка, нет сертификата клиента!
+status_openvpn_Err_keyfile_missing => Ошибка, нет файла ключей!
+status_openvpn_Err_root_cert => Ошибка, нет root-сертификата!
+status_openvpn_Err_unknown_authtype => ошибка в конфигурации OpenVPN, неизвестный authtype
+status_openvpn_OpenVPN_disabled => OpenVPN выключен
+status_openvpn_OpenVPN_not_running => OpenVPN не запущен
+status_openvpn_OpenVPN_running => OpenVPN запущен
+status_openvpn_Starting_OpenVPN => Запускается OpenVPN ...
+status_openvpn_Stopping_OpenVPN => Останавливается OpenVPN ...
+status_openvpn_active_tunnel => найден следующий активный туннель:
+status_openvpn_done => готово.
+status_openvpn_no_active_tunnel => активный туннель не найден
+status_openvpn_start_now => [запустить]
+status_openvpn_stop_now => [остановить]
 
 #status-pppoe.sh
 #TODO, WIP
