@@ -230,8 +230,10 @@ $JS_APN_DB
 function modechange()
 {
 	var v;
-	v = (isset('wan_proto', 'pppoe') || isset('wan_proto', 'pptp') || isset('wan_proto', 'pppoa'));
+	v = (isset('wan_proto', 'static') || isset('wan_proto', 'pptp') || isset('wan_proto', 'dhcp') || isset('wan_proto', 'pppoe') || isset('wan_proto', 'pppoa'));
 	set_visible('ifname', v);
+	
+	v = (isset('wan_proto', 'pppoe') || isset('wan_proto', 'pptp') || isset('wan_proto', 'pppoa'));
 	set_visible('ppp_settings', v);
 	set_visible('username', v);
 	set_visible('passwd', v);
@@ -244,7 +246,6 @@ function modechange()
 	set_visible('wan_ip_settings', v);
 	set_visible('field_wan_ipaddr', v);
 	set_visible('field_wan_netmask', v);
-	set_visible('ifname', v);
 
 	v = isset('wan_proto', 'static');
 	set_visible('field_wan_gateway', v);
