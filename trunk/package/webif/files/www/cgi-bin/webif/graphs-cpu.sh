@@ -4,13 +4,15 @@
 #credit goes to arantius and GasFed
 #
 . /usr/lib/webif/webif.sh
-. ./graphs-subcategories.sh
+. /www/cgi-bin/webif/graphs-subcategories.sh
 
 header "Graphs" "graphs_cpu_subcategory#CPU" "@TR<<graphs_cpu_CPU_Usage#CPU Usage>>" "" ""
+# IE (all versions) does not support the object tag with svg!
+#	<object data="" width="500" height="250" type="image/svg+xml">@TR<<graphs_svg_required#This object requires the SVG support.>></object>
 ?>
 <center>
-	<object data="/cgi-bin/webif/graph_cpu_svg.sh?data.sh"
-		width="500" height="250" type="image/svg+xml">@TR<<graphs_svg_required#This object requires the SVG support.>></object>
+	<embed src="/cgi-bin/webif/graph_cpu_svg.sh?data.sh"
+		width="500" height="250" type="image/svg+xml" />
 </center>
 <? footer ?>
 <!--
