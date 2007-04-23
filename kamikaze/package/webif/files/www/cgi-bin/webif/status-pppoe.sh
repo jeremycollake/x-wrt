@@ -51,10 +51,10 @@ fi
 	</tr>
 		<tr><td><br /><br /></td></tr>
 	<tr>
-		<th><b>Syslog: pppd</b></th>
+		<th><b>Syslog: pppd (Last 500 lines)</b></th>
 	</tr>
 	<tr>
-		<td><pre><? logread | grep pppd ?></pre></td>
+		<td><pre><? logread | grep pppd |tail -n 500 -|sort -r ?></pre></td>
 	</tr>
 </tbody>
 </table>
