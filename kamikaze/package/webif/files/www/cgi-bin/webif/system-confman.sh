@@ -62,7 +62,7 @@ if ! equal $FORM_download "" ; then
 elif ! equal $FORM_instconfig "" ; then
 
 if equal $FORM_rdflash "1" ; then
-	echo "<br />Restoring firmware, please wait ... <br />"
+	echo "<br />@TR<<confman_Restoring_firmware#Restoring firmware, please wait ...>> <br />"
 	mtd -r write $FORM_file linux
 else
 
@@ -86,7 +86,7 @@ EOF
 		echo "<br>@TR<<Rebooting now>>...<meta http-equiv=\"refresh\" content=\"4;url=reboot.sh?reboot=1\">"
 		echo "</pre></td></tr>"
 	else
-		echo "<p>bad dir: $dir</p>"
+		echo "<p>@TR<<confman_bad_dir#bad dir>>: $dir</p>"
 	fi
 
 display_form <<EOF
@@ -100,7 +100,7 @@ elif ! equal $FORM_chkconfig "" ; then
 			
 		echo "<form method=\"get\" name=\"install\" action=\"$SCRIPT_NAME\">"
 if equal $FORM_rdflash "1" ; then
-	echo "<h2><font color=red>WARNING !!! This operation will erase current flash.</font></h2>"
+	echo "<h2><font color=red>@TR<<confman_warn_erase#WARNING !!! This operation will erase current flash.>></font></h2>"
 	echo "<input type='hidden' name='rdflash' value='1'><input type='hidden' name='file' value=\"$FORM_configfile\">"	
 else
 display_form <<EOF
@@ -146,9 +146,9 @@ fi
 
 cat <<EOF
 <form method="post" name="download" action="$SCRIPT_NAME" enctype="multipart/form-data">
-&nbsp;&nbsp;&nbsp;<img src="/images/app.2.jpg" width="24" height="24" alt />&nbsp;<input type="radio" name="rdflash" value="0" checked />&nbsp;Configuration
+&nbsp;&nbsp;&nbsp;<img src="/images/app.2.jpg" width="24" height="24" alt />&nbsp;<input type="radio" name="rdflash" value="0" checked />&nbsp;@TR<<confman_Configuration#Configuration>>
 <br/>
-&nbsp;&nbsp;&nbsp;<img src="/images/app.12.jpg" width="25" height="25" alt />&nbsp;<input type="radio" name="rdflash" value="1" />&nbsp;Entire Flash<br/><br/>
+&nbsp;&nbsp;&nbsp;<img src="/images/app.12.jpg" width="25" height="25" alt />&nbsp;<input type="radio" name="rdflash" value="1" />&nbsp;@TR<<confman_Entire_Flash#Entire Flash>><br/><br/>
 EOF
 
 display_form <<EOF

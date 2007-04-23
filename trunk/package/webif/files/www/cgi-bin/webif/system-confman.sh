@@ -125,7 +125,7 @@ EOF
 		}
 		echo "</pre></td></tr>"
 	else
-		echo "<p>bad dir: $dir</p>"
+		echo "<p>@TR<<confman_bad_dir#bad dir>>: $dir</p>"
 	fi
 	display_form <<EOF
 end_form

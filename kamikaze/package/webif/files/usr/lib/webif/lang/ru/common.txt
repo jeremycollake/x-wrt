@@ -743,7 +743,7 @@ Disable => Выключить
 
 #network-dhcpiface.sh
 Name => Имя
-Interface => Интерфейс
+## duplicate ##Interface => Интерфейс
 Interfaces => Интерфейсы
 
 ## network-qos.sh
@@ -834,12 +834,14 @@ add_vlan => Добавить новую VLAN
 remove_vlan => Удалить последнюю VLAN
 
 #network-wan-lan.sh
+Interface => Интерфейс
+Helptext Interface => Интерфейс внешней сети (eth0, eth1, ...)
 WAN IP Settings => Настройки IP внешней сети
 Helptext WAN IP Settings => Настройки IP не обязательны для DHCP и PPTP. Они используются как настройки по умолчанию в случае, если DHCP сервер не доступен.
 Helptext WAN DNS save => Вы должны сохранить настройки на этой странице перед добавлением или удалением серверов имен
 IP Address => IP адрес
-Helptext LAN IP Address => Это адрес, который Вы бы хотели, чтобы устройство имело в локальной сети.
-Helptext Netmask => Эта маска показывает какие адреса принадлежат Вашей локальной сети.
+Helptext LAN IP Address => Адрес, который Вы бы хотели, чтобы устройство имело в локальной сети.
+Helptext Netmask => Маска показывает какие адреса принадлежат Вашей локальной сети.
 Helptext LAN DNS save => Вы должны сохранить настройки на этой странице перед добавлением или удалением серверов имен
 
 #network-wlan.sh
@@ -865,7 +867,7 @@ Wireless Distance (In Meters) => Беспроводное расстояние (
 Add Virtual Interface => Добавить виртуальный интерфейс
 Remove Virtual Interface => Удалить виртуальный интерфейс
 Generate 40bit Keys => Создать 40-битные ключи
-Generate 128bit Key => Создать 128-битные ключи
+Generate 128bit Key => Создать 128-битный ключ
 Antenna 1 => Антенна 1
 Antenna 2 =>  Антенна 2
 Auto => Авто
@@ -1014,9 +1016,13 @@ status_wlan_survey_Set_Security => &nbsp;Вы можете установить 
 status_wlan_survey_Network_Wireless => в разделе <b>Сеть &gt; Беспроводная сеть</b>&nbsp;
 Wireless survey => Сканирование беспроводных сетей
 
-# system-confman.sh
+## system-confman.sh
+confman_bad_dir => неверная папка
+confman_Configuration => Конфигурацию
+confman_Entire_Flash => Весь флэш
 confman_noauto_click => Если загрузка не начинается автоматически, нажмите сюда
-confman_restoring_conf => Конфигурация восстанавливается.
+confman_Restoring_firmware => Восстанавливается прошивка, пожалуйста подождите...
+confman_restoring_conf => Восстанавливается конфигурация.
 confman_restoring_file => восстанавливается
 Rebooting now => Перезагружается
 Restore Configuration => Восстановить конфигурацию
@@ -1025,11 +1031,11 @@ confman_good_conf => Похоже, правильная конфигурация
 confman_other_board => другой тип платы
 confman_board_ours => наш
 confman_board_file => файл
+confman_warn_erase => ПРЕДУПРЕЖДЕНИЕ !!! Эта операция сотрет текущий флэш.
 Backup => Сохранить
 Saved config.tgz file => Сохраненный config.tgz файл
 Restore => Восстановить
 Backup Configuration => Сохранить конфигурацию
-## TODO: Configuration, Entire Flash tr. symbols add
 
 #system-crontabs.sh
 Cron Tables Directory => Папка таблиц Cron
