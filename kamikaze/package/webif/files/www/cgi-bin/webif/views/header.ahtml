@@ -4,7 +4,7 @@ Pragma: no-cache
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title><% (PAGENAME ? PAGENAME " - " : "") config_get("general", "firmware_name") %> @TR<<Administrative Console>></title>
+<title><% (PAGENAME ? "@TR<<" PAGENAME ">> - " : "") config_get("general", "firmware_name") %> @TR<<Administrative Console>></title>
 	<link rel="stylesheet" type="text/css" href="/themes/active/waitbox.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
 	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_white.css" title="white" />
