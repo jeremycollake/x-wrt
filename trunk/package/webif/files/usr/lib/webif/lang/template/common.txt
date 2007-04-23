@@ -13,6 +13,44 @@
 ## replace any text after "=" and ">" with your translation
 
 
+## apply.sh
+apply_Reloading_settings_for => Reloading settings for
+apply_Exporting_settings_for => Exporting settings for
+apply_Applying_settings_for => Applying settings for
+apply_Restarting_service => Restarting service
+apply_Stopping_service => Stopping service
+apply_Processing_file => Processing file
+apply_Processing_config_file => Processing config file
+apply_Done => Done
+apply_dnsmasq => dnsmasq
+apply_wifi_enable => wifi enable
+apply_wifi_disable => wifi disable
+apply_network => network
+apply_wireless => wireless
+apply_firewall => firewall
+apply_cron => cron
+apply_syslogd => syslogd
+apply_system => system
+apply_upnpd => upnpd
+aplly_Error => Error
+apply_ez-ipupdate_config_not_updated => ez-ipupdate config apply not updated for non-nvram systems.
+apply_ez-ipupdate => ez-ipupdate
+apply_ez-ipupdate => ez-ipupdate
+apply_Could_not_replace => Could not replace
+apply_Media_full => Media full
+apply_conntrack => conntrack
+apply_snmp => snmp
+apply_pptp => pptp
+apply_pptpd => pptpd
+apply_Committing_NVRAM => Committing NVRAM
+apply_Installing_language_pack => Installing language pack
+apply_Error_installing_language => Error installing language pack
+apply_Initializing_theme => Initializing theme
+aplly_theme_installation_failed => theme package installation failed
+apply_qos => qos
+apply_Committing_settings => Committing settings
+
+
 ## browser.awk
 browser_Filesystem_Browser => Filesystem Browser
 browser_Root => Root
