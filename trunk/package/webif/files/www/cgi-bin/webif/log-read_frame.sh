@@ -16,7 +16,8 @@ if equal $LOG_TYPE "file" ; then
 else LOGREAD="logread"
 fi
 
-$LOGREAD | awk '{a[i++]=$0} END {for (j=i-1; j>=0;) print a[j--] }' | sed -e "s| $prefix| |"?></pre>
+$LOGREAD | awk '{a[i++]=$0} END {for (j=i-1; j>=0;) print a[j--] }' | sed -e "s| $prefix| |" | \
+sed 's/\&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g' ?></pre>
 </div>
 </body>
 </html>
