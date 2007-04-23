@@ -1,10 +1,39 @@
 ## language offer
 lang => Čeština
 
-
 ## SVN version referenced
-lang_for_svn => 3169
+lang_for_svn => 3190
 
+## /usr/lib/webif/apn.csv
+Vodafone UK => Vodafone VB
+Mobilkom, Austria => Mobilkom, Rakousko
+Proximus => Proximus Belgie
+Vodafone Spain => Vodafone Španělsko
+Vodafone Italy => Vodafone Itálie
+Vodafone Germany => Vodafone Německo
+Vodafone Germany (Corporate) => Vodafone Německo (korporátní)
+Vodafone Netherlands => Vodafone Nizozemsko
+Vodafone Sweden => Vodafone Švédsko
+Vodafone Hungary => Vodafone Maďarsko
+SFR => SFR Francie
+Vodafone Greece => Vodafone Řecko
+Vodafone Portugal => Vodafone Portugalsko
+Vodafone New Zealand => Vodafone Nový Zéland
+Vodafone Australia => Vodafone Austrálie
+Vodafone Ireland => Vodafone Irsko
+Vodafone Malta => Vodafone Malta
+Vodafone Egypt => Vodafone Egypt
+Vodacom SA => Vodacom SA (Jihoafrická rep.)
+Vipnet => Vipnet Chorvatsko
+SiMobil => SiMobil Slovinsko
+Elisa Finland => Elisa Finsko
+TDC Mobil => TDC Mobil Dánsko
+MTC Bahrain => MTC Bahrajn
+MTC Kuwait => MTC Kuvajt
+Elisa Estonia => Elisa Estonsko
+Vodafone Fiji => Vodafone Fidži
+OG Vodafone => OG Vodafone Island
+LUXGSM => LUXGSM Lucembursko
 
 ## /usr/lib/webif/apply.sh
 Reloading => Obnovuji
@@ -19,12 +48,10 @@ Processing => Zpracovávám
 Critical Error => Kritická chyba
 Could not replace => Nelze přepsat
 Media full => Médium je plné
-Processing => Zpracovávám
 config file => konfigurační soubor
 Done => Hotovo
-conntrack settings => nastavení pro conntrack
+conntrack settings => nastavení conntrack
 Setting => Nastavuji
-Done => Hotovo
 Initializing theme ... => Inicializuji téma ...
 Error => Chyba
 installing theme package => při instalaci balíčku tématu
@@ -36,7 +63,41 @@ Committing => Ukládám
 network => síť
 syslogd => syslogd
 OpenVPN => OpenVPN
-
+##------------------
+apply_Reloading_settings_for => Obnovuji nastavení pro
+apply_Exporting_settings_for => Exportuji nastavení pro
+apply_Applying_settings_for => Aplikuji nastavení pro
+apply_Restarting_service => Restartuji službu
+apply_Stopping_service => Zastavuji službu
+apply_Processing_file => Zpracovávám soubor
+apply_Processing_config_file => Zpracovávám konfigurační soubor
+apply_Done => Hotovo
+apply_dnsmasq => dnsmasq
+apply_wifi_enable => wifi povoleno
+apply_wifi_disable => wifi zakázáno
+apply_network => síť
+apply_wireless => bezdrát
+apply_firewall => firewall
+apply_cron => cron
+apply_syslogd => syslogd
+apply_system => system
+apply_upnpd => upnpd
+aplly_Error => Chyba
+apply_ez-ipupdate_config_not_updated => aplikace konfigurace ez-ipupdate nebyla aktualizována pro systémy bez nvram.
+apply_ez-ipupdate => ez-ipupdate
+apply_Could_not_replace => Nelze přepsat
+apply_Media_full => Médium je plné
+apply_conntrack => conntrack
+apply_snmp => snmp
+apply_pptp => pptp
+apply_pptpd => pptpd
+apply_Committing_NVRAM => Ukládám NVRAM
+apply_Installing_language_pack => Instaluji jazykový balíček
+apply_Error_installing_language => Chyba při instalaci jazykového balíčku
+apply_Initializing_theme => Inicializuji téma
+aplly_theme_installation_failed => instalace balíčku tématu selhala
+apply_qos => qos
+apply_Committing_settings => Ukládám nastavení
 
 ## /usr/lib/webif/browser.awk
 browser_Filesystem_Browser => Prohlížeč souborového systému
@@ -51,8 +112,7 @@ browser_Delete => Smazat
 browser_File => Soubor
 browser_Edit => Upravit
 
-
-## comgt.webif
+## /usr/lib/webif/comgt.webif
 status_wwaninfo_comgt_PManufacturer => Výrobce
 status_wwaninfo_comgt_ModelInfo => Model
 status_wwaninfo_comgt_IMEISN => IMEI a sériové číslo
@@ -71,10 +131,8 @@ status_wwaninfo_comgt_Band_9_18 => Dvojí pásmo 900/1800 MHz (Evropa)
 status_wwaninfo_comgt_Band_9_19 => Dvojí pásmo 900/1900 MHz (USA)
 status_wwaninfo_comgt_APN => Název přístupového bodu
 
-
 ## /usr/lib/webif/common.awk
 Short help => Krátká nápověda
-
 
 ## /usr/lib/webif/editor.awk
 File => Soubor
@@ -82,21 +140,17 @@ File => Soubor
 &nbsp;Back&nbsp; => &nbsp;Zpět&nbsp;
 editor_click_apply => Po dokončení změn souborů a případných dalších úpravách konfigurace musíte kliknout na "Provést změny", aby byly změny trvale uloženy.
 
-
 ## /usr/lib/webif/form.awk
 Remove => Odstranit
 Add => Přidat
 more... => více...
 
-
 ## /usr/lib/webif/functions.sh
 features_require_package => Vlastnosti na této stránce vyžadují balíček
 features_install => nainstalovat nyní
 
-
 ## /usr/lib/webif/subcategories.awk
 Subcategories => Podkategorie
-
 
 ## /usr/lib/webif/validate.awk
 Invalid value => Neplatná hodnota
@@ -116,7 +170,6 @@ maximum length => maximální délka
 Invalid dots => Neplatné tečky
 Invalid spaces => Neplatné mezery
 Error in => Chyba v položce
-
 
 ## /usr/lib/webif/webif.sh
 big_warning => UPOZORNĚNÍ
@@ -145,7 +198,6 @@ Clear Changes => Zahodit změny
 Review Changes => Prohlédnout změny
 making_usable => Rozšíření OpenWrt pro koncové uživatele
 
-
 ## /www/cgi-bin/webif/.categories
 Info => Info
 Graphs => Grafy
@@ -158,63 +210,26 @@ HotSpot => HotSpot
 Freeloader => Freeloader
 Logout => Odhlášení
 
-
-## /www/cgi-bin/webif/apn.csv
-Vodafone UK => Vodafone VB
-Mobilkom, Austria => Mobilkom, Rakousko
-Proximus => Proximus Belgie
-Vodafone Spain => Vodafone Španělsko
-Vodafone Italy => Vodafone Itálie
-Vodafone Germany => Vodafone Německo
-Vodafone Germany (Corporate) => Vodafone Německo (korporátní)
-Vodafone Netherlands => Vodafone Nizozemsko
-Vodafone Sweden => Vodafone Švédsko
-Vodafone Hungary => Vodafone Maďarsko
-SFR => SFR Francie
-Vodafone Greece => Vodafone Řecko
-Vodafone Portugal => Vodafone Portugalsko
-Vodafone New Zealand => Vodafone Nový Zéland
-Vodafone Australia => Vodafone Austrálie
-Vodafone Ireland => Vodafone Irsko
-Vodafone Malta =>
-Vodafone Egypt =>
-Vodacom SA => Vodacom SA (Jihoafrická rep.)
-Vipnet => Vipnet Chorvatsko
-SiMobil => SiMobil Slovinsko
-Elisa Finland => Elisa Finsko
-TDC Mobil => TDC Mobil Dánsko
-MTC Bahrain => MTC Bahrajn
-MTC Kuwait => MTC Kuvajt
-Elisa Estonia => Elisa Estonsko
-Vodafone Fiji => Vodafone Fidži
-OG Vodafone => OG Vodafone Island
-LUXGSM => LUXGSM Lucembursko
-
-
 ## /www/cgi-bin/webif/config.sh
 No config change. => Nebyly provedeny žádné změny konfigurace.
 Config discarded. => Vaše změny konfigurace byly zahozeny.
 Config changes: => Aktuální změny konfigurace:
 Updating config... => Aktualizuji vaši konfiguraci...
 
-
 ## /www/cgi-bin/webif/graphs-cpu.sh
 Graphs => Grafy
 graphs_cpu_subcategory => Procesor
 graphs_cpu_CPU_Usage => Využití CPU
-graphs_svg_required => Tento objekt vyžaduje podporu SVG.
-
+## temporarily removed ##graphs_svg_required => Tento objekt vyžaduje podporu SVG.
 
 ## /www/cgi-bin/webif/graphs-if.sh
 ## duplicate ##Graphs => Grafy
 graphs_if_Traffic => Provoz
 graphs_if_Traffic_of_Interface => Provoz rozhraní
-## duplicate ##graphs_svg_required => Tento objekt vyžaduje podporu SVG.
-
+## temporarily removed #### duplicate ##graphs_svg_required => Tento objekt vyžaduje podporu SVG.
 
 ## /www/cgi-bin/webif/iframe.mini-info.sh
 Device Status => Stav zařízení
-
 
 ## /www/cgi-bin/webif/info-about.sh
 Info => Info
@@ -240,7 +255,6 @@ This device is running => Na tomto zařízení běží
 or a close derivative => nebo jeho blízká odvozenina
 GPL_Text => Tento program je svobodný software; můžete jej šířit a modifikovat podle <br />ustanovení GNU General Public License, vydávané Free Software <br />Foundation; a to buď verze 2 této licence anebo (podle vašeho uvážení) <br />kterékoli pozdější verze.<br />
 
-
 ## /www/cgi-bin/webif/info.sh
 Info => Info
 System => Systém
@@ -263,7 +277,6 @@ Version => Verze
 info_check_update => Zkontrolovat aktualizaci pro Webif&sup2;
 info_check_daily_text => Zahrnout denní sestavení při kontrole aktualizace pro webif&sup2;
 
-
 ## /www/cgi-bin/webif/log-browse.sh
 Log => Záznam
 Firewall Log View => Zobrazení záznamu firewallu
@@ -282,6 +295,21 @@ Destination Port => Cílový port
 Dest. Port => Cíl. port
 Type => Typ
 
+## /www/cgi-bin/webif/log-dmesg.sh
+Log => Záznam
+Kernel => Jádro
+log_dmesg_Kernel_Ring_Buffer => Kruhový záznam jádra
+HelpText Browser_Frames => Váš prohlížeč nepodporuje rámce,<br />pokračujte tímto odkazem
+log_dmesg_View_Kernel_Ring_Buffer=> Zobrazit kruhový záznam jádra
+
+## /www/cgi-bin/webif/logout.sh
+Logout => Odhlášení
+Logout => Odhlášení
+logout_close_window => Pro odhlášení musíte ukončit webový prohlížeč!
+logout_explanation => Protože je základní autentizace httpd uložena v paměti prohlížeče, není možné uživatele odhlásit. Musíte ukončit webový prohlížeč, v případě Firefoxu spustíte 'Vymazat důvěrná data', a donutit ho tak zapomenout přihlašovací informace, které jste zadali. Kvůli tomuto problému zděděné slabiny v základní httpd autentizaci používané běžně firmwary pravděpodobně přejdeme na autentizaci prostřednictvím cookie.
+logout_reference => Odkaz k nahlédnutí, viz http://httpd.apache.org/docs/1.3/howto/auth.html
+Logout => Odhlášení
+Logout => Odhlášení
 
 ## /www/cgi-bin/webif/log-read.sh
 Log => Záznam
@@ -290,7 +318,6 @@ Syslog View => Zobrazení záznamu syslog
 Message Prefix => Předpona zpráv	
 HelpText Browser_Frames => Váš prohlížeč nepodporuje rámce,<br />pokračujte tímto odkazem
 View Syslog => Zobrazit syslog
-
 
 ## /www/cgi-bin/webif/log-setup.sh
 Remote host => Vzdálený počítač
@@ -332,17 +359,6 @@ Log Size => Velikost záznamu
 ##HelpText Log Size => Velikost vašeho záznamu v kilobajtech. Buďte opatrní při stanovení velikosti kruhové paměti, protože je o ni zmenšena pracovní paměť. Výchozí hodnota: $DEFAULT_log_size kB.
 HelpText Log Size => Velikost vašeho záznamu v kilobajtech. Buďte opatrní při stanovení velikosti kruhové paměti, protože je o ni zmenšena pracovní paměť.
 
-
-## /www/cgi-bin/webif/logout.sh
-Logout => Odhlášení
-Logout => Odhlášení
-logout_close_window => Pro odhlášení musíte ukončit webový prohlížeč!
-logout_explanation => Protože je základní autentizace httpd uložena v paměti prohlížeče, není možné uživatele odhlásit. Musíte ukončit webový prohlížeč, v případě Firefoxu spustíte 'Vymazat důvěrná data', a donutit ho tak zapomenout přihlašovací informace, které jste zadali. Kvůli tomuto problému zděděné slabiny v základní httpd autentizaci používané běžně firmwary pravděpodobně přejdeme na autentizaci prostřednictvím cookie.
-logout_reference => Odkaz k nahlédnutí, viz http://httpd.apache.org/docs/1.3/howto/auth.html
-Logout => Odhlášení
-Logout => Odhlášení
-
-
 ## /www/cgi-bin/webif/network-dhcpiface.sh
 Network => Síť
 DHCP => DHCP
@@ -369,7 +385,6 @@ DHCP Lease Minutes => Zápůjčka DHCP v minutách
 DHCP Start => Počátek adresového bloku DHCP
 HelpText DHCP_Start => Nevkládejte do této položky adresu IP! Pokud je adresa tohoto rozhraní 192.168.1.1 a chcete přidělovat klientům DHCP adresy od 192.168.1.100, zadejte do této položky jednoduše '100'.
 
-
 ## /www/cgi-bin/webif/network-dhcpsettings.sh
 Network => Síť
 Dnsmasq => Dnsmasq
@@ -386,7 +401,6 @@ Domain => Doména
 Lease Max => Lease Max
 Read Ethers => Read Ethers
 
-
 ## /www/cgi-bin/webif/network-ez-ipupdate.sh
 Network => Síť
 DynDNS => DynDNS
@@ -401,7 +415,6 @@ Last update => Poslední aktualizace
 broken_ezip => Máte částečně porušený balíček ez-ipupdate, jak bylo zjištěno v oficiálním repozitáři OpenWrt, RC6. Pro instalaci opravené kopie balíčku z repozitáře X-Wrt stiskněte tlačítko níže
 Reinstall EZ-IPUPDATE => Přeinstalovat EZ-IPUPDATE
 Please wait => Počkejte prosím
-
 
 ## /www/cgi-bin/webif/network-firewall.sh
 Protocol => Protokol
@@ -442,7 +455,6 @@ Forwarding a port to a different port => Předávání portu na odlišný port
 firewall_help_fw_example2 => Pokud chcete předávat TCP port 8888 z Internetu na místní počítač na adrese 192.168.1.100 na port 80, mohlo by to vypadat takto:
 firewall_help_fw_port_example2 => Cílové porty: 8888 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cíl: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: 80 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protokol: TCP
 
-
 ## /www/cgi-bin/webif/network-hosts.sh
 network_hosts_host_IP_invalid => Adresa IP počítače
 network_hosts_Host_Name => Název počítače
@@ -468,16 +480,13 @@ network_hosts_min => min
 network_hosts_sec => sek
 network_hosts_No_leases => Nejsou známy žádné zápůjčky DHCP.
 
+## /www/cgi-bin/webif/network-logread-ez-ipupdate_frame.sh
+EZ-IP-Update Messages => Záznam EZ-IP-Update
 
 ## /www/cgi-bin/webif/network-logread-ez-ipupdate.sh
 Network => Síť
 Settings => Nastavení
 DynDNS Syslog View => Zobrazení záznamu DynDNS
-
-
-## /www/cgi-bin/webif/network-logread-ez-ipupdate_frame.sh
-EZ-IP-Update Messages => Záznam EZ-IP-Update
-
 
 ## /www/cgi-bin/webif/network-misc.sh
 network_misc_Suggest_restart => Požadované nastavení bylo odstraněno z konfiguračního souboru, měli byste nyní <a href="reboot.sh">restartovat</a> zařízení, aby jádro mohlo vypočítat nové hodnoty.
@@ -501,7 +510,6 @@ Networking Tweaks => Síťová vylepšení
 Conntrack Settings => Nastavení conntrack
 HelpText maximum_connections => Maximální počet současných spojení, která může váš router sledovat. Vyšší číslo znamená větší spotřebu paměti RAM a vyšší zatížení CPU, pokud je nakonec tento počet spojení opravdu využit. Obvykle je nejlepší ponechat tuto hodnotu ve svém výchozím nastavení.
 HelpText tcp_established_timeout => Počet sekund, po které může být navázané spojení nevyužíváno, než je nuceně ukončeno. Někdy nejsou spojení správně ukončena a mohou zaplnit tabulku conntrack, pokud jsou tyto hodnoty příliš vysoké. Pokud jsou příliš nízké, mohou být spojení ukončena, protože jsou nečinná.
-
 
 ## /www/cgi-bin/webif/network-qos.sh
 Network => Síť
@@ -587,7 +595,6 @@ QoS Packages => Balíčky QoS
 qos_nbds => QoS skripty od Nbd (doporučeno)
 qos_nbds_install => Instalovat
 
-
 ## /www/cgi-bin/webif/network-services.sh
 Network => Síť
 UPnP => UPnP
@@ -624,8 +631,6 @@ linux-igd => linux-igd
 Install => Nainstalovat
 Which UPNPd to choose => Který UPNPd si vybrat
 HelPText install_upnpd_help => Můžete si vybrat ze dvou démonů UPNP: miniupnpd a linux-igd. Nejdříve zkuste miniupnpd, a pokud vám nefunguje, pak tento balíček odstraňte a zkuste linux-igd.
-UPNP =>
-
 
 ## /www/cgi-bin/webif/network-vlan.sh
 Network => Síť
@@ -636,13 +641,11 @@ Helptext VLAN => Virtuální LAN je sada portů, které jsou propojeny mostem, a
 Add New VLAN => Přidat novou VLAN
 Remove Last VLAN => Odstranit poslední VLAN
 
-
 ## /www/cgi-bin/webif/network-wakeonlan.sh
 Network => Síť
 WoL => WoL
 Wake-On-LAN => Wake-On-LAN
-wol_help => Zde můžete odeslat paket Wake-On-LAN pro automatické nastartování počítače, který je vypnutý. Počítač musí podporovat WOL a tato vlastnost musí být zapnuta v BISOu, aby to pracovalo. Naneštěstí není definována jednoznačná odpověď probouzeného počítače, takže nebudete vědět, zda bylo probuzení úspěšné a stroj opravdu startuje.
-
+wol_help => Zde můžete odeslat paket Wake-On-LAN pro automatické nastartování počítače, který je vypnutý. Počítač musí podporovat WOL a tato vlastnost musí být zapnuta v BISOu, aby to fungovalo. Naneštěstí není definována jednoznačná odpověď probouzeného počítače, takže nebudete vědět, zda bylo probuzení úspěšné a stroj opravdu startuje.
 
 ## /www/cgi-bin/webif/network-wan-lan.sh
 WAN DNS Address => Adresa DNS WAN
@@ -721,7 +724,6 @@ Helptext LAN DNS save => Před přidáním/odstraněním serverů DNS je nutné 
 Network => Síť
 WAN-LAN => WAN-LAN
 
-
 ## /www/cgi-bin/webif/network-wifi-lan.sh
 Network => Síť
 WIFI-LAN => WIFI-LAN
@@ -747,7 +749,6 @@ Default Gateway => Výchozí brána
 DNS Servers => Servery DNS
 Note => Poznámka
 Helptext DNS save => Před přidáním/odstraněním serverů DNS na této stránce je nutné uložit vaše nastavení
-
 
 ## /www/cgi-bin/webif/network-wlan-advanced.sh
 Network => Síť
@@ -796,7 +797,6 @@ Max Associated Clients (default 128) => Max. přičleněných klientů (výchoz�
 Wireless Distance (In Meters) => Bezdrátová vzdálenost (v metrech)
 Wireless Distance => Bezdrátová vzdálenost
 Helptext Wireless Distance => Musíte zadat číslo, které je dvakrát větší, než vzdálenost nejdelšího spojení.
-
 
 ## /www/cgi-bin/webif/network-wlan.sh
 Network => Síť
@@ -859,7 +859,6 @@ WEP Key 2 => Klíč WEP 2
 WEP Key 3 => Klíč WEP 3
 WEP Key 4 => Klíč WEP 4
 
-
 ## /www/cgi-bin/webif/reboot.sh
 System => Systém
 Reboot => Restart
@@ -869,7 +868,6 @@ reboot_wait => Počkejte prosím asi
 reboot_seconds => sekund.
 reboot_reload => Webif&sup2; by se měl automaticky znovu načíst.
 
-
 ## /www/cgi-bin/webif/status-asterisk.sh
 Status => Stav
 Asterisk => Asterisk
@@ -878,7 +876,6 @@ Accept => Přijmout
 Edit => Upravit
 Save Changes => Uložit změny
 Asterisk is not running. => Asterisk neběží. 
-
 
 ## /www/cgi-bin/webif/status-basic.sh
 Status => Stav
@@ -909,7 +906,6 @@ Mount Usage => Využití médií
 Mount Usage => Využití médií
 Helptext Mount Usage => Velikost celkového a použitého místa na souborových systémech připojených k routeru.
 
-
 ## /www/cgi-bin/webif/status-connection.sh
 Status => Stav
 Netstat => Netstat
@@ -918,11 +914,9 @@ Routing Table => Směrovací tabulka
 Router Listening Ports => Router naslouchá na portech
 Router Connections => Spojení na router
 
-
 ## /www/cgi-bin/webif/status-conntrackread.sh
 Status => Stav
 Conntrack Table => Tabulka 'conntrack'
-
 
 ## /www/cgi-bin/webif/status-diag.sh
 Status => Stav
@@ -932,7 +926,6 @@ Network Utilities => Síťové nástroje
 Ping => Ping
 TraceRoute => TraceRoute
 Please wait for output of => Počkejte prosím na výstup z
-
 
 ## /www/cgi-bin/webif/status-interfaces.sh
 Status => Stav
@@ -971,6 +964,25 @@ Interfaces Status WAN => Stav rozhraní WAN
 Interfaces Status LAN => Stav rozhraní LAN
 Interfaces Status WLAN => Stav bezdrátového rozhraní
 
+## /www/cgi-bin/webif/status-iptables.sh
+Status => Stav
+Iptables => Iptables
+status_iptables_IPTStatus => Stav Iptables
+status_iptables_col1 => č.
+status_iptables_col2 => paketů
+status_iptables_col3 => bytů
+status_iptables_col4 => cíl
+status_iptables_col5 => prot.
+status_iptables_col6 => vol.
+status_iptables_col7 => přích.
+status_iptables_col8 => odch.
+status_iptables_col9 => zdroj
+status_iptables_col10 => cíl
+status_iptables_col_options => volby
+status_iptables_Target_Filter=> Cíl Filtr
+status_iptables_Target_NAT => Cíl NAT
+status_iptables_Target_Mangle => Cíl Mangle
+status_iptables_Target_Raw => Cíl Raw
 
 ## /www/cgi-bin/webif/status-leases.sh
 Status => Stav
@@ -999,21 +1011,23 @@ status_leases_ethers_title => Databáze překladu ethernetových adres na adresy
 status_leases_ethers_empty => Soubor /etc/ethers neobsahuje žádný pár adres ethernet/IP.
 status_leases_no_ethers => Soubor /etc/ethers neexistuje.
 
-
-## /www/cgi-bin/webif/status-netfilter.sh
-Status => Stav
-IPTables => IPTables
-IPTables status => Stav IPTables
-IPTables rules => Pravidla IPTables
-IPTables/NAT rules => Pravidla IPTables/NAT
-
-
 ## /www/cgi-bin/webif/status-openvpn.sh
 Status => Stav
 OpenVPN => OpenVPN
 OpenVPN Status => Stav OpenVPN
 ## TODO
 
+## /www/cgi-bin/webif/status-pppoe.sh
+Status => Stav
+PPPoE => PPPoE
+PPPoE Status => Stav PPPoE
+
+## /www/cgi-bin/webif/status-pptp.sh
+Status => Stav
+PPTP => PPTP
+PPTP Status => Stav PPTP
+PPTP Client => Klient PPTP
+PPTP Server => Server PPTP
 
 ## /www/cgi-bin/webif/status-processes.sh
 status_processes_kill_error => Chyba kill
@@ -1040,21 +1054,6 @@ status_processes_Legend_Text => Velikosti paměti jsou v jednotkách kB.<br />St
 status_processes_Signals_Legend => Nejčastěji používané signály
 status_processes_Signals_Legend_Text => 1) SIGHUP - zavěšení<br />9) SIGKILL - zabití (nemůže být zachycen nebo ignorován)<br />15) SIGTERM - ukončení<br />10) SIGUSR1/12) SIGUSR2 - uživatelsky definované signály.<br />Více informací najdete v <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/kill.html" onclick="return !targetwindow(this.href);">popisu příkazu kill</a>.
 
-
-## /www/cgi-bin/webif/status-pppoe.sh
-Status => Stav
-PPPoE => PPPoE
-PPPoE Status => Stav PPPoE
-
-
-## /www/cgi-bin/webif/status-pptp.sh
-Status => Stav
-PPTP => PPTP
-PPTP Status => Stav PPTP
-PPTP Client => Klient PPTP
-PPTP Server => Server PPTP
-
-
 ## /www/cgi-bin/webif/status-qos.sh
 Status => Stav
 QoS => QoS
@@ -1071,7 +1070,6 @@ Bytes => Bajtů
 QoS Packets | Raw Stats => Pakety QoS | Surová statistika
 no_qos => Žádná služba QoS neběží, nelze tedy zobrazit dekódovanou statistiku QoS! Doporučujeme nainstalovat skripty QoS od nbd.
 qos_scripts_disabled => Balíček qos-scripts není aktivní. Navštivte <a href="./network-qos.sh">Nastavení QoS</a> k jeho instalaci nebo povolení.
-
 
 ## /www/cgi-bin/webif/status-usb.sh
 status_usb_umount_error_in => Chyba při akci
@@ -1105,7 +1103,6 @@ status_usb_swap_partition => oblast
 status_usb_swap_file => soubor
 status_usb_Loaded_USB_drivers => Natažené ovladače USB
 
-
 ## /www/cgi-bin/webif/status-wlan-survey.sh
 Status => Stav
 Site Survey => Průzkum
@@ -1122,7 +1119,6 @@ Noise => Šum
 SNR => SNR
 No wireless networks were found => Žádné bezdrátové sítě nebyly nalezeny
 Survey Results => Výsledky průzkumu
-
 
 ## /www/cgi-bin/webif/status-wwaninfo.sh
 Status => Stav
@@ -1148,7 +1144,6 @@ status_wwaninfo_quality_Workable => Přijatelná
 status_wwaninfo_quality_Good => Dobrá
 status_wwaninfo_quality_Excellent => Vynikající
 status_wwaninfo_wrong_value => Chybná hodnota kvality signálu
-
 
 ## /www/cgi-bin/webif/system-confman.sh
 System => Systém
@@ -1184,7 +1179,6 @@ Restore Configuration => Obnovit konfiguraci
 Saved config.tgz file: => Uložený soubor config.tgz
 Restore => Obnovit
 
-
 ## /www/cgi-bin/webif/system-cron.sh
 System => Systém
 Cron => Cron
@@ -1195,7 +1189,6 @@ Enable => Povolit
 Disable => Zakázat
 View Crontab files => Zobrazit tabulky cronu
 
-
 ## /www/cgi-bin/webif/system-crontabs.sh
 System => Systém
 Crontabs => Tabulky cronu
@@ -1204,7 +1197,6 @@ Cron Jobs => Úlohy cronu
 crontabs => Tabulky cronu
 HelpText crontabs => Tabulky cronu jsou seznamy úloh, které má démon cron (crond) vykonávat v zadaných intervalech nebo čase.
 Cron Tables Directory => Adresář tabulek cronu
-
 
 ## /www/cgi-bin/webif/system-editor.sh
 System => Systém
@@ -1215,7 +1207,6 @@ system_editor_ask_dir_deletition => Opravdu chcete smazat adresář '{0}'
 system_editor_ask_file_deletition => Opravdu chcete smazat soubor '{0}/{1}'
 system_editor_info_dir_deleted =>  Adresář byl smazán úspěšně
 system_editor_info_file_deleted => Soubor byl smazán úspěšně
-
 
 ## /www/cgi-bin/webif/system-ipkg.sh
 System => Systém
@@ -1256,7 +1247,6 @@ system_ipkg_Install => Nainstalovat
 System => Systém
 Packages => Balíčky
 
-
 ## /www/cgi-bin/webif/system-nvram.sh
 system_nvram_Error_in => Chyba v položce
 system_nvram_New_Variable => Název nové proměnné
@@ -1292,10 +1282,8 @@ system_nvram_Change_the_value => Změnit hodnotu
 system_nvram_Delete_the_variable => Smazat tuto proměnnou
 system_nvram_NVRAM_Usage => Využití NVRAM
 system_nvram_Total => Celkem
-system_nvram_B => B
 system_nvram_Used => Použito
 system_nvram_NVRAM_Usage_helptext => Toto je aktuální využití paměti NVRAM. Graf zobrazuje, kolik paměti je použito a kolik paměti je k dispozici pro další proměnné.
-
 
 ## /www/cgi-bin/webif/system-password.sh
 System => Systém
@@ -1304,7 +1292,6 @@ Password => Heslo
 Password Change => Změna hesla
 New Password => Nové heslo
 Confirm Password => Potvrdit heslo
-
 
 ## /www/cgi-bin/webif/system-settings.sh
 System => Systém
@@ -1346,7 +1333,6 @@ Webif&sup2; Settings => Nastavení pro Webif&sup2;
 Language => Jazyk
 Theme => Téma
 
-
 ## /www/cgi-bin/webif/system-snmpd.sh
 System => Systém
 SNMP => SNMP
@@ -1374,11 +1360,9 @@ Install SNMPd => Nainstalovat SNMPd
 HelPText install_snmpd_help => Simple Network Management Protocol (SNMP) is a widely used protocol for monitoring the health and welfare of network equipment (eg. routers), computer equipment and even devices like UPSs."
 SNMP Settings => Nastavení SNMP
 
-
 ## /www/cgi-bin/webif/system-startup.sh
 System => Systém
 Startup => Start
-
 
 ## /www/cgi-bin/webif/system-upgrade.sh
 System => Systém
@@ -1399,11 +1383,7 @@ HelpText Erase_JFFS2 => Tato volba je užitečná pouze při zápisu odjinud poc
 Firmware Image => Obraz firmware
 HelpText Firmware_Image => Můžete zvolit jakýkoli BIN nebo TRX kompatibilní obraz.
 
-
 ## /www/cgi-bin/webif/vpn-openvpn.sh
-vpn_openvpn_Installing_package => Instaluje se balíček openvpn ...
-vpn_openvpn_warn => VPN nebude pracovat, dokud nenainstalujete OpenVPN:
-vpn_openvpn_install_package => Nainstalovat balíček OpenVPN
 VPN => VPN
 OpenVPN => OpenVPN
 Start VPN Connection => Připojit VPN
@@ -1444,7 +1424,6 @@ Upload Successful => Načtení bylo úspěšné
 Found installed client key. => Nalezen nainstalovaný klientský klíč
 Upload Client Key => Načíst klientský klíč
 
-
 ## /www/cgi-bin/webif/vpn-pptp.sh
 VPN => VPN
 PPTP => PPTP
@@ -1464,7 +1443,6 @@ PPTP Server => Server PPTP
 PPTP VPN Users => Uživatelé PPTP VPN
 Remove => Odebrat
 
-
 ## /www/svggraph/graph_cpu.svg
 graph_cpu_CPU => CPU
 graph_cpu_Cannot_get_data_CPU => Nelze získat data o CPU
@@ -1472,7 +1450,6 @@ graph_Collecting_initial_data => Sbírám počáteční data, počkejte prosím.
 graph_No_URL_getURL => Chybí URL pro getURL
 graph_No_callback_function => Chybí funkce zpětného volání pro getURL
 graph_Both_undefined => Obě funkce getURL a XMLHttpRequest nejsou definovány
-
 
 ## /www/svggraph/graph_if.svg
 graph_if_In => Přích.

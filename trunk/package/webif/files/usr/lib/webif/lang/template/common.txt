@@ -162,14 +162,14 @@ making_usable => End user extensions for OpenWrt
 Graphs => Graphs
 graphs_cpu_subcategory => CPU
 graphs_cpu_CPU_Usage => CPU Usage
-graphs_svg_required => This object requires the SVG support.
+## temporarily removed ##graphs_svg_required => This object requires the SVG support.
 
 
 ## graphs-if.sh
 ## duplicate ##Graphs => Graphs
 graphs_if_Traffic => Traffic
 graphs_if_Traffic_of_Interface => Traffic of Interface
-## duplicate ##graphs_svg_required => This object requires the SVG support.
+## temporarily removed #### duplicate ##graphs_svg_required => This object requires the SVG support.
 
 
 ## network-hosts.sh
