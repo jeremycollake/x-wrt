@@ -10,7 +10,7 @@ tipcount=1
 location=""
 
 HEADER="HTTP/1.0 200 OK
-Content-type: text/html
+Content-type: text/html; charset=UTF-8
 
 "
 

@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-Content-Type: text/html 
+Content-Type: text/html; charset=UTF-8
 Pragma: no-cache
 
 <?

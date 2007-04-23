@@ -92,7 +92,7 @@ has_pkgs() {
 mini_header() {
 
 cat <<EOF
-Content-Type: text/html
+Content-Type: text/html; charset=UTF-8
 Pragma: no-cache
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -157,7 +157,7 @@ header() {
 	}
 
 cat <<EOF
-Content-Type: text/html
+Content-Type: text/html; charset=UTF-8
 Pragma: no-cache
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">

@@ -74,7 +74,7 @@ redir="${script}?path=$FORM_path"
 		} || exit
 	}
 }
-echo "Content-Type: text/html"
+echo "Content-Type: text/html; charset=UTF-8"
 echo "Content-Disposition: inline"
 echo "Pragma: no-cache"
 echo ""
