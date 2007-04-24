@@ -1,0 +1,11 @@
+Package: samba-common
+Depends: libgcc
+Section: net
+Priority: optional
+Description: NetBIOS/SMB server and client shared files
+ The Samba software suite is a collection of programs that implements the
+ SMB protocol for unix systems, allowing you to serve files and printers to
+ Windows, NT, OS/2 and DOS clients. This protocol is sometimes also referred
+ to as the LanManager or Netbios protocol.
+ 
+ http://www.samba.org/
