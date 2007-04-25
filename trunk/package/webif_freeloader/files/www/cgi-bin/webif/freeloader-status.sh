@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<? 
+<?
 . /usr/lib/webif/webif.sh
 ###################################################################
 # freeloader-status.sh
@@ -20,8 +20,8 @@
 #   none
 #
 # Configuration files referenced:
-#   /etc/freeloader-include.sh
-#		/usr/lib/webif/webif.sh
+#   /etc/config/freeloader
+#
 #
 
 header_inject_head=$(cat <<EOF
@@ -38,6 +38,10 @@ header_inject_head=$(cat <<EOF
 }
 #viewarea th {
 	width: 5%;
+}
+#viewarea td {
+	padding-left: 1px;
+	padding-right: 1px;
 }
 #viewarea .torrentcol {
 	width: 68%;
@@ -266,7 +270,7 @@ if [ -f /tmp/currentdownloadfile ]; then
 		echo "<tr><td colspan=\"5\">&nbsp;<td></tr>"
 		ls -l $QUEUE_DIR 2>/dev/null | grep "$CURRENT_DOWNLOADFILE\$" | awk 'NF == 9 {print "<tr><td>",$9,"</td><td>",$7,$6,$8,"</td><td>","&nbsp;","</td><td>","&nbsp;","</td><td>","&nbsp;","</td></tr>"};NF > 9 {filename=$9;for (i=10;i<= NF; i++){filename = filename " " $i};print "<tr><td>",filename,"</td><td>",$7,$6,$8,"</td><td>","&nbsp;","</td><td>","&nbsp;","</td><td>","&nbsp;","</td></tr>"}'
 	else
-		ls -l $QUEUE_DIR 2>/dev/null | grep "$CURRENT_DOWNLOADFILE\$" | awk 'NF == 9 {print "<tr><td>",$9,"</td><td>",$7,$6,$8,"</td><td>","<a href=\"freeloader-status.sh?action=abort&amp;queue=current&amp;torrent=" $9 "\">@TR<<freeloader-status_action_abort#abort>></a>","</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=suspend\">@<<freeloader-status_action_suspend#suspend>></a>","</td></tr>"};NF > 9 {filename=$9;for (i=10;i<= NF; i++){filename = filename " " $i};print "<tr><td>",filename,"</td><td>",$7,$6,$8,"</td><td>","<a href=\"freeloader-status.sh?action=abort&amp;queue=current&amp;torrent="filename"\">@TR<<freeloader-status_action_abort#abort>></a>","</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=suspend\">@<<freeloader-status_action_suspend#suspend>></a>","</td></tr>"}'
+		ls -l $QUEUE_DIR 2>/dev/null | grep "$CURRENT_DOWNLOADFILE\$" | awk 'NF == 9 {print "<tr><td>",$9,"</td><td>",$7,$6,$8,"</td><td>","<a href=\"freeloader-status.sh?action=abort&amp;queue=current&amp;torrent=" $9 "\">@TR<<freeloader-status_action_abort#abort>></a>","</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=suspend\">@TR<<freeloader-status_action_suspend#suspend>></a>","</td></tr>"};NF > 9 {filename=$9;for (i=10;i<= NF; i++){filename = filename " " $i};print "<tr><td>",filename,"</td><td>",$7,$6,$8,"</td><td>","<a href=\"freeloader-status.sh?action=abort&amp;queue=current&amp;torrent="filename"\">@TR<<freeloader-status_action_abort#abort>></a>","</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=suspend\">@TR<<freeloader-status_action_suspend#suspend>></a>","</td></tr>"}'
 	fi
 else
 	if [ -f $DOWNLOAD_DESTINATION/suspend.lock ]; then

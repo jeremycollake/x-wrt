@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<? 
+<?
 . /usr/lib/webif/webif.sh
 ###################################################################
 # freeloader-upload.sh
@@ -23,7 +23,7 @@
 #   none
 #
 # Configuration files referenced:
-#   /etc/freeloader-include.sh
+#   /etc/config/freeloader
 #
 #
 
@@ -42,7 +42,7 @@ function checkformURL(form) {
 		form.uploadURL.focus();
     		return false ;
 		}
-  
+ 
 	if (form.uploadURLlist.value == "" && document.getElementById("divurl2").style.display == "block") {
 		alert( webif_entityDecode( "@TR<<freeloader-upload_Enter_URL_list#Please enter a list of URLs for uploading to the router.>>" ) );
 		form.uploadURLlist.focus();
@@ -60,7 +60,7 @@ function checkformURL(form) {
   		form.username.focus();
   		return false;
   		}
-  
+ 
   return true ;
 }
 
@@ -69,7 +69,7 @@ function checkformTorrentNZB(form) {
     alert( webif_entityDecode( "@TR<<freeloader-upload_Select_a_file#Please select a .torrent or .nzb file for uploading to the router.>>" ) );
     form.uploadfile.focus();
     return false ;
-  }   
+  }  
   return true ;
 }
 
@@ -234,7 +234,7 @@ document.formuploadurllist.inputtype[0].checked = true;
 
 
 EOF
-footer 
+footer
 ?>
 <!--
 ##WEBIF:name:Freeloader:10:freeloader-upload_subcategory#Upload

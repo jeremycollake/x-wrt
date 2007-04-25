@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<? 
+<?
 . /usr/lib/webif/webif.sh
 ###################################################################
 # freeloader-log.sh
@@ -22,7 +22,7 @@
 #   none
 #
 # Configuration files referenced:
-#   /etc/freeloader-include.sh
+#   /etc/config/freeloader
 #
 #
 
@@ -32,9 +32,9 @@ header_inject_head=$(cat <<EOF
 <script type="text/javascript">
 <!--
 function setDiv() {
-	var viewarea = document.getElementById('viewarea'); 
+	var viewarea = document.getElementById('viewarea');
 	var windowheight = document.documentElement.clientHeight;
-	viewarea.style.height = (windowheight - 344) + "px"; 
+	viewarea.style.height = (windowheight - 344) + "px";
 	viewarea.style.display = "block";
 }
 

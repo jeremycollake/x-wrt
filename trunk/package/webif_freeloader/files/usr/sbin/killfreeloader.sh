@@ -20,19 +20,24 @@
 #   none
 #
 # Configuration files referenced:
-#   /etc/freeloader-include.sh
+#   /etc/config/freeloader
 #
 #
 
+#Include functions
+. /usr/lib/webif/webif.sh
 #Include settings
 . /usr/lib/webif/freeloader-include.sh
+
+#exit immediately, no root
+empty "$DOWNLOAD_ROOT" && exit
 
 #this LS command is needed because otherwise the abort.lock and suspend.lock will not be found, some kind of caching problem on CIFS shares
 ls "$DOWNLOAD_DESTINATION"  > /dev/null 2>&1
 
 if ! [ -f "$DOWNLOAD_DESTINATION/suspend.lock" ]; then
 
-	#if the abort.lock file exists, read the PID from the file, kill the proces and remove the abort.lock
+	#if the abort.lock file exists, read the PID from the file, kill the process and remove the abort.lock
 	if [ -f "$DOWNLOAD_DESTINATION/abort.lock" ] ; then
 
 		#kill all ctorrent/curl/nzbget processes
@@ -60,7 +65,7 @@ if ! [ -f "$DOWNLOAD_DESTINATION/suspend.lock" ]; then
 				#create a prio.lock file
 				touch /tmp/prio.lock
 
-				#kill the getfreeloader proces (so the .torrent/.link/.nzb files are NOT moved when ctorrent/curl/nzbget is killed)
+				#kill the getfreeloader process (so the .torrent/.link/.nzb files are NOT moved when ctorrent/curl/nzbget is killed)
 				killall -15 getfreeloader.sh
 	
 				#kill all ctorrent/curl/nzbget processes
@@ -92,7 +97,7 @@ else
 	#check if ctorrent/curl/nzbget is running
 	if [ `pidof ctorrent curl nzbget` ]; then
 		
-		#kill the getfreeloader proces (so the .torrent/.link/.nzb files are NOT moved when ctorrent/curl/nzbget is killed)
+		#kill the getfreeloader process (so the .torrent/.link/.nzb files are NOT moved when ctorrent/curl/nzbget is killed)
 		killall getfreeloader.sh
 		
 		#kill all ctorrent/curl/nzbget processes

@@ -1,6 +1,20 @@
 #!/usr/bin/haserl -u
-content-type: text/html
+Content-Type: text/html; charset=UTF-8
+Pragma: no-cache
 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="refresh" content="0;url=freeloader-upload.sh" />
+<title></title>
+<script type="text/javascript">
+<!--
+window.location="freeloader-upload.sh"
+// -->
+</script>
+</head>
+<body>
 <?
 ###################################################################
 # freeloader-uploadcallback.sh
@@ -24,13 +38,14 @@ content-type: text/html
 #   none
 #
 # Configuration files referenced:
-#   /etc/freeloader-include.sh
+#   /etc/config/freeloader
 #
 #
 
+#Include functions
+. /usr/lib/webif/webif.sh
 #Include settings
 . /usr/lib/webif/freeloader-include.sh
-
 
 if [ -n "$FORM_uploadfile" ]; then
 	#Get only the filename from the path
@@ -46,16 +61,16 @@ if [ -n "$FORM_uploadfile" ]; then
 	logstatus "$FORM_uploadfile_name has been uploaded to the $FORM_queue queue."
 fi
 
-if [ -n "$FORM_uploadURL" ]; then 
+if [ -n "$FORM_uploadURL" ]; then
 	URL_FILENAME=`echo $FORM_uploadURL | awk '{n=split($0,fn,"/"); print fn[n]}'`
 	if [ "$FORM_queue" = "normal" ]; then
-		if [ -n "$FORM_username" ] && [ -n "$FORM_password" ]; then		
+		if [ -n "$FORM_username" ] && [ -n "$FORM_password" ]; then
 			echo "username=$FORM_username" > "$QUEUE_NORMAL/$URL_FILENAME.link.fci"
 			echo "password=$FORM_password" >> "$QUEUE_NORMAL/$URL_FILENAME.link.fci"
 		fi
 		echo "$FORM_uploadURL" > "$QUEUE_NORMAL/$URL_FILENAME.link"
 	else
-		if [ -n "$FORM_username" ] && [ -n "$FORM_password" ]; then		
+		if [ -n "$FORM_username" ] && [ -n "$FORM_password" ]; then
 			echo "username=$FORM_username" > "$QUEUE_PRIO/$URL_FILENAME.link.fci"
 			echo "password=$FORM_password" >> "$QUEUE_PRIO/$URL_FILENAME.link.fci"
 		fi
@@ -65,7 +80,7 @@ if [ -n "$FORM_uploadURL" ]; then
 	logstatus "$URL_FILENAME has been uploaded to the $FORM_queue queue."
 fi
 
-if [ -n "$FORM_uploadURLlist" ]; then 
+if [ -n "$FORM_uploadURLlist" ]; then
 	
 	#generate a random number to make the filename unique when a user uploads a multiple url list
 	RANDOMNUMBER=`dd if=/dev/urandom bs=2 count=1 2>/dev/null | hexdump -d | awk 'int($1) == 0 { print (($2 % 254) + 1) }'`
@@ -87,15 +102,6 @@ if [ -n "$FORM_uploadURLlist" ]; then
 
 	logstatus "$URL_FILENAME has been uploaded to the $FORM_queue queue."
 fi
-
-
-echo "<html><body>"
-cat <<EOF
-<script type="text/javascript">
-<!--
-window.location="freeloader-upload.sh"
-// -->
-</script>
-EOF
-echo "</body></html>"
 ?>
+</body>
+</html>

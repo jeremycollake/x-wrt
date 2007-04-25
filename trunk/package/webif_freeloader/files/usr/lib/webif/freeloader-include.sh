@@ -19,61 +19,37 @@
 #   none
 #
 # Configuration files referenced:
-#
+#   /etc/config/freeloader
 #
 #
 
 uci_add_section_if_not_exists() {
-	local PACKAGE="$1"
-	local SECTION="$2"
 	local _val
-	eval "_val=\$CONFIG_${SECTION}_TYPE" 2>/dev/null
-	! equal "$_val" "$PACKAGE" && {
-		uci_add "$PACKAGE" "$PACKAGE" "$SECTION"
+	eval "_val=\$CONFIG_${2}_TYPE" 2>/dev/null
+	! equal "$_val" "$1" && {
+		uci_add "$1" "$1" "$2"
 	}
-	[ "$_val" = "$PACKAGE" ]
 }
-
 uci_add_option_if_not_exists() {
-	local PACKAGE="$1"
-	local CONFIG="$2"
-	local OPTION="$3"
-	local VALUE="$4"
 	local _val
-	eval "_val=\$CONFIG_${CONFIG}_${OPTION}" 2>/dev/null
+	eval "_val=\$CONFIG_${2}_${3}" 2>/dev/null
 	equal "$_val" "" && {
-		uci_set "$PACKAGE" "$CONFIG" "$OPTION" "$VALUE"
+		uci_add_section_if_not_exists "$1" "$2"
+		uci_set "$1" "$2" "$3" "$4"
+		freeloader_commit=1
 	}
-	[ "$_val" != "" ]
 }
 
 freeloader_commit=0
 uci_load "freeloader"
-uci_add_section_if_not_exists "freeloader" "download"
-[ "$?" != "0" ] && {
-	uci_set "freeloader" "download" "root" "/mnt/disc0_1/freeloader"
-	freeloader_commit=1
-} || {
-	uci_add_option_if_not_exists "freeloader" "download" "root" "/mnt/disc0_1/freeloader"
-	[ "$?" != "0" ] && freeloader_commit=1
-}
-uci_add_section_if_not_exists "freeloader" "email"
-[ "$?" != "0" ] && {
-	uci_set "freeloader" "email" "enable" "0"
-	uci_set "freeloader" "email" "emailfrom" "root@localhost"
-	uci_set "freeloader" "email" "emailto" "root@localhost"
-	uci_set "freeloader" "email" "smtpserver" "127.0.0.1"
-	freeloader_commit=1
-} || {
-	uci_add_option_if_not_exists "freeloader" "email" "enable" "0"
-	[ "$?" != "0" ] && freeloader_commit=1
-	uci_add_option_if_not_exists "freeloader" "email" "emailfrom" "root@localhost"
-	[ "$?" != "0" ] && freeloader_commit=1
-	uci_add_option_if_not_exists "freeloader" "email" "emailto" "root@localhost"
-	[ "$?" != "0" ] && freeloader_commit=1
-	uci_add_option_if_not_exists "freeloader" "email" "smtpserver" "127.0.0.1"
-	[ "$?" != "0" ] && freeloader_commit=1
-}
+uci_add_option_if_not_exists "freeloader" "download" "enable" "0"
+uci_add_option_if_not_exists "freeloader" "download" "root" "/mnt/disc0_1/freeloader"
+uci_add_option_if_not_exists "freeloader" "email" "enable" "0"
+uci_add_option_if_not_exists "freeloader" "email" "emailfrom" "root@localhost"
+uci_add_option_if_not_exists "freeloader" "email" "emailto" "root@localhost"
+uci_add_option_if_not_exists "freeloader" "email" "smtpserver" "127.0.0.1"
+uci_add_option_if_not_exists "freeloader" "curl" "ftplogin" "anonymous"
+uci_add_option_if_not_exists "freeloader" "curl" "ftppasswd" "freeloader@"
 [ "$freeloader_commit" -gt 0 ] && {
 	uci_commit "freeloader"
 	uci_load "freeloader"
