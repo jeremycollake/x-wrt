@@ -54,7 +54,7 @@ fi
 		<th><b>Syslog: pppd (Last 500 lines)</b></th>
 	</tr>
 	<tr>
-		<td><pre><? logread | grep pppd |tail -n 500 -|sort -r ?></pre></td>
+		<td><pre><? logread | grep pppd |tail -n 500 -|sort -r | sed ' s/\&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g' ?></pre></td>
 	</tr>
 </tbody>
 </table>
