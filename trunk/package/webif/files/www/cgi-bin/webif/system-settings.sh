@@ -2,28 +2,6 @@
 <?
 . "/usr/lib/webif/webif.sh"
 
-###################################################################
-# system configuration page
-#
-# Description:
-#	Configures general system settings.
-#
-# Author(s) [in order of work date]:
-#   	Original webif developers -- todo
-#	Markus Wigge <markus@freewrt.org>
-#   	Jeremy Collake <jeremy.collake@gmail.com>
-#	Travis Kemen <kemen04@gmail.com>
-#
-# Major revisions:
-#
-# NVRAM variables referenced:
-#	time_zone
-#  	ntp_server
-#
-# Configuration files referenced:
-#   none
-#
-
 is_bcm947xx && {
 	load_settings "system"
 	load_settings "webif"
@@ -113,19 +91,6 @@ if ! empty "$FORM_install_stunnel"; then
 	echo "</pre><br />"
 fi
 
-WEBIF_SSL="field|@TR<<system_settings_Webif_SSL#Webif&sup2; SSL>>"
-is_package_installed "matrixtunnel"
-if [ "$?" = "1" ]; then
-	WEBIF_SSL="$WEBIF_SSL
-string|<div class=\"warning\">@TR<<system_settings_Feature_requires_matrixtunnel#MatrixTunnel package is not installed. You need to install it for ssl support>>:</div>
-submit|install_stunnel| @TR<<system_settings_Install_MatrixTunnel#Install MatrixTunnel>> |"
-else
-	WEBIF_SSL="$WEBIF_SSL
-select|ssl_enable|$CONFIG_ssl_enable
-option|0|@TR<<system_settings_webifssl_Off#Off>>
-option|1|@TR<<system_settings_webifssl_On#On>>"
-fi
-
 #####################################################################
 # initialize forms
 if empty "$FORM_submit"; then
@@ -165,6 +130,7 @@ if empty "$FORM_submit"; then
 	}
 	FORM_language="${CONFIG_general_lang:-en}"	
 	FORM_theme=${CONFIG_theme_id:-xwrt}
+	FORM_ssl_enable="${CONFIG_ssl_enable:-0}"
 else
 #####################################################################
 # save forms
@@ -220,6 +186,19 @@ EOF
 	else
 		echo "<br /><div class=\"warning\">@TR<<Warning>>: @TR<<system_settings_Hostname_failed_validation#Hostname failed validation. Can not be saved.>></div><br />"
 	fi
+fi
+
+WEBIF_SSL="field|@TR<<system_settings_Webif_SSL#Webif&sup2; SSL>>"
+is_package_installed "matrixtunnel"
+if [ "$?" = "1" ]; then
+	WEBIF_SSL="$WEBIF_SSL
+string|<div class=\"warning\">@TR<<system_settings_Feature_requires_matrixtunnel#MatrixTunnel package is not installed. You need to install it for ssl support>>:</div>
+submit|install_stunnel| @TR<<system_settings_Install_MatrixTunnel#Install MatrixTunnel>> |"
+else
+	WEBIF_SSL="$WEBIF_SSL
+select|ssl_enable|$FORM_ssl_enable
+option|0|@TR<<system_settings_webifssl_Off#Off>>
+option|1|@TR<<system_settings_webifssl_On#On>>"
 fi
 
 is_kamikaze && {	
