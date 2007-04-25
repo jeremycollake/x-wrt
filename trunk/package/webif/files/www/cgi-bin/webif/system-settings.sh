@@ -2,6 +2,28 @@
 <?
 . "/usr/lib/webif/webif.sh"
 
+###################################################################
+# system configuration page
+#
+# Description:
+#	Configures general system settings.
+#
+# Author(s) [in order of work date]:
+#   	Original webif developers -- todo
+#	Markus Wigge <markus@freewrt.org>
+#   	Jeremy Collake <jeremy.collake@gmail.com>
+#	Travis Kemen <kemen04@gmail.com>
+#
+# Major revisions:
+#
+# NVRAM variables referenced:
+#	time_zone
+#  	ntp_server
+#
+# Configuration files referenced:
+#   none
+#
+
 is_bcm947xx && {
 	load_settings "system"
 	load_settings "webif"
