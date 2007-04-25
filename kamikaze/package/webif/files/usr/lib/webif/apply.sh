@@ -104,7 +104,7 @@ switch_language() {
 			webif_version=$(ipkg status webif | awk '/Version:/ { print $2 }')
 			xwrt_repo_url=$(cat /etc/ipkg.conf | grep X-Wrt | cut -d' ' -f3)
 			# always install language pack, since it may have been updated without package version change
-			ipkg install "${xwrt_repo_url}/webif-lang-${newlang}_${webif_version}_mipsel.ipk" -force-reinstall -force-overwrite | uniq
+			ipkg install "${xwrt_repo_url}/webif-lang-${newlang}_${webif_version}_all.ipk" -force-reinstall -force-overwrite | uniq
 			# switch to it if installed, even old one, otherwise return to previous
 			if equal "$(ipkg status "webif-lang-${newlang}" |grep "Status:" |grep " installed" )" ""; then
 				echo '@TR<<Error installing language pack>>!'
@@ -114,15 +114,36 @@ switch_language() {
 	}
 }
 
+uci_load_originals() {
+	local cfsection
+	config_load "$1"
+	for cfsection in $CONFIG_SECTIONS; do
+		config_rename "$cfsection" "orig_$cfsection"
+	done
+	CONFIG_orig_SECTION="$CONFIG_SECTIONS"
+}
+
+uci_unset_originals() {
+	local cfsection
+	local oldvar
+	for cfsection in $CONFIG_orig_SECTION; do
+		for oldvar in $(set | grep "^CONFIG_${cfsection}_" | sed -e 's/\(.*\)=.*$/\1/'); do
+			unset "$oldvar"
+		done
+	done
+	unset CONFIG_orig_SECTION
+}
 
 #
 # now apply any UCI config changes
 #
 for package in $(ls /tmp/.uci/* 2>&-); do
 	# store original language before committing new one so we know if changed
-	equal "$package" "webif" && {
+	equal "$package" "/tmp/.uci/webif" && {
+		uci_load_originals "webif"
+		oldlang="$CONFIG_orig_general_lang"
+		uci_unset_originals "webif"
 		uci_load "webif"
-		oldlang="$CONFIG_general_lang"
 	}
 	echo "@TR<<Committing>> ${package#/tmp/.uci/} ..."
 	uci_commit "$package"
