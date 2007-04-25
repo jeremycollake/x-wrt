@@ -63,8 +63,6 @@ if ! empty "$FORM_install_stunnel"; then
 		is_package_installed "libopenssl"
 		if [ "$?" = "1" ]; then
 			inst_packages="$inst_packages libopenssl"
-			ln -s ~/usr/lib/libssl.so.0.9.8 /lib/libssl.so.0.9.8
-			ln -s ~/usr/lib/libcrypto.so.0.9.8 /lib/libcrypto.so.0.9.8
 			libsslsymlink=1
 		fi
 		is_package_installed "zlib"
@@ -74,9 +72,21 @@ if ! empty "$FORM_install_stunnel"; then
 		if [ "$openssl_install" = "1" ]; then
 			ipkg -d ram install "openssl-util"
 		fi
+		if [ "$libsslsymlink" = "1" ]; then
+			ln -s /tmp/usr/lib/libssl.so.0.9.8 /lib/libssl.so.0.9.8
+			ln -s /tmp/usr/lib/libcrypto.so.0.9.8 /lib/libcrypto.so.0.9.8
+		fi
 		export RANDFILE="/tmp/.rnd"
 		dd if=/dev/urandom of="$RANDFILE" count=1 bs=512 2>/dev/null
-		rdate -s pool.ntp.org; /tmp/usr/bin/openssl genrsa -out /etc/ssl/matrixtunnel.key 2048; /tmp/usr/bin/openssl req -new -batch -nodes -key /etc/ssl/matrixtunnel.key -out /etc/ssl/matrixtunnel.csr; /tmp/usr/bin/openssl x509 -req -days 365 -in /etc/ssl/matrixtunnel.csr -signkey /etc/ssl/matrixtunnel.key -out /etc/ssl/matrixtunnel.cert
+		if [ -z "$(ps -A | grep "[n]tpclient\>")" ] && [ -z "$(ps -A | grep "[n]tpd\>")" ]; then
+			ntpcli=$(which ntpclient)
+			if [ -n "$ntpcli" ]; then
+				$ntpcli -c 1 -s -h pool.ntp.org
+			else
+				rdate -s pool.ntp.org
+			fi
+		fi
+		/tmp/usr/bin/openssl genrsa -out /etc/ssl/matrixtunnel.key 2048; /tmp/usr/bin/openssl req -new -batch -nodes -key /etc/ssl/matrixtunnel.key -out /etc/ssl/matrixtunnel.csr; /tmp/usr/bin/openssl x509 -req -days 365 -in /etc/ssl/matrixtunnel.csr -signkey /etc/ssl/matrixtunnel.key -out /etc/ssl/matrixtunnel.cert
 		rm -f "$RANDFILE" 2>/dev/null
 		unset RANDFILE
 		ipkg install matrixtunnel
