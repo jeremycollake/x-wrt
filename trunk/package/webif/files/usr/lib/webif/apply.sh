@@ -401,7 +401,7 @@ uci_unset_originals() {
 
 # switch languages if changed
 switch_language() {
-	! equal "$CONFIG_general_lang" "$CONFIG_orig_general_lang" && {
+	! empty "$CONFIG_general_lang" && ! equal "$CONFIG_general_lang" "$CONFIG_orig_general_lang" && {
 		# if not English then we install language pack
 		! equal "$CONFIG_general_lang" "en" && {
 			log_message "@TR<<apply_Installing_language_pack#Installing language pack>>"
@@ -410,11 +410,19 @@ switch_language() {
 			webif_version=$(ipkg status webif | awk '/Version:/ { print $2 }')
 			xwrt_repo_url=$(cat /etc/ipkg.conf | grep -i "^src[[:space:]]*X-Wrt[[:space:]]*" | cut -d' ' -f3)
 			# always install language pack, since it may have been updated without package version change
-			ipkg install "${xwrt_repo_url}/webif-lang-${newlang}_${webif_version}_mipsel.ipk" -force-reinstall -force-overwrite | uniq
-			if equal "$(ipkg status "webif-lang-${newlang}" |grep "Status:" |grep " installed" )" ""; then
+			ipkg install "${xwrt_repo_url}/webif-lang-${CONFIG_general_lang}_${webif_version}_mipsel.ipk" -force-reinstall -force-overwrite | uniq
+			if equal "$(ipkg status "webif-lang-${CONFIG_general_lang}" |grep "Status:" |grep " installed" )" ""; then
 				log_message "@TR<<apply_Error_installing_language#Error installing language pack>>!"
-				uci_set "webif" "general" "lang" "en"
+				uci_set "webif" "general" "lang" "${CONFIG_orig_general_lang:-en}"
 				uci_commit "webif"
+			else
+				# always update language packs for the webif^2 jewelry
+				for ajewel in $(ipkg list_installed "webif*" | cut -d' ' -f1 | sed '/^webif-/!d; /-lang-/d'); do
+					! empty "$(ipkg list "${ajewel}-lang-${CONFIG_general_lang}" | grep "^${ajewel}-lang-${CONFIG_general_lang}\>")" && {
+						log_message "@TR<<apply_Installing_additional_language_pack#Installing additional language pack>>"
+						ipkg install "${ajewel}-lang-${CONFIG_general_lang}" -force-reinstall -force-overwrite | uniq
+					}
+				done
 			fi
 			echo_action_done
 		}

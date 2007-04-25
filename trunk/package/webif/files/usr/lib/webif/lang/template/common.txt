@@ -45,6 +45,7 @@ apply_pptpd => pptpd
 apply_Committing_NVRAM => Committing NVRAM
 apply_Installing_language_pack => Installing language pack
 apply_Error_installing_language => Error installing language pack
+apply_Installing_additional_language_pack => Installing additional language pack
 apply_Initializing_theme => Initializing theme
 aplly_theme_installation_failed => theme package installation failed
 apply_qos => qos
