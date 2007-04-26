@@ -42,7 +42,7 @@ wlan_rx_invalid_crypt=$(echo "$wlan_config" | grep "Rx invalid nwid:" | cut -d':
 wlan_rx_invalid_frag=$(echo "$wlan_config" | grep "Rx invalid nwid:" | cut -d':' -f 4 | cut -d' ' -f 1)
 wlan_noise=$(echo "$wlan_config" | grep "Link Noise level:" | cut -d':' -f 2 | cut -d' ' -f 1)
 #Find noise for atheros cards
-if [ ! -e "$wlan_noise" ]; then
+if [ -z "$wlan_noise" ]; then
 	wlan_noise=$(echo "$wlan_config" | grep "Noise level" | cut -d'=' -f 4 | cut -d' ' -f 1)
 fi
 
