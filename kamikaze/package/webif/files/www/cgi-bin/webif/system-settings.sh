@@ -205,7 +205,7 @@ EOF
 		! equal "$FORM_ssl_enable" "$CONFIG_ssl_enable" && ! empty "$FORM_ssl_enable" && {
 			uci_set "webif" "ssl" "enable" "$FORM_ssl_enable"
 		}
-		! equal "$FORM_theme" "$CONFIG_theme_id" && ! empty && "$FORM_theme" && {
+		! equal "$FORM_theme" "$CONFIG_theme_id" && ! empty "$FORM_theme" && {
 			uci_set "webif" "theme" "id" "$FORM_theme"
 		}
 		! equal "$FORM_language" "$CONFIG_general_lang" && ! empty "$FORM_language" && {
