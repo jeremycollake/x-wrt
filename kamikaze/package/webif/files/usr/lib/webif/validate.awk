@@ -16,11 +16,21 @@ BEGIN {
 	value = param[5]
 	for (i = 6; i <= n; i++) value = value FS param[i]
 	verr = ""
+	ipmasks = 0
 }
 
 $1 == "int" {
 	valid_type = 1
 	if ((value != "") && (value !~ /^[[:digit:]]*$/)) { valid = 0; verr = "@TR<<Invalid value>>" }
+}
+
+# two stages ip/netmask validation
+$1 == "ipmask" {
+	ipmasks = split(value, ipmask, "\/")
+	if (ipmasks > 0) {
+		value = ipmask[1]
+		$1 = "ip"
+	}
 }
 
 $1 == "ip" {
@@ -33,6 +43,12 @@ $1 == "ip" {
 		}
 	}
 	if (valid == 0) verr = "@TR<<Invalid value>>"
+}
+
+# two stages ip/netmask validation
+ipmasks > 1 {
+	value = ipmask[2]
+	$1 = "netmask"
 }
 
 function dec2binstr(dec, data)
@@ -72,6 +88,18 @@ $1 == "netmask" {
 		}
         }
         if (valid == 0) verr = "@TR<<Invalid value>>"
+}
+
+# two stages ip/netmask validation
+ipmasks > 0 {
+	$1 = "ipmask"
+	value = ipmask[1]
+	for (i = 2; i <= ipmasks; i++) value = value "\/" ipmask[i]
+}
+ipmasks > 2 {
+       	valid_type = 1
+	valid = 0
+	verr = "@TR<<Invalid value>>"
 }
 
 $1 == "wep" {
@@ -179,6 +207,16 @@ valid == 1 {
 			if (value ~ /[[:space:]]/) {
 				valid = 0
 				verr = "@TR<<Invalid spaces>>"
+			}
+		} else if (options[i] == "netmaskrequired") {
+			if (ipmask[2] == "") {
+				valid = 0
+				verr = "@TR<<Missing netmask>>"
+			}
+		} else if (options[i] == "nonetmask") {
+			if (ipmask[2] != "") {
+				valid = 0
+				verr = "@TR<<Netmask not allowed>>"
 			}
 		}
 	}
