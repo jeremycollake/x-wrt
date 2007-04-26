@@ -98,8 +98,6 @@ if ! empty "$FORM_install_stunnel"; then
 			ln -s /tmp/usr/lib/libssl.so.0.9.8 /lib/libssl.so.0.9.8
 			ln -s /tmp/usr/lib/libcrypto.so.0.9.8 /lib/libcrypto.so.0.9.8
 		fi
-		export RANDFILE="/tmp/.rnd"
-		dd if=/dev/urandom of="$RANDFILE" count=1 bs=512 2>/dev/null
 		if [ -z "$(ps -A | grep "[n]tpclient\>")" ] && [ -z "$(ps -A | grep "[n]tpd\>")" ]; then
 			ntpcli=$(which ntpclient)
 			if [ -n "$ntpcli" ]; then
@@ -108,6 +106,8 @@ if ! empty "$FORM_install_stunnel"; then
 				rdate -s pool.ntp.org
 			fi
 		fi
+		export RANDFILE="/tmp/.rnd"
+		dd if=/dev/urandom of="$RANDFILE" count=1 bs=512 2>/dev/null
 		/tmp/usr/bin/openssl genrsa -out /etc/ssl/matrixtunnel.key 2048; /tmp/usr/bin/openssl req -new -batch -nodes -key /etc/ssl/matrixtunnel.key -out /etc/ssl/matrixtunnel.csr; /tmp/usr/bin/openssl x509 -req -days 365 -in /etc/ssl/matrixtunnel.csr -signkey /etc/ssl/matrixtunnel.key -out /etc/ssl/matrixtunnel.cert
 		rm -f "$RANDFILE" 2>/dev/null
 		unset RANDFILE
@@ -202,13 +202,13 @@ EOF
 			}
 		}
 		# webif settings
-		! equal "$FORM_ssl_enable" "$CONFIG_ssl_enable" && {
+		! equal "$FORM_ssl_enable" "$CONFIG_ssl_enable" && ! empty "$FORM_ssl_enable" && {
 			uci_set "webif" "ssl" "enable" "$FORM_ssl_enable"
 		}
-		! equal "$FORM_theme" "$CONFIG_theme_id" && {
+		! equal "$FORM_theme" "$CONFIG_theme_id" && ! empty && "$FORM_theme" && {
 			uci_set "webif" "theme" "id" "$FORM_theme"
 		}
-		! equal "$FORM_language" "$CONFIG_general_lang" && {
+		! equal "$FORM_language" "$CONFIG_general_lang" && ! empty "$FORM_language" && {
 			uci_set "webif" "general" "lang" "$FORM_language"
 		}
 		is_kamikaze && {	
