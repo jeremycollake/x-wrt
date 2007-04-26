@@ -5,7 +5,7 @@ uci_load network
 header "Status" "Interfaces" "@TR<<Interfaces>>"
 
 # get WAN stats
-wan_config=$(ifconfig 2>&1 | grep -A 6 "$CONFIG_wan_ifname")
+wan_config=$(ifconfig 2>&1 | grep -A 6 "$CONFIG_wan_ifname[[:space:]]")
 if [ -n "$wan_config" ]; then
 wan_ip_addr=$(echo "$wan_config" | grep "inet addr" | cut -d: -f 2 | sed s/Bcast//g)
 wan_mac_addr=$(echo "$wan_config" | grep "HWaddr" | cut -d'H' -f 2 | cut -d' ' -f 2)
@@ -15,7 +15,7 @@ wan_tx_bytes=$(echo "$wan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed
 wan_rx_bytes=$(echo "$wan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d'(' -f 2 | cut -d ')' -f 1)
 fi
 # get LAN stats
-lan_config=$(ifconfig 2>&1 | grep -A 6 "$CONFIG_lan_ifname")
+lan_config=$(ifconfig 2>&1 | grep -A 6 "$CONFIG_lan_ifname[[:space:]]")
 if [ "$(uci get network.lan.type)" = "bridge" ]; then
 lan_ip_addr=$(ifconfig br-lan 2>&1 | grep "inet addr" | cut -d: -f 2 | sed s/Bcast//g)
 else
@@ -68,9 +68,9 @@ field|@TR<<IP Address>>|wan_ip_addr
 string|$wan_ip_addr
 $form_dns_servers
 field|@TR<<Received>>|wan_rx
-string|$wan_rx_packets pkts &nbsp;($wan_rx_bytes)
+string|$wan_rx_packets @TR<<status_interfaces_pkts#pkts>> &nbsp;($wan_rx_bytes)
 field|@TR<<Transmitted>>|wan_tx
-string|$wan_tx_packets pkts &nbsp; ($wan_tx_bytes
+string|$wan_tx_packets @TR<<status_interfaces_pkts#pkts>> &nbsp; ($wan_tx_bytes
 helpitem|WAN
 helptext|WAN WAN#WAN stands for Wide Area Network and is usually the upstream connection to the internet.
 end_form
@@ -84,9 +84,9 @@ string|$lan_mac_addr
 field|@TR<<IP Address>>|lan_ip_addr
 string|$lan_ip_addr
 field|@TR<<Received>>|lan_rx
-string|$lan_rx_packets pkts &nbsp;($lan_rx_bytes)
+string|$lan_rx_packets @TR<<status_interfaces_pkts#pkts>> &nbsp;($lan_rx_bytes)
 field|@TR<<Transmitted>>|lan_tx
-string|$lan_tx_packets pkts &nbsp;($lan_tx_bytes
+string|$lan_tx_packets @TR<<status_interfaces_pkts#pkts>> &nbsp;($lan_tx_bytes
 helpitem|LAN
 helptext|LAN LAN#LAN stands for Local Area Network.
 end_form
@@ -142,7 +142,7 @@ echo "<tr><td><br /></td></tr>
 		</tr>
 		<tr>
 			<td><pre>"
-ifconfig 2>&1 | grep -A 6 "$CONFIG_wan_ifname"
+ifconfig 2>&1 | grep -A 6 "$CONFIG_wan_ifname[[:space:]]"
 echo "</pre></td>
 		</tr>
 		<tr><td><br /><br /></td></tr>
@@ -151,7 +151,7 @@ echo "</pre></td>
 		</tr>
 		<tr>
 			<td><pre>"
-ifconfig 2>&1 | grep -A 6 "CONFIG_lan_ifname"
+ifconfig 2>&1 | grep -A 6 "$CONFIG_lan_ifname[[:space:]]"
 echo "</pre></td>
 		</tr>
 		<tr><td><br /><br /></td></tr>

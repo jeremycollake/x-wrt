@@ -918,6 +918,7 @@ Interfaces Status LAN => Интерфейсы локальной сети
 Interfaces Status WAN => Интерфейсы внешней сети
 Interfaces Status WLAN => Интерфейсы беспроводной сети
 &nbsp;Show raw statistics&nbsp; => &nbsp;Показать исходную информацию&nbsp;
+status_interfaces_pkts => пакет(ов)
 
 #status-iptables.sh
 status_iptables_IPTStatus => Статус Iptables
