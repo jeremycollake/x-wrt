@@ -69,6 +69,20 @@ DeleteRepository()
 	}
 }
 
+is_package_installed() {
+	# $1 = package name
+	# returns 0 if package is installed.
+	for LOCATION in $(grep "^dest\>" /etc/ipkg.conf | cut -d ' ' -f 3); do
+
+		if [ "$LOCATION" = "/" ]; then
+		        paths="$paths /usr/lib/ipkg/status"
+		else
+		        paths="$paths $LOCATION/usr/lib/ipkg/status"
+		fi
+	done
+	grep -q " $1\$" $paths >> /dev/null 2>&1
+}
+
 
 #########################################################################################
 # entry point
@@ -158,6 +172,18 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	/usr/lib/webif/webif-mklanglist.sh
 	rm -f "/etc/themes.lst"
 	/usr/lib/webif/webif-mkthemelist.sh
+	
+	is_package_installed webif_hotspot
+	if [ "$?" = "0" ]; then
+		cat "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories" |sed '/##WEBIF:category:Network/a\
+##WEBIF:category:Hotspot'>"${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"
+	fi
+	
+	is_package_installed webif_freeloader
+	if [ "$?" = "0" ]; then
+		cat "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories" |sed '/##WEBIF:category:Network/a\
+##WEBIF:category:Freeloader'>"${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"
+	fi
 	
 	# todo: merge these two files so two uci commits don't get done
 	ExecuteIfExists "/etc/init.d/S90webif_deviceid"
