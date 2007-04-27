@@ -1,3 +1,5 @@
+# leave at least one comment here to skip the BOM character
+# language name
 lang => Español
 # Common
 Settings saved => Cambios guardados
