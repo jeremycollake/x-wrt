@@ -47,9 +47,11 @@ function do_update() {
 				gsub(/ /,"",webif_version)
 			}
 		}
-		print "<pre>"
-		system("ipkg install \""version_url"/packages/webif-lang-"lang"_"webif_version"_all.ipk\" -force-reinstall -force-overwrite | uniq")
-		print "</pre>"
+		if (lang != "en") {
+			print "<pre>"
+			system("ipkg install \""version_url"/packages/webif-lang-"lang"_"webif_version"_all.ipk\" -force-reinstall -force-overwrite | uniq")
+			print "</pre>"
+		}
 	}
 }
 
