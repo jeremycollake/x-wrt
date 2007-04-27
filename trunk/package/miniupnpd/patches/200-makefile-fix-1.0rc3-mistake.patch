@@ -1,18 +1,19 @@
-diff -BurN miniupnpd.orig/Makefile.openwrt miniupnpd/Makefile.openwrt
---- miniupnpd.orig/Makefile.openwrt	2007-02-01 20:50:38.000000000 -0500
-+++ miniupnpd/Makefile.openwrt	2007-02-01 20:53:22.000000000 -0500
-@@ -16,7 +16,7 @@
- BASEOBJS = miniupnpd.o upnphttp.o upnpdescgen.o upnpsoap.o \
-            upnpreplyparse.o minixml.o \
- 		   upnpredirect.o getifaddr.o daemonize.o upnpglobalvars.o \
--		   options.o
-+		   options.o upnppermissions.o
- 
- LNXOBJS = linux/getifstats.o linux/iptcrdr.o
- 
-@@ -69,3 +69,4 @@
+--- miniupnpd-1.0-RC4/Makefile.openwrt.orig	2007-04-26 14:46:51.000000000 -0500
++++ miniupnpd-1.0-RC4/Makefile.openwrt	2007-04-27 08:20:04.000000000 -0500
+@@ -59,13 +59,14 @@
+ upnphttp.o: upnphttp.h upnpdescgen.h miniupnpdpath.h upnpsoap.h
+ upnpdescgen.o: upnpdescgen.h miniupnpdpath.h upnpglobalvars.h
+ upnpsoap.o: upnpglobalvars.h upnphttp.h upnpsoap.h upnpreplyparse.h
+-upnpsoap.o: upnpredirect.h openbsd/getifstats.h
++upnpsoap.o: upnpredirect.h getifstats.h
+ upnpreplyparse.o: upnpreplyparse.h minixml.h
+ minixml.o: minixml.h
+ upnpredirect.o: upnpredirect.h upnpglobalvars.h openbsd/obsdrdr.h
+ daemonize.o: daemonize.h
+ upnpglobalvars.o: upnpglobalvars.h
+-linux/getifstats.o: openbsd/getifstats.h
++linux/getifstats.o: getifstats.h
  linux/iptcrdr.o: linux/iptcrdr.h
  testupnpdescgen.o: upnpdescgen.h
  upnpdescgen.o: upnpdescgen.h miniupnpdpath.h upnpglobalvars.h
 +upnppermissions.o: upnppermissions.c
-\ No newline at end of file
