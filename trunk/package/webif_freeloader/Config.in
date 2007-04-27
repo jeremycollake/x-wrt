@@ -8,7 +8,6 @@ config BR2_PACKAGE_WEBIF_FREELOADER
 	  A download manager for the webif.
 
 config BR2_PACKAGE_WEBIF_FREELOADER_LANG_CS
-	select BR2_PACKAGE_WEBIF_FREELOADER
 	tristate "webif-freeloader-lang-cs - Czech language file for webif freeloader"
 	depends BR2_PACKAGE_WEBIF_FREELOADER
 	default m
