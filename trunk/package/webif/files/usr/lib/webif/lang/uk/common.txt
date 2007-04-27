@@ -1,4 +1,6 @@
-﻿lang => Українська мова
+# leave at least one comment here to skip the BOM character
+# language name
+lang => Українська мова
 
 # Common
 Settings saved => Зміни збережени

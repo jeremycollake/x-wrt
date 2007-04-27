@@ -1,3 +1,4 @@
+# leave at least one comment here to skip the BOM character
 ## language offer
 lang => Čeština
 

@@ -1,3 +1,7 @@
+# leave at least one comment here to skip the BOM character
+# language name
+lang => English
+
 ## it is the work in the progress
 ##
 ## this file will contain all translations

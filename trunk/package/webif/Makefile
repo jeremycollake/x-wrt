@@ -102,6 +102,7 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_WEBIF): 
 	$(CP) -a ./files/* $(IDIR_WEBIF)/
+	./create_lang_list.sh . $(IDIR_WEBIF)
 	chmod -R 755 $(IDIR_WEBIF)/*
 	rm -rf $(IDIR_WEBIF)/usr/lib/webif/lang/	
 	rm -rf $(IDIR_WEBIF)/www/themes/zephyr
