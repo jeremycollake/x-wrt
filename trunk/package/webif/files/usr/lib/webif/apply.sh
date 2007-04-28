@@ -473,6 +473,8 @@ apply_uci_qos() {
 # now apply any UCI config changes
 #
 for packagefile in $(ls /tmp/.uci/* 2>&-); do
+	# do not process lock files
+	[ "${packagefile%.lock}" != "${packagefile}" ] && continue
 	package="${packagefile#/tmp/.uci/}"
 	log_message "@TR<<apply_Committing_settings#Committing settings>>: $package"
 	uci_load_originals "$package"

@@ -138,6 +138,8 @@ uci_unset_originals() {
 # now apply any UCI config changes
 #
 for package in $(ls /tmp/.uci/* 2>&-); do
+	# do not process lock files
+	[ "${packagefile%.lock}" != "${packagefile}" ] && continue
 	# store original language before committing new one so we know if changed
 	equal "$package" "/tmp/.uci/webif" && {
 		uci_load_originals "webif"
