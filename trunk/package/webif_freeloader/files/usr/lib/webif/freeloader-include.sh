@@ -40,22 +40,27 @@ uci_add_option_if_not_exists() {
 	}
 }
 
-freeloader_commit=0
-uci_load "freeloader"
-uci_add_option_if_not_exists "freeloader" "download" "enable" "0"
-uci_add_option_if_not_exists "freeloader" "download" "root" "/mnt/disc0_1/freeloader"
-uci_add_option_if_not_exists "freeloader" "email" "enable" "0"
-uci_add_option_if_not_exists "freeloader" "email" "emailfrom" "root@localhost"
-uci_add_option_if_not_exists "freeloader" "email" "emailto" "root@localhost"
-uci_add_option_if_not_exists "freeloader" "email" "smtpserver" "127.0.0.1"
-uci_add_option_if_not_exists "freeloader" "curl" "ftplogin" "anonymous"
-uci_add_option_if_not_exists "freeloader" "curl" "ftppasswd" "freeloader@"
-[ "$freeloader_commit" -gt 0 ] && {
-	uci_commit "freeloader"
-	rm -f "/tmp/.uci/freeloader.lock"
-	uci_load "freeloader"
+freeloader_init_config() {
+	freeloader_commit=0
+	uci_add_option_if_not_exists "freeloader" "download" "enable" "1"
+	uci_add_option_if_not_exists "freeloader" "download" "root" "/mnt/disc0_1/freeloader"
+	uci_add_option_if_not_exists "freeloader" "ctorrent" "downloadrate" ""
+	uci_add_option_if_not_exists "freeloader" "ctorrent" "uploadrate" "12"
+	uci_add_option_if_not_exists "freeloader" "email" "enable" "0"
+	uci_add_option_if_not_exists "freeloader" "email" "emailfrom" "root@localhost"
+	uci_add_option_if_not_exists "freeloader" "email" "emailto" "root@localhost"
+	uci_add_option_if_not_exists "freeloader" "email" "smtpserver" "127.0.0.1"
+	uci_add_option_if_not_exists "freeloader" "curl" "ftplogin" "anonymous"
+	uci_add_option_if_not_exists "freeloader" "curl" "ftppasswd" "freeloader@"
+	[ "$freeloader_commit" -gt 0 ] && {
+		uci_commit "freeloader"
+		sleep 1
+		uci_load "freeloader"
+	}
+	unset freeloader_commit
 }
-unset freeloader_commit
+
+uci_load "freeloader"
 
 # Set the working directories
 DOWNLOAD_ROOT="$CONFIG_download_root"

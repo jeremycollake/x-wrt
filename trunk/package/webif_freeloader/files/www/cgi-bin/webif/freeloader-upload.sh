@@ -92,6 +92,7 @@ header "Freeloader" "freeloader-upload_subcategory#Upload" "@TR<<freeloader-uplo
 
 #Include settings
 . /usr/lib/webif/freeloader-include.sh
+freeloader_init_config
 
 #check for installed packages and store the status
 is_package_installed "curl"

@@ -80,6 +80,7 @@ header "Freeloader" "freeloader-status_subcategory#Status" "@TR<<freeloader-stat
 
 #Include settings
 . /usr/lib/webif/freeloader-include.sh
+freeloader_init_config
 
 #Check the required packages
 is_package_installed "curl"
