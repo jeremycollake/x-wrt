@@ -63,7 +63,7 @@ parse_target() {
 	$1 == "num" {
 		print "	<tr>"
 		for (i=1; i<=10; i++)
-			printf "%s%02d%s%s%s\n", "		<th>@TR<<status_iptables_col", i, "#", $i, ">></th>"
+			printf "%s%s%s%s%s\n", "		<th>@TR<<status_iptables_col_", $i, "#", $i, ">></th>"
 		print "		<th>@TR<<status_iptables_col_options#options>></th>"
 		print "	</tr>"
 		rulecntr=0
