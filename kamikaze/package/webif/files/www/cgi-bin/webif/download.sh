@@ -93,3 +93,4 @@ echo "<p><b>Error</b> downloading a file<br />"
 echo "Redirecting to <a href=\"$redir\">previous page</a></p>"
 echo "</body>"
 echo "</html>"
+?>
