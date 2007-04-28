@@ -44,9 +44,18 @@ parse_target() {
 		print "		<td colspan=\"11\"><br /></td>"
 		print "	</tr>"
 	}
+	function translatechain()
+	{
+		gsub(/^Chain /, "@TR<<status_iptables_Chain#Chain>> ")
+		gsub(/\(policy /, "(@TR<<status_iptables_policy#policy>> ")
+		gsub(/ packets,/, " @TR<<status_iptables_packets#packets>>,")
+		gsub(/ bytes\)/, " @TR<<status_iptables_bytes#bytes>>)")
+		gsub(/ references\)/, " @TR<<status_iptables_references#references>>)")
+	}
 	/^(#.*)?$/ {next}
 	$1 == "Chain" {
 		if (rulecntr >= 0 ) blankline()
+		translatechain()
 		print "	<tr>"
 		print "		<td colspan=\"11\"><h4>" $0 "</h4></td>"
 		print "	</tr>"
