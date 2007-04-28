@@ -13,7 +13,7 @@ header "System" "Backup &amp; Restore" "<img src=\"/images/bkup.jpg\" alt=\"@TR<
 DOWNLOAD()
 {
 cat <<EOF
-&nbsp;&nbsp;&nbsp;@TR<<confman_noauto_click#If downloading does not start automatically, click here>> ... <a href="/$1">$1</a><br><br>
+&nbsp;&nbsp;&nbsp;@TR<<confman_noauto_click#If downloading does not start automatically, click here>> ... <a href="/$1">$1</a><br /><br />
 <script language="JavaScript" type="text/javascript">
 setTimeout('top.location.href=\"/$1\"',"300")
 </script>
@@ -71,7 +71,7 @@ display_form <<EOF
 start_form|@TR<<Restore Configuration>>
 EOF
 	if [ -n "$dir" ] && [ -d "$dir" ] && [ -e "$dir/config.name" ] && [ -e "$dir/config.boardtype" ]; then
-			echo "<tr><td colspan=\"2\">@TR<<confman_restoring_conf#Restoring configuration.>><br><pre>"
+			echo "<tr><td colspan=\"2\">@TR<<confman_restoring_conf#Restoring configuration.>><br /><pre>"
 			cd $dir
 			for file in $(find etc); do
 				if [ -d $file ]; then
@@ -83,7 +83,7 @@ EOF
 				fi
 			done
 
-		echo "<br>@TR<<Rebooting now>>...<meta http-equiv=\"refresh\" content=\"4;url=reboot.sh?reboot=1\">"
+		echo "<br />@TR<<Rebooting now>>...<meta http-equiv=\"refresh\" content=\"4;url=reboot.sh?reboot=1\">"
 		echo "</pre></td></tr>"
 	else
 		echo "<p>@TR<<confman_bad_dir#bad dir>>: $dir</p>"
@@ -99,13 +99,13 @@ elif ! equal $FORM_chkconfig "" ; then
 		if [ -n "$FORM_configfile" ] && [ -e "$FORM_configfile" ]; then
 			
 		echo "<form method=\"get\" name=\"install\" action=\"$SCRIPT_NAME\">"
-if equal $FORM_rdflash "1" ; then
-	echo "<h2><font color=red>@TR<<confman_warn_erase#WARNING !!! This operation will erase current flash.>></font></h2>"
-	echo "<input type='hidden' name='rdflash' value='1'><input type='hidden' name='file' value=\"$FORM_configfile\">"	
-else
 display_form <<EOF
 start_form|@TR<<Restore Configuration>>
 EOF
+if equal $FORM_rdflash "1" ; then
+	echo "<h2><font color=red>@TR<<confman_warn_erase#WARNING !!! This operation will erase current flash.>></font></h2>"
+	echo "<input type='hidden' name='rdflash' value='1' /><input type='hidden' name='file' value=\"$FORM_configfile\" />"	
+else
 			rm -rf /tmp/config.* 2>/dev/null
 			tmp=/tmp/config.$$
 			mkdir $tmp
@@ -119,7 +119,7 @@ EOF
 				bd=$(cat $tmp/config.boardtype)
 				dt=$(cat $tmp/config.date)
 
-			CFGGOOD="<tr><td colspan=\"2\">@TR<<confman_good_conf#The configuration looks good>>!<br><br></td></tr>"
+			CFGGOOD="<tr><td colspan=\"2\">@TR<<confman_good_conf#The configuration looks good>>!<br /><br /></td></tr>"
 
 			if [ "$bd" != $(dmesg | grep "CPU revision is:" | sed -e s/'CPU revision is: '//g) ]; then
 				echo "<tr><td colspan=\"2\"><font color=\"red\">@TR<<big_warning#WARNING>></font>: @TR<<confman_other_board#different board type>> (@TR<<confman_board_ours#ours>>: $(dmesg | grep "CPU revision is:" | sed -e s/'CPU revision is: '//g), @TR<<confman_board_file#file>>: $bd)!</td></tr>"
@@ -135,10 +135,21 @@ field|@TR<<Generated>>
 string|$dt
 field
 EOF
+echo "</td></tr>"
 			fi
 fi
-		echo "<input type='hidden' name='dir' value=\"$tmp\">"
-		echo "<input type=\"submit\" class=\"flatbtn\" name=\"instconfig\" value=\"@TR<<Restore>>\"><br><br></form>"
+
+cat <<EOF
+<tr><td>&nbsp;</td></tr>
+<tr><td><input type='hidden' name='dir' value="$tmp" />
+<input type="submit" class="flatbtn" name="instconfig" value="@TR<<Restore>>" /></td></tr>
+<tr><td>&nbsp;</td></tr>
+EOF
+
+display_form <<EOF
+end_form
+EOF
+		echo "</form>"
 		fi
 footer
 exit
@@ -146,9 +157,9 @@ fi
 
 cat <<EOF
 <form method="post" name="download" action="$SCRIPT_NAME" enctype="multipart/form-data">
-&nbsp;&nbsp;&nbsp;<img src="/images/app.2.jpg" width="24" height="24" alt />&nbsp;<input type="radio" name="rdflash" value="0" checked />&nbsp;@TR<<confman_Configuration#Configuration>>
+&nbsp;&nbsp;&nbsp;<img src="/images/app.2.jpg" width="24" height="24" alt="" />&nbsp;<input type="radio" name="rdflash" value="0" checked="checked" />&nbsp;@TR<<confman_Configuration#Configuration>>
 <br/>
-&nbsp;&nbsp;&nbsp;<img src="/images/app.12.jpg" width="25" height="25" alt />&nbsp;<input type="radio" name="rdflash" value="1" />&nbsp;@TR<<confman_Entire_Flash#Entire Flash>><br/><br/>
+&nbsp;&nbsp;&nbsp;<img src="/images/app.12.jpg" width="25" height="25" alt="" />&nbsp;<input type="radio" name="rdflash" value="1" />&nbsp;@TR<<confman_Entire_Flash#Entire Flash>><br/><br/>
 EOF
 
 display_form <<EOF
@@ -156,7 +167,7 @@ start_form|@TR<<Backup Configuration>>
 EOF
 
 cat <<EOF
-<tr><td width="70%">@TR<<Name this configuration>>:&nbsp;&nbsp;&nbsp;<input name="name" value="${FORM_name:-$CONFIG_system_hostname}"/></td>
+<tr><td width="70%">@TR<<Name this configuration>>:&nbsp;&nbsp;&nbsp;<input name="name" value="${FORM_name:-$CONFIG_system_hostname}" /></td>
 <td><input class="flatbtn" type="submit" name="download" value="@TR<<Backup>>" /></td>
 </tr>
 EOF
