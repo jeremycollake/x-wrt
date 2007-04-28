@@ -52,6 +52,7 @@ uci_add_option_if_not_exists "freeloader" "curl" "ftplogin" "anonymous"
 uci_add_option_if_not_exists "freeloader" "curl" "ftppasswd" "freeloader@"
 [ "$freeloader_commit" -gt 0 ] && {
 	uci_commit "freeloader"
+	rm -f "/tmp/.uci/freeloader.lock"
 	uci_load "freeloader"
 }
 unset freeloader_commit
