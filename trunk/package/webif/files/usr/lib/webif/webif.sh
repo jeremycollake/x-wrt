@@ -126,7 +126,7 @@ header() {
 	_uptime="$(uptime)"
 	_loadavg="${_uptime#*load average: }"
 	_uptime="${_uptime#*up }"
-	_uptime="${_uptime%%,*}"
+	_uptime="${_uptime%%, load *}"
 	_hostname=$(cat /proc/sys/kernel/hostname)
 	_webif_rev=$(cat /www/.version)
 	_head="${3:+<h2>$3$_saved_title</h2>}"

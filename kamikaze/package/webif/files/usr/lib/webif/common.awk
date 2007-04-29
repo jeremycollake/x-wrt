@@ -95,7 +95,7 @@ function status(hostname, uptime, loadavg, i) {
 	if (match(uptime, "load average: ") != 0) loadavg = substr($0, RSTART+RLENGTH, length($0) - RSTART - RLENGTH + 1)
 	if (match(uptime, "up ") != 0) uptime = substr($0, RSTART + RLENGTH, length($0) - RSTART - RLENGTH - 1)
 	else uptime=""
-	if (match(uptime, ",") != 0) uptime = substr(uptime, 1, RSTART - 1)
+	if (match(uptime, ", load ") != 0) uptime = substr(uptime, 1, RSTART - 1)
 	return "<div id=\"short-status\">\
 		<h3><strong>@TR<<Status>>:</strong></h3>\
 		<ul>\
