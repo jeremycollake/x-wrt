@@ -9,20 +9,21 @@
 #
 # Author(s) [in order of work date]:
 #	Jeremy Collake <jeremy.collake@gmail.com>
+#	pier11<pier11@operamail.com> port to UCI
 #
 # Major revisions:
 #
 # NVRAM variables referenced:
-#	vlan#ports
-#	vlan#hwname
+#	none
 #
 # Configuration files referenced:
-#   none
+#   network
 #
-load_settings network
+
+#Load settings from the network config file.	
+uci_load "network"
 
 header "Network" "VLAN" "@TR<<Virtual LANs>>" '' "$SCRIPT_NAME"
-ShowNotUpdatedWarning
 
 ###################################################################
 # toggles and default settings
@@ -51,7 +52,8 @@ CountNumberOfVLANsThatContainPortX ( )
 {
 	RETURN_VAR=0
 	for count2 in $(seq "0" "$MAX_VLANS_INDEX"); do
-		if [ -z $(nvram get vlan"$count2"hwname) ]; then
+		eval current_vlan_value2=\$CONFIG_eth0_vlan${count2}
+		if [ -z "$current_vlan_value2" ]; then
 			break
 		fi
 		eval value="\"\$FORM_vlan_${count2}_port_${1}\""
@@ -73,31 +75,22 @@ if ! empty "$FORM_submit"; then
 	# handle add or remove
 	#
 	for count in $(seq 0 $MAX_VLANS_INDEX); do
-		current_vlan_hw_nvram_name=vlan"$count"hwname
-		if [ -z $(nvram get $current_vlan_hw_nvram_name) ]; then
+		eval current_vlan_value=\$CONFIG_eth0_vlan"$count"
+		if [ -z "$current_vlan_value" ]; then
 			let "count-=1"
 			break
 		fi
 	done
 
 	#
-	# now add or remove if appropriate.. we use vlanXhwname variable
+	# now add or remove if appropriate. In WR we used vlanXhwname variable
 	#  as indication of the existance of the vlan, to allow for
 	#  empty vlans.
 	#
-	! empty "$FORM_add_vlan" &&
-	{
-		let "count+=1"
-		nvram set vlan"$count"hwname=et0
-	}
+
 	! empty "$FORM_remove_vlan" &&
 	{
-		# todo: will not work if vlan0 doesn't exist..
-		# nvram unset vlan"$count"hwname
-		# better set it empty to force the user to save changes
-		# where is the 'unset_setting' function?
-		save_setting network "vlan${count}hwname" ""
-		save_setting network "vlan${count}ports" ""
+		uci_remove "network" "eth0" "vlan${count}"
 		let "count-=1"
 	}
 	highest_vlan=$count
@@ -106,8 +99,7 @@ if ! empty "$FORM_submit"; then
 	# save VLAN configuration (also do add or remove)
 	#
 	for count in $(seq 0 $highest_vlan); do
-		current_vlan_nvram_name=vlan"$count"ports
-		current_vlan_hw_nvram_name=vlan"$count"hwname
+		current_vlan_opt_name=vlan"$count"
 		current_vlan_ports=""
 		for port_counter in $(seq $PORT_BASE $MAX_PORT); do
 
@@ -129,11 +121,16 @@ if ! empty "$FORM_submit"; then
 				}
 			fi
 		done
-		save_setting network "$current_vlan_hw_nvram_name" "et0"
-		save_setting network "$current_vlan_nvram_name" "$current_vlan_ports"
+		uci_set "network" "eth0" "$current_vlan_opt_name" "$current_vlan_ports"
 	done
 
-	load_settings network
+	! empty "$FORM_add_vlan" &&
+	{
+		let "count+=1"
+		uci_set "network" "eth0" "vlan${count}" "$MAX_PORT"
+	}
+
+	uci_load "network"
 fi
 
 ####################################################################
@@ -151,23 +148,21 @@ FORM_port_headers="${FORM_port_headers}<td>port</td></tr>"
 #
 FORM_all_vlans="$FORM_port_headers"		# holds VLAN webif form we build
 for count in $(seq "0" "$MAX_VLANS_INDEX"); do
-	vlanport="vlan${count}ports"
+	vlanport="CONFIG_eth0_vlan${count}"
 	FORM_current_vlan="string|<tr><th>VLAN $count&nbsp;&nbsp;</th>"
 	#
 	# for each port, create a checkbox and mark if
 	#  port for in vlan
 	#
-	FORM_log_ipaddr=${log_ipaddr:-$(nvram get log_ipaddr)}
-	defaultval=$(nvram get "$vlanport")
-	eval ports="\${vlan${count}ports:-\"$defaultval\"}"
+	
+	#TODO: revisit for Kamikaze
+	#FORM_log_ipaddr=${log_ipaddr:-$(nvram get log_ipaddr)}
+	eval ports="\$$vlanport"
 	if [ -z "$ports" ]; then
-		# make sure it really is unset and not just empty
-		if [ -z $(nvram get vlan"$count"hwname) ]; then
-			if [ $ALLOW_VLAN_NUMBERING_GAPS = 1 ]; then
-				continue		# to allow vlan # gaps
-			else
-				break			# to disallow vlan # gaps
-			fi
+		if [ $ALLOW_VLAN_NUMBERING_GAPS = 1 ]; then
+			continue		# to allow vlan # gaps
+		else
+			break			# to disallow vlan # gaps
 		fi
 	fi
 	for current_port in $(seq $PORT_BASE $MAX_PORT); do
@@ -205,8 +200,8 @@ helptext|Helptext VLAN#A virtual LAN is a set of ports that are bridged. In case
 $FORM_all_vlans
 end_form
 start_form|
-submit|add_vlan|Add New VLAN
-submit|remove_vlan|Remove Last VLAN
+submit|add_vlan|@TR<<network_vlan_Add_VLAN#Add New VLAN>>
+submit|remove_vlan|@TR<<network_vlan_Remove_Last_VLAN#Remove Last VLAN>>
 end_form
 EOF
 
