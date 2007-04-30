@@ -8,13 +8,13 @@ Settings not saved => Настройки не сохранены
 Save Changes => Сохранить изменения
 Apply Changes => Применить изменения
 Clear Changes => Отменить изменения
-Review Changes => Просмотреть изменения
+Review Changes => Просмотреть изм.
 Host Name => Имя узла
 Uptime => Время работы
 Load => Загрузка
 Categories => Категории
 Subcategories => Подкатегории
-more... => больше...
+more... => подробнее...
 Add => Добавить
 Remove => Удалить
 Warning => Внимание
@@ -834,8 +834,8 @@ HelPText install_upnpd_help => Есть два UPNP демона на выбор
 
 #network-vlan.sh
 Helptext VLAN => Виртуальная локальная сеть (VLAN) - это набор портов, объединенных мостом. В случае, когда порт принадлежит более чем одной виртуальной локальной сети, используется технология, известная как таггинг, для того чтобы определить к какой из VLAN принадлежит трафик на этом порту.
-add_vlan => Добавить новую VLAN
-remove_vlan => Удалить последнюю VLAN
+network_vlan_Add_VLAN => Добавить новую VLAN
+network_vlan_Remove_Last_VLAN => Удалить последнюю VLAN
 
 #network-wan-lan.sh
 Interface => Интерфейс
@@ -920,6 +920,7 @@ Interfaces Status LAN => Интерфейсы локальной сети
 Interfaces Status WAN => Интерфейсы внешней сети
 Interfaces Status WLAN => Интерфейсы беспроводной сети
 &nbsp;Show raw statistics&nbsp; => &nbsp;Показать исходную информацию&nbsp;
+status_interfaces_pkts => пакет(ов)
 
 #status-iptables.sh
 status_iptables_IPTStatus => Статус Iptables
@@ -1127,6 +1128,24 @@ system_nvram_Total => Всего
 system_nvram_B => Б
 system_nvram_Used => Использовано
 system_nvram_NVRAM_Usage_helptext => Текущее использование NVRAM. График показывает как много памяти использовано и как много доступно для других переменных.
+
+## system-snmp.sh
+Install SNMPd => Установка SNMPd
+## duplicate ##Install => 
+Installing SNMPd package => Установить пакет SNMPd
+Remove SNMPd => Удаление SNMPd
+## duplicate ##Remove => 
+Removing SNMPd package => Удалить пакет SNMPd
+SNMP Private Community Name => Частное имя сообщества SNMP
+SNMP Private Source => Частный источник SNMP
+SNMP Public Community Name => Общедоступное имя сообщества SNMP
+SNMP Public Source => Общедоступный источник SNMP
+SNMP Settings => Настройки SNMP
+SNMP Community Name => Имя сообщества SNMP
+Helptext SNMP Community Name => Имя сообщества SNMP идентифицирует группу устройств и систем управления, которые разделяют аутентификацию и контроль доступа этой группы. Хотя имена PUBLIC и PRIVATE широко используются, строго рекомендуется использовать трудно угадываемые имена. Лишь одна вещь может быть хуже чем PUBLIC и PRIVATE - это оставить имя сообщества пустым! Имя сообщества может рассматриваться как пароль группы.
+SNMP Source => Источник SNMP
+Helptext SNMP Source => Источник SNMP определяет IP-адрес, имя узла или маску сети для систем управления, которые могут считывать информацию с 'общедоступных' устройств сообщества или управлять 'частными' устройствами сообщества.
+HelPText install_snmpd_help => Простой протокол управления сетью - Simple Network Management Protocol (SNMP) - широко используемый протокол для мониторинга состояния сетевого оборудования (напр. маршрутизаторов), компьютерного оборудования и даже таких устройств как источники бесперебойного питания.
 
 #log-browse.sh
 Firewall Log View => Файервол
