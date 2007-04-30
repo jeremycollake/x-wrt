@@ -10,22 +10,6 @@ add_insmod() {
 	esac
 }
 
-[ -e /etc/config/network ] && {
-	# only try to parse network config on openwrt
-
-	find_ifname() {(
-		reset_cb
-		include /lib/network
-		scan_interfaces
-		config_get "$1" ifname
-	)}
-} || {
-	find_ifname() {
-		echo "Interface not found."
-		exit 1
-	}
-}
-
 parse_matching_rule() {
 	local var="$1"
 	local section="$2"
@@ -149,8 +133,8 @@ config_cb() {
 	# Section start
 	case "$1" in
 		interface)
-			config_set "$2" "classgroup" "Default"
-			config_set "$2" "upload" "128"
+			config_set "$1" "classgroup" "Default"
+			config_set "$1" "upload" "128"
 		;;
 		classify|default|reclassify)
 			option_cb() {
@@ -163,18 +147,18 @@ config_cb() {
 	config_get TYPE "$CONFIG_SECTION" TYPE
 	case "$TYPE" in
 		interface)
-			config_get_bool enabled "$CONFIG_SECTION" enabled 1
-			[ 1 -eq "$enabled" ] || return 0
+			config_get enabled "$CONFIG_SECTION" enabled
+			config_get download "$CONFIG_SECTION" download
 			config_get classgroup "$CONFIG_SECTION" classgroup
 			config_set "$CONFIG_SECTION" imqdev "$C"
-			C=$(($C+1))
-			append INTERFACES "$CONFIG_SECTION"
-			config_set "$classgroup" enabled 1
-			config_get device "$CONFIG_SECTION" device
-			[ -z "$device" ] && {
-				device="$(find_ifname ${CONFIG_SECTION})"
-				config_set "$CONFIG_SECTION" device "${device:-eth0}"
+			[ -z "$enabled" -o "$(($enabled))" -eq 0 ] || {
+				C=$(($C+1))
+				INTERFACES="$INTERFACES $CONFIG_SECTION"
+				config_set "$classgroup" enabled 1
 			}
+			config_get device "$CONFIG_SECTION" device
+			[ -z "$device" ] && device="$(nvram get ${CONFIG_SECTION}_ifname)"
+			config_set "$CONFIG_SECTION" device "${device:-eth0}"
 		;;
 		classgroup) append CG "$CONFIG_SECTION";;
 		classify|default|reclassify)
@@ -232,16 +216,13 @@ start_interface() {
 	local iface="$1"
 	local num_imq="$2"
 	config_get device "$iface" device
-	config_get_bool enabled "$iface" enabled 1
-	[ -z "$device" -o 1 -ne "$enabled" ] && {
-		echo "Interface '$iface' not found or disabled."
-		return 1 
-	}
+	config_get enabled "$iface" enabled
+	[ -z "$device" -o -z "$enabled" ] && exit
 	config_get upload "$iface" upload
 	config_get halfduplex "$iface" halfduplex
 	config_get download "$iface" download
 	config_get classgroup "$iface" classgroup
-	config_get_bool overhead "$iface" overhead 0
+	config_get overhead "$iface" overhead 0
 	
 	download="${download:-${halfduplex:+$upload}}"
 	enum_classes "$classgroup"
