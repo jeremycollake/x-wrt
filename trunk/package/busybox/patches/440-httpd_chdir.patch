@@ -26,4 +26,3 @@ diff -ur busybox.old/networking/httpd.c busybox.dev/networking/httpd.c
  	char *url_for_decode;
  	USE_FEATURE_HTTPD_ENCODE_URL_STR(const char *url_for_encode;)
  	const char *s_port;
-    

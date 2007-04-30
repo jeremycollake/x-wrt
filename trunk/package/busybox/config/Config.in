@@ -472,3 +472,4 @@ source package/busybox/config/networking/Config.in
 source package/busybox/config/procps/Config.in
 source package/busybox/config/shell/Config.in
 source package/busybox/config/sysklogd/Config.in
+source package/busybox/config/runit/Config.in
