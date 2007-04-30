@@ -109,6 +109,9 @@ EOF
 		! equal "$FORM_wan_enabled" "$CONFIG_wan_enabled" && {
 		 	uci_set "qos" "wan" "enabled" "$FORM_wan_enabled"
 		}
+		! equal "FORM_wan_overhead" "$CONFIG_wan_overhead" && {
+			uci_set "qos" "wan" "overhead" "$FORM_wan_overhead"
+		}
 		! empty "$FORM_wan_download" && ! equal "$FORM_wan_download" "$CONFIG_wan_download" && {
 			uci_set "qos" "wan" "download" "$FORM_wan_download"
 		}
@@ -212,6 +215,7 @@ uci_load "qos"
 FORM_wan_enabled="$CONFIG_wan_enabled"
 FORM_wan_download="$CONFIG_wan_download"
 FORM_wan_upload="$CONFIG_wan_upload"
+FORM_wan_overhead="$CONFIG_wan_overhead"
 
 ######################################################################
 cat <<EOF
@@ -242,6 +246,10 @@ field|@TR<<QoS Service>>|field_n_enabled
 select|wan_enabled|$FORM_wan_enabled
 option|1|@TR<<qos_enabled#Enabled>>
 option|0|@TR<<qos_disabled#Disabled>>
+field|@TR<<QoS Overhead Calculation>>|field_wan_overhead
+select|wan_overhead|$FORM_wan_overhead
+option|1|@TR<<qos_overhead#Enabled>>
+option|0|@TR<<qos_overhead#Disabled>>
 field|@TR<<WAN Upload Speed>>|field_n_wan_upload
 text|wan_upload|$FORM_wan_upload| @TR<<kilobits>>
 helpitem|Maximum Upload/Download
