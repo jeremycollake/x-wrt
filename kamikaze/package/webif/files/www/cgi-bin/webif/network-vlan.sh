@@ -200,8 +200,8 @@ helptext|Helptext VLAN#A virtual LAN is a set of ports that are bridged. In case
 $FORM_all_vlans
 end_form
 start_form|
-submit|add_vlan|@TR<<network_vlan_Add_VLAN#Add New VLAN>>
-submit|remove_vlan|@TR<<network_vlan_Remove_Last_VLAN#Remove Last VLAN>>
+submit|add_vlan|@TR<<Add New VLAN>>
+submit|remove_vlan|@TR<<Remove Last VLAN>>
 end_form
 EOF
 

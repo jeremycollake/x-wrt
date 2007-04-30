@@ -834,8 +834,8 @@ HelPText install_upnpd_help => Есть два UPNP демона на выбор
 
 #network-vlan.sh
 Helptext VLAN => Виртуальная локальная сеть (VLAN) - это набор портов, объединенных мостом. В случае, когда порт принадлежит более чем одной виртуальной локальной сети, используется технология, известная как таггинг, для того чтобы определить к какой из VLAN принадлежит трафик на этом порту.
-network_vlan_Add_VLAN => Добавить новую VLAN
-network_vlan_Remove_Last_VLAN => Удалить последнюю VLAN
+Add New VLAN => Добавить новую VLAN
+Remove Last VLAN => Удалить последнюю VLAN
 
 #network-wan-lan.sh
 Interface => Интерфейс
