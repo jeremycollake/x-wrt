@@ -184,6 +184,18 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 			/etc/init.d/openvpn start ;;
 		"/tmp/.uci/system")
 			/etc/init.d/boot start ;;
+		"/tmp/.uci/snmp")
+			echo '@TR<<Exporting>> @TR<<snmp settings>> ...'
+			[ -e "/sbin/save_snmp" ] && {
+				/sbin/save_snmp >&- 2>&-
+			}
+			
+			echo '@TR<<Reloading>> @TR<<snmp settings>> ...'
+			[ ! -e "/etc/init.d/S??snmpd" ] && {
+				ln -s "/etc/init.d/snmpd" "/etc/init.d/S92snmpd" 2>/dev/null
+			}
+			/etc/init.d/S??snmpd restart >&- 2>&-
+			;;
 		"/tmp/.uci/updatedd")
 			uci_load "updatedd"
 			if [ "$CONFIG_ddns_update" = "1" ]; then
