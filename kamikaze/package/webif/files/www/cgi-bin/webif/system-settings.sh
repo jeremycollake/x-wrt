@@ -34,6 +34,7 @@ uci_load "webif"
 is_kamikaze && {
 	uci_load "system"
 	uci_load "network"
+	uci_load "timezone"
 }
 
 
@@ -127,26 +128,24 @@ fi
 # initialize forms
 if empty "$FORM_submit"; then
 	# initialize all defaults
-	! is_kamikaze && {	
-	FORM_hostname="${wan_hostname:-$(nvram get wan_hostname)}"
-	FORM_hostname="${FORM_hostname:-OpenWrt}"
-	time_zone_part="${FORM_system_timezone#*@}"
-	time_zone_part="${time_zone_part:-$(nvram get time_zone)}"
-	time_zoneinfo_part="${FORM_system_timezone%@*}"
-	time_zoneinfo_part="${time_zoneinfo_part:-$(nvram get time_zoneinfo)}"
+	is_kamikaze && {
+		# the following line code does not work!
+		FORM_hostname="${CONFIG_system_hostname:-"OpenWrt"}"
+		time_zone_part="${CONFIG_timezone_posixtz}"
+		time_zoneinfo_part="${CONFIG_timezone_zoneinfo}"
+		#wait for ntpclient to be updated
+		#FORM_ntp_server="${ntp_server:-$(nvram get ntp_server)}"
+	} || {
+		FORM_hostname="${wan_hostname:-$(nvram get wan_hostname)}"
+		FORM_hostname="${FORM_hostname:-OpenWrt}"
+		time_zone_part="${time_zone_part:-$(nvram get time_zone)}"
+		time_zoneinfo_part="${time_zoneinfo_part:-$(nvram get time_zoneinfo)}"
+		FORM_ntp_server="${ntp_server:-$(nvram get ntp_server)}"
+	}
+	time_zone_part="${time_zone_part:-"UTC+0"}"
 	time_zoneinfo_part="${time_zoneinfo_part:-"-"}"
 	FORM_system_timezone="${time_zoneinfo_part}@${time_zone_part}"
-	FORM_ntp_server="${ntp_server:-$(nvram get ntp_server)}"
-	}
-	
-	is_kamikaze && {
-	FORM_hostname="$CONFIG_system_hostname"
-	FORM_hostname="${FORM_hostname:-OpenWrt}"
-	#wait for ntpclient to be updated
-	#FORM_system_timezone="${FORM_system_timezone:-$(nvram get time_zone)}"
-	#FORM_system_timezone="${FORM_system_timezone:-""}"
-	#FORM_ntp_server="${ntp_server:-$(nvram get ntp_server)}"
-	}
+
 	is_bcm947xx && {
 		FORM_boot_wait="${boot_wait:-$(nvram get boot_wait)}"
 		FORM_boot_wait="${FORM_boot_wait:-off}"
@@ -171,23 +170,26 @@ else
 hostname|FORM_hostname|@TR<<Host Name>>|nodots required|$FORM_hostname
 EOF
 	if equal "$?" 0 ; then
+		time_zone_part="${FORM_system_timezone#*@}"
+		time_zoneinfo_part="${FORM_system_timezone%@*}"
 		is_kamikaze && {
-		#to check if we actually changed hostname, else donot reload network for no reason!
-		uci_load "network"
-		if ! equal "$FORM_hostname" "$CONFIG_system_hostname" ; then uci_set "system" "system" "hostname" "$FORM_hostname" ; fi
-
-		#waiting for ntpclient update
-		#save_setting system time_zone "$FORM_system_timezone"
-		#save_setting system ntp_server "$FORM_ntp_server"
-		}
-		! is_kamikaze && {
+			#to check if we actually changed hostname, else donot reload network for no reason!
+			uci_load "network"
+			! equal "$FORM_hostname" "$CONFIG_system_hostname" && ! empty "$FORM_hostname" && {
+				uci_set "system" "system" "hostname" "$FORM_hostname"
+			}
+			! equal "$CONFIG_timezone_TYPE" "timezone" && uci_add timezone timezone timezone
+			uci_set timezone timezone posixtz "$time_zone_part"
+			uci_set timezone timezone zoneinfo "$time_zoneinfo_part"
+			#waiting for ntpclient update
+			#save_setting system ntp_server "$FORM_ntp_server"
+		} || {
 			save_setting system wan_hostname "$FORM_hostname"
-			time_zone_part="${FORM_system_timezone#*@}"
-			time_zoneinfo_part="${FORM_system_timezone%@*}"
 			save_setting timezone time_zone "$time_zone_part"
 			save_setting timezone time_zoneinfo "$time_zoneinfo_part"
 			save_setting system ntp_server "$FORM_ntp_server"
 		}
+
 		is_bcm947xx && {
 			case "$FORM_boot_wait" in
 				on|off) save_setting system boot_wait "$FORM_boot_wait";;
