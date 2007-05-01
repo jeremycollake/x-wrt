@@ -24,6 +24,15 @@
 #   none
 #
 
+config_cb() {
+	config_get TYPE "$CONFIG_SECTION" TYPE
+	case "$TYPE" in
+		system)
+			hostname_cfg="$CONFIG_SECTION"
+		;;
+	esac
+}
+
 is_bcm947xx && {
 	load_settings "system"
 	load_settings "webif"
@@ -129,8 +138,8 @@ fi
 if empty "$FORM_submit"; then
 	# initialize all defaults
 	is_kamikaze && {
-		# the following line code does not work!
-		FORM_hostname="${CONFIG_system_hostname:-"OpenWrt"}"
+		eval CONFIG_system_hostname="\$CONFIG_${hostname_cfg}_hostname"
+		FORM_hostname="${CONFIG_system_hostname:-OpenWrt}"
 		time_zone_part="${CONFIG_timezone_posixtz}"
 		time_zoneinfo_part="${CONFIG_timezone_zoneinfo}"
 		#wait for ntpclient to be updated
@@ -174,9 +183,8 @@ EOF
 		time_zoneinfo_part="${FORM_system_timezone%@*}"
 		is_kamikaze && {
 			#to check if we actually changed hostname, else donot reload network for no reason!
-			uci_load "network"
 			! equal "$FORM_hostname" "$CONFIG_system_hostname" && ! empty "$FORM_hostname" && {
-				uci_set "system" "system" "hostname" "$FORM_hostname"
+				uci_set "system" "$hostname_cfg" "hostname" "$FORM_hostname"
 			}
 			! equal "$CONFIG_timezone_TYPE" "timezone" && uci_add timezone timezone timezone
 			uci_set timezone timezone posixtz "$time_zone_part"
