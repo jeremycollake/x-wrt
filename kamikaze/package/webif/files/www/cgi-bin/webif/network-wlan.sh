@@ -108,8 +108,6 @@ uci_load wireless
 #we will use uniq so we don't try to parse the same config section twice.
 vface=$(echo "$vface" |uniq)
 
-#echo "$DEVICES"
-#echo "vifs $vface"
 vcfg_number=$(echo "$DEVICES $N $vface" |wc -l)
 let "vcfg_number+=1"
 
