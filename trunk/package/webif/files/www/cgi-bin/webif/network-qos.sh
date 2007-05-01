@@ -248,8 +248,8 @@ option|1|@TR<<qos_enabled#Enabled>>
 option|0|@TR<<qos_disabled#Disabled>>
 field|@TR<<QoS Overhead Calculation>>|field_wan_overhead
 select|wan_overhead|$FORM_wan_overhead
-option|1|@TR<<qos_overhead#Enabled>>
-option|0|@TR<<qos_overhead#Disabled>>
+option|1|@TR<<qos_overhead_enabled#Enabled>>
+option|0|@TR<<qos_overhead_disabled#Disabled>>
 field|@TR<<WAN Upload Speed>>|field_n_wan_upload
 text|wan_upload|$FORM_wan_upload| @TR<<kilobits>>
 helpitem|Maximum Upload/Download
