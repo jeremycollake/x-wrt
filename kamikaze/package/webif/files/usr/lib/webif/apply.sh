@@ -12,6 +12,15 @@
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
 
+config_cb() {
+	config_get TYPE "$CONFIG_SECTION" TYPE
+	case "$TYPE" in
+		timezone)
+			timezone_cfg="$CONFIG_SECTION"
+		;;
+	esac
+}
+
 HANDLERS_file='
 	hosts) rm -f /etc/hosts; mv $config /etc/hosts; killall -HUP dnsmasq ;;
 	ethers) rm -f /etc/ethers; mv $config /etc/ethers; killall -HUP dnsmasq ;;
@@ -207,6 +216,18 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 				/etc/init.d/ddns stop >&- 2>&- <&-
 			fi
 		 	;;
+		"/tmp/.uci/timezone")
+			echo '@TR<<Exporting>> @TR<<TZ setting>> ...'
+			uci_load "timezone"
+			eval CONFIG_timezone_posixtz="\$CONFIG_${timezone_cfg}_posixtz"
+			# create symlink to /tmp/TZ if /etc/TZ doesn't exist
+			# todo: -e | -f | -d didn't seem to work here, so I used find
+			if [ -z $(find "/etc/TZ") ]; then 
+				ln -s /tmp/TZ /etc/TZ
+			fi
+			# eJunky: set timezone
+			[ "$CONFIG_timezone_posixtz" ] && echo $CONFIG_timezone_posixtz > /etc/TZ
+			;;
 	esac
 done
 
