@@ -30,6 +30,9 @@ config_cb() {
 		system)
 			hostname_cfg="$CONFIG_SECTION"
 		;;
+		timezone)
+			timezone_cfg="$CONFIG_SECTION"
+		;;
 	esac
 }
 
@@ -140,7 +143,9 @@ if empty "$FORM_submit"; then
 	is_kamikaze && {
 		eval CONFIG_system_hostname="\$CONFIG_${hostname_cfg}_hostname"
 		FORM_hostname="${CONFIG_system_hostname:-OpenWrt}"
+		eval CONFIG_timezone_posixtz="\$CONFIG_${timezone_cfg}_posixtz"
 		time_zone_part="${CONFIG_timezone_posixtz}"
+		eval CONFIG_timezone_zoneinfo="\$CONFIG_${timezone_cfg}_zoneinfo"
 		time_zoneinfo_part="${CONFIG_timezone_zoneinfo}"
 		#wait for ntpclient to be updated
 		#FORM_ntp_server="${ntp_server:-$(nvram get ntp_server)}"
@@ -183,12 +188,22 @@ EOF
 		time_zoneinfo_part="${FORM_system_timezone%@*}"
 		is_kamikaze && {
 			#to check if we actually changed hostname, else donot reload network for no reason!
+			eval CONFIG_system_hostname="\$CONFIG_${hostname_cfg}_hostname"
 			! equal "$FORM_hostname" "$CONFIG_system_hostname" && ! empty "$FORM_hostname" && {
 				uci_set "system" "$hostname_cfg" "hostname" "$FORM_hostname"
 			}
-			! equal "$CONFIG_timezone_TYPE" "timezone" && uci_add timezone timezone timezone
-			uci_set timezone timezone posixtz "$time_zone_part"
-			uci_set timezone timezone zoneinfo "$time_zoneinfo_part"
+			empty "$timezone_cfg" && {
+				uci_add timezone timezone timezone
+				timezone_cfg = "timezone"
+			}
+			eval CONFIG_timezone_posixtz="\$CONFIG_${timezone_cfg}_posixtz"
+			! equal "$time_zone_part" "$CONFIG_timezone_posixtz" && ! empty "$time_zone_part" && {
+				uci_set timezone "$timezone_cfg" posixtz "$time_zone_part"
+			}
+			eval CONFIG_timezone_zoneinfo="\$CONFIG_${timezone_cfg}_zoneinfo"
+			! equal "$time_zoneinfo_part" "$CONFIG_timezone_zoneinfo" && ! empty "$time_zoneinfo_part" && {
+				uci_set timezone "$timezone_cfg" zoneinfo "$time_zoneinfo_part"
+			}
 			#waiting for ntpclient update
 			#save_setting system ntp_server "$FORM_ntp_server"
 		} || {
