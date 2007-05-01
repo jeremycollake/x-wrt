@@ -782,6 +782,7 @@ Priority => Priority
 Protocol => Протокол
 QOS Configuration => Конфигурация QoS
 QoS Options => Свойства QoS
+QoS Overhead Calculation => Расчет накладных расходов QoS
 QoS Packages => Пакеты QoS
 QoS Rule Edit => QoS редактирование правил
 QoS Service => Сервис QoS
@@ -809,6 +810,8 @@ qos_installing => Устанавливаются скрипты Nbd для QoS
 qos_nbds => Скрипты Nbd для QoS (рекомендуется)
 qos_nbds_install => Установить
 qos_no_compatible => Совместимый пакет QOS не установлен.
+qos_overhead_enabled => Включен
+qos_overhead_disabled => Выключен
 qos_p2p_all => Все
 qos_p2p_bittorrent => bitTorrent
 qos_p2p_dc => DirectConnect
@@ -822,7 +825,6 @@ qos_prot_tcp => TCP
 qos_prot_udp => UDP
 qos_validation_failed => Проверка одного или нескольких полей неудачна! Не сохраняется.
 up => вверх
-
 
 #network-services.sh
 WAN Speeds => Скорость WAN
