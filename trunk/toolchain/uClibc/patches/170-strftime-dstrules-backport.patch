@@ -1,0 +1,202 @@
+--- uClibc-0.9.27/libc/misc/time/time.c	2005-01-12 08:59:21.000000000 +0100
++++ uClibc-0.9.27.bp/libc/misc/time/time.c	2007-01-29 22:37:48.000000000 +0100
+@@ -118,6 +118,15 @@
+  *   Make lookup_tzname() static (as it should have been).
+  *   Have strftime() get timezone information from the passed struct
+  *     for the %z and %Z conversions when using struct tm extensions.
++ *
++ * Jul 24, 2004
++ *   Fix 2 bugs in strftime related to glibc struct tm extensions.
++ *   1) Need to negate tm_gmtoff field value when used. (bug 336).
++ *   2) Deal with NULL ptr case for tm_zone field, which was causing
++ *      segfaults in both the NIST/PCTS tests and the Python 2.4.1
++ *      self-test suite.
++ *      NOTE: We set uninitialized timezone names to "???", and this
++ *            differs (intentionally) from glibc's behavior.
+  */
+ 
+ #define _GNU_SOURCE
+@@ -146,6 +155,22 @@
+ #define TZNAME_MAX _POSIX_TZNAME_MAX
+ #endif
+ 
++#if defined (L_tzset) || defined (L_localtime_r) || defined(L_strftime) || \
++	 defined(L__time_mktime) || defined(L__time_mktime_tzi) || \
++	 ((defined(L_strftime) || defined(L_strftime_l)) && \
++	  defined(__UCLIBC_HAS_XLOCALE__))
++
++void _time_tzset (int);
++
++#ifndef L__time_mktime
++
++ /* Jan 1, 2007 Z - tm = 0,0,0,1,0,107,1,0,0 */
++
++const static time_t new_rule_starts = 1167609600;
++
++#endif
++#endif
++
+ /**********************************************************************/
+ /* The era code is currently unfinished. */
+ /*  #define ENABLE_ERA_CODE */
+@@ -535,7 +560,7 @@
+ {
+ 	TZLOCK;
+ 
+-	tzset();
++	_time_tzset(*timer < new_rule_starts);
+ 
+ 	__time_localtime_tzi(timer, result, _time_tzinfo);
+ 
+@@ -959,7 +984,8 @@
+ 	unsigned char mod;
+ 	unsigned char code;
+ 
+-	tzset();					/* We'll, let's get this out of the way. */
++	/* We'll, let's get this out of the way. */
++	_time_tzset(_time_mktime((struct tm *) timeptr, 0) < new_rule_starts);
+ 
+ 	lvl = 0;
+ 	p = format;
+@@ -1028,7 +1054,7 @@
+ 			goto LOOP;
+ 		}
+ 
+-		o = spec + 26;		/* set to "????" */
++		o = ((const char *) spec) + 26;	/* set to "????" */
+ 		if ((code & MASK_SPEC) == CALC_SPEC) {
+ 
+ 			if (*p == 's') {
+@@ -1066,7 +1092,7 @@
+ 
+ #define RSP_TZUNLOCK	((void) 0)
+ #define RSP_TZNAME		timeptr->tm_zone
+-#define RSP_GMT_OFFSET	timeptr->tm_gmtoff
++#define RSP_GMT_OFFSET	(-timeptr->tm_gmtoff)
+ 
+ #else
+ 
+@@ -1084,6 +1110,20 @@
+ 
+ 				if (*p == 'Z') {
+ 					o = RSP_TZNAME;
++#ifdef __UCLIBC_HAS_TM_EXTENSIONS__
++					/* Sigh... blasted glibc extensions.  Of course we can't
++					 * count on the pointer being valid.  Best we can do is
++					 * handle NULL, which looks to be all that glibc does.
++					 * At least that catches the memset() with 0 case.
++					 * NOTE: We handle this case differently than glibc!
++					 * It uses system timezone name (based on tm_isdst) in this
++					 * case... although it always seems to use the embedded
++					 * tm_gmtoff value.  What we'll do instead is treat the
++					 * timezone name as unknown/invalid and return "???". */
++					if (!o) {
++							o = "???";
++					}
++#endif
+ 					assert(o != NULL);
+ #if 0
+ 					if (!o) {	/* PARANOIA */
+@@ -1092,7 +1132,9 @@
+ #endif
+ 					o_count = SIZE_MAX;
+ 					RSP_TZUNLOCK;
++#ifdef __UCLIBC_HAS_TM_EXTENSIONS__
+ 					goto OUTPUT;
++#endif
+ 				} else {		/* z */
+ 					*s = '+';
+ 					if ((tzo = -RSP_GMT_OFFSET) < 0) {
+@@ -1108,7 +1150,13 @@
+ 			
+ 					i = 16 + 6;	/* 0-fill, width = 4 */
+ 				}
+-
++#ifdef __UCLIBC_HAS_TM_EXTENSIONS__
++#else
++				RSP_TZUNLOCK;
++				if (*p == 'Z') {
++					goto OUTPUT;
++				}
++#endif
+ 			} else {
+ 				/* TODO: don't need year for U, W */
+ 				for (i=0 ; i < 3 ; i++) {
+@@ -1406,7 +1454,9 @@
+ 
+ 			i = 0;
+ 			do {				/* Store the values into tm. */
+-				((int *) tm)[i] = fields[i];
++				if (fields[i] != INT_MIN) {
++					((int *) tm)[i] = fields[i];
++				}
+ 			} while (++i < 8);
+ 
+ 			return (char *) buf; /* Success. */
+@@ -1625,7 +1675,9 @@
+ 	6,  0,  0,					/* Note: overloaded for non-M non-J case... */
+ 	0, 1, 0,					/* J */
+ 	',', 'M',      '4', '.', '1', '.', '0',
+-	',', 'M', '1', '0', '.', '5', '.', '0', 0
++	',', 'M', '1', '0', '.', '5', '.', '0', 0,
++	',', 'M',      '3', '.', '2', '.', '0',
++	',', 'M', '1', '1', '.', '1', '.', '0', 0
+ };
+ 
+ #define TZ    vals
+@@ -1633,6 +1685,7 @@
+ #define RANGE (vals + 7)
+ #define RULE  (vals + 11 - 1)
+ #define DEFAULT_RULES (vals + 22)
++#define DEFAULT_2007_RULES (vals + 38)
+ 
+ /* Initialize to UTC. */
+ int daylight = 0;
+@@ -1757,6 +1810,11 @@
+ 
+ void tzset(void)
+ {
++    _time_tzset((time(NULL)) < new_rule_starts);
++}
++
++void _time_tzset(int use_old_rules)
++{
+ 	register const char *e;
+ 	register char *s;
+ 	long off;
+@@ -1879,7 +1937,15 @@
+ 	} else {					/* OK, we have dst, so get some rules. */
+ 		count = 0;
+ 		if (!*e) {				/* No rules so default to US rules. */
+-			e = DEFAULT_RULES;
++		        e = use_old_rules ? DEFAULT_RULES : DEFAULT_2007_RULES;
++#ifdef DEBUG_TZSET			
++			if (e == DEFAULT_RULES)
++			    printf("tzset: Using old rules.\n");
++			else if (e == DEFAULT_2007_RULES)
++			    printf("tzset: Using new rules\n");
++			else
++			    printf("tzset: Using undefined rules\n");
++#endif /* DEBUG_TZSET */
+ 		}
+ 
+ 		do {
+@@ -1937,7 +2003,9 @@
+ 	daylight = !!_time_tzinfo[1].tzname[0];
+ 	timezone = _time_tzinfo[0].gmt_offset;
+ 
++#if defined(__UCLIBC_HAS_TZ_FILE__) || defined(__UCLIBC_HAS_TZ_CACHING__)
+  FAST_DONE:
++#endif
+ 	TZUNLOCK;
+ }
+ 
+@@ -2211,6 +2279,8 @@
+ 		--d;
+ 	}
+ 
++	_time_tzset (x.tm_year < 2007);	/* tm_year was expanded above */
++
+ #ifdef __BCC__
+ 	d = p[5] - 1;
+ 	days = -719163L + ((long)d)*365 + ((d/4) - (d/100) + (d/400) + p[3] + p[7]);
