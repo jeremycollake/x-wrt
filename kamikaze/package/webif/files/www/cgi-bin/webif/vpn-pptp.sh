@@ -1,17 +1,20 @@
 #!/usr/bin/webif-page "-U /tmp -u 4096"
 <?
 # from: http://coova.org
+# 03/05/2007 port of pptp page to Kamikaze by Liran Tal
+# *unfinished port still...
+
 . /usr/lib/webif/webif.sh
 . /etc/functions-net.sh
 
 load_settings "pptp"
 
 if empty "$FORM_submit"; then
-	FORM_pptp_cli=${pptp_cli:-$(nvram get pptp_cli)}
-	FORM_pptp_srv=${pptp_srv:-$(nvram get pptp_srv)}
+	FORM_pptp_cli=$CONFIG_pptp_cli
+	FORM_pptp_srv=$CONFIG_pptp_srv
 else
-	save_setting pptp pptp_cli $FORM_pptp_cli
-	save_setting pptp pptp_srv $FORM_pptp_srv
+	uci_set pptp pptp pptp_cli "$FORM_pptp_cli"
+	uci_set pptp pptp pptp_srv "$FORM_pptp_srv"
 fi
 
 header "VPN" "PPTP" "@TR<<PPTP>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
