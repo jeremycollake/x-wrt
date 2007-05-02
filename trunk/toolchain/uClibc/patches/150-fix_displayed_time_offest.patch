@@ -1,0 +1,18 @@
+diff -u -p uClibc-0.9.27/libc/misc/time/time.u1.c uClibc-0.9.27/libc/misc/time/time.c
+--- uClibc-0.9.27/libc/misc/time/time.u1.c	2005-07-11 10:26:10.000000000 -0700
++++ uClibc-0.9.27/libc/misc/time/time.c	2005-07-11 10:53:44.000000000 -0700
+@@ -1066,13 +1066,13 @@ size_t __XL(strftime)(char *__restrict s
+ 
+ #define RSP_TZUNLOCK	((void) 0)
+ #define RSP_TZNAME		timeptr->tm_zone
+-#define RSP_GMT_OFFSET	timeptr->tm_gmtoff
++#define RSP_GMT_OFFSET	(-timeptr->tm_gmtoff)
+ 
+ #else
+ 
+ #define RSP_TZUNLOCK	TZUNLOCK
+ #define RSP_TZNAME		rsp->tzname
+-#define RSP_GMT_OFFSET	rsp->gmt_offset
++#define RSP_GMT_OFFSET	(rsp->gmt_offset)
+ 
+ 				TZLOCK;
