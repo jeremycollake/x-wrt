@@ -7,14 +7,14 @@
 start() {
 	uci_load "webif"
 	[ "$CONFIG_misc_opendns" = "1" ] && {
-		! grep -q "208.67.222.222" "/tmp/resolv.conf" && {
+		! grep -q "208\.67\.222\.222" "/tmp/resolv.conf" || ! grep -q "208\.67\.220\.220" "/tmp/resolv.conf" && {
 			echo "Setting OpenDNS nameservers ..."
 			local _ltemp
 			_ltemp=$(mktemp "/tmp/.newresolv-XXXXXX")
-			mv -f "/tmp/resolv.conf" "$_ltemp"
-			echo "nameserver 208.67.222.222" > /tmp/resolv.conf
-			echo "nameserver 208.67.220.220" >> /tmp/resolv.conf
-			cat "$_ltemp" >> "/tmp/resolv.conf"
+			echo "nameserver 208.67.222.222" > "$_ltemp"
+			echo "nameserver 208.67.220.220" >> "$_ltemp"
+			grep -v "208\.67\.22\(2\.222\|0\.220\)" "/tmp/resolv.conf" >> "$_ltemp"
+			cat "$_ltemp" > "/tmp/resolv.conf"
 			rm -f "$_ltemp"			
 		}
 	}

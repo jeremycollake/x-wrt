@@ -330,7 +330,7 @@ reload_snmp() {
 	}
 
 	echo_restarting_service "@TR<<apply_snmp#snmp>>"
-	[ ! -e "/etc/init.d/S??snmpd" ] && {
+	[ ! -e /etc/init.d/S??snmpd ] && {
 		ln -s "/etc/init.d/snmpd" "/etc/init.d/S92snmpd" 2>/dev/null
 	}
 	/etc/init.d/S??snmpd restart >&- 2>&-
@@ -455,12 +455,12 @@ init_theme() {
 apply_uci_webif() {
 	switch_language
 	init_theme
-	if exists "/etc/init.d/S??webif_deviceid"; then
+	[ -x /etc/init.d/S??webif_deviceid ] && {
 		/etc/init.d/S??webif_deviceid
-	fi
-	if exists "/etc/init.d/S??opendns"; then
+	}
+	[ -x /etc/init.d/S??opendns ] && {
 		/etc/init.d/S??opendns restart
-	fi
+	}
 }
 
 apply_uci_qos() {
