@@ -200,7 +200,7 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 			}
 			
 			echo '@TR<<Reloading>> @TR<<snmp settings>> ...'
-			[ ! -e "/etc/init.d/S??snmpd" ] && {
+			[ ! -e "/etc/init.d/snmpd" ] && {
 				ln -s "/etc/init.d/snmpd" "/etc/init.d/S92snmpd" 2>/dev/null
 			}
 			/etc/init.d/S??snmpd restart >&- 2>&-
