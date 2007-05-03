@@ -2,140 +2,211 @@
 <?
 . /usr/lib/webif/webif.sh
 
-# header "Network" "Hosts"...
+exists "/tmp/.webif/file-routes" && ROUTES_FILE="/tmp/.webif/file-routes" || {
+	ROUTES_FILE="/etc/routes"
+	exists "$ROUTES_FILE" || touch "$ROUTES_FILE" >&- 2>&-
+}
 
-exists /tmp/.webif/file-routes  && ROUTES_FILE=/tmp/.webif/file-routes || ROUTES_FILE=/etc/routes
-exists $ROUTES_FILE || touch $ROUTES_FILE >&- 2>&-
+EDIT_FLAG=0
 
-update_hosts() {
+update_routes() {
 	exists /tmp/.webif/* || mkdir -p /tmp/.webif
-	awk -v "mode=$1" -v "ip=$2" -v "name=$3" -v "gw=$4" '
-BEGIN {
-	FS="[ \t]"
-	host_added = 0
-}
-{ processed = 0 }
-(mode == "del") && (ip == $1) {
-	names_found = 0
-	n = split($0, names, "[ \t]")
-	output = $1 "	"
-	for (i = 2; i <= n; i++) {
-		if ((names[i] != "") && (names[i] != name)) {
-			output = output names[i] " "
-			names_found++
-		}
+	[ "$ROUTES_FILE" = "/etc/routes" ] && {
+		cp -f "$ROUTES_FILE" "/tmp/.webif/file-routes" 2>/dev/null
+		ROUTES_FILE="/tmp/.webif/file-routes"
 	}
-	if (names_found > 0) print output
-	processed = 1
-}
-(mode == "add") && (ip == $1) {
-	print $0 " " name " " gw
-	host_added = 1
-	processed = 1
-}
-processed == 0 {
-	print $0
-}
-END {
-	if ((mode == "add") && (host_added == 0)) print ip "	" name
-}' "$ROUTES_FILE" > /tmp/.webif/file-routes-new
-	mv "/tmp/.webif/file-routes-new" "/etc/routes"
-	ROUTES_FILE=/etc/routes
+	local temp_line
+	! empty "$3" && temp_line="-net $2" || temp_line="-host $2"
+	! empty "$3" && temp_line="$temp_line netmask $3"
+	! empty "$4" && temp_line="$temp_line gw $4"
+	! empty "$5" && temp_line="$temp_line $5"
+	[ "$1" = "add" ] && {
+		echo "$temp_line" >> "$ROUTES_FILE" 2>/dev/null
+	}
+	[ "$1" = "del" ] && {
+		sed -e "/$temp_line/d" -i "$ROUTES_FILE" 2>/dev/null
+	}
 }
 
-empty "$FORM_add_host" || {
-	# add a host to /etc/hosts
+! empty "$FORM_action" && {
+	#unsanitize
+	! empty "$FORM_additional" && {
+		FORM_additional=$(echo "$FORM_additional" | sed 's/%20/ /g')
+	}
+	equal "$FORM_action" "editroute" && {
+		EDIT_FLAG=1
+		update_routes del "$FORM_ipaddr" "$FORM_netmask" "$FORM_gateway" "$FORM_additional"
+	}
+	equal "$FORM_action" "addroute" && {
+		EDIT_FLAG=1
+	}
+	equal "$FORM_action" "removeroute" && {
+		update_routes del "$FORM_ipaddr" "$FORM_netmask" "$FORM_gateway" "$FORM_additional"
+	}
+}
+
+! empty "$FORM_submit" && {
 	validate <<EOF
-ip|FORM_host_ip|@TR<<network_hosts_host_IP_invalid#Host's IP Address>>|required|$FORM_host_ip
-hostname|FORM_host_name|@TR<<network_hosts_Host_Name#Host Name>>|required|$FORM_host_name
-gateway|FORM_gw|@TR<<network_hosts_Host_Name#Gateway>>|required|$FORM_gw
+ip|FORM_ipaddr|@TR<<network_routes_IP_Address#IP Address>>|required|$FORM_ipaddr
+netmask|FORM_netmask|@TR<<network_routes_Netmask#Netmask>>||$FORM_netmask
+ip|FORM_gateway|@TR<<network_routes_Gateway#Gateway>>||$FORM_gateway
 EOF
 	equal "$?" 0 && {
-		update_hosts add "$FORM_host_ip" "$FORM_host_name" "$FORM_gw"
-		unset FORM_host_ip FORM_host_name FORM_gw
+		# maybe also check with route command?
+		update_routes add "$FORM_ipaddr" "$FORM_netmask" "$FORM_gateway" "$FORM_additional"
+		unset FORM_ipaddr FORM_netmask FORM_gateway FORM_additional
+	} || {
+		EDIT_FLAG=1
 	}
 }
 
-empty "$FORM_remove_host" || update_hosts del "$FORM_remove_ip" "$FORM_remove_name"
+header "Network" "Routes" "@TR<<network_routes_Static_Routes#Static Routes>>" '' "$SCRIPT_NAME"
 
-header "Network" "Routes" "@TR<<Configured Routes>>" '' "$SCRIPT_NAME"
-
-display_form <<EOF
-start_form|@TR<<network_hosts_Host_Names#Host Names>>
+[ "$EDIT_FLAG" == "1" ] && {
+	display_form <<EOF
+start_form|@TR<<network_routes_Add_route#Add route>>
+field|@TR<<network_routes_IP_Address#IP Address>>|field_ipaddr|
+text|ipaddr|$FORM_ipaddr
+field|@TR<<network_routes_Netmask#Netmask>>|field_wan_netmask|
+text|netmask|$FORM_netmask
+field|@TR<<network_routes_Gateway#Gateway>>|field_gateway|
+text|gateway|$FORM_gateway
+field|@TR<<network_routes_Additional_commands#Additional commands>>|field_additional|
+text|additional|$FORM_additional
+helpitem|network_routes_IP_Address_netmask#IP Address/Netmask
+helptext|network_routes_IP_Address_helptext#Helptext.
+helpitem|network_routes_Gateway#Gateway
+helptext|network_routes_Gateway_helptext#Helptext.
+helpitem|network_routes_Additional_commands#Additional commands
+helptext|network_routes_Additional_commands_helptext#Helptext.
+end_form
 EOF
-
-# Hosts in /etc/hosts
-awk -v "url=$SCRIPT_NAME" \
-	-v "ip=$FORM_host_ip" \
-	-v "name=$FORM_host_name" \
-	-v "gw=$FORM_gw" \
-	-f /usr/lib/webif/common.awk \
-	-f - $ROUTES_FILE <<EOF
-BEGIN {
-	FS="[ \t]"
-	odd=1
-	print "	<tr>\n		<th>@TR<<network_hosts_IP#IP Address>></th>\n		<th>@TR<<network_hosts_Host_Name#Host Name>></th>\n		<th></th>\n	</tr>"
 }
-# only for valid IPv4 addresses
-(\$1 ~ /^[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}$/) {
-	gsub(/#.*$/, "");
-	output = ""
-	names_found = 0
-	n = split(\$0, names, "[ \\t]")
-	first = 1
-	for (i = 2; i <= n; i++) {
-		if (names[i] != "") {
-			if (first != 1) {
-				if (odd == 1)
-					output = output "\\n	<tr>\\n"
-				else
-					output = output "\\n	<tr class=\\"odd\\">\\n"
-			}
-			output = output "		<td>" names[i] "</td>\\n		<td align=\\"right\\" width=\\"10%\\"><a href=\\"" url "?remove_host=1&amp;remove_ip=" \$1 "&amp;remove_name=" names[i] "\\">@TR<<network_hosts_Remove#Remove>></a></td>\\n	</tr>"
-			first = 0
-			names_found++
+
+?>
+<div class="settings">
+<h3><strong>@TR<<network_routes_Configured_Static_Routes#Configured Static Routes>></strong></h3>
+<table style="text-align: left;" border="0" cellpadding="1" cellspacing="3">
+<tbody>
+<tr>
+<th>@TR<<network_routes_IP_Address#IP Address>></th>
+<th>@TR<<network_routes_Gateway#Gateway>></th>
+<th>@TR<<network_routes_Netmask#Netmask>></th>
+<th>@TR<<network_routes_Additional_commands#Additional commands>></th>
+<th>@TR<<network_routes_Action#Action>></th>
+</tr>
+<?
+# static routes in /etc/routes
+cat "$ROUTES_FILE" 2>/dev/null | awk -v "url=$SCRIPT_NAME" -v "editflag=$EDIT_FLAG" '
+BEGIN {
+	records=0
+	odd=1
+}
+(($1 == "-host") || ($1 == "-net")) {
+	href="mode=" $1
+	records=records+1
+	if (odd == 1) {
+		print "	<tr>"
+		odd--
+	} else {
+		print "	<tr class=\"odd\">"
+		odd++
+	}
+	href=href "&amp;ipaddr=" $2
+	print "<td>" $2 "</td>"
+	# scan for known parameters
+	netmask=""
+	gateway=""
+	for (i=3; i<NF; i=i+2) {
+		if ($i == "netmask") {
+			netmask=$(i+1)
+			$i=""
+			$(i+1)=""
+			href=href "&amp;netmask=" netmask
+		} else if ($i == "gw") {
+			gateway=$(i+1)
+			$i=""
+			$(i+1)=""
+			href=href "&amp;gateway=" gateway
 		}
 	}
-	if (names_found > 0) {
-		if (odd == 1) {
-			print "	<tr>"
-			odd--
-		} else {
-			print "	<tr class=\\"odd\\">"
-			odd++
-		}
-		print "		<td rowspan=\\"" names_found "\\">" \$1 "</td>\\n" output
-		print "	<tr>\\n		<td colspan=\\"3\\"><hr class=\\"separator\\" /></td>\\n	</tr>"
+	if (gateway != "")
+		print "<td>" gateway "</td>"
+	else
+		print "<td>&nbsp;</td>"
+	if (netmask != "")
+		print "<td>" netmask "</td>"
+	else
+		print "<td>&nbsp;</td>"
+	additional=""
+	for (i=3; i<=NF; i++) {
+		if ($i != "")
+			additional=additional ((additional == "") ? "" : " ") $i
 	}
+	if (additional != "") {
+		print "<td>" additional "</td>"
+		href=href "&amp;additional=" additional
+	} else
+		print "<td>&nbsp;</td>"
+	gsub(/ /, "%20", href)
+	# buttons
+	print "<td>"
+	if (editflag == 0)
+		print "<a href=\"" url "?action=editroute&amp;" href "\">@TR<<network_routes_Edit#Edit>></a>"
+	print "&nbsp;"
+	if (editflag == 0)
+		print "<a href=\"" url "?action=removeroute&amp;" href "\">@TR<<network_routes_Delete#Delete>></a>"
+	print "</td>"
+	print "</tr>"
 }
 END {
-	print "	<tr>\\n		<td>" textinput("host_ip", ip) "</td>\\n		<td>" textinput("host_name", name) "</td>\\n  <td>" textinput("gateway", gw) "</td>\\n		<td style=\\"width: 10em\\">" button("add_host", "network_hosts_Add#Add") "</td>\\n	</tr>"
-}
-EOF
+	if (records == 0)
+		print "<tr><td colspan=\"5\">@TR<<network_routes_No_configured_routes#No configured static routes exist.>></td></tr>"
+	if (editflag == 0)
+		print "<tr><td colspan=\"5\" align=\"right\"><a href=\"" url "?action=addroute\">@TR<<network_routes_Add_new_route#Add new route>></a></td></tr>"
 
-display_form <<EOF
-helpitem|network_hosts_Host_Names#Host Names
-helptext|network_hosts_Host_Names_helptext#The file /etc/hosts is used to look up the IP address of a device connected to a computer network. The hosts file describes a many-to-one mapping of device names to IP addresses. When accessing a device by name, the networking system attempts to locate the name within the hosts file before accessing the Internet domain name system.
-end_form
-
-EOF
+}'
 ?>
-<hr class="separator" />
-<h5><strong>@TR<<network_routes_routing_table#Kernel Routing Table>></strong></h5>
-
-<table style="text-align: left;" border="0" cellpadding="2" cellspacing="20">
-        <tr>
-                <th>@TR<<Destination>></th>
-                <th>@TR<<Gateway>></th>
-                <th>@TR<<Flags>></th>
-                <th>@TR<<Interface>></th>
-        </tr>
-<?
-        route -n | awk 'NR > 2 {print "<tr><td>" $1 "</td><td>" $2 "</td><td>" $4 "</td><td>" $8 "</td></tr>"}'
-?>
-<tr><td><br /><br /></td></tr>
+</tbody>
 </table>
-                                                                                
+</div>
+
+<br />
+
+<div class="settings">
+<h3><strong>@TR<<network_routes_routing_table#Kernel Routing Table>></strong></h3>
+<table style="text-align: left;" border="0" cellpadding="1" cellspacing="3">
+<tbody>
+<tr>
+<th>@TR<<Destination>></th>
+<th>@TR<<Gateway>></th>
+<th>@TR<<Genmask>></th>
+<th>@TR<<Flags>></th>
+<th>@TR<<MSS>></th>
+<th>@TR<<Window>></th>
+<th>@TR<<irtt>></th>
+<th>@TR<<Interface>></th>
+</tr>
+<?
+        route -ne | awk '
+BEGIN {
+	odd=1
+}
+NR > 2 {
+	if (odd == 1) {
+		print "	<tr>"
+		odd--
+	} else {
+		print "	<tr class=\"odd\">"
+		odd++
+	}
+	for (i=1; i<=NF; i++) printf "<td>" $i "</td>"
+	print "</tr>"
+}
+'
+?>
+</table>
+</div>
 
 <? footer ?>
 <!--
