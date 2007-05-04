@@ -78,7 +78,7 @@ else
 		submit|install_webifbatman| @TR<<Install>> |"
 
 	install_batman_help="helpitem|BATMAN
-	helptext|HelpText install_mesh_help#Batman is the young protocol born to superseed OLSR."
+	helptext|HelpText install_mesh_help#Batman is the young protocol born to supersede OLSR."
 
 #####################################################################
 # install Netsukuku daemon and Webif-netsukuku if asked
