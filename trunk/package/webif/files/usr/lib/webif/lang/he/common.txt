@@ -1,6 +1,6 @@
 # leave at least one comment here to skip the BOM character
 # language name
-lang => Català
+lang => עִבְרִית
 # Common
 Settings saved => הגדרות נשמרו
 Settings not saved => הגדרות לא נשמרו
