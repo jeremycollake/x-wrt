@@ -38,8 +38,8 @@ $(PKG_BUILD_DIR)/.built:
 $(IPKG_ETHER_WAKE):
 	mkdir -p $(IDIR_ETHER_WAKE)/usr/sbin
 	install -m 755 $(PKG_BUILD_DIR)/$(PKG_NAME) $(IDIR_ETHER_WAKE)/usr/sbin/
-	ln -s /usr/sbin/ether-wake $(IDIR_ETHER_WAKE)/usr/sbin/ether_wake
-	ln -s /usr/sbin/ether-wake $(IDIR_ETHER_WAKE)/usr/sbin/etherwake
+	ln -sf /usr/sbin/ether-wake $(IDIR_ETHER_WAKE)/usr/sbin/ether_wake
+	ln -sf /usr/sbin/ether-wake $(IDIR_ETHER_WAKE)/usr/sbin/etherwake
 	$(RSTRIP) $(IDIR_ETHER_WAKE)
 	$(IPKG_BUILD) $(IDIR_ETHER_WAKE) $(PACKAGE_DIR)
 
