@@ -169,6 +169,7 @@ $(COMPILE_PACKAGES): base-files-compile
 $(INSTALL_PACKAGES): base-files-install
 
 arpwatch-compile: libpcap-compile
+ctorrent: ncurses-compile uclibc++-compile
 cyrus-sasl-compile: openssl-compile
 dsniff-compile: libnids-compile openssl-compile libgdbm-compile
 fprobe-compile: libpcap-compile
@@ -184,6 +185,7 @@ net-snmp-compile: libelf-compile
 nfs-server-compile: portmap-compile
 nmap-compile: uclibc++-compile pcre-compile libpcap-compile
 nocatsplash-compile: glib-compile
+nzbget: ncurses-compile uclibc++-compile libxml2-compile
 openldap-compile: cyrus-sasl-compile openssl-compile
 openser-compile: radiusclient-ng-compile mysql-compile
 openssh-compile: zlib-compile openssl-compile
