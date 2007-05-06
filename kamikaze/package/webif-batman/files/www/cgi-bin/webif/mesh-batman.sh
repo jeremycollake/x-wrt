@@ -17,7 +17,7 @@ uci_load "batman"
 
 	# Get interfaces selected in the form
 	interfaces_to_configure=""
-	available_interfaces=$(ifconfig | grep inet -B1 | awk '/HWaddr/ {print $1}')
+	available_interfaces=$(ifconfig | grep inet -B1 | awk '/HWaddr/ {printf "%s ",$1}'
 	for interface in $available_interfaces; do
 		sane_iface=$(echo "$interface" | tr '.-' 'PH')
 		eval checkbox_status="\$FORM_batman_interface_${sane_iface}"
