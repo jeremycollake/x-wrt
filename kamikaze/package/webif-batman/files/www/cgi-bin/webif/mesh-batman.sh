@@ -17,9 +17,10 @@ uci_load "batman"
 
 	# Get interfaces selected in the form
 	interfaces_to_configure=""
-	available_interfaces=$(ifconfig | grep HWaddr | awk '{printf "%s ",$1}')
+	available_interfaces=$(ifconfig | grep inet -B1 | awk '/HWaddr/ {print $1}')
 	for interface in $available_interfaces; do
-		eval checkbox_status="\$FORM_batman_interface_$interface"
+		sane_iface=$(echo "$interface" | tr '.-' 'PH')
+		eval checkbox_status="\$FORM_batman_interface_${sane_iface}"
 		if equal "$checkbox_status" "1";then
 			interfaces_to_configure=$interfaces_to_configure" "$interface
 		fi
@@ -91,9 +92,10 @@ fi
 # Prepare form Batman configuration
 
 form_batman_interface=""
-available_interfaces=$(ifconfig | grep HWaddr | awk '{printf "%s ",$1}')
+available_interfaces=$(ifconfig | grep inet -B1 | awk '/HWaddr/ {printf "%s ",$1}'
 for interface in $available_interfaces; do
-	form_batman_interface=$form_batman_interface$(printf "field| - %s\ncheckbox|batman_interface_%s|"  $interface $interface)
+	sane_iface=$(echo "$interface" | tr '.-' 'PH')
+	form_batman_interface=$form_batman_interface$(printf "field| - %s\ncheckbox|batman_interface_%s|"  $interface $sane_iface)
 	if uci get batman.general.interface | grep -q $interface; then
 		form_batman_interface=$form_batman_interface"1"
 	else
