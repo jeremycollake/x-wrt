@@ -32,8 +32,7 @@ uci_add_section_if_not_exists() {
 }
 uci_add_option_if_not_exists() {
 	local _val
-	eval "_val=\$CONFIG_${2}_${3}" 2>/dev/null
-	equal "$_val" "" && {
+	equal "$(set | grep "CONFIG_${2}_${3}=")" "" && {
 		uci_add_section_if_not_exists "$1" "$2"
 		uci_set "$1" "$2" "$3" "$4"
 		freeloader_commit=1
@@ -52,9 +51,8 @@ freeloader_init_config() {
 	uci_add_option_if_not_exists "freeloader" "email" "smtpserver" "127.0.0.1"
 	uci_add_option_if_not_exists "freeloader" "curl" "ftplogin" "anonymous"
 	uci_add_option_if_not_exists "freeloader" "curl" "ftppasswd" "freeloader@"
-	[ "$freeloader_commit" -gt 0 ] && {
+	[ "$freeloader_commit" -gt "0" ] && {
 		uci_commit "freeloader"
-		sleep 1
 		uci_load "freeloader"
 	}
 	unset freeloader_commit
