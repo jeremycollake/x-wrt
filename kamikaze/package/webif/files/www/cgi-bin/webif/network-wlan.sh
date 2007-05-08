@@ -379,8 +379,8 @@ for device in $DEVICES; do
 
 			isolate_field="field|@TR<<AP Isolation>>|isolate_form_$vcfg|hidden
 					select|isolate_$vcfg|$FORM_isolate
-					option|1|@TR<<On>>
-					option|0|@TR<<Off>>"
+					option|0|@TR<<Off>>
+					option|1|@TR<<On>>"
 			append forms "$isolate_field" "$N"
 
 			ssid="field|@TR<<ESSID>>|ssid_form_$vcfg|hidden
