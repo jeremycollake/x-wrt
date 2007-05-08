@@ -301,6 +301,7 @@ for device in $DEVICES; do
 	        		config_get FORM_isolate $vcfg isolate
 	        		config_get FORM_txpower $vcfg txpower
 	        		config_get FORM_bgscan $vcfg bgscan
+	        		config_get FORM_isolate $vcfg isolate
 			else
 				eval FORM_key="\$FORM_radius_key_$vcfg"
 				eval FORM_radius_ipaddr="\$FORM_radius_ipaddr_$vcfg"
@@ -325,6 +326,7 @@ for device in $DEVICES; do
 				eval FORM_network="\$FORM_network_$vcfg"
 				eval FORM_txpower="\$FORM_txpower_$vcfg"
 				eval FORM_bgscan="\$FORM_bgscan_$vcfg"
+				eval FORM_isolate="\$FORM_isolate_$vcfg"
 			fi
 			
 			case "$FORM_mode" in
@@ -374,6 +376,12 @@ for device in $DEVICES; do
 			append forms "helptext|Helptext Backround Client Scanning#Enables or disables the ablility of a virtual interface to scan for other access points while in client mode. Disabling this allows for higher throughput but keeps your card from roaming to other access points with a higher signal strength." "$N"
 			append forms "helplink|http://madwifi.org/wiki/UserDocs/PerformanceTuning" "$N"
 			fi
+
+			isolate_field="field|@TR<<AP Isolation>>|isolate_form_$vcfg|hidden
+					select|isolate_$vcfg|$FORM_isolate
+					option|1|@TR<<On>>
+					option|0|@TR<<Off>>"
+			append forms "$isolate_field" "$N"
 
 			ssid="field|@TR<<ESSID>>|ssid_form_$vcfg|hidden
 				text|ssid_$vcfg|$FORM_ssid"
@@ -559,6 +567,8 @@ for device in $DEVICES; do
 				set_visible('bssid_form_$vcfg', v);
 				v = (isset('mode_$vcfg','sta'));
 				set_visible('bgscan_form_$vcfg', v);
+				v = (isset('mode_$vcfg','ap'));
+				set_visible('isolate_form_$vcfg', v);
 				v = (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2'));
 				set_visible('wpapsk_$vcfg', v);
 				v = (('$iftype'=='broadcom') && (isset('encryption_$vcfg','psk')) && (isset('encryption_$vcfg','psk2') || isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2')));
@@ -647,6 +657,7 @@ EOF
 						eval FORM_network="\$FORM_network_$vcfg"
 						eval FORM_txpower="\$FORM_txpower_$vcfg"
 						eval FORM_bgscan="\$FORM_bgscan_$vcfg"
+						eval FORM_isolate="\$FORM_isolate_$vcfg"
 
 						uci_set "wireless" "$vcfg" "network" "$FORM_network"
 						uci_set "wireless" "$vcfg" "ssid" "$FORM_ssid"
