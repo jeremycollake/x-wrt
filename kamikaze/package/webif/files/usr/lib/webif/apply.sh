@@ -170,10 +170,7 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 			;;
 		"/tmp/.uci/network")
 			echo '@TR<<Reloading>> @TR<<network>> ...'
-			ifdown wan
-			ifup wan			
-			ifdown lan
-			ifup lan
+			/etc/init.d/network restart
 			killall dnsmasq
 			if exists "/etc/rc.d/S??dnsmasq"; then
 				/etc/init.d/dnsmasq start
