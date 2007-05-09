@@ -73,7 +73,7 @@ if empty "$FORM_submit"; then
 	esac
 	FORM_radio=${wl0_radio:-$(nvram get wl0_radio)}
 	case "$FORM_radio" in
-		0|off|diabled) FORM_radio=0;;
+		0|off|disabled) FORM_radio=0;;
 		*) FORM_radio=1;;
 	esac
 
