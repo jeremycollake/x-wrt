@@ -1,0 +1,37 @@
+--- ctorrent-dnh3/console.cpp	2007-05-08 17:29:22.000000000 +0200
++++ ctorrent-dnh3.noterminal/console.cpp	2007-05-09 20:54:56.000000000 +0200
+@@ -72,8 +72,6 @@
+ 
+ void ConStream::PreserveMode()
+ {
+-  if( !isatty(Fileno()) ) return;
+-
+ #if defined(USE_TERMIOS)
+   tcgetattr(Fileno(), &m_original);
+ #elif defined(USE_TERMIO)
+@@ -86,8 +84,6 @@
+ 
+ void ConStream::RestoreMode()
+ {
+-  if( !isatty(Fileno()) ) return;
+-
+ #if defined(USE_TERMIOS)
+   tcsetattr(Fileno(), TCSANOW, &m_original);
+ #elif defined(USE_TERMIO)
+@@ -100,7 +96,7 @@
+ 
+ void ConStream::SetInputMode(int keymode)
+ {
+-  if( m_suspend || !isatty(Fileno()) ) return;
++  if( m_suspend ) return;
+ 
+ #if defined(USE_TERMIOS)
+   struct termios termset;
+@@ -281,6 +277,7 @@
+ 
+   if( FD_ISSET(m_streams[O_INPUT]->Fileno(), rfdp) ){
+     FD_CLR(m_streams[O_INPUT]->Fileno(), rfdnextp);
++    if(!isatty(m_streams[O_INPUT]->Fileno())) return;
+     (*nready)--;
+     if( K_LINES==m_streams[O_INPUT]->GetInputMode() ){  // command parameter
+       SyncNewlines(O_INPUT);
