@@ -69,6 +69,7 @@ QUEUE_ABORT="$DOWNLOAD_ROOT/downloadabort"
 LOG_DIRECTORY="$DOWNLOAD_ROOT/downloadlog"
 DOWNLOAD_TEMP="$DOWNLOAD_ROOT/downloadtemp"
 DOWNLOAD_DESTINATION="$DOWNLOAD_ROOT"
+CTORRENT_UPLOAD_RATE="$CONFIG_ctorrent_uploadrate"
 
 # Initialize the directory structure
 [ -d "$DOWNLOAD_ROOT" ] && {

@@ -151,13 +151,15 @@ if ! [ -f $DOWNLOAD_DESTINATION/suspend.lock ]; then
 					
 					signal_startdownload "$DOWNLOADFILE"
 
+					OPTIONS=""
 					#Get the WAN IP address
 					WAN=$(nvram get wan_ifname)
 					WAN_IP=`/sbin/ifconfig | grep -A 4 $WAN | awk '/inet/ { print $2 } ' | sed -e s/addr://`
 					if [ -n "$WAN_IP" ]; then
 						OPTIONS="-i $WAN_IP"
-					else
-						OPTIONS=""
+					fi
+					if [ -n "$CTORRENT_UPLOAD_RATE" ]; then
+						OPTIONS="$OPTIONS -U $CTORRENT_UPLOAD_RATE"
 					fi
 
 					#download the desired file with ctorrent and log the output to the logfile
