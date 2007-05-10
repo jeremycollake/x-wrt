@@ -176,6 +176,9 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 				/etc/init.d/dnsmasq start
 			fi
 			;;
+		"/tmp/.uci/dhcp")
+			killall dnsmasq
+			[ -z "$(ps | grep "[d]nsmasq ")" ] && /etc/init.d/dnsmasq start
 		"/tmp/.uci/wireless")
 			echo '@TR<<Reloading>> @TR<<wireless>> ...'
 			wifi ;;

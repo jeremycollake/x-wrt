@@ -4,7 +4,17 @@
 header "Network" "DHCP" "@TR<<DHCP Interfaces>>" '' "$SCRIPT_NAME"
 ShowNotUpdatedWarning
 
-load_settings network
+config_cb() {
+config_get TYPE "$CONFIG_SECTION" TYPE
+case "$TYPE" in
+        interface)
+	        append network_devices "$CONFIG_SECTION"
+        ;;
+esac
+}
+
+uci_load network
+uci_load dhcp
 
 exists /tmp/.webif/file-dnsmasq.conf  && DNSMASQ_FILE=/tmp/.webif/file-dnsmasq.conf || DNSMASQ_FILE=/etc/dnsmasq.conf
 exists $DNSMASQ_FILE || touch $DNSMASQ_FILE >&- 2>&-
@@ -46,14 +56,16 @@ empty "$FORM_add_line" || {
 empty "$FORM_remove_line" || update_dnsmasq del "$FORM_iface" "$FORM_line"
 
 	if [ -n "$FORM_iface" ]; then
-		FORM_dhcp_enabled=${FORM_dhcp_enabled:-$(nvram get ${FORM_iface}_dhcp_enabled)}
-		FORM_dhcp_start=${FORM_dhcp_start:-$(nvram get ${FORM_iface}_dhcp_start)}
+		if empty "$FORM_submit"; then
+			config_get FORM_dhcp_enabled ${FORM_iface} ignore
+			config_get FORM_dhcp_start ${FORM_iface} start
+			config_get FORM_dhcp_num ${FORM_iface} limit
+			config_get FORM_dhcp_lease= ${FORM_iface} lease
+		fi
+		
+		FORM_dhcp_lease=${FORM_dhcp_lease:-12h}
 		# cut is to fix for cases where an IP address got stuck in this instead of mere integer
 		FORM_dhcp_start=$(echo "$FORM_dhcp_start" | cut -d '.' -f 4)
-		FORM_dhcp_num=${FORM_dhcp_num:-$(nvram get ${FORM_iface}_dhcp_num)}
-		FORM_dhcp_bail=${FORM_dhcp_bail:-$(nvram get ${FORM_iface}_dhcp_bail)}
-		FORM_dhcp_lease=${FORM_dhcp_lease:-$(nvram get ${FORM_iface}_dhcp_lease)}
-		FORM_dhcp_lease=${FORM_dhcp_lease:-12h}
 		
 		# convert lease time to minutes
 		lease_int=$(echo "$FORM_dhcp_lease" | tr -d [a-z][A-Z])			
@@ -74,17 +86,15 @@ int|FORM_${FORM_iface}_dhcp_enabled|DHCP enabled||$FORM_dhcp_enabled
 string|FORM_${FORM_iface}_dhcp_iface|DHCP iface||$FORM_dhcp_iface
 int|FORM_${FORM_iface}_dhcp_start|DHCP start||$FORM_dhcp_start
 int|FORM_${FORM_iface}_dhcp_num|DHCP num||$FORM_dhcp_num
-string|FORM_${FORM_iface}_dhcp_bail|DHCP bail||$FORM_dhcp_bail
 int|FORM_${FORM_iface}_dhcp_lease|DHCP lease time|min=1 max=2147483647 required|$FORM_dhcp_lease
 EOF
 	if equal "$?" 0; then
 		SAVED=1
-		save_setting network ${FORM_iface}_dhcp_enabled $FORM_dhcp_enabled
-		save_setting network ${FORM_iface}_dhcp_iface $FORM_dhcp_iface
-		save_setting network ${FORM_iface}_dhcp_start $FORM_dhcp_start
-		save_setting network ${FORM_iface}_dhcp_num $FORM_dhcp_num
-		save_setting network ${FORM_iface}_dhcp_bail $FORM_dhcp_bail
-		save_setting network ${FORM_iface}_dhcp_lease "${FORM_dhcp_lease}m"
+		uci_set "dhcp" "${FORM_iface}" "enabled" "$FORM_dhcp_enabled"
+		uci_set "dhcp" "${FORM_iface}" "interface" "$FORM_dhcp_iface"
+		uci_set "dhcp" "${FORM_iface}" "start" "$FORM_dhcp_start"
+		uci_set "dhcp" "${FORM_iface}" "limit" "$FORM_dhcp_num"
+		uci_set "dhcp" "${FORM_iface}" "lease" "${FORM_dhcp_lease}m"
 	else
 		echo "<div class=\"failed-validation\">Validation failed on one or more variables. On this page a common error is putting an IP address in \"DHCP Start\" instead of a simple number.</div>"
 	fi
@@ -104,10 +114,12 @@ BEGIN{
 EOF
 
 	pppoa_ifname="atm0" # hack for ppp over atm, which has no ${proto}_ifname
-	for ifname in lan wan wifi $(nvram get ifnames); do
-		IFPROTO=$(nvram get ${ifname}_proto)
-		IFACE=$(nvram get ${ifname}_ifname)
-		IFACES=$(nvram get ${ifname}_ifnames)
+	for ifname in $network_devices; do
+		config_get type $ifname type
+		if [ "$type" = "bridge" ]; then
+			IFACE="br-$ifname"
+		fi
+		config_get IFACES $ifname ifname
 		if [ "$ifname" = "$FORM_iface" ]; then
 			style="class=\"settings-title\""
 		else
@@ -124,17 +136,14 @@ BEGIN{
 EOF
 
 if [ -n "$FORM_iface" ]; then
-	ipaddr=$(nvram get ${FORM_iface}_ipaddr)
+	config_get ipaddr ${FORM_iface} ipaddr
 	if [ -n "$ipaddr" ]; then
-		netmask=$(nvram get ${FORM_iface}_netmask)
-		start=$(nvram get ${FORM_iface}_dhcp_start)
-		num=$(nvram get ${FORM_iface}_dhcp_num)
+		config_get netmask ${FORM_iface} netmask
+		config_get start ${FORM_iface} start
+		config_get num ${FORM_iface} limit
 		
-		if [ "$(nvram get firmware_version)" = "0.9" ]; then
 		eval $(ipcalc.sh $ipaddr $netmask ${start:-100} ${num:-150})
-		else
-		eval $(ipcalc $ipaddr $netmask ${start:-100} ${num:-150})
-		fi
+
 		# Static DHCP mappings (/etc/ethers)
 		awk -v "url=$SCRIPT_NAME" \
 			-v "mac=$FORM_dhcp_mac" \
@@ -207,14 +216,12 @@ field|@TR<<Interface>>|iface_field|hidden
 text|iface|$FORM_iface
 field|@TR<<DHCP Service>>|dhcp_enabled_field
 select|dhcp_enabled|$FORM_dhcp_enabled
-option|0|@TR<<Disabled>>
-option|1|@TR<<Enabled>>
+option|1|@TR<<Disabled>>
+option|0|@TR<<Enabled>>
 field|@TR<<DHCP Start>>|dhcp_start_field
 text|dhcp_start|$FORM_dhcp_start|$NETWORK+x
 field|@TR<<DHCP Num>>|dhcp_num_field
 text|dhcp_num|$FORM_dhcp_num
-field|@TR<<DHCP Bail>>
-text|dhcp_bail|$FORM_dhcp_bail
 field|@TR<<DHCP Lease Minutes>>
 text|dhcp_lease|$FORM_dhcp_lease
 end_form
