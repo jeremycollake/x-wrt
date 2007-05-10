@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3190
+lang_for_svn => 3299
 
 ## /usr/lib/webif/apn.csv
 Vodafone UK => Vodafone VB
@@ -455,6 +455,9 @@ QoS Options => Možnosti QoS
 QoS Service => Služba QoS
 qos_enabled => Povolena
 qos_disabled => Zakázána
+QoS Overhead Calculation => Výpočet režie QoS
+qos_overhead_enabled => Povolen
+qos_overhead_disabled => Zakázán
 WAN Upload Speed => Rychlost odesílání WAN
 kilobits => kbps
 Maximum Upload/Download => Maximální rychlosti odesílání/přijímání
@@ -563,13 +566,10 @@ HelPText install_upnpd_help => Můžete si vybrat ze dvou démonů UPNP: miniupn
 Network => Síť
 VLAN => VLAN
 Virtual LANs => Virtuální sítě LAN
-## missing TR
-##VLAN
 VLAN Configuration => Konfigurace VLAN
 Helptext VLAN => Virtuální LAN je sada portů, které jsou propojeny mostem. V případech, kdy port patří do více než jedné virtuální LAN, se k identifikaci provozu VLAN na příslušném portu používá technika známá jako značkování (tagging).
-## untranslated
-##Add New VLAN => Přidat novou VLAN
-##Remove Last VLAN => Odstranit poslední VLAN
+Add New VLAN => Přidat novou VLAN
+Remove Last VLAN => Odstranit poslední VLAN
 
 ## /www/cgi-bin/webif/network-wakeonlan.sh
 Network => Síť
@@ -609,17 +609,22 @@ Please wait for output of => Počkejte prosím na výstup z
 Status => Stav
 Iptables => Iptables
 status_iptables_IPTStatus => Stav Iptables
-status_iptables_col1 => č.
-status_iptables_col2 => paketů
-status_iptables_col3 => bytů
-status_iptables_col4 => cíl
-status_iptables_col5 => prot.
-status_iptables_col6 => vol.
-status_iptables_col7 => přích.
-status_iptables_col8 => odch.
-status_iptables_col9 => zdroj
-status_iptables_col10 => cíl
+status_iptables_col_num => č.
+status_iptables_col_pkts => paketů
+status_iptables_col_bytes => bytů
+status_iptables_col_target => cíl
+status_iptables_col_prot => prot.
+status_iptables_col_opt => mož.
+status_iptables_col_in => přích.
+status_iptables_col_out => odch.
+status_iptables_col_source => zdroj
+status_iptables_col_destination => cíl
 status_iptables_col_options => volby
+status_iptables_Chain => Řetěz
+status_iptables_policy => politika
+status_iptables_packets => paketů
+status_iptables_bytes => bajtů
+status_iptables_references => odkazů
 status_iptables_Target_Filter=> Cíl Filtr
 status_iptables_Target_NAT => Cíl NAT
 status_iptables_Target_Mangle => Cíl Mangle
