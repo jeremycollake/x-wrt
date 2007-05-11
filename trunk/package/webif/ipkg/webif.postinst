@@ -47,25 +47,37 @@ AddRepository()
 {
 	# $1=reponame
 	# $2=repourl
-	cat "${IPKG_INSTROOT}/etc/ipkg.conf" | grep -q "$2"
-	[ "$?" != "0" ] && {
-		local ltmp=$(mktemp "/tmp/.webif-XXXXXX")
-		echo "src $1 $2" > "$ltmp"
-		cat "${IPKG_INSTROOT}/etc/ipkg.conf" >> "$ltmp"
-		mv -f "$ltmp" "${IPKG_INSTROOT}/etc/ipkg.conf"
-		IPKG_UPDATE_NEEDED="1"
+	# $3=force last
+	cat "${IPKG_INSTROOT}/etc/ipkg.conf" | grep -q "^src .*$2"
+	[ "$?" != "0" ] && IPKG_UPDATE_NEEDED="1" || {
+		[ "$(grep "^src .*$2" "${IPKG_INSTROOT}/etc/ipkg.conf" | cut -d' ' -f2)" != "$1" ] && {
+			DeleteRepository "$2" 1
+			IPKG_UPDATE_NEEDED="1"
+		} || {
+			DeleteRepository "$2"
+		}
 	}
+	local ltmp=$(mktemp "/tmp/.webif-XXXXXX")
+	[ "$3" != "1" ] && echo "src $1 $2" > "$ltmp"
+	grep "^src " "${IPKG_INSTROOT}/etc/ipkg.conf" >> "$ltmp"
+	[ "$3" = "1" ] && echo "src $1 $2" >> "$ltmp"
+	grep -v "^src " "${IPKG_INSTROOT}/etc/ipkg.conf" >> "$ltmp"
+	mv -f "$ltmp" "${IPKG_INSTROOT}/etc/ipkg.conf"
 }
 
 IPKG_UPDATE_NEEDED="0"
 DeleteRepository()
 {
 	# $1=repourl
-	cat "${IPKG_INSTROOT}/etc/ipkg.conf" | grep -q "$1"
+	# $2=force removal of the ipkg list
+	cat "${IPKG_INSTROOT}/etc/ipkg.conf" | grep -q "^src .*$1"
 	[ "$?" = "0" ] && {
-		repo_url_sed=$(echo "$1" | sed s/'\/'/'\\\/'/g)
+		[ "$2" = "1" ] && {
+			local list=$(grep "^src .*$1" "${IPKG_INSTROOT}/etc/ipkg.conf" | cut -d' ' -f2)
+			rm -f "${IPKG_INSTROOT}/usr/lib/ipkg/lists/$list" 2>/dev/null
+		}
+		local repo_url_sed=$(echo "$1" | sed s/'\/'/'\\\/'/g)
 		cat "${IPKG_INSTROOT}/etc/ipkg.conf" |  sed /$repo_url_sed/d > "${IPKG_INSTROOT}/etc/ipkg.conf"
-		IPKG_UPDATE_NEEDED="1"
 	}
 }
 
@@ -148,20 +160,22 @@ ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/int2human"
 # initialize ipkg.conf
 [ -z "$IPKG_INSTROOT" ] && firmware_version=$(nvram get firmware_version)
 if [ "$firmware_version" = "RC5" ] || grep -q "RC5" "${IPKG_INSTROOT}/etc/banner"; then
-	DeleteRepository "http://downloads.openwrt.org/backports/rc4"
+	DeleteRepository "http://downloads.openwrt.org/backports/rc4" 1
 	AddRepository "rc5-backports" "http://downloads.openwrt.org/backports/rc5"
 elif [ "$firmware_version" = "RC6" ] || grep -q "RC6" "${IPKG_INSTROOT}/etc/banner"; then	
-	DeleteRepository "http://downloads.openwrt.org/backports/rc5"
+	DeleteRepository "http://downloads.openwrt.org/backports/rc5" 1
 	AddRepository "rc6-backports" "http://downloads.openwrt.org/backports/rc6"	
 elif [ "$firmware_version" = "0.9" ] || grep -q "0.9" "${IPKG_INSTROOT}/etc/banner"; then	
-	# todo: verify backports exists and change when they do
-	DeleteRepository "http://downloads.openwrt.org/backports/rc6"
+	# delete all previous backports, all lost packages are in our repository
+	DeleteRepository "http://downloads.openwrt.org/backports/rc4" 1
+	DeleteRepository "http://downloads.openwrt.org/backports/rc5" 1
+	DeleteRepository "http://downloads.openwrt.org/backports/rc6" 1
 	AddRepository "0.9-backports" "http://downloads.openwrt.org/backports/0.9"
 else
 	echo "White Russian version not detected. Not installing backports repository source."
 fi
-# add our repository as the last and preferred one
-AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/packages"
+# add our repository and force it to be the last and the preferred one
+AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/packages" 1
 
 # only run below on 'real' system (not image builder)
 if [ -z "${IPKG_INSTROOT}" ]; then	
