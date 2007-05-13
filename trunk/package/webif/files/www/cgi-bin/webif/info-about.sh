@@ -51,7 +51,7 @@ this_revision=$(cat "/www/.version")
 	<li><a href="mailto:gregers@wireless-ownership.org">Gregers Petersen</a></li>
 	<li><a href="mailto:mtsales@users.berlios.de">Mario Sales</a></li>
 	<li><a href="mailto:markus@freewrt.org">Markus Wigge</a></li>
-	<li>SeDeKy</li>
+	<li>Olivier Hardy (SeDkY)</li>
 	<li><a href="mailto:seitel@users.berlios.de">Stefan Eitel</a></li>
 	<li><a href="mailto:tyardley@users.berlios.de">Tim Yardley (lst)</a></li>
 </ul>
