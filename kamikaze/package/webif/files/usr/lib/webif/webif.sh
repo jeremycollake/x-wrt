@@ -121,6 +121,7 @@ header() {
 		ERROR=""
 	}
 
+	_category="$1"
 	awx_call "render(\"$cgidir/views/header.ahtml\")" \
 		-v CATEGORY="$1" \
 		-v PAGENAME="$2" \
@@ -184,7 +185,8 @@ EOF
 #
 footer() {
 	awx_call "render(\"$cgidir/views/footer.ahtml\")" \
-		-v use_form="$_use_form"
+		-v use_form="$_use_form" \
+		-v CATEGORY="$_category"
 }
 
 #######################################################
