@@ -22,7 +22,6 @@ header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onload="modechange(
 adhoc_count=0
 ap_count=0
 sta_count=0
-local validate_error
 validate_wireless() {
 	case "$adhoc_count:$sta_count:$ap_count" in
 		1*)
@@ -111,7 +110,6 @@ vface=$(echo "$vface" |uniq)
 vcfg_number=$(echo "$DEVICES $N $vface" |wc -l)
 let "vcfg_number+=1"
 
-local forms js validate_forms
 #####################################################################
 #setup network device form for vfaces
 #
