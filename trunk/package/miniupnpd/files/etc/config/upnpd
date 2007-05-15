@@ -1,5 +1,5 @@
 config upnpd general
-	option enable		'1'
+	option enable		'0'
         option log_output       '0'
         option down_bitspeed    '1024'
         option up_bitspeed      '512'
