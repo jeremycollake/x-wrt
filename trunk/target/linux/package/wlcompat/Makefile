@@ -1,9 +1,9 @@
-# $Id: Makefile 4736 2006-09-03 04:57:01Z nbd $
+# $Id: Makefile 7255 2007-05-15 18:52:46Z nbd $
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME := kmod-wlcompat
-PKG_RELEASE := 4
+PKG_RELEASE := 5
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
 
 include $(TOPDIR)/package/rules.mk
