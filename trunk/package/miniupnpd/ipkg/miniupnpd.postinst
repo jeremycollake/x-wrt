@@ -1,3 +1,0 @@
-#!/bin/sh
-[ -z "${IPKG_INSTROOT}" ] && /etc/init.d/S95miniupnpd
-exit 0
