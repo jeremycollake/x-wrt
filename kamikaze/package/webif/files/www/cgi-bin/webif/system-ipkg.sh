@@ -39,7 +39,7 @@ alert ("             <<< @TR<<big_warning|WARNING>> >>> \n\n@TR<<system_ipkg_Pac
 var actionStr = action=="install" ? "@TR<<system_ipkg_install|install>>" : 
 	(action=="remove" ? "@TR<<system_ipkg_remove|remove>>" : action);
 if (window.confirm("@TR<<Please Confirm>>!\n\n@TR<<Do you want to>> " + actionStr + " \"" + pkg + "\" @TR<<system_ipkg_package|package>>?")){
-window.location="ipkg.sh?action=" + action + "&pkg=" + pkg
+window.location="ipkg.sh?action=" + action + "&amp;pkg=" + pkg
 } }
 </script>
 EOF

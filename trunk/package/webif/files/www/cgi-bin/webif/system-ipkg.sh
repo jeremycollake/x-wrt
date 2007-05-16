@@ -41,7 +41,7 @@ if ( pkg == "uclibc" || pkg == "base-files" || pkg == "bridge" || pkg == "busybo
 alert ("             <<< WARNING >>> \n\nPackage \"" + pkg + "\" should not be removed!\n\n>>> Removing may brick your router. <<<\n\nSystem requires \"" + pkg + "\" package to run.\n\n") ;
 }
 if (window.confirm("Please Confirm!\n\nDo you want to " + action + " \"" + pkg + "\" package?")){
-window.location="ipkg.sh?action=" + action + "&pkg=" + pkg
+window.location="ipkg.sh?action=" + action + "&amp;pkg=" + pkg
 } }
 </script>
 EOF

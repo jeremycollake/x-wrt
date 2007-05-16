@@ -174,7 +174,7 @@ BEGIN {
 	for (i = 3; i <= NF; i++) {
 		print \$i "<br />"
 	}
-	print "</td><td><a href=\\"network-dhcpiface.sh?remove_line=1&mod=del&iface=" iface "&line=" \$0 "\\">" remove "</a></td></tr>"
+	print "</td><td><a href=\\"network-dhcpiface.sh?remove_line=1&amp;mod=del&amp;iface=" iface "&line=" \$0 "\\">" remove "</a></td></tr>"
 	print "<tr><td colspan=\\"3\\"><hr class=\\"separator\\" /></td></tr>"
 }
 
