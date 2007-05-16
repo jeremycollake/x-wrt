@@ -58,7 +58,7 @@ update_changes() {
 	CHANGES=$(($CHANGES + $EDITED_FILES))
 	# calculate and add number of pending uci changes
 	for uci_tmp_file in $(ls /tmp/.uci/* 2>&-); do
-		CHANGES_CUR=$(cat "$uci_tmp_file" | grep CONFIG_SECTION | wc -l)
+		CHANGES_CUR=$(cat "$uci_tmp_file" | grep config_set | wc -l)
 		CHANGES=$(($CHANGES + $CHANGES_CUR))
 		# force CHANGES to be non-zero since with this count method some 
 		# pending changes won't be counted.

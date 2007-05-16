@@ -187,23 +187,13 @@ EOF
 		time_zone_part="${FORM_system_timezone#*@}"
 		time_zoneinfo_part="${FORM_system_timezone%@*}"
 		is_kamikaze && {
-			#to check if we actually changed hostname, else donot reload network for no reason!
-			eval CONFIG_system_hostname="\$CONFIG_${hostname_cfg}_hostname"
-			! equal "$FORM_hostname" "$CONFIG_system_hostname" && ! empty "$FORM_hostname" && {
 				uci_set "system" "$hostname_cfg" "hostname" "$FORM_hostname"
-			}
 			empty "$timezone_cfg" && {
 				uci_add timezone timezone timezone
 				timezone_cfg = "timezone"
 			}
-			eval CONFIG_timezone_posixtz="\$CONFIG_${timezone_cfg}_posixtz"
-			! equal "$time_zone_part" "$CONFIG_timezone_posixtz" && ! empty "$time_zone_part" && {
-				uci_set timezone "$timezone_cfg" posixtz "$time_zone_part"
-			}
-			eval CONFIG_timezone_zoneinfo="\$CONFIG_${timezone_cfg}_zoneinfo"
-			! equal "$time_zoneinfo_part" "$CONFIG_timezone_zoneinfo" && ! empty "$time_zoneinfo_part" && {
-				uci_set timezone "$timezone_cfg" zoneinfo "$time_zoneinfo_part"
-			}
+			uci_set timezone "$timezone_cfg" posixtz "$time_zone_part"
+			uci_set timezone "$timezone_cfg" zoneinfo "$time_zoneinfo_part"
 			#waiting for ntpclient update
 			#save_setting system ntp_server "$FORM_ntp_server"
 		} || {
@@ -227,15 +217,10 @@ EOF
 			}
 		}
 		# webif settings
-		! equal "$FORM_ssl_enable" "$CONFIG_ssl_enable" && ! empty "$FORM_ssl_enable" && {
-			uci_set "webif" "ssl" "enable" "$FORM_ssl_enable"
-		}
-		! equal "$FORM_theme" "$CONFIG_theme_id" && ! empty "$FORM_theme" && {
-			uci_set "webif" "theme" "id" "$FORM_theme"
-		}
-		! equal "$FORM_language" "$CONFIG_general_lang" && ! empty "$FORM_language" && {
-			uci_set "webif" "general" "lang" "$FORM_language"
-		}
+		uci_set "webif" "ssl" "enable" "$FORM_ssl_enable"
+		uci_set "webif" "theme" "id" "$FORM_theme"
+		uci_set "webif" "general" "lang" "$FORM_language"
+
 		is_kamikaze && {	
 			uci_set "webif" "general" "use_progressbar" "$FORM_effect_enable"
 			FORM_effect=$FORM_effect_enable ; if equal $FORM_effect "1" ; then FORM_effect="checked" ; fi

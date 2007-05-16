@@ -1,8 +1,8 @@
 #!/bin/sh
 # Shell script for interacting with config files
 #
-# Copyright (C) 2006 by Fokus Fraunhofer <carsten.tittel@fokus.fraunhofer.de>
-# Copyright (C) 2006 by Felix Fietkau <nbd@openwrt.org>
+# Copyright (C) 2006        Fokus Fraunhofer <carsten.tittel@fokus.fraunhofer.de>
+# Copyright (C) 2006,2007	Felix Fietkau <nbd@openwrt.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -50,7 +50,7 @@ do_set() {
 	local VALUE
 
 	strtok "$1" PACKAGE . CONFIG = VALUE
-	[ $? -ne 3 ] && {
+	[ $? -ne 3 -a $? -ne 2 ] && {
 		uci_usage set
 		exit 1
 	}
@@ -89,6 +89,7 @@ do_remove() {
 do_commit() {
 	local PACKAGE="$1"
 	for package in ${PACKAGE:-$(cd /tmp/.uci; ls)}; do 
+		[ lock = "${package##*.}" ] && continue # ignore .lock files
 		uci_commit "$package"
 	done
 }

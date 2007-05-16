@@ -1,9 +1,8 @@
 #!/bin/sh
 # Shell script defining macros for manipulating config files
 #
-# Copyright (C) 2006 by Fokus Fraunhofer <carsten.tittel@fokus.fraunhofer.de>
-# Copyright (C) 2006 by Felix Fietkau <nbd@openwrt.org>
-# Copyright (C) 2006 by Jeremy Collake <jeremy@bitsum.com> (very minor changes)
+# Copyright (C) 2006        Fokus Fraunhofer <carsten.tittel@fokus.fraunhofer.de>
+# Copyright (C) 2006,2007   Felix Fietkau <nbd@openwrt.org>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,21 +23,39 @@ uci_load() {
 	config_load "$PACKAGE"
 	local PACKAGE_BASE="$(basename "$PACKAGE")"
 	[ -f "/tmp/.uci/${PACKAGE_BASE}" ] && {
-		. "/tmp/.uci/${PACKAGE_BASE}"
+		. "/tmp/.uci/${PACKAGE_BASE}" 2>/dev/null >/dev/null
 		config_cb
 	}
+}
+
+uci_apply_defaults() {(
+	cd /etc/uci-defaults || return 0
+	files="$(ls)"
+	[ -z "$files" ] && return 0
+	mkdir -p /tmp/.uci
+	for file in $files; do
+		( . "./$(basename $file)" ) && rm -f "$file"
+	done
+	uci commit
+)}
+
+uci_call_awk() {
+	local CMD="$*"
+	awk -f $UCI_ROOT/lib/config/uci.awk -f - <<EOF
+BEGIN {
+	$CMD
+}
+EOF
 }
 
 uci_do_update() {
 	local FILENAME="$1"
 	local UPDATE="$2"
-	awk -f /lib/config/uci-update.awk -f - <<EOF
-BEGIN {
-	config = read_file("$FILENAME")
+	uci_call_awk "
+	config = read_file(\"$FILENAME\")
 	$UPDATE
 	print config
-}
-EOF
+"
 }
 
 uci_add_update() {
@@ -59,9 +76,12 @@ uci_set() {
 
 	( # spawn a subshell so you don't mess up the current environment
 		uci_load "$PACKAGE"
-		config_get type "$CONFIG" TYPE
-		[ -z "$type" ]
-	) || uci_add_update "$PACKAGE" "CONFIG_SECTION='$CONFIG'${N}option '$OPTION' '$VALUE'"
+		config_get OLDVAL "$CONFIG" "$OPTION"
+		if [ "$OLDVAL" != "$VALUE" ]; then
+			config_get type "$CONFIG" TYPE
+			[ -z "$type" ]
+		fi
+	) || uci_add_update "$PACKAGE" "config_set '$CONFIG' '$OPTION' '$VALUE'"
 }
 
 uci_add() {
@@ -95,27 +115,28 @@ uci_remove() {
 uci_commit() {
 	local PACKAGE="$1"
 	local PACKAGE_BASE="$(basename "$PACKAGE")"
-	
+
 	mkdir -p /tmp/.uci
-	lock "/tmp/.uci/$PACKAGE_BASE.lock"
+	LOCK=`which lock` || LOCK=:
+	$LOCK "/tmp/.uci/$PACKAGE_BASE.lock"
 	[ -f "/tmp/.uci/$PACKAGE_BASE" ] && (
 		updatestr=""
 		
 		# replace handlers
 		config() {
-			append updatestr "config = update_config(config, \"@$2=$1\")" "$N"
+			append updatestr "config = uci_update_config(config, \"@$2=$1\")" "$N"
 		}
 		option() {
-			append updatestr "config = update_config(config, \"$CONFIG_SECTION.$1=$2\")" "$N"
+			append updatestr "config = uci_update_config(config, \"$CONFIG_SECTION.$1=$2\")" "$N"
 		}
 		config_rename() {
-			append updatestr "config = update_config(config, \"&$1=$2\")" "$N"
+			append updatestr "config = uci_update_config(config, \"&$1=$2\")" "$N"
 		}
 		config_unset() {
-			append updatestr "config = update_config(config, \"-$1.$2\")" "$N"
+			append updatestr "config = uci_update_config(config, \"-$1.$2\")" "$N"
 		}
 		config_clear() {
-			append updatestr "config = update_config(config, \"-$1\")" "$N"
+			append updatestr "config = uci_update_config(config, \"-$1\")" "$N"
 		}
 		
 		. "/tmp/.uci/$PACKAGE_BASE"
@@ -129,15 +150,11 @@ uci_commit() {
 		}
 		
 		config_load "$PACKAGE"
-		# todo: CONFIG_FILENAME never really gets set in config_load
-		CONFIG_FILENAME="${CONFIG_FILENAME:-$ROOT/etc/config/$PACKAGE_BASE}"
-		uci_do_update "$CONFIG_FILENAME" "$updatestr" > "/tmp/.uci/$PACKAGE_BASE.new" && {	
-			# remove extraneous blank lines and put new confg file
-			uniq "/tmp/.uci/$PACKAGE_BASE.new" > "$CONFIG_FILENAME"
-			rm -f "/tmp/.uci/$PACKAGE_BASE" "/tmp/.uci/$PACKAGE_BASE.new"
-		}
+		CONFIG_FILENAME="${CONFIG_FILENAME:-$UCI_ROOT/etc/config/$PACKAGE_BASE}"
+		uci_do_update "$CONFIG_FILENAME" "$updatestr" > "/tmp/.uci/$PACKAGE_BASE.new" && {
+			mv -f "/tmp/.uci/$PACKAGE_BASE.new" "$CONFIG_FILENAME" && \
+			rm -f "/tmp/.uci/$PACKAGE_BASE"
+		} 
 	)
-	lock -u "/tmp/.uci/$PACKAGE_BASE.lock"
+	$LOCK -u "/tmp/.uci/$PACKAGE_BASE.lock"
 }
-
-
