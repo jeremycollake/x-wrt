@@ -26,6 +26,7 @@ HANDLERS_config='
 	snmp) reload_snmp;;
 	syslog) reload_syslog;;
 	system) reload_system;;
+	timezone) reload_timezone;;
 	wifi-disable) reload_wifi_disable;;
 	wifi-enable) reload_wifi_enable;;
 	wireless) reload_wireless;;
@@ -191,6 +192,17 @@ reload_system() {
 		reload_firewall
 	}
 	echo_action_done
+}
+
+reload_timezone() {
+	# create symlink to /tmp/TZ if /etc/TZ doesn't exist
+	# todo: -e | -f | -d didn't seem to work here, so I used find
+	if [ -z $(find "/etc/TZ") ]; then 
+		ln -s /tmp/TZ /etc/TZ
+	fi
+	# eJunky: set timezone
+	TZ=$(nvram get time_zone | cut -f 2)
+	[ "$TZ" ] && echo $TZ > /etc/TZ
 }
 
 reload_upnpd() {
