@@ -1,26 +1,25 @@
 #!/bin/sh
 # Copyright (C) 2006 OpenWrt.org
 # Copyright (C) 2006 Fokus Fraunhofer <carsten.tittel@fokus.fraunhofer.de>
-
-alias debug=${DEBUG:-:}
-
-# newline
+#
+# newline (used by /lib/config/uci.sh)
 N="
 "
-
 _C=0
-NO_EXPORT=1
 
-hotplug_dev() {
-	env -i ACTION=$1 INTERFACE=$2 /sbin/hotplug-call net
-}
+# perform export -n only if available
+_EXPORT_N_OPTION="-n"
+ntest=$(export -n 2>&1)
+if echo "$ntest" | grep -iq "Illegal option -n"; then	
+	_EXPORT_N_OPTION=""
+fi
 
 append() {
 	local var="$1"
 	local value="$2"
 	local sep="${3:- }"
 	
-	eval "export ${NO_EXPORT:+-n} -- \"$var=\${$var:+\${$var}\${value:+\$sep}}\$value\""
+	eval "export $_EXPORT_N_OPTION -- \"$var=\${$var:+\${$var}\${value:+\$sep}}\$value\""
 }
 
 reset_cb() {
@@ -33,20 +32,20 @@ config () {
 	local cfgtype="$1"
 	local name="$2"
 	
-	export ${NO_EXPORT:+-n} CONFIG_NUM_SECTIONS=$(($CONFIG_NUM_SECTIONS + 1))
+	CONFIG_NUM_SECTIONS=$(($CONFIG_NUM_SECTIONS + 1))
 	name="${name:-cfg$CONFIG_NUM_SECTIONS}"
 	append CONFIG_SECTIONS "$name"
-	[ -n "$NO_CALLBACK" ] || config_cb "$cfgtype" "$name"
-	export ${NO_EXPORT:+-n} CONFIG_SECTION="$name"
-	export ${NO_EXPORT:+-n} "CONFIG_${CONFIG_SECTION}_TYPE=$cfgtype"
+	config_cb "$cfgtype" "$name"
+	CONFIG_SECTION="$name"
+	export $_EXPORT_N_OPTION "CONFIG_${CONFIG_SECTION}_TYPE=$cfgtype"
 }
 
 option () {
 	local varname="$1"; shift
 	local value="$*"
 	
-	export ${NO_EXPORT:+-n} "CONFIG_${CONFIG_SECTION}_${varname}=$value"
-	[ -n "$NO_CALLBACK" ] || option_cb "$varname" "$*"
+	export $_EXPORT_N_OPTION "CONFIG_${CONFIG_SECTION}_${varname}=$value"
+	option_cb "$varname" "$*"
 }
 
 config_rename() {
@@ -59,12 +58,12 @@ config_rename() {
 	for oldvar in `set | grep ^CONFIG_${OLD}_ | \
 		sed -e 's/\(.*\)=.*$/\1/'` ; do
 		newvar="CONFIG_${NEW}_${oldvar##CONFIG_${OLD}_}"
-		eval "export ${NO_EXPORT:+-n} \"$newvar=\${$oldvar}\""
+		eval "export $_EXPORT_N_OPTION \"$newvar=\${$oldvar}\""
 		unset "$oldvar"
 	done
-	export ${NO_EXPORT:+-n} CONFIG_SECTIONS="$(echo " $CONFIG_SECTIONS " | sed -e "s, $OLD , $NEW ,")"
+	CONFIG_SECTIONS="$(echo " $CONFIG_SECTIONS " | sed -e "s, $OLD , $NEW ,")"
 	
-	[ "$CONFIG_SECTION" = "$OLD" ] && export ${NO_EXPORT:+-n} CONFIG_SECTION="$NEW"
+	[ "$CONFIG_SECTION" = "$OLD" ] && CONFIG_SECTION="$NEW"
 }
 
 config_unset() {
@@ -75,8 +74,8 @@ config_clear() {
 	local SECTION="$1"
 	local oldvar
 	
-	export ${NO_EXPORT:+-n} CONFIG_SECTIONS="$(echo " $CONFIG_SECTIONS " | sed -e "s, $OLD , ,")"
-	export ${NO_EXPORT:+-n} CONFIG_SECTIONS="${SECTION:+$CONFIG_SECTIONS}"
+	CONFIG_SECTIONS="$(echo " $CONFIG_SECTIONS " | sed -e "s, $OLD , ,")"
+	CONFIG_SECTIONS="${SECTION:+$CONFIG_SECTIONS}"
 
 	for oldvar in `set | grep ^CONFIG_${SECTION:+${SECTION}_} | \
 		sed -e 's/\(.*\)=.*$/\1/'` ; do 
@@ -85,11 +84,11 @@ config_clear() {
 }
 
 config_load() {
-	local file="$UCI_ROOT/etc/config/$1"
+	local file="/etc/config/$1"
 	_C=0
-	export ${NO_EXPORT:+-n} CONFIG_SECTIONS=
-	export ${NO_EXPORT:+-n} CONFIG_NUM_SECTIONS=0
-	export ${NO_EXPORT:+-n} CONFIG_SECTION=
+	CONFIG_SECTIONS=
+	CONFIG_NUM_SECTIONS=0
+	CONFIG_SECTION=
 	
 	[ -e "$file" ] && {
 		. $file
@@ -101,7 +100,7 @@ config_load() {
 config_get() {
 	case "$3" in
 		"") eval "echo \"\${CONFIG_${1}_${2}}\"";;
-		*)  eval "export ${NO_EXPORT:+-n} -- \"$1=\${CONFIG_${2}_${3}}\"";;
+		*)  eval "export $_EXPORT_N_OPTION -- \"$1=\${CONFIG_${2}_${3}}\"";;
 	esac
 }
 
@@ -110,8 +109,8 @@ config_get_bool() {
 	local _tmp
 	config_get "_tmp" "$2" "$3"
 	case "$_tmp" in
-		1|on|enabled) export ${NO_EXPORT:+-n} "$1=1";;
-		0|off|disabled) export ${NO_EXPORT:+-n} "$1=0";;
+		1|on|enabled) export $_EXPORT_N_OPTION "$1=1";;
+		0|off|disabled) export $_EXPORT_N_OPTION "$1=0";;
 		*) eval "$1=${4:-0}";;
 	esac
 }
@@ -176,12 +175,12 @@ strtok() { # <string> { <variable> [<separator>] ... }
 
 		val="${val#$tmp$2}"
 
-		export ${NO_EXPORT:+-n} "$1=$tmp"; count=$((count+1))
+                export $_EXPORT_N_OPTION "$1=$tmp"; count=$((count+1))
 		shift 2
 	done
 
 	if [ $# -gt 0 -a "$val" ]; then
-		export ${NO_EXPORT:+-n} "$1=$val"; count=$((count+1))
+                export $_EXPORT_N_OPTION "$1=$val"; count=$((count+1))
 	fi
 
 	return $count
