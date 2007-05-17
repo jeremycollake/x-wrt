@@ -58,7 +58,7 @@ fix_symlink_hack() {
 	! touch "$1" >&- 2>&- && {
 		local atmpfile
 		atmpfile=$(mktemp "/tmp/webif-XXXXXX")
-		cp "$1" "$atmpfile"
+		cp -p "$1" "$atmpfile"
 		equal "$?" "0" && {
 			rm "$1"
 			mv "$atmpfile" "$1"
@@ -165,18 +165,6 @@ remove_package() {
 
 update_package_list() {
 	ipkg update >> /dev/null
-}
-
-add_package_source() {
-	# $1 = new source
-	# this will not check for duplicates.
-	# for squashfs with symlink hack, rm first.
-	local ipkgtmp
-	ipkgtmp=$(mktemp /tmp/.webif-XXXXXX)
-	cp "/etc/ipkg.conf" "$ipkgtmp"
-	cat "$1" >> "$ipkgtmp"
-	rm "/etc/ipkg.conf"
-	mv "$ipkgtmp" "/etc/ipkg.conf"
 }
 
 has_pkgs() {

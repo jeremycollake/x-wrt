@@ -35,7 +35,7 @@ FixReadOnlyLink()
 	touch "$1" >&- 2>&-	# test if read-only
 	[ "$?" != 0 ] && {
 		local tmpfile=$(mktemp "${IPKG_INSTROOT}/tmp/.webif-inst-XXXXXX")
-		cp "$1" "$tmpfile" >&- 2>&-
+		cp -p "$1" "$tmpfile" >&- 2>&-
 		rm "$1"  >&- 2>&-
 		mv "$tmpfile" "$1"  >&- 2>&-
 	}

@@ -415,6 +415,7 @@ dest app $FORM_prompt" >> /etc/ipkg.conf
 
 	### --- Read file
 	tempfile=$(mktemp /tmp/.ipkg.XXXXXX)
+	chmod 644 $tempfile
 	exec 3<&0
 	exec 0</etc/profile
 	while read line

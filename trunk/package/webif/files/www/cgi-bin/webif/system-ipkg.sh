@@ -69,6 +69,7 @@ EOF
 		# since firstboot doesn't make a copy of ipkg.conf, we must do it
 		# todo: need a mutex or lock here
 		local tmpfile=$(mktemp "/tmp/.webif-ipkg-XXXXXX")
+		cp -p "/etc/ipkg.conf" "$tmpfile" 2>/dev/null
 		# a bit tricky but we want the X-Wrt repository always to be there
 		# and the last and the preferred one (i mean it!)
 		local oldlist=$(grep "^src[[:space:]]$xwrtreponame[[:space:]]$xwrtrepourl" /etc/ipkg.conf | cut -d' ' -f2)
@@ -76,11 +77,11 @@ EOF
 			rm -f "/usr/lib/ipkg/lists/$oldlist" 2>/dev/null
 		}
 		(echo "src $FORM_reponame $FORM_repourl"
-		grep "^src[[:space:]]" "/etc/ipkg.conf") | grep -vi "^src[[:space:]].*[[:space:]]$xwrtrepourl" >> "$tmpfile"
+		grep "^src[[:space:]]" "/etc/ipkg.conf") | grep -vi "^src[[:space:]].*[[:space:]]$xwrtrepourl" > "$tmpfile"
 		echo "src $xwrtreponame $xwrtrepourl" >> "$tmpfile"
-		grep -v "^src[[:space:]]" "/etc/ipkg.conf" >>"$tmpfile"
-		rm "/etc/ipkg.conf"
-		mv "$tmpfile" "/etc/ipkg.conf"
+		grep -v "^src[[:space:]]" "/etc/ipkg.conf" >> "$tmpfile"
+		rm -f "/etc/ipkg.conf"
+		mv -f "$tmpfile" "/etc/ipkg.conf"
 	else
 		echo "<h3 class=\"warning\">$ERROR</h3>"
 	fi
@@ -93,13 +94,14 @@ EOF
 	# do not enable the user to remove our repository and force it to be
 	# the last and the preferred one (i mean it!)
 	local tmpfile=$(mktemp "/tmp/.webif-ipkg-XXXXXX")
+	cp -p "/etc/ipkg.conf" "$tmpfile" 2>/dev/null
 	local oldlist=$(grep "^src[[:space:]]$xwrtreponame[[:space:]]$xwrtrepourl" /etc/ipkg.conf | cut -d' ' -f2)
 	! empty "$oldlist" && ! equal "$oldlist" "$xwrtreponame" ] && {
 		rm -f "/usr/lib/ipkg/lists/$oldlist" 2>/dev/null
 	}
-	grep "^src[[:space:]]" "/etc/ipkg.conf" | grep -vi "^src[[:space:]].*[[:space:]]$xwrtrepourl" >> "$tmpfile"
+	grep "^src[[:space:]]" "/etc/ipkg.conf" | grep -vi "^src[[:space:]].*[[:space:]]$xwrtrepourl" > "$tmpfile"
 	echo "src $xwrtreponame $xwrtrepourl" >> "$tmpfile"
-	grep -v "^src[[:space:]]" "/etc/ipkg.conf" >>"$tmpfile"
+	grep -v "^src[[:space:]]" "/etc/ipkg.conf" >> "$tmpfile"
 	rm -f "/etc/ipkg.conf"
 	mv -f "$tmpfile" "/etc/ipkg.conf"
 	# manually remove package lists since ipkg update won't..

@@ -67,7 +67,8 @@ EOF
 		# since firstboot doesn't make a copy of ipkg.conf, we must do it
 		# todo: need a mutex or lock here
 		tmpfile=$(mktemp "/tmp/.webif-ipkg-XXXXXX")
-		echo "src $FORM_reponame $FORM_repourl" >> "$tmpfile"
+		cp -p "/etc/ipkg.conf" "$tmpfile"
+		echo "src $FORM_reponame $FORM_repourl" > "$tmpfile"
 		cat "/etc/ipkg.conf" >>"$tmpfile"
 		rm "/etc/ipkg.conf"
 		mv "$tmpfile" "/etc/ipkg.conf"

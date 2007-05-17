@@ -6,6 +6,7 @@ ipkg list | awk '/webif-lang/ { gsub("webif-lang-",""); print "option|"$1"|"$5}'
 if [ "'cat $tmplanglst'" != "option|en|English" ]; then
 	if [ "'cat $tmplanglst'" != "'cat $languages_lst'" ]; then
 		rm -f "$languages_lst"
+		chmod 0644 "$tmplanglst"
 		mv -f "$tmplanglst" "$languages_lst"
 	fi
 fi

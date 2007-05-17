@@ -36,7 +36,7 @@ FixReadOnlyLink()
 	touch "$1" >&- 2>&-	# test if read-only
 	[ "$?" != 0 ] && {
 		local tmpfile=$(mktemp "${IPKG_INSTROOT}/tmp/.webif-inst-XXXXXX")
-		cp "$1" "$tmpfile" >&- 2>&-
+		cp -p "$1" "$tmpfile" >&- 2>&-
 		rm "$1"  >&- 2>&-
 		mv "$tmpfile" "$1"  >&- 2>&-
 	}
@@ -58,10 +58,13 @@ AddRepository()
 		}
 	}
 	local ltmp=$(mktemp "/tmp/.webif-XXXXXX")
+	cp -p "${IPKG_INSTROOT}/etc/ipkg.conf" "$ltmp" >&- 2>&-
+	echo -n "" > "$ltmp" >&- 2>&-
 	[ "$3" != "1" ] && echo "src $1 $2" > "$ltmp"
 	grep "^src " "${IPKG_INSTROOT}/etc/ipkg.conf" >> "$ltmp"
 	[ "$3" = "1" ] && echo "src $1 $2" >> "$ltmp"
 	grep -v "^src " "${IPKG_INSTROOT}/etc/ipkg.conf" >> "$ltmp"
+	rm -f "${IPKG_INSTROOT}/etc/ipkg.conf" >&- 2>&-
 	mv -f "$ltmp" "${IPKG_INSTROOT}/etc/ipkg.conf"
 }
 
@@ -141,7 +144,7 @@ ln -sf "/www/themes/xwrt" "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
 [ $? != 0 ] && {
 	# if fs doesn't support symlinks, do a copy
 	mkdir -p "${IPKG_INSTROOT}/www/themes/active"
-	cp "/www/themes/xwrt/*" "/www/themes/active/"
+	cp -p "/www/themes/xwrt/*" "/www/themes/active/"
 }
 
 # initialize webifmetabin binaries
