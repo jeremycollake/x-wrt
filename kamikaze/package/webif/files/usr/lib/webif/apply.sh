@@ -223,7 +223,7 @@ for package in $(ls /tmp/.uci/* 2>&-); do
 			eval CONFIG_timezone_posixtz="\$CONFIG_${timezone_cfg}_posixtz"
 			# create symlink to /tmp/TZ if /etc/TZ doesn't exist
 			# todo: -e | -f | -d didn't seem to work here, so I used find
-			if [ -z $(find "/etc/TZ") ]; then 
+			if [ -z $(find "/etc/TZ" 2>/dev/null) ]; then
 				ln -s /tmp/TZ /etc/TZ
 			fi
 			# eJunky: set timezone

@@ -187,10 +187,10 @@ EOF
 		time_zone_part="${FORM_system_timezone#*@}"
 		time_zoneinfo_part="${FORM_system_timezone%@*}"
 		is_kamikaze && {
-				uci_set "system" "$hostname_cfg" "hostname" "$FORM_hostname"
+			uci_set "system" "$hostname_cfg" "hostname" "$FORM_hostname"
 			empty "$timezone_cfg" && {
 				uci_add timezone timezone timezone
-				timezone_cfg = "timezone"
+				timezone_cfg="timezone"
 			}
 			uci_set timezone "$timezone_cfg" posixtz "$time_zone_part"
 			uci_set timezone "$timezone_cfg" zoneinfo "$time_zoneinfo_part"
