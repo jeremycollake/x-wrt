@@ -27,14 +27,11 @@ if empty "$FORM_submit"; then
 	esac
 
 	lan_interfaces_save=$($lan_interfaces_current |sed s/$wifi_interface//)
-
-	case "$FORM_wifi_enable" in
-		static)
-			FORM_wifi_ipaddr=${wifi_ipaddr:-$(nvram get wifi_ipaddr)}
-			FORM_wifi_netmask=${wifi_netmask:-$(nvram get wifi_netmask)}
-			FORM_wifi_gateway=${wifi_gateway:-$(nvram get wifi_gateway)}
-			;;
-	esac
+	FORM_wifi_ipaddr=${wifi_ipaddr:-$(nvram get wifi_ipaddr)}
+	FORM_wifi_netmask=${wifi_netmask:-$(nvram get wifi_netmask)}
+	FORM_wifi_gateway=${wifi_gateway:-$(nvram get wifi_gateway)}
+	FORM_wifi_wifi2lan=${wifi_wifi2lan:-$(nvram get wifi_wifi2lan)}
+	FORM_wifi_wifi2lan=${FORM_wifi_wifi2lan:-1}
 else
 	case "$FORM_wifi_enable" in
 		static)
@@ -52,6 +49,7 @@ EOF
 				save_setting wifi-enable wifi_ipaddr $FORM_wifi_ipaddr
 				save_setting wifi-enable wifi_netmask $FORM_wifi_netmask
 				save_setting wifi-enable wifi_gateway $FORM_wifi_gateway
+				save_setting wifi-enable wifi_wifi2lan $FORM_wifi_wifi2lan
 			}
 		;;
 		*)
@@ -113,6 +111,11 @@ helpitem|Netmask
 helptext|Helptext Netmask#This bitmask indicates what addresses are included in your Wireless LAN. For those who don't know what a bitmask is, just think of "255" as 'match this part' and "0" as 'any number here'.
 field|@TR<<Default Gateway>>
 text|wifi_gateway|$FORM_wifi_gateway
+field|@TR<<Wifi to LAN Communication>>
+radio|key|$FORM_wifi_wifi2lan|1|Allow
+radio|key|$FORM_wifi_wifi2lan|0|Deny
+helpitem|Wifi to LAN Communication
+helptext|Helptext Wifi to LAN Communication#Allows or denies communication from devices connected to wireless to send traffic to devices on the LAN.
 end_form
 start_form|@TR<<DNS Servers>>|wifi_dns|hidden
 listedit|dns|$SCRIPT_NAME?|$FORM_dns|$FORM_dnsadd
