@@ -1,16 +1,6 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
-is_kamikaze && {
-	local _val
-	uci_load "snmp"
-	eval "_val=\$CONFIG_snmp" 2>/dev/null
-	! equal "$_val" "snmp" && {
-		uci_add "snmp" snmp snmp
-		uci_commit "snmp"
-		uci_load "snmp"
-	}
-}
 ###################################################################
 # SNMP daemon configuration page
 #
@@ -33,6 +23,17 @@ is_kamikaze && {
 # Configuration files referenced:
 #	none
 #
+
+config_cb() {
+	config_get TYPE "$CONFIG_SECTION" TYPE
+	case "$TYPE" in
+		snmp)
+			snmp_cfg="$CONFIG_SECTION"
+		;;
+	esac
+}
+
+uci_load "snmp"
 
 header "System" "SNMP" "@TR<<SNMP Settings>>" '' "$SCRIPT_NAME"
 
@@ -64,10 +65,10 @@ equal "$?" "0" && {
 }
 
 if empty "$FORM_submit"; then
-	FORM_snmp_private_name="$CONFIG_snmp_privatename"
-	FORM_snmp_private_src="$CONFIG_snmp_privatesrc"
-	FORM_snmp_public_name="$CONFIG_snmp_publicname"
-	FORM_snmp_public_src="$CONFIG_snmp_publicsrc"
+	eval FORM_snmp_private_name="\$CONFIG_${snmp_cfg}_privatename"
+	eval FORM_snmp_private_src="\$CONFIG_${snmp_cfg}_privatesrc"
+	eval FORM_snmp_public_name="\$CONFIG_${snmp_cfg}_publicname"
+	eval FORM_snmp_public_src="\$CONFIG_${snmp_cfg}_publicsrc"
 else
 	SAVED=1
 	validate <<EOF
@@ -77,10 +78,14 @@ string|FORM_snmp_public_name|@TR<<SNMP Public Community Name>>||$FORM_snmp_publi
 string|FORM_snmp_public_src|@TR<<SNMP Public Source>>||$FORM_snmp_public_src
 EOF
 	equal "$?" 0 && {
-		uci_set snmp snmp privatename "$FORM_snmp_private_name"
-		uci_set snmp snmp privatesrc "$FORM_snmp_private_src"
-		uci_set snmp snmp publicname "$FORM_snmp_public_name"
-		uci_set snmp snmp publicsrc "$FORM_snmp_public_src"
+		empty "$snmp_cfg" && {
+			uci_add snmp snmp snmp
+			snmp_cfg="snmp"
+		}
+		uci_set snmp "$snmp_cfg" privatename "$FORM_snmp_private_name"
+		uci_set snmp "$snmp_cfg" privatesrc "$FORM_snmp_private_src"
+		uci_set snmp "$snmp_cfg" publicname "$FORM_snmp_public_name"
+		uci_set snmp "$snmp_cfg" publicsrc "$FORM_snmp_public_src"
 	}
 fi
 
