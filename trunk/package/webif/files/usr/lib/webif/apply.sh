@@ -104,16 +104,18 @@ restart_dnsmasq() {
 	echo_action_done
 }
 reload_wifi_enable() {
-	echo_applying_settings "@TR<<apply_wifi_enable#wifi enable>>"
+	echo_applying_settings "@TR<<apply_wifi_enable#Splitting wifi>>"
 	ifup lan
 	ifup wifi
+	reload_firewall
 	restart_dnsmasq
 	echo_action_done
 }
 
 reload_wifi_disable() {
-	echo_applying_settings "@TR<<apply_wifi_disable#wifi disable>>"
+	echo_applying_settings "@TR<<apply_wifi_disable#Unsplitting wifi>>"
 	ifup lan
+	reload_firewall
 	restart_dnsmasq
 	echo_action_done
 }
