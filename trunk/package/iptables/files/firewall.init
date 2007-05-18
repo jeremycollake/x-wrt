@@ -6,6 +6,8 @@
 WAN="$(nvram get wan_ifname)"
 WANDEV="$(nvram get wan_device)"
 LAN="$(nvram get lan_ifname)"
+[ -n "$(nvram get wifi_ifname)" ] && WIFI="$(nvram get lan_ifnames | grep -q $(nvram get wifi_ifname) || nvram get wifi_ifname)"
+WIFI_LAN=${WIFI:+$(nvram get wifi_wifi2lan)}
 
 ## CLEAR TABLES
 for T in filter nat; do
@@ -89,8 +91,14 @@ iptables -A LAN_ACCEPT -j ACCEPT
   iptables -A FORWARD -i $WAN -j forwarding_wan
 
   # allow
-  iptables -A FORWARD -i br0 -o br0 -j ACCEPT
+  iptables -A FORWARD -i $LAN -o $LAN -j ACCEPT
+  [ -n "$WIFI" ] && iptables -A FORWARD -i $WIFI -o $WIFI -j ACCEPT
+  [ "$WIFI_LAN" = "1" ] && [ -n "$WIFI" ] && {
+    iptables -A FORWARD -i $WIFI -o $LAN -j ACCEPT
+    iptables -A FORWARD -i $LAN -o $WIFI -j ACCEPT
+  }
   iptables -A FORWARD -i $LAN -o $WAN -j ACCEPT
+  [ -n "$WIFI" ] && iptables -A FORWARD -i $WIFI -o $WAN -j ACCEPT
 
   # reject (what to do with anything not allowed earlier)
   # uses the default -P DROP
