@@ -65,6 +65,7 @@ EOF
 			save_setting wifi-disable wifi_netmask ""
 			save_setting wifi-disable wifi_gateway ""
 			save_setting wifi-disable wifi_dns ""
+			save_setting wifi-disable wifi_dhcp_enabled ""
 		;;
 	esac
 fi
