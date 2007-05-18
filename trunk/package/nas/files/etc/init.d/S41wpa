@@ -4,7 +4,7 @@
 ifname=""
 real_ifname=$(nvram get wl0_ifname)
 real_ifname=${real_ifname:-eth1}
-brctl show 2>&- | grep "${real_ifname}" >&- 2>&- && ifname=$(brctl show |grep eth1 |cut -f 1)
+brctl show 2>&- | grep "${real_ifname}" >&- 2>&- && ifname=$(brctl show |grep "$real_ifname" |cut -f 1)
 
 start_nas() {
 	# don't start a new nas process if the old one still lives
