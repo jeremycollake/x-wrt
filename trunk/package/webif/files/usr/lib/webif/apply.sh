@@ -313,8 +313,6 @@ done
 for config in $(ls config-wifi-disable 2>&-); do
 	echo_applying_settings "@TR<<apply_wifi_disable#wifi disable>>"
 	ifdown wifi
-	br_int=$(nvram get wifi_ifname)
-	brctl delbr $br_int
 	ifdown lan
 	echo_action_done
 done
