@@ -143,10 +143,8 @@ if empty "$FORM_submit"; then
 	is_kamikaze && {
 		eval CONFIG_system_hostname="\$CONFIG_${hostname_cfg}_hostname"
 		FORM_hostname="${CONFIG_system_hostname:-OpenWrt}"
-		eval CONFIG_timezone_posixtz="\$CONFIG_${timezone_cfg}_posixtz"
-		time_zone_part="${CONFIG_timezone_posixtz}"
-		eval CONFIG_timezone_zoneinfo="\$CONFIG_${timezone_cfg}_zoneinfo"
-		time_zoneinfo_part="${CONFIG_timezone_zoneinfo}"
+		eval time_zone_part="\$CONFIG_${timezone_cfg}_posixtz"
+		eval time_zoneinfo_part="\$CONFIG_${timezone_cfg}_zoneinfo"
 		#wait for ntpclient to be updated
 		#FORM_ntp_server="${ntp_server:-$(nvram get ntp_server)}"
 	} || {

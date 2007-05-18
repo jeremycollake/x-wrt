@@ -143,10 +143,8 @@ if empty "$FORM_submit"; then
 	is_kamikaze && {
 		eval CONFIG_system_hostname="\$CONFIG_${hostname_cfg}_hostname"
 		FORM_hostname="${CONFIG_system_hostname:-OpenWrt}"
-		eval CONFIG_timezone_posixtz="\$CONFIG_${timezone_cfg}_posixtz"
-		time_zone_part="${CONFIG_timezone_posixtz}"
-		eval CONFIG_timezone_zoneinfo="\$CONFIG_${timezone_cfg}_zoneinfo"
-		time_zoneinfo_part="${CONFIG_timezone_zoneinfo}"
+		eval time_zone_part="\$CONFIG_${timezone_cfg}_posixtz"
+		eval time_zoneinfo_part="\$CONFIG_${timezone_cfg}_zoneinfo"
 		#wait for ntpclient to be updated
 		#FORM_ntp_server="${ntp_server:-$(nvram get ntp_server)}"
 	} || {
@@ -187,10 +185,10 @@ EOF
 		time_zone_part="${FORM_system_timezone#*@}"
 		time_zoneinfo_part="${FORM_system_timezone%@*}"
 		is_kamikaze && {
-				uci_set "system" "$hostname_cfg" "hostname" "$FORM_hostname"
+			uci_set "system" "$hostname_cfg" "hostname" "$FORM_hostname"
 			empty "$timezone_cfg" && {
 				uci_add timezone timezone timezone
-				timezone_cfg = "timezone"
+				timezone_cfg="timezone"
 			}
 			uci_set timezone "$timezone_cfg" posixtz "$time_zone_part"
 			uci_set timezone "$timezone_cfg" zoneinfo "$time_zoneinfo_part"
