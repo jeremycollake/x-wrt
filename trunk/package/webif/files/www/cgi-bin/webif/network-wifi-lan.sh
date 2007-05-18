@@ -2,7 +2,6 @@
 <?
 . "/usr/lib/webif/webif.sh"
 load_settings network
-br_num=$(ifconfig -a|grep br |wc -l |cut -d " " -f 7)
 wifi_interface=$(nvram get wl0_ifname)
 
 for interface in $(nvram get lan_ifnames |sed s/$wifi_interface//); do
@@ -47,8 +46,7 @@ ip|FORM_wifi_gateway|@TR<<Gateway>>||$FORM_wifi_gateway
 EOF
 			equal "$?" 0 && {
 				save_setting wifi-enable lan_ifnames "$lan_interfaces_save"
-				save_setting wifi-enable wifi_ifnames $wifi_interface
-				save_setting wifi-enable wifi_ifname br$br_num
+				save_setting wifi-enable wifi_ifname $wifi_interface
 				save_setting wifi-enable wifi_stp "1"
 				save_setting wifi-enable wifi_proto "static"
 				save_setting wifi-enable wifi_ipaddr $FORM_wifi_ipaddr
