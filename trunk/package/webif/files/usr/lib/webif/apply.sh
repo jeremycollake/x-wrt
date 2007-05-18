@@ -105,6 +105,8 @@ restart_dnsmasq() {
 }
 reload_wifi_enable() {
 	echo_applying_settings "@TR<<apply_wifi_enable#splitting the wifi>>"
+	ifdown wifi
+	ifdown lan
 	ifup lan
 	ifup wifi
 	reload_firewall
@@ -114,6 +116,8 @@ reload_wifi_enable() {
 
 reload_wifi_disable() {
 	echo_applying_settings "@TR<<apply_wifi_disable#unsplitting the wifi>>"
+	ifdown wifi
+	ifdown lan
 	ifup lan
 	reload_firewall
 	restart_dnsmasq
@@ -298,22 +302,6 @@ for config in $(ls file-* 2>&-); do
 	eval 'case "$name" in
 		'"$HANDLERS_file"'
 	esac'
-	echo_action_done
-done
-
-# config-wifi-enable		QOS Config file
-for config in $(ls config-wifi-enable 2>&-); do
-	echo_applying_settings "@TR<<apply_wifi_enable#wifi enable>>"
-	ifdown wifi
-	ifdown lan
-	echo_action_done
-done
-
-# config-wifi-disable		QOS Config file
-for config in $(ls config-wifi-disable 2>&-); do
-	echo_applying_settings "@TR<<apply_wifi_disable#wifi disable>>"
-	ifdown wifi
-	ifdown lan
 	echo_action_done
 done
 
