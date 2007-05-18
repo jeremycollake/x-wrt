@@ -112,8 +112,8 @@ helptext|Helptext Netmask#This bitmask indicates what addresses are included in 
 field|@TR<<Default Gateway>>
 text|wifi_gateway|$FORM_wifi_gateway
 field|@TR<<Wifi to LAN Communication>>
-radio|key|$FORM_wifi_wifi2lan|1|Allow
-radio|key|$FORM_wifi_wifi2lan|0|Deny
+radio|wifi_wifi2lan|$FORM_wifi_wifi2lan|1|Allow
+radio|wifi_wifi2lan|$FORM_wifi_wifi2lan|0|Deny
 helpitem|Wifi to LAN Communication
 helptext|Helptext Wifi to LAN Communication#Allows or denies communication from devices connected to wireless to send traffic to devices on the LAN.
 end_form

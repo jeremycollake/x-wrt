@@ -104,7 +104,7 @@ restart_dnsmasq() {
 	echo_action_done
 }
 reload_wifi_enable() {
-	echo_applying_settings "@TR<<apply_wifi_enable#Splitting wifi>>"
+	echo_applying_settings "@TR<<apply_wifi_enable#splitting the wifi>>"
 	ifup lan
 	ifup wifi
 	reload_firewall
@@ -113,7 +113,7 @@ reload_wifi_enable() {
 }
 
 reload_wifi_disable() {
-	echo_applying_settings "@TR<<apply_wifi_disable#Unsplitting wifi>>"
+	echo_applying_settings "@TR<<apply_wifi_disable#unsplitting the wifi>>"
 	ifup lan
 	reload_firewall
 	restart_dnsmasq
