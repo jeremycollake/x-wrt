@@ -1,0 +1,110 @@
+#!/usr/bin/awx
+BEGIN {
+	# imitate the header function
+	CATEGORY = "Network"
+	PAGENAME = "Routes"
+	page_title = "@TR<<network_routes_Static_Routes#Static Routes>>"
+	html_body_args = ""
+	show_info = ""
+#	show_error="$ERROR" \
+
+	# style, javascript and metas
+	inject_head()
+#	inject_body()
+
+	# only when editing a rule
+	if (getvar("FORM_action") == "editroute") {
+		use_form = ENVIRON["SCRIPT_NAME"]
+		_endform = ((use_form != "") ? "</form>" : "" )
+	}
+
+	# imitate the header function
+	include("/usr/lib/webif/common.awx")
+
+	td_ind = "\t"
+}
+
+# style, javascript and metas
+function inject_head() {
+	html_head = html_head " \
+<style type=\"text/css\"> \
+<!-- \
+#routes .cssbutton { \
+	background-color: #f6f4f1; \
+	border: 2px #888785 outset; \
+	border-color: #c6c4c1 #888785 #888785 #c6c4c1; \
+	padding: 1px 3px 1px 2px; \
+	font-size: 0.83em; \
+	text-decoration: none; \
+} \
+#routes .cssbutton, .cssbutton:visited, .cssbutton:active { \
+	color: #000000; \
+} \
+#routes .delbut, .delbut:visited, .delbut:active { \
+	color: #d44533; \
+} \
+#routes .cssbutton:active { \
+	border-style: inset; \
+	border-color: #f6f4f1 #f6f4f1 #888785 #888785; \
+	background-color: #f6f4f1; \
+	padding: 1px 2px 1px 3px; \
+} \
+#routes span { \
+	display: none; \
+} \
+table { \
+	text-align: left; \
+	margin: 0px; \
+	padding: 0px; \
+} \
+td, th { \
+	padding-top: 1px; \
+	padding-right: 1px; \
+	padding-bottom: 2px; \
+	padding-left: 1px; \
+	vertical-align: center; \
+} \
+--> \
+</style>"
+}
+
+#function inject_body() {
+#	html_body = html_body ""
+#}
+
+function static_routes() {
+	count = 0
+	if (count == 0) print "<tr>\n" td_ind "<td colspan=\"6\">@TR<<network_routes_static_No_configured_routes#No configured static routes exist.>></td>\n</tr>"
+	if (getvar("FORM_action") != "editroute") {
+		print "<tr>\n" td_ind "<td colspan=\"5\">&nbsp;</td><td><a class=\"cssbutton\" href=\"" ENVIRON["SCRIPT_NAME"] "?action=addroute\">@TR<<network_routes_Add_new_route#Add new route>></a></td>\n</tr>"
+	}
+}
+
+function kernel_routes() {
+	class_odd = 1
+	old_FS = FS
+	FS = " "
+	count = 0
+	while (("route -n 2>/dev/null" | getline) > 0) {
+		if (/^[[:digit:]]/) {
+			if (class_odd == 1) {
+				print "<tr>"
+				class_odd--
+			} else {
+				print "<tr class=\"odd\">"
+				class_odd++
+			}
+			for (i = 1; i <= NF; i++) printf td_ind "<td>" $(i) "</td>\n"
+			print "</tr>"
+			count++
+		}
+	}
+	if (count == 0) print "<tr>\n" td_ind "<td colspan=\"8\">@TR<<network_routes_No_kernel_routes#There are no IP routes in the kernel's table!?>></td>\n</tr>"
+	FS = old_FS
+}
+
+function handle_default() {
+	RENDER = "views/network-routes.ahtml"
+}
+
+##WEBIF:name:Network:500:Routes
