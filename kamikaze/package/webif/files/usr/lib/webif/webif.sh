@@ -186,7 +186,8 @@ EOF
 footer() {
 	awx_call "render(\"$cgidir/views/footer.ahtml\")" \
 		-v use_form="$_use_form" \
-		-v CATEGORY="$_category"
+		-v CATEGORY="$_category" \
+		-v _endform="${_use_form:+</form>}"
 }
 
 #######################################################
