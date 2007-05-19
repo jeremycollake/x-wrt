@@ -7,6 +7,7 @@ WAN="$(nvram get wan_ifname)"
 WANDEV="$(nvram get wan_device)"
 LAN="$(nvram get lan_ifname)"
 [ -n "$(nvram get wifi_ifname)" ] && WIFI="$(nvram get lan_ifnames | grep -q $(nvram get wifi_ifname) || nvram get wifi_ifname)"
+[ "$WAN" = "$WIFI" ] && WIFI=""
 WIFI_LAN=${WIFI:+$(nvram get wifi_wifi2lan)}
 
 ## CLEAR TABLES
