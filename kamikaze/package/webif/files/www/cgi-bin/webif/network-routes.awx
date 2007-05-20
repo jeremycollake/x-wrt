@@ -13,7 +13,8 @@ BEGIN {
 #	inject_body()
 
 	# only when editing a rule
-	if (getvar("FORM_action") == "editroute") {
+	_action = getvar("action")
+	if (_action == "editroute" || _action == "addroute") {
 		use_form = ENVIRON["SCRIPT_NAME"]
 		_endform = ((use_form != "") ? "</form>" : "" )
 	}
@@ -22,6 +23,54 @@ BEGIN {
 	include("/usr/lib/webif/common.awx")
 
 	td_ind = "\t"
+
+	config_load("network")
+
+	# get bridges
+	old_FS = FS
+	FS = " "
+	last_bridge
+	while (("brctl show 2>/dev/null" | getline) > 0) {
+		if (!/^bridge/) {
+			if ($4 != "") {
+				last_bridge = $1
+				_bridges[$4] = last_bridge
+			} else {
+				for (i = 3; i <= 1; i--) {
+					if ($(i) != "" ) {
+						_bridges[$(i)] = last_bridge
+						break
+					}
+				}
+			}
+		}
+	}
+	# scan interfaces
+	for (var in CONFIG) {
+		if (CONFIG[var] == "interface") {
+			interface_cfg = var
+			sub(/_TYPE/, "", interface_cfg)
+			if (CONFIG[interface_cfg "_type"] == "bridge") {
+				# get the bridge number
+				nif = split(CONFIG[interface_cfg "_ifname"],_br_ifs)
+				for (i = 1; i <= nif; i++) {
+					if (_bridges[_br_ifs[i]] != "") {
+						_ifacenames[interface_cfg] = _bridges[_br_ifs[i]]
+						_ifaceifs[_bridges[_br_ifs[i]]] = interface_cfg
+					} else {
+						_ifacenames[interface_cfg] = "br?"
+						_ifaceifs["br?"] = interface_cfg
+					}
+				}
+			} else {
+				_ifacenames[interface_cfg] = CONFIG[interface_cfg "_ifname"]
+				_ifaceifs[(CONFIG[interface_cfg "_ifname"])] = interface_cfg
+			}
+		}
+	}
+	FS = old_FS
+
+	RENDER = "views/network-routes.ahtml"
 }
 
 # style, javascript and metas
@@ -73,9 +122,45 @@ td, th { \
 #}
 
 function static_routes() {
+	# scan routes
+	class_odd = 1
 	count = 0
+	for (var in CONFIG) {
+		if (CONFIG[var] == "route") {
+			route_cfg = var
+			sub(/_TYPE/, "", route_cfg)
+			if (class_odd == 1) {
+				print "<tr>"
+				class_odd--
+			} else {
+				print "<tr class=\"odd\">"
+				class_odd++
+			}
+			print td_ind "<td>" CONFIG[route_cfg "_target"] "</td>"
+			href=href "target=" CONFIG[route_cfg "_target"]
+			print td_ind "<td>" CONFIG[route_cfg "_gateway"] "</td>"
+			href=href "&amp;gateway=" CONFIG[route_cfg "_gateway"]
+			print td_ind "<td>" CONFIG[route_cfg "_netmask"] "</td>"
+			href=href "&amp;netmask=" CONFIG[route_cfg "_netmask"]
+			print td_ind "<td>" CONFIG[route_cfg "_metric"] "</td>"
+			href=href "&amp;metric=" CONFIG[route_cfg "_metric"]
+			print td_ind "<td>" CONFIG[route_cfg "_interface"] " (" ((_ifacenames[(CONFIG[route_cfg "_interface"])] == "") ? "@TR<<network_routes_unknown_iface#unknown>>" : _ifacenames[(CONFIG[route_cfg "_interface"])]) ")</td>"
+			href=href "&amp;interface=" CONFIG[route_cfg "_interface"]
+			printf td_ind "<td>"
+			if (_editflag != 1) {
+				printf "<a class=\"cssbutton\" href=\"" ENVIRON["SCRIPT_NAME"] "?action=editroute&amp;" href "\">@TR<<network_routes_Edit#Edit>></a>"
+				printf "&nbsp;"
+				print "<a class=\"cssbutton delbut\" href=\""  ENVIRON["SCRIPT_NAME"] "?action=removeroute&amp;" href "\">@TR<<network_routes_Delete#Delete>></a>"
+			} else {
+				printf "&nbsp;"
+			}
+			print "</td>"
+			print "</tr>"
+			count++
+		}
+	}
 	if (count == 0) print "<tr>\n" td_ind "<td colspan=\"6\">@TR<<network_routes_static_No_configured_routes#No configured static routes exist.>></td>\n</tr>"
-	if (getvar("FORM_action") != "editroute") {
+	if (_editflag != 1) {
 		print "<tr>\n" td_ind "<td colspan=\"5\">&nbsp;</td><td><a class=\"cssbutton\" href=\"" ENVIRON["SCRIPT_NAME"] "?action=addroute\">@TR<<network_routes_Add_new_route#Add new route>></a></td>\n</tr>"
 	}
 }
@@ -94,7 +179,11 @@ function kernel_routes() {
 				print "<tr class=\"odd\">"
 				class_odd++
 			}
-			for (i = 1; i <= NF; i++) printf td_ind "<td>" $(i) "</td>\n"
+			for (i = 1; i <= NF; i++) {
+				if (i == 8) {
+					print td_ind "<td>" ((_ifaceifs[$(i)] == "") ? "@TR<<network_routes_unknown_iface#unknown>>" : _ifaceifs[$(i)]) " (" $(i) ")</td>"
+				} else print td_ind "<td>" $(i) "</td>"
+			}
 			print "</tr>"
 			count++
 		}
@@ -103,8 +192,20 @@ function kernel_routes() {
 	FS = old_FS
 }
 
+function handle_addroute() {
+	_editflag = 1
+}
+
+function handle_editroute() {
+	_editflag = 1
+}
+
+function handle_removeroute() {
+	_editflag = 0
+}
+
 function handle_default() {
-	RENDER = "views/network-routes.ahtml"
+	_editflag = 0
 }
 
 ##WEBIF:name:Network:500:Routes
