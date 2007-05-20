@@ -202,11 +202,12 @@ EOF
 EOF
 
 	nvram_totals=$(nvram show 2>&1 | sed '/^size: /!d')
-	USED_NVRAM=$(echo "$nvram_totals" | sed 's/size: \([[:digit:]]\{1,5\}\).*/\1/')
-	FREE_NVRAM=$(echo "$nvram_totals" | sed 's/.*(\([[:digit:]]\{1,5\}\) .*).*/\1/')
-	[ "$USED_NVRAM" -ge 0 ] >/dev/null 2>&1 &&  [ "$FREE_NVRAM" -ge 0 ] >/dev/null 2>&1 && {
+	USED_NVRAM=$(echo "$nvram_totals" | cut -d' ' -f2)
+	FREE_NVRAM=$(echo "$nvram_totals" | cut -d' ' -f4 | sed 's/(//g')
+	! empty "$USED_NVRAM" && ! empty "$FREE_NVRAM" && \
+	[ "$USED_NVRAM" -ge 0 ] 2>/dev/null && [ "$FREE_NVRAM" -ge 0 ] 2>/dev/null && {
 		TOTAL_NVRAM=$(($USED_NVRAM + $FREE_NVRAM))
-		NVRAM_PERCENT_USED=$((100 -($FREE_NVRAM/($TOTAL_NVRAM/100))))
+		NVRAM_PERCENT_USED=$((100 - ($FREE_NVRAM/($TOTAL_NVRAM/100))))
 
 		display_form <<EOF
 start_form|@TR<<system_nvram_NVRAM_Usage#NVRAM Usage>>
