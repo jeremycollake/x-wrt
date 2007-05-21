@@ -1,10 +1,11 @@
+#!/bin/sh
 . /etc/functions.sh
 NAME=ez-ipupdate
 CONFIG=/etc/ez-ipupdate/$NAME.conf
 COMMAND=/usr/sbin/$NAME
 [ "$ACTION" = "ifup" -a "$INTERFACE" = "wan" ] && {
-        [ -x $COMMAND ] && [ -r $CONFIG ] && {
-                IFNAME=$(nvram get ${INTERFACE}_ifname)
-                $COMMAND -c $CONFIG -i $IFNAME 2>&1 | logger -t $NAME
-        } &
+	[ "$(nvram get ddns_enable)" = "1" ] && [ -x $COMMAND ] && [ -r $CONFIG ] && {
+		IFNAME=$(nvram get ${INTERFACE}_ifname)
+		$COMMAND -c $CONFIG -i $IFNAME 2>&1 | logger -t $NAME
+	} &
 }
