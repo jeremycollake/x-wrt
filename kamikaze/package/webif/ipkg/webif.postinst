@@ -143,7 +143,10 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	[ $? = 0 ] && {
 		#Delete old berlios repo before adding new repo
 		DeleteRepository "ftp://ftp.berlios.de/pub/xwrt/kamikaze/broadcom-2.6/packages"
-		AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/brcm-2.6/packages"
+		cat /proc/cpuinfo | grep BCM47xx && SYSTYPE="47xx"
+		cat /proc/cpuinfo | grep BCM63xx && SYSTYPE="63xx"
+		[ -n $SYSTYPE ] && AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/brcm${SYSTYPE}-2.6/packages"
+		unset SYSTYPE
 	}
 	uname -a |grep "2.6" |grep "i\?86"
 	[ $? = 0 ] && {
