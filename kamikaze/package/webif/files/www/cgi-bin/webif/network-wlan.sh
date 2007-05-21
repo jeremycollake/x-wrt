@@ -205,7 +205,7 @@ for device in $DEVICES; do
 		if [ "$?" = "0" ]; then
 			mode_fields="$mode_fields
 				option|11b|@TR<<802.11B>>"
-		if
+		fi
 		echo "$dmesg_txt" |grep -q "${device}: 11a"
 		if [ "$?" = "0" ]; then
 			mode_fields="$mode_fields
