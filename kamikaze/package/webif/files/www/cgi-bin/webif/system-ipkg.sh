@@ -163,7 +163,7 @@ fi
 	<table class="packages"><tr class="packages"><th width="150">@TR<<system_ipkg_th_action#Action>></th><th width="200">@TR<<system_ipkg_th_package#Package>></th><th width=150>@TR<<system_ipkg_th_version#Version>></th><th>@TR<<system_ipkg_th_desc#Description>></th></tr>
 <?
 ipkg list_installed | awk -F ' ' '
-$2 !~ /terminated/ {
+($2 !~ /terminated/) && ($1 !~ /Done./) {
 	link=$1
 	gsub(/\+/,"%2B",link)
 	gsub(/^ */,"",link)
