@@ -49,7 +49,7 @@ $(IPKG_EZIPUPDATE):
 	install -d -m0755 $(IDIR_EZIPUPDATE)/etc
 	install -m0600 ./files/$(PKG_NAME).conf $(IDIR_EZIPUPDATE)/etc/
 	install -d -m0755 $(IDIR_EZIPUPDATE)/etc/hotplug.d/iface
-	install -m0755 ./files/$(PKG_NAME).hotplug $(IDIR_EZIPUPDATE)/etc/hotplug.d/iface/10-$(PKG_NAME)
+	install -m0755 ./files/$(PKG_NAME).hotplug $(IDIR_EZIPUPDATE)/etc/hotplug.d/iface/20-$(PKG_NAME)
 	install -d -m0755 $(IDIR_EZIPUPDATE)/usr/sbin
 	install -m0755 $(PKG_BUILD_DIR)/$(PKG_NAME) $(IDIR_EZIPUPDATE)/usr/sbin/
 	find $(IDIR_EZIPUPDATE) -name CVS | xargs rm -rf
