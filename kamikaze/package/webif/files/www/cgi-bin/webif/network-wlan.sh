@@ -19,6 +19,7 @@
 #   wireless
 #
 header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onload="modechange()"' "$SCRIPT_NAME"
+dmesg_txt="$(dmesg)"
 adhoc_count=0
 ap_count=0
 sta_count=0
@@ -192,12 +193,24 @@ for device in $DEVICES; do
         append forms "$mode_disabled" "$N"
         	
         if [ "$iftype" = "atheros" ]; then
-        mode_fields="field|@TR<<Mode>>
-		select|mode_ap_$device|$FORM_ap_mode
-		option|11bg|@TR<<802.11B/G>>
-        	option|11b|@TR<<802.11B>>
-        	option|11g|@TR<<802.11G>>
-        	option|11a|@TR<<802.11A>>"
+        	mode_fields="field|@TR<<Mode>>
+			select|mode_ap_$device|$FORM_ap_mode"
+		echo "$dmesg_txt" |grep -q "${device}: 11g"
+		if [ "$?" = "0" ]; then
+			mode_fields="$mode_fields
+				option|11bg|@TR<<802.11B/G>>
+				option|11g|@TR<<802.11G>>"
+		fi
+		echo "$dmesg_txt" |grep -q "${device}: 11b"
+		if [ "$?" = "0" ]; then
+			mode_fields="$mode_fields
+				option|11b|@TR<<802.11B>>"
+		if
+		echo "$dmesg_txt" |grep -q "${device}: 11a"
+		if [ "$?" = "0" ]; then
+			mode_fields="$mode_fields
+				option|11a|@TR<<802.11A>>"
+		fi
         append forms "$mode_fields" "$N"
         fi
         
