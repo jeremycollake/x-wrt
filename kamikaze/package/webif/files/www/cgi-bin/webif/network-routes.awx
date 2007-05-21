@@ -31,41 +31,36 @@ BEGIN {
 	FS = " "
 	last_bridge
 	while (("brctl show 2>/dev/null" | getline) > 0) {
-		if (!/^bridge/) {
-			if ($4 != "") {
-				last_bridge = $1
-				_bridges[$4] = last_bridge
-			} else {
-				for (i = 3; i <= 1; i--) {
-					if ($(i) != "" ) {
-						_bridges[$(i)] = last_bridge
-						break
-					}
-				}
-			}
+		if (!/^bridge/ && !/^[[:space:]]*$/) {
+			if (NF == 4) last_bridge = $1
+			_bridges[$(NF)] = last_bridge
+			#_bridgeifaces[last_bridge] = _bridgeifaces[last_bridge] " " $(NF)
+			#sub(/^ */, "", _bridgeifaces[last_bridge])
 		}
 	}
+
 	# scan interfaces
+	count = 0
 	for (var in CONFIG) {
 		if (CONFIG[var] == "interface") {
 			interface_cfg = var
 			sub(/_TYPE/, "", interface_cfg)
 			if (CONFIG[interface_cfg "_type"] == "bridge") {
-				# get the bridge number
-				nif = split(CONFIG[interface_cfg "_ifname"],_br_ifs)
+				nif = split(CONFIG[interface_cfg "_ifname"], _br_ifs)
 				for (i = 1; i <= nif; i++) {
 					if (_bridges[_br_ifs[i]] != "") {
 						_ifacenames[interface_cfg] = _bridges[_br_ifs[i]]
 						_ifaceifs[_bridges[_br_ifs[i]]] = interface_cfg
 					} else {
-						_ifacenames[interface_cfg] = "br?"
-						_ifaceifs["br?"] = interface_cfg
+						_ifacenames[interface_cfg] = "br?" count
+						_ifaceifs["br?" count] = interface_cfg
 					}
 				}
 			} else {
 				_ifacenames[interface_cfg] = CONFIG[interface_cfg "_ifname"]
 				_ifaceifs[(CONFIG[interface_cfg "_ifname"])] = interface_cfg
 			}
+			count++
 		}
 	}
 	FS = old_FS
@@ -140,12 +135,18 @@ function static_routes() {
 			href=href "target=" CONFIG[route_cfg "_target"]
 			print td_ind "<td>" CONFIG[route_cfg "_gateway"] "</td>"
 			href=href "&amp;gateway=" CONFIG[route_cfg "_gateway"]
-			print td_ind "<td>" CONFIG[route_cfg "_netmask"] "</td>"
+			print td_ind "<td>" ((CONFIG[route_cfg "_netmask"] != "") ? CONFIG[route_cfg "_netmask"] : "255.255.255.255") "</td>"
 			href=href "&amp;netmask=" CONFIG[route_cfg "_netmask"]
 			print td_ind "<td>" CONFIG[route_cfg "_metric"] "</td>"
 			href=href "&amp;metric=" CONFIG[route_cfg "_metric"]
 			print td_ind "<td>" CONFIG[route_cfg "_interface"] " (" ((_ifacenames[(CONFIG[route_cfg "_interface"])] == "") ? "@TR<<network_routes_unknown_iface#unknown>>" : _ifacenames[(CONFIG[route_cfg "_interface"])]) ")</td>"
 			href=href "&amp;interface=" CONFIG[route_cfg "_interface"]
+			if (route_cfg !~ /^cfg/) {
+				print td_ind "<td>" route_cfg "</td>"
+				href=href "&amp;name=" route_cfg
+			} else {
+				print td_ind "<td>&nbsp;</td>"
+			}
 			printf td_ind "<td>"
 			if (_editflag != 1) {
 				printf "<a class=\"cssbutton\" href=\"" ENVIRON["SCRIPT_NAME"] "?action=editroute&amp;" href "\">@TR<<network_routes_Edit#Edit>></a>"
@@ -159,9 +160,9 @@ function static_routes() {
 			count++
 		}
 	}
-	if (count == 0) print "<tr>\n" td_ind "<td colspan=\"6\">@TR<<network_routes_static_No_configured_routes#No configured static routes exist.>></td>\n</tr>"
+	if (count == 0) print "<tr>\n" td_ind "<td colspan=\"7\">@TR<<network_routes_static_No_configured_routes#No configured static routes exist.>></td>\n</tr>"
 	if (_editflag != 1) {
-		print "<tr>\n" td_ind "<td colspan=\"5\">&nbsp;</td><td><a class=\"cssbutton\" href=\"" ENVIRON["SCRIPT_NAME"] "?action=addroute\">@TR<<network_routes_Add_new_route#Add new route>></a></td>\n</tr>"
+		print "<tr>\n" td_ind "<td colspan=\"6\">&nbsp;</td><td><a class=\"cssbutton\" href=\"" ENVIRON["SCRIPT_NAME"] "?action=addroute\">@TR<<network_routes_Add_new_route#Add new route>></a></td>\n</tr>"
 	}
 }
 
