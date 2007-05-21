@@ -321,5 +321,4 @@ function kernel_routes() {
 #function handle_default() {
 #}
 
-##WEBIF:category:Network
 ##WEBIF:name:Network:500:Routes
