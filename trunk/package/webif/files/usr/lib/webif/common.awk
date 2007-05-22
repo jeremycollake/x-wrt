@@ -31,12 +31,13 @@ function button(name, caption) {
 }
 
 function helpitem(name) { 
-	return "<dt>@TR<<" name ">>: </dt>"
+	return "<h4>@TR<<" name ">>:</h4>"
 }
 
-function helptext(short, name) { 
-	return "<dd>@TR<<" short "|" name ">>: </dd>"
+function helptext(text) { 
+	return "<p>@TR<<" text ">></p>"
 }
+
 function sel_option(name, caption, default, sel) {
 	if (default == name) sel = " selected=\"selected\""
 	else sel = ""
