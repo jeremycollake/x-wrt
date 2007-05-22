@@ -230,7 +230,7 @@ fi
 
 WEBIF_SSL="field|@TR<<system_settings_Webif_SSL#Webif&sup2; SSL>>"
 is_package_installed "matrixtunnel"
-if [ "$?" = "1" ]; then
+if [ "$?" != "0" ]; then
 	WEBIF_SSL="$WEBIF_SSL
 string|<div class=\"warning\">@TR<<system_settings_Feature_requires_matrixtunnel#MatrixTunnel package is not installed. You need to install it for ssl support>>:</div>
 submit|install_stunnel| @TR<<system_settings_Install_MatrixTunnel#Install MatrixTunnel>> |"
