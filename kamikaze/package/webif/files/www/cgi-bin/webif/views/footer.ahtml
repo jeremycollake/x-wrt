@@ -17,5 +17,5 @@
 	<em>@TR<<making_usable#End user extensions for OpenWrt>></em>
 </div>
 </div> <!-- End #container -->
-<% ( config_get_bool("general", "use_progressbar") && use_progressbar) ? "</DIV><SCRIPT type='text/javascript'>complete()</SCRIPT>" : "") %>
+<% ( config_get_bool("general", "use_progressbar") && use_progressbar ? "</DIV><SCRIPT type='text/javascript'>complete()</SCRIPT>" : "") %>
 </body></html>
