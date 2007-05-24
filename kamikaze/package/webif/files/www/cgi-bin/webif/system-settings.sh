@@ -404,7 +404,6 @@ TIMEZONE_OPTS=$(
 		}' < /usr/lib/webif/timezones.csv 2>/dev/null
 
 )
-## selected=\"selected\"
 #######################################################
 cat <<EOF
 <script type="text/javascript" src="/webif.js"></script>
@@ -434,14 +433,6 @@ cat <<EOF
 		set_value('show_TZ', tz_split[1]);
 	}
 }
-
-function setup()
-{
-	modechange();
-	show('view_tz_string');
-}
-
-window.onload=setup
 -->
 </script>
 EOF
@@ -459,7 +450,7 @@ start_form|@TR<<Time Settings>>
 field|@TR<<Timezone>>
 select|system_timezone|$FORM_system_timezone
 $TIMEZONE_OPTS
-field|@TR<<system_settings_POSIX_TZ_String#POSIX TZ String>>|view_tz_string|hidden
+field|@TR<<system_settings_POSIX_TZ_String#POSIX TZ String>>|view_tz_string|
 string|<input id="show_TZ" type="text" style="width: 96%; height: 1.2em; color: #2f2f2f; background: #ececec; " name="show_TZ" readonly="readonly" value="@TR<<system_settings_js_required#This field requires the JavaScript support.>>" />
 helpitem|Timezone
 helptext|Timezone_helptext#Set up your time zone according to the nearest city of your region from the predefined list.
