@@ -370,6 +370,9 @@ for device in $DEVICES; do
 			
 			if [ "$iftype" = "atheros" ]; then
 			eval txpowers="\$CONFIG_wireless_${device}_txpower"
+			if [ "$txpowers" = "" ]; then
+				txpowers='1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16'
+			fi
 			txpower_field="field|@TR<<Tx Power>>
 					select|txpower_$vcfg|$FORM_txpower"
 			for txpower in $txpowers; do
