@@ -57,7 +57,7 @@ if empty "$FORM_submit"; then
 	# ppp common
 	#TODO: verify all ppp variables still work under kamikaze.
 	FORM_ppp_username="$CONFIG_wan_username"
-	FORM_ppp_passwd="$CONFIG_wan_passwd"
+	FORM_ppp_passwd="$CONFIG_wan_password"
 	FORM_ppp_idletime="$CONFIG_wan_idletime"
 	FORM_ppp_redialperiod="$CONFIG_wan_redialperiod"
 	FORM_ppp_mtu="$CONFIG_wan_mtu"
@@ -80,7 +80,7 @@ if empty "$FORM_submit"; then
 	FORM_wwan_country="$CONFIG_wan_country"
 	FORM_wwan_apn="$CONFIG_wan_apn"
 	FORM_wwan_username="$CONFIG_wan_username"
-	FORM_wwan_passwd="$CONFIG_wan_passwd"
+	FORM_wwan_passwd="$CONFIG_wan_password"
 	
 	# lan
 	FORM_lan_ipaddr="$CONFIG_lan_ipaddr"
@@ -129,7 +129,7 @@ EOF
 			uci_set "network" "wan" "country" "$FORM_wwan_country"
 			uci_set "network" "wan" "apn" "$FORM_wwan_apn"
 			uci_set "network" "wan" "username" "$FORM_wwan_username"
-			uci_set "network" "wan" "passwd" "$FORM_wwan_passwd"
+			uci_set "network" "wan" "password" "$FORM_wwan_passwd"
 			;;
 			pppoa)
 			uci_set "network" "wan" "vpi" "$FORM_wan_vpi"
@@ -148,7 +148,7 @@ EOF
 		case "$FORM_wan_proto" in
 			pppoe|pptp|wwan)
 				empty "$FORM_ppp_username" || uci_set "network" "wan" "username" "$FORM_ppp_username"
-				empty "$FORM_ppp_passwd" || uci_set "network" "wan" "passwd" "$FORM_ppp_passwd"
+				empty "$FORM_ppp_passwd" || uci_set "network" "wan" "password" "$FORM_ppp_passwd"
 
 				# These can be blank
 				uci_set "network" "wan" "idletime" "$FORM_ppp_idletime"
