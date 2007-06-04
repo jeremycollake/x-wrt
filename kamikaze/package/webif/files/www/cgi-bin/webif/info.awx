@@ -84,8 +84,12 @@ function handle_default() {
 		"cat /proc/cpuinfo" | getline
 		if ($0 ~ /IXP4/) repo = "ixp4xx-2.6"
 	}
-	version_url = "http://downloads.x-wrt.org/xwrt/kamikaze/" repo
-
+	revision = config_get("general", "firmware_version")
+	if (revision == "7.06") {
+		version_url = "http://downloads.x-wrt.org/xwrt/kamikaze/" revision "/" repo;
+	} else {
+		version_url = "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/" repo;
+	}
 	PAGENAME = "System"
 	page_title = "<img src=\"/images/blkbox.jpg\" alt=\"@TR<<System Information>>\"/>@TR<<System Information>>"
 	RENDER = "views/info-system.ahtml"
