@@ -124,7 +124,9 @@ ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/webif-page"
 ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/wepkeygen"
 ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/int2human"
 
-revision="`cat ${IPKG_INSTROOT}/etc/openwrt_version`"
+if [ -e ${IPKG_INSTROOT}/etc/openwrt_version ]; then
+	revision="`cat ${IPKG_INSTROOT}/etc/openwrt_version`"
+fi
 
 # don't run below on 'real' system
 if [ -n "${IPKG_INSTROOT}" ]; then
