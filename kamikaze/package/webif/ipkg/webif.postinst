@@ -124,9 +124,15 @@ ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/webif-page"
 ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/wepkeygen"
 ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/int2human"
 
+revision="`cat ${IPKG_INSTROOT}/etc/openwrt_version`"
+
 # don't run below on 'real' system
 if [ -n "${IPKG_INSTROOT}" ]; then
-	AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$S/packages"
+	if [ "$revision" = "7.06" ]; then
+		AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/7.06/$S/packages"
+	else
+		AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/$S/packages"
+	fi
 fi
 
 # only run below on 'real' system (not image builder)
@@ -135,34 +141,56 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	# initialize ipkg.conf
 	uname -a |grep mips |grep 2.4 && cat /proc/cpuinfo |grep Broadcom
 	[ $? = 0 ] && {
-		#Delete old berlios repo before adding new repo
-		DeleteRepository "ftp://ftp.berlios.de/pub/xwrt/kamikaze/broadcom-2.4/packages"
-		AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/brcm-2.4/packages"
+		#Delete incorrect kamikaze repo
+		DeleteRepository "http://downloads.x-wrt.org/xwrt/kamikaze/brcm-2.4/packages"
+		if [ "$revision" = "7.06" ]; then
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/7.06/brcm-2.4/packages"
+		else
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/brcm-2.4/packages"
+		fi
 	}
 	uname -a |grep mips |grep "2.6.*" && cat /proc/cpuinfo |grep Broadcom
 	[ $? = 0 ] && {
-		#Delete old berlios repo before adding new repo
-		DeleteRepository "ftp://ftp.berlios.de/pub/xwrt/kamikaze/broadcom-2.6/packages"
 		cat /proc/cpuinfo | grep BCM47xx && SYSTYPE="47xx"
 		cat /proc/cpuinfo | grep BCM63xx && SYSTYPE="63xx"
-		[ -n $SYSTYPE ] && AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/brcm${SYSTYPE}-2.6/packages"
+		#Delete incorrect repo
+		DeleteRepository "http://downloads.x-wrt.org/xwrt/kamikaze/brcm${SYSTYPE}-2.6/packages"
+		if [ -n $SYSTYPE ]; then
+			if [ "$revision" = "7.06" ]; then
+				AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/7.06/brcm${SYSTYPE}-2.6/packages"
+			else
+				AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/brcm${SYSTYPE}-2.6/packages"
+			fi
+		fi
 		unset SYSTYPE
 	}
 	uname -a |grep "2.6" |grep "i\?86"
 	[ $? = 0 ] && {
-		#Delete old berlios repo before adding new repo
-		DeleteRepository "ftp://ftp.berlios.de/pub/xwrt/kamikaze/x86-2.6/packages"
-		AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/x86-2.6/packages"
-		}
+		#Delete incorrect repo
+		DeleteRepository "http://downloads.x-wrt.org/xwrt/kamikaze/x86-2.6/packages"
+		if [ "$revision" = "7.06" ]; then
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/7.06/x86-2.6/packages"
+		else
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/x86-2.6/packages"
+		fi
+	}
 	uname -a |grep mips |grep 2.6 && cat /proc/cpuinfo |grep Atheros
 	[ $? = 0 ] && {
-		#Delete old berlios repo before adding new repo
-		DeleteRepository "ftp://ftp.berlios.de/pub/xwrt/kamikaze/atheros-2.6/packages"
-		AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/atheros-2.6/packages"
+		#Delete incorrect repo
+		DeleteRepository "http://downloads.x-wrt.org/xwrt/kamikaze/atheros-2.6/packages"
+		if [ "$revision" = "7.06" ]; then
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/7.06/atheros-2.6/packages"
+		else
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/atheros-2.6/packages"
+		fi
 	}
 	cat /proc/cpuinfo |grep "IXP4\?\?"
 	[ $? = "0" ] && {
-		AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/ixp4xx-2.6/packages"
+		if [ "$revision" = "7.06" ]; then
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/7.06/ixp4xx-2.6/packages"
+		else
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/ixp4xx-2.6/packages"
+		fi
 	}
 
 #commit our old webif settings if they exist
