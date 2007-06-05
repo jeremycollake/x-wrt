@@ -53,7 +53,7 @@ uci_load "webif"
 		}
 	break
 	done
-	if [ -z "$CONFIG_general_firmware_version" -a -z $CONFIG_general_firmware_name" ]; then
+	if [ -z "$CONFIG_general_firmware_version" -a -z "$CONFIG_general_firmware_name" ]; then
 		#detect firmware info
 		firmware_name=$CONFIG_general_firmware_name
 		firmware_subtitle=$CONFIG_general_firmware_subtitle
