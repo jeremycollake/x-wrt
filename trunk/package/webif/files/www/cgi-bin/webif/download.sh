@@ -20,16 +20,18 @@
 #  timetodelete - time in seconds, the file will be deleted after the timeout
 #  script - the url, the page will redirect to in case of error
 #  path - file path (no end /)
-#  savefile - file name
+#  savefile - local file name
+#  realname - target file name
 #
 # Example:
-#  http://192.168.1.1/cgi-bin/webif/download.sh?script=/cgi-bin/webif/system-editor.sh&timetodelete=60&path=/tmp&savefile=config.tgz
+#  http://192.168.1.1/cgi-bin/webif/download.sh?script=/cgi-bin/webif/system-editor.sh&timetodelete=60&path=/tmp&savefile=config.tgz-Fxdc4H&realname=config.tgz
 #  script=/cgi-bin/webif/system-editor.sh
 #  timetodelete=60
 #  path=/tmp
-#  savefile=config.tgz
+#  savefile=config.tgz-Fxdc4H
+#  realname=config.tgz
 
-script="${FORM_script:-$(pwd)/info.sh}"
+script="${FORM_script:-/cgi-bin/webif/info.sh}"
 redir="${script}?path=$FORM_path"
 
 ! empty "$FORM_path" && ! empty "$FORM_savefile" && {
@@ -51,8 +53,8 @@ redir="${script}?path=$FORM_path"
 			md5field=$(md5sum "$FORM_path/$FORM_savefile" 2>/dev/null | awk '{ print $1 }')
 		}
 		echo "Content-Type: application/octet-stream"
-		echo "Content-Disposition: inline;filename=\"$FORM_savefile\""
-		echo "Content-Description: \"$FORM_savefile\""
+		echo "Content-Disposition: inline;filename=\"${FORM_realname:-$FORM_savefile}\""
+		echo "Content-Description: \"${FORM_realname:-$FORM_savefile}\""
 		echo "Content-Length: $fsize"
 		echo "Pragma: no-cache"
 		! empty "$md5field" && echo "Content-MD5: $md5field"
@@ -68,6 +70,10 @@ redir="${script}?path=$FORM_path"
 		} || {
 			dd if="$FORM_path/$FORM_savefile" bs=$((2**15)) 2>/dev/null
 			sleep 1
+			equal "$locked" "1" && {
+				rm -f "$lockfile" 2>/dev/null
+				rmdir -p "$lockpath" 2>/dev/null
+			}
 		}
 		equal "$locked" "1" && {
 			set - INT TERM EXIT
