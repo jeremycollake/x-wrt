@@ -1,0 +1,2 @@
+#!/bin/sh
+[ -x /etc/init.d/S??opendns ] && /etc/init.d/S??opendns restart
