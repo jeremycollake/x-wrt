@@ -1,0 +1,97 @@
+config filemask
+	option filemask	'/etc/*.user'
+config filemask
+	option filemask	'/etc/dnsmasq.conf'
+config filemask
+	option filemask	'/etc/ethers'
+config filemask
+	option filemask	'/etc/group'
+config filemask
+	option filemask	'/etc/hosts'
+config filemask
+	option filemask	'/etc/hosts.*'
+config filemask
+	option filemask	'/etc/passwd'
+config filemask
+	option filemask	'/etc/dyndns.org-ip*'
+config filemask
+	option filemask	'/etc/ez-ipupdate/ez-ipupdate.conf'
+config filemask
+	option filemask	'/etc/ez-ipupdate/ez-ipupdate.cache'
+config filemask
+	option filemask	'/etc/openvpn/ca.crt'
+config filemask
+	option filemask	'/etc/openvpn/client.*'
+config filemask
+	option filemask	'/etc/ppp/options.*'
+config filemask
+	option filemask	'/etc/ppp/users.*'
+config filemask
+	option filemask	'/etc/ppp/peers.*'
+config filemask
+	option filemask	'/etc/ssl/matrixtunnel.*'
+
+config directorymask
+	option directorymask	'/etc/config'
+config directorymask
+	option directorymask	'/etc/crontabs'
+config directorymask
+	option directorymask	'/etc/dropbear'
+config directorymask
+	option directorymask	'/etc/chilli'
+config directorymask
+	option directorymask	'/etc/ipkg'
+config directorymask
+	option directorymask	'/etc/wifidog'
+
+config nvramgroupmask
+	option nvramgroupmask	'dhcp_'
+config nvramgroupmask
+	option nvramgroupmask	'ddns_'
+config nvramgroupmask
+	option nvramgroupmask	'hs_'
+config nvramgroupmask
+	option nvramgroupmask	'ipkg_'
+config nvramgroupmask
+	option nvramgroupmask	'lan_'
+config nvramgroupmask
+	option nvramgroupmask	'log_'
+config nvramgroupmask
+	option nvramgroupmask	'openvpn_'
+config nvramgroupmask
+	option nvramgroupmask	'ppp_'
+config nvramgroupmask
+	option nvramgroupmask	'pppoe_'
+config nvramgroupmask
+	option nvramgroupmask	'pptp_'
+config nvramgroupmask
+	option nvramgroupmask	'shape_'
+config nvramgroupmask
+	option nvramgroupmask	'snmp_'
+config nvramgroupmask
+	option nvramgroupmask	'vlan'
+config nvramgroupmask
+	option nvramgroupmask	'wan_'
+config nvramgroupmask
+	option nvramgroupmask	'wifi_'
+config nvramgroupmask
+	option nvramgroupmask	'wl0_'
+config nvramgroupmask
+	option nvramgroupmask	'wl_'
+
+config nvramvariable
+	option nvramvariable	'boot_wait'
+config nvramvariable
+	option nvramvariable	'cron_enable'
+config nvramvariable
+	option nvramvariable	'ifup_interfaces'
+config nvramvariable
+	option nvramvariable	'language'
+config nvramvariable
+	option nvramvariable	'ntp_server'
+config nvramvariable
+	option nvramvariable	'time_zone'
+config nvramvariable
+	option nvramvariable	'time_zoneinfo'
+config nvramvariable
+	option nvramvariable	'wait_time'

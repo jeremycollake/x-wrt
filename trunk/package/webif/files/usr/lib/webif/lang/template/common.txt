@@ -366,6 +366,47 @@ status_wwaninfo_quality_Excellent => Excellent
 status_wwaninfo_wrong_value => Wrong signal quality value
 
 
+## system-confman.sh
+system_confman_Backup_Configuration => Backup Configuration
+system_confman_Preparing_backup => Preparing the backup...
+system_confman_Backing_fidi => Backing up files and directories...
+system_confman_Backing_NVRAM => Backing up NVRAM variables...
+system_confman_Backup_Prepared => The backup was prepared successfully.
+confman_noauto_click => If downloading does not start automatically, click here
+system_confman_Clean_Return => Clean &amp; Return
+system_confman_Press_to_clean => Press the button to free the memory used by the backup archive after the successful download.
+system_confman_Invalid_config_archive => Invalid configuration archive!
+system_confman_Wrong_board_type => Wrong board type
+system_confman_Device_Board_Type => Device's Board Type
+system_confman_Archived_Board_Type => Archived Board Type
+system_confman_Cancel_Clean => Cancel &amp; Clean
+system_confman_Cancel_to_clean => Press the button to free the memory used by the backup archive and temporary files to cancel the restore.
+system_confman_Restore_Configuration => Restore Configuration
+system_confman_Config_Name => Config Name
+system_confman_Board_Type => Board Type
+system_confman_Generated => Generated
+system_confman_Files => Files
+system_confman_NVRAM => NVRAM
+system_confman_Restore_Selected => Restore Selected
+system_confman_no_archive_supplied => No backup archive was supplied.
+system_confman_Preparing_restore => Preparing the restore...
+system_confman_Restoring_Files => Restoring files...
+system_confman_Restoring_NVRAM => Restoring NVRAM values...
+system_confman_total_changes => Total of configuration changes
+confman_Invalid_configuration_archive => Invalid configuration archive!
+Backup and Restore => Backup and Restore
+Settings saved => Settings saved
+system_confman_click_apply => You must click on the Apply Changes link to finally restore the changes and make them permanent.
+system_confman_remind_restart => It is recommended to restart the whole system. The number of changes could be really big and not all services might be able to absorb restored settings.
+system_confman_Backup_Name => Backup Name
+system_confman_Create_Backup => Create Backup
+system_confman_Backup_Name_helptext => You can add a descriptive name to your configuration to better distinguish between several backups. The time of the backup is automatically included.
+system_confman_Backup_File => Backup File
+system_confman_Backup_File_helptext => Browse for the requested backup archive (config[-datetime].tgz) to restore the configuration from.
+System => System
+Backup &amp; Restore => Backup &amp; Restore
+
+
 ## system-nvram.sh
 system_nvram_Error_in => Error in
 system_nvram_New_Variable => New Variable Name
