@@ -168,13 +168,9 @@ dhcp_host_add() {
 	
 	config_get mac "$cfg" mac
 	[ -n "$mac" ] || return 0
-	
-	#config_get ip "$cfg" ip
-	#[ -n "$ip" ] || return 0
+
 	
 	append args "--dhcp-host=$mac,$ip"
-	
-	#append args "--dhcp-mac=$name,$mac"
 	
 	dhcp_option_add "$cfg" "$name"
 }
@@ -193,17 +189,23 @@ dhcp_mac_add() {
 	dhcp_option_add "$cfg" "$name"
 }
 
-dhcp_range_add() {
+
+dhcp_add() {
 	local cfg="$1"
-	
-	config_get name "$cfg" name
-	[ -n "$name" ] || return 0
 	
 	config_get net "$cfg" interface
 	[ -n "$net" ] || return 0
 	
+	config_get name "$cfg" name "$net"
+	
 	config_get ifname "$net" ifname
 	[ -n "$ifname" ] || return 0
+	
+	config_get_bool ignore "$cfg" ignore
+	[ "$ignore" -gt 0 ] && {
+		append args "-I $ifname"
+		return 0
+	}
 	
 	config_get proto "$net" proto
 	[ static = "$proto" ] || return 0
@@ -246,45 +248,6 @@ dhcp_option_add () {
 
 }
 
-dhcp_add() {
-	local cfg="$1"
-
-	config_get net "$cfg" interface
-	[ -n "$net" ] || return 0
-	
-	config_get ifname "$net" ifname
-	[ -n "$ifname" ] || return 0
-	
-	config_get_bool ignore "$cfg" ignore
-	[ "$ignore" -gt 0 ] && {
-		append args "-I $ifname"
-		return 0
-	}
-	
-	config_get proto "$net" proto
-	[ static = "$proto" ] || return 0
-	
-	config_get ipaddr "$net" ipaddr
-	config_get netmask "$net" netmask
-
-	# check for an already active dhcp server on the interface, unless 'force' is set
-	config_get_bool force "$cfg" force 0
-	[ "$force" -gt 0 ] || {
-		udhcpc -n -q -R -s /bin/true -t 1 -i $ifname >&- && return 0
-	}
-	
-	config_get start "$cfg" start
-	config_get end "$cfg" end
-	config_get leasetime "$cfg" leasetime
-	config_get options "$cfg" options
-
-	leasetime="${leasetime:-12h}"
-	start="$(dhcp_calc "${start:-100}")"
-	end="$((${end:-150} + 1))"
-	eval "$(ipcalc.sh $ipaddr $netmask $start $end)"
-	append args "-F $START,$END,$NETMASK,$leasetime${options:+ $options}"
-}
-
 start() {
 	include /lib/network
 	scan_interfaces
@@ -299,9 +262,9 @@ start() {
 	#config_foreach dhcp_circuitid_add circuitid
 	#config_foreach dhcp_remoteid_add remoteid
 	#config_foreach dhcp_subscrid_add subscrid
-	config_foreach dhcp_range_add range
+	config_foreach dhcp_add dhcp
 	
-	dnsmasq $args && {
+	/usr/sbin/dnsmasq $args && {
 		rm -f /tmp/resolv.conf
 		cat > /tmp/resolv.conf <<EOF
 nameserver 127.0.0.1
@@ -309,6 +272,8 @@ search lan
 EOF
 	}
 }
+
+
 
 stop() {
 	killall dnsmasq

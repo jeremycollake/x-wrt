@@ -1,4 +1,4 @@
-config dnsmasq
+#config dnsmasq
 	#option cachesize 150
 	#option nodaemon 1
 	#option domainneeded 0
@@ -24,19 +24,10 @@ config dnsmasq
 
 #config mac
 	#option name 'test'
-	#option mac '00:00:00:00:00:00'
+	#option mac '*:*:*:*:*:*'
 	#option ip '192.198.1.110'
 	#option dhcp0 '6,192.168.1.2'
 	
-config range
-	option name 'test_range'
-	option interface lan
-	option start 150
-	option limit 10
-	option netmask '255.255.255.0'
-	option broadcast ''
-	option leasetime 12h
-	#option dhcp0 "6,192.168.1.1"
 	
 #config vendorclass
 #	option name 'test_vendorclass'
@@ -65,14 +56,13 @@ config range
 #	option subscriberid 'dd'
 #	option dhcp0 '3,192.168.1.1'
 	
-#config dhcp
-#	option interface	lan
-#	option no_dhcp_interface ''
-#	option start 	100
-#	option limit	150
-#	option leasetime	12h
-#	option dhcp0 '3,192.168.1.1'
-#	option dhcp_force0 '3,192.168.1.1'
+config dhcp
+	option name 'lan'
+	option interface	lan
+	option start 	100
+	option limit	150
+	option leasetime	12h
+	#option dhcp0 '3,192.168.1.1'
 
 config dhcp
 	option interface	wan
