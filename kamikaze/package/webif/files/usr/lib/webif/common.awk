@@ -24,10 +24,50 @@ function config_get_bool(package, option, default, var) {
 	return (var && var != "0" ? 1 : 0)
 }
 
+# parameters: 4
+function uci_set(package, config, option, value) {
+	system("/bin/ash -c '. /etc/functions.sh; . /lib/config/uci.sh; uci_set \""package"\" \""config"\" \""option"\" \""value"\"'")
+}
+
+# WARNING: this function is a test and it may not be supported later!
+# parameters: 2
+# the second parameter is a two-dimensional array confoptval[config, option]
+function uci_set_ar(package, confoptval, \
+			cmd, var, nr, confopt) {
+	cmd = "/bin/ash -c '\$0'"
+	for (var in confoptval) {
+		nr = split(var, confopt, SUBSEP)
+		if (nr == 2)
+			print ". /etc/functions.sh; . /lib/config/uci.sh; uci_set \""package"\" \""confopt[1]"\" \""confopt[2]"\" \""confoptval[var]"\"" | cmd
+	}
+	close(cmd)
+}
+
+# parameters: 3
+function uci_add(package, type, config) {
+	system("/bin/ash -c '. /etc/functions.sh; . /lib/config/uci.sh; uci_add \""package"\" \""type"\" \""config"\"'")
+}
+
+# parameters: 3
+function uci_rename(package, config, value) {
+	system("/bin/ash -c '. /etc/functions.sh; . /lib/config/uci.sh; uci_rename \""package"\" \""config"\" \""value"\"'")
+}
+
+# parameters: 3
+function uci_remove(package, config, option) {
+	system("/bin/ash -c '. /etc/functions.sh; . /lib/config/uci.sh; uci_remove \""package"\" \""config"\" \""option"\"'")
+}
+
+# parameters: 1
+function uci_commit(package) {
+	system("/bin/ash -c '. /etc/functions.sh; . /lib/config/uci.sh; uci_commit \""package"\"'")
+}
+
 # parameters: 0
-function categories(n, i, sel, categories, f, c) {
+function categories(n, i, sel, categories, f, c, ofs) {
 	n = 0
 	sel = 0
+	ofs = FS
 	FS = ":"
 	
 	while (("grep '^##WEBIF:' "cgidir"/.categories "cgidir"/*.awx "cgidir"/*.sh 2>/dev/null" | getline) == 1) {
@@ -53,6 +93,7 @@ function categories(n, i, sel, categories, f, c) {
 		}
 	}
 	print "</ul>"
+	FS = ofs
 	return ""
 }
 
@@ -62,7 +103,8 @@ function print_subcategory() {
 }
 
 # parameters: 0-1
-function subcategories(extra, a, n, i) {
+function subcategories(extra, a, n, i, ofs) {
+	ofs = FS
 	FS = ":"
 	print "<h3><strong>@TR<<Subcategories>>:</strong></h3>"
 	print "<ul>"
@@ -77,6 +119,7 @@ function subcategories(extra, a, n, i) {
 		}
 	}
 	print "</ul>"
+	FS = ofs
 	return ""
 }
 
@@ -172,5 +215,4 @@ BEGIN {
 	rootdir="/cgi-bin/webif"
 	indexpage="index.sh"
 }
-
 
