@@ -112,7 +112,7 @@ equal "$INFO" "" && {
 EOF
 	equal "$COMGT" "" || equal "$COMGTWEBIF" "" && {
 		cat << EOF
-<p>@TR<<status_wwaninfo_no_req_app#The required components are missing. Please install the latest <a href="system-ipkg.sh">comgt</a> package and <a href="info.sh">webif&sup2;</a>.>></p>
+<p>@TR<<status_wwaninfo_no_req_app#The required components are missing. Please install the latest <a href="system-ipkg.sh">comgt</a> package and <a href="info.awx">webif&sup2;</a>.>></p>
 EOF
 	}
 	footer

@@ -736,7 +736,7 @@ Status => Stav
 UMTS => UMTS
 status_wwaninfo_UG_Status => Stav UMTS/GPRS
 status_wwaninfo_no_UG_device => UMTS/GPRS zařízení nebylo nalezeno.
-status_wwaninfo_no_req_app => Chybí požadované komponenty. Nainstalujte prosím poslední balíček <a href="system-ipkg.sh">comgt</a> a <a href="info.sh">webif&sup2;</a>.
+status_wwaninfo_no_req_app => Chybí požadované komponenty. Nainstalujte prosím poslední balíček <a href="system-ipkg.sh">comgt</a> a <a href="info.awx">webif&sup2;</a>.
 status_wwaninfo_device_info => Informace o zařízení
 status_wwaninfo_dev_th_Information => Informace
 status_wwaninfo_dev_th_Value => Hodnota
