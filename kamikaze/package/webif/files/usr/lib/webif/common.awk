@@ -140,7 +140,7 @@ function status(hostname, uptime, loadavg, i) {
 	else uptime=""
 	if (match(uptime, ", load ") != 0) uptime = substr(uptime, 1, RSTART - 1)
 	return "<div id=\"short-status\">\
-		<h3><strong>@TR<<Status>>:</strong></h3>\
+		<h3>@TR<<Status>>:</h3>\
 		<ul>\
 			<li><strong>"config_get("general", "firmware_name")" "config_get("general", "firmware_version")"</strong></li>\
 			<li><strong>@TR<<Host>>:</strong> "hostname"</li>\

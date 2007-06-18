@@ -1,21 +1,20 @@
-</div>
-<br />
-<fieldset id="save">
-	<legend><strong>Proceed Changes</strong></legend>
-	<% (use_form ? "<div class=\"page-save\"><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></div>" : "") %>
-	<% ( config_get_bool("general", "use_progressbar") ? "<script type=\"text/javascript\" src=\"/js/waitbox.js\"></script>" : "") %>
-	<ul class="apply">
-		<li><a href="config.sh?mode=save&amp;cat=<% CATEGORY %>&amp;prev=<% ENVIRON["SCRIPT_NAME"] %>" rel="lightbox" >@TR<<Apply Changes>> &laquo;</a></li>
-		<li><a href="config.sh?mode=clear&amp;cat=<% CATEGORY %>&amp;prev=<% ENVIRON["SCRIPT_NAME"] %>">@TR<<Clear Changes>> &laquo;</a></li>
-		<li><a href="config.sh?mode=review&amp;cat=<% CATEGORY %>&amp;prev=<% ENVIRON["SCRIPT_NAME"] %>">@TR<<Review Changes>> <% _changes %> &laquo;</a></li>
-	</ul>
-</fieldset>
-<% _endform %>
-<hr />
-<div id="footer">
-	<h3>X-Wrt</h3>
-	<em>@TR<<making_usable#End user extensions for OpenWrt>></em>
-</div>
-</div> <!-- End #container -->
-<% ( config_get_bool("general", "use_progressbar") && use_progressbar ? "</DIV><SCRIPT type='text/javascript'>complete()</SCRIPT>" : "") %>
-</body></html>
+			</div>
+			<fieldset id="save">
+				<legend>Proceed Changes</legend>
+				<% (use_form ? "<div class=\"page-save\"><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></div>" : "") %>
+				<% ( config_get_bool("general", "use_progressbar") ? "<script type=\"text/javascript\" src=\"/js/waitbox.js\"></script>" : "") %>
+				<ul class="apply">
+					<li><a href="config.sh?mode=save&amp;cat=<% CATEGORY %>&amp;prev=<% ENVIRON["SCRIPT_NAME"] %>" rel="lightbox" >@TR<<Apply Changes>> &laquo;</a></li>
+					<li><a href="config.sh?mode=clear&amp;cat=<% CATEGORY %>&amp;prev=<% ENVIRON["SCRIPT_NAME"] %>">@TR<<Clear Changes>> &laquo;</a></li>
+					<li><a href="config.sh?mode=review&amp;cat=<% CATEGORY %>&amp;prev=<% ENVIRON["SCRIPT_NAME"] %>">@TR<<Review Changes>> <% _changes %> &laquo;</a></li>
+				</ul>
+			</fieldset>
+			<% _endform %>
+			<div id="footer">
+				<h3>X-Wrt</h3>
+				<em>@TR<<making_usable#End user extensions for OpenWrt>></em>
+			</div>
+		</div> <!-- End #container -->
+		<% ( config_get_bool("general", "use_progressbar") && use_progressbar ? "</div><script type='text/javascript'>complete()</script>" : "") %>
+	</body>
+</html>

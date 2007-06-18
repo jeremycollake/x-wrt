@@ -24,29 +24,29 @@ Pragma: no-cache
 <% html_body %>
 
 <div id="container">
-<div id="header">
-	<h1>@TR<<X-Wrt Administration Console>></h1>
-	<% status() %>
-</div>
+	<div id="header">
+		<h1>@TR<<X-Wrt Administration Console>></h1>
+		<% status() %>
+	</div>
 
-<div id="mainmenu">
-<% categories() %>
-</div>
+	<div id="mainmenu">
+	<% categories() %>
+	</div>
 
-<div id="submenu">
-<% subcategories(subcategories_extra) %>
-</div>
+	<div id="submenu">
+	<% subcategories(subcategories_extra) %>
+	</div>
 
-<div id="colorswitcher">
-	<div style="background: #000000" title="black" onclick="setActiveStyleSheet('black'); return false;"></div>
-	<div style="background: #192a65" title="navyblue" onclick="setActiveStyleSheet('navyblue'); return false;"></div>
-	<div style="background: #114488" title="blue" onclick="setActiveStyleSheet('default'); return false;"></div>
-	<div style="background: #2b6d21" title="green" onclick="setActiveStyleSheet('green'); return false;"></div>
-	<div style="background: #e8ca9e" title="brown" onclick="setActiveStyleSheet('brown'); return false;"></div>
-	<div style="background: #fff" title="white" onclick="setActiveStyleSheet('white'); return false;"></div>
-</div>
-<% ( config_get_bool("general", "use_progressbar") && use_progressbar ? "<SCRIPT type='text/javascript'>start=0; end="use_progressbar"</SCRIPT><SCRIPT src='/js/pageload.js' type='text/javascript'></SCRIPT><DIV id='loadmain'><SCRIPT type='text/javascript'>document.getElementById(\"loadmain\").style.display = \"none\";</SCRIPT>" : "" ) %>
-<% ( use_form ? "<form enctype=\"multipart/form-data\" action=\""use_form"\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />" : "") %>
-<div id="content">
-	<h2><% page_title ((show_info != "") ? (page_title ? ": ": "") show_info : "" ) %></h2>
-	<% ((show_error != "") ? "<h3 class=\"warning\">"show_error"</h3>" : "" ) %>
+	<div id="colorswitcher">
+		<div style="background: #000000" title="black" onclick="setActiveStyleSheet('black'); return false;"></div>
+		<div style="background: #192a65" title="navyblue" onclick="setActiveStyleSheet('navyblue'); return false;"></div>
+		<div style="background: #114488" title="blue" onclick="setActiveStyleSheet('default'); return false;"></div>
+		<div style="background: #2b6d21" title="green" onclick="setActiveStyleSheet('green'); return false;"></div>
+		<div style="background: #e8ca9e" title="brown" onclick="setActiveStyleSheet('brown'); return false;"></div>
+		<div style="background: #fff" title="white" onclick="setActiveStyleSheet('white'); return false;"></div>
+	</div>
+	<% ( config_get_bool("general", "use_progressbar") && use_progressbar ? "<script type='text/javascript'>start=0; end="use_progressbar"</script><script src='/js/pageload.js' type='text/javascript'></script><div id='loadmain'><script type='text/javascript'>document.getElementById(\"loadmain\").style.display = \"none\";</script>" : "" ) %>
+	<% ( use_form ? "<form enctype=\"multipart/form-data\" action=\""use_form"\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />" : "") %>
+	<div id="content">
+		<h2><% page_title ((show_info != "") ? (page_title ? ": ": "") show_info : "" ) %></h2>
+		<% ((show_error != "") ? "<h3 class=\"warning\">"show_error"</h3>" : "" ) %>

@@ -168,61 +168,7 @@ function networks() {
 }
 
 function generate_form() {
-	! empty "$FORM_submit" && empty "$FORM_install_nbd" && {	
-	current_qos_item="$FORM_current_rule_index"	
-	! empty "$current_qos_item" && {		
-		# for validation purposes, replace non-numeric stuff in
-		# ports list and port range with integer.				
-		ports_validate=$(echo "$FORM_current_ports" | sed s/','/'0'/g)
-		portrange_validate=$(echo "$FORM_current_portrange" | sed s/'-'/'0'/g)		
-validate <<EOF
-int|ports_validate|@TR<<Port Listing>>||$ports_validate
-int|portrange_validate|@TR<<Port Range>>||$portrange_validate
-ip|FORM_current_srchost|@TR<<Source IP>>||$FORM_current_srchost
-ip|FORM_current_dsthost|@TR<<Dest IP>>||$FORM_current_dsthost
-EOF
-		if ! equal "$?" "0"; then			
-			echo "<div class=\"warning\">@TR<<qos_validation_failed#Validation of one or more fields failed! Not saving.>></div>"
-		else
-			SAVED=1
-			uci_set "qos" "$current_qos_item" "target" "$FORM_current_target"
-			uci_set_value_remove_if_empty "qos" "$current_qos_item" "srchost" "$FORM_current_srchost"
-			uci_set_value_remove_if_empty "qos" "$current_qos_item" "dsthost" "$FORM_current_dsthost"
-			uci_set_value_remove_if_empty "qos" "$current_qos_item" "proto" "$FORM_current_proto"
-			uci_set_value_remove_if_empty "qos" "$current_qos_item" "ports" "$FORM_current_ports"
-			uci_set_value_remove_if_empty "qos" "$current_qos_item" "portrange" "$FORM_current_portrange"
-			uci_set_value_remove_if_empty "qos" "$current_qos_item" "layer7" "$FORM_current_layer7"
-			uci_set_value_remove_if_empty "qos" "$current_qos_item" "ipp2p" "$FORM_current_ipp2p"
-			uci_set_value_remove_if_empty "qos" "$current_qos_item" "mark" "$FORM_current_mark"
-			uci_set_value_remove_if_empty "qos" "$current_qos_item" "tcpflags" "$FORM_current_tcpflags"
-			uci_set_value_remove_if_empty "qos" "$current_qos_item" "pktsize" "$FORM_current_pktsize"			
-		fi
-	}
 	
-	validate <<EOF
-int|FORM_wan_dowload|@TR<<WAN Download Speed>>||$FORM_wan_download
-int|FORM_wan_upload|@TR<<WAN Upload Speed>>||$FORM_wan_upload
-EOF
-	equal "$?" "0" && {
-		SAVED=1
-		uci_load qos # to check existing variables
-		! equal "$FORM_wan_enabled" "$CONFIG_wan_enabled" && {
-		 	uci_set "qos" "wan" "enabled" "$FORM_wan_enabled"
-		}
-		! equal "FORM_wan_overhead" "$CONFIG_wan_overhead" && {
-			uci_set "qos" "wan" "overhead" "$FORM_wan_overhead"
-		}
-		! empty "$FORM_wan_download" && ! equal "$FORM_wan_download" "$CONFIG_wan_download" && {
-			uci_set "qos" "wan" "download" "$FORM_wan_download"
-		}
-		! empty "$FORM_wan_upload" && ! equal "$FORM_wan_upload" "$CONFIG_wan_upload" && {
-			uci_set "qos" "wan" "upload" "$FORM_wan_upload"
-		}		
-		! empty "$FORM_webif_advanced" && ! equal "$FORM_webif_advanced" "$FORM_webif_advanced_test" && {
-			uci_set "webif" "qos" "show_advanced_rules" "$FORM_webif_advanced"
-		}		
-	}
-}
 }
 
 function network_content() {
