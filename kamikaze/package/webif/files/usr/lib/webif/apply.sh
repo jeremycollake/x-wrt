@@ -146,19 +146,20 @@ uci_unset_originals() {
 #
 # now apply any UCI config changes
 #
-for package in $(ls /tmp/.uci/* 2>&-); do
+for ucifile in $(ls /tmp/.uci/* 2>&-); do
 	# do not process lock files
-	[ "${package%.lock}" != "${package}" ] && continue
+	[ "${ucifile%.lock}" != "${ucifile}" ] && continue
 	# store original language before committing new one so we know if changed
-	equal "$package" "/tmp/.uci/webif" && {
+	equal "$ucifile" "/tmp/.uci/webif" && {
 		uci_load_originals "webif"
 		oldlang="$CONFIG_orig_general_lang"
 		uci_unset_originals "webif"
 		uci_load "webif"
 	}
-	echo "@TR<<Committing>> ${package#/tmp/.uci/} ..."
+	package=${ucifile#/tmp/.uci/}
+	echo "@TR<<Committing>> $package ..."
 	uci_commit "$package"
-	case "$package" in
+	case "$ucifile" in
 		"/tmp/.uci/qos") qos-start;;
 		"/tmp/.uci/webif") 
 			switch_language "$oldlang"
