@@ -168,7 +168,8 @@ for device in $DEVICES; do
 		config_get country $device country
 		config_get iftype "$device" type
 		eval FORM_ap_mode="\$FORM_ap_mode_$device"
-		eval FORM_channel="\$FORM_channel_$device"
+		eval FORM_channel="\$FORM_bgchannel_$device"
+		[ -z "$FORM_channel" ] && eval FORM_channel="\$FORM_achannel_$device"
 		eval FORM_maxassoc="\$FORM_maxassoc_$device"
 		eval FORM_distance="\$FORM_distance_$device"
 		eval FORM_diversity="\$FORM_diversity_$device"
@@ -631,7 +632,8 @@ EOF
 		equal "$?" 0 && {
 			for device in $DEVICES; do
 				eval FORM_ap_mode="\$FORM_ap_mode_$device"
-				eval FORM_channel="\$FORM_channel_$device"
+				eval FORM_channel="\$FORM_bgchannel_$device"
+				[ -z "$FORM_channel" ] && eval FORM_channel="\$FORM_achannel_$device"
 				eval FORM_maxassoc="\$FORM_maxassoc_$device"
 				eval FORM_distance="\$FORM_distance_$device"
 				eval FORM_diversity="\$FORM_diversity_$device"
