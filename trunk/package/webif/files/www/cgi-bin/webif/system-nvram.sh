@@ -17,7 +17,7 @@
 #
 
 # max length of the displayed value
-MAX_VALUE_LEN=248
+MAX_VALUE_LEN=64
 
 header_inject_head=$(cat <<EOF
 <style type="text/css">
