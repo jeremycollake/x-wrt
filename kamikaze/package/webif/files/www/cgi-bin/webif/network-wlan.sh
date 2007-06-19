@@ -133,8 +133,8 @@ if ! empty "$FORM_install_hostapd"; then
 	echo "</pre>"
 fi
 if ! empty "$FORM_install_wpa_supplicant"; then
-	echo "Installing wpa_supplicant package ...<pre>"
-	install_package "wpa_supplicant"
+	echo "Installing wpa-supplicant package ...<pre>"
+	install_package "wpa-supplicant"
 	echo "</pre>"
 fi
 nas_installed="0"
@@ -146,7 +146,7 @@ is_package_installed hostapd
 equal "$?" "0" && hostapd_installed="1"
 
 wpa_supplicant_installed="0"
-is_package_installed wpa_supplicant
+is_package_installed wpa-supplicant
 equal "$?" "0" && wpa_supplicant_installed="1"
 
 #####################################################################
@@ -525,11 +525,11 @@ for device in $DEVICES; do
 						string|@TR<<Installed>>."
 				fi
 
-				install_wpa_supplicant_button="field|@TR<<wpa_supplicant Package>>|install_wpa_supplicant_$vcfg|hidden"
+				install_wpa_supplicant_button="field|@TR<<wpa-supplicant Package>>|install_wpa_supplicant_$vcfg|hidden"
 				if ! equal "$wpa_supplicant_installed" "1"; then
 					install_wpa_supplicant_button="$install_wpa_supplicant_button
-						string|<div class=\"warning\">WPA and WPA2 will not work until you install the wpa_supplicant package. </div>
-						submit|install_wpa_supplicant| Install wpa_supplicant Package |"
+						string|<div class=\"warning\">WPA and WPA2 will not work until you install the wpa-supplicant package. </div>
+						submit|install_wpa_supplicant| Install wpa-supplicant Package |"
 				else
 					install_wpa_supplicant_button="$install_wpa_supplicant_button
 						string|@TR<<Installed>>."
