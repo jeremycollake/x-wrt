@@ -25,7 +25,7 @@ if empty "$FORM_submit" ; then
 	fi
 	FORM_log_mark="$CONFIG_general_mark"
 	FORM_log_mark=${FORM_log_mark:-$DEFAULT_log_mark}
-	FORM_filename="$CONFIG_general_file)}"
+	FORM_filename="$CONFIG_general_file"
 	FORM_filename=${FORM_filename:-$DEFAULT_log_file}
 else
 validate <<EOF
@@ -42,7 +42,7 @@ EOF
 		uci_set "syslogd" "general" "ipaddr" "$FORM_ipaddr"
 		uci_set "syslogd" "general" "port" "$FORM_log_port"
 		uci_set "syslogd" "general" "mark" "$FORM_log_mark"
-		uci_set "syslogd" "general" "file" "$FORM_filename"
+		[ "$FORM_type" != "file" ] || uci_set "syslogd" "general" "file" "$FORM_filename"
 	fi
 fi
 
