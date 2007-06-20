@@ -481,5 +481,5 @@ EOF
 footer ?>
 
 <!--
-##WEBIF:name:System:10:Settings
+##WEBIF:name:System:010:Settings
 -->

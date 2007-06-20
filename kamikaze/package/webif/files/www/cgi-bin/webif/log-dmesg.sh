@@ -9,5 +9,5 @@ header "Log" "Kernel" "@TR<<log_dmesg_Kernel_Ring_Buffer#Kernel Ring Buffer>>"
 </iframe>
 <? footer ?>
 <!--
-##WEBIF:name:Log:300:Kernel
+##WEBIF:name:Log:3:Kernel
 -->

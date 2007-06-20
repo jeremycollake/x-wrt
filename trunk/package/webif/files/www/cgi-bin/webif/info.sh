@@ -168,5 +168,5 @@ footer
 
 ?>
 <!--
-##WEBIF:name:Info:1:System
+##WEBIF:name:Info:001:System
 -->

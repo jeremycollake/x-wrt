@@ -101,5 +101,5 @@ function handle_aboutinfo() {
 	RENDER = "views/info-about.ahtml"
 }
 
-##WEBIF:name:Info:1:System
+##WEBIF:name:Info:001:System
 ##WEBIF:name:Info:950:About:aboutinfo
