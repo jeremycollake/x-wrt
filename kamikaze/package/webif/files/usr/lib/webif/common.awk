@@ -63,6 +63,99 @@ function uci_commit(package) {
 	system("/bin/ash -c '. /etc/functions.sh; . /lib/config/uci.sh; uci_commit \""package"\"'")
 }
 
+# parameters: 1
+function indent_level(level, i) {
+	if (level > 0) {
+		for (i = 1; i <= level; i++) printf "\t"
+	}
+}
+
+# parameters: 0
+function cssmenu(mainmenu, submenu, menuind, ofs, osubsep, n, i) {
+	ofs = FS
+	FS = ":"
+	osubsep = SUBSEP
+	SUBSEP = ":"
+
+	delete mainmenu
+	n = 0
+	# parse categories
+	while (("grep '^##WEBIF:' "cgidir"/.categories 2>/dev/null | sed 's/^[^:]*:[^:]*://'" | getline) == 1) {
+		if ($1 != "") {
+			n++
+			mainmenu[n SUBSEP "title"] = $1
+			if ($1 == CATEGORY) mainmenu[n SUBSEP "sel"] = 1
+		}
+	}
+	mainmenu["count"] = n
+	delete submenu
+	# parse all ##WEBIF...
+	n = 0
+	while (("grep '^##WEBIF:' /www/cgi-bin/webif/*.awx /www/cgi-bin/webif/*.sh 2>/dev/null | sed 's,^[^:]*\/,,; s/##WEBIF:name://; s/^\\([^:]*\\):\\(.*\\)/\\2:\\1/' | sort" | getline) == 1) {
+		if ((mainmenu[$1 SUBSEP "url"] == "")  && ($4 != "")) mainmenu[$1 SUBSEP "url"] = rootdir "/" $4
+		if (mainmenu[$1 SUBSEP "pages"] !~ /:$2:/) {
+			mainmenu[$1 SUBSEP "pages"] = mainmenu[$1 SUBSEP "pages"] ":" $2 ":"
+			mainmenu[$1 SUBSEP "count"]++
+			submenu[$1 SUBSEP mainmenu[$1 SUBSEP "count"] SUBSEP "title"] = $3
+			if ($3 == PAGENAME) submenu[$1 SUBSEP mainmenu[$1 SUBSEP "count"] SUBSEP "sel"] = 1
+			if ($5 != "") {
+				if ($4 != "") submenu[$1 SUBSEP mainmenu[$1 SUBSEP "count"] SUBSEP "url"] = rootdir "/" $5 "?action=" $4
+			} else {
+				if ($4 != "") submenu[$1 SUBSEP mainmenu[$1 SUBSEP "count"] SUBSEP "url"] = rootdir "/" $4
+			}
+		}
+	}
+	# parse extra subcategories
+	while (("/bin/ash -c '. /www/cgi-bin/webif/graphs-subcategories.sh; subcategories_extra' | sed 's/##WEBIF:name://' | sort" | getline) == 1) {
+		if ((mainmenu[$1 SUBSEP "url"] == "")  && ($4 != "")) mainmenu[$1 SUBSEP "url"] = rootdir "/" $4
+		mainmenu[$1 SUBSEP "count"]++
+		submenu[$1 SUBSEP mainmenu[$1 SUBSEP "count"] SUBSEP "title"] = $3
+		if ($3 == PAGENAME) submenu[$1 SUBSEP mainmenu[$1 SUBSEP "count"] SUBSEP "sel"] = 1
+		if ($5 != "") {
+			if ($4 != "") submenu[$1 SUBSEP mainmenu[$1 SUBSEP "count"] SUBSEP "url"] = rootdir "/" $5 "?action=" $4
+		} else {
+			if ($4 != "") submenu[$1 SUBSEP mainmenu[$1 SUBSEP "count"] SUBSEP "url"] = rootdir "/" $4
+		}
+	}
+	# flush it
+	menuind = 1
+	indent_level(menuind); print "<ul class=\"mainmenu\">"
+	for (n = 1; n <= mainmenu["count"]; n++) {
+		indent_level(menuind + 1)
+		if (mainmenu[n SUBSEP "title"] == "-") print "<li class=\"separator\">" mainmenu[n SUBSEP "title"] "</li>"
+		else {
+			if (mainmenu[n SUBSEP "sel"] == 1) printf "<li class=\"selected\">"
+			else printf "<li>"
+			if (mainmenu[mainmenu[n SUBSEP "title"] SUBSEP "url"] != "")
+				printf "<a href=\"" mainmenu[mainmenu[n SUBSEP "title"] SUBSEP "url"] "\">"
+			printf "@TR<<" mainmenu[n SUBSEP "title"] ">>"
+			if (mainmenu[mainmenu[n SUBSEP "title"] SUBSEP "url"] != "")
+				printf "</a>"
+			print "<ul class=\"submenu\">"
+			for (i = 1; i <= mainmenu[mainmenu[n SUBSEP "title"] SUBSEP "count"]; i++) {
+				indent_level(menuind + 2)
+				if (submenu[mainmenu[n SUBSEP "title"] SUBSEP i SUBSEP "sel"] == 1) printf "<li class=\"selected\">"
+				else printf "<li>"
+				if (submenu[mainmenu[n SUBSEP "title"] SUBSEP i SUBSEP "url"] != "")
+					printf "<a href=\"" submenu[mainmenu[n SUBSEP "title"] SUBSEP i SUBSEP "url"] "\">"
+				printf "@TR<<" submenu[mainmenu[n SUBSEP "title"] SUBSEP i SUBSEP "title"] ">>"
+				if (submenu[mainmenu[n SUBSEP "title"] SUBSEP i SUBSEP "url"] != "")
+					printf "</a>"
+				print "</li>"
+			}
+			indent_level(menuind + 1)
+			print "</ul></li>"
+		}
+	}
+	indent_level(menuind); print "</ul>"
+
+	delete submenu
+	delete mainmenu
+
+	SUBSEP = osubsep
+	FS = ofs
+}
+
 # parameters: 0
 function categories(n, i, sel, categories, f, c, ofs) {
 	n = 0
