@@ -50,7 +50,6 @@ empty "$FORM_remove_line" || update_dnsmasq del "$FORM_iface" "$FORM_line"
 		# cut is to fix for cases where an IP address got stuck in this instead of mere integer
 		FORM_dhcp_start=$(echo "$FORM_dhcp_start" | cut -d '.' -f 4)
 		FORM_dhcp_num=${FORM_dhcp_num:-$(nvram get ${FORM_iface}_dhcp_num)}
-		FORM_dhcp_bail=${FORM_dhcp_bail:-$(nvram get ${FORM_iface}_dhcp_bail)}
 		FORM_dhcp_lease=${FORM_dhcp_lease:-$(nvram get ${FORM_iface}_dhcp_lease)}
 		FORM_dhcp_lease=${FORM_dhcp_lease:-12h}
 		
@@ -74,7 +73,6 @@ int|FORM_${FORM_iface}_dhcp_enabled|DHCP enabled||$FORM_dhcp_enabled
 string|FORM_${FORM_iface}_dhcp_iface|DHCP iface||$FORM_dhcp_iface
 int|FORM_${FORM_iface}_dhcp_start|DHCP start||$FORM_dhcp_start
 int|FORM_${FORM_iface}_dhcp_num|DHCP num||$FORM_dhcp_num
-string|FORM_${FORM_iface}_dhcp_bail|DHCP bail||$FORM_dhcp_bail
 int|FORM_${FORM_iface}_dhcp_lease|DHCP lease time|min=1 max=2147483647 required|$FORM_dhcp_lease
 EOF
 	if equal "$?" 0; then
@@ -83,7 +81,6 @@ EOF
 		save_setting network ${FORM_iface}_dhcp_iface $FORM_dhcp_iface
 		save_setting network ${FORM_iface}_dhcp_start $FORM_dhcp_start
 		save_setting network ${FORM_iface}_dhcp_num $FORM_dhcp_num
-		save_setting network ${FORM_iface}_dhcp_bail $FORM_dhcp_bail
 		save_setting network ${FORM_iface}_dhcp_lease "${FORM_dhcp_lease}m"
 	else
 		echo "<div class=\"failed-validation\">Validation failed on one or more variables. On this page a common error is putting an IP address in \"DHCP Start\" instead of a simple number.</div>"
@@ -213,8 +210,6 @@ field|@TR<<DHCP Start>>|dhcp_start_field
 text|dhcp_start|$FORM_dhcp_start|$NETWORK+x
 field|@TR<<DHCP Num>>|dhcp_num_field
 text|dhcp_num|$FORM_dhcp_num
-field|@TR<<DHCP Bail>>
-text|dhcp_bail|$FORM_dhcp_bail
 field|@TR<<DHCP Lease Minutes>>
 text|dhcp_lease|$FORM_dhcp_lease
 helpitem|DHCP Start

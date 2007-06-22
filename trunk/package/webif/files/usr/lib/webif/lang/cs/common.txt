@@ -380,11 +380,9 @@ DHCP Server For => Server DHCP pro
 DHCP Service => Služba DHCP
 Disabled => Zakázáno
 Enabled => Povoleno
-DHCP Start => Počátek adresového bloku DHCP
-DHCP Num => Konec adresového bloku DHCP
-DHCP Bail => DHCP Bail
+DHCP Start => Začátek DHCP adres
+DHCP Num => Počet DHCP adres
 DHCP Lease Minutes => Zápůjčka DHCP v minutách
-DHCP Start => Počátek adresového bloku DHCP
 HelpText DHCP_Start => Nevkládejte do této položky adresu IP! Pokud je adresa tohoto rozhraní 192.168.1.1 a chcete přidělovat klientům DHCP adresy od 192.168.1.100, zadejte do této položky jednoduše '100'.
 
 ## /www/cgi-bin/webif/network-dhcpsettings.sh
