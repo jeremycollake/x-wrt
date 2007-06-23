@@ -216,8 +216,8 @@ start_interface() {
 	local iface="$1"
 	local num_imq="$2"
 	config_get device "$iface" device
-	config_get enabled "$iface" enabled
-	[ -z "$device" -o -z "$enabled" ] && exit
+	config_get_bool enabled "$iface" enabled 1
+	[ -z "$device" -o 1 -ne "$enabled" ] && exit
 	config_get upload "$iface" upload
 	config_get halfduplex "$iface" halfduplex
 	config_get download "$iface" download
