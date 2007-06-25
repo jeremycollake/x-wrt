@@ -6,14 +6,6 @@ config webif general
 	option device_name ""
 	option use_progressbar ""
 
-config webif syslog
-	option ipaddr ""
-	option port ""
-	option size ""
-	option type ""
-	option mark ""
-	option file ""
-
 config webif theme
 	option id "xwrt"
 

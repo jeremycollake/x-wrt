@@ -1,0 +1,76 @@
+#!/usr/bin/awx
+BEGIN {
+	# basic functions
+	include("/usr/lib/webif/common.awk")
+
+	DEFAULT["mark"] = 0
+	DEFAULT["size"] = 16
+	DEFAULT["type"] = "circular"
+	DEFAULT["file"] = "/var/log/messages"
+
+	FORM_VARS="mark|size|type|ipaddr|port|file"
+	fvarcount = split(FORM_VARS, form_vars, "|")
+
+	SUBSEP = "_"
+
+	package_cfg = "syslog"
+	type_cfg = "syslogd"
+	uci_load(package_cfg)
+	for (var in CONFIG) {
+		if ((var ~ /_TYPE$/) && (CONFIG[var] == type_cfg)) {
+			syslogd_cfg = var
+			sub(/_TYPE$/, "", syslogd_cfg)
+			break
+		}
+	}
+
+	if (getvar("submit") != "") {
+		# reload form variables
+		for (i = 1; i <= fvarcount; i++)
+			FORM[form_vars[i]] = getvar(form_vars[i])
+		# validate
+		validate = "ip|FORM_ipaddr|@TR<<Remote host>>||" FORM["ipaddr"] "\n"
+		validate = validate "int|FORM_port|@TR<<Remote Port>>|min=0 max=65535|" FORM["port"] "\n"
+		validate = validate "int|FORM_mark|@TR<<Minutes Between Marks>>||" FORM["mark"] "\n"
+		validate = validate "int|FORM_size|@TR<<Log Size>>|min=1 max=9999|" FORM["size"] "\n"
+		FS = "="
+		while (("/bin/ash -c 'echo \""validate"\" | awk -f /usr/lib/webif/validate.awk'" | getline) == 1) {
+			if ($1 == "ERROR") {
+				ERROR = $2
+				for (i = 3; i <= NF; i++) ERROR = ERROR "=" $i
+				ERROR = substr(ERROR, 2, length(ERROR) - 3)
+			}
+		}
+		if (ERROR == "") {
+			if (syslogd_cfg == "") {
+				uci_add(package_cfg, type_cfg, type_cfg)
+				syslogd_cfg = type_cfg
+			}
+			for (i = 1; i <= fvarcount; i++)
+				uci_set(package_cfg, syslogd_cfg, form_vars[i], FORM[form_vars[i]])
+			_show_info = "@TR<<Settings saved>>"
+			show_error = ""
+		} else {
+			_show_info = "@TR<<Settings not saved>>"
+			show_error = ERROR
+		}
+	} else {
+		for (i = 1; i <= fvarcount; i++) {
+			FORM[form_vars[i]] = CONFIG[syslogd_cfg SUBSEP form_vars[i]]
+			if ((FORM[form_vars[i]] == "") && (DEFAULT[form_vars[i]] != ""))
+				FORM[form_vars[i]] = DEFAULT[form_vars[i]]
+		}
+	}
+
+	# imitate the header function
+	CATEGORY = "Log"
+	PAGENAME = "Syslog Settings"
+	page_title = "@TR<<syslog Settings>>"
+	use_form = ENVIRON["SCRIPT_NAME"]
+	_endform = ((use_form != "") ? "</form>" : "")
+	include("/usr/lib/webif/common.awx")
+
+	RENDER = "views/log-setup.ahtml"
+}
+
+##WEBIF:name:Log:001:Syslog Settings

@@ -185,10 +185,8 @@ for ucifile in $(ls /tmp/.uci/* 2>&-); do
 			echo '@TR<<Reloading>> @TR<<wireless>> ...'
 			wifi ;;
 		"/tmp/.uci/syslog")
-			# for kamikaze
 			echo '@TR<<Reloading>> @TR<<syslogd>> ...'
-			killall syslogd >&- 2>&- <&-
-			/sbin/runsyslogd >&- 2>&- <&- ;;
+			/etc/init.d/syslog restart >&- 2>&- ;;
 		"/tmp/.uci/openvpn")
 			echo '@TR<<Reloading>> @TR<<OpenVPN>> ...'
 			killall openvpn >&- 2>&- <&-

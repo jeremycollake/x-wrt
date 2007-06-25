@@ -1,6 +1,87 @@
 #!/bin/sh /etc/rc.common
+
 START=01
-start () {
-killall syslogd
-/sbin/runsyslogd
+
+syslogd_bin="/sbin/syslogd"
+dmesg_bin="/bin/dmesg"
+klogd_bin="/sbin/klogd"
+
+
+syslogd_config() {
+	local cfg="$1"
+	local mark type file size ipaddr port IPCALC_CMD SYSLOG_CMD
+	local DEFAULT_mark=0
+	local DEFAULT_type="circular"
+	local DEFAULT_file="/var/log/messages"
+	local DEFAULT_size=16
+	local DEFAULT_ipaddr=""
+	local DEFAULT_port=514
+
+	config_get mark "$cfg" mark
+	[ "$mark" -gt 0 ] 2>>/dev/null || mark=$DEFAULT_mark
+	config_get type "$cfg" type
+	[ "$type" = "circular" -o "$type" = "file" ] 2>/dev/null || type=$DEFAULT_type
+	config_get file "$cfg" file
+	[ -z "$file" ] && file=$DEFAULT_file
+	config_get size "$cfg" size
+	[ "$size" -gt 0 ] 2>/dev/null || size=$DEFAULT_size
+	config_get ipaddr "$cfg" ipaddr
+	[ "$ipaddr" != "" ] && {
+		IPCALC_CMD=$(which ipcalc.sh 2>/dev/null)
+		[ "$IPCALC_CMD" == "" ] && IPCALC_CMD=$(which ipcalc 2>/dev/null)
+		[ "$IPCALC_CMD" != "" ] && {
+			$IPCALC_CMD "$ipaddr"
+			[ "$ipaddr" != "$IP" ] && ipaddr=""
+		}
+	}
+	config_get port "$cfg" port
+	[ "$port" -lt 1 -o "$port" -gt 65535 ] 2>/dev/null && port=$DEFAULT_port
+
+	if [ "$type" = "circular" ]; then
+		SYSLOG_CMD="-C$size -m $mark ${ipaddr:+-L -R $ipaddr:$port}"
+	else
+		SYSLOG_CMD="-s $size -O $file -m $mark ${ipaddr:+-L -R $ipaddr:$port}"
+	fi
+	$syslogd_bin $SYSLOG_CMD
+}
+
+dmesg_config() {
+	local cfg="$1"
+	local conloglevel buffersize
+
+	config_get buffersize "$cfg" buffersize
+	[ -n "$buffersize" ] && $dmesg_bin -s "$buffersize"
+}
+
+klogd_config() {
+	local cfg="$1"
+	local conloglevel
+
+	config_get conloglevel "$cfg" conloglevel
+	$klogd_bin ${conloglevel:+-c $conloglevel}
+}
+
+start() {
+	[ -n "$(ps | grep [s]yslogd)" -o -n "$(ps | grep [k]logd)" ] && stop
+
+	config_load syslog
+	[ -f $syslogd_bin -a ! -f /etc/rc.d/S??syslog-ng ] && {
+		config_foreach syslogd_config syslogd
+	}
+	[ -f $klogd_bin ] && {
+		config_foreach klogd_config klogd
+	}
+	[ -f $dmesg_bin ] && {
+		config_foreach dmesg_config dmesg
+	}
+}
+
+stop() {
+	killall syslogd
+	killall klogd
+}
+
+restart() {
+	stop
+	start
 }

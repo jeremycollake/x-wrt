@@ -1,0 +1,6 @@
+<div id="logarea">
+<fieldset>
+	<legend>@TR<<log_read_Syslog messages#Syslog messages>>:</legend>
+	<pre><% show_log() %></pre>
+</fieldset>
+</div>

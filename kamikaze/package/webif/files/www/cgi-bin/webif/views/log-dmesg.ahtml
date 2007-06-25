@@ -1,0 +1,12 @@
+<div id="dmesgarea">
+<fieldset>
+	<legend>@TR<<log_dmesg_Current_messages#Current messages>>:</legend>
+	<pre><% show_dmesg() %></pre>
+</fieldset>
+<% @if (dmesgbackup_exist == 1) %>
+<fieldset>
+	<legend>@TR<<log_dmesg_Boot_time_messages#Boot time messages>>:</legend>
+	<pre><% show_dmesg_backup() %></pre>
+</fieldset>
+<% @end %>
+</div>
