@@ -26,7 +26,7 @@ function modechange()
 </div>
 <blockquote class="settings-help">
 <h3><strong>@TR<<Short help>>:</strong></h3>
-<h4>@TR<<Remote Syslog>>:</h4><p>@TR<<HelpText Remote Syslog#IP address and port of the remote logging host. Leave this address blank for no remote logging. The port is set to $DEFAULT_log_port by default>></p>
+<h4>@TR<<Remote Syslog>>:</h4><p>@TR<<HelpText Remote Syslog#IP address and port of the remote logging host. Leave this address blank for no remote logging.>></p>
 </blockquote>
 <div class="clearfix">&nbsp;</div></div>
 
@@ -43,7 +43,7 @@ function modechange()
 </div>
 <blockquote class="settings-help">
 <h3><strong>@TR<<Short help>>:</strong></h3>
-<h4>@TR<<Syslog Marks>>:</h4><p>@TR<<HelpText Syslog Marks#Periodic marks in your log. This parameter sets the time in minutes between the marks. A value of 0 means no mark. Default value: $DEFAULT_log_mark.>></p>
+<h4>@TR<<Syslog Marks>>:</h4><p>@TR<<HelpText Syslog Marks#Periodic marks in your log. This parameter sets the time in minutes between the marks. A value of 0 means no mark.>></p>
 </blockquote>
 <div class="clearfix">&nbsp;</div></div>
 
@@ -65,14 +65,14 @@ function modechange()
 </tr>
 <tr>
 	<td width="40%">@TR<<Log Size>></td>
-	<td width="60%"><input id="id_size" type="text" name="size" value="<% FORM["size"] %>" />&nbsp;kB</td>
+	<td width="60%"><input id="id_size" type="text" name="size" value="<% FORM["size"] %>" />&nbsp;@TR<<KiB>></td>
 </tr>
 </table>
 </div>
 <blockquote class="settings-help">
 <h3><strong>@TR<<Short help>>:</strong></h3>
-<h4>@TR<<Log type>>:</h4><p>@TR<<HelpText Log Type#Whether your log will be stored in a memory circular buffer or in a file. Beware that files are stored in a memory filesystem which will be lost if you reboot your router. Default value: $DEFAULT_log_type.>></p>
-<h4>@TR<<Log File>>:</h4><p>@TR<<HelpText Log File#The path and name of your log file. It can be set on any writable filesystem. CAUTION: DO NOT USE A JFFS filesystem because syslog will write A LOT to it. You can use /tmp or any filesystem on an external storage unit. Default value: $DEFAULT_log_file.>></p>
-<h4>@TR<<Log Size>>:</h4><p>@TR<<HelpText Log Size#The size of your log in kilo-bytes. Be carefull with the size of the circular buffer as it is taken from your main memory. Default value: $DEFAULT_log_size kB.>></p>
+<h4>@TR<<Log type>>:</h4><p>@TR<<HelpText Log Type#Whether your log will be stored in a memory circular buffer or in a file. Beware that files are stored in a memory filesystem which will be lost if you reboot your router.>></p>
+<h4>@TR<<Log File>>:</h4><p>@TR<<HelpText Log File#The path and name of your log file. It can be set on any writable filesystem. CAUTION: DO NOT USE A JFFS filesystem because syslog will write A LOT to it. You can use /tmp or any filesystem on an external storage unit.>></p>
+<h4>@TR<<Log Size>>:</h4><p>@TR<<HelpText Log Size#The size of your log in kibibytes. Be carefull with the size of the circular buffer as it is taken from your main memory.>></p>
 </blockquote>
 <div class="clearfix">&nbsp;</div></div>

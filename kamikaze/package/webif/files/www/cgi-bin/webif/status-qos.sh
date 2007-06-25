@@ -107,11 +107,11 @@ ingress_stats_table=$(echo "$ingress_status" |
 				print "	<td>" $4 "</td>"
 				printf "	<td>%d</td>\n", $2
 				if ($2 >= 2 ** 30) {
-					printf "	<td>(%.1f GB)</td>\n", $2 / (2 ** 30)
+					printf "	<td>(%.1f @TR<<GiB>>)</td>\n", $2 / (2 ** 30)
 				} else if ($2 >= 2 ** 20) {
-					printf "	<td>(%.1f MB)</td>\n", $2 / (2 ** 20)
+					printf "	<td>(%.1f @TR<<MiB>>)</td>\n", $2 / (2 ** 20)
 				} else if ($2 >= 2 ** 10) {
-					printf "	<td>(%.1f kB)</td>\n", $2 / (2 ** 10)
+					printf "	<td>(%.1f @TR<<KiB>>)</td>\n", $2 / (2 ** 10)
 				} else {
 					print "	<td>&nbsp;</td>"
 				}
@@ -165,11 +165,11 @@ egress_stats_table=$(echo "$egress_status" |
 				print "	<td>" $4 "</td>"
 				printf "	<td>%d</td>\n", $2
 				if ($2 >= 2 ** 30) {
-					printf "	<td>(%.1f GB)</td>\n", $2 / (2 ** 30)
+					printf "	<td>(%.1f @TR<<GiB>>)</td>\n", $2 / (2 ** 30)
 				} else if ($2 >= 2 ** 20) {
-					printf "	<td>(%.1f MB)</td>\n", $2 / (2 ** 20)
+					printf "	<td>(%.1f @TR<<MiB>>)</td>\n", $2 / (2 ** 20)
 				} else if ($2 >= 2 ** 10) {
-					printf "	<td>(%.1f kB)</td>\n", $2 / (2 ** 10)
+					printf "	<td>(%.1f @TR<<KiB>>)</td>\n", $2 / (2 ** 10)
 				} else {
 					print "	<td>&nbsp;</td>"
 				}

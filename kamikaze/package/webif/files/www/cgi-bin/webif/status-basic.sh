@@ -36,8 +36,8 @@ done
 	SWAP_PERCENT_FREE=$(expr $FREE_SWAP "*" 100 / $TOTAL_SWAP)
 	SWAP_PERCENT_USED=$(expr 100 - $SWAP_PERCENT_FREE)
 	swap_usage="
-string|<tr><td>@TR<<Swap>>: $TOTAL_SWAP KB</td><td>
-progressbar|swapuse|@TR<<Used>>: $USED_SWAP KB ($SWAP_PERCENT_USED%)|200|$SWAP_PERCENT_USED|$SWAP_PERCENT_USED%||"
+string|<tr><td>@TR<<Swap>>: $TOTAL_SWAP @TR<<KiB>></td><td>
+progressbar|swapuse|@TR<<Used>>: $USED_SWAP @TR<<KiB>> ($SWAP_PERCENT_USED%)|200|$SWAP_PERCENT_USED|$SWAP_PERCENT_USED%||"
 	swap_usage_help="
 helpitem|Swap
 helptext|Helptext Swap#When a program requires more memory than is physically available in the computer, currently unused information can be written to a temporary buffer on the hard disk, called swap, thereby freeing memory."
@@ -61,7 +61,7 @@ df | uniq | awk 'BEGIN { mcount=0 };
 	/\// {
 		filled_caption=$5;
 		print "string|<tr><td><strong>"$6"</strong><br /><em>"$1"</em></td><td>"
-		print "progressbar|mount_" mcount "|" $3 "KB @TR<<mount_of#of>> " $2 "KB|200|" $5 "|" filled_caption "|"; mcount+=1
+		print "progressbar|mount_" mcount "|" $3 "@TR<<KiB>> @TR<<mount_of#of>> " $2 "@TR<<KiB>>|200|" $5 "|" filled_caption "|"; mcount+=1
 		print "</td></tr>"
 	}'
 )
@@ -77,7 +77,7 @@ swap_form=$(cat /proc/swaps | awk 'BEGIN { mcount=0 };
 		else
 			swap_type="@TR<<status_basic_swap_file#swap file>>"
 		print "string|<tr><td><strong>"swap_type" "$5"</strong><br /><em>"$1"</em></td><td>"
-		print "progressbar|swap_" mcount "|" $4 "KB @TR<<mount_of#of>> " $3 "KB|200|" $4 "|" filled_caption "%|"; mcount+=1
+		print "progressbar|swap_" mcount "|" $4 "@TR<<KiB>> @TR<<mount_of#of>> " $3 "@TR<<KiB>>|200|" $4 "|" filled_caption "%|"; mcount+=1
 		print "</td></tr>"
 	}'
 )
@@ -90,8 +90,8 @@ swap_form=$(cat /proc/swaps | awk 'BEGIN { mcount=0 };
 
 display_form <<EOF
 start_form|@TR<<RAM Usage>>
-string|<tr><td>@TR<<Total>>: $TOTAL_MEM KB</td><td>
-progressbar|ramuse|@TR<<Used>>: $USED_MEM KB ($MEM_PERCENT_USED%)|200|$MEM_PERCENT_USED|$MEM_PERCENT_USED%||
+string|<tr><td>@TR<<Total>>: $TOTAL_MEM @TR<<KiB>></td><td>
+progressbar|ramuse|@TR<<Used>>: $USED_MEM @TR<<KiB>> ($MEM_PERCENT_USED%)|200|$MEM_PERCENT_USED|$MEM_PERCENT_USED%||
 $swap_usage
 helpitem|RAM Usage
 helptext|Helptext RAM Usage#This is the current RAM usage. The amount free represents how much applications have available.
