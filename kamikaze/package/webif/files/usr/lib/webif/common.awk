@@ -24,6 +24,19 @@ function config_get_bool(package, option, default, var) {
 	return (var && var != "0" ? 1 : 0)
 }
 
+# parameters: 1
+function uci_load(package, var) {
+	while (("/bin/ash -c '. /etc/functions.sh; . /lib/config/uci.sh; unset NO_EXPORT; uci_load \""package"\"; env | grep \"^CONFIG_\"'" | getline) == 1) {
+		sub("^CONFIG_", "")
+		if (match($0, "=") == 0) {
+			if (var != "") CONFIG[var] = CONFIG[var] "\n" $0
+			next
+		}
+		var=substr($0, 1, RSTART-1)
+		CONFIG[var] = substr($0, RSTART+1, length($0) - RSTART)
+	}
+}
+
 # parameters: 4
 function uci_set(package, config, option, value) {
 	system("/bin/ash -c '. /etc/functions.sh; . /lib/config/uci.sh; uci_set \""package"\" \""config"\" \""option"\" \""value"\"'")
