@@ -1,0 +1,85 @@
+#!/usr/bin/awx
+BEGIN {
+	# basic functions
+	include("/usr/lib/webif/common.awk")
+
+	SUBSEP = "_"
+
+	package_cfg = "syslog"
+	type_cfg = "dmesgbackup"
+	config_load(package_cfg)
+	for (var in CONFIG) {
+		if ((var ~ /_TYPE$/) && (CONFIG[var] == type_cfg)) {
+			dmesgbackup_cfg = var
+			sub(/_TYPE$/, "", dmesgbackup_cfg)
+			break
+		}
+	}
+	if (CONFIG[dmesgbackup_cfg SUBSEP "file"] != "") {
+		while (("/bin/ls \"" CONFIG[dmesgbackup_cfg SUBSEP "file"] "\" \"" CONFIG[dmesgbackup_cfg SUBSEP "file"] ".gz\" 2>/dev/null" | getline) == 1) {
+			dmesgbackup_exist = 1
+			dmesgbackup_file = $0
+			if ($0 ~ /.gz$/) dmesgbackup_gzip = 1
+		}
+	}
+
+	# imitate the header function
+	CATEGORY = "Log"
+	PAGENAME = "Kernel"
+	page_title = "@TR<<log_dmesg_Kernel_Ring_Buffer#Kernel Ring Buffer>>"
+	use_form = ""
+	_endform = ""
+	inject_head()
+	include("/usr/lib/webif/common.awx")
+
+	RENDER = "views/log-dmesg.ahtml"
+}
+
+function inject_head() {
+	html_head = html_head " \
+<style type=\"text/css\"> \
+<!-- \
+#dmesgarea pre { \
+	margin: 0.2em auto 1em auto; \
+	padding: 3px; \
+	width: 99%; \
+	height: 300px; \
+	overflow: auto; \
+	border: 1px solid; \
+} \
+#dmesgarea fieldset { \
+	border: none; \
+	padding: 3px; \
+} \
+// --> \
+</style>"
+}
+
+function print_sanitize(msg) {
+	gsub(/&/, "\\&amp;", msg)
+	gsub(/</, "\\&lt;", msg)
+	gsub(/>/, "\\&gt;", msg)
+	print msg
+}
+
+function show_dmesg(msgln) {
+	while (("/bin/dmesg -s" 2^14 " 2>/dev/null" | getline) == 1) {
+		print_sanitize($0)
+		msgln = msgln + length($0)
+	}
+	if (msgln == 0) print "@TR<<log_dmesg_no_current_messages#There are no kernel messages.>>"
+}
+
+function show_dmesg_backup(msgln) {
+	if (dmesgbackup_exist == 1) {
+		if (dmesgbackup_gzip == 1) cmd = "zcat"; else cmd = "cat"
+		while (("/bin/" cmd " \""dmesgbackup_file"\" 2>/dev/null" | getline) == 1) {
+			print_sanitize($0)
+			msgln = msgln + length($0)
+		}
+		if (msgln == 0) print "@TR<<log_dmesg_no_archived_messages#There are no archived kernel messages.>>"
+	 }
+	print "@TR<<log_dmesg_no_archive_exists#The kernel messages archive does not exist.>>"
+}
+
+##WEBIF:name:Log:3:Kernel

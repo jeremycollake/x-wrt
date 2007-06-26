@@ -1,0 +1,186 @@
+#!/usr/bin/awx
+BEGIN {
+	# imitate the header function
+	CATEGORY = "Network"
+	PAGENAME = "DHCP Networks"
+	page_title = "@TR<<DHCP Networks>>"
+	html_body_args = ""
+
+	# style, javascript and metas
+	inject_head()
+	# body start
+	inject_body()
+	
+	# validate fields with submit
+	if (_action = getvar("submit") != "") {
+		#awx_validation()
+		if (ERROR == "") {
+			_show_info = ((SAVED != "") ? "@TR<<Settings saved>>" : "")
+			show_error = ""
+		} else {
+			_show_info = "@TR<<Settings not saved>>"
+			show_error = ERROR
+			#awx_commit()
+		}
+	}
+	
+	# actions: editnetwork/addnetwork/removenetwork
+
+	# only when editing a rule or an error
+	_action = getvar("action")
+	if (_action == "editnetwork" || _action == "addnetwork" || ERROR != "") {
+		_editflag = 1
+		use_form = ENVIRON["SCRIPT_NAME"]
+		_endform = ((use_form != "") ? "</form>" : "" )
+	}
+
+	# imitate the header function
+	include("/usr/lib/webif/common.awx")
+
+	td_ind = "\t"
+
+	config_load("dhcp")
+	
+	RENDER = "views/network-dhcpiface.ahtml"
+}
+
+function networks() {
+	# scan networks
+	class_odd = 1
+	count = 0
+	_target = getvar("target")
+	for (var in CONFIG) {
+		href = ""
+		if (CONFIG[var] == "range" || CONFIG[var] == "host" || CONFIG[var] == "mac" || CONFIG[var] == "vendorclass" || CONFIG[var] == "userclass" || CONFIG[var] == "circuitid" || CONFIG[var] == "remoteid") {
+			network_cfg = var
+			sub(/_TYPE/, "", network_cfg)
+			if (class_odd == 1) {
+				print "<tr>"
+				class_odd--
+			} else {
+				print "<tr class=\"odd\">"
+				class_odd++
+			}
+			print td_ind "<td>" CONFIG[network_cfg "_name"] "</td>"
+			print td_ind "<td>" CONFIG[var] "</td>"
+			href = href "target=" CONFIG[network_cfg "_name"]
+		}
+		print "<td>"
+		
+		if (CONFIG[var] == "range") {
+			if (_editflag == 1 && _target == CONFIG[network_cfg "_name"]) {
+				print "<p>Network-id : <input id=\"target\" type=\"text\" name=\"target\" value=\"" getvar("target") "\" /></p>"
+			}
+			if (_editflag == 1 && _target == CONFIG[network_cfg "_name"]) {
+				print "<p>Interface : <input id=\"interface\" type=\"text\" name=\"interface\" value=\"" CONFIG[network_cfg "_interface"] "\" />"
+				print "<p>Start : <input id=\"start\" type=\"text\" name=\"start\" value=\"" CONFIG[network_cfg "_start"] "\" />"
+				print "<p>Limit : <input id=\"limit\" type=\"text\" name=\"limit\" value=\"" CONFIG[network_cfg "_limit"] "\" />"
+			} else {
+				print td_ind "<p>Interface : " CONFIG[network_cfg "_interface"] "</p>"
+				print td_ind "<p>Start : " CONFIG[network_cfg "_start"] "</p>"
+				print td_ind "<p>Limit : " CONFIG[network_cfg "_limit"] "</p>"
+			}
+		}
+		if (CONFIG[var] == "host") {
+			if (_editflag == 1 && _target == CONFIG[network_cfg "_name"]) {
+				print "<p>Network-id : <input id=\"target\" type=\"text\" name=\"target\" value=\"" getvar("target") "\" /></p>"
+			}
+			if (_editflag != 1 || _target != CONFIG[network_cfg "_name"]) {
+				print td_ind "<p>MAC : " CONFIG[network_cfg "_mac"] "</p>"
+			} else {
+				print "<p>MAC : <input id=\"mac\" type=\"text\" name=\"mac\" value=\"" CONFIG[network_cfg "_mac"] "\" />"
+			}
+		}
+		if (CONFIG[var] == "mac") {
+			if (_editflag == 1 && _target == CONFIG[network_cfg "_name"]) {
+				print "<p>Network-id : <input id=\"target\" type=\"text\" name=\"target\" value=\"" getvar("target") "\" /></p>"
+			}
+			if (_editflag != 1 || _target != CONFIG[network_cfg "_name"]) {
+				print td_ind "<p>MAC : " CONFIG[network_cfg "_mac"] "</p>"
+			} else {
+				print "<p>MAC : <input id=\"mac\" type=\"text\" name=\"mac\" value=\"" CONFIG[network_cfg "_mac"] "\" />"
+			}
+		}
+		if (CONFIG[var] == "vendorclass") {
+			if (_editflag == 1 && _target == CONFIG[network_cfg "_name"]) {
+				print "<p>Network-id : <input id=\"target\" type=\"text\" name=\"target\" value=\"" getvar("target") "\" /></p>"
+			}
+			if (_editflag != 1 || _target != CONFIG[network_cfg "_name"]) {
+				print td_ind "<p>Vendorclass :" CONFIG[network_cfg "_vendorclass"] "</p>"
+			} else {
+				print "<p>Vendorclass : <input id=\"vendorclass\" type=\"text\" name=\"vendorclass\" value=\"" CONFIG[network_cfg "_vendorclass"] "\" />"
+			}
+		}
+		if (CONFIG[var] == "userclass") {
+			if (_editflag == 1 && _target == CONFIG[network_cfg "_name"]) {
+				print "<p>Network-id : <input id=\"target\" type=\"text\" name=\"target\" value=\"" getvar("target") "\" /></p>"
+			}
+			if (_editflag != 1 || _target != CONFIG[network_cfg "_name"]) {
+				print td_ind "<p>Userclass : " CONFIG[network_cfg "_userclass"] "</p>"
+			} else {
+				print "<p>Userclass : <input id=\"userclass\" type=\"text\" name=\"userclass\" value=\"" CONFIG[network_cfg "_userclass"] "\" />"
+			}
+		}
+		if (CONFIG[var] == "circuitid") {
+			if (_editflag == 1 && _target == CONFIG[network_cfg "_name"]) {
+				print "<p>Network-id : <input id=\"target\" type=\"text\" name=\"target\" value=\"" getvar("target") "\" /></p>"
+			}
+			if (_editflag != 1 || _target != CONFIG[network_cfg "_name"]) {
+				print td_ind "<p>Circuitid : " CONFIG[network_cfg "_circuitid"] "</p>"
+			} else {
+				print "<p>Circuitid : <input id=\"circuitid\" type=\"text\" name=\"circuitid\" value=\"" CONFIG[network_cfg "_circuitid"] "\" />"
+			}
+		}
+		if (CONFIG[var] == "remoteid") {
+			if (_editflag == 1 && _target == CONFIG[network_cfg "_name"]) {
+				print "<p>Network-id : <input id=\"target\" type=\"text\" name=\"target\" value=\"" getvar("target") "\" /></p>"
+			}
+			if (_editflag != 1 || _target != CONFIG[network_cfg "_name"]) {
+				print td_ind "<p>Remoteid : " CONFIG[network_cfg "_remoteid"] "</p>"
+			} else {
+				print "<p>Remoteid : <input id=\"remoteid\" type=\"text\" name=\"remoteid\" value=\"" CONFIG[network_cfg "_remoteid"] "\" />"
+			}
+		}
+
+		if (CONFIG[var] == "range" || CONFIG[var] == "host" || CONFIG[var] == "mac" || CONFIG[var] == "vendorclass" || CONFIG[var] == "userclass" || CONFIG[var] == "circuitid" || CONFIG[var] == "remoteid") {
+			if (_editflag != 1 || _target != CONFIG[network_cfg "_name"]) {
+				print "boucle sur les options"
+			} else {
+				print "boucle sur les options"
+			}
+			printf td_ind "<td>"
+			if (_editflag != 1 || _target != CONFIG[network_cfg "_name"]) {
+				printf "<a class=\"cssbutton\" href=\"" ENVIRON["SCRIPT_NAME"] "?action=editnetwork&amp;" href "\">@TR<<network_dhcpiface_Edit#Edit>></a>"
+				printf "&nbsp;"
+				print "<a class=\"cssbutton delbut\" href=\""  ENVIRON["SCRIPT_NAME"] "?action=removenetwork&amp;" href "\">@TR<<network_dhcpiface_Delete#Delete>></a>"
+			} else {
+				printf "&nbsp;"
+			}
+			print "</td>"
+			print "</tr>"
+			count++
+		}
+	}
+	if (count == 0) print "<tr>\n" td_ind "<td colspan=\"7\">@TR<<network_dhcpiface_No_configured_networks#No networks exist.>></td>\n</tr>"
+	if (_editflag != 1) {
+		print "<tr>\n" td_ind "<td colspan=\"6\">&nbsp;</td><td><a class=\"cssbutton\" href=\"" ENVIRON["SCRIPT_NAME"] "?action=addnetwork\">@TR<<network_dhcpiface_Add_new_network#Add new network>></a></td>\n</tr>"
+	}
+}
+
+function generate_form() {
+	
+}
+
+function network_content() {
+	
+}
+
+function inject_head() {
+	html_head = html_head ""
+}
+
+function inject_body() {
+	html_body = html_body ""
+}
+
+##WEBIF:name:Network:425:DHCP Networks

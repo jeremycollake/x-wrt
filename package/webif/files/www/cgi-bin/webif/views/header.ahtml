@@ -1,0 +1,52 @@
+Content-Type: text/html; charset=UTF-8
+Pragma: no-cache
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title><% (PAGENAME ? "@TR<<" PAGENAME ">> - " : "") config_get("general", "firmware_name") %> @TR<<Administrative Console>></title>
+	<link rel="stylesheet" type="text/css" href="/themes/active/waitbox.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
+	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_white.css" title="white" />
+	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_brown.css" title="brown" />
+	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_green.css" title="green" />
+	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_navyblue.css" title="navyblue" />
+	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_black.css" title="black" />
+	<!--[if lt IE 7]>
+		<link rel="stylesheet" type="text/css" href="/themes/active/ie_lt7.css" />
+	<![endif]-->                
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="expires" content="-1" />
+	<script type="text/javascript" src="/js/styleswitcher.js"></script>
+	<% html_head %>
+</head>
+<body <% html_body_args %>>
+<% html_body %>
+
+<div id="container">
+	<div id="header">
+		<h1>@TR<<X-Wrt Administration Console>></h1>
+		<% status() %>
+	</div>
+
+	<div id="mainmenu">
+	<% categories() %>
+	</div>
+
+	<div id="submenu">
+	<% subcategories(subcategories_extra) %>
+	</div>
+
+	<div id="colorswitcher">
+		<div style="background: #000000" title="black" onclick="setActiveStyleSheet('black'); return false;"></div>
+		<div style="background: #192a65" title="navyblue" onclick="setActiveStyleSheet('navyblue'); return false;"></div>
+		<div style="background: #114488" title="blue" onclick="setActiveStyleSheet('default'); return false;"></div>
+		<div style="background: #2b6d21" title="green" onclick="setActiveStyleSheet('green'); return false;"></div>
+		<div style="background: #e8ca9e" title="brown" onclick="setActiveStyleSheet('brown'); return false;"></div>
+		<div style="background: #fff" title="white" onclick="setActiveStyleSheet('white'); return false;"></div>
+	</div>
+	<% ( config_get_bool("general", "use_progressbar") && use_progressbar ? "<script type='text/javascript'>start=0; end="use_progressbar"</script><script src='/js/pageload.js' type='text/javascript'></script><div id='loadmain'><script type='text/javascript'>document.getElementById(\"loadmain\").style.display = \"none\";</script>" : "" ) %>
+	<% ( use_form ? "<form enctype=\"multipart/form-data\" action=\""use_form"\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />" : "") %>
+	<div id="content">
+		<h2><% page_title ((show_info != "") ? (page_title ? ": ": "") show_info : "" ) %></h2>
+		<% ((show_error != "") ? "<h3 class=\"warning\">"show_error"</h3>" : "" ) %>

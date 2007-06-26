@@ -1,0 +1,25 @@
+config webif general
+	option lang "en"
+	option firmware_name ""
+	option firmware_version ""
+	option firmware_subtitle "With X-Wrt Extensions"
+	option device_name ""
+	option use_progressbar ""
+
+config webif theme
+	option id "xwrt"
+
+config webif cron
+	option enable "1"
+
+config webif qos
+	option show_advanced_rules "0"
+
+config webif misc
+	option opendns "0"
+	
+config webif ssl
+	option enable '0'
+	
+config webif wireless
+	option wifi0_txpower '1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16'

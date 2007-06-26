@@ -1,0 +1,69 @@
+#!/usr/bin/awx
+BEGIN {
+	# basic functions
+	include("/usr/lib/webif/common.awk")
+
+	SUBSEP = "_"
+
+	package_cfg = "syslog"
+	type_cfg = "syslogd"
+	config_load(package_cfg)
+	for (var in CONFIG) {
+		if ((var ~ /_TYPE$/) && (CONFIG[var] == type_cfg)) {
+			syslogd_cfg = var
+			sub(/_TYPE$/, "", syslogd_cfg)
+			break
+		}
+	}
+	if ((CONFIG[syslogd_cfg SUBSEP "type"] == "file") && (length(CONFIG[syslogd_cfg SUBSEP "file"]) > 0))
+		syslog_cmd="cat \""CONFIG[syslogd_cfg SUBSEP "file"]"\""
+	else syslog_cmd="logread"
+
+	# imitate the header function
+	CATEGORY = "Log"
+	PAGENAME = "Syslog"
+	page_title = "@TR<<Syslog View>>"
+	use_form = ""
+	_endform = ""
+	inject_head()
+	include("/usr/lib/webif/common.awx")
+
+	RENDER = "views/log-read.ahtml"
+}
+
+function inject_head() {
+	html_head = html_head " \
+<style type=\"text/css\"> \
+<!-- \
+#logarea pre { \
+	margin: 0.2em auto 1em auto; \
+	padding: 3px; \
+	width: 99%; \
+	height: 300px; \
+	overflow: auto; \
+	border: 1px solid; \
+} \
+#logarea fieldset { \
+	border: none; \
+	padding: 3px; \
+} \
+// --> \
+</style>"
+}
+
+function print_sanitize(msg) {
+	gsub(/&/, "\\&amp;", msg)
+	gsub(/</, "\\&lt;", msg)
+	gsub(/>/, "\\&gt;", msg)
+	print msg
+}
+
+function show_log(msgln) {
+	while ((syslog_cmd " 2>/dev/null" | getline) == 1) {
+		print_sanitize($0)
+		msgln = msgln + length($0)
+	}
+	if (msgln == 0) print "@TR<<log_read_no_messages#There are no syslog messages.>>"
+}
+
+##WEBIF:name:Log:2:Syslog

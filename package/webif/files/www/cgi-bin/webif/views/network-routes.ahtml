@@ -1,0 +1,42 @@
+<div class="warning">@TR<<big_warning#WARNING>>: @TR<<page_is_wip__do_not_translate#This page is a work in the progress. It is the real hazard using it. :-)>></div>
+
+<div id="routes">
+<% generate_form() %>
+
+<div class="settings">
+<h3><strong>@TR<<network_routes_static_Configured_Static_Routes#Configured Static Routes>></strong></h3>
+<table>
+<tbody>
+<tr>
+	<th>@TR<<network_routes_static_th_Destination#Destination>></th>
+	<th>@TR<<network_routes_static_th_Gateway#Gateway>></th>
+	<th>@TR<<network_routes_static_th_Netmask#Netmask>></th>
+	<th>@TR<<network_routes_static_th_Metric#Metric>></th>
+	<th>@TR<<network_routes_static_th_Interface#Interface>></th>
+	<th>@TR<<network_routes_static_th_Name#Name>></th>
+	<th>@TR<<network_routes_static_th_Action#Action>></th>
+</tr>
+<% static_routes() %>
+</table>
+</div>
+
+<br />
+
+<div class="settings">
+<h3><strong>@TR<<network_routes_kernel_Kernel_IP_routing_table#Kernel IP routing table>></strong></h3>
+<table>
+<tbody>
+<tr>
+	<th>@TR<<network_routes_kernel_th_Destination#Destination>></th>
+	<th>@TR<<network_routes_kernel_th_Gateway#Gateway>></th>
+	<th>@TR<<network_routes_kernel_th_Genmask#Genmask>></th>
+	<th>@TR<<network_routes_kernel_th_Flags#Flags>></th>
+	<th>@TR<<network_routes_kernel_th_Metric#Metric>></th>
+	<th>@TR<<network_routes_kernel_th_Ref#Ref>></th>
+	<th>@TR<<network_routes_kernel_th_Use#Use>></th>
+	<th>@TR<<network_routes_kernel_th_Iface#Interface>></th>
+</tr>
+<% kernel_routes() %>
+</table>
+</div>
+</div>

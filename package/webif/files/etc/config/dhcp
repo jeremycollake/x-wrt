@@ -1,0 +1,70 @@
+#config dnsmasq
+	#option cachesize 150
+	#option nodaemon 1
+	#option domainneeded 0
+	#option filterwin2k 0
+	#option nohosts 0
+	#option addnhosts ""
+	#option interface ""
+	#option exceptinterface ""
+	#option authoritative 1
+	#option nonegcache 1
+	#option strictorder 1
+	#option port 53
+	#option ednspacket_max 1280
+	#option logqueries 0
+	#option queryport ""
+	#option noresolv 0
+	#option domain ""
+	#option dhcpleasemax 150
+	#option localise_queries 0
+	#option readethers 1
+	#option dbus 1
+	#option dnsforwardmax 150
+
+#config mac
+	#option name 'test'
+	#option mac '*:*:*:*:*:*'
+	#option ip '192.198.1.110'
+	#option dhcp0 '6,192.168.1.2'
+	
+	
+#config vendorclass
+#	option name 'test_vendorclass'
+#	option vendorclass 'ssss'
+#	option dhcp0 "3,192.168.1.1"
+	
+#config userclass
+#	option name 'test_userclass'
+#	option userclass 'fff'
+#	option dhcp0 "3,192.168.1.1"
+	
+
+	
+#config circuitid
+#	option name 'test_circuitid'
+#	option circuitid 'sss'
+#	option dhcp0 '3,192.168.1.1'
+	
+#config remoteid
+#	option name 'test_remoteid'
+#	option remoteid 'ff'
+#	option dhcp0 '3,192.168.1.1'
+	
+#config subscrid
+#	option name 'test_subscrid'
+#	option subscriberid 'dd'
+#	option dhcp0 '3,192.168.1.1'
+	
+config dhcp
+	option name 'lan'
+	option interface	lan
+	option start 	100
+	option limit	150
+	option leasetime	12h
+	#option dhcp0 '3,192.168.1.1'
+
+config dhcp
+	option interface	wan
+	option no_dhcp_interface ""
+	option ignore	1
