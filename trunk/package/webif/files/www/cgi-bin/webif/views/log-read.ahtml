@@ -30,6 +30,7 @@
 </div>
 <blockquote class="settings-help">
 <h3><strong>@TR<<Short help>>:</strong></h3>
-<h4>@TR<<log_filter_Filter_Mode#Filter Mode>>:</h4><p>@TR<<log_filter_Filter_Mode_helptext#You will see only messages containing the text in the Include mode while you will not see them in the Exclude mode.<br />In fact you can use the reqular expression constants like: <code>00:[[:digit:]]{2}:[[:digit:]]{2}</code> or <code>.debug&#124;.err</code>.>></p>
+<h4>@TR<<log_filter_Text_to_Filter#Text to Filter>>:</h4><p>@TR<<log_filter_Text_to_Filter_helptext#Insert a string that covers what you would like to see or exclude. In fact you can use the reqular expression constants like: <code>00:[[:digit:]]{2}:[[:digit:]]{2}</code> or <code>.debug&#124;.err</code>.>></p>
+<h4>@TR<<log_filter_Filter_Mode#Filter Mode>>:</h4><p>@TR<<log_filter_Filter_Mode_helptext#You will see only messages containing the text in the Include mode while you will not see them in the Exclude mode.>></p>
 </blockquote>
 <div class="clearfix">&nbsp;</div></div>
