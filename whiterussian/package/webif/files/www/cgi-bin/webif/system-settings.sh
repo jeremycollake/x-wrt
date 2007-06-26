@@ -24,18 +24,6 @@
 #   none
 #
 
-config_cb() {
-	config_get TYPE "$CONFIG_SECTION" TYPE
-	case "$TYPE" in
-		system)
-			hostname_cfg="$CONFIG_SECTION"
-		;;
-		timezone)
-			timezone_cfg="$CONFIG_SECTION"
-		;;
-	esac
-}
-
 is_bcm947xx && {
 	load_settings "system"
 	load_settings "webif"
@@ -151,7 +139,7 @@ if empty "$FORM_submit"; then
 		FORM_clkfreq="${FORM_clkfreq:-200}"
 	}
 	# webif settings
-	FORM_language="${CONFIG_general_lang:-en}"	
+	FORM_language="${CONFIG_general_lang:-en}"
 	FORM_theme=${CONFIG_theme_id:-xwrt}
 	FORM_ssl_enable="${CONFIG_ssl_enable:-0}"
 else
@@ -203,8 +191,6 @@ select|ssl_enable|$FORM_ssl_enable
 option|0|@TR<<system_settings_webifssl_Off#Off>>
 option|1|@TR<<system_settings_webifssl_On#On>>"
 fi
-
-}
 
 #####################################################################
 # over/underclocking
