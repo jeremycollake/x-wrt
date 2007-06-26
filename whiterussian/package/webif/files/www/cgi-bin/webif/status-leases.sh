@@ -95,12 +95,7 @@ exists /tmp/dhcp.leases && grep -q "." /tmp/dhcp.leases > /dev/null
 		<th>@TR<<status_leases_Mask#Mask>></th>
 	</tr>
 <?
-if is_kamikaze; then
-	uci_load "network"
-	excludeiface=$CONFIG_wan_ifname
-else
-	excludeiface=$(nvram get wan_ifname)
-fi
+excludeiface=$(nvram get wan_ifname)
 cat /proc/net/arp | awk -v "exiface=$excludeiface" '
 BEGIN {
 	cntr=0
@@ -149,11 +144,7 @@ END {
 <br />
 
 <?
-if is_kamikaze; then
-	includeethers=$(grep -c "^read-ethers" "/etc/dnsmasq.conf")
-else
-	includeethers=$(nvram get dhcp_read_ethers)
-fi
+includeethers=$(nvram get dhcp_read_ethers)
 equal "$includeethers" "1" && {
 cat <<EOF
 <h5><strong>@TR<<status_leases_ethers_title#Ethernet Address to IP Number Database (/etc/ethers)>></strong></h5>

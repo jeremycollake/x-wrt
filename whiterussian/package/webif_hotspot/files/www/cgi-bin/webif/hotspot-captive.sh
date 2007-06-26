@@ -1,43 +1,19 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
-is_kamikaze && {
-	local _val
-	uci_load "hotspot"
-	eval "_val=\$CONFIG_chilli_TYPE" 2>/dev/null
-	! equal "$_val" "hotspot" && {
-		uci_add "hotspot" "hotspot" "chilli"
-		uci_commit "hotspot"
-		uci_load "hotspot"
-	}
-}
 
 if empty "$FORM_submit"; then
-	is_kamikaze && {
-		FORM_chilli_uamserver="$CONFIG_chilli_uamserver"
-		FORM_chilli_uamsecret="$CONFIG_chilli_uamsecret"
-		FORM_chilli_uamhomepage="$CONFIG_chilli_uamhomepage"
-		FORM_chilli_uamlisten="$CONFIG_chilli_uamlisten"
-		FORM_chilli_uamport="$CONFIG_chilli_uamport"
-		FORM_chilli_uamallowed="$CONFIG_chilli_uamallowed"
-		FORM_chilli_uamanydns="$CONFIG_chilli_uamanydns"
-		FORM_chilli_macauth="$CONFIG_chilli_macauth"
-		FORM_chilli_macallowed="$CONFIG_chilli_macallowed"
-		FORM_chilli_macpasswd="$CONFIG_chilli_macpasswd"
-		FORM_chilli_macsuffix="$CONFIG_chilli_macsuffix"
-	} || {
-		FORM_chilli_uamserver="${chilli_uamserver:-$(nvram get chilli_uamserver)}"
-		FORM_chilli_uamsecret="${chilli_uamsecret:-$(nvram get chilli_uamsecret)}"
-		FORM_chilli_uamhomepage="${chilli_uamhomepage:-$(nvram get chilli_uamhomepage)}"
-		FORM_chilli_uamlisten="${chilli_uamlisten:-$(nvram get chilli_uamlisten)}"
-		FORM_chilli_uamport="${chilli_uamport:-$(nvram get chilli_uamport)}"
-		FORM_chilli_uamallowed="${chilli_uamallowed:-$(nvram get chilli_uamallowed)}"
-		FORM_chilli_uamanydns="${chilli_uamanydns:-$(nvram get chilli_uamanydns)}"
-		FORM_chilli_macauth="${chilli_macauth:-$(nvram get chilli_macauth)}"
-		FORM_chilli_macallowed="${chilli_macallowed:-$(nvram get chilli_macallowed)}"
-		FORM_chilli_macpasswd="${chilli_macpasswd:-$(nvram get chilli_macpasswd)}"
-		FORM_chilli_macsuffix="${chilli_macsuffix:-$(nvram get chilli_macsuffix)}"
-	}
+	FORM_chilli_uamserver="${chilli_uamserver:-$(nvram get chilli_uamserver)}"
+	FORM_chilli_uamsecret="${chilli_uamsecret:-$(nvram get chilli_uamsecret)}"
+	FORM_chilli_uamhomepage="${chilli_uamhomepage:-$(nvram get chilli_uamhomepage)}"
+	FORM_chilli_uamlisten="${chilli_uamlisten:-$(nvram get chilli_uamlisten)}"
+	FORM_chilli_uamport="${chilli_uamport:-$(nvram get chilli_uamport)}"
+	FORM_chilli_uamallowed="${chilli_uamallowed:-$(nvram get chilli_uamallowed)}"
+	FORM_chilli_uamanydns="${chilli_uamanydns:-$(nvram get chilli_uamanydns)}"
+	FORM_chilli_macauth="${chilli_macauth:-$(nvram get chilli_macauth)}"
+	FORM_chilli_macallowed="${chilli_macallowed:-$(nvram get chilli_macallowed)}"
+	FORM_chilli_macpasswd="${chilli_macpasswd:-$(nvram get chilli_macpasswd)}"
+	FORM_chilli_macsuffix="${chilli_macsuffix:-$(nvram get chilli_macsuffix)}"
 else
 	SAVED=1
 	validate <<EOF
@@ -54,19 +30,6 @@ string|FORM_chilli_macpasswd|@TR<<hotspot_captive_MAC_Password#MAC Password>>||$
 string|FORM_chilli_macsuffix|@TR<<hotspot_captive_MAC_Suffix#MAC Suffix>>||$FORM_chilli_macsuffix
 EOF
 	equal "$?" 0 && {
-		is_kamikaze && {
-			uci_set hotspot chilli uamserver "$FORM_chilli_uamserver"
-			uci_set hotspot chilli uamsecret "$FORM_chilli_uamsecret"
-			uci_set hotspot chilli uamhomepage "$FORM_chilli_uamhomepage"
-			uci_set hotspot chilli uamlisten "$FORM_chilli_uamlisten"
-			uci_set hotspot chilli uamport "$FORM_chilli_uamport"
-			uci_set hotspot chilli uamallowed "$FORM_chilli_uamallowed"
-			uci_set hotspot chilli uamanydns "$FORM_chilli_uamanydns"
-			uci_set hotspot chilli macallowed "$FORM_chilli_macallowed"
-			uci_set hotspot chilli macauth "$FORM_chilli_macauth"
-			uci_set hotspot chilli macsuffix "$FORM_chilli_macsuffix"
-			uci_set hotspot chilli macpasswd "$FORM_chilli_macpasswd"
-		} || {
 			save_setting hotspot chilli_uamserver "$FORM_chilli_uamserver"
 			save_setting hotspot chilli_uamsecret "$FORM_chilli_uamsecret"
 			save_setting hotspot chilli_uamhomepage "$FORM_chilli_uamhomepage"
@@ -78,7 +41,6 @@ EOF
 			save_setting hotspot chilli_macauth "$FORM_chilli_macauth"
 			save_setting hotspot chilli_macsuffix "$FORM_chilli_macsuffix"
 			save_setting hotspot chilli_macpasswd "$FORM_chilli_macpasswd"
-		}
 	}
 fi
 

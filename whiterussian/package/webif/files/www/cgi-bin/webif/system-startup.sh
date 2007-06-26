@@ -161,15 +161,9 @@ header "System" "Startup" "@TR<<Startup>>" ''
 ! empty "$SUCCESS" && echo "$SUCCESS"
 
 # defaults
-is_kamikaze && {
-	custom_script_name="/etc/init.d/custom-user-startup"
-	startup_script_template="/etc/init.d/custom-user-startup-default"
-	FORM_edit="custom-user-startup"
-} || {
-	custom_script_name="/etc/init.d/S95custom-user-startup"
-	startup_script_template="/etc/init.d/.x95custom-user-startup-default"
-	FORM_edit="S95custom-user-startup"
-}
+custom_script_name="/etc/init.d/S95custom-user-startup"
+startup_script_template="/etc/init.d/.x95custom-user-startup-default"
+FORM_edit="S95custom-user-startup"
 FORM_path="/etc/init.d"
 edit_pathname="$FORM_path/$FORM_edit"
 saved_filename="/tmp/.webif/edited-files/$edit_pathname"

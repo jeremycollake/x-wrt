@@ -107,14 +107,6 @@ else
 		fi
 	else
 		# save form
-		is_kamikaze && {
-			# TODO: This should be moved to apply.sh shouldn't it?
-			if [ "$FORM_upnp_enable" = "1" ]; then
-				/etc/init.d/miniupnpd enable 2>&-
-			else
-				/etc/init.d/miniupnpd disable 2>&-
-			fi
-		}
 		uci_set "upnpd" "general" "enable" "$FORM_upnp_enable"
 		uci_set "upnpd" "general" "log_output" "$FORM_upnpd_log_output"
 		uci_set "upnpd" "general" "down_bitspeed" "$FORM_upnpd_down_bitspeed"

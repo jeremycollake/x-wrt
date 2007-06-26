@@ -42,12 +42,9 @@ is_bcm947xx && {
 }
 
 uci_load "webif"
-
-is_kamikaze && {
-	uci_load "system"
-	uci_load "network"
-	uci_load "timezone"
-}
+uci_load "system"
+uci_load "network"
+uci_load "timezone"
 
 
 #####################################################################
@@ -140,20 +137,12 @@ fi
 # initialize forms
 if empty "$FORM_submit"; then
 	# initialize all defaults
-	is_kamikaze && {
-		eval CONFIG_system_hostname="\$CONFIG_${hostname_cfg}_hostname"
-		FORM_hostname="${CONFIG_system_hostname:-OpenWrt}"
-		eval time_zone_part="\$CONFIG_${timezone_cfg}_posixtz"
-		eval time_zoneinfo_part="\$CONFIG_${timezone_cfg}_zoneinfo"
-		#wait for ntpclient to be updated
-		#FORM_ntp_server="${ntp_server:-$(nvram get ntp_server)}"
-	} || {
-		FORM_hostname="${wan_hostname:-$(nvram get wan_hostname)}"
-		FORM_hostname="${FORM_hostname:-OpenWrt}"
-		time_zone_part="${time_zone_part:-$(nvram get time_zone)}"
-		time_zoneinfo_part="${time_zoneinfo_part:-$(nvram get time_zoneinfo)}"
-		FORM_ntp_server="${ntp_server:-$(nvram get ntp_server)}"
-	}
+	eval CONFIG_system_hostname="\$CONFIG_${hostname_cfg}_hostname"
+	FORM_hostname="${CONFIG_system_hostname:-OpenWrt}"
+	eval time_zone_part="\$CONFIG_${timezone_cfg}_posixtz"
+	eval time_zoneinfo_part="\$CONFIG_${timezone_cfg}_zoneinfo"
+	#wait for ntpclient to be updated
+	#FORM_ntp_server="${ntp_server:-$(nvram get ntp_server)}"
 	time_zone_part="${time_zone_part:-"UTC+0"}"
 	time_zoneinfo_part="${time_zoneinfo_part:-"-"}"
 	FORM_system_timezone="${time_zoneinfo_part}@${time_zone_part}"
@@ -167,10 +156,8 @@ if empty "$FORM_submit"; then
 		FORM_clkfreq="${FORM_clkfreq:-200}"
 	}
 	# webif settings
-	is_kamikaze && {	
-		FORM_effect="${CONFIG_general_use_progressbar}"		# -- effects checkbox
-		if equal $FORM_effect "1" ; then FORM_effect="checked" ; fi	# -- effects checkbox
-	}
+	FORM_effect="${CONFIG_general_use_progressbar}"		# -- effects checkbox
+	if equal $FORM_effect "1" ; then FORM_effect="checked" ; fi	# -- effects checkbox
 	FORM_language="${CONFIG_general_lang:-en}"	
 	FORM_theme=${CONFIG_theme_id:-xwrt}
 	FORM_ssl_enable="${CONFIG_ssl_enable:-0}"
@@ -184,22 +171,15 @@ EOF
 	if equal "$?" 0 ; then
 		time_zone_part="${FORM_system_timezone#*@}"
 		time_zoneinfo_part="${FORM_system_timezone%@*}"
-		is_kamikaze && {
-			uci_set "system" "$hostname_cfg" "hostname" "$FORM_hostname"
-			empty "$timezone_cfg" && {
-				uci_add timezone timezone timezone
-				timezone_cfg="timezone"
-			}
-			uci_set timezone "$timezone_cfg" posixtz "$time_zone_part"
-			uci_set timezone "$timezone_cfg" zoneinfo "$time_zoneinfo_part"
-			#waiting for ntpclient update
-			#save_setting system ntp_server "$FORM_ntp_server"
-		} || {
-			save_setting system wan_hostname "$FORM_hostname"
-			save_setting timezone time_zone "$time_zone_part"
-			save_setting timezone time_zoneinfo "$time_zoneinfo_part"
-			save_setting system ntp_server "$FORM_ntp_server"
+		uci_set "system" "$hostname_cfg" "hostname" "$FORM_hostname"
+		empty "$timezone_cfg" && {
+			uci_add timezone timezone timezone
+			timezone_cfg="timezone"
 		}
+		uci_set timezone "$timezone_cfg" posixtz "$time_zone_part"
+		uci_set timezone "$timezone_cfg" zoneinfo "$time_zoneinfo_part"
+		#waiting for ntpclient update
+		#save_setting system ntp_server "$FORM_ntp_server"
 
 		is_bcm947xx && {
 			case "$FORM_boot_wait" in
@@ -218,11 +198,8 @@ EOF
 		uci_set "webif" "ssl" "enable" "$FORM_ssl_enable"
 		uci_set "webif" "theme" "id" "$FORM_theme"
 		uci_set "webif" "general" "lang" "$FORM_language"
-
-		is_kamikaze && {	
-			uci_set "webif" "general" "use_progressbar" "$FORM_effect_enable"
-			FORM_effect=$FORM_effect_enable ; if equal $FORM_effect "1" ; then FORM_effect="checked" ; fi
-		}
+		uci_set "webif" "general" "use_progressbar" "$FORM_effect_enable"
+		FORM_effect=$FORM_effect_enable ; if equal $FORM_effect "1" ; then FORM_effect="checked" ; fi
 	else
 		echo "<br /><div class=\"warning\">@TR<<Warning>>: @TR<<system_settings_Hostname_failed_validation#Hostname failed validation. Can not be saved.>></div><br />"
 	fi
@@ -241,13 +218,11 @@ option|0|@TR<<system_settings_webifssl_Off#Off>>
 option|1|@TR<<system_settings_webifssl_On#On>>"
 fi
 
-is_kamikaze && {	
 	effect_field=$(cat <<EOF
 field| 
 string|<input type="checkbox" name="effect_enable" value="1" $FORM_effect />&nbsp;@TR<<Enable visual effects>><br/><br/>
 EOF
 )
-}
 
 #####################################################################
 # over/underclocking
@@ -333,11 +308,7 @@ dangerous_form_help=""
 #####################################################################
 # Initialize LANGUAGES form
 # create list if it doesn't exist ..
-is_kamikaze && {
-	! exists "/etc/languages.lst" && {
-		/usr/lib/webif/webif-mklanglist.sh
-	}
-} || {
+! exists "/etc/languages.lst" && {
 	/usr/lib/webif/webif-mklanglist.sh
 }
 LANGUAGES=$(cat "/etc/languages.lst")

@@ -31,8 +31,6 @@
 . "/usr/lib/webif/webif.sh"
 header "Status" "Site Survey" "@TR<<Wireless survey>>"
 
-is_kamikaze && ShowNotUpdatedWarning
-
 MAX_TRIES=4
 MAX_CELLS=100
 WL0_IFNAME=$(nvram get wl0_ifname)

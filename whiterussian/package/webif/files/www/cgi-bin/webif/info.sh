@@ -11,26 +11,9 @@ header "Info" "System" "<img src=\"/images/blkbox.jpg\" alt=\"@TR<<System Inform
 
 SHOW_BANNER=0	# set to show /etc/banner
 
-if is_kamikaze; then
-	XWRT_BRANCH="kamikaze"
-	package_filename="kamikaze/webif_latest_stable.ipk"	
-	uname -a |grep 2.4 |grep -q mips
-	[ $? = 0 ] && {
-		version_url="http://downloads.x-wrt.org/xwrt/kamikaze/brcm-2.4/"
-	}
-	uname -a |grep 2.6 |grep -q "i\?86"
-	[ $? = 0 ] && {
-		version_url="http://downloads.x-wrt.org/xwrt/kamikaze/x86-2.6/"
-	}
-	uname -a |grep mips |grep 2.6 && cat /proc/cpuinfo |grep Atheros
-	[ $? = 0 ] && {
-		version_url="http://downloads.x-wrt.org/xwrt/kamikaze/atheros-2.6/"
-	}
-else
-	XWRT_BRANCH="trunk"
-	package_filename="webif_latest_stable.ipk"
-	version_url="http://ftp.berlios.de/pub/xwrt/"
-fi
+XWRT_BRANCH="trunk"
+package_filename="webif_latest_stable.ipk"
+version_url="http://ftp.berlios.de/pub/xwrt/"
 
 this_revision=$(cat "/www/.version")
 revision_text=" r$this_revision "
