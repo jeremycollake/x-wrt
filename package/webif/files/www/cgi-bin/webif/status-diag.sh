@@ -76,7 +76,6 @@ does_process_exist() {
 	$diag_command 2>&1 > "$tmpfile" &
 	ps_search=$(echo "$diag_command" | cut -c 1-15) # todo: limitation, X char match resolution	
 	ps_results=$(ps | grep "$ps_search" | grep -v "grep")
-	! is_kamikaze && _pid=$(echo $ps_results | cut -d ' ' -f 1 | sed 2,99d)    # older busybox
 	equal $_pid "0" && _pid=$(echo $ps_results | cut -d ' ' -f 1 | sed 2,99d)  # newer busybox
 	output_snapshot_file() {
 		# output file

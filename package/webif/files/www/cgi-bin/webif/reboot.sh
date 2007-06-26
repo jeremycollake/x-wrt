@@ -6,12 +6,8 @@ timeout=40
 if empty "$FORM_reboot"; then
 	reboot_msg="<form method=\"post\" action=\"$SCRIPT_NAME\"><input type=\"submit\" value=\" @TR<<Yes, really reboot now>> \" name=\"reboot\" /></form>"
 else
-	if is_kamikaze; then
-		uci_load "network"
-		router_ip="$CONFIG_lan_ipaddr"
-	else
-		router_ip=$(nvram get lan_ipaddr)
-	fi
+	uci_load "network"
+	router_ip="$CONFIG_lan_ipaddr"
 	header_inject_head="<meta http-equiv=\"refresh\" content=\"$timeout;http://$router_ip\" />"
 	reboot_msg="@TR<<Rebooting now>>...
 <br/><br/>
