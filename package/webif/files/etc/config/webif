@@ -9,9 +9,6 @@ config webif general
 config webif theme
 	option id "xwrt"
 
-config webif cron
-	option enable "1"
-
 config webif qos
 	option show_advanced_rules "0"
 
