@@ -4,9 +4,6 @@
 ###################################################################
 # Services configuration page
 #
-# This page is synchronized between kamikaze and WR branches. Changes to it *must* 
-# be followed by running the webif-sync.sh script.
-#
 # Description:
 #	Configures services not configured elsewhere.
 #
@@ -25,41 +22,47 @@ header "Network" "UPnP" "@TR<<UPnP Configuration>>" ' onload="modechange()" ' "$
 uci_load "upnpd"
 
 if ! empty "$FORM_install_miniupnp"; then
-	echo "@TR<<Installing>> miniUPNPd ...<pre>"		
+	echo "@TR<<Installing>> miniUPNPd ...<pre>"
 	install_package miniupnpd
-	uci_set "upnpd" "general" "enable" "1"
-	echo "</pre>"	
+	uci_set upnpd general enable 1
+	echo "</pre>"
 fi
 
 if ! empty "$FORM_install_linuxigd"; then
-	echo "@TR<<Installing>> linux-igd ...<pre>"		
-	install_package "http://ftp.berlios.de/pub/xwrt/packages/libupnp_1.2.1a_mipsel.ipk"
-	install_package "http://ftp.berlios.de/pub/xwrt/packages/linux-igd_1.0.1.ipk"
+	echo "@TR<<Installing>> linuxigd ...<pre>"
+	install_package libpthread
+	install_package libupnp
+	install_package linuxigd
 	# if config file doesn't exist, create it since it doesn't come with above pkg at present
 	! exists "/etc/config/upnpd" && {
-		uci_load "upnpd"
-		uci_add "upnpd" "settings" "general"
-		uci_set "upnpd" "general" "enable" "1"
+		uci_load upnpd
+		uci_add upnpd upnpd config
+		uci_set upnpd config enabled 1
+		uci_set upnpd config log_output 0
+		uci_set upnpd config download 1024
+		uci_set upnpd config upload 512
+
 	}
 	echo "</pre>"
 fi
 
 if ! empty "$FORM_remove_miniupnpd"; then
-	echo "@TR<<Removing>> miniUPNPd ...<pre>"		
+	echo "@TR<<Removing>> miniUPNPd ...<pre>"
 	remove_package miniupnpd
 	#uci_set "upnpd" "general" "enable" "0"
-	echo "</pre>"	
+	echo "</pre>"
 fi
 
 if ! empty "$FORM_remove_linuxigd"; then
-	echo "@TR<<Removing>> linux-igd UPNPd ...<pre>"			
-	remove_package linux-igd
+	echo "@TR<<Removing>> linuxigd UPNPd ...<pre>"
+	remove_package linuxigd
 	remove_package libupnp
+	remove_package libpthread
 	#uci_set "upnpd" "general" "enable" "0"
-	echo "</pre>"	
+	echo "</pre>"
 fi
 
-ipkg_listinst=$(ipkg list_installed)
+ipkg_listinst=$(ipkg list_installed 2>/dev/null | grep "^\(miniupnpd\|linuxigd\)")
 upnp_installed="0"
 
 echo "$ipkg_listinst" | grep -q "miniupnpd"
@@ -69,57 +72,25 @@ equal "$?" "0" && {
 	submit|remove_miniupnpd| @TR<<Remove>> |"
 }
 
-echo "$ipkg_listinst" | grep -q "linux-igd"
+echo "$ipkg_listinst" | grep -q "linuxigd"
 equal "$?" "0" && {
 	upnp_installed="1"
-	remove_upnpd_button="field|@TR<<Remove linux-igd>>
+	remove_upnpd_button="field|@TR<<Remove linuxigd>>
 	submit|remove_linuxigd| @TR<<Remove>> |"
-}
-
-# check to see if user has old nvram based miniupnp package
-# todo: remove this check after a while, assuming everyone got new one
-exists "/etc/init.d/S95miniupnpd" && ! grep -iq "uci.sh" "/etc/init.d/S95miniupnpd" && {
- 	echo "<div class=\"warning\">You have an old version of miniupnpd incompatible with this webif version. You must upgrade to a newer miniupnpd package, else this page will not work properly.</div>"
-	display_form <<EOF
-	start_form
-	submit|upgrade_upnpd| @TR<<Upgrade UPNPd>> 
-	end_form
-EOF
 }
 
 if empty "$FORM_submit"; then
 	# initialize all defaults
-	FORM_upnp_enable="$CONFIG_general_enable"
-	FORM_upnpd_log_output="$CONFIG_general_log_output"
-	FORM_upnpd_up_bitspeed="$CONFIG_general_up_bitspeed"
-	FORM_upnpd_down_bitspeed="$CONFIG_general_down_bitspeed"
+	FORM_upnp_enable="$CONFIG_config_enabled"
+	FORM_upnpd_log_output="$CONFIG_config_log_output"
+	FORM_upnpd_up_bitspeed="$CONFIG_config_upload"
+	FORM_upnpd_down_bitspeed="$CONFIG_config_download"
 else
-	if ! empty "$FORM_upgrade_upnpd"; then	
-		# upgrade miniupnpd
-		echo "@TR<<Please wait>> ...<br />"
-		ipkg remove miniupnpd 2>&1 >> /dev/null
-		# todo: force to use latest package - but since this is a temporary kludge to get
-		#  users upgraded, no big deal.			
-		if ipkg install "http://ftp.berlios.de/pub/xwrt/packages/miniupnpd_1.0-RC3-2_mipsel.ipk"  2>&1 >> /dev/null; then
-			echo " @TR<<Completed successfully>>!<br />"
-		else
-			echo " @TR<<Failed to install>>!<br />"
-		fi
-	else
-		# save form
-		is_kamikaze && {
-			# TODO: This should be moved to apply.sh shouldn't it?
-			if [ "$FORM_upnp_enable" = "1" ]; then
-				/etc/init.d/miniupnpd enable 2>&-
-			else
-				/etc/init.d/miniupnpd disable 2>&-
-			fi
-		}
-		uci_set "upnpd" "general" "enable" "$FORM_upnp_enable"
-		uci_set "upnpd" "general" "log_output" "$FORM_upnpd_log_output"
-		uci_set "upnpd" "general" "down_bitspeed" "$FORM_upnpd_down_bitspeed"
-		uci_set "upnpd" "general" "up_bitspeed" "$FORM_upnpd_up_bitspeed"
-	fi
+	# save form
+	uci_set upnpd config enabled "$FORM_upnp_enable"
+	uci_set upnpd config log_output "$FORM_upnpd_log_output"
+	uci_set upnpd config download "$FORM_upnpd_down_bitspeed"
+	uci_set upnpd config upload "$FORM_upnpd_up_bitspeed"
 fi
 
 #####################################################################s
@@ -128,7 +99,7 @@ cat <<EOF
 <script type="text/javascript">
 
 function modechange()
-{		
+{
 	if(isset('upnp_enable','1'))
 	{
 		document.getElementById('upnpd_up_bitspeed').disabled = false;
@@ -168,10 +139,10 @@ if equal "$upnp_installed" "1" ; then
 else
 	install_miniupnp_button="field|@TR<<miniupnpd>>
 submit|install_miniupnp| @TR<<Install>> |"
-	install_linuxigd_button="field|@TR<<linux-igd>>
+	install_linuxigd_button="field|@TR<<linuxigd>>
 submit|install_linuxigd| @TR<<Install>> |"
 	install_help="helpitem|Which UPNPd to choose
-helptext|HelPText install_upnpd_help#There are two UPNP daemons to choose from: miniupnpd and linux-igd. Try miniupnpd first, but it if does not work for you, then remove that package and try linux-igd."
+helptext|HelPText install_upnpd_help#There are two UPNP daemons to choose from: miniupnpd and linuxigd. Try miniupnpd first, but it if does not work for you, then remove that package and try linuxigd."
 fi
 
 display_form <<EOF

@@ -166,8 +166,31 @@ for ucifile in $(ls /tmp/.uci/* 2>&-); do
 			init_theme
 			/etc/init.d/webif start
 			;;
-		"/tmp/.uci/upnpd") 
-			/etc/init.d/miniupnpd start
+		"/tmp/.uci/upnpd")
+			config_load upnpd
+			config_get_bool test config enabled 0
+			if [ 1 -eq "$test" ]; then
+				echo '@TR<<Starting>> @TR<<upnpd>> ...'
+				[ -f /etc/init.d/miniupnpd ] && {
+					/etc/init.d/miniupnpd enable >&- 2>&- <&-
+					/etc/init.d/miniupnpd start >&- 2>&- <&-
+				}
+				[ -f /etc/init.d/upnpd ] && {
+					/etc/init.d/upnpd enable >&- 2>&- <&-
+					/etc/init.d/upnpd restart >&- 2>&- <&-
+				}
+			else
+				echo '@TR<<Stopping>> @TR<<upnpd>> ...'
+				[ -f /etc/init.d/miniupnpd ] && {
+					/etc/init.d/miniupnpd stop >&- 2>&- <&-
+					/etc/init.d/miniupnpd disable >&- 2>&- <&-
+				}
+				[ -f /etc/init.d/upnpd ] && {
+					/etc/init.d/upnpd stop >&- 2>&- <&-
+					/etc/init.d/upnpd disable >&- 2>&- <&-
+				}
+			fi
+			config_clear config
 			;;
 		"/tmp/.uci/network")
 			echo '@TR<<Reloading>> @TR<<network>> ...'
