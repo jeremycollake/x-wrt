@@ -301,6 +301,72 @@ restore_selection() {
 	}
 }
 
+mtd_backup() {
+	echo "<form method=\"post\" name=\"backupreturn\" action=\"$SCRIPT_NAME\">"
+	echo "<h3><strong>@TR<<system_confman_Backup_Flash_Partitions#Backup Flash Partitions>></strong></h3>"
+	echo -n "<pre>"
+	echo "@TR<<system_confman_Preparing_backup#Preparing the backup...>>"
+	mtdpart="$FORM_mtdpart"
+	tmpgz=$(mktemp "/tmp/mtdbackup-XXXXXX")
+	[ -n "$tmpgz" ] && {
+		realmask=$(cat /proc/mtd 2>/dev/null | grep "^mtd$mtdpart:" | cut -d'"' -f2)
+		[ "$realmask" = "OpenWrt" ] && realmask="jffs"
+		realmask="$realmask-%s"
+		case "$mtdpart" in
+			0|3)
+				realmask="$realmask.bin"
+				cat /dev/mtdblock/$mtdpart >"$tmpgz" 2>/dev/null
+				result=$?
+			;;
+			2)
+				realmask="$realmask.bin.gz"
+				cat /dev/mtdblock/$mtdpart | gzip -c - >"$tmpgz" 2>/dev/null
+				result=$?
+				[ ! "$result" -eq 0 ] && rm -f "$tmpgz" 2>/dev/null
+			;;
+			1|4)
+				[ "$mtdpart" -eq 1 ] && realmask="$realmask.trx" || realmask="$realmask.bin"
+				realmask="$realmask.gz"
+				mount -o remount,ro /dev/mtdblock/4 /jffs
+				cat /dev/mtdblock/$mtdpart | gzip -c - >"$tmpgz" 2>/dev/null
+				result=$?
+				[ ! "$result" -eq 0 ] && rm -f "$tmpgz" 2>/dev/null
+				mount -o remount,rw /dev/mtdblock/4 /jffs
+			;;
+			*)
+				result=255
+			;;
+		esac
+		if [ "$result" -eq 0 ]; then
+			chmod 0600 "$tmpgz" 2>/dev/null
+			tmpgz_path="${tmpgz%/*}"
+			tmpgz_name="${tmpgz##*/}"
+			realname="$(printf "$realmask" $(date "+%Y%m%d%H%M%S"))"
+			echo "@TR<<system_confman_Backup_Prepared#The backup was prepared successfully.>>"
+			echo "</pre>"
+			cat <<EOF
+<p>@TR<<confman_noauto_click#If downloading does not start automatically, click here>> ... <a href="/cgi-bin/webif/download.sh?script=$SCRIPT_NAME&amp;path=$tmpgz_path&amp;savefile=$tmpgz_name&amp;realname=$realname">$realname</a></p>
+<script language="JavaScript" type="text/javascript">
+<!--
+setTimeout('top.location.href=\"/cgi-bin/webif/download.sh?script=$SCRIPT_NAME&amp;path=$tmpgz_path&amp;savefile=$tmpgz_name&amp;realname=$realname\"',"1500")
+//-->
+</script>
+EOF
+			echo "<br />"
+			echo "<input type=\"hidden\" name=\"tmpgzname\" value=\"$tmpgz\" />"
+		else
+			echo "@TR<<system_confman_Backup_Failed#The backup creation has failed.>>"
+			echo "</pre>"
+			echo "<br />"
+		fi
+	}
+	echo "<input type=\"hidden\" name=\"mtdpart\" value=\"$mtdpart\" />"
+	echo "<input type=\"hidden\" name=\"action\" value=\"backupreturn\" />"
+	echo "<input type=\"submit\" name=\"submit\" value=\" @TR<<system_confman_Clean_Return#Clean &amp; Return>> \" />"
+	echo "</form>"
+	echo "<p>@TR<<system_confman_Press_to_clean#Press the button to free the memory used by the backup archive after the successful download.>></p>"
+}
+
 basic_form() {
 	echo "<form method=\"post\" name=\"backup\" action=\"$SCRIPT_NAME\">"
 	display_form <<EOF
@@ -330,6 +396,63 @@ helptext|system_confman_Backup_File_helptext#Browse for the requested backup arc
 end_form
 EOF
 	echo "</form>"
+	echo "<form method=\"post\" name=\"mtdbackup\" action=\"$SCRIPT_NAME\">"
+	display_form <<EOF
+start_form|@TR<<system_confman_Backup_Flash_Partitions#Backup Flash Partitions>>
+EOF
+	MEMFREE="$(awk 'BEGIN{ mem = 0 } ($1 == "MemFree:") || ($1 == "Cached:") {mem += int($2)} END{print mem}' /proc/meminfo)"
+	cat /proc/mtd 2>/dev/null | sed '/^mtd[[:digit:]]:/!d; s/://; s/"//g' | awk -v "mtdpart=${FORM_mtdpart:-0}"  -v "MEMFREE=$MEMFREE" '
+BEGIN {
+	blocks = 0
+	print "field|@TR<<system_confman_Select_Partition#Select Partition>>"
+	mtd[1] = "[kernel, squashfs, jffs2]"
+	mtd[2] = "[squashfs]"
+	mtd[4] = "[jffs2]"
+}
+function hex2dec(s, n,i,j,h) {
+	s = tolower(s)
+	n = length(s)
+	for (i = 1; i <= n; i++) {
+		j = index("0123456789abcdef", substr(s, i, 1))
+		if (j == 0) return -1
+		h = h*16 + j-1
+	}
+	return h
+}
+{
+	if ($1 ~ /^mtd[[:digit:]]/) {
+		mtdnum = $1
+		sub(/^mtd/, "", mtdnum)
+		size = hex2dec($2)
+		if (size != -1) size = size / 1024
+		else size = 0
+		mtdname = $4
+		for (i = 5; i <= NF; i++) mtdname = mtdname " " $i
+		print "radio|mtdpart|" mtdpart "|" mtdnum "|" mtdname " " mtd[mtdnum] " (" (size > 0 ? size " @TR<<KiB>>" : "@TR<<system_confman_unknown_size#unknown size>>") ")<br />"
+		blocks++
+	}
+}
+END {
+	if (blocks == 0) {
+		print "string|</td><td>@TR<<system_confman_No_MTD#No MTD partitions found.>></td>"
+	} else {
+		print "field|@TR<<system_confman_Free_Memory#Free Memory>>"
+		print "string|" MEMFREE " @TR<<KiB>>"
+		print "field|&nbsp;"
+		print "string|<input type=\"hidden\" name=\"action\" value=\"mtdbackup\" />"
+		print "field|&nbsp;"
+		print "submit|submit|@TR<<system_confman_Backup_Partition#Backup Partition>>"
+	}
+}
+' | display_form
+	display_form <<EOF
+helpitem|system_confman_Select_Partition#Select Partition
+helptext|system_confman_Select_Partition_helptext#You can selectively backup the particular flash memory partition. You need <i>cfe</i>, <i>linux</i>, and <i>nvram</i> for the full backup, although you can select any other partition.
+helpitem|system_confman_Free_Memory#Free Memory
+helptext|system_confman_Free_Memory_helptext#It requires a big amount of the free memory to back up the linux, rootfs and jffs partitions. You will probably need to stop unnecessary services before the backup if there is not enough free memory.
+end_form
+EOF
+	echo "</form>"
 }
 
 header "System" "Backup &amp; Restore" "@TR<<Backup and Restore>>" ''
@@ -347,6 +470,9 @@ FORM_name="${FORM_name:-$(nvram get wan_hostname)}"
 		;;
 		checkarchive)
 			check_archive
+		;;
+		mtdbackup)
+			mtd_backup
 		;;
 		restore)
 			! empty "$FORM_restore_restore" && ! empty "$FORM_tmpgzname" && exists "$FORM_tmpgzname" && restore_selection
