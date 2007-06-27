@@ -35,14 +35,10 @@ if ! empty "$FORM_install_linuxigd"; then
 	install_package linuxigd
 	# if config file doesn't exist, create it since it doesn't come with above pkg at present
 	! exists "/etc/config/upnpd" && {
-		uci_load upnpd
 		uci_add upnpd upnpd config
 		uci_set upnpd config enabled 1
-		uci_set upnpd config log_output 0
-		uci_set upnpd config download 1024
-		uci_set upnpd config upload 512
-
 	}
+	uci_load upnpd
 	echo "</pre>"
 fi
 
@@ -62,19 +58,21 @@ if ! empty "$FORM_remove_linuxigd"; then
 	echo "</pre>"
 fi
 
-ipkg_listinst=$(ipkg list_installed 2>/dev/null | grep "^\(miniupnpd\|linuxigd\)")
+ipkg_listinst=$(ipkg list_installed 2>/dev/null | grep "^\(miniupnpd \|linuxigd \)")
 upnp_installed="0"
 
-echo "$ipkg_listinst" | grep -q "miniupnpd"
+echo "$ipkg_listinst" | grep -q "^miniupnpd "
 equal "$?" "0" && {
 	upnp_installed="1"
+	upnp_miniupnpd="1"
 	remove_upnpd_button="field|@TR<<Remove miniupnpd>>
 	submit|remove_miniupnpd| @TR<<Remove>> |"
 }
 
-echo "$ipkg_listinst" | grep -q "linuxigd"
+echo "$ipkg_listinst" | grep -q "^linuxigd "
 equal "$?" "0" && {
 	upnp_installed="1"
+	upnp_miniupnpd="0"
 	remove_upnpd_button="field|@TR<<Remove linuxigd>>
 	submit|remove_linuxigd| @TR<<Remove>> |"
 }
@@ -88,9 +86,11 @@ if empty "$FORM_submit"; then
 else
 	# save form
 	uci_set upnpd config enabled "$FORM_upnp_enable"
-	uci_set upnpd config log_output "$FORM_upnpd_log_output"
-	uci_set upnpd config download "$FORM_upnpd_down_bitspeed"
-	uci_set upnpd config upload "$FORM_upnpd_up_bitspeed"
+	if equal "$upnp_miniupnpd" "1" ; then
+		uci_set upnpd config log_output "$FORM_upnpd_log_output"
+		uci_set upnpd config download "$FORM_upnpd_down_bitspeed"
+		uci_set upnpd config upload "$FORM_upnpd_up_bitspeed"
+	fi
 fi
 
 #####################################################################s
@@ -100,6 +100,9 @@ cat <<EOF
 
 function modechange()
 {
+EOF
+if equal "$upnp_miniupnpd" "1" ; then
+	cat <<EOF
 	if(isset('upnp_enable','1'))
 	{
 		document.getElementById('upnpd_up_bitspeed').disabled = false;
@@ -112,27 +115,33 @@ function modechange()
 		document.getElementById('upnpd_down_bitspeed').disabled = true;
 		document.getElementById('upnpd_log_output').disabled = true;
 	}
+EOF
+fi
+	cat <<EOF
 }
 </script>
 EOF
-
 #####################################################################
 
 if equal "$upnp_installed" "1" ; then
 	primary_upnpd_form="field|@TR<<UPNP Daemon>>
 	select|upnp_enable|$FORM_upnp_enable
 	option|0|@TR<<Disabled>>
-	option|1|@TR<<Enabled>>
-	field|@TR<<WAN Upload (bits/sec)>>
-	text|upnpd_up_bitspeed|$FORM_upnpd_up_bitspeed| @TR<<kilobits>>
-	field|@TR<<WAN Download (bits/sec)>>
-	text|upnpd_down_bitspeed|$FORM_upnpd_down_bitspeed| @TR<<kilobits>>
-	helpitem|WAN Speeds
-	helptext|HelpText upnpd_wan_speeds#Set your WAN speeds here, in kilobits. This is for reporting to upnp clients that request it only.
-	field|@TR<<Log Debug Output>>
-	select|upnpd_log_output|$FORM_upnpd_log_output
-	option|0|@TR<<Disabled>>
-	option|1|@TR<<Enabled>>
+	option|1|@TR<<Enabled>>"
+	if equal "$upnp_miniupnpd" "1" ; then
+		primary_upnpd_form="$primary_upnpd_form
+		field|@TR<<WAN Upload (bits/sec)>>
+		text|upnpd_up_bitspeed|$FORM_upnpd_up_bitspeed| @TR<<kilobits>>
+		field|@TR<<WAN Download (bits/sec)>>
+		text|upnpd_down_bitspeed|$FORM_upnpd_down_bitspeed| @TR<<kilobits>>
+		helpitem|WAN Speeds
+		helptext|HelpText upnpd_wan_speeds#Set your WAN speeds here, in kilobits. This is for reporting to upnp clients that request it only.
+		field|@TR<<Log Debug Output>>
+		select|upnpd_log_output|$FORM_upnpd_log_output
+		option|0|@TR<<Disabled>>
+		option|1|@TR<<Enabled>>"
+	fi
+	primary_upnpd_form="$primary_upnpd_form
 	$remove_upnpd_button
 	helpitem|Remove UPNPd
 	helptext|HelpText remove_upnpd_help#If you have problems you can remove your current UPNPd and try the other one to see if it works better for you."
