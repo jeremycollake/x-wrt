@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_SRC_NAME:=ncurses
 PKG_NAME:=libncurses
 PKG_VERSION:=5.2
-PKG_RELEASE:=8
+PKG_RELEASE:=9
 PKG_MD5SUM:=464d6a49010cf2a6eb9ce59a264d4d47
 
 PKG_SOURCE:=$(PKG_SRC_NAME)-$(PKG_VERSION).tar.gz
@@ -123,7 +123,7 @@ $(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
 
 $(IPKG_LIBNCURSES):
 	install -m0755 -d $(IDIR_LIBNCURSES)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{ncurses,panel,menu}*.so.* $(IDIR_LIBNCURSES)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{ncurses,panel,menu,form}*.so.* $(IDIR_LIBNCURSES)/usr/lib/
 	install -m0755 -d $(IDIR_LIBNCURSES)/usr/share/terminfo
 	(cd $(PKG_INSTALL_DIR)/usr/share/terminfo; \
 		for dir in ??; do \
