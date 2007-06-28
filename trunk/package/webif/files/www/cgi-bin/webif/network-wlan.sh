@@ -314,6 +314,8 @@ for device in $DEVICES; do
 	        		config_get FORM_txpower $vcfg txpower
 	        		config_get FORM_bgscan $vcfg bgscan
 	        		config_get FORM_isolate $vcfg isolate
+	        		config_get FORM_frag $vcfg frag
+	        		config_get FORM_rts $vcfg rts
 			else
 				eval FORM_key="\$FORM_radius_key_$vcfg"
 				eval FORM_radius_ipaddr="\$FORM_radius_ipaddr_$vcfg"
@@ -339,6 +341,8 @@ for device in $DEVICES; do
 				eval FORM_txpower="\$FORM_txpower_$vcfg"
 				eval FORM_bgscan="\$FORM_bgscan_$vcfg"
 				eval FORM_isolate="\$FORM_isolate_$vcfg"
+				eval FORM_frag="\$FORM_frag_$vcfg"
+				eval FORM_rts="\$FORM_rts_$vcfg"
 			fi
 			
 			case "$FORM_mode" in
@@ -390,6 +394,14 @@ for device in $DEVICES; do
 			append forms "helpitem|Backround Client Scanning" "$N"
 			append forms "helptext|Helptext Backround Client Scanning#Enables or disables the ablility of a virtual interface to scan for other access points while in client mode. Disabling this allows for higher throughput but keeps your card from roaming to other access points with a higher signal strength." "$N"
 			append forms "helplink|http://madwifi.org/wiki/UserDocs/PerformanceTuning" "$N"
+			
+			rts="field|@TR<<RTS (Default off)>>
+				text|rts_$vcfg|$FORM_rts"
+			append forms "$rts" "$N"
+
+			frag="field|@TR<<Fragmentation (Default off)>>
+				text|frag_$vcfg|$FORM_frag"
+			append forms "$frag" "$N"
 			fi
 
 			isolate_field="field|@TR<<AP Isolation>>|isolate_form_$vcfg|hidden
@@ -618,6 +630,8 @@ for device in $DEVICES; do
 					append validate_forms "wep|FORM_key4_$vcfg|@TR<<WEP Key>> 4||$FORM_key4" "$N";;
 			esac
 			append validate_forms "string|FORM_ssid_$vcfg|@TR<<ESSID>>|required|$FORM_ssid" "$N"
+			append validate_forms "int|FORM_frag_$vcfg|@TR<<Fragmentation Threshold>>|min=0 max=2346|$FORM_frag" "$N"
+			append validate_forms "int|FORM_rts_$vcfg|@TR<<RTS Threshold>>|min=0 max=2347|$FORM_rts" "$N"
 		fi
 	done
 	validate_wireless $iftype
@@ -674,6 +688,8 @@ EOF
 						eval FORM_txpower="\$FORM_txpower_$vcfg"
 						eval FORM_bgscan="\$FORM_bgscan_$vcfg"
 						eval FORM_isolate="\$FORM_isolate_$vcfg"
+						eval FORM_isolate="\$FORM_rts_$vcfg"
+						eval FORM_isolate="\$FORM_frag_$vcfg"
 
 						uci_set "wireless" "$vcfg" "network" "$FORM_network"
 						uci_set "wireless" "$vcfg" "ssid" "$FORM_ssid"
@@ -686,6 +702,8 @@ EOF
 						uci_set "wireless" "$vcfg" "isolate" "$FORM_isolate"
 						uci_set "wireless" "$vcfg" "txpower" "$FORM_txpower"
 						uci_set "wireless" "$vcfg" "bgscan" "$FORM_bgscan"
+						uci_set "wireless" "$vcfg" "frag" "$FORM_frag"
+						uci_set "wireless" "$vcfg" "rts" "$FORM_rts"
 						
 						case "$FORM_encryption" in
 							wep) uci_set "wireless" "$vcfg" "key" "$FORM_wep_key";;
