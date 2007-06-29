@@ -29,18 +29,6 @@ ExecuteIfExists()
 	}
 }
 
-# for squashfs symlink hacks like in WR RC5 (requires rm before change)
-FixReadOnlyLink()
-{
-	touch "$1" >&- 2>&-	# test if read-only
-	[ "$?" != 0 ] && {
-		local tmpfile=$(mktemp "${IPKG_INSTROOT}/tmp/.webif-inst-XXXXXX")
-		cp -p "$1" "$tmpfile" >&- 2>&-
-		rm "$1"  >&- 2>&-
-		mv "$tmpfile" "$1"  >&- 2>&-
-	}
-}
-
 IPKG_UPDATE_NEEDED="0"
 AddRepository()
 {
@@ -64,48 +52,9 @@ DeleteRepository()
 		IPKG_UPDATE_NEEDED="1"
 	}
 }
-require_reboot() {
-	# Note: Even if the httpd.conf is *NOT* changed the httpd still needs 
-	#  restarting when upgraded from original webif. Newly created pages 
-	#  can't be found by the httpd, not sure why. Yes, its true.
-	# 		
-	# Only sending SIGHUP to httpd does not work. Restarting httpd when
-	# upgrade is done through webif has not been successful, despite a 
-	# a number of techniques one would think would work. 
-	#
-	# Do *NOT* change this just because you think something or the other
-	# should work. We've tried about everything. Only change after you've
-	# thoroughly tested on clean, fresh installs of WR RC5 and RC6, and 
-	# when upgrading the webif through the webif (i.e. use automated install
-	# on X-Wrt home page). If you break this just because you think something
-	# should definitely work, you will die.
-	echo "I'm sorry, but I must reboot your router. This is a ONE time thing and"
-	echo " future upgrades of the webif will NOT require a reboot."
-	echo "Please wait about one minute for your router to reboot ..."
-	reboot_file=$(mktemp /tmp/rebootme.XXXXXX)
-	echo "#!/bin/sh" > $reboot_file
-	echo "sleep 5 && reboot" >> "$reboot_file"
-	chmod +x "$reboot_file"
-	sh "$reboot_file" &	
-}
-
 
 #########################################################################################
 # entry point
-
-# fix some links on squashfs partition that aren't properly copied instead by firstboot
-# has no effect when done in image builder.
-FixReadOnlyLink "${IPKG_INSTROOT}/usr/lib/ipkg/info/webif.list"
-FixReadOnlyLink "${IPKG_INSTROOT}/etc/ipkg.conf"
-FixReadOnlyLink "${IPKG_INSTROOT}/usr/lib/ipkg/status"
-
-# copy our new httpd.conf and S50dnsmasq files - we renamed them so that the webif can
-# be uninstalled without ipkg removing these pre-existing files as well.
-#dnsmasq_filename="S50dnsmasq"
-#[ -f "${IPKG_INSTROOT}/etc/rc.d/S60dnsmasq" ] && {
-	# S50dnsmasq renamed to S60dnsmasq in post-RC6
-#	dnsmasq_filename="S60dnsmasq"
-#}
 
 # initialize default webif theme
 # create symlink to /www/themes/xwrt (do NOT use INSTROOT in first arg).
@@ -215,7 +164,6 @@ fi
 	#/etc/init.d/syslog enable
 	
 	ExecuteIfExists "/etc/init.d/webif" start
-#	ExecuteIfExists "/etc/init.d/firmwareinfo"	# x-wrt images use to pre-empt firmware_* set
 
 	# test installation successfulness
 	TestInstall
@@ -226,9 +174,6 @@ fi
 			echo "Reinitializing httpd ..."		
 			killall -HUP httpd
 		}
-	#comment out reboot for now to test if it is still needed in kamikaze
-	#else
-		#require_reboot
 	fi
 
 fi
