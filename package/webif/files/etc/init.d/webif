@@ -71,7 +71,7 @@ uci_load "webif"
 	        fi
 	        cat /proc/cpuinfo |grep "IXP4\?\?"
 	        [ $? = "0" ] && {
-			device_name="Unknown IXPxx Device"
+			device_name="Unknown IXP4xx Device"
 			break
 		}
 	break
