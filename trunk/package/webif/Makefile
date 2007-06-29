@@ -131,6 +131,16 @@ $(call Package/webif-lang)
   TITLE:=Original theme for webif^2.
 endef
 
+define Package/webif-theme-xwrt-mini
+$(call Package/webif-lang)
+  TITLE:=Variant of the original theme (has blank header).
+endef
+
+define Package/webif-theme-sedky
+$(call Package/webif-lang)
+  TITLE:=Sedky theme for webif^2
+endef
+
 define Build/Prepare
 	$(call Build/Prepare/Default)
 	$(CP) src/* $(PKG_BUILD_DIR)/
@@ -157,6 +167,8 @@ define Package/webif/install
 	chmod -R 755 $(1)/*
 	rm -rf $(1)/usr/lib/webif/lang/
 	rm -rf $(1)/www/themes/zephyr/
+	rm -rf $(1)/www/themes/xwrt-mini/
+	rm -rf $(1)/www/themes/sedky1/
 	rm -f $(1)/www/cgi-bin/webif/*.wip
 	./embed_rev.sh $(1)/www/.version \
 			$(1)/usr/lib/webif/webif.sh \
@@ -276,6 +288,16 @@ define Package/webif-theme-xwrt/install
 	$(CP) -a ./files/www/themes/xwrt/* $(1)/www/themes/xwrt/
 endef
 
+define Package/webif-theme-xwrt-mini/install
+	mkdir -p $(1)/www/themes/xwrt-mini/
+	$(CP) -a ./files/www/themes/xwrt-mini/* $(1)/www/themes/xwrt-mini/
+endef
+
+define Package/webif-theme-sedky/install
+	mkdir -p $(1)/www/themes/sedky/
+	$(CP) -a ./files/www/themes/sedky/* $(1)/www/themes/sedky/
+endef
+
 
 $(eval $(call BuildPackage,webif))
 $(eval $(call BuildPackage,webif-lang-ca))
@@ -299,3 +321,5 @@ $(eval $(call BuildPackage,webif-lang-uk))
 $(eval $(call BuildPackage,webif-lang-zh))
 $(eval $(call BuildPackage,webif-theme-zephyr))
 $(eval $(call BuildPackage,webif-theme-xwrt))
+$(eval $(call BuildPackage,webif-theme-xwrt-mini))
+$(eval $(call BuildPackage,webif-theme-sedky))
