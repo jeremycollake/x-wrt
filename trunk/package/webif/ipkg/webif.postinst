@@ -177,4 +177,9 @@ fi
 	fi
 
 fi
+
+#remove lock file if it exists otherwise it can cause issues on first apply.
+if [ -e "/tmp/.uci/webif.lock" ]; then
+	rm -f tmp/.uci/webif.lock
+fi
 exit 0
