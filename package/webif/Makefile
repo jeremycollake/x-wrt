@@ -136,7 +136,7 @@ $(call Package/webif-lang)
   TITLE:=Variant of the original theme (has blank header).
 endef
 
-define Package/webif-theme-sedky
+define Package/webif-theme-sedky1
 $(call Package/webif-lang)
   TITLE:=Sedky theme for webif^2
 endef
@@ -293,9 +293,9 @@ define Package/webif-theme-xwrt-mini/install
 	$(CP) -a ./files/www/themes/xwrt-mini/* $(1)/www/themes/xwrt-mini/
 endef
 
-define Package/webif-theme-sedky/install
-	mkdir -p $(1)/www/themes/sedky/
-	$(CP) -a ./files/www/themes/sedky/* $(1)/www/themes/sedky/
+define Package/webif-theme-sedky1/install
+	mkdir -p $(1)/www/themes/sedky1/
+	$(CP) -a ./files/www/themes/sedky1/* $(1)/www/themes/sedky1/
 endef
 
 
