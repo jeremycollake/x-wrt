@@ -159,9 +159,9 @@ fi
 
 	/etc/init.d/webif enable
 	/etc/init.d/custom-user-startup enable
-	
-	#FIXME: Syslog needs to be double checked
-	#/etc/init.d/syslog enable
+
+	# start X-Wrt specific syslog
+	/etc/init.d/syslog enable
 	
 	ExecuteIfExists "/etc/init.d/webif" start
 
