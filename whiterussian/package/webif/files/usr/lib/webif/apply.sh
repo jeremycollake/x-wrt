@@ -153,8 +153,6 @@ reload_wireless() {
 reload_firewall() {
 	echo_applying_settings "@TR<<apply_firewall#firewall>>"
 	/etc/init.d/S??firewall
-	(uci_load "upnpd"
-	[ "$CONFIG_general_enable" = "1" ] && reload_upnpd)
 	echo_action_done
 }
 
