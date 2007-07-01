@@ -160,9 +160,11 @@ fi
 	/etc/init.d/webif enable
 	/etc/init.d/custom-user-startup enable
 
-	# start X-Wrt specific syslog
+	# start X-Wrt specific services
 	/etc/init.d/syslog enable
+	/etc/init.d/timezone enable
 	
+	ExecuteIfExists "/etc/init.d/timezone" start
 	ExecuteIfExists "/etc/init.d/webif" start
 
 	# test installation successfulness
