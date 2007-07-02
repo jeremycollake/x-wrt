@@ -192,8 +192,19 @@ for device in $DEVICES; do
 		option|1|@TR<<Off>>
         	option|0|@TR<<On>>"
         append forms "$mode_disabled" "$N"
-        	
-        if [ "$iftype" = "atheros" ]; then
+        
+	# Initialize channels based on country code
+	# (--- hardly a switch here ---)
+	case "$country" in
+		All|all|ALL) 
+			BGCHANNELS="1 2 3 4 5 6 7 8 9 10 11 12 13 14"; CHANNEL_MAX=14
+			ACHANNELS="36 40 42 44 48 50 52 56 58 60 64 149 152 153 157 160 161 156";;
+		*) 
+			BGCHANNELS="1 2 3 4 5 6 7 8 9 10 11"; CHANNEL_MAX=11
+			ACHANNELS="36 40 42 44 48 50 52 56 58 60 64 149 152 153 157 160 161 156";;
+	esac
+        
+	if [ "$iftype" = "atheros" ]; then
         	mode_fields="field|@TR<<Mode>>
 			select|mode_ap_$device|$FORM_ap_mode"
 		echo "$dmesg_txt" |grep -q "${device}: 11g"
@@ -212,36 +223,33 @@ for device in $DEVICES; do
 			mode_fields="$mode_fields
 				option|11a|@TR<<802.11A>>"
 		fi
-        append forms "$mode_fields" "$N"
-        fi
-        
-        # Initialize channels based on country code
-        # (--- hardly a switch here ---)
-        case "$country" in
-                All|all|ALL) 
-                	    BGCHANNELS="1 2 3 4 5 6 7 8 9 10 11 12 13 14"; CHANNEL_MAX=14
-                	    ACHANNELS="36 40 42 44 48 50 52 56 58 60 64 149 152 153 157 160 161 156";;
-                *) 
-                   BGCHANNELS="1 2 3 4 5 6 7 8 9 10 11"; CHANNEL_MAX=11
-                   ACHANNELS="36 40 42 44 48 50 52 56 58 60 64 149 152 153 157 160 161 156";;
-        esac
-        
-        BG_CHANNELS="field|@TR<<Channel>>|bgchannelform_$device|hidden
-                select|bgchannel_$device|$FORM_channel
-                option|0|@TR<<Auto>>"
-        for ch in $BGCHANNELS; do
-                BG_CHANNELS="$BG_CHANNELS
-                        option|$ch"
-        done
-        
-        A_CHANNELS="field|@TR<<Channel>>|achannelform_$device|hidden
-                select|achannel_$device|$FORM_channel"
-        for ch in $ACHANNELS; do
-                A_CHANNELS="$A_CHANNELS
-                        option|$ch"
-        done
+		append forms "$mode_fields" "$N"
+
+		BG_CHANNELS="field|@TR<<Channel>>|bgchannelform_$device|hidden
+			select|bgchannel_$device|$FORM_channel
+			option|0|@TR<<Auto>>"
+		for ch in $BGCHANNELS; do
+			BG_CHANNELS="$BG_CHANNELS
+				option|$ch"
+		done
+
+		A_CHANNELS="field|@TR<<Channel>>|achannelform_$device|hidden
+			select|achannel_$device|$FORM_channel"
+		for ch in $ACHANNELS; do
+			A_CHANNELS="$A_CHANNELS
+				option|$ch"
+		done
+		append forms "$A_CHANNELS" "$N"
+	elif [ "$iftype" = "broadcom" ]; then
+		BG_CHANNELS="field|@TR<<Channel>>|bgchannelform_$device
+			select|bgchannel_$device|$FORM_channel
+			option|0|@TR<<Auto>>"
+		for ch in $BGCHANNELS; do
+			BG_CHANNELS="$BG_CHANNELS
+				option|$ch"
+		done
+	fi
 	append forms "$BG_CHANNELS" "$N"
-	append forms "$A_CHANNELS" "$N"
 	
 	if [ "$iftype" = "atheros" ]; then
         	mode_diversity="field|@TR<<Diversity>>
