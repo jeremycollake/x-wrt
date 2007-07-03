@@ -418,7 +418,7 @@ for device in $DEVICES; do
 					option|1|@TR<<On>>"
 			append forms "$isolate_field" "$N"
 
-			ssid="field|@TR<<ESSID>>|ssid_form_$vcfg|hidden
+			ssid="field|@TR<<ESSID>>|ssid_form_$vcfg
 				text|ssid_$vcfg|$FORM_ssid"
 			append forms "$ssid" "$N"
 			
@@ -596,7 +596,6 @@ for device in $DEVICES; do
 				v = (isset('mode_ap_$device','11a'));
 				set_visible('achannelform_$device', v);
 				v = (!isset('mode_$vcfg','wds'));
-				set_visible('ssid_form_$vcfg', v);
 				set_visible('broadcast_form_$vcfg', v);
 				v = (isset('mode_$vcfg','wds'));
 				set_visible('bssid_form_$vcfg', v);
