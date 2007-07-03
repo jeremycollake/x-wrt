@@ -701,6 +701,7 @@ EOF
 
 						uci_set "wireless" "$vcfg" "network" "$FORM_network"
 						uci_set "wireless" "$vcfg" "ssid" "$FORM_ssid"
+						FORM_bssid="`echo "$FORM_bssid" |tr "[A-Z]" "[a-z]"`"
 						uci_set "wireless" "$vcfg" "bssid" "$FORM_bssid"
 						uci_set "wireless" "$vcfg" "mode" "$FORM_mode"
 						uci_set "wireless" "$vcfg" "encryption" "$FORM_encryption"
