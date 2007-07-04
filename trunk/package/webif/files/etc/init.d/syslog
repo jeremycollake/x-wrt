@@ -30,7 +30,7 @@ syslogd_config() {
 		IPCALC_CMD=$(which ipcalc.sh 2>/dev/null)
 		[ "$IPCALC_CMD" == "" ] && IPCALC_CMD=$(which ipcalc 2>/dev/null)
 		[ "$IPCALC_CMD" != "" ] && {
-			$IPCALC_CMD "$ipaddr"
+			eval $($IPCALC_CMD "$ipaddr")
 			[ "$ipaddr" != "$IP" ] && ipaddr=""
 		}
 	}
