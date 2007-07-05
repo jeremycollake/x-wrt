@@ -76,7 +76,7 @@ uci_load "webif"
 		}
 	break
 	done
-	if [ -z "$CONFIG_general_firmware_version" -a -z "$CONFIG_general_firmware_name" ]; then
+	if [ -z "$CONFIG_general_firmware_version" -o -z "$CONFIG_general_firmware_name" ]; then
 		#detect firmware info
 		firmware_name=$CONFIG_general_firmware_name
 		firmware_subtitle=$CONFIG_general_firmware_subtitle
@@ -85,18 +85,14 @@ uci_load "webif"
 		if grep -qi "KAMIKAZE" "/etc/banner"; then
 			firmware_name="OpenWrt Kamikaze"
 		else	
-			firmware_name="OpenWrt White Russian"		
+			firmware_name="Unknown Wrt"
 		fi	
 		firmware_subtitle="With X-Wrt Extensions"
 
 		if [ -f "/etc/openwrt_version" ]; then
 			firmware_version=$(cat "/etc/openwrt_version")
-		elif grep -q "RC5" "/etc/banner"; then
-			firmware_version="RC5"	
-		elif grep -q "RC6" "/etc/banner"; then
-			firmware_version="RC6"
 		elif grep -q "KAMIKAZE" "/etc/banner"; then
-			firmware_version=$(cat /etc/banner |grep KAMIKAZE |cut -d ' ' -f 5 |cut -d ')' -f 1)
+			firmware_version=$(cat /etc/banner |grep KAMIKAZE |cut -d '(' -f 2 |cut -d ')' -f 1)
 		else
 			firmware_version="unknown"
 		fi
@@ -135,7 +131,7 @@ uci_load "webif"
 	if [ "$?" = "0" ]; then
 		for wifi in `ifconfig |grep "wifi" |cut -d' ' -f 1`; do
 			athname=$(wlanconfig ath create wlandev $wifi wlanmode ap)
-			for power in `iwlist ath0 txpower 2>&-|grep "Current Tx-Power" -v |grep "ath0" -v | cut -d'd' -f 1 |cut -d' ' -f 3`; do
+			for power in `iwlist ath0 txpower 2>&1 | sed '/dBm/!d /Current/d; s/^[[:space:]]*//;' | cut -d ' ' -f 1`; do
 				txpower="$txpower $power"
 			done
 			wlanconfig "$athname" destroy
