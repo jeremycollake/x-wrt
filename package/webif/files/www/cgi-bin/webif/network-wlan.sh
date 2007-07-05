@@ -383,6 +383,29 @@ for device in $DEVICES; do
 			
 			if [ "$iftype" = "atheros" ]; then
 			eval txpowers="\$CONFIG_wireless_${device}_txpower"
+			[ -z "$txpowers" ] && {
+				txpower=""
+				for athname in $(ls /proc/sys/net/ 2>/dev/null | grep "^ath"); do
+					[ "$(cat /proc/sys/net/${athname}/\%parent)" = "$device" ] && {
+						for power in $(iwlist $athname txpower 2>&1 | sed '/dBm/!d /Current/d; s/^[[:space:]]*//;' | cut -d ' ' -f 1); do
+							txpower="$txpower $power"
+						done
+						break
+					}
+				done
+				[ "$txpower" = "" ] && {
+					athname=$(wlanconfig ath create wlandev $device wlanmode ap)
+					for power in $(iwlist ath0 txpower 2>&1 | sed '/dBm/!d /Current/d; s/^[[:space:]]*//;' | cut -d ' ' -f 1); do
+						txpower="$txpower $power"
+					done
+					wlanconfig "$athname" destroy
+				}
+				[ "$txpower" != "" ] && {
+					txpowers="$txpower"
+					config_set wireless "${device}_txpower" "$txpower"
+					uci_set webif wireless "${device}_txpower" "$txpower"
+				}
+			}
 			if [ "$txpowers" = "" ]; then
 				txpowers='1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16'
 			fi

@@ -125,23 +125,6 @@ uci_load "webif"
 		killall matrixtunnel
 	fi
 
-	#get txpower for each wireless card and store it becuase madwifi doesn't allow you to get valid txpower 
-	#settings without a ath interface being created
-	is_package_installed "kmod-madwifi"
-	if [ "$?" = "0" ]; then
-		for wifi in `ifconfig |grep "wifi" |cut -d' ' -f 1`; do
-			athname=$(wlanconfig ath create wlandev $wifi wlanmode ap)
-			for power in `iwlist ath0 txpower 2>&1 | sed '/dBm/!d /Current/d; s/^[[:space:]]*//;' | cut -d ' ' -f 1`; do
-				txpower="$txpower $power"
-			done
-			wlanconfig "$athname" destroy
-			eval FORM_power="\$CONFIG_wireless_${wifi}_txpower"
-			if [ "$FORM_power" != "$txpower" ]; then
-				uci_set "webif" "wireless" "${wifi}_txpower" "$txpower"
-			fi
-		done
-	fi
-	
 	if [ -e "/tmp/.uci/webif" ]; then
 		uci_commit "webif"
 	fi
