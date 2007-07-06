@@ -28,7 +28,35 @@
 #
 #
 
-. "/usr/lib/webif/webif.sh"
+. /usr/lib/webif/webif.sh
+
+header_inject_head=$(cat <<EOF
+<style type="text/css">
+<!--
+#clienttable table {
+	text-align: left;
+	font-size: 0.9em;
+	border-style: none;
+	border-spacing: 0;
+}
+#clienttable td, th {
+	padding-left: 0.2em;
+	padding-right: 0.2em;
+}
+#clienttable .tdnumber {
+	text-align: right;
+}
+#clienttable .tdcenter {
+	text-align: center;
+}
+-->
+</style>
+
+EOF
+
+)
+
+
 header "Status" "Site Survey" "@TR<<Wireless survey>>"
 
 MAX_TRIES=4
@@ -37,9 +65,7 @@ WL0_IFNAME=$(nvram get wl0_ifname)
 ##################################################
 # Handle switch to sta mode at user request
 #
-if empty "$FORM_clientswitch"; then
-	CLIENT_SWITCH_BUTTON="<form enctype=\"multipart/form-data\" method=\"post\" action=\"$SCRIPT_NAME\"><input type=\"submit\" value=\" @TR<<Scan>> \" name=\"clientswitch\" /></form>"
-else
+if ! empty "$FORM_clientswitch"; then
 	ORIGINAL_WL_MODE=$(nvram get wl0_mode)
 	nvram set wl0_mode="sta"
 	# tests show scan works in infra or ad-hoc mode, but we'll do this to be safe
@@ -52,8 +78,169 @@ WL_MODE=$(nvram get wl0_mode)
 ##################################################
 #
 if equal $WL_MODE "ap" ; then
-	echo "<table><tbody><tr><td>@TR<<HelpText WLAN Survey#Your wireless adaptor is not in client mode. To do a scan it must be put into client mode for a few seconds. Your WLAN traffic will be interrupted during this brief period.>>" \
-	"<tr><td><br /></td></tr><tr><td>$CLIENT_SWITCH_BUTTON</td></tr></tbody></table>"
+	cat <<EOF
+<div class="settings">
+<form enctype="multipart/form-data" method="post" action="$SCRIPT_NAME">
+<h3><strong>@TR<<Survey Results>></strong></h3>
+<p>@TR<<HelpText WLAN Survey#Your wireless adaptor is not in client mode. To do a scan it must be put into client mode for a few seconds. Your WLAN traffic will be interrupted during this brief period.>></p>
+<input type="submit" value=" @TR<<Scan>> " name="clientswitch" />
+</form>
+<div class="clearfix">&nbsp;</div></div>
+EOF
+
+	wlcmd=$(which wl)
+	[ -n "$wlcmd" ] && {
+		assoclist=$(wl assoclist 2>/dev/null | sed 's/assoclist//'; wl wds 2>/dev/null | sed 's/wds//')
+		! empty "$assoclist" && {
+			cat <<EOF
+<div class="settings">
+<h3><strong>@TR<<status_wlan_survey_Connected_clients#Connected clients>></strong></h3>
+<div id="clienttable">
+<table>
+<tbody>
+<tr>
+	<th>@TR<<status_wlan_survey_MACAAddress#MAC Address>></th>
+	<th>@TR<<status_wlan_survey_IPAAddress#IP Address>></th>
+	<th>@TR<<status_wlan_survey_DHCPAName#DHCP Name>></th>
+	<th>@TR<<status_wlan_survey_Hostname#Hostname>></th>
+	<th>@TR<<status_wlan_survey_Idle#Idle>></th>
+	<th>@TR<<status_wlan_survey_Connected#Connected>></th>
+	<th>@TR<<status_wlan_survey_RSSI#RSSI>></th>
+	<th>@TR<<status_wlan_survey_Authenticated#Authenticated>></th>
+	<th>@TR<<status_wlan_survey_Associated#Associated>></th>
+	<th>@TR<<status_wlan_survey_Authorized#Authorized>></th>
+	<th>@TR<<status_wlan_survey_WME#WME>></th>
+	<th>@TR<<status_wlan_survey_Broadcom#Broadcom>></th>
+	<th>@TR<<status_wlan_survey_Afterburner#Afterburner>></th>
+</tr>
+EOF
+			# it is just a shortcut :-)
+			(
+			killall -ALRM dnsmasq >/dev/null 2>&1
+			for ass in $assoclist; do
+				wl sta_info $ass 2>/dev/null | sed '/ERROR/d'
+				wl rssi $ass 2>/dev/null
+			done
+			) | awk '
+BEGIN {
+	num = 0
+	SUBSEP = "_"
+	ind = 0
+	while (("cat /proc/net/arp 2>/dev/null" | getline) > 0) {
+		if ($1 ~ /^[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}$/) {
+			arp[toupper($4)] = $1
+		}
+	}
+	while (("cat /var/dhcp.leases 2>/dev/null" | getline) > 0) {
+		if ($1 ~ /^[[:digit:]]{10}$/) {
+			$2 = toupper($2)
+			leases[$2 SUBSEP "ip"] = $3
+			leases[$2 SUBSEP "name"] = $4
+		}
+	}
+	while (("cat /etc/ethers 2>/dev/null" | getline) > 0) {
+		if ($1 ~ /^[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}$/) {
+			ethers[toupper($1)] = $2
+		}
+	}
+	while (("cat /etc/hosts 2>/dev/null" | getline) > 0) {
+		if ($1 ~ /^[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}$/) {
+			hosts[$1] = $2
+			for (i = 3; i <= NF; i++) hosts[$1] = hosts[$1] = ", " $i
+		}
+	}
+}
+function indent_level(level) {
+	if (level > 0) {
+		for (i = 1; i <= level; i++) printf "\t"
+	}
+}
+function fmtime(seconds, secs, fstring, y, d, h, m ,s) {
+	if (seconds >= 0) {
+		secs = seconds
+		y = int(secs / (60 * 60 * 24 * 365))
+		if (y > 0) {
+			fstring = sprintf("%d@TR<<status_wlan_survey_y#y>> ", y)
+			secs = secs % (60 * 60 * 24 * 365)
+		}
+		d = int(secs / 60 / 60 / 24)
+		if (d > 0) {
+			fstring = sprintf("%d@TR<<status_wlan_survey_d#d>> ", d) fstring
+			secs = secs % (60 * 60 * 24)
+		}
+		h = int(secs / 60 / 60)
+		m = int(secs / 60 % 60)
+		s = int(secs % 60)
+		fstring = fstring "%02d:%02d:%02d"
+		return sprintf(fstring, h, m, s)
+	} else return "&nbsp;"
+}
+function showclient() {
+	if (_cl["mac"] != "") {
+		num++
+		indent_level(ind)
+		if (num % 2 > 0) print "<tr>"
+		else print "<tr class=\"odd\">"
+
+		_cl["ip"] = arp[_cl["mac"]]
+		if (_cl["ip"] == "") _cl["ip"] = leases[_cl["mac"] SUBSEP "ip"]
+		if (_cl["ip"] == "") _cl["ip"] = ethers[_cl["mac"]]
+		if (_cl["ip"] == "") _cl["ip"] = "&nbsp;"
+		_cl["dhcpname"] = leases[_cl["mac"] SUBSEP "name"]
+		if (_cl["dhcpname"] == "") _cl["dhcpname"] = "&nbsp;"
+		_cl["hostname"] = (hosts[_cl["ip"]] == "" ? "&nbsp;" : hosts[_cl["ip"]])
+
+		indent_level(ind + 1)
+		printf "<td>" _cl["mac"] "</td>"
+		printf "<td>" _cl["ip"] "</td>"
+		printf "<td>" _cl["dhcpname"] "</td>"
+		printf "<td>" _cl["hostname"] "</td>"
+		printf "<td class=\"tdnumber\">" fmtime(_cl["idle"]) "</td>"
+		printf "<td class=\"tdnumber\">" fmtime(_cl["in"]) "</td>"
+		printf "<td class=\"tdnumber\">" _cl["rssi"] "</td>"
+		printf "<td class=\"tdcenter\">" (_cl["AUTHENTICATED"] ? "@TR<<status_wlan_survey_yes#yes>>" : "@TR<<status_wlan_survey_no#no>>") "</td>"
+		printf "<td class=\"tdcenter\">" (_cl["ASSOCIATED"] ? "@TR<<status_wlan_survey_yes#yes>>" : "@TR<<status_wlan_survey_no#no>>") "</td>"
+		printf "<td class=\"tdcenter\">" (_cl["AUTHORIZED"] ? "@TR<<status_wlan_survey_yes#yes>>" : "@TR<<status_wlan_survey_no#no>>") "</td>"
+		printf "<td class=\"tdcenter\">" (_cl["WME"] ? "@TR<<status_wlan_survey_yes#yes>>" : "@TR<<status_wlan_survey_no#no>>") "</td>"
+		printf "<td class=\"tdcenter\">" (_cl["BRCM"] ? "@TR<<status_wlan_survey_yes#yes>>" : "@TR<<status_wlan_survey_no#no>>") "</td>"
+		print "<td class=\"tdcenter\">" (_cl["ABCAP"] ? "@TR<<status_wlan_survey_yes#yes>>" : "@TR<<status_wlan_survey_no#no>>") "</td>"
+		print "</tr>"
+	}
+	delete _cl
+}
+{
+	if ($1 == "STA") {
+		showclient()
+		_cl["mac"] = toupper($2)
+		sub(":$", "", _cl["mac"])
+	} else if ($1 == "idle") {
+		_cl["idle"] = $2
+	} else if ($1 == "in") {
+		_cl["in"] = $3
+	} else if ($1 == "state") {
+		for (i = 3; i <= NF; i++) _cl[$i] = 1
+	} else if ($1 == "flags") {
+		for (i = 3; i <= NF; i++) _cl[$i] = 1
+	} else if ($1 == "rssi") {
+		_cl["rssi"] = $3
+	}
+}
+END {
+	if (_cl["mac"] != "") showclient()
+	if (num == 0) {
+		indent_level(ind)
+		print "<tr><td colspan=\"9\">@TR<<status_wlan_survey_No_connected_clients#No connected clients found.>></td></tr>"
+	}
+}
+'
+		}
+		cat <<EOF
+</tbody>
+</table>
+</div>
+<div class="clearfix">&nbsp;</div></div>
+EOF
+	}
 else
 
 tempfile=$(mktemp /tmp/.survtemp.XXXXXX)
