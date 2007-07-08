@@ -7,8 +7,8 @@
 . /usr/lib/webif/webif.sh
 
 if ! empty "$FORM_umount"; then
-	if ! empty "$FORM_mountpoint"; then
-		err_umount=$(umount $FORM_mountpoint 2>&1)
+	if ! empty "$FORM_mountdev"; then
+		err_umount=$(umount $FORM_mountdev 2>&1)
 		! equal "$?" "0" && {
 			ERROR="@TR<<status_usb_umount_error_in#Error in>> $err_umount"
 		}
@@ -84,7 +84,7 @@ EOF
 <div>
 <table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.9em;" border="0" cellpadding="3" cellspacing="2">
 <?
-mounted_devices="$(cat /proc/mounts | grep "^/dev/scsi/")"
+mounted_devices="$(cat /proc/mounts | grep "^/dev/sd[a-p]\{0,2\}[[:space:]]")"
 ! equal "$mounted_devices" "" && {
 	echo "$mounted_devices" | awk '
 	BEGIN {
@@ -112,13 +112,14 @@ mounted_devices="$(cat /proc/mounts | grep "^/dev/scsi/")"
 		print "		<td>" $1 "</td>"
 		print "		<td>" $2 "</td>"
 		print "		<td>" $3 "</td>"
-		if ($4 == "ro")
+		$4 = "," $4 ","
+		if ($4 ~ /,ro,/)
 			print "		<td>@TR<<status_usb_ro#Read only>></td>"
-		else if ($4 == "rw")
+		else if ($4 ~ /,rw,/)
 			print "		<td>@TR<<status_usb_rw#Read/Write>></td>"
 		else
-			print "		<td>" $4 "</td>"
-		print "		<td><form method=\"post\" action='$SCRIPT_NAME'><input type=\"submit\" value=\" @TR<<status_usb_umount#umount>> \" name=\"umount\" /><input type=\"hidden\" value=\"" $2 "\" name=\"mountpoint\" /></form></td>"
+			print "		<td>&nbsp;</td>"
+		print "		<td><form method=\"post\" action='$SCRIPT_NAME'><input type=\"submit\" value=\" @TR<<status_usb_umount#umount>> \" name=\"umount\" /><input type=\"hidden\" value=\"" $1 "\" name=\"mountdev\" /></form></td>"
 		print "	</tr>"
 	}
 	END {
@@ -127,7 +128,7 @@ mounted_devices="$(cat /proc/mounts | grep "^/dev/scsi/")"
 
 	mnts="$(echo "$mounted_devices" | awk '
 	{
-	        sub(/\/part[[:digit:]]{1,2}.*$/, "", $1)
+	        sub(/[[:digit:]]{0,2}$/, "", $1)
     	    print $1
     	    print $2
 	}' | sort -u | awk '
@@ -148,7 +149,7 @@ mounted_devices="$(cat /proc/mounts | grep "^/dev/scsi/")"
 ! empty "$mnts" && {
 	swap_devices="$(cat "/proc/swaps" 2>/dev/null | egrep "$mnts")"
 } || {
-	swap_devices="$(cat "/proc/swaps" 2>/dev/null | grep "^/dev/scsi/")"
+	swap_devices="$(cat "/proc/swaps" 2>/dev/null | grep "^/dev/sd[a-p]\{0,2\}[[:space:]]")"
 }
 ! empty "$swap_devices" && {
 	echo "$swap_devices" | awk '
