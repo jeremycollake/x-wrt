@@ -18,6 +18,18 @@ config_cb() {
 		timezone)
 			timezone_cfg="$CONFIG_SECTION"
 		;;
+		ntp_client)
+			config_get hostname     $cfg hostname
+			config_get port         $cfg port
+			config_get count        $cfg count
+	
+			[ "$DONE" = "1" ] && exit 0
+			ps x | grep 'bin/[n]tpclient' >&- || {
+				route -n 2>&- | grep '^0.0.0.0' >&- && {
+					/usr/sbin/ntpclient -c ${count:-1} -s -h $hostname -p ${port:-123} 2>&- >&- && DONE=1
+				}
+			}
+                ;;
 	esac
 }
 
@@ -199,6 +211,10 @@ for ucifile in $(ls /tmp/.uci/* 2>&-); do
 			if exists "/etc/rc.d/S??dnsmasq"; then
 				/etc/init.d/dnsmasq start
 			fi
+			;;
+		"/tmp/.uci/ntp_client")
+			killall ntpclient
+			config_load ntp_client&
 			;;
 		"/tmp/.uci/dhcp")
 			killall dnsmasq
