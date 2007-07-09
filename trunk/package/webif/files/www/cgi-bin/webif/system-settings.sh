@@ -41,33 +41,8 @@ uci_load "system"
 uci_load "network"
 uci_load "timezone"
 
-
-#####################################################################
-# defaults
-#
-# Overclocking note:
-#  we only handle 3302 0.8 since these are usually safer if they have
-#  the same default CFE as found on Linksys WRT54G(S) v4+, as it
-#  will handle invalid clock frequencies more gracefully and default
-#  to a limit of 250mhz. It also has a fixed divider, so sbclock
-#  frequencies are implied, and ignored if specified.
-#
-OVERCLOCKING_DISABLED="1" # set to 1 to disble OC support, we disable overclocking by default for kamikaze and only enable it for bcm947xx
-is_bcm947xx && {
-	OVERCLOCKING_DISABLED="0"
-}
-
 #####################################################################
 header "System" "Settings" "@TR<<System Settings>>" ' onload="modechange()" ' "$SCRIPT_NAME"
-
-#####################################################################
-# todo: CPU_MODEL not actually used atm (except in building version)
-equal "$OVERCLOCKING_DISABLED" "0" && {
-	CPU_MODEL=$(sed -n "/cpu model/p" "/proc/cpuinfo")
-	CPU_VERSION=$(echo "$CPU_MODEL" | sed -e "s/BCM3302//" -e "s/cpu model//" -e "s/://")
-	#echo "debug.model: $CPU_MODEL <br />"
-	#echo "debug.version: $CPU_VERSION <br />"
-}
 
 #####################################################################
 # install NTP client if asked
@@ -147,8 +122,6 @@ if empty "$FORM_submit"; then
 		FORM_boot_wait="${FORM_boot_wait:-off}"
 		FORM_wait_time="${wait_time:-$(nvram get wait_time)}"
 		FORM_wait_time="${FORM_wait_time:-1}"
-		FORM_clkfreq="${clkfreq:-$(nvram get clkfreq)}";
-		FORM_clkfreq="${FORM_clkfreq:-200}"
 	}
 	# webif settings
 	FORM_effect="${CONFIG_general_use_progressbar}"		# -- effects checkbox
@@ -183,10 +156,6 @@ EOF
 			! empty "$FORM_wait_time" &&
 			{
 				save_setting system wait_time "$FORM_wait_time"
-			}
-			equal "$OVERCLOCKING_DISABLED" "0" && ! empty "$FORM_clkfreq" &&
-			{
-				save_setting nvram clkfreq "$FORM_clkfreq"
 			}
 		}
 		# webif settings
@@ -223,35 +192,6 @@ EOF
 # over/underclocking
 #
 is_bcm947xx && {
-	equal "$OVERCLOCKING_DISABLED" "0" &&
-	{
-	if [ "$CPU_VERSION" = "V0.8" ]; then
-		FORM_clkfreqs="$FORM_clkfreq
-			option|184
-			option|188
-			option|197
-			option|200
-			option|207
-			option|216
-			option|217
-			option|225
-			option|234
-			option|238
-			option|240
-			option|250"
-		# special case for custom CFEs (like mine)
-		if [ $(nvram get clkfreq) -gt 250 ]; then
-			FORM_clkfreqs="$FORM_clkfreqs
-				option|$(nvram get clkfreq)"
-		fi
-	else
-		# BCM3302 v0.7 or other..
-		# in this case, we'll show it, but not have any options
-		FORM_clkfreqs="$FORM_clkfreq
-			option|$FORM_clkfreq"
-	fi
-	}
-
 	#####################################################################
 	# Initialize wait_time form
 	for wtime in $(seq 1 30); do
@@ -296,10 +236,6 @@ done
 #
 THEMES=$(echo "$THEMES" | sort -u)
 
-dangerous_form_start=""
-dangerous_form_end=""
-dangerous_form_help=""
-
 #####################################################################
 # Initialize LANGUAGES form
 # create list if it doesn't exist ..
@@ -321,15 +257,6 @@ is_bcm947xx && {
 	helpitem|Wait Time
 	helptext|HelpText wait_time#Number of seconds the boot loader should wait for a TFTP transfer if Boot Wait is on."
 
-	equal "$OVERCLOCKING_DISABLED" "0" &&
-	{
-		clkfreq_form="field|@TR<<CPU Clock Frequency>>
-		select|clkfreq|$FORM_clkfreqs"
-		dangerous_form_start="start_form|@TR<<Dangerous Settings>>"
-		dangerous_form_end="end_form"
-		dangerous_form_help="helpitem|CPU Clock Frequency
-					helptext|HelpText CPU Clock Frequency#Do not change this. You may brick your router if you do not know what you are doing. We've tried to disable it for all routers that can be bricked through an invalid clock frequency setting. Only Linksys WRT54G v4 units are known to be unbrickable by a bad clkfreq setting."
-	}
 }
 
 #####################################################################
@@ -436,12 +363,6 @@ select|theme|$FORM_theme
 $THEMES
 $WEBIF_SSL
 end_form
-# end webif settings
-###########################
-$dangerous_form_start
-$clkfreq_form
-$dangerous_form_help
-$dangerous_form_end
 EOF
 
 footer ?>
