@@ -298,20 +298,23 @@ for server in $ntpservers; do
 		eval FORM_ntp_port="\$FORM_ntp_port_$server"
 		eval FORM_ntp_count="\$FORM_ntp_count_$server"
 	fi
-	if [ "$FORM_ntp_port" = "" ]; then
-		FORM_ntp_port=123
+	#add check for blank config, the only time it will be seen is when config section is waitings to be removed
+	if [ "$FORM_ntp_port" != "" -o "$FORM_ntp_count" != "" -o "$FORM_ntp_server" != "" ]; then
+		if [ "$FORM_ntp_port" = "" ]; then
+			FORM_ntp_port=123
+		fi
+		if [ "$FORM_ntp_count" = "" ]; then
+			FORM_ntp_count=1
+		fi
+		ntp_form="field|@TR<<NTP Server>>
+		text|ntp_server_$server|$FORM_ntp_server
+		field|@TR<<NTP Server Port>>
+		text|ntp_port_$server|$FORM_ntp_port
+		field|@TR<<NTP Count>>
+		text|ntp_count_$server|$FORM_ntp_count
+		string|<tr><td><a href="$SCRIPT_NAME?remove_ntpcfg=$server">@TR<<Remove NTP Server>></a>"
+		append NTP "$ntp_form" "$N"
 	fi
-	if [ "$FORM_ntp_count" = "" ]; then
-		FORM_ntp_count=1
-	fi
-	ntp_form="field|@TR<<NTP Server>>
-	text|ntp_server_$server|$FORM_ntp_server
-	field|@TR<<NTP Server Port>>
-	text|ntp_port_$server|$FORM_ntp_port
-	field|@TR<<NTP Count>>
-	text|ntp_count_$server|$FORM_ntp_count
-	string|<tr><td><a href="$SCRIPT_NAME?remove_ntpcfg=$server">@TR<<Remove NTP Server>></a>"
-	append NTP "$ntp_form" "$N"
 done
 
 add_ntpcfg="string|<tr><td><a href=$SCRIPT_NAME?add_ntpcfg_number=$ntpcfg_number>@TR<<Add NTP Server>></a>"
