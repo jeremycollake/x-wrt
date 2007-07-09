@@ -19,9 +19,9 @@ config_cb() {
 			timezone_cfg="$CONFIG_SECTION"
 		;;
 		ntp_client)
-			config_get hostname     $cfg hostname
-			config_get port         $cfg port
-			config_get count        $cfg count
+			config_get hostname     $CONFIG_SECTION hostname
+			config_get port         $CONFIG_SECTION port
+			config_get count        $CONFIG_SECTION count
 	
 			[ "$DONE" = "1" ] && exit 0
 			ps x | grep 'bin/[n]tpclient' >&- || {
@@ -29,6 +29,10 @@ config_cb() {
 					/usr/sbin/ntpclient -c ${count:-1} -s -h $hostname -p ${port:-123} 2>&- >&- && DONE=1
 				}
 			}
+                ;;
+                system)
+                	config_get hostname $CONFIG_SECTION hostname
+                	echo "${hostname:-OpenWrt}" > /proc/sys/kernel/hostname
                 ;;
 	esac
 }
@@ -243,7 +247,7 @@ for ucifile in $(ls /tmp/.uci/* 2>&-); do
 			killall openvpn >&- 2>&- <&-
 			/etc/init.d/openvpn start ;;
 		"/tmp/.uci/system")
-			/etc/init.d/boot start ;;
+			config_load system ;;
 		"/tmp/.uci/snmp")
 			echo '@TR<<Exporting>> @TR<<snmp settings>> ...'
 			[ -e "/sbin/save_snmp" ] && {
