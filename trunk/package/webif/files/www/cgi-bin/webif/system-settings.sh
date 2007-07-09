@@ -16,13 +16,23 @@
 #
 # Major revisions:
 #
-# NVRAM variables referenced:
-#	time_zone
-#  	ntp_server
-#
 # Configuration files referenced:
 #   none
 #
+
+# Add NTP Server
+if ! empty "$FORM_add_ntpcfg_number"; then
+	uci_add "ntp_client" "ntp_client" ""
+	uci_set "ntp_client" "cfg$FORM_add_ntpcfg_number" "hostname" ""
+	uci_set "ntp_client" "cfg$FORM_add_ntpcfg_number" "port" "123"
+	uci_set "ntp_client" "cfg$FORM_add_ntpcfg_number" "count" "1"
+	FORM_add_ntpcfg=""
+fi
+
+# Remove NTP Server
+if ! empty "$FORM_remove_ntpcfg"; then
+	uci_remove "ntp_client" "$FORM_remove_ntpcfg"
+fi
 
 config_cb() {
 	config_get TYPE "$CONFIG_SECTION" TYPE
@@ -33,13 +43,28 @@ config_cb() {
 		timezone)
 			timezone_cfg="$CONFIG_SECTION"
 		;;
+		ntp_client)
+			append ntpservers "$CONFIG_SECTION" "$N"
+		;;
 	esac
 }
 
 uci_load "webif"
 uci_load "system"
+#We have to load the system host name setting here because ntp_client also uses the hostname setting.
+eval CONFIG_system_hostname="\$CONFIG_${hostname_cfg}_hostname"
+FORM_hostname="${CONFIG_system_hostname:-OpenWrt}"
 uci_load "network"
 uci_load "timezone"
+uci_load "ntp_client"
+
+#FIXME: uci_load bug
+#uci_load will pass the same config twice when there is a section to be added by using uci_add before a uci_commit happens
+#we will use uniq so we don't try to parse the same config section twice.
+ntpservers=$(echo "$ntpservers" |uniq)
+
+ntpcfg_number=$(echo "$ntpservers" |wc -l)
+let "ntpcfg_number+=1"
 
 #####################################################################
 header "System" "Settings" "@TR<<System Settings>>" ' onload="modechange()" ' "$SCRIPT_NAME"
@@ -107,12 +132,8 @@ fi
 # initialize forms
 if empty "$FORM_submit"; then
 	# initialize all defaults
-	eval CONFIG_system_hostname="\$CONFIG_${hostname_cfg}_hostname"
-	FORM_hostname="${CONFIG_system_hostname:-OpenWrt}"
 	eval time_zone_part="\$CONFIG_${timezone_cfg}_posixtz"
 	eval time_zoneinfo_part="\$CONFIG_${timezone_cfg}_zoneinfo"
-	#wait for ntpclient to be updated
-	#FORM_ntp_server="${ntp_server:-$(nvram get ntp_server)}"
 	time_zone_part="${time_zone_part:-"UTC+0"}"
 	time_zoneinfo_part="${time_zoneinfo_part:-"-"}"
 	FORM_system_timezone="${time_zoneinfo_part}@${time_zone_part}"
@@ -146,8 +167,14 @@ EOF
 		}
 		uci_set timezone "$timezone_cfg" posixtz "$time_zone_part"
 		uci_set timezone "$timezone_cfg" zoneinfo "$time_zoneinfo_part"
-		#waiting for ntpclient update
-		#save_setting system ntp_server "$FORM_ntp_server"
+		for server in $ntpservers; do
+			eval FORM_ntp_server="\$FORM_ntp_server_$server"
+			eval FORM_ntp_port="\$FORM_ntp_port_$server"
+			eval FORM_ntp_count="\$FORM_ntp_count_$server"
+			uci_set ntp_client "$server" hostname "$FORM_ntp_server"
+			uci_set ntp_client "$server" port "$FORM_ntp_port"
+			uci_set ntp_client "$server" count "$FORM_ntp_count"
+		done
 
 		is_bcm947xx && {
 			case "$FORM_boot_wait" in
@@ -260,7 +287,36 @@ is_bcm947xx && {
 }
 
 #####################################################################
-# check if ntpclient or opennptd is installed and give user option to install ntpclient if neither are installed.
+# ntp form
+for server in $ntpservers; do
+	if empty "$FORM_submit"; then
+		config_get FORM_ntp_server $server hostname
+		config_get FORM_ntp_port $server port
+		config_get FORM_ntp_count $server count
+	else
+		eval FORM_ntp_server="\$FORM_ntp_server_$server"
+		eval FORM_ntp_port="\$FORM_ntp_port_$server"
+		eval FORM_ntp_count="\$FORM_ntp_count_$server"
+	fi
+	if [ "$FORM_ntp_port" = "" ]; then
+		FORM_ntp_port=123
+	fi
+	if [ "$FORM_ntp_count" = "" ]; then
+		FORM_ntp_count=1
+	fi
+	ntp_form="field|@TR<<NTP Server>>
+	text|ntp_server_$server|$FORM_ntp_server
+	field|@TR<<NTP Server Port>>
+	text|ntp_port_$server|$FORM_ntp_port
+	field|@TR<<NTP Count>>
+	text|ntp_count_$server|$FORM_ntp_count
+	string|<tr><td><a href="$SCRIPT_NAME?remove_ntpcfg=$server">@TR<<Remove NTP Server>></a>"
+	append NTP "$ntp_form" "$N"
+done
+
+add_ntpcfg="string|<tr><td><a href=$SCRIPT_NAME?add_ntpcfg_number=$ntpcfg_number>@TR<<Add NTP Server>></a>"
+append NTP "$add_ntpcfg" "$N"
+
 if [ -n "$(has_pkgs ntpclient)" -a -n "$(has_pkgs openntpd)" ]; then
 	NTPCLIENT_INSTALL_FORM="string|<div class=\"warning\">@TR<<Warning>>: @TR<<system_settings_feature_requires_ntpclient#No NTP client is installed. For correct time support you need to install one>>:</div>
 		submit|install_ntpclient| @TR<<system_settings_Install_NTP_Client#Install NTP Client>> |"
@@ -347,8 +403,7 @@ field|@TR<<system_settings_POSIX_TZ_String#POSIX TZ String>>|view_tz_string|
 string|<input id="show_TZ" type="text" style="width: 96%; height: 1.2em; color: #2f2f2f; background: #ececec; " name="show_TZ" readonly="readonly" value="@TR<<system_settings_js_required#This field requires the JavaScript support.>>" />
 helpitem|Timezone
 helptext|Timezone_helptext#Set up your time zone according to the nearest city of your region from the predefined list.
-field|@TR<<NTP Server>>
-text|ntp_server|$FORM_ntp_server
+$NTP
 end_form
 $NTPCLIENT_INSTALL_FORM
 ##########################
