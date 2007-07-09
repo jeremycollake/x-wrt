@@ -1,7 +1,0 @@
-Package: qos-scripts
-Maintainer: Felix Fietkau <nbd@openwrt.org>
-Section: net
-Depends: 
-Priority: normal
-Description: QoS module for OpenWrt
-Version: 0.9.1-1

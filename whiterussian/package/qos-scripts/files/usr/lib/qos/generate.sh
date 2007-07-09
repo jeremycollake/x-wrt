@@ -10,6 +10,18 @@ add_insmod() {
 	esac
 }
 
+# Kamikaze compatibility function
+# config_get_bool <variable> <section> <option> [<default>]
+config_get_bool() {
+	local _tmp
+	config_get "_tmp" "$2" "$3"
+	case "$_tmp" in
+		1|on|enabled) export ${NO_EXPORT:+-n} "$1=1";;
+		0|off|disabled) export ${NO_EXPORT:+-n} "$1=0";;
+		*) eval "$1=${4:-0}";;
+	esac
+}
+
 parse_matching_rule() {
 	local var="$1"
 	local section="$2"
@@ -95,6 +107,14 @@ parse_matching_rule() {
 				esac
 				ports=1
 			;;
+			*:direction)
+				value="$(echo "$value" | sed -e 's,-,:,g')"
+				if [ "$value" = "out" ]; then
+					append "$var" "-o $device"
+				elif [ "$value" = "in" ]; then
+					append "$var" "-i $device"
+				fi
+			;;
 			1:pktsize)
 				value="$(echo "$value" | sed -e 's,-,:,g')"
 				add_insmod ipt_length
@@ -147,15 +167,13 @@ config_cb() {
 	config_get TYPE "$CONFIG_SECTION" TYPE
 	case "$TYPE" in
 		interface)
-			config_get enabled "$CONFIG_SECTION" enabled
-			config_get download "$CONFIG_SECTION" download
+			config_get_bool enabled "$CONFIG_SECTION" enabled 1
+			[ 1 -eq "$enabled" ] || return 0
 			config_get classgroup "$CONFIG_SECTION" classgroup
 			config_set "$CONFIG_SECTION" imqdev "$C"
-			[ -z "$enabled" -o "$(($enabled))" -eq 0 ] || {
-				C=$(($C+1))
-				INTERFACES="$INTERFACES $CONFIG_SECTION"
-				config_set "$classgroup" enabled 1
-			}
+			C=$(($C+1))
+			append INTERFACES "$CONFIG_SECTION"
+			config_set "$classgroup" enabled 1
 			config_get device "$CONFIG_SECTION" device
 			[ -z "$device" ] && device="$(nvram get ${CONFIG_SECTION}_ifname)"
 			config_set "$CONFIG_SECTION" device "${device:-eth0}"
@@ -217,19 +235,22 @@ start_interface() {
 	local num_imq="$2"
 	config_get device "$iface" device
 	config_get_bool enabled "$iface" enabled 1
-	[ -z "$device" -o 1 -ne "$enabled" ] && exit
+	[ -z "$device" -o 1 -ne "$enabled" ] && {
+		echo "Interface '$iface' not found or disabled." >&2
+		return 1 
+	}
 	config_get upload "$iface" upload
 	config_get halfduplex "$iface" halfduplex
 	config_get download "$iface" download
 	config_get classgroup "$iface" classgroup
-	config_get overhead "$iface" overhead 0
+	config_get_bool overhead "$iface" overhead 0
 	
 	download="${download:-${halfduplex:+$upload}}"
 	enum_classes "$classgroup"
 	for dir in up${halfduplex} ${download:+down}; do
 		case "$dir" in
 			up)
-				[ "$overhead" = 1 ] && upload=$(($upload * 98 / 100 - (32 * 128 / $upload)))
+				[ "$overhead" = 1 ] && upload=$(($upload * 98 / 100 - (15 * 128 / $upload)))
 				dev="$device"
 				rate="$upload"
 				dl_mode=""
@@ -333,6 +354,7 @@ start_cg() {
 				append down "iptables -t mangle -A POSTROUTING -o $device -j IMQ --todev $imqdev" "$N"
 			}
 			append down "iptables -t mangle -A PREROUTING -i $device -j ${cg}" "$N"
+			append down "iptables -t mangle -A POSTROUTING -o $device -j ${cg}" "$N"
 			append down "iptables -t mangle -A PREROUTING -i $device -j IMQ --todev $imqdev" "$N"
 		}
 	done
