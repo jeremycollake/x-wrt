@@ -36,11 +36,6 @@ config_cb() {
 	esac
 }
 
-is_bcm947xx && {
-	load_settings "system"
-	load_settings "webif"
-}
-
 uci_load "webif"
 uci_load "system"
 uci_load "network"
