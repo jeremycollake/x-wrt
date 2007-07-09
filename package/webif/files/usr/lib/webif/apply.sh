@@ -155,6 +155,18 @@ uci_unset_originals() {
 	unset CONFIG_orig_SECTION
 }
 
+# config-*		simple config files
+(
+	cd /proc/self
+	cat /tmp/.webif/config-* 2>&- | grep '=' >&- 2>&- && {
+		exists "/usr/sbin/nvram" && {
+			cat /tmp/.webif/config-* 2>&- | tee fd/1 | xargs -n1 nvram set	
+			echo "@TR<<Committing>> NVRAM ..."
+			nvram commit
+		}
+	}
+)
+
 #
 # now apply any UCI config changes
 #
