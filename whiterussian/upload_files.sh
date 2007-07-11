@@ -42,6 +42,9 @@ scp \
 	/tmp/build-date.txt \
 	xwrt@xwrt.kicks-ass.org:/www/xwrt/firmware_images/whiterussian/0.9/latest-daily-build/
 scp \
+	bin/md5sums.txt \
+	xwrt@xwrt.kicks-ass.org:/www/xwrt/firmware_images/whiterussian/0.9/latest-daily-build/
+scp \
 	bin/openwrt-* \
 	xwrt@xwrt.kicks-ass.org:/www/xwrt/firmware_images/whiterussian/0.9/latest-daily-build/
 #scp \
