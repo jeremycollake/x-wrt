@@ -112,6 +112,10 @@ helptext|WAN WAN#WAN stands for Wide Area Network and is usually the upstream co
 					form_help="helpitem|LAN
 helptext|LAN LAN#LAN stands for Local Area Network."
 				;;
+				loopback)
+					form_help="helpitem|LOOPBACK
+helptext|LOOPBACK#A loopback interface is a type of 'circuitless IP address' or 'virtual IP' address, as the IP address is not associated with any one particular interface (or circuit) on the host or router. Any traffic that a computer program sends on the loopback network is addressed to the same computer."
+				;;
 				*)
 					form_help=""
 				;;
@@ -190,7 +194,7 @@ string|$wlan_tx_invalid
 field|@TR<<Tx Missed Beacon>>|wan_tx_missed
 string|$wlan_tx_missed
 helpitem|WLAN
-helptext|WLAN LAN#LAN stands for Wireless Local Area Network.
+helptext|WLAN LAN#WLAN stands for Wireless Local Area Network.
 end_form
 EOF
 
