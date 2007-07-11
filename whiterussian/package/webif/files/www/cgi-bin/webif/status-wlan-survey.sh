@@ -57,7 +57,13 @@ EOF
 )
 
 
-header "Status" "Site Survey" "@TR<<Wireless survey>>"
+header "Status" "Wireless" "@TR<<Wireless>>"
+
+! empty "$FORM_submit" && equal "$FORM_action" "installwl" && {
+	echo "@TR<<status_wlan_survey_Installing_wl_package#Installing wl package>> ...<pre>"
+	install_package wl
+	echo "</pre><br />"
+}
 
 MAX_TRIES=4
 MAX_CELLS=100
@@ -99,19 +105,23 @@ EOF
 <table>
 <tbody>
 <tr>
-	<th>@TR<<status_wlan_survey_MACAAddress#MAC Address>></th>
-	<th>@TR<<status_wlan_survey_IPAAddress#IP Address>></th>
-	<th>@TR<<status_wlan_survey_DHCPAName#DHCP Name>></th>
-	<th>@TR<<status_wlan_survey_Hostname#Hostname>></th>
+	<th colspan="2" class="tdcenter">@TR<<status_wlan_survey_Addresses#Addresses>></th>
+	<th colspan="2" class="tdcenter">@TR<<status_wlan_survey_Names#Names>></th>
+	<th colspan="2" class="tdcenter">@TR<<status_wlan_survey_Times#Times>></th>
+	<th colspan="5">&nbsp;</th>
+</tr>
+<tr>
+	<th>@TR<<status_wlan_survey_MAC#MAC>></th>
+	<th>@TR<<status_wlan_survey_IP#IP>></th>
+	<th>@TR<<status_wlan_survey_DHCP#DHCP>></th>
+	<th>@TR<<status_wlan_survey_Hosts#Hosts>></th>
 	<th>@TR<<status_wlan_survey_Idle#Idle>></th>
 	<th>@TR<<status_wlan_survey_Connected#Connected>></th>
 	<th>@TR<<status_wlan_survey_RSSI#RSSI>></th>
 	<th>@TR<<status_wlan_survey_Authenticated#Authenticated>></th>
 	<th>@TR<<status_wlan_survey_Associated#Associated>></th>
 	<th>@TR<<status_wlan_survey_Authorized#Authorized>></th>
-	<th>@TR<<status_wlan_survey_WME#WME>></th>
-	<th>@TR<<status_wlan_survey_Broadcom#Broadcom>></th>
-	<th>@TR<<status_wlan_survey_Afterburner#Afterburner>></th>
+	<th>@TR<<status_wlan_survey_Features#Features>></th>
 </tr>
 EOF
 			# it is just a shortcut :-)
@@ -201,9 +211,16 @@ function showclient() {
 		printf "<td class=\"tdcenter\">" (_cl["AUTHENTICATED"] ? "@TR<<status_wlan_survey_yes#yes>>" : "@TR<<status_wlan_survey_no#no>>") "</td>"
 		printf "<td class=\"tdcenter\">" (_cl["ASSOCIATED"] ? "@TR<<status_wlan_survey_yes#yes>>" : "@TR<<status_wlan_survey_no#no>>") "</td>"
 		printf "<td class=\"tdcenter\">" (_cl["AUTHORIZED"] ? "@TR<<status_wlan_survey_yes#yes>>" : "@TR<<status_wlan_survey_no#no>>") "</td>"
-		printf "<td class=\"tdcenter\">" (_cl["WME"] ? "@TR<<status_wlan_survey_yes#yes>>" : "@TR<<status_wlan_survey_no#no>>") "</td>"
-		printf "<td class=\"tdcenter\">" (_cl["BRCM"] ? "@TR<<status_wlan_survey_yes#yes>>" : "@TR<<status_wlan_survey_no#no>>") "</td>"
-		print "<td class=\"tdcenter\">" (_cl["ABCAP"] ? "@TR<<status_wlan_survey_yes#yes>>" : "@TR<<status_wlan_survey_no#no>>") "</td>"
+
+		_cl["features"] = (_cl["WME"] ? "@TR<<status_wlan_survey_WME#WME>>" : "")
+		_cl["features"] = _cl["features"] ", " (_cl["BRCM"] ? "@TR<<status_wlan_survey_Broadcom#Broadcom>>" : "")
+		_cl["features"] = _cl["features"] ", " (_cl["ABCAP"] ? "@TR<<status_wlan_survey_Afterburner#Afterburner>>" : "")
+		gsub(/, , /, ", ", _cl["features"])
+		gsub(/, $/, "", _cl["features"])
+		gsub(/^, /, "", _cl["features"])
+
+		if (_cl["features"] == "") _cl["features"] = "@TR<<status_wlan_survey_none#none>>"
+		printf "<td class=\"tdcenter\">" _cl["features"] "</td>"
 		print "</tr>"
 	}
 	delete _cl
@@ -240,6 +257,18 @@ END {
 </div>
 <div class="clearfix">&nbsp;</div></div>
 EOF
+	} || {
+		echo "<form method=\"post\" name=\"installwl\" action=\"$SCRIPT_NAME\" enctype=\"multipart/form-data\">"
+		display_form <<EOF
+start_form|@TR<<status_wlan_survey_Connected_clients#Connected clients>>
+field|@TR<<status_wlan_survey_Wireless_driver_utility#Wireless driver utility>>
+string|<input type="hidden" name="action" value="installwl" />
+submit|submit|@TR<<status_wlan_survey_Install_wl#Install wl>>
+helpitem|status_wlan_survey_Wireless_driver_utility#Wireless driver utility
+helptext|status_wlan_survey_Wireless_driver_utility_helptext#This function requires you to install the proprietary Broadcom utility for setting and reading wireless driver parameters.
+end_form
+EOF
+		echo "</form>"
 	}
 else
 
@@ -382,5 +411,5 @@ fi
 
 footer ?>
 <!--
-##WEBIF:name:Status:980:Site Survey
+##WEBIF:name:Status:980:Wireless
 -->
