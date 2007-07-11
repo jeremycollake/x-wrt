@@ -135,6 +135,10 @@ BEGIN {
 	tr_ind = ""
 	td_ind = "\t"
 }
+function readcmdline(pid) {
+	if (("/bin/cat /proc/" pid "/cmdline 2>/dev/null | tr \"\\0\" \" \"" | getline) > 0) return $0
+	else return ""
+}
 {
 	for (i=1; i<=NF; i++) {
 		gsub(/^ */, "", $i)
@@ -171,6 +175,10 @@ BEGIN {
 		}
 		lcol = $5
 		for (i=6; i<=NF; i++) lcol = lcol " " $i
+		if (length(lcol) >= 50) {
+			fulcmd = readcmdline($1)
+			if (fulcmd) lcol = fulcmd
+		}
 		print td_ind "<td>" lcol "</td>"
 		if (interval < 1) {
 			if (lcol ~ /^\[/)
