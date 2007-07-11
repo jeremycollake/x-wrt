@@ -102,6 +102,7 @@ prepare:
 compile:
 endif
 install: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
+	(cd $(BIN_DIR); md5sum -b *.{bin,trx} > md5sums.txt)
 install-ib:
 	mkdir -p $(IB_DIR)/staging_dir_$(ARCH)/bin
 	cp -fpR $(STAGING_DIR)/bin/trx $(STAGING_DIR)/bin/addpattern $(STAGING_DIR)/bin/trx2usr $(STAGING_DIR)/bin/motorola-bin $(IB_DIR)/staging_dir_$(ARCH)/bin
