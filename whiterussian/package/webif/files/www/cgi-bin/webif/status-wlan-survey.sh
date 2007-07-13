@@ -96,8 +96,6 @@ EOF
 
 	wlcmd=$(which wl)
 	[ -n "$wlcmd" ] && {
-		assoclist=$(wl assoclist 2>/dev/null | sed 's/assoclist//'; wl wds 2>/dev/null | sed 's/wds//')
-		! empty "$assoclist" && {
 			cat <<EOF
 <div class="settings">
 <h3><strong>@TR<<status_wlan_survey_Connected_clients#Connected clients>></strong></h3>
@@ -124,6 +122,8 @@ EOF
 	<th>@TR<<status_wlan_survey_Features#Features>></th>
 </tr>
 EOF
+		assoclist=$(wl assoclist 2>/dev/null | sed 's/assoclist//'; wl wds 2>/dev/null | sed 's/wds//')
+		! empty "$assoclist" && {
 			# it is just a shortcut :-)
 			(
 			killall -ALRM dnsmasq >/dev/null 2>&1
@@ -246,10 +246,12 @@ END {
 	if (_cl["mac"] != "") showclient()
 	if (num == 0) {
 		indent_level(ind)
-		print "<tr><td colspan=\"9\">@TR<<status_wlan_survey_No_connected_clients#No connected clients found.>></td></tr>"
+		print "<tr><td colspan=\"11\">@TR<<status_wlan_survey_No_connected_clients#No connected clients found.>></td></tr>"
 	}
 }
 '
+		} || {
+			echo "<tr><td colspan=\"11\">@TR<<status_wlan_survey_No_connected_clients#No connected clients found.>></td></tr>"
 		}
 		cat <<EOF
 </tbody>
