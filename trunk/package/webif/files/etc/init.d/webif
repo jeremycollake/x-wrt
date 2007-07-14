@@ -63,6 +63,26 @@ uci_load "webif"
 			device_name="Gateway 7001 AP"
 			break
 		}
+		cat /proc/cpuinfo |grep "D-Link DSM-G600 RevA"
+		[ $? = "0" ] && {
+			device_name="D-Link DSM-G600 RevA"
+			break
+		}
+		cat /proc/cpuinfo |grep "Freecom FSG-3"
+		[ $? = "0" ] && {
+			device_name="Freecom FSG-3"
+			break
+		}
+		cat /proc/cpuinfo |grep "Iomega NAS 100d"
+		[ $? = "0" ] && {
+			device_name="Iomega NAS 100d"
+			break
+		}
+		cat /proc/cpuinfo |grep "Linksys NSLU2"
+		[ $? = "0" ] && {
+			device_name="Linksys NSLU2"
+			break
+		}
 	
 		#Generic detection in case the router is not caught by the above rules.
 	        if [ "$(uname -m)" = "i?86" ]; then
