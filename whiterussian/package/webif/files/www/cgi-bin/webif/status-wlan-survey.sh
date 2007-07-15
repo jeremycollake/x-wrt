@@ -31,6 +31,16 @@
 . /usr/lib/webif/webif.sh
 
 header_inject_head=$(cat <<EOF
+<script type="text/javascript">
+<!--
+function targetwindow(url) {
+	var wasOpen  = false;
+	var win = window.open(url);    
+	return (typeof(win)=='object')?true:false;
+}
+-->
+</script>
+
 <style type="text/css">
 <!--
 #clienttable table {
@@ -201,7 +211,8 @@ function showclient() {
 		_cl["hostname"] = (hosts[_cl["ip"]] == "" ? "&nbsp;" : hosts[_cl["ip"]])
 
 		indent_level(ind + 1)
-		printf "<td>" _cl["mac"] "</td>"
+		_cl["oui"] = substr(_cl["mac"], 1, 8); gsub(/:/, "-", _cl["oui"])
+		printf "<td><a href=\"http://standards.ieee.org/cgi-bin/ouisearch?"_cl["oui"]"\" onclick=\"return !targetwindow(this.href);\">" _cl["mac"] "</a></td>"
 		printf "<td>" _cl["ip"] "</td>"
 		printf "<td>" _cl["dhcpname"] "</td>"
 		printf "<td>" _cl["hostname"] "</td>"
