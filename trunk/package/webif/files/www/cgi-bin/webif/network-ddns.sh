@@ -22,7 +22,7 @@
 header "Network" "DynDNS" "@TR<<DynDNS Settings>>" 'onload="modechange()"' "$SCRIPT_NAME"
 
 #define supported services
-services="changeip dyndns eurodyndns ovh noip ods hn regfish tzo"
+services="changeip dyndns eurodyndns ovh noip ods hn regfish tzo zoneedit"
 
 #generate fields for supported services
 for service in $services; do
