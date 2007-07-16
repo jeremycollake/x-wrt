@@ -4,7 +4,7 @@
 
 header "Status" "Interfaces" "@TR<<Interfaces>>"
 
-config_load network
+config_load /etc/config/network
 for cfgsec in $CONFIG_SECTIONS; do
 	eval "cfgtype=\$CONFIG_${cfgsec}_TYPE"
 	[ "$cfgtype" = "interface" ] && {
@@ -24,7 +24,7 @@ for cfgsec in $CONFIG_SECTIONS; do
 	}
 done
 
-config_load wireless
+config_load /etc/config/wireless
 for cfgsec in $CONFIG_SECTIONS; do
 	eval "cfgtype=\$CONFIG_${cfgsec}_TYPE"
 	[ "$cfgtype" = "wifi-iface" ] && {
