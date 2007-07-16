@@ -11,6 +11,19 @@ function config_load(package, var) {
 	}
 }
 
+# parameters: 1
+function config_load_state(package, var) {
+	while (("/bin/ash -c '. /etc/functions.sh; unset NO_EXPORT; . \"/var/state/"package"\" 2>/dev/null; env | grep \"^CONFIG_\"'" | getline) == 1) {
+		sub("^CONFIG_", "")
+		if (match($0, "=") == 0) {
+			if (var != "") CONFIG[var] = CONFIG[var] "\n" $0
+			next
+		}
+		var=substr($0, 1, RSTART-1)
+		CONFIG[var] = substr($0, RSTART+1, length($0) - RSTART)
+	}
+}
+
 # parameters: 2
 function config_get(package, option) {
 	return CONFIG[package "_" option]
