@@ -1119,7 +1119,7 @@ status_usb_Loaded_USB_drivers => Natažené ovladače USB
 Status => Stav
 Wireless => Bezdrát
 status_wlan_survey_Installing_wl_package => Instaluji balíček wl
-Survey Results => Výsledky průzkumu
+Wireless Survey => Bezdrátový průzkum
 HelpText WLAN Survey => Váš bezdrátový adaptér není v klientském režimu. Pro průzkum musí být na několik sekund nastaven do klientského režimu. Provoz vaší sítě WLAN bude po tuto krátkou dobu přerušen.
 Scan => Skenovat
 status_wlan_survey_Connected_clients => Připojení klienti
@@ -1158,6 +1158,7 @@ Signal => Signál
 Noise => Šum
 SNR => SNR
 No wireless networks were found => Žádné bezdrátové sítě nebyly nalezeny
+Survey Results => Výsledky průzkumu
 
 ## /www/cgi-bin/webif/status-wwaninfo.sh
 Status => Stav
