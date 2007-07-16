@@ -1,164 +1,234 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
+
 header "Status" "Interfaces" "@TR<<Interfaces>>"
 
-# get WAN stats
-wan_config=$(ifconfig 2>&1 | grep -A 6 "`nvram get wan_ifname`[[:space:]]")
-if [ -n "$wan_config" ]; then
-wan_ip_addr=$(echo "$wan_config" | grep "inet addr" | cut -d: -f 2 | sed s/Bcast//g)
-wan_mac_addr=$(echo "$wan_config" | grep "HWaddr" | cut -d' ' -f 10)
-wan_tx_packets=$(echo "$wan_config" | grep "TX packets" | sed s/'TX packets:'//g | cut -d' ' -f 11 | int2human)
-wan_rx_packets=$(echo "$wan_config" | grep "RX packets" | sed s/'RX packets:'//g | cut -d' ' -f 11 | int2human)
-wan_tx_bytes=$(echo "$wan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d'(' -f 3)
-wan_rx_bytes=$(echo "$wan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d'(' -f 2 | cut -d ')' -f 1)
-fi
-# get LAN stats
-lan_config=$(ifconfig 2>&1 | grep -A 6 "`nvram get lan_ifname`[[:space:]]")
-lan_ip_addr=$(echo "$lan_config" | grep "inet addr" | cut -d: -f 2 | sed s/Bcast//g)
-lan_mac_addr=$(echo "$lan_config" | grep "HWaddr" | cut -d' ' -f 12)
-lan_tx_packets=$(echo "$lan_config" | grep "TX packets" | sed s/'TX packets:'//g | cut -d' ' -f 11 | int2human)
-lan_rx_packets=$(echo "$lan_config" | grep "RX packets" | sed s/'RX packets:'//g | cut -d' ' -f 11 | int2human)
-lan_tx_bytes=$(echo "$lan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d'(' -f 3)
-lan_rx_bytes=$(echo "$lan_config" | grep "TX bytes" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d'(' -f 2 | cut -d ')' -f 1)
-# get wifi stats
-wlan_config=$(iwconfig 2>&1 | grep -v 'no wireless' | grep '\w')
-wlan_ssid=$(echo "$wlan_config" | grep 'ESSID' | cut -d':' -f 2 | sed s/'"'//g)
-wlan_mode=$(echo "$wlan_config" | grep "Mode:" | cut -d':' -f 2 | cut -d' ' -f 1)
-wlan_freq=$(echo "$wlan_config" | grep "Mode:" | cut -d':' -f 3 | cut -d' ' -f 1)
-wlan_ap=$(echo "$wlan_config" | grep "Mode:" | cut -d' ' -f 18)
-wlan_txpwr=$(echo "$wlan_config" | grep Tx-Power | cut -d'-' -f2 | cut -d':' -f 2 | sed s/"dBm"//g)
-wlan_key=$(echo "$wlan_config" | grep "Encryption key:" | sed s/"Encryption key:"//)
-wlan_tx_retries=$(echo "$wlan_config" | grep "Tx excessive retries" | cut -d':' -f 2 | cut -d' ' -f 1)
-wlan_tx_invalid=$(echo "$wlan_config" | grep "Tx excessive retries" | cut -d':' -f 3 | cut -d' ' -f 1)
-wlan_tx_missed=$(echo "$wlan_config" | grep "Missed beacon" | cut -d':' -f 4 | cut -d' ' -f 1)
-wlan_rx_invalid_nwid=$(echo "$wlan_config" | grep "Rx invalid nwid:" | cut -d':' -f 2 | cut -d' ' -f 1)
-wlan_rx_invalid_crypt=$(echo "$wlan_config" | grep "Rx invalid nwid:" | cut -d':' -f 3 | cut -d' ' -f 1)
-wlan_rx_invalid_frag=$(echo "$wlan_config" | grep "Rx invalid nwid:" | cut -d':' -f 4 | cut -d' ' -f 1)
-wlan_noise=$(echo "$wlan_config" | grep "Link Noise level:" | cut -d':' -f 2 | cut -d' ' -f 1)
+display_interface() {
+	local iface="$1"
+	local iname="$2"
+	local dns_servers=""
+	local resconf
+	equal "$iface" "" || equal "$iname" "" && return 1
+	[ "$iname" = "WAN" ] && {
+		resconf=$(cat /etc/dnsmasq.conf 2>/dev/null | grep "^resolv-file=" | cut -d'=' -f 2)
+		resconf="${resconf:-"/etc/resolv.conf"}"
+		dns_servers=$(cat "$resconf" 2>/dev/null | awk '/nameserver/ { printf $2 "|" }')
+	}
+	ifconfig "$iface" 2>/dev/null | awk -v "iname=$iname" -v "dns_servers=$dns_servers" '
+function colonstr(strc, nparts, colparts) {
+	if ((length(strc) == 0) || (strc !~ /:/)) return ""
+	nparts = split(strc, colparts, ":")
+	if (nparts != 2) return ""
+	else return colparts[2]
+}
+function int2human(num, pref) {
+	if (num == "") return num
+	pref = 1000*1000*1000*1000
+	if (int(num/pref) > 0) return sprintf("%.2f@TR<<int2human_tera#t>>", num/pref)
+	pref = pref / 1000
+	if (int(num/pref) > 0) return sprintf("%.2f@TR<<int2human_giga#g>>", num/pref)
+	pref = pref / 1000
+	if (int(num/pref) > 0) return sprintf("%.2f@TR<<int2human_mega#m>>", num/pref)
+	pref = pref / 1000
+	if (int(num/pref) > 0) return sprintf("%.2f@TR<<int2human_kilo#k>>", num/pref)
+	return sprintf("%d", num)
+}
+function hardspace(parm) {
+	if (parm == "") return "&nbsp;"
+	else return parm
+}
+{
+	if ($0 ~ /Link encap:/)	_if["mac"] = hardspace($5)
+	else if ($0 ~ /inet addr:/) _if["ip"] = hardspace(colonstr($2))
+	else if ($0 ~ /RX packets:/) _if["rxp"] = hardspace(int2human(colonstr($2)))
+	else if ($0 ~ /TX packets:/) _if["txp"] = hardspace(int2human(colonstr($2)))
+	else if ($0 ~ /RX bytes:/) {
+		_if["rxh"] = $3" "$4
+		_if["txh"] = $7" "$8
+	}
+}
+END {
+	if (_if["mac"] || _if["ip"]) {
+		print "start_form|@TR<<" iname ">>"
+		print "field|@TR<<MAC Address>>|" iname "_mac_addr"
+		print "string|" _if["mac"]
+		print "field|@TR<<IP Address>>|" iname "_ip_addr"
+		print "string|" _if["ip"]
+		if (dns_servers != "") {
+			dnscount = split(dns_servers, dns, "|")
+			for (i = 1; i <= dnscount; i++) {
+				if (dns[i] != "") {
+					print "field|@TR<<DNS Server>> " i "|dns_server_" i
+					print "string|" dns[i]
+				}
+			}
+		}
+		print "field|@TR<<Received>>|" iname "_rx"
+		print "string|" _if["rxp"] " @TR<<status_interfaces_pkts#pkts>>&nbsp;" _if["rxh"]
+		print "field|@TR<<Transmitted>>|" iname "_tx"
+		print "string|" _if["txp"] " @TR<<status_interfaces_pkts#pkts>>&nbsp;" _if["txh"]
+		if (iname == "WAN") {
+			print "helpitem|WAN"
+			print "helptext|WAN WAN#WAN stands for Wide Area Network and is usually the upstream connection to the internet."
+		} else if (iname == "LAN") {
+			print "helpitem|LAN"
+			print "helptext|LAN LAN#LAN stands for Local Area Network."
+		} else if (iname == "LOOPBACK") {
+			print "helpitem|LOOPBACK"
+			print "helptext|LOOPBACK#A loopback interface is a type of '\''circuitless IP address'\'' or '\''virtual IP'\'' address, as the IP address is not associated with any one particular interface (or circuit) on the host or router. Any traffic that a computer program sends on the loopback network is addressed to the same computer."
+		}
+		print "end_form"
+	}
+}' | display_form
+}
 
-# set unset vars
-wlan_freq="${wlan_freq:-0}"
-wlan_noise="${wlan_noise:-0}"
-wlan_txpwr="${wlan_txpwr:-0}"
+display_wlans() {
+	iwconfig 2>/dev/null | grep -v 'no wireless' | grep '\w' | awk '
+BEGIN {
+	wlan_counter = 0
+}
+function print_wlan() {
+	if (_wlan["essid"]) {
+		print "start_form|@TR<<WLAN>>"; if (wlan_counter > 1) print " " wlan_counter - 1
+		print "field|@TR<<Access Point>>|wlan_"wlan_counter"_ap"
+		print "string|" _wlan["ap"]
+		print "field|@TR<<Mode>>|wlan_"wlan_counter"_mode"
+		print "string|" _wlan["mode"]
+		print "field|@TR<<ESSID>>|wlan_"wlan_counter"_ssid"
+		print "string|" _wlan["essid"]
+		print "field|@TR<<Frequency>>|wlan_"wlan_counter"_freq"
+		print "string|" _wlan["freq"] " GHz"
+		print "field|@TR<<Transmit Power>>|wlan_"wlan_counter"_txpwr"
+		print "string|" _wlan["txpwr"] " dBm"
+		print "field|@TR<<Noise Level>>|wlan_"wlan_counter"_noise"
+		print "string|" _wlan["noise"] " dBm"
+		print "field|@TR<<Encryption Key>>|wlan_"wlan_counter"_key"
+		print "string|<div class=\"smalltext\">" _wlan["key"] "</div>"
+		print "field|@TR<<Rx Invalid nwid>>|wlan_"wlan_counter"_rx_invalid_nwid"
+		print "string|" _wlan["rxinvnwid"]
+		print "field|@TR<<Rx Invalid Encryption>>|wlan_"wlan_counter"_rx_invalid_crypt"
+		print "string|" _wlan["rxinvcrypt"]
+		print "field|@TR<<Tx Retries in Excess>>|wlan_"wlan_counter"_tx_retries"
+		print "string|" _wlan["txretries"]
+		print "field|@TR<<Tx Invalid>>|wlan_"wlan_counter"_tx_invalid"
+		print "string|" _wlan["txinvalid"]
+		print "field|@TR<<Tx Missed Beacon>>|wlan_"wlan_counter"_tx_missed"
+		print "string|" _wlan["txmissed"]
+		if (wlan_counter == 1) {
+			print "helpitem|WLAN"
+			print "helptext|WLAN LAN#WLAN stands for Wireless Local Area Network."
+		}
+		print "end_form"
+	}
+	delete _wlan
+}
+function colonstr(strc, nparts, colparts) {
+	if ((length(strc) == 0) || (strc !~ /:/)) return ""
+	nparts = split(strc, colparts, ":")
+	if (nparts != 2) return ""
+	else return colparts[2]
+}
+function hardspace(parm) {
+	if (parm == "") return "&nbsp;"
+	else return parm
+}
+{
+	if ($0 !~ /^[[:space:]]/) {
+		print_wlan()
+		wlan_counter++
+		for (i = 1; i <= NF; i++) {
+			if ($i ~ /ESSID:/) {
+				_wlan["essid"] = hardspace(colonstr($i))
+				sub(/^"/, "", _wlan["essid"])
+				sub(/"$/, "", _wlan["essid"])
+				_wlan["essid"] = hardspace(_wlan["essid"])
+				break
+			}
+		}
+	} else {
+		if ($0 ~ /Mode:/) {
+			_wlan["mode"] = hardspace(colonstr($1))
+			_wlan["freq"] = colonstr($2); if (_wlan["freq"] == "") _wlan["freq"] = 0
+			_wlan["ap"] = hardspace($6)
+		} else if ($0 ~ /Tx-Power:/) {
+			_wlan["txpwr"] = colonstr($1)
+			if (_wlan["txpwr"] == "") _wlan["txpwr"] = 0
+		} else if ($0 ~ /Encryption key:/) {
+			_wlan["key"] = colonstr($2) " " $3
+		} else if ($0 ~ /Link Noise level:/) {
+			_wlan["noise"] = colonstr($3)
+			if (_wlan["noise"] == "") _wlan["noise"] = 0
+		} else if ($0 ~ /Rx invalid nwid:/) {
+			_wlan["rxinvnwid"] = colonstr($3); if (_wlan["rxinvnwid"] == "") _wlan["rxinvnwid"] = 0
+			_wlan["rxinvcrypt"] = colonstr($6); if (_wlan["rxinvcrypt"] == "") _wlan["rxinvcrypt"] = 0
+		} else if ($0 ~ /Tx excessive retries:/) {
+			_wlan["txretries"] = colonstr($3); if (_wlan["txretries"] == "") _wlan["txretries"] = 0
+			_wlan["txinvalid"] = colonstr($5); if (_wlan["txinvalid"] == "") _wlan["txinvalid"] = 0
+			_wlan["txmissed"] = colonstr($7); if (_wlan["txmissed"] == "") _wlan["txmissed"] = 0
+		}
+	}
+}
+END {
+	print_wlan()
+}
+' | display_form
+}
 
-# enumerate WAN nameservers
-form_dns_servers=$(awk '
-	BEGIN { counter=1 }
-	/nameserver/ {print "field|@TR<<DNS Server>> " counter "|dns_server_" counter "\n string|" $2 "\n" ;counter+=1}
-	' /etc/resolv.conf 2> /dev/null)
+display_interface "$(nvram get wan_ifname)" "WAN"
+display_interface "$(nvram get lan_ifname)" "LAN"
+display_wlans
 
-if [ -n "$wan_config" ]; then
+
+#########################################
+# raw stats
+preinterface() {
+	local iface="$1"
+	local iname="$2"
+	equal "$iface" "" || equal "$iname" "" && return 1
+	echo "<tr>"
+	case "$iname" in
+		WAN) echo "	<th><b>@TR<<Interfaces Status WAN|WAN Interface>></b></th>" ;;
+		LAN) echo "	<th><b>@TR<<Interfaces Status LAN|LAN Interface>></b></th>" ;;
+	esac
+	echo "</tr>"
+	echo "<tr>"
+	echo "	<td><div class=\"smalltext\"><pre>"
+	ifconfig "$iface" 2>/dev/null
+	echo "</pre></div></td>"
+	echo "</tr>"
+}
+
+prewlans() {
+	echo "<tr>"
+	echo "	<th><b>@TR<<Interfaces Status WLAN|Wireless Interface>></b></th>"
+	echo "</tr>"
+	echo "<tr>"
+	echo "	<td><div class=\"smalltext\"><pre>"
+	iwconfig  2>/dev/null | grep -v "no wireless"
+	echo "</pre></div></td>"
+	echo "</tr>"
+}
+
 display_form <<EOF
-
-start_form|@TR<<WAN>>
-field|@TR<<MAC Address>>|wan_mac_addr
-string|$wan_mac_addr
-field|@TR<<IP Address>>|wan_ip_addr
-string|$wan_ip_addr
-$form_dns_servers
-field|@TR<<Received>>|wan_rx
-string|$wan_rx_packets @TR<<status_interfaces_pkts#pkts>> ($wan_rx_bytes)
-field|@TR<<Transmitted>>|wan_tx
-string|$wan_tx_packets @TR<<status_interfaces_pkts#pkts>> ($wan_tx_bytes
-helpitem|WAN
-helptext|WAN WAN#WAN stands for Wide Area Network and is usually the upstream connection to the internet.
-end_form
+start_form|@TR<<Raw Information>>
 EOF
-fi
-
-display_form <<EOF
-start_form|@TR<<LAN>>
-field|@TR<<MAC Address>>|lan_mac_addr
-string|$lan_mac_addr
-field|@TR<<IP Address>>|lan_ip_addr
-string|$lan_ip_addr
-field|@TR<<Received>>|lan_rx
-string|$lan_rx_packets @TR<<status_interfaces_pkts#pkts>> ($lan_rx_bytes)
-field|@TR<<Transmitted>>|lan_tx
-string|$lan_tx_packets @TR<<status_interfaces_pkts#pkts>> ($lan_tx_bytes
-helpitem|LAN
-helptext|LAN LAN#LAN stands for Local Area Network.
-end_form
-
-start_form|@TR<<WLAN>>
-field|@TR<<Access Point>>|wlan_ap
-string|$wlan_ap
-field|@TR<<Mode>>|wlan_mode
-string|$wlan_mode
-field|@TR<<ESSID>>|wlan_ssid
-string|$wlan_ssid
-field|@TR<<Frequency>>|wlan_freq
-string|$wlan_freq Ghz
-field|@TR<<Transmit Power>>|wlan_txpwr
-string|$wlan_txpwr dBm
-field|@TR<<Noise Level>>|wlan_noise
-string|$wlan_noise dBm
-field|@TR<<Encryption Key>>|wlan_key
-string|<div class="numeric-small">$wlan_key</div>
-field|@TR<<Rx Invalid nwid>>|wlan_rx_invalid_nwid
-string|$wlan_rx_invalid_nwid
-field|@TR<<Rx Invalid Encryption>>|wlan_rx_invalid_crypt
-string|$wlan_rx_invalid_crypt
-field|@TR<<Tx Retries in Excess>>|wan_tx_retries
-string|$wlan_tx_retries
-field|@TR<<Tx Invalid>>|wan_tx_invalid
-string|$wlan_tx_invalid
-field|@TR<<Tx Missed Beacon>>|wan_tx_missed
-string|$wlan_tx_missed
-helpitem|WLAN
-helptext|WLAN LAN#WLAN stands for Wireless Local Area Network.
-field||spacer1
-string|<br /><br />
+if empty "$FORM_show_raw_stats"; then
+	display_form <<EOF
 field||show_raw
 formtag_begin|raw_stats|$SCRIPT_NAME
 submit|show_raw_stats| @TR<<&nbsp;Show raw statistics&nbsp;>>
 formtag_end
 end_form
 EOF
-
-#########################################
-# raw stats
-! empty "$FORM_show_raw_stats" && {
-
-display_form <<EOF
-start_form|@TR<<Raw Information>>
-EOF
-
-echo "<tr><td><br /></td></tr>
-	<div class=\"smalltext\">
-		<tr>
-			<th><b>@TR<<Interfaces Status WAN|WAN Interface>></b></th>
-		</tr>
-		<tr>
-			<td><pre>"
-ifconfig 2>&1 | grep -A 6 "`nvram get wan_ifname`[[:space:]]"
-echo "</pre></td>
-		</tr>
-		<tr><td><br /><br /></td></tr>
-		<tr>
-			<th><b>@TR<<Interfaces Status LAN|LAN Interface>></b></th>
-		</tr>
-		<tr>
-			<td><pre>"
-ifconfig 2>&1 | grep -A 6 "`nvram get lan_ifname`[[:space:]]"
-echo "</pre></td>
-		</tr>
-		<tr><td><br /><br /></td></tr>
-		<tr>
-			<th><b>@TR<<Interfaces Status WLAN|Wireless Interface>></b></th>
-		</tr>
-		<tr>
-			<td><pre>"
-iwconfig 2>&1 | grep -v 'no wireless' | grep '\w'
-echo "</pre></td>
-		</tr>
-		</div>"
-
-display_form <<EOF
+else
+	preinterface "$(nvram get wan_ifname)" "WAN"
+	preinterface "$(nvram get lan_ifname)" "LAN"
+	prewlans
+	display_form <<EOF
 end_form
 EOF
-}
+fi
 
 footer ?>
 <!--
