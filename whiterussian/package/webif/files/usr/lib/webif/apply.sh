@@ -129,12 +129,17 @@ reload_network() {
 	grep '^wan_' config-network >&- 2>&- && {
 		ifdown wan
 		ifup wan
+		reload_firewall
 		reload_dnsmasq
 	}
 
 	grep '^lan_' config-network >&- 2>&- && {
 		ifdown lan
 		ifup lan
+		local wl0_ifname="$(nvram get wl0_ifname)"
+		local lan_ifnames="$(nvram get lan_ifnames)"
+		[ -n "$wl0_ifname" ] && [ -n "$(grep "$wl0_ifname" "$lan_ifnames")" ] && reload_wireless
+		reload_firewall
 		restart_dnsmasq
 	}
 	echo_action_done
