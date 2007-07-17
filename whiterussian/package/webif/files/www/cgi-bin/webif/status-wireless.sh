@@ -424,5 +424,5 @@ fi
 
 footer ?>
 <!--
-##WEBIF:name:Status:980:Wireless
+##WEBIF:name:Status:160:Wireless
 -->
