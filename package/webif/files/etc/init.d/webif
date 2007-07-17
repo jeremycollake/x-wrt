@@ -38,63 +38,57 @@ uci_load "webif"
 	
 	[ -z "$device_name" ] && [ -f "/proc/diag/model" ] && device_name=$(cat "/proc/diag/model")
 	while [ -z "$device_name" ]; do  
-	        dd bs=1024 skip=212 count=16 if=/dev/mtd/0 2>/dev/null | strings | grep -q W54G
-	        [ $? = "0" ] && {
-	               device_name="Linksys WRT54G"
-	               break
-	        }
-	        dd bs=1024 count=1 skip=5 if=/dev/mtd/0 2>/dev/null | strings | grep "WL500gp"
-	        [ $? = "0" ] && {
-	               device_name="ASUS WL-500gp"
-	               break
-	        }
-	        ifconfig eth0 |grep -q 00:0D:B9:**:**:**
+		cat /proc/cpuinfo |grep -q "Atheros"
 		[ $? = "0" ] && {
-			device_name="PC Engines WRAP"
-			break
-	        }
-	        dd bs=1 count=19 skip=5 if=/dev/mtd/5 2>/dev/null | strings | grep "MR3201A-FLF-FON" || ifconfig eth0 |grep -q 00:18:84:**:**:**
+	        	dd bs=1 count=19 skip=5 if=/dev/mtd/5 2>/dev/null | strings | grep "MR3201A-FLF-FON" || ifconfig eth0 |grep -q 00:18:84:**:**:**
+			[ $? = "0" ] && {
+				device_name="La Fonera (ACCTON MR3201A)"
+				break
+			}
+			ifconfig eth0 |grep -q 00:18:0A:**:**:**
+			[ $? = "0" ] && {
+				device_name="Meraki Mini"
+				break
+			}
+		}
+
+		if [ "$(uname -m)" = "i?86" ]; then
+			ifconfig eth0 |grep -q 00:0D:B9:**:**:**
+			[ $? = "0" ] && {
+				device_name="PC Engines WRAP"
+				break
+			}
+		fi
+
+		cat /proc/cpuinfo |grep -q "IXP4\?\?"
 		[ $? = "0" ] && {
-			device_name="La Fonera (ACCTON MR3201A)"
-			break
+			cat /proc/cpuinfo |grep "Gateway 7001 AP"
+			[ $? = "0" ] && {
+				device_name="Gateway 7001 AP"
+				break
+			}
+			cat /proc/cpuinfo |grep "D-Link DSM-G600 RevA"
+			[ $? = "0" ] && {
+				device_name="D-Link DSM-G600 RevA"
+				break
+			}
+			cat /proc/cpuinfo |grep "Freecom FSG-3"
+			[ $? = "0" ] && {
+				device_name="Freecom FSG-3"
+				break
+			}
+			cat /proc/cpuinfo |grep "Iomega NAS 100d"
+			[ $? = "0" ] && {
+				device_name="Iomega NAS 100d"
+				break
+			}
+			cat /proc/cpuinfo |grep "Linksys NSLU2"
+			[ $? = "0" ] && {
+				device_name="Linksys NSLU2"
+				break
+			}
 		}
-		cat /proc/cpuinfo |grep "Gateway 7001 AP"
-		[ $? = "0" ] && {
-			device_name="Gateway 7001 AP"
-			break
-		}
-		cat /proc/cpuinfo |grep "D-Link DSM-G600 RevA"
-		[ $? = "0" ] && {
-			device_name="D-Link DSM-G600 RevA"
-			break
-		}
-		cat /proc/cpuinfo |grep "Freecom FSG-3"
-		[ $? = "0" ] && {
-			device_name="Freecom FSG-3"
-			break
-		}
-		cat /proc/cpuinfo |grep "Iomega NAS 100d"
-		[ $? = "0" ] && {
-			device_name="Iomega NAS 100d"
-			break
-		}
-		cat /proc/cpuinfo |grep "Linksys NSLU2"
-		[ $? = "0" ] && {
-			device_name="Linksys NSLU2"
-			break
-		}
-	
-		#Generic detection in case the router is not caught by the above rules.
-	        if [ "$(uname -m)" = "i?86" ]; then
-	        	device_name="Generic x86"
-	        	break
-	        fi
-	        cat /proc/cpuinfo |grep "IXP4\?\?"
-	        [ $? = "0" ] && {
-			device_name="Unknown IXP4xx Device"
-			break
-		}
-	break
+		break
 	done
 	if [ -z "$CONFIG_general_firmware_version" -o -z "$CONFIG_general_firmware_name" ]; then
 		#detect firmware info
