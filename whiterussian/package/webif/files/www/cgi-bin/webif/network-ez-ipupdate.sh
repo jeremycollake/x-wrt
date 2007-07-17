@@ -1,30 +1,30 @@
 #!/usr/bin/webif-page
 <?
-ddns_dir="/etc/ez-ipupdate"
-ddns_msg="$ddns_dir/ez-ipupdate.msg"
 . /usr/lib/webif/webif.sh
+
+ezipupdate_name="ez-ipupdate"
+ddns_dir="/etc/$ezipupdate_name"
+ddns_msg="$ddns_dir/${ezipupdate_name}.msg"
 
 header "Network" "DynDNS" "@TR<<DynDNS Settings>>" '' "$SCRIPT_NAME"
 has_pkgs ez-ipupdate
 
 load_settings "ezipupdate"
 
-# test for broken ez-ipupdate package as found in OpenWrt's RC6 official repository
+# test for broken ez-ipupdate package as found in OpenWrt's official repository
 # if found, give an option to install proper one from X-Wrt repository.
-cat "/etc/hotplug.d/iface/10-ez-ipupdate" 2> /dev/null | grep -iq "include /lib/network"
-equal "$?" "0" && {
-	echo "<div class=\"warning\">@TR<<broken_ezip|You have a partially broken ez-ipupdate package, as found in OpenWrt's official RC6 repository. To install a fixed copy of the package from X-Wrt's repository, press the button below>>.</div>"
-display_form <<EOF
+[ ! -f "/etc/hotplug.d/iface/20-ez-ipupdate" ] && {
+	echo "<div class=\"warning\">@TR<<broken_ezip|You have a partially broken ez-ipupdate package, as found in OpenWrt's official repository. To install a fixed copy of the package from X-Wrt's repository, press the button below>>.</div>"
+	display_form <<EOF
 start_form
 submit|reinstall_ez| @TR<<Reinstall EZ-IPUPDATE>> 
 end_form
 EOF
 }
-	! empty "$FORM_reinstall_ez" && {
-		echo "@TR<<Please wait>> ...<br />"
-		install_package "http://ftp.berlios.de/pub/xwrt/packages/ez-ipupdate_3.0.11b8-2_mipsel.ipk"
-	}
-
+! empty "$FORM_reinstall_ez" && {
+	echo "@TR<<Please wait>> ...<br />"
+	install_package "http://ftp.berlios.de/pub/xwrt/packages/ez-ipupdate_3.0.11b8-3_mipsel.ipk"
+}
 
 # todo add javascript /enable/disable for mx and wildcard / connection type
 #ezip            { "server", "user", "address", "wildcard", "mx", "url", "host", NULL };
@@ -77,7 +77,7 @@ string|FORM_ddns_username|User Name|required|$FORM_ddns_username
 string|FORM_ddns_passwd|Password|required|$FORM_ddns_passwd
 string|FORM_ddns_hostname|Host Name||$FORM_ddns_hostname
 hostname|FORM_ddns_server|Server Name||$FORM_ddns_server
-int|FORM_ddns_max_interval|Max Interval (sec)|min=86400 max=2196000|$FORM_ddns_max_interval
+int|FORM_ddns_max_interval|Max Interval (sec)|min=86400 max=2937600|$FORM_ddns_max_interval
 " && {
 	save_setting "ezipupdate" ddns_enable $FORM_ddns_enable
 	save_setting "ezipupdate" ddns_service_type $FORM_ddns_service_type
@@ -134,7 +134,7 @@ text|ddns_max_interval|$FORM_ddns_max_interval
 string|<br /><a href="network-logread-ez-ipupdate.sh">@TR<<View DynDNS Syslog>></a>
 end_form"
 ?>
-<?if [ -f  $ddns_msg ] ?>
+<?if [ -f $ddns_msg ] ?>
 <br/>@TR<<Last update>>: <? cat $ddns_msg ?><br/><br/>
 <?fi?>
 <? footer ?>

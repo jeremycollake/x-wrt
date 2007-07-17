@@ -1,0 +1,30 @@
+#!/bin/sh
+[ "$INTERFACE" = "wan" ] && [ "$(nvram get ddns_enable)" = "1" ] && {
+	. /etc/functions.sh
+
+	ezipupdate_name="ez-ipupdate"
+	ezipupdate_bin="/usr/sbin/$ezipupdate_name"
+	ezipupdate_init="/etc/init.d/S??$ezipupdate_name"
+	ddns_dir="/etc/$ezipupdate_name"
+	ddns_conf="$ddns_dir/${ezipupdate_name}.conf"
+	ddns_cache="$ddns_dir/${ezipupdate_name}.cache"
+	ddns_exec_ok="$ddns_dir/${ezipupdate_name}-ok.sh"
+
+	case "$ACTION" in
+		ifup)
+			if [ -x $ezipupdate_init ]; then
+				[ "$(cat /proc/diag/led/power)" = "1" ] && /etc/init.d/S??$ezipupdate_name restart
+			else
+				[ -x $ezipupdate_bin ] && [ -r $ddns_conf ] && {
+					wan_interface=$(nvram get ${INTERFACE}_ifname)
+					$ezipupdate_bin -c $ddns_conf -b $ddns_cache -i $wan_interface -e $ddns_exec_ok 2>&1 | logger -t "${ezipupdate_name}-hotplug"
+				}
+			fi
+			;;
+		ifdown)
+			if [ -x $ezipupdate_init ]; then
+				[ "$(cat /proc/diag/led/power)" = "1" ] && /etc/init.d/S??$ezipupdate_name stop
+			fi
+			;;
+	esac
+}

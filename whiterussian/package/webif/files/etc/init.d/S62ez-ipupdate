@@ -1,0 +1,80 @@
+#!/bin/sh
+#
+# ez-ipupdate     Starts ez-ipupdate
+#
+
+ezipupdate_name="ez-ipupdate"
+ezipupdate_bin="/usr/sbin/$ezipupdate_name"
+ezipupdate_pid="/var/run/${ezipupdate_name}.pid"
+ddns_dir="/etc/$ezipupdate_name"
+ddns_conf="$ddns_dir/${ezipupdate_name}.conf"
+ddns_cache="$ddns_dir/${ezipupdate_name}.cache"
+ddns_exec_ok="$ddns_dir/${ezipupdate_name}-ok.sh"
+ddns_msg="$ddns_dir/${ezipupdate_name}.msg"
+
+getPID(){
+	if [ -f $ezipupdate_pid ]; then 
+		echo $(cat $ezipupdate_pid 2>/dev/null)
+	else 
+		echo ""
+	fi
+}
+
+start() {
+	if [ "$(nvram get ddns_enable)" = "1" ]; then
+		wan_interface=$(nvram get wan_ifname)
+		if [ -z "$(getPID)" ]; then
+			if [ -n "$wan_interface" ]; then
+				if [ -f $ddns_conf ]; then
+					echo -n "Starting $ezipupdate_name..."
+					$ezipupdate_bin -d -F $ezipupdate_pid -c $ddns_conf -b $ddns_cache -i $wan_interface -e $ddns_exec_ok
+					echo "OK"
+				else
+					echo "$ezipupdate_name: no configuration file found"
+				fi
+			else
+				echo "$ezipupdate_name: no WAN interface found"
+			fi
+		else
+			echo "$ezipupdate_name is already running"
+		fi
+	else
+		echo "$ezipupdate_name is disabled"
+	fi
+}
+
+stop() {
+	pid=$(getPID)
+	if [ -n "$pid" ]; then
+		echo -n "Stopping $ezipupdate_name..."
+		( { kill -SIGINT $pid >/dev/null 2>&1
+		} && echo "OK" ) || echo "ERROR"
+	else
+		echo "$ezipupdate_name is not running"
+	fi
+}
+
+restart() {
+	stop
+	start
+}
+
+[ ! -f $ezipupdate_bin ] && exit 0
+
+case "$1" in
+	start)
+		start
+		;;
+	stop)
+		stop
+		;;
+	restart)
+		restart
+		;;
+	*)
+		echo $"Usage: $0 {start|stop|restart}"
+		exit 1
+esac
+
+exit $?
+
