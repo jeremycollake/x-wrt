@@ -119,8 +119,8 @@ EOF
 [ 0 -eq "$W2L_IPTRULES" ] && {
 	display_form <<EOF
 field|@TR<<Wifi to LAN Communication>>
-radio|wifi_wifi2lan|$FORM_wifi_wifi2lan|1|Allow
-radio|wifi_wifi2lan|$FORM_wifi_wifi2lan|0|Deny
+radio|wifi_wifi2lan|$FORM_wifi_wifi2lan|1|@TR<<Allow>>
+radio|wifi_wifi2lan|$FORM_wifi_wifi2lan|0|@TR<<Deny>>
 helpitem|Wifi to LAN Communication
 helptext|Helptext Wifi to LAN Communication#Allows or denies communication from devices connected to wireless to send traffic to devices on the LAN.
 EOF
