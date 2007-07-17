@@ -1,7 +1,7 @@
 #!/bin/sh
 . /etc/functions.sh
 NAME=ez-ipupdate
-CONFIG=/etc/ez-ipupdate/$NAME.conf
+CONFIG=/etc/$NAME.conf
 COMMAND=/usr/sbin/$NAME
 [ "$ACTION" = "ifup" -a "$INTERFACE" = "wan" ] && {
 	[ "$(nvram get ddns_enable)" = "1" ] && [ -x $COMMAND ] && [ -r $CONFIG ] && {

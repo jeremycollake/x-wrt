@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ez-ipupdate
 PKG_VERSION:=3.0.11b8
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_MD5SUM:=000211add4c4845ffa4211841bff4fb0
 
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/e/ez-ipupdate \
@@ -47,7 +47,7 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_EZIPUPDATE):
 	install -d -m0755 $(IDIR_EZIPUPDATE)/etc
-	install -m0600 ./files/$(PKG_NAME).conf $(IDIR_EZIPUPDATE)/etc/
+	install -m0600 ./files/$(PKG_NAME).conf $(IDIR_EZIPUPDATE)/etc/$(PKG_NAME).conf.sample
 	install -d -m0755 $(IDIR_EZIPUPDATE)/etc/hotplug.d/iface
 	install -m0755 ./files/$(PKG_NAME).hotplug $(IDIR_EZIPUPDATE)/etc/hotplug.d/iface/20-$(PKG_NAME)
 	install -d -m0755 $(IDIR_EZIPUPDATE)/usr/sbin
