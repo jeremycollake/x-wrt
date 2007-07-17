@@ -109,6 +109,7 @@ reload_wifi_enable() {
 	ifdown lan
 	ifup lan
 	ifup wifi
+	reload_wireless
 	reload_firewall
 	restart_dnsmasq
 	echo_action_done
@@ -119,6 +120,7 @@ reload_wifi_disable() {
 	ifdown wifi
 	ifdown lan
 	ifup lan
+	reload_wireless
 	reload_firewall
 	restart_dnsmasq
 	echo_action_done
