@@ -128,12 +128,11 @@ reload_wifi_disable() {
 
 reload_network() {
 	echo_reloading_settings "@TR<<apply_network#network>>"
-	local wl0_ifname="$(nvram get wl0_ifname)"
+	local wl0_ifname="$(nvram get wl0_ifname | sed 's/[[:space:]]//g')"
 	grep '^wan_' config-network >&- 2>&- && {
 		ifdown wan
 		ifup wan
-		local wan_ifnames="$(nvram get wan_ifnames)"
-		[ -n "$wl0_ifname" ] && [ -n "$(grep "$wl0_ifname" "$wan_ifnames")" ] && reload_wireless
+		[ -n "$wl0_ifname" ] && [ -n "$(nvram get wan_ifnames | grep "$wl0_ifname")" ] && reload_wireless
 		reload_firewall
 		reload_dnsmasq
 	}
@@ -141,8 +140,7 @@ reload_network() {
 	grep '^lan_' config-network >&- 2>&- && {
 		ifdown lan
 		ifup lan
-		local lan_ifnames="$(nvram get lan_ifnames)"
-		[ -n "$wl0_ifname" ] && [ -n "$(grep "$wl0_ifname" "$lan_ifnames")" ] && reload_wireless
+		[ -n "$wl0_ifname" ] && [ -n "$(nvram get lan_ifnames | grep "$wl0_ifname")" ] && reload_wireless
 		reload_firewall
 		restart_dnsmasq
 	}
