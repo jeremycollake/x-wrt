@@ -1,5 +1,5 @@
 #timezone group	timezone cities	timezone config string	zoneinfo
-#lubek@users.berlios.de 20070321 - updated to 2007d, zoneinfo added: 
+#revision: 2007f
 #  it is not exact for the "cities list" but it enables to remember 
 #  the selection and to synchronize TZs with the standard zoneinfo
 Australia	Melbourne,Canberra,Sydney	EST-10EST,M10.5.0,M3.5.0/3	Australia/Melbourne
