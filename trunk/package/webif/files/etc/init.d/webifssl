@@ -8,6 +8,8 @@ config_load webifssl
 DEFAULT_pidfile="/var/run/webifssl.pid"
 CONFIG_matrixtunnel_pidfile="${CONFIG_matrixtunnel_pidfile:-$DEFAULT_pidfile}"
 
+EXTRA_COMMANDS="status"
+
 start() {
 	DEFAULT_certs_cafile="/etc/ssl/matrixtunnel.cert"
 	DEFAULT_certs_privkey="/etc/ssl/matrixtunnel.key"
@@ -69,7 +71,7 @@ start() {
 stop() {
 	[ -f "$CONFIG_matrixtunnel_pidfile" ] && {
 		pid=$(cat "$CONFIG_matrixtunnel_pidfile")
-		[ -d "/proc/$pid" ] && {
+		[ -n "$pid" -a -d "/proc/$pid" ] && {
 			echo -n "Stopping webif^2 ssl tunnel..."
 			kill -TERM "$pid"
 			[ "$?" -eq 0 ] && echo "OK" || {
@@ -86,4 +88,13 @@ stop() {
 restart() {
 	stop
 	start
+}
+
+status() {
+	[ -f "$CONFIG_matrixtunnel_pidfile" ] && {
+		pid=$(cat "$CONFIG_matrixtunnel_pidfile")
+		[ -n "$pid" -a -d "/proc/$pid" ] && {
+			echo "webif^2 ssl tunnel (pid $pid) is running..."
+		}
+	}
 }
