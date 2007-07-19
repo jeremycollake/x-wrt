@@ -1,0 +1,89 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2007 X-Wrt.org 
+
+START=91
+
+config_load webifssl
+
+DEFAULT_pidfile="/var/run/webifssl.pid"
+CONFIG_matrixtunnel_pidfile="${CONFIG_matrixtunnel_pidfile:-$DEFAULT_pidfile}"
+
+start() {
+	DEFAULT_certs_cafile="/etc/ssl/matrixtunnel.cert"
+	DEFAULT_certs_privkey="/etc/ssl/matrixtunnel.key"
+	DEFAULT_listen_host=""
+	DEFAULT_listen_port="443"
+	DEFAULT_remote_host="127.0.0.1"
+	DEFAULT_remote_port="80"
+	DEFAULT_syslog_enable="0"
+	DEFAULT_syslog_loglevel="0"
+
+	CONFIG_certs_cafile="${CONFIG_certs_cafile:-$DEFAULT_certs_cafile}"
+	CONFIG_certs_privkey="${CONFIG_certs_privkey:-$DEFAULT_certs_privkey}"
+	CONFIG_listen_host="${CONFIG_listen_host:-$DEFAULT_listen_host}"
+	CONFIG_listen_port="${CONFIG_listen_port:-$DEFAULT_listen_port}"
+	CONFIG_remote_host="${CONFIG_remote_host:-$DEFAULT_remote_host}"
+	CONFIG_remote_port="${CONFIG_remote_port:-$DEFAULT_remote_port}"
+	CONFIG_syslog_enable="${CONFIG_syslog_enable:-DEFAULT_syslog_enable}"
+	CONFIG_syslog_loglevel="${CONFIG_syslog_loglevel:-DEFAULT_syslog_loglevel}"
+	IPCALC_CMD=$(which ipcalc.sh 2>/dev/null)
+	[ "$IPCALC_CMD" == "" ] && IPCALC_CMD=$(which ipcalc 2>/dev/null)
+
+	[ -f "$CONFIG_matrixtunnel_pidfile" ] && stop
+	config_get_bool wsenable matrixtunnel enable 0
+	[ "$wsenable" -eq 1 ] && {
+		if [ -f "$CONFIG_certs_cafile" -a -f "$CONFIG_certs_privkey" ]; then
+			OPTIONS="-A $CONFIG_certs_cafile -p $CONFIG_certs_privkey"
+			OPTIONS="$OPTIONS -d "
+			[ -n "$CONFIG_listen_host" ] && {
+				[ "$IPCALC_CMD" != "" ] && {
+					eval $($IPCALC_CMD "$CONFIG_listen_host")
+					[ "$CONFIG_listen_host" == "$IP" ] && OPTIONS="$OPTIONS$CONFIG_listen_host:"
+				}
+			}
+			[ "$CONFIG_listen_port" -lt 1 -o "$CONFIG_listen_port" -gt 65535 ] 2>/dev/null && CONFIG_listen_port="$DEFAULT_listen_port"
+			OPTIONS="$OPTIONS$CONFIG_listen_port"
+			OPTIONS="$OPTIONS -r "
+			[ -n "$CONFIG_remote_host" ] && {
+				[ "$IPCALC_CMD" != "" ] && {
+					eval $($IPCALC_CMD "$CONFIG_remote_host")
+					[ "$CONFIG_remote_host" == "$IP" ] && OPTIONS="$OPTIONS$CONFIG_remote_host:"
+				}
+				
+			}
+			[ "$CONFIG_remote_port" -lt 1 -o "$CONFIG_remote_port" -gt 65535 ] 2>/dev/null && CONFIG_listen_port="$DEFAULT_listen_port"
+			OPTIONS="$OPTIONS$CONFIG_remote_port"
+			config_get_bool msenable syslog enable 0
+			[ "$msenable" -eq 1 ] && {
+				[ "$CONFIG_syslog_loglevel" == 0 -o "$CONFIG_syslog_loglevel" -gt 8 ] 2>/dev/null && CONFIG_syslog_loglevel="$DEFAULT_syslog_loglevel"
+				OPTIONS="$OPTIONS -D $CONFIG_syslog_loglevel"
+			}
+			echo "Starting webif^2 ssl tunnel."
+			matrixtunnel $OPTIONS -P "$CONFIG_matrixtunnel_pidfile"
+		else
+			echo "webif^2 ssl certificates are missing!"
+		fi
+	}
+}
+
+stop() {
+	[ -f "$CONFIG_matrixtunnel_pidfile" ] && {
+		pid=$(cat "$CONFIG_matrixtunnel_pidfile")
+		[ -d "/proc/$pid" ] && {
+			echo -n "Stopping webif^2 ssl tunnel..."
+			kill -TERM "$pid"
+			[ "$?" -eq 0 ] && echo "OK" || {
+				echo "Failed!"
+				echo -n "Killing webif^2 ssl tunnel..."
+				kill -KILL "$pid"
+				[ "$?" -eq 0 ] && echo "OK" || echo "Failed!"
+			}
+		} || echo "webif^2 ssl tunnel is not running."
+		rm -f "$CONFIG_matrixtunnel_pidfile" 2>/dev/null
+	} || echo "No webif^2 ssl tunnel is running."
+}
+
+restart() {
+	stop
+	start
+}

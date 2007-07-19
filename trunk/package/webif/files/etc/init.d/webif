@@ -131,14 +131,6 @@ uci_load "webif"
 		uci_set "webif" "general" "device_name" "$device_name"
 	}
 
-	# Start stunnel if ssl is enabled
-	if [ "$CONFIG_ssl_enable" = "1" ]; then
-		killall matrixtunnel
-		matrixtunnel -A /etc/ssl/matrixtunnel.cert  -p /etc/ssl/matrixtunnel.key -d 443 -r 80
-	else
-		killall matrixtunnel
-	fi
-
 	if [ -e "/tmp/.uci/webif" ]; then
 		uci_commit "webif"
 	fi

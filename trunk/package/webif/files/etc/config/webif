@@ -14,9 +14,6 @@ config webif qos
 
 config webif misc
 	option opendns "0"
-	
-config webif ssl
-	option enable '0'
-	
+
 config webif wireless
 	option wifi0_txpower ''
