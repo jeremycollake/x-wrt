@@ -31,6 +31,8 @@ load_variables() {
 
 
 start() {
+	MATRIXTUNNEL=$(which matrixtunnel 2>/dev/null)
+	[ -z "$MATRIXTUNNEL" ] && return 1
 	local IPCALC_CMD wsenable OPTIONS msenable
 	load_variables
 	local IPCALC_CMD=$(which ipcalc.sh 2>/dev/null)
@@ -66,7 +68,7 @@ start() {
 				OPTIONS="$OPTIONS -D $CONFIG_syslog_loglevel"
 			}
 			echo "Starting webif^2 ssl tunnel."
-			matrixtunnel $OPTIONS -P "$CONFIG_matrixtunnel_pidfile"
+			$MATRIXTUNNEL $OPTIONS -P "$CONFIG_matrixtunnel_pidfile"
 		else
 			echo "webif^2 ssl certificates are missing!"
 		fi
