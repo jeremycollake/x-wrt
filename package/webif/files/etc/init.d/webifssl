@@ -2,33 +2,38 @@
 # Copyright (C) 2007 X-Wrt.org 
 
 START=91
-
-config_load webifssl
-
-DEFAULT_pidfile="/var/run/webifssl.pid"
-CONFIG_matrixtunnel_pidfile="${CONFIG_matrixtunnel_pidfile:-$DEFAULT_pidfile}"
-
 EXTRA_COMMANDS="status"
 
-start() {
-	DEFAULT_certs_cafile="/etc/ssl/matrixtunnel.cert"
-	DEFAULT_certs_privkey="/etc/ssl/matrixtunnel.key"
-	DEFAULT_listen_host=""
-	DEFAULT_listen_port="443"
-	DEFAULT_remote_host="127.0.0.1"
-	DEFAULT_remote_port="80"
-	DEFAULT_syslog_enable="0"
-	DEFAULT_syslog_loglevel="0"
+load_variables() {
+	[ "$webifssl_config_loaded" != "1" ] && {
+		config_load webifssl
+		DEFAULT_pidfile="/var/run/webifssl.pid"
+		DEFAULT_certs_cafile="/etc/ssl/matrixtunnel.cert"
+		DEFAULT_certs_privkey="/etc/ssl/matrixtunnel.key"
+		DEFAULT_listen_host=""
+		DEFAULT_listen_port="443"
+		DEFAULT_remote_host="127.0.0.1"
+		DEFAULT_remote_port="80"
+		DEFAULT_syslog_enable="0"
+		DEFAULT_syslog_loglevel="0"
+		CONFIG_matrixtunnel_pidfile="${CONFIG_matrixtunnel_pidfile:-$DEFAULT_pidfile}"
+		CONFIG_certs_cafile="${CONFIG_certs_cafile:-$DEFAULT_certs_cafile}"
+		CONFIG_certs_privkey="${CONFIG_certs_privkey:-$DEFAULT_certs_privkey}"
+		CONFIG_listen_host="${CONFIG_listen_host:-$DEFAULT_listen_host}"
+		CONFIG_listen_port="${CONFIG_listen_port:-$DEFAULT_listen_port}"
+		CONFIG_remote_host="${CONFIG_remote_host:-$DEFAULT_remote_host}"
+		CONFIG_remote_port="${CONFIG_remote_port:-$DEFAULT_remote_port}"
+		CONFIG_syslog_enable="${CONFIG_syslog_enable:-DEFAULT_syslog_enable}"
+		CONFIG_syslog_loglevel="${CONFIG_syslog_loglevel:-DEFAULT_syslog_loglevel}"
+		webifssl_config_loaded="1"
+	}
+}
 
-	CONFIG_certs_cafile="${CONFIG_certs_cafile:-$DEFAULT_certs_cafile}"
-	CONFIG_certs_privkey="${CONFIG_certs_privkey:-$DEFAULT_certs_privkey}"
-	CONFIG_listen_host="${CONFIG_listen_host:-$DEFAULT_listen_host}"
-	CONFIG_listen_port="${CONFIG_listen_port:-$DEFAULT_listen_port}"
-	CONFIG_remote_host="${CONFIG_remote_host:-$DEFAULT_remote_host}"
-	CONFIG_remote_port="${CONFIG_remote_port:-$DEFAULT_remote_port}"
-	CONFIG_syslog_enable="${CONFIG_syslog_enable:-DEFAULT_syslog_enable}"
-	CONFIG_syslog_loglevel="${CONFIG_syslog_loglevel:-DEFAULT_syslog_loglevel}"
-	IPCALC_CMD=$(which ipcalc.sh 2>/dev/null)
+
+start() {
+	local IPCALC_CMD wsenable OPTIONS msenable
+	load_variables
+	local IPCALC_CMD=$(which ipcalc.sh 2>/dev/null)
 	[ "$IPCALC_CMD" == "" ] && IPCALC_CMD=$(which ipcalc 2>/dev/null)
 
 	[ -f "$CONFIG_matrixtunnel_pidfile" ] && stop
@@ -69,6 +74,8 @@ start() {
 }
 
 stop() {
+	local pid
+	load_variables
 	[ -f "$CONFIG_matrixtunnel_pidfile" ] && {
 		pid=$(cat "$CONFIG_matrixtunnel_pidfile")
 		[ -n "$pid" -a -d "/proc/$pid" ] && {
@@ -86,11 +93,12 @@ stop() {
 }
 
 restart() {
-	stop
 	start
 }
 
 status() {
+	local pid
+	load_variables
 	[ -f "$CONFIG_matrixtunnel_pidfile" ] && {
 		pid=$(cat "$CONFIG_matrixtunnel_pidfile")
 		[ -n "$pid" -a -d "/proc/$pid" ] && {
