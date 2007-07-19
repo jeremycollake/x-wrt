@@ -276,6 +276,23 @@ for ucifile in $(ls /tmp/.uci/* 2>&-); do
 			[ ! -f /etc/rc.d/S??timezone ] && /etc/init.d/timezone enable >&- 2>&- <&-
 			/etc/init.d/timezone restart
 			;;
+		"/tmp/.uci/webifssl")
+			config_load webifssl
+			config_get_bool test matrixtunnel enable 0
+			if [ 1 -eq "$test" ]; then
+				[ -f /etc/init.d/webifssl ] && {
+					#echo '@TR<<Starting>> @TR<<webif^2 ssl tunnel>> ...'
+					/etc/init.d/webifssl enable >&- 2>&- <&-
+					/etc/init.d/webifssl start
+				}
+			else
+				[ -f /etc/init.d/webifssl ] && {
+					#echo '@TR<<Stopping>> @TR<<webif^2 ssl tunnel>> ...'
+					/etc/init.d/webifssl stop
+					/etc/init.d/webifssl disable >&- 2>&- <&-
+				}
+			fi
+			;;
 	esac
 done
 
