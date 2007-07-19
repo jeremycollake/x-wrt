@@ -50,6 +50,7 @@ config_cb() {
 }
 
 uci_load "webif"
+uci_load "webifssl"
 uci_load "system"
 #We have to load the system host name setting here because ntp_client also uses the hostname setting.
 eval CONFIG_system_hostname="\$CONFIG_${hostname_cfg}_hostname"
@@ -149,7 +150,7 @@ if empty "$FORM_submit"; then
 	if equal $FORM_effect "1" ; then FORM_effect="checked" ; fi	# -- effects checkbox
 	FORM_language="${CONFIG_general_lang:-en}"	
 	FORM_theme=${CONFIG_theme_id:-xwrt}
-	FORM_ssl_enable="${CONFIG_ssl_enable:-0}"
+	FORM_ssl_enable="${CONFIG_matrixtunnel_enable:-0}"
 else
 #####################################################################
 # save forms
@@ -186,7 +187,7 @@ EOF
 			}
 		}
 		# webif settings
-		uci_set "webif" "ssl" "enable" "$FORM_ssl_enable"
+		uci_set "webifssl" "matrixtunnel" "enable" "$FORM_ssl_enable"
 		uci_set "webif" "theme" "id" "$FORM_theme"
 		uci_set "webif" "general" "lang" "$FORM_language"
 		uci_set "webif" "general" "use_progressbar" "$FORM_effect_enable"
