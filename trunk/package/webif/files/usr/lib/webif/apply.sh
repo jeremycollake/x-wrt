@@ -273,15 +273,8 @@ for ucifile in $(ls /tmp/.uci/* 2>&-); do
 		 	;;
 		"/tmp/.uci/timezone")
 			echo '@TR<<Exporting>> @TR<<TZ setting>> ...'
-			uci_load "timezone"
-			eval CONFIG_timezone_posixtz="\$CONFIG_${timezone_cfg}_posixtz"
-			# create symlink to /tmp/TZ if /etc/TZ doesn't exist
-			# todo: -e | -f | -d didn't seem to work here, so I used find
-			if [ -z $(find "/etc/TZ" 2>/dev/null) ]; then
-				ln -s /tmp/TZ /etc/TZ
-			fi
-			# eJunky: set timezone
-			[ "$CONFIG_timezone_posixtz" ] && echo $CONFIG_timezone_posixtz > /etc/TZ
+			[ ! -f /etc/rc.d/S??timezone ] && /etc/init.d/timezone enable >&- 2>&- <&-
+			/etc/init.d/timezone restart
 			;;
 	esac
 done
