@@ -11,7 +11,7 @@ header "Info" "System" "<img src=\"/images/blkbox.jpg\" alt=\"@TR<<System Inform
 
 SHOW_BANNER=0	# set to show /etc/banner
 
-XWRT_BRANCH="trunk"
+XWRT_BRANCH="whiterussian"
 package_filename="webif_latest_stable.ipk"
 version_url="http://ftp.berlios.de/pub/xwrt/"
 
