@@ -32,7 +32,7 @@ case "$FORM_mode" in
 				CONFIGFILES="$CONFIGFILES ${configname#/tmp/.webif/file-}"
 			}
 		done		
-		for configname in $(ls /tmp/.uci/* 2>&-); do
+		for configname in $(ls /tmp/.uci/* 2>&- | grep -v "\\.lock\$" 2>&-); do
 				echo -n "<h3>${configname#/tmp/.uci/}</h3><br /><pre>"
 				cat $configname
 				echo '</pre><br />'
