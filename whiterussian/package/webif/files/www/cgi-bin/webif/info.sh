@@ -59,7 +59,7 @@ if [ -n "$FORM_install_webif" ]; then
 	uci_load "webif"
 	curlang="$CONFIG_general_lang"
 	! equal "$(ipkg status "webif-lang-${curlang}" 2>/dev/null | grep "^Status: " | grep " installed" )" "" && {
-		webif_version=$(ipkg status webif 2>/dev/null | sed '/^Version:/!d; s/^Version://; s/ //g;')
+		webif_version=$(ipkg status webif 2>/dev/null | awk '/Version:/ { ver = $2 } END { print ver}')
 		echo "<pre>"
 		ipkg install "${version_url}packages/webif-lang-${curlang}_${webif_version}_mipsel.ipk" -force-reinstall -force-overwrite | uniq
 		echo "</pre>"

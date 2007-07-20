@@ -413,7 +413,7 @@ switch_language() {
 			log_message "@TR<<apply_Installing_language_pack#Installing language pack>>"
 			# build URL for package
 			#  since the original webif may be installed to, have to make sure we get latest ver
-			webif_version=$(ipkg status webif | awk '/Version:/ { print $2 }')
+			webif_version=$(ipkg status webif | awk '/Version:/ { ver = $2 } END { print ver }')
 			xwrt_repo_url=$(cat /etc/ipkg.conf | grep -i "^src[[:space:]]*X-Wrt[[:space:]]*" | cut -d' ' -f3)
 			# always install language pack, since it may have been updated without package version change
 			ipkg install "${xwrt_repo_url}/webif-lang-${CONFIG_general_lang}_${webif_version}_mipsel.ipk" -force-reinstall -force-overwrite | uniq
