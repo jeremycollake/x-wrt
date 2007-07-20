@@ -275,7 +275,7 @@ function num_changes(counter) {
 	while (("(cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*; find '/tmp/.webif/edited-files' -type f) 2>&-" | getline) == 1) {
 		counter++
 	}
-	while (("cat /tmp/.uci/* 2>&-" | getline) == 1) {
+	while (("/bin/ash -c 'for config in \$(ls /tmp/.uci/* 2>&- | grep -v \"\\.lock\$\"); do cat \"\$config\" 2>&-; done'" | getline) == 1) {
 		counter++
 	}
 	return counter
