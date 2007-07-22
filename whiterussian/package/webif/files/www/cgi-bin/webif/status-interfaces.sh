@@ -105,16 +105,18 @@ function print_wlan() {
 		print "string|" _wlan["noise"] " @TR<<units_dBm#dBm>>"
 		print "field|@TR<<Encryption Key>>|wlan_"wlan_counter"_key"
 		print "string|<div class=\"smalltext\">" _wlan["key"] "</div>"
-		print "field|@TR<<Rx Invalid nwid>>|wlan_"wlan_counter"_rx_invalid_nwid"
-		print "string|" _wlan["rxinvnwid"]
-		print "field|@TR<<Rx Invalid Encryption>>|wlan_"wlan_counter"_rx_invalid_crypt"
-		print "string|" _wlan["rxinvcrypt"]
-		print "field|@TR<<Tx Retries in Excess>>|wlan_"wlan_counter"_tx_retries"
-		print "string|" _wlan["txretries"]
-		print "field|@TR<<Tx Invalid>>|wlan_"wlan_counter"_tx_invalid"
-		print "string|" _wlan["txinvalid"]
-		print "field|@TR<<Tx Missed Beacon>>|wlan_"wlan_counter"_tx_missed"
-		print "string|" _wlan["txmissed"]
+		if (_wlan["rxinvnwid"] || _wlan["rxinvcrypt"] || _wlan["txretries"] || _wlan["txinvalid"] || _wlan["txinvalid"]) {
+			print "field|@TR<<Rx Invalid nwid>>|wlan_"wlan_counter"_rx_invalid_nwid"
+			print "string|" _wlan["rxinvnwid"]
+			print "field|@TR<<Rx Invalid Encryption>>|wlan_"wlan_counter"_rx_invalid_crypt"
+			print "string|" _wlan["rxinvcrypt"]
+			print "field|@TR<<Tx Retries in Excess>>|wlan_"wlan_counter"_tx_retries"
+			print "string|" _wlan["txretries"]
+			print "field|@TR<<Tx Invalid>>|wlan_"wlan_counter"_tx_invalid"
+			print "string|" _wlan["txinvalid"]
+			print "field|@TR<<Tx Missed Beacon>>|wlan_"wlan_counter"_tx_missed"
+			print "string|" _wlan["txmissed"]
+		}
 		if (wlan_counter == 1) {
 			print "helpitem|WLAN"
 			print "helptext|WLAN LAN#WLAN stands for Wireless Local Area Network."
