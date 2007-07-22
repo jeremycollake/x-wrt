@@ -78,9 +78,10 @@ bulk_class="1:40"
 qos_status=$(qos-stat 2>&-)
 if ! empty "$qos_status" && exists "/usr/bin/qos-stat"; then
 ingress_start_line=$(echo "$qos_status" | grep INGRESS -n | cut -d ':' -f 1)
+ingress_start_line=$(( $ingress_start_line - 2 )) 2>/dev/null
 egress_status=$(echo "$qos_status" | sed "$ingress_start_line,\$ d")
 ingress_status=$(echo "$qos_status" | sed "1,$ingress_start_line d")
-ingress_stats_table=$(echo "$ingress_status" | 
+ingress_stats_table=$(echo -e "$ingress_status\n" | 
 	(awk \
 		-v root_class="$root_class" \
 		-v parent_class="$parent_class" \
@@ -100,22 +101,24 @@ ingress_stats_table=$(echo "$ingress_status" |
 					class="Bulk"
 				} else {
 					class="Unknown" $3
-				}														
-				getline		
-				print "<tr>"
-				print "	<td class=\"text\">" class "</td>"
-				print "	<td>" $4 "</td>"
-				printf "	<td>%d</td>\n", $2
-				if ($2 >= 2 ** 30) {
-					printf "	<td>(%.1f @TR<<GiB>>)</td>\n", $2 / (2 ** 30)
-				} else if ($2 >= 2 ** 20) {
-					printf "	<td>(%.1f @TR<<MiB>>)</td>\n", $2 / (2 ** 20)
-				} else if ($2 >= 2 ** 10) {
-					printf "	<td>(%.1f @TR<<KiB>>)</td>\n", $2 / (2 ** 10)
-				} else {
-					print "	<td>&nbsp;</td>"
 				}
-				print "</tr>"
+				getline
+				if (length($0) > 0) {
+					print "<tr>"
+					print "	<td class=\"text\">" class "</td>"
+					print "	<td>" $4 "</td>"
+					printf "	<td>%d</td>\n", $2
+					if ($2 >= 2 ** 30) {
+						printf "	<td>(%.1f @TR<<GiB>>)</td>\n", $2 / (2 ** 30)
+					} else if ($2 >= 2 ** 20) {
+						printf "	<td>(%.1f @TR<<MiB>>)</td>\n", $2 / (2 ** 20)
+					} else if ($2 >= 2 ** 10) {
+						printf "	<td>(%.1f @TR<<KiB>>)</td>\n", $2 / (2 ** 10)
+					} else {
+						print "	<td>&nbsp;</td>"
+					}
+					print "</tr>"
+				}
 			}
 		}'))
 
@@ -138,7 +141,7 @@ $ingress_stats_table
 EOF
 
 
-egress_stats_table=$(echo "$egress_status" | 
+egress_stats_table=$(echo -e "$egress_status\n" | 
 	(awk \
 		-v root_class="$root_class" \
 		-v parent_class="$parent_class" \
@@ -158,22 +161,24 @@ egress_stats_table=$(echo "$egress_status" |
 					class="Bulk"
 				} else {
 					class="Unknown" $3
-				}										
-				getline
-				print "<tr>"
-				print "	<td class=\"text\">" class "</td>"
-				print "	<td>" $4 "</td>"
-				printf "	<td>%d</td>\n", $2
-				if ($2 >= 2 ** 30) {
-					printf "	<td>(%.1f @TR<<GiB>>)</td>\n", $2 / (2 ** 30)
-				} else if ($2 >= 2 ** 20) {
-					printf "	<td>(%.1f @TR<<MiB>>)</td>\n", $2 / (2 ** 20)
-				} else if ($2 >= 2 ** 10) {
-					printf "	<td>(%.1f @TR<<KiB>>)</td>\n", $2 / (2 ** 10)
-				} else {
-					print "	<td>&nbsp;</td>"
 				}
-				print "</tr>"
+				getline
+				if (length($0) > 0) {
+					print "<tr>"
+					print "	<td class=\"text\">" class "</td>"
+					print "	<td>" $4 "</td>"
+					printf "	<td>%d</td>\n", $2
+					if ($2 >= 2 ** 30) {
+						printf "	<td>(%.1f @TR<<GiB>>)</td>\n", $2 / (2 ** 30)
+					} else if ($2 >= 2 ** 20) {
+						printf "	<td>(%.1f @TR<<MiB>>)</td>\n", $2 / (2 ** 20)
+					} else if ($2 >= 2 ** 10) {
+						printf "	<td>(%.1f @TR<<KiB>>)</td>\n", $2 / (2 ** 10)
+					} else {
+						print "	<td>&nbsp;</td>"
+					}
+					print "</tr>"
+				}
 			}
 		}'))
 
