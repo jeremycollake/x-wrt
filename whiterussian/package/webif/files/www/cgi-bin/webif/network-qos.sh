@@ -5,9 +5,6 @@
 # (c)2007 X-Wrt project (http://www.x-wrt.org)
 # (c)2007 Jeremy Collake
 #
-# This page is synchronized between kamikaze and WR branches. Changes to it *must* 
-# be followed by running the webif-sync.sh script.
-#
 # Description:
 #	Configures the qos-scripts package.
 #
@@ -30,7 +27,7 @@ header "Network" "QoS" "@TR<<QOS Configuration>>" ' onload="modechange()" ' "$SC
 if ! empty "$FORM_install_nbd"; then
 	echo "@TR<<qos_installing#Installing Nbd's QoS scripts>> ...<pre>"
 	! install_package "qos-scripts" && {
-		install_package "http://ftp.berlios.de/pub/xwrt/packages/qos-scripts_1.1.1-1_mipsel.ipk"
+		install_package "http://ftp.berlios.de/pub/xwrt/packages/qos-scripts_1.2.0-0_mipsel.ipk"
 	}
 	echo "</pre>"
 fi
@@ -43,7 +40,7 @@ is_package_installed "qos-re" && {
 # set an option, or remove it if the value is empty
 uci_set_value_remove_if_empty() {
 	local _package="$1"
-	local _config="$2"	
+	local _config="$2"
 	local _option="$3"
 	local _value="$4"
 	if ! empty "$_value"; then
@@ -58,30 +55,26 @@ uci_set_value_remove_if_empty() {
 #
 if is_package_installed "qos-scripts"; then
 
-#
-# test if show advanced rules is set
-#
 uci_load "webif"
-FORM_webif_advanced_test="$CONFIG_qos_show_advanced_rules"
 
 #
 # if form submit, then ...
 # else ...
 #
-! empty "$FORM_submit" && empty "$FORM_install_nbd" && {	
-	current_qos_item="$FORM_current_rule_index"	
-	! empty "$current_qos_item" && {		
+! empty "$FORM_submit" && empty "$FORM_install_nbd" && {
+	current_qos_item="$FORM_current_rule_index"
+	! empty "$current_qos_item" && {
 		# for validation purposes, replace non-numeric stuff in
-		# ports list and port range with integer.				
+		# ports list and port range with integer.
 		ports_validate=$(echo "$FORM_current_ports" | sed s/','/'0'/g)
-		portrange_validate=$(echo "$FORM_current_portrange" | sed s/'-'/'0'/g)		
+		portrange_validate=$(echo "$FORM_current_portrange" | sed s/'-'/'0'/g)
 validate <<EOF
 int|ports_validate|@TR<<Port Listing>>||$ports_validate
 int|portrange_validate|@TR<<Port Range>>||$portrange_validate
 ip|FORM_current_srchost|@TR<<Source IP>>||$FORM_current_srchost
 ip|FORM_current_dsthost|@TR<<Dest IP>>||$FORM_current_dsthost
 EOF
-		if ! equal "$?" "0"; then			
+		if ! equal "$?" "0"; then
 			echo "<div class=\"warning\">@TR<<qos_validation_failed#Validation of one or more fields failed! Not saving.>></div>"
 		else
 			SAVED=1
@@ -95,10 +88,10 @@ EOF
 			uci_set_value_remove_if_empty "qos" "$current_qos_item" "ipp2p" "$FORM_current_ipp2p"
 			uci_set_value_remove_if_empty "qos" "$current_qos_item" "mark" "$FORM_current_mark"
 			uci_set_value_remove_if_empty "qos" "$current_qos_item" "tcpflags" "$FORM_current_tcpflags"
-			uci_set_value_remove_if_empty "qos" "$current_qos_item" "pktsize" "$FORM_current_pktsize"			
+			uci_set_value_remove_if_empty "qos" "$current_qos_item" "pktsize" "$FORM_current_pktsize"
 		fi
 	}
-	
+
 	validate <<EOF
 int|FORM_wan_dowload|@TR<<WAN Download Speed>>||$FORM_wan_download
 int|FORM_wan_upload|@TR<<WAN Upload Speed>>||$FORM_wan_upload
@@ -117,29 +110,29 @@ EOF
 		}
 		! empty "$FORM_wan_upload" && ! equal "$FORM_wan_upload" "$CONFIG_wan_upload" && {
 			uci_set "qos" "wan" "upload" "$FORM_wan_upload"
-		}		
-		! empty "$FORM_webif_advanced" && ! equal "$FORM_webif_advanced" "$FORM_webif_advanced_test" && {
+		}
+		! empty "$FORM_webif_advanced" && ! equal "$FORM_webif_advanced" "$CONFIG_qos_show_advanced_rules" && {
 			uci_set "webif" "qos" "show_advanced_rules" "$FORM_webif_advanced"
-		}		
+		}
 	}
 }
 
 #
 # handle 'add new rule'
 #
-! empty "$FORM_qos_add" && {	
+! empty "$FORM_qos_add" && {
 	# todo: this add needs to be in the save area, causes instant save here	of
 	#       an empty rule here. However, requires more work than a simple move ;).
 	uci_add "qos" "classify" ""
 }
-	
+
 #
 # handle 'remove' (qos rule)
 #
 ! empty "$FORM_qos_remove" && {
-	current_qos_item=$(echo "$QUERY_STRING" | grep "qos_remove=" | cut -d'=' -f2)	
-	! empty "$current_qos_item" && {		
-		# also manually clear the other options so they are immediately empty		
+	current_qos_item=$(echo "$QUERY_STRING" | grep "qos_remove=" | cut -d'=' -f2)
+	! empty "$current_qos_item" && {
+		# also manually clear the other options so they are immediately empty
 		uci_remove "qos" "$current_qos_item"
 	}
 }
@@ -167,11 +160,11 @@ copy_rule()
 	config_get _ports "${section_dest}" "ports"
 	config_get _portrange "${section_dest}" "portrange"
 	config_get _layer7 "${section_dest}" "layer7"
-	config_get _ipp2p "${section_dest}" "ipp2p"		
+	config_get _ipp2p "${section_dest}" "ipp2p"
 	config_get _mark "${section_dest}" "mark"
 	config_get _tcpflags "${section_dest}" "tcpflags"
-	config_get _pktsize "${section_dest}" "pktsize"		
-	uci_set_value_remove_if_empty "qos" "$section_src" "target" "$_target"	
+	config_get _pktsize "${section_dest}" "pktsize"
+	uci_set_value_remove_if_empty "qos" "$section_src" "target" "$_target"
 	uci_set_value_remove_if_empty "qos" "$section_src" "srchost" "$_srchost"
 	uci_set_value_remove_if_empty "qos" "$section_src" "dsthost" "$_dsthost"
 	uci_set_value_remove_if_empty "qos" "$section_src" "proto" "$_proto"
@@ -203,9 +196,9 @@ swap_rule()
 }
 
 #
-# copy show advanced value
+# show advanced
 #
-FORM_webif_advanced=$FORM_webif_advanced_test
+FORM_webif_advanced=${FORM_webif_advanced:-$CONFIG_qos_show_advanced_rules}
 
 #
 # load qos-scripts config
@@ -223,7 +216,7 @@ cat <<EOF
 <script type="text/javascript">
 
 function modechange()
-{		
+{
 	if(isset('wan_enabled','1'))
 	{
 		document.getElementById('wan_upload').disabled = false;
@@ -232,7 +225,7 @@ function modechange()
 	else
 	{
 		document.getElementById('wan_upload').disabled = true;
-		document.getElementById('wan_download').disabled = true;		
+		document.getElementById('wan_download').disabled = true;
 	}
 }
 </script>
@@ -266,12 +259,9 @@ end_form
 EOF
 
 # show the current ruleset in a table
-display_form <<EOF
-start_form|@TR<<QoS Traffic Classification Rules>>
-end_form
-EOF
-
 cat <<EOF
+<div class="settings">
+<h3><strong>@TR<<QoS Traffic Classification Rules>></strong></h3>
 <table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;" border="0" cellpadding="3" cellspacing="2" summary="QoS Traffic Classification Rules">
 <tbody>
 <tr>
@@ -279,7 +269,7 @@ cat <<EOF
 EOF
 equal "$FORM_webif_advanced" "1" && {
 	cat <<EOF
-	<th>@TR<<Type>></th>	
+	<th>@TR<<Type>></th>
 EOF
 }
 cat <<EOF
@@ -291,7 +281,7 @@ cat <<EOF
 <th>@TR<<Ports>></th>
 EOF
 equal "$FORM_webif_advanced" "1" && {
-	cat <<EOF	
+	cat <<EOF
 	<th>@TR<<Flags>></th>
 	<th>@TR<<PktSize>></th>
 	<th>@TR<<Mark>></th>
@@ -320,20 +310,20 @@ show_column()
 local last_shown_rule="-1"
 callback_foreach_rule() {
 	local section_name=$1
-	config_get _type "$section_name" "TYPE"	
+	config_get _type "$section_name" "TYPE"
 	case $_type in
 		"classify") ;;
 		"reclassify") equal "$FORM_webif_advanced" "0" && return;;
 		"default") equal "$FORM_webif_advanced" "0" && return;;
 		*) return;;
-	esac	
+	esac
 	## finishing previous table entry
 	# for 'down' since we didn't know index of next classify item.
 	# if there is a last shown rule, show 'up' option for PREVIOUS rule
 	! equal "$last_shown_rule" "-1" && {
 		echo "<a href=\"$SCRIPT_NAME?qos_swap_dest=$section_name&amp;qos_swap_src=$last_shown_rule\"><img alt=\"@TR<<down>>\" src=\"/images/down.gif\" title=\"@TR<<down>>\" /></a>"
 		echo "</td></tr>"
-	}	
+	}
 	## end finishing last iteration
 	if equal "$cur_color" "odd"; then
 		cur_color="even"
@@ -352,20 +342,19 @@ callback_foreach_rule() {
 	else
 		equal "$_val" "all" && _val="peer-2-peer"
 		show_column "$section_name" "proto" "" "$_val"
-	fi		
+	fi
 	show_column "$section_name" "layer7" ""
 	show_column "$section_name" "portrange" ""
-	show_column "$section_name" "ports" ""	
+	show_column "$section_name" "ports" ""
 	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "tcpflags" "" ""
 	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "pktsize" "" ""
 	equal "$FORM_webif_advanced" "1" && show_column "$section_name" "mark" "" ""
-	echo "<td>"	
+	echo "<td>"
 	echo "<a href=\"$SCRIPT_NAME?qos_remove=$section_name\"><img alt=\"@TR<<delete>>\" src=\"/images/x.gif\" title=\"@TR<<delete>>\" /></a>"
 	echo "<a href=\"$SCRIPT_NAME?qos_edit=$section_name\"><img alt=\"@TR<<edit>>\" src=\"/images/edit.gif\" title=\"@TR<<edit>>\" /></a>"
 	# if there is a last shown rule, show 'up' option
-	! equal "$last_shown_rule" "-1" && {	 	
+	! equal "$last_shown_rule" "-1" && {
 		echo "<a href=\"$SCRIPT_NAME?qos_swap_src=$section_name&amp;qos_swap_dest=$last_shown_rule\"><img alt=\"@TR<<up>>\" src=\"/images/up.gif\" title=\"@TR<<up>>\" /></a>"
-
 	}
 	# if we are adding, always keep last index in FORM_qos_edit
 	! empty "$FORM_qos_add" && FORM_qos_edit="$section_name"
@@ -382,13 +371,14 @@ config_foreach callback_foreach_rule
 cat <<EOF
 <tr><td><a href="$SCRIPT_NAME?qos_add=1">@TR<<new rule>></a></td></tr>
 </tbody></table>
+<div class="clearfix">&nbsp;</div></div>
 EOF
 
-# 
+#
 # handle 'edit' (qos rule)
 #
 #
-! empty "$FORM_qos_edit" && {	
+! empty "$FORM_qos_edit" && {
 	# for padding as if the qos table was encpasulated in std form
 	display_form <<EOF
 	start_form
@@ -396,14 +386,14 @@ EOF
 EOF
 	#
 	# build list of available L7-protocols
-	#	
+	#
 	l7_protocols="option||None"
 	for curfile in /etc/l7-protocols/*; do
 		_l7basename=$(basename "$curfile" | sed s/'.pat'//g)
 		l7_protocols="$l7_protocols
 			option|$_l7basename|$_l7basename"
 	done
-	
+
 	current_item="$FORM_qos_edit"
 	config_get _target "${current_item}" "target"
 	config_get _srchost "${current_item}" "srchost"
@@ -412,7 +402,7 @@ EOF
 	config_get _ports "${current_item}" "ports"
 	config_get _portrange "${current_item}" "portrange"
 	config_get _layer7 "${current_item}" "layer7"
-	config_get _ipp2p "${current_item}" "ipp2p"		
+	config_get _ipp2p "${current_item}" "ipp2p"
 	ADVANCED_FIELD_FORM=""
 	equal "$FORM_webif_advanced" "1" && {
 		# config_get returns TYPE if OPTION ($2) is empty, else returns value
@@ -436,7 +426,7 @@ EOF
 			field|@TR<<Packet Size>>
 			text|current_mark|$_pktsize"
 	}
-	
+
 	display_form <<EOF
 	start_form|@TR<<QoS Rule Edit>>
 	field|@TR<<Rules Index>>|rule_number|hidden
@@ -485,10 +475,9 @@ EOF
 EOF
 }
 #########################################################################################
-# else if qos-scripts NOT installed 
+# else if qos-scripts NOT installed
 else
 	echo "<div class=\"warning\">@TR<<qos_no_compatible#A compatible QOS package was not found to be installed.>></div>"
-
 display_form <<EOF
 onchange|modechange
 start_form|@TR<<QoS Packages>>
