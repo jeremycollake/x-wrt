@@ -28,7 +28,6 @@ dmesgbackup_config() {
 }
 
 start() {
-. /etc/functions.sh
 . /lib/config/uci.sh
 . /usr/lib/webif/functions.sh
 uci_load "webif"
