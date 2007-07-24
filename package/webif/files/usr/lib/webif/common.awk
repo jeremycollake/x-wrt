@@ -227,7 +227,7 @@ function subcategories(extra, a, n, i, ofs) {
 	FS = ":"
 	print "<h3><strong>@TR<<Subcategories>>:</strong></h3>"
 	print "<ul>"
-	while (("grep -H '^##WEBIF:name:"CATEGORY":' "cgidir"/*.awx "cgidir"/*.sh 2>/dev/null | sed -e 's,^.*/\\([a-zA-Z\\.\\-]*\\):\\(.*\\)$,\\2:\\1,' | sort -n" | getline) == 1) {
+	while (("grep -H '^##WEBIF:name:"CATEGORY":' "cgidir"/*.awx "cgidir"/*.sh 2>/dev/null | sed -e 's,^.*/\\([a-zA-Z0-9\\.\\-]*\\):\\(.*\\)$,\\2:\\1,' | sort -n" | getline) == 1) {
 		print_subcategory()
 	}
 	if (extra) {
