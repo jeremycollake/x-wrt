@@ -135,6 +135,14 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/atheros-2.6/packages"
 		fi
 	}
+	uname -a |grep mips |grep 2.6 && cat /proc/cpuinfo |grep WP54
+	[ $? = "0" ] && {
+		if [ "$revision" = "" ]; then
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/adm5120-2.6/packages"
+		else
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/adm5120-2.6/packages"
+		fi
+	}
 	cat /proc/cpuinfo |grep "IXP4\?\?"
 	[ $? = "0" ] && {
 		if [ "$revision" = "" ]; then
