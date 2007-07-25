@@ -152,6 +152,7 @@ Load => Load
 Administrative Console => Administrative Console
 X-Wrt Administration Console => X-Wrt Administration Console
 Warning => Warning
+Password_mismatch => The entered passwords do not match!
 Password_warning => you haven't set a password for the Web interface and SSH access<br />Please enter one now (the user name in your browser will be 'root').
 New Password => New Password
 Confirm Password => Confirm Password

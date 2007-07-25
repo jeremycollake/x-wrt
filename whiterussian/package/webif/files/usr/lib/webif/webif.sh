@@ -208,21 +208,23 @@ $_form
 EOF
 
 	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && {
-		empty "$FORM_passwd1" || {
-			echo '<pre>'
-			(
-				echo "$FORM_passwd1"
-				sleep 1
-				echo "$FORM_passwd2"
-			) | passwd root 2>&1 && apply_passwd
-			echo '</pre>'
-			footer
-			exit
+		! empty "$FORM_passwd1$FORM_passwd2" && {
+			equal "$FORM_passwd1" "$FORM_passwd2" && {
+				echo '<pre>'
+				(
+					echo "$FORM_passwd1"
+					sleep 1
+					echo "$FORM_passwd2"
+				) | passwd root 2>&1 && apply_passwd
+				echo '</pre>'
+				footer
+				exit
+			} || {
+				echo "<h3 class=\"warning\">@TR<<Password_mismatch#The entered passwords do not match!>></h3>"
+			}
 		}
 		equal "$_nopasswd" 1 && {
 			cat <<EOF
-<br />
-<br />
 <br />
 <h3>@TR<<Warning>>: @TR<<Password_warning|You haven't set a password for the Web interface and SSH access.<br />Please enter one now (the user name in your browser will be 'root').>></h3>
 <br />

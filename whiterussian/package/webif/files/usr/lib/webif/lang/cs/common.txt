@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3299
+lang_for_svn => 3495
 
 ## /usr/lib/webif/apn.csv
 Vodafone UK => Vodafone VB
@@ -190,6 +190,7 @@ Load => Zatížení
 Administrative Console => Administrativní konzola
 X-Wrt Administration Console => Administrativní konzola X-Wrt
 Warning => Varování
+Password_mismatch => Zadaná hesla nejsou stejná!
 Password_warning => Nenastavili jste heslo pro webové rozhraní a přístup přes SSH.<br />Prosím zadejte jej nyní (uživatelské jméno pro váš prohlížeč bude 'root').
 New Password => Nové heslo
 Confirm Password => Potvrdit heslo
@@ -1115,7 +1116,7 @@ status_usb_swap_partition => oblast
 status_usb_swap_file => soubor
 status_usb_Loaded_USB_drivers => Natažené ovladače USB
 
-## /www/cgi-bin/webif/status-wlan-survey.sh
+## /www/cgi-bin/webif/status-wireless.sh
 Status => Stav
 Wireless => Bezdrát
 status_wlan_survey_Installing_wl_package => Instaluji balíček wl
