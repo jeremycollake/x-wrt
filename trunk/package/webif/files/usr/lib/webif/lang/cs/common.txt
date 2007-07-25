@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3299
+lang_for_svn => 3495
 
 ## /usr/lib/webif/apn.csv
 Vodafone UK => Vodafone VB
@@ -142,6 +142,7 @@ features_install => nainstalovat nyní
 Settings saved => Nastavení byla uložena
 Settings not saved => Nastavení nebyla uložena
 Warning => Varování
+Password_mismatch => Zadaná hesla nejsou stejná!
 Password_warning => Nenastavili jste heslo pro webové rozhraní a přístup přes SSH<br />Prosím zadejte jej nyní (uživatelské jméno pro váš prohlížeč bude 'root').
 New Password => Nové heslo
 Confirm Password => Potvrdit heslo
