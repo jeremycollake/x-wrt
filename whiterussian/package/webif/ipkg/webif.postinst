@@ -188,13 +188,13 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	/usr/lib/webif/webif-mklanglist.sh
 	/usr/lib/webif/webif-mkthemelist.sh
 	
-	is_package_installed webif_hotspot
+	is_package_installed webif-hotspot
 	if [ "$?" = "0" ]; then
 		cat "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories" |sed '/##WEBIF:category:Network/a\
 ##WEBIF:category:Hotspot'>"${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"
 	fi
 	
-	is_package_installed webif_freeloader
+	is_package_installed webif-freeloader
 	if [ "$?" = "0" ]; then
 		cat "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories" |sed '/##WEBIF:category:Network/a\
 ##WEBIF:category:Freeloader'>"${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"
