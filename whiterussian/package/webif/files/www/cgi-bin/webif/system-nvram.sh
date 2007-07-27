@@ -201,7 +201,7 @@ EOF
 <br />
 EOF
 
-	nvram_totals=$(nvram show 2>&1 | sed '/^size: /!d')
+	nvram_totals=$(nvram show 2>&1 1>/dev/null | sed '/^size: /!d')
 	USED_NVRAM=$(echo "$nvram_totals" | cut -d' ' -f2)
 	FREE_NVRAM=$(echo "$nvram_totals" | cut -d' ' -f4 | sed 's/(//g')
 	! empty "$USED_NVRAM" && ! empty "$FREE_NVRAM" && \
