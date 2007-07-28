@@ -39,7 +39,7 @@ alert ("             <<< @TR<<big_warning|WARNING>> >>> \n\n@TR<<system_ipkg_Pac
 var actionStr = action=="install" ? "@TR<<system_ipkg_install|install>>" : 
 	(action=="remove" ? "@TR<<system_ipkg_remove|remove>>" : action);
 if (window.confirm("@TR<<Please Confirm>>!\n\n@TR<<Do you want to>> " + actionStr + " \"" + pkg + "\" @TR<<system_ipkg_package|package>>?")){
-window.location="ipkg.sh?action=" + action + "&amp;pkg=" + pkg
+window.location="system-ipkg.sh?action=" + action + "&amp;pkg=" + pkg
 } }
 </script>
 EOF
@@ -132,7 +132,7 @@ display_form <<EOF
 start_form|@TR<<system_ipkg_packagesavailable#Packages Available>>|||nohelp
 EOF
 ?>
-<tr><td><a href="ipkg.sh?action=update">@TR<<system_ipkg_updatelists#Update package lists>></a></td></tr>
+<tr><td><a href="system-ipkg.sh?action=update">@TR<<system_ipkg_updatelists#Update package lists>></a></td></tr>
 <?
 display_form <<EOF
 end_form
