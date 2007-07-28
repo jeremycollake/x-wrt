@@ -7,6 +7,7 @@ if empty "$FORM_reboot"; then
 	reboot_msg="<form method=\"post\" action=\"$SCRIPT_NAME\"><input type=\"submit\" value=\" @TR<<Yes, really reboot now>> \" name=\"reboot\" /></form>"
 else
 	router_ip=$(nvram get lan_ipaddr)
+	[ -n "$SERVER_PORT" ] && [ "$SERVER_PORT" != "80" ] && router_ip="$router_ip:$SERVER_PORT"
 	header_inject_head="<meta http-equiv=\"refresh\" content=\"$timeout;http://$router_ip\" />"
 	reboot_msg="@TR<<Rebooting now>>...
 <br/><br/>

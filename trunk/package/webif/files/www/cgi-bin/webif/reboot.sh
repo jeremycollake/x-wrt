@@ -8,6 +8,7 @@ if empty "$FORM_reboot"; then
 else
 	uci_load "network"
 	router_ip="$CONFIG_lan_ipaddr"
+	[ -n "$SERVER_PORT" ] && [ "$SERVER_PORT" != "80" ] && router_ip="$router_ip:$SERVER_PORT"
 	header_inject_head="<meta http-equiv=\"refresh\" content=\"$timeout;http://$router_ip\" />"
 	reboot_msg="@TR<<Rebooting now>>...
 <br/><br/>
