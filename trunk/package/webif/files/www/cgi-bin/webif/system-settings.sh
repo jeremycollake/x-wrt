@@ -163,6 +163,10 @@ EOF
 	if equal "$?" 0 ; then
 		time_zone_part="${FORM_system_timezone#*@}"
 		time_zoneinfo_part="${FORM_system_timezone%@*}"
+		empty "$hostname_cfg" && {
+			uci_add system system
+			hostname_cfg="cfg1"
+		}
 		uci_set "system" "$hostname_cfg" "hostname" "$FORM_hostname"
 		empty "$timezone_cfg" && {
 			uci_add timezone timezone timezone
