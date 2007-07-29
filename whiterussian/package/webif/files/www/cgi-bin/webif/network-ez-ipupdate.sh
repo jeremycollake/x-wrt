@@ -4,6 +4,7 @@
 
 ezipupdate_name="ez-ipupdate"
 ddns_dir="/etc/$ezipupdate_name"
+ddns_cache="$ddns_dir/${ezipupdate_name}.cache"
 ddns_msg="$ddns_dir/${ezipupdate_name}.msg"
 
 header "Network" "DynDNS" "@TR<<DynDNS Settings>>" '' "$SCRIPT_NAME"
@@ -22,8 +23,9 @@ end_form
 EOF
 }
 ! empty "$FORM_reinstall_ez" && {
-	echo "@TR<<Please wait>> ...<br />"
+	echo "@TR<<Please wait>> ...<br /><pre>"
 	install_package "http://ftp.berlios.de/pub/xwrt/packages/ez-ipupdate_3.0.11b8-3_mipsel.ipk"
+	echo "</pre>"
 }
 
 # todo add javascript /enable/disable for mx and wildcard / connection type
@@ -72,22 +74,28 @@ EOF
 	#int|FORM_ddns_tzo_ctype|Connection Type||$FORM_ddns_tzo_ctype
 
 	validate "
-string|FORM_ddns_service_type|Service Type|required|$FORM_ddns_service_type
-string|FORM_ddns_username|User Name|required|$FORM_ddns_username
-string|FORM_ddns_passwd|Password|required|$FORM_ddns_passwd
-string|FORM_ddns_hostname|Host Name||$FORM_ddns_hostname
-hostname|FORM_ddns_server|Server Name||$FORM_ddns_server
-int|FORM_ddns_max_interval|Max Interval (sec)|min=86400 max=2937600|$FORM_ddns_max_interval
-" && {
-	save_setting "ezipupdate" ddns_enable $FORM_ddns_enable
-	save_setting "ezipupdate" ddns_service_type $FORM_ddns_service_type
-	save_setting "ezipupdate" ddns_username $FORM_ddns_username
-	save_setting "ezipupdate" ddns_passwd $FORM_ddns_passwd
-	save_setting "ezipupdate" ddns_hostname $FORM_ddns_hostname
-	save_setting "ezipupdate" ddns_wildcard $FORM_ddns_wildcard
-	#save_setting "ezipupdate" ddns_tzo_ctype $FORM_ddns_tzo_ctype
-	save_setting "ezipupdate" ddns_server $FORM_ddns_server
-	save_setting "ezipupdate" ddns_max_interval $FORM_ddns_max_interval
+string|FORM_ddns_service_type|@TR<<DynDNS Service>>|required|$FORM_ddns_service_type
+string|FORM_ddns_username|@TR<<User Name>>|required|$FORM_ddns_username
+string|FORM_ddns_passwd|@TR<<Password>>|required|$FORM_ddns_passwd
+string|FORM_ddns_hostname|@TR<<Host Name>>||$FORM_ddns_hostname
+hostname|FORM_ddns_server|@TR<<Server Name>>||$FORM_ddns_server
+int|FORM_ddns_max_interval|@TR<<Max Interval (sec)>>|min=86400 max=3024000|$FORM_ddns_max_interval
+" && 	{
+		save_setting "ezipupdate" ddns_enable $FORM_ddns_enable
+		save_setting "ezipupdate" ddns_service_type $FORM_ddns_service_type
+		save_setting "ezipupdate" ddns_username $FORM_ddns_username
+		save_setting "ezipupdate" ddns_passwd $FORM_ddns_passwd
+		save_setting "ezipupdate" ddns_hostname $FORM_ddns_hostname
+		save_setting "ezipupdate" ddns_wildcard $FORM_ddns_wildcard
+		#save_setting "ezipupdate" ddns_tzo_ctype $FORM_ddns_tzo_ctype
+		save_setting "ezipupdate" ddns_server $FORM_ddns_server
+		save_setting "ezipupdate" ddns_max_interval $FORM_ddns_max_interval
+		if [ "$FORM_delete_cache" = "1" ]; then
+			[ ! -d "/tmp/.webif/edited-files${ddns_dir}" ] && mkdir -p "/tmp/.webif/edited-files${ddns_dir}" 2>/dev/null
+			[ ! -e "/tmp/.webif/edited-files${ddns_cache}" ] && touch "/tmp/.webif/edited-files${ddns_cache}" 2>/dev/null
+		else
+			[ -e "/tmp/.webif/edited-files${ddns_cache}" ] && rm -f "/tmp/.webif/edited-files${ddns_cache}" 2>/dev/null
+		fi
 	}
 }
 
@@ -97,8 +105,8 @@ int|FORM_ddns_max_interval|Max Interval (sec)|min=86400 max=2937600|$FORM_ddns_m
 
 display_form "start_form|@TR<<DynDNS>>
 field|@TR<<DynDNS>>
-radio|ddns_enable|$FORM_ddns_enable|1|Enable
-radio|ddns_enable|$FORM_ddns_enable|0|Disable
+radio|ddns_enable|$FORM_ddns_enable|1|@TR<<Enable>>
+radio|ddns_enable|$FORM_ddns_enable|0|@TR<<Disable>>
 field|@TR<<DynDNS Service>>
 select|ddns_service_type|$FORM_ddns_service_type
 option|ezip|ez-ip
@@ -120,18 +128,31 @@ option|dnsexit|dnsexit
 option|dhs|dhs
 field|@TR<<User Name>>
 text|ddns_username|$FORM_ddns_username
-field|Password
+field|@TR<<Password>>
 password|ddns_passwd|$FORM_ddns_passwd
 field|@TR<<Host Name>>
 text|ddns_hostname|$FORM_ddns_hostname
-field|Wildcard
-radio|ddns_wildcard|$FORM_ddns_wildcard|1|Enable
-radio|ddns_wildcard|$FORM_ddns_wildcard|0|Disable
+field|@TR<<Wildcard>>
+radio|ddns_wildcard|$FORM_ddns_wildcard|1|@TR<<Enable>>
+radio|ddns_wildcard|$FORM_ddns_wildcard|0|@TR<<Disable>>
 field|@TR<<Server Name>>
 text|ddns_server|$FORM_ddns_server
 field|@TR<<Max Interval (sec)>>
 text|ddns_max_interval|$FORM_ddns_max_interval
-string|<br /><a href="network-logread-ez-ipupdate.sh">@TR<<View DynDNS Syslog>></a>
+field|@TR<<Remove Cache>>
+checkbox|delete_cache|$FORM_delete_cache|1|
+field|&nbsp;
+string|<a href="network-logread-ez-ipupdate.sh">@TR<<View DynDNS Syslog>></a>
+helpitem|Host Name
+helptext|Host Name_helptext#Enter your registered host name.
+helpitem|Wildcard
+helptext|Wildcard_helptext#Use it when your domain has a wildcard alias.
+helpitem|Server Name
+helptext|Server Name_helptext#The server's hostname is required only when custom service settings are used.
+helpitem|Max Interval (sec)
+helptext|Max Interval (sec)_helptext#The maximal interval to refresh the DNS registration. For example DynDNS enables to refresh records 24-35 days (2073600 - 3024000 seconds) after the first registration to prevent it from expiring.
+helpitem|Remove Cache
+helptext|Remove Cache_helptext#Use only when you want the application to forget the previous registration and to start over.
 end_form"
 ?>
 <?if [ -f $ddns_msg ] ?>

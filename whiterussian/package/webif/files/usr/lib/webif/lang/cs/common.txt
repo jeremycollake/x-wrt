@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3495
+lang_for_svn => 3506
 
 ## /usr/lib/webif/apn.csv
 Vodafone UK => Vodafone VB
@@ -405,17 +405,27 @@ Read Ethers => Read Ethers
 ## /www/cgi-bin/webif/network-ez-ipupdate.sh
 Network => Síť
 DynDNS => DynDNS
-DynDNS Service => Služba DynDNS
 DynDNS Settings => Nastavení DynDNS
+broken_ezip => Máte částečně porušený balíček ez-ipupdate, jak bylo zjištěno v oficiálním repozitáři OpenWrt. Pro instalaci opravené kopie balíčku z repozitáře X-Wrt stiskněte tlačítko níže
+Reinstall EZ-IPUPDATE => Přeinstalovat EZ-IPUPDATE
+Please wait => Počkejte prosím
+DynDNS Service => Služba DynDNS
 User Name => Uživatelské jméno
+Password => Heslo
 Host Name => Název počítače
 Server Name => Název serveru
 Max Interval (sec) => Max. interval (sek)
+Enable => Povolit
+Disable => Zakázat
+Wildcard => Zástupná maska (wildcard)
+Remove Cache => Ostranit keš
 View DynDNS Syslog => Zobrazit systémový záznam DynDNS
+Host Name_helptext => Zadejte zaregistrovaný název počítače.
+Wildcard_helptext => Použijte v případě, že vaše doména má alias zástupnou masku (*.dom.ain).
+Server Name_helptext => Název serveru je potřeba jen v případě uživatelského nastavení služby.
+Max Interval (sec)_helptext => Max. interval pro obnovení registrace DNS. Například DynDNS umožňuje obnovit záznamy 24-35 dní (2073600 - 3024000 sekund) po první registraci, aby záznam nevypršel.
+Remove Cache_helptext => Použijte jen v případě, že chcete, aby aplikaze zapomněla na předchozí registraci a začala znovu od začátku.
 Last update => Poslední aktualizace
-broken_ezip => Máte částečně porušený balíček ez-ipupdate, jak bylo zjištěno v oficiálním repozitáři OpenWrt, RC6. Pro instalaci opravené kopie balíčku z repozitáře X-Wrt stiskněte tlačítko níže
-Reinstall EZ-IPUPDATE => Přeinstalovat EZ-IPUPDATE
-Please wait => Počkejte prosím
 
 ## /www/cgi-bin/webif/network-firewall.sh
 Protocol => Protokol
