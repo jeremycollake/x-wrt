@@ -5,10 +5,11 @@
 empty "$FORM_submit" || {
 	SAVED=1
 	validate <<EOF
-string|FORM_pw1|Password|required min=5|$FORM_pw1
+string|FORM_pw1|@TR<<Password>>|required min=5|$FORM_pw1
 EOF
 	equal "$FORM_pw1" "$FORM_pw2" || {
-		ERROR="$ERROR Passwords do not match<br />"
+		[ -n "$ERROR" ] && ERROR="${ERROR}<br />"
+		ERROR="${ERROR}@TR<<Passwords do not match>><br />"
 	}
 	empty "$ERROR" && {
 		RES=$(
