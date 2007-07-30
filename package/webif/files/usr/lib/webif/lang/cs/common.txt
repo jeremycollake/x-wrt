@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3495
+lang_for_svn => 3508
 
 ## /usr/lib/webif/apn.csv
 Vodafone UK => Vodafone VB
@@ -52,11 +52,17 @@ installing theme package => instaluji balíček tématu
 Installing language pack => instaluji jazykový balíček
 Error installing language pack => Chyba při instalaci jazykového balíčku
 Committing => Ukládám
+Starting => Startuji
+upnpd => upnpd
+Stopping => Zastavuji
 Reloading => Obnovuji
 network => síťová nastavení
 wireless => bezdrátová nastavení
 syslogd => syslogd
 OpenVPN => OpenVPN
+Exporting => Exportuji
+snmp settings => nastavení snmp
+TZ setting => nastavení TZ
 
 ## /usr/lib/webif/browser.awk
 browser_Filesystem_Browser => Prohlížeč souborového systému
@@ -99,7 +105,7 @@ Load => Zatížení
 Short help => Krátká nápověda
 
 ## /usr/lib/webif/editor.awk
-File => Soubor
+editor_File => Soubor
 &nbsp;Save Changes&nbsp; => &nbsp;Uložit změny&nbsp;
 &nbsp;Back&nbsp; => &nbsp;Zpět&nbsp;
 editor_click_apply => Po dokončení změn souborů a případných dalších úpravách konfigurace musíte kliknout na "Provést změny", aby byly změny trvale uloženy.
@@ -130,6 +136,8 @@ maximum => maximální
 maximum length => maximální délka
 Invalid dots => Neplatné tečky
 Invalid spaces => Neplatné mezery
+Missing netmask => Chybějící síťová maska
+Netmask not allowed => Síťová maska není přípustná
 Error in => Chyba v položce
 
 ## /usr/lib/webif/webif.sh
@@ -141,19 +149,12 @@ features_require_package => Vlastnosti na této stránce vyžadují balíček
 features_install => nainstalovat nyní
 Settings saved => Nastavení byla uložena
 Settings not saved => Nastavení nebyla uložena
-Warning => Varování
 Password_mismatch => Zadaná hesla nejsou stejná!
-Password_warning => Nenastavili jste heslo pro webové rozhraní a přístup přes SSH<br />Prosím zadejte jej nyní (uživatelské jméno pro váš prohlížeč bude 'root').
+Warning => Varování
+Password_warning => Nenastavili jste heslo pro webové rozhraní a přístup přes SSH.<br />Prosím zadejte jej nyní (uživatelské jméno pro váš prohlížeč bude 'root').
 New Password => Nové heslo
 Confirm Password => Potvrdit heslo
 Set => Nastavit
-
-## /www/cgi-bin/webif/applications.sh
-Applications => Aplikace
-Applications => Aplikace
-List => Seznam
-List of Applications => Seznam aplikací
-## TODO
 
 ## /www/cgi-bin/webif/.categories
 Info => Info
@@ -163,7 +164,6 @@ Log => Záznam
 System => Systém
 Network => Síť
 VPN => VPN
-Applications => Aplikace
 Logout => Odhlášení
 
 ## /www/cgi-bin/webif/config.sh
@@ -184,15 +184,13 @@ graphs_if_Traffic => Provoz
 graphs_if_Traffic_of_Interface => Provoz rozhraní
 ## temporarily removed #### duplicate ##graphs_svg_required => Tento objekt vyžaduje podporu SVG.
 
-## /www/cgi-bin/webif/iframe.mini-info.sh
-Device Status => Stav zařízení
-## rest is untranslated
-
 ## /www/cgi-bin/webif/info.awx
-Info => Info
+Please wait => Počkejte prosím
 info_wait_install => Počkejte prosím, instalace může chvilku trvat
 System Information => Systémové informace
 About => O aplikaci
+Info => Info
+System => Systém
 
 ## /www/cgi-bin/webif/log-browse.sh
 Log => Záznam
@@ -212,12 +210,13 @@ Date => Datum
 Proto => Protokol
 Dest. Port => Cíl. port
 
-## /www/cgi-bin/webif/log-dmesg.sh
+## /www/cgi-bin/webif/log-dmesg.awx
+log_dmesg_Kernel_Ring_Buffer => Kruhový záznam jádra
+log_dmesg_no_current_messages => Žádné záznamy jádra nebyly nalezeny.
+log_dmesg_no_archived_messages => Neexistují žádné archivované záznamy jádra.
+log_dmesg_no_archive_exists => Archiv záznamů jádra neexistuje.
 Log => Záznam
 Kernel => Jádro
-log_dmesg_Kernel_Ring_Buffer => Kruhový záznam jádra
-HelpText Browser_Frames => Váš prohlížeč nepodporuje rámce,<br />pokračujte tímto odkazem
-log_dmesg_View_Kernel_Ring_Buffer=> Zobrazit kruhový záznam jádra
 
 ## /www/cgi-bin/webif/logout.sh
 Logout => Odhlášení
@@ -225,51 +224,22 @@ logout_close_window => Pro odhlášení musíte ukončit webový prohlížeč!
 logout_explanation => Protože je základní autentizace httpd uložena v paměti prohlížeče, není možné uživatele odhlásit. Musíte ukončit webový prohlížeč, v případě Firefoxu spustíte 'Vymazat důvěrná data', a donutit ho tak zapomenout přihlašovací informace, které jste zadali. Kvůli tomuto problému zděděné slabiny v základní httpd autentizaci používané běžně firmwary pravděpodobně přejdeme na autentizaci prostřednictvím cookie.
 logout_reference => Odkaz k nahlédnutí, viz http://httpd.apache.org/docs/1.3/howto/auth.html
 
-## /www/cgi-bin/webif/log-read_frame.sh
-Syslog Messages => Zprávy syslogu
-
-## /www/cgi-bin/webif/log-read.sh
+## /www/cgi-bin/webif/log-read.awx
+Syslog View => Zobrazení záznamu syslog
+log_read_no_messages => Neexistují žádné záznamy syslogu.
 Log => Záznam
 Syslog => Syslog
-Syslog View => Zobrazení záznamu syslog
-Message Prefix => Předpona zpráv	
-HelpText Browser_Frames => Váš prohlížeč nepodporuje rámce,<br />pokračujte tímto odkazem
-View Syslog => Zobrazit syslog
 
-## /www/cgi-bin/webif/log-setup.sh
+## /www/cgi-bin/webif/log-setup.awx
 Remote host => Vzdálený počítač
 Remote Port => Vzdálený port
 Minutes Between Marks => Minut mezi značkami
 Log Size => Velikost záznamu
+##duplicate Settings saved
+##duplicate Settings not saved
+syslog Settings => Nastavení pro syslog
 Log => Záznam
 Syslog Settings => Nastavení pro syslogd
-syslog Settings => Nastavení pro syslog
-Remote Syslog => Vzdálený syslog
-Server IP Address => Adresa IP serveru
-##!! $variable trouble
-##HelpText Remote Syslog => Adresa IP a port vzdáleného logovacího počítače. Nechcete-li použít vzdálené logování, ponechte položku prázdnou. Port je ve výchozím stavu nastaven na $DEFAULT_log_port
-HelpText Remote Syslog => Adresa IP a port vzdáleného logovacího počítače. Nechcete-li použít vzdálené logování, ponechte položku prázdnou.
-Server Port => Port serveru
-Syslog Marks => Značky v syslogu
-Minutes Between Marks => Minut mezi značkami
-##!! $variable trouble
-##HelpText Syslog Marks => Pravidelné značky ve vašem záznamu. Tento parametr nastavuje čas v minutách mezi značkami. Hodnota 0 znamená bez značek. Výchozí hodnota: $DEFAULT_log_mark.
-HelpText Syslog Marks => Pravidelné značky ve vašem záznamu. Tento parametr nastavuje čas v minutách mezi značkami. Hodnota 0 znamená bez značek.
-Local Log => Místní záznam
-Log type => Typ záznamu
-Circular => Kruhový
-File => Soubor
-##!! $variable trouble
-##HelpText Log Type => Zda bude váš záznam uložen ve vyhrazené kruhové oblasti v paměti nebo v souboru. Dejte pozor na to, že soubory jsou uloženy paměťovém souborovém systému, který se ztratí, pokud restartujete router. Výchozí hodnota: $DEFAULT_log_type.
-HelpText Log Type => Zda bude váš záznam uložen ve vyhrazené kruhové oblasti v paměti nebo v souboru. Dejte pozor na to, že soubory jsou uloženy paměťovém souborovém systému, který se ztratí, pokud restartujete router.
-Log File => Soubor záznamu
-##!! $variable trouble
-##HelpText Log File => Cesta a název vašeho souboru záznamu. Může být nastavena do jakéhokoli zapisovatelného souborového systému. UPOZORNĚNÍ: NEPOUŽÍVEJTE souborový systém JFFS, protože na něj syslog HODNĚ zapisuje. Můžete použít /tmp nebo jakýkoli souborový systém na externí ukládací jednotce. Výchozí hodnota: $DEFAULT_log_file.
-HelpText Log File => Cesta a název vašeho souboru záznamu. Může být nastavena do jakéhokoli zapisovatelného souborového systému. UPOZORNĚNÍ: NEPOUŽÍVEJTE souborový systém JFFS, protože na něj syslog HODNĚ zapisuje. Můžete použít /tmp nebo jakýkoli souborový systém na externí ukládací jednotce.
-Log Size => Velikost záznamu
-##!! $variable trouble
-##HelpText Log Size => Velikost vašeho záznamu v kilobajtech. Buďte opatrní při stanovení velikosti kruhové paměti, protože je o ni zmenšena pracovní paměť. Výchozí hodnota: $DEFAULT_log_size kB.
-HelpText Log Size => Velikost vašeho záznamu v kilobajtech. Buďte opatrní při stanovení velikosti kruhové paměti, protože je o ni zmenšena pracovní paměť.
 
 ## /www/cgi-bin/webif/network-firewall.sh
 Network => Síť
@@ -589,6 +559,31 @@ MAC Address
 ##Wake up
 wol_help => Zde můžete odeslat paket Wake-On-LAN pro automatické nastartování počítače, který je vypnutý. Počítač musí podporovat WOL a tato vlastnost musí být zapnuta v BISOu, aby to pracovalo. Naneštěstí není definována jednoznačná odpověď probouzeného počítače, takže nebudete vědět, zda bylo probuzení úspěšné a stroj opravdu startuje.
 
+## /www/cgi-bin/webif/status-basic.sh
+Status => Stav
+System => Systém
+Device Status => Stav zařízení
+Swap => Odkládací
+KiB => KiB
+Used => Využito
+mount_of => z
+status_basic_swap_partition => odkládací oblast
+status_basic_swap_file => odkládací soubor
+#Load Average => Průměrné zatížení
+#Load Average => Průměrné zatížení
+#Helptext Load Average => Průměrné zatížení reprezentuje průměry aktivních procesů v průběhu posledních 1, 5 a 15 minut.
+RAM Usage => Využití RAM
+Total => Celkem
+Used => Využito
+Helptext RAM Usage => Aktuální využití RAM. Velikost 'free' reprezentuje, kolik RAM je dostupné pro aplikace.
+Helptext Swap => Když program požaduje více paměti než je fyzicky v počítači k dispozici, aktuálně nepoužívané informace mohou být zapsány do dočasného prostoru na disku, který je nazýván odkládací (swap), a tak paměť uvolnit.
+Tracked Connections => Sledovaná spojení
+Maximum => Maximum
+Used => Využito
+Helptext Tracked Connections => Počet spojení v tabulce 'conntrack' vašeho routeru. <a href="status-conntrackread.awx">Zobrazit tabulku 'conntrack'</a
+Mount Usage => Využití médií
+Helptext Mount Usage => Velikost celkového a použitého místa na souborových systémech připojených k routeru.
+
 ## /www/cgi-bin/webif/status-connection.sh
 Status => Stav
 Netstat => Netstat
@@ -596,6 +591,12 @@ Physical Connections => Fyzická spojení Ethernet/Bezdrát
 Routing Table => Směrovací tabulka
 Router Listening Ports => Router naslouchá na portech
 Router Connections => Spojení na router
+
+## /www/cgi-bin/webif/status-conntrackread.awx
+Conntrack Table => Tabulka conntrack
+status_conntrackread_no_messages => Neexistují žádné záznamy sledování spojení.
+Status => Stav
+Conntrack => Conntrack
 
 ## /www/cgi-bin/webif/status-diag.sh
 Status => Stav
@@ -605,6 +606,44 @@ Network Utilities => Síťové nástroje
 Ping => Ping
 TraceRoute => TraceRoute
 Please wait for output of => Počkejte prosím na výstup z
+
+## /www/cgi-bin/webif/status-interfaces.sh
+Status => Stav
+Interfaces => Rozhraní
+DNS Server => Server DNS
+DNS Servers => Servery DNS
+WAN => WAN
+LAN => LAN
+MAC Address => Adresa MAC
+IP Address => Adresa IP
+Received => Přijato
+Transmitted => Odesláno
+status_interfaces_pkts => paketů
+WAN WAN => Termín WAN označuje síť velké geografické rozlohy a je obvykle připojením směrem na Internet.
+LAN LAN => Termín LAN označuje síť lokální rozlohy.
+LOOPBACK_helptext => Rozhraní lokální smyčky je typ 'IP adresa bez elektrického okruhu' nebo 'virtuální IP' adresa, protože adresa není přiřazena k žádnému konkrétnímu rozhraní (nebo el. okruhu) na počítači nebo směrovači. Jakýkoli provoz, který pošle počítačový program do sítě loopback je adresován stejnému počítači.
+WLAN => WLAN
+Access Point => Přístupový bod
+Mode => Režim
+ESSID => ESSID
+Frequency => Frekvence
+GHz => GHz
+Transmit Power => Vysílací výkon
+Noise Level => Úroveň šumu
+Encryption Key => Šifrovací klíč
+Security mode => Režim zabezpečení
+Rx Invalid nwid =>
+Rx Invalid Encryption =>
+Tx Retries in Excess =>
+Tx Invalid =>
+Tx Missed Beacon =>
+WLAN LAN => Termín WLAN označuje bezdrátovou síť lokální rozlohy.
+Raw Information => Surové informace
+&nbsp;Show raw statistics&nbsp; => &nbsp;Zobrazit surovou statistiku&nbsp;
+Interfaces Status WAN => Stav rozhraní WAN
+Interfaces Status LAN => Stav rozhraní LAN
+Interfaces Status Other => Stav rozhraní
+Interfaces Status WLAN nr => Stav bezdrátového rozhraní
 
 ## /www/cgi-bin/webif/status-iptables.sh
 Status => Stav
@@ -767,20 +806,28 @@ system_editor_ask_file_deletition => Opravdu chcete smazat soubor '{0}/{1}'
 system_editor_info_dir_deleted =>  Adresář byl smazán úspěšně
 system_editor_info_file_deleted => Soubor byl smazán úspěšně
 
+## /www/cgi-bin/webif/system-password.sh
+Password => Heslo
+Passwords do not match => Hesla nejsou stejná
+System => Systém
+Password Change => Změna hesla
+New Password => Nové heslo
+Confirm Password => Potvrdit heslo
+
 ## /www/cgi-bin/webif/system-settings.sh
 System => Systém
 Settings => Nastavení
 System Settings => Systémová nastavení
 system_settings_Installing_NTPCLIENT_package => Instaluji balíček NTPCLIENT
 system_settings_Installing_MatrixTunnel_package => Instaluji balíček MatrixTunnel
+Host Name => Název počítače
+Warning => Varování
+system_settings_Hostname_failed_validation => Název počítače není platný. Nelze uložit.
 system_settings_Webif_SSL => Webif&sup2; přes SSL
 system_settings_Feature_requires_matrixtunnel => Balíček MatrixTunnel není nainstalován. Je třeba jej nainstalovat pro podporu SSL
 system_settings_Install_MatrixTunnel => Nainstalovat MatrixTunnel
 system_settings_webifssl_Off => Vypnuto
 system_settings_webifssl_On => Zapnuto
-Host Name => Název počítače
-Warning => Varování
-system_settings_Hostname_failed_validation => Název počítače není platný. Nelze uložit.
 Enable visual effects => Povolit vizuální efekty
 Boot Wait => Boot Wait
 Enabled => Povoleno
@@ -788,9 +835,11 @@ Disabled => Zakázáno
 HelpText boot_wait => Čekání při bootování způsobí, že boot loader některých zařízení bude několik sekund při bootování čekat na TFTP přenos nového obrazu firmware. Je bezpečnostním rizikem ponechat tuto možnost zapnutou.
 Wait Time => Čas čekání
 HelpText wait_time => Počet sekund čekání boot loaderu na TFTP přenos, je-li Boot Wait zapnut.
-CPU Clock Frequency => Frekvence hodin CPU
-Dangerous Settings => Nebezpečná nastavení
-HelpText CPU Clock Frequency => Tuto hodnotu neměňte. Váš router můžete znehodnotit, pokud nevíte, co děláte. Pokusili jsme se tuto možnost zablokovat pro všechny routery, které mohou být znehodnoceny prostřednictvím chybného nastavení frekvence hodin. Pouze přístroje Linksys WRT54G v4 jsou odolné proti špatnému nastavení frekvence.
+NTP Server => Server NTP
+NTP Server Port => Port serveru NTP
+NTP Count => Počet opakování
+Remove NTP Server => Odebrat Server NTP
+Add NTP Server => Přidat Server NTP
 system_settings_feature_requires_ntpclient => Není nainstalován klient NTP. Pro správný čas je třeba jednoho nainstalovat
 system_settings_Install_NTP_Client => Nainstalovat klienta NTP
 ##### translate timezones?
@@ -802,7 +851,6 @@ Timezone => Časová zóna
 system_settings_POSIX_TZ_String => POSIX TZ řetězec
 system_settings_js_required => Tato položka vyžaduje podporu JavaScriptu.
 Timezone_helptext => Nastavte vaši časovou zónu podle nejbližšího města vašeho regionu z předdefinovaného seznamu.
-NTP Server => Server NTP
 Webif&sup2; Settings => Nastavení pro Webif&sup2;
 Language => Jazyk
 Theme => Téma
@@ -858,6 +906,51 @@ info_already_latest => Máte aktuální webif&sup2;
 info_check_update => Zkontrolovat aktualizaci pro Webif&sup2;
 info_upgrade_webif => Aktualizovat/Přeinstalovat Webif&sup2;
 info_check_daily_text => Zahrnout denní sestavení při kontrole aktualizace pro webif&sup2;
+
+## /www/cgi-bin/webif/views/log-dmesg.ahtml
+log_dmesg_Current_messages => Aktuální záznamy
+log_filter_filtered => filtrováno
+log_dmesg_Boot_time_messages => Záznamy po startu
+log_filter_Text_Filter => Textový filtr
+log_filter_Text_to_Filter => Filtrovaný text
+log_filter_Filter_Mode => Režim filtru
+log_filter_Include => Zahrnout
+log_filter_Exclude => Vyloučit
+log_filter_Remove_Filter => Odstranit filtr
+log_filter_Filter_Messages => Filtrovat záznamy
+##duplicate Short help
+log_filter_Text_to_Filter_helptext => Zadejte text, který pokrývá to, co chcete nebo nechcete vidět. Ve skutečnosti můžete použít konstantní regulérní výrazy jako: <code>00:[[:digit:]]{2}:[[:digit:]]{2}</code> nebo <code>.debug&#124;.err</code>.
+log_filter_Filter_Mode_helptext => V režimu Zahrnout uvidíte jen záznamy obsahující text, zatímco v režimu Vyloučit takové záznamy neuvidíte.
+
+## /www/cgi-bin/webif/views/log-read.ahtml
+log_read_Syslog_Messages => Záznamy syslogu
+# the rest is duplicated in log-dmesg.ahtml
+
+## /www/cgi-bin/webif/views/log-setup.ahtml
+Remote Syslog => Vzdálený syslog
+Server IP Address => Adresa IP serveru
+Server Port => Port serveru
+##duplicate Short help
+HelpText Remote Syslog => Adresa IP a port vzdáleného logovacího počítače. Nechcete-li použít vzdálené logování, ponechte položku prázdnou.
+Syslog Marks => Značky v syslogu
+Minutes Between Marks => Minut mezi značkami
+HelpText Syslog Marks => Pravidelné značky ve vašem záznamu. Tento parametr nastavuje čas v minutách mezi značkami. Hodnota 0 znamená bez značek.
+Local Log => Místní záznam
+Log type => Typ záznamu
+Circular => Kruhový
+File => Soubor
+Log File => Soubor záznamu
+Log Size => Velikost záznamu
+KiB => KiB
+HelpText Log Type => Zda bude váš záznam uložen ve vyhrazené kruhové oblasti v paměti nebo v souboru. Dejte pozor na to, že soubory jsou uloženy v souborovém systému v paměti, který se ztratí, pokud restartujete router.
+HelpText Log File => Cesta a název vašeho souboru záznamu. Může být nastavena do jakéhokoli zapisovatelného souborového systému. UPOZORNĚNÍ: NEPOUŽÍVEJTE souborový systém JFFS, protože na něj syslog HODNĚ zapisuje. Můžete použít /tmp nebo jakýkoli souborový systém na externí ukládací jednotce.
+HelpText Log Size => Velikost vašeho záznamu v kibibajtech. Buďte opatrní při stanovení velikosti kruhové paměti, protože je o ni zmenšena pracovní paměť.
+
+## /www/cgi-bin/webif/views/status-conntrackread.ahtml
+##duplicate text filter texts
+conntrackread_filter_Filter_Records => Filtrovat záznamy
+##duplicate Short help
+Kernel Connection Tracking Table => Tabulka sledování spojení jádra
 
 ## /www/svggraph/graph_cpu.svg
 graph_cpu_CPU => CPU
