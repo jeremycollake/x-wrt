@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3506
+lang_for_svn => 3508
 
 ## /usr/lib/webif/apn.csv
 Vodafone UK => Vodafone VB
@@ -137,7 +137,7 @@ status_wwaninfo_comgt_APN => Název přístupového bodu
 Short help => Krátká nápověda
 
 ## /usr/lib/webif/editor.awk
-File => Soubor
+editor_File => Soubor
 &nbsp;Save Changes&nbsp; => &nbsp;Uložit změny&nbsp;
 &nbsp;Back&nbsp; => &nbsp;Zpět&nbsp;
 editor_click_apply => Po dokončení změn souborů a případných dalších úpravách konfigurace musíte kliknout na "Provést změny", aby byly změny trvale uloženy.
@@ -350,7 +350,7 @@ File => Soubor
 Log Type => Typ záznamu
 ##!! $variable trouble
 ##HelpText Log Type => Zda bude váš záznam uložen ve vyhrazené kruhové oblasti v paměti nebo v souboru. Dejte pozor na to, že soubory jsou uloženy paměťovém souborovém systému, který se ztratí, pokud restartujete router. Výchozí hodnota: $DEFAULT_log_type.
-HelpText Log Type => Zda bude váš záznam uložen ve vyhrazené kruhové oblasti v paměti nebo v souboru. Dejte pozor na to, že soubory jsou uloženy paměťovém souborovém systému, který se ztratí, pokud restartujete router.
+HelpText Log Type => Zda bude váš záznam uložen ve vyhrazené kruhové oblasti v paměti nebo v souboru. Dejte pozor na to, že soubory jsou uloženy v souborovém systému v paměti, který se ztratí, pokud restartujete router.
 Log File => Soubor záznamu
 Log File => Soubor záznamu
 ##!! $variable trouble
@@ -948,39 +948,43 @@ Please wait for output of => Počkejte prosím na výstup z
 ## /www/cgi-bin/webif/status-interfaces.sh
 Status => Stav
 Interfaces => Rozhraní
-Interfaces => Rozhraní
-DNS Server => Server DNS
+int2human_tera => t
+int2human_giga => g
+int2human_mega => m
+int2human_kilo => k
 WAN => WAN
-MAC Address => Adresa MAC
-IP Address => Adresa IP
-Received => Přijato
-Transmitted => Odesláno
-WAN WAN => Termín WAN označuje síť velké geografické rozlohy a je obvykle připojením směrem na Internet.
 LAN => LAN
 MAC Address => Adresa MAC
 IP Address => Adresa IP
+DNS Server => Server DNS
 Received => Přijato
 Transmitted => Odesláno
+status_interfaces_pkts => paketů
+WAN WAN => Termín WAN označuje síť velké geografické rozlohy a je obvykle připojením směrem na Internet.
 LAN LAN => Termín LAN označuje síť lokální rozlohy.
+LOOPBACK_helptext => Rozhraní lokální smyčky je typ 'IP adresa bez elektrického okruhu' nebo 'virtuální IP' adresa, protože adresa není přiřazena k žádnému konkrétnímu rozhraní (nebo el. okruhu) na počítači nebo směrovači. Jakýkoli provoz, který pošle počítačový program do sítě loopback je adresován stejnému počítači.
 WLAN => WLAN
 Access Point => Přístupový bod
 Mode => Režim
 ESSID => ESSID
 Frequency => Frekvence
+units_GHz => GHz
 Transmit Power => Vysílací výkon
+units_dBm => dBm
 Noise Level => Úroveň šumu
 Encryption Key => Šifrovací klíč
+Security mode => Režim zabezpečení
 Rx Invalid nwid =>
 Rx Invalid Encryption =>
 Tx Retries in Excess =>
 Tx Invalid =>
 Tx Missed Beacon =>
 WLAN LAN => Termín WLAN označuje bezdrátovou síť lokální rozlohy.
-&nbsp;Show raw statistics&nbsp; => &nbsp;Zobrazit surovou statistiku&nbsp;
-Raw Information => Surové informace
 Interfaces Status WAN => Stav rozhraní WAN
 Interfaces Status LAN => Stav rozhraní LAN
 Interfaces Status WLAN => Stav bezdrátového rozhraní
+Raw Information => Surové informace
+&nbsp;Show raw statistics&nbsp; => &nbsp;Zobrazit surovou statistiku&nbsp;
 
 ## /www/cgi-bin/webif/status-iptables.sh
 Status => Stav
@@ -1353,9 +1357,9 @@ system_nvram_Used => Použito
 system_nvram_NVRAM_Usage_helptext => Toto je aktuální využití paměti NVRAM. Graf zobrazuje, kolik paměti je použito a kolik paměti je k dispozici pro další proměnné.
 
 ## /www/cgi-bin/webif/system-password.sh
+Password => Heslo
+Passwords do not match => Hesla nejsou stejná
 System => Systém
-Password => Heslo
-Password => Heslo
 Password Change => Změna hesla
 New Password => Nové heslo
 Confirm Password => Potvrdit heslo
