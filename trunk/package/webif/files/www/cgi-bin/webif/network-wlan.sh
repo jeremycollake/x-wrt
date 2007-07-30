@@ -189,8 +189,8 @@ for device in $DEVICES; do
 	
         mode_disabled="field|@TR<<Radio>>
 		select|disabled_$device|$FORM_disabled
-		option|1|@TR<<Off>>
-        	option|0|@TR<<On>>"
+		option|0|@TR<<On>>
+        	option|1|@TR<<Off>>"
         append forms "$mode_disabled" "$N"
         
 	# Initialize channels based on country code
