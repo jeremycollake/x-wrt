@@ -114,7 +114,7 @@ helptext|LAN LAN#LAN stands for Local Area Network."
 				;;
 				loopback)
 					form_help="helpitem|LOOPBACK
-helptext|LOOPBACK#A loopback interface is a type of 'circuitless IP address' or 'virtual IP' address, as the IP address is not associated with any one particular interface (or circuit) on the host or router. Any traffic that a computer program sends on the loopback network is addressed to the same computer."
+helptext|LOOPBACK_helptext#A loopback interface is a type of 'circuitless IP address' or 'virtual IP' address, as the IP address is not associated with any one particular interface (or circuit) on the host or router. Any traffic that a computer program sends on the loopback network is addressed to the same computer."
 				;;
 				*)
 					form_help=""

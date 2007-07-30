@@ -76,7 +76,7 @@ END {
 			print "helptext|LAN LAN#LAN stands for Local Area Network."
 		} else if (iname == "LOOPBACK") {
 			print "helpitem|LOOPBACK"
-			print "helptext|LOOPBACK#A loopback interface is a type of '\''circuitless IP address'\'' or '\''virtual IP'\'' address, as the IP address is not associated with any one particular interface (or circuit) on the host or router. Any traffic that a computer program sends on the loopback network is addressed to the same computer."
+			print "helptext|LOOPBACK_helptext#A loopback interface is a type of '\''circuitless IP address'\'' or '\''virtual IP'\'' address, as the IP address is not associated with any one particular interface (or circuit) on the host or router. Any traffic that a computer program sends on the loopback network is addressed to the same computer."
 		}
 		print "end_form"
 	}
