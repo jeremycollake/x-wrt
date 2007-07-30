@@ -64,7 +64,7 @@ start() {
 			OPTIONS="$OPTIONS$CONFIG_remote_port"
 			config_get_bool msenable syslog enable 0
 			[ "$msenable" -eq 1 ] && {
-				[ "$CONFIG_syslog_loglevel" -lt 1 -o "$CONFIG_syslog_loglevel" -gt 8 ] 2>/dev/null && CONFIG_syslog_loglevel="$DEFAULT_syslog_loglevel"
+				[ "$CONFIG_syslog_loglevel" -lt 1 -o "$CONFIG_syslog_loglevel" -gt 7 ] 2>/dev/null && CONFIG_syslog_loglevel="$DEFAULT_syslog_loglevel"
 				OPTIONS="$OPTIONS -D $CONFIG_syslog_loglevel"
 			}
 			echo "Starting webif^2 ssl tunnel."
