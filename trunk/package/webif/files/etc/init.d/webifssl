@@ -75,15 +75,32 @@ start() {
 	}
 }
 
+stop_childs() {
+	local ppid="$1"
+	for proc in $(ps | grep [m]atrixtunnel | sed 's/^\([[:space:]]?*[^[:space:]]*\).*/\1/; s/ //g'); do
+		[ "$proc" != "$ppid" ] && [ "$ppid" = "$(cat /proc/${proc}/status | sed '/^PPid:/!d; s/^PPid:*//; s/[[:space:]]//g')" ] && {
+			echo -n "Stopping webif^2 ssl tunnel child process..."
+			kill -TERM "$proc"
+			[ "$?" -eq 0 -a ! -d "/proc/$proc" ] && echo "OK" || {
+				echo "Failed!"
+				echo -n "Killing webif^2 ssl tunnel child process..."
+				kill -KILL "$proc"
+				[ "$?" -eq 0 ] && echo "OK" || echo "Failed!"
+			}
+		}
+	done
+}
+
 stop() {
 	local pid
 	load_variables
 	[ -f "$CONFIG_matrixtunnel_pidfile" ] && {
 		pid=$(cat "$CONFIG_matrixtunnel_pidfile")
 		[ -n "$pid" -a -d "/proc/$pid" ] && {
+			stop_childs "$pid"
 			echo -n "Stopping webif^2 ssl tunnel..."
 			kill -TERM "$pid"
-			[ "$?" -eq 0 ] && echo "OK" || {
+			[ "$?" -eq 0 -a ! -d "/proc/$pid" ] && echo "OK" || {
 				echo "Failed!"
 				echo -n "Killing webif^2 ssl tunnel..."
 				kill -KILL "$pid"
