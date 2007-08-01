@@ -74,7 +74,7 @@ EOF
 
 displayiface() {
 	local ifpar="$1"
-	local config ip_addr mac_addr tx_packets rx_packets tx_bytes rx_bytes
+	local config ip_addr mac_addr form_mac tx_packets rx_packets tx_bytes rx_bytes
 	eval "iface=\$${ifpar}_iface"
 	if [ -n "$iface" ]; then
 		config=$(ifconfig "$iface" 2>/dev/null)
@@ -82,7 +82,8 @@ displayiface() {
 			ip_addr=$(echo "$config" | grep "inet addr:" | cut -d: -f 2 | cut -d' ' -f 1)
 			ip_addr="${ip_addr:-"&nbsp;"}"
 			mac_addr=$(echo "$config" | grep "HWaddr" | cut -d'H' -f 2 | cut -d' ' -f 2)
-			mac_addr="${mac_addr:-"&nbsp;"}"
+			[ -n "$mac_addr" ] && form_mac="field|@TR<<MAC Address>>|${ifpar}_mac_addr
+string|$mac_addr"
 			tx_packets=$(echo "$config" | grep "TX packets:" | sed s/'TX packets:'//g | cut -d' ' -f 11 | int2human)
 			tx_packets="${tx_packets:-0}"
 			rx_packets=$(echo "$config" | grep "RX packets:" | sed s/'RX packets:'//g | cut -d' ' -f 11 | int2human)
@@ -94,8 +95,7 @@ displayiface() {
 			eval "if_name=\"\$${ifpar}_name\""
 			display_form <<EOF
 start_form|@TR<<$if_name>>
-field|@TR<<MAC Address>>|${ifpar}_mac_addr
-string|$mac_addr
+$form_mac
 field|@TR<<IP Address>>|${ifpar}_ip_addr
 string|$ip_addr
 field|@TR<<Received>>|${ifpar}_rx
