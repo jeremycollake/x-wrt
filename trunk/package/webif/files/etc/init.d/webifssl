@@ -75,37 +75,52 @@ start() {
 	}
 }
 
-stop_childs() {
-	local ppid="$1"
-	for proc in $(ps | grep [m]atrixtunnel | sed 's/^\([[:space:]]?*[^[:space:]]*\).*/\1/; s/ //g'); do
-		[ "$proc" != "$ppid" ] && [ "$ppid" = "$(cat /proc/${proc}/status | sed '/^PPid:/!d; s/^PPid:*//; s/[[:space:]]//g')" ] && {
-			echo -n "Stopping webif^2 ssl tunnel child process..."
-			kill -TERM "$proc"
-			[ "$?" -eq 0 -a ! -d "/proc/$proc" ] && echo "OK" || {
-				echo "Failed!"
-				echo -n "Killing webif^2 ssl tunnel child process..."
-				kill -KILL "$proc"
-				[ "$?" -eq 0 ] && echo "OK" || echo "Failed!"
-			}
+kill_mtproc() {
+	local pid="$1"
+	[ -n "$pid" -a -d "/proc/$pid" ] && {
+		echo -n "Stopping webif^2 ssl tunnel..."
+		kill -TERM "$pid"
+		[ "$?" -eq 0 -a ! -d "/proc/$pid" ] && echo "OK" || {
+			echo "Failed!"
+			echo -n "Killing webif^2 ssl tunnel..."
+			kill -KILL "$pid"
+			[ "$?" -eq 0 ] && echo "OK" || echo "Failed!"
 		}
-	done
+	}
+}
+
+is_mtchild() {
+	local parent="$1"
+	local child="$2"
+	local temp
+	temp=$(cat /proc/${child}/status 2>/dev/null | sed '/^PPid:/!d; s/^PPid://; s/[[:space:]]//g')
+	if [ "$parent" = "$temp" ]; then
+		return "0"
+	elif [ "$temp" = "1" ]; then
+		return "1"
+	elif [ "$temp" = "" ]; then
+		return "1"
+	else
+		is_mtchild "$parent" "$temp"
+		return "$?" = "0"
+	fi
 }
 
 stop() {
 	local pid
 	load_variables
+	local childlist
 	[ -f "$CONFIG_matrixtunnel_pidfile" ] && {
-		pid=$(cat "$CONFIG_matrixtunnel_pidfile")
+		pid=$(cat "$CONFIG_matrixtunnel_pidfile" 2>/dev/null)
 		[ -n "$pid" -a -d "/proc/$pid" ] && {
-			stop_childs "$pid"
-			echo -n "Stopping webif^2 ssl tunnel..."
-			kill -TERM "$pid"
-			[ "$?" -eq 0 -a ! -d "/proc/$pid" ] && echo "OK" || {
-				echo "Failed!"
-				echo -n "Killing webif^2 ssl tunnel..."
-				kill -KILL "$pid"
-				[ "$?" -eq 0 ] && echo "OK" || echo "Failed!"
-			}
+			for mtpid in $(pidof matrixtunnel); do
+				is_mtchild "$pid" "$mtpid"
+				[ "$?" -eq 0 ] && childlist="$childlist $mtpid"
+			done
+			childlist="$childlist $pid"
+			for pid in $childlist; do
+				kill_mtproc "$pid"
+			done
 		} || echo "webif^2 ssl tunnel is not running."
 		rm -f "$CONFIG_matrixtunnel_pidfile" 2>/dev/null
 	} || echo "No webif^2 ssl tunnel is running."
@@ -119,7 +134,7 @@ status() {
 	local pid
 	load_variables
 	[ -f "$CONFIG_matrixtunnel_pidfile" ] && {
-		pid=$(cat "$CONFIG_matrixtunnel_pidfile")
+		pid=$(cat "$CONFIG_matrixtunnel_pidfile" 2>/dev/null)
 		[ -n "$pid" -a -d "/proc/$pid" ] && {
 			echo "webif^2 ssl tunnel (pid $pid) is running..."
 		}
