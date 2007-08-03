@@ -183,7 +183,7 @@ field|@TR<<network_wol_Interface#Interface>>|field_wake_ether_iface|hidden
 select|wake_ether_iface|$FORM_wake_ether_iface
 $form_interface_options
 field|@TR<<network_wol_etherwake_Password#Password>>|field_wake_ether_password|hidden
-text|wake_ether_password|$FORM_wake_ether_password
+password|wake_ether_password|$FORM_wake_ether_password
 field|@TR<<network_wol_Target_Host#Target Host>>|field_wake_wol_target|hidden
 text|wake_wol_target|$FORM_wake_wol_target
 field|@TR<<network_wol_Port#Port>>|field_wake_wol_port|hidden
@@ -191,7 +191,7 @@ text|wake_wol_port|$FORM_wake_wol_port
 field|@TR<<network_wol_Wait#Wait>>|field_wake_wol_wait|hidden
 text|wake_wol_wait|$FORM_wake_wol_wait
 field|@TR<<network_wol_Password#Password>>|field_wake_wol_password|hidden
-text|wake_wol_password|$FORM_wake_wol_password
+password|wake_wol_password|$FORM_wake_wol_password
 field|@TR<<network_wol_Verbose_Output#Verbose Output>>|field_wake_verbose|hidden
 checkbox|wake_verbose|$FORM_wake_verbose|1|
 EOF
