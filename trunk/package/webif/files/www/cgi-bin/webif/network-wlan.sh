@@ -160,10 +160,10 @@ for device in $DEVICES; do
 	        config_get FORM_channel $device channel
 	        config_get FORM_maxassoc $device maxassoc
 	        config_get FORM_distance $device distance
-	        config_get FORM_diversity $device diversity
 	        config_get FORM_txantenna $device txantenna
 	        config_get FORM_rxantenna $device rxantenna
-	        config_get FORM_disabled $device disabled
+	        config_get_bool FORM_diversity $device diversity
+	        config_get_bool FORM_disabled $device disabled
 	else
 		config_get country $device country
 		config_get iftype "$device" type
@@ -386,8 +386,8 @@ for device in $DEVICES; do
 			append forms "helplink|http://madwifi.org/wiki/UserDocs/PerformanceTuning" "$N"
 
 			isolate_field="field|@TR<<AP Isolation>>|isolate_form_$vcfg|hidden
-					radio|isolate_$vcfg|FORM_isolate|1|@TR<<On>>
-					radio|isolate_$vcfg|FORM_isolate|0|@TR<<Off>>"
+					radio|isolate_$vcfg|$FORM_isolate|1|@TR<<On>>
+					radio|isolate_$vcfg|$FORM_isolate|0|@TR<<Off>>"
 			append forms "$isolate_field" "$N"
 
 			if [ "$iftype" = "atheros" ]; then
