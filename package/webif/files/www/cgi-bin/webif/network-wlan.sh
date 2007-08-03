@@ -376,7 +376,20 @@ for device in $DEVICES; do
 				radio|broadcast_$vcfg|$FORM_hidden|1|@TR<<On>>
 				radio|broadcast_$vcfg|$FORM_hidden|0|@TR<<Off>>"
 			append forms "$hidden" "$N"
-			
+
+			bgscan_field="field|@TR<<Backround Client Scanning>>|bgscan_form_$vcfg|hidden
+					radio|bgscan_$vcfg|$FORM_bgscan|1|@TR<<On>>
+					radio|bgscan_$vcfg|$FORM_bgscan|0|@TR<<Off>>"
+			append forms "$bgscan_field" "$N"
+			append forms "helpitem|Backround Client Scanning" "$N"
+			append forms "helptext|Helptext Backround Client Scanning#Enables or disables the ablility of a virtual interface to scan for other access points while in client mode. Disabling this allows for higher throughput but keeps your card from roaming to other access points with a higher signal strength." "$N"
+			append forms "helplink|http://madwifi.org/wiki/UserDocs/PerformanceTuning" "$N"
+
+			isolate_field="field|@TR<<AP Isolation>>|isolate_form_$vcfg|hidden
+					radio|isolate_$vcfg|FORM_isolate|1|@TR<<On>>
+					radio|isolate_$vcfg|FORM_isolate|0|@TR<<Off>>"
+			append forms "$isolate_field" "$N"
+
 			if [ "$iftype" = "atheros" ]; then
 			eval txpowers="\$CONFIG_wireless_${device}_txpower"
 			[ -z "$txpowers" ] && {
@@ -412,19 +425,6 @@ for device in $DEVICES; do
 						option|$txpower|$txpower dbm"
 			done
 			append forms "$txpower_field" "$N"
-
-			bgscan_field="field|@TR<<Backround Client Scanning>>|bgscan_form_$vcfg|hidden
-					radio|bgscan_$vcfg|$FORM_bgscan|1|@TR<<On>>
-					radio|bgscan_$vcfg|$FORM_bgscan|0|@TR<<Off>>"
-			append forms "$bgscan_field" "$N"
-			append forms "helpitem|Backround Client Scanning" "$N"
-			append forms "helptext|Helptext Backround Client Scanning#Enables or disables the ablility of a virtual interface to scan for other access points while in client mode. Disabling this allows for higher throughput but keeps your card from roaming to other access points with a higher signal strength." "$N"
-			append forms "helplink|http://madwifi.org/wiki/UserDocs/PerformanceTuning" "$N"
-
-			isolate_field="field|@TR<<AP Isolation>>|isolate_form_$vcfg|hidden
-					radio|isolate_$vcfg|FORM_isolate|1|@TR<<On>>
-					radio|isolate_$vcfg|FORM_isolate|0|@TR<<Off>>"
-			append forms "$isolate_field" "$N"
 
 			rts="field|@TR<<RTS (Default off)>>
 				text|rts_$vcfg|$FORM_rts"
