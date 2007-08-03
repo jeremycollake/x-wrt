@@ -188,8 +188,8 @@ for device in $DEVICES; do
 	fi
 	
 	mode_disabled="field|@TR<<Radio>>
-			radio|disabled_$device|$FORM_disabled|1|@TR<<On>>
-			radio|disabled_$device|$FORM_disabled|0|@TR<<Off>>"
+			radio|disabled_$device|$FORM_disabled|0|@TR<<On>>
+			radio|disabled_$device|$FORM_disabled|1|@TR<<Off>>"
 	append forms "$mode_disabled" "$N"
         
 	# Initialize channels based on country code
