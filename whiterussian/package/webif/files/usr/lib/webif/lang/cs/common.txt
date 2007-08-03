@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3508
+lang_for_svn => 3519
 
 ## /usr/lib/webif/apn.csv
 Vodafone UK => Vodafone VB
@@ -655,11 +655,50 @@ Helptext VLAN => Virtuální LAN je sada portů, které jsou propojeny mostem, a
 Add New VLAN => Přidat novou VLAN
 Remove Last VLAN => Odstranit poslední VLAN
 
-## /www/cgi-bin/webif/network-wakeonlan.sh
+## /www/cgi-bin/webif/network_wakeonlan.sh
+network_wol_Custom_MAC_Address => Uživatelská adresa MAC
+network_wol_MAC_Address => Adresa MAC
+network_wol_missing_app => Aplikace je nedostupná
+network_wol_Target_Host => Cílový počítač
+network_wol_Port => Port
+network_wol_Wait => Čekání
+network_wol_Password => Heslo
+network_wol_etherwake_Broadcast_packet => Vysílat paket
+network_wol_etherwake_Password => Heslo
+network_wol_Application => Aplikace
+network_wol_Verbose_Output => Podrobný záznam
 Network => Síť
 WoL => WoL
 Wake-On-LAN => Wake-On-LAN
+network_wol_installing_package => Instaluji balíček
+network_wol_Sending => Odesílám magický paket...
+network_wol_Done => Hotovo.
+network_wol_option_wol => wol
+network_wol_option_ether-wake => ether-wake
+network_wol_moreinfo => Více informací o Wake-On-LAN najdete v <a href="#wollegend">nápovědě</a>.
+network_wol_Shared_options => Společné možnosti
+network_wol_Interface => Rozhraní
+network_wol_etherwake_Broadcast_Packet_helptext => Poslat budící paket na vysílací adresu.
+network_wol_etherwake_Password_helptext => Heslo může být zadáno v Ethernetovém 6 bajtovém hexadecimálním formátu (00:22:44:66:88:aa) nebo 4 bajtovém desetinném adresovém formátu (192.168.1.1).
+network_wol_Target_Host_helptext => Vyslat paket na tuto adresu IP, pokud chcete vysílat jen do jedné podsítě (výchozí je 255.255.255.255).
+network_wol_Port_helptext => Použít jiný cílový port (výchozí je 40000).
+network_wol_Wait_helptext => Čekat zadaný počet milisekund mezi magickými pakety.
+network_wol_Password_helptext => Heslo SecureON může být zadáno v Ethernetovém 6 bajtovém hexadecimálním formátu (00:22:44:66:88:aa).
+network_wol_Verbose_Output_helptext => Zvýšit úrověň ladícího výpisu nebo zapnout podrobný záznam.
+network_wol_Wake_up => Vstávat!
+network_wol_Host_Name => Název počítače
+network_wol_IP_Address => Adresa IP
+network_wol_MAC_Address => Adresa MAC
+network_wol_Action => Akce
+network_wol_Wake_up_helptext => Zadejte jakoukoli ze společných možností ve formuláři nahoře a probuďte konkrétní počítač stiskem tlačítka.<br />Pokud chcete, aby byl v seznamu konkrétní počítač, musíte je zadat do seznamu statických adress v souboru <a hre="network-hosts.sh">/etc/ethers</a>.
+network_wol_Wake-On-LAN => Wake-On-LAN
 wol_help => Zde můžete odeslat paket Wake-On-LAN pro automatické nastartování počítače, který je vypnutý. Počítač musí podporovat WOL a tato vlastnost musí být zapnuta v BISOu, aby to fungovalo. Naneštěstí není definována jednoznačná odpověď probouzeného počítače, takže nebudete vědět, zda bylo probuzení úspěšné a stroj opravdu startuje.
+wol_help2 => Ještě více informací najdete v popisu <a href="http://en.wikipedia.org/wiki/Wake-on-LAN" onclick="return !targetwindow(this.href);">Wake-on-LAN</a>.
+network_wol_Application_helptext => Existují dvě aplikace, které jsou schopné vytvořit a přenést magický paket; aplikace <strong>ether-wake</strong> používá speciální Ethernetový rámec a aplikace <strong>wol</strong> používá paket UDP.
+network_wol_requires_wol => Nainstalujte balíček wol, chcete-li probouzet počítač pomocí směrovatelného paketu UDP
+network_wol_Install_wol => Nainstalovat wol
+network_wol_requires_ether-wake => Nainstalujte balíček ether-wake, chcete-li probouzet počítač pomocí nesměrovatelného Ethernetového rámce
+network_wol_Install_ether-wake => Nainstalovat ether-wake
 
 ## /www/cgi-bin/webif/network-wan-lan.sh
 WAN DNS Address => Adresa DNS WAN
