@@ -177,21 +177,20 @@ for device in $DEVICES; do
 		eval FORM_rxantenna="\$FORM_rxantenna_$device"
 		eval FORM_disabled="\$FORM_disabled_$device"
 	fi
-	
-        append forms "start_form|@TR<<Wireless Adapter>> $device @TR<< Configuration>>" "$N"
-        if [ "$iftype" = "broadcom" ]; then
-        	append forms "helpitem|Broadcom Wireless Configuration" "$N"
+
+	append forms "start_form|@TR<<Wireless Adapter>> $device @TR<< Configuration>>" "$N"
+	if [ "$iftype" = "broadcom" ]; then
+		append forms "helpitem|Broadcom Wireless Configuration" "$N"
 		append forms "helptext|Helptext Broadcom Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-3x ap or 1-4x ap or 1x adhoc" "$N"
 	elif [ "$iftype" = "atheros" ]; then
-        	append forms "helpitem|Atheros Wireless Configuration" "$N"
+		append forms "helpitem|Atheros Wireless Configuration" "$N"
 		append forms "helptext|Helptext Atheros Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-4x ap or 1-4x ap or 1x adhoc" "$N"
 	fi
 	
-        mode_disabled="field|@TR<<Radio>>
-		select|disabled_$device|$FORM_disabled
-		option|0|@TR<<On>>
-        	option|1|@TR<<Off>>"
-        append forms "$mode_disabled" "$N"
+	mode_disabled="field|@TR<<Radio>>
+			radio|disabled_$device|$FORM_disabled|1|@TR<<On>>
+			radio|disabled_$device|$FORM_disabled|0|@TR<<Off>>"
+	append forms "$mode_disabled" "$N"
         
 	# Initialize channels based on country code
 	# (--- hardly a switch here ---)
@@ -252,78 +251,76 @@ for device in $DEVICES; do
 	append forms "$BG_CHANNELS" "$N"
 	
 	if [ "$iftype" = "atheros" ]; then
-        	mode_diversity="field|@TR<<Diversity>>
-			select|diversity_$device|$FORM_diversity
-			option|1|@TR<<On>>
-        		option|0|@TR<<Off>>"        	
-        	append forms "$mode_diversity" "$N"
-        	append forms "helpitem|Diversity" "$N"
+		mode_diversity="field|@TR<<Diversity>>
+				radio|diversity_$device|$FORM_diversity|1|@TR<<On>>
+				radio|diversity_$device|$FORM_diversity|0|@TR<<Off>>"      	
+		append forms "$mode_diversity" "$N"
+		append forms "helpitem|Diversity" "$N"
 		append forms "helptext|Helptext Diversity#Used on systems with multiple antennas to help improve reception. Disable if you only have one antenna." "$N"
 		append forms "helplink|http://madwifi.org/wiki/UserDocs/AntennaDiversity" "$N"
 
-        	form_txant="field|@TR<<TX Antenna>>
+		form_txant="field|@TR<<TX Antenna>>
 			select|txantenna_$device|$FORM_txantenna
 			option|0|@TR<<Auto>>
-        		option|1|@TR<<Antenna 1>>
-        		option|2|@TR<<Antenna 2>>"
-        	append forms "$form_txant" "$N"
+			option|1|@TR<<Antenna 1>>
+			option|2|@TR<<Antenna 2>>"
+		append forms "$form_txant" "$N"
 
-        	form_rxant="field|@TR<<RX Antenna>>
+		form_rxant="field|@TR<<RX Antenna>>
 			select|rxantenna_$device|$FORM_rxantenna
 			option|0|@TR<<Auto>>
-        		option|1|@TR<<Antenna 1>>
-        		option|2|@TR<<Antenna 2>>"
-        	append forms "$form_rxant" "$N"
-        fi
-        
-	
+			option|1|@TR<<Antenna 1>>
+			option|2|@TR<<Antenna 2>>"
+		append forms "$form_rxant" "$N"
+	fi
+
+
 	#Currently broadcom only.
 	if [ "$iftype" = "broadcom" ]; then
-        maxassoc="field|@TR<<Max Associated Clients (Default 128)>>
-                text|maxassoc_${device}|$FORM_maxassoc"
+	maxassoc="field|@TR<<Max Associated Clients (Default 128)>>
+		text|maxassoc_${device}|$FORM_maxassoc"
 	append forms "$maxassoc" "$N"
 	fi
-	
-        distance="field|@TR<<Wireless Distance (In Meters)>>
-                text|distance_${device}|$FORM_distance"
+
+	distance="field|@TR<<Wireless Distance (In Meters)>>
+		text|distance_${device}|$FORM_distance"
 
 	append forms "$distance" "$N"
 	append forms "helpitem|Wireless Distance" "$N"
-        append forms "helptext|Helptext Wireless Distance#You must enter a number that is the distance of your longest link." "$N"
+	append forms "helptext|Helptext Wireless Distance#You must enter a number that is the distance of your longest link." "$N"
 
 	add_vcfg="string|<tr><td><a href=$SCRIPT_NAME?add_vcfg=$device&amp;add_vcfg_number=$vcfg_number>@TR<<Add Virtual Interface>></a>"
-        append forms "$add_vcfg" "$N"
-        append forms "end_form" "$N"
+	append forms "$add_vcfg" "$N"
+	append forms "end_form" "$N"
 
 	#####################################################################
 	# This is looped for every virtual wireless interface (wifi-iface)
 	#
-        for vcfg in $vface; do
-       		config_get FORM_device $vcfg device
-       		if [ "$FORM_device" = "$device" ]; then
-       			if empty "$FORM_submit"; then
-	        		config_get FORM_network $vcfg network
-	        		config_get FORM_mode $vcfg mode
-	        		config_get FORM_ssid $vcfg ssid
-	        		config_get FORM_encryption $vcfg encryption
-	        		config_get FORM_key $vcfg key
-	        		case "$FORM_key" in
-	        			1|2|3|4) FORM_wep_key="$FORM_key"
-	        				FORM_key="";;
-	        		esac
-	        		config_get FORM_key1 $vcfg key1
-	        		config_get FORM_key2 $vcfg key2
-	        		config_get FORM_key3 $vcfg key3
-	        		config_get FORM_key4 $vcfg key4
-	        		config_get FORM_server $vcfg server
-	        		config_get FORM_radius_port $vcfg port
-	        		config_get FORM_hidden $vcfg hidden
-	        		config_get FORM_isolate $vcfg isolate
-	        		config_get FORM_txpower $vcfg txpower
-	        		config_get FORM_bgscan $vcfg bgscan
-	        		config_get FORM_isolate $vcfg isolate
-	        		config_get FORM_frag $vcfg frag
+	for vcfg in $vface; do
+		config_get FORM_device $vcfg device
+		if [ "$FORM_device" = "$device" ]; then
+			if empty "$FORM_submit"; then
+				config_get FORM_network $vcfg network
+				config_get FORM_mode $vcfg mode
+				config_get FORM_ssid $vcfg ssid
+				config_get FORM_encryption $vcfg encryption
+				config_get FORM_key $vcfg key
+				case "$FORM_key" in
+					1|2|3|4) FORM_wep_key="$FORM_key"
+						FORM_key="";;
+				esac
+				config_get FORM_key1 $vcfg key1
+				config_get FORM_key2 $vcfg key2
+				config_get FORM_key3 $vcfg key3
+				config_get FORM_key4 $vcfg key4
+				config_get FORM_server $vcfg server
+				config_get FORM_radius_port $vcfg port
+				config_get FORM_txpower $vcfg txpower
+				config_get FORM_frag $vcfg frag
 	        		config_get FORM_rts $vcfg rts
+	        		config_get_bool FORM_hidden $vcfg hidden
+	        		config_get_bool FORM_isolate $vcfg isolate
+	        		config_get_bool FORM_bgscan $vcfg bgscan
 			else
 				eval FORM_key="\$FORM_radius_key_$vcfg"
 				eval FORM_radius_ipaddr="\$FORM_radius_ipaddr_$vcfg"
@@ -376,9 +373,8 @@ for device in $DEVICES; do
 			append forms "helptext|Helptext WDS Connections#Enter the MAC address of the router on your network that should be wirelessly connected to. The other router must also support wds and have the mac address of this router entered." "$N"
 
 			hidden="field|@TR<<ESSID Broadcast>>|broadcast_form_$vcfg|hidden
-				select|broadcast_$vcfg|$FORM_hidden
-				option|0|@TR<<Show>>
-				option|1|@TR<<Hide>>"
+				radio|broadcast_$vcfg|$FORM_hidden|1|@TR<<On>>
+				radio|broadcast_$vcfg|$FORM_hidden|0|@TR<<Off>>"
 			append forms "$hidden" "$N"
 			
 			if [ "$iftype" = "atheros" ]; then
@@ -416,16 +412,20 @@ for device in $DEVICES; do
 						option|$txpower|$txpower dbm"
 			done
 			append forms "$txpower_field" "$N"
-			
+
 			bgscan_field="field|@TR<<Backround Client Scanning>>|bgscan_form_$vcfg|hidden
-					select|bgscan_$vcfg|$FORM_bgscan
-					option|1|@TR<<On>>
-					option|0|@TR<<Off>>"
+					radio|bgscan_$vcfg|$FORM_bgscan|1|@TR<<On>>
+					radio|bgscan_$vcfg|$FORM_bgscan|0|@TR<<Off>>"
 			append forms "$bgscan_field" "$N"
 			append forms "helpitem|Backround Client Scanning" "$N"
 			append forms "helptext|Helptext Backround Client Scanning#Enables or disables the ablility of a virtual interface to scan for other access points while in client mode. Disabling this allows for higher throughput but keeps your card from roaming to other access points with a higher signal strength." "$N"
 			append forms "helplink|http://madwifi.org/wiki/UserDocs/PerformanceTuning" "$N"
-			
+
+			isolate_field="field|@TR<<AP Isolation>>|isolate_form_$vcfg|hidden
+					radio|isolate_$vcfg|FORM_isolate|1|@TR<<On>>
+					radio|isolate_$vcfg|FORM_isolate|0|@TR<<Off>>"
+			append forms "$isolate_field" "$N"
+
 			rts="field|@TR<<RTS (Default off)>>
 				text|rts_$vcfg|$FORM_rts"
 			append forms "$rts" "$N"
@@ -435,16 +435,10 @@ for device in $DEVICES; do
 			append forms "$frag" "$N"
 			fi
 
-			isolate_field="field|@TR<<AP Isolation>>|isolate_form_$vcfg|hidden
-					select|isolate_$vcfg|$FORM_isolate
-					option|0|@TR<<Off>>
-					option|1|@TR<<On>>"
-			append forms "$isolate_field" "$N"
-
 			ssid="field|@TR<<ESSID>>|ssid_form_$vcfg
 				text|ssid_$vcfg|$FORM_ssid"
 			append forms "$ssid" "$N"
-			
+
 			bssid="field|@TR<<BSSID>>|bssid_form_$vcfg|hidden
 				text|bssid_$vcfg|$FORM_bssid"
 			append forms "$bssid" "$N"
