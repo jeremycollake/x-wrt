@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3519
+lang_for_svn => 3521
 
 ## /usr/lib/webif/apn.csv
 Vodafone UK => Vodafone VB
@@ -690,9 +690,9 @@ network_wol_Host_Name => Název počítače
 network_wol_IP_Address => Adresa IP
 network_wol_MAC_Address => Adresa MAC
 network_wol_Action => Akce
-network_wol_Wake_up_helptext => Zadejte jakoukoli ze společných možností ve formuláři nahoře a probuďte konkrétní počítač stiskem tlačítka.<br />Pokud chcete, aby byl v seznamu konkrétní počítač, musíte je zadat do seznamu statických adress v souboru <a hre="network-hosts.sh">/etc/ethers</a>.
+network_wol_Wake_up_helptext => Zadejte jakoukoli ze společných možností ve formuláři nahoře a probuďte konkrétní počítač stiskem tlačítka.<br />Pokud chcete, aby byl v seznamu konkrétní počítač, musíte jej zadat do seznamu statických adress v souboru <a href="network-hosts.sh">/etc/ethers</a>.
 network_wol_Wake-On-LAN => Wake-On-LAN
-wol_help => Zde můžete odeslat paket Wake-On-LAN pro automatické nastartování počítače, který je vypnutý. Počítač musí podporovat WOL a tato vlastnost musí být zapnuta v BISOu, aby to fungovalo. Naneštěstí není definována jednoznačná odpověď probouzeného počítače, takže nebudete vědět, zda bylo probuzení úspěšné a stroj opravdu startuje.
+wol_help => Zde můžete odeslat paket Wake-On-LAN pro automatické nastartování počítače, který je vypnutý. Počítač musí podporovat WOL a tato vlastnost musí být zapnuta v BIOSu, aby to fungovalo. Naneštěstí není definována jednoznačná odpověď probouzeného počítače, takže nebudete vědět, zda bylo probuzení úspěšné a stroj opravdu startuje.
 wol_help2 => Ještě více informací najdete v popisu <a href="http://en.wikipedia.org/wiki/Wake-on-LAN" onclick="return !targetwindow(this.href);">Wake-on-LAN</a>.
 network_wol_Application_helptext => Existují dvě aplikace, které jsou schopné vytvořit a přenést magický paket; aplikace <strong>ether-wake</strong> používá speciální Ethernetový rámec a aplikace <strong>wol</strong> používá paket UDP.
 network_wol_requires_wol => Nainstalujte balíček wol, chcete-li probouzet počítač pomocí směrovatelného paketu UDP

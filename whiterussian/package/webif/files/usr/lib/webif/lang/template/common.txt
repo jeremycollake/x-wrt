@@ -263,7 +263,7 @@ network_wol_Host_Name => Host Name
 network_wol_IP_Address => IP Address
 network_wol_MAC_Address => MAC Address
 network_wol_Action => Action
-network_wol_Wake_up_helptext => Enter any of the shared options in the form above and press the button to wake up the particular computer.<br />If you want the particular computer to be listed here, you must add it to the static addresses list in the <a hre="network-hosts.sh">/etc/ethers</a> file.
+network_wol_Wake_up_helptext => Enter any of the shared options in the form above and press the button to wake up the particular computer.<br />If you want the particular computer to be listed here, you must add it to the static addresses list in the <a href="network-hosts.sh">/etc/ethers</a> file.
 network_wol_Wake-On-LAN => Wake-On-LAN
 wol_help => Here you can send a Wake-On-LAN packet to automatically boot up a computer that is turned off. The computer must support WOL, and the feature needs to be turned on in the BIOS for this to work. Unfortunately, there is no explicit response from that machine, so you do not know whether the waking was successful and the machine is really booting up.
 wol_help2 => For even more information, see the <a href="http://en.wikipedia.org/wiki/Wake-on-LAN" onclick="return !targetwindow(this.href);">Wake-on-LAN description</a>.

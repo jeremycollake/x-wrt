@@ -292,7 +292,7 @@ BEGIN {
 
 	display_form <<EOF
 helpitem|network_wol_Wake_up#Wake up!
-helptext|network_wol_Wake_up_helptext#Enter any of the shared options in the form above and press the button to wake up the particular computer.<br />If you want the particular computer to be listed here, you must add it to the static addresses list in the <a hre="network-hosts.sh">/etc/ethers</a> file.
+helptext|network_wol_Wake_up_helptext#Enter any of the shared options in the form above and press the button to wake up the particular computer.<br />If you want the particular computer to be listed here, you must add it to the static addresses list in the <a href="network-hosts.sh">/etc/ethers</a> file.
 end_form
 EOF
 
