@@ -67,33 +67,25 @@ if ! empty "$FORM_install_ntpclient"; then
 	echo "</pre>"
 fi
 
-if ! empty "$FORM_install_stunnel"; then
-	echo "@TR<<system_settings_Installing_MatrixTunnel_package#Installing MatrixTunnel package>> ...<pre>"
-	install_package "matrixtunnel"
-	if [ ! -e "/etc/ssl/matrixtunnel.key" ]; then
-		is_package_installed "openssl-util"
-		if [ "$?" = "1" ]; then
-			inst_packages="$inst_packages openssl-util"
-			openssl_install="1"
-		fi
-		is_package_installed "libopenssl"
-		if [ "$?" = "1" ]; then
-			inst_packages="$inst_packages libopenssl"
-			libsslsymlink=1
-		fi
-		is_package_installed "zlib"
-		if [ "$?" = "1" ]; then
-			inst_packages="$inst_packages zlib"
-		fi
-		if [ "$openssl_install" = "1" ]; then
-			ipkg -d ram install "openssl-util"
-		fi
-		if [ "$libsslsymlink" = "1" ]; then
-			ln -s /tmp/usr/lib/libssl.so.0.9.8 /lib/libssl.so.0.9.8
-			ln -s /tmp/usr/lib/libcrypto.so.0.9.8 /lib/libcrypto.so.0.9.8
-		fi
+generate_ssl_key() {
+	local inst_packages llib llink libsymlinks
+	is_package_installed "zlib"
+	[ "$?" != "0" ] && inst_packages="$inst_packages zlib"
+	is_package_installed "libopenssl"
+	[ "$?" != "0" ] && inst_packages="$inst_packages libopenssl"
+	is_package_installed "openssl-util"
+	[ "$?" != "0" ] && inst_packages="$inst_packages openssl-util"
+	[ -n "$inst_packages" ] && ipkg -d ram install $inst_packages -force-overwrite
+	is_package_installed "openssl-util"
+	if [ "$?" = "0" ]; then
+		for llib in $(ls /tmp/usr/lib/libssl.so.* /tmp/usr/lib/libcrypto.so.* /tmp/usr/lib/libz.so.* /tmp/usr/bin/openssl 2>/dev/null); do
+			llink=$(echo "$llib" | sed 's/\/tmp//')
+			ln -s $llib $llink
+			[ "$?" = "0" ] && libsymlinks="$libsymlinks $llink"
+		done
 		if [ -z "$(ps -A | grep "[n]tpclient\>")" ] && [ -z "$(ps -A | grep "[n]tpd\>")" ]; then
 			ntpcli=$(which ntpclient)
+			echo "@TR<<system_settings_Updating_time#Updating time>> ..."
 			if [ -n "$ntpcli" ]; then
 				$ntpcli -c 1 -s -h pool.ntp.org
 			else
@@ -102,18 +94,27 @@ if ! empty "$FORM_install_stunnel"; then
 		fi
 		export RANDFILE="/tmp/.rnd"
 		dd if=/dev/urandom of="$RANDFILE" count=1 bs=512 2>/dev/null
-		/tmp/usr/bin/openssl genrsa -out /etc/ssl/matrixtunnel.key 2048; /tmp/usr/bin/openssl req -new -batch -nodes -key /etc/ssl/matrixtunnel.key -out /etc/ssl/matrixtunnel.csr; /tmp/usr/bin/openssl x509 -req -days 365 -in /etc/ssl/matrixtunnel.csr -signkey /etc/ssl/matrixtunnel.key -out /etc/ssl/matrixtunnel.cert
+		(openssl genrsa -out /etc/ssl/matrixtunnel.key 2048; openssl req -new -batch -nodes -key /etc/ssl/matrixtunnel.key -out /etc/ssl/matrixtunnel.csr; openssl x509 -req -days 365 -in /etc/ssl/matrixtunnel.csr -signkey /etc/ssl/matrixtunnel.key -out /etc/ssl/matrixtunnel.cert)
 		rm -f "$RANDFILE" 2>/dev/null
 		unset RANDFILE
-		ipkg install matrixtunnel
-		if [ "$libsslsymlink" = "1" ]; then
-			rm /lib/libcrypto.so.0.9.8
-			rm /lib/libssl.so.0.9.8
-		fi
-		if [ -n "$inst_packages" ]; then
-			ipkg remove "$inst_packages"
-		fi
 	fi
+	[ -n "$libsymlinks" ] && rm -f $libsymlinks
+	[ -n "$inst_packages" ] && ipkg remove $inst_packages
+}
+
+if ! empty "$FORM_install_stunnel"; then
+	echo "@TR<<system_settings_Installing_MatrixTunnel_package#Installing MatrixTunnel package>> ...<pre>"
+	install_package "matrixtunnel"
+	is_package_installed "matrixtunnel"
+	[ "$?" = "0" ] && [ ! -e /etc/ssl/matrixtunnel.key -o ! -e /etc/ssl/matrixtunnel.cert ] && {
+		echo "@TR<<system_settings_Generating_SSL_certificate#Generating SSL certificate>> ..."
+		generate_ssl_key
+	}
+	echo "</pre><br />"
+fi
+if ! empty "$FORM_generate_certificate"; then
+	echo "@TR<<system_settings_Generating_SSL_certificate#Generating SSL certificate>> ...<pre>"
+	generate_ssl_key
 	echo "</pre><br />"
 fi
 
@@ -171,6 +172,9 @@ EOF
 			}
 		}
 		# webif settings
+		# fix emptying the field when not present
+		FORM_ssl_enable="${FORM_ssl_enable:-$CONFIG_ssl_enable}"
+		FORM_ssl_enable="${FORM_ssl_enable:-0}"
 		uci_set "webif" "ssl" "enable" "$FORM_ssl_enable"
 		uci_set "webif" "theme" "id" "$FORM_theme"
 		uci_set "webif" "general" "lang" "$FORM_language"
@@ -186,10 +190,16 @@ if [ "$?" != "0" ]; then
 string|<div class=\"warning\">@TR<<system_settings_Feature_requires_matrixtunnel#MatrixTunnel package is not installed. You need to install it for ssl support>>:</div>
 submit|install_stunnel| @TR<<system_settings_Install_MatrixTunnel#Install MatrixTunnel>> |"
 else
-	WEBIF_SSL="$WEBIF_SSL
+	if [ -e /etc/ssl/matrixtunnel.key -a -e /etc/ssl/matrixtunnel.cert ]; then
+		WEBIF_SSL="$WEBIF_SSL
 select|ssl_enable|$FORM_ssl_enable
 option|0|@TR<<system_settings_webifssl_Off#Off>>
 option|1|@TR<<system_settings_webifssl_On#On>>"
+	else
+		WEBIF_SSL="$WEBIF_SSL
+string|<div class=\"warning\">@TR<<system_settings_Feature_requires_certificate#The SSL certificate is missing. You need to generate it for ssl support>>:</div>
+submit|generate_certificate| @TR<<system_settings_Generate_SSL_Certificate#Generate SSL Certificate>> |"
+	fi
 fi
 
 #####################################################################
@@ -398,7 +408,6 @@ $NTPCLIENT_INSTALL_FORM
 ##########################
 # webif settings
 start_form|@TR<<Webif&sup2; Settings>>
-$effect_field
 field|@TR<<Language>>
 select|language|$FORM_language
 $LANGUAGES
