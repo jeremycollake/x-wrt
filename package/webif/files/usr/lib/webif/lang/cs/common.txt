@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3508
+lang_for_svn => 3528
 
 ## /usr/lib/webif/apn.csv
 Vodafone UK => Vodafone VB
@@ -819,7 +819,9 @@ System => Systém
 Settings => Nastavení
 System Settings => Systémová nastavení
 system_settings_Installing_NTPCLIENT_package => Instaluji balíček NTPCLIENT
+system_settings_Updating_time => Aktualizuji čas
 system_settings_Installing_MatrixTunnel_package => Instaluji balíček MatrixTunnel
+system_settings_Generating_SSL_certificate => Generuji SSL certifikát
 Host Name => Název počítače
 Warning => Varování
 system_settings_Hostname_failed_validation => Název počítače není platný. Nelze uložit.
@@ -828,6 +830,8 @@ system_settings_Feature_requires_matrixtunnel => Balíček MatrixTunnel není na
 system_settings_Install_MatrixTunnel => Nainstalovat MatrixTunnel
 system_settings_webifssl_Off => Vypnuto
 system_settings_webifssl_On => Zapnuto
+system_settings_Feature_requires_certificate => SSL certifikát chybí. Je třeba jej vygenerovat pro podporu SSL
+system_settings_Generate_SSL_Certificate => Generovat SSL certifikát
 Enable visual effects => Povolit vizuální efekty
 Boot Wait => Boot Wait
 Enabled => Povoleno
@@ -845,7 +849,6 @@ system_settings_Install_NTP_Client => Nainstalovat klienta NTP
 ##### translate timezones?
 system_settings_group_unknown_TZ => Neznámá
 system_settings_User_or_old_TZ => Uživatelem definovaná (nebo zastaralá)
-System Settings => Systémová nastavení
 Time Settings => Nastavení času
 Timezone => Časová zóna
 system_settings_POSIX_TZ_String => POSIX TZ řetězec
