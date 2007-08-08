@@ -5,8 +5,8 @@
 config_cb() {
 	config_get TYPE "$CONFIG_SECTION" TYPE
 	case "$TYPE" in
-		hotspot)
-			chili_cfg="$CONFIG_SECTION"
+		chilli)
+			chilli_cfg="$CONFIG_SECTION"
 		;;
 	esac
 }
@@ -43,8 +43,8 @@ string|FORM_chilli_dynip|@TR<<hotspot_core_Dynamic_IP_Pool#Dynamic IP Pool||$FOR
 string|FORM_chilli_statip|@TR<<hotspot_core_Static_IP_Pool#Static IP Pool>>||$FORM_chilli_statip
 EOF
 	equal "$?" 0 && {
-		[ "$chili_cfg" = "" ] && {
-			uci_add hotspot chilli
+		[ "$chilli_cfg" = "" ] && {
+			uci_add hotspot chilli chilli
 			chilli_cfg="chilli"
 		}
 		uci_set hotspot "$chilli_cfg" debug "$FORM_chilli_debug"

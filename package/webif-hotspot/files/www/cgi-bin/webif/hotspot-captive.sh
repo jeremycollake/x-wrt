@@ -5,8 +5,8 @@
 config_cb() {
 	config_get TYPE "$CONFIG_SECTION" TYPE
 	case "$TYPE" in
-		hotspot)
-			chili_cfg="$CONFIG_SECTION"
+		chilli)
+			chilli_cfg="$CONFIG_SECTION"
 		;;
 	esac
 }
@@ -42,7 +42,7 @@ string|FORM_chilli_macsuffix|@TR<<hotspot_captive_MAC_Suffix#MAC Suffix>>||$FORM
 EOF
 	equal "$?" 0 && {
 		[ "$chilli_cfg" = "" ] && {
-			uci_add hotspot chilli
+			uci_add hotspot chilli chilli
 			chilli_cfg="chilli"
 		}
 		uci_set hotspot "$chilli_cfg" uamserver "$FORM_chilli_uamserver"
