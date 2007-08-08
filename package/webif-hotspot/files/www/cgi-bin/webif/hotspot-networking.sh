@@ -1,41 +1,29 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
-is_kamikaze && {
-	local _val
-	uci_load "hotspot"
-	eval "_val=\$CONFIG_chilli_TYPE" 2>/dev/null
-	! equal "$_val" "hotspot" && {
-		uci_add "hotspot" "hotspot" "chilli"
-		uci_commit "hotspot"
-		uci_load "hotspot"
-	}
+
+config_cb() {
+	config_get TYPE "$CONFIG_SECTION" TYPE
+	case "$TYPE" in
+		hotspot)
+			chili_cfg="$CONFIG_SECTION"
+		;;
+	esac
 }
 
+uci_load "hotspot"
+
 if empty "$FORM_submit"; then
-	is_kamikaze && {
-		FORM_chilli_radiusserver1="$CONFIG_chilli_radiusserver1"
-		FORM_chilli_radiusserver2="$CONFIG_chilli_radiusserver2"
-		FORM_chilli_radiussecret="$CONFIG_chilli_radiussecret"
-		FORM_chilli_radiusauthport="$CONFIG_chilli_radiusauthport"
-		FORM_chilli_radiusacctport="$CONFIG_chilli_radiusacctport"
-		FORM_chilli_radiusnasid="$CONFIG_chilli_radiusnasid"
-		FORM_chilli_proxylisten="$CONFIG_chilli_proxylisten"
-		FORM_chilli_proxyport="$CONFIG_chilli_proxyport"
-		FORM_chilli_proxyclient="$CONFIG_chilli_proxyclient"
-		FORM_chilli_proxysecret="$CONFIG_chilli_proxysecret"
-	} || {
-		FORM_chilli_radiusserver1="${chilli_radiusserver1:-$(nvram get chilli_radiusserver1)}"
-		FORM_chilli_radiusserver2="${chilli_radiusserver2:-$(nvram get chilli_radiusserver2)}"
-		FORM_chilli_radiussecret="${chilli_radiussecret:-$(nvram get chilli_radiussecret)}"
-		FORM_chilli_radiusauthport="${chilli_radiusauthport:-$(nvram get chilli_radiusauthport)}"
-		FORM_chilli_radiusacctport="${chilli_radiusacctport:-$(nvram get chilli_radiusacctport)}"
-		FORM_chilli_radiusnasid="${chilli_radiusnasid:-$(nvram get chilli_radiusnasid)}"
-		FORM_chilli_proxylisten="${chilli_proxylisten:-$(nvram get chilli_proxylisten)}"
-		FORM_chilli_proxyport="${chilli_proxyport:-$(nvram get chilli_proxyport)}"
-		FORM_chilli_proxyclient="${chilli_proxyclient:-$(nvram get chilli_proxyclient)}"
-		FORM_chilli_proxysecret="${chilli_proxysecret:-$(nvram get chilli_proxysecret)}"
-	}
+	eval "FORM_chilli_radiusserver1=\"\$CONFIG_${chilli_cfg}_radiusserver1\""
+	eval "FORM_chilli_radiusserver2=\"\$CONFIG_${chilli_cfg}_radiusserver2\""
+	eval "FORM_chilli_radiussecret=\"\$CONFIG_${chilli_cfg}_radiussecret\""
+	eval "FORM_chilli_radiusauthport=\"\$CONFIG_${chilli_cfg}_radiusauthport\""
+	eval "FORM_chilli_radiusacctport=\"\$CONFIG_${chilli_cfg}_radiusacctport\""
+	eval "FORM_chilli_radiusnasid=\"\$CONFIG_${chilli_cfg}_radiusnasid\""
+	eval "FORM_chilli_proxylisten=\"\$CONFIG_${chilli_cfg}_proxylisten\""
+	eval "FORM_chilli_proxyport=\"\$CONFIG_${chilli_cfg}_proxyport\""
+	eval "FORM_chilli_proxyclient=\"\$CONFIG_${chilli_cfg}_proxyclient\""
+	eval "FORM_chilli_proxysecret=\"\$CONFIG_${chilli_cfg}_proxysecret\""
 else
 	SAVED=1
 	validate <<EOF
@@ -51,29 +39,20 @@ string|FORM_chilli_proxyport|@TR<<hotspot_networking_Proxy_Port#Proxy Port>>||$F
 string|FORM_chilli_proxysecret|@TR<<hotspot_networking_Proxy_Secret#Proxy Secret>>||$FORM_chilli_proxysecret
 EOF
 	equal "$?" 0 && {
-		is_kamikaze && {
-			uci_set hotspot chilli radiusserver1 "$FORM_chilli_radiusserver1"
-			uci_set hotspot chilli radiusserver2 "$FORM_chilli_radiusserver2"
-			uci_set hotspot chilli radiussecret "$FORM_chilli_radiussecret"
-			uci_set hotspot chilli radiusauthport "$FORM_chilli_radiusauthport"
-			uci_set hotspot chilli radiusacctport "$FORM_chilli_radiusacctport"
-			uci_set hotspot chilli radiusnasid "$FORM_chilli_radiusnasid"
-			uci_set hotspot chilli proxylisten "$FORM_chilli_proxylisten"
-			uci_set hotspot chilli proxyclient "$FORM_chilli_proxyclient"
-			uci_set hotspot chilli proxyport "$FORM_chilli_proxyport"
-			uci_set hotspot chilli proxysecret "$FORM_chilli_proxysecret"
-		} || {
-			save_setting hotspot chilli_radiusserver1 "$FORM_chilli_radiusserver1"
-			save_setting hotspot chilli_radiusserver2 "$FORM_chilli_radiusserver2"
-			save_setting hotspot chilli_radiussecret "$FORM_chilli_radiussecret"
-			save_setting hotspot chilli_radiusauthport "$FORM_chilli_radiusauthport"
-			save_setting hotspot chilli_radiusacctport "$FORM_chilli_radiusacctport"
-			save_setting hotspot chilli_radiusnasid "$FORM_chilli_radiusnasid"
-			save_setting hotspot chilli_proxylisten "$FORM_chilli_proxylisten"
-			save_setting hotspot chilli_proxyclient "$FORM_chilli_proxyclient"
-			save_setting hotspot chilli_proxyport "$FORM_chilli_proxyport"
-			save_setting hotspot chilli_proxysecret "$FORM_chilli_proxysecret"
+		[ "$chili_cfg" = "" ] && {
+			uci_add hotspot chilli
+			chilli_cfg="chilli"
 		}
+		uci_set hotspot "$chilli_cfg" radiusserver1 "$FORM_chilli_radiusserver1"
+		uci_set hotspot "$chilli_cfg" radiusserver2 "$FORM_chilli_radiusserver2"
+		uci_set hotspot "$chilli_cfg" radiussecret "$FORM_chilli_radiussecret"
+		uci_set hotspot "$chilli_cfg" radiusauthport "$FORM_chilli_radiusauthport"
+		uci_set hotspot "$chilli_cfg" radiusacctport "$FORM_chilli_radiusacctport"
+		uci_set hotspot "$chilli_cfg" radiusnasid "$FORM_chilli_radiusnasid"
+		uci_set hotspot "$chilli_cfg" proxylisten "$FORM_chilli_proxylisten"
+		uci_set hotspot "$chilli_cfg" proxyclient "$FORM_chilli_proxyclient"
+		uci_set hotspot "$chilli_cfg" proxyport "$FORM_chilli_proxyport"
+		uci_set hotspot "$chilli_cfg" proxysecret "$FORM_chilli_proxysecret"
 	}
 fi
 
