@@ -5,8 +5,8 @@
 config_cb() {
 	config_get TYPE "$CONFIG_SECTION" TYPE
 	case "$TYPE" in
-		hotspot)
-			chili_cfg="$CONFIG_SECTION"
+		chilli)
+			chilli_cfg="$CONFIG_SECTION"
 		;;
 	esac
 }
@@ -39,8 +39,8 @@ string|FORM_chilli_proxyport|@TR<<hotspot_networking_Proxy_Port#Proxy Port>>||$F
 string|FORM_chilli_proxysecret|@TR<<hotspot_networking_Proxy_Secret#Proxy Secret>>||$FORM_chilli_proxysecret
 EOF
 	equal "$?" 0 && {
-		[ "$chili_cfg" = "" ] && {
-			uci_add hotspot chilli
+		[ "$chilli_cfg" = "" ] && {
+			uci_add hotspot chilli chilli
 			chilli_cfg="chilli"
 		}
 		uci_set hotspot "$chilli_cfg" radiusserver1 "$FORM_chilli_radiusserver1"
