@@ -52,6 +52,7 @@ HANDLERS_uci='
 	qos) apply_uci_qos;;
 	upnpd) reload_upnpd;;
 	webif) apply_uci_webif;;
+	webifssl) apply_uci_matrixtunnel;;
 '
 
 # common messaging functions
@@ -473,6 +474,22 @@ apply_uci_qos() {
 	echo_applying_settings "@TR<<apply_qos#qos>>"
 	qos-start
 	echo_action_done
+}
+
+apply_uci_matrixtunnel() {
+	config_load webifssl
+	config_get_bool test matrixtunnel enable 0
+	if [ 1 -eq "$test" ]; then
+		[ -f /etc/init.d/S??webifssl ] && {
+			#echo '@TR<<Starting>> @TR<<webif^2 ssl tunnel>> ...'
+			/etc/init.d/S??webifssl start
+		}
+	else
+		[ -f /etc/init.d/S??webifssl ] && {
+			#echo '@TR<<Stopping>> @TR<<webif^2 ssl tunnel>> ...'
+			/etc/init.d/S??webifssl stop
+		}
+	fi
 }
 
 #
