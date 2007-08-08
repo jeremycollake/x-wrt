@@ -1,0 +1,6 @@
+Package: webif-freeloader-lang-cs
+Maintainer: Lubos Stanek <lubek@users.berlios.de>
+Section: net
+Depends: webif
+Priority: normal
+Description: Czech language file for webif.
