@@ -1,0 +1,18 @@
+menu "webif-hotspot"
+
+config BR2_PACKAGE_WEBIF_HOTSPOT
+	depends BR2_PACKAGE_WEBIF	
+	tristate "webif_hotspot - HotSpot manager addon for the webif"
+	default m
+	help
+	  A hotspot manager for the webif.
+
+#config BR2_PACKAGE_WEBIF_HOTSPOT_LANG_*
+#	select BR2_PACKAGE_WEBIF_HOTSPOT
+#	tristate "webif-hotspot-lang-* - * language file for webif hotspot"
+#	depends BR2_PACKAGE_WEBIF_HOTSPOT
+#	default m
+#	help
+#	  * language file for webif hotspot
+
+endmenu
