@@ -1,45 +1,31 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
-is_kamikaze && {
-	local _val
-	uci_load "hotspot"
-	eval "_val=\$CONFIG_chilli_TYPE" 2>/dev/null
-	! equal "$_val" "hotspot" && {
-		uci_add "hotspot" "hotspot" "chilli"
-		uci_commit "hotspot"
-		uci_load "hotspot"
-	}
+
+config_cb() {
+	config_get TYPE "$CONFIG_SECTION" TYPE
+	case "$TYPE" in
+		hotspot)
+			chili_cfg="$CONFIG_SECTION"
+		;;
+	esac
 }
 
+uci_load "hotspot"
+
 if empty "$FORM_submit"; then
-	is_kamikaze && {
-		FORM_chilli_debug="$CONFIG_chilli_debug"
-		FORM_chilli_net="$CONFIG_chilli_net"
-		FORM_chilli_dns1="$CONFIG_chilli_dns1"
-		FORM_chilli_dns2="$CONFIG_chilli_dns2"
-		FORM_chilli_dhcpif="$CONFIG_chilli_dhcpif"
-		FORM_chilli_dhcpmac="$CONFIG_chilli_dhcpmac"
-		FORM_chilli_lease="$CONFIG_chilli_lease"
-		FORM_chilli_pidfile="$CONFIG_chilli_pidfile"
-		FORM_chilli_interval="$CONFIG_chilli_interval"
-		FORM_chilli_domain="$CONFIG_chilli_domain"
-		FORM_chilli_dynip="$CONFIG_chilli_dynip"
-		FORM_chilli_statip="$CONFIG_chilli_statip"
-	} || {
-		FORM_chilli_debug="${chilli_debug:-$(nvram get chilli_debug)}"
-		FORM_chilli_net="${chilli_net:-$(nvram get chilli_net)}"
-		FORM_chilli_dns1="${chilli_dns1:-$(nvram get chilli_dns1)}"
-		FORM_chilli_dns2="${chilli_dns2:-$(nvram get chilli_dns2)}"
-		FORM_chilli_dhcpif="${chilli_dhcpif:-$(nvram get chilli_dhcpif)}"
-		FORM_chilli_dhcpmac="${chilli_dhcpmac:-$(nvram get chilli_dhcpmac)}"
-		FORM_chilli_lease="${chilli_lease:-$(nvram get chilli_lease)}"
-		FORM_chilli_pidfile="${chilli_pidfile:-$(nvram get chilli_pidfile)}"
-		FORM_chilli_interval="${chilli_interval:-$(nvram get chilli_interval)}"
-		FORM_chilli_domain="${chilli_domain:-$(nvram get chilli_domain)}"
-		FORM_chilli_dynip="${chilli_dynip:-$(nvram get chilli_dynip)}"
-		FORM_chilli_statip="${chilli_statip:-$(nvram get chilli_statip)}"
-	}
+	eval "FORM_chilli_debug=\"\$CONFIG_${chilli_cfg}_debug\""
+	eval "FORM_chilli_net=\"\$CONFIG_${chilli_cfg}_net\""
+	eval "FORM_chilli_dns1=\"\$CONFIG_${chilli_cfg}_dns1\""
+	eval "FORM_chilli_dns2=\"\$CONFIG_${chilli_cfg}_dns2\""
+	eval "FORM_chilli_dhcpif=\"\$CONFIG_${chilli_cfg}_dhcpif\""
+	eval "FORM_chilli_dhcpmac=\"\$CONFIG_${chilli_cfg}_dhcpmac\""
+	eval "FORM_chilli_lease=\"\$CONFIG_${chilli_cfg}_lease\""
+	eval "FORM_chilli_pidfile=\"\$CONFIG_${chilli_cfg}_pidfile\""
+	eval "FORM_chilli_interval=\"\$CONFIG_${chilli_cfg}_interval\""
+	eval "FORM_chilli_domain=\"\$CONFIG_${chilli_cfg}_domain\""
+	eval "FORM_chilli_dynip=\"\$CONFIG_${chilli_cfg}_dynip\""
+	eval "FORM_chilli_statip=\"\$CONFIG_${chilli_cfg}_statip\""
 else
 	SAVED=1
 	validate <<EOF
@@ -57,31 +43,21 @@ string|FORM_chilli_dynip|@TR<<hotspot_core_Dynamic_IP_Pool#Dynamic IP Pool||$FOR
 string|FORM_chilli_statip|@TR<<hotspot_core_Static_IP_Pool#Static IP Pool>>||$FORM_chilli_statip
 EOF
 	equal "$?" 0 && {
-		is_kamikaze && {
-			uci_set hotspot chilli debug "$FORM_chilli_debug"
-			uci_set hotspot chilli dns1 "$FORM_chilli_dns1"
-			uci_set hotspot chilli dns2 "$FORM_chilli_dns2"
-			uci_set hotspot chilli lease "$FORM_chilli_lease"
-			uci_set hotspot chilli interval "$FORM_chilli_interval"
-			uci_set hotspot chilli domain "$FORM_chilli_domain"
-			uci_set hotspot chilli pidfile "$FORM_chilli_pidfile"
-			uci_set hotspot chilli statip "$FORM_chilli_statip"
-			uci_set hotspot chilli dynip "$FORM_chilli_dynip"
-			uci_set hotspot chilli dhcpif "$FORM_chilli_dhcpif"
-			uci_set hotspot chilli dhcpmac "$FORM_chilli_dhcpmac"
-		} || {
-			save_setting hotspot chilli_debug "$FORM_chilli_debug"
-			save_setting hotspot chilli_dns1 "$FORM_chilli_dns1"
-			save_setting hotspot chilli_dns2 "$FORM_chilli_dns2"
-			save_setting hotspot chilli_lease "$FORM_chilli_lease"
-			save_setting hotspot chilli_interval "$FORM_chilli_interval"
-			save_setting hotspot chilli_domain "$FORM_chilli_domain"
-			save_setting hotspot chilli_pidfile "$FORM_chilli_pidfile"
-			save_setting hotspot chilli_statip "$FORM_chilli_statip"
-			save_setting hotspot chilli_dynip "$FORM_chilli_dynip"
-			save_setting hotspot chilli_dhcpif "$FORM_chilli_dhcpif"
-			save_setting hotspot chilli_dhcpmac "$FORM_chilli_dhcpmac"
+		[ "$chili_cfg" = "" ] && {
+			uci_add hotspot chilli
+			chilli_cfg="chilli"
 		}
+		uci_set hotspot "$chilli_cfg" debug "$FORM_chilli_debug"
+		uci_set hotspot "$chilli_cfg" dns1 "$FORM_chilli_dns1"
+		uci_set hotspot "$chilli_cfg" dns2 "$FORM_chilli_dns2"
+		uci_set hotspot "$chilli_cfg" lease "$FORM_chilli_lease"
+		uci_set hotspot "$chilli_cfg" interval "$FORM_chilli_interval"
+		uci_set hotspot "$chilli_cfg" domain "$FORM_chilli_domain"
+		uci_set hotspot "$chilli_cfg" pidfile "$FORM_chilli_pidfile"
+		uci_set hotspot "$chilli_cfg" statip "$FORM_chilli_statip"
+		uci_set hotspot "$chilli_cfg" dynip "$FORM_chilli_dynip"
+		uci_set hotspot "$chilli_cfg" dhcpif "$FORM_chilli_dhcpif"
+		uci_set hotspot "$chilli_cfg" dhcpmac "$FORM_chilli_dhcpmac"
 	}
 fi
 
