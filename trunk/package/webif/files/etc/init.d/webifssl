@@ -76,11 +76,13 @@ start() {
 }
 
 kill_mtproc() {
+	local result
 	local pid="$1"
 	[ -n "$pid" -a -d "/proc/$pid" ] && {
 		echo -n "Stopping webif^2 ssl tunnel..."
 		kill -TERM "$pid"
-		[ "$?" -eq 0 -a ! -d "/proc/$pid" ] && echo "OK" || {
+		[ "$?" -eq 0 ] && sleep 1
+		[ ! -d "/proc/$pid" ] && echo "OK" || {
 			echo "Failed!"
 			echo -n "Killing webif^2 ssl tunnel..."
 			kill -KILL "$pid"
