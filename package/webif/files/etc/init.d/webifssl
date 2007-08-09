@@ -3,6 +3,8 @@
 
 START=91
 EXTRA_COMMANDS="status"
+EXTRA_HELP="	status	Show current status
+"
 
 load_variables() {
 	[ "$webifssl_config_loaded" != "1" ] && {
@@ -28,7 +30,6 @@ load_variables() {
 		webifssl_config_loaded="1"
 	}
 }
-
 
 start() {
 	MATRIXTUNNEL=$(which matrixtunnel 2>/dev/null)
@@ -76,7 +77,6 @@ start() {
 }
 
 kill_mtproc() {
-	local result
 	local pid="$1"
 	[ -n "$pid" -a -d "/proc/$pid" ] && {
 		echo -n "Stopping webif^2 ssl tunnel..."
@@ -138,7 +138,12 @@ status() {
 	[ -f "$CONFIG_matrixtunnel_pidfile" ] && {
 		pid=$(cat "$CONFIG_matrixtunnel_pidfile" 2>/dev/null)
 		[ -n "$pid" -a -d "/proc/$pid" ] && {
-			echo "webif^2 ssl tunnel (pid $pid) is running..."
+			for mtpid in $(pidof matrixtunnel); do
+				is_mtchild "$pid" "$mtpid"
+				[ "$?" -eq 0 ] && childlist="$childlist $mtpid"
+			done
+			childlist="$pid$childlist"
+			echo "webif^2 ssl tunnel (pid $childlist) is running..."
 		}
 	}
 }
