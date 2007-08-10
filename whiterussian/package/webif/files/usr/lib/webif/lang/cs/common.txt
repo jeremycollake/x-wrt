@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3528
+lang_for_svn => 3538
 
 ## /usr/lib/webif/apn.csv
 Vodafone UK => Vodafone VB
@@ -1370,13 +1370,13 @@ system_nvram_Variable_Value => Hodnota proměnné
 system_nvram_Are_you_sure => Opravdu chcete smazat tuto proměnnou&#63;
 system_nvram_action_Delete => Smazat
 system_nvram_action_Cancel => Zrušit
-system_nvram_Delete_Setting_helptext => Proměnná bude smazána touto stránkou ihned po stisku tlačítka Smazat. Ujistěte se před stiskem tlačítka, že víte, co děláte!<br />Pokud chcete pouze smazat hodnotu, vraťte se zpět a ve formuláři změny hodnotu vymažte.
+system_nvram_Delete_Setting_helptext => Proměnná bude smazána při aplikování změn. Ujistěte se před stiskem tlačítka, že víte, co děláte!<br />Pokud chcete pouze smazat hodnotu, vraťte se zpět a ve formuláři změny hodnotu vymažte.
 system_nvram_Add_New_NVRAM_Setting => Přidat nové nastavení v NVRAM
+system_nvram_Add_new_variable => Přidat novou proměnnou
 system_nvram_Change_NVRAM_Setting => Změnit nastavení v NVRAM
 system_nvram_action_Change => Změnit
 system_nvram_Variable_Value_helptext => Zadejte požadovanou hodnotu do vstupního pole. Hodnota nesmí obsahovat symboly apostrofu <b>&#39;</b> a uvozovek <b>&quot;</b>.
 system_nvram_Add_System_Setting => Přidat systémové nastavení
-system_nvram_Add_new_variable => Přidat novou proměnnou
 system_nvram_Add_System_Setting_helptext => Zadejte název nové proměnné do vstupního pole. Hodnota nesmí obsahovat mezery a symboly apostrofu <b>&#39;</b> a uvozovek <b>&quot;</b>.
 system_nvram_General_System_Settings => Obecná systémová nastavení
 system_nvram_General_System_Settings_helptext => Obecná systémová nastavení jsou uložena v NVRAM. NVRAM je přepisovatelná paměť RAM, která je v tomto případě 64kB prostoru na konci paměti flash, kde jsou uloženy rozličné konfigurační informace ve formátu název=hodnota.
@@ -1389,9 +1389,14 @@ system_nvram_th_Current_Value => Aktuální hodnota
 system_nvram_th_Action => Akce
 system_nvram_th_Nr => Poř.
 system_nvram_Change_the_value => Změnit hodnotu
+system_nvram_modified_mark => (+)
+system_nvram_deleted_mark => (-)
 system_nvram_Delete_the_variable => Smazat tuto proměnnou
+system_nvram_Note => Poznámka
+system_nvram_graph_inaccurate => V grafu nejsou promítnuty přidané, změněné ani smazané proměnné!
 system_nvram_NVRAM_Usage => Využití NVRAM
 system_nvram_Total => Celkem
+system_nvram_B => B
 system_nvram_Used => Použito
 system_nvram_NVRAM_Usage_helptext => Toto je aktuální využití paměti NVRAM. Graf zobrazuje, kolik paměti je použito a kolik paměti je k dispozici pro další proměnné.
 

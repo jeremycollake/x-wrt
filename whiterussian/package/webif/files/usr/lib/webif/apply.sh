@@ -37,6 +37,7 @@ HANDLERS_file='
 	ethers) rm -f /etc/ethers; mv $config /etc/ethers; reload_dnsmasq;;
 	firewall) mv /tmp/.webif/file-firewall /etc/config/firewall && reload_firewall;;
 	hosts) rm -f /etc/hosts; mv $config /etc/hosts; reload_dnsmasq;;
+	nvramunset) nvram_unset;;
 '
 
 HANDLERS_edited_file='
@@ -278,6 +279,23 @@ reload_ezipupdate() {
 			echo_action_done
 		fi
 	}
+}
+
+nvram_unset() {
+(
+	olddir=$(pwd)
+	cd /proc/self
+	cat /tmp/.webif/file-nvramunset 2>&- | grep '=' >&- 2>&- && {
+		log_message "@TR<<apply_Committing_NVRAM#Committing NVRAM>>"
+		exists "/usr/sbin/nvram" && {
+			cat /tmp/.webif/file-nvramunset 2>&- | grep '=' | cut -d'=' -f1 | tee fd/1 | xargs -n1 nvram unset	
+			cat /tmp/.webif/config-* 2>&- | grep '=' >&- 2>&- || nvram commit
+			rm -f /tmp/.webif/file-nvramunset 2>&-
+		}
+		echo_action_done
+	}
+	[ -n "$olddir" ] && cd "$olddir"
+)
 }
 
 mkdir -p "/tmp/.webif"
