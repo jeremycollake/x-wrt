@@ -76,7 +76,10 @@ generate_ssl_key() {
 	[ "$?" != "0" ] && inst_packages="$inst_packages libopenssl"
 	is_package_installed "openssl-util"
 	[ "$?" != "0" ] && inst_packages="$inst_packages openssl-util"
-	[ -n "$inst_packages" ] && ipkg -d ram install $inst_packages -force-overwrite
+	[ -n "$inst_packages" ] && {
+		ipkg update
+		ipkg -d ram install $inst_packages -force-overwrite
+	}
 	is_package_installed "openssl-util"
 	if [ "$?" = "0" ]; then
 		for llib in $(ls /tmp/usr/lib/libssl.so.* /tmp/usr/lib/libcrypto.so.* /tmp/usr/lib/libz.so.* /tmp/usr/bin/openssl 2>/dev/null); do
@@ -105,6 +108,7 @@ generate_ssl_key() {
 
 if ! empty "$FORM_install_stunnel"; then
 	echo "@TR<<system_settings_Installing_MatrixTunnel_package#Installing MatrixTunnel package>> ...<pre>"
+	ipkg update
 	install_package "matrixtunnel"
 	is_package_installed "matrixtunnel"
 	[ "$?" = "0" ] && [ ! -e /etc/ssl/matrixtunnel.key -o ! -e /etc/ssl/matrixtunnel.cert ] && {
