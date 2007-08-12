@@ -12,6 +12,9 @@ hotspot_networking_Networking => Networking
 hotspot_core_Core => Core
 
 hotspot_core_Core_Settings => Core Settings
+hotspot_common_Installing_package => Installing chillispot package
+hotspot_common_package_required => HotSpot will not work until you install ChilliSpot
+hotspot_common_install_package => Install ChilliSpot Package
 hotspot_core_Debug => Debug
 hotspot_core_Debug_helptext => Enable/Disable debugging.
 hotspot_core_DHCP_Network => DHCP Network

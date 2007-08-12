@@ -12,6 +12,9 @@ hotspot_networking_Networking => Networking
 hotspot_captive_Captive_Portal => Captive Portal
 
 hotspot_captive_Captive_Portal_Settings => Captive Portal Settings
+hotspot_common_Installing_package => Installing chillispot package
+hotspot_common_package_required => HotSpot will not work until you install ChilliSpot
+hotspot_common_install_package => Install ChilliSpot Package
 hotspot_captive_UAM_Server => UAM Server
 hotspot_captive_UAM_Server_helptext => URL of a Webserver handling the authentication.
 hotspot_captive_UAM_Port => UAM Port

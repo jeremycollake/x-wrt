@@ -12,6 +12,9 @@ hotspot_core_Core => Core
 hotspot_networking_Networking => Networking
 
 hotspot_networking_Network_Settings => Network Settings
+hotspot_common_Installing_package => Installing chillispot package
+hotspot_common_package_required => HotSpot will not work until you install ChilliSpot
+hotspot_common_install_package => Install ChilliSpot Package
 hotspot_networking_RADIUS_Server_1 => RADIUS Server 1
 hotspot_networking_RADIUS_Server_2 => RADIUS Server 2
 hotspot_networking_RADIUS_Server => RADIUS Server

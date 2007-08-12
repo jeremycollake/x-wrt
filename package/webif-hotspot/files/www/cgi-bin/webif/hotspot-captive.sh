@@ -11,6 +11,8 @@ config_cb() {
 	esac
 }
 
+[ -n "$FORM_install_package" ] && unset FORM_submit
+
 uci_load "hotspot"
 
 if empty "$FORM_submit"; then
@@ -61,8 +63,25 @@ fi
 
 header "HotSpot" "hotspot_captive_Captive_Portal#Captive Portal" "@TR<<hotspot_captive_Captive_Portal_Settings#Captive Portal Settings>>" '' "$SCRIPT_NAME"
 
+if ! empty "$FORM_install_package"; then
+	echo "@TR<<hotspot_common_Installing_package#Installing chillispot package>>...<pre>"
+	install_package "chillispot"
+	echo "</pre>"
+fi
+
 display_form <<EOF
 start_form|@TR<<hotspot_captive_Captive_Portal_Settings#Captive Portal Settings>>
+EOF
+if ! is_package_installed "chillispot"; then
+	display_form <<EOF
+field|
+string|<div class=warning>@TR<<hotspot_common_package_required#HotSpot will not work until you install ChilliSpot>>:</div>
+submit|install_package| @TR<<hotspot_common_install_package#Install ChilliSpot Package>> |
+helplink|http://www.chillispot.org/
+end_form
+EOF
+else
+	display_form <<EOF
 field|@TR<<hotspot_captive_UAM_Server#UAM Server>>
 text|chilli_uamserver|$FORM_chilli_uamserver
 helpitem|hotspot_captive_UAM_Server#UAM Server
@@ -107,9 +126,10 @@ field|@TR<<hotspot_captive_MAC_Suffix#MAC Suffix>>
 text|chilli_macsuffix|$FORM_chilli_macsuffix
 helpitem|hotspot_captive_MAC_Suffix#MAC Suffix
 helptext|hotspot_captive_MAC_Suffix_helptext#Suffix to add to the username in-order to form the username.
+helplink|http://www.chillispot.org/
 end_form
 EOF
-
+fi
 footer ?>
 <!--
 ##WEBIF:name:HotSpot:3:hotspot_captive_Captive_Portal#Captive Portal
