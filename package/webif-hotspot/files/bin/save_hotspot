@@ -16,7 +16,13 @@ config_cb() {
 option_cb() {
 	local varname="$1"; shift
 	local value="$*"
-	[ -n "$chilli_cfg" ] && chilli_options="$chilli_options${varname} ${value}${_lf}"
+	[ -n "$chilli_cfg" ] && [ -n "$value" ] && [ "$value" != "0" ] && {
+		if [ "$value" = "1" ]; then
+			chilli_options="$chilli_options${varname}${_lf}"
+		else
+			chilli_options="$chilli_options${varname} ${value}${_lf}"
+		fi
+	}
 }
 
 _lf="
