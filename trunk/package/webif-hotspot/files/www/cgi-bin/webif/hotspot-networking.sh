@@ -11,6 +11,8 @@ config_cb() {
 	esac
 }
 
+[ -n "$FORM_install_package" ] && unset FORM_submit
+
 uci_load "hotspot"
 
 if empty "$FORM_submit"; then
@@ -58,8 +60,25 @@ fi
 
 header "HotSpot" "hotspot_networking_Networking#Networking" "@TR<<hotspot_networking_Network_Settings#Network Settings>>" '' "$SCRIPT_NAME"
 
+if ! empty "$FORM_install_package"; then
+	echo "@TR<<hotspot_common_Installing_package#Installing chillispot package>>...<pre>"
+	install_package "chillispot"
+	echo "</pre>"
+fi
+
 display_form <<EOF
 start_form|@TR<<hotspot_networking_Network_Settings#Network Settings>>
+EOF
+if ! is_package_installed "chillispot"; then
+	display_form <<EOF
+field|
+string|<div class=warning>@TR<<hotspot_common_package_required#HotSpot will not work until you install ChilliSpot>>:</div>
+submit|install_package| @TR<<hotspot_common_install_package#Install ChilliSpot Package>> |
+helplink|http://www.chillispot.org/
+end_form
+EOF
+else
+	display_form <<EOF
 field|@TR<<hotspot_networking_RADIUS_Server_1#RADIUS Server 1>>
 text|chilli_radiusserver1|$FORM_chilli_radiusserver1
 field|@TR<<hotspot_networking_RADIUS_Server_2#RADIUS Server 2>>
@@ -94,9 +113,10 @@ field|@TR<<hotspot_networking_Proxy_Secret#Proxy Secret>>
 text|chilli_proxysecret|$FORM_chilli_proxysecret
 helpitem|hotspot_networking_Proxy_Secret#Proxy Secret
 helptext|hotspot_networking_Proxy_Secret_helptext#RADIUS Shared Secret to accept for all clients.
+helplink|http://www.chillispot.org/
 end_form
 EOF
-
+fi
 footer ?>
 <!--
 ##WEBIF:name:HotSpot:2:hotspot_networking_Networking#Networking

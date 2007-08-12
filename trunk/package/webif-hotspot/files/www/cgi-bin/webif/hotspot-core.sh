@@ -8,12 +8,19 @@ config_cb() {
 		chilli)
 			chilli_cfg="$CONFIG_SECTION"
 		;;
+		chillispot)
+			service_cfg="$CONFIG_SECTION"
+		;;
 	esac
 }
+
+[ -n "$FORM_install_package" ] && unset FORM_submit
 
 uci_load "hotspot"
 
 if empty "$FORM_submit"; then
+	eval "FORM_service_enable=\"\$CONFIG_${service_cfg}_enable\""
+	FORM_service_enable="${FORM_service_enable:-0}"
 	eval "FORM_chilli_debug=\"\$CONFIG_${chilli_cfg}_debug\""
 	eval "FORM_chilli_net=\"\$CONFIG_${chilli_cfg}_net\""
 	eval "FORM_chilli_dns1=\"\$CONFIG_${chilli_cfg}_dns1\""
@@ -29,6 +36,7 @@ if empty "$FORM_submit"; then
 else
 	SAVED=1
 	validate <<EOF
+int|FORM_service_enable|@TR<<hotspot_core_Service#Service>>||$FORM_service_enable
 int|FORM_chilli_debug|@TR<<hotspot_core_Debug#Debug>>||$FORM_chilli_debug
 string|FORM_chilli_net|@TR<<hotspot_core_DHCP_Network#DHCP Network>>||$FORM_chilli_net
 string|FORM_chilli_dhcpif|@TR<<hotspot_core_DHCP_Interface#DHCP Interface>>||$FORM_chilli_dhcpif
@@ -43,6 +51,11 @@ string|FORM_chilli_dynip|@TR<<hotspot_core_Dynamic_IP_Pool#Dynamic IP Pool||$FOR
 string|FORM_chilli_statip|@TR<<hotspot_core_Static_IP_Pool#Static IP Pool>>||$FORM_chilli_statip
 EOF
 	equal "$?" 0 && {
+		[ "$service_cfg" = "" ] && {
+			uci_add hotspot chillispot service
+			service_cfg="service"
+		}
+		uci_set hotspot "$service_cfg" enable "$FORM_service_enable"
 		[ "$chilli_cfg" = "" ] && {
 			uci_add hotspot chilli chilli
 			chilli_cfg="chilli"
@@ -63,8 +76,30 @@ fi
 
 header "HotSpot" "hotspot_core_Core#Core" "@TR<<hotspot_core_Core_Settings#Core Settings>>" '' "$SCRIPT_NAME"
 
+if ! empty "$FORM_install_package"; then
+	echo "@TR<<hotspot_common_Installing_package#Installing chillispot package>>...<pre>"
+	install_package "chillispot"
+	echo "</pre>"
+fi
+
 display_form <<EOF
 start_form|@TR<<hotspot_core_Core_Settings#Core Settings>>
+EOF
+if ! is_package_installed "chillispot"; then
+	display_form <<EOF
+field|
+string|<div class=warning>@TR<<hotspot_common_package_required#HotSpot will not work until you install ChilliSpot>>:</div>
+submit|install_package| @TR<<hotspot_common_install_package#Install ChilliSpot Package>> |
+helplink|http://www.chillispot.org/
+end_form
+EOF
+else
+	display_form <<EOF
+field|@TR<<hotspot_core_Service#Service>>
+select|service_enable|$FORM_service_enable
+option|0|@TR<<hotspot_core_Disable#Disable>>
+option|1|@TR<<hotspot_core_Enable#Enable>>
+
 field|@TR<<hotspot_core_Debug#Debug>>
 checkbox|chilli_debug|$FORM_chilli_debug|1
 helpitem|hotspot_core_Debug#Debug
@@ -103,9 +138,10 @@ field|@TR<<hotspot_core_Static_IP_Pool#Static IP Pool>>
 text|chilli_statip|$FORM_chilli_statip
 helpitem|hotspot_core_Static_IP_Pool#Static IP Pool
 helptext|hotspot_core_Static_IP_Pool_helptext#Allocation of static IP Addresses.
+helplink|http://www.chillispot.org/
 end_form
 EOF
-
+fi
 footer ?>
 <!--
 ##WEBIF:name:HotSpot:1:hotspot_core_Core#Core
