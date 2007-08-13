@@ -20,18 +20,21 @@
 #   none
 #
 
+# handle old/current ntpclient configuration
+grep -q "^[[:space:]]*ntpclient)" /etc/hotplug.d/iface/*-ntpclient 2>/dev/null && ntpcliconf="ntpclient" || ntpcliconf="ntp_client"
+
 # Add NTP Server
 if ! empty "$FORM_add_ntpcfg_number"; then
-	uci_add "ntp_client" "ntp_client" ""
-	uci_set "ntp_client" "cfg$FORM_add_ntpcfg_number" "hostname" ""
-	uci_set "ntp_client" "cfg$FORM_add_ntpcfg_number" "port" "123"
-	uci_set "ntp_client" "cfg$FORM_add_ntpcfg_number" "count" "1"
+	uci_add "$ntpcliconf" "$ntpcliconf" ""
+	uci_set "$ntpcliconf" "cfg$FORM_add_ntpcfg_number" "hostname" ""
+	uci_set "$ntpcliconf" "cfg$FORM_add_ntpcfg_number" "port" "123"
+	uci_set "$ntpcliconf" "cfg$FORM_add_ntpcfg_number" "count" "1"
 	FORM_add_ntpcfg=""
 fi
 
 # Remove NTP Server
 if ! empty "$FORM_remove_ntpcfg"; then
-	uci_remove "ntp_client" "$FORM_remove_ntpcfg"
+	uci_remove "$ntpcliconf" "$FORM_remove_ntpcfg"
 fi
 
 config_cb() {
@@ -43,7 +46,7 @@ config_cb() {
 		timezone)
 			timezone_cfg="$CONFIG_SECTION"
 		;;
-		ntp_client)
+		ntp_client|ntpclient)
 			append ntpservers "$CONFIG_SECTION" "$N"
 		;;
 	esac
@@ -59,7 +62,7 @@ FORM_hostname="${FORM_hostname:-OpenWrt}"
 config_clear "$hostname_cfg"
 uci_load "network"
 uci_load "timezone"
-uci_load "ntp_client"
+uci_load "$ntpcliconf"
 
 #FIXME: uci_load bug
 #uci_load will pass the same config twice when there is a section to be added by using uci_add before a uci_commit happens
@@ -177,9 +180,9 @@ EOF
 			eval FORM_ntp_server="\$FORM_ntp_server_$server"
 			eval FORM_ntp_port="\$FORM_ntp_port_$server"
 			eval FORM_ntp_count="\$FORM_ntp_count_$server"
-			uci_set ntp_client "$server" hostname "$FORM_ntp_server"
-			uci_set ntp_client "$server" port "$FORM_ntp_port"
-			uci_set ntp_client "$server" count "$FORM_ntp_count"
+			uci_set "$ntpcliconf" "$server" hostname "$FORM_ntp_server"
+			uci_set "$ntpcliconf" "$server" port "$FORM_ntp_port"
+			uci_set "$ntpcliconf" "$server" count "$FORM_ntp_count"
 		done
 
 		is_bcm947xx && {
