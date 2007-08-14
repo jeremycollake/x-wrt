@@ -149,7 +149,7 @@ endef
 define Build/Compile
 	$(TARGET_CC) $(TARGET_CFLAGS) \
 		-D_METAPACK \
-		-I$(STAGING_DIR)/include-host -include endian.h \
+		-I$(STAGING_DIR)/include-host -I$(STAGING_DIR_HOST)/include -include endian.h \
 		$(TARGET_CFLAGS_EXTRA) \
 		$(TARGET_LDFLAGS) \
 		-o $(PKG_BUILD_DIR)/webifmetabin \
