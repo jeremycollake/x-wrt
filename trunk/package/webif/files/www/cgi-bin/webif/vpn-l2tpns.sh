@@ -58,8 +58,6 @@ else
 	uci_set "l2tpns" "$server_cfg" "pidfile" "$FORM_l2tpns_cli_logfile"
 	uci_set "l2tpns" "$server_cfg" "logfile" "$FORM_l2tpns_cli_pidfile"
 
-	echo "restarting l2tpns... <br/>"
-	sleep 2
 	sh /usr/lib/webif/l2tpns_apply.sh
 fi
 
