@@ -9,8 +9,25 @@ radport=`uci get l2tpns.cfg1.radport`
 radacct=`uci get l2tpns.cfg1.radacct`
 pidfile=`uci get l2tpns.cfg1.pidfile`
 logfile=`uci get l2tpns.cfg1.logfile`
-echo $bindaddr >> /etc/l2tpns/startup-config
-echo $debug >> /etc/l2tpns/startup-config
-echo $radport >> /etc/l2tpns/startup-config
-echo $pidfile >> /etc/l2tpns/startup-config
-echo $logfile >> /etc/l2tpns/startup-config
+pdns=`uci get l2tpns.cfg1.dns1`
+sdns=`uci get l2tpns.cfg1.dns2`
+prad=`uci get l2tpns.cfg1.rad1`
+srad=`uci get l2tpns.cfg1.rad2`
+radsecret=`uci get l2tpns.cfg1.radsecret`
+
+echo "debug $debug" >> /etc/l2tpns/startup-config
+echo "log_file $logfile" >> /etc/l2tpns/startup-config
+echo "pid_file $pidfile" >> /etc/l2tpns/startup-config
+echo "primary_radius $prad" >> /etc/l2tpns/startup-config
+echo "secondary_radius $srad" >> /etc/l2tpns/startup-config
+# for now we're applying to both the primary and secondary
+# radius servers the same port number for auth
+echo "primary_radius_port $radport" >> /etc/l2tpns/startup-config
+echo "secondary_radius_port $radport" >> /etc/l2tpns/startup-config
+echo "radius_accounting $radacct" >> /etc/l2tpns/startup-config
+echo "radius_secret $radsecret" >> /etc/l2tpns/startup-config
+echo "primary_dns $pdns" >> /etc/l2tpns/startup-config
+echo "secondary_dns $sdns" >> /etc/l2tpns/startup-config
+echo "bind_address $bindaddr" >> /etc/l2tpns/startup-config
+
+/etc/init.d/l2tpns restart
