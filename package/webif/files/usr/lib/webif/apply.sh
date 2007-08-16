@@ -260,6 +260,15 @@ for ucifile in $(ls /tmp/.uci/* 2>&-); do
 			}
 			/etc/init.d/S??snmpd restart >&- 2>&-
 			;;
+		"/tmp/.uci/l2tpns")
+			echo '@TR<<Exporting>> @TR<<l2tpns server settings>> ...'
+			[ -e "/usr/lib/webif/l2tpns_apply.sh" ] && {
+				/usr/lib/webif/l2tpns_apply.sh >&- 2>&-
+			}
+
+			echo '@TR<<Reloading>> @TR<<l2tpns server>> ...'
+			/etc/init.d/l2tpns restart >&- 2>&-
+			;;
 		"/tmp/.uci/updatedd")
 			uci_load "updatedd"
 			if [ "$CONFIG_ddns_update" = "1" ]; then
