@@ -1,0 +1,246 @@
+--- ez-ipupdate-3.0.11b8.orig/ez-ipupdate.c	2007-08-16 18:24:52.000000000 +0200
++++ ez-ipupdate-3.0.11b8/ez-ipupdate.c	2007-08-16 19:10:32.000000000 +0200
+@@ -1628,42 +1628,42 @@
+   return(bread);
+ }
+ 
+-int get_if_addr(int sock, char *name, struct sockaddr_in *sin)
++int get_if_addr(char *name, struct sockaddr_in *sin)
+ {
+ #ifdef IF_LOOKUP
+   struct ifreq ifr;
+-
+-  memset(&ifr, 0, sizeof(ifr));
+-  strcpy(ifr.ifr_name, name);
+-  /* why does this need to be done twice? */
+-  if(ioctl(sock, SIOCGIFADDR, &ifr) < 0) 
+-  { 
++  int sd, res;
++  
++  memset(sin, 0, sizeof(struct sockaddr_in));
++  if((sd = socket(AF_INET, SOCK_DGRAM, 0)) < 0)
++  {
+     perror("ioctl(SIOCGIFADDR)"); 
+-    memset(sin, 0, sizeof(struct sockaddr_in));
+-    dprintf((stderr, "%s: %s\n", name, "unknown interface"));
++    dprintf((stderr, "%s: %s\n", name, "cannot create an ioctl socket"));
+     return -1;
+   }
+-  if(ioctl(sock, SIOCGIFADDR, &ifr) < 0)
+-  { 
++  memset(&ifr, 0, sizeof(ifr));
++  ifr.ifr_addr.sa_family = AF_INET;
++  strcpy(ifr.ifr_name, name);
++  res = ioctl(sd, SIOCGIFADDR, &ifr);
++  close(sd);
++  if(res < 0)
++  {
+     perror("ioctl(SIOCGIFADDR)"); 
+-    memset(sin, 0, sizeof(struct sockaddr_in));
+     dprintf((stderr, "%s: %s\n", name, "unknown interface"));
+     return -1;
+   }
+ 
+-  if(ifr.ifr_addr.sa_family == AF_INET)
++  if(memcmp(sin, (struct sockaddr_in *) &(ifr.ifr_addr), sizeof(struct sockaddr_in)) == 0)
+   {
+-    memcpy(sin, &(ifr.ifr_addr), sizeof(struct sockaddr_in));
+-    dprintf((stderr, "%s: %s\n", name, inet_ntoa(sin->sin_addr)));
+-    return 0;
++    dprintf((stderr, "%s: %s\n", name, "could not resolve interface"));
++    return -1;
+   }
+   else
+   {
+-    memset(sin, 0, sizeof(struct sockaddr_in));
+-    dprintf((stderr, "%s: %s\n", name, "could not resolve interface"));
+-    return -1;
++    memcpy(sin, &(ifr.ifr_addr), sizeof(struct sockaddr_in));
++    dprintf((stderr, "%s: %s\n", name, inet_ntoa(sin->sin_addr)));
++    return 0;
+   }
+-  return -1;
+ #else
+   return -1;
+ #endif
+@@ -4702,13 +4702,6 @@
+   if(mx == NULL) { mx = strdup(""); }
+   if(url == NULL) { url = strdup(""); }
+ 
+-#ifdef IF_LOOKUP
+-  if(options & OPT_DAEMON)
+-  {
+-    sock = socket(AF_INET, SOCK_STREAM, 0);
+-  }
+-#endif
+-
+   if(options & OPT_DAEMON)
+   {
+     int local_update_period = update_period;
+@@ -4801,7 +4794,7 @@
+       }
+ #endif
+ 
+-      if(get_if_addr(sock, interface, &sin2) == 0)
++      if(get_if_addr(interface, &sin2) == 0)
+       {
+         ifresolve_warned = 0;
+         if(memcmp(&sin.sin_addr, &sin2.sin_addr, sizeof(struct in_addr)) != 0 || 
+@@ -4824,6 +4817,19 @@
+             show_message("successful update for %s->%s (%s)\n",
+                 interface, inet_ntoa(sin.sin_addr), N_STR(host));
+ 
++            if(cache_file)
++            {
++              char ipbuf[64];
++
++              snprintf(ipbuf, sizeof(ipbuf), "%s", inet_ntoa(sin.sin_addr));
++
++              if(write_cache_file(cache_file, last_update, ipbuf) != 0)
++              {
++                show_message("unable to write cache file \"%s\": %s\n",
++                    cache_file, error_string);
++              }
++            }
++
+             if(post_update_cmd)
+             {
+               int res;
+@@ -4848,19 +4854,6 @@
+                 }
+               }
+             }
+-
+-            if(cache_file)
+-            {
+-              char ipbuf[64];
+-
+-              snprintf(ipbuf, sizeof(ipbuf), "%s", inet_ntoa(sin.sin_addr));
+-
+-              if(write_cache_file(cache_file, last_update, ipbuf) != 0)
+-              {
+-                show_message("unable to write cache file \"%s\": %s\n",
+-                    cache_file, error_string);
+-              }
+-            }
+           }
+           else
+           {
+@@ -4960,14 +4953,11 @@
+         {
+ #ifdef IF_LOOKUP
+           struct sockaddr_in sin;
+-          int sock;
+ 
+-          sock = socket(AF_INET, SOCK_STREAM, 0);
+-          if(get_if_addr(sock, interface, &sin) != 0)
++          if(get_if_addr(interface, &sin) != 0)
+           {
+             exit(1);
+           }
+-          close(sock);
+           snprintf(ipbuf, sizeof(ipbuf), "%s", inet_ntoa(sin.sin_addr));
+ #else
+           fprintf(stderr, "interface lookup not enabled at compile time\n");
+@@ -5006,10 +4996,8 @@
+       if(address == NULL && interface != NULL)
+       {
+         struct sockaddr_in sin;
+-        int sock;
+ 
+-        sock = socket(AF_INET, SOCK_STREAM, 0);
+-        if(get_if_addr(sock, interface, &sin) == 0)
++        if(get_if_addr(interface, &sin) == 0)
+         {
+           if(address) { free(address); }
+           address = strdup(inet_ntoa(sin.sin_addr));
+@@ -5019,7 +5007,6 @@
+           show_message("could not resolve ip address for %s\n", interface);
+           exit(1);
+         }
+-        close(sock);
+       }
+ 
+       for(i=0; i<ntrys; i++)
+@@ -5031,26 +5018,6 @@
+         }
+         if(i+1 != ntrys) { sleep(10 + 10*i); }
+       }
+-      if(retval == 0 && post_update_cmd)
+-      {
+-        if((res=exec_cmd(post_update_cmd)) != 0)
+-        {
+-          if(!(options & OPT_QUIET))
+-          {
+-            if(res == -1)
+-            {
+-              fprintf(stderr, "error running post update command: %s\n",
+-                  error_string);
+-            }
+-            else
+-            {
+-              fprintf(stderr, 
+-                  "error running post update command, command exit code: %d\n",
+-                  res);
+-            }
+-          }
+-        }
+-      }
+ 
+       // write cache file
+       if(retval == 0 && cache_file)
+@@ -5061,14 +5028,11 @@
+         {
+ #ifdef IF_LOOKUP
+           struct sockaddr_in sin;
+-          int sock;
+ 
+-          sock = socket(AF_INET, SOCK_STREAM, 0);
+-          if(get_if_addr(sock, interface, &sin) != 0)
++          if(get_if_addr(interface, &sin) != 0)
+           {
+             exit(1);
+           }
+-          close(sock);
+           snprintf(ipbuf, sizeof(ipbuf), "%s", inet_ntoa(sin.sin_addr));
+ #else
+           fprintf(stderr, "interface lookup not enabled at compile time\n");
+@@ -5087,6 +5051,27 @@
+           exit(1);
+         }
+       }
++
++      if(retval == 0 && post_update_cmd)
++      {
++        if((res=exec_cmd(post_update_cmd)) != 0)
++        {
++          if(!(options & OPT_QUIET))
++          {
++            if(res == -1)
++            {
++              fprintf(stderr, "error running post update command: %s\n",
++                  error_string);
++            }
++            else
++            {
++              fprintf(stderr, 
++                  "error running post update command, command exit code: %d\n",
++                  res);
++            }
++          }
++        }
++      }
+     }
+     else
+     {
+@@ -5094,10 +5079,6 @@
+     }
+   }
+ 
+-#ifdef IF_LOOKUP
+-  if(sock > 0) { close(sock); }
+-#endif
+-
+   if(address) { free(address); }
+   if(cache_file) { free(cache_file); }
+   if(config_file) { free(config_file); }

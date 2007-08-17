@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ez-ipupdate
 PKG_VERSION:=3.0.11b8
-PKG_RELEASE:=3
+PKG_RELEASE:=4
 PKG_MD5SUM:=000211add4c4845ffa4211841bff4fb0
 
 PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/e/ez-ipupdate \
