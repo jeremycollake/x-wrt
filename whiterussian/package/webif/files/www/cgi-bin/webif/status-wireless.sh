@@ -180,12 +180,12 @@ function fmtime(seconds, secs, fstring, y, d, h, m ,s) {
 		secs = seconds
 		y = int(secs / (60 * 60 * 24 * 365))
 		if (y > 0) {
-			fstring = sprintf("%d@TR<<status_wlan_survey_y#y>> ", y)
+			fstring = sprintf("%d@TR<<units_short_year_y#y>> ", y)
 			secs = secs % (60 * 60 * 24 * 365)
 		}
 		d = int(secs / 60 / 60 / 24)
 		if (d > 0) {
-			fstring = fstring sprintf("%d@TR<<status_wlan_survey_d#d>> ", d)
+			fstring = fstring sprintf("%d@TR<<units_short_day_d#d>> ", d)
 			secs = secs % (60 * 60 * 24)
 		}
 		h = int(secs / 60 / 60)
