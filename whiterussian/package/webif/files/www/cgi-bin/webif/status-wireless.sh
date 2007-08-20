@@ -185,7 +185,7 @@ function fmtime(seconds, secs, fstring, y, d, h, m ,s) {
 		}
 		d = int(secs / 60 / 60 / 24)
 		if (d > 0) {
-			fstring = sprintf("%d@TR<<status_wlan_survey_d#d>> ", d) fstring
+			fstring = fstring sprintf("%d@TR<<status_wlan_survey_d#d>> ", d)
 			secs = secs % (60 * 60 * 24)
 		}
 		h = int(secs / 60 / 60)
