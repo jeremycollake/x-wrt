@@ -25,13 +25,6 @@ ap_count=0
 sta_count=0
 validate_wireless() {
 	case "$adhoc_count:$sta_count:$ap_count" in
-		1*)
-			if [ "$sta_count" != "0" ]; then
-				append validate_error "string|<h3>@TR<<Error: No other virtual adapters are allowed if one is in adhoc mode.>></h3><br />"
-			elif [ "$ap_count" != "0" ]; then
-				append validate_error "string|<h3>@TR<<Error: No other virtual adapters are allowed if one is in adhoc mode.>></h3><br />"
-			fi
-			;;
 		0:0:?)
 			if [ "$ap_count" -gt "4" ]; then
 				append validate_error "string|<h3>@TR<<Error: Only 4 virtual adapters are allowed in ap mode.>></h3><br />"
@@ -49,11 +42,6 @@ validate_wireless() {
 				if [ "$ap_count" -gt "4" ]; then
 					append validate_error "string|<h3>@TR<<Error: Only 4 virtual adapters are allowed in ap mode.>></h3><br />"
 				fi	
-			fi
-			;;
-		*)
-			if [ "$adhoc_count" -gt "1" ]; then
-				append validate_error "string|<h3>@TR<<Error: Only 1 virtual adapter is allowed to be in adhoc mode.>></h3><br />"
 			fi
 			;;
 	esac
