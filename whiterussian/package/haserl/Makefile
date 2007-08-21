@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=haserl
 PKG_VERSION:=0.8.0
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=bd9195d086566f56634c0bcbbbcbebea
 
 PKG_SOURCE_URL:=@SF/haserl
