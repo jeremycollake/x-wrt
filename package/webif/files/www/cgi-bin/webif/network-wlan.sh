@@ -248,17 +248,15 @@ for device in $DEVICES; do
 		append forms "helplink|http://madwifi.org/wiki/UserDocs/AntennaDiversity" "$N"
 
 		form_txant="field|@TR<<TX Antenna>>
-			select|txantenna_$device|$FORM_txantenna
-			option|0|@TR<<Auto>>
-			option|1|@TR<<Antenna 1>>
-			option|2|@TR<<Antenna 2>>"
+			radio|txantenna_$device|$FORM_txantenna|0|@TR<<Auto>>
+			radio|txantenna_$device|$FORM_txantenna|1|@TR<<Antenna 1>>
+			radio|txantenna_$device|$FORM_txantenna|2|@TR<<Antenna 2>>"
 		append forms "$form_txant" "$N"
 
 		form_rxant="field|@TR<<RX Antenna>>
-			select|rxantenna_$device|$FORM_rxantenna
-			option|0|@TR<<Auto>>
-			option|1|@TR<<Antenna 1>>
-			option|2|@TR<<Antenna 2>>"
+			radio|rxantenna_$device|$FORM_rxantenna|0|@TR<<Auto>>
+			radio|rxantenna_$device|$FORM_rxantenna|1|@TR<<Antenna 1>>
+			radio|rxantenna_$device|$FORM_rxantenna|2|@TR<<Antenna 2>>"
 		append forms "$form_rxant" "$N"
 	fi
 
