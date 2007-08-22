@@ -374,6 +374,36 @@ status_leases_ethers_empty => File /etc/ethers does not contain any Ethernet add
 status_leases_no_ethers => File /etc/ethers does not exist.
 
 
+## status-pppoe.sh
+status_pppoe_Stopping_wan => Stopping wan connection
+status_pppoe_Starting_wan => Starting wan connection
+Status => Stav
+PPPoE => PPPoE
+PPPoE Status => PPPoE Status
+status_pppoe_Unknown_action => Unknown action
+status_pppoe_Connected => Connected
+status_pppoe_Disconnect => Disconnect
+status_pppoe_Reconnect => Reconnect
+status_pppoe_Disconnected => Disconnected
+status_pppoe_Connect => Connect
+status_pppoe_Connection_Status => Connection Status
+int2human_tera => t
+int2human_giga => g
+int2human_mega => m
+int2human_kilo => k
+units_short_year_y => y
+units_short_day_d => d
+status_pppoe_Additional_Information => Additional Information
+IP Address => IP Address
+DNS Server => DNS Server
+Received => Received
+units_packets_pkts => pkts
+Transmitted => Transmitted
+Duration => Duration
+status_pppoe_Connection_Log => Connection Log
+status_pppoe_not_used => The PPPoE network protocol is not used for the wan connection.
+
+
 ## status-processes.sh
 status_processes_kill_error => Error in
 Status => Status
