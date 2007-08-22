@@ -1,0 +1,12 @@
+#!/bin/sh
+[ "$INTERFACE" = "wan" ] && {
+	case "$ACTION" in
+		ifdown)	[ -e /tmp/.wan_timestamp ] && rm -f /tmp/.wan_timestamp 2>/dev/null ;;
+		ifup)	wan_timestamp=$(date "+%s" 2>/dev/null)
+			[ "$wan_timestamp" -gt 1000000000 ] && {
+				[ ! -d /tmp ] && mkdir -p /tmp 2>/dev/null
+				echo "$wan_timestamp" > /tmp/.wan_timestamp 2>/dev/null
+			}
+		;;
+	esac
+}

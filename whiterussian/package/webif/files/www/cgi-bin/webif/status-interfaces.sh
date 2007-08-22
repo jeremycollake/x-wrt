@@ -9,13 +9,15 @@ display_interface() {
 	local iname="$2"
 	local dns_servers=""
 	local resconf
+	local wan_timestamp
 	equal "$iface" "" || equal "$iname" "" && return 1
 	[ "$iname" = "WAN" ] && {
 		resconf=$(cat /etc/dnsmasq.conf 2>/dev/null | grep "^resolv-file=" | cut -d'=' -f 2)
 		resconf="${resconf:-"/etc/resolv.conf"}"
 		dns_servers=$(cat "$resconf" 2>/dev/null | awk '/nameserver/ { printf $2 "|" }')
+		wan_timestamp=$(cat /tmp/.wan_timestamp 2>/dev/null)
 	}
-	ifconfig "$iface" 2>/dev/null | awk -v "iname=$iname" -v "dns_servers=$dns_servers" '
+	ifconfig "$iface" 2>/dev/null | awk -v "iname=$iname" -v "dns_servers=$dns_servers" -v "wan_timestamp=$wan_timestamp" '
 function colonstr(strc, nparts, colparts) {
 	if ((length(strc) == 0) || (strc !~ /:/)) return ""
 	nparts = split(strc, colparts, ":")
@@ -37,6 +39,26 @@ function int2human(num, pref) {
 function hardspace(parm) {
 	if (parm == "") return "&nbsp;"
 	else return parm
+}
+function fmtime(seconds, secs, fstring, y, d, h, m ,s) {
+	if (seconds >= 0) {
+		secs = seconds
+		y = int(secs / (60 * 60 * 24 * 365))
+		if (y > 0) {
+			fstring = sprintf("%d@TR<<units_short_year_y#y>> ", y)
+			secs = secs % (60 * 60 * 24 * 365)
+		}
+		d = int(secs / 60 / 60 / 24)
+		if (d > 0) {
+			fstring = fstring sprintf("%d@TR<<units_short_day_d#d>> ", d)
+			secs = secs % (60 * 60 * 24)
+		}
+		h = int(secs / 60 / 60)
+		m = int(secs / 60 % 60)
+		s = int(secs % 60)
+		fstring = fstring "%02d:%02d:%02d"
+		return sprintf(fstring, h, m, s)
+	} else return "&nbsp;"
 }
 {
 	if ($0 ~ /Link encap:/)	_if["mac"] = hardspace($5)
@@ -65,12 +87,20 @@ END {
 			}
 		}
 		print "field|@TR<<Received>>|" iname "_rx"
-		print "string|" _if["rxp"] " @TR<<status_interfaces_pkts#pkts>>&nbsp;" _if["rxh"]
+		print "string|" _if["rxp"] " @TR<<units_packets_pkts#pkts>>&nbsp;" _if["rxh"]
 		print "field|@TR<<Transmitted>>|" iname "_tx"
-		print "string|" _if["txp"] " @TR<<status_interfaces_pkts#pkts>>&nbsp;" _if["txh"]
+		print "string|" _if["txp"] " @TR<<units_packets_pkts#pkts>>&nbsp;" _if["txh"]
+		if (wan_timestamp != "") {
+			print "field|@TR<<Duration>>|" iname "_duration"
+			print "string|" fmtime(systime() - wan_timestamp)
+		}
 		if (iname == "WAN") {
 			print "helpitem|WAN"
 			print "helptext|WAN WAN#WAN stands for Wide Area Network and is usually the upstream connection to the internet."
+			if (wan_timestamp != "") {
+				print "helpitem|Duration"
+				print "helptext|Duration_helptext#The field displays the time of the connection in case the time was known shortly after establishing the link (+/- several seconds)."
+			}
 		} else if (iname == "LAN") {
 			print "helpitem|LAN"
 			print "helptext|LAN LAN#LAN stands for Local Area Network."

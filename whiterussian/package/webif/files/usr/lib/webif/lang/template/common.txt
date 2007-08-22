@@ -274,6 +274,52 @@ network_wol_requires_ether-wake => Install the ether-wake package, if you want t
 network_wol_Install_ether-wake => Install ether-wake
 
 
+## status-interfaces.sh
+Status => Status
+Interfaces => Interfaces
+int2human_tera => t
+int2human_giga => g
+int2human_mega => m
+int2human_kilo => k
+units_short_year_y => y
+units_short_day_d => d
+MAC Address => MAC Address
+IP Address => IP Address
+DNS Server => DNS Server
+Received => Received
+units_packets_pkts => pkts
+Transmitted => Transmitted
+Duration => Duration
+WAN => WAN
+WAN WAN => WAN stands for Wide Area Network and is usually the upstream connection to the internet.
+Duration_helptext => The field displays the time of the connection in case the time was known shortly after establishing the link (+/- several seconds).
+LAN => LAN
+LAN LAN => LAN stands for Local Area Network.
+LOOPBACK => LOOPBACK
+LOOPBACK_helptext => A loopback interface is a type of 'circuitless IP address' or 'virtual IP' address, as the IP address is not associated with any one particular interface (or circuit) on the host or router. Any traffic that a computer program sends on the loopback network is addressed to the same computer.
+WLAN => WLAN
+Access Point => Access Point
+Mode => Mode
+ESSID => ESSID
+Frequency => Frequency
+units_GHz => GHz
+Transmit Power => Transmit Power
+units_dBm => dBm
+Noise Level => Noise Level
+Encryption Key => Encryption Key
+Rx Invalid nwid => Rx Invalid nwid
+Rx Invalid Encryption => Rx Invalid Encryption
+Tx Retries in Excess => Tx Retries in Excess
+Tx Invalid => Tx Invalid
+Tx Missed Beacon => Tx Missed Beacon
+WLAN LAN => WLAN stands for Wireless Local Area Network.
+Interfaces Status WAN => WAN Interface
+Interfaces Status LAN => LAN Interface
+Interfaces Status WLAN => Wireless Interface
+Raw Information => Raw Information
+&nbsp;Show raw statistics&nbsp; => &nbsp;Show raw statistics&nbsp;
+
+
 ## status-iptables.sh
 Status => Status
 Iptables => Iptables
