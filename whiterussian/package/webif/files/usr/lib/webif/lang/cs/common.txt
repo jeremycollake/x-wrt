@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3538
+lang_for_svn => 3567
 
 ## /usr/lib/webif/apn.csv
 Vodafone UK => Vodafone VB
@@ -991,16 +991,21 @@ int2human_tera => t
 int2human_giga => g
 int2human_mega => m
 int2human_kilo => k
-WAN => WAN
-LAN => LAN
+units_short_year_y => r
+units_short_day_d => d
 MAC Address => Adresa MAC
 IP Address => Adresa IP
 DNS Server => Server DNS
 Received => Přijato
+units_packets_pkts => paketů
 Transmitted => Odesláno
-status_interfaces_pkts => paketů
+Duration => Doba
+WAN => WAN
 WAN WAN => Termín WAN označuje síť velké geografické rozlohy a je obvykle připojením směrem na Internet.
+Duration_helptext => Položka zobrazuje délku spojení v případě, že byl znám přesný čas těsně po navázání spojení (+/- několik sekund).
+LAN => LAN
 LAN LAN => Termín LAN označuje síť lokální rozlohy.
+LOOPBACK => LOOPBACK
 LOOPBACK_helptext => Rozhraní lokální smyčky je typ 'IP adresa bez elektrického okruhu' nebo 'virtuální IP' adresa, protože adresa není přiřazena k žádnému konkrétnímu rozhraní (nebo el. okruhu) na počítači nebo směrovači. Jakýkoli provoz, který pošle počítačový program do sítě loopback je adresován stejnému počítači.
 WLAN => WLAN
 Access Point => Přístupový bod
@@ -1012,12 +1017,11 @@ Transmit Power => Vysílací výkon
 units_dBm => dBm
 Noise Level => Úroveň šumu
 Encryption Key => Šifrovací klíč
-Security mode => Režim zabezpečení
-Rx Invalid nwid =>
-Rx Invalid Encryption =>
-Tx Retries in Excess =>
-Tx Invalid =>
-Tx Missed Beacon =>
+Rx Invalid nwid => Rx Invalid nwid
+Rx Invalid Encryption => Rx Invalid Encryption
+Tx Retries in Excess => Tx Retries in Excess
+Tx Invalid => Tx Invalid
+Tx Missed Beacon => Tx Missed Beacon
 WLAN LAN => Termín WLAN označuje bezdrátovou síť lokální rozlohy.
 Interfaces Status WAN => Stav rozhraní WAN
 Interfaces Status LAN => Stav rozhraní LAN
@@ -1084,9 +1088,33 @@ OpenVPN Status => Stav OpenVPN
 ## TODO
 
 ## /www/cgi-bin/webif/status-pppoe.sh
+status_pppoe_Stopping_wan => Zastavuji připojení wan
+status_pppoe_Starting_wan => Spouštím připojení wan
 Status => Stav
 PPPoE => PPPoE
 PPPoE Status => Stav PPPoE
+status_pppoe_Unknown_action => Neznámá akce
+status_pppoe_Connected => Připojeno
+status_pppoe_Disconnect => Odpojit
+status_pppoe_Reconnect => Opakovat připojení
+status_pppoe_Disconnected => Odpojeno
+status_pppoe_Connect => Připojit
+status_pppoe_Connection_Status => Stav připojení
+int2human_tera => t
+int2human_giga => g
+int2human_mega => m
+int2human_kilo => k
+units_short_year_y => r
+units_short_day_d => d
+status_pppoe_Additional_Information => Doplňující informace
+IP Address => Adresa IP
+DNS Server => Server DNS
+Received => Přijato
+units_packets_pkts => paketů
+Transmitted => Odesláno
+Duration => Doba
+status_pppoe_Connection_Log => Záznam připojení
+status_pppoe_not_used => Síťový protokol PPPoE není používán pro připojení wan.
 
 ## /www/cgi-bin/webif/status-pptp.sh
 Status => Stav
@@ -1191,8 +1219,8 @@ status_wlan_survey_Authenticated => Ověřený
 status_wlan_survey_Associated => Přidružený
 status_wlan_survey_Authorized => Oprávněný
 status_wlan_survey_Features => Vlastnosti
-status_wlan_survey_y => r
-status_wlan_survey_d => d
+units_short_year_y => r
+units_short_day_d => d
 status_wlan_survey_yes => ano
 status_wlan_survey_no => ne
 status_wlan_survey_WME => WME
