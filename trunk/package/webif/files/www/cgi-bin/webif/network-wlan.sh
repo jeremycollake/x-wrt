@@ -359,8 +359,8 @@ for device in $DEVICES; do
 			append forms "helptext|Helptext WDS Connections#Enter the MAC address of the router on your network that should be wirelessly connected to. The other router must also support wds and have the mac address of this router entered." "$N"
 
 			hidden="field|@TR<<ESSID Broadcast>>|broadcast_form_$vcfg|hidden
-				radio|broadcast_$vcfg|$FORM_hidden|1|@TR<<On>>
-				radio|broadcast_$vcfg|$FORM_hidden|0|@TR<<Off>>"
+				radio|broadcast_$vcfg|$FORM_hidden|0|@TR<<On>>
+				radio|broadcast_$vcfg|$FORM_hidden|1|@TR<<Off>>"
 			append forms "$hidden" "$N"
 
 			bgscan_field="field|@TR<<Backround Client Scanning>>|bgscan_form_$vcfg|hidden
