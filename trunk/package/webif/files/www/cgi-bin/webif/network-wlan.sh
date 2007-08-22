@@ -104,7 +104,7 @@ let "vcfg_number+=1"
 #
 for iface in $NETWORK_DEVICES; do
 	network_options="$network_options 
-			option|$iface|@TR<<$iface>>"
+			option|$iface|$iface"
 done
 
 #####################################################################
