@@ -252,7 +252,7 @@ select|webif_advanced|$FORM_webif_advanced
 option|1|@TR<<qos_adv_enabled#Enabled>>
 option|0|@TR<<qos_adv_disabled#Disabled>>
 helpitem|Advanced
-helptext|HelpText Advanced#Normally users just use the form below to configure QoS. Some people may need access to the more advanced settings. Alternatively, you can <a href="./system-editor.sh?path=/etc/config&amp;edit=qos">manually edit the config</a>
+helptext|HelpText Advanced#Normally users just use the form below to configure QoS. Some people may need access to the more advanced settings. Alternatively, you can <a href="./system-editor.sh?path=/etc/config&amp;edit=qos">manually edit the config</a>.
 end_form
 EOF
 
