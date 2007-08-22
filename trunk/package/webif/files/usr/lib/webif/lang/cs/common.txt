@@ -3,8 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3528
-
+lang_for_svn => 3572
 ## /usr/lib/webif/apn.csv
 Vodafone UK => Vodafone VB
 Mobilkom, Austria => Mobilkom, Rakousko
@@ -439,7 +438,7 @@ Show Advanced Rules => Zobrazit pokročilá pravidla
 qos_adv_enabled => Povoleno
 qos_adv_disabled => Zakázáno
 Advanced => Pokročilé možnosti
-HelpText Advanced => Normálně uživatelům stačí použít formulář níže ke konfiguraci QoS. Někteří lidé mohou potřebovat přístup k mnohem pokročilejším nastavením. Alternativně můžete <a href="./system-editor.sh?path=/etc/config&amp;edit=qos">ručně upravit konfiguraci</a
+HelpText Advanced => Normálně uživatelům stačí použít formulář níže ke konfiguraci QoS. Někteří lidé mohou potřebovat přístup k mnohem pokročilejším nastavením. Alternativně můžete <a href="./system-editor.sh?path=/etc/config&amp;edit=qos">ručně upravit konfiguraci</a>.
 QoS Traffic Classification Rules => Klasifikační pravidla provozu QoS
 Group => Skupina
 Type => Typ
@@ -580,7 +579,7 @@ Helptext Swap => Když program požaduje více paměti než je fyzicky v počít
 Tracked Connections => Sledovaná spojení
 Maximum => Maximum
 Used => Využito
-Helptext Tracked Connections => Počet spojení v tabulce 'conntrack' vašeho routeru. <a href="status-conntrackread.awx">Zobrazit tabulku 'conntrack'</a
+Helptext Tracked Connections => Počet spojení v tabulce 'conntrack' vašeho routeru. <a href="status-conntrackread.awx">Zobrazit tabulku 'conntrack'</a>.
 Mount Usage => Využití médií
 Helptext Mount Usage => Velikost celkového a použitého místa na souborových systémech připojených k routeru.
 

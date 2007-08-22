@@ -102,7 +102,7 @@ start_form|@TR<<Tracked Connections>>
 string|<tr><td>@TR<<Maximum>>: $MAX_CONNECTIONS</td><td>
 progressbar|conntrackuse|@TR<<Used>>: $ACTIVE_CONNECTIONS ($USED_CONNECTIONS_PERCENT%)|200|$USED_CONNECTIONS_PERCENT|$USED_CONNECTIONS_PERCENT%||
 helpitem|Tracked Connections
-helptext|Helptext Tracked Connections#This is the number of connections in your router's conntrack table. <a href="status-conntrackread.awx">View Conntrack Table</a>
+helptext|Helptext Tracked Connections#This is the number of connections in your router's conntrack table. <a href="status-conntrackread.awx">View Conntrack Table</a>.
 end_form|
 
 start_form|@TR<<Mount Usage>>
