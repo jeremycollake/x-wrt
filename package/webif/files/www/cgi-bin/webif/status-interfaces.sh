@@ -94,7 +94,7 @@ string|$mac_addr"
 			rx_bytes="${rx_bytes:-0}"
 			eval "if_name=\"\$${ifpar}_name\""
 			display_form <<EOF
-start_form|@TR<<$if_name>>
+start_form|$if_name
 $form_mac
 field|@TR<<IP Address>>|${ifpar}_ip_addr
 string|$ip_addr
