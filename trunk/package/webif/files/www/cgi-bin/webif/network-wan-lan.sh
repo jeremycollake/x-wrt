@@ -194,7 +194,7 @@ text|pptp_server_ip|$FORM_pptp_server_ip"
 	PPPOA_OPTION="option|pppoa|@TR<<PPPoA>>"
 }
 
-[ -x /sbin/ifup.wwan ] && {
+[ -x /lib/network/3g.sh ] && {
 	WWAN_OPTION="option|wwan|@TR<<UMTS/GPRS>>"
 	WWAN_COUNTRY_LIST=$(
 		awk '	BEGIN{FS=":"}
