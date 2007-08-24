@@ -187,14 +187,14 @@ fi
 	PPTP_SERVER_OPTION="field|@TR<<PPTP Server IP>>|pptp_server|hidden
 text|pptp_server_ip|$FORM_pptp_server_ip"
 }
-[ -x "/lib/network/pppoe.sh" ] && {
+[ -e "/lib/network/pppoe.sh" ] && {
 	PPPOE_OPTION="option|pppoe|@TR<<PPPoE>>"
 }
-[ -x "/lib/network/pppoa.sh" ] && {
+[ -e "/lib/network/pppoa.sh" ] && {
 	PPPOA_OPTION="option|pppoa|@TR<<PPPoA>>"
 }
 
-[ -x /lib/network/3g.sh ] && {
+[ -e "/lib/network/3g.sh" ] && {
 	WWAN_OPTION="option|wwan|@TR<<UMTS/GPRS>>"
 	WWAN_COUNTRY_LIST=$(
 		awk '	BEGIN{FS=":"}
