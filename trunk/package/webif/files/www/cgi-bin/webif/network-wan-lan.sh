@@ -71,8 +71,8 @@ if empty "$FORM_submit"; then
 	FORM_pptp_server_ip="$CONFIG_wan_server"
 	
 	# pppoa
-	FORM_pppoa_vpi="CONFIG_wan_vpi"
-	FORM_pppoa_vci="CONFIG_wan_vci"
+	FORM_pppoa_vpi="$CONFIG_wan_vpi"
+	FORM_pppoa_vci="$CONFIG_wan_vci"
 	
 	# umts apn
 	FORM_wwan_service="$CONFIG_wan_service"
