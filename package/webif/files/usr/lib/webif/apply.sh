@@ -40,7 +40,7 @@ config_cb() {
 HANDLERS_file='
 	hosts) rm -f /etc/hosts; mv $config /etc/hosts; killall -HUP dnsmasq ;;
 	ethers) rm -f /etc/ethers; mv $config /etc/ethers; killall -HUP dnsmasq ;;
-	firewall) mv /tmp/.webif/file-firewall /etc/config/firewall && /etc/init.d/firewall restart;;
+	firewall) mv /tmp/.webif/file-firewall /etc/config/firewall && /etc/init.d/firewall restart && reload_upnpd;;
 	dnsmasq.conf) mv /tmp/.webif/file-dnsmasq.conf /etc/dnsmasq.conf && /etc/init.d/dnsmasq restart;;
 '
 
@@ -113,6 +113,33 @@ init_theme() {
 		}
 	fi		
 	echo '@TR<<Done>>'
+}
+
+reload_upnpd() {
+	config_load upnpd
+	config_get_bool test config enabled 0
+	if [ 1 -eq "$test" ]; then
+		echo '@TR<<Starting>> @TR<<upnpd>> ...'
+		[ -f /etc/init.d/miniupnpd ] && {
+			/etc/init.d/miniupnpd enable >&- 2>&- <&-
+			/etc/init.d/miniupnpd start >&- 2>&- <&-
+		}
+		[ -f /etc/init.d/upnpd ] && {
+			/etc/init.d/upnpd enable >&- 2>&- <&-
+			/etc/init.d/upnpd restart >&- 2>&- <&-
+		}
+	else
+		echo '@TR<<Stopping>> @TR<<upnpd>> ...'
+		[ -f /etc/init.d/miniupnpd ] && {
+			/etc/init.d/miniupnpd stop >&- 2>&- <&-
+			/etc/init.d/miniupnpd disable >&- 2>&- <&-
+		}
+		[ -f /etc/init.d/upnpd ] && {
+			/etc/init.d/upnpd stop >&- 2>&- <&-
+			/etc/init.d/upnpd disable >&- 2>&- <&-
+		}
+	fi
+	config_clear config
 }
 
 # switch_language (old_lang)  - switches language if changed
@@ -195,30 +222,7 @@ for ucifile in $(ls /tmp/.uci/* 2>&-); do
 			/etc/init.d/webif start
 			;;
 		"/tmp/.uci/upnpd")
-			config_load upnpd
-			config_get_bool test config enabled 0
-			if [ 1 -eq "$test" ]; then
-				echo '@TR<<Starting>> @TR<<upnpd>> ...'
-				[ -f /etc/init.d/miniupnpd ] && {
-					/etc/init.d/miniupnpd enable >&- 2>&- <&-
-					/etc/init.d/miniupnpd start >&- 2>&- <&-
-				}
-				[ -f /etc/init.d/upnpd ] && {
-					/etc/init.d/upnpd enable >&- 2>&- <&-
-					/etc/init.d/upnpd restart >&- 2>&- <&-
-				}
-			else
-				echo '@TR<<Stopping>> @TR<<upnpd>> ...'
-				[ -f /etc/init.d/miniupnpd ] && {
-					/etc/init.d/miniupnpd stop >&- 2>&- <&-
-					/etc/init.d/miniupnpd disable >&- 2>&- <&-
-				}
-				[ -f /etc/init.d/upnpd ] && {
-					/etc/init.d/upnpd stop >&- 2>&- <&-
-					/etc/init.d/upnpd disable >&- 2>&- <&-
-				}
-			fi
-			config_clear config
+			reload_upnpd
 			;;
 		"/tmp/.uci/network")
 			echo '@TR<<Reloading>> @TR<<network>> ...'
