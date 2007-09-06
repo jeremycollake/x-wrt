@@ -554,9 +554,10 @@ for device in $DEVICES; do
 			elif [ "$iftype" = "atheros" ]; then
 				install_hostapd_button="field|@TR<<HostAPD Package>>|install_hostapd_mini_$vcfg|hidden"
 				if [ "$hostapd_installed" != "1" -o "$hostapd_mini_installed" != "1" ]; then
-					install_hostapd_button="$install_hostapd_mini_button
-						string|<div class=\"warning\">PSK and PSK2 will not work until you install the HostAPD mini package. </div>
-						submit|install_hostapd_mini| Install HostAPD-Mini Package |"
+					install_hostapd_mini_button="$install_hostapd_mini_button
+						string|<div class=\"warning\">PSK and PSK2 will not work until you install the HostAPD or HostAPD Mini package. (HostAPD Mini only does PSK and PSK2) </div>
+						submit|install_hostapd_mini| Install HostAPD-Mini Package |
+						submit|install_hostapd| Install HostAPD Package |"
 				else
 					install_hostapd_button="$install_hostapd_mini_button
 						string|@TR<<Installed>>."
