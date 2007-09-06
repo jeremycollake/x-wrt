@@ -116,7 +116,7 @@ if ! empty "$FORM_install_nas"; then
 	install_package "nas"
 	echo "</pre>"
 fi
-if ! empty "$hostapd_mini_installed"; then
+if ! empty "$FORM_install_hostapd_mini"; then
 	echo "Installing HostAPD mini package ...<pre>"
 	install_package "hostapd-mini"
 	echo "</pre>"
@@ -556,7 +556,7 @@ for device in $DEVICES; do
 				if [ "$hostapd_installed" != "1" -o "$hostapd_mini_installed" != "1" ]; then
 					install_hostapd_button="$install_hostapd_mini_button
 						string|<div class=\"warning\">PSK and PSK2 will not work until you install the HostAPD mini package. </div>
-						submit|install_hostapd| Install HostAPD Package |"
+						submit|install_hostapd_mini| Install HostAPD-Mini Package |"
 				else
 					install_hostapd_button="$install_hostapd_mini_button
 						string|@TR<<Installed>>."
