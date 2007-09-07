@@ -1,0 +1,25 @@
+config BR2_COMPILE_XYSSL
+	tristate
+	default n
+	depends BR2_PACKAGE_LIBXYSSL
+
+
+config BR2_PACKAGE_LIBXYSSL
+	tristate "xyssl - a fast, open source SSL library"
+	default m if CONFIG_DEVEL
+	select BR2_COMPILE_XYSSL
+	help
+	  A quality, open-source cryptographic library written in C
+	  and targeted at embedded systems.
+	  
+	  http://www.xyssl.org
+ 
+config BR2_PACKAGE_XYSSLPROGS
+	tristate "xyssl - SSL library support programs"
+	default m if CONFIG_DEVEL
+	depends BR2_PACKAGE_LIBXYSSL
+	help
+	  A quality, open-source cryptographic library written in C
+	  and targeted at embedded systems.
+	  
+	  http://www.xyssl.org

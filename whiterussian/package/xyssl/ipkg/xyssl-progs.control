@@ -1,0 +1,9 @@
+Package: xyssl-progs
+Priority: optional
+Section: utils
+Description: Fast, open source SSL library support programs
+ A quality, open-source cryptographic library written in C
+ and targeted at embedded systems.
+ .
+ http://www.xyssl.org
+ 

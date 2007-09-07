@@ -1,0 +1,9 @@
+Package: libxyssl
+Priority: optional
+Section: libs
+Description: Fast, open source SSL library
+ A quality, open-source cryptographic library written in C
+ and targeted at embedded systems.
+ .
+ http://www.xyssl.org
+ 
