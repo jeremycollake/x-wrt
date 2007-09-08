@@ -554,7 +554,7 @@ for device in $DEVICES; do
 			elif [ "$iftype" = "atheros" ]; then
 				install_hostapd_mini_button="field|@TR<<HostAPD Package>>|install_hostapd_mini_$vcfg|hidden"
 				if [ "$hostapd_installed" = "1" -o "$hostapd_mini_installed" = "1" ]; then
-					install_hostapd_button="$install_hostapd_mini_button
+					install_hostapd_mini_button="$install_hostapd_mini_button
 						string|@TR<<Installed>>."
 				else
 					install_hostapd_mini_button="$install_hostapd_mini_button
