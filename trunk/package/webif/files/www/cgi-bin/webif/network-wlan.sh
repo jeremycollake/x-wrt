@@ -552,16 +552,17 @@ for device in $DEVICES; do
 				fi
 				append forms "$install_nas_button" "$N"
 			elif [ "$iftype" = "atheros" ]; then
-				install_hostapd_button="field|@TR<<HostAPD Package>>|install_hostapd_mini_$vcfg|hidden"
-				if [ "$hostapd_installed" != "1" -o "$hostapd_mini_installed" != "1" ]; then
+				install_hostapd_mini_button="field|@TR<<HostAPD Package>>|install_hostapd_mini_$vcfg|hidden"
+				if [ "$hostapd_installed" = "1" -o "$hostapd_mini_installed" = "1" ]; then
+					install_hostapd_button="$install_hostapd_mini_button
+						string|@TR<<Installed>>."
+				else
 					install_hostapd_mini_button="$install_hostapd_mini_button
 						string|<div class=\"warning\">PSK and PSK2 will not work until you install the HostAPD or HostAPD Mini package. (HostAPD Mini only does PSK and PSK2) </div>
 						submit|install_hostapd_mini| Install HostAPD-Mini Package |
 						submit|install_hostapd| Install HostAPD Package |"
-				else
-					install_hostapd_button="$install_hostapd_mini_button
-						string|@TR<<Installed>>."
 				fi
+				install_hostapd_button="field|@TR<<HostAPD Package>>|install_hostapd_$vcfg|hidden"
 				if [ "$hostapd_installed" != "1" ]; then
 					install_hostapd_button="$install_hostapd_button
 						string|<div class=\"warning\">WPA and WPA2 will not work until you install the HostAPD package. </div>
@@ -581,6 +582,7 @@ for device in $DEVICES; do
 						string|@TR<<Installed>>."
 				fi
 				append forms "$install_hostapd_button" "$N"
+				append forms "$install_hostapd_mini_button" "$N"
 				append forms "$install_wpa_supplicant_button" "$N"
 			fi
 
