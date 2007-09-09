@@ -178,6 +178,14 @@ graphs_if_Traffic_of_Interface => Traffic of Interface
 ## temporarily removed #### duplicate ##graphs_svg_required => This object requires the SVG support.
 
 
+## info.sh
+info_Find_more => You can find more information about Webif&sup2;, contribute to the project or help other users following these links
+info_link_X-Wrt => X-Wrt
+info_link_Forum => Forum
+info_link_Wiki => Wiki
+info_link_Trac => Trac
+
+
 ## network-hosts.sh
 network_hosts_host_IP_invalid => Host's IP Address
 network_hosts_Host_Name => Host Name
