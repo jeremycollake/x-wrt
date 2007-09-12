@@ -117,7 +117,7 @@ function cssmenu(mainmenu, submenu, menuind, ofs, osubsep, n, i) {
 	delete submenu
 	# parse all ##WEBIF...
 	n = 0
-	while (("grep '^##WEBIF:' /www/cgi-bin/webif/*.awx /www/cgi-bin/webif/*.sh 2>/dev/null | sed 's,^[^:]*\/,,; s/##WEBIF:name://; s/^\\([^:]*\\):\\(.*\\)/\\2:\\1/' | sort" | getline) == 1) {
+	while (("grep '^##WEBIF:' "cgidir"/*.awx "cgidir"/*.sh 2>/dev/null | sed 's,^[^:]*\/,,; s/##WEBIF:name://; s/^\\([^:]*\\):\\(.*\\)/\\2:\\1/' | sort" | getline) == 1) {
 		if ((mainmenu[$1 SUBSEP "url"] == "")  && ($4 != "")) mainmenu[$1 SUBSEP "url"] = rootdir "/" $4
 		if (mainmenu[$1 SUBSEP "pages"] !~ /:$2:/) {
 			mainmenu[$1 SUBSEP "pages"] = mainmenu[$1 SUBSEP "pages"] ":" $2 ":"
@@ -132,7 +132,7 @@ function cssmenu(mainmenu, submenu, menuind, ofs, osubsep, n, i) {
 		}
 	}
 	# parse extra subcategories
-	while (("/bin/ash -c '. /www/cgi-bin/webif/graphs-subcategories.sh; subcategories_extra' | sed 's/##WEBIF:name://' | sort" | getline) == 1) {
+	while (("/bin/ash -c '. "cgidir"/graphs-subcategories.sh; subcategories_extra' | sed 's/##WEBIF:name://' | sort" | getline) == 1) {
 		if ((mainmenu[$1 SUBSEP "url"] == "")  && ($4 != "")) mainmenu[$1 SUBSEP "url"] = rootdir "/" $4
 		mainmenu[$1 SUBSEP "count"]++
 		submenu[$1 SUBSEP mainmenu[$1 SUBSEP "count"] SUBSEP "title"] = $3
@@ -244,10 +244,6 @@ function subcategories(extra, a, n, i, ofs) {
 
 # parameters: 0
 function status(hostname, uptime, loadavg, i) {
-	if (config_get("general", "use_short_status_frame") == "1") {
-		return "<iframe src=\"/cgi-bin/webif/iframe.mini-info.sh\" width=\"200\" height=\"80\" scrolling=\"no\" frameborder=\"0\"></iframe>"
-	}
-	
 	getline < "/proc/sys/kernel/hostname"
 	hostname=$0
 	
