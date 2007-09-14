@@ -233,8 +233,13 @@ for ucifile in $(ls /tmp/.uci/* 2>&-); do
 			fi
 			;;
 		"/tmp/.uci/ntp_client")
+			#this is for 7.07 and previous
 			killall ntpclient
 			config_load ntp_client&
+			;;
+		"/tmp/.uci/ntpclient")
+			killall ntpclient
+			config_load ntpclient&
 			;;
 		"/tmp/.uci/dhcp")
 			killall dnsmasq
