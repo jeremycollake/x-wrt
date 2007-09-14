@@ -18,7 +18,7 @@ config_cb() {
 		timezone)
 			timezone_cfg="$CONFIG_SECTION"
 		;;
-		ntp_client)
+		ntp_client|ntpclient)
 			config_get hostname     $CONFIG_SECTION hostname
 			config_get port         $CONFIG_SECTION port
 			config_get count        $CONFIG_SECTION count
