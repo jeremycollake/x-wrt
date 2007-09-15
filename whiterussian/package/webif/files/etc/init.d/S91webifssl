@@ -38,7 +38,7 @@ start() {
 	local IPCALC_CMD wsenable OPTIONS msenable
 	load_variables
 	local IPCALC_CMD=$(which ipcalc.sh 2>/dev/null)
-	[ "$IPCALC_CMD" == "" ] && IPCALC_CMD=$(which ipcalc 2>/dev/null)
+	[ "$IPCALC_CMD" = "" ] && IPCALC_CMD=$(which ipcalc 2>/dev/null)
 
 	[ -f "$CONFIG_matrixtunnel_pidfile" ] && stop
 	config_get_bool wsenable matrixtunnel enable 0
@@ -49,7 +49,7 @@ start() {
 			[ -n "$CONFIG_listen_host" ] && {
 				[ "$IPCALC_CMD" != "" ] && {
 					eval $($IPCALC_CMD "$CONFIG_listen_host")
-					[ "$CONFIG_listen_host" == "$IP" ] && OPTIONS="$OPTIONS$CONFIG_listen_host:"
+					[ "$CONFIG_listen_host" = "$IP" ] && OPTIONS="$OPTIONS$CONFIG_listen_host:"
 				}
 			}
 			[ "$CONFIG_listen_port" -lt 1 -o "$CONFIG_listen_port" -gt 65535 ] 2>/dev/null && CONFIG_listen_port="$DEFAULT_listen_port"
@@ -58,7 +58,7 @@ start() {
 			[ -n "$CONFIG_remote_host" ] && {
 				[ "$IPCALC_CMD" != "" ] && {
 					eval $($IPCALC_CMD "$CONFIG_remote_host")
-					[ "$CONFIG_remote_host" == "$IP" ] && OPTIONS="$OPTIONS$CONFIG_remote_host:"
+					[ "$CONFIG_remote_host" = "$IP" ] && OPTIONS="$OPTIONS$CONFIG_remote_host:"
 				}
 				
 			}
