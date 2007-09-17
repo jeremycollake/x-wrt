@@ -60,10 +60,12 @@ name_for_ip() {
 }
 
 if [ -e /etc/ethers ]; then
-	cat $ETHERS_FILE | awk -F ' ' '
+	cat $ETHERS_FILE | awk '
 	{
-		"grep -e "$2" /etc/hosts | sed \"s/^"$2"\w*//\"" | getline hostname;
-		print "<tr><td>" hostname "</td><td>" $2 "</td><td>" $1 "</td><td><button name=\"wake\" type=\"submit\" value=\"" $1 "\">Wake up</button></td></tr>";
+		if ($1 ~ /^[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}/) {
+			"grep -e "$2" /etc/hosts | sed \"s/^"$2"\w*//\"" | getline hostname;
+			print "<tr><td>" hostname "</td><td>" $2 "</td><td>" $1 "</td><td><button name=\"wake\" type=\"submit\" value=\"" $1 "\">Wake up</button></td></tr>"
+		}
 	}'
 fi
 
