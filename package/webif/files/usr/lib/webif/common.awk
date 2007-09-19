@@ -32,8 +32,8 @@ function config_get(package, option) {
 # parameters: 3
 function config_get_bool(package, option, default, var) {
 	var = config_get(package, option);
-	if ((var == "enabled") || (var == "1") || (var == "on")) return 1
-	if ((var == "disabled") || (var == "0") || (var == "off")) return 0
+	if ((var == "1") || (var == "on") || (var == "true") || (var == "enabled")) return 1
+	if ((var == "0") || (var == "off") || (var == "false") || (var == "disabled")) return 0
 	return (default == "1" ? 1 : 0)
 }
 
