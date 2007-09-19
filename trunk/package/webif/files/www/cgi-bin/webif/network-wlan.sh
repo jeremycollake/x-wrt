@@ -377,7 +377,7 @@ for device in $DEVICES; do
 				radio|broadcast_$vcfg|$FORM_hidden|1|@TR<<Off>>"
 			append forms "$hidden" "$N"
 
-			bgscan_field="field|@TR<<Backround Client Scanning>>|bgscan_form_$vcfg|hidden
+			bgscan_field="field|@TR<<Background Client Scanning>>|bgscan_form_$vcfg|hidden
 					radio|bgscan_$vcfg|$FORM_bgscan|1|@TR<<On>>
 					radio|bgscan_$vcfg|$FORM_bgscan|0|@TR<<Off>>"
 			append forms "$bgscan_field" "$N"
