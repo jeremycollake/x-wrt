@@ -1,0 +1,44 @@
+#
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=portsentry
+PKG_VERSION:=1.2
+PKG_RELEASE:=2
+PKG_MD5SUM:=3ebd3618ba9abfea2525e236bd44cebd
+
+PKG_SOURCE_URL:=@SF/sentrytools
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_CAT:=zcat
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)_beta
+
+include $(TOPDIR)/package/rules.mk
+
+$(eval $(call PKG_template,PORTSENTRY,$(PKG_NAME),$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+
+$(PKG_BUILD_DIR)/.configured:
+	touch $@
+
+$(PKG_BUILD_DIR)/.built:
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		$(TARGET_CONFIGURE_OPTS) \
+		linux
+	touch $@
+
+$(IPKG_PORTSENTRY): 
+	mkdir -p $(IDIR_PORTSENTRY)/usr/bin
+	mkdir -p $(IDIR_PORTSENTRY)/etc
+	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME).conf $(IDIR_PORTSENTRY)/etc/
+	$(CP) $(PKG_BUILD_DIR)/$(PKG_NAME) $(IDIR_PORTSENTRY)/usr/bin/
+	$(STRIP) $(IDIR_PORTSENTRY)/usr/bin/*
+	$(IPKG_BUILD) $(IDIR_PORTSENTRY) $(PACKAGE_DIR)
+
+mostlyclean:
+	$(MAKE) -C $(PKG_BUILD_DIR) clean
+	rm -f $(PKG_BUILD_DIR)/.built
