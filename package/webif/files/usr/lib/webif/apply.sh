@@ -128,9 +128,8 @@ reload_upnpd() {
 
 # init_theme - initialize a new theme
 init_theme() {
-	echo '@TR<<Initializing theme ...>>'	
-	uci_load "webif"
-	newtheme="$CONFIG_theme_id"	
+	echo '@TR<<Initializing theme ...>>'
+	config_get newtheme theme id
 	# if theme isn't present, then install it		
 	! exists "/www/themes/$newtheme/webif.css" && {
 		install_package "webif-theme-$newtheme"	
@@ -147,14 +146,12 @@ init_theme() {
 		}
 	fi		
 	echo '@TR<<Done>>'
-	config_allclear
 }
 
 # switch_language (old_lang)  - switches language if changed
 switch_language() {
 	oldlang="$1"
-	uci_load "webif"
-	newlang="$CONFIG_general_lang"
+	config_get newlang general lang
 	! equal "$newlang" "$oldlang" && {
 		echo '@TR<<Applying>> @TR<<Installing language pack>> ...'
 		# if not English then we install language pack
@@ -172,13 +169,12 @@ switch_language() {
 		}
 		echo '@TR<<Done>>'
 	}
-	config_allclear
 }
 
 reload_qos() {
 	config_load qos
-	config_get_bool test wan enabled 0
-	if [ 1 -eq "$test" ]; then
+	config_get_bool wan_enabled wan enabled 0
+	if [ 1 -eq "$wan_enabled" ]; then
 		echo '@TR<<Starting>> @TR<<qos>> ...'
 		[ -f /etc/init.d/qos ] && {
 			/etc/init.d/qos enable >&- 2>&- <&-
@@ -210,29 +206,53 @@ reload_qos() {
 #
 # now apply any UCI config changes
 #
+process_packages=""
 for ucifile in $(ls /tmp/.uci/* 2>&-); do
 	# do not process lock files
 	[ "${ucifile%.lock}" != "${ucifile}" ] && continue
-	# store original language before committing new one so we know if changed
-	equal "$ucifile" "/tmp/.uci/webif" && {
-		config_load "/etc/config/webif"
-		config_get oldlang general lang
-		config_allclear
-	}
+
 	package=${ucifile#/tmp/.uci/}
+	process_packages="$process_packages $package"
+
+	# get old/updated values for the package here
+	case "$ucifile" in
+		"/tmp/.uci/webif") 
+			config_load "/etc/config/$package"
+			config_get apply_webif_oldlang general lang
+			;;
+	esac
+	config_allclear
+
+	# commit settings
 	echo "@TR<<Committing>> $package ..."
 	uci_commit "$package"
-	case "$ucifile" in
-		"/tmp/.uci/qos") reload_qos;;
-		"/tmp/.uci/webif") 
-			switch_language "$oldlang"
+done
+
+[ -n "$process_packages" ] && echo "@TR<<Waiting for the commit to finish>>..."
+LOCK=`which lock` || LOCK=:
+for ucilock in $(ls /tmp/.uci/*.lock 2>&-); do
+	$LOCK -w "$ucilock"
+	rm "$ucilock" >&- 2>&-
+done
+
+# now process changes in UCI configs
+for package in $process_packages; do
+	# process settings
+	case "$package" in
+		"qos")
+			reload_qos
+			;;
+		"webif")
+			config_load webif
+			switch_language "$apply_webif_oldlang"
 			init_theme
 			/etc/init.d/webif start
+			config_allclear
 			;;
-		"/tmp/.uci/upnpd")
+		"upnpd")
 			reload_upnpd
 			;;
-		"/tmp/.uci/network")
+		"network")
 			echo '@TR<<Reloading>> @TR<<network>> ...'
 			/etc/init.d/network restart
 			killall dnsmasq
@@ -240,32 +260,32 @@ for ucifile in $(ls /tmp/.uci/* 2>&-); do
 				/etc/init.d/dnsmasq start
 			fi
 			;;
-		"/tmp/.uci/ntp_client")
+		"ntp_client")
 			#this is for 7.07 and previous
 			killall ntpclient
 			config_load ntp_client&
 			;;
-		"/tmp/.uci/ntpclient")
+		"ntpclient")
 			killall ntpclient
 			config_load ntpclient&
 			;;
-		"/tmp/.uci/dhcp")
+		"dhcp")
 			killall dnsmasq
 			[ -z "$(ps | grep "[d]nsmasq ")" ] && /etc/init.d/dnsmasq start
 			;;
-		"/tmp/.uci/wireless")
+		"wireless")
 			echo '@TR<<Reloading>> @TR<<wireless>> ...'
 			wifi ;;
-		"/tmp/.uci/syslog")
+		"syslog")
 			echo '@TR<<Reloading>> @TR<<syslogd>> ...'
 			/etc/init.d/syslog restart >&- 2>&- ;;
-		"/tmp/.uci/openvpn")
+		"openvpn")
 			echo '@TR<<Reloading>> @TR<<OpenVPN>> ...'
 			killall openvpn >&- 2>&- <&-
 			/etc/init.d/openvpn start ;;
-		"/tmp/.uci/system")
+		"system")
 			config_load system ;;
-		"/tmp/.uci/snmp")
+		"snmp")
 			echo '@TR<<Exporting>> @TR<<snmp settings>> ...'
 			[ -e "/sbin/save_snmp" ] && {
 				/sbin/save_snmp >&- 2>&-
@@ -277,7 +297,7 @@ for ucifile in $(ls /tmp/.uci/* 2>&-); do
 			}
 			/etc/init.d/S??snmpd restart >&- 2>&-
 			;;
-		"/tmp/.uci/l2tpns")
+		"l2tpns")
 			echo '@TR<<Exporting>> @TR<<l2tpns server settings>> ...'
 			[ -e "/usr/lib/webif/l2tpns_apply.sh" ] && {
 				/usr/lib/webif/l2tpns_apply.sh >&- 2>&-
@@ -286,7 +306,7 @@ for ucifile in $(ls /tmp/.uci/* 2>&-); do
 			echo '@TR<<Reloading>> @TR<<l2tpns server>> ...'
 			/etc/init.d/l2tpns restart >&- 2>&-
 			;;
-		"/tmp/.uci/updatedd")
+		"updatedd")
 			uci_load "updatedd"
 			if [ "$CONFIG_ddns_update" = "1" ]; then
 				/etc/init.d/ddns enable >&- 2>&- <&-
@@ -298,12 +318,12 @@ for ucifile in $(ls /tmp/.uci/* 2>&-); do
 			fi
 			config_allclear
 		 	;;
-		"/tmp/.uci/timezone")
+		"timezone")
 			echo '@TR<<Exporting>> @TR<<TZ setting>> ...'
 			[ ! -f /etc/rc.d/S??timezone ] && /etc/init.d/timezone enable >&- 2>&- <&-
 			/etc/init.d/timezone restart
 			;;
-		"/tmp/.uci/webifssl")
+		"webifssl")
 			config_load webifssl
 			config_get_bool test matrixtunnel enable 0
 			if [ 1 -eq "$test" ]; then
