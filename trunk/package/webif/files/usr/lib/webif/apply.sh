@@ -215,7 +215,7 @@ for ucifile in $(ls /tmp/.uci/* 2>&-); do
 	[ "${ucifile%.lock}" != "${ucifile}" ] && continue
 	# store original language before committing new one so we know if changed
 	equal "$ucifile" "/tmp/.uci/webif" && {
-		config_load webif
+		config_load "/etc/config/webif"
 		config_get oldlang general lang
 		config_allclear
 	}
