@@ -92,27 +92,11 @@ for config in $(ls config-conntrack 2>&-); do
 	echo '@TR<<Done>>'
 done
 
-# init_theme - initialize a new theme
-init_theme() {
-	echo '@TR<<Initializing theme ...>>'	
-	uci_load "webif"
-	newtheme="$CONFIG_theme_id"	
-	# if theme isn't present, then install it		
-	! exists "/www/themes/$newtheme/webif.css" && {
-		install_package "webif-theme-$newtheme"	
-	}
-	if ! exists "/www/themes/$newtheme/webif.css"; then
-		# if theme still not installed, there was an error
-		echo "@TR<<Error>>: @TR<<installing theme package>>."
-	else
-		# create symlink to new active theme if its not already set right
-		current_theme=$(ls /www/themes/active -l | cut -d '>' -f 2 | sed s/'\/www\/themes\/'//g)
-		! equal "$current_theme" "$newtheme" && {
-			rm /www/themes/active
-			ln -s /www/themes/$newtheme /www/themes/active
-		}
-	fi		
-	echo '@TR<<Done>>'
+# clear all uci settings to free memory
+config_allclear() {
+	for var in $(set | grep "^CONFIG_" | sed -e 's/\(.*\)=.*$/\1/'); do
+		unset "$var"
+	done
 }
 
 reload_upnpd() {
@@ -139,7 +123,31 @@ reload_upnpd() {
 			/etc/init.d/upnpd disable >&- 2>&- <&-
 		}
 	fi
-	config_clear config
+	config_allclear
+}
+
+# init_theme - initialize a new theme
+init_theme() {
+	echo '@TR<<Initializing theme ...>>'	
+	uci_load "webif"
+	newtheme="$CONFIG_theme_id"	
+	# if theme isn't present, then install it		
+	! exists "/www/themes/$newtheme/webif.css" && {
+		install_package "webif-theme-$newtheme"	
+	}
+	if ! exists "/www/themes/$newtheme/webif.css"; then
+		# if theme still not installed, there was an error
+		echo "@TR<<Error>>: @TR<<installing theme package>>."
+	else
+		# create symlink to new active theme if its not already set right
+		current_theme=$(ls /www/themes/active -l | cut -d '>' -f 2 | sed s/'\/www\/themes\/'//g)
+		! equal "$current_theme" "$newtheme" && {
+			rm /www/themes/active
+			ln -s /www/themes/$newtheme /www/themes/active
+		}
+	fi		
+	echo '@TR<<Done>>'
+	config_allclear
 }
 
 # switch_language (old_lang)  - switches language if changed
@@ -164,27 +172,28 @@ switch_language() {
 		}
 		echo '@TR<<Done>>'
 	}
+	config_allclear
 }
 
-uci_load_originals() {
-	local cfsection
-	config_load "$1"
-	for cfsection in $CONFIG_SECTIONS; do
-		config_rename "$cfsection" "orig_$cfsection"
-	done
-	CONFIG_orig_SECTION="$CONFIG_SECTIONS"
+reload_qos() {
+	config_load qos
+	config_get_bool test wan enabled 0
+	if [ 1 -eq "$test" ]; then
+		echo '@TR<<Starting>> @TR<<qos>> ...'
+		[ -f /etc/init.d/qos ] && {
+			/etc/init.d/qos enable >&- 2>&- <&-
+			/etc/init.d/qos start >&- 2>&- <&-
+		}
+	else
+		echo '@TR<<Stopping>> @TR<<qos>> ...'
+		[ -f /etc/init.d/qos ] && {
+			/etc/init.d/qos stop >&- 2>&- <&-
+			/etc/init.d/qos disable >&- 2>&- <&-
+		}
+	fi
+	config_allclear
 }
 
-uci_unset_originals() {
-	local cfsection
-	local oldvar
-	for cfsection in $CONFIG_orig_SECTION; do
-		for oldvar in $(set | grep "^CONFIG_${cfsection}_" | sed -e 's/\(.*\)=.*$/\1/'); do
-			unset "$oldvar"
-		done
-	done
-	unset CONFIG_orig_SECTION
-}
 
 # config-*		simple config files
 (
@@ -206,16 +215,15 @@ for ucifile in $(ls /tmp/.uci/* 2>&-); do
 	[ "${ucifile%.lock}" != "${ucifile}" ] && continue
 	# store original language before committing new one so we know if changed
 	equal "$ucifile" "/tmp/.uci/webif" && {
-		uci_load_originals "webif"
-		oldlang="$CONFIG_orig_general_lang"
-		uci_unset_originals "webif"
-		uci_load "webif"
+		config_load webif
+		config_get oldlang general lang
+		config_allclear
 	}
 	package=${ucifile#/tmp/.uci/}
 	echo "@TR<<Committing>> $package ..."
 	uci_commit "$package"
 	case "$ucifile" in
-		"/tmp/.uci/qos") qos-start;;
+		"/tmp/.uci/qos") reload_qos;;
 		"/tmp/.uci/webif") 
 			switch_language "$oldlang"
 			init_theme
@@ -288,6 +296,7 @@ for ucifile in $(ls /tmp/.uci/* 2>&-); do
 				/etc/init.d/ddns disable >&- 2>&- <&-
 				/etc/init.d/ddns stop >&- 2>&- <&-
 			fi
+			config_allclear
 		 	;;
 		"/tmp/.uci/timezone")
 			echo '@TR<<Exporting>> @TR<<TZ setting>> ...'
@@ -310,6 +319,7 @@ for ucifile in $(ls /tmp/.uci/* 2>&-); do
 					/etc/init.d/webifssl disable >&- 2>&- <&-
 				}
 			fi
+			config_allclear
 			;;
 	esac
 done
