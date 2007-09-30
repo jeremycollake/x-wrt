@@ -85,17 +85,26 @@ if ! empty "$FORM_install_ntpclient"; then
 fi
 
 generate_ssl_key() {
-	local inst_packages llib llink libsymlinks
+	local inst_packages inst_links llib llink libsymlinks
 	is_package_installed "zlib"
-	[ "$?" != "0" ] && inst_packages="$inst_packages zlib"
+	[ "$?" != "0" ] && {
+		inst_packages="$inst_packages zlib"
+		inst_links="$inst_links /tmp/usr/lib/libz.so.*"
+	}
 	is_package_installed "libopenssl"
-	[ "$?" != "0" ] && inst_packages="$inst_packages libopenssl"
+	[ "$?" != "0" ] && {
+		inst_packages="$inst_packages libopenssl"
+		inst_links="$inst_links /tmp/usr/lib/libssl.so.* /tmp/usr/lib/libcrypto.so.*"
+	}
 	is_package_installed "openssl-util"
-	[ "$?" != "0" ] && inst_packages="$inst_packages openssl-util"
+	[ "$?" != "0" ] && {
+		inst_packages="$inst_packages openssl-util"
+		inst_links="$inst_links /tmp/usr/bin/openssl"
+	}
 	[ -n "$inst_packages" ] && ipkg -d ram install $inst_packages -force-overwrite
 	is_package_installed "openssl-util"
 	if [ "$?" = "0" ]; then
-		for llib in $(ls /tmp/usr/lib/libssl.so.* /tmp/usr/lib/libcrypto.so.* /tmp/usr/lib/libz.so.* /tmp/usr/bin/openssl 2>/dev/null); do
+		for llib in $inst_links; do
 			llink=$(echo "$llib" | sed 's/\/tmp//')
 			ln -s $llib $llink
 			[ "$?" = "0" ] && libsymlinks="$libsymlinks $llink"
