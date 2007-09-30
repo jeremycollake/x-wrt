@@ -1,13 +1,13 @@
 #timezone group	timezone cities	timezone config string	zoneinfo
-#revision: 2007f
+#revision: 2007g
 #  it is not exact for the "cities list" but it enables to remember 
 #  the selection and to synchronize TZs with the standard zoneinfo
-Australia	Melbourne,Canberra,Sydney	EST-10EST,M10.5.0,M3.5.0/3	Australia/Melbourne
-Australia	Perth	WST-8	Australia/Perth	Perth
+Australia	Melbourne,Canberra,Sydney	EST-10EST,M10.1.0,M4.1.0/3	Australia/Melbourne
+Australia	Perth	WST-8	Australia/Perth
 Australia	Brisbane	EST-10	Australia/Brisbane
-Australia	Adelaide	CST-9:30CST,M10.5.0,M3.5.0/3	Australia/Adelaide
+Australia	Adelaide	CST-9:30CST,M10.1.0,M4.1.0/3	Australia/Adelaide
 Australia	Darwin	CST-9:30	Australia/Darwin
-Australia	Hobart	EST-10EST,M10.1.0,M3.5.0/3	Australia/Hobart
+Australia	Hobart	EST-10EST,M10.1.0,M4.1.0/3	Australia/Hobart
 
 Europe	Amsterdam,Netherlands	CET-1CEST,M3.5.0,M10.5.0/3	Europe/Amsterdam
 Europe	Athens,Greece	EET-2EEST,M3.5.0/3,M10.5.0/4	Europe/Athens
@@ -30,7 +30,7 @@ Europe	Moscow,Russia	MSK-3MSD,M3.5.0,M10.5.0/3	Europe/Moscow
 Europe	Stockholm,Sweden	CET-1CEST,M3.5.0,M10.5.0/3	Europe/Stockholm
 Europe	Zurich,Switzerland	CET-1CEST,M3.5.0,M10.5.0/3	Europe/Zurich
 
-New Zealand	Auckland, Wellington	NZST-12NZDT,M10.1.0,M3.3.0/3	Pacific/Auckland
+New Zealand	Auckland, Wellington	NZST-12NZDT,M9.5.0,M4.1.0/3	Pacific/Auckland
 
 USA &amp; Canada	Hawaii Time	HST10	Pacific/Honolulu
 USA &amp; Canada	Alaska Time	AKST9AKDT,M3.2.0,M11.1.0	America/Anchorage
@@ -46,7 +46,7 @@ Asia (UTC+1)	Anadyr	ANAT-12ANAST,M3.5.0,M10.5.0/3	Asia/Anadyr
 
 Asia (UTC+2)	Amman	EET-2EEST,M3.5.4/0,M10.5.5/1	Asia/Amman
 Asia (UTC+2)	Beirut	EET-2EEST,M3.5.0/0,M10.5.0/0	Asia/Beirut
-Asia (UTC+2)	Damascus	EET-2EEST,J91/0,J274/0	Asia/Damascus
+Asia (UTC+2)	Damascus	EET-2EEST,M3.5.5/0,J274/0	Asia/Damascus
 Asia (UTC+2)	Gaza	EET-2EEST,J91/0,M10.3.5/0	Asia/Gaza
 Asia (UTC+2)	Jerusalem	GMT-2	Asia/Jerusalem
 Asia (UTC+2)	Nicosia	EET-2EEST,M3.5.0/3,M10.5.0/4	Asia/Nicosia
