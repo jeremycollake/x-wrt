@@ -345,7 +345,6 @@ for device in $DEVICES; do
 				eval FORM_network="\$FORM_network_$vcfg"
 				eval FORM_txpower="\$FORM_txpower_$vcfg"
 				eval FORM_bgscan="\$FORM_bgscan_$vcfg"
-				eval FORM_isolate="\$FORM_isolate_$vcfg"
 				eval FORM_frag="\$FORM_frag_$vcfg"
 				eval FORM_rts="\$FORM_rts_$vcfg"
 			fi
@@ -724,9 +723,8 @@ EOF
 						eval FORM_network="\$FORM_network_$vcfg"
 						eval FORM_txpower="\$FORM_txpower_$vcfg"
 						eval FORM_bgscan="\$FORM_bgscan_$vcfg"
-						eval FORM_isolate="\$FORM_isolate_$vcfg"
-						eval FORM_isolate="\$FORM_rts_$vcfg"
-						eval FORM_isolate="\$FORM_frag_$vcfg"
+						eval FORM_rts="\$FORM_rts_$vcfg"
+						eval FORM_frag="\$FORM_frag_$vcfg"
 
 						uci_set "wireless" "$vcfg" "network" "$FORM_network"
 						uci_set "wireless" "$vcfg" "ssid" "$FORM_ssid"
