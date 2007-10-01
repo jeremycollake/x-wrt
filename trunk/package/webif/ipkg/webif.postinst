@@ -94,6 +94,11 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 		revision="7.07"
 	}
 
+	grep -q "7.09" "/etc/banner"
+	[ $? = 0 ] && {
+		revision="7.09"
+	}
+
 	# initialize ipkg.conf
 	uname -a |grep mips |grep 2.4 && cat /proc/cpuinfo |grep Broadcom
 	[ $? = 0 ] && {
