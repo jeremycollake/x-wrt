@@ -65,34 +65,7 @@ done
 # leave if some files not applied
 rm -r "/tmp/.webif/edited-files" 2>&-
 
-# file-*		other config files
-for config in $(ls file-* 2>&-); do
-	name=${config#file-}
-	echo "@TR<<Processing>> @TR<<config file>>: $name"
-	eval 'case "$name" in
-		'"$HANDLERS_file"'
-	esac'
-done
 
-
-# config-conntrack	  Conntrack Config file
-for config in $(ls config-conntrack 2>&-); do
-	echo '@TR<<Applying>> @TR<<conntrack settings>> ...'
-	fix_symlink_hack "/etc/sysctl.conf"
-	# set any and all net.ipv4.netfilter settings.
-	for conntrack in $(grep ip_ /tmp/.webif/config-conntrack); do
-		variable_name=$(echo "$conntrack" | cut -d '=' -f1)
-		variable_value=$(echo "$conntrack" | cut -d '"' -f2)
-		echo "&nbsp;@TR<<Setting>> $variable_name to $variable_value"
-		remove_lines_from_file "/etc/sysctl.conf" "net.ipv4.netfilter.$variable_name"
-		echo "net.ipv4.netfilter.$variable_name=$variable_value" >> /etc/sysctl.conf
-	done
-	sysctl -p 2>&- 1>&- # reload sysctl.conf
-	rm -f /tmp/.webif/config-conntrack
-	echo '@TR<<Done>>'
-done
-
-# clear all uci settings to free memory
 config_allclear() {
 	for var in $(set | grep "^CONFIG_" | sed -e 's/\(.*\)=.*$/\1/'); do
 		unset "$var"
@@ -126,6 +99,35 @@ reload_upnpd() {
 	config_allclear
 }
 
+
+# file-*		other config files
+for config in $(ls file-* 2>&-); do
+	name=${config#file-}
+	echo "@TR<<Processing>> @TR<<config file>>: $name"
+	eval 'case "$name" in
+		'"$HANDLERS_file"'
+	esac'
+done
+
+
+# config-conntrack	  Conntrack Config file
+for config in $(ls config-conntrack 2>&-); do
+	echo '@TR<<Applying>> @TR<<conntrack settings>> ...'
+	fix_symlink_hack "/etc/sysctl.conf"
+	# set any and all net.ipv4.netfilter settings.
+	for conntrack in $(grep ip_ /tmp/.webif/config-conntrack); do
+		variable_name=$(echo "$conntrack" | cut -d '=' -f1)
+		variable_value=$(echo "$conntrack" | cut -d '"' -f2)
+		echo "&nbsp;@TR<<Setting>> $variable_name to $variable_value"
+		remove_lines_from_file "/etc/sysctl.conf" "net.ipv4.netfilter.$variable_name"
+		echo "net.ipv4.netfilter.$variable_name=$variable_value" >> /etc/sysctl.conf
+	done
+	sysctl -p 2>&- 1>&- # reload sysctl.conf
+	rm -f /tmp/.webif/config-conntrack
+	echo '@TR<<Done>>'
+done
+
+# clear all uci settings to free memory
 # init_theme - initialize a new theme
 init_theme() {
 	echo '@TR<<Initializing theme ...>>'
