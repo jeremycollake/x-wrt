@@ -303,6 +303,7 @@ for device in $DEVICES; do
 				config_get FORM_network $vcfg network
 				config_get FORM_mode $vcfg mode
 				config_get FORM_ssid $vcfg ssid
+				config_get FORM_bssid $vcfg bssid
 				config_get FORM_encryption $vcfg encryption
 				config_get FORM_key $vcfg key
 				case "$FORM_key" in
@@ -342,6 +343,7 @@ for device in $DEVICES; do
 				eval FORM_key4="\$FORM_key4_$vcfg"
 				eval FORM_broadcast="\$FORM_broadcast_$vcfg"
 				eval FORM_ssid="\$FORM_ssid_$vcfg"
+				eval FORM_bssid="\$FORM_bssid_$vcfg"
 				eval FORM_network="\$FORM_network_$vcfg"
 				eval FORM_txpower="\$FORM_txpower_$vcfg"
 				eval FORM_bgscan="\$FORM_bgscan_$vcfg"
