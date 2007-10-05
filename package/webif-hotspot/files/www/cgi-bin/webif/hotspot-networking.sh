@@ -42,8 +42,8 @@ string|FORM_chilli_proxysecret|@TR<<hotspot_networking_Proxy_Secret#Proxy Secret
 EOF
 	equal "$?" 0 && {
 		[ "$chilli_cfg" = "" ] && {
-			uci_add hotspot chilli chilli
-			chilli_cfg="chilli"
+			uci_add hotspot chilli
+			uci_load "hotspot"
 		}
 		uci_set hotspot "$chilli_cfg" radiusserver1 "$FORM_chilli_radiusserver1"
 		uci_set hotspot "$chilli_cfg" radiusserver2 "$FORM_chilli_radiusserver2"
