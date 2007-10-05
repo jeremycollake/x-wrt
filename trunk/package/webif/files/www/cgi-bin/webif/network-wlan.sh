@@ -362,16 +362,20 @@ for device in $DEVICES; do
 	        	        select|network_$vcfg|$FORM_network
 	        	        $network_options"
 			append forms "$network" "$N"
+			
+			if [ "$iftype" != "mac80211" ]; then
+				option_wds="option|wds|@TR<<WDS>>"
+				append forms "helpitem|WDS Connections" "$N"
+				append forms "helptext|Helptext WDS Connections#Enter the MAC address of the router on your network that should be wirelessly connected to. The other router must also support wds and have the mac address of this router entered." "$N"
+			fi
 
 			mode_fields="field|@TR<<WLAN Mode#Mode>>
 			select|mode_$vcfg|$FORM_mode
 			option|ap|@TR<<Access Point>>
-			option|wds|@TR<<WDS>>
+			$option_wds
 			option|sta|@TR<<Client>>
 			option|adhoc|@TR<<Ad-Hoc>>"
 			append forms "$mode_fields" "$N"
-			append forms "helpitem|WDS Connections" "$N"
-			append forms "helptext|Helptext WDS Connections#Enter the MAC address of the router on your network that should be wirelessly connected to. The other router must also support wds and have the mac address of this router entered." "$N"
 
 			hidden="field|@TR<<ESSID Broadcast>>|broadcast_form_$vcfg|hidden
 				radio|broadcast_$vcfg|$FORM_hidden|0|@TR<<On>>
@@ -392,48 +396,49 @@ for device in $DEVICES; do
 			append forms "$isolate_field" "$N"
 
 			if [ "$iftype" = "atheros" ]; then
-			eval txpowers="\$CONFIG_wireless_${device}_txpower"
-			[ -z "$txpowers" ] && {
-				txpower=""
-				for athname in $(ls /proc/sys/net/ 2>/dev/null | grep "^ath"); do
-					[ "$(cat /proc/sys/net/${athname}/\%parent)" = "$device" ] && {
-						for power in $(iwlist $athname txpower 2>&1 | sed '/dBm/!d /Current/d; s/^[[:space:]]*//;' | cut -d ' ' -f 1); do
+				eval txpowers="\$CONFIG_wireless_${device}_txpower"
+				[ -z "$txpowers" ] && {
+					txpower=""
+					for athname in $(ls /proc/sys/net/ 2>/dev/null | grep "^ath"); do
+						[ "$(cat /proc/sys/net/${athname}/\%parent)" = "$device" ] && {
+							for power in $(iwlist $athname txpower 2>&1 | sed '/dBm/!d /Current/d; s/^[[:space:]]*//;' | cut -d ' ' -f 1); do
+								txpower="$txpower $power"
+							done
+							break
+						}
+					done
+					[ "$txpower" = "" ] && {
+						athname=$(wlanconfig ath create wlandev $device wlanmode ap)
+						for power in $(iwlist ath0 txpower 2>&1 | sed '/dBm/!d /Current/d; s/^[[:space:]]*//;' | cut -d ' ' -f 1); do
 							txpower="$txpower $power"
 						done
-						break
+						wlanconfig "$athname" destroy
 					}
+					[ "$txpower" != "" ] && {
+						txpowers="$txpower"
+						config_set wireless "${device}_txpower" "$txpower"
+						uci_set webif wireless "${device}_txpower" "$txpower"
+					}
+				}
+				if [ "$txpowers" = "" ]; then
+					txpowers='1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16'
+				fi
+				txpower_field="field|@TR<<Tx Power>>
+						select|txpower_$vcfg|$FORM_txpower"
+				for txpower in $txpowers; do
+					txpower_field="$txpower_field
+							option|$txpower|$txpower dbm"
 				done
-				[ "$txpower" = "" ] && {
-					athname=$(wlanconfig ath create wlandev $device wlanmode ap)
-					for power in $(iwlist ath0 txpower 2>&1 | sed '/dBm/!d /Current/d; s/^[[:space:]]*//;' | cut -d ' ' -f 1); do
-						txpower="$txpower $power"
-					done
-					wlanconfig "$athname" destroy
-				}
-				[ "$txpower" != "" ] && {
-					txpowers="$txpower"
-					config_set wireless "${device}_txpower" "$txpower"
-					uci_set webif wireless "${device}_txpower" "$txpower"
-				}
-			}
-			if [ "$txpowers" = "" ]; then
-				txpowers='1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16'
+				append forms "$txpower_field" "$N"
 			fi
-			txpower_field="field|@TR<<Tx Power>>
-					select|txpower_$vcfg|$FORM_txpower"
-			for txpower in $txpowers; do
-				txpower_field="$txpower_field
-						option|$txpower|$txpower dbm"
-			done
-			append forms "$txpower_field" "$N"
+			if [ "$iftype" != "broadcom" ]; then
+				rts="field|@TR<<RTS (Default off)>>
+					text|rts_$vcfg|$FORM_rts"
+				append forms "$rts" "$N"
 
-			rts="field|@TR<<RTS (Default off)>>
-				text|rts_$vcfg|$FORM_rts"
-			append forms "$rts" "$N"
-
-			frag="field|@TR<<Fragmentation (Default off)>>
-				text|frag_$vcfg|$FORM_frag"
-			append forms "$frag" "$N"
+				frag="field|@TR<<Fragmentation (Default off)>>
+					text|frag_$vcfg|$FORM_frag"
+				append forms "$frag" "$N"
 			fi
 
 			ssid="field|@TR<<ESSID>>|ssid_form_$vcfg
@@ -552,7 +557,7 @@ for device in $DEVICES; do
 					string|@TR<<Installed>>."
 				fi
 				append forms "$install_nas_button" "$N"
-			elif [ "$iftype" = "atheros" ]; then
+			else
 				install_hostapd_mini_button="field|@TR<<HostAPD Package>>|install_hostapd_mini_$vcfg|hidden"
 				if [ "$hostapd_installed" = "1" -o "$hostapd_mini_installed" = "1" ]; then
 					install_hostapd_mini_button="$install_hostapd_mini_button
