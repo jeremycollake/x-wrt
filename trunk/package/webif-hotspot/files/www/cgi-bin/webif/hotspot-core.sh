@@ -9,7 +9,7 @@ config_cb() {
 			chilli_cfg="$CONFIG_SECTION"
 		;;
 		chillispot)
-			service_cfg="$CONFIG_SECTION"
+			chillispot_cfg="$CONFIG_SECTION"
 		;;
 	esac
 }
@@ -19,7 +19,7 @@ config_cb() {
 uci_load "hotspot"
 
 if empty "$FORM_submit"; then
-	eval "FORM_service_enable=\"\$CONFIG_${service_cfg}_enable\""
+	eval "FORM_service_enable=\"\$CONFIG_${chillispot_cfg}_enable\""
 	FORM_service_enable="${FORM_service_enable:-0}"
 	eval "FORM_chilli_debug=\"\$CONFIG_${chilli_cfg}_debug\""
 	eval "FORM_chilli_net=\"\$CONFIG_${chilli_cfg}_net\""
@@ -51,15 +51,17 @@ string|FORM_chilli_dynip|@TR<<hotspot_core_Dynamic_IP_Pool#Dynamic IP Pool||$FOR
 string|FORM_chilli_statip|@TR<<hotspot_core_Static_IP_Pool#Static IP Pool>>||$FORM_chilli_statip
 EOF
 	equal "$?" 0 && {
-		[ "$service_cfg" = "" ] && {
-			uci_add hotspot chillispot service
-			service_cfg="service"
+		uci_reload=0
+		[ "$chillispot_cfg" = "" ] && {
+			uci_add hotspot chillispot
+			uci_reload=1
 		}
-		uci_set hotspot "$service_cfg" enable "$FORM_service_enable"
 		[ "$chilli_cfg" = "" ] && {
-			uci_add hotspot chilli chilli
-			chilli_cfg="chilli"
+			uci_add hotspot chilli
+			uci_reload=1
 		}
+		[ 1 -eq "$uci_reload" ] && uci_load "hotspot"
+		uci_set hotspot "$chillispot_cfg" enable "$FORM_service_enable"
 		uci_set hotspot "$chilli_cfg" debug "$FORM_chilli_debug"
 		uci_set hotspot "$chilli_cfg" dns1 "$FORM_chilli_dns1"
 		uci_set hotspot "$chilli_cfg" dns2 "$FORM_chilli_dns2"

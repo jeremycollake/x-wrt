@@ -44,8 +44,8 @@ string|FORM_chilli_macsuffix|@TR<<hotspot_captive_MAC_Suffix#MAC Suffix>>||$FORM
 EOF
 	equal "$?" 0 && {
 		[ "$chilli_cfg" = "" ] && {
-			uci_add hotspot chilli chilli
-			chilli_cfg="chilli"
+			uci_add hotspot chilli
+			uci_load "hotspot"
 		}
 		uci_set hotspot "$chilli_cfg" uamserver "$FORM_chilli_uamserver"
 		uci_set hotspot "$chilli_cfg" uamsecret "$FORM_chilli_uamsecret"
