@@ -146,9 +146,9 @@ elif [ -n "$FORM_action_change" ] || [ -n "$FORM_action_add" ]; then
 	[ -z "$FORM_newvalue" ] && {
 		is_value_modified "$FORM_nvramvar"
 		[ "$?" -eq 0 ] && {
-			eval "FORM_nvramvalue=\"\$NVRAM_${FORM_nvramvar}\""
+			eval "FORM_newvalue=\"\$NVRAM_${FORM_nvramvar}\""
 		} || {
-			FORM_nvramvalue=$(nvram get "$FORM_nvramvar" 2>/dev/null)
+			FORM_newvalue=$(nvram get "$FORM_nvramvar")
 		}
 	}
 	# sanitize for editing
