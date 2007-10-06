@@ -322,6 +322,7 @@ for device in $DEVICES; do
 	        		config_get_bool FORM_hidden $vcfg hidden
 	        		config_get_bool FORM_isolate $vcfg isolate
 	        		config_get_bool FORM_bgscan $vcfg bgscan
+	        		config_get_bool FORM_wds $vcfg wds
 			else
 				eval FORM_key="\$FORM_radius_key_$vcfg"
 				eval FORM_radius_ipaddr="\$FORM_radius_ipaddr_$vcfg"
@@ -343,6 +344,7 @@ for device in $DEVICES; do
 				eval FORM_key4="\$FORM_key4_$vcfg"
 				eval FORM_broadcast="\$FORM_broadcast_$vcfg"
 				eval FORM_ssid="\$FORM_ssid_$vcfg"
+				eval FORM_wds="\$FORM_wds_$vcfg"
 				eval FORM_bssid="\$FORM_bssid_$vcfg"
 				eval FORM_network="\$FORM_network_$vcfg"
 				eval FORM_txpower="\$FORM_txpower_$vcfg"
@@ -376,6 +378,11 @@ for device in $DEVICES; do
 			option|sta|@TR<<Client>>
 			option|adhoc|@TR<<Ad-Hoc>>"
 			append forms "$mode_fields" "$N"
+
+			wds="field|@TR<<WDS>>|wds_form_$vcfg|hidden
+				radio|wds_$vcfg|$FORM_wds|1|@TR<<On>>
+				radio|wds_$vcfg|$FORM_wds|0|@TR<<Off>>"
+			append forms "$wds" "$N"
 
 			hidden="field|@TR<<ESSID Broadcast>>|broadcast_form_$vcfg|hidden
 				radio|broadcast_$vcfg|$FORM_hidden|0|@TR<<On>>
@@ -650,7 +657,9 @@ for device in $DEVICES; do
 				v = (isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2'));
 				set_visible('radiuskey_$vcfg', v);
 				set_visible('radius_ip_$vcfg', v);
-				set_visible('radius_port_form_$vcfg', v);"
+				set_visible('radius_port_form_$vcfg', v);
+				v = (('$iftype'!='mac80211') && (isset('mode_$vcfg','ap') || isset('mode_$vcfg','sta')));
+				set_visible('wds_form_$vcfg', v);"
 			append js "$javascript_forms" "$N"
 			remove_vcfg="string|<tr><td><a href="$SCRIPT_NAME?remove_vcfg=$vcfg">@TR<<Remove Virtual Interface>></a>"
 			append forms "helpitem|Encryption Type" "$N"
@@ -732,6 +741,7 @@ EOF
 						eval FORM_bgscan="\$FORM_bgscan_$vcfg"
 						eval FORM_rts="\$FORM_rts_$vcfg"
 						eval FORM_frag="\$FORM_frag_$vcfg"
+						eval FORM_wds="\$FORM_wds_$vcfg"
 
 						uci_set "wireless" "$vcfg" "network" "$FORM_network"
 						uci_set "wireless" "$vcfg" "ssid" "$FORM_ssid"
@@ -747,6 +757,7 @@ EOF
 						uci_set "wireless" "$vcfg" "bgscan" "$FORM_bgscan"
 						uci_set "wireless" "$vcfg" "frag" "$FORM_frag"
 						uci_set "wireless" "$vcfg" "rts" "$FORM_rts"
+						uci_set "wireless" "$vcfg" "wds" "$FORM_wds"
 						
 						case "$FORM_encryption" in
 							wep) uci_set "wireless" "$vcfg" "key" "$FORM_wep_key";;
