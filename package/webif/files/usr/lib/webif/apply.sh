@@ -286,11 +286,11 @@ for package in $process_packages; do
 			killall openvpn >&- 2>&- <&-
 			uci_load "openvpn"
 			if [ "$CONFIG_general_mode" = "client" ]; then
-				/etc/init.d/openvpn enable
+				/etc/init.d/webifopenvpn enable
 			else
-				/etc/init.d/openvpn disable
+				/etc/init.d/webifopenvpn disable
 			fi
-			/etc/init.d/openvpn start ;;
+			/etc/init.d/webifopenvpn start ;;
 		"system")
 			config_load system ;;
 		"snmp")
