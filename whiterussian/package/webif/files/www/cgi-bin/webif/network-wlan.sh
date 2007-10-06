@@ -384,6 +384,10 @@ function modechange()
 
 EOF
 
+# sanitize password fields before displaying
+FORM_wpa_psk=$(echo "$FORM_wpa_psk" | sed 's/&/\&amp;/; s/"/\&#34;/; s/'\''/\&#39;/; s/\$/\&#36;/; s/</\&lt;/; s/>/\&gt;/; s/\\/\&#92;/; s/|/\&#124;/;')
+FORM_radius_key=$(echo "$FORM_radius_key" | sed 's/&/\&amp;/; s/"/\&#34;/; s/'\''/\&#39;/; s/\$/\&#36;/; s/</\&lt;/; s/>/\&gt;/; s/\\/\&#92;/; s/|/\&#124;/;')
+
 display_form <<EOF
 onchange|modechange
 start_form|@TR<<Wireless Configuration>>
