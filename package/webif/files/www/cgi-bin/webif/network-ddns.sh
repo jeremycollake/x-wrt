@@ -21,6 +21,16 @@
 
 header "Network" "DynDNS" "@TR<<DynDNS Settings>>" 'onload="modechange()"' "$SCRIPT_NAME"
 
+uci_load "webif"
+config_get revision general firmware_version
+if [ "$revision" = "7.07" ]; then
+	username="user"
+	password="passwd"
+else
+	username="username"
+	password="password"
+fi
+
 #define supported services
 services="changeip dyndns eurodyndns ovh noip ods hn regfish tzo zoneedit"
 
@@ -53,8 +63,8 @@ done
 if empty "$FORM_submit"; then
 	uci_load "updatedd"
 	config_get FORM_ddns_service cfg1 ddns_service 
-	config_get FORM_ddns_user    cfg1 ddns_user
-	config_get FORM_ddns_passwd  cfg1 ddns_passwd
+	config_get FORM_ddns_user    cfg1 ddns_$username
+	config_get FORM_ddns_passwd  cfg1 ddns_$password
 	config_get FORM_ddns_host    cfg1 ddns_host
 	config_get FORM_ddns_update  cfg1 ddns_update
 else
@@ -70,8 +80,8 @@ EOF
 	equal "$?" 0 && {
 		uci_set "updatedd" "cfg1" "ddns_update" "$FORM_ddns_update"
 		uci_set "updatedd" "cfg1" "ddns_service" "$FORM_ddns_service"
-		uci_set "updatedd" "cfg1" "ddns_user" "$FORM_ddns_user"
-		uci_set "updatedd" "cfg1" "ddns_passwd" "$FORM_ddns_passwd"
+		uci_set "updatedd" "cfg1" "ddns_$username" "$FORM_ddns_user"
+		uci_set "updatedd" "cfg1" "ddns_$password" "$FORM_ddns_passwd"
 		uci_set "updatedd" "cfg1" "ddns_host" "$FORM_ddns_host"
 	}
 fi
