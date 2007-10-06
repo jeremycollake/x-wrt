@@ -284,6 +284,12 @@ for package in $process_packages; do
 		"openvpn")
 			echo '@TR<<Reloading>> @TR<<OpenVPN>> ...'
 			killall openvpn >&- 2>&- <&-
+			uci_load "openvpn"
+			if [ "$CONFIG_general_mode" = "client" ]; then
+				/etc/init.d/openvpn enable
+			else
+				/etc/init.d/openvpn disable
+			fi
 			/etc/init.d/openvpn start ;;
 		"system")
 			config_load system ;;
