@@ -38,6 +38,11 @@ EOF
 	}
 }
 
+config_load "network"
+config_load "/var/state/network"
+config_get default_lan_target lan ipaddr
+default_lan_target="${default_lan_target:-192.168.1.1}"
+
 empty "$FORM_up$FORM_down$FORM_save$FORM_delete$FORM_new" || {
 	empty "$FORM_up" || equal "$FORM_up" 1 || {
 		FORM_down="$(($FORM_up - 1))"
@@ -58,6 +63,7 @@ empty "$FORM_up$FORM_down$FORM_save$FORM_delete$FORM_new" || {
 		-v target_port="$FORM_target_port" \
 		-v new="$FORM_new" \
 		-v new_target="$FORM_new_target" \
+		-v default_lan_target="$default_lan_target" \
 		-f - "$FW_FILE" > "$FW_FILE_NEW" <<EOF
 BEGIN {
 	FS=":"
@@ -119,7 +125,7 @@ function addnew(new) {
 
 END {
 	if (line_down != "") print line_down
-	if (new_target == "forward") new_target = new_target "::192.168.1.1"
+	if (new_target == "forward") new_target = new_target "::" default_lan_target
 	if ((new != "") && (new_target != "")) print new_target
 }
 EOF
@@ -128,10 +134,9 @@ EOF
 	empty "$FORM_new" && FORM_edit=""
 }
 
-header "Network" "Firewall" "@TR<<Firewall Configuration>>" ''
-
-?>
-<style>
+header_inject_head=$(cat <<EOF
+<style type="text/css">
+<!--
 td.edit_title {
 	font-weight: bold;
 	text-align: right;
@@ -146,8 +151,13 @@ td.match_title {
 	padding-right: 0.5em;
 	padding-bottom: auto;
 }
+-->
 </style>
-<?
+
+EOF
+)
+
+header "Network" "Firewall" "@TR<<Firewall Configuration>>" ''
 
 awk \
 	-v edit="$FORM_edit" \
