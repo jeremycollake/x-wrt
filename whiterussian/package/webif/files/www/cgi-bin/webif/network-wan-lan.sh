@@ -37,6 +37,7 @@ handle_list "$FORM_landnsremove" "$FORM_landnsadd" "$FORM_landnssubmit" 'ip|FORM
 	FORM_landns="$LISTVAL"
 	save_setting network lan_dns "$FORM_landns"
 }
+FORM_landnsadd=${FORM_landnsadd:-$(nvram get lan_ipaddr)}
 FORM_landnsadd=${FORM_landnsadd:-192.168.1.1}
 
 if empty "$FORM_submit"; then
