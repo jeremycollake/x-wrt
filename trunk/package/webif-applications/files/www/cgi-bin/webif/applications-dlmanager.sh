@@ -159,7 +159,7 @@ HTTP_DL_Detail(){
 if [ "$FORM_page" = "http" ]; then
 
 	echo "<strong>Status</strong><br/><br/>"
-	if [ $(ps ax | grep -c curl) = "1" ] ; then 
+	if [ $(ps | grep -c curl) = "1" ] ; then 
 		echo "<div class=warning>HTTP downloading stopped</div><br/><br/>"
 	else echo "<form method="post" action='$SCRIPT_NAME'><font color="#33CC00">HTTP downloading sucessfully started</font>&nbsp;&nbsp;<input type="submit" name="stop_http" class='flatbtn' value='Stop All Downloads' /></form><br/><br/>"
 	fi
@@ -209,7 +209,7 @@ elif [ "$FORM_page" = "ftp" ]; then
 elif [ "$FORM_page" = "torrent" ]; then
 
 	echo "<strong>Status</strong><br/><br/>"
-	if [ $(ps ax | grep -c ctorrent) = "1" ] ; then 
+	if [ $(ps | grep -c ctorrent) = "1" ] ; then 
 		echo "<div class=warning>Torrent downloading stopped</div><br/><br/>"
 	else echo "<form method="post" action='$SCRIPT_NAME'><font color="#33CC00">Torrent Client is sucessfully started</font>&nbsp;&nbsp;<input type="submit" name="stop_torrent" class='flatbtn' value='Stop All Downloads' /></form><br/><br/>"
 	fi

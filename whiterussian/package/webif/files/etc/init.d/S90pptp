@@ -2,7 +2,7 @@
 
 . /etc/ppp/functions.sh
 
-getpid() { echo -n $(ps aux|grep -v grep|grep "pppd call pptp:$1"|awk '{print $1}'); }
+getpid() { echo -n $(ps|grep -v grep|grep "pppd call pptp:$1"|awk '{print $1}'); }
 runppp() { pppd call pptp:$1 updetach; }
 
 case "$1" in

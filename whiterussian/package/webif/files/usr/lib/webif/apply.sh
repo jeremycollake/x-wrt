@@ -176,7 +176,7 @@ restart_cron() {
 
 reload_syslog() {
 	getPID(){
-		echo `ps -elf | grep '[s]yslogd' | awk '{ print $1 }'`
+		echo `ps | grep '[s]yslogd' | awk '{ print $1 }'`
 	}
 	# (re)start syslogd
 	echo_restarting_service "@TR<<apply_syslogd#syslogd>>"

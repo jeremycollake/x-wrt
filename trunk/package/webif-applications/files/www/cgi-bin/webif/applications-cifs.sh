@@ -120,7 +120,7 @@ umount -l -r -f $MOUNT_MNT
 exit
 fi
 
-#echo "'"$(ps ax | grep -c cifs)"'"
+#echo "'"$(ps | grep -c cifs)"'"
 ####### Check if df is mounted
 if equal $( df |grep "$MOUNT_MNT" ) "" ; then 
 

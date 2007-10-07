@@ -11,7 +11,7 @@ mkdir -p "$etc_crontabs"
 mkdir -p "$crond_temp"
 
 getPID(){
-	echo `ps -elf | grep '[/]usr/sbin/crond' | awk '{ print $1 }'`
+	echo `ps | grep '[/]usr/sbin/crond' | awk '{ print $1 }'`
 }
 
 start() {

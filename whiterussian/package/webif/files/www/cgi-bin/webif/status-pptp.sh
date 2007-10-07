@@ -88,7 +88,7 @@ if equal "$(nvram get pptp_srv)" "1"; then
 		;;
 	stopvpn)
 		if [ "$FORM_clientip" != "" ]; then
-		pid=`ps aux|grep pptpd|grep $FORM_clientip|grep -v grep|awk '{print $1}'`
+		pid=`ps|grep pptpd|grep $FORM_clientip|grep -v grep|awk '{print $1}'`
 		[ "$pid" != "" ] && kill $pid
 		echo "<p>stopped VPN for client ip $FORM_clientip</p>"
 		fi

@@ -158,7 +158,7 @@ airodump-ng $hIVS -w $CFG_PATH/key prism0 &" > /etc/init.d/airodump
 if [ "$FORM_page" = "aircrack" ]; then ########################
                 
 ####### Check if airodump is running
-        if [ $(ps ax | grep -c aircrack-ng) = "1" ] ; then
+        if [ $(ps | grep -c aircrack-ng) = "1" ] ; then
 
         cat <<EOF
         <form method="post" action='$SCRIPT_NAME'>
@@ -238,7 +238,7 @@ elif [ "$FORM_page" = "airodump" ]; then ########################
 
 
         ####### Check if airodump is running
-        if [ $(ps ax | grep -c airodump-ng) = "1" ] ; then
+        if [ $(ps | grep -c airodump-ng) = "1" ] ; then
 
         cat <<EOF
         <form method="post" action='$SCRIPT_NAME'>

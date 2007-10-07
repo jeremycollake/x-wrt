@@ -96,7 +96,7 @@ generate_ssl_key() {
 			ln -s $llib $llink
 			[ "$?" = "0" ] && libsymlinks="$libsymlinks $llink"
 		done
-		if [ -z "$(ps -A | grep "[n]tpclient\>")" ] && [ -z "$(ps -A | grep "[n]tpd\>")" ]; then
+		if [ -z "$(ps | grep "[n]tpclient\>")" ] && [ -z "$(ps | grep "[n]tpd\>")" ]; then
 			ntpcli=$(which ntpclient)
 			echo "@TR<<system_settings_Updating_time#Updating time>> ..."
 			if [ -n "$ntpcli" ]; then
