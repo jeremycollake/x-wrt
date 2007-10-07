@@ -138,8 +138,8 @@ exit
 fi
 
 ####### Check if proftpd is running
-#echo "'"$(ps ax | grep -c proftpd)"'"
-if [ $(ps ax | grep -c proftpd) = "1" ] ; then
+#echo "'"$(ps | grep -c proftpd)"'"
+if [ $(ps | grep -c proftpd) = "1" ] ; then
 
 cat <<EOF
 <form method="post" action='$SCRIPT_NAME'>

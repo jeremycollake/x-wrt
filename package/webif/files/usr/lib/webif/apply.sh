@@ -24,7 +24,7 @@ config_cb() {
 			config_get count        $CONFIG_SECTION count
 	
 			[ "$DONE" = "1" ] && exit 0
-			ps x | grep 'bin/[n]tpclient' >&- || {
+			ps | grep 'bin/[n]tpclient' >&- || {
 				route -n 2>&- | grep '^0.0.0.0' >&- && {
 					/usr/sbin/ntpclient -c ${count:-1} -s -h $hostname -p ${port:-123} 2>&- >&- && DONE=1
 				}

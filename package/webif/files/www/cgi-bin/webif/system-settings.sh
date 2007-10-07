@@ -109,7 +109,7 @@ generate_ssl_key() {
 			ln -s $llib $llink
 			[ "$?" = "0" ] && libsymlinks="$libsymlinks $llink"
 		done
-		if [  -z "$(ps -A | grep "[n]tpd\>")" ]; then
+		if [  -z "$(ps | grep "[n]tpd\>")" ]; then
 			is_package_installed "ntpclient"
 			[ "$?" != "0" ] && {
 				echo "@TR<<system_settings_Updating_time#Updating time>> ..."

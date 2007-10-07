@@ -128,7 +128,7 @@ fi
         fi
 
         ####### Check if hydra is running
-        pscheck=$(ps ax | grep -c 'hydra -f')
+        pscheck=$(ps | grep -c 'hydra -f')
         if [ $pscheck = "1" ] ; then
         if  [ -s "/tmp/hydra.www" ]  ; then pwd_www=$( grep "\[www\]" < /tmp/hydra.www) ; fi
         if  [ -s "/tmp/hydra.ftp" ]  ; then pwd_ftp=$( grep "\[ftp\]" < /tmp/hydra.ftp) ; fi
