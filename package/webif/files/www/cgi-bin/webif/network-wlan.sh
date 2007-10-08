@@ -511,6 +511,11 @@ for device in $DEVICES; do
 				fi
 			
 			}
+			
+			if [ "$iftype" = "broadcom" ]; then
+				psk_option="option|psk+psk2|WPA+WPA2 (@TR<<PSK>>)"
+				wpa_option="option|wpa+wpa2|WPA+WPA2 (@TR<<RADIUS>>)"
+			fi
 
 			encryption_forms="field|@TR<<Encryption Type>>
 				select|encryption_$vcfg|$FORM_encryption
@@ -518,8 +523,10 @@ for device in $DEVICES; do
 				option|wep|WEP
 				option|psk|WPA (@TR<<PSK>>)
 				option|psk2|WPA2 (@TR<<PSK>>)
-				option|wpa|WPA (RADIUS)
-				option|wpa2|WPA2 (RADIUS)"
+				$psk_option
+				option|wpa|WPA (@TR<<RADIUS>>)
+				option|wpa2|WPA2 (@TR<<RADIUS>>)
+				$wpa_option"
 			append forms "$encryption_forms" "$N"
 
 			wep="field|@TR<<Passphrase>>|wep_keyphrase_$vcfg|hidden
@@ -646,7 +653,7 @@ for device in $DEVICES; do
 				set_visible('isolate_form_$vcfg', v);
 				v = (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2'));
 				set_visible('wpapsk_$vcfg', v);
-				v = (('$iftype'=='broadcom') && (isset('encryption_$vcfg','psk')) && (isset('encryption_$vcfg','psk2') || isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2')));
+				v = (('$iftype'=='broadcom') && (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2') || isset('encryption_$vcfg','psk+psk2') || isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2') || isset('encryption_$vcfg','wpa+wpa2')));
 				set_visible('install_nas_$vcfg', v);
 				v = (('$iftype'=='atheros') && (!isset('mode_$vcfg','sta')) && (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2')));
 				set_visible('install_hostapd_mini_$vcfg', v);
@@ -670,8 +677,8 @@ for device in $DEVICES; do
 			###################################################################
 			# set validate forms
 			case "$FORM_encryption" in
-				psk|psk2) append validate_forms "wpapsk|FORM_wpa_psk_$vcfg|@TR<<WPA PSK#WPA Pre-Shared Key>>|required|$FORM_key" "$N";;
-				wpa|wpa2) append validate_forms "string|FORM_radius_key_$vcfg|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_key" "$N"
+				psk|psk2|psk+psk2) append validate_forms "wpapsk|FORM_wpa_psk_$vcfg|@TR<<WPA PSK#WPA Pre-Shared Key>>|required|$FORM_key" "$N";;
+				wpa|wpa2|wpa+wpa2) append validate_forms "string|FORM_radius_key_$vcfg|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_key" "$N"
 					append validate_forms "ip|FORM_server_$vcfg|@TR<<RADIUS IP Address>>|required|$FORM_server" "$N"
 					append validate_forms "port|FORM_radius_port_$vcfg|@TR<<RADIUS Port>>|required|$FORM_radius_port" "$N";;
 				wep)
@@ -761,8 +768,8 @@ EOF
 						
 						case "$FORM_encryption" in
 							wep) uci_set "wireless" "$vcfg" "key" "$FORM_wep_key";;
-							psk|psk2) uci_set "wireless" "$vcfg" "key" "$FORM_wpa_psk";;
-							wpa|wpa2) uci_set "wireless" "$vcfg" "key" "$FORM_radius_key";;
+							psk|psk2|psk+psk2) uci_set "wireless" "$vcfg" "key" "$FORM_wpa_psk";;
+							wpa|wpa2|wpa+wpa2) uci_set "wireless" "$vcfg" "key" "$FORM_radius_key";;
 						esac
 						uci_set "wireless" "$vcfg" "key1" "$FORM_key1"
 						uci_set "wireless" "$vcfg" "key2" "$FORM_key2"
