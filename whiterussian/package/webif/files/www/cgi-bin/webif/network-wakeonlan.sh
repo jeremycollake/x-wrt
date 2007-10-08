@@ -194,11 +194,11 @@ field|@TR<<network_wol_Password#Password>>|field_wake_wol_password|hidden
 password|wake_wol_password|$FORM_wake_wol_password
 field|@TR<<network_wol_Verbose_Output#Verbose Output>>|field_wake_verbose|hidden
 checkbox|wake_verbose|$FORM_wake_verbose|1|
+string|</td></tr>
 EOF
 	# the display_form data text is not terminated
 	# due to the hack to enable hidden helptexts
 	cat <<EOF
-</tr>
 </table>
 </div>
 <blockquote class="settings-help" id="help_ether" style="display: none">

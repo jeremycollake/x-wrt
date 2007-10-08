@@ -32,7 +32,7 @@
 xwrtrepourl="http://download2.berlios.de/pub/xwrt/packages"
 xwrtreponame="X-Wrt"
 
-header "System" "Packages" "<img src=\"/images/pkg.jpg\" alt />&nbsp;@TR<<system_ipkg_Packages#Packages>>" '' "$SCRIPT_NAME"
+header "System" "Packages" "<img src=\"/images/pkg.jpg\" alt=\"\" />&nbsp;@TR<<system_ipkg_Packages#Packages>>" '' "$SCRIPT_NAME"
 
 cat <<EOF
 <script type="text/javascript">
@@ -111,11 +111,33 @@ EOF
 }
 
 equal "$repo_update_needed" "1" && {
-	echo "<br />Repository sources updated. Performing update of package lists ...<br /><pre>"	
+	echo "<br />Repository sources updated.<br />"
+}
+
+! empty "$FORM_update_package_lists" && repo_update_needed=1
+
+
+equal "$repo_update_needed" "1" && {
+	echo "<pre>Performing update of package lists ...<br />"
+	echo "@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
 	mkdir "/usr/lib/ipkg/lists" >&- 2>&-
 	ipkg update
-	echo "</pre>"
+	echo "</pre><br />"
 }
+
+if [ "$FORM_action" = "install" ]; then
+	echo "<pre>@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
+	install_package `echo "$FORM_pkg" | sed -e 's, ,+,g'`
+	if [ "$?" != "0" ]; then
+		ipkg update
+		install_package `echo "$FORM_pkg" | sed -e 's, ,+,g'`
+	fi
+	echo "</pre><br />"
+elif [ "$FORM_action" = "remove" ]; then
+	echo "<pre>@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
+	ipkg remove `echo "$FORM_pkg" | sed -e 's, ,+,g'`
+	echo "</pre><br />"
+fi
 
 repo_list=$(awk '/src/ { print "<tr class=\"repositories\"><td><a href=\"./system-ipkg.sh?remove_repo_name=" $2 "&amp;remove_repo_url=" $3 "\">@TR<<system_ipkg_removerepo#remove>></a>&nbsp;&nbsp;" $2 "</td><td colspan=\"2\">" $3 "</td></tr>"}' /etc/ipkg.conf)
 
@@ -141,7 +163,7 @@ end_form
 start_form|@TR<<system_ipkg_installfromurl#Install Package From URL>>
 field|@TR<<system_ipkg_packageurl#URL of Package>>
 text|pkgurl|$FORM_pkgurl
-field|
+field|&nbsp;
 submit|install_url|@TR<<system_ipkg_installfromurl#Install Package From URL>>|
 helpitem|Install Package
 helptext|HelpText Install Package#Normally one installs a package by clicking on the install link in the list of packages below. However, you can install a package not listed in the known repositories here.
@@ -152,38 +174,23 @@ EOF
 ##################################################################
 
 display_form <<EOF
-start_form|@TR<<system_ipkg_packagesavailable#Packages Available>>|||nohelp
-EOF
-?>
-<tr><td><a href="ipkg.sh?action=update">@TR<<system_ipkg_updatelists#Update package lists>></a></td></tr>
-<?
-display_form <<EOF
+start_form|@TR<<system_ipkg_packagesavailable#Packages Available>>
+field|&nbsp;
+submit|update_package_lists|@TR<<system_ipkg_updatelists#Update package lists>>|
 end_form
 EOF
 ?>
 
-<?
-if [ "$FORM_action" = "update" ]; then
-	echo "<pre>@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
-	ipkg update
-	echo "</pre>"
-elif [ "$FORM_action" = "install" ]; then
-	echo "<pre>@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
-	install_package `echo "$FORM_pkg" | sed -e 's, ,+,g'`
-	if [ "$?" != "0" ]; then
-		ipkg update
-		install_package `echo "$FORM_pkg" | sed -e 's, ,+,g'`
-	fi
-	echo "</pre>"
-elif [ "$FORM_action" = "remove" ]; then
-	echo "<pre>@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
-	ipkg remove `echo "$FORM_pkg" | sed -e 's, ,+,g'`
-	echo "</pre>"
-fi
-?>
-	<h3>@TR<<system_ipkg_installedpackages#Installed Packages>></h3>
-	<br />
-	<table class="packages"><tr class="packages"><th width="150">@TR<<system_ipkg_th_action#Action>></th><th width="200">@TR<<system_ipkg_th_package#Package>></th><th width=150>@TR<<system_ipkg_th_version#Version>></th><th>@TR<<system_ipkg_th_desc#Description>></th></tr>
+<div class="settings">
+<h3>@TR<<system_ipkg_installedpackages#Installed Packages>></h3>
+<div class="packages">
+<table>
+<tr>
+	<th width="150">@TR<<system_ipkg_th_action#Action>></th>
+	<th width="200">@TR<<system_ipkg_th_package#Package>></th>
+	<th width="150">@TR<<system_ipkg_th_version#Version>></th>
+	<th>@TR<<system_ipkg_th_desc#Description>></th>
+</tr>
 <?
 ipkg list_installed | awk -F ' ' '
 $2 !~ /terminated/ {
@@ -198,22 +205,29 @@ $2 !~ /terminated/ {
 	gsub(/&/, "\\&amp;", desc)
 	gsub(/</, "\\&lt;", desc)
 	gsub(/>/, "\\&gt;", desc)
-	print "<tr class=\"packages\"><td><a href=\"javascript:confirmT('\''remove'\'','\''" link "'\'')\">@TR<<system_ipkg_Uninstall#Uninstall>></a></td><td>" $1 "</td><td>" version "</td><td>" desc "</td></tr>"
-}
-'
+	print "<tr><td><a href=\"javascript:confirmT('\''remove'\'','\''" link "'\'')\">@TR<<system_ipkg_Uninstall#Uninstall>></a></td><td>" $1 "</td><td>" version "</td><td>" desc "</td></tr>"
+}'
+display_form <<EOF
+end_form
+EOF
 ?>
-	</table>
-	<br />
-	<h3>@TR<<system_ipkg_availablepackages#Available packages>></h3>
-	<br />
-	<table class="packages"><tr class="packages"><th width="150">@TR<<system_ipkg_th_action#Action>></th><th width="250">@TR<<system_ipkg_th_package#Package>></th><th width=150>@TR<<system_ipkg_th_version#Version>></th><th>@TR<<system_ipkg_th_desc#Description>></th></tr>
+<div class="settings">
+<h3>@TR<<system_ipkg_availablepackages#Available packages>></h3>
+<div class="packages">
+<table>
+<tr>
+	<th width="150">@TR<<system_ipkg_th_action#Action>></th>
+	<th width="250">@TR<<system_ipkg_th_package#Package>></th>
+	<th width="150">@TR<<system_ipkg_th_version#Version>></th>
+	<th>@TR<<system_ipkg_th_desc#Description>></th>
+</tr>
 <?
 egrep 'Package:|Description:|Version:' /usr/lib/ipkg/status /usr/lib/ipkg/lists/* 2>&- | sed -e 's, ,,' -e 's,/usr/lib/ipkg/lists/,,' | awk -F: '
 $1 ~ /status/ {
 	installed[$3]++;
 }
 ($1 !~ /terminated/) && ($1 !~ /\/status/) && (!installed[$3]) && ($2 !~ /Description/) && ($2 !~ /Version/) {
-	if (current != $1) print "<tr><th>" $1 "</th></tr>"
+	if (current != $1) print "<tr><th colspan=\"4\">" $1 "</th></tr>"
 	link=$3
 	gsub(/\+/,"%2B",link)
 	gsub(/^ */,"",link)
@@ -225,16 +239,11 @@ $1 ~ /status/ {
 	gsub(/&/, "\\&amp;", desc[3])
 	gsub(/</, "\\&lt;", desc[3])
 	gsub(/>/, "\\&gt;", desc[3])
-	print "<tr class=\"packages\"><td><a href=\"javascript:confirmT('\''install'\'','\''" link "'\'')\">@TR<<system_ipkg_Install#Install>></a></td><td>" $3 "</td><td>" ver[3] "</td><td>" desc[3] "</td></tr>"
+	print "<tr><td><a href=\"javascript:confirmT('\''install'\'','\''" link "'\'')\">@TR<<system_ipkg_Install#Install>></a></td><td>" $3 "</td><td>" ver[3] "</td><td>" desc[3] "</td></tr>"
 	current=$1
 }
 '
-?>
-</table>
-<?
-# todo: temporary fix for a display error in Opera
 display_form <<EOF
-start_form||||nohelp
 end_form
 EOF
 

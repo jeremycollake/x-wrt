@@ -176,7 +176,7 @@ check_archive() {
 					echo "<table>"
 					echo "<tr><td>@TR<<system_confman_Config_Name#Config Name>>:&nbsp;</td><td><strong>$config_name</strong></td></tr>"
 					echo "<tr><td>@TR<<system_confman_Board_Type#Board Type>>:&nbsp;</td><td><strong>$config_boardtype</strong></td></tr>"
-					echo "<tr><td>@TR<<system_confman_Generated#Generated>>:&nbsp;</td><td><strong>$config_date</strong></tr>"
+					echo "<tr><td>@TR<<system_confman_Generated#Generated>>:&nbsp;</td><td><strong>$config_date</strong></td></tr>"
 					echo "</table><br />"
 					echo "<h4>@TR<<system_confman_Files#Files>></h4>"
 					tar zt -f "$FORM_config_file" | sed '/^config\.\(boardtype\|date\|name\)$/d; /^nvram$/d; /\/$/d; s/^/\//;' | sort | awk '
@@ -442,6 +442,7 @@ END {
 		print "string|<input type=\"hidden\" name=\"action\" value=\"mtdbackup\" />"
 		print "field|&nbsp;"
 		print "submit|submit|@TR<<system_confman_Backup_Partition#Backup Partition>>"
+		print "string|</td></tr>"
 	}
 }
 ' | display_form

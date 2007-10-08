@@ -56,7 +56,7 @@ function targetwindow(url) {
 	border-style: none;
 	border-spacing: 0;
 }
-#proctable td {
+#proctable td, th {
 	padding-left: 0.2em;
 	padding-right: 0.2em;
 }
@@ -184,7 +184,7 @@ function readcmdline(pid) {
 			if (lcol ~ /^\[/)
 				print td_ind "<td>&nbsp;</td>"
 			else {
-				print td_ind "<td class=\"buttons\"><form method=\"post\" action='$SCRIPT_NAME'>" siglist "<input type=\"hidden\" value=\"" $1 "\" name=\"pid\" />&nbsp;<input type=\"submit\" value=\" @TR<<status_processes_Send_signal#Send>> \" name=\"kill\" /></form></td>"
+				print td_ind "<td class=\"buttons\"><form method=\"post\" action=\"$SCRIPT_NAME\">" siglist "<input type=\"hidden\" value=\"" $1 "\" name=\"pid\" />&nbsp;<input type=\"submit\" value=\" @TR<<status_processes_Send_signal#Send>> \" name=\"kill\" /></form></td>"
 			}
 		}
 		print tr_ind "</tr>"
@@ -193,6 +193,7 @@ function readcmdline(pid) {
 '
 
 display_form <<EOF
+string|</tbody>
 end_form
 EOF
 

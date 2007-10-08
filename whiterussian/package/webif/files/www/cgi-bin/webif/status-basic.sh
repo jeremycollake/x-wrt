@@ -1,9 +1,13 @@
 #!/usr/bin/webif-page
 <?
 . "/usr/lib/webif/webif.sh"
-header "Status" "System" "@TR<<Device Status>>"
 
-echo "<meta http-equiv=\"refresh\" content=\"20\" />"
+header_inject_head=$(cat <<EOF
+<meta http-equiv="refresh" content="20" />
+EOF
+)
+
+header "Status" "System" "@TR<<Device Status>>"
 
 MEMINFO=$(free | grep "Mem:")
 nI="0"
@@ -37,7 +41,8 @@ done
 	SWAP_PERCENT_USED=$(expr 100 - $SWAP_PERCENT_FREE)
 	swap_usage="
 string|<tr><td>@TR<<Swap>>: $TOTAL_SWAP @TR<<KiB>></td><td>
-progressbar|swapuse|@TR<<Used>>: $USED_SWAP @TR<<KiB>> ($SWAP_PERCENT_USED%)|200|$SWAP_PERCENT_USED|$SWAP_PERCENT_USED%||"
+progressbar|swapuse|@TR<<Used>>: $USED_SWAP @TR<<KiB>> ($SWAP_PERCENT_USED%)|200|$SWAP_PERCENT_USED|$SWAP_PERCENT_USED%||
+string|</td></tr>"
 	swap_usage_help="
 helpitem|Swap
 helptext|Helptext Swap#When a program requires more memory than is physically available in the computer, currently unused information can be written to a temporary buffer on the hard disk, called swap, thereby freeing memory."
@@ -62,7 +67,7 @@ df | uniq | awk 'BEGIN { mcount=0 };
 		filled_caption=$5;
 		print "string|<tr><td><strong>"$6"</strong><br /><em>"$1"</em></td><td>"
 		print "progressbar|mount_" mcount "|" $3 "@TR<<KiB>> @TR<<mount_of#of>> " $2 "@TR<<KiB>>|200|" $5 "|" filled_caption "|"; mcount+=1
-		print "</td></tr>"
+		print "string|</td></tr>"
 	}'
 )
 swap_form=$(cat /proc/swaps | awk 'BEGIN { mcount=0 };
@@ -78,7 +83,7 @@ swap_form=$(cat /proc/swaps | awk 'BEGIN { mcount=0 };
 			swap_type="@TR<<status_basic_swap_file#swap file>>"
 		print "string|<tr><td><strong>"swap_type" "$5"</strong><br /><em>"$1"</em></td><td>"
 		print "progressbar|swap_" mcount "|" $4 "@TR<<KiB>> @TR<<mount_of#of>> " $3 "@TR<<KiB>>|200|" $4 "|" filled_caption "%|"; mcount+=1
-		print "</td></tr>"
+		print "string|</td></tr>"
 	}'
 )
 
@@ -92,6 +97,7 @@ display_form <<EOF
 start_form|@TR<<RAM Usage>>
 string|<tr><td>@TR<<Total>>: $TOTAL_MEM @TR<<KiB>></td><td>
 progressbar|ramuse|@TR<<Used>>: $USED_MEM @TR<<KiB>> ($MEM_PERCENT_USED%)|200|$MEM_PERCENT_USED|$MEM_PERCENT_USED%||
+string|</td></tr>
 $swap_usage
 helpitem|RAM Usage
 helptext|Helptext RAM Usage#This is the current RAM usage. The amount free represents how much applications have available.
@@ -101,6 +107,7 @@ end_form|
 start_form|@TR<<Tracked Connections>>
 string|<tr><td>@TR<<Maximum>>: $MAX_CONNECTIONS</td><td>
 progressbar|conntrackuse|@TR<<Used>>: $ACTIVE_CONNECTIONS ($USED_CONNECTIONS_PERCENT%)|200|$USED_CONNECTIONS_PERCENT|$USED_CONNECTIONS_PERCENT%||
+string|</td></tr>
 helpitem|Tracked Connections
 helptext|Helptext Tracked Connections#This is the number of connections in your router's conntrack table. <a href="status-conntrackread.sh">View Conntrack Table</a>.
 end_form|

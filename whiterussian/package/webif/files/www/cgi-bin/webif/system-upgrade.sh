@@ -46,36 +46,40 @@ read_var() {
 #####################################################################
 NOINPUT=1
 
-display_form <<EOF
-start_form|
-EOF
-
-#####################################################################
-equal "$REQUEST_METHOD" "GET" && {
-	cat <<EOF
-	<script type="text/javascript">
-
+cat <<EOF
+<script type="text/javascript">
+<!--
 function statusupdate() {
 	document.getElementById("form_submit").style.display = "none";
 	document.getElementById("status_text").style.display = "inline";
-
 	return true;
 }
 function printStatus() {
 	document.write('<div style="display: none; font-size: 14pt; font-weight: bold;" id="status_text" />@TR<<Upgrading...>>&nbsp;</div>');
 }
-	</script>
-	<form method="POST" name="upgrade" action="$SCRIPT_NAME" enctype="multipart/form-data" onSubmit="statusupdate()">
+-->
+</script>
+EOF
+
+display_form <<EOF
+start_form|
+string|<tr><td>
+EOF
+
+#####################################################################
+equal "$REQUEST_METHOD" "GET" && {
+	cat <<EOF
+	<form method="post" name="upgrade" action="$SCRIPT_NAME" enctype="multipart/form-data" onSubmit="statusupdate()">
 	<table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
 	<tbody>
 		<tr>
-			<td>@TR<<Boot_Wait_Force|Turn 'boot wait' ON>>:
+			<td>@TR<<Boot_Wait_Force|Turn 'boot wait' ON>>:</td>
 			<td>
 				<input type="checkbox" name="boot_wait" value="1" />
 			</td>
 		</tr>				
 		<tr>
-			<td>@TR<<Erase_JFFS2|Erase JFFS2 partition>>:
+			<td>@TR<<Erase_JFFS2|Erase JFFS2 partition>>:</td>
 			<td>
 				<input type="checkbox" name="erase_fs" value="1" />
 			</td>
@@ -87,7 +91,7 @@ function printStatus() {
 			</td>
 		</tr>
 		<tr>
-			<td />
+			<td>&nbsp;</td>
 			<td>
 				<script type="text/javascript">printStatus()</script>
 				<input id="form_submit" type="submit" name="submit" value="@TR<<Upgrade>>" onClick="statusupdate()" />
@@ -96,6 +100,9 @@ function printStatus() {
 	</tbody>
 	</table>
 	</form>
+EOF
+display_form <<EOF
+string|</td></tr>
 EOF
 }
 #####################################################################

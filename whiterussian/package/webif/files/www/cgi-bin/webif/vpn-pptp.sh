@@ -14,7 +14,7 @@ else
 	save_setting pptp pptp_srv $FORM_pptp_srv
 fi
 
-header "VPN" "PPTP" "@TR<<PPTP>>" ' onLoad="modechange()" ' "$SCRIPT_NAME"
+header "VPN" "PPTP" "@TR<<PPTP>>" '' "$SCRIPT_NAME"
 
 if [ ! -e /etc/ppp/functions.sh ]; then
 	has_pkgs pptp pptpd

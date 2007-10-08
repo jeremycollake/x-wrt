@@ -192,7 +192,7 @@ text|pptp_server_ip|$FORM_pptp_server_ip"
 	PPPOE_OPTION="option|pppoe|@TR<<PPPoE>>"
 }
 
-[ -x /sbin/ifup.wwan ] && {
+[ -x "/sbin/ifup.wwan" ] && {
 	WWAN_OPTION="option|wwan|@TR<<UMTS/GPRS>>"
 	WWAN_COUNTRY_LIST=$(
 		awk '	BEGIN{FS=":"}
@@ -251,6 +251,7 @@ function modechange()
 	set_visible('pptp_server', v);
 	
 	v = isset('wan_proto', 'wwan');
+	set_visible('wwan_type', v);
 	set_visible('wwan_service', v);
 	set_visible('wwan_sim_settings', v);
 	set_visible('apn_settings', v);
@@ -303,7 +304,7 @@ helpitem|Note
 helptext|Helptext WAN DNS save#You should save your settings on this page before adding/removing DNS servers
 end_form
 
-start_form|@TR<<Preferred Connection Type>>|wwan_service|hidden
+start_form|@TR<<Preferred Connection Type>>|wwan_type|hidden
 field|@TR<<Connection Type>>
 select|wwan_service|$FORM_wwan_service
 option|umts_first|@TR<<UMTS first>>

@@ -47,25 +47,25 @@ header "Network" "Dnsmasq" "@TR<<DHCP Configuration>>" '' "$SCRIPT_NAME"
 
 display_form <<EOF
 start_form|@TR<<DHCP Configuration>> $FORM_iface
-field|@TR<<Cache Size>>|dhcp_cache_size
+field|@TR<<Cache Size>>
 text|dhcp_cache_size|$FORM_dhcp_cache_size
-field|@TR<<No Hosts>>|dhcp_no_hosts
+field|@TR<<No Hosts>>
 checkbox|dhcp_no_hosts|$FORM_dhcp_no_hosts|1
-field|@TR<<No Reg Cache>>|dhcp_no_regcache
+field|@TR<<No Reg Cache>>
 checkbox|dhcp_no_regcache|$FORM_dhcp_no_regcache|1
-field|@TR<<Strict Order>>|dhcp_strict_order
+field|@TR<<Strict Order>>
 checkbox|dhcp_strict_order|$FORM_dhcp_strict_order|1
-field|@TR<<Log Queries>>|dhcp_log_queries
+field|@TR<<Log Queries>>
 checkbox|dhcp_log_queries|$FORM_dhcp_log_queries|1
-field|@TR<<No Resolv>>|dhcp_no_resolv
+field|@TR<<No Resolv>>
 checkbox|dhcp_no_resolv|$FORM_dhcp_no_resolv|1
-field|@TR<<Port>>|_dhcp_port
+field|@TR<<Port>>
 text|dhcp_port|$FORM_dhcp_port
-field|@TR<<Domain>>|dhcp_domain
+field|@TR<<Domain>>
 text|dhcp_domain|$FORM_dhcp_domain
-field|@TR<<Lease Max>>|dhcp_lease_max
+field|@TR<<Lease Max>>
 text|dhcp_lease_max|$FORM_dhcp_lease_max
-field|@TR<<Read Ethers>>|dhcp_read_ethers
+field|@TR<<Read Ethers>>
 checkbox|dhcp_read_ethers|$FORM_dhcp_read_ethers|1
 end_form
 EOF

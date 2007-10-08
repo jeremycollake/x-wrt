@@ -118,7 +118,10 @@ mounted_devices="$(cat /proc/mounts | grep "^/dev/scsi/")"
 			print "		<td>@TR<<status_usb_rw#Read/Write>></td>"
 		else
 			print "		<td>" $4 "</td>"
-		print "		<td><form method=\"post\" action='$SCRIPT_NAME'><input type=\"submit\" value=\" @TR<<status_usb_umount#umount>> \" name=\"umount\" /><input type=\"hidden\" value=\"" $2 "\" name=\"mountpoint\" /></form></td>"
+		if ($2 != "/")
+			print "		<td><form method=\"post\" action=\"$SCRIPT_NAME\"><input type=\"submit\" value=\" @TR<<status_usb_umount#umount>> \" name=\"umount\" /><input type=\"hidden\" value=\"" $2 "\" name=\"mountpoint\" /></form></td>"
+		else
+			print "		<td>&nbsp;</td>"
 		print "	</tr>"
 	}
 	END {
@@ -167,6 +170,7 @@ mounted_devices="$(cat /proc/mounts | grep "^/dev/scsi/")"
 		print "		<th>@TR<<status_usb_swap_Size#Size>></th>"
 		print "		<th>@TR<<status_usb_swap_Used#Used>></th>"
 		print "		<th>@TR<<status_usb_swap_Priority#Priority>></th>"
+		print "	</tr>"
 	}
 	{
 		if (odd == 1) {
@@ -212,7 +216,7 @@ EOF
 		if (NR<1) print "	<tr><td>&nbsp;</td></tr>"
 	}'
 	display_form <<EOF
-</tbody>
+string|</tbody>
 end_form
 EOF
 fi

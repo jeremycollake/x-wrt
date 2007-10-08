@@ -142,7 +142,7 @@ text|ddns_max_interval|$FORM_ddns_max_interval
 field|@TR<<Remove Cache>>
 checkbox|delete_cache|$FORM_delete_cache|1|
 field|&nbsp;
-string|<a href="network-logread-ez-ipupdate.sh">@TR<<View DynDNS Syslog>></a>
+string|<a href=\"network-logread-ez-ipupdate.sh\">@TR<<View DynDNS Syslog>></a>
 helpitem|Host Name
 helptext|Host Name_helptext#Enter your registered host name.
 helpitem|Wildcard

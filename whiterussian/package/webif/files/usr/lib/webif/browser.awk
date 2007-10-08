@@ -46,7 +46,7 @@ type == "d" {
 		fullpath = path "/.."
 		gsub(/^\/\//, "/", fullpath)
 		print "<td class=\"leftimage\"><a href=\"" url "?path=" fullpath "\"><img src=\"/images/dir.gif\" alt=\"@TR<<browser_Parent_Directory#Parent Directory>>\" /></a></td>"
-		print "<td><a href=\"" url "?path=" fullpath "\">@TR<<browser_Parent_Directory#Parent Directory>></a>"
+		print "<td><a href=\"" url "?path=" fullpath "\">@TR<<browser_Parent_Directory#Parent Directory>></a></td>"
 		print "<td>&nbsp;</td>"
 		print "<td>&nbsp;</td>"
 		print "<td>&nbsp;</td>"

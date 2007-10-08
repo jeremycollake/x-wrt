@@ -93,6 +93,14 @@ function modechange()
 </script>
 EOF
 
+[ 0 -eq "$W2L_IPTRULES" ] && {
+	w2l_form="field|@TR<<Wifi to LAN Communication>>
+radio|wifi_wifi2lan|$FORM_wifi_wifi2lan|1|@TR<<Allow>>
+radio|wifi_wifi2lan|$FORM_wifi_wifi2lan|0|@TR<<Deny>>
+helpitem|Wifi to LAN Communication
+helptext|Helptext Wifi to LAN Communication#Allows or denies communication from devices connected to wireless to send traffic to devices on the LAN."
+}
+
 display_form <<EOF
 onchange|modechange
 start_form|@TR<<Enable/Disable Unbridged Wireless>>
@@ -114,19 +122,7 @@ helpitem|Netmask
 helptext|Helptext Netmask#This bitmask indicates what addresses are included in your Wireless LAN. For those who don't know what a bitmask is, just think of "255" as 'match this part' and "0" as 'any number here'.
 field|@TR<<Default Gateway>>
 text|wifi_gateway|$FORM_wifi_gateway
-EOF
-
-[ 0 -eq "$W2L_IPTRULES" ] && {
-	display_form <<EOF
-field|@TR<<Wifi to LAN Communication>>
-radio|wifi_wifi2lan|$FORM_wifi_wifi2lan|1|@TR<<Allow>>
-radio|wifi_wifi2lan|$FORM_wifi_wifi2lan|0|@TR<<Deny>>
-helpitem|Wifi to LAN Communication
-helptext|Helptext Wifi to LAN Communication#Allows or denies communication from devices connected to wireless to send traffic to devices on the LAN.
-EOF
-}
-
-display_form <<EOF
+$w2l_form
 end_form
 start_form|@TR<<DNS Servers>>|wifi_dns|hidden
 listedit|dns|$SCRIPT_NAME?|$FORM_dns|$FORM_dnsadd
