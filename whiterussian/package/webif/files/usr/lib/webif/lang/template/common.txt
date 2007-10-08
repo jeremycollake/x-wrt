@@ -382,6 +382,24 @@ status_leases_ethers_empty => File /etc/ethers does not contain any Ethernet add
 status_leases_no_ethers => File /etc/ethers does not exist.
 
 
+## status-modules.sh
+Status => Status
+Modules => Modules
+status_modules_Kernel_Modules => Kernel Modules
+status_modules_Loaded_Modules => Loaded Modules
+status_modules_th_Module => Module
+status_modules_th_Size => Size
+status_modules_th_Count => Count
+status_modules_th_Used_by => Used by
+status_modules_flags_deleted => (deleted)
+status_modules_flags_autoclean => (autoclean)
+status_modules_flags_unused => (unused)
+@TR<<status_modules_flags_initializing => (initializing)
+status_modules_flags_uninitialized => (uninitialized)
+status_modules_No_modules_loaded => There are currently no kernel modules loaded
+status_modules_size_Total => Total
+
+
 ## status-pppoe.sh
 status_pppoe_Stopping_wan => Stopping wan connection
 status_pppoe_Starting_wan => Starting wan connection
