@@ -73,7 +73,7 @@ has_pkgs() {
 	for pkg in "$@"; do
 		pcnt=$((pcnt + 1))
 		empty $(ipkg list_installed | grep "^$pkg ") && {
-			echo -n "<p>@TR<<features_require_package#Features on this page require the package>>: \"<b>$pkg</b>\". &nbsp;<a href=\"/cgi-bin/webif/ipkg.sh?action=install&amp;pkg=$pkg&amp;prev=$SCRIPT_NAME\">@TR<<features_install#install now>></a>.</p>"
+			echo -n "<p>@TR<<features_require_package#Features on this page require the package>>: \"<b>$pkg</b>\". &nbsp;<a href=\"/cgi-bin/webif/system-ipkg.sh?action=install&amp;pkg=$pkg&amp;prev=$SCRIPT_NAME\">@TR<<features_install#install now>></a>.</p>"
 			retval=1;
 			nothave=$((nothave + 1))
 		}
