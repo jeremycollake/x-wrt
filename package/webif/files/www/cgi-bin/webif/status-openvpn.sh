@@ -1,7 +1,11 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
-uci_load openvpn
+if [ -e "/etc/config/webifopenvpn" ]; then
+	uci_load webifopenvpn
+else
+	uci_load openvpn
+fi
 header "Status" "OpenVPN" "@TR<<OpenVPN Status>>"
 
 equal "$CONFIG_general_mode" "client" && {
