@@ -80,6 +80,11 @@ parse_target() {
 		print "		<td align=\"right\">" $1 "</td>"
 		print "		<td align=\"right\">" $2 "</td>"
 		print "		<td align=\"right\">" $3 "</td>"
+		if ($10 !~ /^[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}/) {
+			NF = NF + 1
+			for (i = NF; i >= 5; i--) $(i) = $(i-1)
+			$4 = ""
+		}
 		print "		<td>" $4 "</td>"
 		print "		<td>" $5 "</td>"
 		print "		<td>" $6 "</td>"
