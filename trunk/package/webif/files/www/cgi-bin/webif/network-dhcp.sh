@@ -55,7 +55,7 @@ for config in $dhcp_cfgs; do
 		config_get start $config start
 		config_get limit $config limit
 		config_get leasetime $config leasetime
-		config_get_bool ignore $config ignore 1
+		config_get_bool ignore $config ignore 0
 	else
 		config_get interface $config interface
 		eval start="\$FORM_start_$config"
