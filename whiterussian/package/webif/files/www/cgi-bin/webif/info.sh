@@ -146,7 +146,7 @@ cat <<EOF
 </form>
 
 <br />
-<p>@TR<<info_Find_more#You can find more information about Webif&sup2;, contribute to the project or help other users following these links>>:</p>
+<p>@TR<<info_Find_more#You can find more information about Webif&sup2;, contribute to the project or help other users by following these links>>:</p>
 <p><a href="http://www.x-wrt.org">@TR<<info_link_X-Wrt#X-Wrt>></a> | <a href="http://forum.x-wrt.org">@TR<<info_link_Forum#Forum>></a> | <a href="http://wiki.x-wrt.org">@TR<<info_link_Wiki#Wiki>></a> | <a href="http://dev.x-wrt.org">@TR<<info_link_Trac#Trac>></a></p>
 EOF
 
