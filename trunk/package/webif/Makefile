@@ -171,13 +171,7 @@ define Package/webif/install
 	if [ "$(OPENWRTVERSION)" != "7.06 (Kamikaze)" ]; then \
 		rm -f $(1)/usr/lib/webif/fixed-functions.sh; \
 	fi
-	./embed_rev.sh $(1)/www/.version \
-			$(1)/usr/lib/webif/webif.sh \
-			$(1)/etc/init.d/* \
-			$(1)/www/cgi-bin/webif/*
-	chmod 777 $(1)/CONTROL/*inst
-	./embed_rev.sh $(1)/CONTROL/*inst
-	chmod 755 $(1)/CONTROL/*inst
+	./embed_rev.sh $(1)
 	mkdir -p $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/webifmetabin $(1)/usr/bin/webifmetabin
 	find $(1) -name CVS | xargs rm -rf

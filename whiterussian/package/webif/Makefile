@@ -107,13 +107,7 @@ $(IPKG_WEBIF):
 	rm -rf $(IDIR_WEBIF)/usr/lib/webif/lang/	
 	rm -rf $(IDIR_WEBIF)/www/themes/zephyr
 	rm -f $(IDIR_WEBIF)/www/cgi-bin/webif/*.wip
-	./embed_rev.sh $(IDIR_WEBIF)/www/.version \
-			$(IDIR_WEBIF)/usr/lib/webif/webif.sh \
-			$(IDIR_WEBIF)/etc/init.d/* \
-			$(IDIR_WEBIF)/www/cgi-bin/webif/*
-	chmod 777 $(IDIR_WEBIF)/CONTROL/*inst
-	./embed_rev.sh $(IDIR_WEBIF)/CONTROL/*inst 
-	chmod 755 $(IDIR_WEBIF)/CONTROL/*inst
+	./embed_rev.sh $(IDIR_WEBIF)
 	install -d $(IDIR_WEBIF)/usr/bin
 	install -m0755 $(PKG_BUILD_DIR)/webifmetabin $(IDIR_WEBIF)/usr/bin/webifmetabin
 	find $(IDIR_WEBIF) -name CVS | xargs rm -rf
