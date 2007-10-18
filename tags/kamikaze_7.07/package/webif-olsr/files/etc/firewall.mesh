@@ -1,0 +1,279 @@
+#!/bin/sh
+# Firewall addons for meshing purpose
+# TODO: add some if statements to switch between routing protocols
+# TODO: clean dirty and put some order in tables and chains
+
+test -n "$FAILSAFE" && exit
+# wl driver need time to complete loading
+sleep 2
+test -z "$(l=$(grep : /proc/net/wireless);l=${l%:*};echo ${l##* })" && exit
+
+set_masq() {
+	# Ignore OLSR packets directly from these stations, e.g.
+	# if this connection is too slow, ignore sporadic packets
+	IGNIPS=$(uci get mesh.network.ff_ign)
+	IFS=\;
+	for IGNIP in $IGNIPS; do
+		iptables -I input_rule -i $WIFIDEV -s $IGNIP -p udp --sport 698 -j DROP
+	done
+	unset IFS
+
+	# Setup alias and dest nat for an ethernet DMZ PC, e.g.
+	# 172.31.255.254 on WLAN -> DMZ PC which has 192.168.1.2
+	# Also add to olsrd.conf: "HNA4 172.31.255.254 255.255.255.255"
+	DEVNUM=0
+	DMZS=$(uci get mesh.network.ff_dmz)
+	IFS=\;
+	for DMZ in $DMZS; do
+		SRCIP=${DMZ%[:,]*}
+		DSTIP=${DMZ#*[:,]}
+		ifconfig $WIFIDEV:$DEVNUM $SRCIP netmask 255.255.255.255 broadcast $SRCIP
+		iptables -t nat -A prerouting_rule -d $SRCIP -j DNAT --to $DSTIP
+		iptables -I forwarding_rule -s ! $LANNET/$LANPRE -d $DSTIP -j ACCEPT
+		iptables -I forwarding_rule -s $DSTIP -d ! $LANNET/$LANPRE -j ACCEPT
+		iptables -I output_rule -o lo -s $SRCIP -d $SRCIP -j ACCEPT
+		iptables -I input_rule -i lo -s $SRCIP -j ACCEPT
+		DEVNUM=$(( $DEVNUM + 1 ))
+	done
+	unset IFS
+
+	# Accept fragments
+	iptables -I input_rule -f -j ACCEPT
+
+	# Mask packets from these WLAN DHCP clients, so they can do inet w/o OLSR
+	ENTS=$(uci get mesh.network.ff_wldhcp)
+	IFS=\;
+	for ENT in $ENTS; do
+		NET=${ENT%[:,]*}
+		MSK=${ENT#*[:,]}
+		iptables -t nat -A postrouting_rule -s $NET -j MASQUERADE
+	done
+	unset IFS
+
+	if [ -z "$LANOLSR" ] && [ "$(uci get mesh.network.ff_nonat)" != "1" ]; then
+		# Mask packets from LAN to WIFI
+		iptables -t nat -A postrouting_rule -o $WIFIDEV -s $LANNET/$LANPRE -j MASQUERADE
+	fi
+
+	if [ -n "$WANDEV" ]; then
+		if [ -z "$WANOLSR" ]; then
+			# Mask packets to WAN
+			iptables -t nat -A postrouting_rule -o $WANDEV -j MASQUERADE
+		elif [ -z "$LANOLSR" ] && [ "$mn_nonat" != "1" ]; then
+			# Mask packets from LAN to WAN(OLSR)
+			iptables -t nat -A postrouting_rule -o $WANDEV -s $LANNET/$LANPRE -j MASQUERADE
+		fi
+	fi
+
+	if [ -n "$WIFIMTU" ] && [ 1500 -gt $WIFIMTU ]; then
+		# Repair braindead websites
+		iptables -I forwarding_rule -o $WIFIDEV -p tcp --tcp-flags SYN,RST SYN -j TCPMSS --clamp-mss-to-pmtu
+	fi
+}
+
+set_wlan_fw() {
+	#
+	# ipfilter
+	#
+	# Receive on /dev/lo? Only to/from 127.x.x.x and
+	# to local devs because of kernel route tricks
+	iptables -A ipfilter -i $LODEV -s $LONET/$LOPRE -d $LONET/$LOPRE -j ACCEPT
+	iptables -A ipfilter -i $LODEV -s $LANADR -d $LANADR -j ACCEPT
+	test -n "$WIFIADR" && iptables -A ipfilter -i $LODEV -s $WIFIADR -d $WIFIADR -j ACCEPT
+	# Receive on /dev/et? Only to/from 192.168.x.x
+	iptables -A ipfilter -i $LANDEV -s $LANNET/$LANPRE -d $LANNET/$LANPRE -j ACCEPT
+	# Receive on /dev/wl? Only to 172.x.x.x, from inet ok
+	test -n "$WIFIADR" && $DEBUG && iptables -A ipfilter -i $WIFIDEV -s $LONET/$LOPRE -j LOG
+	test -n "$WIFIADR" && iptables -A ipfilter -i $WIFIDEV -s $LONET/$LOPRE -j DROP
+	test -n "$WIFIADR" && $DEBUG && iptables -A ipfilter -i $WIFIDEV -s $LANNET/$LANPRE -j LOG
+	test -n "$WIFIADR" && iptables -A ipfilter -i $WIFIDEV -s $LANNET/$LANPRE -j DROP
+	test -n "$WIFIADR" && iptables -A ipfilter -i $WIFIDEV -d $WIFINET/$WIFIPRE -j ACCEPT
+	# Send to /dev/lo? Only to/from 127.x.x.x and
+	# from local devs because of kernel route tricks
+	iptables -A ipfilter -o $LODEV -s $LONET/$LOPRE -d $LONET/$LOPRE -j ACCEPT
+	iptables -A ipfilter -o $LODEV -s $LANADR -d $LANADR -j ACCEPT
+	test -n "$WIFIADR" && iptables -A ipfilter -o $LODEV -s $WIFIADR -d $WIFIADR -j ACCEPT
+	# Send to /dev/et? Only to/from 192.168.x.x
+	iptables -A ipfilter -o $LANDEV -s $LANNET/$LANPRE -d $LANNET/$LANPRE -j ACCEPT
+	# Send to /dev/wl? Only from 172.16.x.x, to inet ok
+	test -n "$WIFIADR" && $DEBUG && iptables -A ipfilter -o $WIFIDEV -d $LONET/$LOPRE -j LOG
+	test -n "$WIFIADR" && iptables -A ipfilter -o $WIFIDEV -d $LONET/$LOPRE -j DROP
+	test -n "$WIFIADR" && $DEBUG && iptables -A ipfilter -o $WIFIDEV -d $LANNET/$LANPRE -j LOG
+	test -n "$WIFIADR" && iptables -A ipfilter -o $WIFIDEV -d $LANNET/$LANPRE -j DROP
+	test -n "$WIFIADR" && iptables -A ipfilter -o $WIFIDEV -s $WIFINET/$WIFIPRE -j ACCEPT
+
+	#
+	# meganetwork nodes
+	#
+	# TODO: identify allowed nodes and block all the rest
+	#iptables -A mesh_nodes -j LOG
+	iptables -A mesh_nodes -j RETURN
+
+	#
+	# meganetwork clients
+	#
+	iptables -A mesh_clients -p icmp -j RETURN
+	iptables -A mesh_clients -s $WIFIADR -p tcp --sport 22 -j RETURN
+	iptables -A mesh_clients -d $WIFIADR -p tcp --dport 22 -j RETURN
+	iptables -A mesh_clients -s $WIFIADR -p udp --sport 53 -j RETURN
+	iptables -A mesh_clients -d $WIFIADR -p udp --dport 53 -j RETURN
+	iptables -A mesh_clients -s $WIFIADR -p tcp --sport 80 -j RETURN
+	iptables -A mesh_clients -d $WIFIADR -p tcp --dport 80 -j RETURN
+	[ ".$CLIENT1MAC" != "." ] && iptables -A mesh_clients -m mac --mac-source $CLIENT1MAC -j RETURN
+	[ ".$CLIENT2MAC" != "." ] && iptables -A mesh_clients -m mac --mac-source $CLIENT2MAC -j RETURN
+	[ ".$CLIENT3MAC" != "." ] && iptables -A mesh_clients -m mac --mac-source $CLIENT3MAC -j RETURN
+	[ ".$CLIENT4MAC" != "." ] && iptables -A mesh_clients -m mac --mac-source $CLIENT4MAC -j RETURN
+	[ ".$CLIENT5MAC" != "." ] && iptables -A mesh_clients -m mac --mac-source $CLOENT5MAC -j RETURN
+	iptables -A mesh_clients -j LOG
+	iptables -A mesh_clients -j DROP
+
+	#
+	# meganetwork maintenance mode
+	#
+	iptables -A mesh_maintenance -p icmp -j RETURN
+	iptables -A mesh_maintenance -p tcp --sport 22 -j RETURN
+	iptables -A mesh_maintenance -p tcp --dport 22 -j RETURN
+	iptables -A mesh_maintenance -p udp --sport 53 -j RETURN
+	iptables -A mesh_maintenance -p udp --dport 53 -j RETURN
+	test -n "$WIFIADR" && iptables -A mesh_maintenance -s $WIFIADR -j RETURN
+	test -n "$WIFIADR" && iptables -A mesh_maintenance -d $WIFIADR -j RETURN
+	test -n "$LANADR" && iptables -A mesh_maintenance -s $LANADR -j RETURN
+	test -n "$LANADR" && iptables -A mesh_maintenance -d $LANADR -j RETURN
+	iptables -A mesh_maintenance -p tcp --sport 698 -j RETURN
+	iptables -A mesh_maintenance -p tcp --dport 698 -j RETURN
+	iptables -A mesh_maintenance -p udp --sport 698 -j RETURN
+	iptables -A mesh_maintenance -p udp --sport 698 -j RETURN
+	iptables -A mesh_maintenance -j LOG
+	iptables -A mesh_maintenance -j DROP
+
+	# Allow DHCP. Note: Answers do not show up in input_rule|forwarding_rule
+	test -n "$WIFIADR" && iptables -A input_rule -i $WIFIDEV -d 255.255.255.255 -p udp --sport 68 --dport 67 -j ACCEPT
+	iptables -A input_rule -i $LANDEV -d 255.255.255.255 -p udp --sport 68 --dport 67 -j ACCEPT
+
+	test -n "$WIFIADR" && iptables -I input_rule -s $WIFINET/$WIFIPRE -j mesh_nodes
+	test -n "$WIFIADR" && iptables -I input_rule -s $(echo $WIFIADR | cut -d. -f1-3).8/29 -j mesh_clients
+	if [ ".$CELLNUM" = ".254" ] && [ ".$NODENUM" = ".254" ]; then
+		test -n "$WIFIADR" && iptables -I input_rule -j mesh_maintenance
+	fi
+	iptables -A input_rule -j ipfilter
+	# Accept all OLSR broadcasts, even to 255.255.255.255
+	iptables -A input_rule -i $WIFIDEV -s ! $LANNET/$LANPRE -p udp --sport 698 --dport 698 -j ACCEPT
+	test -n "$WIFIADR" && iptables -A input_rule -i $LANDEV -s $LANNET/$LANPRE -d $WIFIADR -j ACCEPT
+	test $DEBUG && iptables -A input_rule -j LOG --log-prefix "IN:"
+	iptables -A input_rule -j DROP
+
+	iptables -A output_rule -j ipfilter
+	test -n "$WIFIADR" && iptables -A output_rule -o $LANDEV -s $WIFIADR -d $LANNET/$LANPRE -j ACCEPT
+	test $DEBUG && iptables -A output_rule -j LOG --log-prefix "OUT:"
+	iptables -A output_rule -j DROP
+
+	test -n "$WIFIADR" && iptables -I forwarding_rule -s $WIFINET/$WIFIPRE -j mesh_nodes
+	test -n "$WIFIADR" && iptables -I forwarding_rule -s $(echo $WIFIADR | cut -d. -f1-3).8/29 -j mesh_clients
+	if [ ".$CELLNUM" = ".254" ] && [ ".$NODENUM" = ".254" ]; then
+		test -n "$WIFIADR" && iptables -I forwarding_rule -j mesh_maintenance
+	fi
+	iptables -A forwarding_rule -j ipfilter
+	iptables -A forwarding_rule -i $WIFIDEV -o $WIFIDEV -j ACCEPT
+	test -n "$WIFIADR" && iptables -A forwarding_rule -i $WIFIDEV -d 255.255.255.255 -p udp --sport 68 --dport 67 -j ACCEPT
+	iptables -A forwarding_rule -i $LANDEV -d 255.255.255.255 -p udp --sport 68 --dport 67 -j ACCEPT
+	test -n "$WIFIADR" && iptables -A forwarding_rule -i $WIFIDEV -o $LANDEV -m state --state ESTABLISHED,RELATED -j ACCEPT
+	test -n "$WIFIADR" && iptables -A forwarding_rule -i $LANDEV -o $WIFIDEV -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+	test $DEBUG && iptables -A forwarding_rule -j LOG --log-prefix "FW:"
+	iptables -A forwarding_rule -j DROP
+}
+
+set_wan_fw() {
+	# wan dmz
+	[ -n "$WANDMZ" ] && iptables -t nat -A prerouting_rule -i $WANDEV -j DNAT --to $WANDMZ
+	[ -n "$WANDMZ" ] && iptables        -A forwarding_rule -i $WANDEV -d $WANDMZ -j ACCEPT
+	if [ -n "$WIFIADR" ] && [ "$(ipcalc $WANADR $WIFIMSK|grep NETWORK|cut -d'=' -f2)" = "$(ipcalc $WIFIADR $WIFIMSK|grep NETWORK|cut -d'=' -f2)" ]; then
+		# WAN with OLSR, open firewall
+		iptables -I input_rule -i $WANDEV -j ACCEPT
+		iptables -I output_rule -o $WANDEV -j ACCEPT
+		iptables -I forwarding_rule -o $WANDEV -j ACCEPT
+		iptables -I forwarding_rule -i $WANDEV -j ACCEPT
+		return
+	fi
+	test "$mn_wanssh" = "1" && iptables -A input_rule -i $WANDEV -p tcp --dport 22 -j ACCEPT
+	test "$mn_wanhttp" = "1" && iptables -A input_rule -i $WANDEV -p tcp --dport 80 -j ACCEPT
+	test "$mn_wanvoip" = "1" && iptables -A input_rule -i $WANDEV -p udp --dport 5060 -j ACCEPT
+	test "$mn_wanvoip" = "1" && iptables -A input_rule -i $WANDEV -p udp --dport 16384:16403 -j ACCEPT
+	test "$mn_wanicmp" = "1" && iptables -A input_rule -i $WANDEV -p icmp -j ACCEPT
+	iptables -A input_rule -i $WANDEV -m state --state INVALID -j DROP
+	iptables -A input_rule -i $WANDEV -m state --state ESTABLISHED,RELATED -j ACCEPT
+	test $DEBUG && iptables -A input_rule -i $WANDEV -j LOG --log-prefix "WAN:"
+	iptables -A input_rule -i $WANDEV -j DROP
+
+	iptables -A output_rule -o $WANDEV -j ACCEPT
+
+	iptables -A forwarding_rule -i $LANDEV -o $WANDEV -m state --state INVALID -j DROP
+	iptables -A forwarding_rule -i $LANDEV -o $WANDEV -s $LANNET/$LANPRE -d ! $LANNET/$LANPRE -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+	test $DEBUG && iptables -A forwarding_rule -i $LANDEV -o $WANDEV -j LOG --log-prefix "WAN:"
+	iptables -A forwarding_rule -i $LANDEV -o $WANDEV -j DROP
+
+	iptables -A forwarding_rule -i $WANDEV -o $LANDEV -m state --state INVALID -j DROP
+	iptables -A forwarding_rule -i $WANDEV -o $LANDEV -s ! $LANNET/$LANPRE -d $LANNET/$LANPRE -m state --state ESTABLISHED,RELATED -j ACCEPT
+	test $DEBUG && iptables -A forwarding_rule -i $WANDEV -o $LANDEV -d $LANNET/$LANPRE -j LOG --log-prefix "WAN:"
+	iptables -A forwarding_rule -i $WANDEV -o $LANDEV -d $LANNET/$LANPRE -j DROP
+
+	if [ -n "$WIFIADR" ]; then
+		iptables -A forwarding_rule -i $WIFIDEV -o $WANDEV -m state --state INVALID -j DROP
+		iptables -A forwarding_rule -i $WIFIDEV -o $WANDEV -s $WIFINET/$WIFIPRE -d ! $WIFINET/$WIFIPRE -m state --state NEW,ESTABLISHED,RELATED -j ACCEPT
+		test $DEBUG && iptables -A forwarding_rule -i $WIFIDEV -o $WANDEV -j LOG --log-prefix "WAN:"
+		iptables -A forwarding_rule -i $WIFIDEV -o $WANDEV -j DROP
+
+		iptables -A forwarding_rule -i $WANDEV -o $WIFIDEV -m state --state INVALID -j DROP
+		iptables -A forwarding_rule -i $WANDEV -o $WIFIDEV -s ! $WIFINET/$WIFIPRE -d $WIFINET/$WIFIPRE -m state --state ESTABLISHED,RELATED -j ACCEPT
+		test $DEBUG && iptables -A forwarding_rule -i $WANDEV -o $WIFIDEV -d $WIFINET/$WIFIPRE -j LOG --log-prefix "WAN:"
+		iptables -A forwarding_rule -i $WANDEV -o $WIFIDEV -d $WIFINET/$WIFIPRE -j DROP
+	fi
+}
+
+DEBUG=false	# Dump dropped packets to klog, show with "dmesg -c"
+
+LODEV="$(uci get network.loopback.ifname)"
+LONET="$(ipcalc $(uci get network.loopback.ipaddr) $(uci get network.loopback.netmask) | grep NETWORK | cut -d= -f2)"
+LOPRE="$(ipcalc $(uci get network.loopback.ipaddr) $(uci get network.loopback.netmask) | grep PREFIX | cut -d= -f2)"
+
+LANDEV="$(uci get network.lan.ifname)"
+LANADR="$(uci get network.lan.ipaddr)"
+LANNET="$(ipcalc $(uci get network.lan.ipaddr) $(uci get network.lan.netmask) | grep NETWORK | cut -d= -f2)"
+LANPRE="$(ipcalc $(uci get network.lan.ipaddr) $(uci get network.lan.netmask) | grep PREFIX | cut -d= -f2)"
+
+WIFIDEV="$(uci get network.wifi.ifname)"
+WIFIADR="$(uci get network.wifi.ipaddr)"
+WIFIMSK="$(uci get network.wifi.netmask)"
+WIFINET="$(ipcalc $(uci get network.wifi.ipaddr) $(uci get network.wifi.netmask) | grep NETWORK | cut -d= -f2)"
+WIFIPRE="$(ipcalc $(uci get network.wifi.ipaddr) $(uci get network.wifi.netmask) | grep PREFIX | cut -d= -f2)"
+WIFIMTU="$(uci get mesh.network.ff_mtu)"
+
+WANDEV="$(uci get network.wan.ifname)"
+
+WANOLSR=""
+LANOLSR=""
+
+CLIENT1MAC="$(uci get mesh.network.client1mac)"
+CLIENT2MAC="$(uci get mesh.network.client2mac)"
+CLIENT3MAC="$(uci get mesh.network.client3mac)"
+CLIENT4MAC="$(uci get mesh.network.client4mac)"
+CLIENT5MAC="$(uci get mesh.network.client5mac)"
+
+WANDMZ="$(uci get mesh.network.wandmz)"
+
+echo "Starting Mesh firewall..."
+iptables -F ipfilter
+iptables -F mesh_nodes
+iptables -F mesh_clients
+iptables -F mesh_maintenance
+if [ "$(nvram get fw_disable)" != "1" ]; then
+	test -n "$WANDEV" && {
+		echo "	- WAN"
+		set_wan_fw
+	}
+	if [ -z "$WIFIADR" ] || [ "$(ipcalc $LANADR $WIFIMSK|grep NETWORK|cut -d'=' -f2)" != "$(ipcalc $WIFIADR $WIFIMSK|grep NETWORK|cut -d'=' -f2)" ]; then
+		echo "	- WLAN"
+		set_wlan_fw
+	fi
+fi
+echo "	- MASQUERADING"
+set_masq

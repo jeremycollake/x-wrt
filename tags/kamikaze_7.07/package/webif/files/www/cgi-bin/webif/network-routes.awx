@@ -1,0 +1,324 @@
+#!/usr/bin/awx
+BEGIN {
+	# imitate the header function
+	CATEGORY = "Network"
+	PAGENAME = "Routes"
+	page_title = "@TR<<network_routes_Static_Routes#Static Routes>>"
+	html_body_args = ""
+
+	# style, javascript and metas
+	inject_head()
+	# body start
+	inject_body()
+
+	# validate fields with submit
+	if (_action = getvar("submit") != "") {
+#		awx_validation()
+		if (ERROR == "") {
+			_show_info = ((SAVED != "") ? "@TR<<Settings saved>>" : "")
+			show_error = ""
+		} else {
+			_show_info = "@TR<<Settings not saved>>"
+			show_error = ERROR
+#			awx_commit()
+		}
+	}
+
+	# actions: editroute/addroute/removeroute
+
+	# only when editing a rule or an error
+	_action = getvar("action")
+	if (_action == "editroute" || _action == "addroute" || ERROR != "") {
+		_editflag = 1
+		use_form = ENVIRON["SCRIPT_NAME"]
+		_endform = ((use_form != "") ? "</form>" : "" )
+	}
+
+	# imitate the header function
+	include("/usr/lib/webif/common.awx")
+
+	td_ind = "\t"
+
+	config_load("network")
+
+	# get bridges
+	old_FS = FS
+	FS = " "
+	last_bridge = ""
+	while (("brctl show 2>/dev/null" | getline) > 0) {
+		if (!/^bridge/ && !/^[[:space:]]*$/) {
+			if (NF == 4) last_bridge = $1
+			_bridges[$(NF)] = last_bridge
+			#_bridgeifaces[last_bridge] = _bridgeifaces[last_bridge] " " $(NF)
+			#sub(/^ */, "", _bridgeifaces[last_bridge])
+		}
+	}
+
+	# scan interfaces
+	count = 0
+	for (var in CONFIG) {
+		if (CONFIG[var] == "interface") {
+			interface_cfg = var
+			sub(/_TYPE/, "", interface_cfg)
+			if (CONFIG[interface_cfg "_type"] == "bridge") {
+				nif = split(CONFIG[interface_cfg "_ifname"], _br_ifs)
+				for (i = 1; i <= nif; i++) {
+					if (_bridges[_br_ifs[i]] != "") {
+						_ifacenames[interface_cfg] = _bridges[_br_ifs[i]]
+						_ifaceifs[_bridges[_br_ifs[i]]] = interface_cfg
+					} else {
+						_ifacenames[interface_cfg] = "br?" count
+						_ifaceifs["br?" count] = interface_cfg
+					}
+				}
+			} else {
+				_ifacenames[interface_cfg] = CONFIG[interface_cfg "_ifname"]
+				_ifaceifs[(CONFIG[interface_cfg "_ifname"])] = interface_cfg
+			}
+			count++
+		}
+	}
+	FS = old_FS
+
+	RENDER = "views/network-routes.ahtml"
+}
+
+function inject_head() {
+	html_head = html_head " \
+<style type=\"text/css\"> \
+<!-- \
+#routes .cssbutton { \
+	background-color: #f6f4f1; \
+	border: 2px #888785 outset; \
+	border-color: #c6c4c1 #888785 #888785 #c6c4c1; \
+	padding: 1px 3px 1px 2px; \
+	font-size: 0.83em; \
+	text-decoration: none; \
+} \
+#routes .cssbutton, .cssbutton:visited, .cssbutton:active { \
+	color: #000000; \
+} \
+#routes .delbut, .delbut:visited, .delbut:active { \
+	color: #d44533; \
+} \
+#routes .cssbutton:active { \
+	border-style: inset; \
+	border-color: #f6f4f1 #f6f4f1 #888785 #888785; \
+	background-color: #f6f4f1; \
+	padding: 1px 2px 1px 3px; \
+} \
+#routes span { \
+	display: none; \
+} \
+table { \
+	text-align: left; \
+	margin: 0px; \
+	padding: 0px; \
+} \
+td, th { \
+	padding-top: 1px; \
+	padding-right: 1px; \
+	padding-bottom: 2px; \
+	padding-left: 1px; \
+	vertical-align: center; \
+} \
+--> \
+</style>"
+}
+
+function inject_body() {
+	html_body = html_body ""
+}
+
+#function awx_validation() {
+#}
+
+#function awx_commit() {
+#}
+
+function netmask_options(sel_opt) {
+	group_open = 0
+	for (i = 32; i >= 0; i--) {
+		if (i == 32) {
+			if (group_open == 1) print "</optgroup>"
+			print "<optgroup label=\"@TR<<network_routes_netmask_Host#Host>>\">"
+			group_open = 1
+		} else if (i == 31) {
+			if (group_open == 1) print "</optgroup>"
+			print "<optgroup label=\"@TR<<network_routes_netmask_PtP#P-t-P Link>>\">"
+			group_open = 1
+		} else if (i == 30) {
+			if (group_open == 1) print "</optgroup>"
+			print "<optgroup label=\"@TR<<network_routes_netmask_Network#Network>>\">"
+			group_open = 1
+		}
+		res = ""
+		tmp = i
+		for (j = 1; j <= 4; j++) {
+			if (tmp > 8) {
+				tmp = tmp - 8
+				res = res "255"
+			} else if (tmp > 0) {
+				res = res sprintf("%d", 256-2^(8-tmp))
+				tmp = 0
+			} else {
+				res = res "0"
+			}
+			if (j < 4) res = res "."
+		}
+		print "<option" ((sel_opt == res) ? " selected=\"selected\"" : "") " value=\"" res "\">" res " /" i "</option>"
+	}
+	if (group_open == 1) print "</optgroup>"
+}
+
+function interface_options(sel_opt) {
+	for (var in _ifaceifs) {
+		if (var != "lo")
+			print "<option" ((sel_opt == var) ? " selected=\"selected\"" : "") " value=\"" var "\">" _ifaceifs[var] " (" var ")</option>"
+	}
+}
+
+function generate_form() {
+	if (_editflag == 1) {
+		start_form("@TR<<network_routes_Edit_route#Edit route>>", "", "", "")
+		print "<table width=\"100%\" summary=\"Settings\">"
+
+		print "<tr id=\"field_target\">"
+		print "<td width=\"40%\">@TR<<network_routes_edit_Target_IP#Target IP Address>></td>"
+		print "<td width=\"60%\"><input id=\"target\" type=\"text\" name=\"target\" value=\"" getvar("target") "\" /></td>"
+		print "</tr>"
+
+		print "<tr id=\"field_gateway\">"
+		print "<td width=\"40%\">@TR<<network_routes_edit_Gateway#Gateway>></td>"
+		print "<td width=\"60%\"><input id=\"gateway\" type=\"text\" name=\"gateway\" value=\"" getvar("gateway") "\" /></td>"
+		print "</tr>"
+
+		print "<tr id=\"field_netmask\">"
+		print "<td width=\"40%\">@TR<<network_routes_edit_Netmask#Netmask>></td>"
+		print "<td width=\"60%\"><select id=\"netmask\" name=\"netmask\">"
+		netmask_options(getvar("netmask"))
+		print "</select>"
+		print "</td>"
+		print "</tr>"
+
+		print "<tr id=\"field_metric\">"
+		print "<td width=\"40%\">@TR<<network_routes_edit_Metric#Metric>></td>"
+		print "<td width=\"60%\"><input id=\"metric\" type=\"text\" name=\"metric\" value=\"" getvar("metric") "\" /></td>"
+		print "</tr>"
+
+		print "<tr id=\"field_interface\">"
+		print "<td width=\"40%\">@TR<<network_routes_edit_Interface#Interface>></td>"
+		print "<td width=\"60%\"><select id=\"interface\" name=\"interface\">"
+		interface_options(getvar("interface"))
+		print "</select>"
+		print "</td>"
+		print "</tr>"
+
+		print "<tr id=\"field_name\">"
+		print "<td width=\"40%\">@TR<<network_routes_edit_Name#Name>></td>"
+		print "<td width=\"60%\"><input id=\"name\" type=\"text\" name=\"name\" value=\"" getvar("name") "\" /></td>"
+		print "</tr>"
+
+		print "</table>"
+
+		form_help = "<h4>@TR<<network_routes_edit_Target_IP#Target IP Address>>:</h4>"
+		form_help = form_help "\n" "<p>@TR<<network_routes_edit_Target_IP_helptext#Enter the network's or host's destination IP address in the dotted decimal notation.>></p>"
+		form_help = form_help "\n" "<h4>@TR<<network_routes_edit_Gateway#Gateway>>:</h4>"
+		form_help = form_help "\n" "<p>@TR<<network_routes_edit_Gateway_helptext#Route packets via this gateway.>></p>"
+		form_help = form_help "\n" "<h4>@TR<<network_routes_edit_Netmask#Netmask>>:</h4>"
+		form_help = form_help "\n" "<p>@TR<<network_routes_edit_Netmask_helptext#Enter the netmask to be used. Use 255.255.255.255 for the host and any of the remaining netmasks for the network.>></p>"
+		form_help = form_help "\n" "<h4>@TR<<network_routes_edit_Metric#Metric>>:</h4>"
+		form_help = form_help "\n" "<p>@TR<<network_routes_edit_Metric_helptext#A variable used by a dynamic router to calculate its routing table. This determines which route the router should use to forward a packet.>></p>"
+		form_help = form_help "\n" "<h4>@TR<<network_routes_edit_Interface#Interface>>:</h4>"
+		form_help = form_help "\n" "<p>@TR<<network_routes_edit_Interface_helptext#Force the route to be associated with the specified device.>></p>"
+		form_help = form_help "\n" "<h4>@TR<<network_routes_edit_Name#Name>>:</h4>"
+		form_help = form_help "\n" "<p>@TR<<network_routes_edit_Name_helptext#Enter the short name for your static route to distinguish between them quickly.>></p>"
+		end_form(form_help, "")
+	}
+}
+
+function static_routes() {
+	# scan routes
+	class_odd = 1
+	count = 0
+	for (var in CONFIG) {
+		href = ""
+		if (CONFIG[var] == "route") {
+			route_cfg = var
+			sub(/_TYPE/, "", route_cfg)
+			if (class_odd == 1) {
+				print "<tr>"
+				class_odd--
+			} else {
+				print "<tr class=\"odd\">"
+				class_odd++
+			}
+			print td_ind "<td>" CONFIG[route_cfg "_target"] "</td>"
+			href = href "target=" CONFIG[route_cfg "_target"]
+			print td_ind "<td>" CONFIG[route_cfg "_gateway"] "</td>"
+			href = href "&amp;gateway=" CONFIG[route_cfg "_gateway"]
+			print td_ind "<td>" ((CONFIG[route_cfg "_netmask"] != "") ? CONFIG[route_cfg "_netmask"] : "255.255.255.255") "</td>"
+			href = href "&amp;netmask=" CONFIG[route_cfg "_netmask"]
+			print td_ind "<td>" CONFIG[route_cfg "_metric"] "</td>"
+			href = href "&amp;metric=" CONFIG[route_cfg "_metric"]
+			print td_ind "<td>" CONFIG[route_cfg "_interface"] " (" ((_ifacenames[(CONFIG[route_cfg "_interface"])] == "") ? "@TR<<network_routes_unknown_iface#unknown>>" : _ifacenames[(CONFIG[route_cfg "_interface"])]) ")</td>"
+			href = href "&amp;interface=" CONFIG[route_cfg "_interface"]
+			if (route_cfg !~ /^cfg/) {
+				print td_ind "<td>" route_cfg "</td>"
+				href = href "&amp;name=" route_cfg
+			} else {
+				print td_ind "<td>&nbsp;</td>"
+			}
+			printf td_ind "<td>"
+			if (_editflag != 1) {
+				printf "<a class=\"cssbutton\" href=\"" ENVIRON["SCRIPT_NAME"] "?action=editroute&amp;" href "\">@TR<<network_routes_Edit#Edit>></a>"
+				printf "&nbsp;"
+				print "<a class=\"cssbutton delbut\" href=\""  ENVIRON["SCRIPT_NAME"] "?action=removeroute&amp;" href "\">@TR<<network_routes_Delete#Delete>></a>"
+			} else {
+				printf "&nbsp;"
+			}
+			print "</td>"
+			print "</tr>"
+			count++
+		}
+	}
+	if (count == 0) print "<tr>\n" td_ind "<td colspan=\"7\">@TR<<network_routes_static_No_configured_routes#No configured static routes exist.>></td>\n</tr>"
+	if (_editflag != 1) {
+		print "<tr>\n" td_ind "<td colspan=\"6\">&nbsp;</td><td><a class=\"cssbutton\" href=\"" ENVIRON["SCRIPT_NAME"] "?action=addroute\">@TR<<network_routes_Add_new_route#Add new route>></a></td>\n</tr>"
+	}
+}
+
+function kernel_routes() {
+	class_odd = 1
+	old_FS = FS
+	FS = " "
+	count = 0
+	while (("route -n 2>/dev/null" | getline) > 0) {
+		if (/^[[:digit:]]/) {
+			if (class_odd == 1) {
+				print "<tr>"
+				class_odd--
+			} else {
+				print "<tr class=\"odd\">"
+				class_odd++
+			}
+			for (i = 1; i <= NF; i++) {
+				if (i == 8) {
+					print td_ind "<td>" ((_ifaceifs[$(i)] == "") ? "@TR<<network_routes_unknown_iface#unknown>>" : _ifaceifs[$(i)]) " (" $(i) ")</td>"
+				} else print td_ind "<td>" $(i) "</td>"
+			}
+			print "</tr>"
+			count++
+		}
+	}
+	if (count == 0) print "<tr>\n" td_ind "<td colspan=\"8\">@TR<<network_routes_No_kernel_routes#There are no IP routes in the kernel's table!?>></td>\n</tr>"
+	FS = old_FS
+}
+
+#function handle_removeroute() {
+#}
+
+#function handle_default() {
+#}
+
+##WEBIF:name:Network:500:Routes

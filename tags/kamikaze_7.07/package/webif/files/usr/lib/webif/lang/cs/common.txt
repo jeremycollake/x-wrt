@@ -1,0 +1,988 @@
+# leave at least one comment here to skip the BOM character
+## language offer
+lang => Čeština
+
+## SVN version referenced
+lang_for_svn => 3572
+## /usr/lib/webif/apn.csv
+Vodafone UK => Vodafone VB
+Mobilkom, Austria => Mobilkom, Rakousko
+Proximus => Proximus Belgie
+Vodafone Spain => Vodafone Španělsko
+Vodafone Italy => Vodafone Itálie
+Vodafone Germany => Vodafone Německo
+Vodafone Germany (Corporate) => Vodafone Německo (korporátní)
+Vodafone Netherlands => Vodafone Nizozemsko
+Vodafone Sweden => Vodafone Švédsko
+Vodafone Hungary => Vodafone Maďarsko
+SFR => SFR Francie
+Vodafone Greece => Vodafone Řecko
+Vodafone Portugal => Vodafone Portugalsko
+Vodafone New Zealand => Vodafone Nový Zéland
+Vodafone Australia => Vodafone Austrálie
+Vodafone Ireland => Vodafone Irsko
+Vodafone Malta => Vodafone Malta
+Vodafone Egypt => Vodafone Egypt
+Vodacom SA => Vodacom SA (Jihoafrická rep.)
+Vipnet => Vipnet Chorvatsko
+SiMobil => SiMobil Slovinsko
+Elisa Finland => Elisa Finsko
+TDC Mobil => TDC Mobil Dánsko
+MTC Bahrain => MTC Bahrajn
+MTC Kuwait => MTC Kuvajt
+Elisa Estonia => Elisa Estonsko
+Vodafone Fiji => Vodafone Fidži
+OG Vodafone => OG Vodafone Island
+LUXGSM => LUXGSM Lucembursko
+
+## /usr/lib/webif/apply.sh
+Processing => Zpracovávám
+Critical Error => Kritická chyba
+Could not replace => Nelze přepsat
+Media full => Médium je plné
+config file => konfigurační soubor
+Applying => Aplikuji
+conntrack settings => nastavení conntrack
+Setting => Nastavuji
+Done => Hotovo
+Initializing theme ... => Inicializuji téma ...
+Error => Chyba
+installing theme package => instaluji balíček tématu
+Installing language pack => instaluji jazykový balíček
+Error installing language pack => Chyba při instalaci jazykového balíčku
+Committing => Ukládám
+Starting => Startuji
+upnpd => upnpd
+Stopping => Zastavuji
+Reloading => Obnovuji
+network => síťová nastavení
+wireless => bezdrátová nastavení
+syslogd => syslogd
+OpenVPN => OpenVPN
+Exporting => Exportuji
+snmp settings => nastavení snmp
+TZ setting => nastavení TZ
+
+## /usr/lib/webif/browser.awk
+browser_Filesystem_Browser => Prohlížeč souborového systému
+browser_Root => Kořen
+browser_Permissions => Oprávnění
+browser_Owner => Vlastník
+browser_Group => Skupina
+browser_Time => Čas
+browser_Parent_Directory => Rodičovský adresář
+browser_Directory => Adresář
+browser_Delete => Smazat
+browser_File => Soubor
+browser_Edit => Upravit
+
+## /usr/lib/webif/comgt.webif
+status_wwaninfo_comgt_PManufacturer => Výrobce
+status_wwaninfo_comgt_ModelInfo => Model
+status_wwaninfo_comgt_IMEISN => IMEI a sériové číslo
+status_wwaninfo_comgt_PRevision => Revize výrobku
+status_wwaninfo_comgt_HRevision => Revize hardwaru
+status_wwaninfo_comgt_NLock => Zámek sítě
+status_wwaninfo_comgt_No => Ne
+status_wwaninfo_comgt_Yes => Ano
+status_wwaninfo_comgt_Custom => Úpravy
+status_wwaninfo_comgt_BandSettings => Band settings
+status_wwaninfo_comgt_Band_Unknown => Unknown
+status_wwaninfo_comgt_Band_900 => Pásmo 900 MHz
+status_wwaninfo_comgt_Band_1800 => Pásmo 1800 MHz (Evropa)
+status_wwaninfo_comgt_Band_1900 => Pásmo 1900 MHz (USA)
+status_wwaninfo_comgt_Band_9_18 => Dvojí pásmo 900/1800 MHz (Evropa)
+status_wwaninfo_comgt_Band_9_19 => Dvojí pásmo 900/1900 MHz (USA)
+status_wwaninfo_comgt_APN => Název přístupového bodu
+
+## /usr/lib/webif/common.awk
+Subcategories => Podkategorie
+Status => Stav
+Host => Počítač
+Uptime => Běží
+Load => Zatížení
+Short help => Krátká nápověda
+
+## /usr/lib/webif/editor.awk
+editor_File => Soubor
+&nbsp;Save Changes&nbsp; => &nbsp;Uložit změny&nbsp;
+&nbsp;Back&nbsp; => &nbsp;Zpět&nbsp;
+editor_click_apply => Po dokončení změn souborů a případných dalších úpravách konfigurace musíte kliknout na "Provést změny", aby byly změny trvale uloženy.
+
+## /usr/lib/webif/form.awk
+Remove => Odstranit
+Add => Přidat
+more... => více...
+
+## /usr/lib/webif/functions.sh
+features_require_package => Vlastnosti na této stránce vyžadují balíček
+features_install => nainstalovat nyní
+
+## /usr/lib/webif/validate.awk
+Invalid value => Neplatná hodnota
+Invalid key length => Neplatná délka klíče
+Key must not end with '0' => Klíč nesmí končit na '0'
+String too long => Řetězec je příliš dlouhý
+String too short => Řetězec je příliš krátký
+Invalid hex key => Neplatný hexadecimální klíč
+No value entered => Nebyla zadána hodnota
+Value too small => Hodnota je příliš malá
+minimum => minimální
+String too short => Řetězec je příliš krátký
+minimum length => minimální délka
+Value too large => Hodnota je příliš velká
+maximum => maximální
+maximum length => maximální délka
+Invalid dots => Neplatné tečky
+Invalid spaces => Neplatné mezery
+Missing netmask => Chybějící síťová maska
+Netmask not allowed => Síťová maska není přípustná
+Error in => Chyba v položce
+
+## /usr/lib/webif/webif.sh
+big_warning => UPOZORNĚNÍ
+page_incomplete => Tato stránka není kompletní a nemusí pracovat správně nebo vůbec.
+page_untested => Tato stánka nebyla testována a může nebo nemusí pracovat správně.
+page_untested_kamikaze => Tato stránka nebyla aktualizována nebo nebyla zkontrolována její funkčnost pro Kamikaze.
+features_require_package => Vlastnosti na této stránce vyžadují balíček
+features_install => nainstalovat nyní
+Settings saved => Nastavení byla uložena
+Settings not saved => Nastavení nebyla uložena
+Password_mismatch => Zadaná hesla nejsou stejná!
+Warning => Varování
+Password_warning => Nenastavili jste heslo pro webové rozhraní a přístup přes SSH.<br />Prosím zadejte jej nyní (uživatelské jméno pro váš prohlížeč bude 'root').
+New Password => Nové heslo
+Confirm Password => Potvrdit heslo
+Set => Nastavit
+
+## /www/cgi-bin/webif/.categories
+Info => Info
+Graphs => Grafy
+Status => Stav
+Log => Záznam
+System => Systém
+Network => Síť
+VPN => VPN
+Logout => Odhlášení
+
+## /www/cgi-bin/webif/config.sh
+No config change. => Nebyly provedeny žádné změny konfigurace.
+Config discarded. => Vaše změny konfigurace byly zahozeny.
+Config changes: => Aktuální změny konfigurace:
+Updating config... => Aktualizuji vaši konfiguraci...
+
+## /www/cgi-bin/webif/graphs-cpu.sh
+Graphs => Grafy
+graphs_cpu_subcategory => Procesor
+graphs_cpu_CPU_Usage => Využití CPU
+## temporarily removed ##graphs_svg_required => Tento objekt vyžaduje podporu SVG.
+
+## /www/cgi-bin/webif/graphs-if.sh
+## duplicate ##Graphs => Grafy
+graphs_if_Traffic => Provoz
+graphs_if_Traffic_of_Interface => Provoz rozhraní
+## temporarily removed #### duplicate ##graphs_svg_required => Tento objekt vyžaduje podporu SVG.
+
+## /www/cgi-bin/webif/info.awx
+Please wait => Počkejte prosím
+info_wait_install => Počkejte prosím, instalace může chvilku trvat
+System Information => Systémové informace
+About => O aplikaci
+Info => Info
+System => Systém
+
+## /www/cgi-bin/webif/log-browse.sh
+Log => Záznam
+Firewall Log View => Zobrazení záznamu firewallu
+Netfilter Log => Záznam netfilteru
+Filter => Filtr
+All => Všechno
+Prefix => Předpona
+Source IP => Zdrojová IP
+Destination IP => Cílová IP
+Protocol => Protokol
+Source Port => Zdrojový port
+Destination Port => Cílový port
+Type => Typ
+Listing => Výpis
+Date => Datum
+Proto => Protokol
+Dest. Port => Cíl. port
+
+## /www/cgi-bin/webif/log-dmesg.awx
+log_dmesg_Kernel_Ring_Buffer => Kruhový záznam jádra
+log_dmesg_no_current_messages => Žádné záznamy jádra nebyly nalezeny.
+log_dmesg_no_archived_messages => Neexistují žádné archivované záznamy jádra.
+log_dmesg_no_archive_exists => Archiv záznamů jádra neexistuje.
+Log => Záznam
+Kernel => Jádro
+
+## /www/cgi-bin/webif/logout.sh
+Logout => Odhlášení
+logout_close_window => Pro odhlášení musíte ukončit webový prohlížeč!
+logout_explanation => Protože je základní autentizace httpd uložena v paměti prohlížeče, není možné uživatele odhlásit. Musíte ukončit webový prohlížeč, v případě Firefoxu spustíte 'Vymazat důvěrná data', a donutit ho tak zapomenout přihlašovací informace, které jste zadali. Kvůli tomuto problému zděděné slabiny v základní httpd autentizaci používané běžně firmwary pravděpodobně přejdeme na autentizaci prostřednictvím cookie.
+logout_reference => Odkaz k nahlédnutí, viz http://httpd.apache.org/docs/1.3/howto/auth.html
+
+## /www/cgi-bin/webif/log-read.awx
+Syslog View => Zobrazení záznamu syslog
+log_read_no_messages => Neexistují žádné záznamy syslogu.
+Log => Záznam
+Syslog => Syslog
+
+## /www/cgi-bin/webif/log-setup.awx
+Remote host => Vzdálený počítač
+Remote Port => Vzdálený port
+Minutes Between Marks => Minut mezi značkami
+Log Size => Velikost záznamu
+##duplicate Settings saved
+##duplicate Settings not saved
+syslog Settings => Nastavení pro syslog
+Log => Záznam
+Syslog Settings => Nastavení pro syslogd
+
+## /www/cgi-bin/webif/network-firewall.sh
+Network => Síť
+DynDNS => DynDNS
+DynDNS Settings => Nastavení DynDNS
+Dynamic DNS Package => Balíček Dynamického DNS
+## string|<div class=\"warning\">$service will not work until you install the $service package. </div>
+## choppy!!!
+Install => Instalovat
+Package => Balíček
+##echo "Installing $service package ...<pre>"
+Service Type => Typ služby
+User Name => Uživatelské jméno
+Password => Heslo
+Host Name => Název počítače
+##Server Name =>
+##Max Interval (sec) =>
+Dynamic DNS Update => Aktualizace Dynamického DNS
+Enable => Povolit
+Disable => Zakázat
+Account => Účet
+Host => Počítač
+##Server
+
+## /www/cgi-bin/webif/network-dhcpiface.sh
+Network => Síť
+DHCP => DHCP
+DHCP Interfaces => Rozhraní DHCP
+##"<br />WARNING: Unknown suffix found on dhcp lease time: $FORM_dhcp_lease";;
+## untranslated validation
+##DHCP enabled
+##DHCP iface
+##DHCP lease time
+##"<div class=\"failed-validation\">Validation failed on one or more variables. On this page a common error is putting an IP address in \"DHCP Start\" instead of a simple number.</div>"
+Name => Název
+Interface => Rozhraní
+Interfaces => Rozhraní
+Action => Akce
+Modify => Upravit
+Remove => Odstranit
+Add => Přidat
+Parameters => Parametry
+Value => Hodnota
+MAC Address => Adresa MAC
+Options For => Možnosti pro
+## fix variable
+##DHCP Server For => Server DHCP pro
+DHCP Service => Služba DHCP
+Disabled => Zakázáno
+Enabled => Povoleno
+DHCP Start => Počátek adresového bloku DHCP
+DHCP Num => Konec adresového bloku DHCP
+## what's this?
+DHCP Bail => DHCP Bail
+DHCP Lease Minutes => Zápůjčka DHCP v minutách
+
+## /www/cgi-bin/webif/network-dhcpsettings.sh
+## untranslated validation
+##DHCP cache size
+##DHCP no hosts
+##DHCP no regcache
+##DHCP strict order
+##DHCP port
+##DHCP log queries
+##DHCP no resolv
+##DHCP domain
+##DHCP dhcp
+##DHCP read ethers
+Network => Síť
+Dnsmasq => Dnsmasq
+DHCP Configuration => Konfigurace DHCP
+Cache Size => Velikost vyrovnávací paměti
+No Hosts => No Hosts
+No Reg Cache => No Reg Cache
+Strict Order => Strict Order
+Log Queries => Log Queries
+No Resolv => No Resolv
+Port => Port
+Domain => Doména
+Lease Max => Lease Max
+Read Ethers => Read Ethers
+
+## /www/cgi-bin/webif/network-firewall.sh
+Protocol => Protokol
+Target => Cíl
+Protocol => Protokol
+Source IP => Zdrojová IP
+Destination IP => Cílová IP
+Source Ports => Zdrojové porty
+Destination Ports => Cílové porty
+Forward to => Předat na
+Port => Port
+No_Target_IP_Port => Položky cílové adresy IP a portu nesmí být obě prázdné
+Firewall Configuration => Konfigurace firewallu
+Application Protocol => Aplikační protokol
+Everything => Všechno
+Firewall Rules => Pravidla firewallu
+Match => Odpovídá
+Target => Cíl
+Port => Port
+Forward to => Předat na
+Delete => Smazat
+Add => Přidat
+Save => Uložit
+Cancel => Zrušit
+Up => Nahoru
+Down => Dolů
+Edit => Upravit
+New Rule => Nové pravidlo
+Firewall => Firewall
+firewall_help_general => Zde můžete předávat porty a mnohem více. Pokud si je místo toho přejete konfigurovat ručně, použijte '/etc/config/firewall', ale ne '/etc/firewall.user'. Ačkoli fungují oba, pouze první je používán touto stránkou.
+Forwarding a port => Předávání portu
+firewall_help_fw_port_example1 => Pokud chcete předávat TCP port 999 z Internetu na místní počítač na adrese 192.168.1.100, mohlo by to vypadat takto:
+firewall_help_fw_port_example => Cílové porty: 999 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cíl: 192.168.1.100  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: &lt;blank&gt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protokol: TCP
+Forwarding a port range => Předávání rozsahu portů
+firewall_help_fw_portrange => Pokud chcete předávat TCP porty 2000-3000 z Internetu na místní počítač na adrese 192.168.1.100, mohlo by to vypadat takto:
+firewall_help_fw_portrange_example => Cílové porty: 2000-3000 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cíl: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: &lt;blank&gt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protokol: TCP
+Forwarding a port to a different port => Předávání portu na odlišný port
+firewall_help_fw_example2 => Pokud chcete předávat TCP port 8888 z Internetu na místní počítač na adrese 192.168.1.100 na port 80, mohlo by to vypadat takto:
+firewall_help_fw_port_example2 => Cílové porty: 8888 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cíl: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: 80 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protokol: TCP
+
+## /www/cgi-bin/webif/network-hosts.sh
+network_hosts_host_IP_invalid => Adresa IP počítače
+network_hosts_Host_Name => Název počítače
+network_hosts_MAC => Adresa MAC
+network_hosts_static_IP_invalid => Statická adresa IP
+Network => Síť
+Hosts => Počítače
+network_hosts_Configured_Hosts => Nakonfigurované počítače
+network_hosts_Host_Names => Názvy počítačů
+network_hosts_IP => Adresa IP
+network_hosts_Host_Name => Název počítače
+network_hosts_Remove => Odstranit
+network_hosts_Add => Přidat
+network_hosts_Host_Names_helptext => Soubor /etc/hosts se používá k vyhledání adresy IP zařízení připojeného do počítačové sítě. Soubor názvů počítačů popisuje mapování 'mnoha na jednu' názvů zařízení na adresy IP. Když se přistupuje k zařízení pomocí jména, pokouší se síťový systém vyhledat jméno v souboru 'hosts' dříve, než se obrátí na systém doménových jmen Internetu.
+network_hosts_DHCP_Static_IPs => Statické adresy IP (pro DHCP)
+network_hosts_Static_IPs => Statické adresy IP
+network_hosts_Static_IPs_helptext => Soubor /etc/ethers obsahuje databázi informací o známých 48 bitových ethernetových adresách počítačů v síti. Server DHCP používá zadanou odpovídající adresu IP místo přidělení nové z fondu adres pro jakoukoli adresu MAC uvedenou v tomto souboru.
+network_hosts_Active_Leases => Aktivní zápůjčky DHCP
+network_hosts_Name => Název
+network_hosts_Expires => Vyprší za
+network_hosts_h => hod
+network_hosts_min => min
+network_hosts_sec => sek
+network_hosts_No_leases => Nejsou známy žádné zápůjčky DHCP.
+
+## /www/cgi-bin/webif/network-misc.sh
+network_misc_Suggest_restart => Požadované nastavení bylo odstraněno z konfiguračního souboru, měli byste nyní <a href="reboot.sh">restartovat</a> zařízení, aby jádro mohlo vypočítat nové hodnoty.
+Maximum Connections => Maximální počet spojení
+Generic Timeout => Obecný časový limit
+ICMP Timeout => Časový limit pro ICMP
+TCP Established Timeout => Časový limit pro TCP Established
+UDP Timeout => Časový limit pro UDP
+UDP Stream Timeout => Časový limit pro UDP Stream
+Reset to a default value => Vymazat do výchozí hodnoty
+network_misc_Reset_field => Resetovat položku
+network_misc_Reset_all_settings => Resetovat všechna nastavení
+network_misc_Reset__all_fields => Resetovat všechny položky
+network_misc_Reset_to_defaults => Resetovat jednu nebo všechny položky do výchozích hodnot
+network_misc_Reset_to_defaults_helpitem => Všechny zobrazené hodnoty jsou vypočítány při startu systému jádrem z předdefinovaných výchozích hodnot ve vztahu k dostupné paměti nebo jsou nastaveny podle konfigurarčního souboru. Pokud chcete resetovat položku do jejícho výchozího vypočítaného nastavení, neukládejte nastavení, stiskněte tlačítko Resetu vedle položky a restartujte zařízení.
+## duplicate ##big_warning => UPOZORNĚNÍ
+network_misc_too_big_timeout => Your default TCP established timeout value is very high (5 days). Most peer-2-peer users should lower it. A safe setting is probably 1 day (86400), though some users prefer 1 hour (3600).
+## duplicate ##Network => Síť
+Tweaks => Vylepšení
+Networking Tweaks => Síťová vylepšení
+Conntrack Settings => Nastavení conntrack
+HelpText maximum_connections => Maximální počet současných spojení, která může váš router sledovat. Vyšší číslo znamená větší spotřebu paměti RAM a vyšší zatížení CPU, pokud je nakonec tento počet spojení opravdu využit. Obvykle je nejlepší ponechat tuto hodnotu ve svém výchozím nastavení.
+HelpText tcp_established_timeout => Počet sekund, po které může být navázané spojení nevyužíváno, než je nuceně ukončeno. Někdy nejsou spojení správně ukončena a mohou zaplnit tabulku conntrack, pokud jsou tyto hodnoty příliš vysoké. Pokud jsou příliš nízké, mohou být spojení ukončena, protože jsou nečinná.
+
+## /www/cgi-bin/webif/network-qos.sh
+Network => Síť
+QoS => QoS
+QOS Configuration => Nastavení QoS
+qos_installing => Instaluji QoS skripty od Nbd
+qos_found_rudys => Byly nalezeny nainstalované Rudyho QoS skripty. Zajistěte odinstalování Rudyho skriptů před použitím nového balíčku qos-scripts.
+Port Listing => Seznam portů
+Port Range => Rozsah portů
+Source IP => Zdrojová IP
+Dest IP => Cílová IP
+qos_validation_failed => Kontrola jedné nebo více položek selhala! Neukládám.
+WAN Download Speed => Rychlost přijímání WAN
+WAN Upload Speed => Rychlost odesílání WAN
+QoS Options => Možnosti QoS
+QoS Service => Služba QoS
+qos_enabled => Povolena
+qos_disabled => Zakázána
+QoS Overhead Calculation => Výpočet režie QoS
+qos_overhead_enabled => Povolen
+qos_overhead_disabled => Zakázán
+WAN Upload Speed => Rychlost odesílání WAN
+kilobits => kbps
+Maximum Upload/Download => Maximální rychlosti odesílání/přijímání
+HelpText Maximum Upload => Vaše maximální povolené rychlosti odesílání a přijímání v kbps.
+WAN Download Speed => Rychlost přijímání WAN
+kilobits => kbps
+Show Advanced Rules => Zobrazit pokročilá pravidla
+qos_adv_enabled => Povoleno
+qos_adv_disabled => Zakázáno
+Advanced => Pokročilé možnosti
+HelpText Advanced => Normálně uživatelům stačí použít formulář níže ke konfiguraci QoS. Někteří lidé mohou potřebovat přístup k mnohem pokročilejším nastavením. Alternativně můžete <a href="./system-editor.sh?path=/etc/config&amp;edit=qos">ručně upravit konfiguraci</a>.
+QoS Traffic Classification Rules => Klasifikační pravidla provozu QoS
+Group => Skupina
+Type => Typ
+Source IP => Zdrojová IP
+Dest. IP => Cíl. IP
+Protocol => Protokol
+Layer-7 => Vrstva-7
+Port range => Rozsah portů
+Ports => Porty
+Flags => Příznaky
+PktSize => Vel. paketu
+Mark => Značka
+down => dolů
+delete => smazat
+edit => upravit
+up => nahoru
+new rule => nové pravidlo
+TCP Flags => TCP příznaky
+Mark => Značka
+Packet Size => Velikost paketu 
+QoS Rule Edit => Upravit pravidlo QoS
+Rules Index => Rejstřík QoS
+Classify As => Klasifikovat jako
+Bulk => Objemný
+Normal => Normální
+Priority => Priorita
+Express => Expres
+Source IP => Zdrojová IP
+Dest IP => Cílová IP
+Protocol => Protokol
+qos_prot_any => Jakýkoli
+qos_prot_tcp => TCP
+qos_prot_udp => UDP
+qos_prot_icmp => ICMP
+Ports => Porty
+Port Range => Rozsah portů
+Layer7 => Vrstva7
+Peer-2-Peer => Síť P2P
+qos_p2p_none => Žádná
+qos_p2p_all => Všechny
+qos_p2p_bittorrent => bitTorrent
+qos_p2p_dc => DirectConnect
+qos_p2p_ed2k => eDonkey
+qos_p2p_gnutella => Gnutella
+qos_p2p_kazaa => Kazaa
+QoS Rule Edit => Upravit pravidlo QoS
+HelPText qos_rule_edit_help => Potřebujete nastavit jen položky odpovídající provozu. Ostatní ponechte prázdné.
+Layer-7 => Vrstva-7
+HelpText layer7_help => Filtry vrstvy-7 se používají k identifikaci typů provozu založené na obsahové kontrole. Na webu je mnoho dostupných filtrů vrstvy-7, ne všechny jsou ale účinné a přesné. Více filtrů nainstalujete tak, že je stáhnete a umístíte je do /etc/l7-protocols.
+Peer-2-Peer =>
+HelpText p2p_help => Rozdíl mezi položkami filtrů Peer-2-Peer a vrstva-7 je ta, že volba Peer-2-Peer používá speciální nástroj, ipp2p, pro nalezení provozu bežných p2p protokolů. Typicky je mnohem výkonnější net filtra vrstvy-7.
+qos_no_compatible => Nebyl nalezen balíček kompatibilní s QoS.
+QoS Packages => Balíčky QoS
+qos_nbds => QoS skripty od Nbd (doporučeno)
+qos_nbds_install => Instalovat
+
+## /www/cgi-bin/webif/network-services.sh
+Network => Síť
+UPnP => UPnP
+UPnP Configuration => Konfigurace UPnP
+Installing => Instaluji
+Installing => Instaluji
+Removing => Odstraňuji
+Removing => Odstraňuji
+Remove miniupnpd => Odstranit miniupnpd
+Remove => Odstranit
+Remove linux-igd => Odstranit linux-igd
+Remove => Odstranit
+Upgrade UPNPd => Aktualizovat UPNPd
+Please wait => Počkejte prosím
+Completed successfully => Dokončeno úspěšně
+Failed to install => Dokončeno neúspěšně
+UPNP Daemon => Démon UPNP
+Disabled => Zakázáno
+Enabled => Povoleno
+WAN Upload (bits/sec) => Odesílání WAN (bps)
+kilobits => kbps
+WAN Download (bits/sec) => Přijímání WAN (bps)
+kilobits => kbps
+WAN Speeds => Rychlosti WAN
+HelpText upnpd_wan_speeds => Zde nastavte vaše rychlosti WAN v kbps. Hodnoty jsou oznamovány jen klientům upnp, kteří je požadují.
+Log Debug Output => Výstup ladícího záznamu
+Disabled => Zakázáno
+Enabled => Povoleno
+Remove UPNPd => Odstranit UPNPd
+HelpText remove_upnpd_help => Pokud máte problémy, můžete odstranit aktuální UPNPd a zkusit jiný, abyste se přesvědčili, zda pro vás nefunguje lépe.
+miniupnpd => miniupnpd
+Install => Nainstalovat
+linux-igd => linux-igd
+Install => Nainstalovat
+Which UPNPd to choose => Který UPNPd si vybrat
+HelPText install_upnpd_help => Můžete si vybrat ze dvou démonů UPNP: miniupnpd a linux-igd. Nejdříve zkuste miniupnpd, a pokud vám nefunguje, pak tento balíček odstraňte a zkuste linux-igd.
+
+## /www/cgi-bin/webif/network-vlan.sh
+Network => Síť
+VLAN => VLAN
+Virtual LANs => Virtuální sítě LAN
+VLAN Configuration => Konfigurace VLAN
+Helptext VLAN => Virtuální LAN je sada portů, které jsou propojeny mostem. V případech, kdy port patří do více než jedné virtuální LAN, se k identifikaci provozu VLAN na příslušném portu používá technika známá jako značkování (tagging).
+Add New VLAN => Přidat novou VLAN
+Remove Last VLAN => Odstranit poslední VLAN
+
+## /www/cgi-bin/webif/network-wakeonlan.sh
+Network => Síť
+WoL => WoL
+Wake-On-LAN => Wake-On-LAN
+Hardware (MAC) address => Hardwarová adresa (MAC)
+## untranslated
+##"Waking up $mac...
+##ERROR: No WOL application given! Please make sure you have installed either wol or ether-wake, and you have selected one of them in the form below.
+WOL application
+## untranslated
+##Machine
+IP Address
+MAC Address
+## untranslated 2x
+##Wake up
+wol_help => Zde můžete odeslat paket Wake-On-LAN pro automatické nastartování počítače, který je vypnutý. Počítač musí podporovat WOL a tato vlastnost musí být zapnuta v BISOu, aby to pracovalo. Naneštěstí není definována jednoznačná odpověď probouzeného počítače, takže nebudete vědět, zda bylo probuzení úspěšné a stroj opravdu startuje.
+
+## /www/cgi-bin/webif/status-basic.sh
+Status => Stav
+System => Systém
+Device Status => Stav zařízení
+Swap => Odkládací
+KiB => KiB
+Used => Využito
+mount_of => z
+status_basic_swap_partition => odkládací oblast
+status_basic_swap_file => odkládací soubor
+#Load Average => Průměrné zatížení
+#Load Average => Průměrné zatížení
+#Helptext Load Average => Průměrné zatížení reprezentuje průměry aktivních procesů v průběhu posledních 1, 5 a 15 minut.
+RAM Usage => Využití RAM
+Total => Celkem
+Used => Využito
+Helptext RAM Usage => Aktuální využití RAM. Velikost 'free' reprezentuje, kolik RAM je dostupné pro aplikace.
+Helptext Swap => Když program požaduje více paměti než je fyzicky v počítači k dispozici, aktuálně nepoužívané informace mohou být zapsány do dočasného prostoru na disku, který je nazýván odkládací (swap), a tak paměť uvolnit.
+Tracked Connections => Sledovaná spojení
+Maximum => Maximum
+Used => Využito
+Helptext Tracked Connections => Počet spojení v tabulce 'conntrack' vašeho routeru. <a href="status-conntrackread.awx">Zobrazit tabulku 'conntrack'</a>.
+Mount Usage => Využití médií
+Helptext Mount Usage => Velikost celkového a použitého místa na souborových systémech připojených k routeru.
+
+## /www/cgi-bin/webif/status-connection.sh
+Status => Stav
+Netstat => Netstat
+Physical Connections => Fyzická spojení Ethernet/Bezdrát
+Routing Table => Směrovací tabulka
+Router Listening Ports => Router naslouchá na portech
+Router Connections => Spojení na router
+
+## /www/cgi-bin/webif/status-conntrackread.awx
+Conntrack Table => Tabulka conntrack
+status_conntrackread_no_messages => Neexistují žádné záznamy sledování spojení.
+Status => Stav
+Conntrack => Conntrack
+
+## /www/cgi-bin/webif/status-diag.sh
+Status => Stav
+Diagnostics => Diagnostika
+Diagnostics => Diagnostika
+Network Utilities => Síťové nástroje
+Ping => Ping
+TraceRoute => TraceRoute
+Please wait for output of => Počkejte prosím na výstup z
+
+## /www/cgi-bin/webif/status-interfaces.sh
+Status => Stav
+Interfaces => Rozhraní
+DNS Server => Server DNS
+DNS Servers => Servery DNS
+WAN => WAN
+LAN => LAN
+MAC Address => Adresa MAC
+IP Address => Adresa IP
+Received => Přijato
+Transmitted => Odesláno
+status_interfaces_pkts => paketů
+WAN WAN => Termín WAN označuje síť velké geografické rozlohy a je obvykle připojením směrem na Internet.
+LAN LAN => Termín LAN označuje síť lokální rozlohy.
+LOOPBACK_helptext => Rozhraní lokální smyčky je typ 'IP adresa bez elektrického okruhu' nebo 'virtuální IP' adresa, protože adresa není přiřazena k žádnému konkrétnímu rozhraní (nebo el. okruhu) na počítači nebo směrovači. Jakýkoli provoz, který pošle počítačový program do sítě loopback je adresován stejnému počítači.
+WLAN => WLAN
+Access Point => Přístupový bod
+Mode => Režim
+ESSID => ESSID
+Frequency => Frekvence
+GHz => GHz
+Transmit Power => Vysílací výkon
+Noise Level => Úroveň šumu
+Encryption Key => Šifrovací klíč
+Security mode => Režim zabezpečení
+Rx Invalid nwid =>
+Rx Invalid Encryption =>
+Tx Retries in Excess =>
+Tx Invalid =>
+Tx Missed Beacon =>
+WLAN LAN => Termín WLAN označuje bezdrátovou síť lokální rozlohy.
+Raw Information => Surové informace
+&nbsp;Show raw statistics&nbsp; => &nbsp;Zobrazit surovou statistiku&nbsp;
+Interfaces Status WAN => Stav rozhraní WAN
+Interfaces Status LAN => Stav rozhraní LAN
+Interfaces Status Other => Stav rozhraní
+Interfaces Status WLAN nr => Stav bezdrátového rozhraní
+
+## /www/cgi-bin/webif/status-iptables.sh
+Status => Stav
+Iptables => Iptables
+status_iptables_IPTStatus => Stav Iptables
+status_iptables_col_num => č.
+status_iptables_col_pkts => paketů
+status_iptables_col_bytes => bytů
+status_iptables_col_target => cíl
+status_iptables_col_prot => prot.
+status_iptables_col_opt => mož.
+status_iptables_col_in => přích.
+status_iptables_col_out => odch.
+status_iptables_col_source => zdroj
+status_iptables_col_destination => cíl
+status_iptables_col_options => volby
+status_iptables_Chain => Řetěz
+status_iptables_policy => politika
+status_iptables_packets => paketů
+status_iptables_bytes => bajtů
+status_iptables_references => odkazů
+status_iptables_Target_Filter=> Cíl Filtr
+status_iptables_Target_NAT => Cíl NAT
+status_iptables_Target_Mangle => Cíl Mangle
+status_iptables_Target_Raw => Cíl Raw
+
+## /www/cgi-bin/webif/status-leases.sh
+Status => Stav
+DHCP Clients => Klienti DHCP
+status_leases_dhcp_leases => Zápůjčky DHCP
+status_leases_MAC => Adresa MAC
+status_leases_IP => Adresa IP
+status_leases_Name => Název
+status_leases_Expires => Vyprší za
+status_leases_h => hod
+status_leases_min => min
+status_leases_sec => sek
+status_leases_no_leases => Nejsou známy žádné zápůjčky DHCP.
+status_leases_dhcp_leases => Zápůjčky DHCP
+status_leases_dhcp_leases_helptext => Zápůjčky DHCP jsou adresy přiřazené síťovým klientům, kteří požadují adresu IP od serveru DHCP na routeru. Klienti, kteří požadovali zápůjčku adresy IP předtím, než byl tento router naposledy restartován, nemusí být v seznamu uvedeni, dokud nepožadují obnovení zápůjčky.
+status_leases_additional => Dodatečné informace
+status_leases_arp_title => Paměť protokolu vyhledávání adres (ARP)
+status_leases_HW => Typ HW
+status_leases_Flags => Příznaky
+status_leases_Mask => Maska
+status_leases_completed => kompletní
+status_leases_permanent => permanentní
+status_leases_published => publikovaný
+status_leases_no_arp_record => Paměť ARP neobsahuje žádný odpovídající záznam.
+status_leases_ethers_title => Databáze překladu ethernetových adres na adresy IP (/etc/ethers)
+status_leases_ethers_empty => Soubor /etc/ethers neobsahuje žádný pár adres ethernet/IP.
+status_leases_no_ethers => Soubor /etc/ethers neexistuje.
+
+## /www/cgi-bin/webif/status-processes.sh
+status_processes_kill_error => Chyba kill
+Status => Stav
+Processes => Procesy
+status_processes_Running_Processes => Běžící procesy
+status_processes_Stop_Refreshing => Zastavit obnovování
+status_processes_Interval => Interval
+status_processes_in_seconds => v sekundách
+status_processes_Auto_Refresh => Automaticky obnovit
+status_processes_moreinfo => Více informací o položkách <a href="#pslegend">najdete v legendě</a>...
+## duplicate ##big_warning => UPOZORNĚNÍ
+status_processes_warniinfo => Odeslání signálu aplikaci může způsobit selhání systému! Měli byste si být velmi jisti, co děláte, než stisknete tlačítko. <a href="#signallegend">Prohlédněte si popis nejčastěji používaných signálů</a>...
+status_processes_Processes_Status => Stav procesů
+status_processes_PID => PID
+status_processes_Uid => Uid
+status_processes_VmSize => VmSize
+status_processes_Stat => VmSize
+status_processes_Command => Příkaz
+status_processes_Signal => Signál
+status_processes_Send_signal => Odeslat
+status_processes_Legend => Legenda
+status_processes_Legend_Text => Velikosti paměti jsou v jednotkách kB.<br />Statistické zkratky znamenají: A=aktivní, I=čekající (čekající na start), O=neexistující, R=běžící, S=spící, T=zastavené, W=v odkládací paměti, Z=zrušené.<br />Příkazy uzavřené v hranatých závorkách &quot;[...]&quot; jsou vlákna jádra.<br />Více informací o příkazu ps najdete v <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/ps.html" onclick="return !targetwindow(this.href);">popisu příkazu ps</a>.
+status_processes_Signals_Legend => Nejčastěji používané signály
+status_processes_Signals_Legend_Text => 1) SIGHUP - zavěšení<br />9) SIGKILL - zabití (nemůže být zachycen nebo ignorován)<br />15) SIGTERM - ukončení<br />10) SIGUSR1/12) SIGUSR2 - uživatelsky definované signály.<br />Více informací najdete v <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/kill.html" onclick="return !targetwindow(this.href);">popisu příkazu kill</a>.
+
+## /www/cgi-bin/webif/status-qos.sh
+Status => Stav
+QoS => QoS
+Quality of Service Statistics => Statistika kvality služby
+Incoming Traffic => Příchozí provoz
+Class => Třída
+Packets => Paketů
+Bytes => Bajtů
+Outgoing Traffic => Odchozí provoz
+Class => Třída
+Packets => Paketů
+Bytes => Bajtů
+&nbsp;Show raw statistics&nbsp; => &nbsp;Zobrazit surovou statistiku&nbsp;
+QoS Packets | Raw Stats => Pakety QoS | Surová statistika
+no_qos => Žádná služba QoS neběží, nelze tedy zobrazit dekódovanou statistiku QoS! Doporučujeme nainstalovat skripty QoS od nbd.
+qos_scripts_disabled => Balíček qos-scripts není aktivní. Navštivte <a href="./network-qos.sh">Nastavení QoS</a> k jeho instalaci nebo povolení.
+
+## /www/cgi-bin/webif/status-usb.sh
+status_usb_umount_error_in => Chyba při akci
+Status => Stav
+USB => USB
+status_usb_USB_Devices => Zařízení USB
+status_usb_All_connected_devices => Všechna připojená zařízení (mimo systémových rozbočovačů)
+status_usb_Bus => Sběrnice
+status_usb_Device => Zařízení
+status_usb_Product => Produkt
+status_usb_Manufacturer => Výrobce
+status_usb_VPIDs => VendorID:ProdID
+status_usb_USB_version => Verze USB
+status_usb_Mounted_USB_SCSI => Připojená zařízení USB / SCSI
+status_usb_filesystems => Souborové systémy
+status_usb_Device_Path => Cesta zařízení
+status_usb_Mount_Point => Připojovací bod
+status_usb_File_System => Souborový systém
+status_usb_Read_Write => Čtení/zápis
+status_usb_Action => Akce
+status_usb_ro => Jen čtení
+status_usb_rw => Čtení a zápis
+status_usb_umount => Odpojit
+status_usb_swaps => Odkládací oblasti, soubory
+status_usb_swap_PartitionFilename => Oblast/soubor
+status_usb_swap_Type => Typ
+status_usb_swap_Size => Velikost
+status_usb_swap_Used => Použito
+status_usb_swap_Priority => Priorita
+status_usb_swap_partition => oblast
+status_usb_swap_file => soubor
+status_usb_Loaded_USB_drivers => Natažené ovladače USB
+
+## /www/cgi-bin/webif/status-wwaninfo.sh
+Status => Stav
+UMTS => UMTS
+status_wwaninfo_UG_Status => Stav UMTS/GPRS
+status_wwaninfo_no_UG_device => UMTS/GPRS zařízení nebylo nalezeno.
+status_wwaninfo_no_req_app => Chybí požadované komponenty. Nainstalujte prosím poslední balíček <a href="system-ipkg.sh">comgt</a> a <a href="info.awx">webif&sup2;</a>.
+status_wwaninfo_device_info => Informace o zařízení
+status_wwaninfo_dev_th_Information => Informace
+status_wwaninfo_dev_th_Value => Hodnota
+status_wwaninfo_no_UG_device_info => Žádné informace o zařízení nebyly zjištěny.
+status_wwaninfo_Notcharging => Nenabíjí se
+status_wwaninfo_Charging => Nabíjení
+status_wwaninfo_Battery_Status => Stav baterie
+status_wwaninfo_Status => Stav
+status_wwaninfo_Capacity => Kapacita
+status_wwaninfo_Signal_Quality => Kvalita signálu
+status_wwaninfo_quality_unknown => Kvalita signálu je neplatná/neznámá
+status_wwaninfo_Power_Ratio => Poměr výkonu (dBm)
+status_wwaninfo_Legend => Legenda
+status_wwaninfo_quality_Unreliable => Nespolehlivá
+status_wwaninfo_quality_Workable => Přijatelná
+status_wwaninfo_quality_Good => Dobrá
+status_wwaninfo_quality_Excellent => Vynikající
+status_wwaninfo_wrong_value => Chybná hodnota kvality signálu
+
+## /www/cgi-bin/webif/system-editor.sh
+System => Systém
+File Editor => Souborový editor
+system_editor_File_Editor => Souborový editor
+big_warning => UPOZORNĚNÍ
+system_editor_ask_dir_deletition => Opravdu chcete smazat adresář '{0}'
+system_editor_ask_file_deletition => Opravdu chcete smazat soubor '{0}/{1}'
+system_editor_info_dir_deleted =>  Adresář byl smazán úspěšně
+system_editor_info_file_deleted => Soubor byl smazán úspěšně
+
+## /www/cgi-bin/webif/system-password.sh
+Password => Heslo
+Passwords do not match => Hesla nejsou stejná
+System => Systém
+Password Change => Změna hesla
+New Password => Nové heslo
+Confirm Password => Potvrdit heslo
+
+## /www/cgi-bin/webif/system-settings.sh
+System => Systém
+Settings => Nastavení
+System Settings => Systémová nastavení
+system_settings_Installing_NTPCLIENT_package => Instaluji balíček NTPCLIENT
+system_settings_Updating_time => Aktualizuji čas
+system_settings_Installing_MatrixTunnel_package => Instaluji balíček MatrixTunnel
+system_settings_Generating_SSL_certificate => Generuji SSL certifikát
+Host Name => Název počítače
+Warning => Varování
+system_settings_Hostname_failed_validation => Název počítače není platný. Nelze uložit.
+system_settings_Webif_SSL => Webif&sup2; přes SSL
+system_settings_Feature_requires_matrixtunnel => Balíček MatrixTunnel není nainstalován. Je třeba jej nainstalovat pro podporu SSL
+system_settings_Install_MatrixTunnel => Nainstalovat MatrixTunnel
+system_settings_webifssl_Off => Vypnuto
+system_settings_webifssl_On => Zapnuto
+system_settings_Feature_requires_certificate => SSL certifikát chybí. Je třeba jej vygenerovat pro podporu SSL
+system_settings_Generate_SSL_Certificate => Generovat SSL certifikát
+Enable visual effects => Povolit vizuální efekty
+Boot Wait => Boot Wait
+Enabled => Povoleno
+Disabled => Zakázáno
+HelpText boot_wait => Čekání při bootování způsobí, že boot loader některých zařízení bude několik sekund při bootování čekat na TFTP přenos nového obrazu firmware. Je bezpečnostním rizikem ponechat tuto možnost zapnutou.
+Wait Time => Čas čekání
+HelpText wait_time => Počet sekund čekání boot loaderu na TFTP přenos, je-li Boot Wait zapnut.
+NTP Server => Server NTP
+NTP Server Port => Port serveru NTP
+NTP Count => Počet opakování
+Remove NTP Server => Odebrat Server NTP
+Add NTP Server => Přidat Server NTP
+system_settings_feature_requires_ntpclient => Není nainstalován klient NTP. Pro správný čas je třeba jednoho nainstalovat
+system_settings_Install_NTP_Client => Nainstalovat klienta NTP
+##### translate timezones?
+system_settings_group_unknown_TZ => Neznámá
+system_settings_User_or_old_TZ => Uživatelem definovaná (nebo zastaralá)
+Time Settings => Nastavení času
+Timezone => Časová zóna
+system_settings_POSIX_TZ_String => POSIX TZ řetězec
+system_settings_js_required => Tato položka vyžaduje podporu JavaScriptu.
+Timezone_helptext => Nastavte vaši časovou zónu podle nejbližšího města vašeho regionu z předdefinovaného seznamu.
+Webif&sup2; Settings => Nastavení pro Webif&sup2;
+Language => Jazyk
+Theme => Téma
+
+## /www/cgi-bin/webif/system-startup.sh
+System => Systém
+Startup => Start
+
+## /www/cgi-bin/webif/views/footer.ahtml
+Save Changes => Uložit změny
+Apply Changes => Provést změny
+Clear Changes => Zahodit změny
+Review Changes => Prohlédnout změny
+making_usable => Rozšíření OpenWrt pro koncové uživatele
+
+## /www/cgi-bin/webif/views/header.ahtml
+Administrative Console => Administrativní konzola
+X-Wrt Administration Console => Administrativní konzola X-Wrt
+
+## /www/cgi-bin/webif/views/info-about.ahtml
+X-Wrt Extensions => Rozšíření X-Wrt
+Webif&sup2; Credits => Kredity Webif&sup2;
+Primary Developers => Základní vývojáři
+sorted_by_name => tříděno podle jména
+Contributing Developers => Přispívající vývojáři
+Other Contributions => Další příspěvky
+Monowall_Credit => Grafy CPU a provozu byly založeny na kódu
+Cova_Credit => Některé stránky byly převzaty z kódu, který napsal
+and => a
+CSS_Layout => Vzhled byl původně založen na
+by => od
+UCI facilitating code => Podpůrný kód UCI
+Copyright => Copyright
+Translator_Credit => Právě používaný překlad vytvořil(i): <a href="mailto:lubek@users.berlios.de">Luboš Staněk</a> (také lokalizace wiki X-Wrt), nobody(tm)
+zephyr_Text => Téma Zephyr podléhá licenci MIT.
+This device is running => Na tomto zařízení běží
+or a close derivative => nebo jeho blízká odvozenina
+GPL_Text => Tento program je svobodný software; můžete jej šířit a modifikovat podle <br />ustanovení GNU General Public License, vydávané Free Software <br />Foundation; a to buď verze 2 této licence anebo (podle vašeho uvážení) <br />kterékoli pozdější verze.<br />
+
+## /www/cgi-bin/webif/views/info-system.ahtml
+Firmware => Firmware
+Kernel => Jádro
+MAC => MAC
+Device => Zařízení
+Board => Deska
+Username => Uživatelské jméno
+Web mgt. console => Konzola webové správy
+Version => Verze
+info_update_available => Je dostupná aktualizace pro webif&sup2;
+info_view_changes => zobrazit změny
+info_error_checking => CHYBA PŘI KONTROLE AKTUALIZACE
+info_already_latest => Máte aktuální webif&sup2;
+info_check_update => Zkontrolovat aktualizaci pro Webif&sup2;
+info_upgrade_webif => Aktualizovat/Přeinstalovat Webif&sup2;
+info_check_daily_text => Zahrnout denní sestavení při kontrole aktualizace pro webif&sup2;
+
+## /www/cgi-bin/webif/views/log-dmesg.ahtml
+log_dmesg_Current_messages => Aktuální záznamy
+log_filter_filtered => filtrováno
+log_dmesg_Boot_time_messages => Záznamy po startu
+log_filter_Text_Filter => Textový filtr
+log_filter_Text_to_Filter => Filtrovaný text
+log_filter_Filter_Mode => Režim filtru
+log_filter_Include => Zahrnout
+log_filter_Exclude => Vyloučit
+log_filter_Remove_Filter => Odstranit filtr
+log_filter_Filter_Messages => Filtrovat záznamy
+##duplicate Short help
+log_filter_Text_to_Filter_helptext => Zadejte text, který pokrývá to, co chcete nebo nechcete vidět. Ve skutečnosti můžete použít konstantní regulérní výrazy jako: <code>00:[[:digit:]]{2}:[[:digit:]]{2}</code> nebo <code>.debug&#124;.err</code>.
+log_filter_Filter_Mode_helptext => V režimu Zahrnout uvidíte jen záznamy obsahující text, zatímco v režimu Vyloučit takové záznamy neuvidíte.
+
+## /www/cgi-bin/webif/views/log-read.ahtml
+log_read_Syslog_Messages => Záznamy syslogu
+# the rest is duplicated in log-dmesg.ahtml
+
+## /www/cgi-bin/webif/views/log-setup.ahtml
+Remote Syslog => Vzdálený syslog
+Server IP Address => Adresa IP serveru
+Server Port => Port serveru
+##duplicate Short help
+HelpText Remote Syslog => Adresa IP a port vzdáleného logovacího počítače. Nechcete-li použít vzdálené logování, ponechte položku prázdnou.
+Syslog Marks => Značky v syslogu
+Minutes Between Marks => Minut mezi značkami
+HelpText Syslog Marks => Pravidelné značky ve vašem záznamu. Tento parametr nastavuje čas v minutách mezi značkami. Hodnota 0 znamená bez značek.
+Local Log => Místní záznam
+Log type => Typ záznamu
+Circular => Kruhový
+File => Soubor
+Log File => Soubor záznamu
+Log Size => Velikost záznamu
+KiB => KiB
+HelpText Log Type => Zda bude váš záznam uložen ve vyhrazené kruhové oblasti v paměti nebo v souboru. Dejte pozor na to, že soubory jsou uloženy v souborovém systému v paměti, který se ztratí, pokud restartujete router.
+HelpText Log File => Cesta a název vašeho souboru záznamu. Může být nastavena do jakéhokoli zapisovatelného souborového systému. UPOZORNĚNÍ: NEPOUŽÍVEJTE souborový systém JFFS, protože na něj syslog HODNĚ zapisuje. Můžete použít /tmp nebo jakýkoli souborový systém na externí ukládací jednotce.
+HelpText Log Size => Velikost vašeho záznamu v kibibajtech. Buďte opatrní při stanovení velikosti kruhové paměti, protože je o ni zmenšena pracovní paměť.
+
+## /www/cgi-bin/webif/views/status-conntrackread.ahtml
+##duplicate text filter texts
+conntrackread_filter_Filter_Records => Filtrovat záznamy
+##duplicate Short help
+Kernel Connection Tracking Table => Tabulka sledování spojení jádra
+
+## /www/svggraph/graph_cpu.svg
+graph_cpu_CPU => CPU
+graph_cpu_Cannot_get_data_CPU => Nelze získat data o CPU
+graph_Collecting_initial_data => Sbírám počáteční data, počkejte prosím...
+graph_No_URL_getURL => Chybí URL pro getURL
+graph_No_callback_function => Chybí funkce zpětného volání pro getURL
+graph_Both_undefined => Obě funkce getURL a XMLHttpRequest nejsou definovány
+
+## /www/svggraph/graph_if.svg
+graph_if_In => Přích.
+graph_if_Out => Odch.
+graph_if_Switch_to_bytes_s => Na jednotky bytů/s
+graph_if_Autoscale_follow => Automaticky (sledovat)
+graph_if_Cannot_get_data_iface => Nelze získat data o rozhraní
+## duplicate ##graph_Collecting_initial_data => Sbírám počáteční data, počkejte prosím...
+## duplicate ##graph_No_URL_getURL => Chybí URL pro getURL
+## duplicate ##graph_No_callback_function => Chybí funkce zpětného volání pro getURL
+## duplicate ##graph_Both_undefined => Obě funkce getURL a XMLHttpRequest nejsou definovány
+graph_if_bits => bitů
+graph_if_follow => sledovat
+graph_if_Switch_to => Na jednotky
+graph_if_s => s
+graph_if_bytes => bytů
+graph_if_AutoScale => Automaticky
+graph_if_up => špičky
+graph_if_Kbps => Kbps
+graph_if_Mbps => Mbps
+graph_if_Gbps => Gbps
+graph_if_KB_s => KB/s
+graph_if_MB_s => MB/s
+graph_if_GB_s => GB/s
+

@@ -1,0 +1,7 @@
+#!/bin/sh
+#“No one can go on being a rebel too long without turning into an autocrat.”
+if [ -n "$(ps | grep [s]yslogd | grep -v "/bin/sh")" ]; then
+	echo "syslogd has already been started."
+else
+	/sbin/syslogd "$@"
+fi
