@@ -33,7 +33,7 @@ DEFAULT_AP_ISOLATE=0
 #####################################################################
 FORM_wds="${wl0_wds:-$(nvram get wl0_wds)}"
 LISTVAL="$FORM_wds"
-handle_list "$FORM_wdsremove" "$FORM_wdsadd" "$FORM_wdssubmit" 'mac|FORM_wdsadd|WDS MAC address|required' && {
+handle_list "$FORM_wdsremove" "$FORM_wdsadd" "$FORM_wdssubmit" 'mac|FORM_wdsadd|@TR<<WDS MAC address>>|required' && {
 	FORM_wds="$LISTVAL"
 	save_setting wireless wl0_wds "$FORM_wds"
 }
@@ -42,7 +42,7 @@ FORM_wdsadd=${FORM_wdsadd:-00:00:00:00:00:00}
 #####################################################################
 FORM_maclist="${wl0_maclist:-$(nvram get wl0_maclist)}"
 LISTVAL="$FORM_maclist"
-handle_list "$FORM_maclistremove" "$FORM_maclistadd" "$FORM_maclistsubmit" 'mac|FORM_maclistadd|WDS MAC address|required' && {
+handle_list "$FORM_maclistremove" "$FORM_maclistadd" "$FORM_maclistsubmit" 'mac|FORM_maclistadd|@TR<<WDS MAC address>>|required' && {
 	FORM_maclist="$LISTVAL"
 	save_setting wireless wl0_maclist "$FORM_maclist"
 }
@@ -73,8 +73,9 @@ if empty "$FORM_submit"; then
 	esac
 	FORM_wdstimeout=${wl0_wdstimeout:-$(nvram get wl0_wdstimeout)}
 	FORM_antdiv=${antdiv:-$(nvram get wl0_antdiv)}
-	FORM_txdiv=${txdiv:-$(nvram get wl0_txdiv)}
-	FORM_txdiv=${FORM_txdiv:-3}
+	FORM_antdiv=${FORM_antdiv:-3}
+	FORM_txant=${txant:-$(nvram get wl0_txant)}
+	FORM_txant=${FORM_txant:-3}
 	FORM_wl0_plcphdr=${wl0_plcphdr:-$(nvram get wl0_plcphdr)}
 	FORM_wl0_frag=${wl0_frag:-$(nvram get wl0_frag)}
 	FORM_wl0_frag=${FORM_wl0_frag:-2346}
@@ -93,17 +94,17 @@ else
 	SAVED=1
 
 	validate <<EOF
-int|FORM_lazywds|Lazy WDS On/Off|required min=0 max=1|$FORM_lazywds
-int|FORM_wdstimeout|WDS watchdog timeout|optional min=0 max=3600|$FORM_wdstimeout
-int|FORM_txpwr|Transmit Power (in mw)|required min=1 max=251|$FORM_txpwr
-int|FORM_wl0_frag|Fragmentation Threshold|min=0 max=2346|$FORM_wl0_frag
-int|FORM_wl0_rts|RTS Threshold|min=0 max=2347|$FORM_wl0_rts
-int|FORM_wl0_dtim|DTIM Period|min=0|$FORM_wl0_dtim
-int|FORM_wl0_bcn|beacon Period|min=0|$FORM_wl0_bcn
-int|FORM_wl0_maxassoc|Max Associated Clients|required min=0 max=256|$FORM_wl0_maxassoc
-int|FORM_antdiv|Recive Diversity|min=0|$FORM_antdiv
-int|FORM_txdiv|Transmit Diversity|min=0|$FORM_txdiv
-int|FORM_wl0_distance|Distance|min=0|$FORM_wl0_distance
+int|FORM_lazywds|@TR<<Lazy WDS>>|required min=0 max=1|$FORM_lazywds
+int|FORM_wdstimeout|@TR<<WDS Watchdog Timeout>>|optional min=0 max=3600|$FORM_wdstimeout
+int|FORM_txpwr|@TR<<Transmit Power>>|required min=1 max=251|$FORM_txpwr
+int|FORM_wl0_frag|@TR<<Fragmentation Threshold>>|min=0 max=2346|$FORM_wl0_frag
+int|FORM_wl0_rts|@TR<<RTS Threshold>>|min=0 max=2347|$FORM_wl0_rts
+int|FORM_wl0_dtim|@TR<<DTIM Period>>|min=0|$FORM_wl0_dtim
+int|FORM_wl0_bcn|@TR<<Beacon Period>>|min=0|$FORM_wl0_bcn
+int|FORM_wl0_maxassoc|@TR<<Max Associated Clients>>|required min=0 max=256|$FORM_wl0_maxassoc
+int|FORM_antdiv|@TR<<Receive Antenna Diversity>>|min=0|$FORM_antdiv
+int|FORM_txant|@TR<<Transmit Antenna Diversity>>|min=0|$FORM_txant
+int|FORM_wl0_distance|@TR<<Wireless Distance>>|min=0|$FORM_wl0_distance
 EOF
 	equal "$?" 0 && {
 		save_setting wireless wl0_lazywds "$FORM_lazywds"
@@ -114,7 +115,7 @@ EOF
 		save_setting wireless wl0_ap_isolate "$FORM_isolate"
 		save_setting wireless wl0_frameburst "$FORM_frameburst"
 		save_setting wireless wl0_antdiv "$FORM_antdiv"
-		save_setting wireless wl0_txdiv "$FORM_txdiv"
+		save_setting wireless wl0_txant "$FORM_txant"
 		save_setting wireless wl0_plcphdr "$FORM_wl0_plcphdr"
 		save_setting wireless wl0_frag  "$FORM_wl0_frag"
 		save_setting wireless wl0_rts   "$FORM_wl0_rts"
@@ -175,34 +176,34 @@ field|@TR<<Isolate WLAN clients>>
 select|isolate|$FORM_isolate
 option|1|@TR<<Enabled>>
 option|0|@TR<<Disabled>>
-field|@TR<<Transmit Power (in mw)>>
+field|@TR<<Transmit Power>> @TR<<(in mw)>>
 select|txpwr|$FORM_txpwr
 $VALID_TXPWR
 field|@TR<<Receive Antenna Diversity>>
 select|antdiv|$FORM_antdiv
-option|3|@TR<<Diversity>>
+option|3|@TR<<Automatic>>
 option|0|@TR<<Right>>
 option|1|@TR<<Left>>
 field|@TR<<Transmit Antenna Diversity>>
-select|txdiv|$FORM_txdiv
-option|3|@TR<<Diversity>>
+select|txant|$FORM_txant
+option|3|@TR<<Automatic>>
 option|0|@TR<<Right>>
 option|1|@TR<<Left>>
-field|@TR<<Preamble (Default: Long)>>
+field|@TR<<Preamble>> @TR<<(Default: Long)>>
 select|wl0_plcphdr|$FORM_wl0_plcphdr
 option|long|@TR<<Long>>
 option|short|@TR<<Short>>
-field|Fragmentation Threshold (default 2346)
+field|@TR<<Fragmentation Threshold>> @TR<<(default 2346)>>
 text|wl0_frag|$FORM_wl0_frag
-field|RTS Threshold (default 2347)
+field|@TR<<RTS Threshold>> @TR<<(default 2347)>>
 text|wl0_rts|$FORM_wl0_rts
-field|DTIM Period (default 1)
+field|@TR<<DTIM Period>> @TR<<(default 1)>>
 text|wl0_dtim|$FORM_wl0_dtim
-field|Beacon Period (default 100)
+field|@TR<<Beacon Period>> @TR<<(default 100)>>
 text|wl0_bcn|$FORM_wl0_bcn
-field|Max Associated Clients (default 128)
+field|@TR<<Max Associated Clients>> @TR<<(default 128)>>
 text|wl0_maxassoc|$FORM_wl0_maxassoc
-field|Wireless Distance (In Meters)
+field|@TR<<Wireless Distance>> @TR<<(In Meters)>>
 text|wl0_distance|$FORM_wl0_distance
 helpitem|Wireless Distance
 helptext|Helptext Wireless Distance#You must enter a number that is double the distance of your longest link.
