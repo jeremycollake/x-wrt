@@ -1,6 +1,8 @@
---- dnsmasq-2.15.orig/src/config.h	2004-09-20 15:47:57.000000000 +0200
-+++ dnsmasq-2.15/src/config.h	2004-09-20 23:21:10.000000000 +0200
-@@ -78,8 +78,9 @@
+Index: dnsmasq-2.40/src/config.h
+===================================================================
+--- dnsmasq-2.40.orig/src/config.h	2007-06-26 19:16:31.000000000 +0200
++++ dnsmasq-2.40/src/config.h	2007-06-26 19:16:31.000000000 +0200
+@@ -281,8 +281,9 @@
  /* We assume that systems which don't have IPv6
     headers don't have ntop and pton either */
  

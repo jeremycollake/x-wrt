@@ -3,12 +3,13 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dnsmasq
-PKG_VERSION:=2.35
+PKG_VERSION:=2.40
 PKG_RELEASE:=1
-PKG_MD5SUM:=57b8643dc394cf2fbd1bced64536c6df
 
-PKG_SOURCE_URL:=http://thekelleys.org.uk/dnsmasq
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://thekelleys.org.uk/dnsmasq
+PKG_MD5SUM:=91b6063ae81146b9d70b4381b2f3e44f
+
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_CAT:=zcat
 
@@ -21,7 +22,8 @@ $(PKG_BUILD_DIR)/.configured:
 
 $(PKG_BUILD_DIR)/.built:
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC=$(TARGET_CC) CFLAGS="$(TARGET_CFLAGS) -DHAVE_ISC_READER=1" \
+		$(TARGET_CONFIGURE_OPTS) \
+		CFLAGS="$(TARGET_CFLAGS) -DHAVE_ISC_READER=1" \
 		BINDIR=/usr/sbin MANDIR=/usr/man
 	touch $@
 
