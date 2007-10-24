@@ -8,9 +8,9 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=xyssl
-PKG_VERSION:=0.7
+PKG_VERSION:=0.8
 PKG_RELEASE:=1
-PKG_MD5SUM:=f6422c393a4ca72577331f373c6c4248
+PKG_MD5SUM:=5c80e021e3bca4b77fbe2429c9e61541
 
 PKG_SOURCE_URL:=http://www.xyssl.org/code/download
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
@@ -27,15 +27,13 @@ $(eval $(call PKG_template,XYSSLPROGS,$(PKG_NAME)-progs,$(PKG_VERSION)-$(PKG_REL
 $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 	touch $@
 
-$(PKG_BUILD_DIR)/.built:
+$(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
 	rm -rf $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
 		OFLAGS="$(TARGET_CFLAGS)" \
-		all
-	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)/usr" \
-		install
+		all install
 	touch $@
 
 $(IPKG_LIBXYSSL):

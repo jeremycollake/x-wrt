@@ -1,0 +1,36 @@
+diff -urN xyssl-0.8.old/include/xyssl/config.h xyssl-0.8.nofunceng/include/xyssl/config.h
+--- xyssl-0.8.old/include/xyssl/config.h	2007-10-20 00:00:00.000000000 +0200
++++ xyssl-0.8.nofunceng/include/xyssl/config.h	2007-10-24 16:27:58.000000000 +0200
+@@ -149,7 +149,7 @@
+  *
+  * This module enables support for MD2-signed X.509 certificates.
+  */
+-#define XYSSL_MD2_C
++#undef XYSSL_MD2_C
+ 
+ /*
+  * Module:  library/md4.c
+@@ -182,7 +182,7 @@
+  *
+  * This modules adds support for the VIA PadLock on x86.
+  */
+-#define XYSSL_PADLOCK_C
++#undef XYSSL_PADLOCK_C
+ 
+ /*
+  * Module:  library/rsa.c
+diff -urN xyssl-0.8.old/programs/test/selftest.c xyssl-0.8.nofunceng/programs/test/selftest.c
+--- xyssl-0.8.old/programs/test/selftest.c	2007-10-20 00:00:00.000000000 +0200
++++ xyssl-0.8.nofunceng/programs/test/selftest.c	2007-10-24 16:29:13.000000000 +0200
+@@ -50,7 +50,10 @@
+         printf( "\n" );
+     }
+ 
+-    if( ( ret =    md2_self_test( v ) ) == 0 &&
++    if(
++#if defined(XYSSL_MD2_C)
++	( ret =    md2_self_test( v ) ) == 0 &&
++#endif
+         ( ret =    md4_self_test( v ) ) == 0 &&
+         ( ret =    md5_self_test( v ) ) == 0 &&
+         ( ret =   sha1_self_test( v ) ) == 0 &&
