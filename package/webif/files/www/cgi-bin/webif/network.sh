@@ -115,10 +115,10 @@ for interface in $network; do
 	LISTVAL="$FORM_dns"
 	handle_list "$FORM_dnsremove" "$FORM_dnsadd" "$FORM_dnssubmit" 'ip|FORM_dnsadd|@TR<<DNS Address>>|required' && {
 		FORM_dns="$LISTVAL"
-		[ " " = "$FORM_dns" ] && FORM_dns=""
 		uci_set "network" "$interface" "dns" "$FORM_dns"
-		FORM_dnsadd=""
 	}
+	FORM_dnsadd=${FORM_dnsadd:-""}
+	config_get FORM_dns $interface dns
 
 	network_options="start_form|$interface @TR<<Configuration>>
 	field|@TR<<Connection Type>>
@@ -147,7 +147,7 @@ for interface in $network; do
 	field|@TR<<PPTP Server IP>>|field_${interface}_pptp_server|hidden
 	text|${interface}_pptp_server|$FORM_pptp_server
 	helpitem|WAN IP Settings
-	helptext|Helptext IP Settings#IP Settings are optional for DHCP and PPTP. They are used as defaults in case the DHCP server is unavailable.
+	helptext|Helptext WAN IP Settings#IP Settings are optional for DHCP and PPTP. They are used as defaults in case the DHCP server is unavailable.
 	end_form
 
 	start_form||${interface}_ppp_settings|hidden
