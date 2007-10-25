@@ -115,9 +115,10 @@ for interface in $network; do
 	LISTVAL="$FORM_dns"
 	handle_list "$FORM_dnsremove" "$FORM_dnsadd" "$FORM_dnssubmit" 'ip|FORM_dnsadd|@TR<<DNS Address>>|required' && {
 		FORM_dns="$LISTVAL"
+		[ " " = "$FORM_dns" ] && FORM_dns=""
 		uci_set "network" "$interface" "dns" "$FORM_dns"
+		FORM_dnsadd=""
 	}
-	FORM_dnsadd=${FORM_dnsadd:-""}
 
 	network_options="start_form|$interface @TR<<Configuration>>
 	field|@TR<<Connection Type>>
