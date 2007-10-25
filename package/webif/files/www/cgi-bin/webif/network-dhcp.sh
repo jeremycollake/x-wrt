@@ -32,22 +32,48 @@ case "$TYPE" in
 	dhcp)
 		append dhcp_cfgs "$CONFIG_SECTION" "$N"
 	;;
+	dnsmasq)
+		append dnsmasq_cfgs "$CONFIG_SECTION" "$N"
+	;;
 esac
 }
 uci_load network
 uci_load dhcp
-dhcp_cfgs=$(echo "$dhcp_cfgs" |uniq)
+
+vcfg_number=$(echo "$dhcp_cfgs" "$dnsmasq_cfgs" |wc -l)
+let "vcfg_number+=1"
 
 #add dhcp network
 if [ "$FORM_add_dhcp" != "" ]; then
-	vcfg_number=$(echo "$dhcp_cfgs" |wc -l)
-	let "vcfg_number+=1"
 	uci_add "dhcp" "dhcp" ""
 	uci_set "dhcp" "cfg$vcfg_number" "interface" "$FORM_network_add"
 	dhcp_cfgs=""
+	dnsmasq_cfgs=""
 	uci_load dhcp
-	dhcp_cfgs=$(echo "$dhcp_cfgs" |uniq)
+	let "vcfg_number+=1"
 fi
+
+dnsmasq_cfgs=$(echo "$dnsmasq_cfgs" |uniq)
+dhcp_cfgs=$(echo "$dhcp_cfgs" |uniq)
+
+for config in $dnsmasq_cfgs; do
+	if [ "$FORM_submit" = "" ]; then
+		config_get authoritative $config authoritative
+		config_get domain $config domain
+	else
+		eval authoritative="\$FORM_authoritative_$config"
+		eval domain="\$FORM_domain_$config"
+	fi
+	
+	form_dnsmasq="start_form|DHCP Settings
+		field|@TR<<Authoritative>>
+		radio|authoritative_$config|$authoritative|1|@TR<<Enabled>>
+		radio|authoritative_$config|$authoritative|0|@TR<<Disabled>>
+		field|@TR<<Domain>>
+		text|domain_$config|$domain
+		end_form"
+	append forms "$form_dnsmasq" "$N"
+done
 
 for config in $dhcp_cfgs; do
 	if [ "$FORM_submit" = "" ]; then
@@ -119,6 +145,15 @@ if ! empty "$FORM_submit"; then
 $validate_forms
 EOF
 	equal "$?" 0 && {
+		for config in $dnsmasq_cfgs; do
+			eval authoritative="\$FORM_authoritative_$config"
+			eval domain="\$FORM_domain_$config"
+			
+			uci_set "dhcp" "$config" "authoritative" "$authoritative"
+			uci_set "dhcp" "$config" "domain" "$domain"
+			uci_set "dhcp" "$config" "local" "/$domain/"
+		done
+			
 		for config in $dhcp_cfgs; do
 			eval start="\$FORM_start_$config"
 			eval limit="\$FORM_limit_$config"
