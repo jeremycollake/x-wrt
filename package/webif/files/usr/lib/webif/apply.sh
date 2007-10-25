@@ -258,6 +258,7 @@ for package in $process_packages; do
 			echo '@TR<<Reloading>> @TR<<network>> ...'
 			/etc/init.d/network restart
 			killall dnsmasq
+			sleep 3
 			if exists "/etc/rc.d/S??dnsmasq"; then
 				/etc/init.d/dnsmasq start
 			fi
