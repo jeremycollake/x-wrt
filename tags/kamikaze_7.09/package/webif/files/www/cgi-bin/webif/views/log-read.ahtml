@@ -1,0 +1,36 @@
+<div class="settings">
+<h3><strong>@TR<<log_read_Syslog_Messages#Syslog Messages>><% (filtext != "" ? " [@TR<<log_filter_filtered#filtered>>]" : "") %></strong></h3>
+<div id="logarea">
+<pre><% show_log() %></pre>
+</div>
+<div class="clearfix">&nbsp;</div></div>
+
+<div class="settings">
+<h3><strong>@TR<<log_filter_Text_Filter#Text Filter>></strong></h3>
+<div class="settings-content">
+<form action="<% ENVIRON["SCRIPT_NAME"] %>" enctype="multipart/form-data" name="filterform" method="post">
+<table width="100%" summary="Settings">
+<tr>
+	<td width="40%">@TR<<log_filter_Text_to_Filter#Text to Filter>></td>
+	<td width="60%"><input id="id_filtext" type="text" name="filtext" value="<% filtext %>" /></td>
+</tr>
+<tr>
+	<td width="40%">@TR<<log_filter_Filter_Mode#Filter Mode>></td>
+	<td width="60%"><select id="id_filtmode" name="filtmode">
+		<option <% (filtmode == "include" ? "selected=\"selected\" " : "" ) %>value="include">@TR<<log_filter_Include#Include>></option>
+		<option <% (filtmode == "exclude" ? "selected=\"selected\" " : "" ) %>value="exclude">@TR<<log_filter_Exclude#Exclude>></option>
+		</select></td>
+</tr>
+<tr>
+	<td width="40%"><input id="id_clear" type="submit" name="clearfilter" value="@TR<<log_filter_Remove_Filter#Remove Filter>>" /></td>
+	<td width="60%"><input id="id_filter" type="submit" name="newfilter" value="@TR<<log_filter_Filter_Messages#Filter Messages>>" /></td>
+</tr>
+</table>
+</form>
+</div>
+<blockquote class="settings-help">
+<h3><strong>@TR<<Short help>>:</strong></h3>
+<h4>@TR<<log_filter_Text_to_Filter#Text to Filter>>:</h4><p>@TR<<log_filter_Text_to_Filter_helptext#Insert a string that covers what you would like to see or exclude. In fact you can use the reqular expression constants like: <code>00:[[:digit:]]{2}:[[:digit:]]{2}</code> or <code>.debug&#124;.err</code>.>></p>
+<h4>@TR<<log_filter_Filter_Mode#Filter Mode>>:</h4><p>@TR<<log_filter_Filter_Mode_helptext#You will see only messages containing the text in the Include mode while you will not see them in the Exclude mode.>></p>
+</blockquote>
+<div class="clearfix">&nbsp;</div></div>

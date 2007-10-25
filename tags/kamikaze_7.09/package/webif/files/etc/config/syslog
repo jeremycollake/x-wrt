@@ -1,0 +1,18 @@
+config syslogd
+	option ipaddr	''
+	option port	''
+	option size	'16'
+	option type	'circular'
+	option mark	'0'
+	option file	''
+
+config klogd
+	option conloglevel	''
+
+config dmesg
+	option buffersize	''
+
+config dmesgbackup
+	option enabled	'0'
+	option file	'/var/log/dmesg'
+	option gzip	'1'

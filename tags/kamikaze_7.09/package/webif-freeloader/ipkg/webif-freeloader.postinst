@@ -1,0 +1,14 @@
+#!/bin/sh
+#
+# Webif post-install script.
+#
+if [ "`grep "HotSpot" "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"`" = "##WEBIF:category:HotSpot" ]; then
+	cat "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories" |sed '/##WEBIF:category:HotSpot/a\
+##WEBIF:category:Freeloader'>"${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"
+elif [ "`grep "VPN" "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"`" = "##WEBIF:category:VPN" ]; then
+	cat "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories" |sed '/##WEBIF:category:VPN/a\
+##WEBIF:category:Freeloader'>"${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"
+else
+	cat "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories" |sed '/##WEBIF:category:Network/a\
+##WEBIF:category:Freeloader'>"${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"
+fi
