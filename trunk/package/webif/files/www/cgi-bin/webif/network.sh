@@ -118,7 +118,6 @@ for interface in $network; do
 		uci_set "network" "$interface" "dns" "$FORM_dns"
 	}
 	FORM_dnsadd=${FORM_dnsadd:-""}
-	config_get FORM_dns $interface dns
 
 	network_options="start_form|$interface @TR<<Configuration>>
 	field|@TR<<Connection Type>>
