@@ -151,6 +151,7 @@ package-$(BR2_PACKAGE_WOL) += wol
 package-$(BR2_PACKAGE_WPA_SUPPLICANT) += wpa_supplicant
 package-$(BR2_PACKAGE_WPUT) += wput
 package-$(BR2_PACKAGE_XINETD) += xinetd
+package-$(BR2_PACKAGE_XRELAYD) += xrelayd
 package-$(BR2_COMPILE_XYSSL) += xyssl
 package-$(BR2_PACKAGE_ZLIB) += zlib
 #package-$(BR2_PACKAGE_ZLIB) += webfone
@@ -210,6 +211,7 @@ usbutils-compile: libusb-compile
 vtun-compile: zlib-compile openssl-compile lzo-compile
 wificonf-compile: wireless-tools-compile nvram-compile
 wpa_supplicant-compile: openssl-compile
+xrelayd-compile: xyssl-compile
 
 stunnel-compile: openssl-compile tcp_wrappers-compile
 

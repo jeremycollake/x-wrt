@@ -1,0 +1,21 @@
+diff -urN xrelayd-0.2.old/xrelayd.c xrelayd-0.2.new/xrelayd.c
+--- xrelayd-0.2.old/xrelayd.c	2007-10-25 17:18:53.000000000 +0200
++++ xrelayd-0.2.new/xrelayd.c	2007-10-26 14:24:47.000000000 +0200
+@@ -438,7 +438,7 @@
+         ILOG("Handshake succeded");
+     }
+     
+-    NLOG("Connected %s client %d.%d.%d.%d to %s server %s:%d",
++    ILOG("Connected %s client %d.%d.%d.%d to %s server %s:%d",
+         sslserver ? "ssl" : "plain", client_ip[0],client_ip[1],client_ip[2],client_ip[3],
+         sslserver ? "plain" : "ssl", srv_host, srv_port);
+     
+@@ -528,7 +528,7 @@
+     net_close(server_fd);
+     ILOG("Closed %s connection to %s:%d",server_fd==*ssl_fd ? "ssl" : "plain",srv_host,srv_port);
+     
+-    NLOG("Closed connection between %s client %d.%d.%d.%d and %s server %s:%d",
++    ILOG("Closed connection between %s client %d.%d.%d.%d and %s server %s:%d",
+         sslserver ? "ssl" : "plain", client_ip[0],client_ip[1],client_ip[2],client_ip[3],
+         sslserver ? "plain" : "ssl", srv_host, srv_port);
+ }

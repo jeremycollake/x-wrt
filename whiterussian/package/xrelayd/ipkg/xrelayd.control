@@ -1,0 +1,7 @@
+Package: xrelayd
+Priority: optional
+Section: net
+Depends: libxyssl
+Description: The SSL tunnel based based on xyssl
+ A basic tcp proxy server which enables you to encrypt arbitrary
+ protocols without changing ssl unaware deamons and client software.

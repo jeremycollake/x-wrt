@@ -1,0 +1,8 @@
+config BR2_PACKAGE_XRELAYD
+	tristate "xrelayd - the SSL tunnel based based on xyssl"
+	default m if CONFIG_DEVEL
+	select BR2_PACKAGE_LIBXYSSL
+	help
+	  A basic tcp proxy server which enables you to encrypt arbitrary
+	  protocols without changing ssl unaware deamons and client software.
+ 
