@@ -9,12 +9,7 @@ reload_hotspot() {
 	}
 	(
 	config_cb() {
-		config_get TYPE "$CONFIG_SECTION" TYPE
-		case "$TYPE" in
-			chillispot)
-				service_cfg="$CONFIG_SECTION"
-			;;
-		esac
+		[ "$1" = "chillispot" ] && service_cfg="$2"
 	}
 	config_load "hotspot"
 	config_get_bool test "$service_cfg" enable 0
