@@ -15,7 +15,7 @@ config BR2_PACKAGE_LIBXYSSL
 	  http://www.xyssl.org
  
 config BR2_PACKAGE_XYSSLPROGS
-	tristate "xyssl - SSL library support programs"
+	tristate "xysslprogs - SSL library support programs"
 	default m if CONFIG_DEVEL
 	depends BR2_PACKAGE_LIBXYSSL
 	help
