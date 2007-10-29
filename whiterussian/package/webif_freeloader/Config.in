@@ -1,7 +1,7 @@
 menu "webif-freeloader"
 
 config BR2_PACKAGE_WEBIF_FREELOADER
-	depends BR2_PACKAGE_WEBIF	
+	select BR2_PACKAGE_WEBIF
 	tristate "webif-freeloader - Download manager addon for the webif"
 	default m
 	help

@@ -1,158 +1,158 @@
 menu "webif - OpenWrt Administrative Console"
 
 config BR2_PACKAGE_WEBIF
-	select BR2_PACKAGE_IPKG_UPGRADE_FIX
-	select BR2_PACKAGE_WEBIF_THEME_XWRT
-	depends BR2_PACKAGE_HASERL
-	depends BR2_PACKAGE_IPKG	
+ 	select BR2_PACKAGE_IPKG_UPGRADE_FIX
+	depends BR2_PACKAGE_WEBIF_THEME_XWRT
+ 	depends BR2_PACKAGE_HASERL
+	select BR2_PACKAGE_IPKG
 	tristate "webif^2 - HTTP Administrative Console"
 	default y
 	help
 	  An HTTP based management console for OpenWrt.
-	
+
 config BR2_PACKAGE_WEBIF_THEME_XWRT
 	tristate "webif-theme-xwrt - Original X-Wrt webif theme"
-	depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
 	default m
 	help
 	  Original X-Wrt webif theme
-	
+
 config BR2_PACKAGE_WEBIF_THEME_ZEPHYR
 	tristate "webif-theme-zephyr - Zephyr webif theme"
-	depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
 	default m
 	help
 	  Zephyr webif theme
-	
+
 config BR2_PACKAGE_WEBIF_LANG_CA
 	tristate "webif-lang-ca - Catalan language file for webif"
-	depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
 	default m
 	help
 	  Catalan language file for webif
 
 config BR2_PACKAGE_WEBIF_LANG_CS
 	tristate "webif-lang-cs - Czech language file for webif"
-	depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
 	default m
 	help
 	  Czech language file for webif
 
 config BR2_PACKAGE_WEBIF_LANG_DA
 	tristate "webif-lang-da - Danish language file for webif"
-	depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
 	default m
 	help
 	  Danish language file for webif
 
 config BR2_PACKAGE_WEBIF_LANG_DE
 	tristate "webif-lang-de - German language file for webif"
-	depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
 	default m
 	help
 	  German language file for webif
 
 config BR2_PACKAGE_WEBIF_LANG_EE
 	tristate "webif-lang-ee - Estonian language file for webif"
-	depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
 	default m
 	help
 	  Estonian language file for webif
 
 config BR2_PACKAGE_WEBIF_LANG_ES
 	tristate "webif-lang-es - Spanish language file for webif"
-	depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
 	default m
 	help
 	  Spanish language file for webif
 
 config BR2_PACKAGE_WEBIF_LANG_FR
 	tristate "webif-lang-fr - French language file for webif"
-	depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
 	default m
 	help
 	  French language file for webif
 
 config BR2_PACKAGE_WEBIF_LANG_HE
 	tristate "webif-lang-he - Hebrew language file for webif"
-	depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
 	default m
 	help
 	  Hebrew language file for webif
 
 config BR2_PACKAGE_WEBIF_LANG_HR
 	tristate "webif-lang-hr - Croatian language file for webif"
-	depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
 	default m
 	help
 	  Croatian language file for webif
 
 config BR2_PACKAGE_WEBIF_LANG_HU
 	tristate "webif-lang-hu - Hungarian language file for webif"
-	depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
 	default m
 	help
 	  Hungarian language file for webif
 
 config BR2_PACKAGE_WEBIF_LANG_IT
 	tristate "webif-lang-it - Italian language file for webif"
-	depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
 	default m
 	help
 	  Italian language file for webif
 
 config BR2_PACKAGE_WEBIF_LANG_NL
 	tristate "webif-lang-nl - Dutch language file for webif"
-	depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
 	default m
 	help
 	  Dutch language file for webif
 
 config BR2_PACKAGE_WEBIF_LANG_NO
 	tristate "webif-lang-no - Norwegian language file for webif"
-	depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
 	default m
 	help
 	  Norwegian language file for webif
 
 config BR2_PACKAGE_WEBIF_LANG_PL
 	tristate "webif-lang-pl - Polish language file for webif"
-	depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
 	default m
 	help
 	  Polish language file for webif
-	  
+
 config BR2_PACKAGE_WEBIF_LANG_PT
         tristate "webif-lang-pt - Portuguese language file for webif"
-        depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
         default m
         help
           Portuguese language file for webif
 
 config BR2_PACKAGE_WEBIF_LANG_RU
 	tristate "webif-lang-ru - Russian language file for webif"
-	depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
 	default m
 	help
 	  Russian language file for webif
 
 config BR2_PACKAGE_WEBIF_LANG_SV
 	tristate "webif-lang-sv - Swedish language file for webif"
-	depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
 	default m
 	help
 	  Swedish language file for webif
-	  
+
 config BR2_PACKAGE_WEBIF_LANG_UK
 	tristate "webif-lang-uk - Ukrainian language file for webif"
-	depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
 	default m
 	help
 	  Ukrainian language file for webif
-	  
+
 config BR2_PACKAGE_WEBIF_LANG_ZH
 	tristate "webif-lang-zh - Chinese Simplified language file for webif"
-	depends BR2_PACKAGE_WEBIF
+	select BR2_PACKAGE_WEBIF
 	default m
 	help
 	  Chinese Simplified language file for webif
