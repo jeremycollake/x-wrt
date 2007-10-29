@@ -10,3 +10,14 @@ config BR2_PACKAGE_PPTPD
 	  http://poptop.sourceforge.net/
 	  
 
+config BR2_PACKAGE_BCRELAY
+	prompt "bcrelay - A broadcast packet repeater"
+	tristate
+	default m if CONFIG_DEVEL
+	select BR2_PACKAGE_PPTPD
+	help
+	  A broadcast packet repeater for Point-to-Point Tunneling Protocol server
+	  
+	  http://poptop.sourceforge.net/
+	  
+

@@ -17,6 +17,7 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 include $(TOPDIR)/package/rules.mk
 
 $(eval $(call PKG_template,PPTPD,pptpd,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,BCRELAY,bcrelay,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
 $(PKG_BUILD_DIR)/.configured:
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status}; \
@@ -43,6 +44,7 @@ $(PKG_BUILD_DIR)/.configured:
 		  $(DISABLE_LARGEFILE) \
 		  $(DISABLE_NLS) \
 		  --with-pppd-ip-alloc \
+		  --with-bcrelay \
 	)
 	touch $@
 
@@ -67,3 +69,9 @@ $(IPKG_PPTPD):
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/pptpctrl $(IDIR_PPTPD)/usr/sbin/
 	$(RSTRIP) $(IDIR_PPTPD)
 	$(IPKG_BUILD) $(IDIR_PPTPD) $(PACKAGE_DIR)
+
+$(IPKG_BCRELAY):
+	install -d -m0755 $(IDIR_BCRELAY)/usr/sbin
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/bcrelay $(IDIR_BCRELAY)/usr/sbin/
+	$(RSTRIP) $(IDIR_BCRELAY)
+	$(IPKG_BUILD) $(IDIR_BCRELAY) $(PACKAGE_DIR)
