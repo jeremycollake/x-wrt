@@ -1,0 +1,11 @@
+diff -urN file-4.21.old/magic/Magdir/fsav file-4.21.new/magic/Magdir/fsav
+--- file-4.21.old/magic/Magdir/fsav	2006-03-02 23:10:26.000000000 +0100
++++ file-4.21.new/magic/Magdir/fsav	2007-10-29 14:42:33.000000000 +0100
+@@ -54,7 +54,5 @@
+ >>>>>>>>37	string		x 	\b%-.1s
+ >>>>>>>>>38	string		!:	
+ >>>>>>>>>>38	string		x 	\b%-.1s
+->>>>512	string		\037\213	\b, gzipped
+->>>>769	string		ustar\0		\b, tared
+ >512	string		\037\213	\b, gzipped
+ >769	string		ustar\0		\b, tared

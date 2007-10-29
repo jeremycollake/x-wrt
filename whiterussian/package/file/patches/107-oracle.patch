@@ -1,0 +1,23 @@
+diff -urN file-4.21.old/magic/Magdir/filesystems file-4.21.new/magic/Magdir/filesystems
+--- file-4.21.old/magic/Magdir/filesystems	2007-05-16 02:02:54.000000000 +0200
++++ file-4.21.new/magic/Magdir/filesystems	2007-10-29 14:41:54.000000000 +0100
+@@ -1197,6 +1197,19 @@
+ >>>2         short   2048       AXP generated)
+ >>>2         short   4096       I64 generated)
+ 
++# Oracle Clustered Filesystem - Aaron Botsis <redhat@digitalmafia.org>
++8       string          OracleCFS       Oracle Clustered Filesystem,
++>4      long            x               rev %d
++>0      long            x               \b.%d,
++>560    string          x               label: %.64s,
++>136    string          x               mountpoint: %.128s
++
++# Oracle ASM tagged volume - Aaron Botsis <redhat@digitalmafia.org>
++32      string          ORCLDISK        Oracle ASM Volume,
++>40     string          x               Disk Name: %0.12s
++32      string          ORCLCLRD        Oracle ASM Volume (cleared),
++>40     string          x               Disk Name: %0.12s
++
+ # Compaq/HP RILOE floppy image
+ # From: Dirk Jagdmann <doj@cubic.org>
+ 0	string	CPQRFBLO	Compaq/HP RILOE floppy image

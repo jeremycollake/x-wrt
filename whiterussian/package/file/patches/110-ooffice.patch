@@ -1,0 +1,12 @@
+diff -urN file-4.21.old/magic/Magdir/archive file-4.21.new/magic/Magdir/archive
+--- file-4.21.old/magic/Magdir/archive	2007-04-03 23:11:28.000000000 +0200
++++ file-4.21.new/magic/Magdir/archive	2007-10-29 14:44:30.000000000 +0100
+@@ -536,8 +536,6 @@
+ >4	byte		0x0b		Zip archive data, at least v1.1 to extract
+ >4	byte		0x14
+ >>30	ubelong		!0x6d696d65	Zip archive data, at least v2.0 to extract
+->0x161	string		WINZIP          Zip archive data, WinZIP self-extracting
+-
+ 
+ # OpenOffice.org / KOffice / StarOffice documents
+ # From: Abel Cheung <abel@oaka.org>

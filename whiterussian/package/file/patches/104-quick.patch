@@ -1,0 +1,19 @@
+diff -urN file-4.21.old/magic/Makefile.in file-4.21.new/magic/Makefile.in
+--- file-4.21.old/magic/Makefile.in	2007-10-29 14:39:07.000000000 +0100
++++ file-4.21.new/magic/Makefile.in	2007-10-29 14:39:46.000000000 +0100
+@@ -176,6 +176,7 @@
+ Magdir/alpha \
+ Magdir/amanda \
+ Magdir/amigaos \
++Magdir/mail.news \
+ Magdir/animation \
+ Magdir/apl \
+ Magdir/apple \
+@@ -257,7 +258,6 @@
+ Magdir/mach \
+ Magdir/macintosh \
+ Magdir/magic \
+-Magdir/mail.news \
+ Magdir/maple \
+ Magdir/mathematica \
+ Magdir/matroska \

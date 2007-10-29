@@ -1,0 +1,14 @@
+Package: file
+Priority: optional
+Section: utils
+Depends: libmagic
+Description: Determines the file type using magic numbers
+ File tests each argument in an attempt to classify it. There
+ are three sets of tests, performed in this order: filesystem
+ tests, magic number tests, and language tests. The first test
+ that succeeds causes the file type to be printed.
+ 
+ Starting with version 4, the file command is not much more than
+ a wrapper around the "magic" library. 
+ 
+ ftp://ftp.astron.com/pub/file/

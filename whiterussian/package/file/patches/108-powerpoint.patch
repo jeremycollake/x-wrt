@@ -1,0 +1,20 @@
+diff -urN file-4.21.old/magic/magic.mime file-4.21.new/magic/magic.mime
+--- file-4.21.old/magic/magic.mime	2007-10-29 14:37:46.000000000 +0100
++++ file-4.21.new/magic/magic.mime	2007-10-29 14:43:15.000000000 +0100
+@@ -848,7 +848,7 @@
+ 
+ 0	string	PO^Q`			application/msword
+ 
+-0	string	\320\317\021\340\241\261\032\341
++0	string	\320\317\021\340\241\261\032\341 application/msword
+ >546	string	bjbj			application/msword
+ >546	string	jbjb			application/msword
+ 
+@@ -859,7 +859,6 @@
+ 2112	string	MSWordDoc			application/msword
+ 
+ #0	string	\320\317\021\340\241\261\032\341	application/powerpoint
+-0	string	\320\317\021\340\241\261\032\341	application/msword
+ 
+ 0       string  #\ PaCkAgE\ DaTaStReAm  application/x-svr4-package
+ 

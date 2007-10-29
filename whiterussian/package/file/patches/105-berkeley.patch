@@ -1,0 +1,19 @@
+diff -urN file-4.21.old/magic/Makefile.in file-4.21.new/magic/Makefile.in
+--- file-4.21.old/magic/Makefile.in	2007-10-29 14:39:46.000000000 +0100
++++ file-4.21.new/magic/Makefile.in	2007-10-29 14:40:29.000000000 +0100
+@@ -202,7 +202,6 @@
+ Magdir/citrus \
+ Magdir/claris \
+ Magdir/clipper \
+-Magdir/cracklib \
+ Magdir/spec \
+ Magdir/commands \
+ Magdir/communications \
+@@ -212,6 +211,7 @@
+ Magdir/ctags \
+ Magdir/dact \
+ Magdir/database \
++Magdir/cracklib \
+ Magdir/diamond \
+ Magdir/diff \
+ Magdir/digital \

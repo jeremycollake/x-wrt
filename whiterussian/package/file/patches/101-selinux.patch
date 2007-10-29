@@ -1,0 +1,21 @@
+diff -urN file-4.21.old/magic/Magdir/policy file-4.21.new/magic/Magdir/policy
+--- file-4.21.old/magic/Magdir/policy	1970-01-01 01:00:00.000000000 +0100
++++ file-4.21.new/magic/Magdir/policy	2007-10-29 14:36:37.000000000 +0100
+@@ -0,0 +1,6 @@
++# SE Linux policy database
++0       lelong  0xf97cff8c      SE Linux policy
++>16     lelong  x               v%d
++>20     lelong  1 		MLS
++>24     lelong  x       	%d symbols
++>28     lelong  x       	%d ocons
+diff -urN file-4.21.old/magic/Makefile.am file-4.21.new/magic/Makefile.am
+--- file-4.21.old/magic/Makefile.am	2006-11-25 19:36:10.000000000 +0100
++++ file-4.21.new/magic/Makefile.am	2007-10-29 14:36:37.000000000 +0100
+@@ -157,6 +157,7 @@
+ Magdir/pkgadd \
+ Magdir/plan9 \
+ Magdir/plus5 \
++Magdir/policy \
+ Magdir/printer \
+ Magdir/project \
+ Magdir/psdbms \

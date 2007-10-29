@@ -1,0 +1,5 @@
+Package: libmagic
+Priority: optional
+Section: libs
+Depends: zlib
+Description: Determines the file type using magic numbers

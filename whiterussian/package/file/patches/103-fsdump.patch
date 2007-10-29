@@ -1,0 +1,14 @@
+diff -urN file-4.21.old/magic/Makefile.in file-4.21.new/magic/Makefile.in
+--- file-4.21.old/magic/Makefile.in	2007-05-24 19:23:04.000000000 +0200
++++ file-4.21.new/magic/Makefile.in	2007-10-29 14:39:07.000000000 +0100
+@@ -215,9 +215,9 @@
+ Magdir/diff \
+ Magdir/digital \
+ Magdir/dolby \
+-Magdir/dump \
+ Magdir/editors \
+ Magdir/elf \
++Magdir/dump \
+ Magdir/encore \
+ Magdir/epoc \
+ Magdir/esri \

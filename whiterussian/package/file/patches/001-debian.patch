@@ -1,0 +1,21 @@
+diff -urN file-4.21.old/src/magic.c file-4.21.new/src/magic.c
+--- file-4.21.old/src/magic.c	2007-03-26 19:59:50.000000000 +0200
++++ file-4.21.new/src/magic.c	2007-10-29 14:33:42.000000000 +0100
+@@ -239,7 +239,7 @@
+ 	int	fd = 0;
+ 	int	rv = -1;
+ 	unsigned char *buf;
+-	struct stat	sb;
++	struct stat	sb, *st = &sb;
+ 	ssize_t nbytes = 0;	/* number of bytes read from a datafile */
+ 	int	ispipe = 0;
+ 
+@@ -254,7 +254,7 @@
+ 	if (file_reset(ms) == -1)
+ 		goto done;
+ 
+-	switch (file_fsmagic(ms, inname, &sb)) {
++	switch (file_fsmagic(ms, inname, st)) {
+ 	case -1:		/* error */
+ 		goto done;
+ 	case 0:			/* nothing found */

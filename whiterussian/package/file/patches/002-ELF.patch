@@ -1,0 +1,61 @@
+diff -urN file-4.21.old/src/readelf.c file-4.21.new/src/readelf.c
+--- file-4.21.old/src/readelf.c	2007-01-18 06:45:35.000000000 +0100
++++ file-4.21.new/src/readelf.c	2007-10-29 14:35:48.000000000 +0100
+@@ -45,7 +45,7 @@
+     off_t, int *);
+ #endif
+ private int dophn_exec(struct magic_set *, int, int, int, off_t, int, size_t,
+-    off_t, int *);
++    off_t, int *, int);
+ private int doshn(struct magic_set *, int, int, int, off_t, int, size_t, int *);
+ private size_t donote(struct magic_set *, unsigned char *, size_t, size_t, int,
+     int, size_t, int *);
+@@ -785,7 +785,7 @@
+  */
+ private int
+ dophn_exec(struct magic_set *ms, int class, int swap, int fd, off_t off,
+-    int num, size_t size, off_t fsize, int *flags)
++    int num, size_t size, off_t fsize, int *flags, int sh_num)
+ {
+ 	Elf32_Phdr ph32;
+ 	Elf64_Phdr ph64;
+@@ -854,6 +854,19 @@
+ 					return -1;
+ 				align = 4;
+ 			}
++			/* If we have a section header table, handle note
++			   sections just in doshn.  Handling them also here
++			   means that for executables we print the note content
++			   twice and, more importantly, don't handle
++			   strip -o created debuginfo files correctly.
++			   They have PT_NOTE header, but the actual note
++			   content is not present in the debuginfo file,
++			   only in the original stripped executable or library.
++			   The corresponding .note.* section is SHT_NOBITS
++			   rather than SHT_NOTE, so doshn will not look
++			   at it.  */
++			if (sh_num)
++				break;
+ 			/*
+ 			 * This is a PT_NOTE section; loop through all the notes
+ 			 * in the section.
+@@ -960,7 +973,8 @@
+ 				    fd, (off_t)getu32(swap, elfhdr.e_phoff),
+ 				    getu16(swap, elfhdr.e_phnum), 
+ 				    (size_t)getu16(swap, elfhdr.e_phentsize),
+-				    fsize, &flags)
++				    fsize, &flags,
++                    getu16(swap, elfhdr.e_shnum))
+ 				    == -1)
+ 					return -1;
+ 			}
+@@ -1001,7 +1015,8 @@
+ 				    (off_t)elf_getu64(swap, elfhdr.e_phoff),
+ 				    getu16(swap, elfhdr.e_phnum), 
+ 				    (size_t)getu16(swap, elfhdr.e_phentsize),
+-				    fsize, &flags) == -1)
++				    fsize, &flags,
++                    getu16(swap, elfhdr.e_shnum)) == -1)
+ 					return -1;
+ 			}
+ 			if (doshn(ms, class, swap, fd,

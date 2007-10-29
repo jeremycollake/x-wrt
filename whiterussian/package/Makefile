@@ -53,6 +53,7 @@ package-$(BR2_PACKAGE_LIBEVENT) += libevent
 package-$(BR2_PACKAGE_LIBFFI_SABLE) += libffi-sable
 package-$(BR2_PACKAGE_LIBGD) += libgd
 package-$(BR2_PACKAGE_LIBGDBM) += libgdbm
+package-$(BR2_COMPILE_LIBMAGIC) += file
 package-$(BR2_PACKAGE_LIBNET) += libnet
 package-$(BR2_PACKAGE_LIBNIDS) += libnids
 package-$(BR2_PACKAGE_LIBOSIP2) += libosip2
@@ -175,6 +176,7 @@ arpwatch-compile: libpcap-compile
 ctorrent: ncurses-compile uclibc++-compile
 cyrus-sasl-compile: openssl-compile
 dsniff-compile: libnids-compile openssl-compile libgdbm-compile
+file-compile: zlib-compile
 fprobe-compile: libpcap-compile
 gdb-compile: ncurses-compile
 kismet-compile: uclibc++-compile libpcap-compile ncurses-compile

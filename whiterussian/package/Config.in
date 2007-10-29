@@ -122,6 +122,7 @@ source "package/libgdbm/Config.in"
 source "package/gmp/Config.in"  # libbgmp
 source "package/libtool/Config.in"  # libltdl
 source "package/lzo/Config.in"  # liblzo
+source "package/file/Config.in"  # libmagic
 source "package/matrixssl/Config.in"  # libmatrixssl
 source "package/mysql/Config.in"  # limysqlclient
 source "package/ncurses/Config.in"  # libncurses
