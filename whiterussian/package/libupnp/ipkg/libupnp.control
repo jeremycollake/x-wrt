@@ -1,0 +1,10 @@
+Package: libupnp
+Priority: optional
+Section: libs
+Depends: libpthread
+Description: The Universal Plug and Play (UPnP) SDK library.
+ The Universal Plug and Play (UPnP) SDK for Linux provides support 
+ for building UPnP-compliant control points, devices, and bridges 
+ on Linux.
+ .
+ http://upnp.sourceforge.net/

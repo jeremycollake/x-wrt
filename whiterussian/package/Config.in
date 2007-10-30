@@ -142,12 +142,13 @@ source "package/readline/Config.in"  # libreadline
 source "package/cyrus-sasl/Config.in"  # libsasl2
 source "package/speex/Config.in" # libspeex
 source "package/sqlite/Config.in" # libsqlite
+source "package/libupnp/Config.in"
 source "package/libusb/Config.in"
 source "package/tcp_wrappers/Config.in" #libwrap
 source "package/libxml2/Config.in"
 source "package/uclibc++/Config.in"
-source "package/zlib/Config.in"
 source "package/xyssl/Config.in"
+source "package/zlib/Config.in"
 
 comment "Serial communications & terminal emulation ---"
 source "package/microcom/Config.in"

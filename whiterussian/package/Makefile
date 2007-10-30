@@ -62,6 +62,7 @@ package-$(BR2_PACKAGE_LIBPCAP) += libpcap
 package-$(BR2_PACKAGE_LIBPNG) += libpng
 package-$(BR2_PACKAGE_LIBPTHREAD) += libpthread
 package-$(BR2_PACKAGE_LIBTOOL) += libtool
+package-$(BR2_PACKAGE_LIBUPNP) += libupnp
 package-$(BR2_PACKAGE_LIBUSB) += libusb
 package-$(BR2_PACKAGE_LIBXML2) += libxml2
 package-$(BR2_PACKAGE_LIGHTTPD) += lighttpd
@@ -186,6 +187,7 @@ libgd-compile: libpng-compile
 libnet-compile: libpcap-compile
 libnids-compile: libnet-compile
 lighttpd-compile: openssl-compile pcre-compile
+libupnp-compile: libpthread-compile
 mysql-compile: ncurses-compile zlib-compile
 net-snmp-compile: libelf-compile
 nfs-server-compile: portmap-compile
