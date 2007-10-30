@@ -4,8 +4,6 @@
 ###################################################################
 # Status DHCP Leases
 #
-# This page is synchronized between kamikaze and WR branches. Changes to it *must* 
-# be followed by running the webif-sync.sh script.
 #
 # The page awaits validation in kamikaze.
 #
@@ -21,17 +19,26 @@
 #
 # Major revisions:
 #
-# NVRAM variables referenced:
-#  wan_ifname, dhcp_read_ethers (white russian)
-#
 # Configuration files referenced:
-#  /etc/config/network (kamikaze)
-#  /etc/dnsmasq.conf (kamikaze)
-#  /etc/ethers (both)
+#  /etc/config/network
+#  /etc/config/dhcp
+#  /etc/ethers
 #
 # Kernel proc interface:
-#  /proc/net/arp (both)
+#  /proc/net/arp
 #
+
+config_cb() {
+config_get TYPE "$CONFIG_SECTION" TYPE
+case "$TYPE" in
+	dnsmasq)
+		config_get leasefile "$CONFIG_SECTION" leasefile
+		config_get includeethers "$CONFIG_SECTION" readethers
+	;;
+esac
+}
+uci_load dhcp
+
 header "Status" "DHCP Clients" "@TR<<status_leases_dhcp_leases#DHCP Leases>>"
 ?>
 <table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
@@ -42,7 +49,7 @@ header "Status" "DHCP Clients" "@TR<<status_leases_dhcp_leases#DHCP Leases>>"
 		<th>@TR<<status_leases_Name#Name>></th>
 		<th>@TR<<status_leases_Expires#Expires in>></th>
 	</tr>
-<? exists /tmp/dhcp.leases && awk -vdate="$(date +%s)" '
+<? exists $leasefile && awk -vdate="$(date +%s)" '
 $1 > 0 {
 	print "	<tr>"
 	print "		<td>" $2 "</td>"
@@ -59,8 +66,8 @@ $1 > 0 {
 	printf "	</td>"
 	print "	</tr>"
 }
-' /tmp/dhcp.leases
-exists /tmp/dhcp.leases && grep -q "." /tmp/dhcp.leases > /dev/null
+' $leasefile
+exists $leasefile && grep -q "." $leasefile > /dev/null
 ! equal "$?" "0" && {
 	echo "	<tr>"
 	echo "		<td>@TR<<status_leases_no_leases#There are no known DHCP leases.>></td>"
@@ -145,7 +152,6 @@ END {
 <br />
 
 <?
-includeethers=$(grep -c "^read-ethers" "/etc/dnsmasq.conf")
 equal "$includeethers" "1" && {
 cat <<EOF
 <h5><strong>@TR<<status_leases_ethers_title#Ethernet Address to IP Number Database (/etc/ethers)>></strong></h5>
