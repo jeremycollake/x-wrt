@@ -74,7 +74,6 @@ $(STAGING_DIR)/usr/lib/libupnp.so: $(PKG_BUILD_DIR)/.built
 $(IPKG_LIBUPNP): $(STAGING_DIR)/usr/lib/libupnp.so
 	install -m0755 -d $(IDIR_LIBUPNP)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{ixml,threadutil,upnp}.so.* $(IDIR_LIBUPNP)/usr/lib/
-	ln -sf /usr/lib/libupnp.so.3.0.0 $(IDIR_LIBUPNP)/usr/lib/libupnp.so.2
 	$(RSTRIP) $(IDIR_LIBUPNP)
 	$(IPKG_BUILD) $(IDIR_LIBUPNP) $(PACKAGE_DIR)
 
