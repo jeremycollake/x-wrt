@@ -683,7 +683,7 @@ for device in $DEVICES; do
 					append validate_forms "port|FORM_radius_port_$vcfg|@TR<<RADIUS Port>>|required|$FORM_radius_port" "$N";;
 				wep)
 					append validate_forms "int|FORM_wep_key_$vcfg|@TR<<Selected WEP Key>>|min=1 max=4|$FORM_wep_key" "$N"
-					append validate_forms "wep|FORM_key1_$vcfg|@TR<<WEP Key>> 1||$FORM_key1" "$N"
+					append validate_forms "wep|FORM_key1_$vcfg|@TR<<WEP Key>> 1|required|$FORM_key1" "$N"
 					append validate_forms "wep|FORM_key2_$vcfg|@TR<<WEP Key>> 2||$FORM_key2" "$N"
 					append validate_forms "wep|FORM_key3_$vcfg|@TR<<WEP Key>> 3||$FORM_key3" "$N"
 					append validate_forms "wep|FORM_key4_$vcfg|@TR<<WEP Key>> 4||$FORM_key4" "$N";;
