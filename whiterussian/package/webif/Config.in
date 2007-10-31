@@ -2,6 +2,7 @@ menu "webif - OpenWrt Administrative Console"
 
 config BR2_PACKAGE_WEBIF
  	select BR2_PACKAGE_IPKG_UPGRADE_FIX
+	select BR2_PACKAGE_BASE_FILES_UCI
 	depends BR2_PACKAGE_WEBIF_THEME_XWRT
  	depends BR2_PACKAGE_HASERL
 	select BR2_PACKAGE_IPKG

@@ -1,0 +1,26 @@
+#!/bin/sh
+#
+# base-files-uci post-install script.
+#
+
+# for squashfs symlink hacks like in WR RC5 (requires rm before change)
+FixReadOnlyLink()
+{
+	touch "$1" >&- 2>&-	# test if read-only
+	[ "$?" != 0 ] && {
+		local tmpfile=$(mktemp "${IPKG_INSTROOT}/tmp/.webif-inst-XXXXXX")
+		cp -p "$1" "$tmpfile" >&- 2>&-
+		rm "$1"  >&- 2>&-
+		mv "$tmpfile" "$1"  >&- 2>&-
+	}
+}
+
+# again, we rename /lib/config/uci-depends.sh so that it doesn't get removed if webif^2 is
+# uninstalled since we've radically changed /etc/functions.sh.
+FixReadOnlyLink "${IPKG_INSTROOT}/lib/config/uci-depends.sh"
+mv -f "${IPKG_INSTROOT}/lib/config/uci-depends.new" "${IPKG_INSTROOT}/lib/config/uci-depends.sh"
+
+# fix up /etc/functions.sh. It must work under RC5, RC6, and 0.9 and must
+# include the UCI callback funcs in /lib/config/uci-depends.sh.
+FixReadOnlyLink "${IPKG_INSTROOT}/etc/functions.sh"
+mv -f "${IPKG_INSTROOT}/etc/functions.new" "${IPKG_INSTROOT}/etc/functions.sh"

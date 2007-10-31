@@ -1,0 +1,5 @@
+config BR2_PACKAGE_BASE_FILES_UCI
+	tristate "uci - UCI support files"
+	default m if CONFIG_DEVEL
+	help
+	  UCI support file for packages backported from Kamikaze.

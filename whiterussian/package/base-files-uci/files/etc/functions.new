@@ -1,0 +1,168 @@
+#!/bin/sh
+# Copyright (C) 2006 OpenWrt.org
+# Copyright (C) 2006 Fokus Fraunhofer <carsten.tittel@fokus.fraunhofer.de>
+
+. /lib/config/uci-depends.sh
+
+alias debug=${DEBUG:-:}
+
+# valid interface?
+if_valid () (
+  ifconfig "$1" >&- 2>&- ||
+  [ "${1%%[0-9]}" = "br" ] ||
+  {
+    [ "${1%%[0-9]*}" = "vlan" ] && ( 
+      i=${1#vlan}
+      hwname=$(nvram get vlan${i}hwname)
+      hwaddr=$(nvram get ${hwname}macaddr)
+      [ -z "$hwaddr" ] && return 1
+
+      vif=$(ifconfig -a | awk '/^eth.*'$hwaddr'/ {print $1; exit}' IGNORECASE=1)
+      debug "# vlan$i => $vif"
+	  [ -n "$vif" ] || vif=$(ifconfig -a | awk '/^eth'${hw##et}'/ {print $1; exit}' IGNORECASE=1)
+
+      $DEBUG ifconfig $vif up
+      $DEBUG vconfig add $vif $i 2>&-
+    )
+  } ||
+  { debug "# missing interface '$1' ignored"; false; }
+)
+
+do_ifup() {
+	ifproto="$1"
+	iftype="$2"
+	if="$(nvram get ${iftype}_ifname)"
+	[ "${if%%[0-9]}" = "ppp" ] && if="$(nvram get ${iftype}_device)"
+	
+	pidfile=/var/run/${if}.pid
+	[ -f $pidfile ] && $DEBUG kill $(cat $pidfile)
+
+	case "$ifproto" in
+	static)
+		ip=$(nvram get ${iftype}_ipaddr)
+		netmask=$(nvram get ${iftype}_netmask)
+		gateway=$(nvram get ${iftype}_gateway)
+		mtu=$(nvram get ${iftype}_mtu)
+		static_route=$(nvram get ${iftype}_static_route)
+
+		$DEBUG ifconfig $if $ip ${netmask:+netmask $netmask} ${mtu:+mtu $(($mtu))} broadcast + up
+		${gateway:+$DEBUG route add default gw $gateway}
+
+		[ -f /tmp/resolv.conf.auto ] || {
+			debug "# --- creating /tmp/resolv.conf.auto ---"
+			for dns in $(nvram get ${iftype}_dns); do
+				echo "nameserver $dns" >> /tmp/resolv.conf.auto
+			done
+		}
+		
+		[ -n "$static_route" ] && {
+			for route in $static_route; do {
+			eval "set $(echo $route | sed 's/:/ /g')"
+				if [ "$2" = "0.0.0.0" ]; then
+					opt="-host"
+				fi
+				$DEBUG route add ${opt:-"-net"} $1 netmask $2 gw $3 metric $4 
+				unset opt
+			} done
+		}
+
+		env -i ACTION="ifup" INTERFACE="${iftype}" PROTO=static /sbin/hotplug "iface" &
+	;;
+	dhcp*)
+		DHCP_IP=$(nvram get ${iftype}_ipaddr)
+		DHCP_NETMASK=$(nvram get ${iftype}_netmask)
+		mtu=$(nvram get ${iftype}_mtu)
+		$DEBUG ifconfig $if $DHCP_IP ${DHCP_NETMASK:+netmask $DHCP_NETMASK} ${mtu:+mtu $(($mtu))} broadcast + up
+
+		DHCP_ARGS="-i $if ${DHCP_IP:+-r $DHCP_IP} -b -p $pidfile"
+		DHCP_HOSTNAME=$(nvram get ${iftype}_hostname)
+		DHCP_HOSTNAME=${DHCP_HOSTNAME%%.*}
+		[ -z $DHCP_HOSTNAME ] || DHCP_ARGS="$DHCP_ARGS -H $DHCP_HOSTNAME"
+		[ "$(nvram get ${iftype}_proto)" = "pptp" ] && DHCP_ARGS="$DHCP_ARGS -n -q" || DHCP_ARGS="$DHCP_ARGS -R &"
+		[ -r $pidfile ] && oldpid=$(cat $pidfile 2>&-)
+		${DEBUG:-eval} "udhcpc $DHCP_ARGS"
+		[ -n "$oldpid" ] && pidof udhcpc | grep "$oldpid" >&- 2>&- && {
+			sleep 1
+			kill -9 $oldpid
+		}
+		# hotplug events are handled by /usr/share/udhcpc/default.script
+	;;
+	none|"")
+	;;
+	*)
+		[ -x "/sbin/ifup.$ifproto" ] && { $DEBUG /sbin/ifup.$ifproto ${iftype}; exit; }
+		echo "### ifup ${iftype}: ignored ${iftype}_proto=\"$ifproto\" (not supported)"
+	;;
+	esac
+}
+
+load_modules() {
+	cd /etc/modules.d
+	sed 's/^[^#]/insmod &/' $* | ash 2>&- || :
+}
+
+include() {
+	local file
+	
+	for file in $(ls $1/*.sh 2>/dev/null); do
+		. $file
+	done
+}
+
+find_mtd_part() {
+	local PART="$(grep "\"$1\"" /proc/mtd | awk -F: '{print $1}')"
+	
+	PART="${PART##mtd}"
+	echo "${PART:+/dev/mtdblock/$PART}"
+}
+
+strtok() { # <string> { <variable> [<separator>] ... }
+	local tmp
+	local val="$1"
+	local count=0
+
+	shift
+
+	while [ $# -gt 1 ]; do
+		tmp="${val%%$2*}"
+
+		[ "$tmp" = "$val" ] && break
+
+		val="${val#$tmp$2}"
+
+		export -n "$1=$tmp"; count=$((count+1))
+		shift 2
+	done
+
+	if [ $# -gt 0 -a "$val" ]; then
+		export -n "$1=$val"; count=$((count+1))
+	fi
+
+	return $count
+}
+
+set_led() {
+	local led="$1"
+	local state="$2"
+	[ -f "/proc/diag/led/$1" ] && echo "$state" > "/proc/diag/led/$1"
+}
+
+set_state() {
+	case "$1" in
+		preinit)
+			set_led dmz 1
+			set_led diag 1
+			set_led power 0
+		;;
+		failsafe)
+			set_led diag f
+			set_led power f
+			set_led dmz f
+		;;
+		done)
+			set_led dmz 0
+			set_led diag 0
+			set_led power 1
+		;;
+	esac
+}

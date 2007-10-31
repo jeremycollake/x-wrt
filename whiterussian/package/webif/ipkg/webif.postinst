@@ -122,21 +122,6 @@ rm -f "${IPKG_INSTROOT}/etc/init.d/S60cron"
 mv -f "${IPKG_INSTROOT}/etc/init.d/x60cron.webif" "${IPKG_INSTROOT}/etc/init.d/S60cron"
 mv -f "${IPKG_INSTROOT}/etc/httpd.webif" "${IPKG_INSTROOT}/etc/httpd.conf"
 
-# again, we rename /lib/config/uci-depends.sh so that it doesn't get removed if webif^2 is
-# uninstalled since we've radically changed /etc/functions.sh.
-FixReadOnlyLink "${IPKG_INSTROOT}/lib/config/uci-depends.sh"
-mv -f "${IPKG_INSTROOT}/lib/config/uci-depends.new" "${IPKG_INSTROOT}/lib/config/uci-depends.sh"
-
-# fix up /etc/functions.sh. It must work under RC5, RC6, and 0.9 and must
-# include the UCI callback funcs in /lib/config/uci-depends.sh.
-FixReadOnlyLink "${IPKG_INSTROOT}/etc/functions.sh"
-mv -f "${IPKG_INSTROOT}/etc/functions.new" "${IPKG_INSTROOT}/etc/functions.sh"
-
-# include uci-depends.sh from /etc/functions.sh if not already included.
-#if ! grep -q "uci-depends.sh" "${IPKG_INSTROOT}/etc/functions.sh"; then
-#	echo ". /lib/config/uci-depends.sh" >> "${IPKG_INSTROOT}/etc/functions.sh"
-#fi
-
 # initialize default webif theme
 # create symlink to /www/themes/xwrt (do NOT use INSTROOT in first arg).
 rm -rf "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
