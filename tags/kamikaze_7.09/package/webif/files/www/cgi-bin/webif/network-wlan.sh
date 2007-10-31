@@ -287,7 +287,7 @@ for device in $DEVICES; do
 
 	append forms "$distance" "$N"
 	append forms "helpitem|Wireless Distance" "$N"
-	append forms "helptext|Helptext Wireless Distance#You must enter a number that is the distance of your longest link." "$N"
+	append forms "helptext|Helptext Wireless Distance#This is the distance of your longest link." "$N"
 
 	add_vcfg="string|<tr><td><a href=$SCRIPT_NAME?add_vcfg=$device&amp;add_vcfg_number=$vcfg_number>@TR<<Add Virtual Interface>></a>"
 	append forms "$add_vcfg" "$N"
@@ -459,6 +459,7 @@ for device in $DEVICES; do
 			###################################################################
 			# Generate 4 40-bit WEP keys or 1 128-bit WEP Key
 			eval FORM_wep_passphrase="\$FORM_wep_passphrase_$vcfg"
+			[ "$FORM_wep_passphrase" = "" ] && FORM_wep_passphrase="$(dd if=/dev/urandom count=200 bs=1 2>/dev/null|tr "\n" " "|sed 's/[^a-zA-Z0-9]//g')"
 			eval FORM_generate_wep_128="\$FORM_generate_wep_128_$vcfg"
 			eval FORM_generate_wep_40="\$FORM_generate_wep_40_$vcfg"
 			! empty "$FORM_generate_wep_128" &&
