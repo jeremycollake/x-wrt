@@ -1,4 +1,5 @@
 Package: miniupnpd
 Priority: optional
 Section: net
+Depends: base-files-uci
 Description: a small and capable UPNP daemon.

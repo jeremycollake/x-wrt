@@ -8,6 +8,7 @@ config BR2_PACKAGE_QOS_SCRIPTS
 	select BR2_PACKAGE_IPTABLES_MOD_EXTRA
 	select BR2_PACKAGE_IPTABLES_MOD_CONNTRACK
 	select BR2_PACKAGE_IPTABLES_MOD_IMQ
+	select BR2_PACKAGE_BASE_FILES_UCI
 	help
 	 A set of scripts that abstract QoS configuration
 	 into a simple configuration file supporting stanzas that specify
