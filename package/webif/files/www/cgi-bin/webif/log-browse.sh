@@ -2,12 +2,13 @@
 <?
 . /usr/lib/webif/webif.sh
 
+uci_load syslog
 #---------------------------------------------
 # sets the type of log: file or circular
 # defaults to circular, wich is the default install for openwrt
 # use log-setup.sh to modify these parameters
-LOG_TYPE=$(uci get syslogd.general.type)
-LOG_FILE=$(uci get syslogd.general.file)
+config_get LOG_TYPE general type
+config_get LOG_FILE general file
 if equal $LOG_TYPE "file" ; then
 	LOG_FILE=${LOG_FILE:-"/var/log/messages"}
 	LOGREAD="cat "$LOG_FILE
