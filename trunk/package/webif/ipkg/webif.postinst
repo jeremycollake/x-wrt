@@ -198,6 +198,7 @@ fi
 	# start X-Wrt specific services
 	/etc/init.d/syslog enable
 	/etc/init.d/timezone enable
+	/etc/init.d/webiffirewalllog enable
 	
 	ExecuteIfExists "/etc/init.d/timezone" start
 	ExecuteIfExists "/etc/init.d/webif" start
