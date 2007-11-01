@@ -1,0 +1,6 @@
+Package: iconv
+Priority: optional
+Section: utils
+Depends: libiconv
+Description: Character set conversion utility
+ The iconv program converts text from one encoding to another encoding. 

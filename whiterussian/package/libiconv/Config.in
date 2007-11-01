@@ -1,0 +1,26 @@
+config BR2_COMPILE_LIBICONV
+	tristate
+	default m if CONFIG_DEVEL
+	depends BR2_PACKAGE_LIBICONV
+
+config BR2_PACKAGE_LIBICONV
+	prompt "libiconv - Character set conversion library"
+	tristate
+	default m if CONFIG_DEVEL
+	select BR2_COMPILE_LIBICONV
+	help
+	  This library provides an iconv() implementation, for use on systems 
+	  which don't have one, or whose implementation cannot convert 
+	  from/to Unicode.
+	 
+	  http://www.gnu.org/software/libiconv/
+
+config BR2_PACKAGE_ICONV
+	prompt "iconv - Character set conversion utility"
+	tristate
+	default m if CONFIG_DEVEL
+	depends BR2_PACKAGE_LIBICONV
+	help
+	  The iconv program converts text from one encoding to another encoding. 
+	 
+	  http://www.gnu.org/software/libiconv/
