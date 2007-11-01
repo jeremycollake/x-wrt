@@ -146,7 +146,7 @@ for interface in $network; do
 	text|${interface}_gateway|$FORM_gateway
 	field|@TR<<PPTP Server IP>>|field_${interface}_pptp_server|hidden
 	text|${interface}_pptp_server|$FORM_pptp_server
-	helpitem|WAN IP Settings
+	helpitem|IP Settings
 	helptext|Helptext IP Settings#IP Settings are optional for DHCP and PPTP. They are used as defaults in case the DHCP server is unavailable.
 	end_form
 
