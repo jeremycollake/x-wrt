@@ -11,6 +11,12 @@ config_cb() {
 	esac
 }
 
+if ! empty "$FORM_submit"; then
+	uci_set "webif" "firewall" "log" "$FORM_enabled"
+else
+	uci_load webif
+	config_get FORM_enabled firewall log
+fi
 uci_load syslog
 #---------------------------------------------
 # sets the type of log: file or circular
@@ -71,11 +77,15 @@ fi
 
 header "Log" "Firewall Log View" "@TR<<Netfilter Log>>" '' "$SCRIPT_NAME"
 
-has_pkgs kmod-ipt-extra
+has_pkgs kmod-ipt-extra iptables-mod-extra
 
 # request for filtering -----------------------
 display_form <<EOF
 start_form|@TR<<Filter>>
+field|@TR<<Log>>
+radio|enabled|$FORM_enabled|1|@TR<<Enabled>>
+radio|enabled|$FORM_enabled|0|@TR<<Disabled>>
+field|@TR<<Filter>>
 select|act|$FORM_act
 option|A|@TR<<All>>
 option|p|@TR<<Prefix>>
