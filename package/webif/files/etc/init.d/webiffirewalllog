@@ -13,3 +13,9 @@ start() {
 		iptables -A output_rule -j LOG --log-prefix "output_rule:DROP "
 	fi
 }
+
+stop() {
+	iptables -D input_rule -j LOG --log-prefix "input_rule:DROP "
+	iptables -D forwarding_rule -j LOG --log-prefix "forwarding_rule:DROP "
+	iptables -D output_rule -j LOG --log-prefix "output_rule:DROP "
+}

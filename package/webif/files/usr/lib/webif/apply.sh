@@ -253,7 +253,7 @@ for package in $process_packages; do
 			config_get log_enabled firewall log
 			if [ "$old_firewall_log" != "$log_enabled" ]; then
 				[ "$log_enabled" = "1" ] && /etc/init.d/webiffirewalllog start
-				[ "$log_enabled" = "0" ] && /etc/init.d/firewall restart
+				[ "$log_enabled" = "0" ] && /etc/init.d/webiffirewalllog stop
 			fi
 			config_allclear
 			;;
