@@ -259,7 +259,7 @@ for package in $process_packages; do
 			/etc/init.d/network restart
 			sleep 3
 			killall dnsmasq
-			if exists "/etc/rc.d/S??dnsmasq"; then
+			if [ -f /etc/rc.d/S??dnsmasq ]; then
 				/etc/init.d/dnsmasq start
 			fi
 			;;
