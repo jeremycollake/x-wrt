@@ -2,13 +2,22 @@
 <?
 . /usr/lib/webif/webif.sh
 
+config_cb() {
+	config_get TYPE "$CONFIG_SECTION" TYPE
+	case "$TYPE" in
+		syslogd)
+			append config "$CONFIG_SECTION"
+		;;
+	esac
+}
+
 uci_load syslog
 #---------------------------------------------
 # sets the type of log: file or circular
 # defaults to circular, wich is the default install for openwrt
 # use log-setup.sh to modify these parameters
-config_get LOG_TYPE general type
-config_get LOG_FILE general file
+config_get LOG_TYPE "$config" type
+config_get LOG_FILE "$config" file
 if equal $LOG_TYPE "file" ; then
 	LOG_FILE=${LOG_FILE:-"/var/log/messages"}
 	LOGREAD="cat "$LOG_FILE
@@ -62,7 +71,7 @@ fi
 
 header "Log" "Firewall Log View" "@TR<<Netfilter Log>>" '' "$SCRIPT_NAME"
 
-
+has_pkgs kmod-ipt-extra
 
 # request for filtering -----------------------
 display_form <<EOF
