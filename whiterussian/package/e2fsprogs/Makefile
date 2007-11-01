@@ -26,7 +26,7 @@ $(eval $(call PKG_template,LIBUUID,libuuid,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)
 $(eval $(call PKG_template,TUNE2FS,tune2fs,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,RESIZE2FS,resize2fs,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
-$(PKG_BUILD_DIR)/.configured:
+$(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 	(cd $(PKG_BUILD_DIR); rm -rf config.cache; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
@@ -76,7 +76,7 @@ $(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
 		all install
 	touch $@
 
-$(IPKG_E2FSPROGS):
+$(IPKG_E2FSPROGS): $(PKG_BUILD_DIR)/.built
 	install -d -m0755 $(IDIR_E2FSPROGS)/etc
 	$(CP) $(PKG_INSTALL_DIR)/etc/mke2fs.conf $(IDIR_E2FSPROGS)/etc
 	install -d -m0755 $(IDIR_E2FSPROGS)/usr/sbin
@@ -94,19 +94,19 @@ $(IPKG_E2FSPROGS):
 	$(RSTRIP) $(IDIR_E2FSPROGS)
 	$(IPKG_BUILD) $(IDIR_E2FSPROGS) $(PACKAGE_DIR)
 
-$(IPKG_LIBUUID):
+$(IPKG_LIBUUID): $(PKG_BUILD_DIR)/.built
 	install -d -m0755 $(IDIR_LIBUUID)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libuuid.so.* $(IDIR_LIBUUID)/usr/lib/
 	$(RSTRIP) $(IDIR_LIBUUID)
 	$(IPKG_BUILD) $(IDIR_LIBUUID) $(PACKAGE_DIR)
 
-$(IPKG_TUNE2FS):
+$(IPKG_TUNE2FS): $(PKG_BUILD_DIR)/.built
 	install -d -m0755 $(IDIR_TUNE2FS)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/tune2fs $(IDIR_TUNE2FS)/usr/sbin/
 	$(RSTRIP) $(IDIR_TUNE2FS)
 	$(IPKG_BUILD) $(IDIR_TUNE2FS) $(PACKAGE_DIR)
 
-$(IPKG_RESIZE2FS):
+$(IPKG_RESIZE2FS): $(PKG_BUILD_DIR)/.built
 	install -d -m0755 $(IDIR_RESIZE2FS)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/resize2fs $(IDIR_RESIZE2FS)/usr/sbin/
 	$(RSTRIP) $(IDIR_RESIZE2FS)
