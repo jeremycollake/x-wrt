@@ -87,7 +87,9 @@ cat <<EOF
 EOF
 buffersize=$(nvram get klog_buffersize)
 buffersize="${buffersize:-$DEFAULT_klog_buffersize}"
-dmesg ${buffersize:+-s"$buffersize"} 2>/dev/null | show_messages
+let "buffersize *= 1024"
+[ $buffersize -gt 1024 ] || buffersize=""
+dmesg ${buffersize:+-s$buffersize} 2>/dev/null | show_messages
 echo " </pre>"
 
 dmesgbackup_enabled=$(nvram get klog_enabled)

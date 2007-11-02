@@ -91,6 +91,8 @@ cat <<EOF
 <pre>
 EOF
 eval buffersize="\$CONFIG_${dmesg_cfg}_buffersize"
+let "buffersize *= 1024"
+[ $buffersize -gt 1024 ] || buffersize=""
 dmesg ${buffersize:+-s$buffersize} 2>/dev/null | show_messages
 echo " </pre>"
 config_get_bool dmesgbackup_enabled "${dmesgbackup_cfg}" enabled
