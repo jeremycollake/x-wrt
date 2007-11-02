@@ -197,6 +197,7 @@ fi
 
 	# start X-Wrt specific services
 	/etc/init.d/syslog enable
+	/etc/init.d/dmesgbackup enable
 	/etc/init.d/timezone enable
 	
 	ExecuteIfExists "/etc/init.d/timezone" start
