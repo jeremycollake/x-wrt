@@ -1,0 +1,41 @@
+#--------------------------
+# syslogd default values
+#--------------------------
+# WARNING: these values will be used ONLY when their nvram counterpart isnt set
+# nvram values can be set interactively with webif^2 package menu Log|Settings
+#---------------------------------
+# nvram variable names and meaning
+#---------------------------------
+# log_mark= intervall in seconds between marks
+# log_type= circular or file
+#	circular: log in circular in memory buffer (read with logread)
+#	file: log into the file log_file
+# log_file= name of the log file when log_type="file"
+# log_size= the size of the log (be carefull to keep it low when log_type="circular"!)
+# log_ipaddr= address of the remote logging host
+# logport= the port on wich the remote host is listening.
+
+DEFAULT_log_ipaddr=""
+DEFAULT_log_port=514
+DEFAULT_log_mark=0
+DEFAULT_log_type="circular"
+DEFAULT_log_file="/var/log/messages"
+DEFAULT_log_size=16
+
+#----------------------------
+# dmesg/klogd default values
+#----------------------------
+#---------------------------------
+# nvram variable names and meaning
+#---------------------------------
+# klog_conloglevel= messages priority level
+# klog_buffersize= memory size reserved for messages by the kernel
+# klog_enabled= whether to backup boot messages
+# klog_file= name of the backup log file
+# klog_gzip= whether to compress the backup file
+
+DEFAULT_klog_conloglevel=""
+DEFAULT_klog_buffersize=""
+DEFAULT_klog_enabled=""
+DEFAULT_klog_file="/var/log/dmesg"
+DEFAULT_klog_gzip="1"

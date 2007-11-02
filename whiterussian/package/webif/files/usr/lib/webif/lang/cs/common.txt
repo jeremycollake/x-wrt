@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3635
+lang_for_svn => 3685
 
 ## /usr/lib/webif/apn.csv
 Vodafone UK => Vodafone VB
@@ -304,11 +304,23 @@ Dest. Port => Cíl. port
 Type => Typ
 
 ## /www/cgi-bin/webif/log-dmesg.sh
+log_filter_filtered => filtrováno
 Log => Záznam
 Kernel => Jádro
 log_dmesg_Kernel_Ring_Buffer => Kruhový záznam jádra
-HelpText Browser_Frames => Váš prohlížeč nepodporuje rámce,<br />pokračujte tímto odkazem
-log_dmesg_View_Kernel_Ring_Buffer=> Zobrazit kruhový záznam jádra
+log_dmesg_no_archived_messages => Žádné archivované záznamy jádra nebyly nalezeny.
+log_dmesg_no_current_messages => Žádné záznamy jádra nebyly nalezeny.
+log_dmesg_Current_messages => Aktuální záznamy
+log_dmesg_Boot_time_messages => Záznamy po startu
+log_filter_Text_Filter => Textový filtr
+log_filter_Text_to_Filter => Filtrovaný text
+log_filter_Filter_Mode => Režim filtru
+log_filter_Include => Zahrnout
+log_filter_Exclude => Vyloučit
+log_filter_Remove_Filter => Odstranit filtr
+log_filter_Filter_Messages => Filtrovat záznamy
+log_filter_Text_to_Filter_helptext => Zadejte text, který pokrývá to, co chcete nebo nechcete vidět. Ve skutečnosti můžete použít konstantní regulérní výrazy jako: <code>00:[[:digit:]]{2}:[[:digit:]]{2}</code> nebo <code>.debug&#124;.err</code>.
+log_filter_Filter_Mode_helptext => V režimu Zahrnout uvidíte jen záznamy obsahující text, zatímco v režimu Vyloučit takové záznamy neuvidíte.
 
 ## /www/cgi-bin/webif/logout.sh
 Logout => Odhlášení
@@ -320,52 +332,51 @@ Logout => Odhlášení
 Logout => Odhlášení
 
 ## /www/cgi-bin/webif/log-read.sh
+log_filter_filtered => filtrováno
 Log => Záznam
 Syslog => Syslog
 Syslog View => Zobrazení záznamu syslog
-Message Prefix => Předpona zpráv	
-HelpText Browser_Frames => Váš prohlížeč nepodporuje rámce,<br />pokračujte tímto odkazem
-View Syslog => Zobrazit syslog
+log_read_Syslog_Messages => Záznamy syslog
+log_read_no_messages => Neexistují žádné záznamy syslogu.
+log_filter_Text_Filter => Textový filtr
+log_filter_Text_to_Filter => Filtrovaný text
+log_filter_Filter_Mode => Režim filtru
+log_filter_Include => Zahrnout
+log_filter_Exclude => Vyloučit
+log_filter_Remove_Filter => Odstranit filtr
+log_filter_Filter_Messages => Filtrovat záznamy
+log_filter_Text_to_Filter_helptext => Zadejte text, který pokrývá to, co chcete nebo nechcete vidět. Ve skutečnosti můžete použít konstantní regulérní výrazy jako: <code>00:[[:digit:]]{2}:[[:digit:]]{2}</code> nebo <code>.debug&#124;.err</code>.
+log_filter_Filter_Mode_helptext => V režimu Zahrnout uvidíte jen záznamy obsahující text, zatímco v režimu Vyloučit takové záznamy neuvidíte.
 
 ## /www/cgi-bin/webif/log-setup.sh
-Remote host => Vzdálený počítač
-Remote Port => Vzdálený port
-Minutes Between Marks => Minut mezi značkami
-Log Size => Velikost záznamu
-Log => Záznam
-Syslog Settings => Nastavení pro syslogd
-syslog Settings => Nastavení pro syslog
-Remote Syslog => Vzdálený syslog
-Server IP Address => Adresa IP serveru
-Remote Syslog => Vzdálený syslog
-##!! $variable trouble
-##HelpText Remote Syslog => Adresa IP a port vzdáleného logovacího počítače. Nechcete-li použít vzdálené logování, ponechte položku prázdnou. Port je ve výchozím stavu nastaven na $DEFAULT_log_port
-HelpText Remote Syslog => Adresa IP a port vzdáleného logovacího počítače. Nechcete-li použít vzdálené logování, ponechte položku prázdnou.
+Server IP Address => IP adresa serveru
 Server Port => Port serveru
-Syslog Marks => Značky v syslogu
 Minutes Between Marks => Minut mezi značkami
+Log File => Soubor záznamu
+Log Size => Velikost záznamu
+Messages Priority => Priorita záznamů
+Ring Buffer Size => Velikost kruhového záznamu
+Backup File => Soubor zálohy
+Log => Záznam
+Log Settings => Nastavení záznamu
+Remote Syslog => Vzdálený syslog
+HelpText Remote Syslog => Adresa IP a port vzdáleného logovacího počítače. Nechcete-li použít vzdálené logování, ponechte položku prázdnou.
 Syslog Marks => Značky v syslogu
-##!! $variable trouble
-##HelpText Syslog Marks => Pravidelné značky ve vašem záznamu. Tento parametr nastavuje čas v minutách mezi značkami. Hodnota 0 znamená bez značek. Výchozí hodnota: $DEFAULT_log_mark.
 HelpText Syslog Marks => Pravidelné značky ve vašem záznamu. Tento parametr nastavuje čas v minutách mezi značkami. Hodnota 0 znamená bez značek.
 Local Log => Místní záznam
 Log type => Typ záznamu
 Circular => Kruhový
 File => Soubor
-Log Type => Typ záznamu
-##!! $variable trouble
-##HelpText Log Type => Zda bude váš záznam uložen ve vyhrazené kruhové oblasti v paměti nebo v souboru. Dejte pozor na to, že soubory jsou uloženy paměťovém souborovém systému, který se ztratí, pokud restartujete router. Výchozí hodnota: $DEFAULT_log_type.
 HelpText Log Type => Zda bude váš záznam uložen ve vyhrazené kruhové oblasti v paměti nebo v souboru. Dejte pozor na to, že soubory jsou uloženy v souborovém systému v paměti, který se ztratí, pokud restartujete router.
-Log File => Soubor záznamu
-Log File => Soubor záznamu
-##!! $variable trouble
-##HelpText Log File => Cesta a název vašeho souboru záznamu. Může být nastavena do jakéhokoli zapisovatelného souborového systému. UPOZORNĚNÍ: NEPOUŽÍVEJTE souborový systém JFFS, protože na něj syslog HODNĚ zapisuje. Můžete použít /tmp nebo jakýkoli souborový systém na externí ukládací jednotce. Výchozí hodnota: $DEFAULT_log_file.
 HelpText Log File => Cesta a název vašeho souboru záznamu. Může být nastavena do jakéhokoli zapisovatelného souborového systému. UPOZORNĚNÍ: NEPOUŽÍVEJTE souborový systém JFFS, protože na něj syslog HODNĚ zapisuje. Můžete použít /tmp nebo jakýkoli souborový systém na externí ukládací jednotce.
-Log Size => Velikost záznamu
-Log Size => Velikost záznamu
-##!! $variable trouble
-##HelpText Log Size => Velikost vašeho záznamu v kilobajtech. Buďte opatrní při stanovení velikosti kruhové paměti, protože je o ni zmenšena pracovní paměť. Výchozí hodnota: $DEFAULT_log_size kB.
-HelpText Log Size => Velikost vašeho záznamu v kilobajtech. Buďte opatrní při stanovení velikosti kruhové paměti, protože je o ni zmenšena pracovní paměť.
+HelpText Log Size => Velikost vašeho záznamu v kibibajtech. Buďte opatrní při stanovení velikosti kruhové paměti, protože je o ni zmenšena pracovní paměť.
+Kernel Log => Záznam jádra
+Messages Priority_helptext => Zaznamenávat zprávy až po definovanou prioritu, výchozí priorita je 7 (ladění).
+Ring Buffer Size_helptext => Jak velký prostor bude jádro rezervovat pro záznamy v paměti. Výchozí velikos je 16 KiB.
+Boot Time Log => Záznam po startu
+Backup Boot Time Messages => Zálohovat záznam po startu
+Compress Backup => Komprimovat zálohu
+Backup Boot Time Messages_helptext => Záznamy po startu budou přepsány dalšími událostmi. Můžete je uchovat pro pozdější nahlédnutí.
 
 ## /www/cgi-bin/webif/network-dhcpiface.sh
 Network => Síť

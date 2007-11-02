@@ -186,6 +186,25 @@ info_link_Wiki => Wiki
 info_link_Trac => Trac
 
 
+## log-dmesg.sh
+log_filter_filtered => filtered
+Log => Log
+Kernel => Kernel
+log_dmesg_Kernel_Ring_Buffer => Kernel Ring Buffer
+log_dmesg_no_archived_messages => There are no archived kernel messages.
+log_dmesg_no_current_messages => There are no kernel messages.
+log_dmesg_Current_messages => Current messages
+log_dmesg_Boot_time_messages => Boot time messages
+log_filter_Text_Filter => Text Filter
+log_filter_Text_to_Filter => Text to Filter
+log_filter_Filter_Mode => Filter Mode
+log_filter_Include => Include
+log_filter_Exclude => Exclude
+log_filter_Remove_Filter => Remove Filter
+log_filter_Filter_Messages => Filter Messages
+log_filter_Text_to_Filter_helptext => Insert a string that covers what you would like to see or exclude. In fact you can use the reqular expression constants like: <code>00:[[:digit:]]{2}:[[:digit:]]{2}</code> or <code>.debug&#124;.err</code>.
+log_filter_Filter_Mode_helptext => You will see only messages containing the text in the Include mode while you will not see them in the Exclude mode.
+
 ## network-hosts.sh
 network_hosts_host_IP_invalid => Host's IP Address
 network_hosts_Host_Name => Host Name
@@ -210,6 +229,56 @@ network_hosts_h => h
 network_hosts_min => min
 network_hosts_sec => sec
 network_hosts_No_leases => There are no known DHCP leases.
+
+
+## log-read.sh
+log_filter_filtered => filtered
+Log => Log
+Syslog => Syslog
+Syslog View => Syslog View
+log_read_Syslog_Messages => Syslog Messages
+log_read_no_messages => There are no syslog messages.
+log_filter_Text_Filter => Text Filter
+log_filter_Text_to_Filter => Text to Filter
+log_filter_Filter_Mode => Filter Mode
+log_filter_Include => Include
+log_filter_Exclude => Exclude
+log_filter_Remove_Filter => Remove Filter
+log_filter_Filter_Messages => Filter Messages
+log_filter_Text_to_Filter_helptext => Insert a string that covers what you would like to see or exclude. In fact you can use the reqular expression constants like: <code>00:[[:digit:]]{2}:[[:digit:]]{2}</code> or <code>.debug&#124;.err</code>.
+log_filter_Filter_Mode_helptext => You will see only messages containing the text in the Include mode while you will not see them in the Exclude mode.
+
+
+## log-setup.sh
+Server IP Address => Server IP Address
+Server Port => Server Port
+Minutes Between Marks => Minutes Between Marks
+Log File => Log File
+Log Size => Log Size
+Messages Priority => Messages Priority
+Ring Buffer Size => Ring Buffer Size
+Backup File => Backup File
+Log => Log
+Log Settings => Log Settings
+Log Settings => Log Settings
+Remote Syslog => Remote Syslog
+HelpText Remote Syslog => IP address and port of the remote logging host. Leave this address blank for no remote logging.
+Syslog Marks => Syslog Marks
+HelpText Syslog Marks => Periodic marks in your log. This parameter sets the time in minutes between the marks. A value of 0 means no mark.
+Local Log => Local Log
+Log type => Log type
+Circular => Circular
+File => File
+HelpText Log Type => Whether your log will be stored in a memory circular buffer or in a file. Beware that files are stored in a memory filesystem which will be lost if you reboot your router.
+HelpText Log File => The path and name of your log file. It can be set on any writable filesystem. CAUTION: DO NOT USE A JFFS filesystem because syslog will write A LOT to it. You can use /tmp or any filesystem on an external storage unit.
+HelpText Log Size => The size of your log in kibibytes. Be carefull with the size of the circular buffer as it is taken from your main memory.
+Kernel Log => Kernel Log
+Messages Priority_helptext => Log messages up to the defined priority, the default priority level is 7 (debug).
+Ring Buffer Size_helptext => How much space will kernel reserve for messages in memory. The default size is 16 KiB.
+Boot Time Log => Boot Time Log
+Backup Boot Time Messages => Backup Boot Time Messages
+Compress Backup => Compress Backup
+Backup Boot Time Messages_helptext => The boot time messages will get overwritten by other events. You can save them for the later reference.
 
 
 ## network-misc.sh

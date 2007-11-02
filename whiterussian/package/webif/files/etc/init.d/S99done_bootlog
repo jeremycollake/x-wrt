@@ -1,0 +1,27 @@
+#!/bin/sh
+# Copyright (C) 2007 X-Wrt.org 
+START=99
+
+start() {
+	. /etc/syslog.default
+	klog_enabled=$(nvram get klog_enabled)
+	klog_enabled=${klog_enabled:-$DEFAULT_klog_enabled}
+	[ "$klog_enabled" = "1" ] && {
+		klog_file=$(nvram get klog_file)
+		klog_file=${klog_file:-$DEFAULT_klog_file}
+		klog_buffersize=$(nvram get klog_buffersize)
+		klog_buffersize=${klog_buffersize:-$DEFAULT_klog_buffersize}
+		klog_gzip=$(nvram get klog_gzip)
+		klog_gzip=${klog_gzip:-$DEFAULT_klog_gzip}
+		if [ "$klog_gzip" = "1" ]; then
+			dmesg ${klog_buffersize:+-s$klog_buffersize} 2>/dev/null | gzip -c - >"$klog_file.gz"
+		else
+			dmesg ${klog_buffersize:+-s$klog_buffersize} 2>/dev/null >"$klog_file"
+		fi
+	}
+}
+
+case "$1" in
+  boot) start
+	;;
+esac
