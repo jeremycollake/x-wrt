@@ -3,7 +3,8 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3572
+lang_for_svn => 3687
+
 ## /usr/lib/webif/apn.csv
 Vodafone UK => Vodafone VB
 Mobilkom, Austria => Mobilkom, Rakousko
@@ -209,13 +210,24 @@ Date => Datum
 Proto => Protokol
 Dest. Port => Cíl. port
 
-## /www/cgi-bin/webif/log-dmesg.awx
-log_dmesg_Kernel_Ring_Buffer => Kruhový záznam jádra
-log_dmesg_no_current_messages => Žádné záznamy jádra nebyly nalezeny.
-log_dmesg_no_archived_messages => Neexistují žádné archivované záznamy jádra.
-log_dmesg_no_archive_exists => Archiv záznamů jádra neexistuje.
+## /www/cgi-bin/webif/log-dmesg.sh
+log_filter_filtered => filtrováno
 Log => Záznam
 Kernel => Jádro
+log_dmesg_Kernel_Ring_Buffer => Kruhový záznam jádra
+log_dmesg_no_archived_messages => Žádné archivované záznamy jádra nebyly nalezeny.
+log_dmesg_no_current_messages => Žádné záznamy jádra nebyly nalezeny.
+log_dmesg_Current_messages => Aktuální záznamy
+log_dmesg_Boot_time_messages => Záznamy po startu
+log_filter_Text_Filter => Textový filtr
+log_filter_Text_to_Filter => Filtrovaný text
+log_filter_Filter_Mode => Režim filtru
+log_filter_Include => Zahrnout
+log_filter_Exclude => Vyloučit
+log_filter_Remove_Filter => Odstranit filtr
+log_filter_Filter_Messages => Filtrovat záznamy
+log_filter_Text_to_Filter_helptext => Zadejte text, který pokrývá to, co chcete nebo nechcete vidět. Ve skutečnosti můžete použít konstantní regulérní výrazy jako: <code>00:[[:digit:]]{2}:[[:digit:]]{2}</code> nebo <code>.debug&#124;.err</code>.
+log_filter_Filter_Mode_helptext => V režimu Zahrnout uvidíte jen záznamy obsahující text, zatímco v režimu Vyloučit takové záznamy neuvidíte.
 
 ## /www/cgi-bin/webif/logout.sh
 Logout => Odhlášení
@@ -223,22 +235,53 @@ logout_close_window => Pro odhlášení musíte ukončit webový prohlížeč!
 logout_explanation => Protože je základní autentizace httpd uložena v paměti prohlížeče, není možné uživatele odhlásit. Musíte ukončit webový prohlížeč, v případě Firefoxu spustíte 'Vymazat důvěrná data', a donutit ho tak zapomenout přihlašovací informace, které jste zadali. Kvůli tomuto problému zděděné slabiny v základní httpd autentizaci používané běžně firmwary pravděpodobně přejdeme na autentizaci prostřednictvím cookie.
 logout_reference => Odkaz k nahlédnutí, viz http://httpd.apache.org/docs/1.3/howto/auth.html
 
-## /www/cgi-bin/webif/log-read.awx
-Syslog View => Zobrazení záznamu syslog
-log_read_no_messages => Neexistují žádné záznamy syslogu.
+## /www/cgi-bin/webif/log-read.sh
+log_filter_filtered => filtrováno
 Log => Záznam
 Syslog => Syslog
+Syslog View => Zobrazení záznamu syslog
+log_read_Syslog_Messages => Záznamy syslog
+log_read_no_messages => Neexistují žádné záznamy syslogu.
+log_filter_Text_Filter => Textový filtr
+log_filter_Text_to_Filter => Filtrovaný text
+log_filter_Filter_Mode => Režim filtru
+log_filter_Include => Zahrnout
+log_filter_Exclude => Vyloučit
+log_filter_Remove_Filter => Odstranit filtr
+log_filter_Filter_Messages => Filtrovat záznamy
+log_filter_Text_to_Filter_helptext => Zadejte text, který pokrývá to, co chcete nebo nechcete vidět. Ve skutečnosti můžete použít konstantní regulérní výrazy jako: <code>00:[[:digit:]]{2}:[[:digit:]]{2}</code> nebo <code>.debug&#124;.err</code>.
+log_filter_Filter_Mode_helptext => V režimu Zahrnout uvidíte jen záznamy obsahující text, zatímco v režimu Vyloučit takové záznamy neuvidíte.
 
-## /www/cgi-bin/webif/log-setup.awx
-Remote host => Vzdálený počítač
-Remote Port => Vzdálený port
+## /www/cgi-bin/webif/log-setup.sh
+Server IP Address => IP adresa serveru
+Server Port => Port serveru
 Minutes Between Marks => Minut mezi značkami
+Log File => Soubor záznamu
 Log Size => Velikost záznamu
-##duplicate Settings saved
-##duplicate Settings not saved
-syslog Settings => Nastavení pro syslog
+Messages Priority => Priorita záznamů
+Ring Buffer Size => Velikost kruhového záznamu
+Backup File => Soubor zálohy
 Log => Záznam
-Syslog Settings => Nastavení pro syslogd
+Log Settings => Nastavení záznamu
+Remote Syslog => Vzdálený syslog
+HelpText Remote Syslog => Adresa IP a port vzdáleného logovacího počítače. Nechcete-li použít vzdálené logování, ponechte položku prázdnou.
+Syslog Marks => Značky v syslogu
+HelpText Syslog Marks => Pravidelné značky ve vašem záznamu. Tento parametr nastavuje čas v minutách mezi značkami. Hodnota 0 znamená bez značek.
+Local Log => Místní záznam
+Log type => Typ záznamu
+Circular => Kruhový
+File => Soubor
+KiB => KiB
+HelpText Log Type => Zda bude váš záznam uložen ve vyhrazené kruhové oblasti v paměti nebo v souboru. Dejte pozor na to, že soubory jsou uloženy v souborovém systému v paměti, který se ztratí, pokud restartujete router.
+HelpText Log File => Cesta a název vašeho souboru záznamu. Může být nastavena do jakéhokoli zapisovatelného souborového systému. UPOZORNĚNÍ: NEPOUŽÍVEJTE souborový systém JFFS, protože na něj syslog HODNĚ zapisuje. Můžete použít /tmp nebo jakýkoli souborový systém na externí ukládací jednotce.
+HelpText Log Size => Velikost vašeho záznamu v kibibajtech. Buďte opatrní při stanovení velikosti kruhové paměti, protože je o ni zmenšena pracovní paměť.
+Kernel Log => Záznam jádra
+Messages Priority_helptext => Zaznamenávat zprávy až po definovanou prioritu, výchozí priorita je 7 (ladění).
+Ring Buffer Size_helptext => Jak velký prostor bude jádro rezervovat pro záznamy v paměti. Výchozí velikos je 16 KiB.
+Boot Time Log => Záznam po startu
+Backup Boot Time Messages => Zálohovat záznam po startu
+Compress Backup => Komprimovat zálohu
+Backup Boot Time Messages_helptext => Záznamy po startu budou přepsány dalšími událostmi. Můžete je uchovat pro pozdější nahlédnutí.
 
 ## /www/cgi-bin/webif/network-firewall.sh
 Network => Síť
@@ -558,6 +601,140 @@ MAC Address
 ##Wake up
 wol_help => Zde můžete odeslat paket Wake-On-LAN pro automatické nastartování počítače, který je vypnutý. Počítač musí podporovat WOL a tato vlastnost musí být zapnuta v BISOu, aby to pracovalo. Naneštěstí není definována jednoznačná odpověď probouzeného počítače, takže nebudete vědět, zda bylo probuzení úspěšné a stroj opravdu startuje.
 
+## /www/cgi-bin/webif/network-wlan.sh
+Network
+Wireless
+@TR<<Wireless Configuration>>
+@TR<<Error: Only 4 virtual adapters are allowed in ap mode.>>
+@TR<<Error: Only 1 adaptor is allowed in client mode.>>
+@TR<<Error: Only 3 virtual adapters are allowed in ap mode with a adapter in client mode.>>
+@TR<<Error: Only 4 virtual adapters are allowed in ap mode.>>
+###	echo "Installing NAS package ...<pre>"
+###	echo "Installing HostAPD mini package ...<pre>"
+###	echo "Installing HostAPD package ...<pre>"
+###	echo "Installing wpa-supplicant package ...<pre>"
+@TR<<Wireless Adapter>>
+@TR<< Configuration>>
+helpitem|Broadcom Wireless Configuration
+helptext|Helptext Broadcom Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-3x ap or 1-4x ap or 1x adhoc
+helpitem|Atheros Wireless Configuration
+helptext|Helptext Atheros Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-4x ap or 1-4x ap or 1x adhoc
+@TR<<Radio>>
+@TR<<On>>
+@TR<<Off>>
+@TR<<Mode>>
+@TR<<802.11B/G>>
+@TR<<802.11G>>
+@TR<<802.11B>>
+@TR<<802.11A>>
+@TR<<Channel>>
+@TR<<Auto>>
+@TR<<Channel>>
+@TR<<Channel>>
+@TR<<Auto>>
+@TR<<Diversity>>
+@TR<<On>>
+@TR<<Off>>
+helpitem|Diversity
+helptext|Helptext Diversity#Used on systems with multiple antennas to help improve reception. Disable if you only have one antenna.
+helplink|http://madwifi.org/wiki/UserDocs/AntennaDiversity
+@TR<<TX Antenna>>
+@TR<<Auto>>
+@TR<<Antenna 1>>
+@TR<<Antenna 2>>
+@TR<<RX Antenna>>
+@TR<<Auto>>
+@TR<<Antenna 1>>
+@TR<<Antenna 2>>
+@TR<<Max Associated Clients (Default 128)>>
+@TR<<Wireless Distance (In Meters)>>
+helpitem|Wireless Distance
+helptext|Helptext Wireless Distance#This is the distance of your longest link.
+@TR<<Add Virtual Interface>>
+@TR<<Wireless Virtual Adaptor Configuration for Wireless Card>>
+@TR<<Network>>
+@TR<<WDS>>
+helpitem|WDS Connections
+helptext|Helptext WDS Connections#Enter the MAC address of the router on your network that should be wirelessly connected to. The other router must also support wds and have the mac address of this router entered.
+@TR<<WLAN Mode#Mode>>
+@TR<<Access Point>>
+@TR<<Client>>
+@TR<<Ad-Hoc>>
+@TR<<WDS>>
+@TR<<On>>
+@TR<<Off>>
+@TR<<ESSID Broadcast>>
+@TR<<On>>
+@TR<<Off>>
+@TR<<Background Client Scanning>>
+@TR<<On>>
+@TR<<Off>>
+helpitem|Backround Client Scanning
+helptext|Helptext Backround Client Scanning#Enables or disables the ablility of a virtual interface to scan for other access points while in client mode. Disabling this allows for higher throughput but keeps your card from roaming to other access points with a higher signal strength.
+helplink|http://madwifi.org/wiki/UserDocs/PerformanceTuning
+@TR<<AP Isolation>>
+@TR<<On>>
+@TR<<Off>>
+@TR<<Tx Power>>
+@TR<<RTS (Default off)>>
+@TR<<Fragmentation (Default off)>>
+@TR<<ESSID>>
+@TR<<BSSID>>
+### 	echo "<div class=warning>$EMPTY_passphrase_error</div>"
+###	echo "<div class=warning>$EMPTY_passphrase_error</div>"
+@TR<<PSK>>
+@TR<<RADIUS>>
+@TR<<Encryption Type>>
+@TR<<Disabled>>
+###	option|wep|WEP
+@TR<<PSK>>
+@TR<<PSK>>
+@TR<<RADIUS>>
+@TR<<RADIUS>>
+@TR<<Passphrase>>
+@TR<<Generate 40bit Keys>>
+@TR<<Generate 128bit Key>>
+@TR<<WEP Key 1>>
+@TR<<WEP Key 2>>
+@TR<<WEP Key 3>>
+@TR<<WEP Key 4>>
+@TR<<PSK>>
+@TR<<RADIUS IP Address>>
+@TR<<RADIUS Port>>
+@TR<<RADIUS Server Key>>
+@TR<<NAS Package>>
+###	string|<div class=\"warning\">WPA and WPA2 will not work until you install the NAS package. </div>
+###	submit|install_nas| Install NAS Package |"
+@TR<<Installed>>
+@TR<<HostAPD Package>>
+@TR<<Installed>>
+### 	string|<div class=\"warning\">PSK and PSK2 will not work until you install the HostAPD or HostAPD Mini package. (HostAPD Mini only does PSK and PSK2) </div>
+###	submit|install_hostapd_mini| Install HostAPD-Mini Package |
+###	submit|install_hostapd| Install HostAPD Package |"
+@TR<<HostAPD Package>>
+###	string|<div class=\"warning\">WPA and WPA2 will not work until you install the HostAPD package. </div>
+###	submit|install_hostapd| Install HostAPD Package |"
+@TR<<Installed>>
+@TR<<wpa-supplicant Package>>
+###	string|<div class=\"warning\">WPA and WPA2 will not work until you install the wpa-supplicant package. </div>
+###	submit|install_wpa_supplicant| Install wpa-supplicant Package |"
+@TR<<Installed>>
+@TR<<Remove Virtual Interface>>
+helpitem|Encryption Type
+helptext|HelpText Encryption Type#WPA (RADIUS) is only supported in Access Point mode. WPA (PSK) does not work in Ad-Hoc mode.
+@TR<<WPA PSK#WPA Pre-Shared Key>>
+@TR<<RADIUS Server Key>>
+@TR<<RADIUS IP Address>>
+@TR<<RADIUS Port>>
+@TR<<Selected WEP Key>>
+@TR<<WEP Key>> 1
+@TR<<WEP Key>> 2
+@TR<<WEP Key>> 3
+@TR<<WEP Key>> 4
+@TR<<ESSID>>
+@TR<<Fragmentation Threshold>>
+@TR<<RTS Threshold>>
+
 ## /www/cgi-bin/webif/status-basic.sh
 Status => Stav
 System => Systém
@@ -591,11 +768,22 @@ Routing Table => Směrovací tabulka
 Router Listening Ports => Router naslouchá na portech
 Router Connections => Spojení na router
 
-## /www/cgi-bin/webif/status-conntrackread.awx
-Conntrack Table => Tabulka conntrack
-status_conntrackread_no_messages => Neexistují žádné záznamy sledování spojení.
+## /www/cgi-bin/webif/status-conntrackread.sh
+log_filter_filtered => filtrováno
 Status => Stav
 Conntrack => Conntrack
+Conntrack Table => Tabulka conntrack
+log_filter_Text_Filter => Textový filtr
+log_filter_Text_to_Filter => Filtrovaný text
+log_filter_Filter_Mode => Režim filtru
+log_filter_Include => Zahrnout
+log_filter_Exclude => Vyloučit
+log_filter_Remove_Filter => Odstranit filtr
+conntrackread_filter_Filter_Records => Filtrovat záznamy
+log_filter_Text_to_Filter_helptext => Zadejte text, který pokrývá to, co chcete nebo nechcete vidět. Ve skutečnosti můžete použít konstantní regulérní výrazy jako: <code>00:[[:digit:]]{2}:[[:digit:]]{2}</code> nebo <code>.debug&#124;.err</code>.
+log_filter_Filter_Mode_helptext => V režimu Zahrnout uvidíte jen záznamy obsahující text, zatímco v režimu Vyloučit takové záznamy neuvidíte.
+Kernel Connection Tracking Table => Tabulka sledování spojení jádra
+status_conntrackread_no_messages => Žádné záznamy sledování spojení nebyly nalezeny.
 
 ## /www/cgi-bin/webif/status-diag.sh
 Status => Stav
