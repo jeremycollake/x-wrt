@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3685
+lang_for_svn => 3689
 
 ## /usr/lib/webif/apn.csv
 Vodafone UK => Vodafone VB
@@ -367,6 +367,7 @@ Local Log => Místní záznam
 Log type => Typ záznamu
 Circular => Kruhový
 File => Soubor
+KiB => KiB
 HelpText Log Type => Zda bude váš záznam uložen ve vyhrazené kruhové oblasti v paměti nebo v souboru. Dejte pozor na to, že soubory jsou uloženy v souborovém systému v paměti, který se ztratí, pokud restartujete router.
 HelpText Log File => Cesta a název vašeho souboru záznamu. Může být nastavena do jakéhokoli zapisovatelného souborového systému. UPOZORNĚNÍ: NEPOUŽÍVEJTE souborový systém JFFS, protože na něj syslog HODNĚ zapisuje. Můžete použít /tmp nebo jakýkoli souborový systém na externí ukládací jednotce.
 HelpText Log Size => Velikost vašeho záznamu v kibibajtech. Buďte opatrní při stanovení velikosti kruhové paměti, protože je o ni zmenšena pracovní paměť.
@@ -988,8 +989,21 @@ Router Listening Ports => Router naslouchá na portech
 Router Connections => Spojení na router
 
 ## /www/cgi-bin/webif/status-conntrackread.sh
+log_filter_filtered => filtrováno
 Status => Stav
-Conntrack Table => Tabulka 'conntrack'
+Conntrack => Conntrack
+Conntrack Table => Tabulka conntrack
+log_filter_Text_Filter => Textový filtr
+log_filter_Text_to_Filter => Filtrovaný text
+log_filter_Filter_Mode => Režim filtru
+log_filter_Include => Zahrnout
+log_filter_Exclude => Vyloučit
+log_filter_Remove_Filter => Odstranit filtr
+conntrackread_filter_Filter_Records => Filtrovat záznamy
+log_filter_Text_to_Filter_helptext => Zadejte text, který pokrývá to, co chcete nebo nechcete vidět. Ve skutečnosti můžete použít konstantní regulérní výrazy jako: <code>00:[[:digit:]]{2}:[[:digit:]]{2}</code> nebo <code>.debug&#124;.err</code>.
+log_filter_Filter_Mode_helptext => V režimu Zahrnout uvidíte jen záznamy obsahující text, zatímco v režimu Vyloučit takové záznamy neuvidíte.
+Kernel Connection Tracking Table => Tabulka sledování spojení jádra
+status_conntrackread_no_messages => Žádné záznamy sledování spojení nebyly nalezeny.
 
 ## /www/cgi-bin/webif/status-diag.sh
 Status => Stav

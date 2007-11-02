@@ -205,31 +205,6 @@ log_filter_Filter_Messages => Filter Messages
 log_filter_Text_to_Filter_helptext => Insert a string that covers what you would like to see or exclude. In fact you can use the reqular expression constants like: <code>00:[[:digit:]]{2}:[[:digit:]]{2}</code> or <code>.debug&#124;.err</code>.
 log_filter_Filter_Mode_helptext => You will see only messages containing the text in the Include mode while you will not see them in the Exclude mode.
 
-## network-hosts.sh
-network_hosts_host_IP_invalid => Host's IP Address
-network_hosts_Host_Name => Host Name
-network_hosts_MAC => MAC Address
-network_hosts_static_IP_invalid => Static IP Address
-Network => Network
-Hosts => Hosts
-network_hosts_Configured_Hosts => Configured Hosts
-network_hosts_Host_Names => Host Names
-network_hosts_IP => IP Address
-network_hosts_Host_Name => Host Name
-network_hosts_Remove => Remove
-network_hosts_Add => Add
-network_hosts_Host_Names_helptext => The file /etc/hosts is used to look up the IP address of a device connected to a computer network. The hosts file describes a many-to-one mapping of device names to IP addresses. When accessing a device by name, the networking system attempts to locate the name within the hosts file before accessing the Internet domain name system.
-network_hosts_DHCP_Static_IPs => Static IP addresses (for DHCP)
-network_hosts_Static_IPs => Static IP addresses
-network_hosts_Static_IPs_helptext => The file /etc/ethers contains database information regarding known 48-bit ethernet addresses of hosts on an Internetwork. The DHCP server uses the matching IP address instead of allocating a new one from the pool for any MAC address listed in this file.
-network_hosts_Active_Leases => Active DHCP Leases
-network_hosts_Name => Name
-network_hosts_Expires => Expires in
-network_hosts_h => h
-network_hosts_min => min
-network_hosts_sec => sec
-network_hosts_No_leases => There are no known DHCP leases.
-
 
 ## log-read.sh
 log_filter_filtered => filtered
@@ -279,6 +254,32 @@ Boot Time Log => Boot Time Log
 Backup Boot Time Messages => Backup Boot Time Messages
 Compress Backup => Compress Backup
 Backup Boot Time Messages_helptext => The boot time messages will get overwritten by other events. You can save them for the later reference.
+
+
+## network-hosts.sh
+network_hosts_host_IP_invalid => Host's IP Address
+network_hosts_Host_Name => Host Name
+network_hosts_MAC => MAC Address
+network_hosts_static_IP_invalid => Static IP Address
+Network => Network
+Hosts => Hosts
+network_hosts_Configured_Hosts => Configured Hosts
+network_hosts_Host_Names => Host Names
+network_hosts_IP => IP Address
+network_hosts_Host_Name => Host Name
+network_hosts_Remove => Remove
+network_hosts_Add => Add
+network_hosts_Host_Names_helptext => The file /etc/hosts is used to look up the IP address of a device connected to a computer network. The hosts file describes a many-to-one mapping of device names to IP addresses. When accessing a device by name, the networking system attempts to locate the name within the hosts file before accessing the Internet domain name system.
+network_hosts_DHCP_Static_IPs => Static IP addresses (for DHCP)
+network_hosts_Static_IPs => Static IP addresses
+network_hosts_Static_IPs_helptext => The file /etc/ethers contains database information regarding known 48-bit ethernet addresses of hosts on an Internetwork. The DHCP server uses the matching IP address instead of allocating a new one from the pool for any MAC address listed in this file.
+network_hosts_Active_Leases => Active DHCP Leases
+network_hosts_Name => Name
+network_hosts_Expires => Expires in
+network_hosts_h => h
+network_hosts_min => min
+network_hosts_sec => sec
+network_hosts_No_leases => There are no known DHCP leases.
 
 
 ## network-misc.sh
@@ -349,6 +350,24 @@ network_wol_requires_wol => Install the wol package if you want to wake up a com
 network_wol_Install_wol => Install wol
 network_wol_requires_ether-wake => Install the ether-wake package, if you want to wake up a computer via a nonroutable Ethernet frame
 network_wol_Install_ether-wake => Install ether-wake
+
+
+## status-conntrackread.sh
+log_filter_filtered => filtered
+Status => Status
+Conntrack => Conntrack
+Conntrack Table => Conntrack Table
+log_filter_Text_Filter => Text Filter
+log_filter_Text_to_Filter => Text to Filter
+log_filter_Filter_Mode => Filter Mode
+log_filter_Include => Include
+log_filter_Exclude => Exclude
+log_filter_Remove_Filter => Remove Filter
+conntrackread_filter_Filter_Records => Filter Records
+log_filter_Text_to_Filter_helptext => Insert a string that covers what you would like to see or exclude. In fact you can use the reqular expression constants like: <code>00:[[:digit:]]{2}:[[:digit:]]{2}</code> or <code>.debug&#124;.err</code>.
+log_filter_Filter_Mode_helptext => You will see only messages containing the text in the Include mode while you will not see them in the Exclude mode.
+Kernel Connection Tracking Table => Kernel Connection Tracking Table
+status_conntrackread_no_messages => There are no connection tracker's records.
 
 
 ## status-interfaces.sh
