@@ -28,12 +28,12 @@ else
 	[ "$FORM_type" = "file" ] && file_required="required"
 	[ 1 -eq "$FORM_enabled" ] && kfile_required="required"
 	validate <<EOF
-ip|FORM_ipaddr|@TR<<Remote host>>||$FORM_ipaddr
-int|FORM_port|@TR<<Remote Port>>|min=0 max=65535|$FORM_port
+ip|FORM_ipaddr|@TR<<Server IP Address>>||$FORM_ipaddr
+int|FORM_port|@TR<<Server Port>>|min=0 max=65535|$FORM_port
 int|FORM_mark|@TR<<Minutes Between Marks>>||$FORM_mark
 string|file|@TR<<Log File>>|$file_required|$FORM_file
 int|FORM_size|@TR<<Log Size>>|min=1 max=9999 required|$FORM_size
-int|FORM__conloglevel|@TR<<Default Log Level>>|min=0 max=9|$FORM__conloglevel
+int|FORM__conloglevel|@TR<<Messages Priority>>|min=0 max=9|$FORM__conloglevel
 int|FORM_buffersize|@TR<<Ring Buffer Size>>|min=1 max=9999|$FORM_buffersize
 string|kfile|@TR<<Backup File>>|$kfile_required|$FORM_kfile
 EOF
