@@ -18,7 +18,7 @@ else
 		FORM_filtmode=$(sed '/^filmode=/!d; s/^filtmode=//' "$filter_temp" 2>/dev/null)
 	fi
 fi
-if [ "$FORM_filtmode" != "include" -o "$FORM_filtmode" != "exclude" ]; then
+if [ "$FORM_filtmode" != "include" -a "$FORM_filtmode" != "exclude" ]; then
 	FORM_filtmode="include"
 fi
 [ -n "$FORM_filtext" ] && filtered_title=" (@TR<<log_filter_filtered#filtered>>)"
