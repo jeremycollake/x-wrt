@@ -199,11 +199,13 @@ EOF
 	<th>@TR<<network_hosts_Expires#Expires in>></th>
 </tr>
 <?
-exists /tmp/dhcp.leases && awk -vdate="$(date +%s)" '
+cat /tmp/dhcp.leases 2>/dev/null | awk -v date="$(date +%s)" '
 BEGIN {
 	odd=1
+	counter = 0
 }
 $1 > 0 {
+	counter++
 	if (odd == 1)
 	{
 		print "	<tr>"
@@ -226,15 +228,75 @@ $1 > 0 {
 	print "		</td>"
 	print "	</tr>"
 }
-' /tmp/dhcp.leases
-exists /tmp/dhcp.leases && grep -q "." /tmp/dhcp.leases > /dev/null
-! equal "$?" "0" && {
-	echo "	<tr>"
-	echo "		<td colspan=\"5\">@TR<<network_hosts_No_leases#There are no known DHCP leases.>></td>"
-	echo "	</tr>"
-}
+END {
+	if (counter == 0) {
+		print "	<tr>"
+		print "		<td colspan=\"4\">@TR<<network_hosts_No_leases#There are no known DHCP leases.>></td>"
+		print "	</tr>"
+	}
+}'
 ?>
 </table>
+<hr class="separator" />
+<h5><strong>@TR<<status_leases_arp_title#Address Resolution Protocol Cache (ARP)>></strong></h5>
+<table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;" border="0" cellpadding="3" cellspacing="2">
+<tbody>
+	<tr>
+		<th>@TR<<status_leases_MAC#MAC Address>></th>
+		<th>@TR<<status_leases_IP#IP Address>></th>
+		<th>@TR<<status_leases_HW#HW Type>></th>
+		<th>@TR<<status_leases_Flags#Flags>></th>
+		<th>@TR<<status_leases_Mask#Mask>></th>
+	</tr>
+<?
+config_load network
+[ -f /var/state/network ] && . /var/state/network
+config_get excludeiface wan ifname
+cat /proc/net/arp 2>/dev/null | awk -v "exiface=$excludeiface" '
+BEGIN {
+	cntr=0
+}
+$1 ~ /^[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}$/ && $4 ~ /^[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}$/ && $6 != exiface {
+	print "		<tr>"
+	print "		<td>" $4 "</td>"
+	print "		<td>" $1 "</td>"
+	if ($2 == "0x0") flags="NETROM"
+	else if ($2 == "0x1") hwtype="ETHER"
+	else if ($2 == "0x2") hwtype="EETHER"
+	else if ($2 == "0x3") hwtype="AX25"
+	else if ($2 == "0x4") hwtype="PRONET"
+	else if ($2 == "0x5") hwtype="CHAOS"
+	else if ($2 == "0x6") hwtype="IEEE802"
+	else if ($2 == "0x7") hwtype="ARCNET"
+	else if ($2 == "0x8") hwtype="APPLETLK"
+	else if ($2 == "0xF") hwtype="DLCI"
+	else if ($2 == "0x13") hwtype="ATM"
+	else if ($2 == "0x17") hwtype="METRICOM"
+	else if ($2 == "0x18") hwtype="IEEE1394"
+	else if ($2 == "0x1B") hwtype="EUI64"
+	else if ($2 == "0x20") hwtype="INFINIBAND"
+	else hwtype=$2
+	print "		<td>" hwtype "</td>"
+	if ($3 == "0x2") flags="C (@TR<<status_leases_completed#completed>>)"
+	else if ($3 == "0x4") flags="M (@TR<<status_leases_permanent#permanent>>)"
+	else if ($3 == "0x8") flags="P (@TR<<status_leases_published#published>>)"
+	else flags=$3
+	print "		<td>" flags "</td>"
+	print "		<td>" $5 "</td>"
+	print "	</tr>"
+	cntr++
+}
+END {
+	if (cntr == 0) {
+		print "	<tr>"
+		print "		<td>@TR<<status_leases_no_arp_record#ARP Cache does not contain any correspondent record.>></td>"
+		print "	</tr>"
+	}
+}'
+?>
+</tbody>
+</table>
+<br />
 <? footer ?>
 <!--
 ##WEBIF:name:Network:500:Hosts
