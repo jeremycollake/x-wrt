@@ -112,7 +112,7 @@ for config in $dnsmasq_cfgs; do
 		helpitem|Lease File
 		helptext|HelpText Lease File#Use the specified file to store DHCP lease information. This should remain on /tmp unless you have a external hard drive because it writes out infomation for every lease.
 		helpitem|More Information
-		helplink|HelpLink More Information#http://www.thekelleys.org.uk/dnsmasq/docs/dnsmasq-man.html
+		helplink|http://www.thekelleys.org.uk/dnsmasq/docs/dnsmasq-man.html
 		end_form"
 	append forms "$form_dnsmasq" "$N"
 done
