@@ -39,6 +39,8 @@ EOF
 
 )
 
+kernelrelease=$(cat /proc/sys/kernel/osrelease 2>/dev/null | sed 's/^\([[:digit:]]*\)\.\([[:digit:]]*\)\..*/\1\2/')
+
 header "Status" "Modules" "@TR<<status_modules_Kernel_Modules#Kernel Modules>>"
 ?>
 
@@ -57,7 +59,7 @@ header "Status" "Modules" "@TR<<status_modules_Kernel_Modules#Kernel Modules>>"
 </tr>
 
 <?
-cat /proc/modules 2>/dev/null | sort | awk '
+cat /proc/modules 2>/dev/null | sort | awk -v kernelrelease="$kernelrelease" '
 BEGIN{
 	counter = 0
 	odd=1
@@ -80,22 +82,32 @@ function oddline() {
 		print td_ind "<td class=\"number\">" $2 "</td>"
 		counter += $2
 		print td_ind "<td class=\"number\">" $3 "</td>"
-		if ($4 == "-") {
-			usedby = "&nbsp;"
-			mode = $5
-			memory = $6
-		} else {
+		if (kernelrelease == 24) {
 			usedby = $4
-			sub(/,$/, "", usedby)
-			gsub(/,/, ", ", usedby)
-			mode = $5
-			memory = $6
+			for (i=5; i<=NF; i++) usedby = usedby " " $i
+			gsub(/\(deleted\)/, "@TR<<status_modules_flags_deleted|(deleted)>>", usedby)
+			gsub(/\(autoclean\)/, "@TR<<status_modules_flags_autoclean|(autoclean)>>", usedby)
+			gsub(/\(unused\)/, "@TR<<status_modules_flags_unused|(unused)>>", usedby)
+			gsub(/\(initializing\)/, "@TR<<status_modules_flags_initializing|(initializing)>>", usedby)
+			gsub(/\(uninitialized\)/, "@TR<<status_modules_flags_uninitialized|(uninitialized)>>", usedby)
+		} else {
+			if ($4 == "-") {
+				usedby = "&nbsp;"
+				mode = $5
+				memory = $6
+			} else {
+				usedby = $4
+				sub(/,$/, "", usedby)
+				gsub(/,/, ", ", usedby)
+				mode = $5
+				memory = $6
+			}
+			gsub(/Live/, "@TR<<status_modules_flags_Live|Live>>", mode)
+			gsub(/Loading/, "@TR<<status_modules_flags_Loading|Loading>>", mode)
+			gsub(/Unloading/, "@TR<<status_modules_flags_Unloading|Unloading>>", mode)
+			print td_ind "<td>" mode "</td>"
+			print td_ind "<td>" memory "</td>"
 		}
-		gsub(/Live/, "@TR<<status_modules_flags_Live|Live>>", mode)
-		gsub(/Loading/, "@TR<<status_modules_flags_Loading|Loading>>", mode)
-		gsub(/Unloading/, "@TR<<status_modules_flags_Unloading|Unloading>>", mode)
-		print td_ind "<td>" mode "</td>"
-		print td_ind "<td>" memory "</td>"
 		print td_ind "<td>" usedby "</td>"
 		print tr_ind "</tr>"
 	}
@@ -103,13 +115,13 @@ function oddline() {
 END{
 	if (counter == 0) {
 		print "<tr>"
-		print "<td colspan=\"6\">@TR<<status_modules_No_modules_loaded#There are currently no kernel modules loaded>>.</td>"
+		print "<td colspan=\""(kernelrelease == 24 ? 4 : 6)"\">@TR<<status_modules_No_modules_loaded#There are currently no kernel modules loaded>>.</td>"
 		print "</tr>"
 	} else {
 		oddline()
 		print "<td>@TR<<status_modules_size_Total#Total>></td>"
 		print "<td class=\"number\">" counter "</td>"
-		print "<td colspan=\"4\">&nbsp;</td>"
+		print "<td colspan=\""(kernelrelease == 24 ? 2 : 4)"\">&nbsp;</td>"
 		print "</tr>"
 	}
 }
