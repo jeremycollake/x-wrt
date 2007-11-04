@@ -41,7 +41,7 @@ config_cb() {
 }
 
 make_backup() {
-	[ ! -f /etc/config/backup ] && cp -pf /usr/lib/webif/backup.default /etc/config/backup >/dev/null 2>&1
+	[ ! -f /etc/config/backup ] && cp -af /usr/lib/webif/backup.default /etc/config/backup >/dev/null 2>&1
 	uci_load "backup"
 	local tmpdir bkstamp nvram_selector seccfg seccfg_type seccfg_mask tmpgz prepwd oldIFS dir file file_path realname tmpgz_name tmpgz_path
 	echo "<form method=\"post\" name=\"backupreturn\" action=\"$SCRIPT_NAME\">"
@@ -76,7 +76,7 @@ make_backup() {
 					for dir in $(find $seccfg_mask 2>/dev/null); do
 						[ -d "$dir" ] && {
 							mkdir -p $tmpdir$dir
-							cp -fpr $dir/* $tmpdir$dir/
+							cp -afr $dir/* $tmpdir$dir/
 						}
 					done
 					IFS="$oldIFS"
@@ -93,7 +93,7 @@ make_backup() {
 						[ -f "$file" ] && [ ! -d "$file" ] && [ ! -h "$file" ] && {
 							file_path="${file%/*}"
 							[ ! -d "$tmpdir$file_path" ] && mkdir -p "$tmpdir$file_path"
-							cp -fp "$file" "$tmpdir$file"
+							cp -af "$file" "$tmpdir$file"
 						}
 					done
 					IFS="$oldIFS"
@@ -246,7 +246,7 @@ restore_selection() {
 				for cpfile in $filelist; do
 					tmpfpath="${cpfile%/*}"
 					[ ! -d "$editpath$tmpfpath" ] && mkdir -p "$editpath$tmpfpath"
-					cp -fp "$tmpdir$cpfile" "$editpath$cpfile"
+					cp -af "$tmpdir$cpfile" "$editpath$cpfile"
 					[ "$tmpfpath" = "/etc/config" ] && {
 						ucifile="${cpfile##*/}"
 						[ "$ucifile" != "firewall" ] && {
