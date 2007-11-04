@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3687
+lang_for_svn => 3696
 
 ## /usr/lib/webif/apn.csv
 Vodafone UK => Vodafone VB
@@ -883,6 +883,23 @@ status_leases_no_arp_record => Paměť ARP neobsahuje žádný odpovídající z
 status_leases_ethers_title => Databáze překladu ethernetových adres na adresy IP (/etc/ethers)
 status_leases_ethers_empty => Soubor /etc/ethers neobsahuje žádný pár adres ethernet/IP.
 status_leases_no_ethers => Soubor /etc/ethers neexistuje.
+
+## /www/sgi-bin/webif/status-modules.sh
+Status => Stav
+Modules => Moduly
+status_modules_Kernel_Modules => Moduly jádra
+status_modules_Loaded_Modules => Natažené moduly
+status_modules_th_Module => Modul
+status_modules_th_Size => Velikost
+status_modules_th_Count => Počet
+status_modules_th_State => Stav
+status_modules_th_Address => Adresa
+status_modules_th_Used_by => Používán
+status_modules_flags_Live => Aktivní
+status_modules_flags_Loading => Načítání
+status_modules_flags_Unloading => Uvolňování
+status_modules_No_modules_loaded => Aktuálně nejsou žádné moduly jádra nataženy
+status_modules_size_Total => Celkem
 
 ## /www/cgi-bin/webif/status-processes.sh
 status_processes_kill_error => Chyba kill
