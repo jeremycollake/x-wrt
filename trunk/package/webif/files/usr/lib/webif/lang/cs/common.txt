@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3696
+lang_for_svn => 3697
 
 ## /usr/lib/webif/apn.csv
 Vodafone UK => Vodafone VB
@@ -277,7 +277,7 @@ HelpText Log File => Cesta a název vašeho souboru záznamu. Může být nastav
 HelpText Log Size => Velikost vašeho záznamu v kibibajtech. Buďte opatrní při stanovení velikosti kruhové paměti, protože je o ni zmenšena pracovní paměť.
 Kernel Log => Záznam jádra
 Messages Priority_helptext => Zaznamenávat zprávy až po definovanou prioritu, výchozí priorita je 7 (ladění).
-Ring Buffer Size_helptext => Jak velký prostor bude jádro rezervovat pro záznamy v paměti. Výchozí velikos je 16 KiB.
+Ring Buffer Size_helptext => Jak velký prostor bude jádro rezervovat pro záznamy v paměti. Výchozí velikost je 16 KiB.
 Boot Time Log => Záznam po startu
 Backup Boot Time Messages => Zálohovat záznam po startu
 Compress Backup => Komprimovat zálohu
@@ -895,6 +895,11 @@ status_modules_th_Count => Počet
 status_modules_th_State => Stav
 status_modules_th_Address => Adresa
 status_modules_th_Used_by => Používán
+status_modules_flags_deleted => (vymazán)
+status_modules_flags_autoclean => (auto. čištění)
+status_modules_flags_unused => (nepoužit)
+status_modules_flags_initializing => (inicialiace)
+status_modules_flags_uninitialized => (neinicializován)
 status_modules_flags_Live => Aktivní
 status_modules_flags_Loading => Načítání
 status_modules_flags_Unloading => Uvolňování
