@@ -44,13 +44,13 @@ if ! equal $FORM_download "" ; then
 		for file in $COPY_FILES; do
 			[ -e $file ] && [ ! -h $file ] && {
 			d=`dirname $file`; [ -d $tmp$d ] || mkdir -p $tmp$d
-			cp $file $tmp$file 2>/dev/null
+			cp -af $file $tmp$file 2>/dev/null
 			}
 		done
 		for dir in $COPY_DIRS; do
 			[ -e $dir ] && {
 			mkdir -p $tmp$dir
-			cp -r $dir/* $tmp$dir/ 2>/dev/null
+			cp -afr $dir/* $tmp$dir/ 2>/dev/null
 			}
 		done
 		(cd $tmp; tar czf $tgz *)
@@ -78,7 +78,7 @@ EOF
 					[ -d /$file ] || mkdir /$file
 				else
 					[ -e /$file ] && rm /$file
-					cp $file /$file
+					cp -af $file /$file
 					echo "@TR<<confman_restoring_file#restoring>> $file"
 				fi
 			done
