@@ -53,8 +53,14 @@ header "Status" "Modules" "@TR<<status_modules_Kernel_Modules#Kernel Modules>>"
 	<th>@TR<<status_modules_th_Module#Module>></th>
 	<th class="number">@TR<<status_modules_th_Size#Size>></th>
 	<th class="number">@TR<<status_modules_th_Count#Count>></th>
+<?
+[ "$kernelrelease" != "24" ] && {
+	cat <<EOF
 	<th>@TR<<status_modules_th_State#State>></th>
 	<th>@TR<<status_modules_th_Address#Address>></th>
+EOF
+}
+?>
 	<th>@TR<<status_modules_th_Used_by#Used by>></th>
 </tr>
 
