@@ -4,24 +4,25 @@
 # Last updated: 16 August 2007
 
 START=70
-BIN=l2tpns
-DEFAULT=/etc/default/$BIN
+NAME=l2tpns
+BIN=$(which $NAME 2>/dev/null)
+DEFAULT=/etc/default/$NAME
 RUN_D=/var/run
-PID_F=$RUN_D/$BIN.pid
+PID_F=$RUN_D/$NAME.pid
 
 start() {
-        [ -f $DEFAULT ] && . $DEFAULT
-        mkdir -p $RUN_D
-        $BIN $OPTIONS
+	[ -z "$BIN" ] && return
+	[ -f $DEFAULT ] && . $DEFAULT
+	mkdir -p $RUN_D
+	$BIN $OPTIONS
 }
 
 stop() {
-        killall l2tpns
+	[ -f $PID_F ] && kill $(cat $PID_F)
 }
 
-
 restart() {
-	$0 stop
+	stop
 	sleep 6
-	$0 start
+	start
 }
