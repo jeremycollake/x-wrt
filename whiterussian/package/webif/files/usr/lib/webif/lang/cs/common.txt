@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3697
+lang_for_svn => 3701
 
 ## /usr/lib/webif/apn.csv
 Vodafone UK => Vodafone VB
@@ -1211,6 +1211,36 @@ Bytes => Bajtů
 QoS Packets | Raw Stats => Pakety QoS | Surová statistika
 no_qos => Žádná služba QoS neběží, nelze tedy zobrazit dekódovanou statistiku QoS! Doporučujeme nainstalovat skripty QoS od nbd.
 qos_scripts_disabled => Balíček qos-scripts není aktivní. Navštivte <a href="./network-qos.sh">Nastavení QoS</a> k jeho instalaci nebo povolení.
+
+## /www/cgi-bin/webif/status-routes.sh
+Status => Stav
+Routes => Směrování
+network_routes_Deleting_route => Odstraňuji směrování
+network_routes_delete_Ok => OK
+network_routes_delete_Failed => Selhalo
+network_routes_Delete_Route => Smazat směrování
+network_routes_edit_Target_IP => Cílová adresa IP
+network_routes_edit_Gateway => Brána
+network_routes_edit_Netmask => Maska
+network_routes_edit_Metric => Metrika
+network_routes_edit_Interface => Rozhraní
+network_routes_action_Cancel => Zrušit
+network_routes_action_Delete => Smazat
+network_routes_Delete_Route_helptext => Pokud je to nezbytné, můžete smazat konkrétní směrování ze směrovací tabulky jádra. Směrování bude odstraněno okamžitě. Obnovit statická a výchozí směrování můžete jen restartováním příslušného síťového rozhraní.<br /><b>Upozornění!</b> Pokud smažete nevhodné směrování, můžete ztratit přístup k vašemu zařízení.
+network_routes_routing_table => Směrovací tabulka jádra
+network_routes_static_th_Destination => Cíl
+network_routes_static_th_Gateway => Brána
+network_routes_static_th_Genmask => Maska
+network_routes_static_th_Flags => Příznaky
+network_routes_static_th_Metric => Metrika
+network_routes_static_th_Ref => Ref.
+network_routes_static_th_Use => Použití
+network_routes_static_th_Interface => Rozhraní
+network_routes_static_th_Action => Akce
+network_routes_unknown_iface => neznámé
+network_routes_No_kernel_routes => Neexistují žádná směrování v tabulce jádra!?
+network_routes_ipv6_routing_table => IPv6 směrovací tabulka jádra
+network_routes_static_th_Next_Hop => Následující uzel
 
 ## /www/cgi-bin/webif/status-usb.sh
 status_usb_umount_error_in => Chyba při akci

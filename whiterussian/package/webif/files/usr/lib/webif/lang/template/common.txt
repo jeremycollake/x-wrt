@@ -544,6 +544,37 @@ status_processes_Signals_Legend => Most used signals
 status_processes_Signals_Legend_Text => 1) SIGHUP - Hangup<br />9) SIGKILL - Kill (can't be caught or ignored)<br />15) SIGTERM - Termination<br />10) SIGUSR1/12) SIGUSR2 - User-defined signals.<br />For more information see the <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/kill.html" onclick="return !targetwindow(this.href);">kill command description</a>.
 
 
+## status-routes.sh
+Status => Status
+Routes => Routes
+network_routes_Deleting_route => Deleting the route
+network_routes_delete_Ok => OK
+network_routes_delete_Failed => Failed
+network_routes_Delete_Route => Delete Route
+network_routes_edit_Target_IP => Target IP Address
+network_routes_edit_Gateway => Gateway
+network_routes_edit_Netmask => Netmask
+network_routes_edit_Metric => Metric
+network_routes_edit_Interface => Interface
+network_routes_action_Cancel => Cancel
+network_routes_action_Delete => Delete
+network_routes_Delete_Route_helptext => You can delete the particular route from the kernel routing table when necessary. The route will be deleted imediatelly. You can restore static and default routes only by restarting the particular network interface.<br /><b>Warning!</b> You can lose access to your device by deleting the incorrect route.
+network_routes_routing_table => Kernel Routing Table
+network_routes_static_th_Destination => Destination
+network_routes_static_th_Gateway => Gateway
+network_routes_static_th_Genmask => Genmask
+network_routes_static_th_Flags => Flags
+network_routes_static_th_Metric => Metric
+network_routes_static_th_Ref => Ref
+network_routes_static_th_Use => Use
+network_routes_static_th_Interface => Interface
+network_routes_static_th_Action => Action
+network_routes_unknown_iface => unknown
+network_routes_No_kernel_routes => There are no IP routes in the kernel's table?!
+network_routes_ipv6_routing_table => Kernel IPv6 Routing Table
+network_routes_static_th_Next_Hop => Next Hop
+
+
 ## status-usb.sh
 status_usb_umount_error_in => Error in
 Status => Status
