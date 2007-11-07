@@ -16,6 +16,7 @@ for ifname in lan wan wifi $(nvram get ifnames 2>/dev/null ); do
 	iface=$(nvram get ${ifname}_ifname 2>/dev/null | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')
 	[ -n "$iface" ] && ifaces="$ifaces $ifname:$iface"
 done
+ifaces="$ifaces loopback:lo"
 
 DELETE_FLAG=0
 
