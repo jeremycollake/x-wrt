@@ -15,7 +15,6 @@ define Package/webif-applications
   SUBMENU:=webif
   DEPENDS:=+webif
   TITLE:=XWrt applications plugin
-  DESCRIPTION:=Adds some application management capabilities to X-Wrt 
 endef
 
 define Build/Compile

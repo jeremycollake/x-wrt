@@ -25,7 +25,6 @@ define Package/webif-olsr
   SUBMENU:=webif
   DEPENDS:=+webif +webif-mesh +ip +olsrd +olsrd-mod-dyn-gw +olsrd-mod-httpinfo +olsrd-mod-nameservice +olsrd-mod-secure +olsrd-mod-tas
   TITLE:=XWrt olsr mesh plugin
-  DESCRIPTION:=Adds OLSR management capabilities to X-Wrt 
 endef
 
 define Build/Compile
