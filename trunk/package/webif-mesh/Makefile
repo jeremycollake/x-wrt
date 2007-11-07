@@ -25,7 +25,6 @@ define Package/webif-mesh
   SUBMENU:=webif
   DEPENDS:=+webif
   TITLE:=XWrt mesh installation page
-  DESCRIPTION:=Adds mesh installation capabilities to X-Wrt
 endef
 
 define Build/Compile

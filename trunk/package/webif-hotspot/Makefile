@@ -17,7 +17,6 @@ define Package/webif-hotspot
   SUBMENU:=webif
   DEPENDS:=+webif
   TITLE:=XWrt HotSpot control pages
-  DESCRIPTION:=A Hotspot control pages for the webif.
 endef
 
 define Build/Compile

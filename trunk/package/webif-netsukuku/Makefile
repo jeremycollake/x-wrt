@@ -25,7 +25,6 @@ define Package/webif-netsukuku
   SUBMENU:=webif
   DEPENDS:=+webif +webif-mesh
   TITLE:=XWrt Netsukuku mesh plugin
-  DESCRIPTION:=Adds Netsukuku management capabilities to X-Wrt 
 endef
 
 define Build/Compile

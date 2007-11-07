@@ -25,7 +25,6 @@ define Package/webif-batman
   SUBMENU:=webif
   DEPENDS:=+webif +webif-mesh +batman
   TITLE:=XWrt BATMAN mesh plugin
-  DESCRIPTION:=Adds BATMAN management capabilities to X-Wrt 
 endef
 
 define Build/Compile
