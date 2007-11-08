@@ -116,7 +116,6 @@ $(STAGING_DIR)/usr/lib/{libblkid,libcom_err,libext2fs,libe2p,libss,libuuid}.{a,s
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		BUILDCC="$(HOSTCC)" \
 		DESTDIR="$(STAGING_DIR)" \
-		root_libdir="$(STAGING_DIR)/usr/lib" \
 		install-libs
 	touch $@
 

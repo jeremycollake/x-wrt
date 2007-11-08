@@ -1,0 +1,17 @@
+diff -urN e2fsprogs-1.39.old/lib/Makefile.elf-lib e2fsprogs-1.39.new/lib/Makefile.elf-lib
+--- e2fsprogs-1.39.old/lib/Makefile.elf-lib	2006-03-11 00:37:57.000000000 +0100
++++ e2fsprogs-1.39.new/lib/Makefile.elf-lib	2007-11-08 18:10:37.000000000 +0100
+@@ -45,10 +45,10 @@
+ 	@echo "	SYMLINK $(ELF_INSTALL_DIR)/$(ELF_SONAME)"
+ 	@$(LN_S) -f $(ELF_LIB) $(DESTDIR)$(ELF_INSTALL_DIR)/$(ELF_SONAME)
+ 	@echo "	SYMLINK $(libdir)/$(ELF_IMAGE).so"
+-	@$(LN_S) -f $(ELF_INSTALL_DIR)/$(ELF_SONAME) \
++	@$(LN_S) -f $(ELF_SONAME) \
+ 		$(DESTDIR)$(libdir)/$(ELF_IMAGE).so
+-	@echo "	LDCONFIG"
+-	@-$(LDCONFIG)
++	#@echo "	LDCONFIG"
++	#@-$(LDCONFIG)
+ 
+ install-strip: install
+ 	@echo "	STRIP-LIB $(ELF_INSTALL_DIR)/$(ELF_LIB)"
