@@ -139,6 +139,9 @@ $(eval $(call KMOD_template,NFS,nfs,\
 	$(MODULES_DIR)/kernel/fs/nfs/*.o \
 	$(MODULES_DIR)/kernel/net/sunrpc/*.o \
 ,CONFIG_NFS_FS,,30,sunrpc lockd nfs))
+$(eval $(call KMOD_template,NFSD,nfsd,\
+	$(MODULES_DIR)/kernel/fs/nfsd/*.o \
+,CONFIG_NFSD,,30,nfsd))
 $(eval $(call KMOD_template,USB,usb-core,\
 	$(MODULES_DIR)/kernel/drivers/usb/usbcore.o \
 ,CONFIG_USB,,50,usbcore))
