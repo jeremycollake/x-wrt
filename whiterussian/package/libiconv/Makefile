@@ -73,14 +73,14 @@ $(STAGING_DIR)/usr/lib/libiconv/lib/libiconv.so: $(PKG_BUILD_DIR)/.built
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{charset,iconv*}.{a,so*} $(STAGING_DIR)/usr/lib/libiconv/lib/
 	touch $@
 
-$(IPKG_LIBICONV): $(STAGING_DIR)/usr/lib/libiconv/lib/libiconv.so: $(PKG_BUILD_DIR)/.built
+$(IPKG_LIBICONV): $(STAGING_DIR)/usr/lib/libiconv/lib/libiconv.so
 	install -m0755 -d $(IDIR_LIBICONV)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcharset.so.* $(IDIR_LIBICONV)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiconv.so.* $(IDIR_LIBICONV)/usr/lib/
 	$(RSTRIP) $(IDIR_LIBICONV)
 	$(IPKG_BUILD) $(IDIR_LIBICONV) $(PACKAGE_DIR)
 
-$(IPKG_ICONV): $(STAGING_DIR)/usr/lib/libiconv/lib/libiconv.so: $(PKG_BUILD_DIR)/.built
+$(IPKG_ICONV): $(STAGING_DIR)/usr/lib/libiconv/lib/libiconv.so
 	install -m0755 -d $(IDIR_ICONV)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/iconv $(IDIR_ICONV)/usr/bin/
 	$(RSTRIP) $(IDIR_ICONV)
