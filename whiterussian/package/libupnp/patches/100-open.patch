@@ -1,0 +1,24 @@
+diff -Naur libupnp-1.6.0/upnp/src/genlib/net/http/httpreadwrite.c libupnp-1.6.0/upnp/src/genlib/net/http-new/httpreadwrite.c
+--- libupnp-1.6.0/upnp/src/genlib/net/http/httpreadwrite.c	2007-05-23 15:18:08.000000000 +0200
++++ libupnp-1.6.0/upnp/src/genlib/net/http/httpreadwrite.c	2007-09-01 16:18:33.000000000 +0200
+@@ -349,7 +349,7 @@
+             filename = ( char * )va_arg( argp, char * );
+ 
+             if( Instr && Instr->IsVirtualFile )
+-                Fp = virtualDirCallback.open( filename, UPNP_READ );
++                Fp = (virtualDirCallback.open)( filename, UPNP_READ );
+             else
+                 Fp = fopen( filename, "rb" );
+ 
+diff -Naur libupnp-1.6.0/upnp/src/genlib/net/http/webserver.c libupnp-1.6.0/upnp/src/genlib/net/http-new/webserver.c
+--- libupnp-1.6.0/upnp/src/genlib/net/http/webserver.c	2007-05-23 15:18:08.000000000 +0200
++++ libupnp-1.6.0/upnp/src/genlib/net/http/webserver.c	2007-09-01 16:18:33.000000000 +0200
+@@ -1531,7 +1531,7 @@
+ 
+     if( Instr && Instr->IsVirtualFile ) {
+ 
+-        Fp = virtualDirCallback.open( filename, UPNP_WRITE );
++        Fp = (virtualDirCallback.open)( filename, UPNP_WRITE );
+         if( Fp == NULL ) {
+             return HTTP_INTERNAL_SERVER_ERROR;
+         }
