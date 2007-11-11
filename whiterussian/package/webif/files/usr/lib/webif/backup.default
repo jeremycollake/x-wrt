@@ -53,9 +53,13 @@ config nvramgroupmask
 config nvramgroupmask
 	option nvramgroupmask	'ipkg_'
 config nvramgroupmask
+	option nvramgroupmask	'klog_'
+config nvramgroupmask
 	option nvramgroupmask	'lan_'
 config nvramgroupmask
 	option nvramgroupmask	'log_'
+config nvramgroupmask
+	option nvramgroupmask	'opendns_'
 config nvramgroupmask
 	option nvramgroupmask	'openvpn_'
 config nvramgroupmask
