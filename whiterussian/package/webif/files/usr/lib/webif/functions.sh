@@ -69,7 +69,7 @@ fix_symlink_hack() {
 remove_lines_from_file() {
 	# $1=filename
 	# $2=substring match indicating lines to remove (case sensitive)
-	cat "$1" | grep -q "$2" && {
+	cat "$1" 2>/dev/null | grep -q "$2" && {
 		fix_symlink_hack "$1"
 		local _substr_sed
 		_substr_sed=$(echo "$2" |  sed s/'\/'/'\\\/'/g)
