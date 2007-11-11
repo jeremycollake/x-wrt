@@ -25,7 +25,6 @@ HANDLERS_config='
 	opendns) reload_opendns;;
 	pptp) reload_pptp;;
 	snmp) reload_snmp;;
-	syslog) reload_syslog;;
 	system) reload_system;;
 	timezone) reload_timezone;;
 	wifi-disable) reload_wifi_disable;;
@@ -189,32 +188,6 @@ restart_cron() {
 		$cron_init restart
 		echo_action_done
 	fi
-}
-
-reload_syslog() {
-	getPID(){
-		echo `ps | grep '[s]yslogd' | awk '{ print $1 }'`
-	}
-	# (re)start syslogd
-	echo_restarting_service "@TR<<apply_syslogd#syslogd>>"
-	pid=$(getPID)
-	[ -n "$pid" ] && kill $pid >/dev/null 2>&1
-	syslog_ip=$(nvram get log_ipaddr)
-	if [ "$(nvram get firmware_version)" = "0.9" ]; then
-		ipcalc.sh -s "$syslog_ip" || syslog_ip=""
-	else
-		ipcalc -s "$syslog_ip" || syslog_ip=""
-	fi
-	log_port=$(nvram get log_port)
-	log_port=${log_port:+:$log_port}
-	log_mark=$(nvram get log_mark)
-	log_mark=${log_mark:+-m $log_mark}
-	can_prefix=`syslogd --help 2>&1 | grep -e 'PREFIX' `
-	log_prefix=""
-	[ -z "$can_prefix" ] || log_prefix=$(nvram get log_prefix)
-	log_prefix=${log_prefix:+-P "$log_prefix"}
-	syslogd -C 16 ${syslog_ip:+-L -R $syslog_ip$log_port} $log_mark $log_prefix
-	echo_action_done
 }
 
 reload_system() {
@@ -395,9 +368,8 @@ reload_pptp() {
 }
 
 reload_log() {
-	echo_restarting_service "@TR<<apply_syslogd#syslogd>>"
-	killall syslogd >&- 2>&- <&-
-	/sbin/runsyslogd >&- 2>&- <&-
+	echo_restarting_service "@TR<<apply_syslogd#syslogd>>/@TR<<apply_klogd#klogd>>"
+	/etc/init.d/S??syslog restart >&- 2>&- <&-
 	echo_action_done
 }
 

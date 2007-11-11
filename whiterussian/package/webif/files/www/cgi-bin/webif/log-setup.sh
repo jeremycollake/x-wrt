@@ -4,7 +4,6 @@
 [ -f /etc/syslog.default ] && . /etc/syslog.default
 
 load_settings log
-load_settings klog
 
 if empty "$FORM_submit" ; then
 	FORM_ipaddr="${log_ipaddr:-$(nvram get log_ipaddr)}"
@@ -47,12 +46,12 @@ EOF
 		save_setting log log_type "$FORM_type"
 		save_setting log log_file "$FORM_file"
 		save_setting log log_size "$FORM_size"
-		save_setting klog klog_conloglevel "$FORM_conloglevel"
-		save_setting klog klog_buffersize "$FORM_buffersize"
-		save_setting klog klog_enabled "$FORM_enabled"
-		save_setting klog klog_enabled "$FORM_enabled"
-		save_setting klog klog_file "$FORM_kfile"
-		save_setting klog klog_gzip "$FORM_gzip"
+		save_setting log klog_conloglevel "$FORM_conloglevel"
+		save_setting log klog_buffersize "$FORM_buffersize"
+		save_setting log klog_enabled "$FORM_enabled"
+		save_setting log klog_enabled "$FORM_enabled"
+		save_setting log klog_file "$FORM_kfile"
+		save_setting log klog_gzip "$FORM_gzip"
 	}
 fi
 
