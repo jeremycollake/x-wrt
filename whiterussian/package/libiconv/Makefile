@@ -24,10 +24,10 @@ include $(TOPDIR)/package/rules.mk
 $(eval $(call PKG_template,LIBICONV,$(PKG_NAME),$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,ICONV,iconv,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
-$(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
+$(PKG_BUILD_DIR)/.configured:
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
+		CFLAGS="$(TARGET_CFLAGS) -DUSE_DOS" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
 		./configure \
@@ -56,12 +56,12 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 	);
 	touch $@
 
-$(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
+$(PKG_BUILD_DIR)/.built:
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
+		CFLAGS="$(TARGET_CFLAGS) -DUSE_DOS" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 	touch $@
@@ -70,7 +70,8 @@ $(STAGING_DIR)/usr/lib/libiconv/lib/libiconv.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/lib/libiconv/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/*.h $(STAGING_DIR)/usr/lib/libiconv/include/
 	mkdir -p $(STAGING_DIR)/usr/lib/libiconv/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{charset,iconv*}.{a,so*} $(STAGING_DIR)/usr/lib/libiconv/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcharset.{a,so*} $(STAGING_DIR)/usr/lib/libiconv/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libiconv.{a,so*} $(STAGING_DIR)/usr/lib/libiconv/lib/
 	touch $@
 
 $(IPKG_LIBICONV): $(STAGING_DIR)/usr/lib/libiconv/lib/libiconv.so
