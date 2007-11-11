@@ -20,6 +20,7 @@
 #
 
 load_settings network
+load_settings opendns
 
 FORM_wandns="${wan_dns:-$(nvram get wan_dns)}"
 LISTVAL="$FORM_wandns"
@@ -28,8 +29,6 @@ handle_list "$FORM_wandnsremove" "$FORM_wandnsadd" "$FORM_wandnssubmit" 'ip|FORM
 	save_setting network wan_dns "$FORM_wandns"
 }
 FORM_wandnsadd=${FORM_wandnsadd:-""}
-
-uci_load "webif"  # for opendns
 
 FORM_landns="${lan_dns:-$(nvram get lan_dns)}"
 LISTVAL="$FORM_landns"
@@ -78,7 +77,7 @@ if empty "$FORM_submit"; then
 	FORM_wwan_passwd=${wwan_passwd:-$(nvram get wwan_passwd)}
 
 	# get opendns setting (uci_load webif above)
-	FORM_opendns=${CONFIG_misc_opendns:-"0"}
+	FORM_opendns=${opendns_enabled:-$(nvram get opendns_enabled)}
 
 	# get local lan
 	FORM_lan_ipaddr=${lan_ipaddr:-$(nvram get lan_ipaddr)}
@@ -171,9 +170,7 @@ EOF
 		esac
 
 		# opendns
-		! equal "$CONFIG_misc_opendns" "$FORM_opendns" && {
-			uci_set "webif" "misc" "opendns" "$FORM_opendns"
-		}
+		save_setting opendns opendns_enabled "$FORM_opendns"
 
 		# lan settings
 		save_setting network lan_ipaddr $FORM_lan_ipaddr

@@ -1,0 +1,7 @@
+#!/bin/sh
+[ "$INTERFACE" = "wan" -a -x /etc/init.d/S??opendns ] && {
+	case "$ACTION" in
+		ifup)	/etc/init.d/S??opendns enable ;;
+		ifdown)	/etc/init.d/S??opendns disable ;;
+	esac
+}

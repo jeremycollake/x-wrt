@@ -22,6 +22,7 @@ HANDLERS_config='
 	ezipupdate) reload_ezipupdate;;
 	log) reload_log;;
 	network) reload_network;;
+	opendns) reload_opendns;;
 	pptp) reload_pptp;;
 	snmp) reload_snmp;;
 	syslog) reload_syslog;;
@@ -99,12 +100,14 @@ reload_dnsmasq() {
 	[ -z "$(ps | grep "[d]nsmasq ")" ] && /etc/init.d/S??dnsmasq
 	echo_action_done
 }
+
 restart_dnsmasq() {
 	echo_restarting_service "@TR<<apply_dnsmasq#dnsmasq>>"
 	killall -q dnsmasq
 	/etc/init.d/S??dnsmasq
 	echo_action_done
 }
+
 reload_wifi_enable() {
 	echo_applying_settings "@TR<<apply_wifi_enable#splitting the wifi>>"
 	ifdown wifi
@@ -147,6 +150,20 @@ reload_network() {
 		restart_dnsmasq
 	}
 	echo_action_done
+}
+
+reload_opendns() {
+	[ -x /etc/init.d/S??opendns ] && {
+		echo_applying_settings "@TR<<apply_OpenDNS#OpenDNS>>"
+		local opendns_enabled="$(nvram get opendns_enabled)"
+		if [ "$opendns_enabled" = "1" ]; then
+			/etc/init.d/S??opendns enable
+		else
+			/etc/init.d/S??opendns disable
+		fi
+		echo_action_done
+		reload_dnsmasq
+	}
 }
 
 reload_wireless() {
@@ -482,9 +499,6 @@ apply_uci_webif() {
 	init_theme
 	[ -x /etc/init.d/S??webif_deviceid ] && {
 		/etc/init.d/S??webif_deviceid
-	}
-	[ -x /etc/init.d/S??opendns ] && {
-		/etc/init.d/S??opendns restart
 	}
 }
 
