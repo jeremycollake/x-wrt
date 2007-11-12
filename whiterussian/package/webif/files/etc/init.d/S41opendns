@@ -23,7 +23,10 @@ disable() {
 }
 
 case "$1" in
-	enable|start)
+	start)
+		# handled by the wan hotplug
+		;;
+	enable)
 		enable
 		;;
 	disable|stop)
