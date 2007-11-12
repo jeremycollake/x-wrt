@@ -4,7 +4,6 @@ config webif general
 	option firmware_version ""
 	option firmware_subtitle "With X-Wrt Extensions"
 	option device_name ""
-	option use_progressbar ""
 
 config webif theme
 	option id "xwrt"

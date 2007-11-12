@@ -12,8 +12,6 @@ colorize_script=""
 	<![endif]-->
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="expires" content="-1" />
-	<script type="text/javascript" src="/colorize.js"></script>
-		<script type="text/javascript"> colorize(); </script>
 </head>
 <body $4>
 <div class="logread"><pre>

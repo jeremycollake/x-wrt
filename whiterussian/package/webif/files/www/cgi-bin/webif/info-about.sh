@@ -19,7 +19,7 @@
 # Configuration files referenced:
 #   none
 #
-header "Info" "About" "<img src=\"/images/abt.jpg\" alt=\"@TR<<About>>\" />@TR<<About>>" '' ''
+header "Info" "About" "@TR<<About>>"
 
 this_revision=$(cat "/www/.version")
 

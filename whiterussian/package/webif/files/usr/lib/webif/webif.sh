@@ -161,7 +161,6 @@ Pragma: no-cache
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>$_firmware_name @TR<<Administrative Console>></title>
-	<link rel="stylesheet" type="text/css" href="/themes/active/waitbox.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
 	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_white.css" title="white" />
 	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_brown.css" title="brown" />
@@ -271,11 +270,6 @@ cat <<EOF
 <fieldset id="save">
 	<legend><strong>@TR<<Proceed Changes>></strong></legend>
 	$_savebutton
-EOF
-	equal "$_use_apply_progressbar" "1" && {
-	echo '<script type="text/javascript" src="/js/waitbox.js"></script>'
-	}
-cat <<EOF
 	<ul class="apply">
 		<li><a href="config.sh?mode=save&amp;cat=$_category&amp;prev=$SCRIPT_NAME" rel="lightbox" >@TR<<Apply Changes>> &laquo;</a></li>
 		<li><a href="config.sh?mode=clear&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Clear Changes>> &laquo;</a></li>

@@ -32,7 +32,7 @@
 xwrtrepourl="http://download2.berlios.de/pub/xwrt/packages"
 xwrtreponame="X-Wrt"
 
-header "System" "Packages" "<img src=\"/images/pkg.jpg\" alt=\"\" />&nbsp;@TR<<system_ipkg_Packages#Packages>>" '' "$SCRIPT_NAME"
+header "System" "Packages" "@TR<<system_ipkg_Packages#Packages>>" '' "$SCRIPT_NAME"
 
 cat <<EOF
 <script type="text/javascript">
