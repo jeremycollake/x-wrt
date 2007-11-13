@@ -38,6 +38,7 @@ package-$(BR2_PACKAGE_FRICKIN) += frickin
 package-$(BR2_PACKAGE_FUSE) += fuse
 package-$(BR2_PACKAGE_COMGT) += comgt
 package-$(BR2_PACKAGE_GLIB) += glib
+package-$(BR2_PACKAGE_GMEDIASERVER) += gmediaserver
 package-$(BR2_PACKAGE_GMP) += gmp
 package-$(BR2_PACKAGE_HASERL) += haserl
 package-$(BR2_PACKAGE_HOWL) += howl
@@ -186,6 +187,7 @@ dsniff-compile: libnids-compile openssl-compile libgdbm-compile
 file-compile: zlib-compile
 fprobe-compile: libpcap-compile
 gdb-compile: ncurses-compile
+gmediaserver-compile: libpthread-compile id3lib-compile libiconv-compile file-compile libupnp-compile
 id3lib-compile: uclibcxx-compile zlib-compile
 kismet-compile: uclibcxx-compile libpcap-compile ncurses-compile
 lcd4linux-compile: ncurses-compile
