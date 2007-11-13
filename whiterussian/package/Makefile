@@ -69,6 +69,7 @@ package-$(BR2_PACKAGE_LIBUPNP) += libupnp
 package-$(BR2_PACKAGE_LIBUSB) += libusb
 package-$(BR2_PACKAGE_LIBXML2) += libxml2
 package-$(BR2_PACKAGE_LIGHTTPD) += lighttpd
+package-$(BR2_PACKAGE_LINUXIGD) += linuxigd
 package-$(BR2_PACKAGE_LUA) += lua
 package-$(BR2_PACKAGE_LZO) += lzo
 package-$(BR2_PACKAGE_MARADNS) += maradns
@@ -193,6 +194,7 @@ libnet-compile: libpcap-compile
 libnids-compile: libnet-compile
 lighttpd-compile: openssl-compile pcre-compile
 libupnp-compile: libpthread-compile
+linuxigd-compile: iptables-compile libpthread-compile libupnp-compile 
 mysql-compile: ncurses-compile zlib-compile
 net-snmp-compile: libelf-compile
 nfs-server-compile: portmap-compile
