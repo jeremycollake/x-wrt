@@ -1,0 +1,5 @@
+Package: gmediaserver
+Section: net
+Priority: optional
+Depends: libuuid, libpthread, id3lib, libiconv, libmagic, libupnp, libgcc, base-files-uci
+Description: An UPnP music media server

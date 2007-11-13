@@ -1,0 +1,13 @@
+config BR2_PACKAGE_GMEDIASERVER
+	tristate "gmediaserver - an UPnP music media server"
+	default m
+	select BR2_PACKAGE_ID3LIB
+	select BR2_PACKAGE_LIBICONV
+	select BR2_PACKAGE_LIBMAGIC
+	select BR2_PACKAGE_LIBUPNP
+	select BR2_PACKAGE_LIBPTHREAD
+	help
+	 GMediaServer is a server for UPnP media players like the
+	 Netgear MP101, Linksys WMLS11B etc. It exports one or more
+	 directories using the UPnP protocol so the mediaserver can
+	 browse through them and play audio or video files.
