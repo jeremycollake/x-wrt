@@ -1,0 +1,4 @@
+Package: uclibcxx
+Section: libs
+Priority: optional
+Description: C++ library for embedded systems

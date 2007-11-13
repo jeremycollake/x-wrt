@@ -140,7 +140,8 @@ package-$(BR2_PACKAGE_TCPDUMP) += tcpdump
 package-$(BR2_PACKAGE_TINC) += tinc
 package-$(BR2_PACKAGE_TOR) += tor
 package-$(BR2_PACKAGE_TTCP) += ttcp
-package-$(BR2_PACKAGE_UCLIBCXX) += uclibc++
+package-$(BR2_PACKAGE_UCLIBCPP) += uclibc++
+package-$(BR2_PACKAGE_UCLIBCXX) += uclibcxx
 package-$(BR2_PACKAGE_ULOGD) += ulogd
 package-$(BR2_PACKAGE_USBUTILS) += usbutils
 package-$(BR2_COMPILE_UTIL_LINUX) += util-linux
@@ -161,7 +162,7 @@ package-$(BR2_COMPILE_XYSSL) += xyssl
 package-$(BR2_PACKAGE_ZLIB) += zlib
 #package-$(BR2_PACKAGE_ZLIB) += webfone
 
-DEV_LIBS:=tcp_wrappers glib ncurses openssl pcre popt zlib libnet libpcap mysql postgresql iptables matrixssl lzo gmp fuse portmap libelf uclibc++ speex libpng libgd wireless-tools nvram libusb net-snmp
+DEV_LIBS:=tcp_wrappers glib ncurses openssl pcre popt zlib libnet libpcap mysql postgresql iptables matrixssl lzo gmp fuse portmap libelf uclibcxx speex libpng libgd wireless-tools nvram libusb net-snmp
 DEV_LIBS_COMPILE:=$(patsubst %,%-compile,$(DEV_LIBS))
 SDK_DEFAULT_PACKAGES:=busybox dnsmasq iptables wireless-tools dropbear bridge ipkg ppp
 SDK_DEFAULT_COMPILE:=$(patsubst %,%-compile,$(SDK_DEFAULT_PACKAGES))
@@ -177,13 +178,13 @@ $(COMPILE_PACKAGES): base-files-compile
 $(INSTALL_PACKAGES): base-files-install
 
 arpwatch-compile: libpcap-compile
-ctorrent: ncurses-compile uclibc++-compile
+ctorrent: ncurses-compile uclibcxx-compile
 cyrus-sasl-compile: openssl-compile
 dsniff-compile: libnids-compile openssl-compile libgdbm-compile
 file-compile: zlib-compile
 fprobe-compile: libpcap-compile
 gdb-compile: ncurses-compile
-kismet-compile: uclibc++-compile libpcap-compile ncurses-compile
+kismet-compile: uclibcxx-compile libpcap-compile ncurses-compile
 lcd4linux-compile: ncurses-compile
 libgd-compile: libpng-compile
 libnet-compile: libpcap-compile
@@ -193,9 +194,9 @@ libupnp-compile: libpthread-compile
 mysql-compile: ncurses-compile zlib-compile
 net-snmp-compile: libelf-compile
 nfs-server-compile: portmap-compile
-nmap-compile: uclibc++-compile pcre-compile libpcap-compile
+nmap-compile: uclibcxx-compile pcre-compile libpcap-compile
 nocatsplash-compile: glib-compile
-nzbget: ncurses-compile uclibc++-compile libxml2-compile
+nzbget: ncurses-compile uclibcxx-compile libxml2-compile
 openldap-compile: cyrus-sasl-compile openssl-compile
 openser-compile: radiusclient-ng-compile mysql-compile
 openssh-compile: zlib-compile openssl-compile

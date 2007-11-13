@@ -149,6 +149,7 @@ source "package/libusb/Config.in"
 source "package/tcp_wrappers/Config.in" #libwrap
 source "package/libxml2/Config.in"
 source "package/uclibc++/Config.in"
+source "package/uclibcxx/Config.in"
 source "package/xyssl/Config.in"
 source "package/zlib/Config.in"
 
