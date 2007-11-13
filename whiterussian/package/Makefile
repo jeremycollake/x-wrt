@@ -42,6 +42,7 @@ package-$(BR2_PACKAGE_GMP) += gmp
 package-$(BR2_PACKAGE_HASERL) += haserl
 package-$(BR2_PACKAGE_HOWL) += howl
 package-$(BR2_PACKAGE_HTPDATE) += htpdate
+package-$(BR2_PACKAGE_ID3LIB) += id3lib
 package-$(BR2_PACKAGE_IPKG) += ipkg
 package-$(BR2_PACKAGE_IPKG_UPGRADE_FIX) += ipkg-upgrade-fix
 package-$(BR2_PACKAGE_IPROUTE2) += iproute2
@@ -184,6 +185,7 @@ dsniff-compile: libnids-compile openssl-compile libgdbm-compile
 file-compile: zlib-compile
 fprobe-compile: libpcap-compile
 gdb-compile: ncurses-compile
+id3lib-compile: uclibcxx-compile zlib-compile
 kismet-compile: uclibcxx-compile libpcap-compile ncurses-compile
 lcd4linux-compile: ncurses-compile
 libgd-compile: libpng-compile
