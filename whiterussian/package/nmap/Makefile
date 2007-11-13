@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nmap
 PKG_VERSION:=3.81
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_MD5SUM:=0713306dda85aee2c95ef31b4b7d2838
 
 PKG_SOURCE_URL:=http://download.insecure.org/nmap/dist

@@ -1,6 +1,6 @@
 Package: nzbget
 Priority: optional
-Depends: libncurses, libxml2, uclibc++
+Depends: libncurses, libxml2, uclibcxx
 Section: net
 Description: A command-line based binary newsgrabber
  NZBGet is a binary newsgrabber for Linux (and Unix and MacOS X where 

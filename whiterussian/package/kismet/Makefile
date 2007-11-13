@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=kismet
 PKG_VERSION:=2006-04-R1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=8ec2de513f2911df1b7edfcba5ad1c26
 
 PKG_SOURCE_URL:=http://www.kismetwireless.net/code
