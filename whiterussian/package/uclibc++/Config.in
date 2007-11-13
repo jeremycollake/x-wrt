@@ -1,5 +1,7 @@
-config BR2_PACKAGE_UCLIBCXX
-	tristate "uClibc++ - C++ library for embedded systems"
+config BR2_PACKAGE_UCLIBCPP
+	tristate "uClibc++ - C++ library for embedded systems (0.1.11 compat)"
 	default m if CONFIG_DEVEL
 	help
-	  A standard C++ library for embedded systems
+	  A standard C++ library for embedded systems, the compatibility
+	  release for packages explicitly linked against this version from
+	  OpenWrt repositories.

@@ -15,7 +15,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 
 include $(TOPDIR)/package/rules.mk
 
-$(eval $(call PKG_template,UCLIBCXX,uclibc++,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,UCLIBCPP,uclibc++,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
 UCLIBC_TARGET_ARCH:=$(shell echo $(ARCH) | sed -e s'/-.*//' \
 		-e 's/i.86/i386/' \
@@ -44,17 +44,17 @@ $(PKG_BUILD_DIR)/.built:
 		all
 	touch $@
 
-$(IPKG_UCLIBCXX):
-	install -d -m0755 $(IDIR_UCLIBCXX)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/src/libuClibc++-$(PKG_VERSION).so $(IDIR_UCLIBCXX)/usr/lib/
-	$(CP) $(PKG_BUILD_DIR)/src/libuClibc++.so.* $(IDIR_UCLIBCXX)/usr/lib/
-	$(STRIP) $(IDIR_UCLIBCXX)/usr/lib/*.so*
+$(IPKG_UCLIBCPP):
+	install -d -m0755 $(IDIR_UCLIBCPP)/usr/lib
+	$(CP) $(PKG_BUILD_DIR)/src/libuClibc++-$(PKG_VERSION).so $(IDIR_UCLIBCPP)/usr/lib/
+	$(CP) $(PKG_BUILD_DIR)/src/libuClibc++.so.* $(IDIR_UCLIBCPP)/usr/lib/
+	$(STRIP) $(IDIR_UCLIBCPP)/usr/lib/*.so*
 	mkdir -p $(PACKAGE_DIR)
-	$(IPKG_BUILD) $(IDIR_UCLIBCXX) $(PACKAGE_DIR)
+	$(IPKG_BUILD) $(IDIR_UCLIBCPP) $(PACKAGE_DIR)
 
-compile: install-dev
-install-dev: $(PKG_BUILD_DIR)/.built
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) CROSS="$(TARGET_CROSS)" \
-		DESTDIR="$(STAGING_DIR)" \
-		install
+#compile: install-dev
+#install-dev: $(PKG_BUILD_DIR)/.built
+#	$(MAKE) -C $(PKG_BUILD_DIR) \
+#		$(TARGET_CONFIGURE_OPTS) CROSS="$(TARGET_CROSS)" \
+#		DESTDIR="$(STAGING_DIR)" \
+#		install
