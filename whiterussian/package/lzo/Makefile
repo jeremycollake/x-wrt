@@ -64,14 +64,13 @@ $(IPKG_LIBLZO):
 	$(RSTRIP) $(IDIR_LIBLZO)
 	$(IPKG_BUILD) $(IDIR_LIBLZO) $(PACKAGE_DIR)
 
-$(STAGING_DIR)/usr/lib/liblzo.so: $(PKG_BUILD_DIR)/.built
+$(STAGING_DIR)/usr/lib/liblzo2.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/lzo $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblzo2.{a,so*} $(STAGING_DIR)/usr/lib/
-	touch $(STAGING_DIR)/usr/lib/liblzo.so
 
-install-dev: $(STAGING_DIR)/usr/lib/liblzo.so
+install-dev: $(STAGING_DIR)/usr/lib/liblzo2.so
 
 uninstall-dev:
 	rm -rf \
