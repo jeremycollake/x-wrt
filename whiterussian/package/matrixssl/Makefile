@@ -42,8 +42,7 @@ $(STAGING_DIR)/usr/lib/libmatrixssl.so: $(PKG_BUILD_DIR)/.built
 	$(CP) $(PKG_BUILD_DIR)/matrixSsl.h $(STAGING_DIR)/usr/include/matrixSsl/
 	ln -sf matrixSsl/matrixSsl.h $(STAGING_DIR)/usr/include/matrixSsl.h
 	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_BUILD_DIR)/src/libmatrixssl.so.* $(STAGING_DIR)/usr/lib/
-	touch $@
+	$(CP) $(PKG_BUILD_DIR)/src/libmatrixssl.so* $(STAGING_DIR)/usr/lib/
 
 install-dev: $(STAGING_DIR)/usr/lib/libmatrixssl.so
 
