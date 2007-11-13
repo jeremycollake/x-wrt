@@ -1,0 +1,12 @@
+config BR2_PACKAGE_ID3LIB
+	tristate "id3lib - an ID3v1/ID3v2 tag manipulation library"
+	default m if CONFIG_DEVEL
+	select BR2_PACKAGE_UCLIBCXX
+	select BR2_PACKAGE_ZLIB
+	help
+	 id3lib is a software library for manipulating ID3v1/v1.1 and ID3v2 tags.
+	 id3lib 3.0.x conforms to all ID3v2 standards up to and including 
+	 the ID3v2.3.0 informal standard.  
+	 
+	 http://www.id3lib.org/
+
