@@ -3,12 +3,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=zlib
-PKG_VERSION:=1.2.2
-PKG_RELEASE:=2
-PKG_MD5SUM:=1b8aab042d40979e456194c468fd72c5
+PKG_VERSION:=1.2.3
+PKG_RELEASE:=4
 
 PKG_SOURCE_URL:=@SF/zlib
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_MD5SUM:=dee233bf288ee795ac96a98cc2e369b6
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -48,17 +48,16 @@ $(IPKG_ZLIB):
 
 $(STAGING_DIR)/usr/lib/libz.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/*.h $(STAGING_DIR)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/z{conf,lib}.h $(STAGING_DIR)/usr/include
 	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/* $(STAGING_DIR)/usr/lib
-	touch $(STAGING_DIR)/usr/lib/libz.so
-	
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libz.{a,so*} $(STAGING_DIR)/usr/lib
+
 install-dev: $(STAGING_DIR)/usr/lib/libz.so
 
 uninstall-dev:
-	rm -rf $(STAGING_DIR)/usr/include/zconf.h
-	rm -rf $(STAGING_DIR)/usr/include/zlib.h
-	rm -rf $(STAGING_DIR)/usr/lib/libz.*
+	rm -rf \
+		$(STAGING_DIR)/usr/include/z{conf,lib}.h \
+		$(STAGING_DIR)/usr/lib/libz.{a,so*}
 
 compile: install-dev
 clean: uninstall-dev
