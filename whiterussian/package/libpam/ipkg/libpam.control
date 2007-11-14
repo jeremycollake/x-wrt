@@ -1,0 +1,7 @@
+Package: libpam
+Priority: optional
+Section: libs
+Description: A free implementation of the following DCE-RFC from Sunsoft.
+ Linux-PAM is a free implementation of the following DCE-RFC from Sunsoft.
+ 
+ http://www.kernel.org/pub/linux/libs/pam
