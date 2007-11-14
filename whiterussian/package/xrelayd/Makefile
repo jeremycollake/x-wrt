@@ -10,7 +10,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=xrelayd
 PKG_VERSION:=0.2
 PKG_RELEASE:=1
-PKG_MD5SUM:=7bf10a509292d8c6a43662e958a9aba7
+PKG_MD5SUM:=5ff4ab8deaa15bd68096803795a966b7
 
 PKG_SOURCE_URL:=http://znerol.ch/files
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
