@@ -74,6 +74,8 @@ $(IPKG_LIBMAGIC):
 	install -d -m0755 $(IDIR_LIBMAGIC)/usr/share/file
 	$(CP) $(PKG_BUILD_DIR)/magic/magic $(IDIR_LIBMAGIC)/usr/share/file/
 	$(CP) $(PKG_BUILD_DIR)/magic/magic.mime $(IDIR_LIBMAGIC)/usr/share/file/
+	$(SED) '/^#/d; /^[[:space:]]*$$/d' $(IDIR_LIBMAGIC)/usr/share/file/magic
+	$(SED) '/^#/d; /^[[:space:]]*$$/d' $(IDIR_LIBMAGIC)/usr/share/file/magic.mime
 	$(RSTRIP) $(IDIR_LIBMAGIC)
 	$(IPKG_BUILD) $(IDIR_LIBMAGIC) $(PACKAGE_DIR)
 
