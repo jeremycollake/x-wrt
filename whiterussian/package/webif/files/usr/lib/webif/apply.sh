@@ -469,8 +469,8 @@ init_theme() {
 apply_uci_webif() {
 	switch_language
 	init_theme
-	[ -x /etc/init.d/S??webif_deviceid ] && {
-		/etc/init.d/S??webif_deviceid
+	[ -x /etc/init.d/S??webif ] && {
+		/etc/init.d/S??webif
 	}
 }
 
