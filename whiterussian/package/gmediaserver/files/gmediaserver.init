@@ -21,8 +21,10 @@ append_parm() {
 	local section="$1"
 	local option="$2"
 	local switch="$3"
+	local default="$4"
 	local _loctmp
 	config_get _loctmp "$section" "$option"
+	[ -z "$_loctmp" ] && _loctmp="$default"
 	[ -n "$_loctmp" ] && append args "$switch$_loctmp"
 }
 
@@ -33,7 +35,8 @@ start_service() {
 	[ 0 -eq "$enabled" ] && return
 
 	args=""
-	append_parm "$cfg" friendlyname "--friendly-name="
+	append_parm "$cfg" friendlyname "--friendly-name=" OpenWrt
+	append_parm "$cfg" interface "--interface=" br0
 	append_bool "$cfg" disabletags "--disable-tags"
 	append_parm "$cfg" fscharset "--fs-charset="
 	append_parm "$cfg" devicecharset "--device-charset="
@@ -42,24 +45,24 @@ start_service() {
 	append_parm "$cfg" port "--port="
 	append_parm "$cfg" output "--output="
 	config_get timestamp "$cfg" timestamp
-	if [ -n "$(echo "$timestamp" | sed 's/[^%]//g')" ]; then
-		append args "--timestamp=\"$timestamp\""
-	else
-		config_get_bool timestamp "$cfg" timestamp 0
-		if [ 1 -eq "$enabled" ]; then
-			append args "--timestamp"
+	if [ -n "$timestamp" ]; then
+		if [ -n "$(echo "$timestamp" | sed 's/[^%]//g')" ]; then
+			append args "--timestamp=\"$timestamp\""
 		else
-			append args "--no-timestamp"
+			config_get_bool timestamp "$cfg" timestamp 0
+			if [ 1 -eq "$enabled" ]; then
+				append args "--timestamp"
+			else
+				append args "--no-timestamp"
+			fi
 		fi
 	fi
 	append_parm "$cfg" profile "--profile="
 	append_parm "$cfg" filetypes "--file-types="
 	append_parm "$cfg" expiretime "--expire-time="
-
-	config_get interface "$cfg" interface
 	config_get content_directory "$cfg" content_directory
 
-	$DAEMON --background --interface=${interface:-br-lan} --pid-file=$PID_F  $args "${content_directory:-/tmp}"
+	$DAEMON --background --pid-file=$PID_F  $args "${content_directory:-/tmp}"
 }
 
 start() {
