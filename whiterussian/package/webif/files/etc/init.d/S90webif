@@ -1,0 +1,69 @@
+#!/bin/sh
+# a basic device/firmware detection script
+START=90
+. /etc/functions.sh
+. /lib/config/uci.sh
+
+uci_load "webif"
+device_name="$CONFIG_general_device_name"
+firmware_name="$CONFIG_general_firmware_name"
+firmware_subtitle="$CONFIG_general_firmware_subtitle"
+firmware_version="$CONFIG_general_firmware_version"
+commit_needed=0
+
+update_setting() {
+	local option="$1"
+	local current="$2"
+	local previous="$3"
+	local message="$4"
+	[ "$current" != "$previous" ] && {
+		uci_set "webif" "general" "$option" "$current"
+		[ -n "$message" ] && echo "$message"
+		commit_needed=1
+	}
+}
+
+# identification of the device
+[ -z "$device_name" ] && [ -f "/proc/diag/model" ] && device_name=$(cat "/proc/diag/model")
+if [ -z "$device_name" ]; then
+        dd bs=1024 skip=212 count=16 if=/dev/mtd/0 2>/dev/null | strings | grep -q "W54G"
+        [ "$?" = "0" ] && {
+               device_name="Linksys WRT54G"
+        }
+fi
+if [ -z "$device_name" ]; then
+        dd bs=1024 count=1 skip=5 if=/dev/mtd/0 2>/dev/null | strings | grep "WL500gp"
+        [ "$?" = "0" ] && {
+               device_name="ASUS WL-500gp"
+        }
+fi
+update_setting "device_name" "$device_name" "$CONFIG_general_device_name" "The device id was updated: $device_name"
+
+# identification of the system
+if grep -qi "WHITE RUSSIAN" "/etc/banner"; then
+	firmware_name="OpenWrt White Russian"
+else
+	firmware_name="OpenWrt Unknown"
+fi
+update_setting "firmware_name" "$firmware_name" "$CONFIG_general_firmware_name" "The firmware name was updated: $firmware_name"
+firmware_subtitle="With X-Wrt Extensions"
+update_setting "firmware_subtitle" "$firmware_subtitle" "$CONFIG_general_firmware_subtitle" "The firmware subtitle was updated: $firmware_subtitle"
+
+# identification of the release
+if [ -f "/etc/openwrt_version" ]; then
+	firmware_version=$(cat "/etc/openwrt_version")
+elif grep -q "RC5" "/etc/banner"; then
+	firmware_version="RC5"
+elif grep -q "RC6" "/etc/banner"; then
+	firmware_version="RC6"
+else
+	firmware_version="unknown"
+fi
+update_setting "firmware_version" "$firmware_version" "$CONFIG_general_firmware_version" "The firmware version was updated: $firmware_version"
+
+
+# if any variables changed, commit the change
+[ 1 -eq "$commit_needed" ] && {
+	echo "Committing device/firmware id changes..."
+	uci_commit "webif"
+}
