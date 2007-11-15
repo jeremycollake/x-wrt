@@ -1,0 +1,28 @@
+config BR2_COMPILE_ZIP
+	tristate
+	default m if CONFIG_DEVEL
+	depends BR2_PACKAGE_ZIP
+
+config BR2_PACKAGE_ZIP
+	tristate "zip - a compression and file packaging/archive utility"
+	default m if CONFIG_DEVEL
+	select BR2_COMPILE_ZIP
+	help
+	  This is InfoZIP's zip program. It produces files that are fully 
+	  compatible with the popular PKZIP program; however, the command line 
+	  options are not identical. In other words, the end result is the same, 
+	  but the methods differ.
+	  
+	  http://infozip.sourceforge.net/Zip.html
+
+config BR2_PACKAGE_ZIP_TOOLS
+	tristate "zip tools - supporting utilities for the zip"
+	default m if CONFIG_DEVEL
+	select BR2_COMPILE_ZIP
+	help
+	  This is InfoZIP's zip program. It produces files that are fully 
+	  compatible with the popular PKZIP program; however, the command line 
+	  options are not identical. In other words, the end result is the same, 
+	  but the methods differ.
+	  
+	  http://infozip.sourceforge.net/Zip.html

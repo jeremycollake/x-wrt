@@ -1,0 +1,28 @@
+config BR2_COMPILE_UNZIP
+	tristate
+	default m if CONFIG_DEVEL
+	depends BR2_PACKAGE_UNZIP
+
+config BR2_PACKAGE_UNZIP
+	tristate "unzip - an extraction utility for archives compressed in .zip format"
+	default m if CONFIG_DEVEL
+	select BR2_COMPILE_UNZIP
+	help
+	  InfoZIP's unzip program. With the exception of multi-volume archives 
+	  (ie, .ZIP files that are split across several disks using PKZIP's /& option), 
+	  this can handle any file produced either by PKZIP, or the corresponding 
+	  InfoZIP zip program.
+	  
+	  http://infozip.sourceforge.net/UnZip.html
+
+config BR2_PACKAGE_UNZIP_TOOLS
+	tristate "unzip tools - supporting utilities for the unzip"
+	default m if CONFIG_DEVEL
+	select BR2_COMPILE_UNZIP
+	help
+	  InfoZIP's unzip program. With the exception of multi-volume archives 
+	  (ie, .ZIP files that are split across several disks using PKZIP's /& option), 
+	  this can handle any file produced either by PKZIP, or the corresponding 
+	  InfoZIP zip program.
+	  
+	  http://infozip.sourceforge.net/UnZip.html

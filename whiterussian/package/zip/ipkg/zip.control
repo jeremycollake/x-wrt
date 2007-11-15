@@ -1,0 +1,10 @@
+Package: zip
+Priority: optional
+Section: utils
+Description: A compression and file packaging/archive utility
+ This is InfoZIP's zip program. It produces files that are fully 
+ compatible with the popular PKZIP program; however, the command line 
+ options are not identical. In other words, the end result is the same, 
+ but the methods differ.
+ 
+ http://infozip.sourceforge.net/Zip.html

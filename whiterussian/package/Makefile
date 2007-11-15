@@ -147,6 +147,7 @@ package-$(BR2_PACKAGE_TTCP) += ttcp
 package-$(BR2_PACKAGE_UCLIBCPP) += uclibc++
 package-$(BR2_PACKAGE_UCLIBCXX) += uclibcxx
 package-$(BR2_PACKAGE_ULOGD) += ulogd
+package-$(BR2_COMPILE_UNZIP) += unzip
 package-$(BR2_PACKAGE_USBUTILS) += usbutils
 package-$(BR2_COMPILE_UTIL_LINUX) += util-linux
 package-$(BR2_PACKAGE_VTUN) += vtun
@@ -163,6 +164,7 @@ package-$(BR2_PACKAGE_WPUT) += wput
 package-$(BR2_PACKAGE_XINETD) += xinetd
 package-$(BR2_PACKAGE_XRELAYD) += xrelayd
 package-$(BR2_COMPILE_XYSSL) += xyssl
+package-$(BR2_COMPILE_ZIP) += zip
 package-$(BR2_PACKAGE_ZLIB) += zlib
 #package-$(BR2_PACKAGE_ZLIB) += webfone
 

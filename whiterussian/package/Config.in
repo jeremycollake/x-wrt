@@ -171,9 +171,11 @@ source "package/madwifi-tools/Config.in"
 source "package/pciutils/Config.in"
 source "package/pcmcia-cs/Config.in"  # pcmcia-utils
 source "package/strace/Config.in"
+source "package/unzip/Config.in"
 source "package/usbutils/Config.in"  # lsusb
 source "package/util-linux/Config.in"  # fdisk/losetup/swap-utils
 #source "package/webfone/Config.in"
+source "package/zip/Config.in"
 
 # what are we going to do with both of you
 comment "Kernel related ---"
