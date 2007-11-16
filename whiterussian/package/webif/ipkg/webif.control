@@ -1,6 +1,6 @@
 Package: webif
 Maintainer: X-Wrt Project
 Section: net
-Depends: haserl ipkg ipkg-upgrade-fix base-files-uci
+Depends: haserl, ipkg, ipkg-upgrade-fix, base-files-uci
 Priority: normal
 Description: An HTTP administrative console for OpenWrt.
