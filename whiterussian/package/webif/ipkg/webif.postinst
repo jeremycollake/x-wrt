@@ -169,6 +169,9 @@ AddRepository "X-Wrt" "http://download2.berlios.de/pub/xwrt/packages" 1
 if [ -z "${IPKG_INSTROOT}" ]; then	
 	[ "$IPKG_UPDATE_NEEDED" = "1" ] && ipkg update
 
+	# force the reinstallation of uci files when broken
+	[ ! -f /lib/config/uci.sh ] && ipkg install base-files-uci -force-reinstall -force-overwrite
+
 	# force re-initialization of extension package lists
 	/usr/lib/webif/webif-mklanglist.sh
 	/usr/lib/webif/webif-mkthemelist.sh
@@ -185,9 +188,8 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 ##WEBIF:category:Freeloader'>"${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"
 	fi
 	
-	# todo: merge these two files so two uci commits don't get done
-	ExecuteIfExists "/etc/init.d/S90webif_deviceid"
-	ExecuteIfExists "/etc/init.d/S90webif_firmwareid"
+	# initialize config
+	ExecuteIfExists "/etc/init.d/S90webif"
 
 	# test installation successfulness
 	TestInstall
