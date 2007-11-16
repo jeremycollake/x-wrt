@@ -29,6 +29,7 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_BASE_FILES_UCI): 
 	$(CP) -a ./files/* $(IDIR_BASE_FILES_UCI)/
+	chmod -R 755 $(IDIR_BASE_FILES_UCI)/*
 	find $(IDIR_BASE_FILES_UCI) -name .svn | xargs rm -rf
 	find $(IDIR_BASE_FILES_UCI) -name *~ | xargs rm -rf
 	$(IPKG_BUILD) $(IDIR_BASE_FILES_UCI) $(PACKAGE_DIR)
