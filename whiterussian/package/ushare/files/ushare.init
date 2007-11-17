@@ -1,0 +1,59 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2007 X-Wrt.org
+START=98
+
+NAME=ushare
+DAEMON="/usr/sbin/$NAME"
+
+append_bool() {
+	local section="$1"
+	local option="$2"
+	local value="$3"
+	local _loctmp
+	config_get_bool _loctmp "$section" "$option"
+	[ "$_loctmp" -gt 0 ] && append args "$3"
+}
+
+append_parm() {
+	local section="$1"
+	local option="$2"
+	local switch="$3"
+	local default="$4"
+	local _loctmp
+	config_get _loctmp "$section" "$option"
+	[ -z "$_loctmp" ] && _loctmp="$default"
+	[ -n "$_loctmp" ] && append args "$switch$_loctmp"
+}
+
+start_service() {
+	local cfg="$1"
+	local enabled timestamp interface content_directory
+	config_get_bool enabled "$cfg" enabled 0
+	[ 0 -eq "$enabled" ] && return
+
+	args=""
+	append_parm "$cfg" name "--name=" OpenWrt
+	append_parm "$cfg" interface "--interface=" br0
+	append_parm "$cfg" port "--port="
+	append_bool "$cfg" noweb "--no-web"
+	append_bool "$cfg" overrideiconverr "--override-iconv-err"
+	append_bool "$cfg" verbose "--verbose"
+	append_parm "$cfg" profile "--"
+	append_parm "$cfg" cfg "--cfg="
+	append_parm "$cfg" content "--content=" "\"/tmp\""
+
+	$DAEMON --daemon $args
+}
+
+start() {
+	config_load ushare
+	config_foreach start_service ushare
+}
+
+stop() {
+	local pid
+	local pids=$(ps | grep -v "rc\.common" | grep "[u]share" | cut -d' ' -f1)
+	for pid in $pids; do
+		kill $pid
+	done
+}

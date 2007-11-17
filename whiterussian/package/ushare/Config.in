@@ -1,0 +1,22 @@
+config BR2_PACKAGE_USHARE
+	prompt "ushare - A free UPnP A/V Media Server for Linux"
+	tristate
+	default m if CONFIG_DEVEL
+	select BR2_PACKAGE_LIBUPNP
+	select BR2_PACKAGE_LIBICONV
+	select BR2_PACKAGE_BASE_FILES_UCI
+	help
+	 uShare is a UPnP (TM) A/V & DLNA Media Server. It implements the server 
+	 component that provides UPnP media devices with information on available 
+	 multimedia files. uShare uses the built-in http server of libupnp to stream 
+	 the files to clients.
+	 GeeXboX uShare is able to provide access to both images, videos, music or 
+	 playlists files (see below for a complete file format support list). It 
+	 does not act as an UPnP Media Adaptor and thus, can't transcode streams 
+	 to fit the client requirements.
+	 uShare is written in C for the GeeXboX project. It is designed to provide 
+	 access to multimedia contents to GeeXboX but can of course be used by any 
+	 other UPnP client device. It should compile and run on any modern POSIX 
+	 compatible system such as Linux.
+	 
+	 http://ushare.geexbox.org/

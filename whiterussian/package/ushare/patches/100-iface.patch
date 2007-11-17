@@ -1,0 +1,12 @@
+diff -urN ushare-1.0.old/src/cfgparser.h ushare-1.0.new/src/cfgparser.h
+--- ushare-1.0.old/src/cfgparser.h	2007-02-25 16:32:37.000000000 +0100
++++ ushare-1.0.new/src/cfgparser.h	2007-11-14 22:55:01.000000000 +0100
+@@ -35,7 +35,7 @@
+ #if (defined(BSD) || defined(__FreeBSD__))
+ #define DEFAULT_USHARE_IFACE "lnc0"
+ #else /* Linux */
+-#define DEFAULT_USHARE_IFACE "eth0"
++#define DEFAULT_USHARE_IFACE "br0"
+ #endif
+ 
+ int parse_config_file (struct ushare_t *ut)

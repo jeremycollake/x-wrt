@@ -1,0 +1,14 @@
+diff -urN ushare-1.0.old/src/cfgparser.c ushare-1.0.new/src/cfgparser.c
+--- ushare-1.0.old/src/cfgparser.c	2007-07-01 18:57:22.000000000 +0200
++++ ushare-1.0.new/src/cfgparser.c	2007-11-15 07:28:24.000000000 +0100
+@@ -233,7 +233,9 @@
+     return -1;
+ 
+   if (!ut->cfg_file)
+-    snprintf (filename, PATH_MAX, "%s/%s", SYSCONFDIR, USHARE_CONFIG_FILE); 
++    /* no default config file, force the command line
++    snprintf (filename, PATH_MAX, "%s/%s", SYSCONFDIR, USHARE_CONFIG_FILE); */
++    return 0;
+   else
+     snprintf (filename, PATH_MAX, "%s", ut->cfg_file);
+ 
