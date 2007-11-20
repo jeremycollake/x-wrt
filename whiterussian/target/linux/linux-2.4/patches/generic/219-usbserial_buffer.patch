@@ -1,21 +1,54 @@
---- linux.old/drivers/usb/serial/usbserial.c	2006-08-19 18:48:07.000000000 +0200
-+++ linux.dev/drivers/usb/serial/usbserial.c	2006-08-19 18:46:02.000000000 +0200
-@@ -1359,7 +1359,7 @@
- 	wake_up_interruptible(&tty->write_wait);
- }
+--- linux.old/drivers/usb/serial/usbserial.c.old	2005-04-04 03:42:19.000000000 +0200
++++ linux.dev/drivers/usb/serial/usbserial.c	2007-11-17 17:02:57.000000000 +0100
+@@ -331,6 +331,8 @@
+ #ifdef CONFIG_USB_SERIAL_GENERIC
+ static __u16	vendor	= 0x05f9;
+ static __u16	product	= 0xffff;
++static int min_buffer_in = 2048;
++static int min_buffer_out = 2048;
  
--
-+#define MIN(a, b) (((a) < (b)) ? (a) : (b))
- static void * usb_serial_probe(struct usb_device *dev, unsigned int ifnum,
- 			       const struct usb_device_id *id)
- {
-@@ -1512,7 +1512,8 @@
+ static struct usb_device_id generic_device_ids[2]; /* Initially all zeroes. */
+ 
+@@ -1512,7 +1514,15 @@
  			err("No free urbs available");
  			goto probe_error;
  		}
--		buffer_size = endpoint->wMaxPacketSize;
-+		/* Minimum buffer size for EVDO and HSDPA cards */
-+		buffer_size = MIN(2048,endpoint->wMaxPacketSize);
++#ifdef CONFIG_USB_SERIAL_GENERIC
++		if (min_buffer_in > 0)
++			buffer_size = (endpoint->wMaxPacketSize > min_buffer_in) ? endpoint->wMaxPacketSize : min_buffer_in;
++		else
++			buffer_size = endpoint->wMaxPacketSize;
++		info("bulk_in size: %d, device wants: %d", buffer_size, endpoint->wMaxPacketSize);
++#else
+ 		buffer_size = endpoint->wMaxPacketSize;
++#endif
  		port->bulk_in_endpointAddress = endpoint->bEndpointAddress;
  		port->bulk_in_buffer = kmalloc (buffer_size, GFP_KERNEL);
  		if (!port->bulk_in_buffer) {
+@@ -1537,7 +1547,15 @@
+ 			err("No free urbs available");
+ 			goto probe_error;
+ 		}
++#ifdef CONFIG_USB_SERIAL_GENERIC
++		if (min_buffer_out > 0)
++			buffer_size = (endpoint->wMaxPacketSize > min_buffer_out) ? endpoint->wMaxPacketSize : min_buffer_out;
++		else
++			buffer_size = endpoint->wMaxPacketSize;
++		info("bulk_out size: %d, device wants: %d", buffer_size, endpoint->wMaxPacketSize);
++#else
+ 		buffer_size = endpoint->wMaxPacketSize;
++#endif
+ 		port->bulk_out_size = buffer_size;
+ 		port->bulk_out_endpointAddress = endpoint->bEndpointAddress;
+ 		port->bulk_out_buffer = kmalloc (buffer_size, GFP_KERNEL);
+@@ -1878,4 +1896,10 @@
+ 
+ MODULE_PARM(product, "h");
+ MODULE_PARM_DESC(product, "User specified USB idProduct");
++
++MODULE_PARM(min_buffer_in,"i");
++MODULE_PARM_DESC(min_buffer_in,"User specified input USB endpoint size");
++
++MODULE_PARM(min_buffer_out,"i");
++MODULE_PARM_DESC(min_buffer_out,"User specified output USB endpoint size");
+ #endif
