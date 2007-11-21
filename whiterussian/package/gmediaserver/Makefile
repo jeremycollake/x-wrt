@@ -26,10 +26,10 @@ $(eval $(call PKG_template,GMEDIASERVER,$(PKG_NAME),$(PKG_VERSION)-$(PKG_RELEASE
 $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/lib/libiconv/include" \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/include/uClibc++ -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/lib/libiconv/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib/libiconv/lib" \
-		LIBS=" -lz -luClibc++" \
+		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include" \
+		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+		LIBS="-lz" \
 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
 		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
 		./configure \
@@ -52,11 +52,12 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		--sysconfdir=/etc \
 		$(DISABLE_NLS) \
 		$(DISABLE_LARGEFILE) \
+		--disable-rpath \
 		--disable-static \
 		--enable-shared \
-		--disable-rpath \
 		--enable-threads=posix \
 		--without-libintl-prefix \
+		--with-libiconv-prefix="$(STAGING_DIR)/usr/lib/libiconv" \
 		--with-id3lib="$(STAGING_DIR)/usr" \
 		--with-libupnp="$(STAGING_DIR)/usr" \
 	);
@@ -66,18 +67,8 @@ $(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		LIBS=" -luuid -lupnp -lthreadutil -lixml -luClibc++ -lmagic -liconv -lz -lgcc_s -lpthread -lc -lid3" \
-		ID3_CPPFLAGS="" \
-		ID3_LDFLAGS="" \
-		ID3_LIBS="" \
-		LIBMAGIC="" \
-		LIBMULTITHREAD="" \
-		LTLIBICONV="" \
-		LTLIBMULTITHREAD="" \
-		UPNP_CFLAGS="" \
-		UPNP_LIBS="" \
-		UUID_LIBS="" \
-		LTLIBICONV="" \
+		LIBMAGIC="-lmagic -lz" \
+		UPNP_CFLAGS="-pthread -I$(STAGING_DIR)/usr/include/upnp" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 	touch $@

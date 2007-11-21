@@ -1,0 +1,50 @@
+diff -urN gmediaserver-0.13.0.old/src/contentdir.c gmediaserver-0.13.0.new/src/contentdir.c
+--- gmediaserver-0.13.0.old/src/contentdir.c	2007-10-20 09:59:38.000000000 +0200
++++ gmediaserver-0.13.0.new/src/contentdir.c	2007-11-21 13:19:20.000000000 +0100
+@@ -101,19 +101,21 @@
+             return xstrdup("object.item.audioItem.audioBroadcast");*/
+         
+         detail = get_entry_detail(entry, DETAIL_FILE);
+-        switch (detail->data.file.item_class) {
+-        case ITEM_AUDIO:
+-            return xstrdup("object.item.audioItem.musicTrack");
+-        case ITEM_IMAGE:
+-            return xstrdup("object.item.imageItem.photo");
+-        case ITEM_VIDEO:
+-            return xstrdup("object.item.videoItem.movie");
+-        case ITEM_PLAYLIST:
+-        case ITEM_TEXT:
+-        case ITEM_UNKNOWN:
+-        default:
+-            /* FIXME */
+-            return NULL;
++        if (detail != NULL) {
++            switch (detail->data.file.item_class) {
++                case ITEM_AUDIO:
++                    return xstrdup("object.item.audioItem.musicTrack");
++                case ITEM_IMAGE:
++                    return xstrdup("object.item.imageItem.photo");
++                case ITEM_VIDEO:
++                    return xstrdup("object.item.videoItem.movie");
++                case ITEM_PLAYLIST:
++                case ITEM_TEXT:
++                case ITEM_UNKNOWN:
++                default:
++                    /* FIXME */
++                    return NULL;
++            }
+         }
+     }
+ 
+@@ -393,6 +395,11 @@
+ 
+     /* upnp:class is required and cannot be filtered out. */
+     value = get_entry_property(entry, "upnp:class");
++    if (value == NULL) {
++	say(4, _("missing upnp:class, skipping entry\n"));
++        free(result);
++        return;
++    }
+     strbuf_appendf(result, "<upnp:class>%s</upnp:class>", value);
+     free(value);
+ 
