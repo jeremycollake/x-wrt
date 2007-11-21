@@ -2,7 +2,7 @@
 # restore busybox's imperfection
 bblinks="bzip2 bunzip2 bzcat"
 for bblink in $bblinks; do
-	[ -f /usr/bin/$bblink.bb ] && {
-		mv -f /usr/bin/$bblink.bb /usr/bin/$bblink 2>/dev/null
+	[ -f $IPKG_INSTROOT/usr/bin/$bblink.bb ] && {
+		mv -f $IPKG_INSTROOT/usr/bin/$bblink.bb $IPKG_INSTROOT/usr/bin/$bblink 2>/dev/null
 	}
 done
