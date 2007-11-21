@@ -1,0 +1,6 @@
+Package: bzip2recover
+Priority: optional
+Section: misc
+Description: A free, high-quality compressed data recovery utility
+ A freely available, patent free, high-quality compressed data recovery utility.
+ URL:=http://www.bzip.org/

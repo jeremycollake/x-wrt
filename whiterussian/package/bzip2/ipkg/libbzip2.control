@@ -1,0 +1,6 @@
+Package: libbzip2
+Priority: optional
+Section: libs
+Description: A free, high-quality data compressor library
+ A freely available, patent free, high-quality data compressor library.
+ URL:=http://www.bzip.org/

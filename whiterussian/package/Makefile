@@ -51,6 +51,7 @@ package-$(BR2_PACKAGE_IPTABLES) += iptables
 package-$(BR2_PACKAGE_KISMET) += kismet
 package-$(BR2_PACKAGE_L2TPD) += l2tpd
 package-$(BR2_PACKAGE_LCD4LINUX) += lcd4linux
+package-$(BR2_COMPILE_LIBBZIP2) += bzip2
 package-$(BR2_PACKAGE_LIBDB) += libdb
 package-$(BR2_PACKAGE_LIBELF) += libelf
 package-$(BR2_PACKAGE_LIBEVENT) += libevent

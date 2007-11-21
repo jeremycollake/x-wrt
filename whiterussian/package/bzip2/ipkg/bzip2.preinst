@@ -1,0 +1,8 @@
+#!/bin/sh
+# backup busybox's imperfection
+bblinks="bzip2 bunzip2 bzcat"
+for bblink in $bblinks; do
+	[ -f /usr/bin/$bblink ] && {
+		mv -f /usr/bin/$bblink /usr/bin/$bblink.bb 2>/dev/null
+	}
+done

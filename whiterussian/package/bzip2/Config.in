@@ -1,0 +1,29 @@
+config BR2_COMPILE_LIBBZIP2
+	tristate
+	default m if CONFIG_DEVEL
+	depends BR2_PACKAGE_LIBBZIP2
+
+config BR2_PACKAGE_LIBBZIP2
+	tristate "libbzip2 - A free, high-quality data compressor library"
+	default m if CONFIG_DEVEL
+	select BR2_COMPILE_LIBBZIP2
+	help
+	  A freely available, patent free, high-quality data compressor library.
+	  http://www.bzip.org/
+
+config BR2_PACKAGE_BZIP2
+	tristate "bzip2 - A free, high-quality data compressor utility"
+	default m if CONFIG_DEVEL
+	depends BR2_PACKAGE_LIBBZIP2
+	help
+	  A freely available, patent free, high-quality data compressor utility.
+	  http://www.bzip.org/
+
+config BR2_PACKAGE_BZIP2RECOVER
+	tristate "bzip2recover - A free, high-quality data compressor recovery utility"
+	default m if CONFIG_DEVEL
+	depends BR2_PACKAGE_LIBBZIP2
+	help
+	  A freely available, patent free, high-quality compressed data recovery utility.
+	  http://www.bzip.org/
+
