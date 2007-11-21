@@ -1,0 +1,119 @@
+diff -urN libupnp-1.6.0.old/upnp/src/gena/gena_ctrlpt.c libupnp-1.6.0.new/upnp/src/gena/gena_ctrlpt.c
+--- libupnp-1.6.0.old/upnp/src/gena/gena_ctrlpt.c	2007-05-19 04:27:20.000000000 +0200
++++ libupnp-1.6.0.new/upnp/src/gena/gena_ctrlpt.c	2007-11-18 23:26:29.000000000 +0100
+@@ -571,8 +571,8 @@
+         goto error_handler;
+     }
+     // generate client SID
+-    uuid_create( &uid );
+-    uuid_unpack( &uid, temp_sid );
++    uuid_upnp_create( &uid );
++    uuid_upnp_unpack( &uid, temp_sid );
+     sprintf( out_sid, "uuid:%s", temp_sid );
+ 
+     // create event url
+diff -urN libupnp-1.6.0.old/upnp/src/gena/gena_device.c libupnp-1.6.0.new/upnp/src/gena/gena_device.c
+--- libupnp-1.6.0.old/upnp/src/gena/gena_device.c	2007-05-23 15:18:09.000000000 +0200
++++ libupnp-1.6.0.new/upnp/src/gena/gena_device.c	2007-11-18 23:26:47.000000000 +0100
+@@ -1437,8 +1437,8 @@
+     }
+ 
+     //generate SID
+-    uuid_create( &uid );
+-    uuid_unpack( &uid, temp_sid );
++    uuid_upnp_create( &uid );
++    uuid_upnp_unpack( &uid, temp_sid );
+     sprintf( sub->sid, "uuid:%s", temp_sid );
+ 
+     // respond OK
+diff -urN libupnp-1.6.0.old/upnp/src/inc/uuid.h libupnp-1.6.0.new/upnp/src/inc/uuid.h
+--- libupnp-1.6.0.old/upnp/src/inc/uuid.h	2006-10-05 08:19:26.000000000 +0200
++++ libupnp-1.6.0.new/upnp/src/inc/uuid.h	2007-11-18 23:27:29.000000000 +0100
+@@ -26,13 +26,13 @@
+       byte                node[6];
+   } uuid_upnp;
+ 
+-  /* uuid_create -- generate a UUID */
+-  int uuid_create(uuid_upnp * id);
+-  void uuid_unpack(uuid_upnp *u, char *out);	// out will be xxxx-xx-xx-xx-xxxxxx format
++  /* uuid_upnp_create -- generate a UUID */
++  int uuid_upnp_create(uuid_upnp * id);
++  void uuid_upnp_unpack(uuid_upnp *u, char *out);	// out will be xxxx-xx-xx-xx-xxxxxx format
+ 
+-  /* uuid_create_from_name -- create a UUID using a "name"
++  /* uuid_upnp_create_from_name -- create a UUID using a "name"
+      from a "name space" */
+-  void uuid_create_from_name(
++  void uuid_upnp_create_from_name(
+     uuid_upnp * uid,        /* resulting UUID */
+     uuid_upnp nsid,          /* UUID to serve as context, so identical
+                              names from different name spaces generate
+@@ -41,10 +41,10 @@
+     int namelen           /* the length of the name */
+   );
+ 
+-  /* uuid_compare --  Compare two UUID's "lexically" and return
++  /* uuid_upnp_compare --  Compare two UUID's "lexically" and return
+           -1   u1 is lexically before u2
+            0   u1 is equal to u2
+            1   u1 is lexically after u2
+      Note:   lexical ordering is not temporal ordering!
+   */
+-  int uuid_compare(uuid_upnp *u1, uuid_upnp *u2);
++  int uuid_upnp_compare(uuid_upnp *u1, uuid_upnp *u2);
+diff -urN libupnp-1.6.0.old/upnp/src/uuid/uuid.c libupnp-1.6.0.new/upnp/src/uuid/uuid.c
+--- libupnp-1.6.0.old/upnp/src/uuid/uuid.c	2006-10-05 08:19:25.000000000 +0200
++++ libupnp-1.6.0.new/upnp/src/uuid/uuid.c	2007-11-18 23:30:21.000000000 +0100
+@@ -50,10 +50,10 @@
+ 
+ /*-----------------------------------------------------------------------------*/
+ /*
+-   uuid_create -- generator a UUID 
++   uuid_upnp_create -- generator a UUID 
+  */
+ int
+-uuid_create( uuid_upnp * uid )
++uuid_upnp_create( uuid_upnp * uid )
+ {
+     uuid_time_t timestamp,
+       last_time;
+@@ -107,7 +107,7 @@
+ 
+ /*-----------------------------------------------------------------------------*/
+ void
+-uuid_unpack( uuid_upnp * u,
++uuid_upnp_unpack( uuid_upnp * u,
+              char *out )
+ {
+ 
+@@ -286,10 +286,10 @@
+ 
+ /*-----------------------------------------------------------------------------*/
+ /*
+-   uuid_create_from_name -- create a UUID using a "name" from a "name space" 
++   uuid_upnp_create_from_name -- create a UUID using a "name" from a "name space" 
+  */
+ void
+-uuid_create_from_name( uuid_upnp * uid, /* resulting UUID */
++uuid_upnp_create_from_name( uuid_upnp * uid, /* resulting UUID */
+ 
+                        uuid_upnp nsid,  /* UUID to serve as context, so identical
+                                            names from different name spaces generate
+@@ -357,7 +357,7 @@
+ 
+ /*-----------------------------------------------------------------------------*/
+ /*
+-   uuid_compare --  Compare two UUID's "lexically" and return
++   uuid_upnp_compare --  Compare two UUID's "lexically" and return
+    -1   u1 is lexically before u2
+    0   u1 is equal to u2
+    1   u1 is lexically after u2
+@@ -365,7 +365,7 @@
+    Note:   lexical ordering is not temporal ordering!
+  */
+ int
+-uuid_compare( uuid_upnp * u1,
++uuid_upnp_compare( uuid_upnp * u1,
+               uuid_upnp * u2 )
+ {
+     int i;
