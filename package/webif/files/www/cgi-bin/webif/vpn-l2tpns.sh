@@ -55,8 +55,8 @@ else
 	uci_set "l2tpns" "$server_cfg" "radport" "$FORM_l2tpns_cli_radport"
 	uci_set "l2tpns" "$server_cfg" "radacct" "$FORM_l2tpns_cli_radacct"
 	uci_set "l2tpns" "$server_cfg" "debug" "$FORM_l2tpns_cli_debug"
-	uci_set "l2tpns" "$server_cfg" "pidfile" "$FORM_l2tpns_cli_logfile"
-	uci_set "l2tpns" "$server_cfg" "logfile" "$FORM_l2tpns_cli_pidfile"
+	uci_set "l2tpns" "$server_cfg" "pidfile" "$FORM_l2tpns_cli_pidfile"
+	uci_set "l2tpns" "$server_cfg" "logfile" "$FORM_l2tpns_cli_logfile"
 
 	sh /usr/lib/webif/l2tpns_apply.sh
 fi
