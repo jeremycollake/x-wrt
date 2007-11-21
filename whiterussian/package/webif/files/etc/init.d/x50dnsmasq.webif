@@ -42,6 +42,7 @@ for ifname in lan wan wifi $(nvram get ifnames); do
         else
         	eval $(ipcalc $ipaddr $netmask ${start:-100} ${num:-150})
         fi
+	[ "$num" = "0" ] && END=static
         lease=$(nvram get ${ifname}_dhcp_lease)
 	[ "$lease" = "0" ] && {
 		lease="12h"
