@@ -22,7 +22,7 @@ stop() {
 }
 
 restart() {
-	stop
+	/etc/init.d/l2tpns stop
 	sleep 6
-	start
+	/etc/init.d/l2tpns start
 }
