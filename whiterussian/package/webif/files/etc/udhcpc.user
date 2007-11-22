@@ -1,2 +1,5 @@
 #!/bin/sh
-[ -x /etc/init.d/S??opendns ] && /etc/init.d/S??opendns enable
+# the user's script for udhcpc
+# this script runs after the successful setup 
+# of the interface, the resolv.conf(.auto) file
+# and all hotplug events

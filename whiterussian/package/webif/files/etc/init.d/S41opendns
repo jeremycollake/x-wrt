@@ -2,24 +2,31 @@
 # configure opendns nameservers if enabled
 . /usr/lib/webif/functions.sh
 
+get_working_resolv() {
+	working_resolv=$(cat /etc/dnsmasq.conf 2>/dev/null | sed '/^resolv-file=/!d; s/^resolv-file=//; s/^[[:space:]]*//; s/[[:space:]]$//')
+	working_resolv="${working_resolv:-/tmp/resolv.conf.auto}"
+}
+
 enable() {
 	local opendns_enabled=$(nvram get opendns_enabled)
 	[ "$opendns_enabled" = "1" ] && {
-		! grep -q "208\.67\.222\.222" "/tmp/resolv.conf" 2>/dev/null || ! grep -q "208\.67\.220\.220" "/tmp/resolv.conf" 2>/dev/null && {
+		get_working_resolv
+		! grep -q "208\.67\.222\.222" "$working_resolv" 2>/dev/null || ! grep -q "208\.67\.220\.220" "$working_resolv" 2>/dev/null && {
 			local _ltemp
 			_ltemp=$(mktemp "/tmp/.newresolv-XXXXXX")
 			echo "nameserver 208.67.222.222" > "$_ltemp"
 			echo "nameserver 208.67.220.220" >> "$_ltemp"
-			grep -v "208\.67\.22\(2\.222\|0\.220\)" "/tmp/resolv.conf" >> "$_ltemp"
-			cat "$_ltemp" > "/tmp/resolv.conf"
+			grep -v "208\.67\.22\(2\.222\|0\.220\)" "$working_resolv" >> "$_ltemp"
+			cat "$_ltemp" > "$working_resolv"
 			rm -f "$_ltemp"
 		}
 	}
 }
 
 disable() {
-	remove_lines_from_file "/tmp/resolv.conf" "208.67.222.222"
-	remove_lines_from_file "/tmp/resolv.conf" "208.67.220.220"
+	get_working_resolv
+	remove_lines_from_file "$working_resolv" "208.67.222.222"
+	remove_lines_from_file "$working_resolv" "208.67.220.220"
 }
 
 case "$1" in
