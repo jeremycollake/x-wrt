@@ -21,12 +21,12 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 fi
 
 echo ""
-if [ -z "$(grep ^\\${name}: ${IPKG_INSTROOT}/etc/group)" ]; then 
+if [ -z "$(grep ^\\${name}: ${IPKG_INSTROOT}/etc/group)" ]; then
 	echo "adding group $name to /etc/group"
-	echo "${name}:x:${id}:" >> ${IPKG_INSTROOT}/etc/group  
+	echo "${name}:x:${id}:" >> ${IPKG_INSTROOT}/etc/group
 fi
 
-if [ -z "$(grep ^\\${name}: ${IPKG_INSTROOT}/etc/passwd)" ]; then 
+if [ -z "$(grep ^\\${name}: ${IPKG_INSTROOT}/etc/passwd)" ]; then
 	echo "adding user $name to /etc/passwd"
 	echo "${name}:x:${id}:${id}:${name}:/tmp/.${name}:/bin/false" >> ${IPKG_INSTROOT}/etc/passwd
 fi
