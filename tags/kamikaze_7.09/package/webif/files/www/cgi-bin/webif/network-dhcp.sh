@@ -32,22 +32,90 @@ case "$TYPE" in
 	dhcp)
 		append dhcp_cfgs "$CONFIG_SECTION" "$N"
 	;;
+	dnsmasq)
+		append dnsmasq_cfgs "$CONFIG_SECTION" "$N"
+	;;
 esac
 }
 uci_load network
 uci_load dhcp
-dhcp_cfgs=$(echo "$dhcp_cfgs" |uniq)
+
+vcfg_number=$(echo "$dhcp_cfgs" "$dnsmasq_cfgs" |wc -l)
+let "vcfg_number+=1"
 
 #add dhcp network
 if [ "$FORM_add_dhcp" != "" ]; then
-	vcfg_number=$(echo "$dhcp_cfgs" |wc -l)
-	let "vcfg_number+=1"
 	uci_add "dhcp" "dhcp" ""
 	uci_set "dhcp" "cfg$vcfg_number" "interface" "$FORM_network_add"
 	dhcp_cfgs=""
+	dnsmasq_cfgs=""
 	uci_load dhcp
-	dhcp_cfgs=$(echo "$dhcp_cfgs" |uniq)
+	let "vcfg_number+=1"
 fi
+
+dnsmasq_cfgs=$(echo "$dnsmasq_cfgs" |uniq)
+dhcp_cfgs=$(echo "$dhcp_cfgs" |uniq)
+
+for config in $dnsmasq_cfgs; do
+	if [ "$FORM_submit" = "" ]; then
+		config_get authoritative $config authoritative
+		config_get domain $config domain
+		config_get boguspriv $config boguspriv
+		config_get filterwin2k $config filterwin2k
+		config_get localise_queries $config localise_queries
+		config_get expandhosts $config expandhosts
+		config_get nonegcache $config nonegcache
+		config_get readethers $config readethers
+		config_get leasefile $config leasefile
+	else
+		eval authoritative="\$FORM_authoritative_$config"
+		eval domain="\$FORM_domain_$config"
+		eval boguspriv="\$FORM_boguspriv_$config"
+		eval filterwin2k="\$FORM_filterwin2k_$config"
+		eval localise_queries="\$FORM_localise_queries_$config"
+		eval expandhosts="\$FORM_expandhosts_$config"
+		eval nonegcache="\$FORM_nonegcache_$config"
+		eval readethers="\$FORM_readethers_$config"
+		eval leasefile="\$FORM_leasefile_$config"
+	fi
+	
+	form_dnsmasq="start_form|DHCP Settings
+		field|@TR<<Authoritative>>
+		radio|authoritative_$config|$authoritative|1|@TR<<Enabled>>
+		radio|authoritative_$config|$authoritative|0|@TR<<Disabled>>
+		helpitem|Authoritative
+		helptext|HelpText Authoritative#Should be set when dnsmasq is the only DHCP server on a network.
+		field|@TR<<Domain>>
+		text|domain_$config|$domain
+		helpitem|Domain
+		helptext|HelpText Domain#Specifies the domain for the DHCP server.
+		field|@TR<<Bogus Private Reverse Lookups>>
+		radio|boguspriv_$config|$boguspriv|1|@TR<<Enabled>>
+		radio|boguspriv_$config|$boguspriv|0|@TR<<Disabled>>
+		field|@TR<<filterwin2k>>
+		radio|filterwin2k_$config|$filterwin2k|1|@TR<<Enabled>>
+		radio|filterwin2k_$config|$filterwin2k|0|@TR<<Disabled>>
+		field|@TR<<Localise Queries>>
+		radio|localise_queries_$config|$localise_queries|1|@TR<<Enabled>>
+		radio|localise_queries_$config|$localise_queries|0|@TR<<Disabled>>
+		field|@TR<<Expand Hosts>>
+		radio|expandhosts_$config|$expandhosts|1|@TR<<Enabled>>
+		radio|expandhosts_$config|$expandhosts|0|@TR<<Disabled>>
+		field|@TR<<Negative Caching>>
+		radio|nonegcache_$config|$nonegcache|1|@TR<<Enabled>>
+		radio|nonegcache_$config|$nonegcache|0|@TR<<Disabled>>
+		field|@TR<<Read Ethers>>
+		radio|readethers_$config|$readethers|1|@TR<<Enabled>>
+		radio|readethers_$config|$readethers|0|@TR<<Disabled>>
+		field|@TR<<Lease File>>
+		text|leasefile_$config|$leasefile
+		helpitem|Lease File
+		helptext|HelpText Lease File#Use the specified file to store DHCP lease information. This should remain on /tmp unless you have a external hard drive because it writes out infomation for every lease.
+		helpitem|More Information
+		helplink|http://www.thekelleys.org.uk/dnsmasq/docs/dnsmasq-man.html
+		end_form"
+	append forms "$form_dnsmasq" "$N"
+done
 
 for config in $dhcp_cfgs; do
 	if [ "$FORM_submit" = "" ]; then
@@ -119,6 +187,29 @@ if ! empty "$FORM_submit"; then
 $validate_forms
 EOF
 	equal "$?" 0 && {
+		for config in $dnsmasq_cfgs; do
+			eval authoritative="\$FORM_authoritative_$config"
+			eval domain="\$FORM_domain_$config"
+			eval boguspriv="\$FORM_boguspriv_$config"
+			eval filterwin2k="\$FORM_filterwin2k_$config"
+			eval localise_queries="\$FORM_localise_queries_$config"
+			eval expandhosts="\$FORM_expandhosts_$config"
+			eval nonegcache="\$FORM_nonegcache_$config"
+			eval readethers="\$FORM_readethers_$config"
+			eval leasefile="\$FORM_leasefile_$config"
+			
+			uci_set "dhcp" "$config" "authoritative" "$authoritative"
+			uci_set "dhcp" "$config" "domain" "$domain"
+			uci_set "dhcp" "$config" "local" "/$domain/"
+			uci_set "dhcp" "$config" "boguspriv" "$boguspriv"
+			uci_set "dhcp" "$config" "filterwin2k" "$filterwin2k"
+			uci_set "dhcp" "$config" "localise_queries" "$localise_queries"
+			uci_set "dhcp" "$config" "expandhosts" "$expandhosts"
+			uci_set "dhcp" "$config" "nonegcache" "$nonegcache"
+			uci_set "dhcp" "$config" "readethers" "$readethers"
+			uci_set "dhcp" "$config" "leasefile" "$leasefile"
+		done
+			
 		for config in $dhcp_cfgs; do
 			eval start="\$FORM_start_$config"
 			eval limit="\$FORM_limit_$config"

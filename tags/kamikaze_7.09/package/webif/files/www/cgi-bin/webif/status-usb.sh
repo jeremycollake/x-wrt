@@ -86,7 +86,7 @@ EOF
 <?
 mounted_devices="$(cat /proc/mounts | grep "^/dev/sd[a-p]\{0,2\}[[:space:]]")"
 ! equal "$mounted_devices" "" && {
-	echo "$mounted_devices" | awk '
+	echo "$mounted_devices" | awk -v url="$SCRIPT_NAME" '
 	BEGIN {
 		odd=1
 		print "<tbody>"
@@ -119,7 +119,7 @@ mounted_devices="$(cat /proc/mounts | grep "^/dev/sd[a-p]\{0,2\}[[:space:]]")"
 			print "		<td>@TR<<status_usb_rw#Read/Write>></td>"
 		else
 			print "		<td>&nbsp;</td>"
-		print "		<td><form method=\"post\" action='$SCRIPT_NAME'><input type=\"submit\" value=\" @TR<<status_usb_umount#umount>> \" name=\"umount\" /><input type=\"hidden\" value=\"" $1 "\" name=\"mountdev\" /></form></td>"
+		print "		<td><form method=\"post\" action=\"" url "\"><input type=\"submit\" value=\" @TR<<status_usb_umount#umount>> \" name=\"umount\" /><input type=\"hidden\" value=\"" $1 "\" name=\"mountdev\" /></form></td>"
 		print "	</tr>"
 	}
 	END {

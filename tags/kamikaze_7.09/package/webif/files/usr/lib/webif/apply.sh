@@ -221,6 +221,7 @@ for ucifile in $(ls /tmp/.uci/* 2>&-); do
 		"/tmp/.uci/webif") 
 			config_load "/etc/config/$package"
 			config_get apply_webif_oldlang general lang
+			config_get old_firewall_log firewall log
 			;;
 	esac
 	config_allclear
@@ -249,6 +250,11 @@ for package in $process_packages; do
 			switch_language "$apply_webif_oldlang"
 			init_theme
 			/etc/init.d/webif start
+			config_get log_enabled firewall log
+			if [ "$old_firewall_log" != "$log_enabled" ]; then
+				[ "$log_enabled" = "1" ] && /etc/init.d/webiffirewalllog start
+				[ "$log_enabled" = "0" ] && /etc/init.d/webiffirewalllog stop
+			fi
 			config_allclear
 			;;
 		"upnpd")

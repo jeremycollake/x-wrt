@@ -42,6 +42,11 @@ uci_load "webif"
 			}
 		fi
 
+		# there is currently only the atngw100 support
+		if [ "$(uname -m)" = "avr32" ]; then
+			device_name="AVR32 Network Gateway 100 (atngw100)"
+		fi
+
 		cat /proc/cpuinfo |grep -q "IXP4\?\?"
 		[ $? = "0" ] && {
 			cat /proc/cpuinfo |grep "Gateway 7001 AP"
