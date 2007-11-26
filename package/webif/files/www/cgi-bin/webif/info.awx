@@ -81,6 +81,7 @@ function handle_default() {
 		else if (machinfo ~ /2\.4/) repo = "brcm-2.4"
 		else if (machinfo ~ /2\.6/) repo = "brcm-2.6"
 	} else if (machinfo ~ / i[0-9]86 /) repo = "x86-2.6"
+	else if (machinfo ~ / avr32 /) repo = "avr32-2.6"
 	else {
 		"cat /proc/cpuinfo" | getline
 		if ($0 ~ /IXP4/) repo = "ixp4xx-2.6"
