@@ -17,3 +17,6 @@ config webif misc
 
 config webif wireless
 	option wifi0_txpower ''
+	
+config webif firewall
+	option log	'0'

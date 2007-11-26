@@ -2,12 +2,28 @@
 <?
 . /usr/lib/webif/webif.sh
 
+config_cb() {
+	config_get TYPE "$CONFIG_SECTION" TYPE
+	case "$TYPE" in
+		syslogd)
+			append config "$CONFIG_SECTION"
+		;;
+	esac
+}
+
+if ! empty "$FORM_submit"; then
+	uci_set "webif" "firewall" "log" "$FORM_enabled"
+else
+	uci_load webif
+	config_get FORM_enabled firewall log
+fi
+uci_load syslog
 #---------------------------------------------
 # sets the type of log: file or circular
 # defaults to circular, wich is the default install for openwrt
 # use log-setup.sh to modify these parameters
-LOG_TYPE=$(uci get syslogd.general.type)
-LOG_FILE=$(uci get syslogd.general.file)
+config_get LOG_TYPE "$config" type
+config_get LOG_FILE "$config" file
 if equal $LOG_TYPE "file" ; then
 	LOG_FILE=${LOG_FILE:-"/var/log/messages"}
 	LOGREAD="cat "$LOG_FILE
@@ -61,11 +77,15 @@ fi
 
 header "Log" "Firewall Log View" "@TR<<Netfilter Log>>" '' "$SCRIPT_NAME"
 
-
+has_pkgs kmod-ipt-extra iptables-mod-extra
 
 # request for filtering -----------------------
 display_form <<EOF
 start_form|@TR<<Filter>>
+field|@TR<<Log>>
+radio|enabled|$FORM_enabled|1|@TR<<Enabled>>
+radio|enabled|$FORM_enabled|0|@TR<<Disabled>>
+field|@TR<<Filter>>
 select|act|$FORM_act
 option|A|@TR<<All>>
 option|p|@TR<<Prefix>>
@@ -164,5 +184,5 @@ END { print "</table>"}
 footer ?>
 
 <!--
-##WEBIF:name:Log:4:Firewall Log View
+##WEBIF:name:Log:004:Firewall Log View
 -->
