@@ -178,6 +178,14 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/ixp4xx-2.6/packages"
 		fi
 	}
+	[ "$(uname -m)" = "avr32" ] && cat /proc/cpuinfo | grep -q "AVR32"
+	[ $? = "0" ] && {
+		if [ "$revision" = "" ]; then
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/avr32-2.6/packages"
+		else
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/avr32-2.6/packages"
+		fi
+	}
 
 #commit our old webif settings if they exist
 if [ -e "/tmp/.uci/webif" ]; then
