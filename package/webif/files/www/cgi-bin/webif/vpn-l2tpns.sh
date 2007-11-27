@@ -37,12 +37,10 @@ if empty "$FORM_submit"; then
 	eval "FORM_l2tpns_cli=\"\$CONFIG_${server_cfg}_mode\""
 	eval "FORM_l2tpns_cli_server=\"\$CONFIG_${server_cfg}_ipaddr\""
 	eval "FORM_l2tpns_cli_debug=\"\$CONFIG_${server_cfg}_debug\""
-	eval "FORM_l2tpns_cli_port=\"\$CONFIG_${server_cfg}_port\""
-	FORM_l2tpns_cli_port=${FORM_l2tpns_cli_port:-1194}
 	eval "FORM_l2tpns_cli_radacct=\"\$CONFIG_${server_cfg}_radacct\""
-	FORM_l2tpns_cli_pidfile=${FORM_l2tpns_cli_pidfile:-/var/run/l2tpns.pid}
-	FORM_l2tpns_cli_logfile=${FORM_l2tpns_cli_logfile:-/var/log/l2tpns}
-	FORM_l2tpns_cli_radport=${FORM_l2tpns_cli_radport:-1812}
+	eval "FORM_l2tpns_cli_pidfile=\"\$CONFIG_${server_cfg}_pidfile\"" 
+	eval "FORM_l2tpns_cli_logfile=\"\$CONFIG_${server_cfg}_logfile\""
+	eval "FORM_l2tpns_cli_radport=\"\$CONFIG_${server_cfg}_radport\"" 
 
 else
 	[ "$server_cfg" = "" ] && {
@@ -94,21 +92,36 @@ end_form
 start_form|@TR<<Connection Settings>>|connection_settings|hidden
 field|@TR<<Server Address>>
 text|l2tpns_cli_server|$FORM_l2tpns_cli_server
+helpitem|l2tpns_server#Server Address
+helptext|l2tpns_server_text#The IP Address on which the L2TPns server will be listening on (example: 127.0.0.1)
 
 field|@TR<<Primary DNS>>
 text|l2tpns_cli_dns1|$FORM_l2tpns_cli_dns1
 field|@TR<<Secondary DNS>>
 text|l2tpns_cli_dns2|$FORM_l2tpns_cli_dns2
+helpitem|l2tpns_dns#DNS Addresses
+helptext|l2tpns_dns_text#DNS Servers upon which clients will be provided with
+
 
 field|@TR<<Primary RADIUS>>
 text|l2tpns_cli_rad1|$FORM_l2tpns_cli_rad1
 field|@TR<<Secondary RADIUS>>
 text|l2tpns_cli_rad2|$FORM_l2tpns_cli_rad2
 field|@TR<<RADIUS Secret>>
+helpitem|l2tpns_radius#RADIUS Servers
+helptext|l2tpns_radius_text#RADIUS Servers IP Addresses
+
 text|l2tpns_cli_radsecret|$FORM_l2tpns_cli_radsecret
 field|@TR<<RADIUS Port>>
+helpitem|l2tpns_radius_secret#RADIUS Secret 
+helptext|l2tpns_radius_secret_text#RADIUS Servers shared secret key
+
+
 text|l2tpns_cli_radport|$FORM_l2tpns_cli_radport
 field|@TR<<RADIUS Accounting>>
+helpitem|l2tpns_radius_port#RADIUS Port (example: 1812 is the default port for authentication)
+helptext|l2tpns_radius_port_text#RADIUS Servers Port for authentication (the same is used for both primary and secondary radius servers)
+
 select|l2tpns_cli_radacct|$FORM_l2tpns_cli_radacct
 option|yes|@TR<<Yes>>
 option|no|@TR<<No>>
