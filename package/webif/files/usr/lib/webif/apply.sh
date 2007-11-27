@@ -320,15 +320,15 @@ for package in $process_packages; do
 
                         L2TPNS_MODE=`uci get l2tpns.cfg1.mode`
                         if [ $L2TPNS_MODE = "enabled" ]; then
-                               chmod +x /etc/init.d/l2tpns                                            
+                               ln -s /etc/init.d/l2tpns /etc/rc.d/S99l2tpns
                                echo '@TR<<Starting>> @TR<<l2tpns server>> ...'              
-                               /etc/init.d/l2tpns start >&- 2>&-                                      
+                               /etc/init.d/l2tpns start >&- 2>&-
                         fi
                                                           
-                        if [ $L2TPNS_MODE = "disabled" ]; then                 
+                        if [ $L2TPNS_MODE = "disabled" ]; then             
+                               rm -rf /etc/rc.d/S99l2tpns
                                echo '@TR<<Stopping>> @TR<<l2tpns server>> ...'
                                /etc/init.d/l2tpns stop >&- 2>&-
-                               chmod -x /etc/init.d/l2tpns
                         fi
 			;;
 		"updatedd")
