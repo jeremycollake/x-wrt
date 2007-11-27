@@ -274,7 +274,7 @@ if [ "$switch_interfaces" != "" ]; then
 			end_form"
 fi
 
-system_ifaces="$(ifconfig |grep eth |cut -d" " -f1)"
+system_ifaces="$(ifconfig -a|grep eth |cut -d" " -f1)"
 for iface in $system_ifaces; do
 	for vlan_iface in $switch_interfaces; do
 		switching_iface=0
