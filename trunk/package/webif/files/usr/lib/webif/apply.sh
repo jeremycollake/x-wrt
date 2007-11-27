@@ -313,13 +313,23 @@ for package in $process_packages; do
 			/etc/init.d/S??snmpd restart >&- 2>&-
 			;;
 		"l2tpns")
-			echo '@TR<<Exporting>> @TR<<l2tpns server settings>> ...'
-			[ -e "/usr/lib/webif/l2tpns_apply.sh" ] && {
-				/usr/lib/webif/l2tpns_apply.sh >&- 2>&-
-			}
+                        echo '@TR<<Exporting>> @TR<<l2tpns server settings>> ...'
+                        [ -e "/usr/lib/webif/l2tpns_apply.sh" ] && {
+                                /usr/lib/webif/l2tpns_apply.sh >&- 2>&-
+                        }
 
-			echo '@TR<<Reloading>> @TR<<l2tpns server>> ...'
-			/etc/init.d/l2tpns restart >&- 2>&-
+                        L2TPNS_MODE=`uci get l2tpns.cfg1.mode`
+                        if [ $L2TPNS_MODE = "enabled" ]; then
+                               chmod +x /etc/init.d/l2tpns                                            
+                               echo '@TR<<Starting>> @TR<<l2tpns server>> ...'              
+                               /etc/init.d/l2tpns start >&- 2>&-                                      
+                        fi
+                                                          
+                        if [ $L2TPNS_MODE = "disabled" ]; then                 
+                               echo '@TR<<Stopping>> @TR<<l2tpns server>> ...'
+                               /etc/init.d/l2tpns stop >&- 2>&-
+                               chmod -x /etc/init.d/l2tpns
+                        fi
 			;;
 		"updatedd")
 			uci_load "updatedd"
