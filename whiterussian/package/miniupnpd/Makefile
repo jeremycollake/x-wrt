@@ -5,12 +5,13 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=miniupnpd
 PKG_VERSION:=1.0-RC8
 PKG_RELEASE:=1
-PKG_MD5SUM:=54536b268f630449e9ecb0e2552a1d52
 
-PKG_SOURCE_URL:=http://miniupnp.tuxfamily.org/files/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_SOURCE_URL:=http://miniupnp.tuxfamily.org/files/
+PKG_MD5SUM:=54536b268f630449e9ecb0e2552a1d52
 PKG_CAT:=zcat
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(TOPDIR)/package/rules.mk
 
@@ -21,7 +22,12 @@ $(PKG_BUILD_DIR)/.configured:
 
 $(PKG_BUILD_DIR)/.built:
 	ln -sf $(PKG_BUILD_DIR)/config.h.openwrt $(PKG_BUILD_DIR)/config.h
-	make -C $(PKG_BUILD_DIR) -f Makefile.openwrt	
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		-f Makefile.openwrt \
+		$(TARGET_CONFIGURE_OPTS) \
+		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -D_GNU_SOURCE" \
+		STAGING_DIR="$(STAGING_DIR)" \
+		LIBS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib -liptc"
 	touch $@
 
 $(IPKG_MINIUPNPD):
