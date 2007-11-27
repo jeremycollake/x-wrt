@@ -34,6 +34,9 @@ config_cb() {
                 	config_get hostname $CONFIG_SECTION hostname
                 	echo "${hostname:-OpenWrt}" > /proc/sys/kernel/hostname
                 ;;
+                server)
+			l2tpns_cfg="$CONFIG_SECTION"
+		;;
 	esac
 }
 
@@ -318,18 +321,17 @@ for package in $process_packages; do
                                 /usr/lib/webif/l2tpns_apply.sh >&- 2>&-
                         }
 
-                        L2TPNS_MODE=`uci get l2tpns.cfg1.mode`
-                        if [ $L2TPNS_MODE = "enabled" ]; then
-                               ln -s /etc/init.d/l2tpns /etc/rc.d/S99l2tpns
-                               echo '@TR<<Starting>> @TR<<l2tpns server>> ...'              
-                               /etc/init.d/l2tpns start >&- 2>&-
-                        fi
-                                                          
-                        if [ $L2TPNS_MODE = "disabled" ]; then             
-                               rm -rf /etc/rc.d/S99l2tpns
+			uci_load "l2tpns"
+			config_get test "$l2tpns_cfg" mode
+                        if [ "$test" = "enabled" ]; then
+                               echo '@TR<<Starting>> @TR<<l2tpns server>> ...'
+				/etc/init.d/l2tpns enable >&- 2>&- <&-
+				/etc/init.d/l2tpns start >&- 2>&- <&-
+			else
                                echo '@TR<<Stopping>> @TR<<l2tpns server>> ...'
-                               /etc/init.d/l2tpns stop >&- 2>&-
-                        fi
+				/etc/init.d/l2tpns disable >&- 2>&- <&-
+				/etc/init.d/l2tpns stop >&- 2>&- <&-
+			fi
 			;;
 		"updatedd")
 			uci_load "updatedd"
