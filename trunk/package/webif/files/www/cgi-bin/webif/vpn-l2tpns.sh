@@ -1,7 +1,11 @@
 #!/usr/bin/webif-page
 <?
+#
 # Adopted from vpn-openvpn.sh
-# July 2007 - Authored by Liran Tal <liran@enginx.com>
+# Author: Liran Tal <liran@enginx.com>
+#                   <liran.tal@gmail.com>
+#
+# July 2007   - initial release
 
 . /usr/lib/webif/webif.sh
 
@@ -67,7 +71,7 @@ cat <<EOF
 function modechange()
 {
 	var v;
-	v = isset('l2tpns_cli', 'server');
+	v = isset('l2tpns_cli', 'enabled');
 	set_visible('connection_settings', v);
 
 	hide('save');
