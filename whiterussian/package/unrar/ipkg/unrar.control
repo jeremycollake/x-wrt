@@ -1,0 +1,10 @@
+Package: unrar
+Priority: optional
+Depends: uclibcxx
+Section: utils
+Description: A free utility for extracting, testing and viewing RAR archives
+ The unrar utility is a freeware program for extracting, testing and 
+ viewing the contents of archives created with the RAR archiver version 
+ 1.50 and above.
+ 
+ http://www.rarlab.com/rar_archiver.htm

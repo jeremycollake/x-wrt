@@ -148,6 +148,7 @@ package-$(BR2_PACKAGE_TTCP) += ttcp
 package-$(BR2_PACKAGE_UCLIBCPP) += uclibc++
 package-$(BR2_PACKAGE_UCLIBCXX) += uclibcxx
 package-$(BR2_PACKAGE_ULOGD) += ulogd
+package-$(BR2_PACKAGE_UNRAR) += unrar
 package-$(BR2_COMPILE_UNZIP) += unzip
 package-$(BR2_PACKAGE_USBUTILS) += usbutils
 package-$(BR2_PACKAGE_USHARE) += ushare
@@ -226,6 +227,7 @@ sqlite-compile: ncurses-compile readline-compile
 tcpdump-compile: libpcap-compile
 tinc-compile: zlib-compile openssl-compile lzo-compile
 tor-compile: libevent-compile openssl-compile zlib-compile
+unrar-compile: uclibcxx-compile
 usbutils-compile: libusb-compile
 ushare-compile: libiconv-compile libupnp-compile
 vtun-compile: zlib-compile openssl-compile lzo-compile
