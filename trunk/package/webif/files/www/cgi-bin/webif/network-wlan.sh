@@ -164,8 +164,8 @@ for device in $DEVICES; do
 	        config_get FORM_distance $device distance
 	        config_get FORM_txantenna $device txantenna
 	        config_get FORM_rxantenna $device rxantenna
-	        config_get_bool FORM_diversity $device diversity
-	        config_get_bool FORM_disabled $device disabled
+	        config_get_bool FORM_diversity $device diversity 0
+	        config_get_bool FORM_disabled $device disabled 0
 	else
 		config_get country $device country
 		config_get iftype "$device" type
@@ -319,10 +319,10 @@ for device in $DEVICES; do
 				config_get FORM_txpower $vcfg txpower
 				config_get FORM_frag $vcfg frag
 	        		config_get FORM_rts $vcfg rts
-	        		config_get_bool FORM_hidden $vcfg hidden
-	        		config_get_bool FORM_isolate $vcfg isolate
-	        		config_get_bool FORM_bgscan $vcfg bgscan
-	        		config_get_bool FORM_wds $vcfg wds
+	        		config_get_bool FORM_hidden $vcfg hidden 0
+	        		config_get_bool FORM_isolate $vcfg isolate 0
+	        		config_get_bool FORM_bgscan $vcfg bgscan 0
+	        		config_get_bool FORM_wds $vcfg wds 0
 			else
 				eval FORM_key="\$FORM_radius_key_$vcfg"
 				eval FORM_radius_ipaddr="\$FORM_radius_ipaddr_$vcfg"
