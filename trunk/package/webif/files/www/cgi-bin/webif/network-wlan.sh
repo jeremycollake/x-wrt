@@ -323,6 +323,13 @@ for device in $DEVICES; do
 	        		config_get_bool FORM_isolate $vcfg isolate 0
 	        		config_get_bool FORM_bgscan $vcfg bgscan 0
 	        		config_get_bool FORM_wds $vcfg wds 0
+				config_get_bool FORM_doth "$vcfg" 80211h
+				config_get_bool FORM_compression "$vcfg" compression
+				config_get_bool FORM_bursting "$vcfg" bursting
+				config_get_bool FORM_fframes "$vcfg" ff
+				config_get_bool FORM_wmm "$vcfg" wmm
+				config_get FORM_maclist "$vcfg" maclist
+				config_get FORM_macpolicy "$vcfg" macpolicy
 			else
 				eval FORM_key="\$FORM_radius_key_$vcfg"
 				eval FORM_radius_ipaddr="\$FORM_radius_ipaddr_$vcfg"
@@ -351,6 +358,13 @@ for device in $DEVICES; do
 				eval FORM_bgscan="\$FORM_bgscan_$vcfg"
 				eval FORM_frag="\$FORM_frag_$vcfg"
 				eval FORM_rts="\$FORM_rts_$vcfg"
+				eval FORM_doth="\$FORM_doth_$vcfg"
+				eval FORM_compression="\$FORM_compression_$vcfg"
+				eval FORM_bursting="\$FORM_bursting_$vcfg"
+				eval FORM_fframes="\$FORM_fframes_$vcfg"
+				eval FORM_wmm="\$FORM_wmm_$vcfg"
+				eval FORM_maclist="\$FORM_maclist_$vcfg"
+				eval FORM_macpolicy="\$FORM_macpolicy_$vcfg"
 			fi
 			
 			case "$FORM_mode" in
@@ -403,6 +417,56 @@ for device in $DEVICES; do
 			append forms "$isolate_field" "$N"
 
 			if [ "$iftype" = "atheros" ]; then
+				doth="field|@TR<<802.11h>>
+					radio|doth_$vcfg|$FORM_doth|1|@TR<<On>>
+					radio|doth_$vcfg|$FORM_doth|0|@TR<<Off>>"
+				append forms "$doth" "$N"
+
+				compression="field|@TR<<Compression>>
+					radio|compression_$vcfg|$FORM_compression|1|@TR<<On>>
+					radio|compression_$vcfg|$FORM_compression|0|@TR<<Off>>"
+				append forms "$comp" "$N"
+
+				bursting="field|@TR<<Bursting>>
+					radio|bursting_$vcfg|$FORM_bursting|1|@TR<<On>>
+					radio|bursting_$vcfg|$FORM_bursting|0|@TR<<Off>>"
+				append forms "$bursting" "$N"
+
+				fframes="field|@TR<<Fast Frames>>
+					radio|fframes_$vcfg|$FORM_fframes|1|@TR<<On>>
+					radio|fframes_$vcfg|$FORM_fframes|0|@TR<<Off>>"
+				append forms "$ff" "$N"
+
+				wmm="field|@TR<<WMM>>
+					radio|wmm_$vcfg|$FORM_wmm|1|@TR<<On>>
+					radio|wmm_$vcfg|$FORM_wmm|0|@TR<<Off>>"
+				append forms "$wmm" "$N"
+
+				macpolicy="field|@TR<<MAC Filter>>
+					select|macpolicy_$vcfg|$FORM_macpolicy
+					option|none|@TR<<Disabled>>
+					option|allow|@TR<<Allow>>
+					option|deny|@TR<<Deny>>"
+				append forms "$macpolicy" "$N"
+
+				maclist="field|@TR<<MAC List>>|maclist_$device|hidden
+					textarea|maclist_$vcfg|$FORM_maclist|3|18"
+				append forms "$maclist" "$N"
+
+				rate="field|@TR<<TX Rate>>
+					select|rate_$vcfg|$FORM_rate
+					option|auto|@TR<<Auto>>
+					option|1M|@TR<<1M>>
+					option|2M|@TR<<2M>>
+					option|5.5M|@TR<<5.5M>>
+					option|11M|@TR<<11M>>
+					option|6M|@TR<<6M>>
+					option|12M|@TR<<12M>>
+					option|24M|@TR<<24M>>
+					option|36M|@TR<<36M>>
+					option|54M|@TR<<54M>>"
+				append forms "$rate" "$N"
+
 				eval txpowers="\$CONFIG_wireless_${device}_txpower"
 				[ -z "$txpowers" ] && {
 					txpower=""
@@ -750,6 +814,13 @@ EOF
 						eval FORM_rts="\$FORM_rts_$vcfg"
 						eval FORM_frag="\$FORM_frag_$vcfg"
 						eval FORM_wds="\$FORM_wds_$vcfg"
+						eval FORM_doth="\$FORM_doth_$vcfg"
+						eval FORM_compression="\$FORM_compression_$vcfg"
+						eval FORM_bursting="\$FORM_bursting_$vcfg"
+						eval FORM_fframes="\$FORM_fframes_$vcfg"
+						eval FORM_wmm="\$FORM_wmm_$vcfg"
+						eval FORM_maclist="\$FORM_maclist_$vcfg"
+						eval FORM_macpolicy="\$FORM_macpolicy_$vcfg"
 
 						uci_set "wireless" "$vcfg" "network" "$FORM_network"
 						uci_set "wireless" "$vcfg" "ssid" "$FORM_ssid"
@@ -776,6 +847,13 @@ EOF
 						uci_set "wireless" "$vcfg" "key2" "$FORM_key2"
 						uci_set "wireless" "$vcfg" "key3" "$FORM_key3"
 						uci_set "wireless" "$vcfg" "key4" "$FORM_key4"
+						uci_set "wireless" "$vcfg" "doth" "$FORM_doth"
+						uci_set "wireless" "$vcfg" "compression" "$FORM_compression"
+						uci_set "wireless" "$vcfg" "bursting" "$FORM_bursting"
+						uci_set "wireless" "$vcfg" "ff" "$FORM_fframes"
+						uci_set "wireless" "$vcfg" "wmm" "$FORM_wmm"
+						uci_set "wireless" "$vcfg" "maclist" "$FORM_maclist"
+						uci_set "wireless" "$vcfg" "macpolicy" "$FORM_macpolicy"
 					fi
 				done
 			done
