@@ -2,33 +2,17 @@
 <?
 . /usr/lib/webif/webif.sh
 
-# todo add /enable/disable for mx and wildcard / connection type. Add packages checker depending on on service type
-#ezip            { "server", "user", "address", "wildcard", "mx", "url", "host", NULL };
-#pgpow           { "server", "host", NULL };
-#dhs             { "server", "user", "address", "wildcard", "mx", "url", "host", NULL };
-#dyndns          { "server", "user", "address", "wildcard", "mx", "host", NULL };
-#dyndns-static, dyndns-custom { "server", "user", "address", "wildcard", "mx", "host", NULL };
-#ods             { "server", "host", "address", NULL };
-#tzo             { "server", "user", "address", "host", "connection-type", NULL };
-#easydns         { "server", "user", "address", "wildcard", "mx", "host", NULL };
-#easydns-partner { "server", "partner", "user", "address", "wildcard", "host", NULL };
-#gnudip          { "server", "user", "host", "address", NULL };
-#justlinux       { "server", "user", "host", NULL };
-#dyns            { "server", "user", "host", NULL };
-#hn              { "server", "user", "address", NULL };
-#zoneedit        { "server", "user", "address", "mx", "host", NULL };
-#heipv6tb        { "server", "user", NULL };
-
-header "Network" "DynDNS" "@TR<<DynDNS Settings>>" 'onload="modechange()"' "$SCRIPT_NAME"
+# todo:
+#  add /enable/disable for mx and wildcard / connection type.
 
 uci_load "webif"
 config_get revision general firmware_version
 if [ "$revision" = "7.07" ]; then
-	username="user"
-	password="passwd"
+	config_username="user"
+	config_password="passwd"
 else
-	username="username"
-	password="password"
+	config_username="username"
+	config_password="password"
 fi
 
 #define supported services
@@ -39,7 +23,7 @@ for service in $services; do
 	service_option="$service_option
 option|$service"
 	
-	ipkg list_installed | grep -q $service
+	ipkg list_installed | grep -q "$service"
 	! equal "$?" 0 && {
 		package_checker="$package_checker
 field|@TR<<Dynamic DNS Package>>|install_$service|hidden
@@ -47,7 +31,7 @@ string|<div class=\"warning\">$service will not work until you install the $serv
 submit|install_$service|@TR<<Install>> $service @TR<<Package>>|"
 
 		js="$js
-v = isset('ddns_service','$service');
+v = isset('service','$service');
 set_visible('install_$service', v);"
 
 		eval FORM_installer="\$FORM_install_$service"
@@ -62,29 +46,30 @@ done
 
 if empty "$FORM_submit"; then
 	uci_load "updatedd"
-	config_get FORM_ddns_service cfg1 ddns_service 
-	config_get FORM_ddns_user    cfg1 ddns_$username
-	config_get FORM_ddns_passwd  cfg1 ddns_$password
-	config_get FORM_ddns_host    cfg1 ddns_host
-	config_get FORM_ddns_update  cfg1 ddns_update
+	config_get FORM_service cfg1 service 
+	config_get FORM_username cfg1 "$config_username"
+	config_get FORM_password cfg1 "$config_password"
+	config_get FORM_host cfg1 host
+	config_get FORM_update cfg1 update
 else
 	SAVED=1
 	validate <<EOF
-string|FORM_ddns_service|@TR<<Service Type>>|required|$FORM_ddns_service
-string|FORM_ddns_user|@TR<<User Name>>|required|$FORM_ddns_user
-string|FORM_ddns_passwd|@TR<<Password>>|required|$FORM_ddns_passwd
-string|FORM_ddns_host|@TR<<Host Name>>||$FORM_ddns_host
-#hostname|FORM_ddns_server|@TR<<Server Name>>||$FORM_ddns_server
-#int|FORM_ddns_max_interval|@TR<<Max Interval (sec)>>|min=86400 max=2196000|$FORM_ddns_max_interval
+string|FORM_service|@TR<<Service Type>>|required|$FORM_service
+string|FORM_username|@TR<<User Name>>|required|$FORM_username
+string|FORM_password|@TR<<Password>>|required|$FORM_password
+string|FORM_host|@TR<<Host Name>>|required|$FORM_host
 EOF
 	equal "$?" 0 && {
-		uci_set "updatedd" "cfg1" "ddns_update" "$FORM_ddns_update"
-		uci_set "updatedd" "cfg1" "ddns_service" "$FORM_ddns_service"
-		uci_set "updatedd" "cfg1" "ddns_$username" "$FORM_ddns_user"
-		uci_set "updatedd" "cfg1" "ddns_$password" "$FORM_ddns_passwd"
-		uci_set "updatedd" "cfg1" "ddns_host" "$FORM_ddns_host"
+		uci_set updatedd cfg1 update "$FORM_update"
+		uci_set updatedd cfg1 service "$FORM_service"
+		uci_set updatedd cfg1 "$config_username" "$FORM_username"
+		uci_set updatedd cfg1 "$config_password" "$FORM_password"
+		uci_set updatedd cfg1 host "$FORM_host"
 	}
 fi
+
+header "Network" "DynDNS" "@TR<<DynDNS Settings>>" '' "$SCRIPT_NAME"
+
 
 cat <<EOF
 <script type="text/javascript" src="/webif.js"></script>
@@ -107,36 +92,25 @@ display_form <<EOF
 onchange|modechange
 start_form|@TR<<DynDNS>>
 field|@TR<<Dynamic DNS Update>>
-radio|ddns_update|$FORM_ddns_update|1|@TR<<Enable>>
-radio|ddns_update|$FORM_ddns_update|0|@TR<<Disable>>
+radio|update|$FORM_update|1|@TR<<Enable>>
+radio|update|$FORM_update|0|@TR<<Disable>>
 field|@TR<<Service Type>>
-select|ddns_service|$FORM_ddns_service
+select|service|$FORM_service
 $service_option
 $package_checker
 end_form
 
 start_form|@TR<<Account>>
 field|@TR<<User Name>>
-text|ddns_user|$FORM_ddns_user
+text|username|$FORM_username
 field|@TR<<Password>>
-password|ddns_passwd|$FORM_ddns_passwd
+password|password|$FORM_password
 end_form
 
 start_form|@TR<<Host>>
 field|@TR<<Host Name>>
-text|ddns_host|$FORM_ddns_host
-
-#field|@TR<<Wildcard>>
-#radio|ddns_wildcard|$FORM_ddns_wildcard|1|@TR<<Enable>>
-#radio|ddns_wildcard|$FORM_ddns_wildcard|0|@TR<<Disable>>
+text|host|$FORM_host
 end_form
-
-#start_form|@TR<<Server>>
-#field|@TR<<Server Name>
-#text|ddns_server|$FORM_ddns_server
-#field|@TR<<Max Interval (sec)>>
-#text|ddns_max_interval|$FORM_ddns_max_interval
-#end_form
 EOF
 
 footer ?>
