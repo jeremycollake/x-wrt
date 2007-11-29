@@ -317,7 +317,7 @@ for package in $process_packages; do
 			;;
 		"l2tpns")
                         echo '@TR<<Exporting>> @TR<<l2tpns server settings>> ...'
-                        [ -e "/usr/lib/webif/l2tpns_apply.sh" ] && {
+                        [ -x "/usr/lib/webif/l2tpns_apply.sh" ] && {
                                 /usr/lib/webif/l2tpns_apply.sh >&- 2>&-
                         }
 
@@ -332,6 +332,7 @@ for package in $process_packages; do
 				/etc/init.d/l2tpns disable >&- 2>&- <&-
 				/etc/init.d/l2tpns stop >&- 2>&- <&-
 			fi
+			config_allclear
 			;;
 		"updatedd")
 			uci_load "updatedd"
