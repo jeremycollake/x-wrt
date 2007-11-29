@@ -6,61 +6,77 @@
 . /usr/lib/webif/webif.sh
 
 config_cb() {
-        config_get TYPE "$CONFIG_SECTION" TYPE
-        case "$TYPE" in
-                server)
-                        server_cfg="$CONFIG_SECTION"
-                ;;
-        esac
+	config_get TYPE "$CONFIG_SECTION" TYPE
+	case "$TYPE" in
+		server) server_cfg="$CONFIG_SECTION" ;;
+	esac
 }
 
 uci_load "l2tpns"
 
-header "VPN" "L2TPns" "@TR<<L2TPns>>" ' onload="modechange()" ' "$SCRIPT_NAME"
+header "VPN" "L2TPns" "@TR<<L2TPns>>" '' "$SCRIPT_NAME"
 
 if ! empty "$FORM_install_package"; then
-        echo "@TR<<vpn_l2tpns_Installing_package#Installing l2tpns package ...>><pre>"
-        install_package "l2tpns"
-        echo "</pre>"
+	echo "@TR<<l2tpns_Installing_package#Installing l2tpns package ...>><pre>"
+	install_package "l2tpns"
+	echo "</pre>"
 fi
 
 install_package_button=""
 ! is_package_installed "l2tpns" &&
-        install_package_button="string|<div class=warning>@TR<<vpn_l2tpns_warn#VPN will not work until you install L2TPns:>> </div>
-                submit|install_package| @TR<<vpn_l2tpns_install_package#Install L2TPns Package>> |"
+	install_package_button="string|<div class=\"warning\">@TR<<l2tpns_warn#VPN will not work until you install L2TPns:>> </div>
+		submit|install_package| @TR<<l2tpns_install_package#Install L2TPns Package>> |"
 
 if empty "$FORM_submit"; then
-        eval "FORM_l2tpns_cfg1_mode=\"\$CONFIG_${server_cfg}_mode\""
-        eval "FORM_l2tpns_cfg1_serverip=\"\$CONFIG_${server_cfg}_serverip\""
-        eval "FORM_l2tpns_cfg1_dns1=\"\$CONFIG_${server_cfg}_dns1\""
-        eval "FORM_l2tpns_cfg1_dns2=\"\$CONFIG_${server_cfg}_dns2\""
-        eval "FORM_l2tpns_cfg1_debug=\"\$CONFIG_${server_cfg}_debug\""
-        eval "FORM_l2tpns_cfg1_radiusacctmode=\"\$CONFIG_${server_cfg}_radiusacctmode\""
-        eval "FORM_l2tpns_cfg1_pidfile=\"\$CONFIG_${server_cfg}_pidfile\"" 
-        eval "FORM_l2tpns_cfg1_logfile=\"\$CONFIG_${server_cfg}_logfile\""
-        eval "FORM_l2tpns_cfg1_radius1=\"\$CONFIG_${server_cfg}_radius1\"" 
-        eval "FORM_l2tpns_cfg1_radius2=\"\$CONFIG_${server_cfg}_radius2\"" 
-        eval "FORM_l2tpns_cfg1_radiusauthport=\"\$CONFIG_${server_cfg}_radiusauthport\"" 
-        eval "FORM_l2tpns_cfg1_radiussecret=\"\$CONFIG_${server_cfg}_radiussecret\"" 
-
+	config_get_bool FORM_server_mode "$server_cfg" mode 0
+	eval "FORM_server_debug=\"\$CONFIG_${server_cfg}_debug\""
+	eval "FORM_server_pid_file=\"\$CONFIG_${server_cfg}_pid_file\"" 
+	eval "FORM_server_log_file=\"\$CONFIG_${server_cfg}_log_file\""
+	eval "FORM_server_bind_address=\"\$CONFIG_${server_cfg}_bind_address\""
+	eval "FORM_server_primary_dns=\"\$CONFIG_${server_cfg}_primary_dns\""
+	eval "FORM_server_secondary_dns=\"\$CONFIG_${server_cfg}_secondary_dns\""
+	eval "FORM_server_primary_radius=\"\$CONFIG_${server_cfg}_primary_radius\"" 
+	eval "FORM_server_primary_radius_port=\"\$CONFIG_${server_cfg}_primary_radius_port\"" 
+	eval "FORM_server_secondary_radius=\"\$CONFIG_${server_cfg}_secondary_radius\"" 
+	eval "FORM_server_secondary_radius_port=\"\$CONFIG_${server_cfg}_secondary_radius_port\"" 
+	eval "FORM_server_radius_accounting=\"\$CONFIG_${server_cfg}_radius_accounting\""
+	eval "FORM_server_radius_secret=\"\$CONFIG_${server_cfg}_radius_secret\"" 
 else
-        [ "$server_cfg" = "" ] && {
-                uci_add "l2tpns" "server"
-                server_cfg="cfg1"
-        }
-        uci_set "l2tpns" "$server_cfg" "mode" "$FORM_l2tpns_cfg1_mode"
-        uci_set "l2tpns" "$server_cfg" "serverip" "$FORM_l2tpns_cfg1_serverip"
-        uci_set "l2tpns" "$server_cfg" "dns1" "$FORM_l2tpns_cfg1_dns1"
-        uci_set "l2tpns" "$server_cfg" "dns2" "$FORM_l2tpns_cfg1_dns2"
-        uci_set "l2tpns" "$server_cfg" "radius1" "$FORM_l2tpns_cfg1_radius1"
-        uci_set "l2tpns" "$server_cfg" "radius2" "$FORM_l2tpns_cfg1_radius2"
-        uci_set "l2tpns" "$server_cfg" "radiussecret" "$FORM_l2tpns_cfg1_radiussecret"
-        uci_set "l2tpns" "$server_cfg" "radiusauthport" "$FORM_l2tpns_cfg1_radiusauthport"
-        uci_set "l2tpns" "$server_cfg" "radiusacctmode" "$FORM_l2tpns_cfg1_radiusacctmode"
-        uci_set "l2tpns" "$server_cfg" "debug" "$FORM_l2tpns_cfg1_debug"
-        uci_set "l2tpns" "$server_cfg" "pidfile" "$FORM_l2tpns_cfg1_pidfile"
-        uci_set "l2tpns" "$server_cfg" "logfile" "$FORM_l2tpns_cfg1_logfile"
-
+	SAVED=1
+	validate <<EOF
+int|FORM_server_mode|@TR<<l2tpns_Start_L2TPns_Connection#Start L2TPns Connection>>||$FORM_server_mode
+int|FORM_server_debug|@TR<<l2tpns_Debug_Level#Debug Level>>||$FORM_server_debug
+string|FORM_server_pid_file|@TR<<l2tpns_Pid_File#Pid File>>||$FORM_server_pid_file
+string|FORM_server_log_file|@TR<<l2tpns_Log_File#Log File>>||$FORM_server_log_file
+ip|FORM_server_bind_address|@TR<<l2tpns_Bind_Address#Bind Address>>||$FORM_server_bind_address
+ip|FORM_server_primary_dns|@TR<<l2tpns_Primary_DNS#Primary DNS>>||$FORM_server_primary_dns
+ip|FORM_server_secondary_dns|@TR<<l2tpns_Secondary_DNS#Secondary DNS>>||$FORM_server_secondary_dns
+ip|FORM_server_primary_radius|@TR<<l2tpns_Primary_RADIUS#Primary RADIUS>>||$FORM_server_primary_radius
+port|FORM_server_primary_radius_port|@TR<<l2tpns_Primary_RADIUS_Port#Primary RADIUS Port>>||$FORM_server_primary_radius_port
+ip|FORM_server_secondary_radius|@TR<<l2tpns_Secondary_RADIUS#Secondary RADIUS>>||$FORM_server_secondary_radius
+port|FORM_server_secondary_radius_port|@TR<<l2tpns_Secondary_RADIUS_Port#Secondary RADIUS Port>>||$FORM_server_secondary_radius_port
+string|FORM_server_radius_accounting|@TR<<l2tpns_RADIUS_Accounting#RADIUS Accounting>>||$FORM_server_radius_accounting
+string|FORM_server_radius_secret|@TR<<l2tpns_RADIUS_Secret#RADIUS Secret>>||$FORM_server_radius_secret
+EOF
+	equal "$?" 0 && {
+		[ "$server_cfg" = "" ] && {
+			uci_add "l2tpns" "server"
+			uci_load "l2tpns"
+		}
+		uci_set "l2tpns" "$server_cfg" "mode" "$FORM_server_mode"
+		uci_set "l2tpns" "$server_cfg" "debug" "$FORM_server_debug"
+		uci_set "l2tpns" "$server_cfg" "pid_file" "$FORM_server_pid_file"
+		uci_set "l2tpns" "$server_cfg" "log_file" "$FORM_server_log_file"
+		uci_set "l2tpns" "$server_cfg" "bind_address" "$FORM_server_bind_address"
+		uci_set "l2tpns" "$server_cfg" "primary_dns" "$FORM_server_primary_dns"
+		uci_set "l2tpns" "$server_cfg" "secondary_dns" "$FORM_server_secondary_dns"
+		uci_set "l2tpns" "$server_cfg" "primary_radius" "$FORM_server_primary_radius"
+		uci_set "l2tpns" "$server_cfg" "primary_radius_port" "$FORM_server_primary_radius_port"
+		uci_set "l2tpns" "$server_cfg" "secondary_radius" "$FORM_server_secondary_radius"
+		uci_set "l2tpns" "$server_cfg" "secondary_radius_port" "$FORM_server_secondary_radius_port"
+		uci_set "l2tpns" "$server_cfg" "radius_accounting" "$FORM_server_radius_accounting"
+		uci_set "l2tpns" "$server_cfg" "radius_secret" "$FORM_server_radius_secret"
+	}
 fi
 
 cat <<EOF
@@ -69,12 +85,12 @@ cat <<EOF
 <!--
 function modechange()
 {
-        var v;
-        v = isset('l2tpns_cfg1_mode', 'enabled');
-        set_visible('connection_settings', v);
+	var v;
+	v = isset('server_mode', '1');
+	set_visible('connection_settings', v);
 
-        hide('save');
-        show('save');
+	hide('save');
+	show('save');
 }
 -->
 </script>
@@ -84,63 +100,62 @@ EOF
 display_form <<EOF
 onchange|modechange
 $install_package_button
-start_form|@TR<<L2TPns>>
-field|@TR<<Start L2TPns Connection>>
-select|l2tpns_cfg1_mode|$FORM_l2tpns_cfg1_mode
-option|disabled|@TR<<Disabled>>
-option|enabled|@TR<<Enabled>>
+start_form|@TR<<l2tpns_L2TPns#L2TPns>>
+field|@TR<<l2tpns_Start_L2TPns_Connection#Start L2TPns Connection>>
+select|server_mode|$FORM_server_mode
+option|0|@TR<<l2tpns_Disabled#Disabled>>
+option|1|@TR<<l2tpns_Enabled#Enabled>>
 end_form
 
-start_form|@TR<<Connection Settings>>|connection_settings|hidden
-field|@TR<<Server Address>>
-text|l2tpns_cfg1_serverip|$FORM_l2tpns_cfg1_serverip
-helpitem|l2tpns_cfg1_serverip#Server Address
-helptext|l2tpns_cfg1_serverip_text#The IP Address on which the L2TPns server will be listening on
+start_form|@TR<<l2tpns_Connection_Settings#Connection Settings>>|connection_settings|hidden
+field|@TR<<l2tpns_Bind_Address#Bind Address>>
+text|server_bind_address|$FORM_server_bind_address
+helpitem|l2tpns_Bind_Address#Bind Address
+helptext|l2tpns_Bind_Address_helptext#The IP Address on which the L2TPns server will be listening on.
 
-field|@TR<<Primary DNS>>
-text|l2tpns_cfg1_dns1|$FORM_l2tpns_cfg1_dns1
-field|@TR<<Secondary DNS>>
-text|l2tpns_cfg1_dns2|$FORM_l2tpns_cfg1_dns2
-helpitem|l2tpns_cfg1_dns#DNS Addresses
-helptext|l2tpns_cfg1_dns_text#DNS Servers upon which clients will be provided with
+field|@TR<<l2tpns_Primary_DNS#Primary DNS>>
+text|server_primary_dns|$FORM_server_primary_dns
+field|@TR<<l2tpns_Secondary_DNS#Secondary DNS>>
+text|server_secondary_dns|$FORM_server_secondary_dns
+helpitem|l2tpns_DNS_Addresses#DNS Addresses
+helptext|l2tpns_DNS_Addresses_helptext#DNS Servers upon which clients will be provided with.
 
-field|@TR<<Primary RADIUS>>
-text|l2tpns_cfg1_radius1|$FORM_l2tpns_cfg1_radius1
-field|@TR<<Secondary RADIUS>>
-text|l2tpns_cfg1_radius2|$FORM_l2tpns_cfg1_radius2
-helpitem|l2tpns_cfg1_radius#RADIUS Servers
-helptext|l2tpns_cfg1_radius_text#RADIUS Servers IP Addresses
+field|@TR<<l2tpns_Primary_RADIUS#Primary RADIUS>>
+text|server_primary_radius|$FORM_server_primary_radius
+field|@TR<<l2tpns_Primary_RADIUS_Port#Primary RADIUS Port>>
+text|server_primary_radius_port|$FORM_server_primary_radius_port
+field|@TR<<l2tpns_Secondary_RADIUS#Secondary RADIUS>>
+text|server_secondary_radius|$FORM_server_secondary_radius
+field|@TR<<l2tpns_Secondary_RADIUS_Port#Secondary RADIUS Port>>
+text|server_secondary_radius_port|$FORM_server_secondary_radius_port
+helpitem|l2tpns_RADIUS_Servers#RADIUS Servers
+helptext|l2tpns_RADIUS_Servers_helptext#RADIUS Servers IP Addresses.
+helpitem|l2tpns_RADIUS_Ports#RADIUS Ports
+helptext|l2tpns_RADIUS_Ports_helptext#RADIUS Servers Ports for authentication.
 
-field|@TR<<RADIUS Secret>>
-text|l2tpns_cfg1_radiussecret|$FORM_l2tpns_cfg1_radiussecret
-field|@TR<<RADIUS Port>>
-text|l2tpns_cfg1_radiusauthport|$FORM_l2tpns_cfg1_radiusauthport
-helpitem|l2tpns_cfg1_radiussecret#RADIUS Secret
-helptext|l2tpns_cfg1_radiussecret_text#RADIUS Servers shared secret key
+field|@TR<<l2tpns_RADIUS_Secret#RADIUS Secret>>
+text|server_radius_secret|$FORM_server_radius_secret
+helpitem|l2tpns_RADIUS_Secret#RADIUS Secret
+helptext|l2tpns_RADIUS_Secret_helptext#RADIUS Servers shared secret key.
 
-field|@TR<<RADIUS Accounting>>
-helpitem|l2tpns_cfg1_radiusauthport#RADIUS Port
-helptext|l2tpns_cfg1_radiusauthport_text#RADIUS Servers Port for authentication (the same is used for both primary and secondary radiu
-s servers)
+field|@TR<<l2tpns_RADIUS_Accounting#RADIUS Accounting>>
+select|server_radius_accounting|$FORM_server_radius_accounting
+option|no|@TR<<l2tpns_No#No>>
+option|yes|@TR<<l2tpns_Yes#Yes>>
 
-select|l2tpns_cfg1_radiusacctmode|$FORM_l2tpns_cfg1_radiusacctmode
-option|yes|@TR<<Yes>>
-option|no|@TR<<No>>
-
-field|@TR<<Debug>>
-select|l2tpns_cfg1_debug|$FORM_l2tpns_cfg1_debug
+field|@TR<<l2tpns_Debug_Level#Debug Level>>
+select|server_debug|$FORM_server_debug
+option|0|0
 option|1|1
 option|2|2
 option|3|3
 
-field|@TR<<Log file>>
-text|l2tpns_cfg1_logfile|$FORM_l2tpns_cfg1_logfile
+field|@TR<<l2tpns_Log_File#Log File>>
+text|server_log_file|$FORM_server_log_file
 
-field|@TR<<Pid file>>
-text|l2tpns_cfg1_pidfile|$FORM_l2tpns_cfg1_pidfile
-
+field|@TR<<l2tpns_Pid_File#Pid File>>
+text|server_pid_file|$FORM_server_pid_file
 end_form
-
 EOF
 
 footer
