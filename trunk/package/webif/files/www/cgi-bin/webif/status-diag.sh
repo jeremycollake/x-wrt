@@ -80,33 +80,31 @@ does_process_exist() {
 		# tmpfile2
 		# PID		
 		# stop process..	
-		kill -23 $3 2>&- >&-
+		kill -s 23 $3 2>&- >&-
 		exists "$1" && {
 			linecount_1=$(cat "$1" | wc -l | tr -d ' ') # current snapshot size
 			linecount_2=$(cat "$2" | wc -l | tr -d ' ') # last snapshot size
 			cp "$1" "$2"
 			let new_lines=$linecount_1-$linecount_2
 			! equal "$new_lines" "0" && {
-				echo "<pre>"
+				echo -n "<pre>"
 				tail -n $new_lines "$2"
 				echo "</pre>"
 			}
 		}
 		# continue process..	
-		kill -25 $3 2>&- >&-
+		kill -s 25 $3 2>&- >&-
 	}
 	if empty "$_pid" || equal "$_pid" "0"; then
 		# exited before we could get PID
 		echo "Error: Utility terminated too quick."			
 	else		
 		touch "$tmpfile2" # force to exist first iter
-		while sleep $OUTPUT_CHECK_DELAY; do
-			! does_process_exist "$_pid" && {
-				break;
-			}
-			output_snapshot_file "$tmpfile" "$tmpfile2"
+		while does_process_exist "$_pid"; do
+			output_snapshot_file "$tmpfile" "$tmpfile2" "$_pid"
+			sleep $OUTPUT_CHECK_DELAY
 		done
-		output_snapshot_file "$tmpfile" "$tmpfile2"	
+		output_snapshot_file "$tmpfile" "$tmpfile2" "$_pid"
 	fi	
 	rm -f "$tmpfile2"	
 	rm -f "$tmpfile"	
