@@ -1,5 +1,5 @@
 #timezone group	timezone cities	timezone config string	zoneinfo
-#revision: 2007h
+#revision: 2007i
 #  it is not exact for the "cities list" but it enables to remember 
 #  the selection and to synchronize TZs with the standard zoneinfo
 Australia	Melbourne,Canberra,Sydney	EST-10EST,M10.1.0,M4.1.0/3	Australia/Melbourne
@@ -39,6 +39,7 @@ USA &amp; Canada	Mountain Time	MST7MDT,M3.2.0,M11.1.0	America/Denver
 USA &amp; Canada	Mountain Time (Arizona, no DST)	MST7	America/Phoenix
 USA &amp; Canada	Central Time	CST6CDT,M3.2.0,M11.1.0	America/Chicago
 USA &amp; Canada	Eastern Time	EST5EDT,M3.2.0,M11.1.0	America/New_York
+USA &amp; Canada	Atlantic Time	AST4ADT,M3.2.0,M11.1.0	America/Halifax
 
 Atlantic	Bermuda	AST4ADT,M3.2.0,M11.1.0	Atlantic/Bermuda
 
@@ -46,7 +47,7 @@ Asia (UTC+1)	Anadyr	ANAT-12ANAST,M3.5.0,M10.5.0/3	Asia/Anadyr
 
 Asia (UTC+2)	Amman	EET-2EEST,M3.5.4/0,M10.5.5/1	Asia/Amman
 Asia (UTC+2)	Beirut	EET-2EEST,M3.5.0/0,M10.5.0/0	Asia/Beirut
-Asia (UTC+2)	Damascus	EET-2EEST,M3.5.5/0,J274/0	Asia/Damascus
+Asia (UTC+2)	Damascus	EET-2EEST,M3.5.5/0,M11.1.5/0	Asia/Damascus
 Asia (UTC+2)	Gaza	EET-2EEST,J91/0,M9.2.4	Asia/Gaza
 Asia (UTC+2)	Jerusalem	GMT-2	Asia/Jerusalem
 Asia (UTC+2)	Nicosia	EET-2EEST,M3.5.0/3,M10.5.0/4	Asia/Nicosia
