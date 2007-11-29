@@ -44,5 +44,3 @@ echo "primary_dns $pdns" >> /etc/l2tpns/startup-config
 echo "secondary_dns $sdns" >> /etc/l2tpns/startup-config
 echo "bind_address $bindaddr" >> /etc/l2tpns/startup-config
 
-echo '@TR<<Applying>> @TR<<l2tpns settings>> ...'
-
