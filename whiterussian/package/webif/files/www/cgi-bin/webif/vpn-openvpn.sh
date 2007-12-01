@@ -1,4 +1,4 @@
-#!/usr/bin/webif-page "-U /tmp -u 4096"
+#!/usr/bin/webif-page
 <?
 # add haserl args in double quotes it has very ugly
 # command line parsing code!

@@ -1,4 +1,4 @@
-#!/usr/bin/webif-page "-U /tmp -u 4096"
+#!/usr/bin/webif-page
 <?
 # from: http://coova.org
 . /usr/lib/webif/webif.sh
@@ -14,7 +14,7 @@ else
 	save_setting pptp pptp_srv $FORM_pptp_srv
 fi
 
-header "VPN" "PPTP" "@TR<<PPTP>>" '' "$SCRIPT_NAME"
+header "VPN" "PPTP" "@TR<<PPTP>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 if [ ! -e /etc/ppp/functions.sh ]; then
 	has_pkgs pptp pptpd
