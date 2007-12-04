@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3701
+lang_for_svn => 3785
 
 ## /usr/lib/webif/apn.csv
 Vodafone UK => Vodafone VB
@@ -1606,16 +1606,22 @@ Firmware Image => Obraz firmware
 HelpText Firmware_Image => Můžete zvolit jakýkoli BIN nebo TRX kompatibilní obraz.
 
 ## /www/cgi-bin/webif/vpn-openvpn.sh
-VPN => VPN
-OpenVPN => OpenVPN
+vpn_openvpn_Error => Chyba
+vpn_openvpn_upload_failed => Nelze zpracovat načtený soubor
+vpn_openvpn_directory_failed => Nelze vytvořit adresář openvpn
 Start VPN Connection => Připojit VPN
-Disabled => Zakázáno
-Enabled => Povoleno
-Connection Settings => Nastavení spojení
 Server Address => Adresa serveru
 Protocol => Protokol
 Server Port (default: 1194) => Port serveru (výchozí: 1194)
 Authentication Method => Metoda ověření
+VPN => VPN
+OpenVPN => OpenVPN
+vpn_openvpn_Installing_package => Instaluji balíček openvpn ...
+vpn_openvpn_warn => VPN nebide pracovat, dokud nenainstalijete OpenVPN:
+vpn_openvpn_install_package => Instalovat balíček OpenVPN
+Disabled => Zakázáno
+Enabled => Povoleno
+Connection Settings => Nastavení spojení
 Preshared Key => Předsdílený klíč
 Certificate (PKCS12) => Certifikát (PKCS12)
 Certificate (PEM) => Certifikát (PEM)
@@ -1627,24 +1633,17 @@ Found Installed Keyfile => Nalezen nainstalovaný klíč
 Upload Preshared Key => Načíst předsdílený klíč
 Certificate Status => Stav certifikátu
 No Certificate uploaded yet! => Dosud nebyl načten žádný certifikát!
-Upload Successful => Načtení bylo úspěšné
 Found Installed Certificate. => Nalezen nainstalovaný certifikát.
 Upload PKCS12 Certificate => Načíst certifikát PKCS12
-Certificate Status => Stav certifikátu
-Root CA certificate uploaded yet! => Dosud nebyl načten kořenový certifikát CA!
-Upload Successful => Načtení bylo úspěšné
-Found Installed Certificate. => Nalezen nainstalovaný certifikát.
+No Root CA certificate uploaded yet! => Dosud nebyl načten kořenový certifikát CA!
 Upload Root CA certificate => Načíst kořenový certifikát CA
-Certificate Status => Stav certifikátu
 No client certificate uploaded yet! => Dosud nebyl načten klientský certifikát!
-Upload Successful => Načtení bylo úspěšné
-Found Installed Certificate. => Nalezen nainstalovaný certifikát.
 Upload Client Certificate => Načíst klientský certifikát
-Certificate Status => Stav certifikátu
 No client key uploaded yet! => Dosud nebyl načten žádný klientský klíč!
-Upload Successful => Načtení bylo úspěšné
 Found installed client key. => Nalezen nainstalovaný klientský klíč
 Upload Client Key => Načíst klientský klíč
+vpn_openvpn_upload => Načtení klíče/certifikátu
+vpn_openvpn_upload_helptext => Načítejte pouze jeden klíč/certifikát najednou. Vymažte obsah vyplněné položky, chcete-li načíst jiný klíč/certifikát.
 
 ## /www/cgi-bin/webif/vpn-pptp.sh
 VPN => VPN
