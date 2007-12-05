@@ -1,7 +1,6 @@
 #!/bin/sh /etc/rc.common
+
 START=60
-. /lib/config/uci.sh
-uci_load openvpn
 
 status="0"
 file_check() {
@@ -14,6 +13,8 @@ file_check() {
 }
 
 start() {
+	. /lib/config/uci.sh
+	uci_load openvpn
 	case "$CONFIG_general_mode" in
 		client)
 			SERVER="$CONFIG_client_ipaddr"
@@ -67,16 +68,19 @@ start() {
 		*)
 			exit 0
 		:;
-	esac	
+	esac
 }
-restart() {
-		$0 stop
-		sleep 3
-		$0 start
-}
-reload() {
-		killall -SIGHUP openvpn
-}
+
 stop() {
-		killall openvpn
+	killall openvpn
+}
+
+restart() {
+	stop
+	sleep 3
+	start
+}
+
+reload() {
+	killall -SIGHUP openvpn
 }
