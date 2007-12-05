@@ -20,7 +20,7 @@ function checked(name)
 function hide(name)
 {
 	var item = document.getElementById(name);
-	if (item) 
+	if (item)
 		item.style.display = 'none';
 }
 function show(name)

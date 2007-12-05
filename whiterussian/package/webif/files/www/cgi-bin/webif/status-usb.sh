@@ -1,7 +1,7 @@
 #!/usr/bin/webif-page
 <?
 #
-# This page is synchronized between kamikaze and WR branches. Changes to it *must* 
+# This page is synchronized between kamikaze and WR branches. Changes to it *must*
 # be followed by running the webif-sync.sh script.
 #
 . /usr/lib/webif/webif.sh

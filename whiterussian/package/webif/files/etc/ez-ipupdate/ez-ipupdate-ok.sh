@@ -9,5 +9,5 @@ ddns_dir="/etc/ez-ipupdate"
 ddns_cache="$ddns_dir/ez-ipupdate.cache"
 ddns_msg="$ddns_dir/ez-ipupdate.msg"
 
-echo -n "OK. Successful update to $1 at: " > $ddns_msg 
+echo -n "OK. Successful update to $1 at: " > $ddns_msg
 date >> $ddns_msg

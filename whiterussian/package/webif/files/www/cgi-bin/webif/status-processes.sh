@@ -39,7 +39,7 @@ $meta_refresh
 <!--
 function targetwindow(url) {
 	var wasOpen  = false;
-	var win = window.open(url);    
+	var win = window.open(url);
 	return (typeof(win)=='object')?true:false;
 }
 -->

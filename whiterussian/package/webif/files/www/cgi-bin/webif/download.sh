@@ -6,7 +6,7 @@
 #
 # Description:
 #  The primary goal is to be able to download files off the
-#  httpd root. The second goal is to limit the time of the 
+#  httpd root. The second goal is to limit the time of the
 #  existence of the temporary file and remove it when the
 #  timeout expires.
 #  The page accepts both POST and GET requests.

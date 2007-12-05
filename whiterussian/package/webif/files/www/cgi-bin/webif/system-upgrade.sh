@@ -10,7 +10,7 @@ do_upgrade() {
 		nvram set boot_wait=on
 		nvram commit
 	}
-	echo "<br />@TR<<Upgrading firmware, please wait>> ... <br />"	
+	echo "<br />@TR<<Upgrading firmware, please wait>> ... <br />"
 	# free some memory :)
 	ps | grep -vE 'Command|init|\[[kbmj]|httpd|haserl|bin/sh|awk|kill|ps|webif' | awk '{ print $1 }' | xargs kill -KILL
 	MEMFREE="$(awk 'BEGIN{ mem = 0 } ($1 == "MemFree:") || ($1 == "Cached:") {mem += int($2)} END{print mem}' /proc/meminfo)"
@@ -77,7 +77,7 @@ equal "$REQUEST_METHOD" "GET" && {
 			<td>
 				<input type="checkbox" name="boot_wait" value="1" />
 			</td>
-		</tr>				
+		</tr>
 		<tr>
 			<td>@TR<<Erase_JFFS2|Erase JFFS2 partition>>:</td>
 			<td>

@@ -8,7 +8,7 @@ BEGIN {
 	output=""
 }
 
-{ 
+{
 	valid_type = 0
 	valid = 1
 	# XXX: weird hack, but it works...

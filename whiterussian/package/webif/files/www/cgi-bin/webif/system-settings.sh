@@ -265,7 +265,7 @@ is_bcm947xx && {
 #
 ! exists "/etc/themes.lst" && {
 	# create list if it doesn't exist ..
-	/usr/lib/webif/webif-mkthemelist.sh	
+	/usr/lib/webif/webif-mkthemelist.sh
 }
 THEMES=$(cat "/etc/themes.lst")
 for str in $temp_t; do

@@ -358,7 +358,7 @@ callback_foreach_rule() {
 	}
 	# if we are adding, always keep last index in FORM_qos_edit
 	! empty "$FORM_qos_add" && FORM_qos_edit="$section_name"
-	last_shown_rule="$section_name"	
+	last_shown_rule="$section_name"
 }
 
 config_foreach callback_foreach_rule

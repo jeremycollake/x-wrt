@@ -52,9 +52,9 @@ empty "$FORM_remove_line" || update_dnsmasq del "$FORM_iface" "$FORM_line"
 		FORM_dhcp_num=${FORM_dhcp_num:-$(nvram get ${FORM_iface}_dhcp_num)}
 		FORM_dhcp_lease=${FORM_dhcp_lease:-$(nvram get ${FORM_iface}_dhcp_lease)}
 		FORM_dhcp_lease=${FORM_dhcp_lease:-12h}
-		
+
 		# convert lease time to minutes
-		lease_int=$(echo "$FORM_dhcp_lease" | tr -d [a-z][A-Z])			
+		lease_int=$(echo "$FORM_dhcp_lease" | tr -d [a-z][A-Z])
 		time_units=$(echo "$FORM_dhcp_lease" | tr -d [0-9])
 		time_units=${time_units:-m}
 		case "$time_units" in
@@ -62,10 +62,10 @@ empty "$FORM_remove_line" || update_dnsmasq del "$FORM_iface" "$FORM_line"
 			"d" | "D" ) let "FORM_dhcp_lease=$lease_int*24*60";;
 			"s" | "S" ) let "FORM_dhcp_lease=$lease_int/60";;
 			"w" | "W" ) let "FORM_dhcp_lease=$lease_int*7*24*60";;
-			"m" | "M" ) FORM_dhcp_lease="$lease_int";;  # minutes 			
+			"m" | "M" ) FORM_dhcp_lease="$lease_int";;  # minutes
 			*) FORM_dhcp_lease="$lease_int"; echo "<br />WARNING: Unknown suffix found on dhcp lease time: $FORM_dhcp_lease";;
-		esac					
-			
+		esac
+
 	fi
 if [ -n "$FORM_submit" ]; then
 	validate <<EOF
@@ -126,7 +126,7 @@ if [ -n "$FORM_iface" ]; then
 		netmask=$(nvram get ${FORM_iface}_netmask)
 		start=$(nvram get ${FORM_iface}_dhcp_start)
 		num=$(nvram get ${FORM_iface}_dhcp_num)
-		
+
 		if [ -f "/bin/ipcalc.sh" ]; then
 		eval $(ipcalc.sh $ipaddr $netmask ${start:-100} ${num:-150})
 		else

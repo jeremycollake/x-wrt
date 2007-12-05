@@ -23,7 +23,7 @@ header_inject_head=$(cat <<EOF
 <!--
 function targetwindow(url) {
 	var wasOpen  = false;
-	var win = window.open(url);    
+	var win = window.open(url);
 	return (typeof(win)=='object')?true:false;
 }
 function modechange()

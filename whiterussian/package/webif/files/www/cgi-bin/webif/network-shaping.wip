@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<? 
+<?
 # Copyright (c) 2006 David Bird <dbird@acm.org>
 # Released under GPL http://www.gnu.org/copyleft/gpl.html
 
@@ -34,7 +34,7 @@ shaper_defaults() {
 }
 
 
-if  empty "$FORM_submit"; then 
+if  empty "$FORM_submit"; then
     FORM_shape_onboot=${shape_onboot:-$(nvram get shape_onboot)}
     FORM_shape_onboot=${FORM_shape_onboot:-off}
 
@@ -45,7 +45,7 @@ if  empty "$FORM_submit"; then
     FORM_shape_rate_dn=${FORM_shape_rate_dn:-0}
 
     equal "$FORM_shape_onboot" "on" && shaper_defaults
-else 
+else
     SAVED=1
     val=""
     equal "$FORM_shape_onboot" "on" && equal "$FORM_shape" "on" && {

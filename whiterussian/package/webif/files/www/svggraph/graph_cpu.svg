@@ -31,9 +31,9 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 -->
-<svg xml:space='preserve' xmlns='http://www.w3.org/2000/svg' 
+<svg xml:space='preserve' xmlns='http://www.w3.org/2000/svg'
 	xmlns:xlink='http://www.w3.org/1999/xlink'
-	width='100%' height='100%' 
+	width='100%' height='100%'
 	viewBox='0 0 600 300'
 	preserveAspectRatio='none'
 	onload='init(evt)'
@@ -178,8 +178,8 @@ function plot_cpu_data(obj) {
 		var y_cpu = 298 - 2.975*cpu_data[i];
 		path_data += " L" + x + " " + y_cpu;
 	}
-   
-	
+
+
 	SVGDoc.getElementById('error').setAttributeNS(null, 'visibility', 'hidden');
 	SVGDoc.getElementById('graph_cpu').setAttributeNS(null, 'd', path_data);
 	SVGDoc.getElementById('graph_txt').firstChild.data = Math.round(cpu*10)/10 + '%';

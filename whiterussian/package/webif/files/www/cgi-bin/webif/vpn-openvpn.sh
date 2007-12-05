@@ -101,7 +101,7 @@ function modechange()
 	set_visible('certificate_status', v);
 	set_visible('certificate', v);
 	if (!v) set_value('openvpn_pkcs12file','');
-	
+
 	v = isset('openvpn_cli_auth', 'pem');
 	set_visible('root_ca_status', v);
 	set_visible('root_ca', v);

@@ -45,7 +45,7 @@ case "$1" in
 				exit
 			;;
 		esac
-		
+
 		if [ "$status" = "0" ]; then
 		openvpn --proto  "${PROTO:-udp}"		\
 			--port   "${PORT:-1194}"		\

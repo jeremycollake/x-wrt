@@ -4,7 +4,7 @@
 ###################################################################
 # Services configuration page
 #
-# This page is synchronized between kamikaze and WR branches. Changes to it *must* 
+# This page is synchronized between kamikaze and WR branches. Changes to it *must*
 # be followed by running the webif-sync.sh script.
 #
 # Description:
@@ -25,14 +25,14 @@ header "Network" "UPnP" "@TR<<UPnP Configuration>>" ' onload="modechange()" ' "$
 uci_load "upnpd"
 
 if ! empty "$FORM_install_miniupnp"; then
-	echo "@TR<<Installing>> miniUPNPd ...<pre>"		
+	echo "@TR<<Installing>> miniUPNPd ...<pre>"
 	install_package miniupnpd
 	uci_set "upnpd" "general" "enable" "1"
-	echo "</pre>"	
+	echo "</pre>"
 fi
 
 if ! empty "$FORM_install_linuxigd"; then
-	echo "@TR<<Installing>> linux-igd ...<pre>"		
+	echo "@TR<<Installing>> linux-igd ...<pre>"
 	install_package "http://ftp.berlios.de/pub/xwrt/packages/libupnp_1.2.1a_mipsel.ipk"
 	install_package "http://ftp.berlios.de/pub/xwrt/packages/linux-igd_1.0.1.ipk"
 	# if config file doesn't exist, create it since it doesn't come with above pkg at present
@@ -45,18 +45,18 @@ if ! empty "$FORM_install_linuxigd"; then
 fi
 
 if ! empty "$FORM_remove_miniupnpd"; then
-	echo "@TR<<Removing>> miniUPNPd ...<pre>"		
+	echo "@TR<<Removing>> miniUPNPd ...<pre>"
 	remove_package miniupnpd
 	#uci_set "upnpd" "general" "enable" "0"
-	echo "</pre>"	
+	echo "</pre>"
 fi
 
 if ! empty "$FORM_remove_linuxigd"; then
-	echo "@TR<<Removing>> linux-igd UPNPd ...<pre>"			
+	echo "@TR<<Removing>> linux-igd UPNPd ...<pre>"
 	remove_package linux-igd
 	remove_package libupnp
 	#uci_set "upnpd" "general" "enable" "0"
-	echo "</pre>"	
+	echo "</pre>"
 fi
 
 ipkg_listinst=$(ipkg list_installed)
@@ -82,7 +82,7 @@ exists "/etc/init.d/S95miniupnpd" && ! grep -iq "uci.sh" "/etc/init.d/S95miniupn
  	echo "<div class=\"warning\">You have an old version of miniupnpd incompatible with this webif version. You must upgrade to a newer miniupnpd package, else this page will not work properly.</div>"
 	display_form <<EOF
 	start_form
-	submit|upgrade_upnpd| @TR<<Upgrade UPNPd>> 
+	submit|upgrade_upnpd| @TR<<Upgrade UPNPd>>
 	end_form
 EOF
 }
@@ -94,12 +94,12 @@ if empty "$FORM_submit"; then
 	FORM_upnpd_up_bitspeed="$CONFIG_general_up_bitspeed"
 	FORM_upnpd_down_bitspeed="$CONFIG_general_down_bitspeed"
 else
-	if ! empty "$FORM_upgrade_upnpd"; then	
+	if ! empty "$FORM_upgrade_upnpd"; then
 		# upgrade miniupnpd
 		echo "@TR<<Please wait>> ...<br />"
 		ipkg remove miniupnpd 2>&1 >> /dev/null
 		# todo: force to use latest package - but since this is a temporary kludge to get
-		#  users upgraded, no big deal.			
+		#  users upgraded, no big deal.
 		if ipkg install "http://ftp.berlios.de/pub/xwrt/packages/miniupnpd_1.0-RC3-2_mipsel.ipk"  2>&1 >> /dev/null; then
 			echo " @TR<<Completed successfully>>!<br />"
 		else
@@ -120,7 +120,7 @@ cat <<EOF
 <script type="text/javascript">
 
 function modechange()
-{		
+{
 	if(isset('upnp_enable','1'))
 	{
 		document.getElementById('upnpd_up_bitspeed').disabled = false;

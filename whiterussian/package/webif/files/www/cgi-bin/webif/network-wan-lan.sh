@@ -46,12 +46,12 @@ if empty "$FORM_submit"; then
 		static|dhcp|pptp|pppoe|wwan) ;;
 		# otherwise select "none"
 		*) FORM_wan_proto="none";;
-	esac	
+	esac
 
 	# pptp, dhcp and static common
 	FORM_wan_ipaddr=${wan_ipaddr:-$(nvram get wan_ipaddr)}
 	FORM_wan_netmask=${wan_netmask:-$(nvram get wan_netmask)}
-	FORM_wan_gateway=${wan_gateway:-$(nvram get wan_gateway)}	
+	FORM_wan_gateway=${wan_gateway:-$(nvram get wan_gateway)}
 
 	# ppp common
 	FORM_ppp_username=${ppp_username:-$(nvram get ppp_username)}
@@ -67,7 +67,7 @@ if empty "$FORM_submit"; then
 	esac
 
 	FORM_pptp_server_ip=${pptp_server_ip:-$(nvram get pptp_server_ip)}
-	
+
 	# umts apn
 	FORM_wwan_service=${wwan_service:-$(nvram get wwan_service)}
 	FORM_wwan_pincode="-@@-"
@@ -246,7 +246,7 @@ function modechange()
 
 	v = isset('wan_proto', 'pptp');
 	set_visible('pptp_server', v);
-	
+
 	v = isset('wan_proto', 'wwan');
 	set_visible('wwan_type', v);
 	set_visible('wwan_service', v);

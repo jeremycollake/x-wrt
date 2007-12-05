@@ -6,7 +6,7 @@
 # Description:
 #	Allows upgrade of webif.
 #
-# Author(s) [in order of work date]: 
+# Author(s) [in order of work date]:
 #   	Jeremy Collake <jeremy.collake@gmail.com>
 #
 # Major revisions:
@@ -14,7 +14,7 @@
 # NVRAM variables referenced:
 #	none
 #
-# Configuration files referenced: 
+# Configuration files referenced:
 #	none
 #
 header "System" "Webif Upgrade" "@TR<<Webif Upgrade>>" '' "$SCRIPT_NAME"
@@ -24,8 +24,8 @@ export
 ! empty "$FORM_install_webif" && {
 	echo "Please wait, installation may take a minute ... <br />"
 	echo "<pre>"
-	#ipkg install http://ftp.berlios.de/pub/xwrt/webif_latest.ipk	
-	echo "</pre>" 		
+	#ipkg install http://ftp.berlios.de/pub/xwrt/webif_latest.ipk
+	echo "</pre>"
 }
 
 this_revision=$(cat "/www/.version")

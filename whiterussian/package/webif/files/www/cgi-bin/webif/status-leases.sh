@@ -4,7 +4,7 @@
 ###################################################################
 # Status DHCP Leases
 #
-# This page is synchronized between kamikaze and WR branches. Changes to it *must* 
+# This page is synchronized between kamikaze and WR branches. Changes to it *must*
 # be followed by running the webif-sync.sh script.
 #
 # The page awaits validation in kamikaze.

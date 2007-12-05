@@ -13,9 +13,9 @@ ddns_exec_ok="$ddns_dir/${ezipupdate_name}-ok.sh"
 ddns_msg="$ddns_dir/${ezipupdate_name}.msg"
 
 getPID(){
-	if [ -f $ezipupdate_pid ]; then 
+	if [ -f $ezipupdate_pid ]; then
 		echo $(cat $ezipupdate_pid 2>/dev/null)
-	else 
+	else
 		echo ""
 	fi
 }

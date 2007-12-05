@@ -18,7 +18,7 @@ load_settings "ezipupdate"
 	echo "<div class=\"warning\">@TR<<broken_ezip|You have a partially broken ez-ipupdate package, as found in OpenWrt's official repository. To install a fixed copy of the package from X-Wrt's repository, press the button below>>.</div>"
 	display_form <<EOF
 start_form
-submit|reinstall_ez| @TR<<Reinstall EZ-IPUPDATE>> 
+submit|reinstall_ez| @TR<<Reinstall EZ-IPUPDATE>>
 end_form
 EOF
 }

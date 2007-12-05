@@ -87,7 +87,7 @@ EOF
 	fi
 }
 
-! empty "$FORM_remove_repo_name" && ! empty "$FORM_remove_repo_url" && {	
+! empty "$FORM_remove_repo_name" && ! empty "$FORM_remove_repo_url" && {
 	repo_update_needed=1
 	repo_src_line="src $FORM_remove_repo_name $FORM_remove_repo_url"
 	remove_lines_from_file "/etc/ipkg.conf" "$repo_src_line"

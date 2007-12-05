@@ -31,9 +31,9 @@ CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
 ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 -->
-<svg xml:space='preserve' xmlns='http://www.w3.org/2000/svg' 
+<svg xml:space='preserve' xmlns='http://www.w3.org/2000/svg'
 	xmlns:xlink='http://www.w3.org/1999/xlink'
-	width='100%' height='100%' 
+	width='100%' height='100%'
 	viewBox='0 0 600 300'
 	preserveAspectRatio='none'
 	onload='init(evt)'
@@ -98,11 +98,11 @@ if (typeof getURL == 'undefined') {
 
 		http_request.onreadystatechange = function() {
 			if (http_request.readyState == 4) {
-				callback( 
+				callback(
 					{
 						success : true,
 						content : http_request.responseText,
-						contentType : http_request.getResponseHeader("Content-Type") 
+						contentType : http_request.getResponseHeader("Content-Type")
 					}
 				);
 			}
@@ -127,16 +127,16 @@ var scale_type = '@TR<<graph_if_follow#follow>>';
 
 var fetch_url='';
 
-function init(evt) {	
-	/* hacked in fix for all browsers by spectra 
-	 * he says is 'ugly', and someone may want to redo the 'right' way */	 
+function init(evt) {
+	/* hacked in fix for all browsers by spectra
+	 * he says is 'ugly', and someone may want to redo the 'right' way */
 	fetch_url=location.search.split('?');
-	fetch_url='/cgi-bin/webif/data.sh?' + fetch_url[fetch_url.length-1];		
-	/* end hacked in fix */	
+	fetch_url='/cgi-bin/webif/data.sh?' + fetch_url[fetch_url.length-1];
+	/* end hacked in fix */
 	SVGDoc = evt.target.ownerDocument;
 	SVGDoc.getElementById("switch_unit").addEventListener("mousedown", switch_unit, false);
 	SVGDoc.getElementById("switch_scale").addEventListener("mousedown", switch_scale, false);
-	
+
 	fetch_data();
 	setInterval('fetch_data()', 1000);
 }
@@ -167,18 +167,18 @@ function plot_data(obj) {
 	var data=obj.content.split("\n");
 	var dateStr=data[0];
 	//fake timezone cause the real value might confuse JS
-	dateStr=dateStr.replace(/ [A-Z]+ /, ' GMT '); 
+	dateStr=dateStr.replace(/ [A-Z]+ /, ' GMT ');
 	var ugmt=(Date.parse(dateStr))/1000;
 
 	data=data[1].split(/\s+|:/);
 	while (data[0]!=parseInt(data[0])) {
 		data.shift();
-		
+
 		if (0==data.length) return;
 	}
 	var ifin=parseInt(data[0]);
 	var ifout=parseInt(data[8]);
-	
+
 	if (!isNumber(ifin) || !isNumber(ifout)) {
 		return handle_error();
 	}
@@ -192,7 +192,7 @@ function plot_data(obj) {
 	last_ugmt = ugmt;
 	last_ifin = ifin;
 	last_ifout = ifout;
-	
+
 	switch (plot_in.length) {
 	case 0:
 		SVGDoc.getElementById("collect_initial").setAttributeNS(null, 'visibility', 'visible');
@@ -281,7 +281,7 @@ function makeRoundMax(max) {
 			} else {
 				rmax *= 2;
 			}
-			
+
 			if (i == 8) rmax *= 1.024;
 		}
 	}

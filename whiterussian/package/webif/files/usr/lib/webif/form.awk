@@ -3,7 +3,7 @@
 # $3 = form variable value
 # $4 = (radio button) value of button
 # $5 = string to append
-# $6 = additional attributes 
+# $6 = additional attributes
 
 BEGIN {
 	FS="|"
@@ -11,7 +11,7 @@ BEGIN {
 	optgroup_open = 0
 }
 
-# trim leading whitespaces 
+# trim leading whitespaces
 {
 	gsub(/^[ \t]+/,"",$1)
 }
@@ -123,9 +123,9 @@ $1 ~ /^txtfile/ {
 }
 $1 ~ /^caption/ { print "<b>" $2 "</b>" }
 $1 ~ /^string/ { print $2 }
-$1 ~ /^tip/ { 
+$1 ~ /^tip/ {
 	print "<tr><td colspan=\"3\"><div class=\"tip\">" $2 "</div></td></tr>"
-}	
+}
 $1 ~ /^textarea/ {
 	rows = ""
 	if ($4 != "") rows = " rows=\"" $4 "\""
@@ -137,10 +137,10 @@ $1 ~ /^textarea/ {
 }
 #####################################################
 # progressbar|id|title|width_percent|percent_complete|filled_caption|unfilled_caption
-# 
+#
 ($1 ~ /^progressbar/) {
 	print "<div class=\"progressbar\" style=\"width:" $4 "px\">"
-	print "	<span class=\"progress\" style=\"width:" $6 "\">" $6 "</span>"	
+	print "	<span class=\"progress\" style=\"width:" $6 "\">" $6 "</span>"
 	print "</div>"
 	#show caption
 	if ($3 != "" ) print "<em>" $3 "</em>"

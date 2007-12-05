@@ -51,7 +51,7 @@ net_ip_up() {
     fi
 }
 
-# net_ip_down ppp     $TTY 
+# net_ip_down ppp     $TTY
 # net_ip_down openvpn $TUN
 net_ip_down() {
     echo "ipdown: $@" >> $LOG
@@ -65,11 +65,11 @@ BEGIN {
   ifaces=""
   ptp=0
 }
-($0 ~ /^[^ \t]/) { 
+($0 ~ /^[^ \t]/) {
   iface=$1
   gsub(/\.[0-9]+$/,"",iface)
 }
-($3 ~ /^encap:/) { 
+($3 ~ /^encap:/) {
   encap=$3
   gsub(/encap:/,"",encap)
   if (encap == "Ethernet") {
@@ -77,7 +77,7 @@ BEGIN {
   }
   next
 }
-($2 ~ /^addr:/) { 
+($2 ~ /^addr:/) {
   ip=$2
   gsub(/addr:/,"",ip)
 
@@ -101,7 +101,7 @@ BEGIN {
 ($0 ~ /^[ \t]*$/) {
   clifile=""
   "grep -l \"^" iface " \" / /tmp/net/???_ip.* 2>/dev/null | tail -n 1" | getline clifile
-  if (clifile != "") { 
+  if (clifile != "") {
     "basename " clifile | getline clifile
     gsub(/..._ip./,"",clifile)
   }
@@ -114,7 +114,7 @@ BEGIN {
     if (encap == "UNSPEC") { encap="Pnt-to-Pnt"; }
 
     if (opt == "raw") {
-      print iface " " ip " " mask " " encap " " link " " clifile " " rx_bytes " " rx_desc " " tx_bytes " " tx_desc 
+      print iface " " ip " " mask " " encap " " link " " clifile " " rx_bytes " " rx_desc " " tx_bytes " " tx_desc
     } else {
       print iface "=\"" iface " " ip " " mask " " encap " " link " " clifile " " rx_bytes " " rx_desc " " tx_bytes " " tx_desc "\""
     }
@@ -138,12 +138,12 @@ brctrl_ifaces() {
 BEGIN {
   ifaces=""
 }
-(NF == 4) { 
+(NF == 4) {
   iface=$4
   gsub(/\.[0-9]+$/,"",iface)
   ifaces=ifaces " " iface
 }
-(NF == 1) { 
+(NF == 1) {
   iface=$1
   gsub(/\.[0-9]+$/,"",iface)
   ifaces=ifaces " " iface
@@ -164,46 +164,46 @@ int2ip() {
 }
 
 
-#pptpd 
+#pptpd
  USERS=/etc/ppp/users
  PEERS=/etc/ppp/peers
- 
+
  # users.pptpd format:
  # username password ip-address
- 
+
  # users.pptp format:
  # peername username password ip-address
- 
+
  # peers.pptp format:
- # peername host-name username 
- 
+ # peername host-name username
+
  ppp_del_user() {
      rm_entry "$2" $USERS.$1
  }
- 
+
  ppp_add_user() {
      ppp_del_user "$1" "$2"
      echo "$2 $3 $4 $5" >> $USERS.$1
  }
- 
+
  ppp_del_peer() {
      rm_entry "$2" $USERS.$1
      rm_entry "$2" $PEERS.$1
  }
- 
+
  ppp_add_peer() {
      ppp_add_user "$1" "$2" "$4" "$5" "$6"
      rm_entry "$2" $PEERS.$1
      echo "$2 $3 $4" >> $PEERS.$1
  }
- 
+
  build_chap_secrets() {
      mkdir /etc/ppp/peers 2>&-
      touch /etc/ppp/users.pptpd /etc/ppp/users.pptp /etc/ppp/peers.pptp
      grep -v pptp /etc/ppp/chap-secrets > /tmp/chap-secrets
      awk '{print $1 " pptpd " $2 " " $3}' /etc/ppp/users.pptpd >> /tmp/chap-secrets
      awk '{print $2 " pptp:" $1 " " $3 " " $4}' /etc/ppp/users.pptp >> /tmp/chap-secrets
- 
+
      awk '{
             peer="/etc/ppp/peers/pptp:" $1
             print "pty \"pptp " $2 " --nolaunchpppd\"" > peer
@@ -212,8 +212,8 @@ int2ip() {
             print "remotename pptp:" $1 >> peer
             print "file /etc/ppp/options.pptp" >> peer
             print "ipparam pptp:" $1 >> peer
-          }' /etc/ppp/peers.pptp 
- 
+          }' /etc/ppp/peers.pptp
+
      rm /etc/ppp/chap-secrets
      mv /tmp/chap-secrets /etc/ppp/chap-secrets
      chmod 700 /etc/ppp/chap-secrets

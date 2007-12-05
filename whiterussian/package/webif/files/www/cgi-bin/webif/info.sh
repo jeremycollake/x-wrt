@@ -2,7 +2,7 @@
 <?
 . /usr/lib/webif/webif.sh
 #
-# This page is synchronized between kamikaze and WR branches. Changes to it *must* 
+# This page is synchronized between kamikaze and WR branches. Changes to it *must*
 # be followed by running the webif-sync.sh script.
 #
 # TODO: This page looks ugly anymore (rendered).
@@ -21,7 +21,7 @@ version_file=".version-stable"
 daily_checked=""
 upgrade_button=""
 
-equal "$FORM_check_daily" "1" && {	
+equal "$FORM_check_daily" "1" && {
 	version_file=".version"
 	package_filename="webif_latest.ipk"
 	daily_checked="checked=\"checked\""
@@ -31,8 +31,8 @@ if [ -n "$FORM_update_check" ]; then
 	echo "@TR<<Please wait>> ...<br />"
 	tmpfile=$(mktemp "/tmp/.webif-XXXXXX")
 	rm -f $tmpfile
-	wget -q "$version_url$version_file" -O "$tmpfile" 2>&-	
-	! exists "$tmpfile" && echo "doesn't exist" > "$tmpfile"		
+	wget -q "$version_url$version_file" -O "$tmpfile" 2>&-
+	! exists "$tmpfile" && echo "doesn't exist" > "$tmpfile"
 	cat $tmpfile | grep -q "doesn't exist"
 	if [ $? = 0 ]; then
 		revision_text="<em class=\"warning\">@TR<<info_error_checking#ERROR CHECKING FOR UPDATE>><em>"
@@ -114,7 +114,7 @@ cat <<EOF
 	<tr>
 		<td><strong>@TR<<Username>></strong></td><td>&nbsp;</td>
 		<td>$user_string</td>
-	</tr>	
+	</tr>
 </tbody>
 </table>
 <br />
@@ -130,13 +130,13 @@ cat <<EOF
 </tbody>
 </table>
 
-<form action="" enctype="multipart/form-data" method="post">	
+<form action="" enctype="multipart/form-data" method="post">
 <table summary="Update webif">
 <tbody>
 	<tr>
 		<td colspan="2">
 		<input type="submit" value=" @TR<<info_check_update#Check For Webif&sup2; Update>> " name="update_check" />
-		$upgrade_button		
+		$upgrade_button
 		</td>
 	</tr>
 <tr><td colspan="2"><input type="checkbox" $daily_checked value="1" name="check_daily" id="field_check_daily" />@TR<<info_check_daily_text#Include daily builds when checking for update to webif&sup2;>></td>

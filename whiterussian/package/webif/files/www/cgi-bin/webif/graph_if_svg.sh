@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-Content-Type: image/svg+xml 
+Content-Type: image/svg+xml
 Content-Disposition: inline
 Pragma: no-cache
 

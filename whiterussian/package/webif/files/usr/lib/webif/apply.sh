@@ -202,7 +202,7 @@ reload_system() {
 reload_timezone() {
 	# create symlink to /tmp/TZ if /etc/TZ doesn't exist
 	# todo: -e | -f | -d didn't seem to work here, so I used find
-	if [ -z $(find "/etc/TZ" 2>/dev/null) ]; then 
+	if [ -z $(find "/etc/TZ" 2>/dev/null) ]; then
 		ln -s /tmp/TZ /etc/TZ
 	fi
 	# eJunky: set timezone
@@ -263,7 +263,7 @@ reload_ezipupdate() {
 			echo_restarting_service "@TR<<apply_ez-ipupdate#ez-ipupdate>>"
 			$ezipupdate_init restart >&- 2>&- &
 			echo_action_done
-		else		
+		else
 			echo_stopping_service "@TR<<apply_ez-ipupdate#ez-ipupdate>>"
 			$ezipupdate_init stop >&- 2>&- &
 			echo_action_done
@@ -278,7 +278,7 @@ nvram_unset() {
 	cat /tmp/.webif/file-nvramunset 2>&- | grep '=' >&- 2>&- && {
 		log_message "@TR<<apply_Committing_NVRAM#Committing NVRAM>>"
 		exists "/usr/sbin/nvram" && {
-			cat /tmp/.webif/file-nvramunset 2>&- | grep '=' | cut -d'=' -f1 | tee fd/1 | xargs -n1 nvram unset	
+			cat /tmp/.webif/file-nvramunset 2>&- | grep '=' | cut -d'=' -f1 | tee fd/1 | xargs -n1 nvram unset
 			cat /tmp/.webif/config-* 2>&- | grep '=' >&- 2>&- || nvram commit
 			rm -f /tmp/.webif/file-nvramunset 2>&-
 		}
@@ -379,7 +379,7 @@ reload_log() {
 	cat /tmp/.webif/config-* 2>&- | grep '=' >&- 2>&- && {
 		log_message "@TR<<apply_Committing_NVRAM#Committing NVRAM>>"
 		exists "/usr/sbin/nvram" && {
-			cat /tmp/.webif/config-* 2>&- | tee fd/1 | xargs -n1 nvram set	
+			cat /tmp/.webif/config-* 2>&- | tee fd/1 | xargs -n1 nvram set
 			nvram commit
 		}
 		echo_action_done
@@ -447,9 +447,9 @@ switch_language() {
 init_theme() {
 	! equal "$CONFIG_theme_id" "$CONFIG_orig_theme_id" && {
 		log_message "@TR<<apply_Initializing_theme#Initializing theme>>"
-		# if theme isn't present, then install it		
+		# if theme isn't present, then install it
 		! exists "/www/themes/$CONFIG_theme_id/webif.css" && {
-			install_package "webif-theme-$CONFIG_theme_id"	
+			install_package "webif-theme-$CONFIG_theme_id"
 		}
 		if ! exists "/www/themes/$CONFIG_theme_id/webif.css"; then
 			# if theme still not installed, there was an error
@@ -461,7 +461,7 @@ init_theme() {
 				rm /www/themes/active
 				ln -s /www/themes/$CONFIG_theme_id /www/themes/active
 			}
-		fi		
+		fi
 		echo_action_done
 	}
 }

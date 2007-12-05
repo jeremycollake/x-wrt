@@ -8,7 +8,7 @@ runppp() { pppd call pptp:$1 updetach; }
 case "$1" in
     start)
 	build_chap_secrets
-	for module in slhc ppp_generic ppp_async ip_gre arc4 sha1 ppp_mppe_mppc; do 
+	for module in slhc ppp_generic ppp_async ip_gre arc4 sha1 ppp_mppe_mppc; do
 	    /sbin/insmod $module 2>&- >&-
 	done
 	if [ -n "$2" ]; then

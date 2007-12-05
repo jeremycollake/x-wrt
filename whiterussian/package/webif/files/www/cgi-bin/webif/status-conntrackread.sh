@@ -12,7 +12,7 @@ if [ -n "$FORM_newfilter" ]; then
 	echo "# for temporary processing; you are free to delete it" >> "$filter_temp" 2>/dev/null
 	echo "filtext=$FORM_filtext" >> "$filter_temp" 2>/dev/null
 	echo "filtmode=$FORM_filtmode" >> "$filter_temp" 2>/dev/null
-else 
+else
 	if [ -e "$filter_temp" ]; then
 		FORM_filtext=$(sed '/^filtext=/!d; s/^filtext=//' "$filter_temp" 2>/dev/null)
 		FORM_filtmode=$(sed '/^filmode=/!d; s/^filtmode=//' "$filter_temp" 2>/dev/null)

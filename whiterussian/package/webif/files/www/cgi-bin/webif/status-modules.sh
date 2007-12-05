@@ -64,7 +64,7 @@ BEGIN{
 }
 {
 	if (length($0) != 0) {
-		
+
 		if (odd == 1) {
 			print tr_ind "<tr>"
 			odd--

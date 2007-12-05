@@ -96,7 +96,7 @@ Pragma: no-cache
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <?xml version="1.0" encoding="UTF-8"?>
 <head>
-	<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />        
+	<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
 	<title></title>
 	<style type="text/css">
 		html, body { background-color: transparent; }
@@ -128,7 +128,7 @@ header() {
 	_webif_rev=$(cat /www/.version)
 	_head="${3:+<h2>$3$_saved_title</h2>}"
 	_form="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />}"
-	_savebutton="${5:+<div class=\"page-save\"><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></div>}"        
+	_savebutton="${5:+<div class=\"page-save\"><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></div>}"
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}
 
@@ -169,7 +169,7 @@ Pragma: no-cache
 	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_black.css" title="black" />
 	<!--[if lt IE 7]>
 		<link rel="stylesheet" type="text/css" href="/themes/active/ie_lt7.css" />
-	<![endif]-->                
+	<![endif]-->
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="expires" content="-1" />
 	<script type="text/javascript" src="/js/styleswitcher.js"></script>
@@ -262,7 +262,7 @@ footer() {
 	_changes=${CHANGES#0}
 	_changes=${_changes:+(${_changes})}
 	_endform=${_savebutton:+</form>}
-	
+
 
 cat <<EOF
 </div>
@@ -275,7 +275,7 @@ cat <<EOF
 		<li><a href="config.sh?mode=clear&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Clear Changes>> &laquo;</a></li>
 		<li><a href="config.sh?mode=review&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Review Changes>> $_changes &laquo;</a></li>
 	</ul>
-</fieldset>        
+</fieldset>
 $_endform
 <hr />
 <div id="footer">

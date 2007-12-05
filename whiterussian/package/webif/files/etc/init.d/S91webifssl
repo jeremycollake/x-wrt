@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (C) 2007 X-Wrt.org 
+# Copyright (C) 2007 X-Wrt.org
 . /etc/functions.sh
 
 START=91
@@ -60,7 +60,7 @@ start() {
 					eval $($IPCALC_CMD "$CONFIG_remote_host")
 					[ "$CONFIG_remote_host" = "$IP" ] && OPTIONS="$OPTIONS$CONFIG_remote_host:"
 				}
-				
+
 			}
 			[ "$CONFIG_remote_port" -lt 1 -o "$CONFIG_remote_port" -gt 65535 ] 2>/dev/null && CONFIG_listen_port="$DEFAULT_listen_port"
 			OPTIONS="$OPTIONS$CONFIG_remote_port"

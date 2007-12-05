@@ -156,7 +156,7 @@ else
 	 {
 		SAVED=1
 # TODO: A bug exists in validate where if blank lines preceed a validation entry then it can fail validation
-#  without any reported error, only the return value is bad. The old code here used seperate validation 
+#  without any reported error, only the return value is bad. The old code here used seperate validation
 #  strings, i.e. V_PSK, V_WEP. This would result in blank lines in the validation call, causing this anomaly.
 		case "$FORM_encryption" in
 			wpa) V_ENCRYPTION="$V_ENCRYPTION

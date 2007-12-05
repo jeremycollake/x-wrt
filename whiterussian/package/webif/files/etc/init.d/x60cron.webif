@@ -17,7 +17,7 @@ getPID(){
 start() {
 	if [ "$(nvram get cron_enable)" = "1" ]; then
 		pid=$(getPID)
-		if [ -z "$pid" ]; then 
+		if [ -z "$pid" ]; then
 			echo -n "Starting crond: "
 			( /usr/sbin/crond && echo "OK" ) || echo "ERROR"
 		else
@@ -28,11 +28,11 @@ start() {
 	fi
 }
 
-stop() { 
+stop() {
 	pid=$(getPID)
 	if [ -n "$pid" ]; then
 		echo -n "Stopping crond: "
-		( { 
+		( {
 			kill $pid >/dev/null 2>&1
 		} && echo "OK" ) || echo "ERROR"
 	else

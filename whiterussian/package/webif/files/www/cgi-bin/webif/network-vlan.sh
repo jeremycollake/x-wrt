@@ -123,7 +123,7 @@ if ! empty "$FORM_submit"; then
 
 				#
 				# does port exist in alternate VLANs?
-				#				
+				#
 				! equal "$port_counter" "5" && {
 					CountNumberOfVLANsThatContainPortX "$port_counter" || {
 						# add 't' to indicate 'tagged'
@@ -132,7 +132,7 @@ if ! empty "$FORM_submit"; then
 				}
 				#
 				# if port 5 of vlan 0, add '*'
-				# 
+				#
 				equal "$count" "0" && equal "$port_counter" "5" && {
 					current_vlan_ports="${current_vlan_ports}*"
 				}
@@ -165,14 +165,14 @@ fi
 FORM_port_headers="string|<tr><th></th>"
 for current_port in $(seq $PORT_BASE $MAX_PORT); do
 	current_hdr=""
-	case $current_port in 
+	case $current_port in
 		"$wan_port") current_hdr="WAN";;
 		"0" ) current_hdr="eNet0";;
 		"1" ) current_hdr="eNet1";;
 		"2" ) current_hdr="eNet2";;
 		"3" ) current_hdr="eNet3";;
 		"4" ) current_hdr="eNet4";;
-		"5" ) current_hdr="Internal";;		
+		"5" ) current_hdr="Internal";;
 	esac
 	FORM_port_headers="${FORM_port_headers}<th>$current_hdr</th>"
 done

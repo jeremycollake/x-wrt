@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<? 
+<?
 # Copyright (c) 2006 David Bird <dbird@acm.org>
 # Released under GPL http://www.gnu.org/copyleft/gpl.html
 
@@ -26,7 +26,7 @@ cat<<EOF
 EOF
 s=${FORM_show:-iptables}
 
-case $s in 
+case $s in
     iptables) ;;
     class) ;;
     qdisc) ;;
@@ -65,7 +65,7 @@ cat<<EOF
 EOF
 }
 
-footer 
+footer
 ?>
 <!--
 ##WEBIF:name:Status:8:Shaping

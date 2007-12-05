@@ -12,7 +12,7 @@ PEERS=/etc/ppp/peers
 # peername username password ip-address
 
 # peers.pptp format:
-# peername host-name username 
+# peername host-name username
 
 ppp_del_user() {
     rm_entry "$2" $USERS.$1
@@ -49,7 +49,7 @@ build_chap_secrets() {
            print "remotename pptp:" $1 >> peer
            print "file /etc/ppp/options.pptp" >> peer
            print "ipparam pptp:" $1 >> peer
-         }' /etc/ppp/peers.pptp 
+         }' /etc/ppp/peers.pptp
 
     rm /etc/ppp/chap-secrets
     mv /tmp/chap-secrets /etc/ppp/chap-secrets

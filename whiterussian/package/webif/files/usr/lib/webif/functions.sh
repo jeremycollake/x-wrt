@@ -178,7 +178,7 @@ has_pkgs() {
 			retval=1;
 			nothave=$((nothave + 1))
 		}
-	done	
+	done
 	equal "$pcnt" "$nothave" && {
 		_savebutton=""
 	}

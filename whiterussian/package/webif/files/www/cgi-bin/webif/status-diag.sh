@@ -4,7 +4,7 @@
 ###################################################################
 # Diagnostics
 #
-# This page is synchronized between kamikaze and WR branches. Changes to it *must* 
+# This page is synchronized between kamikaze and WR branches. Changes to it *must*
 # be followed by running the webif-sync.sh script.
 #
 # Description:
@@ -48,41 +48,41 @@ does_process_exist() {
 }
 
 ! empty "$FORM_ping_button" || ! empty "$FORM_tracert_button" && {
-	! empty "$FORM_ping_button" && {		
-		sanitized=$(echo "$FORM_ping_hostname" | awk -f "/usr/lib/webif/sanitize.awk")	
+	! empty "$FORM_ping_button" && {
+		sanitized=$(echo "$FORM_ping_hostname" | awk -f "/usr/lib/webif/sanitize.awk")
 		! empty "$sanitized" && {
-			diag_command="ping -c 4 $sanitized"		
+			diag_command="ping -c 4 $sanitized"
 		}
 	}
 
 	! empty "$FORM_tracert_button" && {
 		echo "$please_wait_msg"
-		sanitized=$(echo "$FORM_tracert_hostname" | awk -f "/usr/lib/webif/sanitize.awk")	
+		sanitized=$(echo "$FORM_tracert_hostname" | awk -f "/usr/lib/webif/sanitize.awk")
 		! empty "$sanitized" && {
-			diag_command="traceroute $sanitized"		
+			diag_command="traceroute $sanitized"
 		}
 	}
 
 	#
-	# every one second take a snapshot of the output file and output new lines since last snapshot.	
+	# every one second take a snapshot of the output file and output new lines since last snapshot.
 	# we force synchronization by stopping the outputting process while taking a snapshot
 	# of its output file.
 	#
 	# TODO: Bug.. occasisionally lines can get skipped with this method, look into.
-	#	
+	#
 	echo "<br />@TR<<Please wait for output of>> \"$diag_command\" ...<br /><br />"
 	tmpfile=$(mktemp /tmp/.webif-diag-XXXXXX)
 	tmpfile2=$(mktemp /tmp/.webif-diag-XXXXXX)
 	$diag_command 2>&1 > "$tmpfile" &
-	ps_search=$(echo "$diag_command" | cut -c 1-15) # todo: limitation, X char match resolution	
+	ps_search=$(echo "$diag_command" | cut -c 1-15) # todo: limitation, X char match resolution
 	ps_results=$(ps | grep "$ps_search" | grep -v "grep")
 	_pid=$(echo $ps_results | cut -d ' ' -f 1 | sed 2,99d)    # older busybox
 	equal $_pid "0" && _pid=$(echo $ps_results | cut -d ' ' -f 1 | sed 2,99d)  # newer busybox
 	output_snapshot_file() {
 		# output file
 		# tmpfile2
-		# PID		
-		# stop process..	
+		# PID
+		# stop process..
 		kill -23 $3 2>&- >&-
 		exists "$1" && {
 			linecount_1=$(cat "$1" | wc -l | tr -d ' ') # current snapshot size
@@ -95,13 +95,13 @@ does_process_exist() {
 				echo "</pre>"
 			}
 		}
-		# continue process..	
+		# continue process..
 		kill -25 $3 2>&- >&-
 	}
 	if empty "$_pid" || equal "$_pid" "0"; then
 		# exited before we could get PID
-		echo "Error: Utility terminated too quick."			
-	else		
+		echo "Error: Utility terminated too quick."
+	else
 		touch "$tmpfile2" # force to exist first iter
 		while sleep $OUTPUT_CHECK_DELAY; do
 			! does_process_exist "$_pid" && {
@@ -109,10 +109,10 @@ does_process_exist() {
 			}
 			output_snapshot_file "$tmpfile" "$tmpfile2"
 		done
-		output_snapshot_file "$tmpfile" "$tmpfile2"	
-	fi	
-	rm -f "$tmpfile2"	
-	rm -f "$tmpfile"	
+		output_snapshot_file "$tmpfile" "$tmpfile2"
+	fi
+	rm -f "$tmpfile2"
+	rm -f "$tmpfile"
 }
 
  footer ?>

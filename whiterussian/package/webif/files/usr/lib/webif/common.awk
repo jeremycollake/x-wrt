@@ -30,11 +30,11 @@ function button(name, caption) {
 	return "<input type=\"submit\" name=\"" name "\" value=\"@TR<<" caption ">>\" />"
 }
 
-function helpitem(name) { 
+function helpitem(name) {
 	return "<h4>@TR<<" name ">>:</h4>"
 }
 
-function helptext(text) { 
+function helptext(text) {
 	return "<p>@TR<<" text ">></p>"
 }
 
