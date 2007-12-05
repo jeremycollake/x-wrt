@@ -22,7 +22,7 @@ stop() {
 }
 
 restart() {
-	stop
+	[ -f $PID_F ] && stop
 	sleep 6
 	start
 }
