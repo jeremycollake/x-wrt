@@ -289,7 +289,8 @@ for device in $DEVICES; do
 	append forms "helpitem|Wireless Distance" "$N"
 	append forms "helptext|Helptext Wireless Distance#This is the distance of your longest link." "$N"
 
-	add_vcfg="string|<tr><td><a href=$SCRIPT_NAME?add_vcfg=$device&amp;add_vcfg_number=$vcfg_number>@TR<<Add Virtual Interface>></a>"
+	add_vcfg="field|
+		string|<a href=\"$SCRIPT_NAME?add_vcfg=$device&amp;add_vcfg_number=$vcfg_number\">@TR<<Add Virtual Interface>></a>"
 	append forms "$add_vcfg" "$N"
 	append forms "end_form" "$N"
 
@@ -449,8 +450,8 @@ for device in $DEVICES; do
 					option|deny|@TR<<Deny>>"
 				append forms "$macpolicy" "$N"
 
-				maclist="field|@TR<<MAC List>>|maclist_$device|hidden
-					textarea|maclist_$vcfg|$FORM_maclist|3|18"
+				maclist="field|@TR<<MAC List>>|maclist_form_$vcfg|hidden
+					text|maclist_$vcfg|$FORM_maclist"
 				append forms "$maclist" "$N"
 
 				rate="field|@TR<<TX Rate>>
@@ -731,9 +732,12 @@ for device in $DEVICES; do
 				set_visible('radius_ip_$vcfg', v);
 				set_visible('radius_port_form_$vcfg', v);
 				v = (('$iftype'!='mac80211') && (isset('mode_$vcfg','ap') || isset('mode_$vcfg','sta')));
-				set_visible('wds_form_$vcfg', v);"
+				set_visible('wds_form_$vcfg', v);
+				v = (!isset('macpolicy_$vcfg','none'));
+				set_visible('maclist_form_$vcfg', v);"
 			append js "$javascript_forms" "$N"
-			remove_vcfg="string|<tr><td><a href="$SCRIPT_NAME?remove_vcfg=$vcfg">@TR<<Remove Virtual Interface>></a>"
+			remove_vcfg="field|
+				string|<a href=\"$SCRIPT_NAME?remove_vcfg=$vcfg\">@TR<<Remove Virtual Interface>></a>"
 			append forms "helpitem|Encryption Type" "$N"
 			append forms "helptext|HelpText Encryption Type#WPA (RADIUS) is only supported in Access Point mode. WPA (PSK) does not work in Ad-Hoc mode." "$N"
 			append forms "$remove_vcfg" "$N"
