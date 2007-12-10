@@ -68,5 +68,12 @@ if [ "$dnsmasq_enabled" = 1 ]; then
         args="$args ${cache_size:+-c ${cache_size}} ${port:+-p ${port}} ${dhcp_lease_max:+-X ${dhcp_lease_max}}"
         args="$args ${domain:+-s ${domain}} ${read_ethers:+-Z } ${no_resolv:+-R} ${log_queries:+-q} ${strict_order:+-o} ${no_regcache:+-N}"
         args="$args ${no_hosts:+-h}"
-        dnsmasq ${args}
+        dnsmasq ${args} && {
+		# use dnsmasq for local dns requests
+		rm -f /tmp/resolv.conf 2>/dev/null
+		cat > /tmp/resolv.conf <<EOF
+nameserver 127.0.0.1
+search lan
+EOF
+	}
 fi
