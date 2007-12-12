@@ -12,7 +12,7 @@ do_upgrade() {
 	}
 	echo "<br />@TR<<Upgrading firmware, please wait>> ... <br />"
 	# free some memory :)
-	ps | grep -vE 'Command|init|\[[kbmj]|httpd|haserl|bin/sh|awk|kill|ps|webif' | awk '{ print $1 }' | xargs kill -KILL
+	ps | grep -vE 'Command|init|\[[kbmj]|httpd|haserl|bin/sh|awk|kill|ps|webif' | awk '{ if ($1+0) print $1 }' | xargs -n 1 kill -KILL
 	MEMFREE="$(awk 'BEGIN{ mem = 0 } ($1 == "MemFree:") || ($1 == "Cached:") {mem += int($2)} END{print mem}' /proc/meminfo)"
 	empty "$ERASE_FS" || MTD_OPT="-e linux"
 	if [ $(($MEMFREE)) -ge 4096 ]; then
