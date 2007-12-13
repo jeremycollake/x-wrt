@@ -93,16 +93,6 @@ string|$mac_addr"
 			rx_bytes=$(echo "$config" | grep "TX bytes:" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d'(' -f 2 | cut -d ')' -f 1)
 			rx_bytes="${rx_bytes:-0}"
 			eval "if_name=\"\$${ifpar}_name\""
-			display_form <<EOF
-start_form|$if_name
-$form_mac
-field|@TR<<IP Address>>|${ifpar}_ip_addr
-string|$ip_addr
-field|@TR<<Received>>|${ifpar}_rx
-string|$rx_packets @TR<<status_interfaces_pkts#pkts>>&nbsp;($rx_bytes)
-field|@TR<<Transmitted>>|${ifpar}_tx
-string|$tx_packets @TR<<status_interfaces_pkts#pkts>>&nbsp;($tx_bytes)
-EOF
 			case "$ifpar" in
 				wan)
 					form_help="helpitem|WAN
@@ -121,7 +111,15 @@ helptext|LOOPBACK_helptext#A loopback interface is a type of 'circuitless IP add
 				;;
 			esac
 			display_form <<EOF
+start_form|$if_name
+$form_mac
 $form_help
+field|@TR<<IP Address>>|${ifpar}_ip_addr
+string|$ip_addr
+field|@TR<<Received>>|${ifpar}_rx
+string|$rx_packets @TR<<status_interfaces_pkts#pkts>>&nbsp;($rx_bytes)
+field|@TR<<Transmitted>>|${ifpar}_tx
+string|$tx_packets @TR<<status_interfaces_pkts#pkts>>&nbsp;($tx_bytes)
 end_form
 EOF
 		}

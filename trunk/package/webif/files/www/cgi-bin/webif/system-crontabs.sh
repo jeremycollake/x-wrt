@@ -1,28 +1,39 @@
 #!/usr/bin/webif-page
 <?
-crondir="/etc/crontabs/"
-
 . /usr/lib/webif/webif.sh
 
-header "System" "Crontabs" "@TR<<Cron Tables>>" "$SCRIPT_NAME"
+crondir="/etc/crontabs/"
 
-cron_dir_text="<br/>@TR<<Cron Tables Directory>>:<pre>$crondir</pre><br/>"
+header "System" "Crontabs" "@TR<<Cron Tables>>"
+
+crontab_help="helpitem|crontabs
+helptext|crontabs_helptext#The Cron Tables is a list of jobs the cron daemon (crond) should execute at specified intervals or times.
+"
 
 for crontab in $(ls $crondir/); do
-	for i in $(cat $crondir$crontab | tr ' ' '@'); do
-		text="$text$i<br/>"
+	for tab in $(cat $crondir$crontab | sed '/^#/d; /^[[:space:]]*$/d; s/ /@/g'); do
+		tab_lines="${tab_lines}field|
+string|<pre>$tab</pre>
+"
 	done
-	cron_text="<h3>$crontab</h3><pre>$(echo "$text" | tr '@' ' ')</pre><br/>$cron_text"
-	text=""
+	[ -n "$tab_lines" ] && {
+		[ -z "$cron_text" ] && cronhelp="$crontab_help"
+		cron_text="${cron_text}start_form|@TR<<Cron Jobs>> : $crontab
+$(echo "$tab_lines" | sed 's/@/ /g')
+$cronhelp
+end_form
+"
+	tab_lines=""
+	cronhelp=""
+	}
 done
 
 display_form <<EOF
-start_form|@TR<<Cron Jobs>>
-string|$cron_text
-helpitem|crontabs
-helptext|HelpText crontabs#The Cron Tables is a list of jobs the cron daemon (crond) should execute at specified intervals or times.
-string|$cron_dir_text
+start_form|@TR<<Cron Tables Directory>>
+field|@TR<<Cron Tables Directory>>
+string|$crondir
 end_form
+$cron_text
 EOF
 
 footer ?>
