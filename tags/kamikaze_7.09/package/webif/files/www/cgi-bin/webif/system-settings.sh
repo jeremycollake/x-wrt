@@ -339,12 +339,14 @@ for server in $ntpservers; do
 		text|ntp_port_$server|$FORM_ntp_port
 		field|@TR<<NTP Count>>
 		text|ntp_count_$server|$FORM_ntp_count
-		string|<tr><td><a href="$SCRIPT_NAME?remove_ntpcfg=$server">@TR<<Remove NTP Server>></a>"
+		field|
+		string|<a href=\"$SCRIPT_NAME?remove_ntpcfg=$server\">@TR<<Remove NTP Server>></a>"
 		append NTP "$ntp_form" "$N"
 	fi
 done
 
-add_ntpcfg="string|<tr><td><a href=$SCRIPT_NAME?add_ntpcfg_number=$ntpcfg_number>@TR<<Add NTP Server>></a>"
+add_ntpcfg="field|
+string|<a href=\"$SCRIPT_NAME?add_ntpcfg_number=$ntpcfg_number\">@TR<<Add NTP Server>></a>"
 append NTP "$add_ntpcfg" "$N"
 
 if [ -n "$(has_pkgs ntpclient)" -a -n "$(has_pkgs openntpd)" ]; then
