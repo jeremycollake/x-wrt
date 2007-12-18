@@ -1,3 +1,0 @@
-<% render("views/header.ahtml") %>
-<% ( RENDER ? render(RENDER) : "" ) %>
-<% render("views/footer.ahtml") %>
