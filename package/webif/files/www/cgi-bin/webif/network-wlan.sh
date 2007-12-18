@@ -207,7 +207,7 @@ for device in $DEVICES; do
         
 	if [ "$iftype" = "atheros" ]; then
         	mode_fields="field|@TR<<Mode>>
-			select|mode_ap_$device|$FORM_ap_mode"
+			select|ap_mode_$device|$FORM_ap_mode"
 		echo "$dmesg_txt" |grep -q "${device}: 11g"
 		if [ "$?" = "0" ]; then
 			mode_fields="$mode_fields
@@ -851,7 +851,7 @@ EOF
 						uci_set "wireless" "$vcfg" "key2" "$FORM_key2"
 						uci_set "wireless" "$vcfg" "key3" "$FORM_key3"
 						uci_set "wireless" "$vcfg" "key4" "$FORM_key4"
-						uci_set "wireless" "$vcfg" "doth" "$FORM_doth"
+						uci_set "wireless" "$vcfg" "80211h" "$FORM_doth"
 						uci_set "wireless" "$vcfg" "compression" "$FORM_compression"
 						uci_set "wireless" "$vcfg" "bursting" "$FORM_bursting"
 						uci_set "wireless" "$vcfg" "ff" "$FORM_fframes"
