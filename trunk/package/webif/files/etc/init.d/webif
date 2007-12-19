@@ -34,12 +34,20 @@ uci_load "webif"
 			}
 		}
 
-		if [ "$(uname -m)" = "i?86" ]; then
+		if $(uname -m | grep -q "i.86"); then
 			ifconfig eth0 |grep -q 00:0D:B9:**:**:**
 			[ $? = "0" ] && {
 				device_name="PC Engines WRAP"
 				break
 			}
+			for id in $(ls -l /sys/devices/pci*/ 2>/dev/null | sed '/^d/!d; s/^.*[[:space:]]//g; /^\./d'); do
+				for vendor in vendor subsystem_vendor; do
+					if cat "/sys/devices/pci${id%:*}/$id/$vendor" 2>/dev/null | grep -qi "0x15ad"; then
+						device_name="WMware Virtual Machine"
+						break 3
+					fi
+				done
+			done
 		fi
 
 		# there is currently only the atngw100 support
