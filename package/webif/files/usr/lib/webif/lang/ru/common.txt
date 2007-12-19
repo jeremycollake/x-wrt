@@ -345,7 +345,7 @@ status_wwaninfo_quality_Workable => Рабочий
 status_wwaninfo_quality_Good => Хороший
 status_wwaninfo_quality_Excellent => Отличный
 status_wwaninfo_wrong_value => Неправильный сигнал
-status_wwaninfo_no_req_app => Требуемые компоненты не установлены. Пожалуйста установите последние пакет '<a href="system-ipkg.sh">comgt</a>' и <a href="info.awx">webif&sup2;</a>.
+status_wwaninfo_no_req_app => Требуемые компоненты не установлены. Пожалуйста установите последние пакет '<a href="system-ipkg.sh">comgt</a>' и <a href="info.sh">webif&sup2;</a>.
 status_wwaninfo_Notcharging => Не заряжает
 status_wwaninfo_Charging => Заряжает
 status_wwaninfo_Battery_Status => Статус батареи
@@ -1327,7 +1327,7 @@ network => сеть
 wireless => беспроводная сеть
 syslogd => syslogd
 
-## info.awx
+## info.sh
 ## duplicate ##About
 Please wait => Пожалуйста подождите
 System Information => Информация о системе
