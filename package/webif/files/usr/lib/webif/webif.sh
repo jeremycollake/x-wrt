@@ -159,7 +159,7 @@ Pragma: no-cache
 	<meta http-equiv="expires" content="-1" />
 	<script type="text/javascript" src="/js/styleswitcher.js"></script>
 $header_inject_head</head>
-<body>$header_inject_body
+<body $4>$header_inject_body
 
 <div id="container">
 <div id="header">
