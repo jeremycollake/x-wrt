@@ -207,7 +207,7 @@ for device in $DEVICES; do
         
 	if [ "$iftype" = "atheros" ]; then
         	mode_fields="field|@TR<<Mode>>
-			select|mode_ap_$device|$FORM_ap_mode"
+			select|ap_mode_$device|$FORM_ap_mode"
 		echo "$dmesg_txt" |grep -q "${device}: 11g"
 		if [ "$?" = "0" ]; then
 			mode_fields="$mode_fields
