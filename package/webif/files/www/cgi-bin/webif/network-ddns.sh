@@ -15,6 +15,32 @@ else
 	config_password="password"
 fi
 
+if empty "$FORM_submit"; then
+	uci_load "updatedd"
+	config_get FORM_service cfg1 service 
+	config_get FORM_username cfg1 "$config_username"
+	config_get FORM_password cfg1 "$config_password"
+	config_get FORM_host cfg1 host
+	config_get FORM_update cfg1 update
+else
+	SAVED=1
+	validate <<EOF
+string|FORM_service|@TR<<Service Type>>|required|$FORM_service
+string|FORM_username|@TR<<User Name>>|required|$FORM_username
+string|FORM_password|@TR<<Password>>|required|$FORM_password
+string|FORM_host|@TR<<Host Name>>|required|$FORM_host
+EOF
+	equal "$?" 0 && {
+		uci_set updatedd cfg1 update "$FORM_update"
+		uci_set updatedd cfg1 service "$FORM_service"
+		uci_set updatedd cfg1 "$config_username" "$FORM_username"
+		uci_set updatedd cfg1 "$config_password" "$FORM_password"
+		uci_set updatedd cfg1 host "$FORM_host"
+	}
+fi
+
+header "Network" "DynDNS" "@TR<<DynDNS Settings>>" '' "$SCRIPT_NAME"
+
 #define supported services
 services="changeip dyndns eurodyndns ovh noip ods hn regfish tzo zoneedit"
 
@@ -43,33 +69,6 @@ set_visible('install_$service', v);"
 		fi
 	}
 done
-
-if empty "$FORM_submit"; then
-	uci_load "updatedd"
-	config_get FORM_service cfg1 service 
-	config_get FORM_username cfg1 "$config_username"
-	config_get FORM_password cfg1 "$config_password"
-	config_get FORM_host cfg1 host
-	config_get FORM_update cfg1 update
-else
-	SAVED=1
-	validate <<EOF
-string|FORM_service|@TR<<Service Type>>|required|$FORM_service
-string|FORM_username|@TR<<User Name>>|required|$FORM_username
-string|FORM_password|@TR<<Password>>|required|$FORM_password
-string|FORM_host|@TR<<Host Name>>|required|$FORM_host
-EOF
-	equal "$?" 0 && {
-		uci_set updatedd cfg1 update "$FORM_update"
-		uci_set updatedd cfg1 service "$FORM_service"
-		uci_set updatedd cfg1 "$config_username" "$FORM_username"
-		uci_set updatedd cfg1 "$config_password" "$FORM_password"
-		uci_set updatedd cfg1 host "$FORM_host"
-	}
-fi
-
-header "Network" "DynDNS" "@TR<<DynDNS Settings>>" '' "$SCRIPT_NAME"
-
 
 cat <<EOF
 <script type="text/javascript" src="/webif.js"></script>
