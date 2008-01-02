@@ -42,10 +42,8 @@ if ! empty "$FORM_remove_snmpd"; then
 	echo "</pre>"
 fi
 
-ipkg_listinst=$(ipkg list_installed)
 snmpd_installed="0"
-
-echo "$ipkg_listinst" | grep -q "snmpd"
+is_package_installed "snmpd"
 equal "$?" "0" && {
 	snmpd_installed="1"
 	remove_snmpd_button="field|@TR<<Remove SNMPd>>

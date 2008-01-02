@@ -148,8 +148,8 @@ header "Network" "WoL" "@TR<<Wake-On-LAN>>"
 	echo "<br />"
 }
 
-is_package_installed "ether-wake"; have_etherwake=$((!$?))
-is_package_installed "wol"; have_wol=$((!$?))
+is_package_installed "ether-wake"; have_etherwake=$(($?==0))
+is_package_installed "wol"; have_wol=$(($?==0))
 [ "$have_wol" -eq 1 ] && form_app_options="$form_app_options
 option|wol|@TR<<network_option_wol#wol>>"
 [ "$have_etherwake" -eq 1 ] && form_app_options="$form_app_options

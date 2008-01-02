@@ -301,7 +301,7 @@ fi
 # generate nas package field
 #
 nas_installed="0"
-ipkg list_installed | grep -q nas
+is_package_installed "nas"
 equal "$?" "0" && nas_installed="1"
 
 install_nas_button='field|@TR<<NAS Package>>|install_nas|hidden'

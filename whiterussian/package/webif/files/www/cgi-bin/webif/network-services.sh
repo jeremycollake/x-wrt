@@ -59,20 +59,20 @@ if ! empty "$FORM_remove_linuxigd"; then
 	echo "</pre>"
 fi
 
-ipkg_listinst=$(ipkg list_installed)
+ipkg_listinst=$(ipkg list_installed 2>/dev/null | grep "^\(miniupnpd \|linuxigd \)")
 upnp_installed="0"
 
-echo "$ipkg_listinst" | grep -q "miniupnpd"
+echo "$ipkg_listinst" | grep -q "^miniupnpd "
 equal "$?" "0" && {
 	upnp_installed="1"
 	remove_upnpd_button="field|@TR<<Remove miniupnpd>>
 	submit|remove_miniupnpd| @TR<<Remove>> |"
 }
 
-echo "$ipkg_listinst" | grep -q "linux-igd"
+echo "$ipkg_listinst" | grep -q "^linuxigd "
 equal "$?" "0" && {
 	upnp_installed="1"
-	remove_upnpd_button="field|@TR<<Remove linux-igd>>
+	remove_upnpd_button="field|@TR<<Remove linuxigd>>
 	submit|remove_linuxigd| @TR<<Remove>> |"
 }
 
