@@ -130,7 +130,7 @@ validate() {
 is_package_installed() {
 	# $1 = package name
 	# returns 0 if package is installed.
-	for LOCATION in $(grep "^dest\>" /etc/ipkg.conf | cut -d ' ' -f 3); do
+	for LOCATION in $(grep "^dest\>" /etc/ipkg.conf 2>/dev/null | cut -d ' ' -f 3); do
 
 		if [ "$LOCATION" = "/" ]; then
 		        paths="$paths /usr/lib/ipkg/status"
@@ -138,6 +138,7 @@ is_package_installed() {
 		        paths="$paths $LOCATION/usr/lib/ipkg/status"
 		fi
 	done
+	[ -z "$paths" ] && return 1
 	grep -q " $1\$" $paths >> /dev/null 2>&1
 }
 
