@@ -52,7 +52,7 @@ signal_finishdownload()
 	#log status
 	logstatus "The download $1 exited with exitcode $2"
 	
-	#if terminated normal mail this status and moce the .torrent file the done directory
+	#if terminated normal mail this status and move the .torrent file the done directory
 	if [ "$2" -eq '0' ]; then
 		if [ "$3" = "TRUE" ]; then
 			mv "$QUEUE_DIR/$1" "$QUEUE_DONE/$1"
