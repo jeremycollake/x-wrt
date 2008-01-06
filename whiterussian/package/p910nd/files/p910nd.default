@@ -5,6 +5,7 @@
 #  - options can be :
 #    -b to turn on bidirectional copying.
 #    -f to specify a different printer device.
+#    -i bind to interface.
 #
 #0  -b -f /dev/usb/lp0 -i 192.168.1.1
 #1  -b -f /dev/usb/lp1 -i 192.168.1.1
