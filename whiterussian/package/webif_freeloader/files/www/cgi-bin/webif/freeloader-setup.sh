@@ -29,7 +29,9 @@
 header "Freeloader" "freeloader-setup_subcategory#Setup" "@TR<<freeloader-log_Freeloader_log#Freeloader setup>>"
 #Include settings
 . /usr/lib/webif/freeloader-include.sh
-load_settings freeloader
+#load_settings freeloader
+freeloader_init_config
+
 
 #Check the required packages
 is_package_installed "curl"
@@ -52,10 +54,14 @@ if [ $pkg_nzbget -eq "0" ] || [ $pkg_ctorrent -eq "0" ] || [ $pkg_curl -eq "0" ]
 	echo "Email email smtpserver = $CONFIG_email_smtpserver <br />"
 	echo "<br />"
 	echo "Curl ftplogin = $CONFIG_curl_ftplogin <br />"
-	echo "Curl ftppassword = $CONFIG_curl_ftppassword <br />"
+	echo "Curl ftppassword = $CONFIG_curl_ftppasswd <br />"
 else
 	echo "<p>@TR<<freeloader-common_None_required_installed#None of the required packages are installed, check the <a href=\"freeloader-upload.sh\">upload-page</a> to install the packages.>></p>"
 fi
+
+#uci_load "freeloader"
+#uci_set "freeloader" "email" "emailfrom" "uci@open.nl"
+#uci_commit "freeloader"
 
 footer ?>
 <!--
