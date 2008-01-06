@@ -1,0 +1,7 @@
+config BR2_PACKAGE_P910ND
+	tristate "p910nd - A small non-spooling printer server"
+	default m if CONFIG_DEVEL
+	help
+	  A small non-spooling printer server.
+	  
+	  http://etherboot.sourceforge.net/p910nd/

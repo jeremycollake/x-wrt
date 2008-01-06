@@ -105,6 +105,7 @@ package-$(BR2_PACKAGE_OPENSSL) += openssl
 package-$(BR2_PACKAGE_OPENSWAN) += openswan
 package-$(BR2_PACKAGE_OPENVPN) += openvpn
 package-$(BR2_PACKAGE_OSIRIS) += osiris
+package-$(BR2_PACKAGE_P910ND) += p910nd
 package-$(BR2_PACKAGE_PCIUTILS) += pciutils
 package-$(BR2_COMPILE_PCMCIA_CS) += pcmcia-cs
 package-$(BR2_PACKAGE_PCRE) += pcre

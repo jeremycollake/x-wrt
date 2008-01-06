@@ -1,0 +1,11 @@
+diff -urN p910nd-0.91.old/Makefile p910nd-0.91.dev/Makefile
+--- p910nd-0.91.old/Makefile	2007-04-11 04:26:04.000000000 +0200
++++ p910nd-0.91.dev/Makefile	2008-01-01 18:24:44.000000000 +0100
+@@ -4,6 +4,7 @@
+ 
+ # If you don't have it in /var/log/subsys, uncomment and define
+ #CFLAGS += -DLOCKFILE_DIR=\"/var/log\"
++CFLAGS += -DLOCKFILE_DIR=\"/tmp\"
+ 
+ # GNU target string
+ CROSS = 
