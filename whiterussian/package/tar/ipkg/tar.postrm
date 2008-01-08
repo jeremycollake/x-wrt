@@ -1,0 +1,9 @@
+#!/bin/sh
+# restore busybox's imperfection
+rm -f $IPKG_INSTROOT/bin/tar.bb 2>/dev/null
+rm -f $IPKG_INSTROOT/bin/tar 2>/dev/null
+if [ -n "$IPKG_INSTROOT" ]; then
+	ln -sf busybox $IPKG_INSTROOT/bin/tar 2>/dev/null
+else
+	/bin/busybox --help 2>/dev/null | grep -q "[[:space:]]tar\>" && ln -sf busybox $IPKG_INSTROOT/bin/tar 2>/dev/null
+fi
