@@ -3,7 +3,7 @@
 rm -f $IPKG_INSTROOT/usr/bin/wget.bb 2>/dev/null
 rm -f $IPKG_INSTROOT/usr/bin/wget 2>/dev/null
 if [ -n "$IPKG_INSTROOT" ]; then
-	ln -sf ../../busybox $IPKG_INSTROOT/usr/bin/wget.bb 2>/dev/null
+	ln -sf ../../bin/busybox $IPKG_INSTROOT/usr/bin/wget.bb 2>/dev/null
 else
-	/bin/busybox --help 2>/dev/null | grep -q "[[:space:]]wget\>" && ln -sf ../../busybox $IPKG_INSTROOT/usr/bin/wget.bb 2>/dev/null
+	/bin/busybox --help 2>/dev/null | grep -q "[[:space:]]wget\>" && ln -sf ../../bin/busybox $IPKG_INSTROOT/usr/bin/wget.bb 2>/dev/null
 fi

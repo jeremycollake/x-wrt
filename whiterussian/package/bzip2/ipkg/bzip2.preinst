@@ -6,8 +6,8 @@ for bblink in $bblinks; do
 	rm -f $IPKG_INSTROOT/usr/bin/${bblink}.bb 2>/dev/null
 	rm -f $IPKG_INSTROOT/usr/bin/$bblink 2>/dev/null
 	if [ -n "$IPKG_INSTROOT" ]; then
-		ln -sf ../../busybox $IPKG_INSTROOT/usr/bin/${bblink}.bb 2>/dev/null
+		ln -sf ../../bin/busybox $IPKG_INSTROOT/usr/bin/${bblink}.bb 2>/dev/null
 	else
-		echo "$bbhelp" | grep -q "[[:space:]]$bblink\>" && ln -sf ../../busybox $IPKG_INSTROOT/usr/bin/${bblink}.bb 2>/dev/null
+		echo "$bbhelp" | grep -q "[[:space:]]$bblink\>" && ln -sf ../../bin/busybox $IPKG_INSTROOT/usr/bin/${bblink}.bb 2>/dev/null
 	fi
 done
