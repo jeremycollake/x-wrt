@@ -1,0 +1,13 @@
+diff -urN tar-1.15.1.old/src/create.c tar-1.15.1.dev/src/create.c
+--- tar-1.15.1.old/src/create.c	2008-01-08 19:25:33.000000000 +0100
++++ tar-1.15.1.dev/src/create.c	2008-01-08 19:28:46.000000000 +0100
+@@ -254,7 +254,8 @@
+       && S_IROTH == TOREAD && S_IWOTH == TOWRITE && S_IXOTH == TOEXEC
+       && archive_format != POSIX_FORMAT
+       && archive_format != USTAR_FORMAT
+-      && archive_format != GNU_FORMAT)
++      && archive_format != GNU_FORMAT
++      && archive_format != OLDGNU_FORMAT)
+     {
+       negative = v < 0;
+       u = v;

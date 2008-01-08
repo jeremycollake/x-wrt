@@ -1,0 +1,37 @@
+diff -urN tar-1.15.1.old/src/create.c tar-1.15.1.dev/src/create.c
+--- tar-1.15.1.old/src/create.c	2004-10-04 11:21:31.000000000 +0200
++++ tar-1.15.1.dev/src/create.c	2008-01-08 19:24:36.000000000 +0100
+@@ -332,16 +332,20 @@
+ }
+ 
+ 
+-/* A file is not dumpable if
++/* A file is considered dumpable if it is sparse and both --sparse and --totals
++   are specified.
++   Otherwise, it is dumpable unless any of the following conditions occur:
++   
+    a) it is empty *and* world-readable, or
+    b) current archive is /dev/null */
+ 
+ bool
+ file_dumpable_p (struct tar_stat_info *st)
+ {
+-  return !(dev_null_output
+-	   || (st->archive_file_size == 0
+-	       && (st->stat.st_mode & MODE_R) == MODE_R));
++  if (dev_null_output)
++    return totals_option && sparse_option && sparse_file_p (st);
++  return !(st->archive_file_size == 0
++	   && (st->stat.st_mode & MODE_R) == MODE_R);
+ }
+ 
+ 
+@@ -1437,7 +1441,7 @@
+ 	  else
+ 	    fd = -1;
+ 
+-	  if (sparse_option && sparse_file_p (st))
++	  if (fd != -1 && sparse_option && sparse_file_p (st))
+ 	    {
+ 	      status = sparse_dump_file (fd, st);
+ 	      if (status == dump_status_not_implemented)

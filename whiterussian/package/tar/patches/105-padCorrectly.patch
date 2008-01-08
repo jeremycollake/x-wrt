@@ -1,0 +1,23 @@
+diff -urN tar-1.15.1.old/src/create.c tar-1.15.1.dev/src/create.c
+--- tar-1.15.1.old/src/create.c	2008-01-08 19:25:02.000000000 +0100
++++ tar-1.15.1.dev/src/create.c	2008-01-08 19:25:33.000000000 +0100
+@@ -877,8 +877,8 @@
+ 	  return dump_status_short;
+ 	}
+       size_left -= count;
+-
+-      set_next_block_after (blk + (bufsize - 1) / BLOCKSIZE);
++      if (count)
++        set_next_block_after (blk + (bufsize - 1) / BLOCKSIZE);
+ 
+       if (count != bufsize)
+ 	{
+@@ -892,7 +892,7 @@
+ 		 STRINGIFY_BIGINT (size_left, buf)));
+ 	  if (! ignore_failed_read_option)
+ 	    exit_status = TAREXIT_FAILURE;
+-	  pad_archive (size_left);
++	  pad_archive (size_left - (bufsize-count));
+ 	  return dump_status_short;
+ 	}
+     }

@@ -1,0 +1,12 @@
+diff -urN tar-1.15.1.old/src/create.c tar-1.15.1.dev/src/create.c
+--- tar-1.15.1.old/src/create.c	2008-01-08 19:24:36.000000000 +0100
++++ tar-1.15.1.dev/src/create.c	2008-01-08 19:25:02.000000000 +0100
+@@ -1387,7 +1387,7 @@
+       && OLDER_STAT_TIME (st->stat, m)
+       && (!after_date_option || OLDER_STAT_TIME (st->stat, c)))
+     {
+-      if (!incremental_option)
++      if (!incremental_option && verbose_option)
+ 	WARN ((0, 0, _("%s: file is unchanged; not dumped"),
+ 	       quotearg_colon (p)));
+       return;

@@ -1,0 +1,43 @@
+diff -urN tar-1.15.1.old/src/extract.c tar-1.15.1.dev/src/extract.c
+--- tar-1.15.1.old/src/extract.c	2004-12-21 10:55:12.000000000 +0100
++++ tar-1.15.1.dev/src/extract.c	2008-01-08 19:28:16.000000000 +0100
+@@ -404,7 +404,7 @@
+ 	     invert_permissions is zero, because
+ 	     repair_delayed_set_stat may need to update the struct.  */
+ 	  delay_set_stat (file_name,
+-			  &current_stat_info.stat /* ignored */,
++			  &current_stat_info.stat,
+ 			  invert_permissions, INTERDIR_PERMSTATUS);
+ 
+ 	  print_for_mkdir (file_name, cursor - file_name, mode);
+@@ -1065,7 +1065,7 @@
+ 		    }
+ 		  if (S_ISDIR (st.st_mode))
+ 		    {
+-		      mode = st.st_mode & ~ current_umask;
++		      mode = st.st_mode;
+ 		      goto directory_exists;
+ 		    }
+ 		}
+@@ -1088,11 +1088,16 @@
+       if (status == 0
+ 	  || old_files_option == DEFAULT_OLD_FILES
+ 	  || old_files_option == OVERWRITE_OLD_FILES)
+-	delay_set_stat (file_name, &current_stat_info.stat,
+-			MODE_RWX & (mode ^ current_stat_info.stat.st_mode),
+-			(status == 0
+-			 ? ARCHIVED_PERMSTATUS
+-			 : UNKNOWN_PERMSTATUS));
++      {
++        if (status == 0)
++         delay_set_stat (file_name, &current_stat_info.stat,
++                         MODE_RWX & (mode ^ current_stat_info.stat.st_mode),
++                         ARCHIVED_PERMSTATUS);
++        else /* For an already existing directory, invert_perms must be 0 */
++         delay_set_stat (file_name, &current_stat_info.stat,
++                         0,
++                         UNKNOWN_PERMSTATUS);
++      }
+       break;
+ 
+     case GNUTYPE_VOLHDR:

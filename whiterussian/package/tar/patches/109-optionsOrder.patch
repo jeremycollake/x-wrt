@@ -1,0 +1,15 @@
+diff -urN tar-1.15.1.old/src/tar.c tar-1.15.1.dev/src/tar.c
+--- tar-1.15.1.old/src/tar.c	2004-12-21 15:11:26.000000000 +0100
++++ tar-1.15.1.dev/src/tar.c	2008-01-08 19:27:49.000000000 +0100
+@@ -617,9 +617,9 @@
+   
+   switch (key)
+     {
+-      case 1:
++    case ARGP_KEY_ARG:
+ 	/* File name or non-parsed option, because of ARGP_IN_ORDER */
+-	name_add (optarg);
++	name_add (arg);
+ 	args->input_files++;
+ 	break;
+ 
