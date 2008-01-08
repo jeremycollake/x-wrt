@@ -11,7 +11,7 @@ header "Graphs" "graphs_cpu_subcategory#CPU" "@TR<<graphs_cpu_CPU_Usage#CPU Usag
 #	<object data="" width="500" height="250" type="image/svg+xml">@TR<<graphs_svg_required#This object requires the SVG support.>></object>
 ?>
 <center>
-	<embed src="/cgi-bin/webif/graph_cpu_svg.sh?data.sh"
+	<embed src="/cgi-bin/webif/graph_cpu_svg.sh"
 		width="500" height="250" type="image/svg+xml" />
 </center>
 <? footer ?>
