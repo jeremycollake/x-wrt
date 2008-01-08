@@ -56,9 +56,10 @@ $(IPKG_LIBBZIP2): $(STAGING_DIR)/usr/lib/libbz2.so
 
 $(IPKG_BZIP2):
 	install -m0755 -d $(IDIR_BZIP2)/usr/bin
-	install -m0755  $(PKG_BUILD_DIR)/bzip2 $(IDIR_BZIP2)/usr/bin/
-	ln -sf bzip2 $(IDIR_BZIP2)/usr/bin/bunzip2
-	ln -sf bzip2 $(IDIR_BZIP2)/usr/bin/bzcat
+	install -m0755  $(PKG_BUILD_DIR)/bzip2 $(IDIR_BZIP2)/usr/bin/bzip2.real
+	ln -sf bzip2.real $(IDIR_BZIP2)/usr/bin/bzip2
+	ln -sf bzip2.real $(IDIR_BZIP2)/usr/bin/bunzip2
+	ln -sf bzip2.real $(IDIR_BZIP2)/usr/bin/bzcat
 	$(RSTRIP) $(IDIR_BZIP2)
 	$(IPKG_BUILD) $(IDIR_BZIP2) $(PACKAGE_DIR)
 
