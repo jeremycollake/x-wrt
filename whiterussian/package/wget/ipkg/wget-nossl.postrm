@@ -1,0 +1,9 @@
+#!/bin/sh
+# restore busybox's imperfection
+rm -f $IPKG_INSTROOT/usr/bin/wget.bb 2>/dev/null
+rm -f $IPKG_INSTROOT/usr/bin/wget 2>/dev/null
+if [ -n "$IPKG_INSTROOT" ]; then
+	ln -sf ../../busybox $IPKG_INSTROOT/usr/bin/wget 2>/dev/null
+else
+	echo "$bbhelp" | grep -q "[[:space:]]wget\>" && ln -sf ../../busybox $IPKG_INSTROOT/usr/bin/wget 2>/dev/null
+fi

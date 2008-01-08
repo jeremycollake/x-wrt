@@ -1,0 +1,13 @@
+--- wget-1.10.2.old/src/ptimer.c	2005-07-06 17:26:18.000000000 +0200
++++ wget-1.10.2.dev/src/ptimer.c	2008-01-08 14:12:50.000000000 +0100
+@@ -73,6 +73,10 @@
+ # include <windows.h>
+ #endif
+ 
++#ifdef __UCLIBC__
++#undef _POSIX_TIMERS
++#endif
++
+ #include "wget.h"
+ #include "ptimer.h"
+ 

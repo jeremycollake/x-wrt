@@ -160,6 +160,8 @@ package-$(BR2_PACKAGE_WEBIF) += webif
 package-$(BR2_PACKAGE_WEBIF_FREELOADER) += webif_freeloader
 package-$(BR2_PACKAGE_WEBIF_HOTSPOT) += webif_hotspot
 package-$(BR2_PACKAGE_WEPKEYGEN) += wepkeygen
+package-$(BR2_PACKAGE_WGET) += wget
+package-$(BR2_PACKAGE_WGET_NOSSL) += wget
 package-$(BR2_PACKAGE_WIFICONF) += wificonf
 package-$(BR2_COMPILE_WIRELESS_TOOLS) += wireless-tools
 package-$(BR2_PACKAGE_WOL) += wol
@@ -232,6 +234,7 @@ unrar-compile: uclibcxx-compile
 usbutils-compile: libusb-compile
 ushare-compile: libiconv-compile libupnp-compile
 vtun-compile: zlib-compile openssl-compile lzo-compile
+wget-compile: openssl-compile
 wificonf-compile: wireless-tools-compile nvram-compile
 wpa_supplicant-compile: openssl-compile
 xrelayd-compile: xyssl-compile

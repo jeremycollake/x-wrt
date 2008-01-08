@@ -1,0 +1,11 @@
+--- wget-1.10.2.old/src/openssl.c	2005-08-26 12:44:54.000000000 +0200
++++ wget-1.10.2.dev/src/openssl.c	2008-01-08 14:13:21.000000000 +0100
+@@ -193,7 +193,7 @@
+       meth = SSLv23_client_method ();
+       break;
+     case secure_protocol_sslv2:
+-      meth = SSLv2_client_method ();
++      meth = SSLv23_client_method ();
+       break;
+     case secure_protocol_sslv3:
+       meth = SSLv3_client_method ();
