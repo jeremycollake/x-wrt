@@ -38,7 +38,7 @@ $(PKG_BUILD_DIR)/.configured:
 		  --program-suffix="" \
 		  --prefix=/usr \
 		  --exec-prefix=/usr \
-		  --bindir=/usr/bin \
+		  --bindir=/bin \
 		  --datadir=/usr/share \
 		  --includedir=/usr/include \
 		  --infodir=/usr/share/info \
@@ -46,7 +46,7 @@ $(PKG_BUILD_DIR)/.configured:
 		  --libexecdir=/usr/lib \
 		  --localstatedir=/var \
 		  --mandir=/usr/share/man \
-		  --sbindir=/usr/sbin \
+		  --sbindir=/sbin \
 		  --sysconfdir=/etc \
 		  $(DISABLE_NLS) \
 		  $(DISABLE_LARGEFILE) \
@@ -66,7 +66,9 @@ $(PKG_BUILD_DIR)/.built:
 	touch $@
 
 $(IPKG_TAR):
-	install -m0755 -d $(IDIR_TAR)/usr/bin
-	cp $(PKG_INSTALL_DIR)/usr/bin/tar $(IDIR_TAR)/usr/bin/
+	install -m0755 -d $(IDIR_TAR)/bin
+	cp $(PKG_INSTALL_DIR)/bin/tar $(IDIR_TAR)/bin/tar.real
+	ln -sf tar.real $(IDIR_TAR)/bin/tar
+	ln -sf tar.real $(IDIR_TAR)/bin/gtar
 	$(RSTRIP) $(IDIR_TAR)
 	$(IPKG_BUILD) $(IDIR_TAR) $(PACKAGE_DIR)
