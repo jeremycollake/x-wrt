@@ -188,12 +188,12 @@ for device in $DEVICES; do
 		append forms "helpitem|Atheros Wireless Configuration" "$N"
 		append forms "helptext|Helptext Atheros Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-4x ap or 1-4x ap or 1x adhoc" "$N"
 	fi
-	
+
 	mode_disabled="field|@TR<<Radio>>
 			radio|disabled_$device|$FORM_disabled|0|@TR<<On>>
 			radio|disabled_$device|$FORM_disabled|1|@TR<<Off>>"
 	append forms "$mode_disabled" "$N"
-        
+
 	# Initialize channels based on country code
 	# (--- hardly a switch here ---)
 	case "$country" in
@@ -204,7 +204,7 @@ for device in $DEVICES; do
 			BGCHANNELS="1 2 3 4 5 6 7 8 9 10 11"; CHANNEL_MAX=11
 			ACHANNELS="36 40 42 44 48 50 52 56 58 60 64 149 152 153 157 160 161 156";;
 	esac
-        
+
 	if [ "$iftype" = "atheros" ]; then
         	mode_fields="field|@TR<<Mode>>
 			select|ap_mode_$device|$FORM_ap_mode"
@@ -251,7 +251,7 @@ for device in $DEVICES; do
 		done
 	fi
 	append forms "$BG_CHANNELS" "$N"
-	
+
 	if [ "$iftype" = "atheros" ]; then
 		mode_diversity="field|@TR<<Diversity>>
 				radio|diversity_$device|$FORM_diversity|1|@TR<<On>>
@@ -273,7 +273,6 @@ for device in $DEVICES; do
 			radio|rxantenna_$device|$FORM_rxantenna|2|@TR<<Antenna 2>>"
 		append forms "$form_rxant" "$N"
 	fi
-
 
 	#Currently broadcom only.
 	if [ "$iftype" = "broadcom" ]; then
@@ -329,7 +328,6 @@ for device in $DEVICES; do
 				config_get_bool FORM_bursting "$vcfg" bursting
 				config_get_bool FORM_fframes "$vcfg" ff
 				config_get_bool FORM_wmm "$vcfg" wmm
-				config_get FORM_maclist "$vcfg" maclist
 				config_get FORM_macpolicy "$vcfg" macpolicy
 			else
 				eval FORM_key="\$FORM_radius_key_$vcfg"
@@ -364,22 +362,33 @@ for device in $DEVICES; do
 				eval FORM_bursting="\$FORM_bursting_$vcfg"
 				eval FORM_fframes="\$FORM_fframes_$vcfg"
 				eval FORM_wmm="\$FORM_wmm_$vcfg"
-				eval FORM_maclist="\$FORM_maclist_$vcfg"
 				eval FORM_macpolicy="\$FORM_macpolicy_$vcfg"
 			fi
-			
+
+			config_get FORM_maclist "$vcfg" maclist
+			eval FORM_maclistadd="\$FORM_${vcfg}_maclistadd"
+			eval FORM_maclistremove="\$FORM_${vcfg}_maclistremove"
+			eval FORM_maclistsubmit="\$FORM_${vcfg}_maclistsubmit"
+			LISTVAL="$FORM_maclist"
+			handle_list "$FORM_maclistremove" "$FORM_maclistadd" "$FORM_maclistsubmit" 'mac|FORM_maclistadd|@TR<<MAC Address>>|required' && {
+				FORM_maclist="$LISTVAL"
+				[ " " = "$FORM_maclist" ] && FORM_maclist=""
+				uci_set "wireless" "$vcfg" "maclist" "$FORM_maclist"
+				FORM_maclistadd=""
+			}
+
 			case "$FORM_mode" in
 				ap) let "ap_count+=1";;
 				sta) let "sta_count+=1";;
 				adhoc) let "adhoc_count+=1";;
 			esac
-			
+
 			append forms "start_form|@TR<<Wireless Virtual Adaptor Configuration for Wireless Card>> $FORM_device" "$N"
 			network="field|@TR<<Network>>
 	        	        select|network_$vcfg|$FORM_network
 	        	        $network_options"
 			append forms "$network" "$N"
-			
+
 			if [ "$iftype" != "mac80211" ]; then
 				option_wds="option|wds|@TR<<WDS>>"
 				append forms "helpitem|WDS Connections" "$N"
@@ -442,17 +451,6 @@ for device in $DEVICES; do
 					radio|wmm_$vcfg|$FORM_wmm|1|@TR<<On>>
 					radio|wmm_$vcfg|$FORM_wmm|0|@TR<<Off>>"
 				append forms "$wmm" "$N"
-
-				macpolicy="field|@TR<<MAC Filter>>
-					select|macpolicy_$vcfg|$FORM_macpolicy
-					option|none|@TR<<Disabled>>
-					option|allow|@TR<<Allow>>
-					option|deny|@TR<<Deny>>"
-				append forms "$macpolicy" "$N"
-
-				maclist="field|@TR<<MAC List>>|maclist_form_$vcfg|hidden
-					text|maclist_$vcfg|$FORM_maclist"
-				append forms "$maclist" "$N"
 
 				rate="field|@TR<<TX Rate>>
 					select|rate_$vcfg|$FORM_rate
@@ -671,6 +669,22 @@ for device in $DEVICES; do
 				append forms "$install_hostapd_mini_button" "$N"
 				append forms "$install_wpa_supplicant_button" "$N"
 			fi
+			
+			append forms "helpitem|Encryption Type" "$N"
+			append forms "helptext|HelpText Encryption Type#WPA (RADIUS) is only supported in Access Point mode. WPA (PSK) does not work in Ad-Hoc mode." "$N"
+
+				macpolicy="field|@TR<<MAC Filter>>
+					select|macpolicy_$vcfg|$FORM_macpolicy
+					option|none|@TR<<Disabled>>
+					option|allow|@TR<<Allow>>
+					option|deny|@TR<<Deny>>"
+				append forms "$macpolicy" "$N"
+
+				maclist="end_form
+					start_form|@TR<<MAC List>>|maclist_form_$vcfg|hidden
+					listedit|${vcfg}_maclist||$FORM_maclist|$FORM_macadd
+					end_form"
+				append forms "$maclist" "$N"
 
 			###################################################################
 			# set JavaScript
@@ -736,10 +750,9 @@ for device in $DEVICES; do
 				v = (!isset('macpolicy_$vcfg','none'));
 				set_visible('maclist_form_$vcfg', v);"
 			append js "$javascript_forms" "$N"
-			remove_vcfg="field|
+			remove_vcfg="start_form
+				field|
 				string|<a href=\"$SCRIPT_NAME?remove_vcfg=$vcfg\">@TR<<Remove Virtual Interface>></a>"
-			append forms "helpitem|Encryption Type" "$N"
-			append forms "helptext|HelpText Encryption Type#WPA (RADIUS) is only supported in Access Point mode. WPA (PSK) does not work in Ad-Hoc mode." "$N"
 			append forms "$remove_vcfg" "$N"
 			append forms "end_form" "$N"
 			
@@ -782,7 +795,7 @@ EOF
 				eval FORM_txantenna="\$FORM_txantenna_$device"
 				eval FORM_rxantenna="\$FORM_rxantenna_$device"
 				eval FORM_disabled="\$FORM_disabled_$device"
-				
+
 				uci_set "wireless" "$device" "mode" "$FORM_ap_mode"
 				uci_set "wireless" "$device" "channel" "$FORM_channel"
 				uci_set "wireless" "$device" "maxassoc" "$FORM_maxassoc"
@@ -823,7 +836,6 @@ EOF
 						eval FORM_bursting="\$FORM_bursting_$vcfg"
 						eval FORM_fframes="\$FORM_fframes_$vcfg"
 						eval FORM_wmm="\$FORM_wmm_$vcfg"
-						eval FORM_maclist="\$FORM_maclist_$vcfg"
 						eval FORM_macpolicy="\$FORM_macpolicy_$vcfg"
 
 						uci_set "wireless" "$vcfg" "network" "$FORM_network"
@@ -856,7 +868,6 @@ EOF
 						uci_set "wireless" "$vcfg" "bursting" "$FORM_bursting"
 						uci_set "wireless" "$vcfg" "ff" "$FORM_fframes"
 						uci_set "wireless" "$vcfg" "wmm" "$FORM_wmm"
-						uci_set "wireless" "$vcfg" "maclist" "$FORM_maclist"
 						uci_set "wireless" "$vcfg" "macpolicy" "$FORM_macpolicy"
 					fi
 				done
@@ -886,7 +897,6 @@ function modechange()
 </script>
 
 EOF
-
 
 display_form <<EOF
 onchange|modechange
