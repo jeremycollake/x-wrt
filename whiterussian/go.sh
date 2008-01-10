@@ -1,2 +1,2 @@
 #!/bin/sh
-./cleanw.sh && ./mkimages.sh && ./compress_images.sh && ./upload_files.sh jcollake
+./cleanw.sh && make && ./mkimages.sh && ./compress_images.sh && ./upload_files.sh jcollake
