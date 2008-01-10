@@ -1,6 +1,6 @@
 Package: bzip2
 Priority: optional
-Section: misc
+Section: utils
 Description: A free, high-quality data compressor utility
  A freely available, patent free, high-quality data compressor utility.
  http://www.bzip.org/
