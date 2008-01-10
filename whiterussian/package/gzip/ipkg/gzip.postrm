@@ -1,0 +1,13 @@
+#!/bin/sh
+# restore busybox's imperfection
+bblinks="gzip gunzip zcat"
+[ -z "$IPKG_INSTROOT" ] && bbhelp=$(/bin/busybox --help 2>/dev/null)
+for bblink in $bblinks; do
+	[ -f $IPKG_INSTROOT/bin/$bblink.bb ] && rm -f $IPKG_INSTROOT/bin/$bblink.bb 2>/dev/null
+	[ -f $IPKG_INSTROOT/bin/$bblink ] && rm -f $IPKG_INSTROOT/bin/$bblink 2>/dev/null
+	if [ -n "$IPKG_INSTROOT" ]; then
+		ln -s busybox $IPKG_INSTROOT/bin/$bblink 2>/dev/null
+	else
+		echo "$bbhelp" | grep -q "[[:space:]]$bblink\>" && ln -s busybox $IPKG_INSTROOT/bin/$bblink 2>/dev/null
+	fi
+done

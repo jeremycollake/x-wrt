@@ -40,6 +40,7 @@ package-$(BR2_PACKAGE_COMGT) += comgt
 package-$(BR2_PACKAGE_GLIB) += glib
 package-$(BR2_PACKAGE_GMEDIASERVER) += gmediaserver
 package-$(BR2_PACKAGE_GMP) += gmp
+package-$(BR2_PACKAGE_GZIP) += gzip
 package-$(BR2_PACKAGE_HASERL) += haserl
 package-$(BR2_PACKAGE_HOWL) += howl
 package-$(BR2_PACKAGE_HTPDATE) += htpdate

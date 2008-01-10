@@ -1,0 +1,16 @@
+diff -urN gzip-1.3.12.old/unlzh.c gzip-1.3.12.dev/unlzh.c
+--- gzip-1.3.12.old/unlzh.c	2006-11-20 09:40:34.000000000 +0100
++++ gzip-1.3.12.dev/unlzh.c	2008-01-10 14:55:23.000000000 +0100
+@@ -145,7 +145,11 @@
+     unsigned i, k, len, ch, jutbits, avail, nextcode, mask;
+ 
+     for (i = 1; i <= 16; i++) count[i] = 0;
+-    for (i = 0; i < (unsigned)nchar; i++) count[bitlen[i]]++;
++    for (i = 0; i < (unsigned)nchar; i++) {
++        if (bitlen[i] > 16)
++        error("Bad table (case a)\n");
++        else count[bitlen[i]]++;
++    }
+ 
+     start[1] = 0;
+     for (i = 1; i <= 16; i++)

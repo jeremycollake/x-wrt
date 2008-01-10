@@ -1,0 +1,7 @@
+config BR2_PACKAGE_GZIP
+	tristate "gzip - (GNU zip) is a compression utility."
+	default m if CONFIG_DEVEL
+	help
+	  gzip (GNU zip) is a compression utility designed to be a 
+	  replacement for compress.
+	  http://www.gzip.org/

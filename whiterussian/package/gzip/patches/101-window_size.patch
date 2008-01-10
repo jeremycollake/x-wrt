@@ -1,0 +1,12 @@
+diff -urN gzip-1.3.12.old/gzip.c gzip-1.3.12.dev/gzip.c
+--- gzip-1.3.12.old/gzip.c	2008-01-10 14:53:39.000000000 +0100
++++ gzip-1.3.12.dev/gzip.c	2008-01-10 14:54:50.000000000 +0100
+@@ -170,7 +170,7 @@
+ DECLARE(uch, inbuf,  INBUFSIZ +INBUF_EXTRA);
+ DECLARE(uch, outbuf, OUTBUFSIZ+OUTBUF_EXTRA);
+ DECLARE(ush, d_buf,  DIST_BUFSIZE);
+-DECLARE(uch, window, 2L*WSIZE);
++DECLARE(uch, window, 2L*WSIZE + 4096);
+ #ifndef MAXSEG_64K
+     DECLARE(ush, tab_prefix, 1L<<BITS);
+ #else

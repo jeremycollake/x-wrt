@@ -1,0 +1,30 @@
+diff -urN gzip-1.3.12.old/unlzh.c gzip-1.3.12.dev/unlzh.c
+--- gzip-1.3.12.old/unlzh.c	2008-01-10 14:55:23.000000000 +0100
++++ gzip-1.3.12.dev/unlzh.c	2008-01-10 14:56:13.000000000 +0100
+@@ -260,7 +260,7 @@
+ 		    if (bitbuf & mask) c = right[c];
+ 		    else               c = left [c];
+ 		    mask >>= 1;
+-		} while (c >= NT);
++		} while (c >= NT && (mask || c != left[c]));
+ 	    }
+ 	    fillbuf((int) pt_len[c]);
+ 	    if (c <= 2) {
+@@ -296,7 +296,7 @@
+ 	    if (bitbuf & mask) j = right[j];
+ 	    else               j = left [j];
+ 	    mask >>= 1;
+-	} while (j >= NC);
++	} while (j >= NC && (mask || j != left[j])); 
+     }
+     fillbuf((int) c_len[j]);
+     return j;
+@@ -313,7 +313,7 @@
+ 	    if (bitbuf & mask) j = right[j];
+ 	    else               j = left [j];
+ 	    mask >>= 1;
+-	} while (j >= NP);
++	} while (j >= NP && (mask || j != left[j]));
+     }
+     fillbuf((int) pt_len[j]);
+     if (j != 0) j = ((unsigned) 1 << (j - 1)) + getbits((int) (j - 1));

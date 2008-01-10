@@ -1,0 +1,21 @@
+diff -urN gzip-1.3.12.old/unpack.c gzip-1.3.12.dev/unpack.c
+--- gzip-1.3.12.old/unpack.c	2006-11-20 09:40:34.000000000 +0100
++++ gzip-1.3.12.dev/unpack.c	2008-01-10 14:55:49.000000000 +0100
+@@ -150,7 +150,7 @@
+ 	/* Remember where the literals of this length start in literal[] : */
+ 	lit_base[len] = base;
+ 	/* And read the literals: */
+-	for (n = leaves[len]; n > 0; n--) {
++	for (n = leaves[len]; n > 0 && base < LITERALS; n--) {
+ 	    literal[base++] = (uch)get_byte();
+ 	}
+     }
+@@ -186,7 +186,7 @@
+     prefixp = &prefix_len[1<<peek_bits];
+     for (len = 1; len <= peek_bits; len++) {
+ 	int prefixes = leaves[len] << (peek_bits-len); /* may be 0 */
+-	while (prefixes--) *--prefixp = (uch)len;
++	while (prefixes-- && prefixp > prefix_len) *--prefixp = (uch)len;
+     }
+     /* The length of all other codes is unknown: */
+     while (prefixp > prefix_len) *--prefixp = 0;
