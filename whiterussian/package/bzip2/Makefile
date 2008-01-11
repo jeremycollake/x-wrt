@@ -46,6 +46,7 @@ $(STAGING_DIR)/usr/lib/libbz2.so: $(PKG_BUILD_DIR)/.built
 	$(CP) $(PKG_BUILD_DIR)/bzlib.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_BUILD_DIR)/libbz2.{a,so*} $(STAGING_DIR)/usr/lib/
+	ln -sf libbz2.so.1.0 $(STAGING_DIR)/usr/lib/libbz2.so
 	touch $@
 
 $(IPKG_LIBBZIP2): $(STAGING_DIR)/usr/lib/libbz2.so
