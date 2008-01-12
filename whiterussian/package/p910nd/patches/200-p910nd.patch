@@ -1,6 +1,6 @@
 diff -urN p910nd-0.91.old/p910nd.c p910nd-0.91.dev/p910nd.c
 --- p910nd-0.91.old/p910nd.c	2007-09-16 01:33:59.000000000 +0200
-+++ p910nd-0.91.dev/p910nd.c	2008-01-02 21:27:51.000000000 +0100
++++ p910nd-0.91.dev/p910nd.c	2008-01-12 22:57:42.000000000 +0100
 @@ -102,11 +102,10 @@
  #else
  #define		LOCKFILE	"/var/lock/subsys/p910%cd"
@@ -177,7 +177,7 @@ diff -urN p910nd-0.91.old/p910nd.c p910nd-0.91.dev/p910nd.c
 -	fclose(f);
 +	if (copy_stream(0, lp) < 0)
 +		syslog(LOG_ERR, "copy_stream: %m\n");
-+	fclose(lp);
++	close(lp);
  	free_lock();
  }
  
@@ -305,7 +305,7 @@ diff -urN p910nd-0.91.old/p910nd.c p910nd-0.91.dev/p910nd.c
 +			syslog(LOG_ERR, "copy_stream: %m\n");
  		(void)close(fd);
 -		(void)fclose(f);
-+		(void)fclose(lp);
++		(void)close(lp);
  	}
 -	syslog(LOGOPTS, "accept: %m\n");
 +	syslog(LOG_ERR, "accept: %m\n");
