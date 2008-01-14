@@ -29,7 +29,6 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-		LIBS="-lz" \
 		PKG_CONFIG_PATH="$(STAGING_DIR)/usr/lib/pkgconfig" \
 		PKG_CONFIG_LIBDIR="$(STAGING_DIR)/usr/lib/pkgconfig" \
 		./configure \
@@ -59,7 +58,6 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		--without-libintl-prefix \
 		--with-libiconv-prefix="$(STAGING_DIR)/usr/lib/libiconv" \
 		--with-id3lib="$(STAGING_DIR)/usr" \
-		--with-libupnp="$(STAGING_DIR)/usr" \
 	);
 	touch $@
 
@@ -68,7 +66,6 @@ $(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		LIBMAGIC="-lmagic -lz" \
-		UPNP_CFLAGS="-pthread -I$(STAGING_DIR)/usr/include/upnp" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 	touch $@
