@@ -1,0 +1,20 @@
+--- howl-1.0.0.old/howl.pc.in	2004-11-23 02:15:47.000000000 +0100
++++ howl-1.0.0.dev/howl.pc.in	2008-01-14 16:38:36.000000000 +0100
+@@ -3,10 +3,15 @@
+ # For more info, see <http://www.freedesktop.org/software/pkgconfig/>
+ #
+ 
++prefix=@prefix@
++exec_prefix=@exec_prefix@
++libdir=@libdir@
++includedir=@includedir@
++
+ Name: Howl
+ Description: Howl Rendezvous/mDNS-SD Library from Porchdog Software (http://www.porchdogsoft.com)
+ Version: @VERSION@
+ Requires:
+-Libs: -L@prefix@/lib -lhowl @PLATFORM_LIBS@
+-Cflags: -I@prefix@/include/howl
++Libs: -L${libdir} -lhowl @PLATFORM_LIBS@
++Cflags: -I${includedir}/howl
+ 
