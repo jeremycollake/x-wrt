@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=ntpclient
 PKG_VERSION:=2003_194
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_MD5SUM:=94e84d5c6023c5e1f3890b28d0a08c92
 
 PKG_SOURCE_URL:=http://doolittle.faludi.com/ntpclient

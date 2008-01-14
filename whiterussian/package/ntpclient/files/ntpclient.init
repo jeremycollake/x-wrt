@@ -3,7 +3,7 @@ server=$(nvram get ntp_server)
 case "${ACTION:-ifup}" in
 	ifup)
 		ps | grep 'bin/[n]tpclient' >&- || {
-			route -n 2>&- | grep '^0.0.0.0' >&- && /usr/sbin/ntpclient -c 1 -s -h ${server:-pool.ntp.org} &
+			route -n 2>&- | grep '^0.0.0.0' >&- && /usr/sbin/ntpclient -c 1 -s -h ${server:-0.openwrt.pool.ntp.org} &
 		}
 		;;
 	ifdown)

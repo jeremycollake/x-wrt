@@ -18,7 +18,7 @@ if [ -f "/usr/sbin/ntpclient" ] || \
 	# get server, use pool.ntp.org if not set
 	NTP_SERVER=$(nvram get ntp_server)
 	if [ -z "$NTP_SERVER" ]; then
-		NTP_SERVER="pool.ntp.org"
+		NTP_SERVER="0.openwrt.pool.ntp.org"
 		nvram set "ntp_server=$NTP_SERVER"
 	fi
 

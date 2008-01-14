@@ -100,9 +100,9 @@ generate_ssl_key() {
 			ntpcli=$(which ntpclient)
 			echo "@TR<<system_settings_Updating_time#Updating time>> ..."
 			if [ -n "$ntpcli" ]; then
-				$ntpcli -c 1 -s -h pool.ntp.org
+				$ntpcli -c 1 -s -h 0.openwrt.pool.ntp.org
 			else
-				rdate -s pool.ntp.org
+				rdate -s 0.openwrt.pool.ntp.org
 			fi
 		fi
 		export RANDFILE="/tmp/.rnd"

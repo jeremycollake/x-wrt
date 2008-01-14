@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openntpd
 PKG_VERSION:=3.7p1
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 PKG_MD5SUM:=10ed8eefd760e5819efcf3277b118f47
 
 # space separated list or special @SF for sourceforge projects
