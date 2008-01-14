@@ -83,7 +83,8 @@ TARGET_CONFIGURE_OPTS:= \
   CXX=$(TARGET_CROSS)g++ \
   RANLIB=$(TARGET_CROSS)ranlib \
   STRIP=$(TARGET_CROSS)strip \
-  OBJCOPY=$(TARGET_CROSS)objcopy
+  OBJCOPY=$(TARGET_CROSS)objcopy \
+  STAGING_DIR=$(STAGING_DIR)
 
 # strip an entire directory
 RSTRIP:= \
