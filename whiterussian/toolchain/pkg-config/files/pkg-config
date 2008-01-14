@@ -1,0 +1,17 @@
+#!/bin/sh
+if [ -z "$STAGING_DIR" ]; then
+	STAGING_DIR="${0%/*}"
+	STAGING_DIR="${STAGING_DIR%/usr/bin*}"
+fi
+PKG_CONFIG_REAL="${STAGING_DIR}/usr/bin/pkg-config.real"
+if [ -z "$PKG_CONFIG_PATH" ]; then
+	export PKG_CONFIG_PATH="${STAGING_DIR}/usr/lib/pkgconfig"
+fi
+if [ -z "$PKG_CONFIG_LIBDIR" ]; then
+	export PKG_CONFIG_LIBDIR="${STAGING_DIR}/usr/lib/pkgconfig"
+fi
+$PKG_CONFIG_REAL "$@" \
+	--define-variable=prefix="${STAGING_DIR}/usr" \
+	--define-variable=exec_prefix="${STAGING_DIR}/usr" \
+	--define-variable=libdir="${STAGING_DIR}/usr/lib" \
+	--define-variable=includedir="${STAGING_DIR}/usr/include"
