@@ -1,0 +1,16 @@
+--- libxml2-2.6.20.old/xml2-config.in	2005-01-04 15:55:45.000000000 +0100
++++ libxml2-2.6.20.dev/xml2-config.in	2008-01-14 18:49:03.000000000 +0100
+@@ -1,9 +1,9 @@
+ #! /bin/sh
+ 
+-prefix=@prefix@
+-exec_prefix=@exec_prefix@
+-includedir=@includedir@
+-libdir=@libdir@
++prefix=${STAGING_DIR}@prefix@
++exec_prefix=${STAGING_DIR}@exec_prefix@
++includedir=${STAGING_DIR}@includedir@
++libdir=${STAGING_DIR}@libdir@
+ 
+ usage()
+ {
