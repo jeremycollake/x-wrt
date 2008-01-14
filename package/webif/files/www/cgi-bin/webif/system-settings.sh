@@ -113,7 +113,7 @@ generate_ssl_key() {
 			is_package_installed "ntpclient"
 			[ "$?" != "0" ] && {
 				echo "@TR<<system_settings_Updating_time#Updating time>> ..."
-				rdate -s pool.ntp.org
+				rdate -s 0.openwrt.pool.ntp.org
 			}
 		fi
 		export RANDFILE="/tmp/.rnd"
