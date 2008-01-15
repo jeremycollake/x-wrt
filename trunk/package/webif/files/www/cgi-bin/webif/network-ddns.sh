@@ -5,21 +5,11 @@
 # todo:
 #  add /enable/disable for mx and wildcard / connection type.
 
-uci_load "webif"
-config_get revision general firmware_version
-if [ "$revision" = "7.07" ]; then
-	config_username="user"
-	config_password="passwd"
-else
-	config_username="username"
-	config_password="password"
-fi
-
 if empty "$FORM_submit"; then
 	uci_load "updatedd"
 	config_get FORM_service cfg1 service 
-	config_get FORM_username cfg1 "$config_username"
-	config_get FORM_password cfg1 "$config_password"
+	config_get FORM_username cfg1 "username"
+	config_get FORM_password cfg1 "password"
 	config_get FORM_host cfg1 host
 	config_get FORM_update cfg1 update
 else
@@ -33,8 +23,8 @@ EOF
 	equal "$?" 0 && {
 		uci_set updatedd cfg1 update "$FORM_update"
 		uci_set updatedd cfg1 service "$FORM_service"
-		uci_set updatedd cfg1 "$config_username" "$FORM_username"
-		uci_set updatedd cfg1 "$config_password" "$FORM_password"
+		uci_set updatedd cfg1 "username" "$FORM_username"
+		uci_set updatedd cfg1 "password" "$FORM_password"
 		uci_set updatedd cfg1 host "$FORM_host"
 	}
 fi
