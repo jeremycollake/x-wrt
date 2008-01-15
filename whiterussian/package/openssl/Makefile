@@ -64,6 +64,7 @@ $(PKG_BUILD_DIR)/.built:
 	$(MAKE) -C $(PKG_BUILD_DIR) -j1 \
 		INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
 		install
+	$(SED) 's|-L$(STAGING_DIR)/usr/lib -ldl ||g' $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/*.pc
 	touch $@
 
 $(IPKG_LIBOPENSSL):
@@ -87,8 +88,10 @@ $(IPKG_OPENSSL_UTIL):
 $(STAGING_DIR)/usr/lib/libssl.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/openssl $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib/
+	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{crypto,ssl}.{a,so*} $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/lib{crypto,ssl}.pc $(STAGING_DIR)/usr/lib/pkgconfig/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/openssl.pc $(STAGING_DIR)/usr/lib/pkgconfig/
 	touch $@
 	
 install-dev: $(STAGING_DIR)/usr/lib/libssl.so
@@ -97,6 +100,8 @@ uninstall-dev:
 	rm -rf \
 		$(STAGING_DIR)/usr/include/openssl \
 		$(STAGING_DIR)/usr/lib/lib{crypto,ssl}.{a,so*} \
+		$(STAGING_DIR)/usr/lib/pkgconfig/lib{crypto,ssl}.pc \
+		$(STAGING_DIR)/usr/lib/pkgconfig/openssl.pc
 
 compile: install-dev
 clean: uninstall-dev
