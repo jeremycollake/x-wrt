@@ -11,7 +11,7 @@ if empty "$FORM_submit"; then
 	config_get FORM_username cfg1 "username"
 	config_get FORM_password cfg1 "password"
 	config_get FORM_host cfg1 host
-	config_get FORM_update cfg1 update
+	config_get_bool FORM_update cfg1 update 0
 else
 	SAVED=1
 	validate <<EOF
