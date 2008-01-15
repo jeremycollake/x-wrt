@@ -731,7 +731,7 @@ for device in $DEVICES; do
 				set_visible('bgscan_form_$vcfg', v);
 				v = (isset('mode_$vcfg','ap'));
 				set_visible('isolate_form_$vcfg', v);
-				v = (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2'));
+				v = (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2') || isset('encryption_$vcfg','psk+psk2'));
 				set_visible('wpapsk_$vcfg', v);
 				v = (('$iftype'=='broadcom') && (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2') || isset('encryption_$vcfg','psk+psk2') || isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2') || isset('encryption_$vcfg','wpa+wpa2')));
 				set_visible('install_nas_$vcfg', v);
