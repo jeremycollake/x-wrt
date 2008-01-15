@@ -741,7 +741,7 @@ for device in $DEVICES; do
 				set_visible('install_hostapd_$vcfg', v);
 				v = (('$iftype'=='atheros') && (isset('mode_$vcfg','sta')) && (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2') || isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2')));
 				set_visible('install_wpa_supplicant_$vcfg', v);
-				v = (isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2'));
+				v = (isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2') || isset('encryption_$vcfg','wpa+wpa2'));
 				set_visible('radiuskey_$vcfg', v);
 				set_visible('radius_ip_$vcfg', v);
 				set_visible('radius_port_form_$vcfg', v);
