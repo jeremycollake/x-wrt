@@ -1,5 +1,8 @@
 /*
  * Copyright (C) 2004  Manuel Novoa III  <mjn3@codepoet.org>
+ * Copyright (C) 2005  Konstantin A. Klubnichkin and Oleg I. Vdovikin
+ * Copyright (C) 2006  OpenWrt developers <openwrt-developers@openwrt.org>
+ * Copyright (C) 2006  Waldemar Brodkorb <wbx@freewrt.org>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -16,27 +19,8 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA
  */
 
-/* July 29, 2004
- *
- * This is a hacked replacement for the 'trx' utility used to create
- * wrt54g .trx firmware files.  It isn't pretty, but it does the job
- * for me.
- *
- * As an extension, you can specify a larger maximum length for the
- * .trx file using '-m'.  It will be rounded up to be a multiple of 4K.
- * NOTE: This space will be malloc()'d.
- *
- * August 16, 2004
- *
- * Sigh... Make it endian-neutral.
- *
- * TODO: Support '-b' option to specify offsets for each file.
- *
- * February 19, 2005 - mbm
- *
- * Add -a (align offset) and -b (absolute offset)
- */
 
+#include <sys/param.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stddef.h>
@@ -44,8 +28,8 @@
 #include <string.h>
 #include <errno.h>
 #include <unistd.h>
-#include <endian.h>
 #include <byteswap.h>
+#include <endian.h>
 
 #if __BYTE_ORDER == __BIG_ENDIAN
 #define STORE32_LE(X)		bswap_32(X)
@@ -62,7 +46,7 @@ uint32_t crc32buf(char *buf, size_t len);
 
 #define TRX_MAGIC	0x30524448	/* "HDR0" */
 #define TRX_VERSION	1
-#define TRX_MAX_LEN	0x5A0000
+#define TRX_MAX_LEN	0x697800
 #define TRX_NO_HEADER	1		/* Do not write TRX header */	
 
 struct trx_header {
@@ -79,7 +63,7 @@ void usage(void) __attribute__ (( __noreturn__ ));
 
 void usage(void)
 {
-	fprintf(stderr, "Usage: trx [-o outfile] [-m maxlen] [-a align] [-b offset] file [file [file]]\n");
+	fprintf(stderr, "Usage: trx [-p product_id] [-v version] [-o outfile] [-m maxlen] [-a align] [-b offset] file [file [file]]\n");
 	exit(EXIT_FAILURE);
 }
 
@@ -96,7 +80,16 @@ int main(int argc, char **argv)
 	unsigned long maxlen = TRX_MAX_LEN;
 	struct trx_header *p;
 
-	fprintf(stderr, "mjn3's trx replacement - v0.81.1\n");
+	struct {
+		uint8_t version[4];	/* Firmware version */
+		uint8_t prod_id[12];	/* Product Id */
+		uint8_t comp_hw[4][4];	/* Compatible hw list maj-min min/maj-min max */
+		uint8_t	pad[32];	/* Padding */
+	} asus = {
+		.version 	= { 1, 9, 2, 7 }, /* version is set to 1.9.2.7 by default */
+		.comp_hw[0]	= { 0, 2, 2, 99 } /* hardcoded hw compat list 0.02 - 2.99 */
+	};
+
 
 	if (!(buf = malloc(maxlen))) {
 		fprintf(stderr, "malloc failed\n");
@@ -112,7 +105,7 @@ int main(int argc, char **argv)
 	in = NULL;
 	i = 0;
 
-	while ((c = getopt(argc, argv, "-:o:m:a:b:")) != -1) {
+	while ((c = getopt(argc, argv, "-:o:p:v:m:a:b:")) != -1) {
 		switch (c) {
 			case 1:
 				p->offsets[i++] = STORE32_LE(cur_len);
@@ -135,7 +128,10 @@ int main(int argc, char **argv)
 					n += ROUND - (n & (ROUND-1));
 				}
 				cur_len += n;
-
+				/* reserve space for asus footer */
+				if (asus.prod_id[0]) {
+					cur_len += sizeof(asus);
+				}
 				break;
 			case 'o':
 				ofn = optarg;
@@ -196,6 +192,28 @@ int main(int argc, char **argv)
 					cur_len = n;
 				}
 				break;
+			case 'p':
+				if ((n = strlen(optarg)) > sizeof(asus.prod_id)) {
+					fprintf(stderr, "product id too long\n");
+					usage();
+				}
+				memset(asus.prod_id, ' ', sizeof(asus.prod_id));
+				memcpy(asus.prod_id, optarg, n);
+				break;
+			case 'v':
+				for (n = 0; n < sizeof(asus.version) / sizeof(asus.version[0]); n++)
+				{
+					if (n != 0 && optarg[0] == '.' && optarg[1]) optarg++;
+					else if (n != 0) break;
+					
+					asus.version[n] = strtoul(optarg, &optarg, 10);
+				}
+				if (*optarg) 
+				{
+					fprintf(stderr, "invalid version string\n");
+					usage();
+				}
+				break;
 			default:
 				usage();
 		}
@@ -212,6 +230,10 @@ int main(int argc, char **argv)
 	if (n) {
 		memset(buf + cur_len, 0, ROUND - n);
 		cur_len += ROUND - n;
+	}
+	/* add asus footer */
+	if (asus.prod_id[0]) {
+		memcpy(buf + cur_len - sizeof(asus), &asus, sizeof(asus));
 	}
 
 	p->crc32 = crc32buf((char *) &p->flag_version,
