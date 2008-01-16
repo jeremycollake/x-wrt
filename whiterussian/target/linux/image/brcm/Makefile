@@ -1,4 +1,3 @@
-# $Id: Makefile 6074 2007-01-11 09:54:51Z nbd $
 #
 include $(TOPDIR)/rules.mk
 
@@ -51,13 +50,10 @@ FSNAME:=$(patsubst jffs2-%,jffs2,$(FS))
 # install: $(BIN_DIR)/openwrt-wap54g-$(FSNAME).trx
 # endif
 
-$(BIN_DIR)/openwrt-wr850g-$(FS).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
-	$(STAGING_DIR)/bin/motorola-bin -1 $< $@
-
 $(BIN_DIR)/openwrt-usr5461-$(FS).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
 	$(STAGING_DIR)/bin/trx2usr $< $@
 
-install: $(BIN_DIR)/openwrt-wr850g-$(FS).bin $(BIN_DIR)/openwrt-usr5461-$(FS).bin
+install: $(BIN_DIR)/openwrt-usr5461-$(FS).bin
 
 ifneq ($(FS),jffs2-8MB)
 $(BIN_DIR)/openwrt-wrt54g3g-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
@@ -78,7 +74,41 @@ $(BIN_DIR)/openwrt-wa840g-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$
 $(BIN_DIR)/openwrt-we800g-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
 	$(STAGING_DIR)/bin/motorola-bin -3 $< $@
 
-install: $(BIN_DIR)/openwrt-wrt54g-$(FSNAME).bin $(BIN_DIR)/openwrt-wrt54gs_v4-$(FSNAME).bin $(BIN_DIR)/openwrt-wrt54g3g-$(FSNAME).bin $(BIN_DIR)/openwrt-wa840g-$(FSNAME).bin $(BIN_DIR)/openwrt-we800g-$(FSNAME).bin
+$(BIN_DIR)/openwrt-wl300g-$(FSNAME).trx: $(KDIR)/loader.tmp.gz
+	$(STAGING_DIR)/bin/trx -p WL300g -v 1.9.3.7 -o $@ $(KDIR)/loader.tmp.gz $(KDIR)/vmlinux.lzma $(TRXALIGN) $(KDIR)/root.$(FS)
+
+$(BIN_DIR)/openwrt-wl320ge-$(FSNAME).trx: $(KDIR)/loader.tmp.gz
+	$(STAGING_DIR)/bin/trx -p WL320gE -v 1.9.8.0 -o $@ $(KDIR)/loader.tmp.gz $(KDIR)/vmlinux.lzma $(TRXALIGN) $(KDIR)/root.$(FS)
+
+$(BIN_DIR)/openwrt-wl320gp-$(FSNAME).trx: $(KDIR)/loader.tmp.gz
+	$(STAGING_DIR)/bin/trx -p WL320gP -v 1.9.8.0 -o $@ $(KDIR)/loader.tmp.gz $(KDIR)/vmlinux.lzma $(TRXALIGN) $(KDIR)/root.$(FS)
+
+$(BIN_DIR)/openwrt-wl500b-$(FSNAME).trx: $(KDIR)/loader.tmp.gz
+	$(STAGING_DIR)/bin/trx -p WL500b -v 1.8.2.4 -o $@ $(KDIR)/loader.tmp.gz $(KDIR)/vmlinux.lzma $(TRXALIGN) $(KDIR)/root.$(FS)
+
+$(BIN_DIR)/openwrt-wl500g-$(FSNAME).trx: $(KDIR)/loader.tmp.gz
+	$(STAGING_DIR)/bin/trx -p WL500g -v 1.9.5.0 -o $@ $(KDIR)/loader.tmp.gz $(KDIR)/vmlinux.lzma $(TRXALIGN) $(KDIR)/root.$(FS)
+
+$(BIN_DIR)/openwrt-wl500gx-$(FSNAME).trx: $(KDIR)/loader.tmp.gz
+	$(STAGING_DIR)/bin/trx -p WL500gx -v 1.9.6.0 -o $@ $(KDIR)/loader.tmp.gz $(KDIR)/vmlinux.lzma $(TRXALIGN) $(KDIR)/root.$(FS)
+
+$(BIN_DIR)/openwrt-wlhdd-$(FSNAME).trx: $(KDIR)/loader.tmp.gz
+	$(STAGING_DIR)/bin/trx -p WLHDD -v 1.2.3.9 -o $@ $(KDIR)/loader.tmp.gz $(KDIR)/vmlinux.lzma $(TRXALIGN) $(KDIR)/root.$(FS)
+
+install: \
+	$(BIN_DIR)/openwrt-wa840g-$(FSNAME).bin \
+	$(BIN_DIR)/openwrt-we800g-$(FSNAME).bin \
+	$(BIN_DIR)/openwrt-wlhdd-$(FSNAME).trx \
+	$(BIN_DIR)/openwrt-wl300g-$(FSNAME).trx \
+	$(BIN_DIR)/openwrt-wl320ge-$(FSNAME).trx \
+	$(BIN_DIR)/openwrt-wl320gp-$(FSNAME).trx \
+	$(BIN_DIR)/openwrt-wl500b-$(FSNAME).trx \
+	$(BIN_DIR)/openwrt-wl500g-$(FSNAME).trx \
+	$(BIN_DIR)/openwrt-wl500gx-$(FSNAME).trx \
+	$(BIN_DIR)/openwrt-wrt54g-$(FSNAME).bin \
+	$(BIN_DIR)/openwrt-wrt54gs_v4-$(FSNAME).bin \
+	$(BIN_DIR)/openwrt-wrt54g3g-$(FSNAME).bin \
+	$(BIN_DIR)/openwrt-wr850g-$(FSNAME).bin
 endif
 
 ifneq ($(FS),jffs2-4MB)
@@ -88,7 +118,17 @@ $(BIN_DIR)/openwrt-wrt54gs-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-
 $(BIN_DIR)/openwrt-wrtsl54gs-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
 	$(STAGING_DIR)/bin/addpattern -4 -p W54U -v v2.08.1 -i $< -o $@ -g
 
-install: $(BIN_DIR)/openwrt-wrt54gs-$(FSNAME).bin $(BIN_DIR)/openwrt-wrtsl54gs-$(FSNAME).bin
+$(BIN_DIR)/openwrt-wl500gp-$(FSNAME).trx: $(KDIR)/loader.tmp.gz
+	$(STAGING_DIR)/bin/trx -p WL500gp -v 1.9.7.5 -o $@ $(KDIR)/loader.tmp.gz $(KDIR)/vmlinux.lzma $(TRXALIGN) $(KDIR)/root.$(FS)
+
+$(BIN_DIR)/openwrt-wl500w-$(FSNAME).trx: $(KDIR)/loader.tmp.gz
+	$(STAGING_DIR)/bin/trx -p WL500W -v 1.9.8.9 -o $@ $(KDIR)/loader.tmp.gz $(KDIR)/vmlinux.lzma $(TRXALIGN) $(KDIR)/root.$(FS)
+
+install: \
+	$(BIN_DIR)/openwrt-wl500gp-$(FSNAME).trx \
+	$(BIN_DIR)/openwrt-wl500w-$(FSNAME).trx \
+	$(BIN_DIR)/openwrt-wrt54gs-$(FSNAME).bin \
+	$(BIN_DIR)/openwrt-wrtsl54gs-$(FSNAME).bin
 endif
 endif
 
