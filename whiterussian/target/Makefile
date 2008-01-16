@@ -15,6 +15,7 @@ clean: linux-clean utils-clean lzma-clean image_clean
 
 image_clean:
 	rm -f $(BIN_DIR)/openwrt-*
+	rm -f $(BIN_DIR)/md5sums.txt
 
 linux/package/%:
 	$(MAKE) -C $(TOPDIR)/target/linux $(patsubst linux/%,%,$@)
