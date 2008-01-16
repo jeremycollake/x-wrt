@@ -1,0 +1,5 @@
+Package: lighttpd-mod-extforward
+Priority: optional
+Section: net
+Description: an extract forwarded module for lighttpd
+Depends: lighttpd

@@ -1,0 +1,5 @@
+Package: lighttpd-mod-fastcgi
+Priority: optional
+Section: net
+Description: a FastCGI module for lighttpd
+Depends: lighttpd

@@ -1,0 +1,5 @@
+Package: lighttpd-mod-flv-streaming
+Priority: optional
+Section: net
+Description: a Flash streaming module for lighttpd
+Depends: lighttpd

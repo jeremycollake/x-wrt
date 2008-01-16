@@ -1,0 +1,4 @@
+Package: bcrelay
+Priority: optional
+Section: net
+Description: A broadcast packet repeater for PPTPD

@@ -1,0 +1,5 @@
+Package: lighttpd-mod-access
+Priority: optional
+Section: net
+Description: an access module for lighttpd
+Depends: lighttpd

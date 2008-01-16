@@ -1,0 +1,5 @@
+Package: lighttpd-mod-trigger-b4-dl
+Priority: optional
+Section: net
+Description: an anti-hot-linking module for lighttpd
+Depends: lighttpd, libgdbm

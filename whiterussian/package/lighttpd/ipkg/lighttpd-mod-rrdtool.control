@@ -1,0 +1,5 @@
+Package: lighttpd-mod-rrdtool
+Priority: optional
+Section: net
+Description: a RRD time-series data module for lighttpd
+Depends: lighttpd

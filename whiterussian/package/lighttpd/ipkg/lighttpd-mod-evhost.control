@@ -1,0 +1,5 @@
+Package: lighttpd-mod-evhost
+Priority: optional
+Section: net
+Description: an enhanced virtual hosting module for lighttpd
+Depends: lighttpd

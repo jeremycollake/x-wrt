@@ -1,0 +1,5 @@
+Package: lighttpd-mod-scgi
+Priority: optional
+Section: net
+Description: a simplified CGI module for lighttpd
+Depends: lighttpd

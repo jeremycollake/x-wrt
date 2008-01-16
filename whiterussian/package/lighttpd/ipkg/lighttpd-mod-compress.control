@@ -1,0 +1,5 @@
+Package: lighttpd-mod-compress
+Priority: optional
+Section: net
+Description: a compress module for lighttpd
+Depends: lighttpd, zlib, libbzip2
