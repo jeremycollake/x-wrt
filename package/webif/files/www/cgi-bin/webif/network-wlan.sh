@@ -328,6 +328,9 @@ for device in $DEVICES; do
 				config_get_bool FORM_bursting "$vcfg" bursting
 				config_get_bool FORM_fframes "$vcfg" ff
 				config_get_bool FORM_wmm "$vcfg" wmm
+				config_get_bool FORM_xr "$vcfg" xr
+				config_get_bool FORM_ar "$vcfg" ar
+				config_get_bool FORM_turbo "$vcfg" turbo
 				config_get FORM_macpolicy "$vcfg" macpolicy
 			else
 				eval FORM_key="\$FORM_radius_key_$vcfg"
@@ -362,6 +365,9 @@ for device in $DEVICES; do
 				eval FORM_bursting="\$FORM_bursting_$vcfg"
 				eval FORM_fframes="\$FORM_fframes_$vcfg"
 				eval FORM_wmm="\$FORM_wmm_$vcfg"
+				eval FORM_xr="\$FORM_xr_$vcfg"
+				eval FORM_ar="\$FORM_ar_$vcfg"
+				eval FORM_turbo="\$FORM_turbo_$vcfg"
 				eval FORM_macpolicy="\$FORM_macpolicy_$vcfg"
 			fi
 
@@ -451,6 +457,21 @@ for device in $DEVICES; do
 					radio|wmm_$vcfg|$FORM_wmm|1|@TR<<On>>
 					radio|wmm_$vcfg|$FORM_wmm|0|@TR<<Off>>"
 				append forms "$wmm" "$N"
+
+				xr="field|@TR<<XR>>
+					radio|xr_$vcfg|$FORM_xr|1|@TR<<On>>
+					radio|xr_$vcfg|$FORM_xr|0|@TR<<Off>>"
+				append forms "$xr" "$N"
+
+				ar="field|@TR<<AR>>
+					radio|ar_$vcfg|$FORM_ar|1|@TR<<On>>
+					radio|ar_$vcfg|$FORM_ar|0|@TR<<Off>>"
+				append forms "$ar" "$N"
+
+				turbo="field|@TR<<Turbo>>
+					radio|turbo_$vcfg|$FORM_turbo|1|@TR<<On>>
+					radio|turbo_$vcfg|$FORM_turbo|0|@TR<<Off>>"
+				append forms "$turbo" "$N"
 
 				rate="field|@TR<<TX Rate>>
 					select|rate_$vcfg|$FORM_rate
@@ -836,6 +857,9 @@ EOF
 						eval FORM_bursting="\$FORM_bursting_$vcfg"
 						eval FORM_fframes="\$FORM_fframes_$vcfg"
 						eval FORM_wmm="\$FORM_wmm_$vcfg"
+						eval FORM_xr="\$FORM_xr_$vcfg"
+						eval FORM_ar="\$FORM_ar_$vcfg"
+						eval FORM_turbo="\$FORM_turbo_$vcfg"
 						eval FORM_macpolicy="\$FORM_macpolicy_$vcfg"
 
 						uci_set "wireless" "$vcfg" "network" "$FORM_network"
@@ -868,6 +892,9 @@ EOF
 						uci_set "wireless" "$vcfg" "bursting" "$FORM_bursting"
 						uci_set "wireless" "$vcfg" "ff" "$FORM_fframes"
 						uci_set "wireless" "$vcfg" "wmm" "$FORM_wmm"
+						uci_set "wireless" "$vcfg" "xr" "$FORM_xr"
+						uci_set "wireless" "$vcfg" "ar" "$FORM_ar"
+						uci_set "wireless" "$vcfg" "turbo" "$FORM_turbo"
 						uci_set "wireless" "$vcfg" "macpolicy" "$FORM_macpolicy"
 					fi
 				done
