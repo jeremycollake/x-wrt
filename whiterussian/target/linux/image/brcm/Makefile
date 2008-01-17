@@ -56,8 +56,11 @@ install: $(BIN_DIR)/openwrt-usr5461-$(FS).bin
 endif
 
 ifneq ($(FS),jffs2-8MB)
-$(BIN_DIR)/openwrt-wrt54g3g-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
-	$(STAGING_DIR)/bin/addpattern -4 -p W54F -v v2.01.1 -i $< -o $@ -g
+$(BIN_DIR)/openwrt-wrt54g3gat-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
+	$(STAGING_DIR)/bin/addpattern -4 -p W3GA -v v2.02.2 -i $< -o $@ -g
+
+$(BIN_DIR)/openwrt-wrt54g3gst-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
+	$(STAGING_DIR)/bin/addpattern -4 -p W3GS -v v2.00.9 -i $< -o $@ -g
 
 $(BIN_DIR)/openwrt-wrt54g-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL)-$(FS).trx
 	$(STAGING_DIR)/bin/addpattern -4 -p W54G -v v4.60.1 -i $< -o $@ -g
@@ -107,7 +110,8 @@ install: \
 	$(BIN_DIR)/openwrt-wl500gx-$(FSNAME).trx \
 	$(BIN_DIR)/openwrt-wrt54g-$(FSNAME).bin \
 	$(BIN_DIR)/openwrt-wrt54gs_v4-$(FSNAME).bin \
-	$(BIN_DIR)/openwrt-wrt54g3g-$(FSNAME).bin \
+	$(BIN_DIR)/openwrt-wrt54g3gat-$(FSNAME).bin \
+	$(BIN_DIR)/openwrt-wrt54g3gst-$(FSNAME).bin \
 	$(BIN_DIR)/openwrt-wr850g-$(FSNAME).bin
 endif
 
