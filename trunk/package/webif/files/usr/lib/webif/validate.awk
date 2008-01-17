@@ -5,7 +5,7 @@
 # $5 = value
 BEGIN {
 	FS="|"
-	output=''
+	output=""
 }
 
 { 
