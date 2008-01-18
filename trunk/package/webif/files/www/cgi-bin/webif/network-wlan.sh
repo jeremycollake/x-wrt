@@ -703,7 +703,7 @@ for device in $DEVICES; do
 
 				maclist="end_form
 					start_form|@TR<<MAC List>>|maclist_form_$vcfg|hidden
-					listedit|${vcfg}_maclist||$FORM_maclist|$FORM_macadd
+					listedit|${vcfg}_maclist|$SCRIPT_NAME?|$FORM_maclist|$FORM_macadd
 					end_form"
 				append forms "$maclist" "$N"
 
