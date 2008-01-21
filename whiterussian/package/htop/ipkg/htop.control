@@ -1,0 +1,8 @@
+Package: htop
+Priority: optional
+Section: utils
+Depends: libncurses
+Description: an interactive process viewer
+ This is htop, an interactive process viewer.
+ .
+ http://htop.sourceforge.net/

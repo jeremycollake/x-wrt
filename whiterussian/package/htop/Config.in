@@ -1,0 +1,8 @@
+config BR2_PACKAGE_HTOP
+	tristate "htop - an interactive process viewer"
+	default m if CONFIG_DEVEL
+	select BR2_PACKAGE_LIBNCURSES
+	help
+	  This is htop, an interactive process viewer.
+	  
+	  http://htop.sourceforge.net/

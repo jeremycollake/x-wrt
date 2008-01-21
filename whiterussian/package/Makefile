@@ -44,6 +44,7 @@ package-$(BR2_PACKAGE_GMP) += gmp
 package-$(BR2_PACKAGE_GZIP) += gzip
 package-$(BR2_PACKAGE_HASERL) += haserl
 package-$(BR2_PACKAGE_HOWL) += howl
+package-$(BR2_PACKAGE_HTOP) += htop
 package-$(BR2_PACKAGE_HTPDATE) += htpdate
 package-$(BR2_PACKAGE_ID3LIB) += id3lib
 package-$(BR2_PACKAGE_IPKG) += ipkg
@@ -200,6 +201,7 @@ file-compile: zlib-compile
 fprobe-compile: libpcap-compile
 gdb-compile: ncurses-compile
 gmediaserver-compile: libpthread-compile id3lib-compile libiconv-compile file-compile libupnp-compile
+htop-compile: ncurses-compile
 id3lib-compile: uclibcxx-compile zlib-compile
 kismet-compile: uclibcxx-compile libpcap-compile ncurses-compile
 lcd4linux-compile: ncurses-compile

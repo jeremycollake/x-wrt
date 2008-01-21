@@ -1,0 +1,102 @@
+--- htop-0.6.6.old/Hashtable.c	2007-05-17 19:07:38.000000000 +0200
++++ htop-0.6.6.dev/Hashtable.c	2008-01-21 17:32:29.000000000 +0100
+@@ -79,12 +79,16 @@
+    this->size = size;
+    this->buckets = (HashtableItem**) calloc(sizeof(HashtableItem*), size);
+    this->owner = owner;
++#ifdef DEBUG
+    assert(Hashtable_isConsistent(this));
++#endif
+    return this;
+ }
+ 
+ void Hashtable_delete(Hashtable* this) {
++#ifdef DEBUG
+    assert(Hashtable_isConsistent(this));
++#endif
+    for (int i = 0; i < this->size; i++) {
+       HashtableItem* walk = this->buckets[i];
+       while (walk != NULL) {
+@@ -100,7 +104,9 @@
+ }
+ 
+ inline int Hashtable_size(Hashtable* this) {
++#ifdef DEBUG
+    assert(Hashtable_isConsistent(this));
++#endif
+    return this->items;
+ }
+ 
+@@ -119,13 +125,17 @@
+          break;
+       } else
+          bucketPtr = &((*bucketPtr)->next);
++#ifdef DEBUG
+    assert(Hashtable_isConsistent(this));
++#endif
+ }
+ 
+ void* Hashtable_remove(Hashtable* this, unsigned int key) {
+    unsigned int index = key % this->size;
+    
++#ifdef DEBUG
+    assert(Hashtable_isConsistent(this));
++#endif
+ 
+    HashtableItem** bucket; 
+    for (bucket = &(this->buckets[index]); *bucket; bucket = &((*bucket)->next) ) {
+@@ -137,15 +147,21 @@
+          this->items--;
+          if (this->owner) {
+             free(value);
++#ifdef DEBUG
+             assert(Hashtable_isConsistent(this));
++#endif
+             return NULL;
+          } else {
++#ifdef DEBUG
+             assert(Hashtable_isConsistent(this));
++#endif
+             return value;
+          }
+       }
+    }
++#ifdef DEBUG
+    assert(Hashtable_isConsistent(this));
++#endif
+    return NULL;
+ }
+ 
+@@ -154,10 +170,14 @@
+    HashtableItem* bucketPtr = this->buckets[index];
+    while (true) {
+       if (bucketPtr == NULL) {
++#ifdef DEBUG
+          assert(Hashtable_isConsistent(this));
++#endif
+          return NULL;
+       } else if (bucketPtr->key == key) {
++#ifdef DEBUG
+          assert(Hashtable_isConsistent(this));
++#endif
+          return bucketPtr->value;
+       } else
+          bucketPtr = bucketPtr->next;
+@@ -165,7 +185,9 @@
+ }
+ 
+ void Hashtable_foreach(Hashtable* this, Hashtable_PairFunction f, void* userData) {
++#ifdef DEBUG
+    assert(Hashtable_isConsistent(this));
++#endif
+    for (int i = 0; i < this->size; i++) {
+       HashtableItem* walk = this->buckets[i];
+       while (walk != NULL) {
+@@ -173,5 +195,7 @@
+          walk = walk->next;
+       }
+    }
++#ifdef DEBUG
+    assert(Hashtable_isConsistent(this));
++#endif
+ }
