@@ -1,0 +1,6 @@
+Package: spcaserv
+Priority: optional
+Section: net
+Depends: libpthread, base-files-uci
+Description: a streaming TCP server for spca5xx based webcam
+ A streaming TCP server for spca5xx based webcam with the raw jpeg feature.

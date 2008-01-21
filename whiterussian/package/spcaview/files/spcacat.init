@@ -1,0 +1,62 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2007 X-Wrt.org
+START=90
+
+append_bool() {
+	local section="$1"
+	local option="$2"
+	local value="$3"
+	local _loctmp
+	config_get_bool _loctmp "$section" "$option"
+	[ "$_loctmp" -gt 0 ] && append args "$3"
+}
+
+append_parm() {
+	local section="$1"
+	local option="$2"
+	local switch="$3"
+	local default="$4"
+	local _loctmp
+	config_get _loctmp "$section" "$option"
+	[ -z "$_loctmp" ] && _loctmp="$default"
+	[ -n "$_loctmp" ] && append args "$switch$_loctmp"
+}
+
+start_service() {
+	local cfg="$1"
+	local DAEMON=$(which spcacat 2>/dev/null)
+	[ -z "$DAEMON" ] && return
+	local enabled
+	config_get_bool enabled "$cfg" enabled 0
+	[ 0 -eq "$enabled" ] && return
+
+	local defdevice="/dev/v4l/video0"
+	local args device read format resolution port workdir
+	args=""
+	config_get device "$cfg" device
+	[ -z "$device" ] && device="$defdevice"
+	[ -c "$device" ] || {
+		echo "The v4l video device is missing!"
+		return
+	}
+	append_parm "$cfg" device "-d " "$device"
+	append_bool "$cfg" readmethod "-g"
+	append_parm "$cfg" format "-f " "jpg"
+	append_parm "$cfg" resolution "-s " "320x240"
+	append_parm "$cfg" interval "-p " "10000"
+	append_bool "$cfg" overwrite "-o"
+
+	config_get workdir "$cfg" workdir
+	[ -z "$workdir" ] && workdir="/tmp/spcacat"
+	[ -d "$workdir" ] || mkdir -p "$workdir"
+	cd "$workdir" && $DAEMON $args >&- 2>&- <&- &
+}
+
+start() {
+	config_load spcacat
+	config_foreach start_service spcacat
+}
+
+stop() {
+	killall spcacat
+}

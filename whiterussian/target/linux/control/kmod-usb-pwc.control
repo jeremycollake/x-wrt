@@ -1,4 +1,4 @@
-Package: kmod-pwc
+Package: kmod-usb-pwc
 Priority: optional
 Section: sys
 Description: Kernel driver for USB Philips Cameras

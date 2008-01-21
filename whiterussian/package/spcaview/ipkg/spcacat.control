@@ -1,0 +1,6 @@
+Package: spcacat
+Priority: optional
+Section: utils
+Depends: libpthread, base-files-uci
+Description: a picture grabber for spca5xx based webcam
+ A picture grabber for spca5xx based webcam with the raw jpeg feature.

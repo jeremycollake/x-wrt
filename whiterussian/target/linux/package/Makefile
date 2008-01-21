@@ -8,6 +8,8 @@ package-$(BR2_PACKAGE_KMOD_SWITCH) += switch
 package-$(BR2_PACKAGE_KMOD_NOZOMI) += nozomi
 package-$(BR2_PACKAGE_KMOD_OPENSWAN) += openswan
 package-$(BR2_PACKAGE_KMOD_MADWIFI) += madwifi
+package-$(BR2_PACKAGE_KMOD_USB_SPCA5XX) += spca5xx
+package-$(BR2_PACKAGE_KMOD_USB_SPCA5XX_LE) += spca5xx-le
 package-y += openwrt
 
 package-$(BR2_PACKAGE_KMOD_WLCOMPAT) += wlcompat

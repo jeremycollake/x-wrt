@@ -269,10 +269,13 @@ $(eval $(call KMOD_template,SCHED,sched,\
 ))
 $(eval $(call KMOD_template,VIDEODEV,videodev,\
 	$(MODULES_DIR)/kernel/drivers/media/video/videodev.o \
-))
-$(eval $(call KMOD_template,PWC,pwc,\
+,CONFIG_VIDEO_DEV,,80,videodev))
+$(eval $(call KMOD_template,USB_OV511,usb-ov511,\
+	$(MODULES_DIR)/kernel/drivers/usb/ov511.o \
+,CONFIG_USB_OV511,,90,ov511))
+$(eval $(call KMOD_template,USB_PWC,usb-pwc,\
 	$(MODULES_DIR)/kernel/drivers/usb/pwc.o \
-))
+,CONFIG_USB_PWC,,90,pwc))
 
 $(eval $(call KMOD_template,SOFTDOG,softdog,\
 	$(MODULES_DIR)/kernel/drivers/char/softdog.o \

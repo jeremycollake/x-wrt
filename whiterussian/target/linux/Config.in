@@ -492,8 +492,16 @@ config BR2_PACKAGE_KMOD_VIDEODEV
 	tristate "Video (For Linux) kernel support"
 	default m
 
-config BR2_PACKAGE_KMOD_PWC
+config BR2_PACKAGE_KMOD_USB_OV511
+	tristate "Kernel driver for USB OV511 Camera"
+	select BR2_PACKAGE_KMOD_VIDEODEV
+	select BR2_PACKAGE_KMOD_USB
+	default m
+
+config BR2_PACKAGE_KMOD_USB_PWC
 	tristate "Kernel driver for USB Philips Cameras"
+	select BR2_PACKAGE_KMOD_VIDEODEV
+	select BR2_PACKAGE_KMOD_USB
 	default m
 
 config BR2_PACKAGE_KMOD_SOFTDOG

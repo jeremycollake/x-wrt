@@ -141,6 +141,7 @@ package-$(BR2_PACKAGE_SHFS) += shfs
 package-$(BR2_PACKAGE_SIPROXD) += siproxd
 package-$(BR2_PACKAGE_SIPSAK) += sipsak
 package-$(BR2_PACKAGE_SNORT) += snort
+package-$(BR2_COMPILE_SPCAVIEW) += spcaview
 package-$(BR2_PACKAGE_SPEEX) += speex
 package-$(BR2_PACKAGE_SQLITE) += sqlite
 package-$(BR2_PACKAGE_STRACE) += strace
@@ -231,6 +232,7 @@ rsync-compile: popt-compile
 screen-compile: ncurses-compile
 siproxd-compile: libosip2-compile
 sipsak-compile: openssl-compile
+spcaview-compile: libpthread-compile
 sqlite-compile: ncurses-compile readline-compile
 tcpdump-compile: libpcap-compile
 tinc-compile: zlib-compile openssl-compile lzo-compile

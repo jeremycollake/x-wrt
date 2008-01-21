@@ -1,0 +1,11 @@
+--- spca5xx-20060501.old/drivers/usb/spca5xx.h	2006-04-20 22:57:55.000000000 +0200
++++ spca5xx-20060501.dev/drivers/usb/spca5xx.h	2008-01-21 10:12:53.000000000 +0100
+@@ -314,7 +314,7 @@
+     int out[6 * 64];
+     int max[6];
+ 	/*******************************************/
+-//    int seq;			/* Frame sequence number */
++    int seq;			/* Frame sequence number */
+     int depth;			/* Bytes per pixel */
+     int width;			/* Width application is expecting */
+     int height;			/* Height */

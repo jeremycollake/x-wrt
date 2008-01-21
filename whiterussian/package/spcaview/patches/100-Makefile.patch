@@ -1,0 +1,26 @@
+--- spcaview-20071224.old/Makefile	2005-09-24 22:57:52.000000000 +0200
++++ spcaview-20071224.dev/Makefile	2008-01-21 13:37:59.000000000 +0100
+@@ -10,8 +10,8 @@
+ APP_BINARY=spcaview
+ BIN=/usr/local/bin
+ #SDLLIBS= -lSDL -lpthread -lSDL_image
+-SDLLIBS = $(shell sdl-config --libs) 
+-SDLFLAGS = $(shell sdl-config --cflags)
++#SDLLIBS = $(shell sdl-config --libs) 
++#SDLFLAGS = $(shell sdl-config --cflags)
+ 
+ SERVFLAGS= -O2 -DLINUX $(WARNINGS)
+ MATH_LIB=-lm 
+@@ -59,10 +59,10 @@
+ 	chmod 755 $(APP_BINARY)
+ 
+ spcaserv: $(OBJSERVER)
+-	gcc $(SERVFLAGS) -o spcaserv $(OBJSERVER) $(SERVLIBS)
++	$(CC) $(SERVFLAGS) -o spcaserv $(OBJSERVER) $(SERVLIBS)
+ 	
+ spcacat: $(OBJCAT)
+-	gcc $(SERVFLAGS) -o spcacat $(OBJCAT) $(SERVLIBS)
++	$(CC) $(SERVFLAGS) -o spcacat $(OBJCAT) $(SERVLIBS)
+ 	
+ spcaview.o: spcaview.c  jconfig.h dpsh.h utils.h SDL_audioin.h
+ 

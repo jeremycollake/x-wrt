@@ -1,0 +1,76 @@
+diff -urN spcaview-20071224.old/server.c spcaview-20071224.dev/server.c
+--- spcaview-20071224.old/server.c	2005-12-11 14:13:13.000000000 +0100
++++ spcaview-20071224.dev/server.c	2008-01-21 17:57:52.000000000 +0100
+@@ -158,12 +158,12 @@
+ 	{
+ 	  printf ("usage: cdse [-h -d -g ] \n");
+ 	  printf ("-h	print this message \n");
+-	  printf ("-d	/dev/videoX       use videoX device\n");
++	  printf ("-d	/dev/v4l/videoX   use videoX device\n");
+ 	  printf ("-g	use read method for grab instead mmap \n");
+ 	  printf ("-f	video format  default yuv  others options are r16 r24 r32 yuv jpg \n");
+ 	  printf ("-s	widthxheight      use specified input size \n");
+ 	  printf ("-w	port      server port \n");
+-	  printf ("-p	/dev/partportX       use partportX device\n");
++	  printf ("-p	/dev/printers/X   use partportX device\n");
+ 	  exit (0);
+ 	}
+     }
+@@ -172,10 +172,10 @@
+   printf(" %s \n",version);
+   if (videodevice == NULL || *videodevice == 0)
+     {
+-      videodevice = "/dev/video0";
++      videodevice = "/dev/v4l/video0";
+     }
+   if(usepartport && partdevice == NULL)
+-  	partdevice = "/dev/parport0";
++  	partdevice = "/dev/printers/0";
+ 	
+   memset (&videoIn, 0, sizeof (struct vdIn));
+   if (init_videoIn
+diff -urN spcaview-20071224.old/spcacat.c spcaview-20071224.dev/spcacat.c
+--- spcaview-20071224.old/spcacat.c	2005-11-27 22:09:42.000000000 +0100
++++ spcaview-20071224.dev/spcacat.c	2008-01-21 17:58:45.000000000 +0100
+@@ -174,11 +174,11 @@
+ 	{
+ 	  printf ("usage: cdse [-h -d -g -s -P -p -N -o] \n");
+ 	  printf ("-h	print this message \n");
+-	  printf ("-d	/dev/videoX       use videoX device\n");
++	  printf ("-d	/dev/v4l/videoX   use videoX device\n");
+ 	  printf ("-g	use read method for grab instead mmap \n");
+ 	  printf ("-f	video format  default yuv  others options are r16 r24 r32 yuv jpg \n");
+ 	  printf ("-s	widthxheight      use specified input size \n");
+-	  printf ("-P	/dev/partportX       use partportX device\n");
++	  printf ("-P	/dev/printers/X   use partportX device\n");
+ 	  printf ("-p	x ms       take a picture every x ms minimum is set to 50ms \n");
+ 	  printf ("-N   take a N pictures every p ms and stop \n");
+ 	  printf ("-o	overwrite picture, each picture come with the same name SpacPict.jpg \n");
+@@ -189,10 +189,10 @@
+   printf(" %s \n",version);
+   if (videodevice == NULL || *videodevice == 0)
+     {
+-      videodevice = "/dev/video0";
++      videodevice = "/dev/v4l/video0";
+     }
+   if(usepartport && partdevice == NULL)
+-  	partdevice = "/dev/parport0";
++  	partdevice = "/dev/printers/0";
+ 	
+   memset (&videoIn, 0, sizeof (struct vdIn));
+   if (init_videoIn
+diff -urN spcaview-20071224.old/spcav4l.c spcaview-20071224.dev/spcav4l.c
+--- spcaview-20071224.old/spcav4l.c	2007-12-24 17:46:58.000000000 +0100
++++ spcaview-20071224.dev/spcav4l.c	2008-01-21 19:15:37.000000000 +0100
+@@ -92,9 +92,9 @@
+   vd->videodevice = NULL;
+   vd->cameraname = NULL;
+   vd->videodevice = NULL;
+-  vd->videodevice = (char *) realloc (vd->videodevice, 16);
++  vd->videodevice = (char *) realloc (vd->videodevice, 18);
+   vd->cameraname = (char *) realloc (vd->cameraname, 32);
+-  snprintf (vd->videodevice, 12, "%s", device);
++  snprintf (vd->videodevice, 16, "%s", device);
+   printf("video %s \n",vd->videodevice);
+   memset (vd->cameraname, 0, sizeof (vd->cameraname));
+   memset(vd->bridge, 0, sizeof(vd->bridge));

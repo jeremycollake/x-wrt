@@ -1,0 +1,26 @@
+menu "spca5xx based webcam utilities"
+
+config BR2_COMPILE_SPCAVIEW
+	tristate
+	default n
+	depends BR2_PACKAGE_SPCACAT || BR2_PACKAGE_SPCASERV
+
+config BR2_PACKAGE_SPCACAT
+	tristate "spcacat - a picture grabber"
+	default m if CONFIG_DEVEL
+	select BR2_COMPILE_SPCAVIEW
+	select BR2_PACKAGE_LIBPTHREAD
+	select BR2_PACKAGE_BASE_FILES_UCI
+	help
+	  A picture grabber for spca5xx based webcam with the raw jpeg feature.
+
+config BR2_PACKAGE_SPCASERV
+	tristate "spcaserv - a streaming TCP server"
+	default m if CONFIG_DEVEL
+	select BR2_COMPILE_SPCAVIEW
+	select BR2_PACKAGE_LIBPTHREAD
+	select BR2_PACKAGE_BASE_FILES_UCI
+	help
+	  A streaming TCP server for spca5xx based webcam with the raw jpeg feature.
+
+endmenu

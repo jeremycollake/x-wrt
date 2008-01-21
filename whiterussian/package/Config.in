@@ -177,6 +177,7 @@ source "package/int2human/Config.in"
 source "package/madwifi-tools/Config.in"
 source "package/pciutils/Config.in"
 source "package/pcmcia-cs/Config.in"  # pcmcia-utils
+source "package/spcaview/Config.in"
 source "package/strace/Config.in"
 source "package/tar/Config.in"
 source "package/unrar/Config.in"
