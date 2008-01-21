@@ -1,0 +1,72 @@
+diff -NarU1 cabextract-1.1.orig/mspack/cabd.c cabextract-1.1/mspack/cabd.c
+--- cabextract-1.1.orig/mspack/cabd.c	2004-10-18 11:10:15.000000000 +0300
++++ cabextract-1.1/mspack/cabd.c	2005-03-18 01:24:26.000000000 +0200
+@@ -331,3 +331,3 @@
+   /* read in the CFHEADER */
+-  if (sys->read(fh, &buf[0], cfhead_SIZEOF) != cfhead_SIZEOF) {
++  if ((sys->read)(fh, &buf[0], cfhead_SIZEOF) != cfhead_SIZEOF) {
+     return MSPACK_ERR_READ;
+@@ -367,3 +367,3 @@
+   if (cab->base.flags & cfheadRESERVE_PRESENT) {
+-    if (sys->read(fh, &buf[0], cfheadext_SIZEOF) != cfheadext_SIZEOF) {
++    if ((sys->read)(fh, &buf[0], cfheadext_SIZEOF) != cfheadext_SIZEOF) {
+       return MSPACK_ERR_READ;
+@@ -405,3 +405,3 @@
+   for (i = 0; i < num_folders; i++) {
+-    if (sys->read(fh, &buf[0], cffold_SIZEOF) != cffold_SIZEOF) {
++    if ((sys->read)(fh, &buf[0], cffold_SIZEOF) != cffold_SIZEOF) {
+       return MSPACK_ERR_READ;
+@@ -435,3 +435,3 @@
+   for (i = 0; i < num_files; i++) {
+-    if (sys->read(fh, &buf[0], cffile_SIZEOF) != cffile_SIZEOF) {
++    if ((sys->read)(fh, &buf[0], cffile_SIZEOF) != cffile_SIZEOF) {
+       return MSPACK_ERR_READ;
+@@ -528,3 +528,3 @@
+   /* read up to 256 bytes */
+-  len = sys->read(fh, &buf[0], 256);
++  len = (sys->read)(fh, &buf[0], 256);
+ 
+@@ -641,3 +641,3 @@
+     /* fill the search buffer with data from disk */
+-    if (sys->read(fh, &buf[0], length) != length) {
++    if ((sys->read)(fh, &buf[0], length) != length) {
+       return MSPACK_ERR_READ;
+@@ -1213,3 +1213,3 @@
+     /* read the block header */
+-    if (sys->read(d->infh, &hdr[0], cfdata_SIZEOF) != cfdata_SIZEOF) {
++    if ((sys->read)(d->infh, &hdr[0], cfdata_SIZEOF) != cfdata_SIZEOF) {
+       return MSPACK_ERR_READ;
+@@ -1239,3 +1239,3 @@
+     /* read the block data */
+-    if (sys->read(d->infh, d->i_end, len) != len) {
++    if ((sys->read)(d->infh, d->i_end, len) != len) {
+       return MSPACK_ERR_READ;
+@@ -1353,3 +1353,3 @@
+     run = (bytes > s->bufsize) ? s->bufsize : (int) bytes;
+-    if (s->sys->read(s->i, &s->buf[0], run) != run) return MSPACK_ERR_READ;
++    if ((s->sys->read)(s->i, &s->buf[0], run) != run) return MSPACK_ERR_READ;
+     if (s->sys->write(s->o, &s->buf[0], run) != run) return MSPACK_ERR_WRITE;
+diff -NarU1 cabextract-1.1.orig/mspack/lzxd.c cabextract-1.1/mspack/lzxd.c
+--- cabextract-1.1.orig/mspack/lzxd.c	2004-10-18 11:10:15.000000000 +0300
++++ cabextract-1.1/mspack/lzxd.c	2005-03-18 01:23:01.000000000 +0200
+@@ -128,3 +128,3 @@
+ static int lzxd_read_input(struct lzxd_stream *lzx) {
+-  int read = lzx->sys->read(lzx->input, &lzx->inbuf[0], (int)lzx->inbuf_size);
++  int read = (lzx->sys->read)(lzx->input, &lzx->inbuf[0], (int)lzx->inbuf_size);
+   if (read < 0) return lzx->error = MSPACK_ERR_READ;
+diff -NarU1 cabextract-1.1.orig/mspack/mszipd.c cabextract-1.1/mspack/mszipd.c
+--- cabextract-1.1.orig/mspack/mszipd.c	2004-10-18 11:10:15.000000000 +0300
++++ cabextract-1.1/mspack/mszipd.c	2005-03-18 01:23:59.000000000 +0200
+@@ -91,3 +91,3 @@
+ static int zipd_read_input(struct mszipd_stream *zip) {
+-  int read = zip->sys->read(zip->input, &zip->inbuf[0], (int)zip->inbuf_size);
++  int read = (zip->sys->read)(zip->input, &zip->inbuf[0], (int)zip->inbuf_size);
+   if (read < 0) return zip->error = MSPACK_ERR_READ;
+diff -NarU1 cabextract-1.1.orig/mspack/qtmd.c cabextract-1.1/mspack/qtmd.c
+--- cabextract-1.1.orig/mspack/qtmd.c	2004-10-18 11:10:15.000000000 +0300
++++ cabextract-1.1/mspack/qtmd.c	2005-03-18 01:25:06.000000000 +0200
+@@ -91,3 +91,3 @@
+ static int qtmd_read_input(struct qtmd_stream *qtm) {
+-  int read = qtm->sys->read(qtm->input, &qtm->inbuf[0], (int)qtm->inbuf_size);
++  int read = (qtm->sys->read)(qtm->input, &qtm->inbuf[0], (int)qtm->inbuf_size);
+   if (read < 0) return qtm->error = MSPACK_ERR_READ;

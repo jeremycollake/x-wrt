@@ -1,0 +1,8 @@
+config BR2_PACKAGE_CABEXTRACT
+	tristate "cabextract - an extraction utility for cabinet (.cab) archives"
+	default m if CONFIG_DEVEL
+	help
+	  cabextract is a program which can extract files from cabinet (.cab) 
+	  archives.
+	  
+	  http://www.kyz.uklinux.net/cabextract.php

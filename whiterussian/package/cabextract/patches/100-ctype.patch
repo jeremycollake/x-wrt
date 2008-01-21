@@ -1,0 +1,11 @@
+--- cabextract-1.1.old/fnmatch.c	2004-07-16 16:07:40.000000000 +0200
++++ cabextract-1.1.dev/fnmatch.c	2008-01-17 10:25:35.000000000 +0100
+@@ -45,7 +45,7 @@
+ 
+ #include <errno.h>
+ #include <fnmatch.h>
+-#include <safe-ctype.h>
++#include <ctype.h>
+ 
+ /* Comment out all this code if we are using the GNU C Library, and are not
+    actually compiling the library itself.  This code is part of the GNU C
