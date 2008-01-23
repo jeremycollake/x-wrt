@@ -39,6 +39,12 @@ esac
 }
 uci_load network
 uci_load dhcp
+# create dnsmasq's section when missing
+[ -z "$dnsmasq_cfgs" ] && {
+	uci_add dhcp dnsmasq
+	unset dhcp_cfgs dnsmasq_cfgs
+	uci_load dhcp
+}
 
 vcfg_number=$(echo "$dhcp_cfgs" "$dnsmasq_cfgs" |wc -l)
 let "vcfg_number+=1"
