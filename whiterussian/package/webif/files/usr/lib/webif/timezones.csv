@@ -1,5 +1,5 @@
 #timezone group	timezone cities	timezone config string	zoneinfo
-#revision: 2007i
+#revision: 2007k
 #  it is not exact for the "cities list" but it enables to remember
 #  the selection and to synchronize TZs with the standard zoneinfo
 Australia	Melbourne,Canberra,Sydney	EST-10EST,M10.1.0,M4.1.0/3	Australia/Melbourne
@@ -28,6 +28,7 @@ Europe	Prague,CzechRepublic	CET-1CEST,M3.5.0,M10.5.0/3	Europe/Prague
 Europe	Roma,Italy	CET-1CEST,M3.5.0,M10.5.0/3	Europe/Rome
 Europe	Moscow,Russia	MSK-3MSD,M3.5.0,M10.5.0/3	Europe/Moscow
 Europe	Stockholm,Sweden	CET-1CEST,M3.5.0,M10.5.0/3	Europe/Stockholm
+Europe	Warsaw,Poland	CET-1CEST,M3.5.0,M10.5.0/3	Europe/Warsaw
 Europe	Zurich,Switzerland	CET-1CEST,M3.5.0,M10.5.0/3	Europe/Zurich
 
 New Zealand	Auckland, Wellington	NZST-12NZDT,M9.5.0,M4.1.0/3	Pacific/Auckland
@@ -110,6 +111,6 @@ Asia (UTC+9)	Tokyo	JST-9	Asia/Tokyo
 Asia (UTC+9)	Yakutsk	YAKT-9YAKST,M3.5.0,M10.5.0/3	Asia/Yakutsk
 
 Central and South America	Sao Paulo,Brazil	BRT3BRST,M10.2.0/0,M2.3.0/0	America/Sao_Paulo
-Central and South America	Argentina	ART3	America/Argentina/Buenos_Aires
+Central and South America	Argentina	ART3ARST,M10.1.0/0,M3.3.0/0	America/Argentina/Buenos_Aires
 # no offense, just something in the center
 Central and South America	Central America (no DST)	CST6	America/Guatemala
