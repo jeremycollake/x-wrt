@@ -98,6 +98,7 @@ package-$(BR2_PACKAGE_NET_SNMP) += net-snmp
 package-$(BR2_PACKAGE_NFS_SERVER) += nfs-server
 package-$(BR2_PACKAGE_NMAP) += nmap
 package-$(BR2_PACKAGE_NOCATSPLASH) += nocatsplash
+package-$(BR2_PACKAGE_NTPD) += ntp
 package-$(BR2_PACKAGE_NTPCLIENT) += ntpclient
 package-$(BR2_PACKAGE_OLSRD) += olsrd
 package-$(BR2_PACKAGE_OPENLDAP) += openldap
@@ -217,6 +218,7 @@ net-snmp-compile: libelf-compile
 nfs-server-compile: portmap-compile
 nmap-compile: uclibcxx-compile pcre-compile libpcap-compile
 nocatsplash-compile: glib-compile
+ntp-compile: libelf-compile readline-compile ncurses-compile
 nzbget-compile: ncurses-compile uclibcxx-compile libxml2-compile
 openldap-compile: cyrus-sasl-compile openssl-compile
 openser-compile: radiusclient-ng-compile mysql-compile

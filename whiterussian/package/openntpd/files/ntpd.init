@@ -1,3 +1,14 @@
-#!/bin/sh
-mkdir -p `grep "^ntp:" /etc/passwd | cut -d: -f6`
-/usr/sbin/ntpd -s
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+
+START=60
+
+start() {
+	mkdir -p `grep "^ntp:" /etc/passwd | cut -d: -f6`
+	mkdir -p /var/db/
+	/usr/sbin/ntpd -s
+}
+
+stop() {
+	killall ntpd
+}

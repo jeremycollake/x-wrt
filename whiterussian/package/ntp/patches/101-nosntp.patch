@@ -1,0 +1,35 @@
+diff -urN ntp-4.2.4p4.old/configure ntp-4.2.4p4.dev/configure
+--- ntp-4.2.4p4.old/configure	2007-09-11 02:18:40.000000000 +0200
++++ ntp-4.2.4p4.dev/configure	2008-01-24 16:46:15.000000000 +0100
+@@ -53073,9 +53073,9 @@
+ 
+ 
+ 
+-ac_subdirs_all="$ac_subdirs_all sntp"
++ac_subdirs_all="$ac_subdirs_all"
+ 
+-subdirs="$subdirs sntp"
++subdirs="$subdirs"
+ 
+ 
+ cat >confcache <<\_ACEOF
+diff -urN ntp-4.2.4p4.old/Makefile.in ntp-4.2.4p4.dev/Makefile.in
+--- ntp-4.2.4p4.old/Makefile.in	2007-09-11 02:18:20.000000000 +0200
++++ ntp-4.2.4p4.dev/Makefile.in	2008-01-24 16:46:59.000000000 +0100
+@@ -215,7 +215,7 @@
+ NULL = 
+ SUBDIRS = $(am__append_1) scripts include ElectricFence @ARLIB_DIR@ \
+ 	libntp libparse ntpd ntpdate ntpdc ntpq parseutil adjtimed \
+-	clockstuff kernel sntp util $(NULL)
++	clockstuff kernel util $(NULL)
+ DIST_SUBDIRS = \
+ 	scripts		\
+ 	include		\
+@@ -232,7 +232,6 @@
+ 	adjtimed	\
+ 	clockstuff	\
+ 	kernel		\
+-	sntp		\
+ 	util		\
+ 	$(NULL)
+ 

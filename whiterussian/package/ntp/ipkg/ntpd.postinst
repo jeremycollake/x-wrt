@@ -1,0 +1,5 @@
+#!/bin/sh
+grep -q '^ntp[[:space:]]*123/udp' ${IPKG_INSTROOT}/etc/services 2>/dev/null
+[ $? -eq 0 ] || echo "ntp	123/udp     # Network Time Protocol" >>${IPKG_INSTROOT}/etc/services
+grep -q '^ntp[[:space:]]*123/tcp' ${IPKG_INSTROOT}/etc/services 2>/dev/null
+[ $? -eq 0 ] || echo "ntp	123/tcp     # Network Time Protocol" >>${IPKG_INSTROOT}/etc/services

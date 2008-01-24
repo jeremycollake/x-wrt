@@ -1,0 +1,9 @@
+Package: ntpd
+Priority: optional
+Section: net
+Depends: libreadline, libncurses
+Description: A full featured reference NTP server
+ The full featured reference NTP (Network Time Protocol) 
+ implementation daemon.
+ .
+ http://www.ntp.org/

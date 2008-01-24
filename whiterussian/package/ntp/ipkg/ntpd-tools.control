@@ -1,0 +1,9 @@
+Package: ntpd-tools
+Priority: optional
+Section: net
+Depends: ntpd
+Description: A collection of helpfull utilities for ntpd
+ A collection of helpfull utilities for the reference NTP 
+ (Network Time Protocol) implementation.
+ .
+ http://www.ntp.org/

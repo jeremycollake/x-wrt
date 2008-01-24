@@ -1,0 +1,5 @@
+# consult the ntpd init script for used fields
+# step servers are used to initially sync the time, 
+# some of them could be local
+STEP_SERVERS="0.openwrt.pool.ntp.org 1.openwrt.pool.ntp.org 2.openwrt.pool.ntp.org"
+STEP_TIMEOUT="2"

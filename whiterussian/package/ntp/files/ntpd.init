@@ -1,0 +1,29 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+
+START=60
+
+STEP_FILE="/etc/default/step-servers"
+VAR_RUN="/var/run"
+PIDFILE="$VAR_RUN/ntpd.pid"
+VAR_LIB="/var/lib/ntp"
+
+start() {
+#	ln -sf /dev/ttyS0 /dev/gps0
+#	/usr/sbin/setgarmin -d /dev/gps -c /etc/setgarmin.conf
+	stop
+	[ -f "$STEP_FILE" ] && . "$STEP_FILE"
+	[ -z "$STEP_SERVERS" ] && STEP_SERVERS=$(cat /etc/ntp.conf 2>/dev/null | awk '$1=="peer"||$1=="server"{print $2}' | egrep -v '127\.[0-9]+\.[0-9]+\.[0-9]+')
+	if [ -n "$STEP_SERVERS" ]; then
+		for ss in $STEP_SERVERS; do
+			/usr/sbin/ntpdate -s -b -u -t "${STEP_TIMEOUT:-2}" "$ss" && break
+		done
+	fi
+	[ -d "$VAR_RUN" ] || mkdir -p "$VAR_RUN"
+	[ -d "$VAR_LIB" ] || mkdir -p "$VAR_LIB"
+	/usr/sbin/ntpd -g -p $PIDFILE
+}
+
+stop() {
+	[ -f "$PIDFILE" ] && kill $(cat "$PIDFILE") 2>/dev/null >/dev/null
+}

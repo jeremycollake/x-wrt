@@ -1,15 +1,19 @@
-# $Id: Makefile 1211 2005-06-12 09:09:22Z nico $
-
+# 
+# Copyright (C) 2007 X-Wrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=htpdate
-PKG_VERSION:=0.8.2
+PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
-PKG_MD5SUM:=f1d8c0706a6a60f880ce6a0dccbb99a3
 
-PKG_SOURCE_URL:=http://www.clevervest.com/htp/archive/c/
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_CAT:=zcat
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=http://www.clevervest.com/htp/archive/c
+PKG_MD5SUM:=3d2015c3881b53351be880f24911786a
+PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -30,11 +34,11 @@ $(PKG_BUILD_DIR)/.built:
 $(IPKG_HTPDATE):
 	install -d -m0755 $(IDIR_HTPDATE)/etc/default/
 	install -m0644 ./files/htpdate.default $(IDIR_HTPDATE)/etc/default/htpdate
+	install -d -m0755 $(IDIR_HTPDATE)/etc/hotplug.d/iface
+	install -m0755 ./files/htpdate.hotplug $(IDIR_HTPDATE)/etc/hotplug.d/iface/20-htpdate
 	install -d -m0755 $(IDIR_HTPDATE)/etc/init.d/
 	install -m0755 ./files/htpdate.init $(IDIR_HTPDATE)/etc/init.d/htpdate
-	ln -sf htpdate $(IDIR_HTPDATE)/etc/init.d/S49htpdate
 	install -d -m0755 $(IDIR_HTPDATE)/usr/sbin
 	install -m0755 $(PKG_BUILD_DIR)/htpdate $(IDIR_HTPDATE)/usr/sbin/
 	$(RSTRIP) $(IDIR_HTPDATE)
 	$(IPKG_BUILD) $(IDIR_HTPDATE) $(PACKAGE_DIR)
-

@@ -1,0 +1,11 @@
+#!/bin/sh
+case "${ACTION:-ifup}" in
+        ifup)
+		ps | grep 'bin/[h]tpdate' >&- || {
+			route -n 2>&- | grep '^0.0.0.0' >&- && /etc/init.d/htpdate start
+		}
+        ;;
+        ifdown)
+                route -n 2>&- | grep '^0.0.0.0' >&- || /etc/init.d/htpdate stop
+        ;;
+esac

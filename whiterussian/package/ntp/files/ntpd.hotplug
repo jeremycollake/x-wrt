@@ -1,0 +1,11 @@
+#!/bin/sh
+case "${ACTION:-ifup}" in
+        ifup)
+		ps | grep 'bin/[n]tpd' >&- || {
+			route -n 2>&- | grep '^0.0.0.0' >&- && /etc/init.d/ntpd start
+		}
+        ;;
+        ifdown)
+                route -n 2>&- | grep '^0.0.0.0' >&- || /etc/init.d/ntpd stop
+        ;;
+esac

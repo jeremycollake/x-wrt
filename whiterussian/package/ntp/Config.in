@@ -1,0 +1,19 @@
+config BR2_PACKAGE_NTPD
+	tristate "ntpd - a full featured reference NTP (Network Time Protocol) implementation"
+	default m if CONFIG_DEVEL
+	select BR2_PACKAGE_LIBELF
+	select BR2_PACKAGE_READLINE
+	select BR2_PACKAGE_NCURSES
+	help
+	  The full featured reference NTP (Network Time Protocol) implementation daemon.
+	  
+	  http://www.ntp.org/
+
+config BR2_PACKAGE_NTPD_TOOLS
+	tristate "ntpd-tools - a collection of helpfull utilities for ntpd"
+	depends BR2_PACKAGE_NTPD
+	help
+	  A collection of helpfull utilities for the reference NTP 
+	  (Network Time Protocol) implementation.
+	  
+	  http://www.ntp.org/
