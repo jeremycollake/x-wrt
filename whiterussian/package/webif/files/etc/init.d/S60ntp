@@ -5,16 +5,6 @@ if [ -f "/usr/sbin/ntpclient" ] || \
 	[ -f "/sbin/ntpclient" ] || \
 	[ -f "/bin/ntpclient" ]; then
 
-	# create symlink to /tmp/TZ if /etc/TZ doesn't exist
-	# todo: -e | -f | -d didn't seem to work here, so I used find
-	if [ -z $(find "/etc/TZ" 2>/dev/null) ]; then
-		ln -s /tmp/TZ /etc/TZ
-	fi
-
-	# eJunky: set timezone
-	TZ=$(nvram get time_zone | cut -f 2)
-	[ "$TZ" ] && echo $TZ > /etc/TZ
-
 	# get server, use pool.ntp.org if not set
 	NTP_SERVER=$(nvram get ntp_server)
 	if [ -z "$NTP_SERVER" ]; then

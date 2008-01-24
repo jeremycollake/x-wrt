@@ -1,0 +1,11 @@
+#!/bin/sh
+# create symlink to /tmp/TZ if /etc/TZ doesn't exist
+# todo: -e | -f | -d didn't seem to work here, so I used find
+if [ -z $(find "/etc/TZ" 2>/dev/null) ]; then
+	ln -s /tmp/TZ /etc/TZ
+fi
+
+# eJunky: set timezone
+TZ=$(nvram get time_zone | cut -f 2)
+TZ="${TZ:-UTC+0}"
+echo $TZ > /etc/TZ
