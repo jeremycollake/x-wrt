@@ -1,6 +1,7 @@
-diff -ur busybox.old/editors/awk.c busybox.dev/editors/awk.c
---- busybox.old/editors/awk.c	2007-01-19 22:23:12.000000000 +0100
-+++ busybox.dev/editors/awk.c	2007-01-26 20:09:45.000000000 +0100
+Index: busybox-1.4.2/editors/awk.c
+===================================================================
+--- busybox-1.4.2.orig/editors/awk.c	2007-06-15 23:43:26.460690280 +0200
++++ busybox-1.4.2/editors/awk.c	2007-06-15 23:45:26.283474448 +0200
 @@ -2639,14 +2639,13 @@
  
  int awk_main(int argc, char **argv)
@@ -17,7 +18,7 @@ diff -ur busybox.old/editors/awk.c busybox.dev/editors/awk.c
  
  	/* Undo busybox.c, or else strtod may eat ','! This breaks parsing:
  	 * $1,$2 == '$1,' '$2', NOT '$1' ',' '$2' */
-@@ -2694,40 +2693,54 @@
+@@ -2694,40 +2693,56 @@
  		free(s);
  	}
  
@@ -82,13 +83,13 @@ diff -ur busybox.old/editors/awk.c busybox.dev/editors/awk.c
 -		parse_program(s + 1);
 -		free(s);
 -	} else { // no -f: take program from 1st parameter
--		if (!argc)
--			bb_show_usage();
 +	}
 +	argc -= optind;
 +	argv += optind;
 +
 +	if (!programname) {
+ 		if (!argc)
+ 			bb_show_usage();
  		programname = "cmd. line";
  		parse_program(*argv++);
  		argc--;

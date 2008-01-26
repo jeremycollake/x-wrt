@@ -12,6 +12,21 @@ config BUSYBOX_CONFIG_FEATURE_IPV6
 	  Enable IPv6 support in busybox.
 	  This adds IPv6 support in the networking applets.
 
+config BUSYBOX_CONFIG_FEATURE_PREFER_IPV4_ADDRESS
+	bool "Preferentially use IPv4 addresses from DNS queries"
+	default y
+	depends on BUSYBOX_CONFIG_FEATURE_IPV6
+	help
+	  Use IPv4 address of network host if it has one.
+
+	  If this option is off, the first returned address will be used.
+	  This may cause problems when your DNS server is IPv6-capable and
+	  is returning IPv6 host addresses too. If IPv6 address
+	  precedes IPv4 one in DNS reply, busybox network applets
+	  (e.g. wget) will use IPv6 address. On an IPv6-incapable host
+	  or network applets will fail to connect to the host
+	  using IPv6 address.
+
 config BUSYBOX_CONFIG_ARP
 	bool "arp"
 	default n
@@ -615,7 +630,7 @@ config BUSYBOX_CONFIG_TFTP
 
 config BUSYBOX_CONFIG_FEATURE_TFTP_GET
 	bool "Enable \"get\" command"
-	default n
+	default y
 	depends on BUSYBOX_CONFIG_TFTP
 	help
 	  Add support for the GET command within the TFTP client.  This allows
@@ -623,7 +638,7 @@ config BUSYBOX_CONFIG_FEATURE_TFTP_GET
 
 config BUSYBOX_CONFIG_FEATURE_TFTP_PUT
 	bool "Enable \"put\" command"
-	default n
+	default y
 	depends on BUSYBOX_CONFIG_TFTP
 	help
 	  Add support for the PUT command within the TFTP client.  This allows

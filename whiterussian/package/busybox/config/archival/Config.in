@@ -121,14 +121,6 @@ config BUSYBOX_CONFIG_GZIP
 	  gzip is used to compress files.
 	  It's probably the most widely used UNIX compression program.
 
-config BUSYBOX_CONFIG_IPKG
-	bool "ipkg"
-	default y
-	select BUSYBOX_CONFIG_MD5SUM
-	select BUSYBOX_CONFIG_WGET
-	help
-	  ipkg is the itsy package management system.
-	
 config BUSYBOX_CONFIG_RPM2CPIO
 	bool "rpm2cpio"
 	default n
@@ -139,7 +131,7 @@ config BUSYBOX_CONFIG_RPM
 	bool "rpm"
 	default n
 	help
-	  Mini RPM applet - queries and extracts
+	  Mini RPM applet - queries and extracts RPM packages.
 
 config BUSYBOX_CONFIG_TAR
 	bool "tar"
@@ -219,7 +211,7 @@ config BUSYBOX_CONFIG_FEATURE_TAR_LONG_OPTIONS
 	default n
 	depends on BUSYBOX_CONFIG_TAR && BUSYBOX_CONFIG_GETOPT_LONG
 	help
-		Enable use of long options, increases size by about 400 Bytes
+	  Enable use of long options, increases size by about 400 Bytes
 
 config BUSYBOX_CONFIG_UNCOMPRESS
 	bool "uncompress"
@@ -300,9 +292,9 @@ config BUSYBOX_CONFIG_FEATURE_DEB_TAR_LZMA
 	depends on BUSYBOX_CONFIG_DPKG || BUSYBOX_CONFIG_DPKG_DEB
 	help
 	  This allows dpkg and dpkg-deb to extract deb's that are compressed
-          internally with lzma instead of gzip.
+	  internally with lzma instead of gzip.
 
 	  You only want this if you are creating your own custom debian
-          packages that use an internal control.tar.lzma or data.tar.lzma.
+	  packages that use an internal control.tar.lzma or data.tar.lzma.
 
 endmenu

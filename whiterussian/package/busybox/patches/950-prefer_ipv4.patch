@@ -1,0 +1,59 @@
+--- busybox-1.4.2.old/libbb/xconnect.c	2008-01-26 10:51:31.000000000 +0100
++++ busybox-1.4.2.dev/libbb/xconnect.c	2008-01-26 10:58:11.000000000 +0100
+@@ -119,6 +119,7 @@
+ 	int rc;
+ 	len_and_sockaddr *r; // = NULL;
+ 	struct addrinfo *result = NULL;
++	struct addrinfo *used_res;
+ 	const char *org_host = host; /* only for error msg */
+ 	const char *cp;
+ 	struct addrinfo hint;
+@@ -158,9 +159,21 @@
+ 	rc = getaddrinfo(host, NULL, &hint, &result);
+ 	if (rc || !result)
+ 		bb_error_msg_and_die("bad address '%s'", org_host);
+-	r = xmalloc(offsetof(len_and_sockaddr, sa) + result->ai_addrlen);
+-	r->len = result->ai_addrlen;
+-	memcpy(&r->sa, result->ai_addr, result->ai_addrlen);
++	used_res = result;
++#if ENABLE_FEATURE_PREFER_IPV4_ADDRESS
++	while (1) {
++		if (used_res->ai_family == AF_INET)
++			break;
++		used_res = used_res->ai_next;
++		if (!used_res) {
++			used_res = result;
++			break;
++		}
++	}
++#endif
++	r = xmalloc(offsetof(len_and_sockaddr, sa) + used_res->ai_addrlen);
++	r->len = used_res->ai_addrlen;
++	memcpy(&r->sa, used_res->ai_addr, used_res->ai_addrlen);
+ 	set_nport(r, htons(port));
+ 	freeaddrinfo(result);
+ 	return r;
+--- busybox-1.4.2.old/networking/Config.in	2008-01-26 11:11:01.000000000 +0100
++++ busybox-1.4.2.dev/networking/Config.in	2008-01-26 11:25:26.000000000 +0100
+@@ -12,6 +12,21 @@
+ 	  Enable IPv6 support in busybox.
+ 	  This adds IPv6 support in the networking applets.
+ 
++config FEATURE_PREFER_IPV4_ADDRESS
++	bool "Preferentially use IPv4 addresses from DNS queries"
++	default y
++	depends on FEATURE_IPV6
++	help
++	  Use IPv4 address of network host if it has one.
++
++	  If this option is off, the first returned address will be used.
++	  This may cause problems when your DNS server is IPv6-capable and
++	  is returning IPv6 host addresses too. If IPv6 address
++	  precedes IPv4 one in DNS reply, busybox network applets
++	  (e.g. wget) will use IPv6 address. On an IPv6-incapable host
++	  or network applets will fail to connect to the host
++	  using IPv6 address.
++
+ config ARP
+ 	bool "arp"
+ 	default n
