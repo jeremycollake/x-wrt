@@ -1,17 +1,21 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
-
+#
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=dsniff
-PKG_VERSION:=2.3
+PKG_VERSION:=2.4b1
 PKG_RELEASE:=2
-PKG_MD5SUM:=183e336a45e38013f3af840bddec44b4
 
-PKG_SOURCE_URL:=http://www.monkey.org/~dugsong/dsniff/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.monkey.org/~dugsong/dsniff/beta
+PKG_MD5SUM:=2f761fa3475682a7512b0b43568ee7d6
 PKG_CAT:=zcat
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-2.4
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(TOPDIR)/package/rules.mk
@@ -42,6 +46,8 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		  --mandir=/usr/share/man \
 		  --sbindir=/usr/sbin \
 		  --sysconfdir=/etc \
+		  $(DISABLE_LARGEFILE) \
+		  $(DISABLE_NLS) \
 		  --without-db \
 		  --without-x \
 		  --with-gdbm="$(STAGING_DIR)/usr" \
@@ -49,8 +55,6 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		  --with-libpcap="$(STAGING_DIR)/usr" \
 		  --with-libnet="$(STAGING_DIR)/usr" \
 		  --with-openssl="$(STAGING_DIR)/usr" \
-		  $(DISABLE_LARGEFILE) \
-		  $(DISABLE_NLS) \
 	);
 	touch $@
 
@@ -64,9 +68,9 @@ $(PKG_BUILD_DIR)/.built:
 	touch $@
 
 $(IPKG_DSNIFF):
-	install -d -m0755 $(IDIR_DSNIFF)/usr/lib
 	install -d -m0755 $(IDIR_DSNIFF)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/* $(IDIR_DSNIFF)/usr/sbin
+	install -d -m0755 $(IDIR_DSNIFF)/usr/lib
 	$(CP)  $(PKG_INSTALL_DIR)/usr/lib/* $(IDIR_DSNIFF)/usr/lib
 	$(RSTRIP) $(IDIR_DSNIFF)
 	$(IPKG_BUILD) $(IDIR_DSNIFF) $(PACKAGE_DIR)
