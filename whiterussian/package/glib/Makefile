@@ -88,6 +88,7 @@ $(IPKG_GLIB1):
 $(STAGING_DIR)/usr/lib/libglib.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/glib-config $(STAGING_DIR)/usr/bin/
+	$(SED) 's,/usr,$${STAGING_DIR}/usr,g' $(STAGING_DIR)/usr/bin/glib-config
 	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/glib-1.2 $(STAGING_DIR)/usr/include/
 	$(CP) $(PKG_BUILD_DIR)/glibconfig-sysdefs.h $(STAGING_DIR)/usr/include/glib-1.2/

@@ -67,6 +67,7 @@ $(IPKG_LIBPNG):
 $(STAGING_DIR)/usr/lib/libpng.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/libpng{,12}-config $(STAGING_DIR)/usr/bin/
+	$(SED) 's,/usr,$${STAGING_DIR}/usr,g' $(STAGING_DIR)/usr/bin/libpng{,12}-config
 	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/png{,conf}.h $(STAGING_DIR)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libpng $(STAGING_DIR)/usr/include/
