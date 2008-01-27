@@ -43,4 +43,10 @@ install-dev: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/lib
 	cp $(PKG_BUILD_DIR)/*.so $(STAGING_DIR)/usr/lib
 	
+uninstall-dev:
+	rm -rf \
+	  $(STAGING_DIR)/usr/lib/libnvram.so \
+	  $(STAGING_DIR)/usr/lib/libshared.so
 
+compile: install-dev
+clean: uninstall-dev
