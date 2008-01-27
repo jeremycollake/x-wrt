@@ -3,7 +3,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libtool
-PKG_VERSION:=1.5.14
+PKG_VERSION:=1.5.22
 PKG_RELEASE:=1
 PKG_MD5SUM:=049bf67de9b0eb75cd943dafe3d749ec
 
@@ -66,18 +66,27 @@ $(IPKG_LIBLTDL):
 	$(IPKG_BUILD) $(IDIR_LIBLTDL) $(PACKAGE_DIR)
 
 $(STAGING_DIR)/usr/lib/libltdl.so: $(PKG_BUILD_DIR)/.built
+	mkdir -p $(STAGING_DIR)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/libtool* $(STAGING_DIR)/usr/bin/
 	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/ltdl.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(I_LIBLTDL_DEV)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libltdl.{a,so*} $(STAGING_DIR)/usr/lib/
+	mkdir -p $(I_LIBLTDL_DEV)/usr/share/aclocal
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/aclocal $(STAGING_DIR)/usr/share/
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/libtool $(STAGING_DIR)/usr/share/
 	touch $@
 
 install-dev: $(STAGING_DIR)/usr/lib/libltdl.so
 
 uninstall-dev:
 	rm -rf \
+		$(STAGING_DIR)/usr/bin/libtool* \
 		$(STAGING_DIR)/usr/include/ltdl.h \
 		$(STAGING_DIR)/usr/lib/libltdl.{a,so*} \
+		$(STAGING_DIR)/usr/share/aclocal/libtool.* \
+		$(STAGING_DIR)/usr/share/aclocal/ltdl.* \
+		$(STAGING_DIR)/usr/share/libtool
 
 compile: install-dev
 clean: uninstall-dev
