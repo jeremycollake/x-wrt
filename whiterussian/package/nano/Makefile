@@ -1,22 +1,26 @@
-# $Id: Makefile 3112 2006-02-01 23:53:19Z mbm $
-
+#
+# Copyright (C) 2007 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nano
-PKG_VERSION:=1.3.8
+PKG_VERSION:=2.0.7
 PKG_RELEASE:=1
-PKG_MD5SUM:=20633397bf5d462255f37dfcc7cad4e7
 
-PKG_SOURCE_URL:=http://www.ewtoo.org/~astyanax/nano/dist/v1.3 \
-	http://www.nano-editor.org/dist/v1.3
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.nano-editor.org/dist/v2.0
+PKG_MD5SUM:=16187fed2bdefec6275ece6401ce4cd2
 PKG_CAT:=zcat
+
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(TOPDIR)/package/rules.mk
 
-$(eval $(call PKG_template,NANO,nano,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,NANO,$(PKG_NAME),$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
 $(PKG_BUILD_DIR)/.configured:
 	(cd $(PKG_BUILD_DIR); \
@@ -66,11 +70,6 @@ $(PKG_BUILD_DIR)/.built:
 
 $(IPKG_NANO):
 	install -d -m0755 $(IDIR_NANO)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nano $(IDIR_NANO)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/$(PKG_NAME) $(IDIR_NANO)/usr/bin/
 	$(RSTRIP) $(IDIR_NANO)
 	$(IPKG_BUILD) $(IDIR_NANO) $(PACKAGE_DIR)
-
-mostlyclean:
-	-$(MAKE) -C $(PKG_BUILD_DIR) clean
-	rm -f $(PKG_BUILD_DIR)/.built
-
