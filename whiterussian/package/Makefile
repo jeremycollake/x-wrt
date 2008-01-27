@@ -208,7 +208,7 @@ htop-compile: ncurses-compile
 id3lib-compile: uclibcxx-compile zlib-compile
 kismet-compile: uclibcxx-compile libpcap-compile ncurses-compile
 lcd4linux-compile: ncurses-compile
-libgd-compile: libpng-compile
+libgd-compile: libpng-compile jpeg-compile
 libnet-compile: libpcap-compile
 libnids-compile: libnet-compile
 jpeg-compile: libtool-compile

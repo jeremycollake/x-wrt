@@ -4,11 +4,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gd
 PKG_VERSION:=2.0.33
-PKG_RELEASE:=1
-PKG_MD5SUM:=be0a6d326cd8567e736fbc75df0a5c45
+PKG_RELEASE:=2
 
-PKG_SOURCE_URL:=http://www.boutell.com/gd/http
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.boutell.com/gd/http
+PKG_MD5SUM:=be0a6d326cd8567e736fbc75df0a5c45
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -52,6 +52,7 @@ $(PKG_BUILD_DIR)/.configured:
 		  --disable-rpath \
 		  --without-x \
 		  --with-png=$(STAGING_DIR)/usr \
+		  --with-jpeg=$(STAGING_DIR)/usr \
 	)
 	touch $@
 
