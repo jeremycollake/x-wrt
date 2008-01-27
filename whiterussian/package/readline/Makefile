@@ -1,14 +1,18 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
-
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=readline
-PKG_VERSION:=5.0
+PKG_VERSION:=5.1
 PKG_RELEASE:=1
-PKG_MD5SUM:=
 
-PKG_SOURCE_URL:=@GNU/readline
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@GNU/readline
+PKG_MD5SUM:=7ee5a692db88b30ca48927a13fd60e46
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -21,7 +25,7 @@ $(eval $(call PKG_template,LIBREADLINE,libreadline,$(PKG_VERSION)-$(PKG_RELEASE)
 $(PKG_BUILD_DIR)/.configured:
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(strip $(TARGET_CFLAGS))" \
+		CFLAGS="-I. -I.. $(TARGET_CFLAGS)" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
 		./configure \
@@ -46,7 +50,7 @@ $(PKG_BUILD_DIR)/.configured:
 		  $(DISABLE_NLS) \
 		  --enable-shared \
 		  --enable-static \
-		  --with-curses \
+		  --without-curses \
 	);
 	touch $@
 
