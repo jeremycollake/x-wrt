@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libpam
 PKG_VERSION:=0.99.6.3
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=Linux-PAM-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.kernel.org/pub/linux/libs/pam/pre/library/
@@ -89,6 +89,8 @@ install-dev: $(PKG_BUILD_DIR)/.built
 uninstall-dev:
 	rm -rf \
 		$(STAGING_DIR)/usr/include/security \
+		$(STAGING_DIR)/usr/include/_pam_* \
+		$(STAGING_DIR)/usr/include/pam_* \
 		$(STAGING_DIR)/lib/libpa{m,mc,m_misc}.so* \
 		$(STAGING_DIR)/lib/security
 
