@@ -1,0 +1,12 @@
+config BR2_PACKAGE_LIBJPEG
+	tristate "libjpeg - The Independent JPEG Group's JPEG runtime library"
+	default m if CONFIG_DEVEL
+	help
+	  The Independent JPEG Group's JPEG runtime library.
+
+config BR2_PACKAGE_JPEG_TOOLS
+	tristate "jpeg-tools - The Independent JPEG Group's JPEG manipulation tools"
+	default m if CONFIG_DEVEL
+	depends BR2_PACKAGE_LIBJPEG
+	help
+	  The Independent JPEG Group's JPEG manipulation tools.

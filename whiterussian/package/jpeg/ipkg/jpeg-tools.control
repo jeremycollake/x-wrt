@@ -1,0 +1,5 @@
+Package: jpeg-tools
+Priority: optional
+Section: utils
+Depends: libjpeg
+Description: The Independent JPEG Group's JPEG manipulation tools
