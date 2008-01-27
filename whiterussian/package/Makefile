@@ -60,7 +60,7 @@ package-$(BR2_PACKAGE_LIBELF) += libelf
 package-$(BR2_PACKAGE_LIBEVENT) += libevent
 package-$(BR2_PACKAGE_LIBFFI_SABLE) += libffi-sable
 package-$(BR2_PACKAGE_LIBGD) += libgd
-package-$(BR2_PACKAGE_LIBGDBM) += libgdbm
+package-$(BR2_PACKAGE_LIBGDBM) += gdbm
 package-$(BR2_COMPILE_LIBICONV) += libiconv
 package-$(BR2_COMPILE_LIBJPEG) += jpeg
 package-$(BR2_COMPILE_LIBMAGIC) += file
@@ -199,7 +199,7 @@ $(INSTALL_PACKAGES): base-files-install
 arpwatch-compile: libpcap-compile
 ctorrent-compile: ncurses-compile uclibcxx-compile
 cyrus-sasl-compile: openssl-compile
-dsniff-compile: libnids-compile openssl-compile libgdbm-compile
+dsniff-compile: libnids-compile openssl-compile gdbm-compile
 file-compile: zlib-compile
 fprobe-compile: libpcap-compile
 gdb-compile: ncurses-compile
@@ -211,6 +211,7 @@ lcd4linux-compile: ncurses-compile
 libgd-compile: libpng-compile jpeg-compile
 libnet-compile: libpcap-compile
 libnids-compile: libnet-compile
+lighttpd-compile: openssl-compile pcre-compile bzip2-compile gdbm-compile libxml2-compile libpthread-compile sqlite-compile
 jpeg-compile: libtool-compile
 lighttpd-compile: openssl-compile pcre-compile
 libupnp-compile: libpthread-compile

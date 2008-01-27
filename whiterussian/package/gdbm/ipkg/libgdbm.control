@@ -1,0 +1,7 @@
+Package: libgdbm
+Priority: optional
+Section: libs
+Description: the GNU database manager
+ A disk file format database which stores key/data-pairs in single files.
+ .
+ http://www.gnu.org/software/gdbm/

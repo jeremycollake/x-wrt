@@ -1,24 +1,28 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
-
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=libgdbm
+PKG_NAME:=gdbm
 PKG_VERSION:=1.8.3
-PKG_RELEASE:=0
-PKG_MD5SUM:=1d1b1d5c0245b1c00aff92da751e9aa1
+PKG_RELEASE:=1
 
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://ftp.gnu.org/gnu/gdbm/
-PKG_SOURCE:=gdbm-$(PKG_VERSION).tar.gz
+PKG_MD5SUM:=1d1b1d5c0245b1c00aff92da751e9aa1
 PKG_CAT:=zcat
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/gdbm-$(PKG_VERSION)
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(TOPDIR)/package/rules.mk
 
-$(eval $(call PKG_template,LIBGDBM,libgdbm,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,LIBGDBM,lib$(PKG_NAME),$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
-$(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
+$(PKG_BUILD_DIR)/.configured:
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
@@ -44,18 +48,19 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		--sysconfdir=/etc \
 		$(DISABLE_NLS) \
 		$(DISABLE_LARGEFILE) \
+		--disable-rpath \
 		--enable-shared \
 		--enable-static \
 	);
 	touch $@
 
-$(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
+$(PKG_BUILD_DIR)/.built:
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
+		$(TARGET_CONFIGURE_OPTS) \
 		BINOWN=`id -u` \
 		BINGRP=`id -g` \
-		$(TARGET_CONFIGURE_OPTS) \
 		INSTALL_ROOT="$(PKG_INSTALL_DIR)" \
 		all install
 	touch $@
@@ -76,7 +81,7 @@ $(STAGING_DIR)/usr/lib/libgdbm.so: $(PKG_BUILD_DIR)/.built
 install-dev: $(STAGING_DIR)/usr/lib/libgdbm.so
 
 uninstall-dev:
-	rm -rf $(STAGING_DIR)/usr/include/gdbm.h
+	rm -rf $(STAGING_DIR)/usr/include/gdbm.h \
 	rm -rf $(STAGING_DIR)/usr/lib/libgdbm.{a,so*}
 
 compile: install-dev

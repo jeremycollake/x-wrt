@@ -127,7 +127,7 @@ source "package/libelf/Config.in"
 source "package/libevent/Config.in"
 source "package/base-files/Config.in" # libgcc
 source "package/libgd/Config.in"
-source "package/libgdbm/Config.in"
+source "package/gdbm/Config.in"  # libgdbm
 source "package/gmp/Config.in"  # libbgmp
 source "package/libiconv/Config.in"
 source "package/jpeg/Config.in"  # libjpeg
