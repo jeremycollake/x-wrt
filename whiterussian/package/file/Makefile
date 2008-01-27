@@ -97,7 +97,7 @@ install-dev: $(STAGING_DIR)/usr/lib/libmagic.so
 uninstall-dev:
 	rm -rf \
 	  $(STAGING_DIR)/usr/include/magic.h \
-	  $(STAGING_DIR)/usr/lib/libmagic.{a,so} \
+	  $(STAGING_DIR)/usr/lib/libmagic.{a,so*} \
 
 compile: install-dev
 clean: uninstall-dev
