@@ -1,14 +1,18 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
-
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pcre
-PKG_VERSION:=5.0
-PKG_RELEASE:=3
-PKG_MD5SUM:=813850808894d99fb5b1c41ec6335d4f
+PKG_VERSION:=7.0
+PKG_RELEASE:=1
 
 PKG_SOURCE_URL:=@SF/pcre
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_MD5SUM:=b97e3bb84bd665e0fbb7a90344d65a43
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -47,6 +51,7 @@ $(PKG_BUILD_DIR)/.configured:
 		--enable-shared \
 		--enable-static \
 		--enable-utf8 \
+		--disable-cpp \
 	);
 	touch $@
 
@@ -78,7 +83,6 @@ $(STAGING_DIR)/usr/lib/libpcre.so: $(PKG_BUILD_DIR)/.built
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/pcre{,posix}.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libpcre{,posix}.{a,so*} $(STAGING_DIR)/usr/lib/
-	touch $(STAGING_DIR)/usr/lib/libpcre.so
 
 install-dev: $(STAGING_DIR)/usr/lib/libpcre.so
 
