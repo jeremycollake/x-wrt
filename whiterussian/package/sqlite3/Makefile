@@ -5,10 +5,10 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=sqlite
 PKG_VERSION:=3.3.3
 PKG_RELEASE:=1
-PKG_MD5SUM:=eb5d9d7e7853b3af78e767d709b7fced
 
-PKG_SOURCE_URL:=http://www.sqlite.org/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.sqlite.org/
+PKG_MD5SUM:=eb5d9d7e7853b3af78e767d709b7fced
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -16,8 +16,8 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(TOPDIR)/package/rules.mk
 
-$(eval $(call PKG_template,LIBSQLITE,libsqlite,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,SQLITE_CLI,sqlite-cli,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,LIBSQLITE3,libsqlite3,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,SQLITE3_CLI,sqlite3-cli,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
 $(PKG_BUILD_DIR)/.configured:
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
@@ -65,17 +65,17 @@ $(PKG_BUILD_DIR)/.built:
 		all install
 	touch $@
 
-$(IPKG_LIBSQLITE):
-	install -d -m0755 $(IDIR_LIBSQLITE)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsqlite3.so.* $(IDIR_LIBSQLITE)/usr/lib/
-	$(RSTRIP) $(IDIR_LIBSQLITE)
-	$(IPKG_BUILD) $(IDIR_LIBSQLITE) $(PACKAGE_DIR)
+$(IPKG_LIBSQLITE3):
+	install -d -m0755 $(IDIR_LIBSQLITE3)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libsqlite3.so.* $(IDIR_LIBSQLITE3)/usr/lib/
+	$(RSTRIP) $(IDIR_LIBSQLITE3)
+	$(IPKG_BUILD) $(IDIR_LIBSQLITE3) $(PACKAGE_DIR)
 
-$(IPKG_SQLITE_CLI):
-	install -d -m0755 $(IDIR_SQLITE_CLI)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/sqlite3 $(IDIR_SQLITE_CLI)/usr/bin/
-	$(RSTRIP) $(IDIR_SQLITE_CLI)
-	$(IPKG_BUILD) $(IDIR_SQLITE_CLI) $(PACKAGE_DIR)
+$(IPKG_SQLITE3_CLI):
+	install -d -m0755 $(IDIR_SQLITE3_CLI)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/sqlite3 $(IDIR_SQLITE3_CLI)/usr/bin/
+	$(RSTRIP) $(IDIR_SQLITE3_CLI)
+	$(IPKG_BUILD) $(IDIR_SQLITE3_CLI) $(PACKAGE_DIR)
 
 $(STAGING_DIR)/usr/lib/libsqlite3.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/include

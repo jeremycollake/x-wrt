@@ -3,4 +3,4 @@ Priority: optional
 Section: net
 Description: a NetFlow accounting daemon,
  built with SQLite database support
-Depends: libsqlite, libpcap
+Depends: libsqlite3, libpcap

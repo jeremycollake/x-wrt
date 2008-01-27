@@ -1,5 +1,5 @@
-Package: sqlite-cli
+Package: sqlite3-cli
 Priority: optional
 Section: libs
 Description: Command Line Interface (CLI) for SQLite
-Depends: libsqlite, libncurses, libreadline
+Depends: libsqlite3, libncurses, libreadline

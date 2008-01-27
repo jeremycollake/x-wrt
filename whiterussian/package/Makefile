@@ -145,7 +145,7 @@ package-$(BR2_PACKAGE_SIPSAK) += sipsak
 package-$(BR2_PACKAGE_SNORT) += snort
 package-$(BR2_COMPILE_SPCAVIEW) += spcaview
 package-$(BR2_PACKAGE_SPEEX) += speex
-package-$(BR2_PACKAGE_SQLITE) += sqlite
+package-$(BR2_PACKAGE_SQLITE3) += sqlite3
 package-$(BR2_PACKAGE_STRACE) += strace
 package-$(BR2_PACKAGE_STUNNEL) += stunnel
 package-$(BR2_PACKAGE_TAR) += tar
@@ -212,7 +212,7 @@ lcd4linux-compile: ncurses-compile
 libgd-compile: libpng-compile jpeg-compile
 libnet-compile: libpcap-compile
 libnids-compile: libnet-compile
-lighttpd-compile: openssl-compile pcre-compile bzip2-compile gdbm-compile libxml2-compile libpthread-compile sqlite-compile
+lighttpd-compile: openssl-compile pcre-compile bzip2-compile gdbm-compile libxml2-compile libpthread-compile sqlite3-compile
 libupnp-compile: libpthread-compile
 linuxigd-compile: iptables-compile libpthread-compile libupnp-compile 
 mysql-compile: ncurses-compile zlib-compile
@@ -237,7 +237,7 @@ screen-compile: ncurses-compile
 siproxd-compile: libosip2-compile
 sipsak-compile: openssl-compile
 spcaview-compile: libpthread-compile
-sqlite-compile: ncurses-compile readline-compile
+sqlite3-compile: ncurses-compile readline-compile
 tcpdump-compile: libpcap-compile
 tinc-compile: zlib-compile openssl-compile lzo-compile
 tor-compile: libevent-compile openssl-compile zlib-compile
@@ -287,7 +287,7 @@ ifneq ($(BR2_PACKAGE_PMACCT_PGSQL),)
 pmacct-compile: postgresql-compile
 endif
 ifneq ($(BR2_PACKAGE_PMACCT_SQLITE),)
-pmacct-compile: sqlite-compile
+pmacct-compile: sqlite3-compile
 endif
 
 snort-compile: libnet-compile libpcap-compile pcre-compile

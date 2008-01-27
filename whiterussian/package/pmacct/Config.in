@@ -76,7 +76,7 @@ choice
 		tristate
 		select BR2_PACKAGE_PMACCT_SQLITE
 		select BR2_PACKAGE_LIBPCAP
-		select BR2_PACKAGE_LIBSQLITE
+		select BR2_PACKAGE_LIBSQLITE3
 
 	config BR2_PACKAGE_NFACCTD_CUSTOM
 		prompt "nfacctd-custom: customized to your needs"
@@ -115,7 +115,7 @@ choice
 		bool
 		default n
 		depends BR2_PACKAGE_NFACCTD_CUSTOM
-		select BR2_PACKAGE_LIBSQLITE
+		select BR2_PACKAGE_LIBSQLITE3
 
 endchoice
 
@@ -163,7 +163,7 @@ choice
 		tristate
 		select BR2_PACKAGE_PMACCT_SQLITE
 		select BR2_PACKAGE_LIBPCAP
-		select BR2_PACKAGE_LIBSQLITE
+		select BR2_PACKAGE_LIBSQLITE3
 
 	config BR2_PACKAGE_PMACCTD_CUSTOM
 		prompt "pmacctd-custom: customized to your needs"
@@ -202,7 +202,7 @@ choice
 		bool
 		default n
 		depends BR2_PACKAGE_PMACCTD_CUSTOM
-		select BR2_PACKAGE_LIBSQLITE
+		select BR2_PACKAGE_LIBSQLITE3
 
 endchoice
 
