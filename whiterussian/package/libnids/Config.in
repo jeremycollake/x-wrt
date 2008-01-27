@@ -1,7 +1,7 @@
 config BR2_PACKAGE_LIBNIDS
 	tristate "libnids - network intrusion library"
 	select BR2_PACKAGE_LIBPCAP
-	select BR2_PACKAGE_LIBNET
+	select BR2_PACKAGE_LIBNET0
 	default m if CONFIG_DEVEL
 	help
 	  An implementation of an E-component of Network Intrusion Detection System.

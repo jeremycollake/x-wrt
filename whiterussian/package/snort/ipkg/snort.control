@@ -3,4 +3,4 @@ Priority: optional
 Section: net
 Description: a flexible Network Intrusion Detection System (NIDS),
  built without database logging support
-Depends: libnet, libpcap, libpcre
+Depends: libnet0, libpcap, libpcre

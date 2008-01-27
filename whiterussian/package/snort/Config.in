@@ -27,7 +27,7 @@ choice
 		prompt "snort: without database support"
 		tristate
 		select BR2_PACKAGE_SNORT
-		select BR2_PACKAGE_LIBNET
+		select BR2_PACKAGE_LIBNET0
 		select BR2_PACKAGE_LIBPCAP
 		select BR2_PACKAGE_LIBPCRE
 	
@@ -35,7 +35,7 @@ choice
 		prompt "snort-mysql: with MySQL database support"
 		tristate
 		select BR2_PACKAGE_SNORT
-		select BR2_PACKAGE_LIBNET
+		select BR2_PACKAGE_LIBNET0
 		select BR2_PACKAGE_LIBPCAP
 		select BR2_PACKAGE_LIBPCRE
 		select BR2_PACKAGE_LIBMYSQLCLIENT
@@ -44,7 +44,7 @@ choice
 		prompt "snort-pgsql: with PostgreSQL database support"
 		tristate
 		select BR2_PACKAGE_SNORT
-		select BR2_PACKAGE_LIBNET
+		select BR2_PACKAGE_LIBNET0
 		select BR2_PACKAGE_LIBPCAP
 		select BR2_PACKAGE_LIBPCRE
 		select BR2_PACKAGE_LIBPQ
@@ -53,7 +53,7 @@ choice
 		prompt "snort-custom: customized to your needs"
 		tristate
 		select BR2_PACKAGE_SNORT
-		select BR2_PACKAGE_LIBNET
+		select BR2_PACKAGE_LIBNET0
 		select BR2_PACKAGE_LIBPCAP
 		select BR2_PACKAGE_LIBPCRE
 	

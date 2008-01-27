@@ -16,7 +16,7 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(TOPDIR)/package/rules.mk
 
-$(eval $(call PKG_template,LIBNET,libnet,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,LIBNET0,$(PKG_NAME)0,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
 $(PKG_BUILD_DIR)/.configured:
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
@@ -68,11 +68,11 @@ $(PKG_BUILD_DIR)/.built:
 		all install
 	touch $@
 
-$(IPKG_LIBNET):
-	install -m0755 -d $(IDIR_LIBNET)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnet.so.* $(IDIR_LIBNET)/usr/lib/
-	$(RSTRIP) $(IDIR_LIBNET)
-	$(IPKG_BUILD) $(IDIR_LIBNET) $(PACKAGE_DIR)
+$(IPKG_LIBNET0):
+	install -m0755 -d $(IDIR_LIBNET0)/usr/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnet.so.* $(IDIR_LIBNET0)/usr/lib/
+	$(RSTRIP) $(IDIR_LIBNET0)
+	$(IPKG_BUILD) $(IDIR_LIBNET0) $(PACKAGE_DIR)
 
 $(STAGING_DIR)/usr/lib/libnet.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/bin

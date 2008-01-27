@@ -3,4 +3,4 @@ Priority: optional
 Section: net
 Description: a flexible Network Intrusion Detection System (NIDS),
  built with MySQL database logging support
-Depends: libnet, libpcap, libpcre, libmysqlclient
+Depends: libnet0, libpcap, libpcre, libmysqlclient

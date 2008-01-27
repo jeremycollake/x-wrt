@@ -1,4 +1,4 @@
-Package: libnet
+Package: libnet0
 Priority: optional
 Section: libs
 Description: a low-level packet creation library

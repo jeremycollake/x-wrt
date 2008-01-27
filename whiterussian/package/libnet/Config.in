@@ -1,5 +1,5 @@
-config BR2_PACKAGE_LIBNET
-	tristate "libnet - Low-level packet creation library"
+config BR2_PACKAGE_LIBNET0
+	tristate "libnet0 - Low-level packet creation library"
 	default m if CONFIG_DEVEL
 	select BR2_PACKAGE_LIBPCAP
 	help
