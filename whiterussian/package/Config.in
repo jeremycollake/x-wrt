@@ -130,6 +130,7 @@ source "package/libgd/Config.in"
 source "package/libgdbm/Config.in"
 source "package/gmp/Config.in"  # libbgmp
 source "package/libiconv/Config.in"
+source "package/jpeg/Config.in"  # libjpeg
 source "package/libtool/Config.in"  # libltdl
 source "package/lzo/Config.in"  # liblzo
 source "package/file/Config.in"  # libmagic
