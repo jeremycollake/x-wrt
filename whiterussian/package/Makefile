@@ -206,14 +206,13 @@ gdb-compile: ncurses-compile
 gmediaserver-compile: libpthread-compile id3lib-compile libiconv-compile file-compile libupnp-compile
 htop-compile: ncurses-compile
 id3lib-compile: uclibcxx-compile zlib-compile
+jpeg-compile: libtool-compile
 kismet-compile: uclibcxx-compile libpcap-compile ncurses-compile
 lcd4linux-compile: ncurses-compile
 libgd-compile: libpng-compile jpeg-compile
 libnet-compile: libpcap-compile
 libnids-compile: libnet-compile
 lighttpd-compile: openssl-compile pcre-compile bzip2-compile gdbm-compile libxml2-compile libpthread-compile sqlite-compile
-jpeg-compile: libtool-compile
-lighttpd-compile: openssl-compile pcre-compile
 libupnp-compile: libpthread-compile
 linuxigd-compile: iptables-compile libpthread-compile libupnp-compile 
 mysql-compile: ncurses-compile zlib-compile
