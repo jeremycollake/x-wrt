@@ -1,5 +1,6 @@
 Package: ulogd-mod-extra
 Priority: optional
 Section: net
-Description: Netfilter userspace logging daemon (extra plugins)
 Depends: ulogd
+Description: Extra plugins
+ This package contains the LOCAL, LOGEMU, OPRINT, PWSNIFF and SYSLOG plugins.

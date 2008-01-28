@@ -6,37 +6,44 @@ config BR2_PACKAGE_ULOGD
 	default m if CONFIG_DEVEL
 	select BR2_PACKAGE_IPTABLES
 	help
-	  
 	  The netfilter userspace logging daemon
 	  
 	  http://gnumonks.org/projects/ulogd
-	  
 
 config BR2_PACKAGE_ULOGD_MOD_MYSQL
-	prompt "...-mod-mysql - Output plugin for logging into a MySQL database"
+	prompt "...-mod-mysql - Output plugin for logging to a MySQL database"
 	tristate
 	default m if CONFIG_DEVEL
 	depends BR2_PACKAGE_ULOGD
 	select BR2_PACKAGE_LIBMYSQLCLIENT
 
 config BR2_PACKAGE_ULOGD_MOD_PCAP
-	prompt"...-mod-pcap - Output plugin for pcap logging format"
+	prompt"...-mod-pcap - Output plugin for logging in pcap format"
 	tristate
 	default m if CONFIG_DEVEL
 	depends BR2_PACKAGE_ULOGD
 	select BR2_PACKAGE_LIBPCAP
 
 config BR2_PACKAGE_ULOGD_MOD_PGSQL
-	prompt "...-mod-pgsql - Output plugin for logging into a PostgreSQL database"
+	prompt "...-mod-pgsql - Output plugin for logging to a PostgreSQL database"
 	tristate
 	default m if CONFIG_DEVEL
 	depends BR2_PACKAGE_ULOGD
 	select BR2_PACKAGE_LIBPQ
 
-config BR2_PACKAGE_ULOGD_MOD_EXTRA
-	prompt "...-mod-extra - All other plugins"
+config BR2_PACKAGE_ULOGD_MOD_SQLITE
+	prompt "...-mod-sqlite - Output plugin for logging to an SQLite database"
 	tristate
 	default m if CONFIG_DEVEL
 	depends BR2_PACKAGE_ULOGD
+	select BR2_PACKAGE_SQLITE3
+
+config BR2_PACKAGE_ULOGD_MOD_EXTRA
+	prompt "...-mod-extra - Extra plugins"
+	tristate
+	default m if CONFIG_DEVEL
+	depends BR2_PACKAGE_ULOGD
+	help
+	  This package contains the LOCAL, LOGEMU, OPRINT, PWSNIFF and SYSLOG plugins.
 
 endmenu
