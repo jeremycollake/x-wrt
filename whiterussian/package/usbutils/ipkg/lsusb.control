@@ -1,5 +1,5 @@
 Package: lsusb
 Priority: optional
-Section: net
+Section: utils
 Depends: libusb
-Description: A program to list USB devices
+Description: USB devices listing utilities

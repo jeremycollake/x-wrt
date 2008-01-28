@@ -1,14 +1,19 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=usbutils
-PKG_VERSION:=0.71
+PKG_VERSION:=0.72
 PKG_RELEASE:=1
-PKG_MD5SUM:=479d7c7098ef44cc95e7978fd71c712c
 
-PKG_SOURCE_URL:=@SF/linux-usb
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@SF/linux-usb
+PKG_MD5SUM:=ee345fe605ffcfce843dae4aed81122b
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
