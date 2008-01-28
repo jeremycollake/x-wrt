@@ -1,5 +1,6 @@
 Package: openvpn-easy-rsa
 Priority: optional
 Section: net
-Description: collection of shell scripts to manage a simple CA infrastructure
-Depends: openssl-util
+Depends: openvpn, openssl-util
+Description: Simple shell scripts to manage a Certificate Authority
+ Open source VPN solution using SSL

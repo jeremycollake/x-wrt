@@ -1,4 +1,0 @@
-Package: openvpn-webif
-Priority: optional
-Section: net
-Description: webif module for OpenVPN

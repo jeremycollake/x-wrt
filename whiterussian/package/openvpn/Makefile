@@ -1,14 +1,18 @@
-# $Id: Makefile 4875 2006-09-29 19:11:03Z nbd $
-
+#
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openvpn
-PKG_VERSION:=2.0.8
+PKG_VERSION:=2.0.9
 PKG_RELEASE:=1
-PKG_MD5SUM:=de41592b6dd88d33b7c45c114a4f4e00
 
-PKG_SOURCE_URL:=http://openvpn.net/release @SF/openvpn
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://openvpn.net/release @SF/openvpn
+PKG_MD5SUM:=60745008b90b7dbe25fe8337c550fec6
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -16,9 +20,8 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(TOPDIR)/package/rules.mk
 
-$(eval $(call PKG_template,OPENVPN,openvpn,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,OPENVPN_EASY_RSA,openvpn-easy-rsa,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,OPENVPN_WEBIF,openvpn-webif,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,OPENVPN,$(PKG_NAME),$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,OPENVPN_EASY_RSA,$(PKG_NAME)-easy-rsa,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
 PKG_DEPEND:="kmod-tun"
 ifneq ($(BR2_PACKAGE_OPENVPN_OPENSSL),y)
@@ -87,33 +90,27 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		  $(ENABLE_SMALL) \
 		  $(DISABLE_MANAGEMENT) \
 	);
-	touch $(PKG_BUILD_DIR)/.configured
+	touch $@
 
 $(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
-	$(MAKE) -C $(PKG_BUILD_DIR)
+	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		install
-	touch $(PKG_BUILD_DIR)/.built
+		all install
+	touch $@
 
 $(IPKG_OPENVPN):
 	install -d -m0755 $(IDIR_OPENVPN)/usr/sbin
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/openvpn $(IDIR_OPENVPN)/usr/sbin/
-	$(RSTRIP) $(IDIR_OPENVPN)
 	echo "Depends: $(PKG_DEPEND)" >> $(IDIR_OPENVPN)/CONTROL/control
+	$(RSTRIP) $(IDIR_OPENVPN)
 	$(IPKG_BUILD) $(IDIR_OPENVPN) $(PACKAGE_DIR)
 
 $(IPKG_OPENVPN_EASY_RSA):
-	install -d -m0755 $(IDIR_OPENVPN_EASY_RSA)/usr/sbin $(IDIR_OPENVPN_EASY_RSA)/etc/easy-rsa
-	$(CP) $(PKG_BUILD_DIR)/easy-rsa/2.0/{build-*,clean-all,inherit-inter,list-crl,pkitool,revoke-full,sign-req} $(IDIR_OPENVPN_EASY_RSA)/usr/sbin
-	install -m 0644 $(PKG_BUILD_DIR)/easy-rsa/2.0/openssl.cnf $(IDIR_OPENVPN_EASY_RSA)/etc/easy-rsa/openssl.cnf
-	install -m 0644 $(PKG_BUILD_DIR)/easy-rsa/2.0/vars $(IDIR_OPENVPN_EASY_RSA)/etc/easy-rsa/vars
+	install -d -m0755 $(IDIR_OPENVPN_EASY_RSA)/usr/sbin
+	$(CP) $(PKG_BUILD_DIR)/easy-rsa/2.0/{build-*,clean-all,inherit-inter,list-crl,pkitool,revoke-full,sign-req,whichopensslcnf} $(IDIR_OPENVPN_EASY_RSA)/usr/sbin
+	install -d -m0755 $(IDIR_OPENVPN_EASY_RSA)/etc/easy-rsa
+	install -m 0644 $(PKG_BUILD_DIR)/easy-rsa/2.0/openssl.cnf $(IDIR_OPENVPN_EASY_RSA)/etc/easy-rsa/
+	install -m 0644 $(PKG_BUILD_DIR)/easy-rsa/2.0/vars $(IDIR_OPENVPN_EASY_RSA)/etc/easy-rsa/
 	$(IPKG_BUILD) $(IDIR_OPENVPN_EASY_RSA) $(PACKAGE_DIR)
-
-$(IPKG_OPENVPN_WEBIF):
-	install -d -m0755 $(IDIR_OPENVPN_WEBIF)/etc/init.d $(IDIR_OPENVPN_WEBIF)/www/cgi-bin/webif
-	install -m0755 ./files/S50openvpn $(IDIR_OPENVPN_WEBIF)/etc/init.d/S50openvpn
-	install -m0755 ./files/openvpn.sh $(IDIR_OPENVPN_WEBIF)/www/cgi-bin/webif/
-	install -m0755 ./files/openvpn-status.sh $(IDIR_OPENVPN_WEBIF)/www/cgi-bin/webif/
-	$(IPKG_BUILD) $(IDIR_OPENVPN_WEBIF) $(PACKAGE_DIR)

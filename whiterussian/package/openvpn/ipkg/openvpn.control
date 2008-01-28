@@ -2,3 +2,4 @@ Package: openvpn
 Priority: optional
 Section: net
 Description: Open Source VPN solution using SSL
+ Open source VPN solution using SSL
