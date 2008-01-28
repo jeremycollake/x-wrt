@@ -1,5 +1,8 @@
 Package: libnids
 Priority: optional
 Section: libs
-Description: implementation of an E-component of Network Intrusion Detection System.
-Depends: libpcap, libnet0
+Depends: libnet0, libpcap
+Description: A network intrusion detection library
+ An implementation of an E-component of Network Intrusion Detection System.
+ .
+ http://www.packetfactory.net/projects/libnids/

@@ -1,14 +1,19 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libnids
 PKG_VERSION:=1.18
-PKG_RELEASE:=0
-PKG_MD5SUM:=9ee6dcdfac97bae6fe611aa27d2594a5
+PKG_RELEASE:=1
 
-PKG_SOURCE_URL:=http://www.packetfactory.net/projects/libnids/dist/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.packetfactory.net/projects/libnids/dist/
+PKG_MD5SUM:=9ee6dcdfac97bae6fe611aa27d2594a5
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -76,8 +81,9 @@ $(STAGING_DIR)/usr/lib/libnids.so: $(PKG_BUILD_DIR)/.built
 install-dev: $(STAGING_DIR)/usr/lib/libnids.so
 
 uninstall-dev:
-	rm -rf $(STAGING_DIR)/usr/include/nids.h
-	rm -rf $(STAGING_DIR)/usr/lib/libnids.{a,so*}
+	rm -rf \
+		$(STAGING_DIR)/usr/include/nids.h \
+		$(STAGING_DIR)/usr/lib/libnids.{a,so*}
 
 compile: install-dev
 clean: uninstall-dev
