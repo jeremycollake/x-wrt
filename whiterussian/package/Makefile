@@ -83,6 +83,7 @@ package-$(BR2_PACKAGE_MARADNS) += maradns
 package-$(BR2_PACKAGE_MATRIXSSL) += matrixssl
 package-$(BR2_PACKAGE_MATRIXTUNNEL) += matrixtunnel
 package-$(BR2_PACKAGE_MADWIFI_TOOLS) += madwifi-tools
+package-$(BR2_PACKAGE_MC) += mc
 package-$(BR2_PACKAGE_MICROCOM) += microcom
 package-$(BR2_PACKAGE_MICROPERL) += microperl
 package-$(BR2_PACKAGE_MINIUPNPD) += miniupnpd
@@ -215,6 +216,7 @@ libnids-compile: libnet-compile
 lighttpd-compile: openssl-compile pcre-compile bzip2-compile gdbm-compile libxml2-compile libpthread-compile sqlite3-compile
 libupnp-compile: libpthread-compile
 linuxigd-compile: iptables-compile libpthread-compile libupnp-compile 
+mc-compile: glib-compile ncurses-compile
 mysql-compile: ncurses-compile zlib-compile
 net-snmp-compile: libelf-compile
 nfs-server-compile: portmap-compile
