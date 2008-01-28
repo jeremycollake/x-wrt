@@ -5,7 +5,7 @@ include $(TOPDIR)/rules.mk
 PKG_NAME:=libtool
 PKG_VERSION:=1.5.22
 PKG_RELEASE:=1
-PKG_MD5SUM:=049bf67de9b0eb75cd943dafe3d749ec
+PKG_MD5SUM:=8e0ac9797b62ba4dcc8a2fb7936412b0
 
 PKG_SOURCE_URL:=http://ftp.gnu.org/gnu/libtool/ \
 	ftp://ftp.belnet.be/mirror/ftp.gnu.org/gnu/libtool/ \
