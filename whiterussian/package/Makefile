@@ -212,12 +212,12 @@ kismet-compile: uclibcxx-compile libpcap-compile ncurses-compile
 lcd4linux-compile: ncurses-compile
 libgd-compile: libpng-compile jpeg-compile
 libnet-compile: libpcap-compile
-libnids-compile: libnet-compile
+libnids-compile: libnet-compile libpcap-compile
 lighttpd-compile: openssl-compile pcre-compile bzip2-compile gdbm-compile libxml2-compile libpthread-compile sqlite3-compile
 libupnp-compile: libpthread-compile
 linuxigd-compile: iptables-compile libpthread-compile libupnp-compile 
 mc-compile: glib-compile ncurses-compile
-mysql-compile: ncurses-compile zlib-compile
+mysql-compile: ncurses-compile readline-compile zlib-compile
 net-snmp-compile: libelf-compile
 nfs-server-compile: portmap-compile
 nmap-compile: uclibcxx-compile pcre-compile libpcap-compile
@@ -276,7 +276,9 @@ ifneq ($(BR2_PACKAGE_FREERADIUS_MOD_SQL_PGSQL),)
 freeradius-compile: postgresql-compile
 endif
 
+ifeq ($(BR2_PACKAGE_OPENVPN_OPENSSL),y)
 openvpn-compile: openssl-compile
+endif
 ifeq ($(BR2_PACKAGE_OPENVPN_LZO),y)
 openvpn-compile: lzo-compile
 endif
@@ -312,6 +314,9 @@ ulogd-compile: libpcap-compile
 endif
 ifneq ($(BR2_PACKAGE_ULOGD_PGSQL),)
 ulogd-compile: postgresql-compile
+endif
+ifneq ($(BR2_PACKAGE_ULOGD_SQLITE),)
+ulogd-compile: sqlite3-compile
 endif
 
 sdk-compile: $(DEV_LIBS_COMPILE) $(SDK_DEFAULT_COMPILE)
