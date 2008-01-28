@@ -1,0 +1,7 @@
+config BR2_PACKAGE_SIPCALC
+	tristate "sipcalc - an advanced console based ip subnet calculator"
+	default m if CONFIG_DEVEL
+	help
+	  Sipcalc is an advanced console based ip subnet calculator.
+	  
+	  http://www.routemeister.net/projects/sipcalc/index.html

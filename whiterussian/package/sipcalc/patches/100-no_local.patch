@@ -1,0 +1,112 @@
+diff -urN sipcalc-1.1.4.old/configure sipcalc-1.1.4.dev/configure
+--- sipcalc-1.1.4.old/configure	2006-11-10 11:07:34.000000000 +0100
++++ sipcalc-1.1.4.dev/configure	2008-01-25 12:28:41.000000000 +0100
+@@ -4179,52 +4179,6 @@
+ done
+ 
+ 
+-if test -d /usr/local/include;
+-then
+-  CFLAGS="${CFLAGS} -I/usr/local/include"
+-fi
+-
+-if test -d /usr/local/lib;
+-then
+-  LIBS="${LIBS} -L/usr/local/lib"
+-fi
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+-
+ 
+ 
+ 
+@@ -4772,18 +4726,6 @@
+ _ACEOF
+ 
+ 
+-else
+-
+-    if test -f /usr/local/include/getopt.h;
+-    then
+-      echo checking for getopt.h in /usr/local/include... yes
+-
+-cat >>confdefs.h <<\_ACEOF
+-#define HAVE_GETOPT_H 1
+-_ACEOF
+-
+-    fi
+-
+ fi
+ 
+ done
+diff -urN sipcalc-1.1.4.old/configure.ac sipcalc-1.1.4.dev/configure.ac
+--- sipcalc-1.1.4.old/configure.ac	2006-11-10 11:07:02.000000000 +0100
++++ sipcalc-1.1.4.dev/configure.ac	2008-01-25 12:24:50.000000000 +0100
+@@ -16,19 +16,6 @@
+ ])
+ AC_CHECK_FUNCS(socket strstr strtol strtoul gethostbyname gethostbyname2 inet_ntop getipnodebyaddr getaddrinfo)
+ 
+-dnl - Include /usr/local/include if it exists.
+-if test -d /usr/local/include;
+-then
+-  CFLAGS="${CFLAGS} -I/usr/local/include"
+-fi
+-
+-dnl - Include /usr/local/lib if it exists.
+-if test -d /usr/local/lib;
+-then
+-  LIBS="${LIBS} -L/usr/local/lib"
+-fi
+-
+-
+ dnl Check if getopt_long is available.
+ 
+ AC_DEFUN([sii_GETOPT_LONG],
+@@ -36,13 +23,6 @@
+   AC_CHECK_HEADERS(getopt.h,
+   [
+     AC_DEFINE(HAVE_GETOPT_H, 1, getopt_h)
+-  ],
+-  [
+-    if test -f /usr/local/include/getopt.h;
+-    then
+-      echo checking for getopt.h in /usr/local/include... yes
+-      AC_DEFINE(HAVE_GETOPT_H, 1, getopt_h)
+-    fi
+   ])
+   AC_CHECK_FUNCS(getopt_long,,
+   [

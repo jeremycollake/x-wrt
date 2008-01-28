@@ -1,0 +1,7 @@
+Package: sipcalc
+Priority: optional
+Section: utils
+Description: An advanced console based ip subnet calculator
+ Sipcalc is an advanced console based ip subnet calculator.
+ .
+ http://www.routemeister.net/projects/sipcalc/index.html
