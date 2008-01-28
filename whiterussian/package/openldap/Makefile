@@ -1,36 +1,26 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openldap
-PKG_VERSION:=2.2.26
+PKG_VERSION:=2.2.29
 PKG_RELEASE:=1
-PKG_MD5SUM:=afc8700b5738da863b30208e1d3e9de8
 
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
 PKG_SOURCE_URL:=ftp://ftp.openldap.org/pub/OpenLDAP/openldap-release/ \
 	ftp://sunsite.cnlab-switch.ch/mirror/OpenLDAP/openldap-release/ \
 	ftp://ftp.nl.uu.net/pub/unix/db/openldap/openldap-release/ \
 	ftp://ftp.plig.org/pub/OpenLDAP/openldap-release/
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tgz
+PKG_MD5SUM:=6c4c72a1336aa45b463e738034c078d6
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
-
-PKG_CONFIGURE_OPTIONS = \
-	--enable-shared \
-	--enable-static \
-	--disable-debug \
-	--enable-dynamic \
-	--enable-syslog \
-	--disable-local \
-	--disable-slapd \
-	--disable-slurpd \
-	--with-cyrus-sasl \
-	--without-fetch \
-	--with-threads \
-	--with-tls \
-	--with-yielding_select="yes" \
 
 include $(TOPDIR)/package/rules.mk
 
@@ -38,42 +28,6 @@ $(eval $(call PKG_template,LIBOPENLDAP,libopenldap,$(PKG_VERSION)-$(PKG_RELEASE)
 $(eval $(call PKG_template,OPENLDAP_UTILS,openldap-utils,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
 $(PKG_BUILD_DIR)/.configured:
-	touch $@
-
-$(PKG_BUILD_DIR)/.built:
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
-	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
-		./configure \
-		  --target=$(GNU_HOST_NAME) \
-		  --host=$(GNU_HOST_NAME) \
-		  --build=$(GNU_HOST_NAME) \
-		  --program-prefix="" \
-		  --program-suffix="" \
-		  --prefix=/usr \
-		  --exec-prefix=/usr \
-		  --bindir=/usr/bin \
-		  --datadir=/usr/share \
-		  --includedir=/usr/include \
-		  --libdir=/usr/lib \
-		  --libexecdir=/usr/lib \
-		  --localstatedir=/var \
-		  --mandir=/usr/share/man \
-		  --sbindir=/usr/sbin \
-		  --sysconfdir=/etc \
-		  $(DISABLE_LARGEFILE) \
-		  $(DISABLE_NLS) \
-		  $(PKG_CONFIGURE_OPTIONS) \
-		  --without-cyrus-sasl \
-		  --without-threads \
-		  --without-tls \
-	)
-	$(MAKE) -C $(PKG_BUILD_DIR) depend 
-	$(MAKE) -C $(PKG_BUILD_DIR)/libraries/liblutil
-	$(MAKE) -C $(PKG_BUILD_DIR)/libraries/liblber
-	$(MAKE) -C $(PKG_BUILD_DIR)/libraries/liblunicode
-	$(MAKE) -C $(PKG_BUILD_DIR)/libraries/liblber clean
-	$(MAKE) -C $(PKG_BUILD_DIR)/libraries/liblutil clean
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
@@ -99,13 +53,30 @@ $(PKG_BUILD_DIR)/.built:
 		  --sysconfdir=/etc \
 		  $(DISABLE_LARGEFILE) \
 		  $(DISABLE_NLS) \
-		  $(PKG_CONFIGURE_OPTIONS) \
-	)
+		  --enable-shared \
+		  --enable-static \
+		  --disable-debug \
+		  --enable-dynamic \
+		  --enable-syslog \
+		  --disable-local \
+		  --disable-slapd \
+		  --disable-slurpd \
+		  --without-fetch \
+		  --with-yielding_select="yes" \
+		  --without-cyrus-sasl \
+		  --without-threads \
+		  --without-tls  \
+	);
+	touch $@
+
+$(PKG_BUILD_DIR)/.built:
+	rm -rf $(PKG_INSTALL_DIR)
+	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+		HOSTCC="$(HOSTCC)" \
+		depend all install
 	touch $@
-	
 
 $(IPKG_LIBOPENLDAP):
 	mkdir -p $(IDIR_LIBOPENLDAP)/etc/openldap
@@ -128,7 +99,6 @@ $(STAGING_DIR)/usr/lib/libldap.so: $(PKG_BUILD_DIR)/.built
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/{lber,ldap}*.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib/
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/lib{lber,ldap}*.{a,so*} $(STAGING_DIR)/usr/lib/
-	touch $(STAGING_DIR)/usr/lib/libldap.so
 	
 install-dev: $(STAGING_DIR)/usr/lib/libldap.so
 

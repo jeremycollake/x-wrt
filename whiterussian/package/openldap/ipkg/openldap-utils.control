@@ -1,5 +1,10 @@
 Package: openldap-utils
 Priority: optional
-Section: admin
+Section: utils
 Description: OpenLDAP (Lightweight Directory Access Protocol) client utilities
-Depends: libopenldap, libopenssl, libsasl2
+Depends: libopenldap
+ OpenLDAP Software is an open source implementation of the 
+ Lightweight Directory Access Protocol (LDAP).
+ This package contains client programs required to access LDAP servers.
+ .
+ http://www.openldap.org/
