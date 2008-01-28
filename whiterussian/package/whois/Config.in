@@ -1,0 +1,7 @@
+config BR2_PACKAGE_WHOIS
+	tristate "whois - a client for the whois directory service"
+	default m if CONFIG_DEVEL
+	help
+	  whois searches for an object in a RFC 3912 database.
+	  
+	  http://www.linux.it/~md/software/

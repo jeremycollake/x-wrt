@@ -1,0 +1,16 @@
+diff -urN whois-4.7.24.old/config.h whois-4.7.24.dev/config.h
+--- whois-4.7.24.old/config.h	2007-10-30 11:07:08.000000000 +0100
++++ whois-4.7.24.dev/config.h	2008-01-25 16:18:00.000000000 +0100
+@@ -17,7 +17,11 @@
+ 
+ /* autoconf in cpp macros */
+ #ifdef linux
+-# define ENABLE_NLS
++# ifdef DISABLE_NLS
++#  undef ENABLE_NLS
++# else
++#  define ENABLE_NLS
++# endif
+ #endif
+ 
+ #ifdef __FreeBSD__
