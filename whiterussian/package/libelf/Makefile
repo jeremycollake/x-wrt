@@ -1,14 +1,19 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libelf
-PKG_VERSION:=0.8.5
+PKG_VERSION:=0.8.8
 PKG_RELEASE:=1
-PKG_MD5SUM:=c1daf069367871350ece779b7de20047
 
-PKG_SOURCE_URL:=http://www.mr511.de/software/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.mr511.de/software/
+PKG_MD5SUM:=be84e553686dd50c8b6d520f86f46521
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -62,7 +67,7 @@ $(PKG_BUILD_DIR)/.built:
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) -j1 \
-		CC=$(TARGET_CC) LD=$(TARGET_CROSS)ld ARCH=$(ARCH) \
+		$(TARGET_CONFIGURE_OPTS) \
 		instroot="$(PKG_INSTALL_DIR)" \
 		all install
 	touch $@
@@ -78,12 +83,16 @@ $(STAGING_DIR)/usr/lib/libelf.so: $(PKG_BUILD_DIR)/.built
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libelf* $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libelf.{a,so*} $(STAGING_DIR)/usr/lib/
+	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libelf.pc $(STAGING_DIR)/usr/lib/pkgconfig/
 
 install-dev: $(STAGING_DIR)/usr/lib/libelf.so
 
 uninstall-dev:
-	rm -rf $(STAGING_DIR)/usr/include/libelf*
-	rm -rf $(STAGING_DIR)/usr/lib/libelf.{a,so*}
+	rm -rf \
+		$(STAGING_DIR)/usr/include/libelf* \
+		$(STAGING_DIR)/usr/lib/libelf.{a,so*} \
+		$(STAGING_DIR)/usr/lib/pkgconfig/libelf.pc
 
 compile: install-dev
 clean: uninstall-dev
