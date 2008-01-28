@@ -1,37 +1,74 @@
 # leave at least one comment here to skip the BOM character
 # language name
 lang => Polski
-# Common
+#
+# translations from /usr/lib/webif/webif.sh
+#
+big_warning => OSTRZEŻENIE
+page_incomplete => Ta strona jest niekompletna i może działać nieprawidłowo, albo nawet wcale.
+page_untested => Strona nie została przetestowana i może nie działać prawidłowo.
+page_untested_kamikaze => Ta strona nie była odświeżona ani sprawdzona pod wersją Kamikaze oprogramowania.
+features_require_package => Features on this page require the package
 Settings saved => Ustawienia zostały zapisane
-Settings not saved => Ustawienia niezostały zapisane
-Save Changes => Zapisz zmiany
-Apply Changes => Zastosuj zmiany
-Clear Changes => Czyść zmiany
-Review Changes => Przejżyj zmiany
-Host Name => Hostname
+Settings not saved => Ustawienia nie zostały zapisane
+Host => Host
 Uptime => Czas pracy
 Load => Obciążenie
-Version => Wersja
+X-Wrt Administration Console => Konsola administracyjna X-Wrt
+Password_mismatch => Wprowadzone hasła nie są identyczne!
+Password_warning => Nie masz ustawionego hasła dostępu do WWW oraz SSH.<br />Proszę wpisz je teraz(nazwa użytkownika to 'root')
+New Password => Nowe hasło
+Confirm Password => Potwierdź hasło
+Proceed Changes => Proceed Changes
+Apply Changes => Zastosuj zmiany
+Clear Changes => Czyść zmiany
+Review Changes => Przejrzyj zmiany
+Set => Ustaw
+making_usable => Rozszerzenia systemu OpenWrt dla użytkownika końcowego.
+
+
+# translations from /usr/lib/webif/functions.sh
+#
+# translations from /usr/lib/webif/validate.awk
+#
+Invalid value => Nieprawidłowa wartość
+Invalid key length => Nieprawidłowa długość klucza
+Key must not end with '0' => Klucz nie może kończyć się '0'
+String too long => Łańcuch zbyt długi
+String too short => Łańcuch zbyt krotki
+Invalid hex key => Nieprawidłowy klucz heksadecymalny
+minimum => minimum
+minimum length => minimalna długość
+maximum => maksimum
+maximum length => maksymalna długość
+Value too large => wartość zbyt duża
+Invalid dots => niedozwolone kropki
+Invalid spaces => niedozwolone spacje
+Missing netmask => brak maski podsieci
+Netmask not allowed => maska podsieci niedozwolona
+Error in => Błąd w
+
+# Common
+Save Changes => Zapisz zmiany
+Host Name => Hostname
 Categories => Kategorie
 Subcategories => Podkategorie
 more... => Więcej Informacji...
 Add => Dodaj
 Remove => Usuń
 Warning => Uwaga
-Password_warning => Niemasz ustawionego hasła dostępu do WWW oraz SSH.<br />Prosze wpisz je teraz(nazwa użytkownika to 'root')
 
 # Categories
 Info => Info
-About => O Autorze
+About => O Autorach
 Router Info => Info o WRT
 
 Status => Status
-Connections => Połaczenia
+Connections => Połączenia
 DHCP => DHCP
 Wireless => WLAN
 
 System => System
-Password => Hasło
 Settings => Ustawienia
 Installed Software => Zainstalowane pakiety
 Firmware Upgrade => Aktualizacja opr.
@@ -45,10 +82,10 @@ Hosts => Konfiguracja Hostów
 
 
 # 'About' page
-Copyright => Copyright
+Copyright => Prawa autorskie
 
 GPL_Text => This program is free software; you can redistribute it and/or <br >modify it under the terms of the GNU General Public License <br >as published by the Free Software Foundation; either version 2 <br > of the License, or (at your option) any later version. 
-Contributions by => Wspólpracownicy
+Contributions by => Współpracownicy
 Layout based on => Layout bazuje na
 by => by
 
@@ -61,13 +98,13 @@ Updating config... => Aktualizacja konfiguracji...
 
 # 'Router Info' page
 Firmware Version => Wersja Opr.
-Kernel Version => Wersja kernela
+Kernel Version => Wersja jądra
 Current Date/Time => Aktualna Data/Czas
 MAC Address => Adres MAC
 
 
 # 'Connections' page
-Connection Status => Stan połaczeń
+Connection Status => Stan połączeń
 Physical Connections => Połączenia fizyczne
 Router Connections => Połączenia do routera
 
@@ -75,13 +112,18 @@ Router Connections => Połączenia do routera
 # 'Wireless Status' page
 Wireless Status => Status WLAN
 
+
 # 'Password' page
-Password Change => Zmien hasło
+# file /www/cgi-bin/webif/system-password.sh
+#
+Password => Hasło
+Passwords do not match => Hasła nie są identyczne!
+Password Change => Zmień hasło
 New Password => Nowe hasło
-Confirm Password => Potwierdz hasło
+
 
 # 'System Settings' page
-System Settings => Ustawienia Systemu
+System Settings => Ustawienia systemu
 Host Name => Hostname
 Language => Język
 
@@ -111,19 +153,17 @@ Note => Notatka
 WAN Settings => Ustawienia WAN
 WAN Configuration => Konfiguracja WAN
 PPTP Server IP => Adres serwera PPTP
-Connection Type => Połaczenie
+Connection Type => Połączenie
 No WAN => Bez WAN
 DHCP => DHCP
 Static IP => Statyczne IP
 IP Settings => Ustawienia IP
 PPP Settings => Ustawienia PPP
 Redial Policy => Rodzaj wydzwaniania
-Connect on Demand => Połączenia na żadanie
-Keep Alive => Trzymaj połączenie
+Connect on Demand => Połączenia na żądanie
+Keep Alive => Podtrzymuj połączenie
 Maximum Idle Time => Max. czas bezczynności
-	
 MTU => MTU
-Username => Nazwa uzyt.
 
 
 # 'Wireless Configuration' page
@@ -136,7 +176,7 @@ ESSID => ESSID
 Channel => Kanał
 RADIUS IP Address => Adres IP RADIUS
 RADIUS Server Key => Klucz RADIUS
-Enabled => Właczone
+Enabled => Włączone
 Disabled => Wyłączone
 ESSID Broadcast => Rozsyłanie ESSID 
 Show => Pokaż
@@ -155,7 +195,8 @@ WEP Keys => Klucze WEP
 
 
 # 'Advanced Wireless Configuration' page
-Advanced Wireless Configuration => Zaawansowane WLAN
+Advanced Wireless Configuration => Zaawansowane ustawienia sieci bezprzewodowej (WLAN)
+Lazy WDS => "Leniwe" WDS
 WDS Connections => Połączenie WDS
 MAC Filter List => Filtrowanie MAC
 Filter Mode => Rodzaj filtra
@@ -163,10 +204,19 @@ Allow => Udzielaj dostępu
 Deny => Odrzucaj dostęp
 Set => Ustaw
 Settings => Ustawienia
+Transmit Power (in mw) => Moc nadajnika (w mW)
 Automatic WDS => Automatyczny WDS
+Preamble (Default: Long) => Preambuła (domyślnie: długa)
+Long => Długa
+Short => Krótka
+Right => Prawa
+Left => Lewa
+Fragmentation Threshold (default 2346) => Próg fragmentacji (domyślnie: 2346)
+RTS Threshold (default 2347) => Próg RTS (domyślnie: 2347)
+DTIM Period (default 1) => Okres DTIM (domyślnie: 1)
+Wireless Distance (In Meters) => Największa odległość (w metrach)
 
 # "Hosts" page
-
 MAC Address => Adres MAC
 Configured Hosts => Konfiguracja Hostów
 DHCP Static => Statyczne DHCP
@@ -194,9 +244,9 @@ Target => Cel
 Port => Port
 
 Protocol => Protokół
-Source IP => IP żródłowe
+Source IP => IP źródłowe
 Destination IP => IP docelowe
-Source Ports => Port żródłowy
+Source Ports => Port źródłowy
 Destination Ports => Port docelowy
 
 Forward to => Przekieruj do
@@ -207,15 +257,36 @@ Helptext DNS save => Musisz zapisać ustawienia przed dodaniem/usunięciem serwe
 
 Helptext Operation mode => Umożliwia wybór pracy urządzenia.
 Helptext Encryption Type => 'WPA (RADIUS)' działa tylko w trybie Access Point <br /> 'WPA (PSK)' nie działa w trybie Ad-Hoc. 
-Helptext IP Settings => Ustawienia numeru IP dla DHCP i PPTP jest niekonieczne. Jeżeli je ustawisz, będa używane jako domyślnje w przypadku , gdy serwer DHCP bedzie niedostępny.
-Helptext Idle Time => Czas w sekundach bezruchu internetowego, po upływie których następuje rozłaczenie (tylko Połączenie na ządanie)
-Helptext Redial Timeout => Liczba sekund, które trzeba odczekac po tym, jak nie otrzymales odpowiedzi od providera (przed ponowna proba podlaczenia)
+Helptext IP Settings => Ustawienia numeru IP dla DHCP i PPTP jest niekonieczne. Jeżeli je ustawisz, będą używane jako domyślne w przypadku , gdy serwer DHCP będzie niedostępny.
+Helptext Idle Time => Czas w sekundach bezruchu internetowego, po upływie których następuje rozłączenie (tylko Połączenie na żądanie)
+Helptext Redial Timeout => Liczba sekund, które trzeba odczekać po tym, jak nie otrzymałeś odpowiedzi od providera (przed ponowną próbą podłączenia)
 
 
 
 ## new format
 ## you are free to translate the part between "new format comments"
 ## replace any text after "=" and ">" with your translation
+
+## 'Info page'
+## translations from file /www/cgi-bin/webif/info.sh
+#
+System Information => Informacja o systemie
+info_error_checking => Błąd podczas sprawdzania nowej wersji oprogramowania
+info_update_available => Nowa wersja oprogramowania webif&sup2; jest dostępna
+info_view_changes => Przejrzyj zmiany
+info_upgrade_webif => Zainstaluj nową wersję Webif&sup2;
+info_already_latest => Masz już najnowszą wersję oprogramowania Webif&sup2;
+info_wait_install => Proszę czekać, instalacja może potrwać minutę
+Firmware => Oprogramowanie
+Kernel => Jądro
+MAC => Adres fizyczny
+Device => Urządzenie
+Board => Wersja sprzętu
+Username => Nazwa użytkownika
+Web mgt. console => Konsola zarządzania przez WWW
+Version => Wersja
+info_check_update => Sprawdź czy jest nowa wersja Webif&sup2;
+info_check_daily_text => Włącz sprawdzanie dziennych wersji przy sprawdzaniu nowej wersji webif&sup2;
 
 
 ## network hosts
@@ -235,17 +306,90 @@ network_hosts_Static_IPs_helptext => The file /etc/ethers contains database info
 network_hosts_Active_Leases => Active DHCP Leases
 network_hosts_Name => Nazwa
 network_hosts_Expires => Wygasa za
-network_hosts_h => h
+network_hosts_h => godz
 network_hosts_min => min
-network_hosts_sec => sec
-network_hosts_No_leases => There are no known DHCP leases.
+network_hosts_sec => sek
+network_hosts_No_leases => Brak aktywnych dzierżaw DHCP.
 Network => Sieć
 Hosts => Konfiguracja Hostów
+
+## 'Status basic'
+# translations from file /www/cgi-bin/webif/status-basic.sh
+#
+Device Status => Stan urządzenia
+Swap => Plik wymiany
+Used => Użyte
+KiB => KB
+status_basic_swap_partition => Partycja wymiany
+status_basic_swap_file => Plik wymiany
+Load Average => Średnie obciążenie
+RAM Usage => Zużycie pamięci RAM
+Total => Całkowite
+Tracked Connections => Śledzone połączenia (conntrack)
+Maximum => maksimum
+Mount Usage => Zużycie dysków
+mount_of => z
+Helptext RAM Usage => Bieżące zużycie pamięci RAM, ilość wolnej pamięci informuje o tym, ile aplikacje mają dostępne.
+Helptext Tracked Connections => Ilość połączeń w tablicy połączeń routera. <a href="status-conntrackread.sh">Zobacz tablicę połączeń</a
+Helptext Mount Usage => Pokazuje ilości całkowitego i użytego miejsca w zamontowanych systemach plików.
+
+## /www/cgi-bin/webif/status-precesses.sh
+#
+status_processes_kill_error => Błąd w
+status_processes_Running_Processes => Działające procesy
+status_processes_Stop_Refreshing => Zatrzymaj odświeżanie
+status_processes_Interval => Okres odświeżania
+status_processes_in_seconds => w sekundach
+status_processes_Auto_Refresh => Odświeżanie automatyczne
+status_processes_moreinfo => Więcej informacji o wyświetlanych polach <a href="#pslegend">zobacz legendę</a>...
+status_processes_warniinfo => Wysłanie sygnału do aplikacji może zakończyć się awarią systemu! Musisz upewnić się, że wiesz co robisz przed naciśnięciem przycisku. <a href="#signallegend">Zobacz opisy najczęściej używanych sygnałów</a>...
+status_processes_Processes_Status => Stany procesów
+status_processes_Signal => Sygnał
+status_processes_Send_signal => Wyślij
+status_processes_Legend => Legenda
+status_processes_Legend_Text => Wielkość pamięci podana jest w kB.<br />Stany procesów oznaczają: A=Aktywny, I=Idle (czekający na start), O=Nieistniejący, R=Działający, S=Śpiący, T=Zatrzymany, W=Swapped, Z=Zombie.<br />Polecenia w &quot;[...]&quot; to wątki jądra.<br />Więcej informacji <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/ps.html" onclick="return !targetwindow(this.href);">opis komendy ps (ang.)</a>.>>
+status_processes_Signals_Legend => Najczęściej używane sygnały
+status_processes_Signals_Legend_Text => 1) SIGHUP - Odłącz<br />9) SIGKILL - Zabij (nie może być przechwycony ani zignorowany)<br />15) SIGTERM - Zakończenie<br />10) SIGUSR1/12) SIGUSR2 - Sygnały użytkownika.<br />Więcej informacji <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/kill.html" onclick="return !targetwindow(this.href);">opis komendy kill (ang.)</a>.
+
+
+##
+## /www/cgi-bin/webif/status-interfaces.sh
+#
+Interfaces => Interfejsy
+int2human_tera => T
+int2human_giga => G
+int2human_mega => M
+int2human_kilo => K
+IP Address => Adres IP
+DNS Server => Serwer DNS
+Received => Odebrane
+Transmitted => Wysłane
+WAN => Sieć rozległa (WAN)
+Helptext WAN WAN: => Skrót WAN oznacza sieć rozległą. Najczęściej jest to połączenie do Internetu.
+LAN => Sieć lokalna
+status_interfaces_pkts => pakietów
+Helptext LAN LAN => Skrót LAN oznacza sieć lokalną.
+LOOPBACK => LOOPBACK
+Helptext LOOPBACK_helptext => A loopback interface is a type of '\''circuitless IP address'\'' or '\''virtual IP'\'' address, as the IP address is not associated with any one particular interface (or circuit) on the host or router. Any traffic that a computer program sends on the loopback network is addressed to the same computer.
+Mode => Tryb pracy
+Frequency => Częstotliwość
+Transmit Power => Moc nadajnika
+Noise Level => Poziom szumów
+Encryption Key => Klucz kodowania
+Rx Invalid nwid => Odebrane z nieprawidłowym nwid
+Rx Invalid Encryption => Odebrane z nieprawidłowym kodowaniem
+Tx Retries in Excess => Powtórzenia transmisji ponad normę
+Helptext WLAN LAN => Skrót WLAN oznacza lokalną sieć bezprzewodową.
+Interfaces Status WAN => Stan interfejsu WAN
+Interfaces Status LAN => Stan interfejsu LAN
+Interfaces Status WLAN => Stan interfejsu WLAN
+Raw Information => Dane surowe
+&nbsp;Show raw statistics&nbsp; => Pokaż dane surowe
 
 
 ## status-leases.sh
 Status => Status
-DHCP Clients => DHCP Clients
+DHCP Clients => Klienci DHCP
 status_leases_dhcp_leases => Dzierżawa DHCP
 status_leases_MAC => Adres MAC
 status_leases_IP => Adres IP
@@ -253,9 +397,9 @@ status_leases_Name => Nazwa
 status_leases_Expires => Wygasa za
 status_leases_h => h
 status_leases_min => min
-status_leases_sec => sec
-status_leases_no_leases => There are no known DHCP leases.
-status_leases_dhcp_leases => DHCP Leases
+status_leases_sec => sek
+status_leases_no_leases => Brak aktywnych dzierżaw DHCP.
+status_leases_dhcp_leases => Dzierżawy DHCP
 status_leases_dhcp_leases_helptext => DHCP leases are assigned to network clients that request an IP address from the DHCP server of the router. Clients that requested their IP lease before this router was last rebooted may not be listed until they request a renewal of their lease.
 status_leases_additional => Additional information
 status_leases_arp_title => Address Resolution Protocol Cache (ARP)
@@ -268,40 +412,40 @@ status_leases_published => published
 status_leases_no_arp_record => ARP Cache does not contain any correspondent record.
 status_leases_ethers_title => Ethernet Address to IP Number Database (/etc/ethers)
 status_leases_ethers_empty => File /etc/ethers does not contain any Ethernet address/IP address pair.
-status_leases_no_ethers => File /etc/ethers does not exist.
+status_leases_no_ethers => Plik /etc/ethers nie istnieje.
 
 
 ## status-usb.sh
-status_usb_umount_error_in => Error in
+status_usb_umount_error_in => Błąd w
 Status => Status
 USB => USB
-status_usb_USB_Devices => USB Devices
-status_usb_All_connected_devices => All connected devices (excluding system hubs)
-status_usb_Bus => Bus
-status_usb_Device => Device
-status_usb_Product => Product
-status_usb_Manufacturer => Manufacturer
+status_usb_USB_Devices => Urządzenia USB
+status_usb_All_connected_devices => Wszystkie podłączone urządzenia (oprócz hubów systemowych)
+status_usb_Bus => Magistrala
+status_usb_Device => Urządzenie
+status_usb_Product => Produkt
+status_usb_Manufacturer => Producent
 status_usb_VPIDs => VendorID:ProdID
-status_usb_USB_version => USB version
-status_usb_Mounted_USB_SCSI => Mounted USB / SCSI devices
-status_usb_filesystems => File systems
-status_usb_Device_Path => Device Path
-status_usb_Mount_Point => Mount Point
-status_usb_File_System => File System
-status_usb_Read_Write => Read/Write
-status_usb_Action => Action
-status_usb_ro => Read only
-status_usb_rw => Read/Write
-status_usb_umount => umount
-status_usb_swaps => Swaps
-status_usb_swap_PartitionFilename => Partition/Filename
-status_usb_swap_Type => Type
-status_usb_swap_Size => Size
-status_usb_swap_Used => Used
-status_usb_swap_Priority => Priority
-status_usb_swap_partition => partition
-status_usb_swap_file => file
-status_usb_Loaded_USB_drivers => Loaded USB drivers
+status_usb_USB_version => Wersja USB
+status_usb_Mounted_USB_SCSI => Zamontowane urządzenia USB / SCSI
+status_usb_filesystems => Systemy plików
+status_usb_Device_Path => Ścieżka urządzenia
+status_usb_Mount_Point => Punkt montowania
+status_usb_File_System => System plików
+status_usb_Read_Write => Odczyt/Zapis
+status_usb_Action => Akcja
+status_usb_ro => Tylko do odczytu
+status_usb_rw => Odczyt/Zapis
+status_usb_umount => odmontowanie
+status_usb_swaps => Swapy
+status_usb_swap_PartitionFilename => Partycja/Nazw pliku
+status_usb_swap_Type => Typ
+status_usb_swap_Size => Wielkość
+status_usb_swap_Used => Użyte
+status_usb_swap_Priority => Priorytet
+status_usb_swap_partition => partycja
+status_usb_swap_file => plik
+status_usb_Loaded_USB_drivers => Załadowane sterowniki USB
 
 
 ## status-wwaninfo.sh
@@ -324,19 +468,21 @@ status_wwaninfo_quality_Excellent => Excellent
 status_wwaninfo_wrong_value => Wrong signal quality value
 
 
-## new format
-
-
 ## system-ipkg.sh
 system_ipkg_installedpackages => Zainstalowane pakiety
 system_ipkg_updatelists => Aktualizuj liste pakietów
 system_ipkg_Uninstall => Usuń
 system_ipkg_Install => Instaluj
 
-
+## /www/cgi-bin/webif/system-crontabs.sh
+#
+Cron Tables => Tablice cron
+Cron Tables Directory => Katalog tablic cron
+Cron Jobs => Zadania cron
+crontabs => Tablice cron
+Helptext crontabs => Tablice cron są listą zadań, które demon cron (crond) powinien wykonać w określonych przedziałach czasu lub porze.
 
 # untranslated:
-
 qos_enabled => Właczone
 qos_adv_enabled => Właczone
 qos_disabled => Wyłączone
