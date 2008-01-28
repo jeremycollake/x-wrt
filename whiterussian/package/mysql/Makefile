@@ -1,20 +1,23 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=mysql
-PKG_VERSION:=4.0.24
-PKG_RELEASE:=2
-PKG_MD5SUM:=408d3001ed715ddc90009c247e548638
-
-PKG_SOURCE_URL:=\
-	http://netmirror.org/mirror/mysql.com/Downloads/MySQL-4.0/ \
-	http://mysql.he.net/Downloads/MySQL-4.0/ \
-	http://www.linorg.usp.br/mysql/Downloads/MySQL-4.0/ \
-	http://mysql.planetmirror.com/Downloads/MySQL-4.0/ \
-	http://mysql.holywar.net/Downloads/MySQL-4.0/
+PKG_VERSION:=5.0.18
+PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=\
+	http://mysql.planetmirror.com/Downloads/MySQL-5.0/ \
+	http://mysql.he.net/Downloads/MySQL-5.0/ \
+	http://www.linorg.usp.br/mysql/Downloads/MySQL-5.0/ \
+	http://mysql.holywar.net/Downloads/MySQL-5.0/
+PKG_MD5SUM:=f18153b0239aaa03fc5a751f2d82cb71
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -25,12 +28,12 @@ include $(TOPDIR)/package/rules.mk
 $(eval $(call PKG_template,LIBMYSQLCLIENT,libmysqlclient,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
 $(PKG_BUILD_DIR)/.configured:
-	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
-		touch configure.in; \
-		touch aclocal.m4; \
-		touch Makefile.in; \
-		touch config.h.in; \
-		touch configure; \
+	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status}; touch \
+		configure.in \
+		aclocal.m4 \
+		Makefile.in \
+		config.h.in \
+		configure; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
@@ -80,19 +83,24 @@ $(PKG_BUILD_DIR)/.configured:
 		--without-docs \
 		--without-bench \
 		--without-readline \
+		--with-named-thread-libs=-lpthread \
 	);
 	touch $@
 
 $(PKG_BUILD_DIR)/.built:
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
+	$(MAKE) -C "$(PKG_BUILD_DIR)" \
+		SUBDIRS="include" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		all install
 	$(MAKE) -C "$(PKG_BUILD_DIR)/libmysql" \
 		CC="$(HOSTCC)" \
 		LINK="$(HOSTCC) -o conf_to_src -lc" \
 		CFLAGS="" \
 		conf_to_src
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
-		SUBDIRS="include libmysql" \
+		SUBDIRS="libmysql" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 	$(MAKE) -C "$(PKG_BUILD_DIR)" \
@@ -111,8 +119,11 @@ $(IPKG_LIBMYSQLCLIENT):
 $(STAGING_DIR)/usr/lib/mysql/libmysqlclient.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/mysql_config $(STAGING_DIR)/usr/bin/
+	$(SED) 's,^ldflags=.*,ldflags="-L$${STAGING_DIR}/usr/lib",g' $(STAGING_DIR)/usr/bin/mysql_config
 	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/mysql $(STAGING_DIR)/usr/include/
+	# NOTE: needed for MySQL-Python
+	$(CP) $(PKG_BUILD_DIR)/include/mysqld_error.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/mysql $(STAGING_DIR)/usr/lib/
 	rm -f $(STAGING_DIR)/usr/lib/mysql/libmysqlclient.la
@@ -124,6 +135,7 @@ uninstall-dev:
 	rm -rf \
 	  $(STAGING_DIR)/usr/bin/mysql_config \
 	  $(STAGING_DIR)/usr/include/mysql \
+	  $(STAGING_DIR)/usr/include/mysqld_error.h \
 	  $(STAGING_DIR)/usr/lib/mysql \
 
 compile: install-dev

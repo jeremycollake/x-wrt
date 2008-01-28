@@ -12,5 +12,4 @@ config BR2_PACKAGE_LIBMYSQLCLIENT
 	  MySQL client library.
 	  
 	  http://dev.mysql.com/
-	  
 
