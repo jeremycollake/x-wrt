@@ -1,0 +1,26 @@
+config BR2_PACKAGE_SOCAT
+	tristate "socat - a multipurpose relay (SOcket CAT)"
+	default m if CONFIG_DEVEL
+	help
+	  SoCat (for SOcket CAT) establishes two bidirectional byte streams and
+	  transfers data between them.
+	  Data channels may be files, pipes, devices (terminal or modem, etc.), or
+	  sockets (Unix, IPv4, IPv6, raw, UDP, TCP, SSL). It provides forking,
+	  logging and tracing, different modes for interprocess communication and
+	  many more options.
+	  
+	  http://www.dest-unreach.org/socat/
+
+config BR2_PACKAGE_SOCAT_TOOLS
+	tristate "socat-tools - process utilities for socat"
+	default m if CONFIG_DEVEL
+	depends BR2_PACKAGE_SOCAT
+	help
+	  SoCat (for SOcket CAT) establishes two bidirectional byte streams and
+	  transfers data between them.
+	  Data channels may be files, pipes, devices (terminal or modem, etc.), or
+	  sockets (Unix, IPv4, IPv6, raw, UDP, TCP, SSL). It provides forking,
+	  logging and tracing, different modes for interprocess communication and
+	  many more options.
+	  
+	  http://www.dest-unreach.org/socat/
