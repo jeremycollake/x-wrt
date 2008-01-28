@@ -1,14 +1,18 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
-
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=libusb
-PKG_VERSION:=0.1.10a
+PKG_VERSION:=0.1.12
 PKG_RELEASE:=1
-PKG_MD5SUM:=c6062b29acd2cef414bcc34e0decbdd1
 
-PKG_SOURCE_URL:=@SF/libusb
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@SF/libusb
+PKG_MD5SUM:=caf182cbc7565dac0fd72155919672e6
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -47,6 +51,7 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		$(DISABLE_LARGEFILE) \
 		--enable-shared \
 		--enable-static \
+		--disable-build-docs \
 	);
 	touch $@
 
@@ -54,7 +59,7 @@ $(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) -j1 \
-		CC=$(TARGET_CC) LD=$(TARGET_CROSS)ld ARCH=$(ARCH) \
+		$(TARGET_CONFIGURE_OPTS) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 	touch $@
@@ -68,10 +73,13 @@ $(IPKG_LIBUSB):
 $(STAGING_DIR)/usr/lib/libusb.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/libusb-config $(STAGING_DIR)/usr/bin/
+	$(SED) 's,/usr,$${STAGING_DIR}/usr,g' $(STAGING_DIR)/usr/bin/libusb-config
 	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/usb.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libusb*.{a,so*} $(STAGING_DIR)/usr/lib/
+	mkdir -p $(STAGING_DIR)/usr/lib/pkgconfig
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/pkgconfig/libusb.pc $(STAGING_DIR)/usr/lib/pkgconfig/
 	touch $@
 
 install-dev: $(STAGING_DIR)/usr/lib/libusb.so
@@ -81,6 +89,7 @@ uninstall-dev:
 		$(STAGING_DIR)/usr/bin/libusb-config \
 		$(STAGING_DIR)/usr/include/usb.h \
 		$(STAGING_DIR)/usr/lib/libusb*.{a,so*} \
+		$(STAGING_DIR)/usr/lib/pkgconfig/libusb.pc
 
 compile: install-dev
 clean: uninstall-dev
