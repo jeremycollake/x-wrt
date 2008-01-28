@@ -24,7 +24,7 @@ include $(TOPDIR)/package/rules.mk
 $(eval $(call PKG_template,LIBJPEG,lib$(PKG_NAME),$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,JPEG_TOOLS,$(PKG_NAME)-tools,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
-$(PKG_BUILD_DIR)/.configured:
+$(PKG_BUILD_DIR)/.configured:  $(PKG_BUILD_DIR)/.prepared
 	# replace the old upstream libtool stuff with our own
 	ln -sf $(STAGING_DIR)/usr/bin/libtool $(PKG_BUILD_DIR)/
 	ln -sf $(STAGING_DIR)/usr/share/libtool/config.sub $(PKG_BUILD_DIR)/
@@ -61,7 +61,7 @@ $(PKG_BUILD_DIR)/.configured:
 	);
 	touch $@
 
-$(PKG_BUILD_DIR)/.built:
+$(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)/usr/{include,lib,bin,man/man1}
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -71,19 +71,19 @@ $(PKG_BUILD_DIR)/.built:
 		all install install-headers install-lib
 	touch $@
 
-$(IPKG_LIBJPEG):
+$(IPKG_LIBJPEG): $(STAGING_DIR)/usr/lib/libdb.so
 	install -m0755 -d $(IDIR_LIBJPEG)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libjpeg.so.* $(IDIR_LIBJPEG)/usr/lib/
 	$(RSTRIP) $(IDIR_LIBJPEG)
 	$(IPKG_BUILD) $(IDIR_LIBJPEG) $(PACKAGE_DIR)
 
-$(IPKG_JPEG_TOOLS):
+$(IPKG_JPEG_TOOLS): $(STAGING_DIR)/usr/lib/libdb.so
 	install -m0755 -d $(IDIR_JPEG_TOOLS)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/*jpeg* $(IDIR_JPEG_TOOLS)/usr/bin/
 	$(RSTRIP) $(IDIR_JPEG_TOOLS)
 	$(IPKG_BUILD) $(IDIR_JPEG_TOOLS) $(PACKAGE_DIR)
 
-$(STAGING_DIR)/usr/lib/libjpeg.so:
+$(STAGING_DIR)/usr/lib/libjpeg.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/include
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/jpeglib.h $(STAGING_DIR)/usr/include/
 	$(CP) $(PKG_BUILD_DIR)/jpegint.h $(STAGING_DIR)/usr/include/
