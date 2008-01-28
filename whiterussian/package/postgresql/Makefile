@@ -1,18 +1,21 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=postgresql
-PKG_VERSION:=7.4.7
-PKG_RELEASE:=3
-PKG_MD5SUM:=32dac2916d16287d95e0c958a75161fa
+PKG_VERSION:=7.4.14
+PKG_RELEASE:=1
 
-PKG_SOURCE_URL:=\
-	ftp://ftp3.us.postgresql.org/pub/postgresql/source/v$(PKG_VERSION)/ \
-	ftp://ftp.br.postgresql.org/pub/PostgreSQL/source/v$(PKG_VERSION)/ \
-	ftp://ftp.au.postgresql.org/pub/postgresql/source/v$(PKG_VERSION)/ \
-	ftp://ftp.tw.postgresql.org/pub/postgresql/source/v$(PKG_VERSION)/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=\
+	ftp://ftp.us.postgresql.org/pub/mirrors/postgresql/source/v$(PKG_VERSION) \
+	ftp://ftp-archives.postgresql.org/pub/source/v$(PKG_VERSION)
+PKG_MD5SUM:=2e0e82552f8463343df5d89348356481
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -27,8 +30,8 @@ $(PKG_BUILD_DIR)/.configured:
 #	./configure advertise "--infodir", but does not support it, replaced with "--docdir"
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) $(EXTRA_CFLAGS)" \
-		CPPFLAGS="$$CPPFLAGS -I$(STAGING_DIR)/usr/include" \
+		CFLAGS="$(TARGET_CFLAGS)" \
+		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
 		./configure \
 		--target=$(GNU_TARGET_NAME) \
@@ -76,6 +79,11 @@ $(PKG_BUILD_DIR)/.built:
 	$(MAKE) -C "$(PKG_BUILD_DIR)/src/interfaces/libpq" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
+	$(MAKE) -C "$(PKG_BUILD_DIR)/src/bin/pg_config" \
+		DESTDIR="$(PKG_INSTALL_DIR)" \
+		includedir="$(STAGING_DIR)/usr/include" \
+		libdir="$(STAGING_DIR)/usr/lib" \
+		all install
 	$(MAKE) -C "$(PKG_BUILD_DIR)/src/bin/psql" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
@@ -94,8 +102,14 @@ $(IPKG_PGSQL_CLI):
 	$(IPKG_BUILD) $(IDIR_PGSQL_CLI) $(PACKAGE_DIR)
 
 $(STAGING_DIR)/usr/lib/libpq.so: $(PKG_BUILD_DIR)/.built
+	mkdir -p $(STAGING_DIR)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/pg_config $(STAGING_DIR)/usr/bin/
+	$(SED) 's,='\''/usr\(.*\)'\''\(.*\),="$${STAGING_DIR}/usr\1"\2,g' $(STAGING_DIR)/usr/bin/pg_config
+	$(SED) 's,='\''$(STAGING_DIR)\(.*\)'\''\(.*\),="$${STAGING_DIR}\1"\2,g' $(STAGING_DIR)/usr/bin/pg_config
 	mkdir -p $(STAGING_DIR)/usr/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/libpq $(STAGING_DIR)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/libpq-fe.h $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/pg_config.h $(STAGING_DIR)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/postgres_ext.h $(STAGING_DIR)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/postgresql $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
@@ -106,10 +120,13 @@ install-dev: $(STAGING_DIR)/usr/lib/libpq.so
 
 uninstall-dev:
 	rm -rf \
+		$(STAGING_DIR)/usr/bin/pg_config \
+		$(STAGING_DIR)/usr/include/libpq \
 		$(STAGING_DIR)/usr/include/libpq-fe.h \
+		$(STAGING_DIR)/usr/include/pg_config.h \
 		$(STAGING_DIR)/usr/include/postgres_ext.h \
 		$(STAGING_DIR)/usr/include/postgresql \
-		$(STAGING_DIR)/usr/lib/libpq.{a,so*} \
+		$(STAGING_DIR)/usr/lib/libpq.{a,so*}
 
 compile: install-dev
 clean: uninstall-dev
