@@ -1,16 +1,22 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=freeradius
-PKG_VERSION:=1.0.5
+PKG_VERSION:=1.1.2
 PKG_RELEASE:=1
-PKG_MD5SUM:=00d06fc31e3b8279f6456d25401c81cb
 
-PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/radius/old/ \
-	http://freeradius.portal-to-web.de/old/ \
-	ftp://ftp.uk.freeradius.org/pub/radius/old/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=ftp://ftp.freeradius.org/pub/radius \
+	ftp://ftp.freeradius.org/pub/radius/old \
+	http://freeradius.portal-to-web.de \
+	ftp://ftp.uk.freeradius.org/pub/radius
+PKG_MD5SUM:=6649ac5f9666b4a8cd55a837068ca61e
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -38,6 +44,7 @@ PKG_CONFIGURE_OPTIONS := \
 	--without-rlm_example \
 	--without-rlm_ippool \
 	--without-rlm_krb5 \
+	--without-rlm_otp \
 	--without-rlm_pam \
 	--without-rlm_perl \
 	--without-rlm_python \
@@ -45,35 +52,65 @@ PKG_CONFIGURE_OPTIONS := \
 	--without-rlm_smb \
 	--with-rlm_sql \
 	--with-rlm_sqlcounter \
+	--without-rlm_sqlippool \
 	--without-rlm_sql_db2 \
 	--without-rlm_sql_freetds \
 	--without-rlm_sql_iodbc \
 	--without-rlm_sql_oracle \
 	--without-rlm_sql_sybase \
 	--without-rlm_sql_unixodbc \
-	--without-rlm_unix \
-	--without-rlm_x99-token \
+	--without-rlm_sql_log \
+	--without-rlm_unix
+
+PKG_DICTIONARIES:= \
+	freeradius freeradius.internal \
+	rfc2865 rfc2866 rfc2867 rfc2868 rfc2869 rfc3162 rfc3576 rfc3580 \
+	microsoft \
+	wispr
 
 ifneq ($(BR2_PACKAGE_FREERADIUS_MOD_LDAP),)
-PKG_CONFIGURE_OPTIONS += \
+  PKG_CONFIGURE_LIBS += -lcrypto -lssl
+  PKG_CONFIGURE_OPTIONS += \
 	--with-rlm_ldap-include-dir="$(STAGING_DIR)/usr/include" \
 	--with-rlm_ldap-lib-dir="$(STAGING_DIR)/usr/lib"
 else
-PKG_CONFIGURE_OPTIONS += --without-rlm_ldap
+  PKG_CONFIGURE_OPTIONS += --without-rlm_ldap
 endif
+
 ifneq ($(BR2_PACKAGE_FREERADIUS_MOD_SQL_MYSQL),)
-PKG_CONFIGURE_OPTIONS += \
+  PKG_CONFIGURE_LIBS += -lz
+  PKG_CONFIGURE_OPTIONS += \
 	--with-mysql-include-dir="$(STAGING_DIR)/usr/include/mysql" \
-	--with-mysql-lib-dir="$(STAGING_DIR)/usr/lib/mysql"
+	--with-mysql-lib-dir="$(STAGING_DIR)/usr/lib/mysql" \
+	--without-threads
 else
-PKG_CONFIGURE_OPTIONS += --without-rlm_sql_mysql
+  PKG_CONFIGURE_OPTIONS += --without-rlm_sql_mysql
 endif
+
 ifneq ($(BR2_PACKAGE_FREERADIUS_MOD_SQL_PGSQL),)
-PKG_CONFIGURE_OPTIONS += \
+  PKG_CONFIGURE_OPTIONS += \
 	--with-rlm_sql_postgresql-include-dir="$(STAGING_DIR)/usr/include" \
 	--with-rlm_sql_postgresql-lib-dir="$(STAGING_DIR)/usr/lib"
 else
-PKG_CONFIGURE_OPTIONS += --without-rlm_sql_postgresql
+  PKG_CONFIGURE_OPTIONS += --without-rlm_sql_postgresql
+endif
+
+ifneq ($(BR2_PACKAGE_FREERADIUS_MOD_EAP_PEAP),)
+  PKG_CONFIGURE_OPTIONS += --with-rlm_eap_peap
+else
+  PKG_CONFIGURE_OPTIONS += --without-rlm_eap_peap
+endif
+
+ifneq ($(BR2_PACKAGE_FREERADIUS_MOD_EAP_TLS),)
+  PKG_CONFIGURE_OPTIONS += --with-rlm_eap_tls
+else
+  PKG_CONFIGURE_OPTIONS += --without-rlm_eap_tls
+endif
+
+ifneq ($(BR2_PACKAGE_FREERADIUS_MOD_EAP_TTLS),)
+  PKG_CONFIGURE_OPTIONS += --with-rlm_eap_ttls
+else
+  PKG_CONFIGURE_OPTIONS += --without-rlm_eap_ttls
 endif
 
 include $(TOPDIR)/package/rules.mk
@@ -96,28 +133,28 @@ $$(IPKG_$(1)):
 
 endef
 
-$(eval $(call PKG_template,FREERADIUS,freeradius,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_DEMOCERTS,freeradius-democerts,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_MOD_CHAP,freeradius-mod-chap,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_MOD_DETAIL,freeradius-mod-detail,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_MOD_EAP,freeradius-mod-eap,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_MOD_EAP_GTC,freeradius-mod-eap-gtc,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_MOD_EAP_MD5,freeradius-mod-eap-md5,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_MOD_EAP_MSCHAPV2,freeradius-mod-eap-mschapv2,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_MOD_EAP_PEAP,freeradius-mod-eap-peap,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_MOD_EAP_TLS,freeradius-mod-eap-tls,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_MOD_EAP_TTLS,freeradius-mod-eap-ttls,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_MOD_FILES,freeradius-mod-files,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_MOD_LDAP,freeradius-mod-ldap,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_MOD_MSCHAP,freeradius-mod-mschap,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_MOD_PAP,freeradius-mod-pap,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_MOD_PREPROCESS,freeradius-mod-preprocess,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_MOD_REALM,freeradius-mod-realm,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_MOD_SQL,freeradius-mod-sql,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_MOD_SQL_MYSQL,freeradius-mod-sql-mysql,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_MOD_SQL_PGSQL,freeradius-mod-sql-pgsql,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_MOD_SQLCOUNTER,freeradius-mod-sqlcounter,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,FREERADIUS_UTILS,freeradius-utils,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS,$(PKG_NAME),$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_DEMOCERTS,$(PKG_NAME)-democerts,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_MOD_CHAP,$(PKG_NAME)-mod-chap,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_MOD_DETAIL,$(PKG_NAME)-mod-detail,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_MOD_EAP,$(PKG_NAME)-mod-eap,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_MOD_EAP_GTC,$(PKG_NAME)-mod-eap-gtc,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_MOD_EAP_MD5,$(PKG_NAME)-mod-eap-md5,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_MOD_EAP_MSCHAPV2,$(PKG_NAME)-mod-eap-mschapv2,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_MOD_EAP_PEAP,$(PKG_NAME)-mod-eap-peap,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_MOD_EAP_TLS,$(PKG_NAME)-mod-eap-tls,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_MOD_EAP_TTLS,$(PKG_NAME)-mod-eap-ttls,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_MOD_FILES,$(PKG_NAME)-mod-files,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_MOD_LDAP,$(PKG_NAME)-mod-ldap,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_MOD_MSCHAP,$(PKG_NAME)-mod-mschap,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_MOD_PAP,$(PKG_NAME)-mod-pap,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_MOD_PREPROCESS,$(PKG_NAME)-mod-preprocess,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_MOD_REALM,$(PKG_NAME)-mod-realm,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_MOD_SQL,$(PKG_NAME)-mod-sql,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_MOD_SQL_MYSQL,$(PKG_NAME)-mod-sql-mysql,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_MOD_SQL_PGSQL,$(PKG_NAME)-mod-sql-pgsql,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_MOD_SQLCOUNTER,$(PKG_NAME)-mod-sqlcounter,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,FREERADIUS_UTILS,$(PKG_NAME)-utils,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
 $(eval $(call PKG_mod_template,FREERADIUS_MOD_CHAP,rlm_chap,))
 $(eval $(call PKG_mod_template,FREERADIUS_MOD_DETAIL,rlm_detail,))
@@ -142,12 +179,11 @@ $(eval $(call PKG_mod_template,FREERADIUS_MOD_SQLCOUNTER,rlm_sqlcounter,))
 $(PKG_BUILD_DIR)/.configured:
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
-		sys_lib_dlsearch_path_spec="$(STAGING_DIR)/usr/lib $(STAGING_DIR)/lib" \
+		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -L$(PKG_INSTALL_DIR)/usr/lib/freeradius" \
+		LIBS="$(PKG_CONFIGURE_LIBS)" \
 		sys_lib_search_path_spec="$(STAGING_DIR)/usr/lib $(STAGING_DIR)/lib" \
-		MYSQL_CONFIG="no" \
 		./configure \
 			--target=$(GNU_TARGET_NAME) \
 			--host=$(GNU_TARGET_NAME) \
@@ -190,11 +226,9 @@ $(IPKG_FREERADIUS):
 			$(IDIR_FREERADIUS)/etc/freeradius/ ; \
 	done
 	install -m0755 -d $(IDIR_FREERADIUS)/usr/share/freeradius
-	$(CP) $(PKG_INSTALL_DIR)/usr/share/freeradius/dictionary \
-		$(IDIR_FREERADIUS)/usr/share/freeradius/
-	for f in cisco freeradius microsoft tunnel wispr; do \
-		$(CP) $(PKG_INSTALL_DIR)/usr/share/freeradius/dictionary.$${f} \
-			$(IDIR_FREERADIUS)/usr/share/freeradius/ ; \
+	$(CP) $(PKG_INSTALL_DIR)/usr/share/freeradius/dictionary $(IDIR_FREERADIUS)/usr/share/freeradius/
+	for f in $(PKG_DICTIONARIES); do \
+		$(CP) $(PKG_INSTALL_DIR)/usr/share/freeradius/dictionary.$${f} $(IDIR_FREERADIUS)/usr/share/freeradius/ ; \
 	done
 	install -m0755 -d $(IDIR_FREERADIUS)/usr/lib/freeradius
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/freeradius/libradius{,-*}.so \
@@ -218,10 +252,9 @@ $(IPKG_FREERADIUS_DEMOCERTS):
 
 $(IPKG_FREERADIUS_UTILS):
 	install -m0755 -d $(IDIR_FREERADIUS_UTILS)/usr/bin
-	for f in radclient radeapclient radtest; do \
+	for f in radclient radeapclient; do \
 		$(CP) $(PKG_INSTALL_DIR)/usr/bin/$${f} \
 			$(IDIR_FREERADIUS_UTILS)/usr/bin/ ; \
 	done
 	$(RSTRIP) $(IDIR_FREERADIUS_UTILS)
 	$(IPKG_BUILD) $(IDIR_FREERADIUS_UTILS) $(PACKAGE_DIR)
-	
