@@ -17,7 +17,7 @@ $(BIN_DIR)/$(SDK_NAME).tar.bz2:
 	(cd $(STAGING_DIR); \
 		rm -rf info man share; \
 		cd usr; \
-		rm -rf doc info man share; \
+		rm -rf doc info man share/doc share/info share/man; \
 	)
 	rm -rf $(SDK_BUILD_DIR)
 	mkdir -p $(SDK_BUILD_DIR)/dl $(SDK_BUILD_DIR)/examples $(SDK_BUILD_DIR)/package
