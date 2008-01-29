@@ -1,5 +1,11 @@
 Package: lua-examples
 Priority: optional
-Section: devel
-Description: LUA programming language examples
+Section: lang
 Depends: lua
+Description: LUA programming language (examples)
+ Lua is a powerful light-weight programming language designed for extending 
+ applications. Lua is also frequently used as a general-purpose, stand-alone 
+ language. Lua is free software.
+ This package contains LUA language examples.
+ .
+ http://www.lua.org/

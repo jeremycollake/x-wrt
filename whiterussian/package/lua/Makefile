@@ -1,17 +1,22 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lua
-PKG_VERSION:=5.0.2
+PKG_VERSION:=5.1.2
 PKG_RELEASE:=1
-PKG_MD5SUM:= dea74646b7e5c621fef7174df83c34b1
 
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.lua.org/ftp/ \
 	http://ftp.gwdg.de/pub/languages/lua/ \
 	http://mirrors.dotsrc.org/lua/ \
 	http://www.tecgraf.puc-rio.br/lua/ftp/
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_MD5SUM:=687ce4c2a1ddff18f1008490fdc4e5e0
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -29,35 +34,23 @@ $(PKG_BUILD_DIR)/.configured:
 
 $(PKG_BUILD_DIR)/.built:
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CROSS)gcc" \
-		LD="$(TARGET_CROSS)ld" \
+		$(TARGET_CONFIGURE_OPTS) \
 		AR="$(TARGET_CROSS)ar rcu" \
-		RANLIB="$(TARGET_CROSS)ranlib" \
 		INSTALL_ROOT=/usr \
-		MYCFLAGS="-I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
-		MYLDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-		all so
-	# remove statically linked binaries, so that they will get linked against shlib this time
-	rm -f $(PKG_BUILD_DIR)/bin/lua{,c}
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC="$(TARGET_CROSS)gcc" \
-		LD="$(TARGET_CROSS)ld" \
-		AR="$(TARGET_CROSS)ar rcu" \
-		RANLIB="$(TARGET_CROSS)ranlib" \
-		INSTALL_ROOT=/usr \
-		MYCFLAGS="-I$(STAGING_DIR)/usr/include $(TARGET_CFLAGS)" \
-		MYLDFLAGS="-L$(STAGING_DIR)/usr/lib" \
-		all
+		MYCFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+		MYLDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+		PKG_VERSION=$(PKG_VERSION) \
+		all linux 
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		INSTALL_ROOT="$(PKG_INSTALL_DIR)/usr" \
-		install soinstall
+		INSTALL_TOP="$(PKG_INSTALL_DIR)/usr" \
+		install
 	touch $@
 
 $(IPKG_LIBLUA):
 	install -d -m0755 $(IDIR_LIBLUA)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblua{,lib}.so.* $(IDIR_LIBLUA)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblua.so.* $(IDIR_LIBLUA)/usr/lib/
 	$(RSTRIP) $(IDIR_LIBLUA)
 	$(IPKG_BUILD) $(IDIR_LIBLUA) $(PACKAGE_DIR)
 
@@ -82,17 +75,19 @@ $(IPKG_LUA_EXAMPLES):
 
 $(STAGING_DIR)/usr/lib/liblua.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/lua{,lib}.h $(STAGING_DIR)/usr/include/
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/lua{,lib,conf}.h $(STAGING_DIR)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/lauxlib.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblua{,lib}.{a,so*} $(STAGING_DIR)/usr/lib/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/liblua.{a,so.*} $(STAGING_DIR)/usr/lib/
+	ln -sf liblua.so.$(PKG_VERSION) $(STAGING_DIR)/usr/lib/liblua.so
+	ln -sf liblua.so.$(PKG_VERSION) $(STAGING_DIR)/usr/lib/liblualib.so
 	touch $@
 
 install-dev: $(STAGING_DIR)/usr/lib/liblua.so
 
 uninstall-dev:
 	rm -rf \
-		$(STAGING_DIR)/usr/include/lua{,lib}.h \
+		$(STAGING_DIR)/usr/include/lua{,lib,conf}.h \
 		$(STAGING_DIR)/usr/include/lauxlib.h \
 		$(STAGING_DIR)/usr/lib/liblua{,lib}.{a,so*} \
 

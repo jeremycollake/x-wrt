@@ -1,5 +1,11 @@
 Package: lua
 Priority: optional
-Section: admin
-Description: LUA programming language interpreter
-Depends: liblua
+Section: lang
+Depends: liblua, libreadline, libncurses
+Description: LUA programming language (interpreter)
+ Lua is a powerful light-weight programming language designed for extending 
+ applications. Lua is also frequently used as a general-purpose, stand-alone 
+ language. Lua is free software.
+ This package contains the LUA language interpreter.
+ .
+ http://www.lua.org/
