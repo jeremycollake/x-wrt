@@ -90,6 +90,7 @@ package-$(BR2_PACKAGE_MICROPERL) += microperl
 package-$(BR2_PACKAGE_MINIUPNPD) += miniupnpd
 package-$(BR2_PACKAGE_MINI_SENDMAIL) += mini_sendmail
 package-$(BR2_PACKAGE_MONIT) += monit
+package-$(BR2_PACKAGE_MONIT_NOSSL) += monit
 package-$(BR2_PACKAGE_MTD) += mtd
 package-$(BR2_PACKAGE_MYSQL) += mysql
 package-$(BR2_PACKAGE_NANO) += nano
@@ -221,6 +222,7 @@ lighttpd-compile: openssl-compile pcre-compile bzip2-compile gdbm-compile libxml
 libupnp-compile: libpthread-compile
 linuxigd-compile: iptables-compile libpthread-compile libupnp-compile 
 mc-compile: glib-compile ncurses-compile
+monit-compile: openssl-compile libpthread-compile
 mysql-compile: ncurses-compile readline-compile zlib-compile
 net-snmp-compile: libelf-compile
 nfs-server-compile: portmap-compile
@@ -287,7 +289,7 @@ ifeq ($(BR2_PACKAGE_OPENVPN_LZO),y)
 openvpn-compile: lzo-compile
 endif
 
-pmacct-compile: libpcap-compile
+pmacct-compile: libpcap-compile zlib-compile
 ifneq ($(BR2_PACKAGE_PMACCT_MYSQL),)
 pmacct-compile: mysql-compile
 endif
