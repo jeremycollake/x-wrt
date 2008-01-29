@@ -7,4 +7,3 @@ config BR2_PACKAGE_STRACE
 	  while it is running.
 	  
 	  http://sourceforge.net/projects/strace/
-	  

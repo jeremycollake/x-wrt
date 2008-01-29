@@ -1,4 +1,9 @@
 Package: strace
 Priority: optional
-Section: net
-Description: System call trace program
+Section: utils
+Description: System call tracer
+ A useful diagnostic, instructional, and debugging tool.
+ Allows you to track what system calls a program makes 
+ while it is  running.
+ .
+ http://strace.sourceforge.net/

@@ -1,14 +1,19 @@
-# $Id: Makefile 1146 2005-06-05 13:32:28Z nbd $
+#
+# Copyright (C) 2007 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=strace
-PKG_VERSION:=4.5.11
+PKG_VERSION:=4.5.14
 PKG_RELEASE:=1
-PKG_MD5SUM:=28335e15c83456a3db055a0a0efcb4fe
 
-PKG_SOURCE_URL:=@SF/strace
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=@SF/$(PKG_NAME)
+PKG_MD5SUM:=09bcd5d00ece28f8154dec11cadfce3c
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -54,9 +59,5 @@ $(PKG_BUILD_DIR)/.built:
 $(IPKG_STRACE): 
 	mkdir -p $(IDIR_STRACE)/usr/sbin
 	cp $(PKG_BUILD_DIR)/$(PKG_NAME) $(IDIR_STRACE)/usr/sbin/
-	$(STRIP) $(IDIR_STRACE)/usr/sbin/*
+	$(RSTRIP) $(IDIR_STRACE)
 	$(IPKG_BUILD) $(IDIR_STRACE) $(PACKAGE_DIR)
-
-mostlyclean:
-	$(MAKE) -C $(PKG_BUILD_DIR) clean
-	rm -f $(PKG_BUILD_DIR)/.built
