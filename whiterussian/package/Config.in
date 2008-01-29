@@ -125,6 +125,7 @@ source "package/glib/Config.in"
 source "package/id3lib/Config.in"
 source "package/bzip2/Config.in"  # libbzip2
 source "package/libdb/Config.in"
+source "package/libdnet/Config.in"
 source "package/libelf/Config.in"
 source "package/libevent/Config.in"
 source "package/base-files/Config.in" # libgcc

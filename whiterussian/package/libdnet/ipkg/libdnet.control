@@ -1,0 +1,8 @@
+Package: libdnet
+Priority: optional
+Section: libs
+Description: Low-level network library
+ libdnet is a library of simplified, portable interface to several
+ low-level networking routines.
+ .
+ http://sourceforge.net/projects/libdnet/
