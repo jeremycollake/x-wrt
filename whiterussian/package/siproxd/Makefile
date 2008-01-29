@@ -1,14 +1,19 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
+#
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=siproxd
-PKG_VERSION:=0.5.11
-PKG_RELEASE:=2
-PKG_MD5SUM:=a614f60683f9ea9423573bc5d646c525
+PKG_VERSION:=0.5.13
+PKG_RELEASE:=1
 
-PKG_SOURCE_URL:=@SF/siproxd
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@SF/siproxd
+PKG_MD5SUM:=91a572f80dd5a9af5a0f7f207fd34478
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -53,13 +58,14 @@ $(PKG_BUILD_DIR)/.built:
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
-		install-exec install-data
+		SUBDIRS="src scripts contrib" \
+		all install
 	touch $@
 
 $(IPKG_SIPROXD):
 	install -d -m0755 $(IDIR_SIPROXD)/etc
-	$(CP) $(PKG_INSTALL_DIR)/etc/siproxd.conf.example $(IDIR_SIPROXD)/etc/siproxd.conf
-	$(CP) $(PKG_INSTALL_DIR)/etc/siproxd_passwd.cfg $(IDIR_SIPROXD)/etc/
+	$(CP) $(PKG_BUILD_DIR)/doc/siproxd.conf.example $(IDIR_SIPROXD)/etc/siproxd.conf
+	$(CP) $(PKG_BUILD_DIR)/doc/siproxd_passwd.cfg $(IDIR_SIPROXD)/etc/
 	install -d -m0755 $(IDIR_SIPROXD)/etc/init.d
 	install -m0755 files/siproxd.init $(IDIR_SIPROXD)/etc/init.d/siproxd
 	install -d -m0755 $(IDIR_SIPROXD)/usr/sbin

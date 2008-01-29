@@ -1,5 +1,5 @@
 Package: siproxd
 Priority: optional
 Section: net
-Description: a SIP (Session Initiation Protocol) proxy
 Depends: libosip2, libpthread
+Description: SIP (Session Initiation Protocol) proxy

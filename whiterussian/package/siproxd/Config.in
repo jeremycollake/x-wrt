@@ -2,6 +2,7 @@ config BR2_PACKAGE_SIPROXD
 	tristate "siproxd - SIP (Session Initiation Protocol) proxy"
 	default m if CONFIG_DEVEL
 	select BR2_PACKAGE_LIBOSIP2
+	select BR2_PACKAGE_LIBPTHREAD
 	help
 	  A SIP (Session Initiation Protocol) proxy
 	  
