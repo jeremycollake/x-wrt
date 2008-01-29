@@ -1,16 +1,21 @@
-# $Id: Makefile 4884 2006-10-01 13:11:31Z nbd $
+#
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=tinc
-PKG_VERSION:=1.0.4
-PKG_RELEASE:=2
-PKG_MD5SUM:=63887373dd763f8d90cecc5a3616c363
+PKG_VERSION:=1.0.6
+PKG_RELEASE:=1
 
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.tinc-vpn.org/packages \
 	http://ftp.yi.se/pub/tinc/ \
 	http://www.mirrors.wiretapped.net/security/network-security/tinc/
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_MD5SUM:=5e636f8020d155a81c43af4ae528fda3
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -46,9 +51,9 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		  --sysconfdir=/etc \
 		  $(DISABLE_NLS) \
 		  $(DISABLE_LARGEFILE) \
-		  --with-kernel=$(LINUX_DIR) \
-		  --with-zlib=$(STAGING_DIR)/usr/ \
-		  --with-lzo-include=$(STAGING_DIR)/usr/include/lzo \
+		  --with-kernel="$(LINUX_DIR)" \
+		  --with-zlib="$(STAGING_DIR)/usr" \
+		  --with-lzo-include="$(STAGING_DIR)/usr/include/lzo" \
 	);
 	touch $@
 
@@ -56,8 +61,6 @@ $(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC=$(TARGET_CC) \
-		CFLAGS="$(TARGET_CFLAGS)" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 	touch $@
@@ -67,4 +70,3 @@ $(IPKG_TINC):
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/tincd $(IDIR_TINC)/usr/sbin/
 	$(RSTRIP) $(IDIR_TINC)
 	$(IPKG_BUILD) $(IDIR_TINC) $(PACKAGE_DIR)
-
