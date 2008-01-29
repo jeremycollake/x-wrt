@@ -1,5 +1,8 @@
 Package: nmap
 Priority: optional
 Section: net
-Depends: libgcc, libpcap, libpcre, uclibcxx
-Description: Nmap is a free open source utility for network exploration or security auditing.
+Depends: libdnet, libpcap, libpcre, uclibcxx
+Description: Network exploration and/or security auditing utility
+ A free open source utility for network exploration or security auditing.
+ .
+ http://www.insecure.org/nmap/

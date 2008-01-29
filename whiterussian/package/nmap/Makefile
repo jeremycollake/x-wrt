@@ -1,14 +1,19 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
+#
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=nmap
-PKG_VERSION:=3.81
-PKG_RELEASE:=3
-PKG_MD5SUM:=0713306dda85aee2c95ef31b4b7d2838
+PKG_VERSION:=4.20
+PKG_RELEASE:=1
 
-PKG_SOURCE_URL:=http://download.insecure.org/nmap/dist
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
+PKG_SOURCE_URL:=http://download.insecure.org/nmap/dist
+PKG_MD5SUM:=ea50419f99472200c4184a304e3831ea
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -21,13 +26,11 @@ $(eval $(call PKG_template,NMAP,nmap,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(PKG_BUILD_DIR)/.configured:
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
-		libpcapdir="$(STAGING_DIR)/usr/lib" \
 		CFLAGS="$(TARGET_CFLAGS)" \
-		CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -nostdinc++" \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+		CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++" \
+		CPPFLAGS="-I$(STAGING_DIR)/usr/include/uClibc++ -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
 		LIBS="-nodefaultlibs -luClibc++ -lc -lm -lgcc" \
-		ac_cv_prog_CXX="$(TARGET_CXX)" \
 		./configure \
 		  --target=$(GNU_TARGET_NAME) \
 		  --host=$(GNU_TARGET_NAME) \
@@ -50,6 +53,7 @@ $(PKG_BUILD_DIR)/.configured:
 		  $(DISABLE_NLS) \
 		  --without-openssl \
 		  --without-nmapfe \
+		  --with-libdnet="$(STAGING_DIR)/usr" \
 		  --with-libpcap="$(STAGING_DIR)/usr" \
 		  --with-libpcre="$(STAGING_DIR)/usr" \
 	);
@@ -58,22 +62,16 @@ $(PKG_BUILD_DIR)/.configured:
 $(PKG_BUILD_DIR)/.built:
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
-		CCOPT="$(TARGET_CFLAGS) -fno-builtin -nostdinc++" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 	touch $@
 
 $(IPKG_NMAP):
+	install -d -m0755 $(IDIR_NMAP)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nmap $(IDIR_NMAP)/usr/bin/
 	install -d -m0755 $(IDIR_NMAP)/usr/share/nmap
 	for file in mac-prefixes os-fingerprints protocols rpc service-probes services; do \
 		$(CP) $(PKG_INSTALL_DIR)/usr/share/nmap/nmap-$$file $(IDIR_NMAP)/usr/share/nmap; \
 	done
-	install -d -m0755 $(IDIR_NMAP)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nmap $(IDIR_NMAP)/usr/bin/
 	$(RSTRIP) $(IDIR_NMAP)
 	$(IPKG_BUILD) $(IDIR_NMAP) $(PACKAGE_DIR)
-
-mostlyclean:
-	$(MAKE) -C $(PKG_BUILD_DIR) clean
-	rm $(PKG_BUILD_DIR)/.built
