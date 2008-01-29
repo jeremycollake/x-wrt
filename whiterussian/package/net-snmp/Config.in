@@ -6,55 +6,71 @@ config BR2_PACKAGE_NET_SNMP
 	depends BR2_PACKAGE_LIBNETSNMP
 
 config BR2_PACKAGE_LIBNETSNMP
-	prompt "libnetsnmp - SNMP shared libraries"
+	prompt "libnetsnmp - Open source SNMP implementation (librairies)"
 	tristate
 	default m if CONFIG_DEVEL
 	select BR2_PACKAGE_NET_SNMP
 	select BR2_PACKAGE_LIBELF
 	help
+	  Open source SNMP (Simple Network Management Protocol) implementation (libraries).
 	  Simple Network Management Protocol (SNMP) is a widely used 
 	  protocol for monitoring the health and welfare of network 
 	  equipment (eg. routers), computer equipment and even devices 
 	  like UPSs. Net-SNMP is a suite of applications used to implement 
 	  SNMP v1, SNMP v2c and SNMP v3 using both IPv4 and IPv6.
-	  
-	  http://www.net-snmp.org/
 	  
 	  This package contains shared libraries, needed by other programs.
-	  
+
+	  http://www.net-snmp.org/
 
 config BR2_PACKAGE_SNMPD
-	prompt "snmpd - SNMP agent"
+	prompt "snmpd - Open source SNMP implementation (daemon)"
 	tristate
 	select BR2_PACKAGE_LIBNETSNMP
 	default m if CONFIG_DEVEL
 	help
+	  Open source SNMP (Simple Network Management Protocol) implementation (daemon).
 	  Simple Network Management Protocol (SNMP) is a widely used 
 	  protocol for monitoring the health and welfare of network 
 	  equipment (eg. routers), computer equipment and even devices 
 	  like UPSs. Net-SNMP is a suite of applications used to implement 
 	  SNMP v1, SNMP v2c and SNMP v3 using both IPv4 and IPv6.
 	  
+	  This package contains the SNMP agent, dynamically linked.
+
 	  http://www.net-snmp.org/
+
+config BR2_PACKAGE_SNMPD_STATIC
+	prompt "snmpd-static - Open source SNMP implementation (daemon)"
+	tristate
+	select BR2_PACKAGE_LIBNETSNMP
+	default m if CONFIG_DEVEL
+	help
+	  Open source SNMP (Simple Network Management Protocol) implementation (daemon).
+	  Simple Network Management Protocol (SNMP) is a widely used 
+	  protocol for monitoring the health and welfare of network 
+	  equipment (eg. routers), computer equipment and even devices 
+	  like UPSs. Net-SNMP is a suite of applications used to implement 
+	  SNMP v1, SNMP v2c and SNMP v3 using both IPv4 and IPv6.
 	  
-	  This package contains the SNMP agent.
-	  
+	  This package contains the SNMP agent, statically linked.
+
+	  http://www.net-snmp.org/
 
 config BR2_PACKAGE_SNMP_UTILS
-	prompt "snmp-utils - SNMP client utilities"
+	prompt "snmp-utils - Open source SNMP implementation (utilities)"
 	tristate
 	select BR2_PACKAGE_LIBNETSNMP
 	default m if CONFIG_DEVEL
 	help
+	  Open source SNMP (Simple Network Management Protocol) implementation (utilities).
 	  Simple Network Management Protocol (SNMP) is a widely used 
 	  protocol for monitoring the health and welfare of network 
 	  equipment (eg. routers), computer equipment and even devices 
 	  like UPSs. Net-SNMP is a suite of applications used to implement 
 	  SNMP v1, SNMP v2c and SNMP v3 using both IPv4 and IPv6.
 	  
+	  This package contains SNMP client utilities.
+	  
 	  http://www.net-snmp.org/
-	  
-	  This package contains the SNMP client utilities.
-	  
-
 endmenu

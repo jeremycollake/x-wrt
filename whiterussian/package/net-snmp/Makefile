@@ -1,14 +1,19 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=net-snmp
 PKG_VERSION:=5.1.2
-PKG_RELEASE:=2
-PKG_MD5SUM:=8080555ab3f90011f25d5122042d9a8d
+PKG_RELEASE:=2.1
 
-PKG_SOURCE_URL:=@SF/net-snmp
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=@SF/net-snmp
+PKG_MD5SUM:=8080555ab3f90011f25d5122042d9a8d
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -62,9 +67,9 @@ SNMP_MIB_MODULES_EXCLUDED = \
 	ucd_snmp \
 	utilities \
 
-SNMP_TRANSPORTS_INCLUDED = UDP
+SNMP_TRANSPORTS_INCLUDED = Callback UDP
 
-SNMP_TRANSPORTS_EXCLUDED = Callback TCP TCPv6 UDPv6 Unix
+SNMP_TRANSPORTS_EXCLUDED = TCP TCPv6 UDPv6 Unix
 
 PKG_CONFIGURE_OPTIONS = \
 	--enable-shared \
@@ -96,6 +101,7 @@ include $(TOPDIR)/package/rules.mk
 
 $(eval $(call PKG_template,LIBNETSNMP,libnetsnmp,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,SNMPD,snmpd,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,SNMPD_STATIC,snmpd-static,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,SNMP_UTILS,snmp-utils,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
 $(PKG_BUILD_DIR)/.configured:
@@ -135,6 +141,15 @@ $(PKG_BUILD_DIR)/.built:
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
 		all install
+	( cd $(PKG_INSTALL_DIR); mv usr/sbin/snmpd usr/sbin/snmpd-shared )
+	#ifneq ($(BR2_PACKAGE_SNMPD_STATIC),)
+	( cd $(PKG_BUILD_DIR); rm -f agent/snmpd; )
+	$(MAKE) -C $(PKG_BUILD_DIR) \
+		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib -static" \
+		INSTALL_PREFIX="$(PKG_INSTALL_DIR)" \
+		all install
+	( cd $(PKG_INSTALL_DIR); mv usr/sbin/snmpd usr/sbin/snmpd-static );
+	#endif
 	touch $@
 
 $(IPKG_LIBNETSNMP):
@@ -151,9 +166,21 @@ $(IPKG_SNMPD):
 	install -d -m0755 $(IDIR_SNMPD)/etc/init.d
 	install -m0755 ./files/snmpd.init $(IDIR_SNMPD)/etc/init.d/snmpd
 	install -d -m0755 $(IDIR_SNMPD)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/snmpd $(IDIR_SNMPD)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/snmpd-shared $(IDIR_SNMPD)/usr/sbin/
 	$(RSTRIP) $(IDIR_SNMPD)
 	$(IPKG_BUILD) $(IDIR_SNMPD) $(PACKAGE_DIR)
+
+$(IPKG_SNMPD_STATIC):
+	install -d -m0755 $(IDIR_SNMPD_STATIC)/etc/snmp
+	install -m0644 ./files/snmpd.conf $(IDIR_SNMPD_STATIC)/etc/snmp/snmpd.conf
+	install -d -m0755 $(IDIR_SNMPD_STATIC)/etc/default
+	install -m0644 ./files/snmpd.default $(IDIR_SNMPD_STATIC)/etc/default/snmpd
+	install -d -m0755 $(IDIR_SNMPD_STATIC)/etc/init.d
+	install -m0755 ./files/snmpd.init $(IDIR_SNMPD_STATIC)/etc/init.d/snmpd
+	install -d -m0755 $(IDIR_SNMPD_STATIC)/usr/sbin
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/snmpd-static $(IDIR_SNMPD_STATIC)/usr/sbin/
+	$(RSTRIP) $(IDIR_SNMPD_STATIC)
+	$(IPKG_BUILD) $(IDIR_SNMPD_STATIC) $(PACKAGE_DIR)
 
 $(IPKG_SNMP_UTILS):
 	install -d -m0755 $(IDIR_SNMP_UTILS)/usr/bin

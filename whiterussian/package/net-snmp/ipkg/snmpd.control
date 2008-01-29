@@ -1,5 +1,15 @@
 Package: snmpd
 Priority: optional
-Section: admin
-Description: SNMP agent
-Depends: libnetsnmp, libelf
+Section: net
+Depends: libnetsnmp
+Description: Open source SNMP implementation (daemon)
+ Open source SNMP (Simple Network Management Protocol) implementation (daemon).
+ Simple Network Management Protocol (SNMP) is a widely used 
+ protocol for monitoring the health and welfare of network 
+ equipment (eg. routers), computer equipment and even devices 
+ like UPSs. Net-SNMP is a suite of applications used to implement 
+ SNMP v1, SNMP v2c and SNMP v3 using both IPv4 and IPv6.
+ .
+ This package contains the SNMP agent, dynamically linked.
+ .
+ http://www.net-snmp.org/

@@ -1,4 +1,16 @@
 Package: libnetsnmp
 Priority: optional
 Section: libs
-Description: SNMP shared libraries
+Depends: libelf
+Description: Open source SNMP implementation (libraries)
+ Open source SNMP (Simple Network Management Protocol) implementation (libraries).
+ Simple Network Management Protocol (SNMP) is a widely used 
+ protocol for monitoring the health and welfare of network 
+ equipment (eg. routers), computer equipment and even devices 
+ like UPSs. Net-SNMP is a suite of applications used to implement 
+ SNMP v1, SNMP v2c and SNMP v3 using both IPv4 and IPv6.
+ .
+ This package contains shared libraries, needed by other programs.
+ .
+ http://www.net-snmp.org/
+
