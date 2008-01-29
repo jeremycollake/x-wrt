@@ -1,14 +1,19 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
+#
+# Copyright (C) 2007 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=rsync
-PKG_VERSION:=2.6.5
-PKG_RELEASE:=0
-PKG_MD5SUM:=3691cdf1540d0649ba679edce6bae8fc
+PKG_VERSION:=2.6.9
+PKG_RELEASE:=1
 
-PKG_SOURCE_URL:=http://rsync.samba.org/ftp/rsync/
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://rsync.samba.org/ftp/rsync/
+PKG_MD5SUM:=996d8d8831dbca17910094e56dcb5942
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -44,6 +49,10 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		  --sysconfdir=/etc \
 		  $(DISABLE_LARGEFILE) \
 		  $(DISABLE_NLS) \
+		  --with-included-popt=no \
+		  --disable-debug \
+		  --disable-ipv6 \
+		  --disable-locale \
 	);
 	touch $@
 
