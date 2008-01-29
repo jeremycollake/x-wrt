@@ -1,6 +1,5 @@
 Package: pmacctd-custom
 Priority: optional
 Section: net
-Description: an IP accounting daemon,
- built with custom options
 Depends: libpcap
+Description: IP pcap-based accounting daemon, custom build

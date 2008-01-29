@@ -1,6 +1,5 @@
 Package: pmacctd
 Priority: optional
 Section: net
-Description: an IP accounting daemon,
- built without database support
-Depends: libpcap
+Depends: libpcap, zlib
+Description: IP pcap-based accounting daemon

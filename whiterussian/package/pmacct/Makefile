@@ -1,14 +1,19 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
+#
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=pmacct
-PKG_VERSION:=0.10.0
+PKG_VERSION:=0.10.3
 PKG_RELEASE:=1
-PKG_MD5SUM:=ed510e7ee2130d1f37f27901b89e985a
 
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.ba.cnr.it/~paolo/pmacct/
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION)rc2.tar.gz
+PKG_MD5SUM:=0be1ffd9d4bda73575caa3240abbf4cb
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -91,6 +96,7 @@ $(PKG_BUILD_DIR)/$(2) $(PKG_BUILD_DIR)/$(3): $(PKG_BUILD_DIR)/.prepared
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
+		LIBS="-lz" \
 		./configure \
 			--target=$(GNU_TARGET_NAME) \
 			--host=$(GNU_TARGET_NAME) \
@@ -119,9 +125,10 @@ $(PKG_BUILD_DIR)/$(2) $(PKG_BUILD_DIR)/$(3): $(PKG_BUILD_DIR)/.prepared
 	);
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include"
-	mv -f $(PKG_BUILD_DIR)/nfacctd $(PKG_BUILD_DIR)/$(2)
-	mv -f $(PKG_BUILD_DIR)/pmacctd $(PKG_BUILD_DIR)/$(3)
+		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+		all
+	mv -f $(PKG_BUILD_DIR)/src/nfacctd $(PKG_BUILD_DIR)/$(2)
+	mv -f $(PKG_BUILD_DIR)/src/pmacctd $(PKG_BUILD_DIR)/$(3)
 
 endef
 
@@ -179,6 +186,6 @@ $(PKG_BUILD_DIR)/.built: $(BUILD_TARGETS)
 
 $(IPKG_PMACCT_CLIENT):
 	install -d -m0755 $(IDIR_PMACCT_CLIENT)/usr/sbin
-	$(CP) $(PKG_BUILD_DIR)/pmacct $(IDIR_PMACCT_CLIENT)/usr/sbin/
+	$(CP) $(PKG_BUILD_DIR)/src/pmacct $(IDIR_PMACCT_CLIENT)/usr/sbin/
 	$(RSTRIP) $(IDIR_PMACCT_CLIENT)
 	$(IPKG_BUILD) $(IDIR_PMACCT_CLIENT) $(PACKAGE_DIR)

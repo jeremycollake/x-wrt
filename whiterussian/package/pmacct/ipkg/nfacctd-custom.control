@@ -1,6 +1,5 @@
 Package: nfacctd-custom
 Priority: optional
 Section: net
-Description: a NetFlow accounting daemon,
- built with custom options
 Depends: libpcap
+Description: NetFlow accounting daemon, custom build

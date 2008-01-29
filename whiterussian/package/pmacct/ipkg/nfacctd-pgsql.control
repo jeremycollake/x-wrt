@@ -1,6 +1,5 @@
 Package: nfacctd-pgsql
 Priority: optional
 Section: net
-Description: a NetFlow accounting daemon,
- built with PostgreSQL database support
-Depends: libpq, libpcap
+Depends: libpq, libpcap, zlib
+Description: with PostreSQL support

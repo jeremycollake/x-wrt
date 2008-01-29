@@ -1,0 +1,5 @@
+Package: sfacctd
+Priority: optional
+Section: net
+Depends: libpcap
+Description: sFlow accounting daemon
