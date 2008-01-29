@@ -1,15 +1,20 @@
-# $Id: Makefile 3621 2006-04-12 00:17:43Z nico $
+#
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=l2tpd
 PKG_VERSION:=0.70pre
 PKG_UPSTREAM_VERSION:=0.70-pre20031121
-PKG_RELEASE:=4
-PKG_MD5SUM:=3f2707b6e16a8cb72e7bf64f574202fa
+PKG_RELEASE:=4.1
 
-PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/l/l2tpd
 PKG_SOURCE:=$(PKG_NAME)_$(PKG_UPSTREAM_VERSION).orig.tar.gz
+PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/l/l2tpd
+PKG_MD5SUM:=3f2707b6e16a8cb72e7bf64f574202fa
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_UPSTREAM_VERSION).orig
@@ -40,4 +45,3 @@ $(IPKG_L2TPD):
 	install -m0755 $(PKG_BUILD_DIR)/$(PKG_NAME) $(IDIR_L2TPD)/usr/sbin/
 	$(RSTRIP) $(IDIR_L2TPD)
 	$(IPKG_BUILD) $(IDIR_L2TPD) $(PACKAGE_DIR)
-
