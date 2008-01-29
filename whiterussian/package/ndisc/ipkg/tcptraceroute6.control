@@ -1,0 +1,7 @@
+Package: tcptraceroute6
+Priority: optional
+Section: ipv6
+Description: A TCP/IPv6-based traceroute implementation
+ A TCP/IPv6-based traceroute implementation
+ .
+ http://people.via.ecp.fr/~rem/ndisc6/

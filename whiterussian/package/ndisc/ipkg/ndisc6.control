@@ -1,4 +1,7 @@
 Package: ndisc6
 Priority: optional
-Section: net
-Description: ICMPv6 Neighbour Discovery tool
+Section: ipv6
+Description: An ICMPv6 neighbour discovery tool
+ An ICMPv6 neighbour discovery tools
+ .
+ http://people.via.ecp.fr/~rem/ndisc6/

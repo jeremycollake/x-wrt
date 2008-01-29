@@ -1,4 +1,7 @@
 Package: rdisc6
 Priority: optional
-Section: net
-Description: ICMPv6 Router Discovery tool
+Section: ipv6
+Description: An ICMPv6 router discovery tool
+ An ICMPv6 router discovery tool
+ .
+ http://people.via.ecp.fr/~rem/ndisc6/
