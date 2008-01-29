@@ -1,14 +1,19 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=kismet
-PKG_VERSION:=2006-04-R1
-PKG_RELEASE:=2
-PKG_MD5SUM:=8ec2de513f2911df1b7edfcba5ad1c26
+PKG_VERSION:=2007-01-R1a
+PKG_RELEASE:=1
 
-PKG_SOURCE_URL:=http://www.kismetwireless.net/code
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.kismetwireless.net/code
+PKG_MD5SUM:=5921166366d3f695eeef26121c56a674
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -16,7 +21,6 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(TOPDIR)/package/rules.mk
 
-$(eval $(call PKG_template,KISMET,kismet,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,KISMET_CLIENT,kismet-client,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,KISMET_DRONE,kismet-drone,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,KISMET_SERVER,kismet-server,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
@@ -25,9 +29,10 @@ $(PKG_BUILD_DIR)/.configured:
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)"  \
-		CXXFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include  -fno-builtin -nostdinc++ -nodefaultlibs"  \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(LINUX_DIR)/include" \
-		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
+		CXXFLAGS="$(TARGET_CFLAGS) -fno-builtin -fno-rtti -nostdinc++" \
+		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include -I$(LINUX_DIR)/include" \
+		LDFLAGS="-nodefaultlibs -L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib" \
+		LIBS="-luClibc++ -lc -lm -lgcc" \
 		./configure \
 		  --target=$(GNU_TARGET_NAME) \
 		  --host=$(GNU_TARGET_NAME) \
@@ -57,11 +62,11 @@ $(PKG_BUILD_DIR)/.configured:
 
 $(PKG_BUILD_DIR)/.built:
 	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC=$(TARGET_CC) \
-		LIBS="-L$(STAGING_DIR)/lib -fno-builtin -nostdinc++ -nodefaultlibs -luClibc++ -lc -lm -lgcc" \
-		CPPFLAGS="-I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include -I$(LINUX_DIR)/include" 
+		LIBS="-luClibc++ -lc -lm -lgcc" \
+		all
 	touch $@
 
+#FIXME: remove this package?
 $(IPKG_KISMET):
 	install -d -m0755 $(IDIR_KISMET)/usr/bin/
 	install -m0755 $(PKG_BUILD_DIR)/scripts/kismet $(IDIR_KISMET)/usr/bin/kismet
@@ -95,7 +100,3 @@ $(IPKG_KISMET_SERVER):
 	$(CP)  $(PKG_BUILD_DIR)/kismet_server $(IDIR_KISMET_SERVER)/usr/bin/
 	$(RSTRIP) $(IDIR_KISMET_SERVER)
 	$(IPKG_BUILD) $(IDIR_KISMET_SERVER) $(PACKAGE_DIR)
-
-mostlyclean:
-#	$(MAKE) -C $(PKG_BUILD_DIR) clean
-	rm -f $(PKG_BUILD_DIR)/.built

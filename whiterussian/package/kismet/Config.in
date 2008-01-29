@@ -6,7 +6,7 @@ config BR2_PACKAGE_KISMET
 	depends BR2_PACKAGE_KISMET_CLIENT || BR2_PACKAGE_KISMET_DRONE || BR2_PACKAGE_KISMET_SERVER
 
 config BR2_PACKAGE_KISMET_CLIENT
-	prompt "kismet-client - the Kismet client"
+	prompt "kismet-client - Kismet client"
 	tristate
 	default m if CONFIG_DEVEL
 	select BR2_PACKAGE_KISMET
@@ -24,10 +24,9 @@ config BR2_PACKAGE_KISMET_CLIENT
 	    - libncurses
 	    - libpcap
 	    - uClibc++
-	  
 
 config BR2_PACKAGE_KISMET_DRONE
-	prompt "kismet-drone - the Kismet drone"
+	prompt "kismet-drone - Kismet drone"
 	tristate
 	default m if CONFIG_DEVEL
 	select BR2_PACKAGE_KISMET
@@ -44,10 +43,9 @@ config BR2_PACKAGE_KISMET_DRONE
 	  Depends:
 	    - libpcap
 	    - uClibc++
-	  
 
 config BR2_PACKAGE_KISMET_SERVER
-	prompt "kismet-server - the Kismet server"
+	prompt "kismet-server - Kismet server"
 	tristate
 	default m if CONFIG_DEVEL
 	select BR2_PACKAGE_KISMET
@@ -64,6 +62,5 @@ config BR2_PACKAGE_KISMET_SERVER
 	  Depends:
 	    - libpcap
 	    - uClibc++
-	  
 
 endmenu
