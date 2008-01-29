@@ -1,15 +1,20 @@
-# $Id: Makefile 973 2005-05-19 21:22:09Z nico $
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=radvd
-PKG_VERSION:=0.7.3
+PKG_VERSION:=1.0
 PKG_RELEASE:=1
-PKG_MD5SUM:=56ce3f8cbf5966a0d531c21813320423
 
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://v6web.litech.org/radvd/dist \
 		http://download.sourcemage.org/mirror
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_MD5SUM:=8bce4a21757cf069f5a69e2f9bee9e5b
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -50,9 +55,10 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 	touch $@
 
 $(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
+	rm -rf $(PKG_INSTALL_DIR)
+	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		radvd_LDADD=""
-	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		install
@@ -62,7 +68,7 @@ $(IPKG_RADVD):
 	install -d -m0755 $(IDIR_RADVD)/etc
 	install -m0644 ./files/radvd.conf $(IDIR_RADVD)/etc/radvd.conf
 	install -d -m0755 $(IDIR_RADVD)/etc/init.d
-	install -m0755 ./files/radvd.init $(IDIR_RADVD)/etc/init.d/S51radvd
+	install -m0755 ./files/radvd.init $(IDIR_RADVD)/etc/init.d/radvd
 	install -d -m0755 $(IDIR_RADVD)/usr/sbin
 	install -m 755 $(PKG_INSTALL_DIR)/usr/sbin/radvd $(IDIR_RADVD)/usr/sbin/
 	install -m 755 $(PKG_INSTALL_DIR)/usr/sbin/radvdump $(IDIR_RADVD)/usr/sbin/
