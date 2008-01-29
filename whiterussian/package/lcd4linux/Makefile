@@ -1,18 +1,23 @@
-# $Id: Makefile 3021 2006-01-20 03:15:53Z nbd $
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=lcd4linux
-PKG_VERSION:=0.10.0
+PKG_VERSION:=0.10.0+cvs20051015
 PKG_RELEASE:=1
-PKG_MD5SUM:=b7fb1c24b940482cd730cf212d1b5062
 
-PKG_SOURCE_URL:=@SF/lcd4linux
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)_$(PKG_VERSION).orig.tar.gz
+PKG_SOURCE_URL:=http://ftp.debian.org/debian/pool/main/l/lcd4linux/ \
+		http://ftp.de.debian.org/debian/pool/main/l/lcd4linux/
+PKG_MD5SUM:=5b5ac629be4bb5c29104fb8f6b7fa444
 PKG_CAT:=zcat
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION).orig
 
 include $(TOPDIR)/package/rules.mk
 
@@ -51,9 +56,7 @@ $(PKG_BUILD_DIR)/.configured:
 	touch $@
 
 $(PKG_BUILD_DIR)/.built:
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		CC=$(TARGET_CC) LD=$(TARGET_CROSS)ld \
-		CFLAGS="$(TARGET_CFLAGS) -Wall"
+	$(MAKE) -C $(PKG_BUILD_DIR)
 	touch $@
 
 $(IPKG_LCD4LINUX):
