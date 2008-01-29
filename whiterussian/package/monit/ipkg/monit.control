@@ -1,5 +1,9 @@
 Package: monit
 Priority: optional
 Section: admin
-Description: an utility for system services monitoring
-Depends: libpthread
+Depends: libpthread, libopenssl
+Description: System services monitoring utility, with SSL support
+ An utility for monitoring services on a Unix system
+ This package is built with SSL support.
+ .
+ http://www.tildeslash.com/monit
