@@ -8,4 +8,4 @@ config BR2_PACKAGE_SIPSAK
 	  http://www.sipsak.org/
 	  
 	  Depends: openssl
-	  
+
