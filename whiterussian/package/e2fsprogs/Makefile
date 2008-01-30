@@ -117,7 +117,9 @@ $(STAGING_DIR)/usr/lib/{libblkid,libcom_err,libext2fs,libe2p,libss,libuuid}.{a,s
 		BUILDCC="$(HOSTCC)" \
 		DESTDIR="$(STAGING_DIR)" \
 		install-libs
-	touch $@
+	# fix development files
+	$(SED) 's,-/usr,-$${STAGING_DIR}/usr,g; s,$(PKG_BUILD_DIR)/lib,$${STAGING_DIR}/usr/share,g' $(STAGING_DIR)/usr/bin/compile_et
+	$(SED) 's,-/usr,-$${STAGING_DIR}/usr,g; s,$(PKG_BUILD_DIR)/lib,$${STAGING_DIR}/usr/share,g; s,$(STAGING_DIR)/bin/,,g' $(STAGING_DIR)/usr/bin/mk_cmds
 
 install-dev: $(STAGING_DIR)/usr/lib/{libblkid,libcom_err,libext2fs,libe2p,libss,libuuid}.{a,so}*
 
