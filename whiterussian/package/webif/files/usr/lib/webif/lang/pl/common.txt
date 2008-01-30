@@ -75,7 +75,6 @@ Firmware Upgrade => Aktualizacja opr.
 
 Network => Sieć
 LAN => LAN
-WAN => Internet(WAN)
 Wireless => WLAN
 Advanced Wireless => Zaawansowane WLAN
 Hosts => Konfiguracja Hostów
@@ -255,11 +254,11 @@ Port => Port
 Helptext ESSID => Nazwa sieci radiowej
 Helptext DNS save => Musisz zapisać ustawienia przed dodaniem/usunięciem serwera DNS
 
-Helptext Operation mode => Umożliwia wybór pracy urządzenia.
-Helptext Encryption Type => 'WPA (RADIUS)' działa tylko w trybie Access Point <br /> 'WPA (PSK)' nie działa w trybie Ad-Hoc. 
-Helptext IP Settings => Ustawienia numeru IP dla DHCP i PPTP jest niekonieczne. Jeżeli je ustawisz, będą używane jako domyślne w przypadku , gdy serwer DHCP będzie niedostępny.
-Helptext Idle Time => Czas w sekundach bezruchu internetowego, po upływie których następuje rozłączenie (tylko Połączenie na żądanie)
-Helptext Redial Timeout => Liczba sekund, które trzeba odczekać po tym, jak nie otrzymałeś odpowiedzi od providera (przed ponowną próbą podłączenia)
+Operation mode => Wybór trybu pracy urządzenia.
+Encryption Type => 'WPA (RADIUS)' działa tylko w trybie Access Point <br /> 'WPA (PSK)' nie działa w trybie Ad-Hoc. 
+Settings => Ustawienia numeru IP dla DHCP i PPTP jest niekonieczne. Jeżeli je ustawisz, będą używane jako domyślne w przypadku , gdy serwer DHCP będzie niedostępny.
+Idle Time => Czas w sekundach bezruchu internetowego, po upływie których następuje rozłączenie (tylko Połączenie na żądanie)
+Redial Timeout => Liczba sekund, które trzeba odczekać po tym, jak nie otrzymałeś odpowiedzi od providera (przed ponowną próbą podłączenia)
 
 
 
@@ -300,10 +299,10 @@ network_hosts_IP => Adres IP
 network_hosts_Remove => Usuń
 network_hosts_Add => Dodaj
 network_hosts_Host_Names_helptext => The file /etc/hosts is used to look up the IP address of a device connected to a computer network. The hosts file describes a many-to-one mapping of device names to IP addresses. When accessing a device by name, the networking system attempts to locate the name within the hosts file before accessing the Internet domain name system.
-network_hosts_DHCP_Static_IPs => Static IP addresses (for DHCP)
-network_hosts_Static_IPs => Static IP addresses
+network_hosts_DHCP_Static_IPs => Statyczne adresy IP (dla DHCP)
+network_hosts_Static_IPs => Statyczne adresy IP
 network_hosts_Static_IPs_helptext => The file /etc/ethers contains database information regarding known 48-bit ethernet addresses of hosts on an Internetwork. The DHCP server uses the matching IP address instead of allocating a new one from the pool for any MAC address listed in this file.
-network_hosts_Active_Leases => Active DHCP Leases
+network_hosts_Active_Leases => Aktywne dzierżawy DHCP
 network_hosts_Name => Nazwa
 network_hosts_Expires => Wygasa za
 network_hosts_h => godz
@@ -333,7 +332,7 @@ Helptext RAM Usage => Bieżące zużycie pamięci RAM, ilość wolnej pamięci i
 Helptext Tracked Connections => Ilość połączeń w tablicy połączeń routera. <a href="status-conntrackread.sh">Zobacz tablicę połączeń</a
 Helptext Mount Usage => Pokazuje ilości całkowitego i użytego miejsca w zamontowanych systemach plików.
 
-## /www/cgi-bin/webif/status-precesses.sh
+## /www/cgi-bin/webif/status-processes.sh
 #
 status_processes_kill_error => Błąd w
 status_processes_Running_Processes => Działające procesy
@@ -347,9 +346,9 @@ status_processes_Processes_Status => Stany procesów
 status_processes_Signal => Sygnał
 status_processes_Send_signal => Wyślij
 status_processes_Legend => Legenda
-status_processes_Legend_Text => Wielkość pamięci podana jest w kB.<br />Stany procesów oznaczają: A=Aktywny, I=Idle (czekający na start), O=Nieistniejący, R=Działający, S=Śpiący, T=Zatrzymany, W=Swapped, Z=Zombie.<br />Polecenia w &quot;[...]&quot; to wątki jądra.<br />Więcej informacji <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/ps.html" onclick="return !targetwindow(this.href);">opis komendy ps (ang.)</a>.>>
+status_processes_Legend_Text => Wielkość pamięci podana jest w kB.<br />Stany procesów oznaczają: A=Aktywny, I=Idle (czekający na start), O=Nieistniejący, R=Działający, S=Śpiący, T=Zatrzymany, W=Swapped, Z=Zombie.<br />Polecenia w &quot;[...]&quot; to wątki jądra.<br />Więcej informacji <a href="http://pl.wikipedia.org/wiki/Ps" onclick="return !targetwindow(this.href);">opis komendy ps</a>
 status_processes_Signals_Legend => Najczęściej używane sygnały
-status_processes_Signals_Legend_Text => 1) SIGHUP - Odłącz<br />9) SIGKILL - Zabij (nie może być przechwycony ani zignorowany)<br />15) SIGTERM - Zakończenie<br />10) SIGUSR1/12) SIGUSR2 - Sygnały użytkownika.<br />Więcej informacji <a href="http://www.opengroup.org/onlinepubs/009695399/utilities/kill.html" onclick="return !targetwindow(this.href);">opis komendy kill (ang.)</a>.
+status_processes_Signals_Legend_Text => 1) SIGHUP - Odłącz<br />9) SIGKILL - Zabij (nie może być przechwycony ani zignorowany)<br />15) SIGTERM - Zakończenie<br />10) SIGUSR1/12) SIGUSR2 - Sygnały użytkownika.<br />Więcej informacji <a href="http://pl.wikipedia.org/wiki/Kill_%28Unix%29" onclick="return !targetwindow(this.href);">opis komendy kill</a>
 
 
 ##
@@ -365,12 +364,12 @@ DNS Server => Serwer DNS
 Received => Odebrane
 Transmitted => Wysłane
 WAN => Sieć rozległa (WAN)
-Helptext WAN WAN: => Skrót WAN oznacza sieć rozległą. Najczęściej jest to połączenie do Internetu.
+WAN WAN => Skrót WAN oznacza sieć rozległą. Najczęściej jest to połączenie do Internetu.
 LAN => Sieć lokalna
 status_interfaces_pkts => pakietów
-Helptext LAN LAN => Skrót LAN oznacza sieć lokalną.
-LOOPBACK => LOOPBACK
-Helptext LOOPBACK_helptext => A loopback interface is a type of '\''circuitless IP address'\'' or '\''virtual IP'\'' address, as the IP address is not associated with any one particular interface (or circuit) on the host or router. Any traffic that a computer program sends on the loopback network is addressed to the same computer.
+LAN LAN => Skrót LAN oznacza sieć lokalną.
+LOOPBACK => Pętla lokalna
+LOOPBACK_helptext => Pętla lokalna jest rodzajem 'wirtualnego adresu IP' ponieważ ten adres IP nie jest związany z jakimkolwiek interfejsem lub łączem routera lub komputera. Dowolne dane wysyłane przez program poprzez interfejs pętli lokalnej powracają do tego samego komputera.
 Mode => Tryb pracy
 Frequency => Częstotliwość
 Transmit Power => Moc nadajnika
@@ -379,7 +378,7 @@ Encryption Key => Klucz kodowania
 Rx Invalid nwid => Odebrane z nieprawidłowym nwid
 Rx Invalid Encryption => Odebrane z nieprawidłowym kodowaniem
 Tx Retries in Excess => Powtórzenia transmisji ponad normę
-Helptext WLAN LAN => Skrót WLAN oznacza lokalną sieć bezprzewodową.
+WLAN LAN => Skrót WLAN oznacza lokalną sieć bezprzewodową.
 Interfaces Status WAN => Stan interfejsu WAN
 Interfaces Status LAN => Stan interfejsu LAN
 Interfaces Status WLAN => Stan interfejsu WLAN
@@ -387,31 +386,71 @@ Raw Information => Dane surowe
 &nbsp;Show raw statistics&nbsp; => Pokaż dane surowe
 
 
+## status-wireless.sh
+status_wlan_survey_Installing_wl_package => Instalowanie pakietu
+Wireless Survey => Przeglądanie otoczenia bezprzewodowego
+HelpText WLAN Survey => Twój interfejs bezprzewodowy nie jest w trybie klienta. By przeglądać otoczenie bezprzewodowe musi on zostać przełączony w ten tryb na kilka sekund. Ruch WLAN będzie wstrzymany podczas tego krótkiego okresu.
+Scan => Przeglądaj
+status_wlan_survey_Connected_clients => Podłączeni klienci
+status_wlan_survey_Addresses => Adresy
+status_wlan_survey_Names => Nazwy
+status_wlan_survey_Times => Czasy
+status_wlan_survey_MAC => MAC
+status_wlan_survey_IP => IP
+status_wlan_survey_DHCP => DHCP
+status_wlan_survey_Hosts => Hosty
+status_wlan_survey_Idle => Bezczynności
+status_wlan_survey_Connected => Podłączenia
+status_wlan_survey_RSSI => RSSI
+status_wlan_survey_Authenticated => Uwierzytelniony
+status_wlan_survey_Associated => Powiązany
+status_wlan_survey_Authorized => Autoryzowany
+status_wlan_survey_Features => Features
+status_wlan_survey_y => lat
+status_wlan_survey_d => dni
+status_wlan_survey_no => nie
+status_wlan_survey_Broadcom => Broadcom
+status_wlan_survey_Afterburner => "Dopalacz"
+status_wlan_survey_none => Brak
+status_wlan_survey_No_connected_clients => Brak podłączonych klientów
+status_wlan_survey_Wireless_driver_utility => Narzędzia sterownika bezprzewodowego
+status_wlan_survey_Install_wl => Zainstaluj pakiet wl
+status_wlan_survey_Wireless_driver_utility => Narzędzia sterownika bezprzewodowego
+status_wlan_survey_Wireless_driver_utility_helptext => Ta funkcja wymaga zainstalowania zamkniętego narzędzia firmy Broadcom do ustawiania i odczytu parametrów sterownika bezprzewodowego.
+Sorry, no scan results. => Przykro mi, brak rezultatów przeglądania
+Cell => Komórka
+SSID => SSID
+Signal => Poziom sygnału
+Noise => Poziom szumów
+No wireless networks were found => Nie znaleziono sieci bezprzewodowych
+Survey Results => Wyniki przeglądania
+
+
 ## status-leases.sh
 Status => Status
 DHCP Clients => Klienci DHCP
 status_leases_dhcp_leases => Dzierżawa DHCP
-status_leases_MAC => Adres MAC
+status_leases_MAC => Adres fizyczny (MAC)
 status_leases_IP => Adres IP
 status_leases_Name => Nazwa
 status_leases_Expires => Wygasa za
-status_leases_h => h
+status_leases_h => godz
 status_leases_min => min
 status_leases_sec => sek
 status_leases_no_leases => Brak aktywnych dzierżaw DHCP.
 status_leases_dhcp_leases => Dzierżawy DHCP
-status_leases_dhcp_leases_helptext => DHCP leases are assigned to network clients that request an IP address from the DHCP server of the router. Clients that requested their IP lease before this router was last rebooted may not be listed until they request a renewal of their lease.
-status_leases_additional => Additional information
-status_leases_arp_title => Address Resolution Protocol Cache (ARP)
-status_leases_HW => HW Type
-status_leases_Flags => Flags
-status_leases_Mask => Mask
-status_leases_completed => completed
-status_leases_permanent => permanent
-status_leases_published => published
-status_leases_no_arp_record => ARP Cache does not contain any correspondent record.
-status_leases_ethers_title => Ethernet Address to IP Number Database (/etc/ethers)
-status_leases_ethers_empty => File /etc/ethers does not contain any Ethernet address/IP address pair.
+status_leases_dhcp_leases_helptext => Dzierżawy DHCP są przyznawane klientom sieciowym którzy zarządali adresu IP od serwera DHCP w routerze. Klienci którzy zarządali swoich dzierżaw IP przed ostatnim restartem routera mogą nie być wyświetleni, aż zarządają odnowienia dzierżawy adresu.
+status_leases_additional => Dodatkowa informacja
+status_leases_arp_title => Pamięć podręczna ARP
+status_leases_HW => Typ sprzętu
+status_leases_Flags => Flagi
+status_leases_Mask => Maska
+status_leases_completed => zakończone
+status_leases_permanent => trwałe
+status_leases_published => opublikowane
+status_leases_no_arp_record => Pamięć podręczna ARP nie zawiera żadnych wpisów.
+status_leases_ethers_title => Baza danych par adresów Ethernet / adres IP (/etc/ethers)
+status_leases_ethers_empty => Plik /etc/ethers nie zawiera żadnej pary adres Ethernet / adres IP.
 status_leases_no_ethers => Plik /etc/ethers nie istnieje.
 
 
@@ -451,21 +490,61 @@ status_usb_Loaded_USB_drivers => Załadowane sterowniki USB
 ## status-wwaninfo.sh
 Status => Status
 UMTS => UMTS
-status_wwaninfo_UG_Status => UMTS/GPRS Status
-status_wwaninfo_no_UG_device => UMTS / GPRS device not found.
-status_wwaninfo_device_info => Device Information
-status_wwaninfo_dev_th_Information => Information
-status_wwaninfo_dev_th_Value => Value
+status_wwaninfo_UG_Status => Status UMTS/GPRS
+status_wwaninfo_no_UG_device => Nie znaleziono urządzeń UMTS / GPRS.
+status_wwaninfo_no_req_app => Brak wymaganych komponentów. Proszę zainstalować najnowsze wersje pakietów <a href="system-ipkg.sh">comgt</a> i <a href="info.sh">webif&sup2;</a>.
+status_wwaninfo_device_info => Informacja o urządzeniu
+status_wwaninfo_dev_th_Information => Informacja
+status_wwaninfo_dev_th_Value => Wartość
 status_wwaninfo_no_UG_device_info => No device information reported.
-status_wwaninfo_Signal_Quality => Signal Quality
-status_wwaninfo_quality_unknown => Signal quality is invalid/unknown
-status_wwaninfo_Power_Ratio => Power Ratio (dBm)
-status_wwaninfo_Legend => Legend
-status_wwaninfo_quality_Unreliable => Unreliable
-status_wwaninfo_quality_Workable => Workable
-status_wwaninfo_quality_Good => Good
-status_wwaninfo_quality_Excellent => Excellent
-status_wwaninfo_wrong_value => Wrong signal quality value
+status_wwaninfo_Signal_Quality => Jakość sygnału
+status_wwaninfo_quality_unknown => Jakość sygnału nieprawidłowa/nieznana
+status_wwaninfo_Power_Ratio => Moc (dBm)
+status_wwaninfo_Legend => Legenda
+status_wwaninfo_quality_Unreliable => Niepewny
+status_wwaninfo_quality_Workable => Działający
+status_wwaninfo_quality_Good => Dobry
+status_wwaninfo_quality_Excellent => Doskonały
+status_wwaninfo_wrong_value => Nieprawidłowa wartość jakości sygnału
+status_wwaninfo_Notcharging => Nie ładuję
+status_wwaninfo_Charging => Ładuję
+status_wwaninfo_Battery_Status => Stan baterii
+status_wwaninfo_Status => Stan
+status_wwaninfo_Capacity => Pojemność
+
+## status-pptp.sh
+#
+PPTP Status => Stan połączeń PPTP
+PPTP Client => Klient PPTP
+PPTP Server => Serwer PPTP
+
+## status-openvpn.sh
+#
+OpenVPN Status => Stan połączeń OpenVPN
+status_openvpn_Starting_OpenVPN => Uruchamianie OpenVPN...
+status_openvpn_Stopping_OpenVPN => Zatrzymywanie OpenVPN...
+status_openvpn_done => zrobione.
+status_openvpn_Err_cert_missing => Błąd! Brak certyfikatu!
+status_openvpn_Err_keyfile_missing => Błąd! Brak pliku klucza!
+status_openvpn_Err_client_keyfile_missing => Błąd! Brak pliku klucza klienta!
+status_openvpn_Err_client_cert_missing => Błąd! Brak certyfikatu klienta!
+status_openvpn_Err_root_cert => Błąd! Brak głównego certyfikatu!
+status_openvpn_Err_unknown_authtype => błąd w konfiguracji OpenVPN, nieznany typ autentykacji
+status_openvpn_no_active_tunnel => brak aktywnych tuneli
+status_openvpn_active_tunnel => znaleziono następujące aktywne tunele:
+status_openvpn_OpenVPN_running => OpenVPN uruchomiony
+status_openvpn_stop_now => [zatrzymaj]
+status_openvpn_OpenVPN_not_running => OpenVPN nie uruchomiony
+status_openvpn_start_now => [uruchom]
+status_openvpn_OpenVPN_disabled => OpenVPN jest wyłączony
+
+## status-diag.sh
+#
+Diagnostics => Diagnostyka
+Network Utilities => Narzędzia sieciowe
+Ping => Ping
+TraceRoute => Traceroute
+Please wait for output of => Proszę poczekać na wyniki
 
 
 ## system-ipkg.sh
