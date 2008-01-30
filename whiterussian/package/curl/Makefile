@@ -28,7 +28,7 @@ include $(TOPDIR)/package/rules.mk
 $(eval $(call PKG_template,CURL,curl,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,LIBCURL,libcurl,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
-$(PKG_BUILD_DIR)/.configured:
+$(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(strip $(TARGET_CFLAGS))" \
@@ -86,7 +86,7 @@ $(PKG_BUILD_DIR)/.configured:
 	touch $@
 
 
-$(PKG_BUILD_DIR)/.built:
+$(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -94,13 +94,13 @@ $(PKG_BUILD_DIR)/.built:
 		all install
 	touch $@
 
-$(IPKG_CURL):
+$(IPKG_CURL): $(PKG_BUILD_DIR)/.built
 	install -m0755 -d $(IDIR_CURL)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/curl $(IDIR_CURL)/usr/bin/
 	$(RSTRIP) $(IDIR_CURL)
 	$(IPKG_BUILD) $(IDIR_CURL) $(PACKAGE_DIR)
 
-$(IPKG_LIBCURL):
+$(IPKG_LIBCURL): $(PKG_BUILD_DIR)/.built
 	install -m0755 -d $(IDIR_LIBCURL)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcurl.so.* $(IDIR_LIBCURL)/usr/lib/
 	$(RSTRIP) $(IDIR_LIBCURL)
@@ -116,7 +116,9 @@ $(STAGING_DIR)/usr/lib/libcurl.so: $(PKG_BUILD_DIR)/.built
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcurl.so* $(STAGING_DIR)/usr/lib/
 	$(SED) 's,-I/usr/include,,g' $(STAGING_DIR)/usr/bin/curl-config
 	$(SED) 's,-L/usr/lib,,g' $(STAGING_DIR)/usr/bin/curl-config
-	touch $@
+	# fix development files
+	$(SED) 's,^\(prefix=\),\1$${STAGING_DIR},g; s,^\(exec_prefix=\),\1$${STAGING_DIR},g; s,^\(includedir=\),\1$${STAGING_DIR},g; s,$(STAGING_DIR),$${STAGING_DIR},g' \
+		$(STAGING_DIR)/usr/bin/curl-config
 
 install-dev: $(STAGING_DIR)/usr/lib/libcurl.so
 
