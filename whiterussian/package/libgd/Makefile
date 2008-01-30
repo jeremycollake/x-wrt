@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=gd
 PKG_VERSION:=2.0.33
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://www.boutell.com/gd/http
@@ -18,13 +18,15 @@ include $(TOPDIR)/package/rules.mk
 
 $(eval $(call PKG_template,LIBGD,libgd,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
-$(PKG_BUILD_DIR)/.configured:
+$(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
 		LIBPNG12_CONFIG="$(STAGING_DIR)/usr/bin/libpng12-config" \
+		ac_cv_hardcode_into_libs=no \
+		ac_cv_hardcode_libdir_flag_spec="" \
 		sys_lib_dlsearch_path_spec="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
 		sys_lib_search_path_spec="$(STAGING_DIR)/lib $(STAGING_DIR)/usr/lib" \
 		./configure \
@@ -51,20 +53,21 @@ $(PKG_BUILD_DIR)/.configured:
 		  --enable-static \
 		  --disable-rpath \
 		  --without-x \
-		  --with-png=$(STAGING_DIR)/usr \
-		  --with-jpeg=$(STAGING_DIR)/usr \
+		  --with-png="$(STAGING_DIR)/usr" \
+		  --with-jpeg="$(STAGING_DIR)/usr" \
 	)
 	touch $@
 
-$(PKG_BUILD_DIR)/.built:
+$(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
+		LDFLAGS=" -L$(STAGING_DIR)/usr/lib" \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 	touch $@
 
-$(IPKG_LIBGD):
+$(IPKG_LIBGD): $(PKG_BUILD_DIR)/.built
 	install -d -m0755 $(IDIR_LIBGD)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgd.so.* $(IDIR_LIBGD)/usr/lib/
 	$(RSTRIP) $(IDIR_LIBGD)
@@ -78,7 +81,9 @@ $(STAGING_DIR)/usr/lib/libgd.so: $(PKG_BUILD_DIR)/.built
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/gd*.h $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libgd.{a,so*} $(STAGING_DIR)/usr/lib/
-	touch $@
+	# fix development files
+	$(SED) 's,^\(libdir=\),\1$${STAGING_DIR},g; s,^\(includedir=\),\1$${STAGING_DIR},g; s,-L$(STAGING_DIR),-L$${STAGING_DIR},g; s,-I/,-I$${STAGING_DIR}/,g; s,-Wl[^[:space:]]*,,g' \
+		$(STAGING_DIR)/usr/bin/gdlib-config
 
 install-dev: $(STAGING_DIR)/usr/lib/libgd.so
 
