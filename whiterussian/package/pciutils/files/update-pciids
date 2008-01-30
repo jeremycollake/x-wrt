@@ -1,0 +1,32 @@
+#!/bin/sh
+IDS_NAME="pci.ids"
+IDS_SOURCE="$IDS_NAME.gz"
+IDS_URL="http://pciids.sourceforge.net/v2.2"
+DEST_PATH="/usr/share"
+TMP_PATH="/tmp"
+
+tmp_clean() {
+	rm -f "$TMP_PATH/$IDS_SOURCE"
+	rm -f "$TMP_PATH/$IDS_NAME"
+}
+
+tmp_clean
+wget  "$IDS_URL/$IDS_SOURCE" -O "$TMP_PATH/$IDS_SOURCE" 2>/dev/null
+[ -f "$TMP_PATH/$IDS_SOURCE" ] || {
+	echo >&2 "update-pciids: download failed"
+	tmp_clean
+	exit 1
+}
+gzip -d <"$TMP_PATH/$IDS_SOURCE" >"$TMP_PATH/$IDS_NAME" || {
+	echo >&2 "update-pciids: decompression failed, probably truncated file"
+	tmp_clean
+	exit 1
+}
+grep -q "^C" "$TMP_PATH/$IDS_NAME" || {
+	echo >&2 "update-pciids: missing class info, probably truncated file"
+	tmp_clean
+	exit 1
+}
+[ -f "$DEST_PATH/$IDS_NAME" ] && rm -f "$DEST_PATH/$IDS_NAME"
+mv -f "$TMP_PATH/$IDS_NAME" "$DEST_PATH/$IDS_NAME"
+echo "Done."
