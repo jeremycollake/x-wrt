@@ -131,6 +131,7 @@ header() {
 	_savebutton="${5:+<div class=\"page-save\"><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></div>}"
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}
+	_pagename="${2:+@TR<<$2>> - }"
 
 	if equal $CONFIG_general_use_short_status_frame "1"; then
 		short_status_frame='<iframe src="/cgi-bin/webif/iframe.mini-info.sh"
@@ -160,7 +161,7 @@ Pragma: no-cache
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>$_firmware_name @TR<<Administrative Console>></title>
+<title>$_pagename$_firmware_name @TR<<Administrative Console>></title>
 	<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
 	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_white.css" title="white" />
 	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_brown.css" title="brown" />
