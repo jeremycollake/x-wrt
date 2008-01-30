@@ -47,17 +47,18 @@ $(PKG_BUILD_DIR)/.configured:
 		  $(DISABLE_NLS) \
 		  $(DISABLE_LARGEFILE) \
 		  --with-gnu-ld \
+		  --disable-slp \
+		  --disable-ssl \
+		  --disable-openssl \
+		  --disable-gnutls \
+		  --disable-cdsassl \
+		  --disable-pam \
 		  --with-cups-user=root \
 		  --with-cups-group=root \
+		  --without-java \
 		  --without-perl \
-		  --without-python \
 		  --without-php \
-		  --disable-slp \
-		  --disable-gnutls \
-		  --disable-openssl \
-		  --disable-cdsassl \
-		  --disable-ssl \
-		  --disable-slp \
+		  --without-python \
 	);
 	touch $@
 
@@ -105,6 +106,9 @@ $(STAGING_DIR)/usr/lib/libcups.so: $(PKG_BUILD_DIR)/.built
 	$(CP) $(PKG_INSTALL_DIR)/usr/include/cups $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libcups.{a,so*} $(STAGING_DIR)/usr/lib/
+	# fix development files
+	$(SED) 's,^\(includedir=\),\1$${STAGING_DIR},g; s,^\(libdir=\),\1$${STAGING_DIR},g' \
+		$(STAGING_DIR)/usr/bin/cups-config
 
 install-dev: $(STAGING_DIR)/usr/lib/libcups.so
 
