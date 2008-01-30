@@ -14,4 +14,3 @@ config BR2_PACKAGE_RSYNC
 	  across the network link. 
 	  
 	  http://rsync.samba.org
-endef

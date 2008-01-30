@@ -56,7 +56,7 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 	);
 	touch $@
 
-$(PKG_BUILD_DIR)/.built:
+$(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
 	rm -rf $(PKG_INSTALL_DIR)
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
@@ -65,7 +65,7 @@ $(PKG_BUILD_DIR)/.built:
 		all install
 	touch $@
 
-$(IPKG_RSYNC):
+$(IPKG_RSYNC): $(PKG_BUILD_DIR)/.built
 	install -d -m0755 $(IDIR_RSYNC)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/* $(IDIR_RSYNC)/usr/bin
 	$(RSTRIP) $(IDIR_RSYNC)
