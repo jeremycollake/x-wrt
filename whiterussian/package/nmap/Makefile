@@ -23,7 +23,7 @@ include $(TOPDIR)/package/rules.mk
 
 $(eval $(call PKG_template,NMAP,nmap,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
-$(PKG_BUILD_DIR)/.configured:
+$(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
@@ -59,14 +59,14 @@ $(PKG_BUILD_DIR)/.configured:
 	);
 	touch $@
 
-$(PKG_BUILD_DIR)/.built:
+$(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		DESTDIR="$(PKG_INSTALL_DIR)" \
 		all install
 	touch $@
 
-$(IPKG_NMAP):
+$(IPKG_NMAP): $(PKG_BUILD_DIR)/.built
 	install -d -m0755 $(IDIR_NMAP)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/nmap $(IDIR_NMAP)/usr/bin/
 	install -d -m0755 $(IDIR_NMAP)/usr/share/nmap
