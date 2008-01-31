@@ -67,10 +67,7 @@ Connections => Połączenia
 DHCP => DHCP
 Wireless => WLAN
 
-System => System
-Settings => Ustawienia
 Installed Software => Zainstalowane pakiety
-Firmware Upgrade => Aktualizacja opr.
 
 Network => Sieć
 LAN => LAN
@@ -124,7 +121,10 @@ New Password => Nowe hasło
 #
 # /www/cgi-bin/webif/system-settings.sh
 #
+System => System
+Settings => Ustawienia
 System Settings => Ustawienia systemu
+Time Settings => Ustawienia czasu
 Host Name => Nazwa urządzenia
 system_settings_Installing_NTPCLIENT_package => Instalowanie pakietu klienta ntp
 system_settings_Installing_MatrixTunnel_package => Instalowanie pakietu MatrixTunnel SSL
@@ -156,6 +156,11 @@ NTP Server => Serwer czasu (ntp)
 Webif&sup2; Settings => Ustawienia Webif&sup2;
 Language => Język
 Theme => Motyw
+
+# 'Startup'
+#
+Startup => Skrypty użytkownika
+
 
 # 'Cron' settings
 # /www/cgi-bin/webif/system-cron.sh
@@ -245,17 +250,120 @@ editor_File => Plik
 &nbsp;Back&nbsp; => &nbsp;Cofnij&nbsp;
 editor_click_apply => Po zakończeniu dokonywania zmian w plikach i konfiguracji musisz użyć łącza &quot;Zastosuj zmiany&quot;, aby stały się one trwałe.
 
+# /www/cgi-bin/webif/system-ipkg.sh
+#
+system_ipkg_Packages => Pakiety
+system_ipkg_reponame => Nazwa repozytorium
+system_ipkg_repourl => Adres URL repozytorium
+system_ipkg_removerepo => usuń
+system_ipkg_addrepo => Dodaj repozytorium
+system_ipkg_currentrepos => Bieżące repozytoria
+Add Repository => Dodaj repozytorium
+HelpText Add Repository => Repozytoria to serwery zawierające pakiety które mogą być zainstalowane w systemie OpenWRT. Dodanie nowych powoduje, że staną się dostępne nowe pakiety.
+Backports Tip => Backports Tip
+HelpText Backports Tip => For a much larger assortment of packages, see if there is a backports repository available for your firmware.
+system_ipkg_installfromurl => Zainstaluj pakiet z adresu URL
+system_ipkg_packageurl => Adres URL pakietu
+Install Package => Instaluj pakiet
+HelpText Install Package => Normalnie pakiety instaluje się poprzez kliknięcie na łączu w liście pakietów poniżej. Jednak możesz zainstalować pakiety nie wymienione w repozytoriach, poprzez podanie ich adresu URL.
+system_ipkg_packagesavailable => Dostępne pakiety
+system_ipkg_pleasewait => Czekaj
+system_ipkg_th_action => Akcja
+system_ipkg_th_package => Pakiet
+system_ipkg_th_version => Wersja
+system_ipkg_th_desc => Opis
+system_ipkg_availablepackages => Dostępne pakiety
+system_ipkg_Uninstall => Odinstaluj
+
+# 'SNMP'
+# /www/cgi-bin/webif/system-snmp.sh
+#
+SNMP Settings => Ustawienia SNMP
+Installing SNMPd package => Instalowanie pakietu SNMP
+Removing SNMPd package => Usuwanie pakietu SNMP
+Remove SNMPd => Usuń SNMPd
+SNMP Private Community Name => Nazwa SNMP prywatna (do zapisu)
+SNMP Private Source => Źródło dla SNMP prywatnej
+SNMP Public Community Name => Nazwa SNMP publiczna (do odczytu)
+SNMP Public Source => Źródło dla SNMP publicznej
+SNMP Community Name => Nazwa dla SNMP
+Helptext SNMP Community Name => Nazwa SNMP identyfikuje grupę urządzeń i systemów zarządzania które współdzielą kontrolę dostępu tej grupy. Mimo, że PUBLIC i PRIVATE są często używane, jest usilnie polecane wybranie trudnych do odgadnięcia nazw. Jedyną gorszą rzeczą niż nazwy PUBLIC and PRIVATE, jest pozostawienie tej nazwy pustej! Nazwa SNMP może być rozumiana jako hasło grupy.
+SNMP Source => Źródło SNMP
+Helptext SNMP Source => Źródło SNMP definiuje adres IP , nazwę urządzenia lub maskę sieci systemów zarządzania które mogą odczytywać z SNMP &quot;publicznej&quot; lub kontrolować &quot;prywatną&quot; SNMP.
+
+# /www/cgi-bin/webif/system-confman.sh
+#
+system_confman_Backup_Configuration => Kopia bezpieczeństwa konfiguracji
+system_confman_Preparing_backup => Przygotowywanie kopii bezpieczeństwa...
+system_confman_Backing_fidi => Kopiowanie plików i katalogów...
+system_confman_Backing_NVRAM => Kopiowanie zmiennych pamięci NVRAM...
+system_confman_Backup_Prepared => Przygotowano kopię bezpieczeństwa.
+confman_noauto_click => Jeżeli plik nie zaczął ściągać się automatycznie, kliknij tutaj
+system_confman_Press_to_clean => Naciśnij przycisk, aby zwolnić pamięć wykorzystaną na kopię bezpieczeństwa, po jej poprawnym ściągnięciu (na komputer).
+system_confman_Invalid_config_archive => Nieprawidłowe archiwum konfiguracji!
+system_confman_Wrong_board_type => Nieprawidłowa wersja sprzętu!
+system_confman_Device_Board_Type => Wersja sprzętu
+system_confman_Archived_Board_Type => Zapisana wersja sprzętu
+system_confman_Cancel_Clean => Wycofaj i wyczyść
+system_confman_Cancel_to_clean => Wciśnij przycisk aby zwolnić pamięć zużytą na kopię bezpieczeństwa i pliki tymczasowe oraz wycofać odtwarzanie systemu.
+system_confman_Restore_Configuration => Odtwórz konfigurację
+system_confman_Config_Name => Nazwa konfiguracji
+system_confman_Board_Type => Wersja sprzętu
+system_confman_Generated => Wygenerowane
+system_confman_File => Pliki
+system_confman_NVRAM => Pamięć NVRAM
+system_confman_Restore_Selected => Odtwórz wybrane
+system_confman_no_archive_supplied => Nie wskazano kopii bezpieczeństwa.
+system_confman_Preparing_restore => Przygotowanie do odtwarzania...
+system_confman_Restoring_Files => Odtwarzanie plików...
+system_confman_Restoring_NVRAM => Odtwarzanie zmiennych NVRAM
+system_confman_total_changes => Całkowite zmiany konfiguracji
+Backup and Restore => Kopia bezpieczeństwa i odtwarzanie
+system_confman_click_apply => Musisz kliknąć na łączu &quot; Zastosuj zmiany &quot; aby odtworzyć zmiany i utrwalić je.
+ystem_confman_remind_restart => Zalecane jest ponowne uruchomienie systemu. Ilość zmian może być naprawdę duża i nie wszystkie usługi będą w stanie przyjąć zmienione ustawienia.
+system_confman_Backup_Flash_Partitions => Kopia partycji pamięci Flash
+system_confman_Backup_Name => Nazwa kopii bezpieczeństwa
+system_confman_Create_Backup => Stwórz kopię bezpieczeństwa
+system_confman_Backup_Name_helptext => Możesz podać nazwę opisującą Twoją konfigurację aby lepiej rozróżniać kopie. Czas wykonania kopii jest dołączany automatycznie.
+system_confman_Backup_File => Kopiuj plik
+system_confman_Backup_File_helptext => Wskaż odpowiednią kopię bezpieczeństwa  (config[-datetime].tgz) aby odtworzyć konfigurację.
+system_confman_Clean_Return => Czyść i powróć
+system_confman_Select_Partition => Wybierz partycję
+system_confman_unknown_size => nieznana wielkość
+system_confman_No_MTD => Nie znaleziono partycji MTD
+system_confman_Free_Memory => Wolna pamięć
+system_confman_Select_Partition_helptext => Możesz selektywnie zachowywać poszczególne partycje pamięci Flash. Potrzebujesz <i>cfe</i>, <i>linux</i>, i <i>nvram</i> do wyykonania pełnej kopii bezpieczeństwa, ale możesz wybrać dowolną inną partycję.
+system_confman_Free_Memory_helptext => Kopia bezpieczeństwa partycji linux, rootfs i jffs wymaga dużej ilości pamięci. Prawdopodobnie będziesz chciał zatrzymać niepotrzebne usługi przed wykonaniem kopii, jeżeli nie jest dostępne wystarczająco dużo pamięci.
+system_confman_Backup_Partition => Kopiuj partycję
 
 # 'Firmware Upgrade' page
+Firmware Upgrade => Aktualizacja oprogramowania systemowego
+Upgrade => Aktualizuj
+Turning boot_wait on => Włączanie oczekiwania przy starcie
+Upgrading firmware, please wait => Aktualizuję oprogramowanie, proszę czekać
+Upgrading... => Aktualizuję...
+Boot_Wait_Force => Wymuszenie oczekiwania przy starcie
+Firmware_image => Obraz oprogramowania:
 Firmware format => Format pliku firmware
 Error => Błąd
 done => Gotowe
 Invalid_format => Błędny format firmware
 Erase_JFFS2 => Formatuj JFFS2
+Erase JFFS2 => Formatuj partycję JFFS2
 Options => Opcje
-Firmware_image => Obraz FW:
-Upgrade => Aktualizuj
-Upgrading... => Aktualizuję...
+Turn boot wait on => Włączenie oczekiwania przy starcie
+HelpText Turn_boot_wait_on => Ta opcja spowoduje ustawienie zmiennej boot_wait przed wgraniem obrazu oprogramowania do pamięci Flash. Kiedy boot_wait jest ustawione, większość urządzeń czeka kilka sekund przy starcie aby sprawdzić, czy nie jest do nich wysyłane nowe oprogramowanie (poprzez TFTP). Jest to przydatne w przypadku, jeżeli aktualizacja oprogramowania uszkodziła je w pamięci routera.
+HelpText Erase_JFFS2 => Ta opcja jest przydatna tylko w przypadku wgrywania  oprogramownia innego niż OpenWRT. Jeśli to robisz, zawsze włącz tą opcję. Przy wgrywaniu nowej wersji OpenWRT, partycja JFFS2 jest zawsze formatowana.
+Firmware Image => Obraz oprogramowania systemowego
+HelpText Firmware_Image => Możesz wybrać dowolny prawidłowy plik z obrazem w formacie BIN lub TRX.
+
+# 'Reboot'
+Yes, really reboot now => Tak, uruchom ponownie teraz
+Rebooting now => Uruchamiam ponownie
+reboot_wait => Proszę poczekać około
+reboot_seconds => sekund.
+reboot_reload => Webif&sup2; powinien automatycznie załadować się ponownie.
+
 
 # 'LAN Settings' page
 LAN Settings => Ustawienia LAN
@@ -489,7 +597,7 @@ LAN => Sieć lokalna
 status_interfaces_pkts => pakietów
 LAN LAN => Skrót LAN oznacza sieć lokalną.
 LOOPBACK => Pętla lokalna
-LOOPBACK_helptext => Pętla lokalna jest rodzajem &quot;wirtualnego adresu IP&quot; ponieważ ten adres IP nie jest związany z jakimkolwiek interfejsem lub łączem routera lub komputera. Dowolne dane wysyłane przez program poprzez interfejs pętli lokalnej powracają do tego samego komputera.
+LOOPBACK_helptext => Pętla lokalna jest rodzajem 'wirtualnego adresu IP' ponieważ ten adres IP nie jest związany z jakimkolwiek interfejsem lub łączem routera lub komputera. Dowolne dane wysyłane przez program poprzez interfejs pętli lokalnej powracają do tego samego komputera.
 Mode => Tryb pracy
 Frequency => Częstotliwość
 Transmit Power => Moc nadajnika
