@@ -1,6 +1,6 @@
 config BR2_PACKAGE_GMEDIASERVER
 	tristate "gmediaserver - an UPnP music media server"
-	default m
+	default m if CONFIG_DEVEL
 	select BR2_PACKAGE_ID3LIB
 	select BR2_PACKAGE_LIBICONV
 	select BR2_PACKAGE_LIBMAGIC

@@ -1,7 +1,7 @@
 config BR2_PACKAGE_MINI_SENDMAIL
 	prompt "mini-sendmail - A small sendmail-compatible mail forwarder"
 	tristate
-	default y
+	default m if CONFIG_DEVEL
 	help
 	  mini_sendmail reads its standard input up to an end-of-file and sends a 
 	  copy of the message found there to all of the addresses listed. 

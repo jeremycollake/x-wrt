@@ -14,7 +14,7 @@ config BR2_PACKAGE_WEBIF
 config BR2_PACKAGE_WEBIF_THEME_XWRT
 	tristate "webif-theme-xwrt - Original X-Wrt webif theme"
 	select BR2_PACKAGE_WEBIF
-	default m
+	default y
 	help
 	  Original X-Wrt webif theme
 

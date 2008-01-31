@@ -2,7 +2,7 @@ menu "openssh - A free implementation of the Secure Shell protocol"
 
 config BR2_PACKAGE_OPENSSH
 	bool "OpenSSH - A free implementation of the Secure Shell protocol"
-	default y if CONFIG_DEVEL
+	default m if CONFIG_DEVEL
 	help
 	  OpenSSH is a FREE version of the SSH protocol suite of network 
 	  connectivity tools that increasing numbers of people on the Internet 

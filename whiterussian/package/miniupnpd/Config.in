@@ -1,6 +1,6 @@
 config BR2_PACKAGE_MINIUPNPD
 	tristate "miniupnpd - a small and capable UPNP daemon"
-	default m
+	default m if CONFIG_DEVEL
 	select BR2_PACKAGE_IPTABLES
 	select BR2_PACKAGE_BASE_FILES_UCI
 	help
