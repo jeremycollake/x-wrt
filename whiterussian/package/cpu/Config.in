@@ -1,6 +1,6 @@
 config BR2_PACKAGE_CPU
 	tristate "cpu - reports CPU utilization."
-	default m
+	default m if CONFIG_DEVEL
 	help
 	 reports CPU utilization as a percentage of used time slices in a period.
 
