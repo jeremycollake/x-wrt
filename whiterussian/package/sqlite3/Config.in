@@ -6,8 +6,7 @@ config BR2_PACKAGE_SQLITE3
 config BR2_PACKAGE_LIBSQLITE3
 	prompt "libsqlite3 - Self-contained, embeddable, zero-configuration SQL database engine"
 	tristate
-#	default m if CONFIG_DEVEL
-	default n
+	default m if CONFIG_DEVEL
 	select BR2_PACKAGE_SQLITE3
 	select BR2_PACKAGE_LIBNCURSES
 	select BR2_PACKAGE_LIBREADLINE
@@ -42,8 +41,7 @@ config BR2_PACKAGE_LIBSQLITE3
 config BR2_PACKAGE_SQLITE3_CLI
 	prompt "sqlite3-cli - Command line interface for SQLite"
 	tristate
-#	default m if CONFIG_DEVEL
-	default n
+	default m if CONFIG_DEVEL
 	depends BR2_PACKAGE_LIBSQLITE3
 	help
 	  SQLite is a small C library that implements a self-contained, embeddable, 

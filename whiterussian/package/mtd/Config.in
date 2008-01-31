@@ -6,7 +6,7 @@ config BR2_PACKAGE_MTD
 
 config BR2_PACKAGE_MTD_STATIC
 	tristate "mtd - update utility for trx firmware images (statically linked)"
-	default n
+	default m if CONFIG_DEVEL
 	help
 	 update utility for trx firmware images (statically linked). To update
 	 from other firmware or older OpenWrt releases.

@@ -11,6 +11,7 @@ config BR2_PACKAGE_NTPD
 
 config BR2_PACKAGE_NTPD_TOOLS
 	tristate "ntpd-tools - a collection of helpfull utilities for ntpd"
+	default m if CONFIG_DEVEL
 	depends BR2_PACKAGE_NTPD
 	help
 	  A collection of helpfull utilities for the reference NTP 
