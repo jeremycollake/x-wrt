@@ -75,7 +75,11 @@ $(STAGING_DIR)/usr/lib/libltdl.so: $(PKG_BUILD_DIR)/.built
 	mkdir -p $(I_LIBLTDL_DEV)/usr/share/aclocal
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/aclocal $(STAGING_DIR)/usr/share/
 	$(CP) $(PKG_INSTALL_DIR)/usr/share/libtool $(STAGING_DIR)/usr/share/
-	touch $@
+	# Fix development file
+	$(SED) 's,$(STAGING_DIR)/bin,$${STAGING_DIR}/bin,g; s,$(STAGING_DIR)/lib,$${STAGING_DIR}/lib,g; s,^\(sys_lib_dlsearch_path_spec=\).*,\1"$${STAGING_DIR}/lib $${STAGING_DIR}usr/lib",g;' \
+		$(STAGING_DIR)/usr/bin/libtool
+	$(SED) 's,^\(prefix=\)\(.*\),\1"$${STAGING_DIR}\2",g;' \
+		$(STAGING_DIR)/usr/bin/libtoolize
 
 install-dev: $(STAGING_DIR)/usr/lib/libltdl.so
 
