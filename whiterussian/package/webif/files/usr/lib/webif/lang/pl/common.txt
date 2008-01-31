@@ -50,7 +50,6 @@ Error in => Błąd w
 
 # Common
 Save Changes => Zapisz zmiany
-Host Name => Hostname
 Categories => Kategorie
 Subcategories => Podkategorie
 more... => Więcej Informacji...
@@ -122,9 +121,130 @@ New Password => Nowe hasło
 
 
 # 'System Settings' page
+#
+# /www/cgi-bin/webif/system-settings.sh
+#
 System Settings => Ustawienia systemu
-Host Name => Hostname
+Host Name => Nazwa urządzenia
+system_settings_Installing_NTPCLIENT_package => Instalowanie pakietu klienta ntp
+system_settings_Installing_MatrixTunnel_package => Instalowanie pakietu MatrixTunnel SSL
+system_settings_Generating_SSL_certificate => Generowanie certyfikatu SSL
+system_settings_Hostname_failed_validation => Nieprawidłowa nazwa systemu. Nie może zostać zapisana.
+system_settings_Webif_SSL => Webif&sup2; SSL
+system_settings_Feature_requires_matrixtunnel => Pakiet Matrix SSL nie zainstalowany. Musisz go zainstalować aby używać bezpiecznych połączeń (SSL).
+system_settings_Install_MatrixTunnel => Zainstaluj Matrix SSL
+system_settings_webifssl_Off => Wyłączony
+system_settings_webifssl_On => Włączony
+system_settings_Feature_requires_certificate => Brak certyfikatu SSL. Musisz go wygenerować, aby SSL mogło pracować
+system_settings_Generate_SSL_Certificate => Wygeneruj certyfikat SSL
+Boot Wait => Oczekiwanie przy starcie
+HelpText boot_wait => Opcja oczekiwania przy starcie powoduje, w niektórych urządzeniach, że program ładujący czeka kilka sekund na nowy obraz oprogramowania (poprzez TFTP). Jest to pewne zagrożenie bezpieczeństwa, jeśli włączone.
+Wait Time => Czas oczekiwania
+HelpText wait_time => Czas (w sekundach) przez który program ładujący będzie oczekiwał na połączenie TFTP jeśli oczekiwanie jest włączone.
+CPU Clock Frequency => Zegar procesora
+Dangerous Settings => Niebezpieczne ustawienia
+HelpText CPU Clock Frequency => Nie zmieniaj tego. Możesz trwale uszkodzić router, jeśli nie wiesz co robisz. Próbowaliśmy wyłączyć tą opcję na wszystkich routerach, które mogą zostać uszkodzone poprzez zmianę częstotliwości zegara. Tylko Linksys WRT54G v4 są znane z odporności na te zmiany.
+system_settings_feature_requires_ntpclient => Klient ntp nie jest zainstalowany. Dla utrzymania prawidłowego czasu w systemie należy go zainstalować.
+system_settings_Install_NTP_Client => Zainstaluj klienta ntp
+system_settings_group_unknown_TZ => Nieznana
+system_settings_User_or_old_TZ => Użytkownika (lub nieprawidłowa)
+Timezone => Strefa czasowa
+system_settings_POSIX_TZ_String => Strefa czasowa w/g normy POSIX
+system_settings_js_required => To pole wymaga wsparcia dla JavaScript
+Timezone_helptext => Ustaw swoją strefę czasową, w/g najbliższego miasta w Twoim regionie.
+NTP Server => Serwer czasu (ntp)
+Webif&sup2; Settings => Ustawienia Webif&sup2;
 Language => Język
+Theme => Motyw
+
+# 'Cron' settings
+# /www/cgi-bin/webif/system-cron.sh
+#
+Cron => Cron
+Cron Settings => Ustawienia Cron'a
+Cron Daemon => Demon Cron
+Enable => Włączony
+Disable => Wyłączony
+HelpText Cron => Cron jest demonem linuksa, który wykonuje polecenia o określonych porach lub odstępach czasu.
+View Crontab files => Zobacz tablice Cron'a
+
+
+# 'Crontab' settings
+# /www/cgi-bin/webif/system-crontabs.sh
+HelpText crontabs => Tablice cron są listą zadań, które demon cron ma wykonać w określonych porach lub odstępach czasu.
+Cron Tables => Tablice cron
+Cron Tables Directory => Katalog tablic cron
+Cron Jobs => Zadania cron
+crontabs => Tablice cron
+
+# 'NVRAM'
+# /www/cgi-bin/webif/system-nvram.sh
+#
+system_nvram_Error_in => Błąd w
+system_nvram_New_Variable => Nazwa nowej zmiennej
+system_nvram_Invalid_characters => Niedozwolone znaki
+system_nvram_Variable_Value => Wartość zmiennej
+system_nvram_NVRAM => Pamięć nieulotna (NVRAM)
+system_nvram_Delete_Setting => Kasowanie zmiennych NVRAM
+system_nvram_Are_you_sure => Czy na pewno chcesz skasować tą zmienną&#63;
+system_nvram_action_Delete => Skasuj
+system_nvram_action_Cancel => Anuluj
+system_nvram_Delete_Setting_helptext => Zmienna zostanie skasowana natychmiast po tym jak naciśniesz przycisk Kasuj. Upewnij się, że wiesz co robisz zanim naciśniesz!<br />Jeżeli chcesz tylko skasować wartość, wróć i zmodyfikuj wartość zmiennej czyszcząc ją.
+system_nvram_Add_New_NVRAM_Setting => Dodaj nową zmienną NVRAM
+system_nvram_Change_NVRAM_Setting => Zmień wartość zmiennej NVRAM
+system_nvram_action_Change => Zmień
+system_nvram_Variable_Name => Nazwa zmiennej
+system_nvram_Variable_Value_helptext => Wprowadź żądaną wartość w okienku. Wartość nie może zawierać znaków <b>&#39;</b> (apostrof) ani cudzysłowu <b>&quot;</b>.
+system_nvram_Add_System_Setting => Dodaj nową zmienną
+system_nvram_New_Variable => Nazwa nowej zmiennej
+system_nvram_Add_new_variable => Dodaj nową zmienną
+system_nvram_Add_System_Setting_helptext => Wprowadź nazwę nowej zmiennej w okienku. Nazwa nie może zawierać, znaków <b>&#39;</b> (apostrof) ani cudzysłowu <b>&quot;</b>.
+system_nvram_General_System_Settings => Zmienne systemowe
+system_nvram_General_System_Settings_helptext => Zmienne systemowe są przechowywane w pamięci NVRAM. NVRAM oznacza nieulotną pamięć RAM, w tym przypadku jest to ostatnie 64K pamięci flash. Wykorzystane do przechowywania informacji konfiguracyjnych w formacie nazwa=wartość.
+system_nvram_warn_nvram => Zmiana tych zmiennych może spowodować trwałe uszkodzenie systemu.
+system_nvram_inform_apply => Zmiany nie zostaną wprowadzone aż wybierzesz
+system_nvram_th_Change_Variable => Zmień wartość
+system_nvram_th_Current_Value => Bieżąca wartość
+system_nvram_th_Action => Akcja
+system_nvram_th_Nr => Nr.
+system_nvram_Change_the_value => Zmień wartość
+system_nvram_Delete_the_variable => Skasuj zmienną
+system_nvram_action_Delete => Kasuj
+system_nvram_NVRAM_Usage => Użycie pamięci NVRAM
+system_nvram_Total => Całkowita
+system_nvram_Used => Użyta
+system_nvram_NVRAM_Usage_helptext => Zużycie pamięci NVRAM. Wykres pokazuje ile pamięci zostało użyte a ile pozostaje dostępne dla innych zmiennych.
+
+# 'System editor'
+# /www/cgi-bin/webif/system-editor.sh
+#
+system_editor_ask_dir_deletition => Czy na pewno chcesz skasować katalog '{0}'
+system_editor_ask_file_deletition => Czy na pewno chcesz skasować plik '{0}/{1}'
+system_editor_info_dir_deleted => Pomyślnie skasowano katalog
+system_editor_info_file_deleted => Pomyślnie skasowano plik
+system_editor_File_Editor => Edytor plików
+
+# /usr/lib/webif/browser.awk
+#
+browser_Filesystem_Browser => Przeglądarka systemu plików
+browser_Root => Korzeń
+browser_Permissions => Uprawnienia
+browser_Owner => Właściciel
+browser_Group => Grupa
+browser_Time => Czas
+browser_Parent_Directory => Katalog nadrzędny
+browser_Directory => Katalog
+browser_Delete => Kasuj
+browser_File => Plik
+browser_Edit => Edytuj
+
+# /usr/lib/webif/editor.awk
+#
+editor_File => Plik
+&nbsp;Save Changes&nbsp; => &nbsp;Zapisz zmiany&nbsp;
+&nbsp;Back&nbsp; => &nbsp;Cofnij&nbsp;
+editor_click_apply => Po zakończeniu dokonywania zmian w plikach i konfiguracji musisz użyć łącza &quot;Zastosuj zmiany&quot;, aby stały się one trwałe.
+
 
 # 'Firmware Upgrade' page
 Firmware format => Format pliku firmware
@@ -135,7 +255,7 @@ Erase_JFFS2 => Formatuj JFFS2
 Options => Opcje
 Firmware_image => Obraz FW:
 Upgrade => Aktualizuj
-Upgrading... => Aktualizuje...
+Upgrading... => Aktualizuję...
 
 # 'LAN Settings' page
 LAN Settings => Ustawienia LAN
@@ -369,7 +489,7 @@ LAN => Sieć lokalna
 status_interfaces_pkts => pakietów
 LAN LAN => Skrót LAN oznacza sieć lokalną.
 LOOPBACK => Pętla lokalna
-LOOPBACK_helptext => Pętla lokalna jest rodzajem 'wirtualnego adresu IP' ponieważ ten adres IP nie jest związany z jakimkolwiek interfejsem lub łączem routera lub komputera. Dowolne dane wysyłane przez program poprzez interfejs pętli lokalnej powracają do tego samego komputera.
+LOOPBACK_helptext => Pętla lokalna jest rodzajem &quot;wirtualnego adresu IP&quot; ponieważ ten adres IP nie jest związany z jakimkolwiek interfejsem lub łączem routera lub komputera. Dowolne dane wysyłane przez program poprzez interfejs pętli lokalnej powracają do tego samego komputera.
 Mode => Tryb pracy
 Frequency => Częstotliwość
 Transmit Power => Moc nadajnika
@@ -553,13 +673,6 @@ system_ipkg_updatelists => Aktualizuj liste pakietów
 system_ipkg_Uninstall => Usuń
 system_ipkg_Install => Instaluj
 
-## /www/cgi-bin/webif/system-crontabs.sh
-#
-Cron Tables => Tablice cron
-Cron Tables Directory => Katalog tablic cron
-Cron Jobs => Zadania cron
-crontabs => Tablice cron
-Helptext crontabs => Tablice cron są listą zadań, które demon cron (crond) powinien wykonać w określonych przedziałach czasu lub porze.
 
 # untranslated:
 qos_enabled => Właczone
