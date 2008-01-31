@@ -11,9 +11,9 @@ if $(echo "$machinfo" | grep -q "mips"); then
 	elif $(echo "$board_type" | grep -q "WP54"); then
 		target="adm5120-2.6"
 	elif $(echo "$machinfo" | grep -q "2\.4"); then
-		target="brcm-2.4"
+		target="brcm"
 	elif $(echo "$machinfo" | grep -q "2\.6"); then
-		target="brcm-2.6"
+		target="brcm"
 	fi
 elif $(echo "$machinfo" | grep -q " i[0-9]86 "); then
 	target="x86-2.6"
@@ -23,7 +23,7 @@ elif $(cat /proc/cpuinfo 2>/dev/null | grep -q "IXP4"); then
 	target="ixp4xx-2.6"
 fi
 
-if [ "$target" = "brcm-2.4" ]; then
+if [ "$target" = "brcm" ]; then
 #####################################################################
 do_upgrade() {
 	echo "<br />Upgrading firmware, please wait ... <br />"
