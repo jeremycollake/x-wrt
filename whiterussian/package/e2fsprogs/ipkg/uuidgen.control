@@ -1,0 +1,9 @@
+Package: uuidgen
+Section: utils
+Priority: optional
+Depends: libuuid
+Description: A command-line utility to create a new UUID value
+ uuidgen program creates a new universally unique identifier (UUID) 
+ using the libuuid library. The new UUID can reasonably be considered 
+ unique among all UUIDs created on the local system, and among UUIDs 
+ created on other systems in the past and in the future.

@@ -23,6 +23,7 @@ include $(TOPDIR)/package/rules.mk
 
 $(eval $(call PKG_template,E2FSPROGS,e2fsprogs,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,LIBUUID,libuuid,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,UUIDGEN,uuidgen,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,TUNE2FS,tune2fs,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 $(eval $(call PKG_template,RESIZE2FS,resize2fs,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
 
@@ -99,6 +100,12 @@ $(IPKG_LIBUUID): $(PKG_BUILD_DIR)/.built
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libuuid.so.* $(IDIR_LIBUUID)/usr/lib/
 	$(RSTRIP) $(IDIR_LIBUUID)
 	$(IPKG_BUILD) $(IDIR_LIBUUID) $(PACKAGE_DIR)
+
+$(IPKG_UUIDGEN): $(PKG_BUILD_DIR)/.built
+	install -d -m0755 $(IDIR_UUIDGEN)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/uuidgen $(IDIR_UUIDGEN)/usr/bin/
+	$(RSTRIP) $(IDIR_UUIDGEN)
+	$(IPKG_BUILD) $(IDIR_UUIDGEN) $(PACKAGE_DIR)
 
 $(IPKG_TUNE2FS): $(PKG_BUILD_DIR)/.built
 	install -d -m0755 $(IDIR_TUNE2FS)/usr/sbin
