@@ -39,7 +39,7 @@ $(PKG_BUILD_DIR)/.configured:
 		--exec-prefix=/usr \
 		--bindir=/usr/bin \
 		--datadir=/usr/share \
-		--includedir=/usr/include \
+		--includedir=/usr/include/security \
 		--infodir=/usr/share/info \
 		--libdir=/lib \
 		--libexecdir=/usr/lib \
@@ -81,19 +81,16 @@ $(IPKG_LIBPAM): $(PKG_BUILD_DIR)/.built
 	$(IPKG_BUILD) $(IDIR_LIBPAM) $(PACKAGE_DIR)
 
 install-dev: $(PKG_BUILD_DIR)/.built
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/security $(STAGING_DIR)/usr/include/
 	mkdir -p $(STAGING_DIR)/lib/security/pam_filter $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/* $(STAGING_DIR)/usr/include/
 	$(CP) $(PKG_INSTALL_DIR)/lib/libpa{m,mc,m_misc}.so* $(STAGING_DIR)/lib/
 	$(CP) $(PKG_INSTALL_DIR)/lib/security/* $(STAGING_DIR)/lib/security/
 
 uninstall-dev:
 	rm -rf \
 		$(STAGING_DIR)/usr/include/security \
-		$(STAGING_DIR)/usr/include/_pam_* \
-		$(STAGING_DIR)/usr/include/pam_* \
 		$(STAGING_DIR)/lib/libpa{m,mc,m_misc}.so* \
 		$(STAGING_DIR)/lib/security
 
 compile: install-dev
 clean: uninstall-dev
-
