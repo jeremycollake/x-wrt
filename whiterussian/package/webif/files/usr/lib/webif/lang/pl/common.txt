@@ -8,7 +8,7 @@ big_warning => OSTRZEŻENIE
 page_incomplete => Ta strona jest niekompletna i może działać nieprawidłowo, albo nawet wcale.
 page_untested => Strona nie została przetestowana i może nie działać prawidłowo.
 page_untested_kamikaze => Ta strona nie była odświeżona ani sprawdzona pod wersją Kamikaze oprogramowania.
-features_require_package => Features on this page require the package
+features_require_package => Funkcjonalności na tej stronie wymagają pakietu
 Settings saved => Ustawienia zostały zapisane
 Settings not saved => Ustawienia nie zostały zapisane
 Host => Host
@@ -16,7 +16,7 @@ Uptime => Czas pracy
 Load => Obciążenie
 X-Wrt Administration Console => Konsola administracyjna X-Wrt
 Password_mismatch => Wprowadzone hasła nie są identyczne!
-Password_warning => Nie masz ustawionego hasła dostępu do WWW oraz SSH.<br />Proszę wpisz je teraz(nazwa użytkownika to 'root')
+Password_warning => Nie masz ustawionego hasła dostępu do WWW oraz SSH.<br>Proszę wpisz je teraz(nazwa użytkownika to 'root')
 New Password => Nowe hasło
 Confirm Password => Potwierdź hasło
 Proceed Changes => Proceed Changes
@@ -29,6 +29,10 @@ making_usable => Rozszerzenia systemu OpenWrt dla użytkownika końcowego.
 
 # translations from /usr/lib/webif/functions.sh
 #
+
+# translations from /usr/lib/webif/common.awk
+#
+
 # translations from /usr/lib/webif/validate.awk
 #
 Invalid value => Nieprawidłowa wartość
@@ -79,7 +83,7 @@ Hosts => Konfiguracja Hostów
 # 'About' page
 Copyright => Prawa autorskie
 
-GPL_Text => This program is free software; you can redistribute it and/or <br >modify it under the terms of the GNU General Public License <br >as published by the Free Software Foundation; either version 2 <br > of the License, or (at your option) any later version. 
+GPL_Text => Ten program jest wolnym oprogramowaniem; możesz go rozprowadzać i/lub <br>modyfikować zgodnie z regułami licencji GNU GPL,<br>jak opublikowała je Fundacja Wolnego Oprogramowania (Free Software Foundation); w wersji 2 <br > Licencji, lub (w/g Twojego wyboru) dowolnej późniejszej wersji. 
 Contributions by => Współpracownicy
 Layout based on => Layout bazuje na
 by => by
@@ -90,9 +94,39 @@ Config discarded. => Zmiany zostały anulowane.
 Config changes: => Aktualna konfiguracja:
 Updating config... => Aktualizacja konfiguracji...
 
+# 'Graphs'
+#
+graphs_cpu_CPU_Usage => Zużycie CPU
+graphs_svg_required => Wymagane wsparcie dla SVG.
+graphs_if_Traffic_of_Interface => Ruch na interfejsie:
+
+# 'Graphs SVG'
+# /www/svggraph/graph_if.svg
+#
+graph_if_In => Do
+graph_if_Out => Z
+graph_if_Switch_to => Przełącz na
+graph_if_Switch_to_bytes_s => Przełącz na bajty
+graph_if_Autoscale_follow => Autoskalowanie (podążaj)
+graph_if_Cannot_get_data_iface => Nie można uzyskać informacji o interfejsie
+graph_Collecting_initial_data => Pobieranie danych początkowych, proszę czekać...
+graph_No_URL_getURL => No URL for getURL
+graph_No_callback_function => No callback function for getURL
+graph_Both_undefined => Both getURL and XMLHttpRequest are undefined
+graph_if_follow => podążaj
+graph_if_bits => bity
+graph_if_up => góra
+graph_if_AutoScale => Autoskalowanie
+graph_if_bytes => bajty
+graph_if_Kbps => Kbps
+graph_if_Mbps => Mbps
+graph_if_Gbps => Gbps
+graph_if_KB_s => KB/s
+graph_if_MB_s => MB/s
+graph_if_GB_s => GB/s
 
 # 'Router Info' page
-Firmware Version => Wersja Opr.
+Firmware Version => Wersja oprogramowania systemowego
 Kernel Version => Wersja jądra
 Current Date/Time => Aktualna Data/Czas
 MAC Address => Adres MAC
@@ -366,70 +400,158 @@ reboot_reload => Webif&sup2; powinien automatycznie załadować się ponownie.
 
 
 # 'LAN Settings' page
+# /www/cgi-bin/webif/network-wan-lan.sh
+#
 LAN Settings => Ustawienia LAN
 LAN Configuration => Konfiguracja LAN
 Netmask => Maska sieci
 Default Gateway => Brama domyślna
-DNS Servers => Serwer DNS
+DNS Servers => Serwery DNS
 DNS Address => Adres DNS
-
-Note => Notatka
-
-
-# 'WAN Settings' page
-WAN Settings => Ustawienia WAN
+WAN DNS Address => Serwery DNS dla sieci WAN
+LAN DNS Address => Serwery DNS dla sieci LAN
+No WAN Proto => Nie wybrano protokołu dla połączenia WAN
+WAN IP Address => Adres IP WAN
+WAN PPTP Server IP => Adres IP serwera PPTP
+LAN IP Address => Adres IP w sieci LAN
+PPTP Server IP => Adres IP serwera PPTP
+WAN-LAN Configuration => Konfiguracja sieci LAN i WAN
 WAN Configuration => Konfiguracja WAN
-PPTP Server IP => Adres serwera PPTP
-Connection Type => Połączenie
+Connection Type => Typ połączenia
 No WAN => Bez WAN
 DHCP => DHCP
 Static IP => Statyczne IP
+WAN Settings => Ustawienia sieci WAN
 IP Settings => Ustawienia IP
+PPP Settings => Ustawienia PPP
+WAN IP Settings => Ustawienia IP sieci rozległej (WAN)
+Helptext WAN IP Settings => Ustawienia IP są opcjonalne dla DHCP i PPTP. Będą one użyte w przypadku niedostępności serwera DHCP.
+OpenDNS Service => Usługa OpenDNS
+Utilize OpenDNS => Użyj OpenDNS
+Yes => Tak
+No => Nie
+OpenDNS => Usługa OpenDNS
+HelpText OpenDNS => Włączenie korzystania z usługi OpenDNS oznacza, że zamiast z serwerów DNS Twojego dostawcy Internetu router będzie korzystał z serwerów OpenDNS przy rozwiązywaniu nazw.
+WAN DNS Servers => Serwery DNS sieci rozległej
+Note => Notatka
+Helptext WAN DNS save => Musisz zapisać swoje ustawienia przed dodaniem/skasowaniem serwerów DNS
+Preferred Connection Type => Preferowany typ połączenia
+Connection Type => Typ połączenia
+UMTS first => Priorytet UMTS
+UMTS only => Tylko UMTS
+GPRS only => Tylko GPRS
+SIM Configuration => Konfiguracja karty SIM
+PIN Code => Kod PIN
+APN Settings => Ustawienia APN
+Select Network => Wybór sieci
+APN Name => Nazwa APN
 PPP Settings => Ustawienia PPP
 Redial Policy => Rodzaj wydzwaniania
 Connect on Demand => Połączenia na żądanie
 Keep Alive => Podtrzymuj połączenie
 Maximum Idle Time => Max. czas bezczynności
 MTU => MTU
+Helptext LAN IP Address => Adres IP pod którym urządzenie ma być widoczne w sieci lokalnej.
+Helptext Netmask => Maska bitowa podsieci określa które adresy przynależą do sieci lokalnej.
+LAN DNS Servers => Serwery DNS w sieci lokalnej
+Helptext LAN DNS save => Musisz zapisać swoje ustawienia przed dodaniem/skasowaniem serwerów DNS
 
 
 # 'Wireless Configuration' page
-Wireless Configuration => WLAN-Konfiguracja
+#
+# /www/cgi-bin/webif/network-wifi-lan.sh
+Wireless Bridge Configuration => Konfiguracja mostu bezprzewodowego
+Enable/Disable Unbridged Wireless => Włącz/wyłącz odłączenie sieci bezprzewodowe od mostu Ethernet
+Split WLAN From Switch Bridge => Oddziel sieć bezprzewodową od przełącznika
+Enable/Disable => Włącz/wyłącz
+Helptext Enable/Disable => Włączenie oddzieli sieć bezprzewodową od przełącznika w routerze i umieści ją w odrębnej podsieci.
+Wireless LAN Configuration => Konfiguracja sieci bezprzewodowej
+Helptext IP Address => Adres IP pod którym urządzenie ma być widoczne w sieci bezprzewodowej.
+Netmask => Maska sieci
+Helptext Netmask => This bitmask indicates what addresses are included in your Wireless LAN. For those who don't know what a bitmask is, just think of "255" as 'match this part' and "0" as 'any number here'.
+Wifi to LAN Communication => Połączenia bezprzewodowe <-> LAN
+Helptext Wifi to LAN Communication => Zezwala lub zabrania połączeń między urządzeniami podłączonymi bezprzewodowo i siecią lokalną.
+
+# /www/cgi-bin/webif/network-vlan.sh
+#
+Virtual LANs => Podsieci wirtualne (VLANy)
+VLAN Configuration => Konfiguracja podsieci wirtualnych
+VLAN => Podsieci wirtualne (VLANy)
+Helptext VLAN => Podsieć wirtalna jest zbiorem portów które są zmostowane i tworzą coś, co wygląda jak sieć LAN. Porty 0 do 4 to 5 portów z tyłu routera. W zależności od modelu, port 0 lub port 4 jest portem WAN a pozostałe są portami LAN. Port 5 to wewnętrzny port, który łączy główny układ scalony z przełącznikiem.
+Add New VLAN => Dodaj nowy VLAN
+Remove Last VLAN => Usuń ostatni VLAN
+
+# /www/cgi-bin/webif/network-wlan.sh
+#
+Wireless Configuration => Konfiguracja sieci bezprzewodowej (WLAN)
 Wireless Interface => Intefejs WLAN
 WEP Key => Klucz WEP
 Selected WEP Key => Wybrany klucz WEP
-WPA PSK => WPA PSK
+WPA PSK => WPA z kluczem współdzielonym
 ESSID => ESSID
 Channel => Kanał
-RADIUS IP Address => Adres IP RADIUS
+RADIUS IP Address => Adres IP serwera RADIUS
 RADIUS Server Key => Klucz RADIUS
+NAS Package => Pakiet NAS
+Installed => Zainstalowany
+Install NAS Package => Zainstaluj pakiet NAS
 Enabled => Włączone
 Disabled => Wyłączone
 ESSID Broadcast => Rozsyłanie ESSID 
 Show => Pokaż
 Hide => Ukryj
-WLAN Mode => Tryb Radiowy
+WLAN Mode => Tryb pracy
+HelpText WLAN Mode => Tutaj ustawia się tryb pracy sieci bezprzewodowej. Wybranie trybu 'Klient (Most)' nie zmieni ustawień interfejsu sieciowego. Ustawi tylko kilka parametrów sterownika sieci bezprzewodowej, które umożliwią ograniczone mostowanie na interfejsie.
 Access Point => Punkt Dostępowy
 Client => Klient
 Bridge => Most
 Ad-Hoc => Ad-Hoc
+Wireless Mode => Tryb radiowy
+802.11b only => tylko 802.11b
+802.11b + 802.11g => 802.11b + 802.11g (mieszane)
+802.11g => 802.11g
+802.11g with 802.11b deferred => 802.11g z 802.11b opóźnionym
+802.11g (performance) => 802.11g (wydajność)
+802.11g (range - LRS) => 802.11g (zasięg - LRS)
+802.11g (afterburner) => 802.11g ("dopalacz")
+G-mode Protection => Ochrona trybu G
+HelpText G-mode Protection => Włącz to w trybie mieszanym, jeżeli niektóre stacje nie widzą sieci.
 Encryption Settings => Ustawienia kodowania
 Encryption Type => Rodzaj kodowania
 PSK => PSK
 WPA Mode => Tryb WPA
 WPA Algorithms => Algorytm WPA
 WEP Keys => Klucze WEP
+HelpText Encryption Type => Kodowanie WPA (RADIUS) jest wspierane tylko w trybie  Punkt Dostępowy. Kodowanie WPA (PSK) nie pracuje w trybie Ad-Hoc. Klucze WEP nie mogą kończyć się zerem.
+WEP Key 1 => Klucz WEP 1
+WEP Key 2 => Klucz WEP 2
+WEP Key 3 => Klucz WEP 3
+WEP Key 4 => Klucz WEP 4
+Generate 40bit Keys => Wygeneruj klucze 40-bitowe
+Generate 128bit Key => Wygeneruj klucze 128-bitowe
+Passphrase => Słowo kodowe
+PSK => Klucz współdzielony
 
 
 # 'Advanced Wireless Configuration' page
 Advanced Wireless Configuration => Zaawansowane ustawienia sieci bezprzewodowej (WLAN)
 Lazy WDS => "Leniwe" WDS
-WDS Connections => Połączenie WDS
+WDS Connections => Połączenia WDS
+WDS Watchdog Timeout => Czas watchdoga WDS
+Wireless Distribution System => System dystrybucji bezprzewodowej (WDS)
+HelpText Wireless Distribution System => Ta opcja umożliwia użycie wielu punktów dostępowych w celu zwiększenia zasięgu sieci bez konieczności ciągnięcia kabli do punktów dostępowych.
+HelpText WDS Connections => Wpisz tu adresy MAC routera(ów) które mają być podłączone bezprzewodowo. Te routery muszą wspierać "Leniwe WDS" (wiele wspiera), lub też muszą być ręcznie skonfigurowane.
+HelpText Lazy WDS => Kiedy ustawione, umożliwia dowolnemu routerowi zainicjowanie połączenia WDS do tego routera.
 MAC Filter List => Filtrowanie MAC
 Filter Mode => Rodzaj filtra
 Allow => Udzielaj dostępu
-Deny => Odrzucaj dostęp
+Deny => Odmawiaj dostępu
 Set => Ustaw
+HelpText MAC Filter List => Tu możesz wpisać listę adresów MAC dla zezwolenia lub odmowy połączenia do sieci bezprzewodowej, w zależności od ustawienia 'Rodzaj filtra'.
+Isolate WLAN clients => Izoluj klientów sieci WLAN
+Receive Antenna Diversity => Anteny odbiorcze
+Transmit Antenna Diversity => Anteny nadawcze
+Diversity => Obie
 Settings => Ustawienia
 Transmit Power (in mw) => Moc nadajnika (w mW)
 Automatic WDS => Automatyczny WDS
@@ -441,54 +563,85 @@ Left => Lewa
 Fragmentation Threshold (default 2346) => Próg fragmentacji (domyślnie: 2346)
 RTS Threshold (default 2347) => Próg RTS (domyślnie: 2347)
 DTIM Period (default 1) => Okres DTIM (domyślnie: 1)
+Beacon Period (default 100) => Okres rozgłaszania (domyślnie 100)
 Wireless Distance (In Meters) => Największa odległość (w metrach)
-
-# "Hosts" page
-MAC Address => Adres MAC
-Configured Hosts => Konfiguracja Hostów
-DHCP Static => Statyczne DHCP
-Host Names => Lista Hostów
+Wireless Distance => Największa odległość
+Max Associated Clients (default 128) => Maksymalna ilość podłączonych klientów (domyślnie 128)
+Helptext Wireless Distance => Musisz wpisać liczbę będącą podwojoną długością najdłuższego połączenia.
 
 
+# /www/cgi-bin/webif/network-firewall.sh
+#
+No_Target_IP_Port => Adres docelowy IP i numer portu nie mogą jednocześnie być puste
+Application Protocol => Protokół warstwy aplikacji
+Forward => Przekieruj
+Accept => Akceptuj
+Drop => Odrzuć
+Firewall => Zapora
+Firewall Rules => Reguły zapory
+Firewall Configuration => Konfiguracja zapory
+New Rule => Nowa reguła
+Match => Dotyczy
+Target => Cel
+Port => Port
+Protocol => Protokół
+Source IP => IP źródłowe
+Destination IP => IP docelowe
+Source Ports => Port źródłowy
+Destination Ports => Port docelowy
+Forward to => Przekieruj do
+Everything => Wszystko
 Up => W górę
 Down => W dół
 Edit => Edytuj
 Delete => Kasuj
 Save => Zapisz
 Cancel => Anuluj
+firewall_help_general => Tutaj możesz skonfigurować przekierowanie portów i inne funkcje. Jeżeli zamiast tego wolisz ręcznie zmieniać pliki, użyj '/etc/config/firewall', a nie '/etc/firewall.user'. Oba te pliki działają, ale tylko pierwszy jest wspierany na tej stronie.
+Forwarding a port => Przekierowanie portu
+firewall_help_fw_port_example1 => Jeżeli chcesz przekierować port TCP numer 999 TCP z Internetu do lokalnego komputera pod adresem 192.168.1.100, może to wyglądać w ten sposób:
+firewall_help_fw_port_example => Porty docelowe: 999 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cel: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: &lt;puste&gt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protokół: TCP
+Forwarding a port range => Przekierowanie zakresu portów
+firewall_help_fw_portrange => Jeżeli chcesz przekierować porty TCP z zakresu 2000-3000 z Internetu do lokalnego komputera pod adresem 192.168.1.100, może to wyglądać w ten sposób:
+firewall_help_fw_portrange_example => Porty docelowe: 2000-3000 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cel: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: &lt;puste&gt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protokół: TCP
+Forwarding a port to a different port => Przekierowanie portu do innego portu
+firewall_help_fw_example2 =>  Jeżeli chcesz przekierować port TCP numer 8888 z Internetu do 192.168.1.100 na port 80,  może to wyglądać w poniższy sposób:
+firewall_help_fw_port_example2 => Porty docelowe: 8888 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cel: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: 80 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protokół: TCP
 
-Forward => Przekieruj
-Accept => Akceptuj
-Drop => Odrzuć
+# /www/cgi-bin/webif/network-dhcpiface.sh
+#
+DHCP Interfaces => Interfejsy DHCP
+Name => Nazwa
+Interface => Interfejs
+Action => Akcja
+Modify => Zmień
+DHCP Server For => Serwer DHCP dla
+DHCP Service => Usługa DHCP
+DHCP Start => Początek zakresu DHCP
+DHCP Num => Ilość adresów DHCP
+DHCP Lease Minutes => Czas dzierżawy (w minutach)
+HelpText DHCP_Start => NIE wpisuj tu adresu IP! Jeżeli adresem IP tego interfejsu jest 192.168.1.1 i chcesz aby adresy dla klientów DHCP zaczynały się od 192.168.1.100 powinieneś wpisać tu po prostu '100'.
 
-Firewall => Firewall
-Firewall Rules => Reguły Firewalla
-Firewall Configuration => Konfiguracja Firewalla
+# /www/cgi-bin/webif/network-dhcpsettings.sh
+#
+DHCP Configuration => Konfiguracja DHCP
+Cache Size => Wielkość pamięci podręcznej
+No Hosts => Nie używaj pliku hosts
+No Reg Cache => No Reg Cache
+Strict Order => Strict Order
+Log Queries => Loguj zapytania
+No Resolv => Nie używaj resolv
+Domain => Domena
+Lease Max => Maksymalna dzierżawa
+Read Ethers => Użyj pliku ethers
 
-New Rule => Nowa reguła
-Match => Dotyczy
-Target => Cel
-Port => Port
-
-Protocol => Protokół
-Source IP => IP źródłowe
-Destination IP => IP docelowe
-Source Ports => Port źródłowy
-Destination Ports => Port docelowy
-
-Forward to => Przekieruj do
-Port => Port
 
 Helptext ESSID => Nazwa sieci radiowej
 Helptext DNS save => Musisz zapisać ustawienia przed dodaniem/usunięciem serwera DNS
 
 Operation mode => Wybór trybu pracy urządzenia.
-Encryption Type => 'WPA (RADIUS)' działa tylko w trybie Access Point <br /> 'WPA (PSK)' nie działa w trybie Ad-Hoc. 
-Settings => Ustawienia numeru IP dla DHCP i PPTP jest niekonieczne. Jeżeli je ustawisz, będą używane jako domyślne w przypadku , gdy serwer DHCP będzie niedostępny.
 Idle Time => Czas w sekundach bezruchu internetowego, po upływie których następuje rozłączenie (tylko Połączenie na żądanie)
 Redial Timeout => Liczba sekund, które trzeba odczekać po tym, jak nie otrzymałeś odpowiedzi od providera (przed ponowną próbą podłączenia)
-
-
 
 ## new format
 ## you are free to translate the part between "new format comments"
@@ -517,19 +670,19 @@ info_check_daily_text => Włącz sprawdzanie dziennych wersji przy sprawdzaniu n
 
 
 ## network hosts
-network_hosts_host_IP_invalid => Host's IP Address
-network_hosts_Host_Name => Hostname
+network_hosts_host_IP_invalid => Nieprawidłowy adres IP hosta
+network_hosts_Host_Name => Nazwa hosta
 network_hosts_MAC => Adres MAC
-network_hosts_static_IP_invalid => Static IP Address
-network_hosts_Configured_Hosts => Konfiguracja Hostów
-network_hosts_Host_Names => Lista Hostów
+network_hosts_static_IP_invalid => Nieprawidłowy statyczny adres IP
+network_hosts_Configured_Hosts => Skonfigurowane hosty
+network_hosts_Host_Names => Lista hostów
 network_hosts_IP => Adres IP
 network_hosts_Remove => Usuń
 network_hosts_Add => Dodaj
-network_hosts_Host_Names_helptext => The file /etc/hosts is used to look up the IP address of a device connected to a computer network. The hosts file describes a many-to-one mapping of device names to IP addresses. When accessing a device by name, the networking system attempts to locate the name within the hosts file before accessing the Internet domain name system.
+network_hosts_Host_Names_helptext => Plik /etc/hosts jest używany do odnajdowania adresów IP urządzeń podłączonych do sieci komputerowej. Plik hosts opisuje mapowanie wiele-do-jednego nazw urządzeń na adresy IP. Przy dostępie w/g nazwy urządzenia, system sieciowy próbuje zlokalizować nazwę w pliku hosts zanim użyje systemu nazw Internetu (DNS).
 network_hosts_DHCP_Static_IPs => Statyczne adresy IP (dla DHCP)
 network_hosts_Static_IPs => Statyczne adresy IP
-network_hosts_Static_IPs_helptext => The file /etc/ethers contains database information regarding known 48-bit ethernet addresses of hosts on an Internetwork. The DHCP server uses the matching IP address instead of allocating a new one from the pool for any MAC address listed in this file.
+network_hosts_Static_IPs_helptext => Plik /etc/ethers zawiera bazę danych o znanych 48-bitowych adresach Ethernet komputerów w podsieci. Serwer DHCP używa pasującego adresu IP zamiast alokować nowy z puli, dla dowolnego adresu MAC znajdującego się w pliku.
 network_hosts_Active_Leases => Aktywne dzierżawy DHCP
 network_hosts_Name => Nazwa
 network_hosts_Expires => Wygasa za
@@ -538,7 +691,104 @@ network_hosts_min => min
 network_hosts_sec => sek
 network_hosts_No_leases => Brak aktywnych dzierżaw DHCP.
 Network => Sieć
-Hosts => Konfiguracja Hostów
+Hosts => Konfiguracja hostów
+MAC Address => Adres MAC
+Configured Hosts => Skonfigurowane hosty
+DHCP Static => Statyczne DHCP
+Host Names => Lista hostów
+
+# /www/cgi-bin/webif/network-services.sh
+#
+UPnP Configuration => Konfiguracja UPnP
+Installing => Instaluję
+Removing => Usuwam
+Remove miniupnpd => Usuń miniupnpd
+Remove linux-igd => Usuń linux-igd
+Upgrade UPNPd => Zainstaluj świeżą wersję UPnPd
+Please wait => Proszę czekać
+Completed successfully => Zakończono pomyślnie
+Failed to install => Instalacja nieudana
+UPNP Daemon => Demon UPnP
+WAN Upload (bits/sec) => prędkość do WAN (bitów/sek)
+kilobits => kilobitów
+WAN Download (bits/sec) => prędkość z WAN (bitów/sek)
+WAN Speeds => Prędkości WAN
+HelpText upnpd_wan_speeds => Ustaw swoje prędkości WAN tutaj, w kilobitach. This is for reporting to upnp clients that request it only.
+Log Debug Output => Loguj wyjście diagnostyczne
+Remove UPNPd => Usuń UPnPd
+HelpText remove_upnpd_help => Jeżeli masz problemy możesz usunąć bieżącego demona UPNP i wypróbować drugiego aby sprawdzić, czy będzie działał lepiej.
+miniupnpd => miniupnpd
+linux-igd => linux-igd
+Which UPNPd to choose
+HelPText install_upnpd_help => Są dwa demony UPNP do wyboru: miniupnpd i linux-igd. Wypróbuj miniupnpd najpierw, ale jeżeli nie będzie poprawnie działał, usuń pakiet i wypróbuj linux-igd.
+UPNP => Uniwersalne Plug'n'Play
+Install => Instaluj
+Which UPNPd to choose => Którego demona UPnP wybrać
+
+
+# /www/cgi-bin/webif/network-qos.sh
+#
+QOS Configuration => Konfiguracja jakości usług (QoS)
+Installing Nbd's QoS scripts => Instaluję skrypty QoS od Nbd
+qos_found_rudys => Znaleziono zainstalowane skrypty QoS Rudy'ego. Bądź pewien, że odistalowałeś te skrypty przed użyciem nowego pakietu skrypty-qos.
+Port Listing => Lista portów
+qos_validation_failed => Walidacja jednego lub więcej pól nieudana! Zmiany nie zostaną zapisane.
+WAN Download Speed => Prędkość z WAN do LAN
+WAN Upload Speed => Prędkość z LAN do WAN
+QoS Options => Opcje QoS
+QoS Service => Usługa QoS
+QoS Overhead Calculation => Kalkulacja narzutu QoS
+qos_overhead_enabled => Włączona
+qos_overhead_disabled => Wyłączona
+Maximum Upload/Download => Maksymalne pasmo do/z WAN
+HelpText Maximum Upload => Maksymalne stałe prędkości do i z WAN, w kilobitach.
+Show Advanced Rules => Pokaż zaawansowane reguły
+qos_adv_enabled => Włączone
+qos_adv_disabled => Wyłączone
+Advanced => Zaawansowane
+HelpText Advanced => Normalni użytkownicy po prostu używają formularza pod spodem do skonfigurowania QoS. Niektórzy mogą jednak potrzebować dostępu do bardziej zaawansowanych ustawień. Jako alternatywę, możesz <a href="./system-editor.sh?path=/etc/config&amp;edit=qos">ręcznie edytować konfigurację</a
+Dest. IP => IP docelowe
+QoS Traffic Classification Rules => Reguły klasyfikacji ruchu QoS
+Group => Grupa
+PktSize => Wielkość pakietu
+Mark => Znacznik
+new rule => nowa reguła
+TCP Flags => Flagi TCP
+Packet Size => Wielkość pakietu
+QoS Rule Edit => Edycja reguł QoS
+Classify As => Zaklasyfikuj jako
+Bulk => Bulk
+Normal => Normalny
+Priority => Priorytetowy
+Express => Ekspresowy
+qos_prot_tcp => TCP
+qos_prot_udp => UDP
+qos_prot_icmp => ICMP
+Layer7 => Warstwa 7
+Layer-7 => Warstwa-7
+Port range => Zakres portów
+Ports => Porty
+delete => kasuj
+edit => edytuj
+down => w dół
+up => w górę
+Peer-2-Peer => Peer-2-Peer
+qos_p2p_none => Żaden
+qos_p2p_all => Wszystkie
+qos_p2p_bittorrent => bitTorrent
+qos_p2p_dc => DirectConnect
+qos_p2p_ed2k => eDonkey
+qos_p2p_gnutella => Gnutella
+qos_p2p_kazaa => Kazaa
+HelPText qos_rule_edit_help => You need only set fields you wish to match traffic on. Pozostałe pozastaw puste.
+HelpText layer7_help => Filtry Warstwy-7 są używane do klasyfikowania rodzajów ruchu sieciowego na podstawie inspekcji zawartości. Wiele filtrów warstwy-7 jest dostępne w sieci www, ale nie wszystkie są efektywne czy dokładne. By zainstalować więcej filtrów, ściągnij je i umieść w /etc/l7-protocols.
+HelpText p2p_help => Różnica pomiędzy polem the Peer-2-Peer a filtrami Warstwy-7 polega po prostu na tym, że opcje Peer-2-Peer używają specjalnego narzędzia, ipp2p, by dopasować ruch popularnych protokołów p2p. Najczęściej są bardziej skuteczne niż filtry Warstwy-7.
+qos_no_compatible => Nie znaleziono kompatybilnego pakietu QOS.
+QoS Packages => Pakiety QoS
+qos_nbds => Pakiet skryptów QoS od Nbd (rekomendowany)
+qos_nbds_install => Instaluj
+
+
 
 ## 'Status basic'
 # translations from file /www/cgi-bin/webif/status-basic.sh
