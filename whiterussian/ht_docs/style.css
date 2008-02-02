@@ -19,7 +19,7 @@ em{display:block;font-weight:bold}
 h1,h2,h3{color:#666699}
 #header { font-style: oblique; height: 6em;}
 #header h1 span {	font-size: 200%;}
-
+fieldset { border: 0; }
 
 /* horizontal margins */
 p,li,dt,em,dd,h4{margin-left:4em}
