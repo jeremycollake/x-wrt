@@ -79,16 +79,6 @@ Wireless => WLAN
 Advanced Wireless => Zaawansowane WLAN
 Hosts => Konfiguracja Hostów
 
-
-# 'About' page
-Copyright => Prawa autorskie
-
-GPL_Text => Ten program jest wolnym oprogramowaniem; możesz go rozprowadzać i/lub <br>modyfikować zgodnie z regułami licencji GNU GPL,<br>jak opublikowała je Fundacja Wolnego Oprogramowania (Free Software Foundation); w wersji 2 <br > Licencji, lub (w/g Twojego wyboru) dowolnej późniejszej wersji. 
-Contributions by => Współpracownicy
-Layout based on => Layout bazuje na
-by => by
-
-
 No config change. => Nie dokonano zmian.
 Config discarded. => Zmiany zostały anulowane.
 Config changes: => Aktualna konfiguracja:
@@ -124,6 +114,8 @@ graph_if_Gbps => Gbps
 graph_if_KB_s => KB/s
 graph_if_MB_s => MB/s
 graph_if_GB_s => GB/s
+
+graphs_if_Traffic => Ruch
 
 # 'Router Info' page
 Firmware Version => Wersja oprogramowania systemowego
@@ -450,6 +442,9 @@ Redial Policy => Rodzaj wydzwaniania
 Connect on Demand => Połączenia na żądanie
 Keep Alive => Podtrzymuj połączenie
 Maximum Idle Time => Max. czas bezczynności
+Redial Timeout => Czas do ponownego połączenia
+Helptext Idle Time => Czas w sekundach bez ruchu internetowego, który router ma odczekać przed odłączeniem od Internetu (tylko przy Połączeniu na żądanie)
+Helptext Redial Timeout => Liczba sekund, które trzeba odczekać po tym, jak nie otrzymałeś odpowiedzi od dostawcy Internetu (przed ponowną próbą podłączenia)
 MTU => MTU
 Helptext LAN IP Address => Adres IP pod którym urządzenie ma być widoczne w sieci lokalnej.
 Helptext Netmask => Maska bitowa podsieci określa które adresy przynależą do sieci lokalnej.
@@ -460,6 +455,7 @@ Helptext LAN DNS save => Musisz zapisać swoje ustawienia przed dodaniem/skasowa
 # 'Wireless Configuration' page
 #
 # /www/cgi-bin/webif/network-wifi-lan.sh
+#
 Wireless Bridge Configuration => Konfiguracja mostu bezprzewodowego
 Enable/Disable Unbridged Wireless => Włącz/wyłącz odłączenie sieci bezprzewodowe od mostu Ethernet
 Split WLAN From Switch Bridge => Oddziel sieć bezprzewodową od przełącznika
@@ -599,14 +595,14 @@ Save => Zapisz
 Cancel => Anuluj
 firewall_help_general => Tutaj możesz skonfigurować przekierowanie portów i inne funkcje. Jeżeli zamiast tego wolisz ręcznie zmieniać pliki, użyj '/etc/config/firewall', a nie '/etc/firewall.user'. Oba te pliki działają, ale tylko pierwszy jest wspierany na tej stronie.
 Forwarding a port => Przekierowanie portu
-firewall_help_fw_port_example1 => Jeżeli chcesz przekierować port TCP numer 999 TCP z Internetu do lokalnego komputera pod adresem 192.168.1.100, może to wyglądać w ten sposób:
-firewall_help_fw_port_example => Porty docelowe: 999 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cel: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: &lt;puste&gt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protokół: TCP
+firewall_help_fw_port_example1 => Jeżeli chcesz przekierować port TCP numer 999  z Internetu do lokalnego komputera pod adresem 192.168.1.100, może to wyglądać w ten sposób:
+firewall_help_fw_port_example => Porty docelowe: 999 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; IP docelowe: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: &lt;puste&gt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protokół: TCP
 Forwarding a port range => Przekierowanie zakresu portów
 firewall_help_fw_portrange => Jeżeli chcesz przekierować porty TCP z zakresu 2000-3000 z Internetu do lokalnego komputera pod adresem 192.168.1.100, może to wyglądać w ten sposób:
-firewall_help_fw_portrange_example => Porty docelowe: 2000-3000 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cel: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: &lt;puste&gt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protokół: TCP
+firewall_help_fw_portrange_example => Porty docelowe: 2000-3000 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; IP docelowe: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: &lt;puste&gt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protokół: TCP
 Forwarding a port to a different port => Przekierowanie portu do innego portu
 firewall_help_fw_example2 =>  Jeżeli chcesz przekierować port TCP numer 8888 z Internetu do 192.168.1.100 na port 80,  może to wyglądać w poniższy sposób:
-firewall_help_fw_port_example2 => Porty docelowe: 8888 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Cel: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: 80 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protokół: TCP
+firewall_help_fw_port_example2 => Porty docelowe: 8888 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; IP docelowe: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: 80 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protokół: TCP
 
 # /www/cgi-bin/webif/network-dhcpiface.sh
 #
@@ -640,8 +636,6 @@ Helptext ESSID => Nazwa sieci radiowej
 Helptext DNS save => Musisz zapisać ustawienia przed dodaniem/usunięciem serwera DNS
 
 Operation mode => Wybór trybu pracy urządzenia.
-Idle Time => Czas w sekundach bezruchu internetowego, po upływie których następuje rozłączenie (tylko Połączenie na żądanie)
-Redial Timeout => Liczba sekund, które trzeba odczekać po tym, jak nie otrzymałeś odpowiedzi od providera (przed ponowną próbą podłączenia)
 
 ## new format
 ## you are free to translate the part between "new format comments"
@@ -731,6 +725,8 @@ Which UPNPd to choose => Którego demona UPnP wybrać
 QOS Configuration => Konfiguracja jakości usług (QoS)
 Installing Nbd's QoS scripts => Instaluję skrypty QoS od Nbd
 qos_found_rudys => Znaleziono zainstalowane skrypty QoS Rudy'ego. Bądź pewien, że odistalowałeś te skrypty przed użyciem nowego pakietu skrypty-qos.
+qos_enabled => Włączona
+qos_disabled => Wyłączona
 Port Listing => Lista portów
 qos_validation_failed => Walidacja jednego lub więcej pól nieudana! Zmiany nie zostaną zapisane.
 WAN Download Speed => Prędkość z WAN do LAN
@@ -788,6 +784,46 @@ QoS Packages => Pakiety QoS
 qos_nbds => Pakiet skryptów QoS od Nbd (rekomendowany)
 qos_nbds_install => Instaluj
 
+# /www/cgi-bin/webif/vpn-openvpn.sh
+#
+OpenVPN => OpenVPN
+vpn_openvpn_Installing_package => Instaluję pakiet OpenVPN...
+vpn_openvpn_warn => Wirtualna sieć prywatna (VPN) wymaga instalacji pakietu OpenVPN:
+vpn_openvpn_install_package => Zainstaluj pakiet OpenVPN
+Start VPN Connection => Uruchom połączenie VPN
+Connection Settings => Ustawienia połączenia
+Server Address => Adres serwera
+Server Port (default: 1194) => Port serwera (domyślnie: 1194)
+Authentication Method => Metoda autentykacji
+Preshared Key => Klucz współdzielony
+Certificate (PKCS12) => Certyfikat (PKCS12)
+Certificate (PEM) => Certyfikat (PEM)
+Authentication => Autentykacja
+Preshared Key Status => Status klucza współdzielonego
+No Keyfile uploaded yet! => Jeszcze nie załadowano klucza!
+Upload Successful => Załadowano pomyślnie
+Found Installed Keyfile => Znaleziono zainstalowany plik klucza
+Upload Preshared Key => Załaduj klucz współdzielony
+Certificate Status => Status certyfikatu
+No Certificate uploaded yet! => Jeszcze nie załadowano certyfikatu!
+Found Installed Certificate. => Znaleziono zainstalowany certyfikat.
+Upload PKCS12 Certificate => Załaduj certyfikat PKCS12
+Root CA certificate uploaded yet! => Jeszcze nie załadowano głównego certyfikatu CA!
+Upload Root CA certificate => Załaduj główny certyfikat CA
+No client certificate uploaded yet! => Jeszcze nie załadowano certyfikatu klienta!
+Upload Client Certificate => Załaduj certyfikat klienta
+No client key uploaded yet! => Jeszcze nie załadowano klucza klienta!
+Found installed client key. => Znaleziono zainstalowany klucz klienta.
+Upload Client Key => Załaduj klucz klienta
+
+# /www/cgi-bin/webif/vpn-pptp.sh
+#
+Peername => Nazwa węzła
+PPTP Client => Klient PPTP
+PPTP Client Connection => Połączenie klienta PPTP
+PPTP Client Connections => Połączenia klienta PPTP
+PPTPD Server => Serwer PPTP
+PPTP Server => Serwer PPTP
 
 
 ## 'Status basic'
@@ -812,6 +848,7 @@ Helptext Mount Usage => Pokazuje ilości całkowitego i użytego miejsca w zamon
 
 ## /www/cgi-bin/webif/status-processes.sh
 #
+Processes => Procesy
 status_processes_kill_error => Błąd w
 status_processes_Running_Processes => Działające procesy
 status_processes_Stop_Refreshing => Zatrzymaj odświeżanie
@@ -931,6 +968,38 @@ status_leases_ethers_title => Baza danych par adresów Ethernet / adres IP (/etc
 status_leases_ethers_empty => Plik /etc/ethers nie zawiera żadnej pary adres Ethernet / adres IP.
 status_leases_no_ethers => Plik /etc/ethers nie istnieje.
 
+# /www/cgi-bin/webif/status-connection.sh
+#
+Netstat => Netstat
+Routing Table => Tablica routingu
+Router Listening Ports => Nasłuchujące porty routera
+
+# /www/cgi-bin/webif/status-iptables.sh
+#
+status_iptables_IPTStatus => Stan tablic iptables
+status_iptables_Chain => Łańcuch
+status_iptables_policy => polityka
+status_iptables_packets => pakietów
+status_iptables_bytes => bajtów
+status_iptables_references => odniesień
+status_iptables_col_options => opcje
+status_iptables_Target_Filter => Cel Filtr
+status_iptables_Target_NAT => Cel NAT
+status_iptables_Target_Mangle => Cel Zmiana
+status_iptables_Target_Raw => Cel surowy
+
+# /www/cgi-bin/webif/status-qos.sh
+#
+Quality of Service Statistics => Statystyki jakości usług (QoS)
+Incoming Traffic => Ruch przychodzacy
+Outgoing Traffic => Ruch wychodzący
+Class => Klasa
+&nbsp;Show raw statistics&nbsp; => Pokaż surowe statystyki
+QoS Packets | Raw Stats => Pakiety QoS surowe
+no_qos => Nie znaleziono uruchomionego pakietu QoS a więc nie można pokazać statystyk! Rekomendujemy instalację skryptów QoS od Nbd.
+qos_scripts_disabled => Pakiet skryptów QoS nieaktywny. Przejdź do<a href="./network-qos.sh">strony QoS</a> by zainstalować/włączyć.
+Packets => Pakietów
+Bytes => Bajtów
 
 ## status-usb.sh
 status_usb_umount_error_in => Błąd w
@@ -990,11 +1059,26 @@ status_wwaninfo_Battery_Status => Stan baterii
 status_wwaninfo_Status => Stan
 status_wwaninfo_Capacity => Pojemność
 
+## status-pppoe.sh
+#
+PPPoE Status => Status PPPoE
+Reconnect => Połącz ponownie
+Manual Control: => Ręczne sterowanie:
+Disconnect => Rozłącz
+Connect => Połącz
+Ip Addr: => Adres IP:
+Syslog: pppd (Last 500 lines) => Log systemowy: pppd (ostatnie 500 linii)
+Ifconfig ppp0 => Ifconfig ppp0
+
+
 ## status-pptp.sh
 #
 PPTP Status => Stan połączeń PPTP
 PPTP Client => Klient PPTP
 PPTP Server => Serwer PPTP
+pptp client disabled. => klient PPTP wyłączony
+pptp server disabled. => serwer PPTP wyłączony
+
 
 ## status-openvpn.sh
 #
@@ -1016,6 +1100,24 @@ status_openvpn_OpenVPN_not_running => OpenVPN nie uruchomiony
 status_openvpn_start_now => [uruchom]
 status_openvpn_OpenVPN_disabled => OpenVPN jest wyłączony
 
+## status-asterisk.sh
+#
+Asterisk Simple Managment => Uproszczone zarządzanie Asteriskiem
+Asterisk is not running. => Asterisk nie jest uruchomiony.
+Version => Wersja
+SIP/Peers => SIP/Węzły
+SIP/Channels => SIP/Kanały
+SIP/Registry => SIP/Rejestr
+IAX/Peers => IAX/Węzły
+IAX/Channels => IAX/Kanały
+IAX/Registry => IAX/Rejestr
+Global/Modules => Globalne/Moduły
+Custom/Command => Użytkownika/Polecenie
+.conf Editor => Edytor konfiguracji
+Reload => Przeładuj
+Reloading... => Trwa przeładowywanie
+
+
 ## status-diag.sh
 #
 Diagnostics => Diagnostyka
@@ -1024,16 +1126,92 @@ Ping => Ping
 TraceRoute => Traceroute
 Please wait for output of => Proszę poczekać na wyniki
 
+## log-setup.sh
+#
+Syslog Settings => Ustawienia logu systemowego
+syslog Settings => Ustawienia logu systemowego
+Remote host => Zdalny komputer
+Remote Port => Zdalny port
+Minutes Between Marks => Czas między znacznikami (minuty)
+Log Size => Wielkość logu
+Remote Syslog => Zdalny log systemowy
+Server IP Address => Adres IP serwera
+HelpText Remote Syslog => Adres IP i port komputera, na który będą wysyłane zdarzenia logu systemowego. Pozostaw puste by wyłączyć zdalne logowanie zdarzeń.
+Server Port => Port
+Syslog Marks => Znaczniki logu systemowego
+HelpText Syslog Marks => Okresowo wysyła znaczniki do logu. Ten parametr oznacza czas w minutach pomiędzy znacznikami. Wartość 0 oznacza brak znaczników.
+Local Log => Lokalny log systemowy
+Log type => Typ logu
+Circular => Cykliczny
+File => Plik
+HelpText Log Type => Decyduje czy twój log systemowy będzie przechowywany w cyklicznym buforze pamięci czy w pliku. Pliki są przechowywane systemie plików w pamięci i znikają w przypadku restartu routera.
+Log File => Plik logu
+HelpText Log File => Ścieżka i nazwa pliku dla pliku logu. Może wskazywać na dowolny zapisywalny system plików. UWAGA: NIE UŻYWAJ systemu plików JFFS , ponieważ log systemowy zapisuje DUŻE ilości informacji. Możesz użyć /tmp albo innego systemu plików na zewnętrznym urządzeniu.
+Log Size => Wielkość logu
+HelpText Log Size => Wielkość logu systemowego w tysiącach bajtów. Uważnie ustawiaj wielkość bufora cyklicznego, ponieważ jest on przechowywany w pamięci głównej.
+
+## log-read.sh
+#
+Message Prefix => Komunikaty
+HelpText Browser_Frames => Jeżeli Twoja przeglądarka nie obsługuje ramek,<br>przejdź tutaj
+View Syslog => Zobacz log systemowy
+
+
+## log-dmesg.sh
+log_dmesg_Kernel_Ring_Buffer => Bufor cykliczny jądra
+log_dmesg_View_Kernel_Ring_Buffer => Zobacz log jądra
+
+## log-browse.sh
+#
+Firewall Log View => Log zapory sieciowej
+Netfilter Log => Log zapory
+Filter => Filtr
+All => Wszystkie
+Prefix => Prefiks
+Source Port => Port źródłowy
+Destination Port => Port docelowy
+Type => Typ
+Listing => Lista
+Date => Data
+Proto => Protokół
+Dest. Port => Port docelowy
+
+File Editor => Edytor plików
 
 ## system-ipkg.sh
+Packages => Pakiety
 system_ipkg_installedpackages => Zainstalowane pakiety
 system_ipkg_updatelists => Aktualizuj liste pakietów
 system_ipkg_Uninstall => Usuń
 system_ipkg_Install => Instaluj
 
 
-# untranslated:
-qos_enabled => Właczone
-qos_adv_enabled => Właczone
-qos_disabled => Wyłączone
-qos_adv_disabled => Wyłączone
+# /www/cgi-bin/webif/logout.sh
+#
+Logout => Wyloguj
+logout_close_window => Musisz zamknąć przeglądarkę by się wylogować!
+logout_explanation => Ponieważ dane autentykacji "podstawowej" są przechowywane w pamięci podręcznej przeglądarki, nie jest możliwe automatyczne wylogowanie użytkownika. Musisz zamknąć okna przeglądarki lub, w przypadku Firefox'a, 'Wyczyścić dane prywatne', aby zmusić ją aby "zapomniała" dane które wpisałeś. Prawdopodobnie przejdziemy na autentykację opartą o "ciasteczka" z powodu tej słabości autentykacji "podstawowej", która jest używana powszechnie w oprogramowaniach systemowych.
+
+# 'About' page
+Copyright => Prawa autorskie
+
+GPL_Text => Ten program jest wolnym oprogramowaniem; możesz go rozprowadzać i/lub modyfikować zgodnie z regułami licencji GNU GPL, tak jak opublikowała je Fundacja Wolnego Oprogramowania (Free Software Foundation); w wersji 2  Licencji, lub (w/g Twojego wyboru) dowolnej późniejszej wersji. 
+Contributions by => Współpracownicy
+Layout based on => Layout bazuje na
+by => przez
+
+X-Wrt Extensions => Rozszerzenia X-Wrt
+Primary Developers => Główni deweloperzy
+sorted_by_name => w porządku nazwisk
+Contributing Developers => deweloperzy
+Other Contributions => inni
+Monowall_Credit => Wykresy użycia CPU i ruchu sieciowego oparte na kodzie z 
+Cova_Credit => Niektóre strony zostały zaadaptowane z kodu napisanego przez
+and => i
+CSS_Layout => Oryginalny układ CSS oparty na
+UCI facilitating code => kod UCI
+Translator_Credit => Tłumaczenie którego właśnie używasz zostało stworzone przez (<a href="mailto:laurentp@wp.pl">Wawrzyniec Piotrzkowski</a>).
+zephyr_Text => Temat Zephyr na licencji MIT.
+This device is running => Na tym urządzeniu działa
+or a close derivative => lub jego bliska pochodna
+Webif&sup2; Credits => Podziękowania Webif&sup2;
