@@ -7,7 +7,7 @@ lang => Polski
 big_warning => OSTRZEŻENIE
 page_incomplete => Ta strona jest niekompletna i może działać nieprawidłowo, albo nawet wcale.
 page_untested => Strona nie została przetestowana i może nie działać prawidłowo.
-page_untested_kamikaze => Ta strona nie była odświeżona ani sprawdzona pod wersją Kamikaze oprogramowania.
+page_untested_kamikaze => Ta strona nie była odświeżona ani sprawdzona pod wersją Kamikaze oprosygramowania.
 features_require_package => Funkcjonalności na tej stronie wymagają pakietu
 Settings saved => Ustawienia zostały zapisane
 Settings not saved => Ustawienia nie zostały zapisane
@@ -86,6 +86,7 @@ Updating config... => Aktualizacja konfiguracji...
 
 # 'Graphs'
 #
+Graphs => Wykresy
 graphs_cpu_CPU_Usage => Zużycie CPU
 graphs_svg_required => Wymagane wsparcie dla SVG.
 graphs_if_Traffic_of_Interface => Ruch na interfejsie:
@@ -100,9 +101,9 @@ graph_if_Switch_to_bytes_s => Przełącz na bajty
 graph_if_Autoscale_follow => Autoskalowanie (podążaj)
 graph_if_Cannot_get_data_iface => Nie można uzyskać informacji o interfejsie
 graph_Collecting_initial_data => Pobieranie danych początkowych, proszę czekać...
-graph_No_URL_getURL => No URL for getURL
-graph_No_callback_function => No callback function for getURL
-graph_Both_undefined => Both getURL and XMLHttpRequest are undefined
+graph_No_URL_getURL => Brak URL dla getURL
+graph_No_callback_function => Brak fukcji callback dla getURL
+graph_Both_undefined => Oba getURL i XMLHttpRequest są niezdefiniowane
 graph_if_follow => podążaj
 graph_if_bits => bity
 graph_if_up => góra
@@ -114,7 +115,6 @@ graph_if_Gbps => Gbps
 graph_if_KB_s => KB/s
 graph_if_MB_s => MB/s
 graph_if_GB_s => GB/s
-
 graphs_if_Traffic => Ruch
 
 # 'Router Info' page
@@ -286,8 +286,8 @@ system_ipkg_addrepo => Dodaj repozytorium
 system_ipkg_currentrepos => Bieżące repozytoria
 Add Repository => Dodaj repozytorium
 HelpText Add Repository => Repozytoria to serwery zawierające pakiety które mogą być zainstalowane w systemie OpenWRT. Dodanie nowych powoduje, że staną się dostępne nowe pakiety.
-Backports Tip => Backports Tip
-HelpText Backports Tip => For a much larger assortment of packages, see if there is a backports repository available for your firmware.
+Backports Tip => Podpowiedź
+HelpText Backports Tip => Aby mieć dostęp do dużej ilości pakietów, sprawdź, czy jest dostępne repozytorium pakietów "uwstecznionych" dla Twojego oprogramowania systemowego.
 system_ipkg_installfromurl => Zainstaluj pakiet z adresu URL
 system_ipkg_packageurl => Adres URL pakietu
 Install Package => Instaluj pakiet
@@ -384,6 +384,7 @@ Firmware Image => Obraz oprogramowania systemowego
 HelpText Firmware_Image => Możesz wybrać dowolny prawidłowy plik z obrazem w formacie BIN lub TRX.
 
 # 'Reboot'
+Reboot => Restart
 Yes, really reboot now => Tak, uruchom ponownie teraz
 Rebooting now => Uruchamiam ponownie
 reboot_wait => Proszę poczekać około
@@ -457,7 +458,7 @@ Helptext LAN DNS save => Musisz zapisać swoje ustawienia przed dodaniem/skasowa
 # /www/cgi-bin/webif/network-wifi-lan.sh
 #
 Wireless Bridge Configuration => Konfiguracja mostu bezprzewodowego
-Enable/Disable Unbridged Wireless => Włącz/wyłącz odłączenie sieci bezprzewodowe od mostu Ethernet
+Enable/Disable Unbridged Wireless => Włącz/wyłącz odłączenie sieci bezprzewodowej od mostu Ethernet
 Split WLAN From Switch Bridge => Oddziel sieć bezprzewodową od przełącznika
 Enable/Disable => Włącz/wyłącz
 Helptext Enable/Disable => Włączenie oddzieli sieć bezprzewodową od przełącznika w routerze i umieści ją w odrębnej podsieci.
@@ -523,13 +524,14 @@ WEP Key 1 => Klucz WEP 1
 WEP Key 2 => Klucz WEP 2
 WEP Key 3 => Klucz WEP 3
 WEP Key 4 => Klucz WEP 4
-Generate 40bit Keys => Wygeneruj klucze 40-bitowe
-Generate 128bit Key => Wygeneruj klucze 128-bitowe
+generate_wep_40 => Wygeneruj klucze 40-bitowe
+generate_wep_128 => Wygeneruj klucze 128-bitowe
 Passphrase => Słowo kodowe
 PSK => Klucz współdzielony
 
 
-# 'Advanced Wireless Configuration' page
+## 'Advanced Wireless Configuration' page
+#
 Advanced Wireless Configuration => Zaawansowane ustawienia sieci bezprzewodowej (WLAN)
 Lazy WDS => "Leniwe" WDS
 WDS Connections => Połączenia WDS
@@ -550,6 +552,7 @@ Transmit Antenna Diversity => Anteny nadawcze
 Diversity => Obie
 Settings => Ustawienia
 Transmit Power (in mw) => Moc nadajnika (w mW)
+(in mw) => (w mW)
 Automatic WDS => Automatyczny WDS
 Preamble (Default: Long) => Preambuła (domyślnie: długa)
 Long => Długa
@@ -557,13 +560,27 @@ Short => Krótka
 Right => Prawa
 Left => Lewa
 Fragmentation Threshold (default 2346) => Próg fragmentacji (domyślnie: 2346)
+(default 2346) => (domyślnie: 2346)
+Fragmentation Threshold => Próg fragmentacji
 RTS Threshold (default 2347) => Próg RTS (domyślnie: 2347)
+(default 2347) => (domyślnie: 2347)
+RTS Threshold => Próg RTS
 DTIM Period (default 1) => Okres DTIM (domyślnie: 1)
+(default 1) => (domyślnie: 1)
+DTIM Period => Okres DTIM
 Beacon Period (default 100) => Okres rozgłaszania (domyślnie 100)
+(default 100) => (domyślnie 100)
+Beacon Period => Okres rozgłaszania
 Wireless Distance (In Meters) => Największa odległość (w metrach)
+(In Meters) => (w metrach)
 Wireless Distance => Największa odległość
 Max Associated Clients (default 128) => Maksymalna ilość podłączonych klientów (domyślnie 128)
+(default 128) => (domyślnie 128)
+Max Associated Clients => Maksymalna ilość podłączonych klientów
 Helptext Wireless Distance => Musisz wpisać liczbę będącą podwojoną długością najdłuższego połączenia.
+Automatic => Auto
+Preamble => Preambuła
+(Default: Long) => (domyślnie: długa)
 
 
 # /www/cgi-bin/webif/network-firewall.sh
@@ -617,6 +634,9 @@ DHCP Start => Początek zakresu DHCP
 DHCP Num => Ilość adresów DHCP
 DHCP Lease Minutes => Czas dzierżawy (w minutach)
 HelpText DHCP_Start => NIE wpisuj tu adresu IP! Jeżeli adresem IP tego interfejsu jest 192.168.1.1 i chcesz aby adresy dla klientów DHCP zaczynały się od 192.168.1.100 powinieneś wpisać tu po prostu '100'.
+Options For => Opcje dla
+Parameters => Parametry
+Value => Wartość
 
 # /www/cgi-bin/webif/network-dhcpsettings.sh
 #
@@ -624,7 +644,7 @@ DHCP Configuration => Konfiguracja DHCP
 Cache Size => Wielkość pamięci podręcznej
 No Hosts => Nie używaj pliku hosts
 No Reg Cache => No Reg Cache
-Strict Order => Strict Order
+Strict Order => Ścisły porządek
 Log Queries => Loguj zapytania
 No Resolv => Nie używaj resolv
 Domain => Domena
@@ -661,6 +681,11 @@ Web mgt. console => Konsola zarządzania przez WWW
 Version => Wersja
 info_check_update => Sprawdź czy jest nowa wersja Webif&sup2;
 info_check_daily_text => Włącz sprawdzanie dziennych wersji przy sprawdzaniu nowej wersji webif&sup2;
+info_Find_more => Aby uzyskać więcej informacji o Webif&sup2; (w języku angielskim), wnieść coś do projektu albo pomóc innym użytkownikom zajrzyj pod poniższe łącza
+info_link_X-Wrt => X-Wrt
+info_link_Forum => Forum
+info_link_Wiki => Wiki
+info_link_Trac => Trac
 
 
 ## network hosts
@@ -707,7 +732,7 @@ WAN Upload (bits/sec) => prędkość do WAN (bitów/sek)
 kilobits => kilobitów
 WAN Download (bits/sec) => prędkość z WAN (bitów/sek)
 WAN Speeds => Prędkości WAN
-HelpText upnpd_wan_speeds => Ustaw swoje prędkości WAN tutaj, w kilobitach. This is for reporting to upnp clients that request it only.
+HelpText upnpd_wan_speeds => Ustaw swoje prędkości WAN tutaj, w kilobitach. Przeznaczone są one dla żądających tego klientów UPnP.
 Log Debug Output => Loguj wyjście diagnostyczne
 Remove UPNPd => Usuń UPnPd
 HelpText remove_upnpd_help => Jeżeli masz problemy możesz usunąć bieżącego demona UPNP i wypróbować drugiego aby sprawdzić, czy będzie działał lepiej.
@@ -787,6 +812,9 @@ qos_nbds_install => Instaluj
 # /www/cgi-bin/webif/vpn-openvpn.sh
 #
 OpenVPN => OpenVPN
+vpn_openvpn_Error => Błąd
+vpn_openvpn_upload_failed => Nie można przetworzyć załadowanego pliku
+vpn_openvpn_directory_failed => Nie można utworzyć katalogu openvpn
 vpn_openvpn_Installing_package => Instaluję pakiet OpenVPN...
 vpn_openvpn_warn => Wirtualna sieć prywatna (VPN) wymaga instalacji pakietu OpenVPN:
 vpn_openvpn_install_package => Zainstaluj pakiet OpenVPN
@@ -808,13 +836,16 @@ Certificate Status => Status certyfikatu
 No Certificate uploaded yet! => Jeszcze nie załadowano certyfikatu!
 Found Installed Certificate. => Znaleziono zainstalowany certyfikat.
 Upload PKCS12 Certificate => Załaduj certyfikat PKCS12
-Root CA certificate uploaded yet! => Jeszcze nie załadowano głównego certyfikatu CA!
+No Root CA certificate uploaded yet! => Jeszcze nie załadowano głównego certyfikatu CA!
 Upload Root CA certificate => Załaduj główny certyfikat CA
 No client certificate uploaded yet! => Jeszcze nie załadowano certyfikatu klienta!
 Upload Client Certificate => Załaduj certyfikat klienta
 No client key uploaded yet! => Jeszcze nie załadowano klucza klienta!
 Found installed client key. => Znaleziono zainstalowany klucz klienta.
 Upload Client Key => Załaduj klucz klienta
+vpn_openvpn_upload => Ładowanie klucza/certyfikatu
+vpn_openvpn_upload_helptext => W danej chwili można ładować tylko JEDEN klucz/certyfikat. Wyczyść wypełnione pola, jeżeli chcesz załadować klucz/certyfikat.
+
 
 # /www/cgi-bin/webif/vpn-pptp.sh
 #
@@ -824,6 +855,7 @@ PPTP Client Connection => Połączenie klienta PPTP
 PPTP Client Connections => Połączenia klienta PPTP
 PPTPD Server => Serwer PPTP
 PPTP Server => Serwer PPTP
+PPTP VPN Users => Użytkownicy VPN PPTP
 
 
 ## 'Status basic'
@@ -845,6 +877,24 @@ mount_of => z
 Helptext RAM Usage => Bieżące zużycie pamięci RAM, ilość wolnej pamięci informuje o tym, ile aplikacje mają dostępne.
 Helptext Tracked Connections => Ilość połączeń w tablicy połączeń routera. <a href="status-conntrackread.sh">Zobacz tablicę połączeń</a
 Helptext Mount Usage => Pokazuje ilości całkowitego i użytego miejsca w zamontowanych systemach plików.
+
+## /www/cgi-bin/webif/status-modules.sh
+#
+Modules => Moduły
+status_modules_Kernel_Module => Moduły jądra
+status_modules_Loaded_Modules => Załadowane moduły
+status_modules_th_Module => Moduł
+status_modules_th_Size => Wielkość
+status_modules_th_Count => Licznik odwołań
+status_modules_th_Used_by => Używany przez
+status_modules_flags_deleted => (skasowany)
+status_modules_flags_autoclean => (autoczyszczenie)
+status_modules_flags_unused => (nieużywany)
+status_modules_flags_initializing => (inicjalizacja)
+status_modules_flags_uninitialized => (niezainicjowany)
+status_modules_No_modules_loaded => W chwili obecnej żaden moduł jądra nie jest załadowany.
+status_modules_size_Total => Całkowita wielkość
+
 
 ## /www/cgi-bin/webif/status-processes.sh
 #
@@ -901,6 +951,39 @@ Raw Information => Dane surowe
 &nbsp;Show raw statistics&nbsp; => Pokaż dane surowe
 
 
+## /www/cgi-bin/webif/status-routes.sh
+#
+Routes => Trasy
+network_routes_Deleting_route => Kasowanie trasy
+network_routes_delete_Ok => Ok
+network_routes_delete_Failed => Nieudane
+network_routes_Delete_Route => Skasuj trasę
+network_routes_edit_Target_IP => Docelowy adres IP
+network_routes_edit_Gateway => Brama
+network_routes_edit_Netmask => Maska podsieci
+network_routes_edit_Metric => Metryka
+network_routes_edit_Interface => Interfejs
+network_routes_action_Cancel => Wycofaj
+network_routes_action_Delete => Kasuj
+network_routes_Delete_Route => Kasowanie tras
+network_routes_Delete_Route_helptext => Możesz usuwać poszczególne trasy z tablicy tras jądra jeśli tego potrzebujesz. Trasa zostanie usunięta natychmiast. Odtworzenie statycznych i domyślnych tras ma miejsce tylko przy restarcie konkretnego interfejsu sieciowego.<br/><b>Uwaga!</b> Możesz stracić dostęp do urządzenia jeśli skasujesz nieprawidłową trasę.
+network_routes_routing_table => Tablica tras jądra
+network_routes_static_th_Destination => Adres docelowy
+network_routes_static_th_Gateway => Brama
+network_routes_static_th_Genmask => Maska
+network_routes_static_th_Flags => Flagi
+network_routes_static_th_Metric => Metryka
+network_routes_static_th_Ref => Odn.
+network_routes_static_th_Use => Uż.
+network_routes_static_th_Interface => Interfejs
+network_routes_static_th_Action => Akcja
+network_routes_unknown_iface => nieznany
+network_routes_action_Delete => Kasuj
+network_routes_No_kernel_routes => Brak tras w tablicy trasowania jądra
+network_routes_ipv6_routing_table => Tablica tras jądra dla IPv6
+network_routes_static_th_Next_Hop => Następny krok
+
+
 ## status-wireless.sh
 status_wlan_survey_Installing_wl_package => Instalowanie pakietu
 Wireless Survey => Przeglądanie otoczenia bezprzewodowego
@@ -913,20 +996,7 @@ status_wlan_survey_Times => Czasy
 status_wlan_survey_MAC => MAC
 status_wlan_survey_IP => IP
 status_wlan_survey_DHCP => DHCP
-status_wlan_survey_Hosts => Hosty
-status_wlan_survey_Idle => Bezczynności
-status_wlan_survey_Connected => Podłączenia
-status_wlan_survey_RSSI => RSSI
-status_wlan_survey_Authenticated => Uwierzytelniony
-status_wlan_survey_Associated => Powiązany
-status_wlan_survey_Authorized => Autoryzowany
-status_wlan_survey_Features => Features
-status_wlan_survey_y => lat
-status_wlan_survey_d => dni
-status_wlan_survey_no => nie
-status_wlan_survey_Broadcom => Broadcom
-status_wlan_survey_Afterburner => "Dopalacz"
-status_wlan_survey_none => Brak
+stat_survey_none => Brak
 status_wlan_survey_No_connected_clients => Brak podłączonych klientów
 status_wlan_survey_Wireless_driver_utility => Narzędzia sterownika bezprzewodowego
 status_wlan_survey_Install_wl => Zainstaluj pakiet wl
@@ -973,6 +1043,21 @@ status_leases_no_ethers => Plik /etc/ethers nie istnieje.
 Netstat => Netstat
 Routing Table => Tablica routingu
 Router Listening Ports => Nasłuchujące porty routera
+
+## /www/cgi-bin/webif/status-conntrackread.sh
+Conntrack Table => Tablica śledzonych połączeń (conntrack)
+log_filter_Text_Filter => Filt tekstowy
+log_filter_Text_to_Filter => Tekst do filtrowania
+log_filter_Filter_Mode => Tryb pracy filtra
+log_filter_Include => Włączaj
+log_filter_Exclude => Wyłączaj
+log_filter_Remove_Filter => Usuń filtr
+conntrackread_filter_Filter_Records => Filtruj zapisy
+log_filter_Text_to_Filter_helptext => Wpisz łańcuch znakowy, który określi co chcesz zobaczyć lub wykluczyć. Możesz używać stałych z wyrażeń regularnych takich jak: <code>00:[[:digit:]]{2}:[[:digit:]]{2}</code> lub <code>.debug&#124;.err</code>.
+log_filter_Filter_Mode_helptext => Zobaczysz tylko komunikaty zawierające tekst w trybie "Włączaj", w trybie "Wyłączaj" NIE zobaczysz tych komunikatów.
+Kernel Connection Tracking Table => Tablica śledzonych połączeń jądra
+status_conntrackread_no_messages => Brak śledzonych połączeń w tablicy jądra
+
 
 # /www/cgi-bin/webif/status-iptables.sh
 #
@@ -1035,6 +1120,7 @@ status_usb_Loaded_USB_drivers => Załadowane sterowniki USB
 
 
 ## status-wwaninfo.sh
+#
 Status => Status
 UMTS => UMTS
 status_wwaninfo_UG_Status => Status UMTS/GPRS
@@ -1062,22 +1148,36 @@ status_wwaninfo_Capacity => Pojemność
 ## status-pppoe.sh
 #
 PPPoE Status => Status PPPoE
-Reconnect => Połącz ponownie
-Manual Control: => Ręczne sterowanie:
-Disconnect => Rozłącz
-Connect => Połącz
-Ip Addr: => Adres IP:
-Syslog: pppd (Last 500 lines) => Log systemowy: pppd (ostatnie 500 linii)
-Ifconfig ppp0 => Ifconfig ppp0
-
+status_pppoe_Stopping_wan => Zatrzymywanie połączenia WAN
+status_pppoe_Starting_wan => Uruchamianie połączenia WAN
+status_pppoe_Unknown_action => Nieznane polecenie
+status_pppoe_Connected => Połączony
+status_pppoe_Disconnect => Rozłącz
+status_pppoe_Reconnect => Połącz ponownie
+status_pppoe_Disconnected => Rozłączony
+status_pppoe_Connect => Połącz
+status_pppoe_Connection_Status => Stan połączenia
+status_pppoe_Additional_Information => Dodatkowe informacje
+DNS Server => Serwer DNS
+Received => Otrzymano
+Transmitted => Wysłano
+units_packets_pkts => pakietów
+Duration => Czas trwania
+status_pppoe_Connection_Log => Log połączenia
+status_pppoe_not_used => Protokół PPPoE nie jest wykorzystywany w połączeniu WAN.
 
 ## status-pptp.sh
 #
 PPTP Status => Stan połączeń PPTP
 PPTP Client => Klient PPTP
+Active PPTP Tunnels: => Aktywne tunele PPTP
+Peername => Nazwa węzła
 PPTP Server => Serwer PPTP
 pptp client disabled. => klient PPTP wyłączony
 pptp server disabled. => serwer PPTP wyłączony
+pptpd process is running. => Proces demona PPTP pracuje.
+pptpd is not running. => Proces demona PPTP nie pracuje.
+Established VPN Connections => Ustanowione połączenia VPN
 
 
 ## status-openvpn.sh
@@ -1128,6 +1228,7 @@ Please wait for output of => Proszę poczekać na wyniki
 
 ## log-setup.sh
 #
+Log Settings => Ustawienia logów
 Syslog Settings => Ustawienia logu systemowego
 syslog Settings => Ustawienia logu systemowego
 Remote host => Zdalny komputer
@@ -1136,6 +1237,9 @@ Minutes Between Marks => Czas między znacznikami (minuty)
 Log Size => Wielkość logu
 Remote Syslog => Zdalny log systemowy
 Server IP Address => Adres IP serwera
+Messages Priority => Priorytet komunikatów
+Backup File => Plik komunikatów
+Kernel Log => Log jądra systemu
 HelpText Remote Syslog => Adres IP i port komputera, na który będą wysyłane zdarzenia logu systemowego. Pozostaw puste by wyłączyć zdalne logowanie zdarzeń.
 Server Port => Port
 Syslog Marks => Znaczniki logu systemowego
@@ -1149,17 +1253,34 @@ Log File => Plik logu
 HelpText Log File => Ścieżka i nazwa pliku dla pliku logu. Może wskazywać na dowolny zapisywalny system plików. UWAGA: NIE UŻYWAJ systemu plików JFFS , ponieważ log systemowy zapisuje DUŻE ilości informacji. Możesz użyć /tmp albo innego systemu plików na zewnętrznym urządzeniu.
 Log Size => Wielkość logu
 HelpText Log Size => Wielkość logu systemowego w tysiącach bajtów. Uważnie ustawiaj wielkość bufora cyklicznego, ponieważ jest on przechowywany w pamięci głównej.
+Ring Buffer Size => Wielkość bufora cyklicznego
+Messages Priority_helptext => Loguj komunikaty aż do określonego priorytetu, domyślny priorytet to 7 (debug).
+Ring Buffer Size_helptext => Określa ile miejsca jądro zarezerwuje na komunikaty w pamięci. Wartość domyślna to 16 KB.
+Boot Time Log => Log startowy
+Backup Boot Time Messages => Zachowaj komunikaty startowe
+Compress Backup => Kompresuj
+Backup Boot Time Messages_helptext => Komunikaty generowane w trakcie startu systemu ulegają nadpisaniu przez inne zdarzenia. Możesz zapisać je w pliku do późniejszego wykorzystania.
+
 
 ## log-read.sh
 #
+Syslog => Log systemowy
+log_read_Syslog_Messages => Komunikaty logu systemowego
 Message Prefix => Komunikaty
 HelpText Browser_Frames => Jeżeli Twoja przeglądarka nie obsługuje ramek,<br>przejdź tutaj
 View Syslog => Zobacz log systemowy
-
+log_read_no_messages => Brak komunikatów w logu systemowym
+log_filter_Filter_Messages => Filtruj komunikaty
+Syslog View => Podgląd logu systemowego
 
 ## log-dmesg.sh
 log_dmesg_Kernel_Ring_Buffer => Bufor cykliczny jądra
 log_dmesg_View_Kernel_Ring_Buffer => Zobacz log jądra
+log_dmesg_no_archived_messages => Brak zachowanych komunikatów jądra
+log_dmesg_no_current_messages => Brak bieżących komunikatów jądra
+log_dmesg_Current_messages => Bieżące komunikaty
+log_dmesg_Boot_time_messages => Komunikaty startowe systemu
+
 
 ## log-browse.sh
 #
@@ -1191,6 +1312,7 @@ system_ipkg_Install => Instaluj
 Logout => Wyloguj
 logout_close_window => Musisz zamknąć przeglądarkę by się wylogować!
 logout_explanation => Ponieważ dane autentykacji "podstawowej" są przechowywane w pamięci podręcznej przeglądarki, nie jest możliwe automatyczne wylogowanie użytkownika. Musisz zamknąć okna przeglądarki lub, w przypadku Firefox'a, 'Wyczyścić dane prywatne', aby zmusić ją aby "zapomniała" dane które wpisałeś. Prawdopodobnie przejdziemy na autentykację opartą o "ciasteczka" z powodu tej słabości autentykacji "podstawowej", która jest używana powszechnie w oprogramowaniach systemowych.
+logout_reference => Odnośnik do dokumentacji: <a href=http://httpd.apache.org/docs/1.3/howto/auth.html>Autentykacja http</a>
 
 # 'About' page
 Copyright => Prawa autorskie
