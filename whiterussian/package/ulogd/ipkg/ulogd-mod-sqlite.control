@@ -1,0 +1,5 @@
+Package: ulogd-mod-sqlite
+Priority: optional
+Section: net
+Depends: libsqlite3, ulogd
+Description: Output plugin for logging to an SQLite database
