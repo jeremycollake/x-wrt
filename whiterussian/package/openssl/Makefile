@@ -4,7 +4,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openssl
 PKG_VERSION:=0.9.8d
-PKG_RELEASE:=2
+PKG_RELEASE:=3
 PKG_MD5SUM:=8ed1853538e1d05a1f5ada61ebf8bffa
 
 PKG_SOURCE_URL:=http://www.openssl.org/source/ \
