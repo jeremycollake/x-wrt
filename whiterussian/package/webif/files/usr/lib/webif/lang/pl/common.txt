@@ -316,6 +316,8 @@ SNMP Community Name => Nazwa dla SNMP
 Helptext SNMP Community Name => Nazwa SNMP identyfikuje grupę urządzeń i systemów zarządzania które współdzielą kontrolę dostępu tej grupy. Mimo, że PUBLIC i PRIVATE są często używane, jest usilnie polecane wybranie trudnych do odgadnięcia nazw. Jedyną gorszą rzeczą niż nazwy PUBLIC and PRIVATE, jest pozostawienie tej nazwy pustej! Nazwa SNMP może być rozumiana jako hasło grupy.
 SNMP Source => Źródło SNMP
 Helptext SNMP Source => Źródło SNMP definiuje adres IP , nazwę urządzenia lub maskę sieci systemów zarządzania które mogą odczytywać z SNMP &quot;publicznej&quot; lub kontrolować &quot;prywatną&quot; SNMP.
+Install SNMPd => Zainstaluj SNMPd
+HelPText install_snmpd_help => Simple Network Management Protocol (SNMP) jest szeroko używanym protokołem służącym do monitorowania stanu urządzeń sieciowych (np. routery), komputerów a nawet takich urządzeń jak UPSy.
 
 # /www/cgi-bin/webif/system-confman.sh
 #
@@ -801,13 +803,34 @@ qos_p2p_dc => DirectConnect
 qos_p2p_ed2k => eDonkey
 qos_p2p_gnutella => Gnutella
 qos_p2p_kazaa => Kazaa
-HelPText qos_rule_edit_help => You need only set fields you wish to match traffic on. Pozostałe pozastaw puste.
+HelPText qos_rule_edit_help => Musisz ustawić tylko te pola, które chcesz aby brały udział w filtrowaniu. Pozostałe pozostaw puste.
 HelpText layer7_help => Filtry Warstwy-7 są używane do klasyfikowania rodzajów ruchu sieciowego na podstawie inspekcji zawartości. Wiele filtrów warstwy-7 jest dostępne w sieci www, ale nie wszystkie są efektywne czy dokładne. By zainstalować więcej filtrów, ściągnij je i umieść w /etc/l7-protocols.
 HelpText p2p_help => Różnica pomiędzy polem the Peer-2-Peer a filtrami Warstwy-7 polega po prostu na tym, że opcje Peer-2-Peer używają specjalnego narzędzia, ipp2p, by dopasować ruch popularnych protokołów p2p. Najczęściej są bardziej skuteczne niż filtry Warstwy-7.
-qos_no_compatible => Nie znaleziono kompatybilnego pakietu QOS.
+qos_no_compatible => Nie znaleziono kompatybilnego pakietu QoS.
 QoS Packages => Pakiety QoS
 qos_nbds => Pakiet skryptów QoS od Nbd (rekomendowany)
 qos_nbds_install => Instaluj
+
+## /www/cgi-bin/webif/network-ez-ipupdate.sh
+#
+DynDNS => DynDNS
+DynDNS Settings => Ustawienia DynDNS
+broken_ezip => Masz zainstalowaną częściowo uszkodzoną wersję pakietu ez-ipupdate z oficjalnego repozytorium OpenWrt. Aby zainstalować poprawioną wersję z repozytorium X-Wrt, naciśnij poniższy przycisk
+Reinstall EZ-IPUPDATE => Zainstaluj ponownie EZ-IPUPDATE
+DynDNS Service => Usługa DynDNS
+User Name => Nazwa użytkownika
+Server Name => Nazwa serwera
+Max Interval (sec) => Maksymalny odstęp czasu (sek)
+Wildcard => Wieloznaczne
+Remove Cache => Czyść pamięć podręczną
+View DynDNS Syslog => Zobacz log DynDNS
+Host Name_helptext => Wpisz zarejestrowaną nazwę komputera
+Wildcard_helptext => Użyj jeśli Twoja domena ma wiele aliasów.
+Server Name_helptext => Nazwa serwera jest wymagana tylko jeżeli używane są ustawienia użytkownika.
+Max Interval (sec)_helptext => Maksymalny odstęp czasu co jaki chcesz odnawiać rejestrację w DynDNS. Na przykład DynDNS pozwala na odświeżanie zapisów co 24-35 dni (2073600 - 3024000 sekund) licząc od pierwszej rejestracji, aby nie dopuścić do przeterminowania.
+Remove Cache_helptext => Użyj, jeśli chcesz aby urządzenie "zapomniało" poprzednią rejestrację.
+Last update => Ostatnio odświeżony
+
 
 # /www/cgi-bin/webif/vpn-openvpn.sh
 #
@@ -882,6 +905,7 @@ Helptext Mount Usage => Pokazuje ilości całkowitego i użytego miejsca w zamon
 #
 Modules => Moduły
 status_modules_Kernel_Module => Moduły jądra
+status_modules_Kernel_Modules => Moduły jądra
 status_modules_Loaded_Modules => Załadowane moduły
 status_modules_th_Module => Moduł
 status_modules_th_Size => Wielkość
@@ -1046,7 +1070,7 @@ Router Listening Ports => Nasłuchujące porty routera
 
 ## /www/cgi-bin/webif/status-conntrackread.sh
 Conntrack Table => Tablica śledzonych połączeń (conntrack)
-log_filter_Text_Filter => Filt tekstowy
+log_filter_Text_Filter => Filtr tekstowy
 log_filter_Text_to_Filter => Tekst do filtrowania
 log_filter_Filter_Mode => Tryb pracy filtra
 log_filter_Include => Włączaj
@@ -1082,7 +1106,7 @@ Class => Klasa
 &nbsp;Show raw statistics&nbsp; => Pokaż surowe statystyki
 QoS Packets | Raw Stats => Pakiety QoS surowe
 no_qos => Nie znaleziono uruchomionego pakietu QoS a więc nie można pokazać statystyk! Rekomendujemy instalację skryptów QoS od Nbd.
-qos_scripts_disabled => Pakiet skryptów QoS nieaktywny. Przejdź do<a href="./network-qos.sh">strony QoS</a> by zainstalować/włączyć.
+qos_scripts_disabled => Pakiet skryptów QoS nieaktywny. Przejdź do <a href="./network-qos.sh">strony QoS</a> by zainstalować/włączyć.
 Packets => Pakietów
 Bytes => Bajtów
 
@@ -1337,3 +1361,4 @@ zephyr_Text => Temat Zephyr na licencji MIT.
 This device is running => Na tym urządzeniu działa
 or a close derivative => lub jego bliska pochodna
 Webif&sup2; Credits => Podziękowania Webif&sup2;
+
