@@ -3,11 +3,11 @@ include ../../rules.mk
 
 PKG_NAME := kmod-usb-spca5xx-le
 PKG_VERSION := 00.57.08
-PKG_RELEASE := 1
+PKG_RELEASE := 2
 
 PKG_SOURCE_URL := http://mxhaard.free.fr/spca50x/embedded/KernelPatch
-PKG_SOURCE := linux-2.4.31-715LE08.patch.tar.gz
-PKG_MD5SUM := 7089c7be9e7607b6225fdde11fcefb35
+PKG_SOURCE := linux-2.4.31-716LE08.patch.tgz
+PKG_MD5SUM := c4e195260ea0bb7b532e279503daf266
 PKG_CAT := zcat
 
 PKG_BUILD_DIR := $(BUILD_DIR)/$(PKG_NAME)
