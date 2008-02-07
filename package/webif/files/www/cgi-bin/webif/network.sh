@@ -62,7 +62,6 @@ WWAN_COUNTRY_LIST=$(
 	)
 append JS_APN_DB "$JS_APN" "$N"
 
-header "Network" "Networks" "@TR<<Network Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 for interface in $network; do
 	config_get delete_check $interface proto
 	if [ "$interface" != "loopback" ]; then
@@ -326,7 +325,7 @@ EOF
 		done
 	}
 fi
-
+header "Network" "Networks" "@TR<<Network Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 #####################################################################
 # modechange script
 #
