@@ -7,7 +7,7 @@ lang => Polski
 big_warning => OSTRZEŻENIE
 page_incomplete => Ta strona jest niekompletna i może działać nieprawidłowo, albo nawet wcale.
 page_untested => Strona nie została przetestowana i może nie działać prawidłowo.
-page_untested_kamikaze => Ta strona nie była odświeżona ani sprawdzona pod wersją Kamikaze oprosygramowania.
+page_untested_kamikaze => Ta strona nie była odświeżona ani sprawdzona pod wersją Kamikaze oprogramowania.
 features_require_package => Funkcjonalności na tej stronie wymagają pakietu
 Settings saved => Ustawienia zostały zapisane
 Settings not saved => Ustawienia nie zostały zapisane
@@ -831,6 +831,47 @@ Max Interval (sec)_helptext => Maksymalny odstęp czasu co jaki chcesz odnawiać
 Remove Cache_helptext => Użyj, jeśli chcesz aby urządzenie "zapomniało" poprzednią rejestrację.
 Last update => Ostatnio odświeżony
 
+## /www/cgi-bin/webif/network-wakeonlan.sh
+#
+network_wol_Custom_MAC_Address => Adres MAC użytkownika
+network_wol_MAC_Address => Adres MAC
+network_wol_missing_app => Aplikacja WoL niedostępna
+network_wol_Target_Host => Komputer docelowy
+network_wol_Port => Port
+network_wol_Wait => Czekaj
+network_wol_Password => Hasło
+network_wol_etherwake_Broadcast_packet => Pakiet rozgłoszeniowy
+network_wol_etherwake_Broadcast_Packet => Pakiet rozgłoszeniowy
+network_wol_etherwake_Password => Hasło
+network_wol_Application => Aplikacja
+network_wol_Verbose_Output => "Gadatliwe" wyjście
+Wake-On-LAN => "Budzenie" przez sieć
+network_wol_installing_package => Instaluję pakiet
+network_wol_Sending => Wysyłanie "magicznej" ramki...
+network_wol_Done => Zrobione.
+network_option_wol => wol
+network_wol_option_ether-wake => ether-wake
+network_wol_moreinfo => Aby dowiedzieć się więcej zajrzyj pod poniższe <a href="#wollegend">łącze</a>.
+network_wol_Shared_options => Wspólne opcje
+network_wol_Interface => Interfejs
+Short help => Krótka pomoc
+network_wol_etherwake_Broadcast_Packet_helptext => Wyślij ramkę "budzącą" na adres rozgłoszeniowy.
+network_wol_etherwake_Password_helptext => Hasło może być w formie adresu Ethernet heksadecymalnego (00:22:44:66:88:aa) lub cztero bajtowej notacji dziesiętnej (192.168.1.1).
+network_wol_Target_Host_helptext => Wyślij ramkę na ten adres IP, jeżeli chcesz wysłać tylko do jednej podsieci (domyślnie 255.255.255.255).
+network_wol_Port_helptext => Użyj innego numeru portu (domyślnie: 40000).
+network_wol_Wait_helptext => Powoduje oczekiwanie wprowadzonej wartości w milisekundach pomiędzy "Magicznymi Pakietami".
+network_wol_Password_helptext => Hasło SecureON może być wpisane w formacie sześciu bajtów heksadecymalnie - Ethernet (00:22:44:66:88:aa).
+network_wol_Verbose_Output_helptext => Zwiększ poziom odpluskwiania lub włącz "gadatliwe" wyście.
+network_wol_Wake_up => Obudź!
+network_wol_Wake_up_helptext => Wprowadź wspólne opcje i naciśnij przycisk aby "obudzić" konkretny komputer.<br />Jeżeli chcesz, aby konkretny komputer pojawił się na liście, musisz umieścić go w pliku <a href="network-hosts.sh">/etc/ethers</a>.
+wol_help => Z tej strony możesz wysyłać pakiety "budzące" aby włączyć wyłączone komputery. Komputery takie muszą wspierać WOL, i ta funkcjonalność musi być włączona w opcjach BIOS. Niestety nie ma odpowiedzi z takiej maszyny, więc nie wiadomo, czy "budzenie" było skuteczne ani czy maszyna naprawdę startuje.
+wol_help2 => Po więcej informacji zajrzyj do Wiki: <a href="http://en.wikipedia.org/wiki/Wake-on-LAN" onclick="return !targetwindow(this.href);">Opis Wake-on-LAN</a>.
+network_wol_Application_helptext => Są dwie dostępne aplikacje które generują i wysyłają "magiczne pakiety"; <strong>ether-wake</strong> używa specjalnego rodzaju ramki Ethernet a aplikacja <strong>wol</strong> używa pakietu UDP.
+network_wol_requires_wol => Zainstaluj pakiet wol jeżeli chcesz "budzić" komputery używając routowalnego pakietu UDP
+network_wol_Install_wol => Zainstaluj pakiet wol
+network_wol_requires_ether-wake => Zainstaluj pakiet ether-wake jeżeli chcesz "budzić" komputery używając nieroutowalnej ramki Ethernet
+network_wol_Install_ether-wake => Zainstaluj pakiet ether-wake
+
 
 # /www/cgi-bin/webif/vpn-openvpn.sh
 #
@@ -1361,4 +1402,3 @@ zephyr_Text => Temat Zephyr na licencji MIT.
 This device is running => Na tym urządzeniu działa
 or a close derivative => lub jego bliska pochodna
 Webif&sup2; Credits => Podziękowania Webif&sup2;
-
