@@ -128,10 +128,6 @@ equal "$repo_update_needed" "1" && {
 if [ "$FORM_action" = "install" ]; then
 	echo "<pre>@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
 	install_package `echo "$FORM_pkg" | sed -e 's, ,+,g'`
-	if [ "$?" != "0" ]; then
-		ipkg update
-		install_package `echo "$FORM_pkg" | sed -e 's, ,+,g'`
-	fi
 	echo "</pre><br />"
 elif [ "$FORM_action" = "remove" ]; then
 	echo "<pre>@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
