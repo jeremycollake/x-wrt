@@ -179,6 +179,7 @@ reload_firewall() {
 	echo_applying_settings "@TR<<apply_firewall#firewall>>"
 	/etc/init.d/S??firewall
 	echo_action_done
+	reload_upnpd
 }
 
 restart_cron() {
@@ -212,12 +213,30 @@ reload_timezone() {
 
 reload_upnpd() {
 	echo_restarting_service "@TR<<apply_upnpd#upnpd>>"
-	killall miniupnpd upnpd 2>&- >&-
-	exists "/etc/init.d/S95miniupnpd" && /etc/init.d/S95miniupnpd
-	exists "/etc/init.d/S65upnpd" && {
-		/etc/init.d/S65upnpd stop 2>&- >&-
-		/etc/init.d/S65upnpd start
-	}
+	config_load upnpd
+	local enabled
+	config_get_bool enabled general enable 0
+	if exists "/etc/init.d/miniupnpd"; then
+		if [ "$enabled" -gt 0 ]; then
+			/etc/init.d/miniupnpd enable 2>/dev/null
+			/etc/init.d/miniupnpd start
+		else
+			/etc/init.d/miniupnpd stop
+			/etc/init.d/miniupnpd disable 2>/dev/null
+		fi
+	elif exists "/etc/init.d/upnpd"; then
+		if [ "$enabled" -gt 0 ]; then
+			/etc/init.d/upnpd enable 2>/dev/null
+			/etc/init.d/S65upnpd stop 2>&- >&-
+			/etc/init.d/S65upnpd start
+		else
+			/etc/init.d/S65upnpd stop 2>&- >&-
+			/etc/init.d/upnpd disable 2>/dev/null
+		fi
+	else
+		killall miniupnpd upnpd 2>&- >&-
+		exists "/etc/init.d/S95miniupnpd" && /etc/init.d/S95miniupnpd
+	fi
 	echo_action_done
 }
 

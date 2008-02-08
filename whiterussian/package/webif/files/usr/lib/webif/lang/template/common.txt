@@ -306,6 +306,65 @@ HelpText maximum_connections => This is the maximum number of simultaneous conne
 HelpText tcp_established_timeout => This is the number of seconds that a established connection can be idle before it is forcibly closed. Sometimes connections are not properly closed and can fill up your conntrack table if these values are too high. If they are too low, then connections can be disconnected simply because they are idle.
 
 
+## /www/cgi-bin/webif/network-services.sh
+Please wait => Please wait
+network_upnp_Completed_successfully => Completed successfully
+network_upnp_Failed_to_install => Failed to install
+network_upnp_UPnPd_Port => UPnPd Port
+network_upnp_Report_Uptime => Report Uptime of
+network_upnp_Secure_Mode => Secure Mode
+network_upnp_NAT_PMP_Support => NAT-PMP Support
+network_upnp_Serial_Number => Serial Number
+network_upnp_Model_Number => Model Number
+network_upnp_SSDP_notify_interval => SSDP notify interval
+network_upnp_Presentation_URL => Presentation URL
+network_upnp_UPnP_Daemon => UPnP Daemon
+network_upnp_Log_Debug_Output => Log Debug Output
+network_upnp_WAN_Upload => WAN Upload
+network_upnp_WAN Download => WAN Download
+Error in => Error in
+network_upnp_UPnP_UUID => UPnP UUID
+network_upnp_invalid_uuid_error => Invalid UUID
+Network => Network
+UPnP => UPnP
+UPnP Configuration => UPnP Configuration
+network_upnp_Installing => Installing
+network_upnp_Removing => Removing
+network_upnp_Remove_miniupnpd => Remove miniupnpd
+network_upnp_Remove => Remove
+network_upnp_Remove_linuxigd => Remove linuxigd
+network_upnp_incompatible_miniupnpd => You have an old version of miniupnpd incompatible with this webif&sup2; version. You must upgrade to a newer miniupnpd package, else this page will not work properly.
+network_upnp_Upgrade_UPnPd => Upgrade UPnPd
+network_upnp_upnpd_Disabled => Disabled
+network_upnp_upnpd_Enabled => Enabled
+Kibps => Kibps
+network_upnp_WAN_Speeds => WAN Upload/Download Speeds
+network_upnp_WAN_Speeds_helptext => Set your WAN speeds here, in kibibits per second. This is for reporting to upnp clients that request it only.
+network_upnp_log_Disabled => Disabled
+network_upnp_log_Enabled => Enabled
+network_upnp_Remove_helptext => If you have problems you can remove your current UPnPd and try the other one to see if it works better for you.
+network_upnp_Additional_Settings => Additional Settings
+network_upnp_UPnPd_Port_helptext => Default port for HTTP (descriptions and SOAP) traffic is 5555.
+network_upnp_Report_Daemon => Daemon
+network_upnp_Report_System => System
+network_upnp_Report_Uptime_helptext => Report the daemon uptime or the system uptime.
+network_upnp_Secure_Off => Off
+network_upnp_Secure_On => On
+network_upnp_Secure_Mode_helptext => UPnP client are allowed to add mappings only to their IP in the secure mode.
+network_upnp_NAT_PMP_Off => Off
+network_upnp_NAT_PMP_On => On
+network_upnp_NAT_PMP_helptext => Enable experimental support for the NAT Port Mapping Protocol.
+network_upnp_UPnP_UUID_helptext => Set your own universally unique identifier of the Internet Gateway Device (32 hexadecimal digits in 5 groups separated by hyphens, ex.: edfabdbd-fd44-45d9-865a-443d840b9ece).
+network_upnp_seconds => seconds
+network_upnp_SSDP_notify_interval_helptext => Simple Service Discovery Protocol announce messages will be broadcasted at this interval.
+network_upnp_Presentation_URL_helptext => Default is the first address on LAN, port 80.
+network_upnp_miniupnpd => miniupnpd
+network_upnp_Install => Install
+network_upnp_linuxigd => linuxigd
+network_upnp_Which_UPnPd => Which UPnPd to choose
+network_upnp_Which_UPnPd_helptext => There are two UPnP daemons to choose from: miniupnpd and linuxigd. Try miniupnpd first, but it if does not work for you, then remove that package and try linuxigd.
+
+
 ## network_wakeonlan.sh
 network_wol_Custom_MAC_Address => Custom MAC Address
 network_wol_MAC_Address => MAC Address
