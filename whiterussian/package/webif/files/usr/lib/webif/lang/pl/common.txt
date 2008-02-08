@@ -872,6 +872,28 @@ network_wol_Install_wol => Zainstaluj pakiet wol
 network_wol_requires_ether-wake => Zainstaluj pakiet ether-wake jeżeli chcesz "budzić" komputery używając nieroutowalnej ramki Ethernet
 network_wol_Install_ether-wake => Zainstaluj pakiet ether-wake
 
+## /www/cgi-bin/webif/network-misc.sh
+#
+network_misc_Suggest_restart => Usunięto ustawienie z pliku konfiguracyjnego, powinieneś <a href=\"reboot.sh\">uruchomić ponownie</a> urządzenie, aby jądro mogło wyliczyć nową wartość.
+Maximum Connections => Maksymalna ilość śledzonych połączeń
+Generic Timeout => Czas oczekiwania
+ICMP Timeout => Czas oczekiwania ICMP
+TCP Established Timeout => Czas oczekiwania połączeń ustanowionych TCP
+UDP Timeout => Czas oczekiwania UDP
+UDP Stream Timeout => Czas oczekiwania strumienia UDP
+Reset to a default value => Ustaw na wartość domyślną
+network_misc_Reset_field => Wyczyść pole
+network_misc_Reset_all_settings => Ustaw wszeystkie na wartość domyślną
+network_misc_Reset__all_fields => Wyczyść wszystkie pola
+network_misc_Reset_to_defaults => Ustaw jedno lub wszystkie pola na wartość domyślną
+network_misc_Reset_to_defaults_helpitem => Wszystkie pokazane tu wartości są wyliczane przez jądro w czasie startu z predefiniowanych wartości zależnych od dostępnej pamięci lub pobierane z pliku konfiguracyjnego. Jeżeli chcesz ustawić jakieś pole na wartość wyliczoną przy starcie, nie zachowuj ustawień, naciśnij przycisk Kasuj obok pola i uruchom ponownie urządzenie.
+network_misc_too_big_timeout => Twój czas oczekiwania połączeń ustanowionych TCP jest bardzo duży (5 dni). Większość użytkowników sieci peer-to-peer powinna używać niższej wartości. Bezpiecznym ustawieniem jest prawdopodobnie 1 dzień (86400), aczkolwiek niektórzy użytkownicy wolą 1 godzinę (3600).
+Networking Tweaks => "Podkręcanie" sieci
+Tweaks => "Podkręcanie"
+Conntrack Settings => Ustawienia śledzenia połączeń (conntrack)
+HelpText maximum_connections => Maksymalna liczba jednoczesnych połączeń, które router może śledzić. Większa wartość oznacza większe zużycie pamięci RAM i procesora jeżeli te połączenia zostaną wykorzystane. Najczęściej najlepiej jest pozostawić ten parametr na wartości domyślnej.
+HelpText tcp_established_timeout => Liczba sekund, przez którą ustanowione połączenie może być nieaktywne zanim zostanie zamknięte. Czasami połączenia nie są prawidłowo zamykane i mogą wypełnić tablicę w jądrze, jeżeli ta wartość jest ustawiona zbyt wysoko. Jeżeli jest zbyt mała, połączenia mogą być zamykane tylko dlatego, że są nieaktywne.
+
 
 # /www/cgi-bin/webif/vpn-openvpn.sh
 #
