@@ -1,4 +1,4 @@
-config upnpd general
+config miniupnpd general
 	option enable		'0'
         option log_output       '0'
         option down_bitspeed    '1024'

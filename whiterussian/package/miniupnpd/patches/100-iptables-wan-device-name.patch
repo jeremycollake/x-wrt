@@ -1,6 +1,6 @@
-diff -urN miniupnpd.orig/linux/iptables_init.sh miniupnpd/linux/iptables_init.sh
---- miniupnpd.orig/linux/iptables_init.sh	2006-11-23 07:56:34.000000000 -0500
-+++ miniupnpd/linux/iptables_init.sh	2006-11-24 18:57:43.000000000 -0500
+diff -urN miniupnpd-1.0.old/netfilter/iptables_init.sh miniupnpd-1.0.dev/netfilter/iptables_init.sh
+--- miniupnpd-1.0.old/netfilter/iptables_init.sh	2006-11-23 13:56:34.000000000 +0100
++++ miniupnpd-1.0.dev/netfilter/iptables_init.sh	2008-02-01 18:09:56.000000000 +0100
 @@ -2,8 +2,7 @@
  # $Id: iptables_init.sh,v 1.3 2006/11/23 12:32:57 nanard Exp $
  IPTABLES=iptables
@@ -11,9 +11,9 @@ diff -urN miniupnpd.orig/linux/iptables_init.sh miniupnpd/linux/iptables_init.sh
  EXTIP="`LC_ALL=C /sbin/ifconfig $EXTIF | grep 'inet addr' | awk '{print $2}' | sed -e 's/.*://'`"
  echo "External IP = $EXTIP"
  
-diff -urN miniupnpd.orig/linux/iptables_removeall.sh miniupnpd/linux/iptables_removeall.sh
---- miniupnpd.orig/linux/iptables_removeall.sh	2006-11-23 07:56:34.000000000 -0500
-+++ miniupnpd/linux/iptables_removeall.sh	2006-11-24 19:00:47.000000000 -0500
+diff -urN miniupnpd-1.0.old/netfilter/iptables_removeall.sh miniupnpd-1.0.dev/netfilter/iptables_removeall.sh
+--- miniupnpd-1.0.old/netfilter/iptables_removeall.sh	2006-11-23 13:56:34.000000000 +0100
++++ miniupnpd-1.0.dev/netfilter/iptables_removeall.sh	2008-02-01 18:09:56.000000000 +0100
 @@ -2,8 +2,7 @@
  # $Id: iptables_removeall.sh,v 1.3 2006/11/23 12:32:57 nanard Exp $
  IPTABLES=iptables
