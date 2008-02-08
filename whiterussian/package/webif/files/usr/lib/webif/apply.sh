@@ -47,6 +47,7 @@ HANDLERS_edited_file='
 	/etc/hosts) reload_dnsmasq;;
 	/etc/config/firewall) reload_firewall;;
 	/etc/crontabs/root) restart_cron;;
+	/etc/miniupnpd.conf) reload_upnpd;;
 '
 
 HANDLERS_uci='
