@@ -45,7 +45,7 @@ done
 # install NAS if asked
 if ! empty "$FORM_install_nas"; then
 	echo "Installing NAS package ...<pre>"
-	install_package "http://downloads.openwrt.org/whiterussian/newest/packages/non-free/nas_3.90.37-17_mipsel.ipk"
+	install_package "nas"
 	echo "</pre>"
 fi
 

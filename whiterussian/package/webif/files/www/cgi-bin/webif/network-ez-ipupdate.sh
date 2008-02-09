@@ -24,7 +24,7 @@ EOF
 }
 ! empty "$FORM_reinstall_ez" && {
 	echo "@TR<<Please wait>> ...<br /><pre>"
-	install_package "http://ftp.berlios.de/pub/xwrt/packages/ez-ipupdate_3.0.11b8-3_mipsel.ipk"
+	install_package "ez-ipupdate"
 	echo "</pre>"
 }
 
