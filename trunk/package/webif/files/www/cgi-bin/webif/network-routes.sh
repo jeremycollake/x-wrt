@@ -2,8 +2,7 @@
 <?
 . /usr/lib/webif/webif.sh
 
-config_load "/etc/config/network"
-[ -f /var/state/network ] && . /var/state/network
+config_load "network"
 for cfgsec in $CONFIG_SECTIONS; do
 	eval "cfgtype=\$CONFIG_${cfgsec}_TYPE"
 	[ "$cfgtype" = "interface" ] && {
