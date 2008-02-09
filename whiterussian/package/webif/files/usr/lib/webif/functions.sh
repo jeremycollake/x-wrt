@@ -145,17 +145,11 @@ is_package_installed() {
 install_package() {
 	# $1 = package name or URL
 	# returns 0 if success.
-	# if package is not found, and it isn't a URL, then it'll
-	# try an 'ipkg update' to see if it can locate it. Does
+	# always update package lists
 	# emit output to std devices.
-	! ipkg install "$1" -force-overwrite -force-defaults && {
-		echo "$1" | grep "://" >> /dev/null
-		! equal "$?" "0" && {
-			# wasn't a URL, so update
-			ipkg update
-			ipkg install "$1" -force-overwrite -force-defaults
-		}
-	}
+	echo "$1" | grep "://" >> /dev/null
+	! equal "$?" "0" && update_package_list
+	ipkg install "$1" -force-overwrite -force-defaults
 }
 
 remove_package() {
