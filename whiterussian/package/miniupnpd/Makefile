@@ -8,15 +8,16 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=miniupnpd
-PKG_VERSION:=1.0
+SRC_VERSION:=1.0
+PKG_VERSION:=1.0.0
 PKG_RELEASE:=1
 
-PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE:=$(PKG_NAME)-$(SRC_VERSION).tar.gz
 PKG_SOURCE_URL:=http://miniupnp.tuxfamily.org/files/
 PKG_MD5SUM:=9d500aa930e31fd49250c143df0abb4c
 PKG_CAT:=zcat
 
-PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(SRC_VERSION)
 
 include $(TOPDIR)/package/rules.mk
 
