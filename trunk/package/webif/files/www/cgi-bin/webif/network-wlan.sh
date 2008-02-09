@@ -739,7 +739,7 @@ for device in $DEVICES; do
 						document.getElementById('encryption_$vcfg').value = 'off';
 					}
 				}
-				v = (isset('ap_mode_$device','11b') || isset('ap_mode_$device','11bg') || isset('ap_mode_$device','11g'));
+				v = (isset('ap_mode_$device','11b') || isset('ap_mode_$device','11bg') || isset('ap_mode_$device','11g') || ('$iftype'=='broadcom'));
 				set_visible('bgchannelform_$device', v);
 				v = (isset('mode_ap_$device','11a'));
 				set_visible('achannelform_$device', v);
