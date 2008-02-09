@@ -18,7 +18,7 @@
 #	/etc/config/upnpd
 #
 
-exists "/etc/init.d/miniupnpd" && upnpd_modern=1
+exists "/etc/init.d/miniupnpd" && grep -q "append_parm" "/etc/init.d/miniupnpd" 2>/dev/null && upnpd_modern=1
 
 ! empty "$FORM_submit" && {
 	if ! empty "$FORM_upgrade_upnpd"; then
@@ -115,8 +115,6 @@ fi
 
 if ! empty "$FORM_install_linuxigd"; then
 	echo "@TR<<network_upnp_Installing#Installing>> linuxigd ...<pre>"
-	install_package "libpthread"
-	install_package "libupnp"
 	install_package "linuxigd"
 	# if config file doesn't exist, create it since it doesn't come with above pkg at present
 	! exists "/etc/config/upnpd" && {
@@ -136,9 +134,9 @@ fi
 
 if ! empty "$FORM_remove_linuxigd"; then
 	echo "@TR<<network_upnp_Removing#Removing>> linuxigd ...<pre>"
-	remove_package linuxigd
-	remove_package libupnp
-	remove_package libpthread
+	remove_package "linuxigd"
+	# clean dependencies if unused
+	remove_package "-V 0 libupnp libpthread"
 	echo "</pre>"
 fi
 
