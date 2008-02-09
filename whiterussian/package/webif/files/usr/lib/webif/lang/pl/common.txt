@@ -16,7 +16,7 @@ Uptime => Czas pracy
 Load => Obciążenie
 X-Wrt Administration Console => Konsola administracyjna X-Wrt
 Password_mismatch => Wprowadzone hasła nie są identyczne!
-Password_warning => Nie masz ustawionego hasła dostępu do WWW oraz SSH.<br>Proszę wpisz je teraz(nazwa użytkownika to 'root')
+Password_warning => Nie masz ustawionego hasła dostępu przez WWW oraz SSH.<br>Proszę wpisz je teraz(nazwa użytkownika to 'root')
 New Password => Nowe hasło
 Confirm Password => Potwierdź hasło
 Proceed Changes => Proceed Changes
@@ -76,8 +76,6 @@ Installed Software => Zainstalowane pakiety
 Network => Sieć
 LAN => LAN
 Wireless => WLAN
-Advanced Wireless => Zaawansowane WLAN
-Hosts => Konfiguracja Hostów
 
 No config change. => Nie dokonano zmian.
 Config discarded. => Zmiany zostały anulowane.
@@ -475,7 +473,7 @@ Helptext Wifi to LAN Communication => Zezwala lub zabrania połączeń między u
 #
 Virtual LANs => Podsieci wirtualne (VLANy)
 VLAN Configuration => Konfiguracja podsieci wirtualnych
-VLAN => Podsieci wirtualne (VLANy)
+VLAN => VLANy
 Helptext VLAN => Podsieć wirtalna jest zbiorem portów które są zmostowane i tworzą coś, co wygląda jak sieć LAN. Porty 0 do 4 to 5 portów z tyłu routera. W zależności od modelu, port 0 lub port 4 jest portem WAN a pozostałe są portami LAN. Port 5 to wewnętrzny port, który łączy główny układ scalony z przełącznikiem.
 Add New VLAN => Dodaj nowy VLAN
 Remove Last VLAN => Usuń ostatni VLAN
@@ -534,6 +532,7 @@ PSK => Klucz współdzielony
 
 ## 'Advanced Wireless Configuration' page
 #
+Advanced Wireless => Zaaw. WLAN
 Advanced Wireless Configuration => Zaawansowane ustawienia sieci bezprzewodowej (WLAN)
 Lazy WDS => "Leniwe" WDS
 WDS Connections => Połączenia WDS
@@ -691,6 +690,7 @@ info_link_Trac => Trac
 
 
 ## network hosts
+Hosts => Hosty
 network_hosts_host_IP_invalid => Nieprawidłowy adres IP hosta
 network_hosts_Host_Name => Nazwa hosta
 network_hosts_MAC => Adres MAC
@@ -718,9 +718,66 @@ Configured Hosts => Skonfigurowane hosty
 DHCP Static => Statyczne DHCP
 Host Names => Lista hostów
 
-# /www/cgi-bin/webif/network-services.sh
+
+## /www/cgi-bin/webif/network-services.sh
 #
-UPnP Configuration => Konfiguracja UPnP
+Please wait => Proszę czekać
+network_upnp_Completed_successfully => Zakończone pomyślnie
+network_upnp_Failed_to_install => Instalacja nieudana
+network_upnp_UPnPd_Port => Port UPnPd
+network_upnp_Report_Uptime => Czas pracy
+network_upnp_Secure_Mode => Tryb bezpieczny
+network_upnp_NAT_PMP_Support => Wsparcie dla NAT-PMP
+network_upnp_Serial_Number => Serial Number
+network_upnp_Model_Number => Model
+network_upnp_SSDP_notify_interval => Odstęp notyfikacji SSDP
+network_upnp_Presentation_URL => URL prezentacji
+network_upnp_UPnP_Daemon => Demon UPnP
+network_upnp_Log_Debug_Output => Loguj wyjście diagnostyczne
+network_upnp_WAN_Upload => Pasmo do WAN
+network_upnp_WAN Download => Pasmo z WAN
+network_upnp_UPnP_UUID => UPnP UUID
+network_upnp_invalid_uuid_error => Nieprawidłowy UUID
+Network => Sieć
+UPnP => UPnP
+UPnP Configuration => Konfiguracja Uniwersalnego Plug'n'Play
+network_upnp_Installing => Instaluję
+network_upnp_Removing => Usuwam
+network_upnp_Remove_miniupnpd => Usuń miniupnpd
+network_upnp_Remove => Usuń
+network_upnp_Remove_linuxigd => Usuń linuxigd
+network_upnp_incompatible_miniupnpd => Masz zainstalowaną starą wersję pakietu, jest ona niekompatybilna z tą wersją webif&sup2;. Musisz zainstalować nową wersję pakietu miniupnpd, albo ta strona nie będzie działać poprawnie.
+network_upnp_Upgrade_UPnPd => Upgrade UPnPd
+network_upnp_upnpd_Disabled => Wyłączony
+network_upnp_upnpd_Enabled => Włączony
+Kibps => Kbps
+network_upnp_WAN_Speeds => Prędkości do/z WANu
+network_upnp_WAN_Speeds_helptext => Ustaw swoje prędkości WAN tutaj, w kilobitach. Przeznaczone są one dla żądających tego klientów UPnP.
+network_upnp_log_Disabled => Wyłączone
+network_upnp_log_Enabled => Włączone
+network_upnp_Remove_helptext => Jeżeli masz problemy możesz usunąć bieżącego demona UPNP i wypróbować drugiego aby sprawdzić, czy będzie działał lepiej.
+network_upnp_Additional_Settings => Dodatkowe ustawienia
+network_upnp_UPnPd_Port_helptext => Domyślny port dla ruchu HTTP (opisy i SOAP) to 5555.
+network_upnp_Report_Daemon => Demon
+network_upnp_Report_System => System
+network_upnp_Report_Uptime_helptext => Pokazuje czas pracy demona lub systemu.
+network_upnp_Secure_Off => Wyłączony
+network_upnp_Secure_On => Włączony
+network_upnp_Secure_Mode_helptext => W trybie bezpiecznym klienci UPnP mogą dodawać mapowania tylko do swojego adresu IP.
+network_upnp_NAT_PMP_Off => Wyłączone
+network_upnp_NAT_PMP_On => Włączone
+network_upnp_NAT_PMP_helptext => Włącz wsparcie dla eksperymentalnego Protokołu Mapowania Portów NAT.
+network_upnp_UPnP_UUID_helptext => Ustaw własny unikalny globalnie identyfikator Urzączenia Bramy do Internetu (32 cyfry heksadecymalne w 5 grupach rozdzielone myślnikami, np.: edfabdbd-fd44-45d9-865a-443d840b9ece).
+network_upnp_seconds => sekundy
+network_upnp_SSDP_notify_interval_helptext => Pakiety protokołu Simple Service Discovery będą rozgłaszane w podanym odstępie czasu.
+network_upnp_Presentation_URL_helptext => Domyślnie pierwszy adres w LAN, port 80.
+network_upnp_miniupnpd => miniupnpd
+network_upnp_Install => Zainstaluj
+network_upnp_linuxigd => linuxigd
+network_upnp_Which_UPnPd => Którego demona UPnP wybrać
+network_upnp_Which_UPnPd_helptext => Są dwa demony UPNP do wyboru: miniupnpd i linux-igd. Wypróbuj miniupnpd najpierw, ale jeżeli nie będzie poprawnie działał, usuń pakiet i wypróbuj linux-igd.
+
+##old version
 Installing => Instaluję
 Removing => Usuwam
 Remove miniupnpd => Usuń miniupnpd
@@ -740,7 +797,6 @@ Remove UPNPd => Usuń UPnPd
 HelpText remove_upnpd_help => Jeżeli masz problemy możesz usunąć bieżącego demona UPNP i wypróbować drugiego aby sprawdzić, czy będzie działał lepiej.
 miniupnpd => miniupnpd
 linux-igd => linux-igd
-Which UPNPd to choose
 HelPText install_upnpd_help => Są dwa demony UPNP do wyboru: miniupnpd i linux-igd. Wypróbuj miniupnpd najpierw, ale jeżeli nie będzie poprawnie działał, usuń pakiet i wypróbuj linux-igd.
 UPNP => Uniwersalne Plug'n'Play
 Install => Instaluj
