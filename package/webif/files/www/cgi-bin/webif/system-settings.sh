@@ -25,10 +25,10 @@ grep -q "^[[:space:]]*ntpclient)" /etc/hotplug.d/iface/*-ntpclient 2>/dev/null &
 
 # Add NTP Server
 if ! empty "$FORM_add_ntpcfg_number"; then
-	uci_add "$ntpcliconf" "$ntpcliconf" ""
-	uci_set "$ntpcliconf" "cfg$FORM_add_ntpcfg_number" "hostname" ""
-	uci_set "$ntpcliconf" "cfg$FORM_add_ntpcfg_number" "port" "123"
-	uci_set "$ntpcliconf" "cfg$FORM_add_ntpcfg_number" "count" "1"
+	uci_add "$ntpcliconf" "$ntpcliconf"
+	uci_set "$ntpcliconf" "$CONFIG_SECTION" "hostname" ""
+	uci_set "$ntpcliconf" "$CONFIG_SECTION" "port" "123"
+	uci_set "$ntpcliconf" "$CONFIG_SECTION" "count" "1"
 	FORM_add_ntpcfg=""
 fi
 
