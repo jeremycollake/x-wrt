@@ -39,7 +39,6 @@ EOF
 }
 
 config_load "network"
-config_load "/var/state/network"
 config_get default_lan_target lan ipaddr
 default_lan_target="${default_lan_target:-192.168.1.1}"
 
