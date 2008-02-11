@@ -7,6 +7,26 @@ config_cb() {
 }
 
 uci_load syslog
+[ "$?" != "0" ] && {
+	uci_set_default syslog <<EOF
+config 'syslogd'
+	option 'ipaddr' ''
+	option 'port' ''
+	option 'size' '16'
+	option 'type' 'circular'
+	option 'mark' '0'
+	option 'file' '/var/log/messages'
+config 'klogd'
+	option 'conloglevel' ''
+config 'dmesg'
+	option 'buffersize' ''
+config 'dmesgbackup'
+	option 'enabled' '0'
+	option 'file' '/var/log/dmesg'
+	option 'gzip' '1'
+EOF
+	uci_load syslog
+}
 
 if empty "$FORM_submit"; then
 	eval FORM_ipaddr="\$CONFIG_${syslogd_cfg}_ipaddr"
@@ -38,12 +58,10 @@ int|FORM_buffersize|@TR<<Ring Buffer Size>>|min=1 max=9999|$FORM_buffersize
 string|kfile|@TR<<Backup File>>|$kfile_required|$FORM_kfile
 EOF
 	equal "$?" 0 && {
-		reload_config=0
-		[ -z "$syslogd_cfg" ] && { uci_add syslog syslogd; reload_config=1; }
-		[ -z "$klogd_cfg" ] && { uci_add syslog klogd; reload_config=1; }
-		[ -z "$dmesg_cfg" ] && { uci_add syslog dmesg; reload_config=1; }
-		[ -z "$dmesgbackup_cfg" ] && { uci_add syslog dmesgbackup; reload_config=1; }
-		[ 1 -eq "$reload_config" ] && uci_load syslog
+		[ -z "$syslogd_cfg" ] && { uci_add syslog syslogd; syslogd_cfg="$CONFIG_SECTION"; }
+		[ -z "$klogd_cfg" ] && { uci_add syslog klogd; klogd_cfg="$CONFIG_SECTION"; }
+		[ -z "$dmesg_cfg" ] && { uci_add syslog dmesg; dmesg_cfg="$CONFIG_SECTION"; }
+		[ -z "$dmesgbackup_cfg" ] && { uci_add syslog dmesgbackup; dmesgbackup_cfg="$CONFIG_SECTION"; }
 		uci_set syslog "$syslogd_cfg" ipaddr "$FORM_ipaddr"
 		uci_set syslog "$syslogd_cfg" port "$FORM_port"
 		uci_set syslog "$syslogd_cfg" mark "$FORM_mark"
