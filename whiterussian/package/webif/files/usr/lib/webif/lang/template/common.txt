@@ -306,11 +306,12 @@ HelpText maximum_connections => This is the maximum number of simultaneous conne
 HelpText tcp_established_timeout => This is the number of seconds that a established connection can be idle before it is forcibly closed. Sometimes connections are not properly closed and can fill up your conntrack table if these values are too high. If they are too low, then connections can be disconnected simply because they are idle.
 
 
-## /www/cgi-bin/webif/network-services.sh
-Please wait => Please wait
-network_upnp_Completed_successfully => Completed successfully
-network_upnp_Failed_to_install => Failed to install
-network_upnp_UPnPd_Port => UPnPd Port
+## network-services.sh
+network_upnp_UPnP_Daemon => UPnP Daemon
+network_upnp_Log_Debug_Output => Log Debug Output
+network_upnp_WAN_Upload => WAN Upload
+network_upnp_WAN Download => WAN Download
+network_upnp_UPnPd_Port=> UPnPd Port
 network_upnp_Report_Uptime => Report Uptime of
 network_upnp_Secure_Mode => Secure Mode
 network_upnp_NAT_PMP_Support => NAT-PMP Support
@@ -318,23 +319,23 @@ network_upnp_Serial_Number => Serial Number
 network_upnp_Model_Number => Model Number
 network_upnp_SSDP_notify_interval => SSDP notify interval
 network_upnp_Presentation_URL => Presentation URL
-network_upnp_UPnP_Daemon => UPnP Daemon
-network_upnp_Log_Debug_Output => Log Debug Output
-network_upnp_WAN_Upload => WAN Upload
-network_upnp_WAN Download => WAN Download
 Error in => Error in
 network_upnp_UPnP_UUID => UPnP UUID
 network_upnp_invalid_uuid_error => Invalid UUID
+network_upnp_miniupnpd_Validate_before_edit => All settings must be valid before editing the configuration file.
 Network => Network
 UPnP => UPnP
 UPnP Configuration => UPnP Configuration
-network_upnp_Installing => Installing
 network_upnp_Removing => Removing
+network_upnp_Upgrading => Upgrading UPnPd
+network_upnp_Installing => Installing
 network_upnp_Remove_miniupnpd => Remove miniupnpd
 network_upnp_Remove => Remove
-network_upnp_Remove_linuxigd => Remove linuxigd
 network_upnp_incompatible_miniupnpd => You have an old version of miniupnpd incompatible with this webif&sup2; version. You must upgrade to a newer miniupnpd package, else this page will not work properly.
 network_upnp_Upgrade_UPnPd => Upgrade UPnPd
+network_upnp_Remove_linuxigd => Remove linuxigd
+network_upnp_title_miniupnpd => miniupnpd
+network_upnp_title_linuxigd => linuxigd
 network_upnp_upnpd_Disabled => Disabled
 network_upnp_upnpd_Enabled => Enabled
 Kibps => Kibps
@@ -363,6 +364,12 @@ network_upnp_Install => Install
 network_upnp_linuxigd => linuxigd
 network_upnp_Which_UPnPd => Which UPnPd to choose
 network_upnp_Which_UPnPd_helptext => There are two UPnP daemons to choose from: miniupnpd and linuxigd. Try miniupnpd first, but it if does not work for you, then remove that package and try linuxigd.
+network_upnp_conf_miniupnpd => miniupnpd.conf
+network_upnp_Configuration_File_miniupnpd_helptext => You can configure the external IP address in case of more addresses for the WAN interface, unused rules cleaning, and permission rules in the miniupnpd's configuration file.<br />All fields above must be valid before editing the configuration file.
+field|@TR<<network_upnp_conf_linuxigd => upnpd.conf
+network_upnp_Configuration_File_linuxigd_helptext => You can configure all settings of linuxigd in its configuration file.
+network_upnp_Configuration_File => Configuration File
+network_upnp_Edit_Configuration => Edit Configuration
 
 
 ## network_wakeonlan.sh

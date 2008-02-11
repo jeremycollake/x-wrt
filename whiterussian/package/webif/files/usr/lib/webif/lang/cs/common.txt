@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3958
+lang_for_svn => 3974
 
 About => O aplikaci
 Accept => Přijmout
@@ -540,8 +540,12 @@ network_routes_unknown_iface => neznámé
 Network => Síť
 network => síť
 network_upnp_Additional_Settings => Rozšiřující nastavení
-network_upnp_Completed_successfully => Dokončeno úspěšně
-network_upnp_Failed_to_install =>  Dokončeno neúspěšně
+network_upnp_Configuration_File => Konfigurační soubor
+network_upnp_Configuration_File_linuxigd_helptext => Všechna nastavení pro linuxigd můžete upravit v konfiguračním souboru.
+network_upnp_Configuration_File_miniupnpd_helptext => V konfiguračním souboru miniupnpd můžete nastavit externí adresu IP v případě více adres pro rozhraní WAN, čištění nepoužívaných pravidel a pravidla oprávnění.<br />Před úpravou konfiguračního souboru musí být všechny položky platné.
+network_upnp_conf_linuxigd => upnpd.conf
+network_upnp_conf_miniupnpd => miniupnpd.conf
+network_upnp_Edit_Configuration => Upravit konfiguraci
 network_upnp_incompatible_miniupnpd => Vaše verze miniupnpd není kompatibilní s touto verzí webif&sup2;. Musíte aktualizovat miniupnpd na novejší verzi, jinak tato stránka nebude pracovat správně.
 network_upnp_Installing => Instaluji
 network_upnp_Install => Nainstalovat
@@ -551,6 +555,7 @@ network_upnp_Log_Debug_Output => Výstup ladícího záznamu
 network_upnp_log_Disabled => Zakázáno
 network_upnp_log_Enabled => Povoleno
 network_upnp_miniupnpd => miniupnpd
+network_upnp_miniupnpd_Validate_before_edit => Před úpravou konfiguračního souboru musí být všechny položky platné.
 network_upnp_Model_Number => Modelové číslo
 network_upnp_NAT_PMP_helptext => Můžete povolit experimentální podporu pro protokol mapování portů NAT.
 network_upnp_NAT_PMP_Off => vypnuta
@@ -575,7 +580,10 @@ network_upnp_Secure_On => zapnut
 network_upnp_Serial_Number => Sériové číslo
 network_upnp_SSDP_notify_interval_helptext => Oznamovací zprávy protokolu jednoduchého vyhledávání služeb budou vysílány v tomto intervalu.
 network_upnp_SSDP_notify_interval => Interval oznámení SSDP
+network_upnp_title_linuxigd => linuxigd
+network_upnp_title_miniupnpd => miniupnpd
 network_upnp_Upgrade_UPnPd => Aktualizovat UPNPd
+network_upnp_Upgrading => Aktualizuji UPnPd
 network_upnp_UPnP_Daemon => Démon UPnP
 network_upnp_upnpd_Disabled => Zakázáno
 network_upnp_upnpd_Enabled => Povoleno
