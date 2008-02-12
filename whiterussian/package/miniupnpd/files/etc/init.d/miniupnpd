@@ -28,7 +28,7 @@ append_parm() {
 start() {
 	[ -d "$RUN_D" ] || mkdir -p "$RUN_D"
 	[ -f "$PID_F" ] && stop
-	local enable ext_ifname ifup_interfaces iface donotlisten
+	local enable ext_ifname ifup_interfaces iface ifname ipaddr donotlisten
 	local upnpd_down_bitspeed upnpd_up_bitspeed
 	local upnpd_down_bytespeed upnpd_up_bytespeed log_output
 
@@ -47,7 +47,11 @@ start() {
 		if [ "$iface" != "wan" ]; then
 			config_get_bool donotlisten "$iface" disable 0
 			[ "$donotlisten" -gt 0 ] || {
-				append args "-a $(nvram get ${iface}_ipaddr)"
+				for ifname in $(nvram get "${iface}_ifname"); do
+					for ipaddr in $(ifconfig "$ifname" 2>/dev/null | grep "inet addr:" | cut -d: -f 2 | cut -d' ' -f 1); do
+						append args "-a $ipaddr"
+					done
+				done
 			}
 		fi
 	done
