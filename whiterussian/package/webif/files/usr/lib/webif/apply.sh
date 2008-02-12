@@ -48,6 +48,7 @@ HANDLERS_edited_file='
 	/etc/config/firewall) reload_firewall;;
 	/etc/crontabs/root) restart_cron;;
 	/etc/miniupnpd.conf) reload_upnpd;;
+	/etc/upnpd.conf) reload_upnpd;;
 '
 
 HANDLERS_uci='
