@@ -1,2 +1,2 @@
 #!/bin/sh
-[ "$ACTION" = "ifup" ] && [ "$INTERFACE" = "wan" ] && /etc/init.d/S??miniupnpd start
+[ "$ACTION" = "ifup" ] && [ "$INTERFACE" = "wan" ] && /etc/init.d/S??miniupnpd start 2>/dev/null
