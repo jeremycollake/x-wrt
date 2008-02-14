@@ -31,7 +31,7 @@ EOF
 if empty "$FORM_submit"; then
 	eval FORM_ipaddr="\$CONFIG_${syslogd_cfg}_ipaddr"
 	eval FORM_port="\$CONFIG_${syslogd_cfg}_port"
-	eval FORM_mark="\$CONFIG_${syslogd_cfg}_mark"
+#	eval FORM_mark="\$CONFIG_${syslogd_cfg}_mark"
 	eval FORM_type="\$CONFIG_${syslogd_cfg}_type"
 	eval FORM_file="\$CONFIG_${syslogd_cfg}_file"
 	FORM_file="${FORM_file:-/var/log/messages}"
@@ -64,7 +64,7 @@ EOF
 		[ -z "$dmesgbackup_cfg" ] && { uci_add syslog dmesgbackup; dmesgbackup_cfg="$CONFIG_SECTION"; }
 		uci_set syslog "$syslogd_cfg" ipaddr "$FORM_ipaddr"
 		uci_set syslog "$syslogd_cfg" port "$FORM_port"
-		uci_set syslog "$syslogd_cfg" mark "$FORM_mark"
+		#uci_set syslog "$syslogd_cfg" mark "$FORM_mark"
 		uci_set syslog "$syslogd_cfg" type "$FORM_type"
 		uci_set syslog "$syslogd_cfg" file "$FORM_file"
 		uci_set syslog "$syslogd_cfg" size "$FORM_size"
@@ -105,14 +105,18 @@ text|port|$FORM_port
 helpitem|Remote Syslog
 helptext|HelpText Remote Syslog#IP address and port of the remote logging host. Leave this address blank for no remote logging.
 end_form
+EOF
 
-start_form|@TR<<Syslog Marks>>
-field|@TR<<Minutes Between Marks>>
-text|mark|$FORM_mark
-helpitem|Syslog Marks
-helptext|HelpText Syslog Marks#Periodic marks in your log. This parameter sets the time in minutes between the marks. A value of 0 means no mark.
-end_form
+#display_form <<EOF
+#start_form|@TR<<Syslog Marks>>
+#field|@TR<<Minutes Between Marks>>
+#text|mark|$FORM_mark
+#helpitem|Syslog Marks
+#helptext|HelpText Syslog Marks#Periodic marks in your log. This parameter sets the time in minutes between the marks. A value of 0 means no mark.
+#end_form
+#EOF
 
+display_form <<EOF
 start_form|@TR<<Local Log>>
 onchange|modechange
 field|@TR<<Log type>>
