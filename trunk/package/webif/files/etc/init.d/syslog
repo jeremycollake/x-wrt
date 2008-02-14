@@ -9,16 +9,13 @@ klogd_bin="/sbin/klogd"
 
 syslogd_config() {
 	local cfg="$1"
-	local mark type file size ipaddr port IPCALC_CMD SYSLOG_CMD
-	local DEFAULT_mark=0
+	local type file size ipaddr port IPCALC_CMD SYSLOG_CMD
 	local DEFAULT_type="circular"
 	local DEFAULT_file="/var/log/messages"
 	local DEFAULT_size=16
 	local DEFAULT_ipaddr=""
 	local DEFAULT_port=514
 
-	config_get mark "$cfg" mark
-	[ "$mark" -gt 0 ] 2>>/dev/null || mark=$DEFAULT_mark
 	config_get type "$cfg" type
 	[ "$type" = "circular" -o "$type" = "file" ] 2>/dev/null || type=$DEFAULT_type
 	config_get file "$cfg" file
@@ -38,9 +35,9 @@ syslogd_config() {
 	[ "$port" -lt 1 -o "$port" -gt 65535 ] 2>/dev/null && port=$DEFAULT_port
 
 	if [ "$type" = "circular" ]; then
-		SYSLOG_CMD="-C$size -m $mark ${ipaddr:+-L -R $ipaddr:$port}"
+		SYSLOG_CMD="-C$size ${ipaddr:+-L -R $ipaddr:$port} -S"
 	else
-		SYSLOG_CMD="-s $size -O $file -m $mark ${ipaddr:+-L -R $ipaddr:$port}"
+		SYSLOG_CMD="-s $size -O $file ${ipaddr:+-L -R $ipaddr:$port} -S"
 	fi
 	$syslogd_bin $SYSLOG_CMD
 }
