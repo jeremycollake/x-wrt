@@ -69,8 +69,7 @@ EOF
 			validation_result="1"
 		}
 	}
-	[ "$validation_result" == "0" ]
-	if equal "$?" "0"; then
+	if equal "$validation_result" "0"; then
 		FORM_upnp_enable="${FORM_upnp_enable:-0}"
 		uci_set "upnpd" "general" "enable" "$FORM_upnp_enable"
 		[ "$FORM_upnp_enable" -eq "1" ] && {
