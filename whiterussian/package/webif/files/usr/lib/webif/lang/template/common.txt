@@ -805,7 +805,6 @@ system_settings_Installing_MatrixTunnel_package => Installing MatrixTunnel packa
 system_settings_Generating_SSL_certificate => Generating SSL certificate
 Host Name => Host Name
 Warning => Warning
-system_settings_Hostname_failed_validation => Hostname failed validation. Can not be saved.
 system_settings_Webif_SSL => Webif&sup2; SSL
 system_settings_Feature_requires_matrixtunnel => MatrixTunnel package is not installed. You need to install it for ssl support
 system_settings_Install_MatrixTunnel => Install MatrixTunnel
