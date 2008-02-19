@@ -5,7 +5,6 @@ PKG_VERSION:=0.001
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -14,8 +13,7 @@ define Package/webif-lua
   CATEGORY:=Administration
   SUBMENU:=webif
   DEPENDS:=+webif +lua +liblua
-  TITLE:=Framework in LUA for X-Wrt. 
-  DESCRIPTION:=Basic framewor to XWrt in LUA.
+  TITLE:=LUA framework for X-Wrt
 endef
 
 define Build/Compile
