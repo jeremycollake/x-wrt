@@ -24,50 +24,6 @@
 #   none
 #
 
-is_bcm947xx && {
-	load_settings "system"
-	load_settings "webif"
-}
-
-uci_load "webif"
-uci_load "webifssl"
-
-#####################################################################
-# defaults
-#
-# Overclocking note:
-#  we only handle 3302 0.8 since these are usually safer if they have
-#  the same default CFE as found on Linksys WRT54G(S) v4+, as it
-#  will handle invalid clock frequencies more gracefully and default
-#  to a limit of 250mhz. It also has a fixed divider, so sbclock
-#  frequencies are implied, and ignored if specified.
-#
-OVERCLOCKING_DISABLED="1" # set to 1 to disble OC support, we disable overclocking by default for kamikaze and only enable it for bcm947xx
-is_bcm947xx && {
-	OVERCLOCKING_DISABLED="0"
-}
-
-#####################################################################
-header "System" "Settings" "@TR<<System Settings>>" ' onload="modechange()" ' "$SCRIPT_NAME"
-
-#####################################################################
-# todo: CPU_MODEL not actually used atm (except in building version)
-equal "$OVERCLOCKING_DISABLED" "0" && {
-	CPU_MODEL=$(sed -n "/cpu model/p" "/proc/cpuinfo")
-	CPU_VERSION=$(echo "$CPU_MODEL" | sed -e "s/BCM3302//" -e "s/cpu model//" -e "s/://")
-	#echo "debug.model: $CPU_MODEL <br />"
-	#echo "debug.version: $CPU_VERSION <br />"
-}
-
-#####################################################################
-# install NTP client if asked
-if ! empty "$FORM_install_ntpclient"; then
-	tmpfile=$(mktemp "/tmp/.webif_ntp-XXXXXX")
-	echo "@TR<<system_settings_Installing_NTPCLIENT_package#Installing NTPCLIENT package>> ...<pre>"
-	install_package "ntpclient"
-	echo "</pre>"
-fi
-
 generate_ssl_key() {
 	local inst_packages inst_links llib llink libsymlinks
 	is_package_installed "zlib"
@@ -115,22 +71,37 @@ generate_ssl_key() {
 	[ -n "$inst_packages" ] && ipkg remove $inst_packages
 }
 
-if ! empty "$FORM_install_stunnel"; then
-	echo "@TR<<system_settings_Installing_MatrixTunnel_package#Installing MatrixTunnel package>> ...<pre>"
-	ipkg update
-	install_package "matrixtunnel"
-	is_package_installed "matrixtunnel"
-	[ "$?" = "0" ] && [ ! -e /etc/ssl/matrixtunnel.key -o ! -e /etc/ssl/matrixtunnel.cert ] && {
-		echo "@TR<<system_settings_Generating_SSL_certificate#Generating SSL certificate>> ..."
-		generate_ssl_key
-	}
-	echo "</pre><br />"
-fi
-if ! empty "$FORM_generate_certificate"; then
-	echo "@TR<<system_settings_Generating_SSL_certificate#Generating SSL certificate>> ...<pre>"
-	generate_ssl_key
-	echo "</pre><br />"
-fi
+is_bcm947xx && {
+	load_settings "system"
+	load_settings "webif"
+}
+
+uci_load "webif"
+uci_load "webifssl"
+
+#####################################################################
+# defaults
+#
+# Overclocking note:
+#  we only handle 3302 0.8 since these are usually safer if they have
+#  the same default CFE as found on Linksys WRT54G(S) v4+, as it
+#  will handle invalid clock frequencies more gracefully and default
+#  to a limit of 250mhz. It also has a fixed divider, so sbclock
+#  frequencies are implied, and ignored if specified.
+#
+OVERCLOCKING_DISABLED="1" # set to 1 to disble OC support, we disable overclocking by default for kamikaze and only enable it for bcm947xx
+is_bcm947xx && {
+	OVERCLOCKING_DISABLED="0"
+}
+
+#####################################################################
+# todo: CPU_MODEL not actually used atm (except in building version)
+equal "$OVERCLOCKING_DISABLED" "0" && {
+	CPU_MODEL=$(sed -n "/cpu model/p" "/proc/cpuinfo")
+	CPU_VERSION=$(echo "$CPU_MODEL" | sed -e "s/BCM3302//" -e "s/cpu model//" -e "s/://")
+	#echo "debug.model: $CPU_MODEL <br />"
+	#echo "debug.version: $CPU_VERSION <br />"
+}
 
 #####################################################################
 # initialize forms
@@ -161,10 +132,12 @@ else
 #####################################################################
 # save forms
 	SAVED=1
+	[ -f /usr/sbin/ntpclient ] && ntp_validate="required"
 	validate <<EOF
 hostname|FORM_hostname|@TR<<Host Name>>|nodots required|$FORM_hostname
+hostname|FORM_ntp_server|@TR<<NTP Server>>|$ntp_validate|$FORM_ntp_server
 EOF
-	if equal "$?" 0 ; then
+	equal "$?" 0 && {
 		time_zone_part="${FORM_system_timezone#*@}"
 		time_zoneinfo_part="${FORM_system_timezone%@*}"
 		save_setting system wan_hostname "$FORM_hostname"
@@ -192,10 +165,39 @@ EOF
 		uci_set "webifssl" "matrixtunnel" "enable" "$FORM_ssl_enable"
 		uci_set "webif" "theme" "id" "$FORM_theme"
 		uci_set "webif" "general" "lang" "$FORM_language"
-	else
-		echo "<br /><div class=\"warning\">@TR<<Warning>>: @TR<<system_settings_Hostname_failed_validation#Hostname failed validation. Can not be saved.>></div><br />"
-	fi
+	}
 fi
+
+#####################################################################
+header "System" "Settings" "@TR<<System Settings>>" ' onload="modechange()" ' "$SCRIPT_NAME"
+
+#####################################################################
+# install NTP client if asked
+if ! empty "$FORM_install_ntpclient"; then
+	tmpfile=$(mktemp "/tmp/.webif_ntp-XXXXXX")
+	echo "@TR<<system_settings_Installing_NTPCLIENT_package#Installing NTPCLIENT package>> ...<pre>"
+	install_package "ntpclient"
+	echo "</pre>"
+fi
+
+
+if ! empty "$FORM_install_stunnel"; then
+	echo "@TR<<system_settings_Installing_MatrixTunnel_package#Installing MatrixTunnel package>> ...<pre>"
+	ipkg update
+	install_package "matrixtunnel"
+	is_package_installed "matrixtunnel"
+	[ "$?" = "0" ] && [ ! -e /etc/ssl/matrixtunnel.key -o ! -e /etc/ssl/matrixtunnel.cert ] && {
+		echo "@TR<<system_settings_Generating_SSL_certificate#Generating SSL certificate>> ..."
+		generate_ssl_key
+	}
+	echo "</pre><br />"
+fi
+if ! empty "$FORM_generate_certificate"; then
+	echo "@TR<<system_settings_Generating_SSL_certificate#Generating SSL certificate>> ...<pre>"
+	generate_ssl_key
+	echo "</pre><br />"
+fi
+
 
 WEBIF_SSL="field|@TR<<system_settings_Webif_SSL#Webif&sup2; SSL>>"
 is_package_installed "matrixtunnel"
