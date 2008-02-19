@@ -5,7 +5,6 @@ PKG_VERSION:=0.003
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -14,8 +13,7 @@ define Package/iw-chillispot
   CATEGORY:=Administration
   SUBMENU:=webif
   DEPENDS:=+webif-lua
-  TITLE:=Chillispot Administration Console
-  DESCRIPTION:=Chillispot Administration Console to OpenWrt in LUA.
+  TITLE:=Chillispot Administration Console in LUA
 endef
 
 define Build/Compile
