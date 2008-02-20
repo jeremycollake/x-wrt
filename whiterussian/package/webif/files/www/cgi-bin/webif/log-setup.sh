@@ -55,7 +55,7 @@ EOF
 	}
 fi
 
-header "Log" "Log Settings" "@TR<<Log Settings>>" '' "$SCRIPT_NAME"
+header "Log" "Log Settings" "@TR<<Log Settings>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 cat <<EOF
 <script type="text/javascript" src="/webif.js "></script>
