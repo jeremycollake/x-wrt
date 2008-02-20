@@ -58,7 +58,7 @@ EOF
 	}
 fi
 
-header "Log" "Log Settings" "@TR<<Log Settings>>" '' "$SCRIPT_NAME"
+header "Log" "Log Settings" "@TR<<Log Settings>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
 #####################################################################
 # modechange script
