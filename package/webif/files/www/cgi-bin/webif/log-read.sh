@@ -62,7 +62,7 @@ if [ "$logtype" = "file" ]; then
 else
 	syslog_cmd="logread"
 fi
-$syslog_cmd 2>/dev/null | awk -v "filtmode=$FORM_filtmode" -v "filtext=$FORM_filtext" '
+eval $syslog_cmd 2>/dev/null | awk -v "filtmode=$FORM_filtmode" -v "filtext=$FORM_filtext" '
 BEGIN {
 	msgcntr = 0
 }
