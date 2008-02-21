@@ -40,7 +40,11 @@ config_cb() {
 	esac
 }
 # this line is for compatibility with webif-lua
-/usr/lib/webif/LUA/xwrt-apply.lua
+LUA="/usr/lib/webif/LUA/xwrt-apply.lua"
+if [ -e $LUA ] 
+then
+  /usr/lib/webif/LUA/xwrt-apply.lua
+fi
 HANDLERS_file='
 	hosts) rm -f /etc/hosts; mv $config /etc/hosts; killall -HUP dnsmasq ;;
 	ethers) rm -f /etc/ethers; mv $config /etc/ethers; killall -HUP dnsmasq ;;
