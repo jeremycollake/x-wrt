@@ -103,7 +103,7 @@ gress_stats() {
 				print "	<td class=\"text\">" class "</td>"
 				print "	<td>" $4 "</td>"
 				total_packets += $4
-				printf "	<td>%d</td>\n", $2
+				print "	<td>" $2 "</td>"
 				total_bytes += $2
 				print "	<td>" bytes2human($2) "</td>"
 				print "</tr>"
@@ -114,7 +114,7 @@ gress_stats() {
 		print "<tr>"
 			print "	<td class=\"text\">@TR<<qos_line_Total#Total>></td>"
 			print "	<td>" total_packets "</td>"
-			printf "	<td>%d</td>\n", total_bytes
+			print "	<td>" total_bytes "</td>"
 			print "	<td>" bytes2human(total_bytes) "</td>"
 		print "</tr>"
 	}'
