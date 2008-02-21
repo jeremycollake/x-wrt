@@ -12,7 +12,7 @@
 --------------------------------------------------------------------------------
 require("common")
 require("form")
-if __FORM == nil then __FORM = get_post() end
+--if __FORM == nil then __FORM = get_post() end
 
 uciClass = {} 
 uciClass_mt = {__index = uciClass} 
