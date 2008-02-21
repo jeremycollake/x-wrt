@@ -97,6 +97,7 @@ function uciUpdatedClass:review(page)
 end
 
 function uciUpdatedClass:applay(page)
+  __RESTART = {}
 	self.count = 0
 	__MENU.selected = string.gsub(__SERVER.REQUEST_URI,"(.*)_changes&(.*)","%2")
 	page.title = tr("Updating config")
@@ -105,10 +106,87 @@ function uciUpdatedClass:applay(page)
 	page.action_clear = ""
 	page.savebutton ="<input type=\"submit\" name=\"continue\" value=\"Continue\" style=\"width:150px;\" />"
 	print(page:header())
+  local handler_list = {}
+  handler_dir = io.popen("ls /usr/lib/webif/apply")
+  for line in handler_dir:lines() do
+    handler_list[#handler_list+1] = line
+  end
+  for k,t in pairsByKeys(self) do
+    if type(t) == "table" then
+      local found = false
+      for i = 1, #handler_list do
+        if handler_list[i] == k then
+          local form = formClass.new(k,true)
+		    	print (form:startFullForm())
+          found = true
+--          print("Committing ...")
+--          os.execute("uci commit "..k)
+--          print("Executing parser ...")
+          dofile("/usr/lib/webif/apply/"..k)
+    			print (form:endForm())
+          break
+        end
+      end
+		end
+	end
+	for i, t in pairs(__RESTART) do 
+    local form = formClass.new("Restarting...",true)
+    print (form:startFullForm())
+    local ucifile = uciClass.new(t.pkg)
+    if ucifile[t.cfg][t.opt] == "1" then
+      local myexec = io.popen(t.init.." enable")
+      print ("Enabling "..i.." service...<br>")
+      for li in myexec:lines() do
+        if string.len(li) > 1 then
+          print(li,"<br>")
+        end
+      end
+      myexec:close()
+--  print("<br>")
+      myexec = io.popen(t.init.." stop")
+      print ("Stopping "..i.." service...<br>")
+      for li in myexec:lines() do
+        if string.len(li) > 1 then
+          print(li,"<br>")
+        end
+      end
+      myexec:close()
+--  print("<br>")
+      myexec = io.popen(t.init.." start")
+      print ("Starting "..i.." service...<br>")
+      for li in myexec:lines() do
+        if string.len(li) > 1 then
+          print(li,"<br>")
+        end
+      end
+      myexec:close()
+    else
+      myexec = io.popen(t.init.." stop")
+      print ("Stopping "..i.." service...<br>")
+      for li in myexec:lines() do
+        if string.len(li) > 1 then
+          print(li,"<br>")
+        end
+      end
+      myexec:close()
+      local myexec = io.popen(t.init.." disable")
+      print ("Disabling "..i.." service...<br>")
+      for li in myexec:lines() do
+        if string.len(li) > 1 then
+          print(li,"<br>")
+        end
+      end
+      myexec:close()
+    end
+  	print (form:endForm())
+  end
+  local form = formClass.new("Apply...",true)
+  print (form:startFullForm())
 	changes_applay=io.popen ("/usr/lib/webif/apply.sh 2>&1")
 	for linea in changes_applay:lines() do
 		print(trsh(linea),"<BR>")
 	end
+ 	print (form:endForm())
 	changes_applay:close()
 	print(page:footer())
 	os.exit()
