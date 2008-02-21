@@ -13,7 +13,7 @@ define Package/iw-chillispot
   CATEGORY:=Administration
   SUBMENU:=webif
   DEPENDS:=+webif-lua
-  TITLE:=Chillispot Administration Console in LUA
+  TITLE:=Chillispot Administration Console
 endef
 
 define Build/Compile

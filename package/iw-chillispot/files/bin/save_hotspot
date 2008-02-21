@@ -39,7 +39,7 @@ PID_F=$RUN_D/chilli.pid
 
 start() {
 	/usr/sbin/chilli 
-	/etc/init.d/firewall restart
+	/etc/init.d/firewall 
 }
 
 stop() {
