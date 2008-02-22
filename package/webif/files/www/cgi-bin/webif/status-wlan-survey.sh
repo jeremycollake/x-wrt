@@ -379,7 +379,7 @@ else
                 done
 ################
 
-SSID=$(grep -i "ESSID" < "$tempfile"_"${current}" | sed -e s/'ESSID:'//g  -e s/'"'//g | awk '{ print $1 }' )
+SSID=$(grep -i "ESSID" < "$tempfile"_"${current}" | sed -e s/'ESSID:'//g -e s/'"'//g | awk '{gsub(/^[ \t]+|[ \t]+$/,"");print}' )
 
 CHANNEL=$(grep -i "Channel:" < "$tempfile"_"${current}" | sed -e s/'Channel:'//g -e s/' '//g)
 if equal $CHANNEL "" ; then CHANNEL=$(grep -i "Frequency:" < "$tempfile"_"${current}" | awk '{ print $4  }' | sed -e s/')'//g ) ; fi
