@@ -15,7 +15,10 @@ define Package/iw-freeradius
   SUBMENU:=webif
   DEPENDS:=+webif-lua
   TITLE:=Freeradius Administrative Console in LUA for X-Wrt.
-  DESCRIPTION:=Basic Freeradius Administrative Console in LUA for X-Wrt.
+endef
+
+define Package/madwifi/description
+ Basic Freeradius Administrative Console in LUA for X-Wrt.
 endef
 
 define Build/Compile
