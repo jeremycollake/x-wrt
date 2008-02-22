@@ -85,6 +85,7 @@ for interface in $network; do
 		config_get FORM_demand $interface demand
 		config_get FORM_vci $interface vci
 		config_get FORM_vpi $interface vpi
+		config_get FORM_macaddr $interface macaddr
 		config_get_bool FORM_defaultroute $interface defaultroute 1
 	else
 		eval FORM_proto="\$FORM_${interface}_proto"
@@ -105,6 +106,7 @@ for interface in $network; do
 		eval FORM_keepalive="\$FORM_${interface}_keepalive"
 		eval FORM_vci="\$FORM_${interface}_vci"
 		eval FORM_vpi="\$FORM_${interface}_vpi"
+		eval FORM_macaddr="\$FORM_${interface}_macaddr"
 		eval FORM_defaultroute="\$FORM_${interface}_defaultroute"
 	fi
 	config_get FORM_dns $interface dns
@@ -134,6 +136,10 @@ for interface in $network; do
 	select|${interface}_type|$FORM_type
 	option||@TR<<None>>
 	option|bridge|@TR<<Bridged>>
+	field|@TR<<MAC Address>>
+	text|${interface}_macaddr|$FORM_macaddr
+	helpitem|MAC Address
+	helptext|Helptext MAC Address#Used to enter a MAC address besides the default one.
 	end_form
 
 	start_form||${interface}_ip_settings|hidden
@@ -286,6 +292,7 @@ EOF
 				eval FORM_keepalive="\$FORM_${interface}_keepalive"
 				eval FORM_vci="\$FORM_${interface}_vci"
 				eval FORM_vpi="\$FORM_${interface}_vpi"
+				eval FORM_macaddr="\$FORM_${interface}_macaddr"
 				eval FORM_defaultroute="\$FORM_${interface}_defaultroute"
 				if [ "$FORM_defaultroute" = "" ]; then
 					FORM_defaultroute=0
@@ -293,6 +300,7 @@ EOF
 
 				uci_set "network" "$interface" "proto" "$FORM_proto"
 				uci_set "network" "$interface" "type" "$FORM_type"
+				uci_set "network" "$interface" "macaddr" "$FORM_macaddr"
 				case "$FORM_proto" in
 					pptp)
 						uci_set "network" "$interface" "server" "$FORM_pptp_server" ;;
