@@ -77,12 +77,12 @@ function formClass:tostring(name)
 		ret = ret .. self:endForm()
 		return ret
 	end
-	if #__ERROR > 0 then 
-		self.__help = {}
-		for i,error in ipairs(__ERROR) do
-			form:Add_help(error["var_name"],error["msg"])
-		end
-	end
+--	if #__ERROR > 0 then 
+----		self.__help = {}
+--		for i,error in ipairs(__ERROR) do
+--			form:Add_help(error["var_name"],error["msg"])
+--		end
+--	end
 end
 
 function formClass:Add(str_input,str_name,str_value,str_label,str_validate,str_style,str_script)
@@ -251,6 +251,20 @@ function formClass:endForm()
 ]]
 	if self.__full == true then srt = "</table>" 
 	else
+    local found = false
+    local str_error = ""
+    if #__ERROR > 0 then
+			str_error = str_error..[[<blockquote class="settings-help"><font color="red">]]
+			str_error = str_error..[[<h1><strong>]]..tr("Invalid input!!!")..[[</strong></h1>]]
+		  for i,error in ipairs(__ERROR) do
+		    if self[error.var] ~= nil then
+		      found = true
+          str_error = str_error .. "<h4>"..error.var_name.." :</h4><p>"..error.msg.."</p>"
+        end
+		  end
+			str_error = str_error.."</font></blockquote>"
+    end
+    if found then str = str .. str_error end
 		if #self.__help > 0 then
 			str = str..[[<blockquote class="settings-help">]]
 			str = str..[[<h3><strong>tr(Short help) :</strong></h3>]]
@@ -275,8 +289,8 @@ function formClass:Add_help(title,text)
 end
 
 function formClass:Add_help_link(link,text,blanck)
-	if blanck == false then blanck = "" else blanck = "target=\"_blanck\" " end
-	if link == nil then link = "Error help link = nil" end
-	if text == nil then text = "Error help text = nil" end
-	self.__help[#self.__help+1] = [[<a class="more-help" href="]]..link..[["]]..blanck..[[ >]]..text..[[...</a>]]
+    if blanck == false then blanck = "" else blanck = "target=\"_blanck\" " end
+    if link == nil then link = "Error help link = nil" end
+    if text == nil then text = "Error help text = nil" end
+    self.__help[#self.__help+1] = [[<a class="more-help" href="]]..link..[["]]..blanck..[[ >]]..text..[[...</a>]]
 end

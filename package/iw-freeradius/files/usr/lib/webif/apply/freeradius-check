@@ -11,7 +11,7 @@
 --------------------------------------------------------------------------------
 print ("Committing Freeradius-check...")
 os.execute("uci commit freeradius-check")
-print ("Committing Freeradius-check...")
+print ("Committing Freeradius-reply...")
 os.execute("uci commit freeradius-reply")
 
 print ("Writing users...")

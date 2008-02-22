@@ -33,7 +33,7 @@ function validate_post()
 	end
 end
 
-function validate(str_name,str_value,s)
+function validate(str_name,str_value,s,str_var)
 	local i = 0
 	local list = {}
 	local option = {}
@@ -241,6 +241,7 @@ function validate(str_name,str_value,s)
 	else
 		ret["var_name"] = str_name
 		ret["msg"] = str_error
+		ret["var"] = str_var
 	end
 	return ret
 end

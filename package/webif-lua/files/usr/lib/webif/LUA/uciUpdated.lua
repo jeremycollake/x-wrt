@@ -41,7 +41,7 @@ function uciUpdatedClass:countUpdated()
 		uci_val:close()
 		if uci_value == nil then uci_value = "" end
 		if __FORM[v] == nil then __FORM[v] = "" end
-		local error = validate(__FORM["val_lbl_"..v],__FORM[v],__FORM["val_str_"..v])
+		local error = validate(__FORM["val_lbl_"..v],__FORM[v],__FORM["val_str_"..v],v)
 		if error ~=nil then __ERROR[#__ERROR+1] = error end
 		if __FORM[v] ~= uci_value and error==nil then
 			if __FORM[v] == "" then 

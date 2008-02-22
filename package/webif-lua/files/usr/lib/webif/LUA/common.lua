@@ -48,13 +48,50 @@ function load_file(filename)
 	local data = ""
 	local BUFSIZE = 2^15     -- 8K
 	local f = io.input(filename)   -- open input file
-	while true do
-		local lines, rest = f:read(BUFSIZE, "*line")
-		if not lines then break end
-		if rest then lines = lines .. rest .. '\n' end
-		data = data..lines
+	if f then 
+    while true do
+		  local lines, rest = f:read(BUFSIZE, "*line")
+		  if not lines then break end
+		  if rest then lines = lines .. rest .. '\n' end
+      data = data ..lines
+    end
+  else
+    return nil
 	end
+--	while true do
+--		local lines, rest = f:read(BUFSIZE, "*line")
+--		if not lines then break end
+--		if rest then lines = lines .. rest .. '\n' end
+--		data = data..lines
+--	end
 	return data
+end
+
+function io.exists( file )
+    local f = io.open( file, "r" )
+    if f then
+        io.close( f )
+        return true
+    else
+        return false
+    end
+end
+
+function io.totable(filename,clean)
+  local t = {}
+	local data = load_file(filename)
+	if clean then
+    for i,v in pairs(string.split(data,'\n')) do
+      if string.find(string.trim(v),"#",1,true) ~= 1 then 
+        if string.trim(v) ~= "" then
+          t[#t+1] = v
+        end
+      end
+    end
+    return t
+  end
+  if data then return string.split(data,'\n') end
+  return nil
 end
 
 --function count_updated()
