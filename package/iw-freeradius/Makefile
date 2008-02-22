@@ -17,7 +17,7 @@ define Package/iw-freeradius
   TITLE:=Freeradius Administrative Console in LUA for X-Wrt.
 endef
 
-define Package/madwifi/description
+define Package/iw-freeradius/description
  Basic Freeradius Administrative Console in LUA for X-Wrt.
 endef
 
