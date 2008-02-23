@@ -50,7 +50,7 @@ if __FORM.option == "dhcp" then
 	for i,v in pairsByKeys(get_interfaces()) do
 		form[cfg_chilli..".dhcpif"].options:Add(i,i)
 	end
-	form:Add("text",cfg_chilli..".domain",chilli_val.domain,tr("chilli_var_doman#Domain","string"),"width:99%")
+	form:Add("text",cfg_chilli..".domain",chilli_val.domain,tr("chilli_var_doman#Domain"),"string","width:99%")
 	form:Add("text",cfg_chilli..".net",chilli_val.net,tr("chilli_var_net#Network"),"string")
 	form:Add("text",cfg_chilli..".dynip",chilli_val.dynip,tr("chilli_var_dynip#Dynamic IP Pool"),"string")
 	form:Add("text",cfg_chilli..".statip",chilli_val.statip,tr("chilli_var_statip#Static IP Pool"),"string")
@@ -106,7 +106,7 @@ elseif __FORM.option == "radius" then
   form:Add("subtitle",tr("NAS Identification"))
 	form:Add("text",cfg_chilli..".radiusnasid",       chilli_val.radiusnasid,tr("chilli_var_radiusnasid#NAS ID"),"string")
 	form:Add("text",cfg_chilli..".radiusnasip",       chilli_val.radiusnasip,tr("chilli_var_radiusnasip#NAS IP"),"string")
-	form:Add("text",cfg_chilli..".radiusnasporttype", chilli_val.radiusnasip,tr("chilli_var_radiusnasporttype#NAS Port type"),"int")
+	form:Add("text",cfg_chilli..".radiusnasporttype", chilli_val.radiusporttype,tr("chilli_var_radiusnasporttype#NAS Port type"),"int")
 	form:Add("text",cfg_chilli..".radiuslocationid",  chilli_val.radiuslocationid,tr("chilli_var_radiuslocationid#Location ID"),"string","width:99%")
 	form:Add("text",cfg_chilli..".radiuslocationname",chilli_val.radiuslocationname,tr("chilli_var_radiuslocationname#Location Name"),"string","width:99%")
 	form:Add("text",cfg_chilli..".radiuslisten",      chilli_val.radiuslisten,tr("chilli_var_radiuslisten#Listen Interface IP"),"string")

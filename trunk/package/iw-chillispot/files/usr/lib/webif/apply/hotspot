@@ -1,0 +1,39 @@
+#!/usr/bin/lua
+--------------------------------------------------------------------------------
+-- freeradius apply handler
+-- Author(s) [in order of work date]:
+--       Fabián Omar Franzotti
+--         
+-- Configuration files referenced:
+--    freeradius
+--   
+--
+--------------------------------------------------------------------------------
+print ("Committing Chillispot".."<br>")
+os.execute("uci commit hotspot")
+print("Checking freeradius installation".."<br>")
+if io.exists("/usr/share/freeradius/dictionary") then
+  local dict = io.totable("/usr/share/freeradius/dictionary",true)
+  print("Updating /usr/share/freeradius/dictionary".."<br>")
+  if dict[1] ~= "$INCLUDE dictionary.chillispot" then
+    table.insert(dict,1,"$INCLUDE dictionary.chillispot")
+  end
+  pepe = io.open("/usr/share/freeradius/dictionary","w")
+  pepe:write(table.concat(dict,'\n'))
+  pepe:close()
+end
+
+print ("Writing configuration file /etc/chilli.conf".."<br>")
+local hotspot = uciClass.new("hotspot")
+chilli = hotspot.chilli
+for i=1, #chilli do
+  for k,v in pairs(chilli[i].values) do
+    print(k,v,"<br>")
+  end
+end
+
+__RESTART["Chillispot"] = {}
+__RESTART["Chillispot"]["pkg"] = "hotspot"
+__RESTART["Chillispot"]["cfg"] = "service"
+__RESTART["Chillispot"]["opt"] = "enable"
+__RESTART["Chillispot"]["init"] = "/etc/init.d/chilli"
