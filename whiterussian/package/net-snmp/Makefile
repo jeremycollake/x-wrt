@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=net-snmp
 PKG_VERSION:=5.1.2
-PKG_RELEASE:=2.1
+PKG_RELEASE:=2.2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=@SF/net-snmp
@@ -166,7 +166,7 @@ $(IPKG_SNMPD):
 	install -d -m0755 $(IDIR_SNMPD)/etc/init.d
 	install -m0755 ./files/snmpd.init $(IDIR_SNMPD)/etc/init.d/snmpd
 	install -d -m0755 $(IDIR_SNMPD)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/snmpd-shared $(IDIR_SNMPD)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/snmpd-shared $(IDIR_SNMPD)/usr/sbin/snmpd
 	$(RSTRIP) $(IDIR_SNMPD)
 	$(IPKG_BUILD) $(IDIR_SNMPD) $(PACKAGE_DIR)
 
@@ -178,7 +178,7 @@ $(IPKG_SNMPD_STATIC):
 	install -d -m0755 $(IDIR_SNMPD_STATIC)/etc/init.d
 	install -m0755 ./files/snmpd.init $(IDIR_SNMPD_STATIC)/etc/init.d/snmpd
 	install -d -m0755 $(IDIR_SNMPD_STATIC)/usr/sbin
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/snmpd-static $(IDIR_SNMPD_STATIC)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/snmpd-static $(IDIR_SNMPD_STATIC)/usr/sbin/snmpd
 	$(RSTRIP) $(IDIR_SNMPD_STATIC)
 	$(IPKG_BUILD) $(IDIR_SNMPD_STATIC) $(PACKAGE_DIR)
 
