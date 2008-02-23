@@ -7,19 +7,25 @@ load_settings log
 
 if empty "$FORM_submit" ; then
 	FORM_ipaddr="${log_ipaddr:-$(nvram get log_ipaddr)}"
-	equal "$FORM_ipaddr" 0 && FORM_ipaddr=""
+	FORM_ipaddr="${FORM_ipaddr:-$DEFAULT_log_ipaddr}"
+	empty "$FORM_ipaddr" && FORM_ipaddr=""
 	FORM_port="${log_port:-$(nvram get log_port)}"
+	FORM_port="${FORM_port:-$DEFAULT_log_port}"
 	empty "$FORM_port" && FORM_port=""
 	FORM_mark="${log_mark:-$(nvram get log_mark)}"
+	FORM_mark="${FORM_mark:-$DEFAULT_log_mark}"
 	FORM_type="${log_type:-$(nvram get log_type)}"
 	FORM_type="${FORM_type:-$DEFAULT_log_type}"
 	FORM_file="${log_file:-$(nvram get log_file)}"
-	FORM_file="${FORM_filename:-$DEFAULT_log_file}"
+	FORM_file="${FORM_file:-$DEFAULT_log_file}"
 	FORM_size="${log_size:-$(nvram get log_size)}"
 	FORM_size="${FORM_size:-$DEFAULT_log_size}"
 	FORM_conloglevel="${klog_conloglevel:-$(nvram get klog_conloglevel)}"
+	FORM_conloglevel="${FORM_conloglevel:-$DEFAULT_klog_conloglevel}"
 	FORM_buffersize="${klog_buffersize:-$(nvram get klog_buffersize)}"
+	FORM_buffersize="${FORM_buffersize:-$DEFAULT_klog_buffersize}"
 	FORM_enabled="${klog_enabled:-$(nvram get klog_enabled)}"
+	FORM_enabled="${FORM_enabled:-$DEFAULT_klog_enabled}"
 	FORM_kfile="${klog_file:-$(nvram get klog_file)}"
 	FORM_kfile="${FORM_kfile:-$DEFAULT_klog_file}"
 	FORM_gzip="${klog_gzip:-$(nvram get klog_gzip)}"
@@ -32,11 +38,14 @@ else
 ip|FORM_ipaddr|@TR<<Server IP Address>>||$FORM_ipaddr
 int|FORM_port|@TR<<Server Port>>|min=0 max=65535|$FORM_port
 int|FORM_mark|@TR<<Minutes Between Marks>>||$FORM_mark
-string|file|@TR<<Log File>>|$file_required|$FORM_file
+string|FORM_type|@TR<<Log type>>|nospaces|$FORM_type
+string|FORM_file|@TR<<Log File>>|$file_required|$FORM_file
 int|FORM_size|@TR<<Log Size>>|min=1 max=9999 required|$FORM_size
-int|FORM__conloglevel|@TR<<Messages Priority>>|min=0 max=9|$FORM__conloglevel
+int|FORM_conloglevel|@TR<<Messages Priority>>|min=0 max=9|$FORM_conloglevel
 int|FORM_buffersize|@TR<<Ring Buffer Size>>|min=1 max=9999|$FORM_buffersize
-string|kfile|@TR<<Backup File>>|$kfile_required|$FORM_kfile
+int|FORM_enabled|@TR<<Backup Boot Time Messages>>||$FORM_enabled
+string|FORM_kfile|@TR<<Backup File>>|$kfile_required|$FORM_kfile
+int|FORM_gzip|@TR<<Compress Backup>>||$FORM_gzip
 EOF
 	equal "$?" 0 && {
 		[ -z "$FORM_ipaddr" ] && FORM_port=""
@@ -48,7 +57,6 @@ EOF
 		save_setting log log_size "$FORM_size"
 		save_setting log klog_conloglevel "$FORM_conloglevel"
 		save_setting log klog_buffersize "$FORM_buffersize"
-		save_setting log klog_enabled "$FORM_enabled"
 		save_setting log klog_enabled "$FORM_enabled"
 		save_setting log klog_file "$FORM_kfile"
 		save_setting log klog_gzip "$FORM_gzip"
