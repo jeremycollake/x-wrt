@@ -34,7 +34,7 @@ chilli = hotspot.chilli
 chillispot = hotspot.chillispot
 -- Check if config section exist, if not set it
 if chilli == nil then chilli = hotspot:set("chilli") end
-if chillispot == nil then chillispot = hotspot:set("chillispot") end
+if chillispot == nil then chillispot = hotspot:set("chillispot","service") end
 local cfg_chilli = hotspot.chilli[1].name
 local cfg_chillispot = hotspot.chillispot[1].name
 local chilli_val = hotspot.chilli[1].values
@@ -87,7 +87,7 @@ elseif __FORM.option == "portal" then
 	form:Add("text",cfg_chilli..".uamhomepage",chilli_val.uamhomepage,tr("chilli_var_uamhomepage#UAM Home Page"),"string","width:99%")
 	form:Add("text",cfg_chilli..".uamallowed",chilli_val.uamallowed,tr("chilli_var_uamallowed#UAM Allowed"),"string","width:99%")
 	form:Add("text",cfg_chilli..".uamlisten",chilli_val.uamlisten,tr("chilli_var_uamlisten#UAM Listen"),"string","width:99%")
-	form:Add("text",cfg_chilli..".uamport",chilli_val.uamport,tr("chilli_var_uamport#UAM Port","string"),"width:99%")
+	form:Add("text",cfg_chilli..".uamport",chilli_val.uamport,tr("chilli_var_uamport#UAM Port"),"string","width:99%")
 ----	Help section	
 	form:Add_help(tr("chilli_var_uamserver#UAM Server"),tr("chilli_help_uamserver#URL of a Webserver handling the authentication."))
 	form:Add_help(tr("chilli_var_uamsecret#UAM Secret"),tr("chilli_help_uamsecret#Shared secret between HotSpot and Webserver (UAM Server)."))
@@ -102,7 +102,7 @@ elseif __FORM.option == "radius" then
 	form:Add("text",cfg_chilli..".radiusserver2",     chilli_val.radiusserver2,tr("chilli_var_radiusserver2#Secondary Radius"),"string","width:99%")
 	form:Add("text",cfg_chilli..".radiusauthport",    chilli_val.radiusauthport,tr("chilli_var_radiusauthport#Authentication Port"),"string")
 	form:Add("text",cfg_chilli..".radiusacctport",    chilli_val.radiusacctport,tr("chilli_var_radiusacctport#Accounting Port"),"string")
-  form:Add("text",cfg_chilli..".radiussecret",      chilli_val.radiussecret,tr("chilli_var_radiussecret#Radius Secret"),"string","width:99%")
+  form:Add("text",cfg_chilli..".radiussecret",      chilli_val.radiussecret,tr("chilli_var_radiussecret#Radius Secret"),"string")
   form:Add("subtitle",tr("NAS Identification"))
 	form:Add("text",cfg_chilli..".radiusnasid",       chilli_val.radiusnasid,tr("chilli_var_radiusnasid#NAS ID"),"string")
 	form:Add("text",cfg_chilli..".radiusnasip",       chilli_val.radiusnasip,tr("chilli_var_radiusnasip#NAS IP"),"string")
