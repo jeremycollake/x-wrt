@@ -170,12 +170,13 @@ function pkgInstalledClass:install_pkg()
 			end
 		end
 	end
+	page.title = tr("Installing Package")
 	page.savebutton ="<input type=\"submit\" name=\"continue\" value=\"Continue\" style=\"width:150px;\" />"
 	print(page:header())
 	print("<pre>")
 	local install = io.popen("ipkg install "..str_list)
 	for line in install:lines() do
-		print(line,"<br>")
+		print(line)
 	end
 	print("</pre>")
 	print(page:footer())
