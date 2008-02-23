@@ -246,6 +246,7 @@ for interface in $network; do
 	document.getElementById(\"${interface}_passwd\").value = apnDB[element.value].pass;"
 	append JS_APN_DB "$wwan_js" "$N"
 
+	append validate_forms "mac|FORM_${interface}_macaddr|$interface @TR<<MAC Address>>||$FORM_macaddr" "$N"
 	append validate_forms "ip|FORM_${interface}_ipaddr|$interface @TR<<IP Address>>||$FORM_ipaddr" "$N"
 	append validate_forms "netmask|FORM_${interface}_netmask|$interface @TR<<WAN Netmask>>||$FORM_netmask" "$N"
 	append validate_forms "ip|FORM_${interface}_gateway|$interface @TR<<Default Gateway>>||$FORM_gateway" "$N"
