@@ -31,8 +31,10 @@ EOF
 if empty "$FORM_submit"; then
 	eval FORM_ipaddr="\$CONFIG_${syslogd_cfg}_ipaddr"
 	eval FORM_port="\$CONFIG_${syslogd_cfg}_port"
+	FORM_port="${FORM_port:-514}"
 #	eval FORM_mark="\$CONFIG_${syslogd_cfg}_mark"
 	eval FORM_type="\$CONFIG_${syslogd_cfg}_type"
+	FORM_type="${FORM_type:-circular}"
 	eval FORM_file="\$CONFIG_${syslogd_cfg}_file"
 	FORM_file="${FORM_file:-/var/log/messages}"
 	eval FORM_size="\$CONFIG_${syslogd_cfg}_size"
@@ -51,11 +53,14 @@ else
 ip|FORM_ipaddr|@TR<<Server IP Address>>||$FORM_ipaddr
 int|FORM_port|@TR<<Server Port>>|min=0 max=65535|$FORM_port
 int|FORM_mark|@TR<<Minutes Between Marks>>||$FORM_mark
-string|file|@TR<<Log File>>|$file_required|$FORM_file
+string|FORM_type|@TR<<Log type>>|nospaces|$FORM_type
+string|FORM_file|@TR<<Log File>>|$file_required|$FORM_file
 int|FORM_size|@TR<<Log Size>>|min=1 max=9999 required|$FORM_size
-int|FORM__conloglevel|@TR<<Messages Priority>>|min=0 max=9|$FORM__conloglevel
+int|FORM_conloglevel|@TR<<Messages Priority>>|min=0 max=9|$FORM_conloglevel
 int|FORM_buffersize|@TR<<Ring Buffer Size>>|min=1 max=9999|$FORM_buffersize
-string|kfile|@TR<<Backup File>>|$kfile_required|$FORM_kfile
+int|FORM_enabled|@TR<<Backup Boot Time Messages>>||$FORM_enabled
+string|FORM_kfile|@TR<<Backup File>>|$kfile_required|$FORM_kfile
+int|FORM_gzip|@TR<<Compress Backup>>||$FORM_gzip
 EOF
 	equal "$?" 0 && {
 		[ -z "$syslogd_cfg" ] && { uci_add syslog syslogd; syslogd_cfg="$CONFIG_SECTION"; }
