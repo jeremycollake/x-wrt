@@ -132,8 +132,12 @@ function uciUpdatedClass:applay(page)
 	for i, t in pairs(__RESTART) do 
     local form = formClass.new("Restarting...",true)
     print (form:startFullForm())
-    local ucifile = uciClass.new(t.pkg)
-    if ucifile[t.cfg][t.opt] == "1" then
+    local opt = 1
+    if t.pkg ~= "" then
+      local ucifile = uciClass.new(t.pkg)
+      opt = tonumber(ucifile[t.cfg][t.opt]) 
+    end
+    if  opt == 1 then
       local myexec = io.popen(t.init.." enable")
       print ("Enabling "..i.." service...<br>")
       for li in myexec:lines() do
@@ -142,7 +146,6 @@ function uciUpdatedClass:applay(page)
         end
       end
       myexec:close()
---  print("<br>")
       myexec = io.popen(t.init.." stop")
       print ("Stopping "..i.." service...<br>")
       for li in myexec:lines() do
@@ -151,7 +154,6 @@ function uciUpdatedClass:applay(page)
         end
       end
       myexec:close()
---  print("<br>")
       myexec = io.popen(t.init.." start")
       print ("Starting "..i.." service...<br>")
       for li in myexec:lines() do
