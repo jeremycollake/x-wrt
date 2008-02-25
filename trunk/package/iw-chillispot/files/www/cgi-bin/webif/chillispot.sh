@@ -50,7 +50,7 @@ if __FORM.option == "dhcp" then
 	for i,v in pairsByKeys(get_interfaces()) do
 		form[cfg_chilli..".dhcpif"].options:Add(i,i)
 	end
-	form:Add("text",cfg_chilli..".domain",chilli_val.domain,tr("chilli_var_doman#Domain"),"string","width:99%")
+	form:Add("text",cfg_chilli..".domain",chilli_val.domain,tr("chilli_var_doman#Domain"),"string","width:90%")
 	form:Add("text",cfg_chilli..".net",chilli_val.net,tr("chilli_var_net#Network"),"string")
 	form:Add("text",cfg_chilli..".dynip",chilli_val.dynip,tr("chilli_var_dynip#Dynamic IP Pool"),"string")
 	form:Add("text",cfg_chilli..".statip",chilli_val.statip,tr("chilli_var_statip#Static IP Pool"),"string")
@@ -82,12 +82,12 @@ if __FORM.option == "dhcp" then
 elseif __FORM.option == "portal" then
 	form = formClass.new(tr("chilli_portal_title#Portal Settings"))
 ----	Input Section form
-	form:Add("text",cfg_chilli..".uamserver",chilli_val.uamserver,tr("chilli_var_uamserver#UAM Server"),"string","width:99%")
-	form:Add("text",cfg_chilli..".uamsecret",chilli_val.uamsecret,tr("chilli_var_uamsecret#UAM Secret"),"string","width:99%")
-	form:Add("text",cfg_chilli..".uamhomepage",chilli_val.uamhomepage,tr("chilli_var_uamhomepage#UAM Home Page"),"string","width:99%")
-	form:Add("text",cfg_chilli..".uamallowed",chilli_val.uamallowed,tr("chilli_var_uamallowed#UAM Allowed"),"string","width:99%")
-	form:Add("text",cfg_chilli..".uamlisten",chilli_val.uamlisten,tr("chilli_var_uamlisten#UAM Listen"),"string","width:99%")
-	form:Add("text",cfg_chilli..".uamport",chilli_val.uamport,tr("chilli_var_uamport#UAM Port"),"string","width:99%")
+	form:Add("text",cfg_chilli..".uamserver",chilli_val.uamserver,tr("chilli_var_uamserver#UAM Server"),"string","width:90%")
+	form:Add("text",cfg_chilli..".uamsecret",chilli_val.uamsecret,tr("chilli_var_uamsecret#UAM Secret"),"string","width:90%")
+	form:Add("text",cfg_chilli..".uamhomepage",chilli_val.uamhomepage,tr("chilli_var_uamhomepage#UAM Home Page"),"string","width:90%")
+	form:Add("text",cfg_chilli..".uamallowed",chilli_val.uamallowed,tr("chilli_var_uamallowed#UAM Allowed"),"string","width:90%")
+	form:Add("text",cfg_chilli..".uamlisten",chilli_val.uamlisten,tr("chilli_var_uamlisten#UAM Listen"),"string","width:90%")
+	form:Add("text",cfg_chilli..".uamport",chilli_val.uamport,tr("chilli_var_uamport#UAM Port"),"string","width:90%")
 ----	Help section	
 	form:Add_help(tr("chilli_var_uamserver#UAM Server"),tr("chilli_help_uamserver#URL of a Webserver handling the authentication."))
 	form:Add_help(tr("chilli_var_uamsecret#UAM Secret"),tr("chilli_help_uamsecret#Shared secret between HotSpot and Webserver (UAM Server)."))
@@ -98,8 +98,8 @@ elseif __FORM.option == "portal" then
 elseif __FORM.option == "radius" then
 	form = formClass.new(tr("chilli_radius_title#Radius Settings"))
 ----	Input Section form
-	form:Add("text",cfg_chilli..".radiusserver1",     chilli_val.radiusserver1,tr("chilli_var_radiusserver1#Primary Radius"),"string","width:99%")
-	form:Add("text",cfg_chilli..".radiusserver2",     chilli_val.radiusserver2,tr("chilli_var_radiusserver2#Secondary Radius"),"string","width:99%")
+	form:Add("text",cfg_chilli..".radiusserver1",     chilli_val.radiusserver1,tr("chilli_var_radiusserver1#Primary Radius"),"string","width:90%")
+	form:Add("text",cfg_chilli..".radiusserver2",     chilli_val.radiusserver2,tr("chilli_var_radiusserver2#Secondary Radius"),"string","width:90%")
 	form:Add("text",cfg_chilli..".radiusauthport",    chilli_val.radiusauthport,tr("chilli_var_radiusauthport#Authentication Port"),"string")
 	form:Add("text",cfg_chilli..".radiusacctport",    chilli_val.radiusacctport,tr("chilli_var_radiusacctport#Accounting Port"),"string")
   form:Add("text",cfg_chilli..".radiussecret",      chilli_val.radiussecret,tr("chilli_var_radiussecret#Radius Secret"),"string")
@@ -107,10 +107,10 @@ elseif __FORM.option == "radius" then
 	form:Add("text",cfg_chilli..".radiusnasid",       chilli_val.radiusnasid,tr("chilli_var_radiusnasid#NAS ID"),"string")
 	form:Add("text",cfg_chilli..".radiusnasip",       chilli_val.radiusnasip,tr("chilli_var_radiusnasip#NAS IP"),"string")
 	form:Add("text",cfg_chilli..".radiusnasporttype", chilli_val.radiusporttype,tr("chilli_var_radiusnasporttype#NAS Port type"),"int")
-	form:Add("text",cfg_chilli..".radiuslocationid",  chilli_val.radiuslocationid,tr("chilli_var_radiuslocationid#Location ID"),"string","width:99%")
-	form:Add("text",cfg_chilli..".radiuslocationname",chilli_val.radiuslocationname,tr("chilli_var_radiuslocationname#Location Name"),"string","width:99%")
+	form:Add("text",cfg_chilli..".radiuslocationid",  chilli_val.radiuslocationid,tr("chilli_var_radiuslocationid#Location ID"),"string","width:90%")
+	form:Add("text",cfg_chilli..".radiuslocationname",chilli_val.radiuslocationname,tr("chilli_var_radiuslocationname#Location Name"),"string","width:90%")
 	form:Add("text",cfg_chilli..".radiuslisten",      chilli_val.radiuslisten,tr("chilli_var_radiuslisten#Listen Interface IP"),"string")
-	form:Add("text",cfg_chilli..".radiuscalled",      chilli_val.radiuscalled,tr("chilli_var_radiuscalled#Called Station ID"),"string","width:99%")
+	form:Add("text",cfg_chilli..".radiuscalled",      chilli_val.radiuscalled,tr("chilli_var_radiuscalled#Called Station ID"),"string","width:90%")
   form:Add("subtitle","Radius request disconnection")
 	form:Add("text",cfg_chilli..".coaport",      chilli_val.coaport,tr("chilli_var_coaport#UDP port"),"string")
 	form:Add("checkbox",cfg_chilli..".coanoipcheck",chilli_val.coanoipcheck ,tr("chilli_var_coanoipcheck#No check radius IP"),"string")
@@ -146,7 +146,7 @@ elseif __FORM.option == "access" then
 	form = formClass.new(tr("chilli_title_access#Access List Setting"))
 ----	Input Section form
 	form:Add("checkbox",cfg_chilli..".macauth",chilli_val.macauth,tr("chilli_var_macauth#MAC Authentication"))
-	form:Add("text",cfg_chilli..".macallowed",chilli_val.macallowed,tr("chilli_var_macallowed#MAC Allowed"),"string","width:99%")
+	form:Add("text",cfg_chilli..".macallowed",chilli_val.macallowed,tr("chilli_var_macallowed#MAC Allowed"),"string","width:90%")
 	form:Add("text",cfg_chilli..".macpassword",chilli_val.macpassword,tr("chilli_var_macpassword#MAC Password"),"string")
 	form:Add("text",cfg_chilli..".macsuffix",chilli_val.macsuffix,tr("chilli_var_macsuffix#MAC Suffix"),"string")
 ----	Help section	
@@ -170,10 +170,10 @@ elseif __FORM.option == "proxy" then
 elseif __FORM.option == "scripts" then
 	form = formClass.new(tr("chilli_title_scripts#Scripts Settings"))
 ----	Input Section form
-	form:Add("text",cfg_chilli..".ipup",chilli_val.ipup,tr("chilli_var_ipup#IP Up"),"string","width:99%")
-	form:Add("text",cfg_chilli..".ipdown",chilli_val.ipdown,tr("chilli_var_ipdown#IP Down"),"string","width:99%")
-	form:Add("text",cfg_chilli..".conup",chilli_val.conup,tr("chilli_var_conup#Connection Up"),"string","width:99%")
-	form:Add("text",cfg_chilli..".condown",chilli_val.condown,tr("chilli_var_condown#Connection Down"),"string","width:99%")
+	form:Add("text",cfg_chilli..".ipup",chilli_val.ipup,tr("chilli_var_ipup#IP Up"),"string","width:90%")
+	form:Add("text",cfg_chilli..".ipdown",chilli_val.ipdown,tr("chilli_var_ipdown#IP Down"),"string","width:90%")
+	form:Add("text",cfg_chilli..".conup",chilli_val.conup,tr("chilli_var_conup#Connection Up"),"string","width:90%")
+	form:Add("text",cfg_chilli..".condown",chilli_val.condown,tr("chilli_var_condown#Connection Down"),"string","width:90%")
 ----	Help section	
 	form:Add_help(tr("chilli_help_title_ip#/etc/chilli.ipup and /etc/chilli.ipdown"),tr("chilli_help_ip#Script executed after network interface has been brought up. Executed with the following parameters: (devicename) (ip address) (mask)."))
 	form:Add_help(tr("chilli_help_title_con#/etc/chilli.conup and /etc/chilli.condown"),tr("chilli_help_con#Script executed after a user has disconnected. Executed with the following parameters: (devicename) (ip address) (mask) (user ip address) (user mac address) (filter ID)."))
@@ -188,8 +188,8 @@ else
 	form:Add("checkbox",cfg_chilli..".fg",chilli_val.fg,tr("chilli_var_foreground#Foreground"))
 	form:Add("checkbox",cfg_chilli..".debug",chilli_val.debug,tr("chilli_var_debug#Debug"))
 	form:Add("text",cfg_chilli..".interval",chilli_val.interval,tr("chilli_var_interval#Interval"),"int,>1800")
-	form:Add("text",cfg_chilli..".pidfile",chilli_val.pidfile,tr("chilli_var_pidfile#Pid file"),"string","width:99%")
-	form:Add("text",cfg_chilli..".statedir",chilli_val.statedir,tr("chilli_var_statedir#State dir"),"string","width:99%")
+	form:Add("text",cfg_chilli..".pidfile",chilli_val.pidfile,tr("chilli_var_pidfile#Pid file"),"string","width:90%")
+	form:Add("text",cfg_chilli..".statedir",chilli_val.statedir,tr("chilli_var_statedir#State dir"),"string","width:90%")
 	form:Add("text",cfg_chilli..".confusername",chilli_val.confusername,tr("chilli_var_confusername#Conf username"),"string")
 	form:Add("text",cfg_chilli..".confpassword",chilli_val.confpassword,tr("chilli_var_confpassword#Conf password"),"string")
 --	form[cfg_chilli..".fg"].checked = 1

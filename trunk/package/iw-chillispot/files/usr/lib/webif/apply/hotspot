@@ -23,7 +23,27 @@ if io.exists("/usr/share/freeradius/dictionary") then
   write_file:write(table.concat(dict,'\n'))
   write_file:close()
 end
+init_file = [[#!/bin/sh /etc/rc.common
+# Copyright (C) 2006 OpenWrt.org
+START=50
 
+RUN_D=/var/run
+PID_F=$RUN_D/chilli.pid
+
+start() {
+	/usr/sbin/chilli
+  /etc/init.d/firewall restart
+}
+
+stop() {
+	[ -f $PID_F ] && kill $(cat $PID_F) >/dev/null 2>&1
+}
+
+]]
+print ("Writing init file /etc/init.d/chilli".."<br>")
+write_file = io.open("/etc/init.d/chilli","w")
+write_file:write(init_file)
+write_file:close()
 print ("Writing configuration file /etc/chilli.conf".."<br>")
 local hotspot = uciClass.new("hotspot")
 chilli = hotspot.chilli
