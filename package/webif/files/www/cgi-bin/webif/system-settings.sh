@@ -81,6 +81,8 @@ if ! empty "$FORM_install_ntpclient"; then
 	tmpfile=$(mktemp "/tmp/.webif_ntp-XXXXXX")
 	echo "@TR<<system_settings_Installing_NTPCLIENT_package#Installing NTPCLIENT package>> ...<pre>"
 	install_package "ntpclient"
+	ACTION=ifup
+	. /etc/hotplug.d/iface/20-ntpclient
 	echo "</pre>"
 fi
 
