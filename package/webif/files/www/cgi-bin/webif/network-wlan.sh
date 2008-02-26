@@ -423,8 +423,6 @@ for device in $DEVICES; do
 					radio|bgscan_$vcfg|$FORM_bgscan|0|@TR<<Off>>"
 			append forms "$bgscan_field" "$N"
 			append forms "helpitem|Backround Client Scanning" "$N"
-			append forms "helptext|Helptext Backround Client Scanning#Enables or disables the ablility of a virtual interface to scan for other access points while in client mode. Disabling this allows for higher throughput but keeps your card from roaming to other access points with a higher signal strength." "$N"
-			append forms "helplink|http://madwifi.org/wiki/UserDocs/PerformanceTuning" "$N"
 
 			isolate_field="field|@TR<<AP Isolation>>|isolate_form_$vcfg|hidden
 					radio|isolate_$vcfg|$FORM_isolate|1|@TR<<On>>
@@ -432,6 +430,8 @@ for device in $DEVICES; do
 			append forms "$isolate_field" "$N"
 
 			if [ "$iftype" = "atheros" ]; then
+				append forms "helptext|Helptext Backround Client Scanning#Enables or disables the ablility of a virtual interface to scan for other access points while in client mode. Disabling this allows for higher throughput but keeps your card from roaming to other access points with a higher signal strength." "$N"
+				append forms "helplink|http://madwifi.org/wiki/UserDocs/PerformanceTuning" "$N"
 				doth="field|@TR<<802.11h>>
 					radio|doth_$vcfg|$FORM_doth|1|@TR<<On>>
 					radio|doth_$vcfg|$FORM_doth|0|@TR<<Off>>"
