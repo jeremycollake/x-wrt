@@ -91,6 +91,9 @@ fi
 # don't run below on 'real' system
 if [ -n "${IPKG_INSTROOT}" ]; then
 	if [ "$revision" = "" ]; then
+		if [ "$S" = "brcm-2.4-2.4" ]; then
+			S="brcm-2.4"
+		fi
 		AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/$S/packages"
 	else
 		AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/$S/packages"
