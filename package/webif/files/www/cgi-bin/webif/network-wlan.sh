@@ -54,12 +54,12 @@ validate_wireless() {
 # Add Virtual Interface
 if ! empty "$FORM_add_vcfg"; then
 
-	uci_add "wireless" "wifi-iface" ""
-	uci_set "wireless" "cfg$FORM_add_vcfg_number" "device" "$FORM_add_vcfg"
-	uci_set "wireless" "cfg$FORM_add_vcfg_number" "mode" "ap"
-	uci_set "wireless" "cfg$FORM_add_vcfg_number" "ssid" "OpenWrt$FORM_add_vcfg_number"
-	uci_set "wireless" "cfg$FORM_add_vcfg_number" "hidden" "0"
-	uci_set "wireless" "cfg$FORM_add_vcfg_number" "encryption" "none"
+	uci_add "wireless" "wifi-iface" ""; wireless_cfg="$CONFIG_SECTION"
+	uci_set "wireless" "$wireless_cfg" "device" "$FORM_add_vcfg"
+	uci_set "wireless" "$wireless_cfg" "mode" "ap"
+	uci_set "wireless" "$wireless_cfg" "ssid" "OpenWrt$FORM_add_vcfg_number"
+	uci_set "wireless" "$wireless_cfg" "hidden" "0"
+	uci_set "wireless" "$wireless_cfg" "encryption" "none"
 	FORM_add_vcfg=""
 fi
 
