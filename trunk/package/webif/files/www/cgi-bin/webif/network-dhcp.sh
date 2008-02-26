@@ -52,7 +52,7 @@ let "vcfg_number+=1"
 #add dhcp network
 if [ "$FORM_add_dhcp" != "" ]; then
 	uci_add "dhcp" "dhcp" ""
-	uci_set "dhcp" "cfg$vcfg_number" "interface" "$FORM_network_add"
+	uci_set "dhcp" "$CONFIG_SECTION" "interface" "$FORM_network_add"
 	dhcp_cfgs=""
 	dnsmasq_cfgs=""
 	uci_load dhcp
