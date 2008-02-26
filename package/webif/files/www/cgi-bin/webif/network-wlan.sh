@@ -790,7 +790,13 @@ for device in $DEVICES; do
 					append validate_forms "wep|FORM_key3_$vcfg|@TR<<WEP Key>> 3||$FORM_key3" "$N"
 					append validate_forms "wep|FORM_key4_$vcfg|@TR<<WEP Key>> 4||$FORM_key4" "$N";;
 			esac
-			append validate_forms "string|FORM_ssid_$vcfg|@TR<<ESSID>>|required|$FORM_ssid" "$N"
+			case "$FORM_mode" in
+				wds)
+					append validate_forms "string|FORM_ssid_$vcfg|@TR<<ESSID>>||$FORM_ssid" "$N"
+					append validate_forms "mac|FORM_bssid_$vcfg|@TR<<BSSID>>||$FORM_bssid" "$N";;
+				*)
+					append validate_forms "string|FORM_ssid_$vcfg|@TR<<ESSID>>|required|$FORM_ssid" "$N";;
+			esac
 			append validate_forms "int|FORM_frag_$vcfg|@TR<<Fragmentation Threshold>>|min=0 max=2346|$FORM_frag" "$N"
 			append validate_forms "int|FORM_rts_$vcfg|@TR<<RTS Threshold>>|min=0 max=2347|$FORM_rts" "$N"
 		fi
