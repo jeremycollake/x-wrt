@@ -2,7 +2,9 @@
 #
 # Webif post-install script.
 #
-echo "##WEBIF:category:IW" >> /www/cgi-bin/webif/.categories
+if [ "`grep "IW" "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"`" = "" ]; then
+  echo "##WEBIF:category:IW" >> /www/cgi-bin/webif/.categories
+fi
 echo "
 #### Chilli firewall configuration 
 CHILLI="tun0"
