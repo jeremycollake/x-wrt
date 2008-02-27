@@ -9,8 +9,9 @@ if freeradius.websettings ~= nil then
   __MENU.IW.Freeradius:Add("Proxy","freeradius-proxy.sh")
   __MENU.IW.Freeradius:Add("Clients","freeradius-clients.sh")
 --  __MENU.IW.Freeradius:Add("To conf","freeradius-conf.sh")
-  elseif freeradius.websettings.mode =="3" then
+  elseif freeradius.webadmin.mode == "3" then
   -- Menu de Experto edita los archivos directamente
+    __FORM.__menu = string.sub(__FORM.__menu,1,4)
   end
 else
   -- Todavía no configuró como quiere manejar la configuracion

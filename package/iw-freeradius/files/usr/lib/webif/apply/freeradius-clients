@@ -12,26 +12,29 @@
 print ("Committing Freeradius-clients...")
 os.execute("uci commit freeradius-clients")
 print ("Writing clients.conf ...")
--- Process clients.conf
-local sep = ""
-local clients = uciClass.new("freeradius-clients")
-local client_str = ""
-for i=1, #clients.client do
-  client_str = client_str .. "client "..clients.client[i].values.client.." {\n"
-  sep = "\t"
-  for k,v in pairs(clients.client[i].values) do
-    if k ~= "client" then
-      client_str = client_str..sep..k.."\t= "..v
-      sep = "\n\t"
-    end
-  end
-  client_str = client_str.."\n}\n"
-end
+local freeradius = uciClass.new("freeradius")
+if freeradius.webadmin.mode == "0" then
 
-local pepe = io.open("/etc/freeradius/clients.conf","w")
-pepe:write(client_str)
-pepe:close()
---dofile("/usr/lib/webif/LUA/freeradius-restart.lua")
+  -- Process clients.conf
+  local sep = ""
+  local clients = uciClass.new("freeradius-clients")
+  local client_str = ""
+  for i=1, #clients.client do
+    client_str = client_str .. "client "..clients.client[i].values.client.." {\n"
+    sep = "\t"
+    for k,v in pairs(clients.client[i].values) do
+      if k ~= "client" then
+        client_str = client_str..sep..k.."\t= "..v
+        sep = "\n\t"
+      end
+    end
+    client_str = client_str.."\n}\n"
+  end
+
+  local pepe = io.open("/etc/freeradius/clients.conf","w")
+  pepe:write(client_str)
+  pepe:close()
+end
 __RESTART["radiusd"] = {}
 __RESTART["radiusd"]["pkg"] = "freeradius"
 __RESTART["radiusd"]["cfg"] = "webadmin"
