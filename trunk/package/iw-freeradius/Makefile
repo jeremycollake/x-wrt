@@ -31,7 +31,7 @@ define Package/iw-freeradius/install
 #	rm -f $(1)/www/cgi-bin/webif/*.wip
 	$(CP) -a ./ipkg/iw-freeradius.postinst $(1)/CONTROL/preinst
 #	$(CP) -a ./ipkg/iw-freeradius.postrm $(1)/CONTROL/postrm
-#	chmod 755 $(1)/CONTROL/*inst
+	chmod 755 $(1)/CONTROL/*inst
 	find $(1) -name CVS | xargs rm -rf
 	find $(1) -name .svn | xargs rm -rf
 	find $(1) -name *~ | xargs rm -rf
