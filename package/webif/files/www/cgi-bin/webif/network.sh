@@ -31,19 +31,29 @@ if [ "$FORM_button_add_network" != "" ]; then
 	fi
 fi
 
+config_cb() {
+	config_get TYPE "$CONFIG_SECTION" TYPE
+	case "$TYPE" in
+		interface)
+			append network "$CONFIG_SECTION" "$N"
+		;;
+		dhcp)
+			option_cb() {
+				case "$1" in
+					interface)
+						[ "$2" = "$FORM_remove_network" ] && uci_remove "dhcp" "$CONFIG_SECTION";;
+				esac
+			}
+		;;
+	esac
+}
+
 #remove network
 if ! empty "$FORM_remove_network"; then
 	uci_remove "network" "$FORM_remove_network"
+	uci_load dhcp
 fi
 
-config_cb() {
-config_get TYPE "$CONFIG_SECTION" TYPE
-case "$TYPE" in
-        interface)
-	        append network "$CONFIG_SECTION" "$N"
-        ;;
-esac
-}
 uci_load network
 network=$(echo "$network" |uniq)
 
