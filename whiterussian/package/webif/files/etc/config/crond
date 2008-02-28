@@ -1,2 +1,0 @@
-config crond general
-	option enable "1"
