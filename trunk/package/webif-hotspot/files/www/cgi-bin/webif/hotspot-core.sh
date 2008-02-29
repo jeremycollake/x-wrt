@@ -3,13 +3,15 @@
 . /usr/lib/webif/webif.sh
 
 config_cb() {
-	config_get TYPE "$CONFIG_SECTION" TYPE
-	case "$TYPE" in
+	local cfg_type="$1"
+	local cfg_name="$2"
+
+	case "$cfg_type" in
 		chilli)
-			chilli_cfg="$CONFIG_SECTION"
+			chilli_cfg="$cfg_name"
 		;;
 		chillispot)
-			chillispot_cfg="$CONFIG_SECTION"
+			chillispot_cfg="$cfg_name"
 		;;
 	esac
 }

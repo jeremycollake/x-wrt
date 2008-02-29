@@ -38,16 +38,18 @@ if ! empty "$FORM_remove_ntpcfg"; then
 fi
 
 config_cb() {
-	config_get TYPE "$CONFIG_SECTION" TYPE
-	case "$TYPE" in
+	local cfg_type="$1"
+	local cfg_name="$2"
+
+	case "$cfg_type" in
 		system)
-			hostname_cfg="$CONFIG_SECTION"
+			hostname_cfg="$cfg_name"
 		;;
 		timezone)
-			timezone_cfg="$CONFIG_SECTION"
+			timezone_cfg="$cfg_name"
 		;;
 		ntp_client|ntpclient)
-			append ntpservers "$CONFIG_SECTION" "$N"
+			append ntpservers "$cfg_name" "$N"
 		;;
 	esac
 }
