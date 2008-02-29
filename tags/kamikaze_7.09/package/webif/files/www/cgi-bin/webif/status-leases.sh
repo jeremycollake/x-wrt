@@ -29,13 +29,15 @@
 #
 
 config_cb() {
-config_get TYPE "$CONFIG_SECTION" TYPE
-case "$TYPE" in
-	dnsmasq)
-		config_get leasefile "$CONFIG_SECTION" leasefile
-		config_get includeethers "$CONFIG_SECTION" readethers
-	;;
-esac
+	local cfg_type="$1"
+	local cfg_name="$2"
+
+	case "$cfg_type" in
+		dnsmasq)
+			config_get leasefile "$cfg_name" leasefile
+			config_get includeethers "$cfg_name" readethers
+		;;
+	esac
 }
 uci_load dhcp
 

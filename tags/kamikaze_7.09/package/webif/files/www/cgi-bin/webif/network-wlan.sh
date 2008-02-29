@@ -72,18 +72,20 @@ fi
 ###################################################################
 # Parse Settings, this function is called when doing a config_load
 config_cb() {
-config_get TYPE "$CONFIG_SECTION" TYPE
-case "$TYPE" in
-        wifi-device)
-                append DEVICES "$CONFIG_SECTION"
-        ;;
-        wifi-iface)
-                append vface "$CONFIG_SECTION" "$N"
-        ;;
-        interface)
-	        append network_devices "$CONFIG_SECTION"
-        ;;
-esac
+	local cfg_type="$1"
+	local cfg_name="$2"
+
+	case "$cfg_type" in
+	        wifi-device)
+	                append DEVICES "$cfg_name"
+	        ;;
+	        wifi-iface)
+	                append vface "$cfg_name" "$N"
+	        ;;
+	        interface)
+		        append network_devices "$cfg_name"
+	        ;;
+	esac
 }
 uci_load network
 NETWORK_DEVICES="none $network_devices"
