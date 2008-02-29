@@ -6,9 +6,11 @@
 . /usr/lib/webif/webif.sh
 
 config_cb() {
-	config_get TYPE "$CONFIG_SECTION" TYPE
-	case "$TYPE" in
-		server) server_cfg="$CONFIG_SECTION" ;;
+	local cfg_type="$1"
+	local cfg_name="$2"
+
+	case "$cfg_type" in
+		server) server_cfg="$cfg_name" ;;
 	esac
 }
 

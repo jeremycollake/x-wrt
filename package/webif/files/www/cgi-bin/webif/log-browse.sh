@@ -3,10 +3,12 @@
 . /usr/lib/webif/webif.sh
 
 config_cb() {
-	config_get TYPE "$CONFIG_SECTION" TYPE
-	case "$TYPE" in
+	local cfg_type="$1"
+	local cfg_name="$2"
+
+	case "$cfg_type" in
 		syslogd)
-			append config "$CONFIG_SECTION"
+			append config "$cfg_name"
 		;;
 	esac
 }

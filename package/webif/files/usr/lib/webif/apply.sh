@@ -13,15 +13,17 @@
 . /lib/config/uci.sh
 
 config_cb() {
-	config_get TYPE "$CONFIG_SECTION" TYPE
-	case "$TYPE" in
+	local cfg_type="$1"
+	local cfg_name="$2"
+
+	case "$cfg_type" in
 		timezone)
-			timezone_cfg="$CONFIG_SECTION"
+			timezone_cfg="$cfg_name"
 		;;
 		ntp_client|ntpclient)
-			config_get hostname     $CONFIG_SECTION hostname
-			config_get port         $CONFIG_SECTION port
-			config_get count        $CONFIG_SECTION count
+			config_get hostname     "$cfg_name" hostname
+			config_get port         "$cfg_name" port
+			config_get count        "$cfg_name" count
 	
 			[ "$DONE" = "1" ] && exit 0
 			ps | grep 'bin/[n]tpclient' >&- || {
@@ -31,11 +33,11 @@ config_cb() {
 			}
                 ;;
                 system)
-                	config_get hostname $CONFIG_SECTION hostname
+                	config_get hostname "$cfg_name" hostname
                 	echo "${hostname:-OpenWrt}" > /proc/sys/kernel/hostname
                 ;;
                 server)
-			l2tpns_cfg="$CONFIG_SECTION"
+			l2tpns_cfg="$cfg_name"
 		;;
 	esac
 }

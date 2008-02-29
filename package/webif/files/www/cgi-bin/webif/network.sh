@@ -32,16 +32,18 @@ if [ "$FORM_button_add_network" != "" ]; then
 fi
 
 config_cb() {
-	config_get TYPE "$CONFIG_SECTION" TYPE
-	case "$TYPE" in
+	local cfg_type="$1"
+	local cfg_name="$2"
+
+	case "$cfg_type" in
 		interface)
-			append network "$CONFIG_SECTION" "$N"
+			append network "$cfg_name" "$N"
 		;;
 		dhcp)
 			option_cb() {
 				case "$1" in
 					interface)
-						[ "$2" = "$FORM_remove_network" ] && uci_remove "dhcp" "$CONFIG_SECTION";;
+						[ "$2" = "$FORM_remove_network" ] && uci_remove "dhcp" "$cfg_name";;
 				esac
 			}
 		;;
