@@ -32,10 +32,12 @@ EOF
 )
 
 config_cb() {
-	config_get TYPE "$CONFIG_SECTION" TYPE
-	case "$TYPE" in
+	local cfg_type="$1"
+	local cfg_name="$2"
+
+	case "$cfg_type" in
 		backup)
-			backup_cfg="$CONFIG_SECTION"
+			backup_cfg="$cfg_name"
 		;;
 	esac
 }
