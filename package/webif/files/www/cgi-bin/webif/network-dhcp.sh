@@ -22,20 +22,22 @@ header "Network" "DHCP" "@TR<<DHCP Configuration>>" 'onload="modechange()"' "$SC
 ###################################################################
 # Parse Settings, this function is called when doing a config_load
 config_cb() {
-config_get TYPE "$CONFIG_SECTION" TYPE
-case "$TYPE" in
-	interface)
-		if [ "$CONFIG_SECTION" != "loopback" ]; then
-			append networks "$CONFIG_SECTION" "$N"
-		fi
-	;;
-	dhcp)
-		append dhcp_cfgs "$CONFIG_SECTION" "$N"
-	;;
-	dnsmasq)
-		append dnsmasq_cfgs "$CONFIG_SECTION" "$N"
-	;;
-esac
+	local cfg_type="$1"
+	local cfg_name="$2"
+
+	case "$cfg_type" in
+		interface)
+			if [ "$cfg_name" != "loopback" ]; then
+				append networks "$cfg_name" "$N"
+			fi
+		;;
+		dhcp)
+			append dhcp_cfgs "$cfg_name" "$N"
+		;;
+		dnsmasq)
+			append dnsmasq_cfgs "$cfg_name" "$N"
+		;;
+	esac
 }
 uci_load network
 uci_load dhcp

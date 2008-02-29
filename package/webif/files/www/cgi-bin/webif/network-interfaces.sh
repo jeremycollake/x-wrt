@@ -21,16 +21,18 @@
 #
 
 config_cb() {
-config_get TYPE "$CONFIG_SECTION" TYPE
-case "$TYPE" in
-        interface)
-	        append networks "$CONFIG_SECTION" "$N"
-	        config_get ifnames_$CONFIG_SECTION $CONFIG_SECTION ifname
-        ;;
-        switch)
-	        append switch_interfaces "$CONFIG_SECTION"
-        ;;
-esac
+	local cfg_type="$1"
+	local cfg_name="$2"
+
+	case "$cfg_type" in
+	        interface)
+		        append networks "$cfg_name" "$N"
+		        config_get "ifnames_$cfg_name" "$cfg_name" ifname
+	        ;;
+	        switch)
+		        append switch_interfaces "$cfg_name"
+	        ;;
+	esac
 }
 
 #Load settings from the network config file.	

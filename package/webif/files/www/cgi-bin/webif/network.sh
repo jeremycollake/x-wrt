@@ -37,12 +37,14 @@ if ! empty "$FORM_remove_network"; then
 fi
 
 config_cb() {
-config_get TYPE "$CONFIG_SECTION" TYPE
-case "$TYPE" in
-        interface)
-	        append network "$CONFIG_SECTION" "$N"
-        ;;
-esac
+	local cfg_type="$1"
+	local cfg_name="$2"
+
+	case "$cfg_type" in
+		interface)
+			append network "$cfg_name" "$N"
+		;;
+	esac
 }
 uci_load network
 network=$(echo "$network" |uniq)
