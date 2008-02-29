@@ -16,23 +16,23 @@
 . /etc/functions.sh
 
 config_cb() {
-	local cfgtype="$1"
-	local name="$2"
-	[ "$cfgtype" = "server" ] && server_cfg="$name" || unset server_cfg
+	local cfg_type="$1"
+	local cfg_name="$2"
+	[ "$cfg_type" = "server" ] && server_cfg="$cfg_name" || unset server_cfg
 }
 
 option_cb() {
-	local varname="$1"; shift
-	local value="$*"
+	local var_name="$1"; shift
+	local var_value="$*"
 	local tvalue
-	[ -n "$server_cfg" ] && [ -n "$value" ] && {
-		case "$varname" in
+	[ -n "$server_cfg" ] && [ -n "$var_value" ] && {
+		case "$var_name" in
 			mode) ;;
 			debug)
-				let tvalue=value+1
-				[ "$tvalue" -gt 1 ] && l2tpns_options="${l2tpns_options}set ${varname} ${value}${_lf}"
+				let tvalue=var_value+1
+				[ "$tvalue" -gt 1 ] && l2tpns_options="${l2tpns_options}set ${var_name} ${var_value}${_lf}"
 			;;
-			*) [ -n "$value" ] && l2tpns_options="${l2tpns_options}set ${varname} ${value}${_lf}" ;;
+			*) [ -n "$var_value" ] && l2tpns_options="${l2tpns_options}set ${var_name} ${var_value}${_lf}" ;;
 		esac
 	}
 }
