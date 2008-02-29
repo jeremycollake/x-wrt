@@ -33,17 +33,17 @@ fi
 
 config_cb() {
 	local cfg_type="$1"
-	local cfg_name="$2"
+	local cfg_name_dhcp="$2"
 
 	case "$cfg_type" in
 		interface)
-			append network "$cfg_name" "$N"
+			append network "$cfg_name_dhcp" "$N"
 		;;
 		dhcp)
 			option_cb() {
 				case "$1" in
 					interface)
-						[ "$2" = "$FORM_remove_network" ] && uci_remove "dhcp" "$cfg_name";;
+						[ "$2" = "$FORM_remove_network" ] && uci_remove "dhcp" "$cfg_name_dhcp";;
 				esac
 			}
 		;;
