@@ -18,7 +18,7 @@ option_cb() {
 	local var_value="$*"
 	[ -n "$chilli_cfg" ] && [ -n "$var_value" ] && {
 		case "$var_name" in
-			debug|macauth|uamanydns|coanoipcheck|acctupdate)
+			debug|macauth|uamanydns|coanoipcheck|acctupdate|fg|eapolenable)
 				case "$var_value" in
 					1|on|enabled) chilli_options="$chilli_options${var_name}${_lf}" ;;
 				esac
