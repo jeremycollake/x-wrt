@@ -21,7 +21,7 @@
 #
 
 config_cb() {
-	local cfg_type="$1"
+	cfg_type="$1"
 	cfg_name="$2"
 
 	case "$cfg_type" in
@@ -37,9 +37,7 @@ option_cb() {
 	local var_name="$1"; shift
 	local var_value="$*"
 
-	case "$var_name" in
-		ifname) eval "ifnames_${cfg_name}=\"$var_value\"";;
-	esac
+	[ "$var_name" = "ifname" ] && [ "$cfg_type" = "interface" ] && eval "ifnames_${cfg_name}=\"$var_value\""
 }
 
 #Load settings from the network config file.	
