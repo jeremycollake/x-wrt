@@ -29,13 +29,19 @@
 #
 
 config_cb() {
-	local cfg_type="$1"
-	local cfg_name="$2"
+	cfg_type="$1"
+	cfg_name="$2"
+}
+option_cb() {
+	local var_name="$1"; shift
+	local var_value="$*"
 
 	case "$cfg_type" in
 		dnsmasq)
-			config_get leasefile "$cfg_name" leasefile
-			config_get includeethers "$cfg_name" readethers
+			case "$var_name" in
+				leasefile) leasefile="$var_value" ;;
+				readethers) includeethers="$var_value" ;;
+			esac
 		;;
 	esac
 }
