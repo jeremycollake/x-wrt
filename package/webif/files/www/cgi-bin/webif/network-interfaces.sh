@@ -22,16 +22,23 @@
 
 config_cb() {
 	local cfg_type="$1"
-	local cfg_name="$2"
+	cfg_name="$2"
 
 	case "$cfg_type" in
 	        interface)
 		        append networks "$cfg_name" "$N"
-		        config_get "ifnames_$cfg_name" "$cfg_name" ifname
 	        ;;
 	        switch)
 		        append switch_interfaces "$cfg_name"
 	        ;;
+	esac
+}
+option_cb() {
+	local var_name="$1"; shift
+	local var_value="$*"
+
+	case "$var_name" in
+		ifname) eval "ifnames_${cfg_name}=\"$var_value\"";;
 	esac
 }
 
