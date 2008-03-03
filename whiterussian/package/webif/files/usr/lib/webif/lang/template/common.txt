@@ -240,6 +240,7 @@ Remote Syslog => Remote Syslog
 HelpText Remote Syslog => IP address and port of the remote logging host. Leave this address blank for no remote logging.
 Syslog Marks => Syslog Marks
 HelpText Syslog Marks => Periodic marks in your log. This parameter sets the time in minutes between the marks. A value of 0 means no mark.
+HelpText Syslog Marks_disabled => This feature is currently disabled to prevent the system to hang with intensive logging. Use a cron job to reach the similar functionality.
 Local Log => Local Log
 Log type => Log type
 Circular => Circular

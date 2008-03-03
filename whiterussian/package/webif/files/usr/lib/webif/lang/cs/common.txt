@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 3974
+lang_for_svn => 4042
 
 About => O aplikaci
 Accept => Přijmout
@@ -318,6 +318,7 @@ HelpText Remote Syslog => Adresa IP a port vzdáleného logovacího počítače.
 Helptext SNMP Community Name => The SNMP community name identifies a group of devices and management systems that share authentication, access control of this group. Although PUBLIC and PRIVATE are commonly used, it is strongly suggested to use hard to guess names. The only worse thing than PUBLIC and PRIVATE, is to leave the community name blank! The community name can be considered a group password.
 Helptext SNMP Source => SNMP source defines the IP address, hostname or network mask for management systems that can read information from this 'public' community device or control this 'private' comunity device.
 Helptext Swap => Když program požaduje více paměti než je fyzicky v počítači k dispozici, aktuálně nepoužívané informace mohou být zapsány do dočasného prostoru na disku, který je nazýván odkládací (swap), a tak paměť uvolnit.
+HelpText Syslog Marks_disabled => Tato vlastnost je nyní zablokována, aby se zabránilo pádu systému při intenzivním zápisu do systémového záznamu. Použijte úlohu cronu pro dosažení podobné funkce.
 HelpText Syslog Marks => Pravidelné značky ve vašem záznamu. Tento parametr nastavuje čas v minutách mezi značkami. Hodnota 0 znamená bez značek.
 HelpText tcp_established_timeout => Počet sekund, po které může být navázané spojení nevyužíváno, než je nuceně ukončeno. Někdy nejsou spojení správně ukončena a mohou zaplnit tabulku conntrack, pokud jsou tyto hodnoty příliš vysoké. Pokud jsou příliš nízké, mohou být spojení ukončena, protože jsou nečinná.
 Helptext Tracked Connections => Počet spojení v tabulce 'conntrack' vašeho routeru. <a href="status-conntrackread.sh">Zobrazit tabulku 'conntrack'</a>.
@@ -1145,7 +1146,6 @@ system_settings_feature_requires_ntpclient => Není nainstalován klient NTP. Pr
 system_settings_Generate_SSL_Certificate => Generovat SSL certifikát
 system_settings_Generating_SSL_certificate => Generuji SSL certifikát
 system_settings_group_unknown_TZ => Neznámá
-system_settings_Hostname_failed_validation => Název počítače není platný. Nelze uložit.
 system_settings_Installing_MatrixTunnel_package => Instaluji balíček MatrixTunnel
 system_settings_Installing_NTPCLIENT_package => Instaluji balíček NTPCLIENT
 system_settings_Install_MatrixTunnel => Nainstalovat MatrixTunnel

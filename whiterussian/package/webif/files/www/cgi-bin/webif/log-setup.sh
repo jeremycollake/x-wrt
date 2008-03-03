@@ -12,8 +12,9 @@ if empty "$FORM_submit" ; then
 	FORM_port="${log_port:-$(nvram get log_port)}"
 	FORM_port="${FORM_port:-$DEFAULT_log_port}"
 	empty "$FORM_port" && FORM_port=""
-	FORM_mark="${log_mark:-$(nvram get log_mark)}"
-	FORM_mark="${FORM_mark:-$DEFAULT_log_mark}"
+	#FORM_mark="${log_mark:-$(nvram get log_mark)}"
+	#FORM_mark="${FORM_mark:-$DEFAULT_log_mark}"
+	FORM_mark="0"
 	FORM_type="${log_type:-$(nvram get log_type)}"
 	FORM_type="${FORM_type:-$DEFAULT_log_type}"
 	FORM_file="${log_file:-$(nvram get log_file)}"
@@ -37,7 +38,7 @@ else
 	validate <<EOF
 ip|FORM_ipaddr|@TR<<Server IP Address>>||$FORM_ipaddr
 int|FORM_port|@TR<<Server Port>>|min=0 max=65535|$FORM_port
-int|FORM_mark|@TR<<Minutes Between Marks>>||$FORM_mark
+int|FORM_mark|@TR<<Minutes Between Marks>>|min=0 max=0|$FORM_mark
 string|FORM_type|@TR<<Log type>>|nospaces|$FORM_type
 string|FORM_file|@TR<<Log File>>|$file_required|$FORM_file
 int|FORM_size|@TR<<Log Size>>|min=1 max=9999 required|$FORM_size
@@ -90,9 +91,10 @@ end_form
 
 start_form|@TR<<Syslog Marks>>
 field|@TR<<Minutes Between Marks>>
-text|mark|$FORM_mark
+text|mark|$FORM_mark||readonly="readonly"
 helpitem|Syslog Marks
 helptext|HelpText Syslog Marks#Periodic marks in your log. This parameter sets the time in minutes between the marks. A value of 0 means no mark.
+helptext|HelpText Syslog Marks_disabled#This feature is currently disabled to prevent system hangs with intensive logging. Use a cron job to reach the similar functionality.
 end_form
 
 start_form|@TR<<Local Log>>

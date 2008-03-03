@@ -10,8 +10,9 @@ klogd_bin="/sbin/klogd"
 start() {
 	[ -n "$(ps | grep [s]yslogd)" -o -n "$(ps | grep [k]logd)" ] && stop
 
-	log_mark=$(nvram get log_mark)
-	[ "$log_mark" -gt 0 ] 2>>/dev/null || log_mark=$DEFAULT_log_mark
+	#log_mark=$(nvram get log_mark)
+	#[ "$log_mark" -gt 0 ] 2>>/dev/null || log_mark=$DEFAULT_log_mark
+	log_mark="0"
 	log_type=$(nvram get log_type)
 	[ "$log_type" = "circular" -o "$log_type" = "file" ] 2>/dev/null || log_type=$DEFAULT_log_type
 	log_file=$(nvram get log_file)
