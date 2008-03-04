@@ -54,7 +54,7 @@ config BR2_PACKAGE_LIGHTTPD_MOD_CGI
 
 config BR2_PACKAGE_LIGHTTPD_MOD_COMPRESS
 	depends BR2_PACKAGE_LIGHTTPD
-	prompt "...-mod-cgi - Compress module"
+	prompt "...-mod-compress - Compress module"
 	tristate 
 	default m if CONFIG_DEVEL
 
