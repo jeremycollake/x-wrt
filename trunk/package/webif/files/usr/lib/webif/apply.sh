@@ -12,35 +12,6 @@
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
 
-config_cb() {
-	local cfg_type="$1"
-	local cfg_name="$2"
-
-	case "$cfg_type" in
-		timezone)
-			timezone_cfg="$cfg_name"
-		;;
-		ntp_client|ntpclient)
-			config_get hostname     "$cfg_name" hostname
-			config_get port         "$cfg_name" port
-			config_get count        "$cfg_name" count
-	
-			[ "$DONE" = "1" ] && exit 0
-			ps | grep 'bin/[n]tpclient' >&- || {
-				route -n 2>&- | grep '^0.0.0.0' >&- && {
-					/usr/sbin/ntpclient -c ${count:-1} -s -h $hostname -p ${port:-123} 2>&- >&- && DONE=1
-				}
-			}
-                ;;
-                system)
-                	config_get hostname "$cfg_name" hostname
-                	echo "${hostname:-OpenWrt}" > /proc/sys/kernel/hostname
-                ;;
-                server)
-			l2tpns_cfg="$cfg_name"
-		;;
-	esac
-}
 # this line is for compatibility with webif-lua
 LUA="/usr/lib/webif/LUA/xwrt-apply.lua"
 if [ -e $LUA ]; then
@@ -279,14 +250,9 @@ for package in $process_packages; do
 				/etc/init.d/dnsmasq start
 			fi
 			;;
-		"ntp_client")
-			#this is for 7.07 and previous
-			killall ntpclient
-			config_load ntp_client&
-			;;
 		"ntpclient")
 			killall ntpclient
-			config_load ntpclient&
+			ACTION="ifup" . /etc/hotplug.d/iface/??-ntpclient; [ -f /etc/rc.d/S??ntpclient ] && /etc/rc.d/S??ntpclient start &
 			;;
 		"dhcp")
 			killall dnsmasq
@@ -309,7 +275,16 @@ for package in $process_packages; do
 			fi
 			/etc/init.d/webifopenvpn start ;;
 		"system")
-			config_load system ;;
+			config_cb() {
+				[ "$1" = "system" ] && system_cfg="$2"
+			}
+			unset system_cfg
+			config_load system
+			reset_cb
+			config_get hostname "$system_cfg" hostname
+			echo "${hostname:-OpenWrt}" > /proc/sys/kernel/hostname
+			config_allclear
+			;;
 		"snmp")
 			echo '@TR<<Exporting>> @TR<<snmp settings>> ...'
 			[ -e "/sbin/save_snmp" ] && {
@@ -323,19 +298,24 @@ for package in $process_packages; do
 			/etc/init.d/S??snmpd restart >&- 2>&-
 			;;
 		"l2tpns")
-                        echo '@TR<<Exporting>> @TR<<l2tpns server settings>> ...'
-                        [ -x "/usr/lib/webif/l2tpns_apply.sh" ] && {
-                                /usr/lib/webif/l2tpns_apply.sh >&- 2>&-
-                        }
+			echo '@TR<<Exporting>> @TR<<l2tpns server settings>> ...'
+			[ -x "/usr/lib/webif/l2tpns_apply.sh" ] && {
+				/usr/lib/webif/l2tpns_apply.sh >&- 2>&-
+			}
 
+			config_cb() {
+				[ "$1" = "server" ] && l2tpns_cfg="$2"
+			}
+			unset l2tpns_cfg
 			uci_load "l2tpns"
+			reset_cb
 			config_get test "$l2tpns_cfg" mode
-                        if [ "$test" = "enabled" ]; then
-                               echo '@TR<<Starting>> @TR<<l2tpns server>> ...'
+			if [ "$test" = "enabled" ]; then
+				echo '@TR<<Starting>> @TR<<l2tpns server>> ...'
 				/etc/init.d/l2tpns enable >&- 2>&- <&-
 				/etc/init.d/l2tpns start >&- 2>&- <&-
 			else
-                               echo '@TR<<Stopping>> @TR<<l2tpns server>> ...'
+				echo '@TR<<Stopping>> @TR<<l2tpns server>> ...'
 				/etc/init.d/l2tpns disable >&- 2>&- <&-
 				/etc/init.d/l2tpns stop >&- 2>&- <&-
 			fi
