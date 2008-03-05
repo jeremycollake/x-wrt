@@ -12,33 +12,6 @@
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
 
-config_cb() {
-	local cfg_type="$1"
-	local cfg_name="$2"
-
-	case "$cfg_type" in
-		timezone)
-			timezone_cfg="$cfg_name"
-		;;
-		ntp_client|ntpclient)
-			config_get hostname     "$cfg_name" hostname
-			config_get port         "$cfg_name" port
-			config_get count        "$cfg_name" count
-	
-			[ "$DONE" = "1" ] && exit 0
-			ps | grep 'bin/[n]tpclient' >&- || {
-				route -n 2>&- | grep '^0.0.0.0' >&- && {
-					/usr/sbin/ntpclient -c ${count:-1} -s -h $hostname -p ${port:-123} 2>&- >&- && DONE=1
-				}
-			}
-                ;;
-                system)
-                	config_get hostname "$cfg_name" hostname
-                	echo "${hostname:-OpenWrt}" > /proc/sys/kernel/hostname
-                ;;
-	esac
-}
-
 HANDLERS_file='
 	hosts) rm -f /etc/hosts; mv $config /etc/hosts; killall -HUP dnsmasq ;;
 	ethers) rm -f /etc/ethers; mv $config /etc/ethers; killall -HUP dnsmasq ;;
@@ -274,11 +247,11 @@ for package in $process_packages; do
 		"ntp_client")
 			#this is for 7.07 and previous
 			killall ntpclient
-			config_load ntp_client&
+			ACTION="ifup" . /etc/hotplug.d/iface/??-ntpclient &
 			;;
 		"ntpclient")
 			killall ntpclient
-			config_load ntpclient&
+			ACTION="ifup" . /etc/hotplug.d/iface/??-ntpclient &
 			;;
 		"dhcp")
 			killall dnsmasq
@@ -301,7 +274,16 @@ for package in $process_packages; do
 			fi
 			/etc/init.d/webifopenvpn start ;;
 		"system")
-			config_load system ;;
+			config_cb() {
+				[ "$1" = "system" ] && system_cfg="$2"
+			}
+			unset system_cfg
+			config_load system
+			reset_cb
+			config_get hostname "$system_cfg" hostname
+			echo "${hostname:-OpenWrt}" > /proc/sys/kernel/hostname
+			config_allclear
+			;;
 		"snmp")
 			echo '@TR<<Exporting>> @TR<<snmp settings>> ...'
 			[ -e "/sbin/save_snmp" ] && {
