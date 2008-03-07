@@ -135,7 +135,7 @@ elif [ "$FORM_action" = "remove" ]; then
 	echo "</pre><br />"
 fi
 
-repo_list=$(awk '/src/ { print "<tr class=\"repositories\"><td><a href=\"./system-ipkg.sh?remove_repo_name=" $2 "&amp;remove_repo_url=" $3 "\">@TR<<system_ipkg_removerepo#remove>></a>&nbsp;&nbsp;" $2 "</td><td colspan=\"2\">" $3 "</td></tr>"}' /etc/ipkg.conf)
+repo_list=$(awk '/^[[:space:]]*src[[:space:]]/ { print "<tr class=\"repositories\"><td><a href=\"./system-ipkg.sh?remove_repo_name=" $2 "&amp;remove_repo_url=" $3 "\">@TR<<system_ipkg_removerepo#remove>></a>&nbsp;&nbsp;" $2 "</td><td colspan=\"2\">" $3 "</td></tr>"}' /etc/ipkg.conf)
 
 display_form <<EOF
 start_form|@TR<<system_ipkg_addrepo#Add Repository>>
@@ -218,7 +218,10 @@ EOF
 	<th>@TR<<system_ipkg_th_desc#Description>></th>
 </tr>
 <?
-egrep 'Package:|Description:|Version:' /usr/lib/ipkg/status /usr/lib/ipkg/lists/* 2>&- | sed -e 's, ,,' -e 's,/usr/lib/ipkg/lists/,,' | awk -F: '
+repo_list=$(awk '/^[[:space:]]*src[[:space:]]/ { printf " /usr/lib/ipkg/lists/" $2 }' /etc/ipkg.conf)
+status_list=$(awk '/^[[:space:]]*dest[[:space:]]/ { if ($3 == "/") printf " /usr/lib/ipkg/status"; else printf " "$3"/usr/lib/ipkg/status" }' /etc/ipkg.conf)
+[ -z "$status_list" ] && status_list="/usr/lib/ipkg/status"
+egrep 'Package:|Description:|Version:' $status_list $repo_list 2>&- | sed -e 's, ,,' -e 's,^[^:]*/usr/lib/ipkg/lists/,,' | awk -F: '
 $1 ~ /status/ {
 	installed[$3]++;
 }
