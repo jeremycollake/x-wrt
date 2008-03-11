@@ -5,7 +5,7 @@
 dofile("/usr/lib/webif/LUA/config.lua")
 local freeradius_pkg = pkgInstalledClass.new("freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm",true)
 require("files/freeradius-menu")
-freeradius = uciClass.new("freeradius-clients")
+freeradius = uciClass.new("freeradius_clients")
 if freeradius.client == nil then client = freeradius:set("client") else client = freeradius.client end
 page.title = tr("Freeradius Clients")
 print(page:header())
@@ -33,7 +33,7 @@ for i=1,#client do
   form:Add("text",client[i].name..".password",client[i].values.password,"Password")
   form:Add("link","remove_"..client[i].name,__SERVER.SCRIPT_NAME.."?".."UCI_CMD_del"..client[i].name.."= &__menu="..__FORM.__menu,tr("Remove Client"))
 end
-form:Add("link","add_client",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius-clients=client&__menu="..__FORM.__menu,tr("Add Client"))
+form:Add("link","add_client",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_clients=client&__menu="..__FORM.__menu,tr("Add Client"))
 form:Add_help("client",[[
       Defines a RADIUS client.  The format is 'client [hostname|ip-address]'<br>
       '127.0.0.1' is another name for 'localhost'.  It is enabled by default,

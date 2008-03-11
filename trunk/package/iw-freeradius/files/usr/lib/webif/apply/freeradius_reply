@@ -9,4 +9,4 @@
 --    freeradius-reply
 --
 --------------------------------------------------------------------------------
-dofile("/usr/lib/webif/apply/freeradius-check")
+dofile("/usr/lib/webif/apply/freeradius_check")

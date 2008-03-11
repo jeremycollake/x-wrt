@@ -10,14 +10,15 @@
 --
 --------------------------------------------------------------------------------
 print ("Committing Freeradius-clients...")
-os.execute("uci commit freeradius-clients")
+os.execute("uci commit freeradius_clients")
+os.execute("rm /tmp/.uci/freeradius_clients")
 print ("Writing clients.conf ...")
 local freeradius = uciClass.new("freeradius")
 if freeradius.webadmin.mode == "0" then
 
   -- Process clients.conf
   local sep = ""
-  local clients = uciClass.new("freeradius-clients")
+  local clients = uciClass.new("freeradius_clients")
   local client_str = ""
   for i=1, #clients.client do
     client_str = client_str .. "client "..clients.client[i].values.client.." {\n"

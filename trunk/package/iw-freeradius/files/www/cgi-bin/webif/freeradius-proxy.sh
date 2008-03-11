@@ -5,7 +5,7 @@
 dofile("/usr/lib/webif/LUA/config.lua")
 local freeradius_pkg = pkgInstalledClass.new("freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm",true)
 require("files/freeradius-menu")
-freeradius = uciClass.new("freeradius-proxy")
+freeradius = uciClass.new("freeradius_proxy")
 if freeradius.server == nil then server = freeradius:set("server") else server = freeradius.server end
 server_cfg = server[1].name
 server_val = server[1].values
@@ -25,7 +25,7 @@ form[server_cfg..".default_fallback"].options:Add("no",tr("No"))
 form:Add("select",server_cfg..".post_proxy_authorize",server_val.post_proxy_authorize,"Post proxy authorize","string")
 form[server_cfg..".post_proxy_authorize"].options:Add("no",tr("No"))
 form[server_cfg..".post_proxy_authorize"].options:Add("yes",tr("Yes"))
-form:Add("link","add_community",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius-proxy=realm&__menu="..__FORM.__menu,tr("Add Community"))
+form:Add("link","add_community",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_proxy=realm&__menu="..__FORM.__menu,tr("Add Community"))
 form:print()
 form = formClass.new("Comunities Settings")
 if freeradius.realm ~= nil then

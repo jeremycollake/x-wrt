@@ -25,13 +25,31 @@ end
 
 function uciUpdatedClass:countUpdated()
   for i=1, #__UCI_CMD do
+    if __UCI_CMD[i].cmd == "snw" and __FORM.UCI_SET_VALUE ~= "" then
+      __UCI_CMD[i].cmd = "set"
+      __UCI_CMD[i].value = __UCI_CMD[i].value ..":"..__FORM.UCI_SET_VALUE
+    end
     if __UCI_CMD[i].cmd == "set" then
       local grp, name = unpack(string.split(__UCI_CMD[i].value,":"))
       if name == nil then name = "" end
-    	assert(os.execute("mkdir /tmp/.uci > /dev/null 2>&1"))
-		  os.execute("echo \"config '"..grp.."' '"..name.."'\" >>/tmp/.uci/"..__UCI_CMD[i].varname)
+      if __UCI_VERSION == nil then	
+        assert(os.execute("mkdir /tmp/.uci > /dev/null 2>&1"))
+		    os.execute("echo \"config '"..grp.."' '"..name.."'\" >>/tmp/.uci/"..__UCI_CMD[i].varname)
+		  else
+        if name == "" then
+          os.execute("uci add "..__UCI_CMD[i].varname.." "..grp.." > /dev/null 2>&1")
+--          os.execute("uci add "..self.__PACKAGE.." "..grp)
+        else
+          os.execute("uci set "..__UCI_CMD[i].varname.."."..name.."="..grp.." > /dev/null 2>&1")
+--          os.execute("uci set "..self.__PACKAGE.."."..name.."="..grp)
+        end
+		  end
     elseif __UCI_CMD[i].cmd == "del" then
-      os.execute("uci "..__UCI_CMD[i].cmd.." "..__UCI_CMD[i].varname)
+      if __UCI_VERSION == nil then 
+        os.execute("uci "..__UCI_CMD[i].cmd.." "..__UCI_CMD[i].varname)
+      else
+        
+      end
     end
   end
 	for i, v in ipairs(__TOCHECK) do

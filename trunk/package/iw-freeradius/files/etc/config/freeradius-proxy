@@ -1,0 +1,31 @@
+
+
+config "server" ""
+	option synchronous	'no'
+	option retry_delay	'5'
+	option retry_count	'3'
+	option dead_time	'121'
+	option default_fallback	'yes'
+	option post_proxy_authorize	'no'
+
+
+
+
+
+
+
+
+config "realm" ""
+	option community	'internet-wifi'
+	option type	'radius'
+	option authhost	'rad01.internet-wifi.com.ar'
+	option accthost	'rad01.internet-wifi.com.ar'
+	option secret	'Internet-Wifi'
+	option nostrip	'1'
+
+
+
+
+
+
+

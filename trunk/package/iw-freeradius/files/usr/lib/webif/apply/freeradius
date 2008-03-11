@@ -11,6 +11,7 @@
 --------------------------------------------------------------------------------
 print ("Committing Freeradius")
 os.execute("uci commit freeradius")
+os.execute("rm /tmp/.uci/freeradius")
 local radiusd_str = [[
 prefix = /usr
 exec_prefix = /usr
