@@ -1,0 +1,8 @@
+#!/bin/sh
+# NVRAM fix for the wwan proto
+
+WAN_PROTO="$(nvram get wan_proto)"
+WAN_IFNAME="$(nvram get wan_ifname)"
+case "$WAN_PROTO" in
+	wwan) [ "${WAN_IFNAME%%[0-9]*}" = "ppp" ] || nvram set wan_ifname=ppp0;;
+esac

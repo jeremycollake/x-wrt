@@ -47,6 +47,8 @@ $(IPKG_COMGT):
 	install -m0644 ./files/wwan.iface $(IDIR_COMGT)/etc/hotplug.d/iface/05-wwan
 	install -d -m0755 $(IDIR_COMGT)/etc/hotplug.d/button
 	install -m0644 ./files/wwan.button $(IDIR_COMGT)/etc/hotplug.d/button/01-wwan
+	install -d -m0755 $(IDIR_COMGT)/etc/init.d
+	install -m0755 ./files/S06wwanfix $(IDIR_COMGT)/etc/init.d/
 	$(RSTRIP) $(IDIR_COMGT)
 	$(IPKG_BUILD) $(IDIR_COMGT) $(PACKAGE_DIR)
 

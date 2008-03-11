@@ -209,7 +209,7 @@ nvram_default vlan1ports "0 5"
 WAN_PROTO="$(nvram get wan_proto)"
 WAN_IFNAME="$(nvram get wan_ifname)"
 case "$WAN_PROTO" in
-	pp*) [ "${WAN_IFNAME%%[0-9]*}" = "ppp" ] || nvram set wan_ifname=ppp0;;
+	pp*|wwan) [ "${WAN_IFNAME%%[0-9]*}" = "ppp" ] || nvram set wan_ifname=ppp0;;
 	*) [ "${WAN_IFNAME%%[0-9]*}" = "ppp" ] && nvram set wan_ifname="$(nvram get wan_device)";;
 esac
 
