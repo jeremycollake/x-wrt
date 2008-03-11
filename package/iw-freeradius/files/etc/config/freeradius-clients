@@ -1,0 +1,12 @@
+
+
+config "client" ""
+	option client	'127.0.0.1'
+	option shortname	'localhost'
+	option secret	'testing123'
+	option nastype	'chillispot'
+
+
+
+
+

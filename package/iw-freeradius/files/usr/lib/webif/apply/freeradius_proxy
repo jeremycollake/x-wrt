@@ -10,13 +10,14 @@
 --
 --------------------------------------------------------------------------------
 print ("Committing Freeradius-proxy...")
-os.execute("uci commit freeradius-proxy")
+os.execute("uci commit freeradius_proxy")
+os.execute("rm /tmp/.uci/freeradius_proxy")
 print ("Writing proxy.conf ...")
 local freeradius = uciClass.new("freeradius")
 if freeradius.webadmin.mode == "0" then
   -- Process proxy.conf
   local sep = ""
-  local proxy = uciClass.new("freeradius-proxy")
+  local proxy = uciClass.new("freeradius_proxy")
   local proxy_str = "proxy server {\n"
   for i, v in pairs (proxy.server) do
     for k, val in pairs(v.values) do

@@ -9,38 +9,44 @@
 --    freeradius-reply
 --
 --------------------------------------------------------------------------------
-print ("Committing Freeradius-check...")
-os.execute("uci commit freeradius-check")
-print ("Committing Freeradius-reply...")
-os.execute("uci commit freeradius-reply")
+print ("Committing freeradius_check...<br>")
+os.execute("uci commit freeradius_check")
+os.execute("rm /tmp/.uci/freeradius_check > /dev/null 2>&1")
+print ("Committing freeradius_reply...<br>")
+os.execute("uci commit freeradius_reply")
+os.execute("rm /tmp/.uci/freeradius_reply > /dev/null 2>&1")
 
 local freeradius = uciClass.new("freeradius")
 if freeradius.webadmin.mode == "0" then
-  print ("Writing users...")
+  print ("Writing users...<br>")
 -- Process users
   local user_str = ""
   local sep = ""
-  local users_chk = uciClass.new("freeradius-check")
-  local users_rpl = uciClass.new("freeradius-reply")
-
-  for i=1, #users_chk.user do
-    user_str = user_str.."\n\n"..users_chk.user[i].values.Username
-    sep = "\t"
-    for j, k in pairs (users_chk.user[i].values) do
-      if j ~= "Username" then
-        if string.trim(j) == "User_Password" then
-          user_str = user_str..sep.. string.gsub(j,"_","-").." := \""..k.."\""
-        else
-          user_str = user_str..sep.. string.gsub(j,"_","-").." := "..k
+  local users_chk = uciClass.new("freeradius_check")
+  local users_rpl = uciClass.new("freeradius_reply")
+  for i=1 ,#users_chk.sections do
+    local name = users_chk.sections[i].name
+    if name ~= "default" then
+      local checks = users_chk[name]
+      local replys = users_rpl[name]
+      user_str = user_str .. "\n\n"..name
+      sep = "\t"
+      for j, k in pairs(checks) do
+        if type(k) ~= "table" then
+          if string.trim(j) == "User_Password" then
+            user_str = user_str..sep.. string.gsub(j,"_","-").." := \""..k.."\""
+          else
+            user_str = user_str..sep.. string.gsub(j,"_","-").." := "..k
+          end
+          sep = ", "
         end
-        sep = ", "
-      end
-    end
-    sep = "\n\t"
-    for j, k in pairs (users_rpl.user[i].values) do
-      if j ~= "Username" then
-        user_str = user_str..sep.. string.gsub(j,"_","-").." = "..k
-        sep = ", "
+      end    
+      sep = "\n\t"
+      for j, k in pairs(replys) do
+        if type(k) ~= "table" then
+          user_str = user_str..sep.. string.gsub(j,"_","-").." = "..k
+          sep = ", "
+        end
       end
     end
   end
@@ -59,7 +65,6 @@ if freeradius.webadmin.mode == "0" then
       sep = ",\n\t"
     end
   end
-
   local pepe = io.open("/etc/freeradius/users","w")
   pepe:write(user_str)
   pepe:close()

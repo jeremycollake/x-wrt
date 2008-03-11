@@ -1,0 +1,15 @@
+
+
+config "default" "default"
+	option Simultaneous_Use	'1'
+
+
+
+config "user" ""
+	option Username	'pepe'
+	option User_Password	'trueno'
+	option Simultaneous_Use	'1'
+
+
+
+

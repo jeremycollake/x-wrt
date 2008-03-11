@@ -14,6 +14,14 @@
 package.path = package.path .. ";/usr/lib/webif/LUA/?.lua;/usr/share//lua/5.1/?.lua"
 -- Common Functions
 require("common")
+require("lpkg")
+local pkg = lpkgClass.new("uci")
+if pkg.uci ~= nil then
+  if pkg.uci.Installed ~= neil then
+    __UCI_VERSION = pkg.uci.Installed.Version
+  end
+end
+
 require("uciUpdated")
 __ERROR   = {} -- __ERROR[#__ERROR][var_name], __ERROR[#__ERROR][msg]
 __TOCHECK = {} -- __TOCHECK[#__TOCHECK]

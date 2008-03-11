@@ -61,6 +61,8 @@ function formClass:tostring(name)
 			return self:subtitle(self[name])
 		elseif self[name].input == "link" then
 			return self:link(self[name])
+		elseif self[name].input == "uci_set_config" then
+			return self:uci_set_config(self[name])
 		else
 			return self:ful_line(self[name])
 		end
@@ -126,8 +128,23 @@ function formClass:UCI_CMD_link(t)
   
 end
 
-function formClass:UCI_CMD_button(t)
-  
+function formClass:uci_set_config(t)
+	local style = ""
+	if t.style ~= "" then style = "style=\""..t.style.."\" " end
+	local str  = "<TR><TD width=\"40%\">" .. t.label .. "</TD>"
+	str = str .. "<TD width=\"60%\">"
+  str = str .. "<table cellspacing=\"0\" border=\"0\"><tr><td width=\"80%\">"
+  local conf = string.split(t.name,",") 
+  for i = 1, #conf do
+    str = str .. "<input type=\"hidden\" name=\"UCI_CMD_snw"..conf[i].."\" value=\""..t.value.."\">"
+  end
+  str = str .. "<input type=\"text\" name=\"UCI_SET_VALUE\""..style..t.script.." />"
+  str = str .. "</td><td width=\"20%\">"
+	str = str .. "&nbsp;<input type=\"submit\" name=\""..t.name.."\" value=\""..tr("Add").."\""..style..t.script.." />"
+  str = str .. "</td></tr></table>"
+	str = str .. "</TD></TR>"
+	
+	return str
 end
 
 function formClass:button(t)

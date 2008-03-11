@@ -1,0 +1,24 @@
+
+
+config "chilli" ""
+	option dhcpif	'wl0'
+	option net	'192.168.182.0/24'
+	option dynip	'192.168.182.128/25'
+	option statip	'172.16.182.0/25'
+	option uamanydns	'1'
+	option dns1	'172.16.0.5'
+	option uamserver	'http://www.internet-wifi.com.ar/hotspotlogin_m.php'
+	option uamsecret	'Internet-Wifi'
+	option uamallowed	'www.internet-wifi.com.ar,172.16.0.0/24,www.lared.com.ar'
+	option radiusserver1	'127.0.0.1'
+	option radiusserver2	'127.0.0.1'
+	option radiussecret	'testing123'
+	option radiusnasid	'olsr1'
+	option radiusnasip	'192.168.182.1'
+	option dns2	'172.16.0.4'
+
+
+config "chillispot" "service"
+	option enable	'1'
+
+

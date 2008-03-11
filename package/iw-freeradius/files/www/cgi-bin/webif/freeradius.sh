@@ -12,6 +12,22 @@ __FORM.option = string.trim(__FORM.option)
 ----	Input Section formservice
   if freeradius.websettings == nil then websettings = freeradius:set("websettings","webadmin") 
   else websettings = freeradius.websettings end
+--[[
+  for i,n in pairs(freeradius) do
+    print (i,n,"<br>")
+    if type(n) == "table" then
+      for j,m in pairs(n) do
+        print ("&nbsp;&nbsp;&nbsp;",j,m,"<br>")
+        if type(m) == "table" then
+          for k,o in pairs(m) do
+            print ("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",k,o,"<br>")
+          end
+        end
+      end
+    end
+  end
+  print ("algo<br>")  
+]]--
   websettings_values = websettings[1].values
 	form = formClass.new("Service Settings")
 	form:Add("select",websettings[1].name..".enable",websettings_values.enable,"Service","string")

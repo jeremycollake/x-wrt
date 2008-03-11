@@ -18,10 +18,15 @@ uciClass = {}
 uciClass_mt = {__index = uciClass} 
 
 function uciClass.new (pkg) 
+  local pkg_exists = io.exists("/etc/config/"..pkg)
+  if pkg_exists == false then
+    os.execute("echo \"# "..pkg.."\" > /etc/config/"..pkg)
+  end
 	local self = {}
 	setmetatable(self,uciClass_mt) 
 	self["__PACKAGE"] = pkg
 	self.sections = {}
+	self.version = 1
 	self:load_conf(pkg)
 	return self 
 end 
@@ -34,13 +39,23 @@ function uciClass:set(grp,name)
 		if self[name] ~= nil then
 			found = true
 		end
-	end	
-	if found == false then
-		assert(os.execute("mkdir /tmp/.uci > /dev/null 2>&1"))
-		os.execute("echo \"config '"..grp.."' '"..name.."'\" >>/tmp/.uci/"..self.__PACKAGE)
-		self:load_conf(self.__PACKAGE)
-		__UCI_UPDATED.count = __UCI_UPDATED.count + 1
 	end
+  if __UCI_VERSION == nil then	
+  	if found == false then
+      assert(os.execute("mkdir /tmp/.uci > /dev/null 2>&1"))
+      os.execute("echo \"config '"..grp.."' '"..name.."'\" >>/tmp/.uci/"..self.__PACKAGE)
+      self:load_conf(self.__PACKAGE)
+      __UCI_UPDATED.count = __UCI_UPDATED.count + 1
+    end
+  else
+    if name == "" then
+      os.execute("uci add "..self.__PACKAGE.." "..grp.." > /dev/null 2>&1")
+    else
+      os.execute("uci set "..self.__PACKAGE.."."..name.."="..grp.." > /dev/null 2>&1")
+    end
+    self:load_conf(self.__PACKAGE)
+    __UCI_UPDATED.count = __UCI_UPDATED.count + 1
+  end
 	return self[grp]
 end
 
