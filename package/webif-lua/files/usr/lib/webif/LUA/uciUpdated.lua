@@ -48,7 +48,7 @@ function uciUpdatedClass:countUpdated()
       if __UCI_VERSION == nil then 
         os.execute("uci "..__UCI_CMD[i].cmd.." "..__UCI_CMD[i].varname)
       else
-        
+        os.execute("uci "..__UCI_CMD[i].cmd.." "..__UCI_CMD[i].varname)
       end
     end
   end

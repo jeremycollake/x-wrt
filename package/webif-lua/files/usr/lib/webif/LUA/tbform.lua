@@ -108,6 +108,8 @@ function tbformClass:lines()
         str = str .. self:str_text(r,i)
       elseif self["col"][i]["input"] == "select" then
         str = str .. self:str_select(r,i)
+      elseif self["col"][i]["input"] == "link" then
+        str = str .. self:str_link(r,i)
       end
     end
     str = str .. "</tr>"
@@ -151,4 +153,8 @@ function tbformClass:str_text(r,i)
 	str = str .. "<input type=\"text\" name=\""..self[r][i]["var_name"].."\" value=\""..self[r][i]["value"].."\" "..style..self["col"][i]["script"].." />"
   str = str .. "</td>"
 	return str
+end
+
+function tbformClass:str_link(r,i)
+  return [[<td><a href="]]..self[r][i].value..[[">]]..self["col"][i].title..[[</a></td>]]
 end
