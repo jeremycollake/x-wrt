@@ -121,7 +121,7 @@ function formClass:hidden(t)
 end
 
 function formClass:link(t)
-  return [[<tr><td><a href="]]..t.value..[[">]]..t.label..[[</a>]]
+  return [[<tr><td><a href="]]..t.value..[[">]]..t.label..[[</a></td></tr>]]
 end
 
 function formClass:UCI_CMD_link(t)

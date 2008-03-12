@@ -33,7 +33,6 @@ formdef:Add("text",reply_cfg..".WISPr_Bandwidth_Max_Down",reply_val.WISPr_Bandwi
 formdef:Add("text",reply_cfg..".WISPr_Bandwidth_Max_Up",reply_val.WISPr_Bandwidth_Max_Up,tr("freerad_var_maxup#Max Bandwidth Up"),"int")
 
 formdef:Add("uci_set_config","freeradius_check,freeradius_reply","user",tr("freerad_add_user#New User"),"string")
---formdef:Add("link","add_user",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_check=user&UCI_CMD_setfreeradius_reply=user&__menu="..__FORM.__menu,tr("Add Client"))
 
 formdef:Add_help(tr("freerad_var_simultaneous#Simultaneos Use"),tr([[freerad_help_simultaneous#Set max simultaneous connection for account.]]))
 formdef:Add_help(tr("freerad_var_idle_timeout#Idle Timeout"),tr([[freerad_help_idle_timeout#Specifies the maximum length of time, in seconds, that a subscriber session can remain idle before it is disconnected.]]))
@@ -58,6 +57,8 @@ form:Add_col("text", "IdleTimeout", "Idle Timeout", "80px","int","width:80px")
 form:Add_col("text", "AcctInterimInt", "Acct Interim Interval", "90px","int","width:90px")
 form:Add_col("text", "MaxDown", "MaxDown", "100px","int","width:100px")
 form:Add_col("text", "MaxUp", "MaxUp", "100px","int","width:100px")
+form:Add_col("link", "Remove","Remove ", "100px","","width:100px")
+
 users = freeradius_check.sections
 for i=1, #users do
   local name = users[i].name
@@ -84,6 +85,7 @@ for i=1, #users do
     form:set_col("AcctInterimInt", "freeradius_reply."..name..".Acct_Interim_Interval", acctii)
     form:set_col("MaxDown", "freeradius_reply."..name..".WISPr_Bandwidth_Max_Down", maxdown)
     form:set_col("MaxUp", "freeradius_reply."..name..".WISPr_Bandwidth_Max_Down", maxup)
+    form:set_col("Remove", "Remove_"..name, __SERVER.SCRIPT_NAME.."?".."UCI_CMD_delfreeradius_check."..name.."=&UCI_CMD_delfreeradius_reply."..name.."=&__menu="..__FORM.__menu)
   end
 end
 form:print()
