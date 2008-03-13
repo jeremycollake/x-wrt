@@ -17,7 +17,7 @@
 [ -n "$FORM_interval" ] || FORM_interval=20
 
 ! empty "$FORM_kill" && ! empty "$FORM_signal" && ! empty "$FORM_pid" && {
-	err_kill=$(kill -s$FORM_signal $FORM_pid 2>&1)
+	err_kill=$(kill -$FORM_signal $FORM_pid 2>&1)
 	! equal "$?" "0" && {
 		ERROR="@TR<<status_processes_kill_error#Error in>> $err_kill"
 	}
@@ -115,7 +115,7 @@ echo "</form>"
 	echo "<p><strong>@TR<<big_warning#WARNING>></strong>: @TR<<status_processes_warniinfo#Sending a signal to the application may result in the system malfunction! You should be pretty sure what you are doing before firing the button. <a href=\"#signallegend\">See the most used signal descriptions</a>...>></p>"
 	echo "</blockquote>"
 	signal_list=$(echo "1)SIGHUP|2)SIGINT|3)SIGQUIT|4)SIGILL|5)SIGTRAP|6)SIGABRT|7)SIGBUS|8)SIGFPE|9)SIGKILL|10)SIGUSR1|11)SIGSEGV|12)SIGUSR2|13)SIGPIPE|14)SIGALRM|15)SIGTERM|17)SIGCHLD|18)SIGCONT|19)SIGSTOP|20)SIGTSTP|21)SIGTTIN|22)SIGTTOU|23)SIGURG|24)SIGXCPU|25)SIGXFSZ|26)SIGVTALRM|27)SIGPROF|28)SIGWINCH|29)SIGIO|30)SIGPWR|31)SIGSYS" |
-		 awk 'BEGIN{ RS="|"; FS=")" } { print "<option value=\"" $1 "\">" $2 " (" $1 ")</option>" }')
+		 awk 'BEGIN{ RS="|"; FS=")" } { print "<option value=\"" $2 "\">" $2 " (" $1 ")</option>" }')
 	signal_list="<select name=\"signal\">$signal_list</select>"
 }
 ?>
