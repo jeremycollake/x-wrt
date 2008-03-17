@@ -43,7 +43,7 @@ uci_load "webif"
 			for id in $(ls -l /sys/devices/pci*/ 2>/dev/null | sed '/^d/!d; s/^.*[[:space:]]//g; /^\./d'); do
 				for vendor in vendor subsystem_vendor; do
 					if cat "/sys/devices/pci${id%:*}/$id/$vendor" 2>/dev/null | grep -qi "0x15ad"; then
-						device_name="WMware Virtual Machine"
+						device_name="VMware Virtual Machine"
 						break 3
 					fi
 				done
