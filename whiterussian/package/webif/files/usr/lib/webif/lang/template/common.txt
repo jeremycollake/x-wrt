@@ -373,6 +373,26 @@ network_upnp_Configuration_File => Configuration File
 network_upnp_Edit_Configuration => Edit Configuration
 
 
+## network_vlan.sh
+Network => Network
+VLAN => VLAN
+Virtual LANs => Virtual LANs
+network-vlan_portlabel_WAN => WAN
+network-vlan_portlabel_eNet0 => eNet0
+network-vlan_portlabel_eNet1 => eNet1
+network-vlan_portlabel_eNet2 => eNet2
+network-vlan_portlabel_eNet3 => eNet3
+network-vlan_portlabel_eNet4 => eNet4
+network-vlan_portlabel_Internal => Internal
+network-vlan_vlanlabel_VLAN => VLAN
+VLAN Configuration => VLAN Configuration
+Helptext VLAN => A virtual LAN is a set of ports that are bridged to create what appears to be a LAN. Ports 0 through 4 are the 5 ports on the back of the router. Depending on the router, port 0 or port 4 is the WAN port and the others are the LAN ports. Port 5 is an internal port that connects the on-chip device to the switch itself.
+network-vlan_Port_Labels => Port Labels
+network-vlan_Port_Labels_helptext => Column (port) labels are only informative. Refer to your device's documentation and the actual configuration.
+Add New VLAN => Add New VLAN
+Remove Last VLAN => Remove Last VLAN
+
+
 ## network_wakeonlan.sh
 network_wol_Custom_MAC_Address => Custom MAC Address
 network_wol_MAC_Address => MAC Address

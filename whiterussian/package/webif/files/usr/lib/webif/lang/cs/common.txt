@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 4042
+lang_for_svn => 4054
 
 About => O aplikaci
 Accept => Přijmout
@@ -599,6 +599,16 @@ network_upnp_WAN_Upload => Odesílání WAN
 network_upnp_Which_UPnPd_helptext => Můžete si vybrat ze dvou démonů UPNP: miniupnpd a linuxigd. Nejdříve zkuste miniupnpd, a pokud vám nefunguje, pak tento balíček odstraňte a zkuste linuxigd.
 network_upnp_Which_UPnPd => Který UPnPd si vybrat
 Network Utilities => Síťové nástroje
+network-vlan_portlabel_eNet0 => eNet0
+network-vlan_portlabel_eNet1 => eNet1
+network-vlan_portlabel_eNet2 => eNet2
+network-vlan_portlabel_eNet3 => eNet3
+network-vlan_portlabel_eNet4 => eNet4
+network-vlan_portlabel_Internal => Interní
+network-vlan_Port_Labels_helptext => Jmenovky (portů) sloupců jsou pouze informativní. Obraťte se na dokumentaci k zařízení a aktuální konfiguraci.
+network-vlan_Port_Labels => Jmenovky portů
+network-vlan_portlabel_WAN => WAN
+network-vlan_vlanlabel_VLAN => VLAN
 network_wol_Action => Akce
 network_wol_Application => Aplikace
 network_wol_Application_helptext => Existují dvě aplikace, které jsou schopné vytvořit a přenést magický paket; aplikace <strong>ether-wake</strong> používá speciální Ethernetový rámec a aplikace <strong>wol</strong> používá paket UDP.

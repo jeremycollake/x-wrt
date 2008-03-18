@@ -150,14 +150,18 @@ fi
 #
 uci_load "webif"
 
-if echo "$CONFIG_general_device_name" | grep -iq "WRT54G"; then
+if echo "$CONFIG_general_device_name" | grep -iq "TrueMobile 2300"; then
 	wan_port="4"
-elif echo "$CONFIG_general_device_name" | grep -iq "WL-500g"; then
-	wan_port="0"
 elif echo "$CONFIG_general_device_name" | grep -iq "WHR-G54"; then
 	wan_port="0"
 elif echo "$CONFIG_general_device_name" | grep -iq "WHR-HP-G54"; then
 	wan_port="0"
+elif echo "$CONFIG_general_device_name" | grep -iq "WL-500g"; then
+	wan_port="0"
+elif echo "$CONFIG_general_device_name" | grep -iq "WR850G V2/V3"; then
+	wan_port="4"
+elif echo "$CONFIG_general_device_name" | grep -iq "WRTSL54GS"; then
+	wan_port="4"
 else
 	wan_port="-1"
 fi
@@ -166,13 +170,13 @@ FORM_port_headers="string|<tr><th></th>"
 for current_port in $(seq $PORT_BASE $MAX_PORT); do
 	current_hdr=""
 	case $current_port in
-		"$wan_port") current_hdr="WAN";;
-		"0" ) current_hdr="eNet0";;
-		"1" ) current_hdr="eNet1";;
-		"2" ) current_hdr="eNet2";;
-		"3" ) current_hdr="eNet3";;
-		"4" ) current_hdr="eNet4";;
-		"5" ) current_hdr="Internal";;
+		"$wan_port") current_hdr="@TR<<network-vlan_portlabel_WAN#WAN>>";;
+		"0" ) current_hdr="@TR<<network-vlan_portlabel_eNet0#eNet0>>";;
+		"1" ) current_hdr="@TR<<network-vlan_portlabel_eNet1#eNet1>>";;
+		"2" ) current_hdr="@TR<<network-vlan_portlabel_eNet2#eNet2>>";;
+		"3" ) current_hdr="@TR<<network-vlan_portlabel_eNet3#eNet3>>";;
+		"4" ) current_hdr="@TR<<network-vlan_portlabel_eNet4#eNet4>>";;
+		"5" ) current_hdr="@TR<<network-vlan_portlabel_Internal#Internal>>";;
 	esac
 	FORM_port_headers="${FORM_port_headers}<th>$current_hdr</th>"
 done
@@ -185,7 +189,7 @@ FORM_port_headers="${FORM_port_headers}</tr>"
 FORM_all_vlans="$FORM_port_headers"		# holds VLAN webif form we build
 for count in $(seq "0" "$MAX_VLANS_INDEX"); do
 	vlanport="vlan${count}ports"
-	FORM_current_vlan="string|<tr><th>VLAN $count&nbsp;&nbsp;</th>"
+	FORM_current_vlan="string|<tr><th>@TR<<network-vlan_vlanlabel_VLAN#VLAN>> $count&nbsp;&nbsp;</th>"
 	#
 	# for each port, create a checkbox and mark if
 	#  port for in vlan
@@ -235,7 +239,9 @@ onchange|modechange
 start_form|@TR<<VLAN Configuration>>
 helpitem|VLAN
 helptext|Helptext VLAN#A virtual LAN is a set of ports that are bridged to create what appears to be a LAN. Ports 0 through 4 are the 5 ports on the back of the router. Depending on the router, port 0 or port 4 is the WAN port and the others are the LAN ports. Port 5 is an internal port that connects the on-chip device to the switch itself.
-helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration?highlight=%28wl0_mode%29#head-1f582c0ad21a03a769e00c345743d6cf85ba878f
+helplink|http://wiki.openwrt.org/OpenWrtDocs/Configuration#head-1f582c0ad21a03a769e00c345743d6cf85ba878f
+helpitem|network-vlan_Port_Labels#Port Labels
+helptext|network-vlan_Port_Labels_helptext#Column (port) labels are only informative. Refer to your device's documentation and the actual configuration.
 $FORM_all_vlans
 end_form
 start_form|
