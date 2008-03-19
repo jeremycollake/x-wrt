@@ -72,13 +72,13 @@ $(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
 		all install install-headers install-lib
 	touch $@
 
-$(IPKG_LIBJPEG): $(STAGING_DIR)/usr/lib/libdb.so
+$(IPKG_LIBJPEG): $(STAGING_DIR)/usr/lib/libjpeg.so
 	install -m0755 -d $(IDIR_LIBJPEG)/usr/lib
 	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libjpeg.so.* $(IDIR_LIBJPEG)/usr/lib/
 	$(RSTRIP) $(IDIR_LIBJPEG)
 	$(IPKG_BUILD) $(IDIR_LIBJPEG) $(PACKAGE_DIR)
 
-$(IPKG_JPEG_TOOLS): $(STAGING_DIR)/usr/lib/libdb.so
+$(IPKG_JPEG_TOOLS): $(STAGING_DIR)/usr/lib/libjpeg.so
 	install -m0755 -d $(IDIR_JPEG_TOOLS)/usr/bin
 	$(CP) $(PKG_INSTALL_DIR)/usr/bin/*jpeg* $(IDIR_JPEG_TOOLS)/usr/bin/
 	$(RSTRIP) $(IDIR_JPEG_TOOLS)
