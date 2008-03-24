@@ -3,15 +3,14 @@
 . /usr/lib/webif/webif.sh
 
 #---------------------------------------------
-# sets the type of log: file or circular
-# defaults to circular, wich is the default install for openwrt
-# use log-setup.sh to modify these parameters
-LOG_TYPE=$(nvram get log_type)
-LOG_FILE=$(nvram get log_file)
-if equal $LOG_TYPE "file" ; then
-	LOG_FILE=${LOG_FILE:-"/var/log/messages"}
-	LOGREAD="cat "$LOG_FILE
-else LOGREAD="logread"
+[ -f /etc/syslog.default ] && . /etc/syslog.default
+logtype=$(nvram get log_type)
+logfile=$(nvram get log_file)
+logfile="${logfile:-$DEFAULT_log_file}"
+if [ "$logtype" = "file" ]; then
+	syslog_cmd="cat \"$logfile\""
+else
+	syslog_cmd="logread"
 fi
 
 #--------------------------------------------
@@ -81,7 +80,7 @@ EOF
 
 
 # display --------------------------------
-$LOGREAD | sort -r | awk -v filter=$FORM_filter -F ' ' '
+eval $syslog_cmd 2>/dev/null | sort -r | awk -v filter=$FORM_filter -F ' ' '
 BEGIN {
 	print "<h3>@TR<<Listing>></h3>";
 	print "<table width=\"90%\">";

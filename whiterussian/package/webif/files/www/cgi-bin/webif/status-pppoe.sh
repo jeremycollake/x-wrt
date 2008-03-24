@@ -134,7 +134,16 @@ END {
 <h3><strong>@TR<<status_pppoe_Connection_Log#Connection Log>></strong></h3>
 <pre style="margin: 0.2em auto 1em auto; padding: 3px; width: 94%; margin: auto; height: 200px; overflow: scroll; border: 1px solid; ">
 EOF
-	logread | egrep "(ppp0|pppd|pppoe)" |tail -n 500 -|sort -r | sed ' s/\&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'
+[ -f /etc/syslog.default ] && . /etc/syslog.default
+logtype=$(nvram get log_type)
+logfile=$(nvram get log_file)
+logfile="${logfile:-$DEFAULT_log_file}"
+if [ "$logtype" = "file" ]; then
+	syslog_cmd="cat \"$logfile\""
+else
+	syslog_cmd="logread"
+fi
+	eval $syslog_cmd 2>/dev/null | egrep "(ppp0|pppd|pppoe)" |tail -n 500 -|sort -r | sed ' s/\&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'
 	echo
 	echo "</pre></div>"
 

@@ -17,7 +17,16 @@ colorize_script=""
 <div class="logread"><pre>
 <?
 echo "If this page is blank then dyndns is not started, or you may have just rebooted"
-logread | grep 'ez-ipupdate\[' | sort -r | sed 's/[a-zA-Z]*\..*ez-ipupdate\[[0-9]*\]//'
+[ -f /etc/syslog.default ] && . /etc/syslog.default
+logtype=$(nvram get log_type)
+logfile=$(nvram get log_file)
+logfile="${logfile:-$DEFAULT_log_file}"
+if [ "$logtype" = "file" ]; then
+	syslog_cmd="cat \"$logfile\""
+else
+	syslog_cmd="logread"
+fi
+	eval $syslog_cmd 2>/dev/null | grep 'ez-ipupdate\( \|\[\)' | sort -r | sed 's/[a-zA-Z]*\..*ez-ipupdate\[[0-9]*\]//' | sed ' s/\&/\&amp;/g; s/</\&lt;/g; s/>/\&gt;/g'
 ?>
 </pre></div>
 </body>
