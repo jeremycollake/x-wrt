@@ -73,6 +73,7 @@ hr,
 #header h1 {
 	font-size: 0em;
 }
+#header em { display: none; }
 
 /* ---  Short-status  --- */
 #header #short-status {
