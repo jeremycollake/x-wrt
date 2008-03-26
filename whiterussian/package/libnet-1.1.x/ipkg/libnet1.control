@@ -1,0 +1,5 @@
+Package: libnet1
+Priority: optional
+Section: libs
+Depends: libpcap
+Description: a low-level packet creation library (v1.1.x)

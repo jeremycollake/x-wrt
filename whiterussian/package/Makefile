@@ -66,6 +66,7 @@ package-$(BR2_COMPILE_LIBICONV) += libiconv
 package-$(BR2_COMPILE_LIBJPEG) += jpeg
 package-$(BR2_COMPILE_LIBMAGIC) += file
 package-$(BR2_PACKAGE_LIBNET0) += libnet
+package-$(BR2_PACKAGE_LIBNET1) += libnet-1.1.x
 package-$(BR2_PACKAGE_LIBNIDS) += libnids
 package-$(BR2_PACKAGE_LIBOSIP2) += libosip2
 package-$(BR2_PACKAGE_LIBPAM) += libpam
@@ -217,6 +218,7 @@ kismet-compile: uclibcxx-compile libpcap-compile ncurses-compile
 lcd4linux-compile: ncurses-compile
 libgd-compile: libpng-compile jpeg-compile
 libnet-compile: libpcap-compile
+libnet-1.1.x-compile: libpcap-compile
 libnids-compile: libnet-compile libpcap-compile
 lighttpd-compile: openssl-compile pcre-compile bzip2-compile gdbm-compile libxml2-compile libpthread-compile sqlite3-compile
 libupnp-compile: libpthread-compile
