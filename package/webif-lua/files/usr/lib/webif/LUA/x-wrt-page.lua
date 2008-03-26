@@ -76,6 +76,7 @@ Pragma: no-cache
 ]] .. self.body .. [[
 <div id="container">
 <div id="header">
+	<em>]]..tr("making_usable#End user extensions for OpenWrt")..[[</em>
 	<h1>]]..tr("X-Wrt Administration Console")..[[</h1>
 	<div id="short-status">
 		<h3><strong>]]..tr("Status")..[[ :</strong></h3>
