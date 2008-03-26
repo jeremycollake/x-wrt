@@ -1,0 +1,11 @@
+config BR2_PACKAGE_EMPTY
+	tristate "empty - Run applications under pseudo-terminal sessions"
+	default m if CONFIG_DEVEL
+	help
+	  empty is an utility that provides an interface to execute and/or interact 
+	  with processes under pseudo-terminal sessions (PTYs). This tool is 
+	  definitely useful in programming of shell scripts designed to communicate 
+	  with interactive programs like telnet, ssh, ftp, etc. In some cases, empty 
+	  can be the simplest replacement for TCL/expect or other similar 
+	  programming tools.
+	  http://empty.sourceforge.net

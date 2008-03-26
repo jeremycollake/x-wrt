@@ -28,6 +28,7 @@ package-$(BR2_PACKAGE_DSL_QOS_QUEUE) += dsl-qos-queue
 package-$(BR2_PACKAGE_DSNIFF) += dsniff
 package-$(BR2_COMPILE_E2FSPROGS) += e2fsprogs
 package-$(BR2_PACKAGE_EBTABLES) += ebtables
+package-$(BR2_PACKAGE_EMPTY) += empty
 package-$(BR2_PACKAGE_ETHER_WAKE) += ether-wake
 package-$(BR2_PACKAGE_EZIPUPDATE) += ez-ipupdate
 package-$(BR2_PACKAGE_FAKEIDENTD) += fakeidentd
