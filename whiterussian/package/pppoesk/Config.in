@@ -1,0 +1,23 @@
+config BR2_PACKAGE_PPPOESK
+	tristate "pppoesk - a PPPoE session killer"
+	default m if CONFIG_DEVEL
+	select BR2_PACKAGE_LIBPCAP
+	select BR2_PACKAGE_LIBNET1
+	help
+	  pppoesk is a small C program which goal is to terminate a bogus PPPoE 
+	  session in an automatic way.
+	  
+	  http://www.loicp.eu/pppoesk/
+
+config BR2_PACKAGE_PPPOESK_STATIC
+	tristate "pppoesk-static - a PPPoE session killer"
+	default m if CONFIG_DEVEL
+	select BR2_PACKAGE_LIBPCAP
+	select BR2_PACKAGE_LIBNET1
+	help
+	  pppoesk is a small C program which goal is to terminate a bogus PPPoE 
+	  session in an automatic way.
+	  This package contains the statically compiled program.
+	  
+	  http://www.loicp.eu/pppoesk/
+

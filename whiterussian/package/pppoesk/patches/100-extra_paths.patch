@@ -1,0 +1,69 @@
+diff -urN pppoesk-1.1.old/configure pppoesk-1.1.dev/configure
+--- pppoesk-1.1.old/configure	2007-01-06 12:52:53.000000000 +0100
++++ pppoesk-1.1.dev/configure	2008-03-25 20:10:03.000000000 +0100
+@@ -4334,34 +4334,6 @@
+ 
+ 
+ 
+-# Checks extra paths for headers and libraries
+-{ echo "$as_me:$LINENO: checking extra paths for libpcap and libnet libraries" >&5
+-echo "$as_me: checking extra paths for libpcap and libnet libraries" >&6;}
+-for p in /usr/local /opt; do
+-
+-    { echo "$as_me:$LINENO: checking for $p/include directory" >&5
+-echo $ECHO_N "checking for $p/include directory... $ECHO_C" >&6; }
+-    if test -d $p/include; then
+-	{ echo "$as_me:$LINENO: result: yes" >&5
+-echo "${ECHO_T}yes" >&6; }
+-	CPPFLAGS="${CPPFLAGS} -I$p/include/"
+-    else
+-	{ echo "$as_me:$LINENO: result: no" >&5
+-echo "${ECHO_T}no" >&6; }
+-    fi
+-
+-    { echo "$as_me:$LINENO: checking for $p/lib directory" >&5
+-echo $ECHO_N "checking for $p/lib directory... $ECHO_C" >&6; }
+-    if test -d $p/lib; then
+-	{ echo "$as_me:$LINENO: result: yes" >&5
+-echo "${ECHO_T}yes" >&6; }
+-	LDFLAGS="${LDFLAGS} -L$p/lib/"
+-    else
+-	{ echo "$as_me:$LINENO: result: no" >&5
+-echo "${ECHO_T}no" >&6; }
+-    fi
+-done
+-
+ # Checks for programs.
+ ac_ext=c
+ ac_cpp='$CPP $CPPFLAGS'
+diff -urN pppoesk-1.1.old/configure.ac pppoesk-1.1.dev/configure.ac
+--- pppoesk-1.1.old/configure.ac	2007-01-06 12:52:36.000000000 +0100
++++ pppoesk-1.1.dev/configure.ac	2008-03-25 20:09:20.000000000 +0100
+@@ -17,27 +17,6 @@
+     )
+     
+ 
+-# Checks extra paths for headers and libraries
+-AC_MSG_NOTICE([checking extra paths for libpcap and libnet libraries])
+-for p in /usr/local /opt; do
+-    
+-    AC_MSG_CHECKING([for $p/include directory])
+-    if test -d $p/include; then
+-	AC_MSG_RESULT([yes])
+-	CPPFLAGS="${CPPFLAGS} -I$p/include/"
+-    else
+-	AC_MSG_RESULT([no])
+-    fi
+-    
+-    AC_MSG_CHECKING([for $p/lib directory])
+-    if test -d $p/lib; then
+-	AC_MSG_RESULT([yes])
+-	LDFLAGS="${LDFLAGS} -L$p/lib/"
+-    else
+-	AC_MSG_RESULT([no])
+-    fi
+-done
+-	    
+ # Checks for programs.
+ AC_PROG_CC
+ 

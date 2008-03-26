@@ -125,6 +125,7 @@ package-$(BR2_PACKAGE_PORTMAP) += portmap
 package-$(BR2_PACKAGE_PORTSENTRY) += portsentry
 package-$(BR2_PACKAGE_POSTGRESQL) += postgresql
 package-$(BR2_PACKAGE_PPP) += ppp
+package-$(BR2_PACKAGE_PPPOESK) += pppoesk
 package-$(BR2_PACKAGE_PPTP) += pptp
 package-$(BR2_PACKAGE_PPTPD) += pptpd
 package-$(BR2_PACKAGE_PROCPS) += procps
@@ -241,6 +242,7 @@ osiris-compile: openssl-compile
 portmap-compile: tcp_wrappers-compile
 postgresql-compile: zlib-compile
 ppp-compile: libpcap-compile
+pppoesk-compile: libnet-1.1.x-compile
 quagga-compile: readline-compile ncurses-compile
 rsync-compile: popt-compile
 screen-compile: ncurses-compile

@@ -1,0 +1,8 @@
+Package: pppoesk-static
+Priority: optional
+Section: net
+Description: A PPPoE session killer
+ pppoesk is a small C program which goal is to terminate a bogus PPPoE 
+ session in an automatic way.
+ 
+ http://www.loicp.eu/pppoesk/
