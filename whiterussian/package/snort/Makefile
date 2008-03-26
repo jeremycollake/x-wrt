@@ -39,8 +39,8 @@ PKG_CONFIGURE_OPTS := \
 	--enable-shared \
 	--disable-static \
 	--enable-flexresp \
-	--with-libnet-includes="$(STAGING_DIR)/usr/include" \
-	--with-libnet-libraries="$(STAGING_DIR)/usr/lib" \
+	--with-libnet-includes="$(STAGING_DIR)/usr/lib/libnet-1.0.x/include" \
+	--with-libnet-libraries="$(STAGING_DIR)/usr/lib/libnet-1.0.x/lib" \
 	--with-libpcap-includes="$(STAGING_DIR)/usr/include" \
 	--with-libpcap-libraries="$(STAGING_DIR)/usr/lib" \
 	--with-libpcre-includes="$(STAGING_DIR)/usr/include" \
@@ -101,6 +101,7 @@ $(PKG_BUILD_DIR)/$(2): $(PKG_BUILD_DIR)/.prepared
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/usr/include/mysql" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/usr/lib/mysql" \
+		PATH="$(STAGING_DIR)/usr/lib/libnet-1.0.x/bin:$$$$PATH" \
 		./configure \
 		  $(PKG_CONFIGURE_OPTS) \
 		  $$($(1)_CONFIGURE_OPTS) \

@@ -1,4 +1,9 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
+# 
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
@@ -20,18 +25,19 @@ $(eval $(call PKG_template,LIBNET0,$(PKG_NAME)0,$(PKG_VERSION)-$(PKG_RELEASE),$(
 
 $(PKG_BUILD_DIR)/.configured:
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
-		touch configure.in; \
-		touch include.m4; \
-		touch aclocal.m4; \
-		touch Makefile.in; \
-		touch configure; \
+		touch configure.in \
+			include.m4 \
+			aclocal.m4 \
+			Makefile.in \
+			configure; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
+		ac_cv_libnet_endianess=lil \
 		ac_libnet_have_pf_packet=yes \
 		ac_cv_lbl_unaligned_fail=no \
-		ac_cv_libnet_endianess=lil \
+		LL_INT_TYPE=sockpacket \
 		./configure \
 		--target=$(GNU_TARGET_NAME) \
 		--host=$(GNU_TARGET_NAME) \
@@ -74,22 +80,20 @@ $(IPKG_LIBNET0):
 	$(RSTRIP) $(IDIR_LIBNET0)
 	$(IPKG_BUILD) $(IDIR_LIBNET0) $(PACKAGE_DIR)
 
-$(STAGING_DIR)/usr/lib/libnet.so: $(PKG_BUILD_DIR)/.built
-	mkdir -p $(STAGING_DIR)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/libnet-config $(STAGING_DIR)/usr/bin/
-	mkdir -p $(STAGING_DIR)/usr/include
-	$(CP) $(PKG_INSTALL_DIR)/usr/include/libnet* $(STAGING_DIR)/usr/include/
-	mkdir -p $(STAGING_DIR)/usr/lib
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnet.{a,so*} $(STAGING_DIR)/usr/lib/
+$(STAGING_DIR)/usr/lib/libnet-1.0.x/lib/libnet.so: $(PKG_BUILD_DIR)/.built
+	mkdir -p $(STAGING_DIR)/usr/lib/libnet-1.0.x/bin
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/libnet-config $(STAGING_DIR)/usr/lib/libnet-1.0.x/bin/
+	mkdir -p $(STAGING_DIR)/usr/lib/libnet-1.0.x/include
+	$(CP) $(PKG_INSTALL_DIR)/usr/include/libnet* $(STAGING_DIR)/usr/lib/libnet-1.0.x/include/
+	mkdir -p $(STAGING_DIR)/usr/lib/libnet-1.0.x/lib
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libnet.{a,so*} $(STAGING_DIR)/usr/lib/libnet-1.0.x/lib/
 	touch $@
 
-install-dev: $(STAGING_DIR)/usr/lib/libnet.so
+install-dev: $(STAGING_DIR)/usr/lib/libnet-1.0.x/lib/libnet.so
 
 uninstall-dev:
 	rm -rf \
-		$(STAGING_DIR)/usr/bin/libnet-config \
-		$(STAGING_DIR)/usr/include/libnet*  \
-		$(STAGING_DIR)/usr/lib/libnet.{a,so*} \
+		$(STAGING_DIR)/usr/lib/libnet-1.0.x
 
 compile: install-dev
 clean: uninstall-dev

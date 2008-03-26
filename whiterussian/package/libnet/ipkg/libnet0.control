@@ -1,5 +1,5 @@
 Package: libnet0
 Priority: optional
 Section: libs
-Description: a low-level packet creation library
 Depends: libpcap
+Description: a low-level packet creation library (v1.0.x)

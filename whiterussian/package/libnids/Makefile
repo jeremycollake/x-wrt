@@ -26,7 +26,7 @@ $(eval $(call PKG_template,LIBNIDS,libnids,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)
 $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS)" \
+		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/usr/include" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
 		./configure \
@@ -51,7 +51,7 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		$(DISABLE_LARGEFILE) \
 		--enable-shared \
 		--enable-static \
-		--with-libnet="$(STAGING_DIR)/usr" \
+		--with-libnet="$(STAGING_DIR)/usr/lib/libnet-1.0.x" \
 		--with-libpcap="$(STAGING_DIR)/usr" \
 	);
 	touch $@
@@ -61,6 +61,7 @@ $(PKG_BUILD_DIR)/.built: $(PKG_BUILD_DIR)/.configured
 	mkdir -p $(PKG_INSTALL_DIR)
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
+		LNETLIB="-L$(STAGING_DIR)/usr/lib/libnet-1.0.x/lib -lnet" \
 		install_prefix="$(PKG_INSTALL_DIR)" \
 		all install
 	touch $@

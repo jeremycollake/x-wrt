@@ -53,7 +53,7 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		  --with-gdbm="$(STAGING_DIR)/usr" \
 		  --with-libnids="$(STAGING_DIR)/usr" \
 		  --with-libpcap="$(STAGING_DIR)/usr" \
-		  --with-libnet="$(STAGING_DIR)/usr" \
+		  --with-libnet="$(STAGING_DIR)/usr/lib/libnet-1.0.x" \
 		  --with-openssl="$(STAGING_DIR)/usr" \
 	);
 	touch $@
