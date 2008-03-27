@@ -81,6 +81,9 @@ displayiface() {
 		[ -n "$config" ] && {
 			ip_addr=$(echo "$config" | grep "inet addr:" | cut -d: -f 2 | cut -d' ' -f 1)
 			ip_addr="${ip_addr:-"&nbsp;"}"
+			ip6_addr=$(echo "$config" |grep "inet6 addr:" | grep "Global" |cut -d' ' -f 13)
+			[ "$ip6_addr" != "" ] && ip6_form="field|@TR<<IP6 Address>>|${ifpar}_ip6_addr
+string|$ip6_addr"
 			mac_addr=$(echo "$config" | grep "HWaddr" | cut -d'H' -f 2 | cut -d' ' -f 2)
 			[ -n "$mac_addr" ] && form_mac="field|@TR<<MAC Address>>|${ifpar}_mac_addr
 string|$mac_addr"
@@ -116,6 +119,7 @@ $form_mac
 $form_help
 field|@TR<<IP Address>>|${ifpar}_ip_addr
 string|$ip_addr
+$ip6_form
 field|@TR<<Received>>|${ifpar}_rx
 string|$rx_packets @TR<<status_interfaces_pkts#pkts>>&nbsp;($rx_bytes)
 field|@TR<<Transmitted>>|${ifpar}_tx
