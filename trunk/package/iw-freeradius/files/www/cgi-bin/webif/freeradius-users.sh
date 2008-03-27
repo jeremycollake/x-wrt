@@ -5,6 +5,7 @@
 dofile("/usr/lib/webif/LUA/config.lua")
 local freeradius_pkg = pkgInstalledClass.new("freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm",true)
 require("files/freeradius-menu")
+__WIP = 2
 require("tbform")
 freeradius_check = uciClass.new("freeradius_check")
 freeradius_reply = uciClass.new("freeradius_reply")

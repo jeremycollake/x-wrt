@@ -1,7 +1,7 @@
 #!/usr/bin/lua
---
---##WEBIF:name:IW:250:Freeradius
---
+--[[
+##WEBIF:name:IW:250:Freeradius
+]]--
 dofile("/usr/lib/webif/LUA/config.lua")
 local chillispot_pkg = pkgInstalledClass.new("freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm",true)
 

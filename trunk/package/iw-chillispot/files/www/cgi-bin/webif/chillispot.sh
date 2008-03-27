@@ -14,9 +14,9 @@
 --    hotspot
 --
 --------------------------------------------------------------------------------
---
---##WEBIF:name:IW:150:ChilliSpot
---
+--[[
+##WEBIF:name:IW:200:ChilliSpot
+]]--
 -- config.lua 
 -- LUA settings and load some functions files
 -- 
@@ -185,8 +185,8 @@ else
 	formservice[cfg_chillispot..".enable"].options:Add("1","Enable")
 	form = formClass.new(tr("Core Settings"))
 ----	Input Section form
-	form:Add("checkbox",cfg_chilli..".fg",chilli_val.fg,tr("chilli_var_foreground#Foreground"))
-	form:Add("checkbox",cfg_chilli..".debug",chilli_val.debug,tr("chilli_var_debug#Debug"))
+--	form:Add("checkbox",cfg_chilli..".fg",chilli_val.fg,tr("chilli_var_foreground#Foreground"))
+--	form:Add("checkbox",cfg_chilli..".debug",chilli_val.debug,tr("chilli_var_debug#Debug"))
 	form:Add("text",cfg_chilli..".interval",chilli_val.interval,tr("chilli_var_interval#Interval"),"int,>1800")
 	form:Add("text",cfg_chilli..".pidfile",chilli_val.pidfile,tr("chilli_var_pidfile#Pid file"),"string","width:90%")
 	form:Add("text",cfg_chilli..".statedir",chilli_val.statedir,tr("chilli_var_statedir#State dir"),"string","width:90%")
