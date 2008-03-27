@@ -106,7 +106,7 @@ end
 function pkgInstalledClass:display()
 	__MENU.selected = string.gsub(__SERVER.REQUEST_URI,"(.*)_changes&(.*)","%2")
 	page.title = tr("Need Install").." ("..self.require.count..") packages..."
---	page.action_applay = ""
+--	page.action_apply = ""
 	page.action_review = ""
 --	page.action_clear = ""
 	local pkg_title = ""

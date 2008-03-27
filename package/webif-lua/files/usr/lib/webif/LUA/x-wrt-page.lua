@@ -19,13 +19,13 @@ function pageClass.new (title)
 	self["body"] = "<body>"
 --	self["menu"] = menu:tohtml()
 --	self["savebutton"] ="<div class=\"page-save\"><input type=\"submit\" name=\"__ACTION\" value=\""..tr("Save Changes").."\" /></div></form>"
---	self["action_applay"]  = [[<a href="]]..__SERVER.SCRIPT_NAME.. [[?__ACTION=applay_changes]] ..[[" >]]..tr("Apply Changes")..[[ &laquo;</a>]]
+--	self["action_apply"]  = [[<a href="]]..__SERVER.SCRIPT_NAME.. [[?__ACTION=apply_changes]] ..[[" >]]..tr("Apply Changes")..[[ &laquo;</a>]]
 --	self["action_clear"]  = [[<a href="]]..__SERVER.SCRIPT_NAME.. [[?__ACTION=clear_changes]] ..[[" >]]..tr("Clear Changes")..[[ &laquo;</a>]]
 --	self["action_review"] = [[<a href="]]..__SERVER.SCRIPT_NAME.. [[?__ACTION=review_changes]]..[[" >]]..tr("Review Changes")..[[ (]]..config.updated.count..[[) &laquo;</a>]]
 --	if __FORM.__menu ~= nil then __options = "<input type=\"hidden\" name=\"menu\" value=\""..__FORM.__menu.."\" />" else __options="" end
 --	self["form"]="<form enctype=\"multipart/form-data\" action=\""..__SERVER.SCRIPT_NAME.."\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />"..__options
 	self["savebutton"]    = "<input type=\"submit\" name=\"__ACTION\" value=\""..tr("Save Changes").."\" />"
-	self["action_applay"] = nil
+	self["action_apply"] = nil
 	self["action_clear"]  = nil
 	self["action_review"] = nil
 	self["form"]          = [[<form enctype="multipart/form-data" action="]]..__SERVER.SCRIPT_NAME..[[" method="post">]]
@@ -39,7 +39,7 @@ end
 
 function pageClass:Init()
 	if __FORM.__ACTION=="clear_changes"  then __UCI_UPDATED:clear(self)  end
-	if __FORM.__ACTION=="applay_changes" then __UCI_UPDATED:applay(self) end
+	if __FORM.__ACTION=="apply_changes" then __UCI_UPDATED:apply(self) end
 	if __FORM.__ACTION=="review_changes" then __UCI_UPDATED:review(self) end
 --	if __FORM.__ACTION==tr("Save Changes") then config:save(self) end
 end
@@ -138,21 +138,21 @@ function pageClass:footer()
 		self.savebutton = str..self.savebutton.."</div>"
 	end
 
-	if self.action_applay == nil then
-		self.action_applay = [[<a href="]]..__SERVER.SCRIPT_NAME.. [[?__ACTION=applay_changes&]]..__MENU.selected..[[" >]]..tr("Apply Changes")..[[ &laquo;</a>]]
-	elseif self.action_applay ~= "" then
-		if string.match(self.action_applay,"?") then
-			self.action_applay = string.gsub(self.action_applay,"?","?"..__MENU.selected.."&")
+	if self.action_apply == nil then
+		self.action_apply = [[<a href="]]..__SERVER.SCRIPT_NAME.. [[?__ACTION=apply_changes&amp;]]..__MENU.selected..[[" >]]..tr("Apply Changes")..[[ &laquo;</a>]]
+	elseif self.action_apply ~= "" then
+		if string.match(self.action_apply,"?") then
+			self.action_apply = string.gsub(self.action_apply,"?","?"..__MENU.selected.."&amp;")
 		else
-			self.action_applay = self.action_applay.."?"..__MENU.selected
+			self.action_apply = self.action_apply.."?"..__MENU.selected
 		end
 	end
 
 	if self.action_clear == nil then
-		self.action_clear = [[<a href="]]..__SERVER.SCRIPT_NAME.. [[?__ACTION=clear_changes&]]..__MENU.selected..[[" >]]..tr("Clear Changes")..[[ &laquo;</a>]]
+		self.action_clear = [[<a href="]]..__SERVER.SCRIPT_NAME.. [[?__ACTION=clear_changes&amp;]]..__MENU.selected..[[" >]]..tr("Clear Changes")..[[ &laquo;</a>]]
 	elseif self.action_clear ~= "" then
 		if string.match(self.action_clear,"?") then
-			self.action_clear = string.gsub(self.action_clear,"?","?"..__MENU.selected.."&")
+			self.action_clear = string.gsub(self.action_clear,"?","?"..__MENU.selected.."&amp;")
 		else
 			self.action_clear = self.action_clear.."?"..__MENU.selected
 		end
@@ -182,7 +182,7 @@ if tonumber(__SYSTEM.general.use_progressbar) == 1 then footer = footer .. '<scr
 if __UCI_UPDATED.count > 0 then
 footer = footer ..[[
 	<ul class="apply">
-		<li>]]..self.action_applay..[[</li>
+		<li>]]..self.action_apply..[[</li>
 		<li>]]..self.action_clear..[[</li>
 		<li>]]..self.action_review..[[</li>
 	</ul>

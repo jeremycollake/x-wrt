@@ -132,7 +132,7 @@ end
 --	self:update_count()
 --	menu.selected = string.gsub(__SERVER.REQUEST_URI,"(.*)_changes&(.*)","%2")
 --	page.title = tr("Review Changes").." ("..config.updated.count..")"
---	page.action_applay = ""
+--	page.action_apply = ""
 --	page.action_review = ""
 --	page.action_clear = ""
 --	
@@ -153,20 +153,20 @@ end
 --	os.exit()
 --end
 
---function applay(page)
+--function apply(page)
 --	self.updated.count = 0
 --	menu.selected = string.gsub(__SERVER.REQUEST_URI,"(.*)_changes&(.*)","%2")
 --	page.title = tr("Updating config")
---	page.action_applay = ""
+--	page.action_apply = ""
 --	page.action_review = ""
 --	page.action_clear = ""
 --	page.savebutton ="<input type=\"submit\" name=\"continue\" value=\"Continue\" style=\"width:150px;\" />"
 --	print(page:header())
---	changes_applay=io.popen ("/usr/lib/webif/apply.sh 2>&1")
---	for linea in changes_applay:lines() do
+--	changes_apply=io.popen ("/usr/lib/webif/apply.sh 2>&1")
+--	for linea in changes_apply:lines() do
 --		print(trsh(linea),"<BR>")
 --	end
---	changes_applay:close()
+--	changes_apply:close()
 --	print(page:footer())
 --	os.exit()
 --end

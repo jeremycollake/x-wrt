@@ -94,7 +94,7 @@ end
 function uciUpdatedClass:review(page)
 	__MENU.selected = string.gsub(__SERVER.REQUEST_URI,"(.*)_changes&(.*)","%2")
 	page.title = tr("Review Changes").." ("..self.count..")"
---	page.action_applay = ""
+--	page.action_apply = ""
 	page.action_review = ""
 --	page.action_clear = ""
 	
@@ -114,12 +114,12 @@ function uciUpdatedClass:review(page)
 	os.exit()
 end
 
-function uciUpdatedClass:applay(page)
+function uciUpdatedClass:apply(page)
   __RESTART = {}
 	self.count = 0
 	__MENU.selected = string.gsub(__SERVER.REQUEST_URI,"(.*)_changes&(.*)","%2")
 	page.title = tr("Updating config")
-	page.action_applay = ""
+	page.action_apply = ""
 	page.action_review = ""
 	page.action_clear = ""
 	page.savebutton ="<input type=\"submit\" name=\"continue\" value=\"Continue\" style=\"width:150px;\" />"
@@ -202,12 +202,12 @@ function uciUpdatedClass:applay(page)
   end
   local form = formClass.new("Apply...",true)
   print (form:startFullForm())
-	changes_applay=io.popen ("/usr/lib/webif/apply.sh 2>&1")
-	for linea in changes_applay:lines() do
-		print(trsh(linea),"<BR>")
+	changes_apply=io.popen ("/usr/lib/webif/apply.sh 2>&1")
+	for linea in changes_apply:lines() do
+		print(trsh(linea),"<br>")
 	end
  	print (form:endForm())
-	changes_applay:close()
+	changes_apply:close()
 	print(page:footer())
 	os.exit()
 end
@@ -215,7 +215,7 @@ end
 function uciUpdatedClass:clear(page)
 	__MENU.selected = string.gsub(__SERVER.REQUEST_URI,"(.*)_changes&(.*)","%2")
 	page.title = tr("Clear Changes").." ("..self.count..")"
---	page.action_applay = ""
+--	page.action_apply = ""
 	page.action_review = ""
 --	page.action_clear = ""
 	

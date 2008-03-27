@@ -208,7 +208,7 @@ function menuClass:selmenu(menu,menutype,menupath,sel)
 --		if sel == nil and pepe ~= nil and pepe > 1 then sel = i end
 		link, option = unpack(string.split(link,"?"))
 		if option == nil then option = ""
-		else option = "&"..option end
+		else option = "&amp;"..option end
 		if i == sel then 
 			_strMenu = _strMenu.."\t<li class=\"selected\"><a href=\""..link.."?__menu="..menupath..i..option.."\">"..tr(v.name).."</a></li>\n"
 			self.selected = "__menu="..menupath..i..tostring(option)
