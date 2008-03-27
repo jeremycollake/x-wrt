@@ -23,6 +23,8 @@ if pkg.uci ~= nil then
 end
 
 require("uciUpdated")
+__WORK_STATE = {"Warning... Work in progress...","Warning... Work not done", "Warning... Work Not Tested","Warning... Work in Test"}
+__WIP = 0 
 __ERROR   = {} -- __ERROR[#__ERROR][var_name], __ERROR[#__ERROR][msg]
 __TOCHECK = {} -- __TOCHECK[#__TOCHECK]
 __UCI_CMD = {} -- __UCI_CMD[#__UCI_CMD]["command"], __UCI_CMD[#__UCI_CMD_]["varname"]
