@@ -105,10 +105,10 @@ end
 function formClass:full_line(t)
 	local style = ""
 	if t.style ~= "" then style = "style=\""..t.style.."\" " end
-	local str  = "<TR>"
-	str = str .. "<TD colspan=\"2\">"
+	local str  = "<tr>"
+	str = str .. "<td colspan=\"2\">"
 	str = str .. "<input type=\"text\" name=\""..t.name.."\" value=\""..t.value.."\" "..style..t.script.." />"
-	str = str .. "</TD></TR>"
+	str = str .. "</td></tr>"
 	return str
 end
 
@@ -131,8 +131,8 @@ end
 function formClass:uci_set_config(t)
 	local style = ""
 	if t.style ~= "" then style = "style=\""..t.style.."\" " end
-	local str  = "<TR><TD width=\"40%\">" .. t.label .. "</TD>"
-	str = str .. "<TD width=\"60%\">"
+	local str  = "<tr><td width=\"40%\">" .. t.label .. "</td>"
+	str = str .. "<td width=\"60%\">"
   str = str .. "<table cellspacing=\"0\" border=\"0\"><tr><td width=\"80%\">"
   local conf = string.split(t.name,",") 
   for i = 1, #conf do
@@ -142,7 +142,7 @@ function formClass:uci_set_config(t)
   str = str .. "</td><td width=\"20%\">"
 	str = str .. "&nbsp;<input type=\"submit\" name=\""..t.name.."\" value=\""..tr("Add").."\""..style..t.script.." />"
   str = str .. "</td></tr></table>"
-	str = str .. "</TD></TR>"
+	str = str .. "</td></tr>"
 	
 	return str
 end
@@ -150,64 +150,64 @@ end
 function formClass:button(t)
 	local style = ""
 	if t.style ~= "" then style = "style=\""..t.style.."\" " end
-	local str  = "<TR>"
+	local str  = "<tr>"
 	if self.__full == true then
-		str = str .. "<TD>"
+		str = str .. "<td>"
 	else
-		str = str .. "<TD colspan=\"2\">"
+		str = str .. "<td colspan=\"2\">"
 	end
 	str = str .. "<input type=\"submit\" name=\""..t.name.."\" value=\""..t.value.."\" "..style..t.script.." />"
-	str = str .. "</TD></TR>"
+	str = str .. "</td></tr>"
 	return str
 end
 
 function formClass:text(t)
 	local style = ""
 	if t.style ~= "" then style = "style=\""..t.style.."\" " end
-	local str  = "<TR><TD width=\"40%\">" .. t.label .. "</TD>"
-	str = str .. "<TD width=\"60%\">"
+	local str  = "<tr><td width=\"40%\">" .. t.label .. "</td>"
+	str = str .. "<td width=\"60%\">"
 	if t.validate ~= "" then
 	str = str .. "<input type=\"hidden\" name=\"val_str_"..t.name.."\" value=\""..t.validate.."\" />"
 	str = str .. "<input type=\"hidden\" name=\"val_lbl_"..t.name.."\" value=\""..t.label.."\" />"
 	end
 	str = str .. "<input type=\"text\" name=\""..t.name.."\" value=\""..t.value.."\" "..style..t.script.." />"
-	str = str .. "</TD></TR>"
+	str = str .. "</td></tr>"
 	return str
 end
 
 function formClass:password(t)
 	local style = ""
 	if t.style ~= "" then style = "style=\""..t.style.."\" " end
-	local str  = "<TR><TD width=\"40%\">" .. t.label .. "</TD>"
-	str = str .. "<TD width=\"60%\">"
+	local str  = "<tr><td width=\"40%\">" .. t.label .. "</td>"
+	str = str .. "<td width=\"60%\">"
 	if t.validate ~= "" then
 	str = str .. "<input type=\"hidden\" name=\"val_str_"..t.name.."\" value=\""..t.validate.."\" />"
 	str = str .. "<input type=\"hidden\" name=\"val_lbl_"..t.name.."\" value=\""..t.label.."\" />"
 	end
 	str = str .. "<input type=\"password\" name=\""..t.name.."\" value=\""..t.value.."\" "..style..t.script..">"
-	str = str .. "</TD></TR>"
+	str = str .. "</td></tr>"
 	return str
 end
 
 function formClass:select(t)
 	local style = ""
 	if t.style ~= "" then style = "style=\""..t.style.."\" " end
-	local str  = "<TR><TD width=\"40%\">" .. t.label .. "</TD>"
-	str = str .. "<TD width=\"60%\">"
+	local str  = "<tr><td width=\"40%\">" .. t.label .. "</td>"
+	str = str .. "<td width=\"60%\">"
 	if t.validate ~= "" then
 	str = str .. "<input type=\"hidden\" name=\"val_str_"..t.name.."\" value=\""..t.validate.."\" />"
 	str = str .. "<input type=\"hidden\" name=\"val_lbl_"..t.name.."\" value=\""..t.label.."\" />"
 	end
-	str = str .. "<SELECT name=\""..t.name.."\" "..style.." "..t.script..">"
+	str = str .. "<select name=\""..t.name.."\" "..style.." "..t.script..">"
 	for v,op in ipairs(t.options) do
 		if string.trim(op.value) == string.trim(t.value) then 
-			str = str .. "<OPTION VALUE=\""..op.value.."\" SELECTED>"..op.label.."</OPTION>"
+			str = str .. "<option value=\""..op.value.."\" selected=\"selected\">"..op.label.."</option>"
 		else
-			str = str .. "<OPTION VALUE=\""..op.value.."\" >"..op.label.."</OPTION>"
+			str = str .. "<option value=\""..op.value.."\" >"..op.label.."</option>"
 		end
 	end
-	str = str .. "</SELECT>"
-	str = str .. "</TD></TR>"
+	str = str .. "</select>"
+	str = str .. "</td></tr>"
 	return str
 end
 
@@ -215,15 +215,15 @@ function formClass:checkbox(t)
 	local style = ""
 	local checked = "" 
 	if t.style ~= "" then style = "style=\""..t.style.."\" " end
-	if string.trim(t.value) == string.trim(t.checked) then checked = " checked" end
-	local str  = "<TR><TD width=\"40%\">" .. t.label .. "</TD>"
-	str = str .. "<TD width=\"60%\">"
+	if string.trim(t.value) == string.trim(t.checked) then checked = " checked=\"checked\"" end
+	local str  = "<tr><td width=\"40%\">" .. t.label .. "</td>"
+	str = str .. "<td width=\"60%\">"
 	if t.validate ~= "" then
 	str = str .. "<input type=\"hidden\" name=\"val_str_"..t.name.."\" value=\""..t.validate.."\" />"
 	str = str .. "<input type=\"hidden\" name=\"val_lbl_"..t.name.."\" value=\""..t.label.."\" />"
 	end
 	str = str .. "<input type=\"checkbox\" name=\""..t.name.."\" value=\"1\""..t.style..t.script.." "..checked.."/>"
-	str = str .. "</TD></TR>"
+	str = str .. "</td></tr>"
 	return str
 end
 
@@ -231,14 +231,14 @@ function formClass:radio(name,value,label,options,style,script)
 	if label == nil then label = name end
 	if value == nil then value = "" end
 	if style == nil then style = "" end
-	if string.trim(value) == string.trim(options) then options = " checked" end
+	if string.trim(value) == string.trim(options) then options = " checked=\"checked\"" end
 	if script == nil then script = "" end
-	local str  = "<TR><TD width=\"40%\">" .. label .. "</TD>"
-	str = str .. "<TD width=\"60%\">"
+	local str  = "<tr><td width=\"40%\">" .. label .. "</td>"
+	str = str .. "<td width=\"60%\">"
 	str = str .. "<input type=\"hidden\" name=\"val_str_"..name.."\" value=\"string\" />"
 	str = str .. "<input type=\"hidden\" name=\"val_lbl_"..name.."\" value=\""..label.."\" />"
-	str = str .. "<input TYPE=\"radio\" name=\""..name.."\" style=\""..style.."\" "..script.." "..options.."/>"
-	str = str .. "</TD></TR>"
+	str = str .. "<input type=\"radio\" name=\""..name.."\" style=\""..style.."\" "..script.." "..options.."/>"
+	str = str .. "</td></tr>"
 	return str
 end
 

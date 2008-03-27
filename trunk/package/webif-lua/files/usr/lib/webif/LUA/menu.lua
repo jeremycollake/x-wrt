@@ -45,7 +45,7 @@ function menuClass:Add(name,val)
 end
 
 function menuClass:Show()
-	print ("<Table border=\"1\">")
+	print ("<table border=\"1\">")
 	print ("<tr>")
 	print ("<td>i</td>")
 	print ("<td>v.name</td>")
@@ -82,8 +82,8 @@ function menuClass:Show()
 end
 
 function menuClass:ShowT()
-	print ("</Table>")
-	print ("<Table border=\"1\">")
+	print ("</table>")
+	print ("<table border=\"1\">")
 	print ("<tr>")
 	print ("<td>i</td>")
 	print ("<td>v[1].name</td>")
@@ -116,7 +116,7 @@ function menuClass:ShowT()
 			print ("</td></tr>")
 		end
 	end
-	print ("</Table>")
+	print ("</table>")
 end
 
 function menuClass:tohtml()
@@ -169,7 +169,7 @@ function menuClass:tohtml()
 	if submenucount == 0 then submenucount = 7
 	else submenucount = submenucount + 8.03 + (submenucount-1) * 0.85 end
 newstyle =[[
-	<style type='text/css'>
+	<style type="text/css">
 	<!--
 	#colorswitcher {
 	position: absolute;
@@ -195,7 +195,7 @@ function menuClass:selmenu(menu,menutype,menupath,sel)
 	if string.len(menupath) > 0 then
 		menupath = menupath .. ":"
 	end 
-	_strMenu = "<div id=\""..menutype.."\"><ul>"
+	_strMenu = "<div id=\""..menutype.."\">\n<ul>\n"
 	for i,v in ipairs(menu) do
 		local injectpath = ""
 		local option = ""
@@ -210,18 +210,18 @@ function menuClass:selmenu(menu,menutype,menupath,sel)
 		if option == nil then option = ""
 		else option = "&"..option end
 		if i == sel then 
-			_strMenu = _strMenu.."<li class=\"selected\"><a href=\""..link.."?__menu="..menupath..i..option.."\">"..tr(v.name).."</a></li>"
+			_strMenu = _strMenu.."\t<li class=\"selected\"><a href=\""..link.."?__menu="..menupath..i..option.."\">"..tr(v.name).."</a></li>\n"
 			self.selected = "__menu="..menupath..i..tostring(option)
 			sel = i
  		else
 			if v.name == "-" then 
-				_strMenu = _strMenu.."<li class=\"separator\">-</li>"
+				_strMenu = _strMenu.."\t<li class=\"separator\">-</li>\n"
 			else
-				_strMenu = _strMenu.."<li><a href=\""..link.."?__menu="..menupath..i..option.."\">"..tr(v.name).."</a></li>"
+				_strMenu = _strMenu.."\t<li><a href=\""..link.."?__menu="..menupath..i..option.."\">"..tr(v.name).."</a></li>\n"
 			end
 		end
 	end
-	_strMenu = _strMenu.."</ul></div>"
+	_strMenu = _strMenu.."</ul>\n</div>\n"
 	if sel ~= nil then menupath = menupath ..sel end
 	return _strMenu, menupath
 end
