@@ -15,6 +15,7 @@ pageClass_mt = {__index = pageClass}
 
 function pageClass.new (title) 
 	local self = {}
+	self["__DOCTYPE"] = [[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">]]
 	self["title"] = tr(title)
 	self["body"] = "<body>"
 --	self["menu"] = menu:tohtml()
@@ -53,9 +54,9 @@ end
 function pageClass:header()
 local header = [[
 Content-Type: text/html; charset=UTF-8
-Pragma: no-cache
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+Pragma: no-cache]]..
+self.__DOCTYPE ..
+[[
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>]]..self.title.." "..__SYSTEM.general.firmware_name..tr("Administrative Console")..[[</title>
@@ -66,16 +67,16 @@ Pragma: no-cache
 	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_green.css" title="green" />
 	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_navyblue.css" title="navyblue" />
 	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_black.css" title="black" />
-	<!--[if lt IE 7]>
+	<!--[if lt IE 7]
 		<link rel="stylesheet" type="text/css" href="/themes/active/ie_lt7.css" />
-	<![endif]-->
+	[endif]-->
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="expires" content="-1" />
 	<script type="text/javascript" src="/js/styleswitcher.js"></script>
 </head>
 ]] .. self.body .. [[
 <div id="container">
-<div id="header">
+ <div id="header">
 	<em>]]..tr("making_usable#End user extensions for OpenWrt")..[[</em>
 	<h1>]]..tr("X-Wrt Administration Console")..[[</h1>
 	<div id="short-status">
@@ -117,7 +118,7 @@ if self.image ~= nil then
 else
 	header = header ..tr(self.title).."</h2>"
 end
-
+if __WIP >0 then header = header .."<h3 CLASS=\"warning\"> "..tr(__WORK_STATE[__WIP]).."</h3>" end 
 return header
 end
 
@@ -169,7 +170,7 @@ function pageClass:footer()
 	end
 local footer = [[
 </div>
-<br />
+<!-- <br /> -->
 <fieldset id="save">
 	<legend><strong>]]..tr("Proceed Changes")..[[</strong></legend>
 ]]
