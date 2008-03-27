@@ -21,3 +21,4 @@ __MENU.IW.ChilliSpot:Add("chilli_menu_Radius#Radius","chillispot.sh?option=radiu
 __MENU.IW.ChilliSpot:Add("chilli_menu_Access#Access","chillispot.sh?option=access")
 __MENU.IW.ChilliSpot:Add("chilli_menu_Proxy#Proxy","chillispot.sh?option=proxy")
 __MENU.IW.ChilliSpot:Add("chilli_menu_Scripts#Scripts","chillispot.sh?option=scripts")
+__WIP = 4
