@@ -1,0 +1,4 @@
+# freeradius_check
+config "default" "default"
+	option Simultaneous_Use	'1'
+

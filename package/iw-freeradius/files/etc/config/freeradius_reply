@@ -1,0 +1,11 @@
+# freeradius_reply
+
+config "default" "default"
+	option Idle_Timeout	'700'
+	option Acct_Interim_Interval	'600'
+	option WISPr_Bandwidth_Max_Down	'512000'
+	option WISPr_Bandwidth_Max_Up	'25600'
+
+
+
+
