@@ -1,0 +1,67 @@
+#!/usr/bin/lua
+package.path = package.path .. ";/usr/lib/webif/LUA/?.lua;/usr/share//lua/5.1/?.lua"
+-- Common Functions
+require("common")
+require("common")
+require("uci")
+olsr = uciClass.new("olsr")
+for i,v in pairs(olsr.sections) do
+  print (i,v)
+end
+hna4 = olsr.Hna4
+local hna4name = {}
+if hna4 then
+for i=1, #hna4 do
+  print(hna4[i].values.NetAddr)
+  if hna4[i].values.NetAddr == "0.0.0.0" then
+    hna4name[#hna4name+1] = hna4[i].name
+  end    
+end
+end
+netfile = load_file("/var/state/network")
+netfile = string.gsub(netfile,"config_set ","")
+netfile = string.gsub(netfile,"\' \'",",")
+netfile = string.gsub(netfile,"\'","")
+local link = false
+local interfaces = {}
+for line in string.gmatch(netfile,"[^\n]+") do 
+  if line then
+    local ifname, ifvar, ifset = unpack(string.split(line,","))
+    if interfaces[ifname] == nil then interfaces[ifname] = {} end
+    interfaces[ifname][ifvar] = ifset
+  end
+end
+
+if tonumber(interfaces.wan.up) == 1 then
+  ping = io.popen("ping -c 1 66.94.234.13")
+  for line in ping:lines() do
+    if string.match(line,"1 packets received") then 
+      link = true
+    end
+  end
+  if link then
+    print("conectado")
+    if #hna4name == 0 then
+      local param = "uci set olsr.cfg"..tostring(#olsr.sections+1).."=Hna4" 
+      os.execute(param)
+      param = "uci set olsr.cfg"..tostring(#olsr.sections+1)..".NetAddr=0.0.0.0" 
+      os.execute(param)
+      param = "uci set olsr.cfg"..tostring(#olsr.sections+1)..".NetMask=0.0.0.0" 
+      os.execute(param)
+      os.execute("uci commit olsr")
+      os.execute("rm /tmp/.uci/olsr*")
+      os.execute("/etc/init.d/olsrd restart") 
+    end
+  else
+    os.execute("ifup wan")
+    for i=1, #hna4name do
+      print(hna4name[i])
+      os.execute("uci del "..hna4name[i])
+    end
+    os.execute("uci commit olsr")
+    os.execute("rm /tmp/.uci/olsr*")
+    print("desconectado") 
+    os.execute("/etc/init.d/olsrd restart") 
+  end
+end
+  
