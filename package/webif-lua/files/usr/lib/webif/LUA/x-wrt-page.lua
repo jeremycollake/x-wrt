@@ -87,7 +87,8 @@ Pragma: no-cache
 			<li><strong>]]..tr("Load")..[[ :</strong> ]]..__SYSTEM.loadavg..[[</li>
 		</ul>
 	</div>
-</div>]].. __MENU:tohtml() ..[[
+</div>
+]].. __MENU:tohtml() ..[[
 <div id="colorswitcher">
 	<div style="background: #000000" title="black" onclick="setActiveStyleSheet('black'); return false;"></div>
 	<div style="background: #192a65" title="navyblue" onclick="setActiveStyleSheet('navyblue'); return false;"></div>
@@ -99,20 +100,22 @@ Pragma: no-cache
 ]]
 if __SYSTEM.general.use_progressbar == 1 then 
 	header = header .. [[
-	<SCRIPT type='text/javascript'>start=0; end=10</SCRIPT>
-	<SCRIPT src='/js/pageload.js' type='text/javascript'></SCRIPT>
-	<DIV id='loadmain'>
-	<SCRIPT type='text/javascript'>document.getElementById(\"loadmain\").style.display = \"none\";</SCRIPT>";
-	_JSload="<SCRIPT type='text/javascript'>load()</SCRIPT>]]
-else header = header ..  "<script type='text/javascript'>function load() { }</script>" end
+	<script type="text/javascript">start=0; end=10</SCRIPT>
+	<script src="/js/pageload.js" type="text/javascript"></SCRIPT>
+	<div id="loadmain">
+	<script type="text/javascript">document.getElementById(\"loadmain\").style.display = \"none\";</script>";
+	_JSload="<script type='text/javascript'>load()</script>
+]]
+else header = header ..  "<script type=\"text/javascript\">function load() { }</script>\n" end
 
-header = header ..[[
+header = header..self.form..[[
+
 <div id="content">
 	<h2>]]
 if self.image ~= nil then
-	header = header .. "<img src=\""..self.image.."\" />&nbsp;"..tr(self.title).."</h2>"..self.form
+	header = header .. "<img src=\""..self.image.."\" />&nbsp;"..tr(self.title).."</h2>"
 else
-	header = header ..tr(self.title).."</h2>"..self.form
+	header = header ..tr(self.title).."</h2>"
 end
 
 return header
@@ -130,9 +133,9 @@ function pageClass:footer()
 		str = str .. [[<input type="hidden" name="]]..key..[[" value="]]..val..[[" />]]
 	end
 	if self.savebutton == nil then
-		self.savebutton = str.."<input type=\"submit\" name=\"__ACTION\" value=\""..tr("Save Changes").."\" />".."</div></form>"
+		self.savebutton = str.."<input type=\"submit\" name=\"__ACTION\" value=\""..tr("Save Changes").."\" />".."</div>"
 	elseif self.savebutton ~= "" then
-		self.savebutton = str..self.savebutton.."</div></form>"
+		self.savebutton = str..self.savebutton.."</div>"
 	end
 
 	if self.action_applay == nil then
@@ -187,7 +190,12 @@ footer = footer ..[[
 end
 -- $_endform
 footer = footer ..[[
+
 </fieldset>
+]]
+if self.form ~= nil and self.form ~= "" then footer = footer.."</form>" end
+footer = footer ..[[
+
 <hr />
 <div id="footer">
 	<h3>X-Wrt</h3>
