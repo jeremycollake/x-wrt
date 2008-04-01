@@ -3,6 +3,6 @@
 # IW-Freeradius post-install script.
 #
 
-if [ "`grep "IW" "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"`" = "" ]; then
-  echo "##WEBIF:category:IW" >> "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"
+if [ "`grep 'IW' '${IPKG_INSTROOT}/www/cgi-bin/webif/.categories'`" = "" ]; then
+  echo "##WEBIF:category:IW">>"${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"
 fi
