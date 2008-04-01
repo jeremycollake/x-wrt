@@ -37,6 +37,7 @@ this_revision=$(cat "/www/.version")
 	<li><a href="mailto:jeremy.collake@gmail.com">Jeremy Collake (db90h)</a></li>
 	<li><a href="mailto:kemen04@gmail.com">Travis Kemen (thepeople)</a></li>
 	<li><a href="mailto:lubek@users.berlios.de">Luboš Staněk (lubek)</a></li>
+	<li><a href="mailto:fofware@users.berlios.de">Fabi&aacuten Omar Franzotti (fofware)</a></li>
 </ul>
 
 <h2>@TR<<Contributing Developers>> <em>(@TR<<sorted_by_name#sorted by name>>)</em></h2>
