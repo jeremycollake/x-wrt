@@ -18,19 +18,11 @@ function pageClass.new (title)
 	self["__DOCTYPE"] = [[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">]]
 	self["title"] = tr(title)
 	self["body"] = "<body>"
---	self["menu"] = menu:tohtml()
---	self["savebutton"] ="<div class=\"page-save\"><input type=\"submit\" name=\"__ACTION\" value=\""..tr("Save Changes").."\" /></div></form>"
---	self["action_apply"]  = [[<a href="]]..__SERVER.SCRIPT_NAME.. [[?__ACTION=apply_changes]] ..[[" >]]..tr("Apply Changes")..[[ &laquo;</a>]]
---	self["action_clear"]  = [[<a href="]]..__SERVER.SCRIPT_NAME.. [[?__ACTION=clear_changes]] ..[[" >]]..tr("Clear Changes")..[[ &laquo;</a>]]
---	self["action_review"] = [[<a href="]]..__SERVER.SCRIPT_NAME.. [[?__ACTION=review_changes]]..[[" >]]..tr("Review Changes")..[[ (]]..config.updated.count..[[) &laquo;</a>]]
---	if __FORM.__menu ~= nil then __options = "<input type=\"hidden\" name=\"menu\" value=\""..__FORM.__menu.."\" />" else __options="" end
---	self["form"]="<form enctype=\"multipart/form-data\" action=\""..__SERVER.SCRIPT_NAME.."\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />"..__options
 	self["savebutton"]    = "<input type=\"submit\" name=\"__ACTION\" value=\""..tr("Save Changes").."\" />"
 	self["action_apply"] = nil
 	self["action_clear"]  = nil
 	self["action_review"] = nil
 	self["form"]          = [[<form enctype="multipart/form-data" action="]]..__SERVER.SCRIPT_NAME..[[" method="post">]]
---	self.form = self.form .. [[<input type="hidden" name="submit" value="1" />]]
 
 
 	setmetatable(self,pageClass_mt) 
@@ -52,10 +44,11 @@ function pageClass:print()
 end
 
 function pageClass:header()
-local header = [[
+print ([[
 Content-Type: text/html; charset=UTF-8
-Pragma: no-cache]]..
-self.__DOCTYPE ..
+Pragma: no-cache
+]])
+local header = self.__DOCTYPE ..
 [[
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
