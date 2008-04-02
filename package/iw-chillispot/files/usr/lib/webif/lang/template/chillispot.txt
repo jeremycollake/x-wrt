@@ -1,0 +1,134 @@
+# category
+HotSpot => HotSpot
+# Menu
+chilli_menu_Core => Core
+chilli_menu_DHCP => DHCP
+chilli_menu_Portal => Captive Portal
+chilli_menu_access => Access Lists
+chilli_menu_Radius => Radius
+chilli_menu_Proxy => Proxy Radiud
+chilli_menu_Scripts => Scripts
+#
+chilli_main_title => Chillispot Settings
+#
+chilli_dhcp_title => DHCP Settings
+#
+chilli_var_dhcpif => Interface
+chilli_var_anydns => Any DNS
+chilli_var_net => Network
+chilli_var_dynip => Dynamic IP Pool
+chilli_var_dns1 => Primary DNS
+chilli_var_dns2 => Secondary DNS
+chilli_var_statip => Static IP Pool
+chilli_var_dhcpmac => DHCP MAC
+chilli_var_lease => Lease
+chilli_help_dhcpif => This is the network interface which is connected to the access points.
+chilli_help_uamanydns => If enabled, users will be allowed to user any other dns server they specify.
+chilli_help_net => Client's DHCP Network IP Subnet (192.168.182.0/24 by default).
+chilli_help_dynip => Allocation of dynamic IP Addresses to clients.
+chilli_help_net => Client's DHCP Network IP Subnet (192.168.182.0/24 by default).
+chilli_help_statip => Allocation of static IP Addresses.
+chilli_help_dhcpmac => An address in the range  00:00:5E:00:02:00 - 00:00:5E:FF:FF:FF falls within the IANA range of addresses and is not allocated for other purposes.
+chilli_help_lease => Time before DHCP lease expires
+#
+chilli_portal_title => Portal Settings
+#
+chilli_var_uamserver => UAM Server
+chilli_var_uamsecret => UAM Secret
+chilli_var_uamhomepage => UAM Home Page
+chilli_var_uamallowed => UAM Allowed
+chilli_var_uamlisten => UAM Listen
+chilli_var_uamport => UAM Port
+chilli_var_doman => Domain
+#help
+chilli_help_uamserver => URL of a Webserver handling the authentication.
+chilli_help_uamsecret => Shared secret between HotSpot and Webserver (UAM Server).
+chilli_help_uamhomepage => URL of Welcome Page. Unauthenticated users will be redirected to this address, otherwise specified, they will be redirected to UAM Server instead.
+chilli_help_uamallowed => Comma-seperated list of domain names, urls or network subnets the client can access without authentication (walled gardened).
+chilli_help_uamlisten => IP Address to listen to for authentication requests.
+chilli_help_uamport => TCP port to listen to for authentication requests.
+chilli_help_domain => Will be suggested to the client.
+#
+chilli_radius_title => Radius Settings
+#
+chilli_var_radiusserver1 => Primary Radius
+chilli_var_radiusserver2 => Secondary Radius
+chilli_var_radiussecret => Radius Secret
+chilli_var_radiusnasid => NAS ID
+chilli_var_radiusnasip => NAS IP
+chilli_var_radiusauthport => Authentication Port
+chilli_var_radiusacctport => Accounting Port
+chilli_var_radiuslocationid => Location ID
+chilli_var_radiuslocationname => Location Name
+chilli_var_radiuslisten => Listen IP
+chilli_var_radiuscalled => Radius Called Station ID
+#help
+chilli_help_title_radiusserver => Primary / Secondary Radius
+chilli_help_radiusserver => Ip or url address of Radius Servers. If you have only one radius server you should set Secondary radius server to the same value as Primary radius server.
+chilli_help_radiussecret => Radius shared secret for both servers.
+chilli_help_title_radiusports => Authentication / Accounting Ports
+chilli_help_radiusports => The UDP port number to use for radius authentication and accounting requests. The same port number is used for both radiusserver1 and radiusserver2.
+chilli_help_radiuslocationid  => WISPr Location ID. Should be in the format: isocc=&lt;ISO_Country_Code&gt;, cc=&lt;E.164_Country_Code&gt;, ac=&lt;E.164_Area_Code&gt;, network=&lt;ssid/ZONE&gt;
+chilli_help_radiuslocationname => Location Name|WISPr Location Name. Should be in the format: &lt;HOTSPOT_OPERATOR_NAME&gt;, &lt;LOCATION&gt;
+
+#
+chilli_title_access => Access List Setting
+#
+chilli_var_macauth#MAC Authentication
+chilli_var_macallowed#MAC Allowed
+chilli_var_macpassword#MAC Password
+chilli_var_macsuffix#MAC Suffix
+----	Help section	
+chilli_help_macauth#If enabled, users will be authenticated only based on their MAC Address.
+chilli_help_macallowed#List of allowed MAC Addresses.
+chilli_help_macpassword#Password to use for MAC authentication.
+chilli_help_macsuffix#Suffix to add to the username in-order to form the username.
+
+#
+chilli_title_proxy => Proxy Settings
+#
+chilli_var_proxylisten => Listen
+chilli_var_proxyport => Port
+chilli_var_proxysecret => Secret
+chilli_var_proxyclient => Client
+----	Help section	
+chilli_var_proxylisten => IP Address to listen to (advanced uses only).
+chilli_var_proxyport => UDP port to listen to.
+chilli_var_proxysecret => RADIUS Shared Secret to accept for all clients.
+chilli_var_proxyclient => Clients from which we accept RADIUS Requests.
+#
+chilli_title_scripts => Scripts Settings
+#
+chilli_var_ipup => IP Up
+chilli_var_ipdown => IP Down
+chilli_var_conup => Connection Up
+chilli_var_condown => Connection Down
+----	Help section	
+chilli_help_title_ip => /etc/chilli.ipup and /etc/chilli.ipdown
+chilli_help_ip => Script executed after network interface has been brought up. Executed with the following parameters: (devicename) (ip address) (mask).
+chilli_help_title_con => /etc/chilli.conup and /etc/chilli.condown
+chilli_help_con => Script executed after a user has disconnected. Executed with the following parameters: (devicename) (ip address) (mask) (user ip address) (user mac address) (filter ID).
+#
+chilli_title_service => Service
+#
+chilli_var_service => Service
+chilli_var_foreground => Foreground
+chilli_var_debug => Debug
+chilli_var_interval => Interval
+chilli_var_pidfile => Pid file
+chilli_var_statedir => State dir
+chilli_var_confusername => Conf username
+chilli_var_confpassword => Conf password
+chilli_help_interval => Re-read configuration file at this interval. Will also cause new domain name lookups to be performed. 	Value is given in seconds. Default value is 3600.
+chilli_help_pidfile => File to store information about the process id of the program. The program must have write access to this file/directory. Default is pidfile /var/run/chilli.pid
+chilli_help_statedir => Directory to use for nonvolatile storage. The program must have write access to this directory. This tag is currently ignored.
+chilli_var_confuser_pass => Configuration Username and Password
+chilli_help_confuser_pass => If confusername is specified together with confpassword chillispot will at regular intervals specified by the interval option query the radius server for configuration information.
+
+# install Package
+info_wait_install => Please wait, installation may take a minute
+Chillispot => Chillispot
+hotspot_chilli_package_install => Chillispot Package Install
+continue_button => Continue
+hotspot_chilli_need_install => Chillispot Package is needed!!!
+Install_It => Install It ?
