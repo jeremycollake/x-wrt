@@ -1,6 +1,57 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
+###################################################################
+# Static routes display and configuration
+#
+# Description:
+#	Route configuration
+#
+# Author(s) [in order of work date]:
+#	???		( Someone else did most of the work! )
+#	Adam Hill	<adam@voip-x.co.uk>
+# Major revisions:
+#	Allow static IPV4 routes to be added
+#
+# UCI variables referenced:
+#
+# Configuration files referenced:
+#   network
+#
+
+
+if [ "$FORM_route_remove" != "" ]
+then
+	uci_remove "network" "$FORM_route_remove"
+fi
+
+if [ "$FORM_add_route" != "" ]
+then
+	validate <<EOF
+string|FORM_rtname|@TR<<Name>>|required|$FORM_rtname
+ip|FORM_target|@TR<<Destination>>|required|$FORM_target
+ip|FORM_gateway|@TR<<Gateway>>|required|$FORM_gateway
+netmask|FORM_netmask|@TR<<Netmask>>||$FORM_netmask
+int|FORM_metric|@TR<<Target>>|max=254 min=0|$FORM_metric
+EOF
+	equal "$?" 0 && {
+		[ "$FORM_netmask" = "" ] && FORM_netmask="255.255.255.255"
+		[ "$FORM_metric" = "" ] && FORM_metric="0"
+		FORM_rtname=$(echo -n $FORM_rtname | sed 's/ /_/g')
+		uci_add "network" "route" "$FORM_rtname"
+		uci_set "network" "$FORM_rtname" "target" "$FORM_target"
+		uci_set "network" "$FORM_rtname" "gateway" "$FORM_gateway"
+		uci_set "network" "$FORM_rtname" "netmask" "$FORM_netmask"
+		uci_set "network" "$FORM_rtname" "metric" "$FORM_metric"
+		uci_set "network" "$FORM_rtname" "interface" "$FORM_interface"
+		FORM_target=""
+		FORM_gateway=""
+		FORM_netmask=""
+		FORM_metric=""
+		FORM_rtname=""
+		FORM_interface=""
+	}
+fi
 
 config_load "network"
 for cfgsec in $CONFIG_SECTIONS; do
@@ -12,9 +63,23 @@ for cfgsec in $CONFIG_SECTIONS; do
 		else
 			eval "iface=\"\$CONFIG_${cfgsec}_ifname\""
 		fi
-		[ -n "$iface" ] && ifaces="$ifaces ${cfgsec}:$iface"
+		[ -n "$iface" ] && {
+ 			ifaces="$ifaces ${cfgsec}:$iface"
+ 			ifacelist="$ifacelist ${cfgsec}"
+		}
 	}
 done
+
+# Copy just pre fills the form with the values from a specific route.
+if [ "$FORM_route_copy" != "" ]
+then
+	FORM_rtname="$FORM_route_copy"
+	config_get FORM_target "$FORM_rtname" "target"
+	config_get FORM_gateway "$FORM_rtname" "gateway"
+	config_get FORM_netmask "$FORM_rtname" "netmask"
+	config_get FORM_metric "$FORM_rtname" "metric"
+	config_get FORM_interface "$FORM_rtname" "interface"
+fi
 
 display_config_routes() {
 	local ipv="$1"
@@ -65,9 +130,34 @@ EOF
 			else
 				echo "	<td>$cfgsec</td>"
 			fi
+			[ "$ipv" = "4" ] && echo "<td><a href=\"?route_remove=$cfgsec\">X</a></td>
+			<td><a href=\"?route_copy=$cfgsec\">@TR<<rt_copy#Edit>></td>"
 			echo "</tr>"
 		}
 	done
+	if [ "$ipv" = "4" ]
+ 	then
+		echo "<form enctype=\"multipart/form-data\" action=\"/cgi-bin/webif/network-routes.sh\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />
+		<tr>
+		<td><input type=\"text\" size=\"15\" name=\"target\" value=\"$FORM_target\"></td>
+		<td><input type=\"text\" size=\"15\" name=\"gateway\" value=\"$FORM_gateway\"></td>
+		<td><input type=\"text\" size=\"15\" name=\"netmask\" value=\"$FORM_netmask\"></td>
+		<td><input type=\"text\" size=\"3\" name=\"metric\" value=\"$FORM_metric\"></td>
+		<td><select id=\"interface\" name=\"interface\">
+		"
+		for iface in $ifacelist
+		do
+			echo "<option value=\"$iface\""
+			[ "$FORM_interface" = "$iface" ] && echo "selected=\"selected\""
+			echo ">$iface</option>$N"
+		done
+#echo $ifacelist | awk -F":" 'BEGIN { RS=" " } { print "<option value=\"" $1 "\">" $1 "</option>" }'
+		echo "</select></td>
+		<td><input type=\"text\" size=\"15\" name=\"rtname\" value=\"$FORM_rtname\"></td>
+		<td><input type=\"submit\" name=\"add_route\" value=\"Add\"></td>
+		</tr></form>"
+	fi
+
 	cat <<EOF
 </tbody>
 </table>
