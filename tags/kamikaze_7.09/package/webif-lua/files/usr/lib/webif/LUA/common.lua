@@ -46,8 +46,13 @@ end
 -- Load File
 function load_file(filename)
 	local data = ""
-	local BUFSIZE = 2^15     -- 8K
-	local f = io.input(filename)   -- open input file
+	local error = ""
+	local BUFSIZE = 2^15     -- 32K
+	local f = io.exists( filename )
+	if f then
+    f = assert(io.open(filename,"r"))   -- open input file
+  end
+
 	if f then 
     while true do
 		  local lines, rest = f:read(BUFSIZE, "*line")
@@ -56,15 +61,9 @@ function load_file(filename)
       data = data ..lines
     end
   else
-    return nil
+    return "No such file or directory", f
 	end
---	while true do
---		local lines, rest = f:read(BUFSIZE, "*line")
---		if not lines then break end
---		if rest then lines = lines .. rest .. '\n' end
---		data = data..lines
---	end
-	return data
+	return data, string.len(data)
 end
 
 function io.exists( file )
@@ -248,6 +247,16 @@ function listtovars(strlist,cnt)
 	return unpack(t)
 end
 
+function string.totable(strlist)
+	local t = {}
+	for col in string.gmatch(strlist, "%S+") do
+		col = string.gsub (col, "'", "")
+		col = string.gsub (col, '"', "")
+    t[#t+1] = col
+	end
+	return t
+end
+
 function string.trim (str)
 	if str == nil then return "" end
 	return string.gsub(str, "^%s*(.-)%s*$", "%1")
@@ -424,11 +433,38 @@ end
 -- Table of availables NIC
 function get_interfaces()
 	t={}
-	info = io.popen("/sbin/ifconfig 2>/dev/null | grep 'Link' | sed -e 's/ .* HWaddr//'")
+	info = io.popen("/sbin/ifconfig 2>/dev/null | grep -A 1 'Link' | sed -e 's/ .* HWaddr//' | sed -e ")
 	for linea in info:lines() do
 		local ifname, ifmac = listtovars(linea,2)
 		t[ifname]=ifmac
 	end
 	info:close()
 	return t
+end
+
+function get_ifname(netname)
+  for i,v in pairs(get_interfaces) do
+    print(i,v,"<br>")
+  end
+end
+
+function get_wireless()
+  local t = {}
+  local wifi = uciClass.new("wireless")
+  for i=1, #wifi["wifi-iface"] do
+    t[#t+1]={}
+    for k,v in pairs(wifi["wifi-iface"][i].values) do
+      t[#t][k] = v
+    end
+    for k,v in pairs(wifi[wifi["wifi-iface"][i].values.device]) do
+      t[#t][k] = v
+    end
+  end
+  print("aca va")
+  for i=1, #t do
+    for k,v in pairs(t[i]) do
+      print (k,v)
+    end
+  end
+  return t
 end
