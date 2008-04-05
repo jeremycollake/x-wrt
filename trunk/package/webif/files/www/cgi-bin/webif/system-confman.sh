@@ -10,6 +10,26 @@ uci_load "system"
 
 header "System" "Backup &amp; Restore" "<img src=\"/images/bkup.jpg\" alt=\"@TR<<Backup and Restore>>\" />&nbsp;@TR<<Backup and Restore>>" ''
 
+board_type=$(cat /proc/cpuinfo 2>/dev/null | sed 2,20d | cut -c16-)
+machinfo=$(uname -a 2>/dev/null)
+if $(echo "$machinfo" | grep -q "mips"); then
+	if $(echo "$board_type" | grep -q "Atheros"); then
+		full_flash="0"
+	elif $(echo "$board_type" | grep -q "WP54"); then
+		full_flash="0"
+	elif $(echo "$machinfo" | grep -q "2\.4"); then
+		full_flash="1"
+	elif $(echo "$machinfo" | grep -q "2\.6"); then
+		full_flash="1"
+	fi
+elif $(echo "$machinfo" | grep -q " i[0-9]86 "); then
+	full_flash="0"
+elif $(echo "$machinfo" | grep -q " avr32 "); then
+	full_flash="0"
+elif $(cat /proc/cpuinfo 2>/dev/null | grep -q "IXP4"); then
+	full_flash="0"
+fi
+
 DOWNLOAD()
 {
 cat <<EOF
@@ -155,12 +175,20 @@ footer
 exit
 fi
 
+if [ "$full_flash" = "1" ]; then
 cat <<EOF
 <form method="post" name="download" action="$SCRIPT_NAME" enctype="multipart/form-data">
 &nbsp;&nbsp;&nbsp;<img src="/images/app.2.jpg" width="24" height="24" alt="" />&nbsp;<input type="radio" name="rdflash" value="0" checked="checked" />&nbsp;@TR<<confman_Configuration#Configuration>>
 <br/>
 &nbsp;&nbsp;&nbsp;<img src="/images/app.12.jpg" width="25" height="25" alt="" />&nbsp;<input type="radio" name="rdflash" value="1" />&nbsp;@TR<<confman_Entire_Flash#Entire Flash>><br/><br/>
 EOF
+else
+cat <<EOF
+<form method="post" name="download" action="$SCRIPT_NAME" enctype="multipart/form-data">
+&nbsp;&nbsp;&nbsp;<img src="/images/app.2.jpg" width="24" height="24" alt="" />&nbsp;<input type="radio" name="rdflash" value="0" checked="checked" />&nbsp;@TR<<confman_Configuration#Configuration>>
+<br/>
+EOF
+fi
 
 display_form <<EOF
 start_form|@TR<<Backup Configuration>>
