@@ -11,12 +11,26 @@ config "olsr" "general"
 	option LinkQualityLevel	'2'
 	option UseHysteresis	'no'
 
+#config "ipcconnect" "IpcConnect"
+#     option MaxConnections  '1'
+
+     # Specify entire net-ranges that are 
+     # allowed to connect
+
+#     option Net '192.168.1.0 255.255.255.0'     
+
+#config "ipcconnecthost"
+#     option Host '127.0.0.1'
+
+#config "ipcconnecthost"
+#     option Host '10.0.0.5'
+
 config "LoadPlugin" "dyn_gw_plain"
 	option Library	'olsrd_dyn_gw.so.0.4'
 
 config "LoadPlugin" "nameservice"
 	option Library	'olsrd_nameservice.so.0.3'
-	option name	'12-ola-gs'
+	option name	'sven-ola-gs'
 	option hosts_file	'/var/etc/hosts'
 	option suffix	'.olsr'
 #	option latlon_infile	'/var/run/latlon.txt'
@@ -26,7 +40,7 @@ config "LoadPlugin" "txtinfo"
 	option Accept	'127.0.0.1'
 
 config "Interface"
-	option Interface	"wlan"
+	option Interface	"wl0"
 	option HelloInterval	'6.0'
 	option HelloValidityTime	'108.0'
 	option TcInterval	'4.0'
@@ -35,11 +49,12 @@ config "Interface"
 	option MidValidityTime	'324.0'
 	option HnaInterval	'18.0'
 	option HnaValidityTime	'108.0'
-	option AutoDetectChanges	'yes'
 
 config "websettings" "webadmin"
 
 config "Hna4" "cfg7"
 	option NetAddr	'0.0.0.0'
 	option NetMask	'0.0.0.0'
+
+
 
