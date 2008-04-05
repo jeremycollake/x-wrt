@@ -148,7 +148,7 @@ end_form
 EOF
 	else
 		echo "<br />Upgrading firmware, please wait ... <br />"
-		sysupgrade $upgradefile
+		sysupgrade $FORM_upgradefile
 		echo "@TR<<done>>."
 	fi
 else
