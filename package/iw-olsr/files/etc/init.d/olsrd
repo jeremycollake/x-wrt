@@ -56,6 +56,5 @@ start() {
 
 stop() {
   /usr/lib/webif/LUA/cron_ctrl del "* * * * * /usr/lib/webif/LUA/olsr/minute.cron"
-  /etc/init.d/firewall restart
 	killall olsrd
 }
