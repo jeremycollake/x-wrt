@@ -15,8 +15,38 @@ write_config_lua () {
 }
   
 start() {
-	$BIN -f "$USE_CONF_F" -nofork $OPTIONS &
+	include /lib/network
+	scan_interfaces
+	config_load /var/state/network
+	
+	config_get WAN wan ifname
+	config_get WANDEV wan device
+	config_get LAN lan ifname
+  
+  WIFI=wl0
+  # Allow connections to olsr info port.
+  iptables        -A input_wan      -p tcp --dport 1979 -j ACCEPT
+  # OLSR needs port 698 to transmit state messages. 
+  iptables -A input_rule -p udp --dport 698 -j ACCEPT
+  iptables -A input_rule -p udp --dport 53 -j ACCEPT
+  iptables -A input_rule -p tcp --dport 53 -j ACCEPT
 
+  iptables -A forwarding_rule -i $WAN -o $WIFI -j ACCEPT
+  iptables -A forwarding_rule -i $WIFI -o $WAN -j ACCEPT
+  # For forwarding LAN & WIFI in nodes
+  iptables -A forwarding_rule -i $LAN -o $WIFI -j ACCEPT
+
+  # For WIFI clients to connect to nodes.
+  iptables -A forwarding_rule -i $WIFI -o $WIFI -j ACCEPT
+
+  # For connecting a wired lan client of node 1 to wired lan client of node 2
+  iptables -A forwarding_rule -i $LAN -o $LAN -j ACCEPT
+  
+  # Masquerade all trafic
+  iptables -t nat -A POSTROUTING -o $WIFI -j MASQUERADE
+  itables -t nat -A POSTROUTING -o $WAN -j MASQUERADE
+
+	$BIN -f "$USE_CONF_F" -nofork $OPTIONS &
 	# write pid file (but strip out own pid ($$))
 	mkdir -p $RUN_D
 	PID=`pidof $BIN`
@@ -26,5 +56,6 @@ start() {
 
 stop() {
   /usr/lib/webif/LUA/cron_ctrl del "* * * * * /usr/lib/webif/LUA/olsr/minute.cron"
+  /etc/init.d/firewall restart
 	killall olsrd
 }
