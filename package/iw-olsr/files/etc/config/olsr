@@ -52,9 +52,3 @@ config "Interface"
 
 config "websettings" "webadmin"
 
-config "Hna4" "cfg7"
-	option NetAddr	'0.0.0.0'
-	option NetMask	'0.0.0.0'
-
-
-
