@@ -1,0 +1,23 @@
+#!/usr/bin/lua
+--------------------------------------------------------------------------------
+-- olsr apply handler
+-- Author(s) [in order of work date]:
+--       Fabián Omar Franzotti
+--         
+-- Configuration files referenced:
+--    olsr
+--   
+--
+--------------------------------------------------------------------------------
+print ("Committing OLSR")
+os.execute("uci commit olsr")
+os.execute("rm /tmp/.uci/olsr.lock")
+print("<br>parsers")
+dofile("/usr/lib/webif/LUA/olsr/parsers")
+print("<br>Restart")
+__RESTART["olsrd"] = {}
+__RESTART["olsrd"]["pkg"] = "olsr"
+__RESTART["olsrd"]["cfg"] = "webadmin"
+__RESTART["olsrd"]["opt"] = "enable"
+__RESTART["olsrd"]["init"] = "/etc/init.d/olsrd"
+print("<br>algo")
