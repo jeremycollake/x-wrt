@@ -15,7 +15,7 @@ package.path = package.path .. ";/usr/lib/webif/LUA/?.lua;/usr/share//lua/5.1/?.
 require("common")
 
 function save_cron(str)
-  os.execute("echo '"..str.."' | crontab - 2>&-")
+  os.execute("echo '"..string.trim(str).."' | crontab - 2>&-")
 end
 
 function add(arg)

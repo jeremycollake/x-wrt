@@ -46,7 +46,9 @@ require("validate")
 -- Functions for menu
 require("menu")
 __MENU = menuClass.new()
-__MENU:loadXWRT()
+if string.match(__SERVER.SCRIPT_NAME,"webif") then 
+  __MENU:loadXWRT()
+end
 -- menu   = menuClass.new()
 -- menu:loadXWRT_Category()
 require("x-wrt-page")

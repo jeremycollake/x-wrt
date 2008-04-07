@@ -11,20 +11,6 @@ config "olsr" "general"
 	option LinkQualityLevel	'2'
 	option UseHysteresis	'no'
 
-#config "ipcconnect" "IpcConnect"
-#     option MaxConnections  '1'
-
-     # Specify entire net-ranges that are 
-     # allowed to connect
-
-#     option Net '192.168.1.0 255.255.255.0'     
-
-#config "ipcconnecthost"
-#     option Host '127.0.0.1'
-
-#config "ipcconnecthost"
-#     option Host '10.0.0.5'
-
 config "LoadPlugin" "dyn_gw_plain"
 	option Library	'olsrd_dyn_gw.so.0.4'
 
@@ -51,4 +37,6 @@ config "Interface"
 	option HnaValidityTime	'108.0'
 
 config "websettings" "webadmin"
+	option enable	'1'
+	option mode	'-1'
 
