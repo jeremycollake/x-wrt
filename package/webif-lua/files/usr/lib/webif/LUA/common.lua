@@ -49,9 +49,9 @@ function load_file(filename)
 	local error = ""
 	local BUFSIZE = 2^15     -- 32K
 	local f = io.exists( filename )
-	if f then
+	if f == true then
     f = assert(io.open(filename,"r"))   -- open input file
-  end
+  else f = false end
 
 	if f then 
     while true do
