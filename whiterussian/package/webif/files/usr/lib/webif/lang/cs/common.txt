@@ -3,7 +3,7 @@
 lang => Čeština
 
 ## SVN version referenced
-lang_for_svn => 4054
+lang_for_svn => 4095
 
 About => O aplikaci
 Accept => Přijmout
@@ -959,6 +959,7 @@ status_usb_Product => Produkt
 status_usb_Read_Write => Čtení/zápis
 status_usb_ro => Jen čtení
 status_usb_rw => Čtení a zápis
+status_usb_Speed => Rychlost
 status_usb_swap_file => soubor
 status_usb_swap_PartitionFilename => Oblast/soubor
 status_usb_swap_partition => oblast
@@ -1202,6 +1203,7 @@ UMTS only => Jen UMTS
 UMTS => UMTS
 units_dBm => dBm
 units_GHz => GHz
+units_Mbps => Mb/s
 units_packets_pkts => paketů
 units_short_day_d => d
 units_short_year_y => r

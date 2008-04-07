@@ -35,6 +35,7 @@ header "Status" "USB" "@TR<<status_usb_USB_Devices#USB Devices>>"
 		print "		<th>@TR<<status_usb_Manufacturer#Manufacturer>></th>"
 		print "		<th>@TR<<status_usb_VPIDs#VendorID:ProdID>></th>"
 		print "		<th>@TR<<status_usb_USB_version#USB version>></th>"
+		print "		<th>@TR<<status_usb_Speed#Speed>></th>"
 		print "	</tr>"
 	}
 	$1 ~ /^T: / { i++; }
@@ -45,6 +46,7 @@ header "Status" "USB" "@TR<<status_usb_USB_Devices#USB Devices>>"
 	$1 ~ /^ProdID/ { productID[i]=$2; }
 	$1 ~ /^Manufacturer/ { manufacturer[i]=$2; }
 	$1 ~ /^Product/ { product[i]=$2; }
+	$1 ~ /^Spd/ { speed[i]=$2; gsub(/[[:space:]]*$/, "", speed[i]); }
 	END {
 		for ( j=1; j<=i; ++j ) {
 			vpID=vendorID[j]":"productID[j];
@@ -69,6 +71,7 @@ header "Status" "USB" "@TR<<status_usb_USB_Devices#USB Devices>>"
 				print "		<td>" manufacturer[j] "</td>"
 				print "		<td>" vpID "</td>"
 				print "		<td>" usbversion[j] "</td>"
+				print "		<td>" speed[j] "&nbsp;@TR<<units_Mbps#Mbps>></td>"
 				print "	</tr>"
 			}
 		}
