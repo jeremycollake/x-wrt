@@ -1,0 +1,5 @@
+Package: kmod-usb-mos7715
+Priority: optional
+Section: sys
+Depends: kmod-usb-core, kmod-usb-serial, kmod-lp
+Description: Kernel driver for USB converters using the Moschip MCS7715 Chip

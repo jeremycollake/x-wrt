@@ -1,0 +1,6 @@
+config BR2_PACKAGE_KMOD_USB_MOS7715
+	prompt "kmod-usb-mos7715 - Driver for USB converters using the Moschip MCS7715 Chip"
+	tristate
+	default m if CONFIG_DEVEL
+	help
+	  Driver for USB to Combo Serial & Printer converters using the Moschip MCS7715 Chip.

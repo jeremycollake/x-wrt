@@ -10,6 +10,7 @@ package-$(BR2_PACKAGE_KMOD_OPENSWAN) += openswan
 package-$(BR2_PACKAGE_KMOD_MADWIFI) += madwifi
 package-$(BR2_PACKAGE_KMOD_USB_SPCA5XX) += spca5xx
 package-$(BR2_PACKAGE_KMOD_USB_SPCA5XX_LE) += spca5xx-le
+package-$(BR2_PACKAGE_KMOD_USB_MOS7715) += mos7715
 package-y += openwrt
 
 package-$(BR2_PACKAGE_KMOD_WLCOMPAT) += wlcompat

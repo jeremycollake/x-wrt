@@ -262,6 +262,13 @@ config BR2_PACKAGE_KMOD_USB2
 	depends BR2_PACKAGE_KMOD_USB
 	select BR2_PACKAGE_KMOD_USB_CONTROLLER
 
+config BR2_PACKAGE_KMOD_USB_MOS7715
+	tristate "Support for USB to Combo Serial & Printer converters using the Moschip MCS7715 Chip"
+	default m 
+	depends BR2_PACKAGE_KMOD_USB_CONTROLLER
+	depends BR2_PACKAGE_KMOD_USB_SERIAL
+	depends BR2_PACKAGE_KMOD_LP
+
 config BR2_PACKAGE_KMOD_USB_SERIAL
         tristate "Support for serial USB devices" 
 	default m 
