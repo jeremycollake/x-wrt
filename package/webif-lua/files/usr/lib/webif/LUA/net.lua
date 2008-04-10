@@ -28,8 +28,8 @@ setfenv(1, P)
 
 -- Table of availables NIC
 function interfaces()
---[[
 	t={}
+--[[
 	info = io.popen("/sbin/ifconfig 2>/dev/null | grep -A 1 'Link' | sed -e 's/ .* HWaddr//'")
 	for linea in info:lines() do
 		local ifname, ifmac = listtovars(linea,2)
@@ -53,6 +53,7 @@ function interfaces()
     _, _, ip, nada = string.find(t[i], ".+ inet addr:(%d+.%d+.%d+.%d+)" )
     _, _, mask, nada =  string.find(t[i], ".+ Mask:(%d+.%d+.%d+.%d+)" )
     print(iface, mac, ip, mask)
+    
   end
 end
 

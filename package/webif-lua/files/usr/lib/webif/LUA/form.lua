@@ -61,6 +61,10 @@ function formClass:tostring(name)
 			return self:subtitle(self[name])
 		elseif self[name].input == "link" then
 			return self:link(self[name])
+		elseif self[name].input == "text_line" then
+			return self:text_line(self[name])
+		elseif self[name].input == "hidden_set" then
+			return self:hidden_set(self[name])
 		elseif self[name].input == "uci_set_config" then
 			return self:uci_set_config(self[name])
 		else
@@ -124,6 +128,10 @@ function formClass:link(t)
   return [[<tr><td><a href="]]..t.value..[[">]]..t.label..[[</a></td></tr>]]
 end
 
+function formClass:text_line(t)
+  return [[<tr><td>]]..t.value..[[</td></tr>]]
+end
+
 function formClass:UCI_CMD_link(t)
   
 end
@@ -160,6 +168,22 @@ function formClass:button(t)
 	str = str .. "</td></tr>"
 	return str
 end
+
+function formClass:hidden_set(t)
+--	local style = ""
+--	if t.style ~= "" then style = "style=\""..t.style.."\" " end
+--	local str  = "<tr><td width=\"40%\">" .. t.label .. "</td>"
+--	str = str .. "<td width=\"60%\">"
+--	if t.validate ~= "" then
+
+	str = "<input type=\"hidden\" name=\"val_str_"..t.name.."\" value=\""..t.validate.."\" />"
+	str = str .. "<input type=\"hidden\" name=\"val_lbl_"..t.name.."\" value=\""..t.label.."\" />"
+--	end
+	str = str .. "<input type=\"hidden\" name=\""..t.name.."\" value=\""..t.value.."\" />"
+--	str = str .. "</td></tr>"
+	return str
+end
+
 
 function formClass:text(t)
 	local style = ""

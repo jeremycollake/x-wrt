@@ -38,5 +38,5 @@ config "Interface"
 
 config "websettings" "webadmin"
 	option enable	'1'
-	option mode	'-1'
+	option mode	'0'
 
