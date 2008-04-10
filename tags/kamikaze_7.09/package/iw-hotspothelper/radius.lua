@@ -37,9 +37,12 @@ function set_menu()
     __MENU.IW.Freeradius = menuClass.new()
     __MENU.IW.Freeradius:Add("Core","freeradius.sh")
 --    __MENU.IW.Freeradius.Core = menuClass.new()
-    __MENU.IW.Freeradius:Add("Users","freeradius-users.sh")
-    __MENU.IW.Freeradius:Add("Proxy","freeradius-proxy.sh")
-    __MENU.IW.Freeradius:Add("Clients","freeradius-clients.sh")
+--    __MENU.IW.Freeradius:Add("Users","freeradius-users.sh")
+--    __MENU.IW.Freeradius:Add("Proxy","freeradius-proxy.sh")
+--    __MENU.IW.Freeradius:Add("Clients","freeradius-clients.sh")
+    __MENU.IW.Freeradius:Add("Users","freeradius.sh?option=users")
+    __MENU.IW.Freeradius:Add("Proxy","freeradius.sh?option=proxy")
+    __MENU.IW.Freeradius:Add("Clients","freeradius.sh?option=client")
 --    __MENU.IW.Freeradius:Add("To conf","freeradius-conf.sh")
     elseif freeradius.webadmin.mode == "3" then
     -- Menu de Experto edita los archivos directamente
@@ -164,7 +167,6 @@ function proxy_settings_form()
   form:Add("link","add_community",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_proxy=realm&__menu="..__FORM.__menu,tr("Add Community"))
   return form
 end
-
 function community_form()
   local freeradius = uciClass.new("freeradius_proxy")
   if freeradius.server == nil then server = freeradius:set("server") else server = freeradius.server end
@@ -229,6 +231,7 @@ function defaul_user_form()
   form:Add("text",reply_cfg..".WISPr_Bandwidth_Max_Down",reply_val.WISPr_Bandwidth_Max_Down,tr("freerad_var_maxdown#Max Bandwidth Down"),"int")
   form:Add("text",reply_cfg..".WISPr_Bandwidth_Max_Up",reply_val.WISPr_Bandwidth_Max_Up,tr("freerad_var_maxup#Max Bandwidth Up"),"int")
 
+  form:Add("uci_set_config","freeradius_check,freeradius_reply","user",tr("freerad_add_user#New User"),"string")
 
   form:Add_help(tr("freerad_var_simultaneous#Simultaneos Use"),tr([[freerad_help_simultaneous#Set max simultaneous connection for account.]]))
   form:Add_help(tr("freerad_var_idle_timeout#Idle Timeout"),tr([[freerad_help_idle_timeout#Specifies the maximum length of time, in seconds, that a subscriber session can remain idle before it is disconnected.]]))
@@ -246,6 +249,7 @@ function user_form()
   local freeradius_check = uciClass.new("freeradius_check")
   local freeradius_reply = uciClass.new("freeradius_reply")
   local users = freeradius_check.sections
+
   form = tbformClass.new("Local Users")
   form:Add_col("label", "Username","Username", "120px")
   form:Add_col("text", "Password", "Password", "120px","string,len>5","width:120px")
@@ -287,11 +291,5 @@ function user_form()
       form:set_col("Remove", "Remove_"..name, __SERVER.SCRIPT_NAME.."?".."UCI_CMD_delfreeradius_check."..name.."=&UCI_CMD_delfreeradius_reply."..name.."=&__menu="..__FORM.__menu)
     end
   end
-  return form
-end
-
-function add_usr_form()
-  local form = formClass.new("Local Users")
-  form:Add("uci_set_config","freeradius_check,freeradius_reply","user",tr("freerad_add_user#New User"),"string")
   return form
 end

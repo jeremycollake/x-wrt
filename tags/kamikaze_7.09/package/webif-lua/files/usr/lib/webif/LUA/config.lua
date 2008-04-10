@@ -11,7 +11,7 @@
 -- Configuration files referenced:
 --   none
 --------------------------------------------------------------------------------
-package.path = package.path .. ";/usr/lib/webif/LUA/?.lua;/usr/share//lua/5.1/?.lua"
+package.path = package.path .. ";/usr/lib/webif/LUA/?.lua;/usr/lib/webif/LUA/pkgs/?.lua;/usr/share//lua/5.1/?.lua"
 -- Common Functions
 require("common")
 require("lpkg")
@@ -46,7 +46,7 @@ require("validate")
 -- Functions for menu
 require("menu")
 __MENU = menuClass.new()
-if string.match(__SERVER.SCRIPT_NAME,"webif") then 
+if string.match(__SERVER.SCRIPT_NAME,"webif") then
   __MENU:loadXWRT()
 end
 -- menu   = menuClass.new()
