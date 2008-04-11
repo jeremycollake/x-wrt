@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=cabextract
-PKG_VERSION:=1.1
+PKG_VERSION:=1.2
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://www.kyz.uklinux.net/downloads
-PKG_MD5SUM:=f4b729c0be7d288660f4fc167de199a1
+PKG_SOURCE_URL:=http://www.cabextract.org.uk
+PKG_MD5SUM:=dc421a690648b503265c82ade84e143e
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
