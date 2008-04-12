@@ -156,30 +156,35 @@ function uciUpdatedClass:apply(page)
       opt = tonumber(ucifile[t.cfg][t.opt]) 
     end
     if  opt == 1 then
-      local myexec = io.popen(t.init.." enable")
       print ("Enabling "..i.." service...<br>")
+      io.stdout:flush()
+      local myexec = io.popen(t.init.." enable")
       for li in myexec:lines() do
-        if string.len(li) > 1 then
+--        if string.len(li) > 1 then
           print(li,"<br>")
-        end
+--        end
       end
       myexec:close()
+      io.stdout:flush()
       myexec = io.popen(t.init.." stop")
       print ("Stopping "..i.." service...<br>")
       for li in myexec:lines() do
-        if string.len(li) > 1 then
+--        if string.len(li) > 1 then
           print(li,"<br>")
-        end
+--        end
       end
       myexec:close()
-      myexec = io.popen(t.init.." start")
       print ("Starting "..i.." service...<br>")
-      for li in myexec:lines() do
-        if string.len(li) > 1 then
+      io.stdout:flush()
+      os.execute(t.init.." start > /tmp/start")
+--      mystart, error = io.popen(t.init.." start ", "r")
+      for li in io.input("/tmp/start"):lines() do
+--        if string.len(li) > 1 then
           print(li,"<br>")
-        end
+--          io.stdout:flush()
+--        end
       end
-      myexec:close()
+--      mystart:close()
     else
       myexec = io.popen(t.init.." stop")
       print ("Stopping "..i.." service...<br>")
