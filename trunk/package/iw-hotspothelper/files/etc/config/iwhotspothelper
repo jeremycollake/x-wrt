@@ -1,0 +1,21 @@
+# iwhotspothelper
+
+config "general" "default"
+	option interface	'iwolsr'
+	option ipaddress	'10.128.0.1'
+	option ipmask	'255.255.255.0'
+	option device	'wl0'
+	option channel	'6'
+	option ssid	'Internet-Wifi'
+	option uamserver	'http://www.internet-wifi.com.ar/hotspotlogin_m.php'
+	option uamsecret	'Internet-Wifi'
+	option uamallowed	'www.internet-wifi.com.ar,x-wrt.org,openwrt.org'
+	option secret	'testing123'
+	option username	'pepe'
+	option password	'truenoa'
+	option rmtserver1	'rad01.internet-wifi.com.ar'
+	option rmtserver2	'rad02.internet-wifi.com.ar'
+	option rmtsecret	'Internet-Wifi'
+
+
+
