@@ -38,7 +38,6 @@ local portal = tonumber(hotspot.service.portal) or 0
 local users = tonumber(hotspot.service.users) or 0
 
 function set_menu()
-  
   __MENU.IW["Coova-Chilli"] = menuClass.new()
   __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Core#Core","coova-chilli.sh")
   __MENU.IW["Coova-Chilli"]:Add("chilli_menu_DHCP#Network","coova-chilli.sh?option=net")
@@ -97,19 +96,19 @@ function net_form(form,user_level,localuam)
   local user_level = user_level or userlevel
   local form = form
   local network = {}
-  network["values"] = hotspot.network
+  network["values"] = hotspot.network or hotspot:set("chilli","network")
   network["name"] = hotspot.__PACKAGE..".network"
   if form == nil then
     form = formClass.new(tr("Network Settings"))
   else
     form:Add("subtitle",tr("Networ Settings"))
   end
-  local dev
-  if user_level > 0 then
-    dev = net.ifname() -- for advanced users
-  else
-    dev = net.wireless() -- for beginers users
-  end
+--  local dev
+--  if user_level > 0 then
+--    dev = net.ifname() -- for advanced users
+--  else
+--    dev = net.wireless() -- for beginers users
+--  end
   local cp_HSWANIF       = network.values.HSWANIF 
   local cp_HSLANIF       = network.values.HSLANIF
   local cp_HS_NETWORK    = network.values.HS_NETWORK or "192.168.182.0"
@@ -123,10 +122,11 @@ function net_form(form,user_level,localuam)
   local cp_HS_DNS_DOMAIN = network.values.HS_DNS_DOMAIN
   local cp_HS_DNS1       = network.values.HS_DNS1 or "192.168.182.1"
   local cp_HS_DNS2       = network.values.HS_DNS2 or "204.225.44.3"
-  form:Add("select",network.name..".HS_LANIF",network.values.HS_LANIF,tr("cportal_var_device#Device Network"),"string")
-  for k, v in pairs(dev) do
-    form[network.name..".HS_LANIF"].options:Add(k,k)
-  end
+--  form:Add("select",network.name..".HS_LANIF",network.values.HS_LANIF,tr("cportal_var_device#Device Network"),"string")
+--  for k, v in pairs(dev) do
+--    form[network.name..".HS_LANIF"].options:Add(k,k)
+--  end
+--[[
   if localuam == 2 then
     form:Add("hidden",network.name..".HS_DNS_DOMAIN",cp_HS_DNS_DOMAIN)
     form:Add("hidden",network.name..".HS_NETWORK",cp_HS_NETWORK)
@@ -136,7 +136,8 @@ function net_form(form,user_level,localuam)
     form:Add("hidden",network.name..".HS_DNS2",cp_HS_DNS2)
     return form
   end
-  if user_level > 1 then
+]]--
+--  if user_level > 1 then
 --[[
     form:Add("select", network.name..".HS_WANIF", cp_HS_WANIF,tr("cportal_var_wan#WAN Device"),"string")
   for k, v in pairs(ifname("wan")) do
@@ -155,6 +156,7 @@ function net_form(form,user_level,localuam)
     form:Add("text", network.name..".HS_DYNIP_MASK", cp_HS_DYNIP_MASK,tr("cportal_var_staticip#Dynamic IP Mask"),"string")
     form:Add("text", network.name..".HS_DNS1", cp_HS_DNS1,tr("cportal_var_dns#DNS Server").." 1","string")
     form:Add("text", network.name..".HS_DNS2", cp_HS_DNS2,tr("cportal_var_dns#DNS Server").." 2","string")
+--[[
   else
     form:Add("hidden", network.name..".HS_WANIF", "")
     form:Add("hidden", network.name..".HS_DNS_DOMAIN", cp_HS_DNS_DOMAIN)
@@ -169,6 +171,7 @@ function net_form(form,user_level,localuam)
     form:Add("hidden", network.name..".HS_DNS1", cp_HS_DNS1)
     form:Add("hidden", network.name..".HS_DNS2", cp_HS_DNS2)
   end
+]]--
   return form
 end
   
@@ -177,7 +180,7 @@ function radius_form(form,user_level,localrad)
   local user_level = user_level or 0
   local localrad = localrad or 0
   local radius = {}
-  radius["values"] = hotspot.radius
+  radius["values"] = hotspot.radius or hotspot:set("chilli","radius")
   radius["name"] = hotspot.__PACKAGE..".radius"
   
   cp_HS_RADIUS = radius.values.HS_RADIUS
@@ -276,7 +279,7 @@ function uam_form(form,user_level,localuam)
   local user_level = user_level or userlevel
   local localuam = localuam or portal
   local uam = {}
-  uam["values"] = hotspot.uam
+  uam["values"] = hotspot.uam or hotspot:set("chilli","uam")
   uam["name"] = hotspot.__PACKAGE..".uam"
   
   cp_HS_UAMSERVER   = uam.values.HS_UAMSERVER or "192.168.182.1"
@@ -321,7 +324,7 @@ function extras_form()
   local user_level = user_level or 0
   local localuam = localuam or 0
   local extras = {}
-  extras["values"] = hotspot.extas
+  extras["values"] = hotspot.extas or hotspot:set("chilli","extras")
   extras["name"] = hotspot.__PACKAGE..".extras"
 
   cp_HS_RADCONF     = extras.values.HS_RADCONF or "off"
