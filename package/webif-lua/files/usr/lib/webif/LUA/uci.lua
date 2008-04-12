@@ -93,3 +93,17 @@ function uciClass:load_conf(package)
 		end
 	end
 end
+
+function uciClass:get(name)
+--  if self.name ~= nil then
+--    return self.name
+--  end
+  for i=1, #self.sections do
+    if self.sections[i].name == name then
+      t = {}
+      t["name"] = self.__PACKAGE.."."..name
+      t["values"] = self.sections[i].values
+      return t
+    end
+  end
+end

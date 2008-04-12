@@ -127,7 +127,7 @@ function menuClass:tohtml()
 	local mymenu=""
 	local submenucount = 0
 	collectgarbage ("collect")
-	if __FORM.__ACTION == nil or string.trim(__FORM.__ACTION) == tr("Save Changes") then
+	if __FORM.__ACTION == nil or string.trim(__FORM.__ACTION) == tr("Save Changes") or __FORM.__ShowMenu=="yes" then
 	if __FORM.__menu~=nil and __FORM.__menu ~= "" then
 		for m in string.gmatch(__FORM.__menu,"[^:]+") do
 			mymenu, menupath = self:selmenu(t,typemenu,menupath,m)
