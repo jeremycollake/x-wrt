@@ -12,7 +12,7 @@ define Package/iw-freeradius
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+webif-lua +freeradius +freeradius-mod-chap +freeradius-mod-files +freeradius-mod-radutmp +freeradius-mod-realm
+  DEPENDS:=+webif-lua # +freeradius +freeradius-mod-chap +freeradius-mod-files +freeradius-mod-radutmp +freeradius-mod-realm
   TITLE:=Freeradius Administrative Console in LUA for X-Wrt.
 endef
 
