@@ -32,5 +32,6 @@ setTimeout('chilliController.refresh()', 0);
 </div>
 </div>
 ]])
-print( file_load("/etc/chilli/www/json_html.tmpl"))
+local tmpl = load_file("/etc/chilli/www/json_html.tmpl") 
+print( tmpl )
 print("</body></html>")
