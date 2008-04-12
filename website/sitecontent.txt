@@ -1,0 +1,60 @@
+HOME (no subpages)
+  heading ABOUT
+    contains introduction what x-wrt is -> more on about page
+    lists major supported devices (for google)
+    current revision: php check for current revision and show it
+    (or should we place this in a short-status like div in top right corner?)
+
+  heading NEWS
+	create new board "News" on forum.x-wrt.org, grab latest news from rss feed
+
+ABOUT
+make this kinda like a step-by-step introduction to webif, with next:/previous: links at the bottom of each page
+
+- features
+good list, mark kamikaze wip pages with *
+
+- demo webif
+couple of small, enlargable screenshots
+link to demo webif
+deny demo sites in robots.txt
+
+- roadmap
+milestones
+kamikaze plans, link to kamikaze status in wiki
+
+- license
+free free free! gpl and note to OEMs/commercial use
+
+- developers list? interesting because we have people from all different countries contributing
+
+INSTALL
+
+- instructions
+install openwrt if not already happend
+enter your ip address here.. stable/latest
+
+or use
+ ipkg install http://...latest.ipk
+ ipkg install http://...stable.ipk
+
+- upgrading
+ambitious -> describe process of upgrading OpenWrt AND describe upgrading of webif only
+
+- download
+for convenience, we provide openwrt images with x-wrt pre-installed...
+differences between openwrt firmware and this one in details: ..
+
+SUPPORT
+- wiki
+what does the wiki contain, encourage to enhance it .. and a link of course
+- forum
+when to use the forum, brief forum rules
+- irc
+irc rules (like irc.openwrt.org, just not so offensive :P), #x-wrt freenode
+
+CONTRIBUTE
+- new features, fix bugs etc.
+- localization!
+- donations
+donations are up to the individual developer

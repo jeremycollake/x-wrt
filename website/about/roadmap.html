@@ -1,0 +1,80 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <title>
+      Roadmap - X-Wrt.org
+    </title>
+    <link rel="stylesheet" type="text/css" href="/cssjs/style.css" />
+  </head>
+  <body>
+    <div id="header">
+      <h1>
+        X-Wrt
+      </h1><em>OpenWrt for end users</em>
+    </div>
+    <div id="mainnav">
+	 	<h2>Navigation:</h2>
+      <ul>
+        <li><a href="../">Home</a>
+        </li>
+        <li class="active">
+          <a href="../about.html">About</a>
+        </li>
+        <li>
+          <a href="../install.html">Downloads/Install</a>
+        </li>
+        <li>
+          <a href="../support.html">Support</a>
+        </li>
+        <li>
+          <a href="../contribute.html">Contribute</a>
+        </li>
+      </ul>
+    </div>
+
+    <div id="subnav">
+      <ul>
+            <li><a href="links.html">Project Links</a>
+            </li>
+            <li class="active"><a href="roadmap.html">Roadmap</a>
+            </li>
+            <li><a href="license.html">License</a>
+            </li>
+            <li><a href="developers.html">Developers</a>
+            </li>
+      </ul>
+    </div>
+    <div id="content">
+      <h1>
+        Roadmap
+      </h1>
+      <p>
+        We are working actively towards a version of the webif for OpenWrt's
+		next generation, Kamikaze. The webif is not finished yet you get its
+		status at <a href="http://wiki.x-wrt.org/index.php/Kamikaze">
+		http://wiki.x-wrt.org/index.php/Kamikaze</a>.</p>
+      <p>
+        OpenWrt Kamikaze represents a substantial and fundamental change. It is not simply a new version of White Russian, but instead a
+        complete rewrite of the build root and configuration structure. That is why White Russian went stagnant for so long, the developers
+        quit working on it in favor of this more ambitious idealized solution. This new branch of OpenWrt took a long, long time to hash
+        out, but now its almost ready.
+      </p>
+      <p>
+        The ever-popular NVRAM configuration storage system is no longer utilized in Kamikaze. It has been replaced with configuration
+        files, many stored in the common format known as 'UCI'. This was done because although an emulated NVRAM storage area to keep tuple
+        based configuration data can be easily implemented on any platform, the OpenWrt developers felt it wasn't structured enough for
+        their tastes. So, out the window it went.
+      </p>
+      <p>
+        To make the webif work with Kamikaze we therefore have to work with this new configuration system. The good news is our webif
+        already supports UCI. Some pages, like the QoS page, use the UCI system entirely.
+      </p>
+    </div>
+    <div id="footer">
+		<hr />
+      &copy; X-Wrt project 2007<br />
+      <a href="#mainnav">back to top</a> | <a href="sitemap.html">Sitemap</a>
+    </div>
+  </body>
+</html>
