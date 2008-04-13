@@ -127,6 +127,7 @@ package-$(BR2_PACKAGE_PORTSENTRY) += portsentry
 package-$(BR2_PACKAGE_POSTGRESQL) += postgresql
 package-$(BR2_PACKAGE_PPP) += ppp
 package-$(BR2_PACKAGE_PPPOESK) += pppoesk
+package-$(BR2_PACKAGE_PPPOESK_STATIC) += pppoesk
 package-$(BR2_PACKAGE_PPTP) += pptp
 package-$(BR2_PACKAGE_PPTPD) += pptpd
 package-$(BR2_PACKAGE_PROCPS) += procps
