@@ -1,0 +1,117 @@
+#!/usr/bin/lua
+--[[
+  olsr apply parsers
+  Author(s) [in order of work date]:
+       Fabián Omar Franzotti (fofware@users.berlios.de)
+         
+  Configuration files referenced:
+    olsr
+
+  Output files
+    /etc/olsrd.conf
+
+]]--
+package.path = package.path .. ";/usr/lib/webif/LUA/?.lua;/usr/share//lua/5.1/?.lua"
+require("common")
+-- Functions to manipulate UCI Files
+require("uci")
+require("network")
+
+function connection()
+  local nets = net.networks()
+  local link = false
+  if nets.wan.state == "UP" then
+    ping = io.popen("ping -c 2 66.94.234.13")
+    for line in ping:lines() do
+      if string.match(line,"packets received") then 
+        return string.match(line,"(%d+) packets received")
+      end
+    end
+  end
+  return 0
+end
+
+local output_file="/etc/olsrd.conf"
+local ctrl_file = "/var/etc/olsrd.ctrl"
+local str_olsrconf = ""
+local olsr = uciClass.new("olsr")
+for i, v in pairs(olsr.general) do
+  str_olsrconf = str_olsrconf .. i .. " " .. v .. "\n"
+end
+local data, size = load_file(ctrl_file)
+str_olsrconf = str_olsrconf .. "\n"
+
+if olsr.Hna4 then
+  str_olsrconf = str_olsrconf .. "Hna4\n{\n"
+  for i,t in pairs(olsr.Hna4) do
+    if t.values.NetAddr ~= "0.0.0.0" then 
+      str_olsrconf = str_olsrconf .. '\t'.. t.values.NetAddr .. ' ' .. t.values.NetMask .. '\n'
+--    else
+--      if tonumber(connection()) > 0 then
+--        str_olsrconf = str_olsrconf .. '\t'.. t.values.NetAddr .. ' ' .. t.values.NetMask .. '\n'
+--      end
+    end
+  end
+  str_olsrconf = str_olsrconf .. "}\n\n"
+end
+
+if olsr.Hna6 then
+  str_olsrconf = str_olsrconf .. "Hna6\n{\n"
+  for i,t in pairs(olsr.Hna6) do
+    str_olsrconf = str_olsrconf .. '\t'.. t.values.NetAddr .. ' ' .. t.values.NetValue .. '\n'
+  end
+  str_olsrconf = str_olsrconf .. "}\n\n"
+end
+
+if olsr.IpcConnect then
+  str_olsrconf = str_olsrconf .. "IpConnect \n{\n"
+  if olsr.IpcConnect.MaxConnections then
+    str_olsrconf = str_olsrconf .. "\tMaxConnections " .. olsr.IpcConnect.MaxConnections .. "\n"
+  end
+  if olsr.ipcconnecthost then
+    for i=1, #olsr.ipcconnecthost do
+      for k,v in pairs(olsr.ipcconnecthost[i].values) do
+        str_olsrconf = str_olsrconf .. "\t" .. k .. " " .. v .. "\n"
+      end
+    end
+  end
+
+  if olsr.IpcConnect.Net then
+    str_olsrconf = str_olsrconf .. "\tNet " .. olsr.IpcConnect.Net .. "\n"
+  end
+  str_olsrconf = str_olsrconf .. "}\n\n"
+end
+
+for i,t in pairs(olsr.LoadPlugin) do
+  if string.match(t.values.Library,"olsrd_dyn_gw.so") 
+  and not string.match(t.values.Library, "olsrd_dyn_gw_plain.so") then
+    str_olsrconf = str_olsrconf .. "LoadPlugin \"".. t.values.Library .. "\"\n{\n"
+    str_olsrconf = str_olsrconf .. '\tPlParam     "Ping"       "141.1.1.1"\n'
+    str_olsrconf = str_olsrconf .. '\tPlParam     "Ping"       "194.25.2.129"\n'
+  else 
+    str_olsrconf = str_olsrconf .. "LoadPlugin \"".. t.values.Library .. "\"\n{\n"
+    for k,v in pairs(t.values) do
+      if k ~= "Library" then
+        if k == "hosts_file" then k = "hosts-file" end
+        str_olsrconf = str_olsrconf .. '\tPlParam "'.. k .. '" "' .. v .. '"\n'
+      end
+    end
+  end
+  str_olsrconf = str_olsrconf .. "}\n\n"
+end
+
+for i,t in pairs(olsr.Interface) do
+  str_olsrconf = str_olsrconf .. "Interface  \"".. t.values.Interface .. "\"\n{\n"
+  for k,v in pairs(t.values) do
+    if k ~= "Interface" then
+      str_olsrconf = str_olsrconf .. '\t'.. k .. ' ' .. v .. '\n'
+    end
+  end
+  str_olsrconf = str_olsrconf .. "}\n\n"
+end
+
+if size ~= string.len(str_olsrconf) then
+  os.execute ("mkdir /var/etc 2>/dev/null")
+  os.execute ("echo '"..string.len(str_olsrconf).."' > "..ctrl_file)
+  os.execute ("echo '"..str_olsrconf.."' > "..output_file)
+end

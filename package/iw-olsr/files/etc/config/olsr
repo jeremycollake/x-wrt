@@ -16,7 +16,7 @@ config "LoadPlugin" "dyn_gw_plain"
 
 config "LoadPlugin" "nameservice"
 	option Library	'olsrd_nameservice.so.0.3'
-	option name	'12-ola-gs'
+	option name	'sven-ola-gs'
 	option hosts_file	'/var/etc/hosts'
 	option suffix	'.olsr'
 #	option latlon_infile	'/var/run/latlon.txt'
@@ -26,7 +26,7 @@ config "LoadPlugin" "txtinfo"
 	option Accept	'127.0.0.1'
 
 config "Interface"
-	option Interface	"wlan"
+	option Interface	"wl0"
 	option HelloInterval	'6.0'
 	option HelloValidityTime	'108.0'
 	option TcInterval	'4.0'
@@ -35,11 +35,8 @@ config "Interface"
 	option MidValidityTime	'324.0'
 	option HnaInterval	'18.0'
 	option HnaValidityTime	'108.0'
-	option AutoDetectChanges	'yes'
 
 config "websettings" "webadmin"
-
-config "Hna4" "cfg7"
-	option NetAddr	'0.0.0.0'
-	option NetMask	'0.0.0.0'
+	option enable	'1'
+	option mode	'0'
 
