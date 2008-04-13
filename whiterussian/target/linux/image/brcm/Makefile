@@ -125,12 +125,11 @@ $(BIN_DIR)/openwrt-wrtsl54gs-$(FSNAME).bin: $(BIN_DIR)/openwrt-$(BOARD)-$(KERNEL
 $(BIN_DIR)/openwrt-wl500gp-$(FSNAME).trx: $(KDIR)/loader.tmp.gz
 	$(STAGING_DIR)/bin/trx -p WL500gp -v 1.9.7.5 -o $@ $(KDIR)/loader.tmp.gz $(KDIR)/vmlinux.lzma $(TRXALIGN) $(KDIR)/root.$(FS)
 
-$(BIN_DIR)/openwrt-wl500w-$(FSNAME).trx: $(KDIR)/loader.tmp.gz
-	$(STAGING_DIR)/bin/trx -p WL500W -v 1.9.8.9 -o $@ $(KDIR)/loader.tmp.gz $(KDIR)/vmlinux.lzma $(TRXALIGN) $(KDIR)/root.$(FS)
+# $(BIN_DIR)/openwrt-wl500w-$(FSNAME).trx: $(KDIR)/loader.tmp.gz
+# 	$(STAGING_DIR)/bin/trx -p WL500W -v 1.9.8.9 -o $@ $(KDIR)/loader.tmp.gz $(KDIR)/vmlinux.lzma $(TRXALIGN) $(KDIR)/root.$(FS)
 
 install: \
 	$(BIN_DIR)/openwrt-wl500gp-$(FSNAME).trx \
-	$(BIN_DIR)/openwrt-wl500w-$(FSNAME).trx \
 	$(BIN_DIR)/openwrt-wrt54gs-$(FSNAME).bin \
 	$(BIN_DIR)/openwrt-wrtsl54gs-$(FSNAME).bin
 endif
