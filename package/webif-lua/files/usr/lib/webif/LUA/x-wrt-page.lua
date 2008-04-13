@@ -119,7 +119,7 @@ function pageClass:footer()
 --	local key, val = "", "" 
 	local str = "<div class=\"page-save\">"
 --	str = str .. [[<input type="hidden" name="__PREVIUS_PAGE" value="]]..menu.selected..[[" />]]
-  print(__MENU.selected,"<br>")
+--  print(__MENU.selected,"<br>")
 	for line in string.gmatch(__MENU.selected,"[^&]+") do
     line = string.trim(string.gsub(line,"amp;",""))
 --    print (line,"<br>")
