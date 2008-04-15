@@ -38,7 +38,7 @@ pbadata = ""
 -- Functions to make forms
 require("form")
 -- Functions to manipulate UCI Files
-require("uci")
+require("iw-uci")
 -- Functions to manipulate Packages
 require ("checkpkg")
 -- Function to validate form values

@@ -53,7 +53,6 @@ function interfaces()
     _, _, ip, nada = string.find(t[i], ".+ inet addr:(%d+.%d+.%d+.%d+)" )
     _, _, mask, nada =  string.find(t[i], ".+ Mask:(%d+.%d+.%d+.%d+)" )
     print(iface, mac, ip, mask)
-    
   end
 end
 
