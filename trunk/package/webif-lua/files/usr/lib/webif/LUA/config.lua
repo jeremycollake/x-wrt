@@ -11,7 +11,9 @@
 -- Configuration files referenced:
 --   none
 --------------------------------------------------------------------------------
-package.path = package.path .. ";/usr/lib/webif/LUA/?.lua;/usr/lib/webif/LUA/pkgs/?.lua;/usr/share//lua/5.1/?.lua"
+package.cpath = "./?.so;/usr/lib/lua/5.1/?.so" 
+package.path = "./?.lua;/usr/lib/webif/LUA/?.lua;/usr/lib/webif/LUA/pkgs/?.lua;/usr/lib/lua/5.1/?.lua;/usr/lib/lua/5.1/?/init.lua;/usr/lib/lua/5.1/?.lua;/usr/lib/lua/5.1/?/init.lua" 
+--package.path = package.path .. ";/usr/lib/webif/LUA/?.lua;/usr/lib/webif/LUA/pkgs/?.lua;/usr/share//lua/5.1/?.lua"
 -- Common Functions
 require("common")
 require("lpkg")
