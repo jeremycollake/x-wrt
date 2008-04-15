@@ -15,7 +15,7 @@ package.path = package.path .. ";/usr/lib/webif/LUA/?.lua;/usr/share//lua/5.1/?.
 require("common")
 -- Functions to manipulate UCI Files
 require("uci")
-require("network")
+require("net")
 
 function connection()
   local nets = net.networks()
@@ -31,10 +31,63 @@ function connection()
   return 0
 end
 
-local output_file="/etc/olsrd.conf"
-local ctrl_file = "/var/etc/olsrd.ctrl"
+
+local iw ="wl0"
+local output_file = "/etc/olsrd.conf"
+local ctrl_file   = "/var/etc/olsrd.ctrl"
 local str_olsrconf = ""
+
 local olsr = uciClass.new("olsr")
+
+if tonumber(olsr.webadmin.userlevel) < 2 then
+  str_olsrconf = [[
+DebugLevel 0
+UseHysteresis no
+LinkQualityFishEye 1
+IpVersion 4
+AllowNoInt yes
+TcRedundancy 2
+LinkQualityLevel 2
+MprCoverage 7
+LinkQualityWinSize 100
+TosValue 16
+LinkQualityDijkstraLimit 0 9.0
+Pollrate 0.025
+
+LoadPlugin "olsrd_dyn_gw.so.0.4"
+{
+	PlParam     "Ping"       "141.1.1.1"
+	PlParam     "Ping"       "194.25.2.129"
+}
+
+LoadPlugin "olsrd_nameservice.so.0.3"
+{
+	PlParam "hosts-file" "/var/etc/hosts"
+	PlParam "name" "12-ola-gs"
+	PlParam "suffix" ".olsr"
+}
+
+LoadPlugin "olsrd_txtinfo.so.0.1"
+{
+	PlParam "Accept" "127.0.0.1"
+}
+
+Interface  "]]..iw..[["
+{
+	HelloInterval 6.0
+	MidValidityTime 324.0
+	TcInterval 4.0
+	AutoDetectChanges yes
+	HnaValidityTime 108.0
+	HelloValidityTime 108.0
+	TcValidityTime 324.0
+	HnaInterval 18.0
+	MidInterval 18.0
+}
+]]
+  os.execute ("echo '"..string.len(str_olsrconf).."' > "..ctrl_file)
+  os.execute ("echo '"..str_olsrconf.."' > "..output_file)
+else  
 for i, v in pairs(olsr.general) do
   str_olsrconf = str_olsrconf .. i .. " " .. v .. "\n"
 end
@@ -109,9 +162,9 @@ for i,t in pairs(olsr.Interface) do
   end
   str_olsrconf = str_olsrconf .. "}\n\n"
 end
-
 if size ~= string.len(str_olsrconf) then
   os.execute ("mkdir /var/etc 2>/dev/null")
   os.execute ("echo '"..string.len(str_olsrconf).."' > "..ctrl_file)
   os.execute ("echo '"..str_olsrconf.."' > "..output_file)
+end
 end

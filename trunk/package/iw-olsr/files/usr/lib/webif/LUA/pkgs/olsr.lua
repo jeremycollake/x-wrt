@@ -5,7 +5,9 @@
     community_form
 
 ]]--
+require("net")
 require("tbform")
+
 olsrd = {}
 local P = {}
 olsrd = P
@@ -15,6 +17,8 @@ local io = io
 local os = os
 local assert = assert
 local string = string
+local tonumber = tonumber
+local net = net
 
 local uciClass = uciClass
 local menuClass = menuClass
@@ -29,15 +33,24 @@ local tbformClass = tbformClass
 setfenv(1, P)
 
 local olsr = uciClass.new("olsr")
-
+if olsr.webadmin == nil then webadmin = olsr:set("websettings","webadmin") end
+--if olsr.general == nil then general = olsr:set("olsr","general") end 
+--if olsr.Hna4 == nil then hna4 = olsr:set("Hna4") end 
+--if olsr.Interface == nil then interface = olsr:set("Interface") end 
+ 
+local loc_userlevel = tonumber(olsr.webadmin.userlevel) or 0
+--local userlevel = tonumber(olsr.websettings.userlevel) or 0
 
 function set_menu()
+  local user_level = loc_userlevel
   __MENU.IW.OLSR = menuClass.new()
   __MENU.IW.OLSR:Add("Core","olsr.sh")
-  __MENU.IW.OLSR:Add("General","olsr.sh?option=general")
---__MENU.IW.OLSR:Add("Ip Connect","olsr.sh?option=ipconnect")
-  __MENU.IW.OLSR:Add("Hna4","olsr.sh?option=hna4")
-  __MENU.IW.OLSR:Add("Hna6","olsr.sh?option=hna6")
+  if user_level > 1 then
+    __MENU.IW.OLSR:Add("General","olsr.sh?option=general")
+--  __MENU.IW.OLSR:Add("Ip Connect","olsr.sh?option=ipconnect")
+    __MENU.IW.OLSR:Add("Hna4","olsr.sh?option=hna4")
+    __MENU.IW.OLSR:Add("Hna6","olsr.sh?option=hna6")
+  end
   __MENU.IW.OLSR:Add("Interfaces","olsr.sh?option=interfaces")
   __MENU.IW.OLSR:Add("Status","olsr-status.sh")
   __MENU.IW.OLSR:Add("Visualization","olsr-viz.sh")
@@ -55,12 +68,11 @@ function core_form()
   form:Add("select",websettings[1].name..".enable",websettings_values.enable,"Service","string")
 	form[websettings[1].name..".enable"].options:Add("0","Disable")
 	form[websettings[1].name..".enable"].options:Add("1","Enable")
-	form:Add("select",websettings[1].name..".mode",websettings_values.mode,"Configuration Mode","string")
-	form[websettings[1].name..".mode"].options:Add("-1","Select Mode")
-	form[websettings[1].name..".mode"].options:Add("0","Beginer")
---	form[websettings[1].name..".mode"].options:Add("1","Medium")
---	form[websettings[1].name..".mode"].options:Add("2","Advanced")
-	form[websettings[1].name..".mode"].options:Add("3","Expert")
+	form:Add("select",websettings[1].name..".userlevel",websettings_values.userlevel,"Configuration Mode","string")
+	form[websettings[1].name..".userlevel"].options:Add("0","Select Mode")
+	form[websettings[1].name..".userlevel"].options:Add("1","Beginer")
+--	form[websettings[1].name..".userlevel"].options:Add("2","Advanced")
+	form[websettings[1].name..".userlevel"].options:Add("3","Expert")
 	form:Add_help(tr("olsr_msg#Olsr"),tr([[olsr_help_msg#OLSR is a great routing protocol.<br>
     Remember set all Access Point in Ad-hoc mode, the same ESSID at everyone and
     thoes IP in same subnet "10.128.1.1" mask "255.255.0.0" 
@@ -277,14 +289,27 @@ function hna4_form()
   return form
 end
 
-function interfaces_form()
+function interfaces_form(form,user_level)
+  local form = form
+  local user_level = user_level or loc_userlevel
+  local mydev 
+  mydev = net.wireless()
   if olsr.Interface == nil then interface = olsr:set("Interface") 
   else interface = olsr.Interface end
-  interface_values = interface[1].values
+--  interface_values = interface[1].values
   local form = formClass.new(tr("Interfaces Settings"))
   for i=1,#interface do
     if i > 1 then form:Add("subtitle","Interface") end
-    form:Add("text",interface[i].name..".Interface",interface[i].values.Interface,"Interface","string","width:99%")
+    form:Add("select",interface[i].name..".Interface",interface[i].values.Interface,tr("cportal_var_device#Device Network"),"string")
+      form[interface[i].name..".Interface"].options:Add("wl0","wl0")
+--      form[interface[i].name..".Interface"].options:Add(type(mydev),type(mydev))
+    if mydev == nil then 
+      form[interface[i].name..".Interface"].options:Add("nil","nil")
+    end    
+--    for k, v in pairs(dev) do
+--      form[interface[i].name..".Interface"].options:Add(k,k)
+--    end
+--    form:Add("text",interface[i].name..".Interface",interface[i].values.Interface,"Interface","string")
     form:Add_help(tr("olsr_var_Interface#Interface"),tr([[
       This optionblock specifies one or more network interfaces on which olsrd 
       should run. Atleast one network interface block must be specified for 
@@ -293,104 +318,106 @@ function interfaces_form()
       interface configurations. 
       ]]))
 
-    form:Add("select",interface[i].name..".AutoDetectChanges",interface[i].values.AutoDetectChanges,"AutoDetectChanges","string")
-  	form[interface[i].name..".AutoDetectChanges"].options:Add("no","No")  
-  	form[interface[i].name..".AutoDetectChanges"].options:Add("yes",tr("Yes"))  
+    if user_level > 1 then
+      form:Add("select",interface[i].name..".AutoDetectChanges",interface[i].values.AutoDetectChanges,"AutoDetectChanges","string")
+    	form[interface[i].name..".AutoDetectChanges"].options:Add("no","No")  
+      form[interface[i].name..".AutoDetectChanges"].options:Add("yes",tr("Yes"))  
 
-    form:Add("text",interface[i].name..".Ip4Broadcast",interface[i].values.Ip4Broadcast,"Ip4Broadcast","string")
-    form:Add_help(tr("olsr_var_Ip4Broadcast#Ip4Broadcast"),tr([[
-      Forces the given IPv4 broadcast address to be used as destination address 
-      for all outgoing OLSR traffic on the interface. In reallity only the 
-      address 255.255.255.255 makes sense to set here. If this option is not set 
-      the broadcast address that the interface is configured with will be used. 
-      This address will also be updated in run-time if a change is detected. 
-      ]]))
+      form:Add("text",interface[i].name..".Ip4Broadcast",interface[i].values.Ip4Broadcast,"Ip4Broadcast","string")
+      form:Add_help(tr("olsr_var_Ip4Broadcast#Ip4Broadcast"),tr([[
+        Forces the given IPv4 broadcast address to be used as destination address 
+        for all outgoing OLSR traffic on the interface. In reallity only the 
+        address 255.255.255.255 makes sense to set here. If this option is not set 
+        the broadcast address that the interface is configured with will be used. 
+        This address will also be updated in run-time if a change is detected. 
+        ]]))
 
-    form:Add("select",interface[i].name..".Ip6AddrType",interface[i].values.Ip6AddrType,"Ip6AddrType","string")
-  	form[interface[i].name..".Ip6AddrType"].options:Add(""," ")  
-  	form[interface[i].name..".Ip6AddrType"].options:Add("site-local",tr("site-local"))  
-  	form[interface[i].name..".Ip6AddrType"].options:Add("global","global")  
-    form:Add_help(tr("olsr_var_Ip6AddrType#Ip6AddrType"),tr([[
-      This option sets what IPv6 address type is to be used in interface address 
-      detection. Defaults to site-local.  
-      ]]))
+      form:Add("select",interface[i].name..".Ip6AddrType",interface[i].values.Ip6AddrType,"Ip6AddrType","string")
+      form[interface[i].name..".Ip6AddrType"].options:Add(""," ")  
+      form[interface[i].name..".Ip6AddrType"].options:Add("site-local",tr("site-local"))  
+      form[interface[i].name..".Ip6AddrType"].options:Add("global","global")  
+      form:Add_help(tr("olsr_var_Ip6AddrType#Ip6AddrType"),tr([[
+        This option sets what IPv6 address type is to be used in interface address 
+        detection. Defaults to site-local.  
+        ]]))
 
-    form:Add("text",interface[i].name..".Ip6MulticastSite",interface[i].values.Ip6MulticastSite,"Ip6MulticastSite","string")
-    form:Add_help(tr("olsr_var_Ip6MulticastSite#Ip6MulticastSite"),tr([[
-      Sets the destionation of outgoing OLSR traffic on this interface to use 
-      the specified IPv6 multicast address as destination if the site-local 
-      address type is set on this interface.  
-      ]]))
+      form:Add("text",interface[i].name..".Ip6MulticastSite",interface[i].values.Ip6MulticastSite,"Ip6MulticastSite","string")
+      form:Add_help(tr("olsr_var_Ip6MulticastSite#Ip6MulticastSite"),tr([[
+        Sets the destionation of outgoing OLSR traffic on this interface to use 
+        the specified IPv6 multicast address as destination if the site-local 
+        address type is set on this interface.  
+        ]]))
 
-    form:Add("text",interface[i].name..".Ip6MulticastGlobal",interface[i].values.Ip6MulticastGlobal,"Ip6MulticastGlobal","string")
-    form:Add_help(tr("olsr_var_Ip6MulticastGlobal#Ip6MulticastGlobal"),tr([[
-      Sets the destionation of outgoing OLSR traffic on this interface to use 
-      the specified IPv6 multicast address as destination if the global address 
-      type is set on this interface.  
-      ]]))
+      form:Add("text",interface[i].name..".Ip6MulticastGlobal",interface[i].values.Ip6MulticastGlobal,"Ip6MulticastGlobal","string")
+      form:Add_help(tr("olsr_var_Ip6MulticastGlobal#Ip6MulticastGlobal"),tr([[
+        Sets the destionation of outgoing OLSR traffic on this interface to use 
+        the specified IPv6 multicast address as destination if the global address 
+        type is set on this interface.  
+        ]]))
 
-    form:Add("subtitle","&nbsp;")
-    form:Add("text",interface[i].name..".HelloInterval",interface[i].values.HelloInterval,"HelloInterval","int,>=0")
-    form:Add_help(tr("olsr_var_HelloInterval#HelloInterval"),tr([[
-      Sets the interval on which HELLO messages will be generated and 
-      transmitted on this interface.   
-      ]]))
+      form:Add("subtitle","&nbsp;")
+      form:Add("text",interface[i].name..".HelloInterval",interface[i].values.HelloInterval,"HelloInterval","int,>=0")
+      form:Add_help(tr("olsr_var_HelloInterval#HelloInterval"),tr([[
+        Sets the interval on which HELLO messages will be generated and 
+        transmitted on this interface.   
+        ]]))
 
-    form:Add("text",interface[i].name..".HelloValidityTime",interface[i].values.HelloValidityTime,"HelloValidityTime","int,>=0")
-    form:Add_help(tr("olsr_var_HelloValidityTime#HelloValidityTime"),tr([[
-      Sets the validity time to be announced in HELLO messages generated by this 
-      host on this interface. This value must be larger than than the HELLO 
-      generation interval to make any sense. Defaults to 3 * the generation interval.  
-      ]]))
+      form:Add("text",interface[i].name..".HelloValidityTime",interface[i].values.HelloValidityTime,"HelloValidityTime","int,>=0")
+      form:Add_help(tr("olsr_var_HelloValidityTime#HelloValidityTime"),tr([[
+        Sets the validity time to be announced in HELLO messages generated by this 
+        host on this interface. This value must be larger than than the HELLO 
+        generation interval to make any sense. Defaults to 3 * the generation interval.  
+        ]]))
 
-    form:Add("text",interface[i].name..".TcInterval",interface[i].values.TcInterval,"TcInterval","int,>=0")
-    form:Add_help(tr("olsr_var_TcInterval#TcInterval"),tr([[
-      Sets the interval on which TC messages will be generated and transmitted 
-      on this interface.   
-      ]]))
+      form:Add("text",interface[i].name..".TcInterval",interface[i].values.TcInterval,"TcInterval","int,>=0")
+      form:Add_help(tr("olsr_var_TcInterval#TcInterval"),tr([[
+        Sets the interval on which TC messages will be generated and transmitted 
+        on this interface.   
+        ]]))
 
-    form:Add("text",interface[i].name..".TcValidityTime",interface[i].values.TcValidityTime,"TcValidityTime","int,>=0")
-    form:Add_help(tr("olsr_var_TcValidityTime#TcValidityTime"),tr([[
-      Sets the validity time to be announced in TC messages generated by this 
-      host on this interface. This value must be larger than than the TC 
-      generation interval to make any sense. Defaults to 3 * the generation 
-      interval.   
-      ]]))
+      form:Add("text",interface[i].name..".TcValidityTime",interface[i].values.TcValidityTime,"TcValidityTime","int,>=0")
+      form:Add_help(tr("olsr_var_TcValidityTime#TcValidityTime"),tr([[
+        Sets the validity time to be announced in TC messages generated by this 
+        host on this interface. This value must be larger than than the TC 
+        generation interval to make any sense. Defaults to 3 * the generation 
+        interval.   
+        ]]))
 
-    form:Add("text",interface[i].name..".MidInterval",interface[i].values.MidInterval,"MidInterval","int,>=0")
-    form:Add_help(tr("olsr_var_MidInterval#MidInterval"),tr([[
-      Sets the interval on which MID messages will be generated and transmitted 
-      on this interface.   
-      ]]))
+      form:Add("text",interface[i].name..".MidInterval",interface[i].values.MidInterval,"MidInterval","int,>=0")
+      form:Add_help(tr("olsr_var_MidInterval#MidInterval"),tr([[
+        Sets the interval on which MID messages will be generated and transmitted 
+        on this interface.   
+        ]]))
 
-    form:Add("text",interface[i].name..".MidValidityTime",interface[i].values.MidValidityTime,"MidValidityTime","int,>=0")
-    form:Add_help(tr("olsr_var_MidValidityTime#MidValidityTime"),tr([[
-      Sets the validity time to be announced in MID messages generated by this 
-      host on this interface. This value must be larger than than the MID 
-      generation interval to make any sense. Defaults to 3 * the generation 
-      interval.    
-      ]]))
+      form:Add("text",interface[i].name..".MidValidityTime",interface[i].values.MidValidityTime,"MidValidityTime","int,>=0")
+      form:Add_help(tr("olsr_var_MidValidityTime#MidValidityTime"),tr([[
+        Sets the validity time to be announced in MID messages generated by this 
+        host on this interface. This value must be larger than than the MID 
+        generation interval to make any sense. Defaults to 3 * the generation 
+        interval.    
+        ]]))
 
-    form:Add("text",interface[i].name..".HnaInterval",interface[i].values.HnaInterval,"HnaInterval","int,>=0")
-    form:Add_help(tr("olsr_var_HnaInterval#HnaInterval"),tr([[
-      Sets the interval on which HNA messages will be generated and transmitted 
-      on this interface.    
-      ]]))
+      form:Add("text",interface[i].name..".HnaInterval",interface[i].values.HnaInterval,"HnaInterval","int,>=0")
+      form:Add_help(tr("olsr_var_HnaInterval#HnaInterval"),tr([[
+        Sets the interval on which HNA messages will be generated and transmitted 
+        on this interface.    
+        ]]))
 
-    form:Add("text",interface[i].name..".HnaValidityTime",interface[i].values.HnaValidityTime,"HnaValidityTime","int,>=0")
-    form:Add_help(tr("olsr_var_HnaValidityTime#HnaValidityTime"),tr([[
-      Sets the validity time to be announced in HNA messages generated by this 
-      host on this interface. This value must be larger than than the HNA generation 
-      interval to make any sense. Defaults to 3 * the generation interval.    
-      ]]))
+      form:Add("text",interface[i].name..".HnaValidityTime",interface[i].values.HnaValidityTime,"HnaValidityTime","int,>=0")
+      form:Add_help(tr("olsr_var_HnaValidityTime#HnaValidityTime"),tr([[
+        Sets the validity time to be announced in HNA messages generated by this 
+        host on this interface. This value must be larger than than the HNA generation 
+        interval to make any sense. Defaults to 3 * the generation interval.    
+        ]]))
 
-    form:Add("text",interface[i].name..".Weight",interface[i].values.Weight,"Weight","int,>=0")
-    form:Add_help(tr("olsr_var_Weight#Weight"),tr([[
-      When multiple links exist between hosts the weight of the interface is used 
-      to determine the link to route by. Normally the weight is automatically 
-      calculated by olsrd based on the characteristics of the interface, but here 
-      you can specify a fixed value. Olsrd will choose links with the lowest value.   
-      ]]))
+      form:Add("text",interface[i].name..".Weight",interface[i].values.Weight,"Weight","int,>=0")
+      form:Add_help(tr("olsr_var_Weight#Weight"),tr([[
+        When multiple links exist between hosts the weight of the interface is used 
+        to determine the link to route by. Normally the weight is automatically 
+        calculated by olsrd based on the characteristics of the interface, but here 
+        you can specify a fixed value. Olsrd will choose links with the lowest value.   
+        ]]))
+    end
   end
   return form
 end
