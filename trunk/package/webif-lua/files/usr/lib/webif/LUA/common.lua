@@ -78,19 +78,21 @@ end
 
 function io.totable(filename,clean)
   local t = {}
-	local data = load_file(filename)
-	if clean then
-    for i,v in pairs(string.split(data,'\n')) do
-      if string.find(string.trim(v),"#",1,true) ~= 1 then 
-        if string.trim(v) ~= "" then
-          t[#t+1] = v
+	local data, f = load_file(filename)
+	if f == true then
+    if clean then
+      for i,v in pairs(string.split(data,'\n')) do
+        if string.find(string.trim(v),"#",1,true) ~= 1 then 
+          if string.trim(v) ~= "" then
+            t[#t+1] = v
+          end
         end
       end
+      return t
     end
-    return t
+    if data then return string.split(data,'\n') end
   end
-  if data then return string.split(data,'\n') end
-  return nil
+  return t
 end
 
 --function count_updated()

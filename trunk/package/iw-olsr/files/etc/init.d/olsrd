@@ -23,7 +23,7 @@ start() {
 	config_get WANDEV wan device
 	config_get LAN lan ifname
   
-  WIFI=wl0
+  WIFI=wl0  
   # Allow connections to olsr info port.
   iptables        -A input_wan      -p tcp --dport 1979 -j ACCEPT
   # OLSR needs port 698 to transmit state messages. 
@@ -60,3 +60,4 @@ stop() {
   /usr/lib/webif/LUA/cron_ctrl del "$CRONSET"
 	killall olsrd
 }
+

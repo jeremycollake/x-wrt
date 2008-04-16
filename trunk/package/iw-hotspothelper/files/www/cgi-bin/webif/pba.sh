@@ -2,32 +2,23 @@
 --[[
 ##WEBIF:name:IW:500:Pba
 ]]--
-dofile("/usr/lib/webif/LUA/config.lua")
-require("ucipkg")
-print(uci.show("chilli"))
-print("\nempieza a setear\n")
-print("uci set chilli.interface=wlan")
-print(uci.set("chilli.interface","wlan"))
-print("uci set chilli.interface.device=wl0")
-print(uci.set("chilli.interface.device","wl0"))
-print("\n\n")
-print(uci.show("chilli"))
-print("\n\n")
-print("uci add chilli algo")
-juan = uci.add("chilli","algo")
-print(juan,"\n")
-print("uci.list(chilli,algo)")
-pepe = uci.list("chilli","algo")
---for i=1, #pepe do
---  if pepe[i] ~= juan then
---    uci.del(pepe[i])
---  else
-    uci.set(juan..".pendorcho",juan)
---  end
---end
-uci.rename("chilli","cfg1",tostring(os.date()))
-print("uci.show(chilli)")
-print(uci.show("chilli"))
---uci.del("chilli.interface")
-uci.commit("chilli")
-print(uci.show("chilli"))
+-- dofile("/usr/lib/webif/LUA/config.lua")
+package.cpath = "./?.so;/usr/lib/lua/5.1/?.so" 
+package.path = "./?.lua;/usr/lib/webif/LUA/?.lua;/usr/lib/webif/LUA/pkgs/?.lua;/usr/lib/lua/5.1/?.lua;/usr/lib/lua/5.1/?/init.lua;/usr/lib/lua/5.1/?.lua;/usr/lib/lua/5.1/?/init.lua" 
+require("uci")
+pepe = uci.load("pba")
+pepe = uci.set("pba=pepe")
+print ("pba=pepe", type(pepe),tostring(pepe))
+pepe = uci.set("pba.algo=pepe")
+print ("pba.algo=pepe", type(pepe),tostring(pepe),uci.get("pba.algo"))
+
+pepe = uci.set("pba.algo.uno=primero")
+print ("pba.algo.uno=primero", type(pepe),tostring(pepe),uci.get("pba.algo.uno"))
+
+--[[
+print("Hola mundo")
+
+for k, v in pairs(package) do
+  print (k,v)
+end
+]]--

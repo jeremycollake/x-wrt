@@ -11,11 +11,13 @@
     /etc/olsrd.conf
 
 ]]--
-package.path = package.path .. ";/usr/lib/webif/LUA/?.lua;/usr/share//lua/5.1/?.lua"
+package.cpath = "./?.so;/usr/lib/lua/5.1/?.so" 
+package.path = "./?.lua;/usr/lib/webif/LUA/?.lua;/usr/lib/webif/LUA/pkgs/?.lua;/usr/lib/lua/5.1/?.lua;/usr/lib/lua/5.1/?/init.lua;/usr/lib/lua/5.1/?.lua;/usr/lib/lua/5.1/?/init.lua" 
 require("common")
 -- Functions to manipulate UCI Files
-require("uci")
+require("iw-uci")
 require("net")
+require("iwuci")
 
 function connection()
   local nets = net.networks()
@@ -32,12 +34,108 @@ function connection()
 end
 
 
-local iw ="wl0"
 local output_file = "/etc/olsrd.conf"
 local ctrl_file   = "/var/etc/olsrd.ctrl"
 local str_olsrconf = ""
 
+require("iwuci")
 local olsr = uciClass.new("olsr")
+local network = uciClass.new("network")
+local wireless = uciClass.new("wireless")
+
+
+local initfile =[[#!/bin/sh /etc/rc.common
+START=50
+
+BIN=olsrd
+CONF_F=/var/etc/olsrd.conf
+USE_CONF_F=/etc/olsrd.conf
+DEFAULT=/etc/default/olsrd
+RUN_D=/var/run
+PID_F=$RUN_D/$BIN.pid
+CRONSET="* * * * * /usr/lib/webif/LUA/olsr/minute.cron"
+
+write_config_lua () {
+  /usr/lib/webif/LUA/olsr/parsers
+		USE_CONF_F="$CONF_F"
+}
+  
+start() {
+	include /lib/network
+	scan_interfaces
+	config_load /var/state/network
+	
+	config_get WAN wan ifname
+	config_get WANDEV wan device
+	config_get LAN lan ifname
+  
+  WIFI=wl0  
+  # Allow connections to olsr info port.
+  iptables        -A input_wan      -p tcp --dport 1979 -j ACCEPT
+  # OLSR needs port 698 to transmit state messages. 
+  iptables -A input_rule -p udp --dport 698 -j ACCEPT
+  iptables -A input_rule -p udp --dport 53 -j ACCEPT
+  iptables -A input_rule -p tcp --dport 53 -j ACCEPT
+
+  iptables -A forwarding_rule -i $WAN -o $WIFI -j ACCEPT
+  iptables -A forwarding_rule -i $WIFI -o $WAN -j ACCEPT
+  # For forwarding LAN & WIFI in nodes
+  iptables -A forwarding_rule -i $LAN -o $WIFI -j ACCEPT
+
+  # For WIFI clients to connect to nodes.
+  iptables -A forwarding_rule -i $WIFI -o $WIFI -j ACCEPT
+
+  # For connecting a wired lan client of node 1 to wired lan client of node 2
+  iptables -A forwarding_rule -i $LAN -o $LAN -j ACCEPT
+  
+  # Masquerade all trafic
+  iptables -t nat -A POSTROUTING -o $WIFI -j MASQUERADE
+  iptables -t nat -A POSTROUTING -o $WAN -j MASQUERADE
+  /usr/lib/webif/LUA/cron_ctrl add "$CRONSET"
+
+	$BIN -f "$USE_CONF_F" -nofork $OPTIONS &
+
+	# write pid file (but strip out own pid ($$))
+	mkdir -p $RUN_D
+	PID=`pidof $BIN`
+	echo ${PID%$$} > $PID_F
+  echo "OLSR is running\n"
+}
+
+stop() {
+  /usr/lib/webif/LUA/cron_ctrl del "$CRONSET"
+	killall olsrd
+}
+
+]]
+
+os.execute ("echo '"..initfile.."' > /etc/init.d/olsrd")
+
+local set_netname = olsr.webadmin.netname or "olsrnet"
+local set_nodenumber = olsr.webadmin.nodenumber or "1"
+local set_device = olsr.webadmin.device or "wl0"
+local set_ssid = olsr.webadmin.ssid or "X-Wrt"
+local set_channel = olsr.webadmin.channel or "6"
+
+if network[set_netname] == nil then 
+  network:set("interface",set_netname) end
+
+local set_netaddr = olsr.webadmin.ipaddr or "10.128."..olsr.webadmin.nodenumber..".1"
+local set_netmask = olsr.webadmin.netmask or "255.255.0.0"
+iwuci.set("network."..olsr.webadmin.netname..".ipaddr",set_netaddr)
+iwuci.set("network."..olsr.webadmin.netname..".netmask",set_netmask)
+iwuci.set("network."..olsr.webadmin.netname..".proto","static")
+wififace = wireless["wifi-iface"]
+for i=1, #wififace do
+  if wififace[i].values.device == set_device then
+    iwuci.set(wififace[i].name..".ssid",set_ssid)
+    iwuci.set(wififace[i].name..".network",set_netname)
+    iwuci.set(wififace[i].name..".mode","adhoc")
+    iwuci.set("wireless."..set_device..".channel",set_channel)
+    iwuci.set("wireless."..set_device..".disabled","0")
+    break
+  end
+end
 
 if tonumber(olsr.webadmin.userlevel) < 2 then
   str_olsrconf = [[
@@ -72,7 +170,7 @@ LoadPlugin "olsrd_txtinfo.so.0.1"
 	PlParam "Accept" "127.0.0.1"
 }
 
-Interface  "]]..iw..[["
+Interface  "]]..olsr.webadmin.device..[["
 {
 	HelloInterval 6.0
 	MidValidityTime 324.0

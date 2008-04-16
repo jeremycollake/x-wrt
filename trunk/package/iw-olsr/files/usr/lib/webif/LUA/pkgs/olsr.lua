@@ -15,6 +15,7 @@ olsrd = P
 -- declare everything this package needs from outside
 local io = io
 local os = os
+local pairs = pairs
 local assert = assert
 local string = string
 local tonumber = tonumber
@@ -64,20 +65,27 @@ function core_form()
   if olsr.websettings == nil then websettings = olsr:set("websettings","webadmin") 
   else websettings = olsr.websettings end
   websettings_values = websettings[1].values
+  if websettings_values.netname == nil then websettings_values.netname = "olsrnet" end
+  if websettings_values.ssid == nil then websettings_values.ssid = "X-Wrt" end
+  if websettings_values.channel == nil then websettings_values.channel = "6" end
+  local mydev 
+  mydev = net.wireless()
+   
   local form = formClass.new(tr("Service Settings"))
   form:Add("select",websettings[1].name..".enable",websettings_values.enable,"Service","string")
 	form[websettings[1].name..".enable"].options:Add("0","Disable")
 	form[websettings[1].name..".enable"].options:Add("1","Enable")
-	form:Add("select",websettings[1].name..".userlevel",websettings_values.userlevel,"Configuration Mode","string")
-	form[websettings[1].name..".userlevel"].options:Add("0","Select Mode")
-	form[websettings[1].name..".userlevel"].options:Add("1","Beginer")
---	form[websettings[1].name..".userlevel"].options:Add("2","Advanced")
-	form[websettings[1].name..".userlevel"].options:Add("3","Expert")
 	form:Add_help(tr("olsr_msg#Olsr"),tr([[olsr_help_msg#OLSR is a great routing protocol.<br>
     Remember set all Access Point in Ad-hoc mode, the same ESSID at everyone and
     thoes IP in same subnet "10.128.1.1" mask "255.255.0.0" 
     ]]))
 	form:Add_help(tr("olsr_var_service#Service"),tr("olsr_help_service#Turns olsr enable or disable"))
+
+	form:Add("select",websettings[1].name..".userlevel",websettings_values.userlevel,"Configuration Mode","string")
+	form[websettings[1].name..".userlevel"].options:Add("0","Select Mode")
+	form[websettings[1].name..".userlevel"].options:Add("1","Beginer")
+--	form[websettings[1].name..".userlevel"].options:Add("2","Advanced")
+	form[websettings[1].name..".userlevel"].options:Add("3","Expert")
 	form:Add_help(tr("_var_mode#Configuration Mode"),tr("_help_mode#"..[[
           Select mode of configuration page.<br>
           <strong>Beginer :</strong><br>
@@ -86,6 +94,14 @@ function core_form()
           <strong>Expert :</strong><br>
           This mode keep your configurations file and you edit they by your self.
           ]]))
+  form:Add("text",websettings[1].name..".netname",websettings_values.netname,tr("olsrdNetName#OLSR Net Name"),"string")
+  form:Add("text",websettings[1].name..".nodenumber",websettings_values.nodenumber,tr("olsrdNodeNum#OLSR Node Number"),"int,>0,<255")
+  form:Add("select",websettings[1].name..".device",websettings_values.device,tr("cportal_var_device#Device Network"),"string")
+  for k, v in pairs(net.wireless()) do
+    form[websettings[1].name..".device"].options:Add(k,k)
+  end    
+  form:Add("text",websettings[1].name..".ssid",websettings_values.ssid,tr("olsrdSsId#SSID"),"string")
+  form:Add("text",websettings[1].name..".channel",websettings_values.channel,tr("olsrdChannel#Wifi Channel"),"int,>0,<15")
   return form
 end
 
@@ -297,7 +313,7 @@ function interfaces_form(form,user_level)
   if olsr.Interface == nil then interface = olsr:set("Interface") 
   else interface = olsr.Interface end
 --  interface_values = interface[1].values
-  local form = formClass.new(tr("Interfaces Settings"))
+  form = formClass.new(tr("Interfaces Settings"))
   for i=1,#interface do
     if i > 1 then form:Add("subtitle","Interface") end
     form:Add("select",interface[i].name..".Interface",interface[i].values.Interface,tr("cportal_var_device#Device Network"),"string")
