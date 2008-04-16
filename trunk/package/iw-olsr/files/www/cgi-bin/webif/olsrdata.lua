@@ -6,9 +6,10 @@
 --      Library to manipulate forms
 --
 -- Author(s) [in order of work date]:
---       Fabián Omar Franzotti .
 -- olsrdata is inspired by OLSR-Viz, Lorenz Schori <lo@znerol.ch>
 -- and OLSR-Viz is inspired by Wi-viz: http://wiviz.natetrue.com 
+-- Mdify and ported to LUA by
+--       Fabián Omar Franzotti .
 -- Configuration files referenced:
 --   none
 --------------------------------------------------------------------------------
