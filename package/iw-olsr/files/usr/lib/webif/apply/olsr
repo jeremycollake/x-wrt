@@ -11,8 +11,39 @@
 --------------------------------------------------------------------------------
 print ("Committing OLSR")
 os.execute("uci commit olsr")
-os.execute("rm /tmp/.uci/olsr.lock")
+os.execute("rm /tmp/.uci/olsr*")
 dofile("/usr/lib/webif/LUA/olsr/parsers")
+--------------------------------------------------------------------------------
+print(tr("Please wait restarting services"))
+io.stdout:flush()
+os.execute("uci commit network")
+os.execute("rm /tmp/.uci/network*")
+os.execute("uci commit wireless")
+os.execute("rm /tmp/.uci/wireless*")
+--[[
+local str = ""
+restart = io.popen("/etc/init.d/network restart")
+for line in restart:lines(restart) do
+  str = str .. line .. "<br>"
+end
+print (str)
+
+os.execute("sleep 3 && killall dnsmasq")
+dnsmasq = io.popen("test -f /etc/rc.d/S??dnsmasq")
+for result in dnsmasq:lines() do
+  if result == "0" then os.execute("/etc/init.d/dnsmasq start") end
+end
+
+str = ""
+restart = io.popen("wifi")
+for line in restart:lines(restart) do
+  str = str .. line .. "<br>"
+end
+print (str)
+]]--
+os.execute("/usr/lib/webif/LUA/olsr/netinit.sh")
+--------------------------------------------------------------------------------
+
 __RESTART["olsrd"] = {}
 __RESTART["olsrd"]["pkg"] = "olsr"
 __RESTART["olsrd"]["cfg"] = "webadmin"

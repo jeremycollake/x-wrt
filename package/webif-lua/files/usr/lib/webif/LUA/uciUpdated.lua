@@ -174,6 +174,7 @@ function uciUpdatedClass:apply(page)
 --        end
       end
       myexec:close()
+      if t.first then t.first() end
       print ("Starting "..i.." service...<br>")
       io.stdout:flush()
       os.execute(t.init.." start > /tmp/start")
@@ -185,6 +186,7 @@ function uciUpdatedClass:apply(page)
 --        end
       end
 --      mystart:close()
+      if t.after then t.after() end
     else
       myexec = io.popen(t.init.." stop")
       print ("Stopping "..i.." service...<br>")
