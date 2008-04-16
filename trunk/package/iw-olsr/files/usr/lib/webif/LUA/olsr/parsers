@@ -125,6 +125,8 @@ local set_netmask = olsr.webadmin.netmask or "255.255.0.0"
 iwuci.set("network."..olsr.webadmin.netname..".ipaddr",set_netaddr)
 iwuci.set("network."..olsr.webadmin.netname..".netmask",set_netmask)
 iwuci.set("network."..olsr.webadmin.netname..".proto","static")
+-- in some situations this need fix and put dynamic dns configuration from olsr network
+iwuci.set("network."..olsr.webadmin.netname..".dns","204.225.44.3")
 wififace = wireless["wifi-iface"]
 for i=1, #wififace do
   if wififace[i].values.device == set_device then
