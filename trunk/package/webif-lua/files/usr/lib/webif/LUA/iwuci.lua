@@ -45,7 +45,7 @@ function del(varname)
 end
 
 function set(varname,value)
-  os.execute("uci set "..varname.."="..value)
+  os.execute("uci set "..varname.."='"..value.."'")
 --  local myuci = io.popen("uci set "..varname.."="..value)
 --  local str = ""
 --  for res in myuci:lines() do
