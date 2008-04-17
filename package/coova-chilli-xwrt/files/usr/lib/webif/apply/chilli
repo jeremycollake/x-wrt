@@ -65,16 +65,15 @@ if tonumber(hotspot.service.userlevel) < 2 then
   iwuci.set("chilli.uam.HS_UAMFORMAT","http://$HS_UAMSERVER/cgi-bin/login/pba.lua") 
   iwuci.set("chilli.uam.HS_UAMHOMEPAGE","http://$HS_UAMLISTEN:$HS_UAMPORT/www/coova.html")
   iwuci.set("chilli.uam.HS_UAMALLOW","x-wrt.org")
-
 end
 
 print ("Committing Chilli".."<br>")
 os.execute("uci commit chilli")
-os.execute("rm /tmp/.uci/chilli")
+--os.execute("rm /tmp/.uci/chilli")
 hotspot = uciClass.new("chilli")
-if hotspot.service.users > 0 then
-local pkgs = pkgInstalledClass.new("freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm,iw-freeradius",true)
+if tonumber(hotspot.service.users) > 0 then
   print("Checking freeradius installation".."<br>")
+--  freeradpkgs = pkgInstalledClass.new("freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm,iw-freeradius",true)
   local write_file
   if io.exists("/usr/share/freeradius/dictionary") then
     local dict = io.totable("/usr/share/freeradius/dictionary",true)
