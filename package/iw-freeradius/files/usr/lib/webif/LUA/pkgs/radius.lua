@@ -15,6 +15,7 @@ local io = io
 local os = os
 local assert = assert
 local string = string
+local tonumber = tonumber
 
 local uciClass = uciClass
 local menuClass = menuClass
@@ -28,26 +29,27 @@ local tbformClass = tbformClass
 -- no more external access after this point
 setfenv(1, P)
 
+local radconf = uciClass.new("freeradius")
+local userlevel = tonumber(radconf.webadmin.userlevel) or 0
 
 function set_menu()
-  freeradius = uciClass.new("freeradius")
-  if freeradius.websettings ~= nil then
-    if freeradius.webadmin.mode == "0" then 
+--    if userlevel < 4 then 
     -- Muestra menu principiante
     __MENU.IW.Freeradius = menuClass.new()
     __MENU.IW.Freeradius:Add("Core","freeradius.sh")
---    __MENU.IW.Freeradius.Core = menuClass.new()
-    __MENU.IW.Freeradius:Add("Users","freeradius-users.sh")
-    __MENU.IW.Freeradius:Add("Proxy","freeradius-proxy.sh")
-    __MENU.IW.Freeradius:Add("Clients","freeradius-clients.sh")
---    __MENU.IW.Freeradius:Add("To conf","freeradius-conf.sh")
-    elseif freeradius.webadmin.mode == "3" then
+    __MENU.IW.Freeradius:Add("Users")
+    __MENU.IW.Freeradius.Users = menuClass.new()
+    __MENU.IW.Freeradius.Users:Add("Users","freeradius.sh?option=users")
+    __MENU.IW.Freeradius.Users:Add("Default Values","freeradius.sh?option=users_default")
+    __MENU.IW.Freeradius:Add("Communities")
+    __MENU.IW.Freeradius.Communities = menuClass.new()
+    __MENU.IW.Freeradius.Communities:Add("Communities","freeradius.sh?option=communities")
+    __MENU.IW.Freeradius.Communities:Add("Proxy Server","freeradius.sh?option=proxy")
+    __MENU.IW.Freeradius:Add("Clients","freeradius.sh?option=client")
+--    elseif userlevel == 4 then
     -- Menu de Experto edita los archivos directamente
-      __FORM.__menu = string.sub(__FORM.__menu,1,4)
-    end
-  else
-    -- Todavía no configuró como quiere manejar la configuracion
-  end
+--      __FORM.__menu = string.sub(__FORM.__menu,1,4)
+--    end
 end
 
 function check_pkg()
@@ -56,21 +58,21 @@ end
 
 function core_form()
 ----	Input Section formservice
-  local websettings
-  freeradius = uciClass.new("freeradius")
-  if freeradius.websettings == nil then websettings = freeradius:set("websettings","webadmin") 
-  else websettings = freeradius.websettings end
-  websettings_values = websettings[1].values
 	local form = formClass.new("Service Settings")
+  local websettings
+  if radconf.websettings == nil then websettings = radconf:set("websettings","webadmin") 
+  else websettings = radconf.websettings end
+  websettings_values = websettings[1].values
+
 	form:Add("select",websettings[1].name..".enable",websettings_values.enable,"Service","string")
 	form[websettings[1].name..".enable"].options:Add("0","Disable")
 	form[websettings[1].name..".enable"].options:Add("1","Enable")
-	form:Add("select",websettings[1].name..".mode",websettings_values.mode,"Configuration Mode","string")
-	form[websettings[1].name..".mode"].options:Add("-1","Select Mode")
-	form[websettings[1].name..".mode"].options:Add("0","Beginer")
---	form[websettings[1].name..".mode"].options:Add("1","Medium")
---	form[websettings[1].name..".mode"].options:Add("2","Advanced")
-	form[websettings[1].name..".mode"].options:Add("3","Expert")
+	form:Add("select",websettings[1].name..".userlevel",websettings_values.userlevel,"Configuration Mode","string")
+	form[websettings[1].name..".userlevel"].options:Add("0","Select Mode")
+	form[websettings[1].name..".userlevel"].options:Add("1","Beginer")
+--	form[websettings[1].name..".userlevel"].options:Add("2","Medium")
+--	form[websettings[1].name..".userlevel"].options:Add("3","Advanced")
+	form[websettings[1].name..".userlevel"].options:Add("4","Expert")
 ----	Help section	
 	form:Add_help(tr("freeradius_var_service#Service"),tr("freeradius_help_service#Turns freeradius server enable or disable"))
 	form:Add_help(tr("freeradius_var_mode#Configuration Mode"),tr("freeradius_help_mode#"..[[
@@ -119,9 +121,9 @@ function client_form()
     form[client[i].name..".nastype"].options:Add("other","Other")  
     form:Add("text",client[i].name..".login",client[i].values.login,"Login","string")
     form:Add("text",client[i].name..".password",client[i].values.password,"Password")
-    form:Add("link","remove_"..client[i].name,__SERVER.SCRIPT_NAME.."?".."UCI_CMD_del"..client[i].name.."= &__menu="..__FORM.__menu,tr("Remove Client"))
+    form:Add("link","remove_"..client[i].name,__SERVER.SCRIPT_NAME.."?".."UCI_CMD_del"..client[i].name.."= &__menu="..__FORM.__menu.."&option=client",tr("Remove Client"))
   end
-  form:Add("link","add_client",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_clients=client&__menu="..__FORM.__menu,tr("Add Client"))
+  form:Add("link","add_client",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_clients=client&__menu="..__FORM.__menu.."&option=client",tr("Add Client"))
   form:Add_help("client",[[
       Defines a RADIUS client.  The format is 'client [hostname|ip-address]'<br>
       '127.0.0.1' is another name for 'localhost'.  It is enabled by default,
@@ -148,7 +150,7 @@ function proxy_settings_form()
   if freeradius.server == nil then server = freeradius:set("server") else server = freeradius.server end
   local server_cfg = server[1].name
   local server_val = server[1].values
-  local form = formClass.new("Server Settings")
+  local form = formClass.new("Proxy Settings")
   form:Add("select",server_cfg..".synchronous",server_val.synchronous,"Synchronous","string")
   form[server_cfg..".synchronous"].options:Add("no",tr("No"))
   form[server_cfg..".synchronous"].options:Add("yes",tr("Yes"))
@@ -161,7 +163,7 @@ function proxy_settings_form()
   form:Add("select",server_cfg..".post_proxy_authorize",server_val.post_proxy_authorize,"Post proxy authorize","string")
   form[server_cfg..".post_proxy_authorize"].options:Add("no",tr("No"))
   form[server_cfg..".post_proxy_authorize"].options:Add("yes",tr("Yes"))
-  form:Add("link","add_community",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_proxy=realm&__menu="..__FORM.__menu,tr("Add Community"))
+--  form:Add("link","add_community",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_proxy=realm&__menu="..__FORM.__menu,tr("Add Community"))
   return form
 end
 
@@ -171,7 +173,8 @@ function community_form()
   local server_cfg = server[1].name
   local server_val = server[1].values
   form = formClass.new("Comunities Radius")
-  form:Add("link","add_community",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_proxy=realm&__menu="..__FORM.__menu.."&option=wizard&step=radius",tr("Add Community"))
+--  form:Add("link","add_community",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_proxy=realm&__menu="..__FORM.__menu.."&option=wizard&step=radius",tr("Add Community"))
+  form:Add("link","add_community",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_proxy=realm&__menu="..__FORM.__menu.."&option=proxy",tr("Add Community"))
   if freeradius.realm ~= nil then
     for i = 1, #freeradius.realm do
       realm_cfg = freeradius.realm[i].name
@@ -192,7 +195,7 @@ function community_form()
       form[realm_cfg..".ldflag"].options:Add("",tr("&nbsp;"))
       form[realm_cfg..".ldflag"].options:Add("fail_over",tr("Fail over"))
       form[realm_cfg..".ldflag"].options:Add("round_robin",tr("Round robin"))
-      form:Add("link","remove"..realm_cfg,__SERVER.SCRIPT_NAME.."?".."UCI_CMD_del"..realm_cfg.."=&__menu="..__FORM.__menu,tr("Remove Community"))
+      form:Add("link","remove"..realm_cfg,__SERVER.SCRIPT_NAME.."?".."UCI_CMD_del"..realm_cfg.."=&__menu="..__FORM.__menu.."&option=proxy",tr("Remove Community"))
     end
   end
   return form
@@ -290,8 +293,13 @@ function user_form()
   return form
 end
 
-function add_usr_form()
-  local form = formClass.new("Local Users")
+function add_usr_form(form,user_level)
+  if form == nil then
+    form = formClass.new("Local Users")
+  else
+    form:Add("subtitle","Local Users")
+  end
+  
   form:Add("uci_set_config","freeradius_check,freeradius_reply","user",tr("freerad_add_user#New User"),"string")
   return form
 end
