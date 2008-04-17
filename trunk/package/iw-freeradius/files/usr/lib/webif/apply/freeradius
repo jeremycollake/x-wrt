@@ -332,7 +332,7 @@ post-proxy {
 print ("Committing Freeradius...")
 os.execute("uci commit freeradius")
 local freeradius = uciClass.new("freeradius")
-if freeradius.webadmin.mode == "0" then
+if tonumber(freeradius.webadmin.userlevel) < 4 then
   print ("Writing radiusd.conf")
   if io.exists("/usr/share/freeradius/dictionary") then
     local dict = io.totable("/usr/share/freeradius/dictionary",true)
@@ -343,8 +343,6 @@ if freeradius.webadmin.mode == "0" then
     pepe:write(table.concat(dict,'\n'))
     pepe:close()
   end
---end
---if freeradius.webadmin.mode == "0" then
   local pepe = io.open("/etc/freeradius/radiusd.conf","w")
   pepe:write(radiusd_str)
   pepe:close()

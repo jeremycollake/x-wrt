@@ -14,7 +14,7 @@ os.execute("uci commit freeradius_proxy")
 os.execute("rm /tmp/.uci/freeradius_proxy")
 print ("Writing proxy.conf ...")
 local freeradius = uciClass.new("freeradius")
-if freeradius.webadmin.mode == "0" then
+if tonumber(freeradius.webadmin.userlevel) < 4 then
   -- Process proxy.conf
   local sep = ""
   local proxy = uciClass.new("freeradius_proxy")
