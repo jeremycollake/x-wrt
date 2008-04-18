@@ -24,3 +24,7 @@ mv -f "${IPKG_INSTROOT}/lib/config/uci-depends.uci" "${IPKG_INSTROOT}/lib/config
 # include the UCI callback funcs in /lib/config/uci-depends.sh.
 FixReadOnlyLink "${IPKG_INSTROOT}/etc/functions.sh"
 mv -f "${IPKG_INSTROOT}/etc/functions.uci" "${IPKG_INSTROOT}/etc/functions.sh"
+
+# fix up /etc/rc.common.
+FixReadOnlyLink "${IPKG_INSTROOT}/etc/rc.common"
+mv -f "${IPKG_INSTROOT}/etc/rc.common.uci" "${IPKG_INSTROOT}/etc/rc.common"

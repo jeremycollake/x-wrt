@@ -28,6 +28,28 @@ if_valid () (
   { debug "# missing interface '$1' ignored"; false; }
 )
 
+setup_switch() {
+	[ -d /proc/switch/eth0 ] || return 0
+
+	echo 1 > /proc/switch/eth0/reset
+	echo 1 > /proc/switch/eth0/enable
+	echo 1 > /proc/switch/eth0/enable_vlan
+
+	local nr vlan_hwname vlan_ports
+	for nr in $(seq 0 15); do
+		vlan_ports="$(nvram get vlan${nr}ports | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')"
+		vlan_hwname="$(nvram get vlan${nr}hwname | sed 's/^[[:space:]]*//; s/[[:space:]]*$//')"
+		[ -z "$vlan_hwname" ] && {
+			unset vlan_ports
+			nvram unset vlan${nr}ports
+			nvram unset vlan${nr}hwname
+		}
+		echo "$vlan_ports" > /proc/switch/eth0/vlan/$nr/ports
+	done
+
+	vconfig set_name_type VLAN_PLUS_VID_NO_PAD
+}
+
 do_ifup() {
 	ifproto="$1"
 	iftype="$2"
