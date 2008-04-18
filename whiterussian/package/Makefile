@@ -153,6 +153,7 @@ package-$(BR2_PACKAGE_SHFS) += shfs
 package-$(BR2_PACKAGE_SIPCALC) += sipcalc
 package-$(BR2_PACKAGE_SIPROXD) += siproxd
 package-$(BR2_PACKAGE_SIPSAK) += sipsak
+package-$(BR2_PACKAGE_SMTPTRAPD) += smtptrapd
 package-$(BR2_PACKAGE_SNORT) += snort
 package-$(BR2_PACKAGE_SOCAT) += socat
 package-$(BR2_COMPILE_SPCAVIEW) += spcaview
@@ -254,6 +255,7 @@ rsync-compile: popt-compile
 screen-compile: ncurses-compile
 siproxd-compile: libosip2-compile
 sipsak-compile: openssl-compile
+smtptrapd-compile: libpthread-compile
 spcaview-compile: libpthread-compile
 sqlite3-compile: ncurses-compile readline-compile
 tcpdump-compile: libpcap-compile

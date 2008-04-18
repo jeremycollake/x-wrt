@@ -1,0 +1,10 @@
+Package: smtptrapd
+Priority: optional
+Section: net
+Depends: libpthread, base-files-uci
+Description: SMTP Trap Daemon
+ The smtptrapd program is a multi-threaded daemon that provides 
+ a RFC 2821 compliant SMTP service that always returns a 4xx soft 
+ error to the RCPT TO verb.
+ .
+ http://smtptrapd.inodes.org/
