@@ -1,5 +1,17 @@
 config BR2_PACKAGE_CTORRENT
-	prompt "ctorrent - console-based BitTorrent client"
+	prompt "ctorrent - console-based BitTorrent client (with builtin SHA-1 support)"
+	tristate
+	default m if CONFIG_DEVEL
+	select BR2_PACKAGE_UCLIBCXX
+	help
+	  CTorrent is a BitTorrent client written in the C programming language, known to
+	  be a very robust and mature programming language, which produces fast and
+	  optimized application.
+	  
+	  http://www.rahul.net/dholmes/ctorrent/
+
+config BR2_PACKAGE_CTORRENT_OPENSSL
+	prompt "ctorrent-ssl - console-based BitTorrent client (with  OpenSSL support)"
 	tristate
 	default m if CONFIG_DEVEL
 	select BR2_PACKAGE_LIBOPENSSL

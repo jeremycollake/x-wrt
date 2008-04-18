@@ -1,8 +1,8 @@
-Package: ctorrent
+Package: ctorrent-openssl
 Priority: optional
-Depends: uclibcxx
+Depends: libopenssl, uclibcxx
 Section: net
-Description: console-based BitTorrent client (with builtin SHA-1 support)
+Description: console-based BitTorrent client (with  OpenSSL support)
  CTorrent is a BitTorrent client written in the C programming language, known to 
  be a very robust and mature programming language, which produces fast and 
  optimized application.
