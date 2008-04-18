@@ -1,0 +1,101 @@
+#
+# Copyright (C) 2007 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
+
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=iperf
+PKG_VERSION:=2.0.2
+PKG_RELEASE:=2
+
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://dast.nlanr.net/Projects/Iperf2.0
+PKG_MD5SUM:=bb658aba58a5af0356f5b1342dfe8f53
+PKG_CAT:=zcat
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
+
+include $(TOPDIR)/package/rules.mk
+
+IPERF_LDFLAGS:=""
+
+IPERF_MT_LDFLAGS:= -lpthread
+
+IPERF_CONFIGURE_OPTS:= --disable-threads \
+
+IPERF_MT_CONFIGURE_OPTS:= --enable-threads=posix \
+
+define PKG_build
+
+ifneq ($(BR2_PACKAGE_$(1)),)
+BUILD_TARGETS += $(PKG_BUILD_DIR)/$(2)
+endif
+
+$(PKG_BUILD_DIR)/$(2): $(PKG_BUILD_DIR)/.prepared
+	mkdir -p $(PKG_BUILD_DIR)/$(2)
+	(cd $(PKG_BUILD_DIR)/$(2); rm -rf config.{cache,status} ; \
+		$(TARGET_CONFIGURE_OPTS) \
+		CFLAGS="$(TARGET_CFLAGS)" \
+		CPPFLAGS="-I$(STAGING_DIR)/usr/include -I$(STAGING_DIR)/include" \
+		LDFLAGS="-L$(STAGING_DIR)/usr/lib -L$(STAGING_DIR)/lib $$($(1)_LDFLAGS)" \
+		CXX="$(STAGING_DIR)/bin/g++-uc" \
+		CXXFLAGS="-fno-rtti" \
+		ac_cv_func_pthread_cancel=no \
+		ac_cv_func_malloc_0_nonnull=yes \
+		ac_cv_func_memcmp_working=yes \
+		../configure \
+		  --target=$(GNU_TARGET_NAME) \
+		  --host=$(GNU_TARGET_NAME) \
+		  --build=$(GNU_HOST_NAME) \
+		  --program-prefix="" \
+		  --program-suffix="" \
+		  --prefix=/usr \
+		  --exec-prefix=/usr \
+		  --bindir=/usr/bin \
+		  --datadir=/usr/share \
+		  --includedir=/usr/include \
+		  --infodir=/usr/share/info \
+		  --libdir=/usr/lib \
+		  --libexecdir=/usr/lib \
+		  --localstatedir=/var \
+		  --mandir=/usr/share/man \
+		  --sbindir=/usr/sbin \
+		  --sysconfdir=/etc \
+		  $(DISABLE_LARGEFILE) \
+		  $(DISABLE_NLS) \
+		  --enable-shared \
+		  --disable-static \
+		  --disable-rpath \
+		  --disable-multicast \
+		  $$($(1)_CONFIGURE_OPTS) \
+	);
+	$(MAKE) -C $(PKG_BUILD_DIR)/$(2) \
+		DESTDIR="$(PKG_INSTALL_DIR)/$(1)" \
+		all install
+
+$$(IPKG_$(1)): $(PKG_BUILD_DIR)/.installed $(PKG_BUILD_DIR)/$(2)
+	install -d -m0755 $$(IDIR_$(1))/usr/bin
+	install -m0755 $(PKG_INSTALL_DIR)/$(1)/usr/bin/iperf $$(IDIR_$(1))/usr/bin/
+	$(RSTRIP) $$(IDIR_$(1))
+	$(IPKG_BUILD) $$(IDIR_$(1)) $(PACKAGE_DIR)
+
+endef
+
+$(eval $(call PKG_template,IPERF,$(PKG_NAME),$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,IPERF_MT,$(PKG_NAME)-mt,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+
+$(eval $(call PKG_build,IPERF,$(PKG_NAME),$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_build,IPERF_MT,$(PKG_NAME)-mt,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+
+$(PKG_BUILD_DIR)/.configured:
+	touch $@
+
+$(PKG_BUILD_DIR)/.built: $(BUILD_TARGETS)
+	touch $@
+
+$(PKG_BUILD_DIR)/.installed: $(PKG_BUILD_DIR)/.built
+	touch $@

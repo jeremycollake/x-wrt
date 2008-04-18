@@ -49,6 +49,8 @@ package-$(BR2_PACKAGE_HTOP) += htop
 package-$(BR2_PACKAGE_HTPDATE) += htpdate
 package-$(BR2_PACKAGE_ID3LIB) += id3lib
 package-$(BR2_PACKAGE_IPKG) += ipkg
+package-$(BR2_PACKAGE_IPERF) += iperf
+package-$(BR2_PACKAGE_IPERF_MT) += iperf
 package-$(BR2_PACKAGE_IPKG_UPGRADE_FIX) += ipkg-upgrade-fix
 package-$(BR2_PACKAGE_IPROUTE2) += iproute2
 package-$(BR2_PACKAGE_IPTABLES) += iptables
@@ -216,6 +218,7 @@ gdb-compile: ncurses-compile
 gmediaserver-compile: libpthread-compile id3lib-compile libiconv-compile file-compile libupnp-compile
 htop-compile: ncurses-compile
 id3lib-compile: uclibcxx-compile zlib-compile
+iperf-compile: uclibcxx-compile libpthread-compile
 jpeg-compile: libtool-compile
 kismet-compile: uclibcxx-compile libpcap-compile ncurses-compile
 lcd4linux-compile: ncurses-compile

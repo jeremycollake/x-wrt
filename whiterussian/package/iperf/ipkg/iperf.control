@@ -1,0 +1,11 @@
+Package: iperf
+Priority: optional
+Section: net
+Depends: uclibcxx
+Description: Internet Protocol bandwidth measuring tool (single threaded)
+ Iperf is a modern alternative for measuring TCP and UDP bandwidth 
+ performance, allowing the tuning of various parameters and 
+ characteristics.
+ This package is built with the single thread support.
+ .
+ http://dast.nlanr.net/Projects/Iperf/

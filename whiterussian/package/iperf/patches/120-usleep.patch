@@ -1,0 +1,23 @@
+diff -NarU5 iperf-2.0.2.orig/compat/Thread.c iperf-2.0.2/compat/Thread.c
+--- iperf-2.0.2.orig/compat/Thread.c	2005-05-03 11:15:51.000000000 -0400
++++ iperf-2.0.2/compat/Thread.c	2007-10-27 20:17:10.000000000 -0400
+@@ -403,13 +403,17 @@
+  * is not guarenteed to actually rest.
+  * ------------------------------------------------------------------- */
+ void thread_rest ( void ) {
+ #if defined( HAVE_THREAD )
+ #if defined( HAVE_POSIX_THREAD )
+-    // TODO add checks for sched_yield or pthread_yield and call that
+-    // if available
++
++#if defined( _POSIX_PRIORITY_SCHEDULING )
++    sched_yield();
++#else
+     usleep( 0 );
++#endif
++
+ #else // Win32
+     SwitchToThread( );
+ #endif
+ #endif
+ }
