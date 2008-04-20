@@ -15,7 +15,7 @@ if [ -n "$FORM_newfilter" ]; then
 else 
 	if [ -e "$filter_temp" ]; then
 		FORM_filtext=$(sed '/^filtext=/!d; s/^filtext=//' "$filter_temp" 2>/dev/null)
-		FORM_filtmode=$(sed '/^filmode=/!d; s/^filtmode=//' "$filter_temp" 2>/dev/null)
+		FORM_filtmode=$(sed '/^filtmode=/!d; s/^filtmode=//' "$filter_temp" 2>/dev/null)
 	fi
 fi
 if [ "$FORM_filtmode" != "include" -a "$FORM_filtmode" != "exclude" ]; then
