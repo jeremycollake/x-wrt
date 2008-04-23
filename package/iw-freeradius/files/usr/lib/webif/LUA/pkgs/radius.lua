@@ -278,15 +278,15 @@ function user_form()
       maxup = replys.WISPr_Bandwidth_Max_Up or ""
       form:New_row()
 
-      form:set_col("Username","freeradius_check."..name..".Username",name)
-      form:set_col("Password","freeradius_check."..name..".User_Password",password)
-      form:set_col("Expiration","freeradius_check."..name..".Expiration",expiration)
+      form:set_col("Username","freeradius_check."..name..".Username", name)
+      form:set_col("Password","freeradius_check."..name..".User_Password", password)
+      form:set_col("Expiration","freeradius_check."..name..".Expiration", expiration)
       form:set_col("FallThrough", "freeradius_reply."..name..".Fall_Through", fall)
       form:set_col("Simultaneous", "freeradius_check."..name..".Simultaneous_Use", simul)
       form:set_col("IdleTimeout", "freeradius_reply."..name..".Idle_Timeout", itimeout)
       form:set_col("AcctInterimInt", "freeradius_reply."..name..".Acct_Interim_Interval", acctii)
       form:set_col("MaxDown", "freeradius_reply."..name..".WISPr_Bandwidth_Max_Down", maxdown)
-      form:set_col("MaxUp", "freeradius_reply."..name..".WISPr_Bandwidth_Max_Down", maxup)
+      form:set_col("MaxUp", "freeradius_reply."..name..".WISPr_Bandwidth_Max_Up", maxup)
       form:set_col("Remove", "Remove_"..name, __SERVER.SCRIPT_NAME.."?".."UCI_CMD_delfreeradius_check."..name.."=&UCI_CMD_delfreeradius_reply."..name.."=&__menu="..__FORM.__menu)
     end
   end

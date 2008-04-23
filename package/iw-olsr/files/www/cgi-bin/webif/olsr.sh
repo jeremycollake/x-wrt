@@ -2,7 +2,8 @@
 --[[
 ##WEBIF:name:IW:400:OLSR
 ]]--
-dofile("/usr/lib/webif/LUA/config.lua")
+--dofile("/usr/lib/webif/LUA/config.lua")
+require("init")
 local olsr_pkg = pkgInstalledClass.new("olsrd",true)
 require("olsr")
 --olsr = uciClass.new("olsr")

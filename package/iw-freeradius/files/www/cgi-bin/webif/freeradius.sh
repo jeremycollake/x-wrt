@@ -2,7 +2,8 @@
 --[[
 ##WEBIF:name:IW:250:Freeradius
 ]]--
-dofile("/usr/lib/webif/LUA/config.lua")
+--dofile("/usr/lib/webif/LUA/config.lua")
+require("init")
 local chillispot_pkg = pkgInstalledClass.new("libltdl,freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm",true)
 
 require("radius")

@@ -20,7 +20,8 @@
 -- config.lua 
 -- LUA settings and load some functions files
 -- 
-dofile("/usr/lib/webif/LUA/config.lua")
+--dofile("/usr/lib/webif/LUA/config.lua")
+require("init")
 require("coovaportal")
 -- pageClass is part of the framework 
 page.title = tr("chilli_main_title#Coova-Chilli")
