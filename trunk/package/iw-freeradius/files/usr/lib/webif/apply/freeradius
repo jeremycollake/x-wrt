@@ -1,18 +1,59 @@
-#!/usr/bin/lua
---------------------------------------------------------------------------------
--- freeradius apply handler
--- Author(s) [in order of work date]:
---       Fabián Omar Franzotti
---         
--- Configuration files referenced:
---    freeradius
---   
---
---------------------------------------------------------------------------------
-print ("Committing Freeradius")
-os.execute("uci commit freeradius")
-os.execute("rm /tmp/.uci/freeradius")
-local radiusd_str = [[
+require("iw-uci")
+require("iwuci")
+
+parser = {}
+local P = {}
+parser = P
+-- Import Section:
+-- declare everything this package needs from outside
+local io = io
+local wwwprint = wwwprint
+if wwwprint == nil then wwwprint=print end
+local oldprint = oldprint
+local table = table
+local pairs = pairs
+local iwuci = iwuci
+local uciClass = uciClass
+local tonumber = tonumber
+
+local freeradius = uciClass.new("freeradius")
+-- no more external access after this point
+setfenv(1, P)
+
+enable    = tonumber(freeradius.webadmin.enable)    or 0
+userlevel = tonumber(freeradius.webadmin.userlevel) or 0
+reboot    = false                -- reboot device after all apply process
+
+name = "Freeradius"
+script = "radiusd"
+init_script = "/etc/init.d/radiusd"
+
+function process()
+  wwwprint(name.." Parsers...")
+  iwuci.commit("freeradius")
+  freeradius = uciClass.new("freeradius")
+
+  if tonumber(freeradius.webadmin.userlevel) < 4 then
+    wwwprint("Checking freeradius dictionary to chilli")
+    local write_file
+    if io.exists("/usr/share/freeradius/dictionary") then
+      local dict = io.totable("/usr/share/freeradius/dictionary",true)
+      wwwprint("Updating /usr/share/freeradius/dictionary")
+      if dict[1] ~= "$INCLUDE dictionary.chillispot" then
+        table.insert(dict,1,"$INCLUDE dictionary.chillispot")
+      end
+      write_file = io.open("/usr/share/freeradius/dictionary","w")
+      write_file:write(table.concat(dict,'\n'))
+      write_file:close()
+    end
+    write_config()
+  end
+
+end
+
+function write_config()
+  local conf_file = "/etc/freeradius/radiusd.conf"
+  local conf_str  = [[######
 prefix = /usr
 exec_prefix = /usr
 sysconfdir = /etc
@@ -329,26 +370,11 @@ post-proxy {
 }
 
 ]]
-print ("Committing Freeradius...")
-os.execute("uci commit freeradius")
-local freeradius = uciClass.new("freeradius")
-if tonumber(freeradius.webadmin.userlevel) < 4 then
-  print ("Writing radiusd.conf")
-  if io.exists("/usr/share/freeradius/dictionary") then
-    local dict = io.totable("/usr/share/freeradius/dictionary",true)
-    if dict[1] ~= "$INCLUDE dictionary.chillispot" then
-      table.insert(dict,1,"$INCLUDE dictionary.chillispot")
-    end
-    pepe = io.open("/usr/share/freeradius/dictionary","w")
-    pepe:write(table.concat(dict,'\n'))
-    pepe:close()
-  end
-  local pepe = io.open("/etc/freeradius/radiusd.conf","w")
-  pepe:write(radiusd_str)
-  pepe:close()
+
+  wwwprint ("Writing config file "..conf_file)
+  local write_file = io.open(conf_file,"w")
+  write_file:write(conf_str)
+  write_file:close()
 end
-__RESTART["radiusd"] = {}
-__RESTART["radiusd"]["pkg"] = "freeradius"
-__RESTART["radiusd"]["cfg"] = "webadmin"
-__RESTART["radiusd"]["opt"] = "enable"
-__RESTART["radiusd"]["init"] = "/etc/init.d/radiusd"
+
+return parser

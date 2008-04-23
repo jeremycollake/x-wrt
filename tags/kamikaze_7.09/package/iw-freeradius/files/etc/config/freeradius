@@ -1,4 +1,5 @@
 config "websettings" "webadmin"
 	option enable	'1'
 	option mode	'0'
+	option userlevel	'1'
 

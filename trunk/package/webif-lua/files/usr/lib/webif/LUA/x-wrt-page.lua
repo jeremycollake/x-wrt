@@ -31,10 +31,12 @@ function pageClass.new (title)
 end 
 
 function pageClass:Init()
+--[[
 	if __FORM.__ACTION=="clear_changes"  then __UCI_UPDATED:clear(self)  end
-	if __FORM.__ACTION=="apply_changes" then __UCI_UPDATED:apply(self) end
+	if __FORM.__ACTION=="apply_changes"  then __UCI_UPDATED:apply(self) end
 	if __FORM.__ACTION=="review_changes" then __UCI_UPDATED:review(self) end
 --	if __FORM.__ACTION==tr("Save Changes") then config:save(self) end
+]]--
 end
 
 function pageClass:print()

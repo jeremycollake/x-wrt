@@ -104,8 +104,8 @@ end
 
 function commit(pkg)
   os.execute("uci commit "..pkg)
---  os.execute("rm /tmp/.uci/"..pkg)
-  os.execute("rm /tmp/.uci/"..pkg..".lock")
+  os.execute("rm /tmp/.uci/"..pkg.." 2>/dev/null")
+  os.execute("rm /tmp/.uci/"..pkg..".lock 2>/dev/null")
 end
 
 function rename(pkg,config,name)

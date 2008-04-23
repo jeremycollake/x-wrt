@@ -1,4 +1,6 @@
-config "websettings" "webadmin"
-	option enable	'1'
-	option mode	'0'
+
+config 'websettings' 'webadmin'
+	option 'enable' '1'
+	option 'userlevel' '1'
+	option 'mode' '0'
 

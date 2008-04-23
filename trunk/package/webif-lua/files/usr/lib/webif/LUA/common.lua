@@ -79,7 +79,7 @@ end
 function io.totable(filename,clean)
   local t = {}
 	local data, f = load_file(filename)
-	if f == true then
+	if f ~= false then
     if clean then
       for i,v in pairs(string.split(data,'\n')) do
         if string.find(string.trim(v),"#",1,true) ~= 1 then 

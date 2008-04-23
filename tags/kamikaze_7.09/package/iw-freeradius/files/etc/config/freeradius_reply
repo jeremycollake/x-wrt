@@ -6,6 +6,7 @@ config "default" "default"
 	option WISPr_Bandwidth_Max_Down	'512000'
 	option WISPr_Bandwidth_Max_Up	'25600'
 
-
+config "user" "pepe"
+	option Fall_Through	'yes'
 
 
