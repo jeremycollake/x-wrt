@@ -91,7 +91,7 @@ function uciUpdatedClass:countUpdated()
 	end
 end
 
-function uciUpdatedClass:review(page)
+function uciUpdatedClass:review()
 	__MENU.selected = string.gsub(__SERVER.REQUEST_URI,"(.*)_changes&(.*)","%2")
 	page.title = tr("Review Changes").." ("..self.count..")"
 --	page.action_apply = ""
@@ -114,7 +114,9 @@ function uciUpdatedClass:review(page)
 	os.exit()
 end
 
-function uciUpdatedClass:apply(page)
+function uciUpdatedClass:apply()
+  dofile("/usr/lib/webif/LUA/apply.lua")
+--[[
   __RESTART = {}
 	self.count = 0
 	__MENU.selected = string.gsub(__SERVER.REQUEST_URI,"(.*)_changes&(.*)","%2")
@@ -174,6 +176,7 @@ function uciUpdatedClass:apply(page)
 --        end
       end
       myexec:close()
+      if t.first then t.first() end
       print ("Starting "..i.." service...<br>")
       io.stdout:flush()
       os.execute(t.init.." start > /tmp/start")
@@ -185,6 +188,7 @@ function uciUpdatedClass:apply(page)
 --        end
       end
 --      mystart:close()
+      if t.after then t.after() end
     else
       myexec = io.popen(t.init.." stop")
       print ("Stopping "..i.." service...<br>")
@@ -214,10 +218,11 @@ function uciUpdatedClass:apply(page)
  	print (form:endForm())
 	changes_apply:close()
 	print(page:footer())
+]]--
 	os.exit()
 end
 
-function uciUpdatedClass:clear(page)
+function uciUpdatedClass:clear()
 	__MENU.selected = string.gsub(__SERVER.REQUEST_URI,"(.*)_changes&(.*)","%2")
 	page.title = tr("Clear Changes").." ("..self.count..")"
 --	page.action_apply = ""
