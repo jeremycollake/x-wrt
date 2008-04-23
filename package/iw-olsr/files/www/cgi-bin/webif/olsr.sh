@@ -2,14 +2,16 @@
 --[[
 ##WEBIF:name:IW:400:OLSR
 ]]--
-dofile("/usr/lib/webif/LUA/config.lua")
+--dofile("/usr/lib/webif/LUA/config.lua")
+require("init")
 local olsr_pkg = pkgInstalledClass.new("olsrd",true)
 require("olsr")
 --olsr = uciClass.new("olsr")
 forms = {}
+__WIP=2
 olsrd.set_menu()
 local option = string.trim(__FORM.option)
-page.title = "OLSR Settings"
+page.title = "OLSR"
 if option == "" then option = "service" end
 if option == "service" then
   forms[1] = olsrd.core_form()
@@ -19,6 +21,14 @@ elseif option == "hna4" then
   forms[1] = olsrd.hna4_form()
 elseif option == "interfaces" then
   forms[1] = olsrd.interfaces_form()
+elseif option == "status" then
+  page.__DOCTYPE = ""
+  page.form = ""
+  forms[1] = olsrd.status_form()
+elseif option == "viz" then
+  page.__DOCTYPE = ""
+  page.form = ""
+  forms[1] = olsrd.viz_form()
 else
   form.title = __FORM.option.." ".. form.title
 end

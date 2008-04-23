@@ -32,35 +32,38 @@ local tbformClass = tbformClass
 -- no more external access after this point
 setfenv(1, P)
 local hotspot = uciClass.new("chilli")
-local service = hotspot.service or hotspot:set("chilli","service")
+local service = hotspot.service or hotspot:set("websettings","service")
 local userlevel = tonumber(hotspot.service.userlevel) or 0
 local portal = tonumber(hotspot.service.portal) or 0
 local users = tonumber(hotspot.service.users) or 0
 
 function set_menu()
-  
   __MENU.IW["Coova-Chilli"] = menuClass.new()
   __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Core#Core","coova-chilli.sh")
-  __MENU.IW["Coova-Chilli"]:Add("chilli_menu_DHCP#Network","coova-chilli.sh?option=net")
+  if userlevel > 1 then
+    __MENU.IW["Coova-Chilli"]:Add("chilli_menu_DHCP#Network","coova-chilli.sh?option=net")
 --  if portal > 0 then
-    __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Portal#Portal","coova-chilli.sh?option=uam")
+      __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Portal#Portal","coova-chilli.sh?option=uam")
 --  end
-  if users == 0 then
-    __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Radius#Radius","coova-chilli.sh?option=radius")
+    if users == 0 then
+      __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Radius#Radius","coova-chilli.sh?option=radius")
+    end
+    __MENU.IW["Coova-Chilli"]:Add("chilli_menu_NasId#NAS ID","coova-chilli.sh?option=nasid")
   end
-  __MENU.IW["Coova-Chilli"]:Add("chilli_menu_NasId#NAS ID","coova-chilli.sh?option=nasid")
   if users == 1
   or users == 3 then 
     __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Users#Users","coova-chilli.sh?option=users")
   end
-  if users == 2
-  or users == 3 then
+  if users > 1 then
     __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Communities#Communities","coova-chilli.sh?option=communities")
   end
-  __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Connections#Connections","coova-chilli.sh?option=connections")
---  __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Access#Access","coova-chilli.sh?option=access")
---  __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Proxy#Proxy","coova-chilli.sh?option=proxy")
---  __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Scripts#Extras","coova-chilli.sh?option=extras")
+  if tonumber(hotspot.service.enable) == 1 then
+    __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Connections#Connections","coova-chilli.sh?option=connections")
+  end
+--    __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Access#Access","coova-chilli.sh?option=access")
+--    __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Proxy#Proxy","coova-chilli.sh?option=proxy")
+--    __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Scripts#Extras","coova-chilli.sh?option=extras")
+  
   __WIP = 4
 end
 
@@ -68,28 +71,43 @@ function core_form()
   local service = {}
   service["values"] = hotspot.service or hotspot:set("chilli","service")
   service["name"] = hotspot.__PACKAGE..".service"
+  local network = {}
+  network["values"] = hotspot.network or hotspot:set("chilli","network")
+  network["name"] = hotspot.__PACKAGE..".network"
   cp_enable = service.values.enable or "0"
   cp_userlevel = service.values.userlevel or "0"
   cp_portal = service.values.portal or "0"
-  cp_users = service.values.users or "0"
+  cp_users = service.values.users or "1"
+
+
   form = formClass.new(tr("chilli_title_service#Service"))
 	form:Add("select",service.name..".enable",cp_enable,tr("chilli_var_service#Service"),"string")
 	form[service.name..".enable"].options:Add("0","Disable")
 	form[service.name..".enable"].options:Add("1","Enable")
+
 	form:Add("select",service.name..".userlevel",cp_userlevel,tr("userlevel#User Level"),"string")
 	form[service.name..".userlevel"].options:Add("0","Select Mode")
 	form[service.name..".userlevel"].options:Add("1","Beginer")
-	form[service.name..".userlevel"].options:Add("2","Advanced")
-	form[service.name..".userlevel"].options:Add("3","Expert")
-	form:Add("select",service.name..".portal",cp_portal,tr("portal#Portal Settings"),"string")
---	form[service.name..".portal"].options:Add("0","Coova Server")
-	form[service.name..".portal"].options:Add("1","Remote Server")
-	form[service.name..".portal"].options:Add("2","Internal Server")
-	form:Add("select",service.name..".users",cp_users,tr("authentication_users#Authenticate Users Mode"),"string")
-	form[service.name..".users"].options:Add("0","Remote Radius")
-	form[service.name..".users"].options:Add("1","Local Radius Users")
-	form[service.name..".users"].options:Add("2","Communities Users")
-	form[service.name..".users"].options:Add("3","Remote & Local Users")
+	form[service.name..".userlevel"].options:Add("2","Medium")
+	form[service.name..".userlevel"].options:Add("3","Advanced")
+	form[service.name..".userlevel"].options:Add("4","Expert")
+  if userlevel > 1 then
+  	form:Add("select",service.name..".portal",cp_portal,tr("portal#Portal Settings"),"string")
+--  	form[service.name..".portal"].options:Add("0","Coova Server")
+    form[service.name..".portal"].options:Add("2","Internal Server")
+    form[service.name..".portal"].options:Add("1","Remote Server")
+
+    form:Add("select",service.name..".users",cp_users,tr("authentication_users#Authenticate Users Mode"),"string")
+    form[service.name..".users"].options:Add("1","Local Radius Users")
+    form[service.name..".users"].options:Add("0","Remote Radius")
+    form[service.name..".users"].options:Add("2","Communities Users")
+    form[service.name..".users"].options:Add("3","Remote & Local Users")
+  end
+  form:Add("select",network.name..".HS_LANIF",network.values.HS_LANIF,tr("cportal_var_device#Device Network"),"string")
+  for k, v in pairs(net.wireless()) do
+    form[network.name..".HS_LANIF"].options:Add(k,k)
+  end    
+   
   return form
 end
 
@@ -97,7 +115,7 @@ function net_form(form,user_level,localuam)
   local user_level = user_level or userlevel
   local form = form
   local network = {}
-  network["values"] = hotspot.network
+  network["values"] = hotspot.network or hotspot:set("chilli","network")
   network["name"] = hotspot.__PACKAGE..".network"
   if form == nil then
     form = formClass.new(tr("Network Settings"))
@@ -127,6 +145,7 @@ function net_form(form,user_level,localuam)
   for k, v in pairs(dev) do
     form[network.name..".HS_LANIF"].options:Add(k,k)
   end
+--[[
   if localuam == 2 then
     form:Add("hidden",network.name..".HS_DNS_DOMAIN",cp_HS_DNS_DOMAIN)
     form:Add("hidden",network.name..".HS_NETWORK",cp_HS_NETWORK)
@@ -136,7 +155,8 @@ function net_form(form,user_level,localuam)
     form:Add("hidden",network.name..".HS_DNS2",cp_HS_DNS2)
     return form
   end
-  if user_level > 1 then
+]]--
+--  if user_level > 1 then
 --[[
     form:Add("select", network.name..".HS_WANIF", cp_HS_WANIF,tr("cportal_var_wan#WAN Device"),"string")
   for k, v in pairs(ifname("wan")) do
@@ -155,6 +175,7 @@ function net_form(form,user_level,localuam)
     form:Add("text", network.name..".HS_DYNIP_MASK", cp_HS_DYNIP_MASK,tr("cportal_var_staticip#Dynamic IP Mask"),"string")
     form:Add("text", network.name..".HS_DNS1", cp_HS_DNS1,tr("cportal_var_dns#DNS Server").." 1","string")
     form:Add("text", network.name..".HS_DNS2", cp_HS_DNS2,tr("cportal_var_dns#DNS Server").." 2","string")
+--[[
   else
     form:Add("hidden", network.name..".HS_WANIF", "")
     form:Add("hidden", network.name..".HS_DNS_DOMAIN", cp_HS_DNS_DOMAIN)
@@ -169,6 +190,7 @@ function net_form(form,user_level,localuam)
     form:Add("hidden", network.name..".HS_DNS1", cp_HS_DNS1)
     form:Add("hidden", network.name..".HS_DNS2", cp_HS_DNS2)
   end
+]]--
   return form
 end
   
@@ -177,7 +199,7 @@ function radius_form(form,user_level,localrad)
   local user_level = user_level or 0
   local localrad = localrad or 0
   local radius = {}
-  radius["values"] = hotspot.radius
+  radius["values"] = hotspot.radius or hotspot:set("chilli","radius")
   radius["name"] = hotspot.__PACKAGE..".radius"
   
   cp_HS_RADIUS = radius.values.HS_RADIUS
@@ -225,10 +247,10 @@ end
 
 function nasid_form(form,user_level)
   local form = form
-  local user_level = user_level or 0
+  local user_level = user_level or userlevel
   local nas = {}
   nas["values"] = hotspot.nasid or hotspot:set("chilli","nasid") 
-  nas["name"] = hotspot.__PACKAGE..".nas"
+  nas["name"] = hotspot.__PACKAGE..".nasid"
   if form == nil then
     form = formClass.new(tr("Captive Portal - NAS Identification"))
   else
@@ -242,12 +264,12 @@ function nasid_form(form,user_level)
   cp_HS_LOC_ISOCC = nas.values.HS_LOC_ISOCC
 
 --  form:Add("subtitle",tr("NAS Identification"))
-	form:Add("text",nas.name..".HS_NASID",       cp_HS_NASID,tr("cportal_var_radiusnasid#NAS ID"),"string")
-  form:Add("text",nas.name..".HS_LOC_NAME",    cp_HS_LOC_NAME,tr("cportal_var_radiusnasip#Location Name"),"string")
-	form:Add("text",nas.name..".HS_LOC_NETWORK", cp_HS_LOC_NETWORK,tr("cportal_var_radiusnasporttype#Network name"),"string")
-	form:Add("text",nas.name..".HS_LOC_AC",      cp_HS_LOC_AC,tr("cportal_var_radiuslocationid#Phone area code"),"string")
-	form:Add("text",nas.name..".HS_LOC_CC",      cp_HS_LOC_CC,tr("cportal_var_radiuslocationname#Phone country code"),"string")
-	form:Add("text",nas.name..".HS_LOC_ISOCC",   cp_HS_LOC_ISOCC,tr("cportal_var_isocc#ISO Country code"),"string")
+	form:Add("text",nas.name..".HS_NASID",cp_HS_NASID,tr("cportal_var_radiusnasid#NAS ID"),"string")
+  form:Add("text",nas.name..".HS_LOC_NAME",cp_HS_LOC_NAME,tr("cportal_var_radiusnasip#Location Name"),"string")
+	form:Add("text",nas.name..".HS_LOC_NETWORK",cp_HS_LOC_NETWORK,tr("cportal_var_radiusnasporttype#Network name"),"string")
+	form:Add("text",nas.name..".HS_LOC_AC",cp_HS_LOC_AC,tr("cportal_var_radiuslocationid#Phone area code"),"string")
+	form:Add("text",nas.name..".HS_LOC_CC",cp_HS_LOC_CC,tr("cportal_var_radiuslocationname#Phone country code"),"string")
+	form:Add("text",nas.name..".HS_LOC_ISOCC",cp_HS_LOC_ISOCC,tr("cportal_var_isocc#ISO Country code"),"string")
   return form
 end
 
@@ -276,7 +298,7 @@ function uam_form(form,user_level,localuam)
   local user_level = user_level or userlevel
   local localuam = localuam or portal
   local uam = {}
-  uam["values"] = hotspot.uam
+  uam["values"] = hotspot.uam or hotspot:set("chilli","uam")
   uam["name"] = hotspot.__PACKAGE..".uam"
   
   cp_HS_UAMSERVER   = uam.values.HS_UAMSERVER or "192.168.182.1"
@@ -321,7 +343,7 @@ function extras_form()
   local user_level = user_level or 0
   local localuam = localuam or 0
   local extras = {}
-  extras["values"] = hotspot.extas
+  extras["values"] = hotspot.extas or hotspot:set("chilli","extras")
   extras["name"] = hotspot.__PACKAGE..".extras"
 
   cp_HS_RADCONF     = extras.values.HS_RADCONF or "off"
