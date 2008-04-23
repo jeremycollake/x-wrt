@@ -20,7 +20,6 @@
 -- config.lua 
 -- LUA settings and load some functions files
 -- 
---dofile("/usr/lib/webif/LUA/config.lua")
 require("init")
 require("coovaportal")
 -- pageClass is part of the framework 
@@ -38,7 +37,7 @@ elseif __FORM.option == "radius" then
 elseif __FORM.option == "nasid" then
   forms[1] = cportal.nasid_form()
 elseif __FORM.option == "users" then
-  local freeradius_pkg = pkgInstalledClass.new("freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm",true)
+  local freeradius_pkg = pkgInstalledClass.new("libltdl,freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm",true)
   require("radius")
   forms[1] = radius.add_usr_form()
   forms[2] = radius.user_form()
@@ -49,6 +48,8 @@ elseif __FORM.option == "communities" then
 elseif __FORM.option == "connections" then
   page.savebutton = ""
   forms[1] = cportal.connect_form()
+elseif __FORM.bt_pkg_install == "Install" then
+  local freeradius_pkg = pkgInstalledClass.new("libltdl,freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm",true)
 else
   forms[1] = cportal.core_form()
 end
@@ -57,4 +58,9 @@ print(page:header())
 for i=1, #forms do
   forms[i]:print()
 end
+--[[
+for i,v in pairs(__FORM) do
+  print(i,v,"<br>")
+end
+]]--
 print (page:footer())

@@ -31,10 +31,12 @@ function pageClass.new (title)
 end 
 
 function pageClass:Init()
+--[[
 	if __FORM.__ACTION=="clear_changes"  then __UCI_UPDATED:clear(self)  end
-	if __FORM.__ACTION=="apply_changes" then __UCI_UPDATED:apply(self) end
+	if __FORM.__ACTION=="apply_changes"  then __UCI_UPDATED:apply(self) end
 	if __FORM.__ACTION=="review_changes" then __UCI_UPDATED:review(self) end
 --	if __FORM.__ACTION==tr("Save Changes") then config:save(self) end
+]]--
 end
 
 function pageClass:print()
@@ -116,14 +118,21 @@ return header
 end
 
 function pageClass:footer()
-	local key, val = "", "" 
+--	local key, val = "", "" 
 	local str = "<div class=\"page-save\">"
 --	str = str .. [[<input type="hidden" name="__PREVIUS_PAGE" value="]]..menu.selected..[[" />]]
+--  print(__MENU.selected,"<br>")
 	for line in string.gmatch(__MENU.selected,"[^&]+") do
-		key, val = unpack(string.split(line,"="))
-		key = string.trim(key)
-		val = string.trim(val)
---		print ("<br>",key,val)
+    line = string.trim(string.gsub(line,"amp;",""))
+--    print (line,"<br>")
+    local _, _, key, val = string.find(line,"(.+)%s*=%s*(.+)")
+--		print (key,val," Obtuvo<br>")
+--    local t = string.split(line,"=")
+--    print(t[1],t[2],"<br>")
+--		key, val = unpack(string.split(line,"="))
+--		key = string.trim(t[1])
+--		val = string.trim(t[2])
+--		print (key,val," Anduvo<br>")
 		str = str .. [[<input type="hidden" name="]]..key..[[" value="]]..val..[[" />]]
 	end
 	if self.savebutton == nil then
