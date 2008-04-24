@@ -27,12 +27,12 @@
 ]]--
 
 --[[
-##WEBIF:name:HotSpot:100:Wizard
+##WEBIF:name:IW:150:Wizard
 ]]--
 -- config.lua 
 -- LUA settings and load some functions files
 -- 
-require("init")
+dofile("/usr/lib/webif/LUA/config.lua")
 --require("tbform")
 --require("radius")
 --require("captiveportal")
