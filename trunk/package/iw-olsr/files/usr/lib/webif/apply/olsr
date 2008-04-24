@@ -20,6 +20,7 @@ local uciClass = uciClass
 local net = net
 local tonumber = tonumber
 local os = os
+local tr = tr
 
 -- no more external access after this point
 setfenv(1, P)
@@ -120,7 +121,7 @@ end
 function write_config()
   local str_olsrconf = ""
   wwwprint ("Writing "..output_file)
-  local olsr = uciClass.new("olsr")
+--  olsr = uciClass.new("olsr")
   local set_netname = olsr.webadmin.netname or "olsrnet"
   local set_nodenumber = olsr.webadmin.nodenumber or "1"
   local set_device = olsr.webadmin.device or "wl0"
@@ -129,15 +130,27 @@ function write_config()
 
   if network[set_netname] == nil then 
     network:set("interface",set_netname) end
-
-  local set_netaddr = olsr.webadmin.ipaddr or "10.128."..olsr.webadmin.nodenumber..".1"
+  wwwprint(tr("Setting networks"))
+  wwwprint(tr("Set device ")..set_netname)
+  local set_netaddr = olsr.webadmin.ipaddr or "10.128."..set_nodenumber..".1"
+  wwwprint(tr("Set ipaddress ")..set_netaddr)
+  
   local set_netmask = olsr.webadmin.netmask or "255.255.0.0"
+  wwwprint(tr("Set netmask ")..set_netmask)
   iwuci.set("network."..olsr.webadmin.netname..".ipaddr",set_netaddr)
   iwuci.set("network."..olsr.webadmin.netname..".netmask",set_netmask)
   iwuci.set("network."..olsr.webadmin.netname..".proto","static")
+  wwwprint(tr("Set proto static"))
 -- in some situations this need fix and put dynamic dns configuration from olsr network
   iwuci.set("network."..olsr.webadmin.netname..".dns","204.225.44.3")
   wififace = wireless["wifi-iface"]
+  wwwprint(tr("Setting Wireless "))
+  wwwprint(tr("Set SSID ")..set_ssid)
+  wwwprint(tr("Set Network ")..set_netname)
+  wwwprint(tr("Set Mode ").."AdHoc")
+  wwwprint(tr("Set Channel ")..set_channel)
+  wwwprint(tr("Enabling Wireless"))
+
   for i=1, #wififace do
     if wififace[i].values.device == set_device then
       iwuci.set(wififace[i].name..".ssid",set_ssid)
@@ -148,8 +161,10 @@ function write_config()
       break
     end
   end
+  iwuci.commit("olsrd")
   iwuci.commit("network")
   iwuci.commit("wireless")
+  olsr = uciClass.new("olsr")
   if tonumber(olsr.webadmin.userlevel) < 2 then
     str_olsrconf = [[
 DebugLevel 0

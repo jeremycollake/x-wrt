@@ -15,8 +15,8 @@ config 'olsr' 'general'
 config 'LoadPlugin' 'arprefresh'
 	option 'Library' 'olsrd_arprefresh.so.0.1'
 
-config 'LoadPlugin' 'dyn_gw_plain'
-	option 'Library' 'olsrd_dyn_gw_plain.so.0.4'
+config 'LoadPlugin' 'dyn_gw'
+	option 'Library' 'olsrd_dyn_gw.so.0.4'
 
 config 'LoadPlugin' 'nameservice'
 	option 'Library' 'olsrd_nameservice.so.0.3'
@@ -40,7 +40,7 @@ config 'Interface'
 	option 'HnaInterval' '18.0'
 	option 'HnaValidityTime' '108.0'
 
-config 'websettings' 'webadmin'
+config "websettings" "webadmin"
 	option 'enable' '1'
 	option 'userlevel' '1'
 	option 'netname' 'olsrnet'

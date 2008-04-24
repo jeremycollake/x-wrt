@@ -1,8 +1,5 @@
 --[[
     Availables functions
-    check_pkg
-    core_form
-    community_form
 
 ]]--
 require("net")
@@ -75,7 +72,7 @@ function core_form()
   form:Add("select",websettings[1].name..".enable",websettings_values.enable,"Service","string")
 	form[websettings[1].name..".enable"].options:Add("0","Disable")
 	form[websettings[1].name..".enable"].options:Add("1","Enable")
-	form:Add_help(tr("olsr_msg#Olsr"),tr([[olsr_help_msg#OLSR is a great routing protocol.<br>
+	form:Add_help(tr("olsr_msg#Olsr"),tr([[olsr_help_msg#OLSR is a great routing protocol.<br />
     Remember set all Access Point in Ad-hoc mode, the same ESSID at everyone and
     thoes IP in same subnet "10.128.1.1" mask "255.255.0.0" 
     ]]))
@@ -87,15 +84,15 @@ function core_form()
 --	form[websettings[1].name..".userlevel"].options:Add("2","Advanced")
 	form[websettings[1].name..".userlevel"].options:Add("3","Expert")
 	form:Add_help(tr("_var_mode#Configuration Mode"),tr("_help_mode#"..[[
-          Select mode of configuration page.<br>
-          <strong>Beginer :</strong><br>
+          Select mode of configuration page.<br />
+          <strong>Beginer :</strong><br />
           This basic mode write the propers configuration files.
-          <br><br>
-          <strong>Expert :</strong><br>
+          <br /><br />
+          <strong>Expert :</strong><br />
           This mode keep your configurations file and you edit they by your self.
           ]]))
   form:Add("text",websettings[1].name..".netname",websettings_values.netname,tr("olsrdNetName#OLSR Net Name"),"string")
-  form:Add("text",websettings[1].name..".nodenumber",websettings_values.nodenumber,tr("olsrdNodeNum#OLSR Node Number"),"int,>0,<255")
+  form:Add("text",websettings[1].name..".nodenumber",websettings_values.nodenumber,tr("olsrdNodeNum#OLSR Node Number"))
   form:Add("select",websettings[1].name..".device",websettings_values.device,tr("cportal_var_device#Device Network"),"string")
   for k, v in pairs(net.wireless()) do
     form[websettings[1].name..".device"].options:Add(k,k)
