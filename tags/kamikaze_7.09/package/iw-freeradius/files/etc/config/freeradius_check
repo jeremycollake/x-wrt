@@ -2,8 +2,8 @@
 config "default" "default"
 	option Simultaneous_Use	'1'
 
-config "user" "pepe"
-	option User_Password	'trueno'
+config "user" "steve"
+	option User_Password	'testing123'
 
 
 

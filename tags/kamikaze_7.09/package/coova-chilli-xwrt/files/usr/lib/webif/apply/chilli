@@ -26,7 +26,10 @@ radiususers = tonumber(hotspot.service.users) or 0
 
 reboot = false                -- reboot device after all apply process
 --exe_before = {} -- execute os process in this table before any process
---exe_after  = {} -- execute os process after all apply process
+exe_after  = {} -- execute os process after all apply process
+if radiususers > 0 then
+  exe_after["/etc/init.d/radiusd restart"]="freeradius"
+end
 script = "chilli"
 init_script = "/etc/init.d/chilli"
 
