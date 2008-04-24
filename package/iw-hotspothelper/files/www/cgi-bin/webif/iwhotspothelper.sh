@@ -33,9 +33,9 @@
 -- LUA settings and load some functions files
 -- 
 dofile("/usr/lib/webif/LUA/config.lua")
-require("tbform")
-require("radius")
-require("captiveportal")
+--require("tbform")
+--require("radius")
+--require("captiveportal")
 
 function about()
 	form = formClass.new(tr("About"))
