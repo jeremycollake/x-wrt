@@ -30,7 +30,7 @@ reboot = false                -- reboot device after all apply process
 script = "chilli"
 init_script = "/etc/init.d/chilli"
 
-depends_pkgs = "freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm,iw-freeradius"
+depends_pkgs = "libltdl,freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm,iw-freeradius"
 
 function process()
   if userlevel < 2 then basic_settings() end

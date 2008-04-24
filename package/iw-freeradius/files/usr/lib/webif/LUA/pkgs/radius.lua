@@ -76,17 +76,17 @@ function core_form()
 ----	Help section	
 	form:Add_help(tr("freeradius_var_service#Service"),tr("freeradius_help_service#Turns freeradius server enable or disable"))
 	form:Add_help(tr("freeradius_var_mode#Configuration Mode"),tr("freeradius_help_mode#"..[[
-          Select mode of configuration page.<br/>
+          Select mode of configuration page.<br>
           Freeradius have many configurations param and they depend of modules 
           you install. So if want give access to your own users, maybe the users
           of other radis server and or control the access of some Hotspot, use
           the basic configuration mode in other case you need know about freeradius
-          configuration and edit the files that you need change.<br/><br/>
-          <strong>Beginer :</strong><br/>
+          configuration and edit the files that you need change.<br><br>
+          <strong>Beginer :</strong><br>
           This basic mode write the propers configuration files to create, modify and delete,
           Users, Clients and Proxy to other radius.
-          <br/><br/>
-          <strong>Expert :</strong><br/>
+          <br><br>
+          <strong>Expert :</strong><br>
           This mode keep your configurations file and you edit they by your self.
           
           ]]))
@@ -125,7 +125,7 @@ function client_form()
   end
   form:Add("link","add_client",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_clients=client&__menu="..__FORM.__menu.."&option=client",tr("Add Client"))
   form:Add_help("client",[[
-      Defines a RADIUS client.  The format is 'client [hostname|ip-address]'<br/>
+      Defines a RADIUS client.  The format is 'client [hostname|ip-address]'<br>
       '127.0.0.1' is another name for 'localhost'.  It is enabled by default,
       to allow testing of the server after an initial installation.  If you
       are not going to be permitting RADIUS queries from localhost, we suggest
