@@ -58,13 +58,15 @@ done
 displaydns() {
 	local resconf form_dns_servers
 	resconf=$(cat /etc/dnsmasq.conf 2>/dev/null | grep "^resolv-file=" | cut -d'=' -f 2)
-	resconf="${resconf:-"/etc/resolv.conf"}"
-	form_dns_servers=$(awk '
-BEGIN { counter=1 }
-/nameserver/ {
-	print "field|@TR<<DNS Server>> " counter "|dns_server_" counter "\n string|" $2 "\n" 
-	counter+=1
-}' "$resconf" 2>/dev/null)
+	resconf="${resconf:-"/etc/resolv.conf /tmp/resolv.conf.auto"}"
+	resconf="`cat $resconf`"
+	counter=1
+	for dns_server in $resconf; do
+		form_dns_servers="$form_dns_servers
+field|@TR<<DNS Server>> ${counter}
+string|$dns_server"
+		let "counter+=1"
+	done
 	display_form <<EOF
 start_form|@TR<<DNS Servers>>
 $form_dns_servers
