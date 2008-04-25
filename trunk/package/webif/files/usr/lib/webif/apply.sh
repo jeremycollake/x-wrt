@@ -264,10 +264,10 @@ for package in $process_packages; do
 		"syslog")
 			echo '@TR<<Reloading>> @TR<<syslogd>> ...'
 			/etc/init.d/syslog restart >&- 2>&- ;;
-		"openvpn")
+		"webifopenvpn")
 			echo '@TR<<Reloading>> @TR<<OpenVPN>> ...'
 			killall openvpn >&- 2>&- <&-
-			uci_load "openvpn"
+			uci_load "webifopenvpn"
 			if [ "$CONFIG_general_mode" = "client" ]; then
 				/etc/init.d/webifopenvpn enable
 			else
