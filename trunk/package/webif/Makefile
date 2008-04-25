@@ -172,7 +172,7 @@ define Package/webif/install
 	rm -rf $(1)/www/themes/zephyr/
 	rm -rf $(1)/www/themes/xwrt-mini/
 	rm -rf $(1)/www/themes/sedky1/
-	rm -rf $(1)/www/themes/clubman/
+	rm -rf $(1)/www/themes/xwrt/
 	rm -f $(1)/www/cgi-bin/webif/*.wip
 	if [ "$(OPENWRTVERSION)" != "7.06 (Kamikaze)" ]; then \
 		rm -f $(1)/usr/lib/webif/fixed-functions.sh; \

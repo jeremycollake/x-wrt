@@ -57,13 +57,13 @@ DeleteRepository()
 # entry point
 
 # initialize default webif theme
-# create symlink to /www/themes/xwrt (do NOT use INSTROOT in first arg).
+# create symlink to /www/themes/clubman (do NOT use INSTROOT in first arg).
 rm -rf "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
-ln -sf "/www/themes/xwrt" "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
+ln -sf "/www/themes/clubman" "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
 [ $? != 0 ] && {
 	# if fs doesn't support symlinks, do a copy
 	mkdir -p "${IPKG_INSTROOT}/www/themes/active"
-	cp -r "${IPKG_INSTROOT}/www/themes/xwrt/" "${IPKG_INSTROOT}/www/themes/active/"
+	cp -r "${IPKG_INSTROOT}/www/themes/clubman/" "${IPKG_INSTROOT}/www/themes/active/"
 }
 
 # initialize webifmetabin binaries
@@ -107,12 +107,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 
 	# initialize ipkg.conf
 	uname -a |grep mips |grep 2.4 && cat /proc/cpuinfo |grep Broadcom
-	[ $? = 0 ] && {
-		#Delete incorrect kamikaze repo
-		if [ "$revision" = "7.07" ]; then
-			DeleteRepository "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/brcm-2.4/packages"
-		fi
-		
+	[ $? = 0 ] && {		
 		if [ "$revision" = "" ]; then
 			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/brcm-2.4/packages"
 		else
@@ -123,10 +118,6 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	[ $? = 0 ] && {
 		cat /proc/cpuinfo | grep BCM47xx && SYSTYPE="47xx"
 		cat /proc/cpuinfo | grep BCM63xx && SYSTYPE="63xx"
-		#Delete incorrect repo
-		if [ "$revision" = "7.07" ]; then
-			DeleteRepository "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/brcm${SYSTYPE}-2.6/packages"
-		fi
 		if [ -n $SYSTYPE ]; then
 			if [ "$revision" = "" ]; then
 				AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/brcm${SYSTYPE}-2.6/packages"
@@ -138,10 +129,6 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	}
 	uname -a |grep "2.6" |grep "i\?86"
 	[ $? = 0 ] && {
-		#Delete incorrect repo
-		if [ "$revision" = "7.07" ]; then
-			DeleteRepository "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/x86-2.6/packages"
-		fi
 		if [ "$revision" = "" ]; then
 			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/x86-2.6/packages"
 		else
@@ -150,10 +137,6 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	}
 	uname -a |grep mips |grep 2.6 && cat /proc/cpuinfo |grep Atheros
 	[ $? = 0 ] && {
-		#Delete incorrect repo
-		if [ "$revision" = "7.07" ]; then
-			DeleteRepository "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/atheros-2.6/packages"
-		fi
 		if [ "$revision" = "" ]; then
 			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/atheros-2.6/packages"
 		else
@@ -162,10 +145,6 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	}
 	uname -a |grep mips |grep 2.6 && cat /proc/cpuinfo |grep WP54
 	[ $? = "0" ] && {
-		#Delete incorrect repo
-		if [ "$revision" = "7.07" ]; then
-			DeleteRepository "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/adm5120-2.6/packages"
-		fi
 		if [ "$revision" = "" ]; then
 			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/adm5120-2.6/packages"
 		else
@@ -174,10 +153,6 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	}
 	cat /proc/cpuinfo |grep "IXP4\?\?"
 	[ $? = "0" ] && {
-		#Delete incorrect repo
-		if [ "$revision" = "7.07" ]; then
-			DeleteRepository "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/ixp4xx-2.6/packages"
-		fi
 		if [ "$revision" = "" ]; then
 			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/ixp4xx-2.6/packages"
 		else
