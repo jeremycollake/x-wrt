@@ -12,6 +12,11 @@
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
 
+config_cb() {
+	[ "$1" = "system" ] && system_cfg="$2"
+	[ "$1" = "server" ] && l2tpns_cfg="$2"
+}
+
 # this line is for compatibility with webif-lua
 LUA="/usr/lib/webif/LUA/xwrt-apply.lua"
 if [ -e $LUA ]; then
@@ -271,9 +276,6 @@ for package in $process_packages; do
 			fi
 			/etc/init.d/webifopenvpn restart ;;
 		"system")
-			config_cb() {
-				[ "$1" = "system" ] && system_cfg="$2"
-			}
 			unset system_cfg
 			config_load system
 			reset_cb
@@ -299,9 +301,6 @@ for package in $process_packages; do
 				/usr/lib/webif/l2tpns_apply.sh >&- 2>&-
 			}
 
-			config_cb() {
-				[ "$1" = "server" ] && l2tpns_cfg="$2"
-			}
 			unset l2tpns_cfg
 			uci_load "l2tpns"
 			reset_cb
