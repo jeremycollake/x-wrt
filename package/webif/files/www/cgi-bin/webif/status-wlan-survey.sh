@@ -122,7 +122,7 @@ if [ "$scan_iface" != "1" ]; then
 <div class="settings">
 <form enctype="multipart/form-data" method="post" action="$SCRIPT_NAME">
 <h3><strong>@TR<<Wireless Survey>></strong></h3>
-<p>@TR<<HelpText WLAN Survey#Your wireless adaptor is not in client mode. To do a scan it must be put into client mode for a few seconds. Your WLAN traffic will be interrupted during this brief period. Please commit any wireless changes as this will remove anything not yet committed>></p>
+<p>@TR<<HelpText WLAN Survey#Your wireless adaptor is not in client mode. To do a scan it must be put into client mode for a few seconds. Your WLAN traffic will be interrupted during this brief period.>></p>
 <input type="submit" value=" @TR<<Scan>> " name="clientswitch" />
 </form>
 <div class="clearfix">&nbsp;</div></div>
