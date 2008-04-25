@@ -601,6 +601,8 @@ for device in $DEVICES; do
 			if [ "$iftype" = "broadcom" ]; then
 				psk_option="option|psk+psk2|WPA+WPA2 (@TR<<PSK>>)"
 				wpa_option="option|wpa+wpa2|WPA+WPA2 (@TR<<RADIUS>>)"
+			else
+				psk_option="option|psk-mixed/tkip+aes|WPA+WPA2 (@TR<<PSK>>)"
 			fi
 
 			encryption_forms="field|@TR<<Encryption Type>>
