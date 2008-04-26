@@ -3,6 +3,7 @@ START=95
 
 RUN_D=/var/run
 PID_F=$RUN_D/miniupnpd.pid
+CTL_F=$RUN_D/miniupnpd.ctl
 
 append_bool() {
 	local section="$1"
@@ -89,5 +90,6 @@ stop() {
 		kill "$pid_f"
 		rm -f "$PID_F" 2>/dev/null
 	}
+	[ -f "$CTL_F" ] && rm -f "$CTL_F" 2>/dev/null
 	iptables_removeall.sh >/dev/null 2>&1
 }
