@@ -41,17 +41,17 @@ local loc_userlevel = tonumber(olsr.webadmin.userlevel) or 0
 
 function set_menu()
   local user_level = loc_userlevel
-  __MENU.IW.OLSR = menuClass.new()
-  __MENU.IW.OLSR:Add("Core","olsr.sh")
+  __MENU.HotSpot.OLSR = menuClass.new()
+  __MENU.HotSpot.OLSR:Add("Core","olsr.sh")
   if user_level > 1 then
-    __MENU.IW.OLSR:Add("General","olsr.sh?option=general")
---  __MENU.IW.OLSR:Add("Ip Connect","olsr.sh?option=ipconnect")
-    __MENU.IW.OLSR:Add("Hna4","olsr.sh?option=hna4")
-    __MENU.IW.OLSR:Add("Hna6","olsr.sh?option=hna6")
-    __MENU.IW.OLSR:Add("Interfaces","olsr.sh?option=interfaces")
+    __MENU.HotSpot.OLSR:Add("General","olsr.sh?option=general")
+--  __MENU.HotSpot.OLSR:Add("Ip Connect","olsr.sh?option=ipconnect")
+    __MENU.HotSpot.OLSR:Add("Hna4","olsr.sh?option=hna4")
+    __MENU.HotSpot.OLSR:Add("Hna6","olsr.sh?option=hna6")
+    __MENU.HotSpot.OLSR:Add("Interfaces","olsr.sh?option=interfaces")
   end
-  __MENU.IW.OLSR:Add("Status","olsr.sh?option=status")
---  __MENU.IW.OLSR:Add("Visualization","olsr-viz.sh")
+  __MENU.HotSpot.OLSR:Add("Status","olsr.sh?option=status")
+--  __MENU.HotSpot.OLSR:Add("Visualization","olsr-viz.sh")
 end
 
 function check_pkg()

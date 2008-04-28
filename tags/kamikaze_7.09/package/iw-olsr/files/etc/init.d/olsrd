@@ -45,7 +45,7 @@ start() {
   # Masquerade all trafic
   iptables -t nat -A POSTROUTING -o $WIFI -j MASQUERADE
   iptables -t nat -A POSTROUTING -o $WAN -j MASQUERADE
-  /usr/lib/webif/LUA/cron_ctrl add "$CRONSET"
+#  /usr/lib/webif/LUA/cron_ctrl add "$CRONSET"
 
 	$BIN -f "$USE_CONF_F" -nofork $OPTIONS &
 
@@ -57,7 +57,7 @@ start() {
 }
 
 stop() {
-  /usr/lib/webif/LUA/cron_ctrl del "$CRONSET"
+#  /usr/lib/webif/LUA/cron_ctrl del "$CRONSET"
 	killall olsrd
 }
 

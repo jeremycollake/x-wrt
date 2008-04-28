@@ -1,0 +1,313 @@
+echo "#!/bin/sh
+# Coova Chilli - David Bird <david@coova.com>
+# Licensed under the GPL, see http://coova.org/
+# up.sh /dev/tun0 192.168.0.10 255.255.255.0
+
+. /etc/chilli/functions
+
+[ -e "/var/run/chilli.iptables" ] && sh /var/run/chilli.iptables 2>/dev/null
+rm -f /var/run/chilli.iptables 2>/dev/null
+
+IF=$(basename $DEV)
+
+ipt() {
+    opt=$1; shift
+    echo "iptables -D $*" >> /var/run/chilli.iptables
+    iptables $opt $*
+}
+
+ipt_in() {
+    ipt -A INPUT -i $IF $*
+}
+
+[ -n "$DHCPIF" ] && {
+
+    [ -n "$UAMPORT" -a "$UAMPORT" != "0" ] && \
+	ipt_in -p tcp -m tcp --dport $UAMPORT --dst $ADDR -j ACCEPT
+
+    [ -n "$UAMUIPORT" -a "$UAMUIPORT" != "0" ] && \
+	ipt_in -p tcp -m tcp --dport $UAMUIPORT --dst $ADDR -j ACCEPT
+
+    [ -n "HS_TCP_PORTS" ] && {
+	for port in $HS_TCP_PORTS; do
+	    ipt_in -p tcp -m tcp --dport $port --dst $ADDR -j ACCEPT
+	done
+    }
+    
+    ipt_in -p udp -d 255.255.255.255 --destination-port 67:68 -j ACCEPT
+    ipt_in -p udp --dst $ADDR --dport 53 -j ACCEPT
+
+#    ipt -A INPUT -i $IF --dst $ADDR -j DROP
+#    ipt -A INPUT -i $IF -j DROP
+
+#    ipt -I FORWARD -i $DHCPIF -j DROP
+#    ipt -I FORWARD -o $DHCPIF -j DROP
+    ipt -I FORWARD -i $IF -j ACCEPT
+    ipt -I FORWARD -o $IF -j ACCEPT
+
+#    [ "$HS_LAN_ACCESS" != "on" -a "$HS_LAN_ACCESS" != "allow" ] && \
+#	ipt -I FORWARD -i $IF -o \! $HS_WANIF -j DROP
+
+    [ "$HS_LOCAL_DNS" = "on" ] && \
+	ipt -I PREROUTING -t nat -i $IF -p udp --dport 53 -j DNAT --to-destination $ADDR
+}
+
+# site specific stuff optional
+[ -e /etc/chilli/ipup.sh ] && . /etc/chilli/ipup.sh
+" > /etc/chilli/up.sh
+echo "<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>X-Wrt for end users</title>
+<link rel="stylesheet" type="text/css" href="http://192.168.182.1/themes/active/waitbox.css" media="screen" />
+<link rel="stylesheet" type="text/css" href="http://192.168.182.1/themes/active/webif.css" />
+<!-- redirecting... either by meta tag or javascript -->
+<meta http-equiv="refresh" content="2; URL=/prelogin"> 
+<script type="text/javascript" language="Javascript">
+//<!--
+function getURLParam(n) {
+  var s = "";
+  var href = window.location.href;
+  if (href.indexOf("?") > -1) {
+    var qs = href.substr(href.indexOf("?"));
+    var qsList = qs.split("&");
+    for (var i = 0; i < qsList.length; i++) {
+      if (qsList[i].indexOf(n + "=") > -1) {
+        var pList = qsList[i].split("=");
+        s = pList[1];
+        break;
+      }
+    }
+  }
+  return unescape(s.replace(/\+/g, " "));
+}
+var loginUrl = getURLParam("loginurl");
+window.document.write("<meta http-equiv=\"refresh\" content=\"2; URL="+loginUrl+"\">");
+function redirect() { window.location = loginUrl; return false; }
+//-->
+</script>
+<meta http-equiv="refresh" content="2; URL=/prelogin"> 
+</head>
+<!-- <body style="margin: 0pt auto; height:100%;"> -->
+<body>
+<div id="container"> 
+<div id="header"><h1>X-Wrt</h1>
+<em>OpenWrt for end users</em>
+<div id="mainmenu">
+<div style="width:100%;position:fixed;display:table;">
+<p style="display: table-cell; line-height: 2.5em;
+vertical-align:middle;text-align:center;color:grey;"> 
+<small><img src="wait.gif"/> redirecting...</small></p>
+</div>
+</div>
+</div>
+<!--
+<div style="width:100%;height:80%;position:fixed;display:table;">
+<p style="display: table-cell; line-height: 2.5em;
+vertical-align:middle;text-align:center;color:grey;"> 
+<small><img src="wait.gif"/> redirecting...</small></p>
+<br><br>
+</div>
+-->
+</body>
+</html>
+" > /etc/chilli/www/coova.html
+echo "<div id="Chilli">
+<center>
+<table border="0">
+<tr><td>
+<div id="locationName" style="padding:5px 0px 0px 2px;font-size:120%;"></div>
+</td></tr>
+<tr><td>
+<div id="chilliPage">
+<div id="logonPage" style="display:none;">
+<form onSubmit="return false;" name="logon">
+
+<!--
+<div id="openIDSelect" style="font-size:70%;padding-top:4px;float:right;display:none;">
+<a href="#" onclick="javascript:return openID();"><img border="0" src="CHILLIWWW/www/openid.gif"/></a>
+</div>
+
+<div id="openIDForm"
+style="display:none;background-color:white;position:absolute;padding:10px;border:solid 1px orange">
+OpenID URL: <input style="font-size:60%;" name="username" type="text" id="username" size="30" value="http://"/>
+</div>
+-->
+
+<table id="logonTable" border="0" >
+<tr>
+<td colspan="2" style="font-size:120%;">
+<div id="logonMessage" style="font-size:70%;padding-top:4px;">Login:</div>
+</td>
+</tr>
+
+<tr id="usernameRow">
+<td id="usernameLabel"><b>Username</b></td>
+<td><input name="username" type="text" id="username" size="20"/></td>
+</tr>
+<tr id="passwordRow">
+<td id="passwordLabel"><b>Password</b></td>
+<td><input name="password" type="password" id="password" size="20"/></td>
+</tr>
+<tr>
+
+<td colspan="2"><input type="submit" value="Connect" onClick="connect();"/></td>
+
+</tr>	
+<!--
+<tr id="signUpRow">
+<td id="signUp" colspan="2" style="font-size: 50%">
+<a target="_blank" href="https://coova.org/app/c/signup.html">Sign up</a> for an account
+</td>
+</tr>
+-->
+</table>		
+</form>
+</div>
+
+<div id="statusPage" style="display:none;">
+<table border="0" id="statusTable" style="padding-top:4px;font-size:70%">
+<tr id="connectRow">
+<td><span id="statusMessage">Connected</span></td>
+<td><a href="#" onClick="return disconnect();">logout</a></td>
+</tr>
+<tr id="sessionIdRow">
+<td id="sessionIdLabel" class="chilliLabel"><b>Session ID</b></td>
+<td id="sessionId" class="chilliValue">Not available</td>
+</tr>
+<tr id="sessionTimeoutRow">
+<td id="sessionTimeoutLabel" class="chilliLabel"><b>Max Session Time</b></td>
+<td id="sessionTimeout" class="chilliValue">Not available</td>
+</tr>
+<tr id="idleTimeoutRow">
+<td id="idleTimeoutLabel" class="chilliLabel"><b>Max Idle Time</b></td>
+<td id="idleTimeout" class="chilliValue">Not available</td>
+</tr>
+<tr id="startTimeRow">
+<td id="startTimeLabel" class="chilliLabel"><b>Start Time</b></td>
+<td id="startTime" class="chilliValue">Not available</td>
+</tr>
+<tr id="sessionTimeRow">
+<td id="sessionTimeLabel" class="chilliLabel"><b>Session Time</b></td>
+<td id="sessionTime" class="chilliValue">Not available</td>
+</tr>
+<tr id="idleTimeRow">
+<td id="idleTimeLabel" class="chilliLabel"><b>Idle Time</b></td>
+<td id="idleTime" class="chilliValue">Not available</td>
+</tr>
+<tr id="inputOctetsRow">
+<td id="inputOctetsLabel" class="chilliLabel"><b>Downloaded</b></td>
+<td id="inputOctets" class="chilliValue">N/A</td>
+</tr>
+<tr id="outputOctetsRow">
+<td id="outputOctetsLabel" class="chilliValueLabel"><b>Uploaded</b></td>
+<td id="outputOctets" class="chilliValue">N/A</td>
+</tr>
+<tr id="originalURLRow">
+<td id="originalURLLabel" class="chilliValueLabel"><b>Original URL</b></td>
+<td id="originalURL" class="chilliValue">N/A</td>
+</tr>
+</table>
+</div>
+</td></tr>
+</table>
+</center>
+
+<div id="errorPage" style="display:none;">
+<span id="errorMessage">Error</span>
+</div>
+</div>
+<!--
+<div id="debugPage" style="display:inline;">
+<textarea id="debugarea" rows="20" cols="60">
+</textarea>
+</div
+-->
+</div>
+
+" > /etc/chilli/www/json_html.tmpl
+echo "#!/bin/sh /etc/rc.common
+START=59
+
+EXTRA_COMMANDS="status checkrunning radconfig condrestart"
+EXTRA_HELP="	status	Show current status
+    checkrunning If services is not running start it"
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON=/usr/sbin/chilli
+NAME=chilli
+DESC=chilli
+CONFFILE=/etc/chilli.conf
+OPTS="--pidfile /var/run/$NAME.pid"
+
+. /etc/chilli/functions
+check_required
+
+start() {
+	echo -n "Starting $DESC: "
+   /sbin/modprobe tun >/dev/null 2>&1
+   echo 1 > /proc/sys/net/ipv4/ip_forward
+
+   writeconfig
+   radiusconfig
+
+   (crontab -l 2>&- | grep -v $0
+      test ${HS_ADMINTERVAL:-0} -gt 0 && echo "*/$HS_ADMINTERVAL * * * * $0 radconfig"
+      echo "*/10 * * * * $0 checkrunning"
+      #echo "*/2  * * * * $0 arping"
+   ) | crontab - 2>&-
+  $DAEMON -- $OPTS
+  RETVAL=$?
+	echo "$NAME."
+}
+
+status () {
+		pid=$(cat "/var/run/$NAME.pid" 2>/dev/null)
+		[ -n "$pid" -a -d "/proc/$pid" ] && {
+      echo "$DESC running"
+      exit 0
+		}
+    echo "$DESC stopped"
+}
+
+checkrunning () {
+    local pid
+		pid=$(cat "/var/run/$NAME.pid" 2>/dev/null)
+		[ -n "$pid" -a -d "/proc/$pid" ] && {
+			exit 0
+		}
+    $0 start
+}
+
+radconfig () {
+      [ -e $MAIN_CONF ] || writeconfig
+      radiusconfig
+}
+
+stop () {
+    local pid
+		pid=$(cat "/var/run/$NAME.pid" 2>/dev/null)
+		[ -n "$pid" -a -d "/proc/$pid" ] && {
+      echo -n "Stopping $DESC: "
+      crontab -l 2>&- | grep -v $0 | crontab -
+      kill -TERM "$pid"
+      [ "$?" -eq 0 ] && sleep 1
+      [ ! -d "/proc/$pid" ] && echo "OK" || {
+  			echo "Failed!"
+        echo -n "Killing chilli..."
+        kill -KILL "$pid"
+        [ "$?" -eq 0 ] && echo "OK" || echo "Failed!"
+      }
+      exit 0
+		}
+		echo "$DESC was not running"
+}
+
+condrestart() {
+    local pid
+		pid=$(cat "/var/run/$NAME.pid" 2>/dev/null)
+		[ -n "$pid" -a -d "/proc/$pid" ] && {
+      echo -n "Restarting $DESC: "
+      $0 restart
+      RETVAL=$?
+		}
+}
+" > /etc/init.d/chilli

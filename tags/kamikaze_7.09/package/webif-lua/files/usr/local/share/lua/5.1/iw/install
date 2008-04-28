@@ -1,0 +1,169 @@
+#!/usr/bin/lua
+package.cpath = "?;./?.so;/usr/lib/lua/5.1/?.so" 
+package.path = "?;./?.lua;/usr/local/share/lua/5.1/iw/?.lua;/usr/lib/webif/LUA/?.lua;/usr/lib/webif/LUA/pkgs/?.lua;/usr/lib/lua/5.1/?.lua" 
+
+require("common")
+
+require("iw-luaipkg")
+function tcount(t)
+  local c = 0
+  for i,k in pairs(t) do
+    c = c + 1
+  end
+  return c
+end
+
+function repo_list(t)
+  for i,v in pairsByKeys(t) do
+    print(i,v.url)
+  end
+end
+
+function list_installed_pkgs(t)
+  for i,v in pairsByKeys(t) do
+    print(i,v.Version)
+  end
+end
+
+function list_pkgs(t,detailled)
+  for p,r in pairsByKeys(t) do
+    local show = false
+    for pkg, data in pairsByKeys(r.pkgs) do
+      if show == false then
+        print(p,r.url)
+        show = true
+      end  
+      print("",pkg,data.Version,data.Description)
+    end
+    if show == true then print("") end
+  end
+end
+
+function list_toinstall(pepe)
+  local ctrl_dep = {}
+  local tinstall = {}
+  local tmpdir = "/tmp"
+  repeat
+    for i,v in pairs(pepe.__toinstall) do
+      local ok = true
+      if v.Depends ~= nil then
+        local depends = string.gsub(v.Depends,","," ")
+        for dep in string.gmatch(depends,"%S+") do
+          if pepe.__installed[dep] == nil and ctrl_dep[dep] == nil then
+            ok = false
+            break
+          end
+        end
+      end
+      if ok == true then
+--        if pepe.__installed[i] == nil then
+        tinstall[#tinstall+1] = {}
+        tinstall[#tinstall]["url"] = v.url
+        tinstall[#tinstall]["file"] = v.Filename
+        ctrl_dep[i] = #tinstall
+        pepe.__toinstall[i] = nil
+--        end
+      end
+    end
+  until tcount(pepe.__toinstall) == 0 
+  for i = 1, #tinstall do
+    print(tinstall[i].url..tinstall[i].file)
+  end
+end
+
+function install_pkgs(pepe)
+  local ctrl_dep = {}
+  local tinstall = {}
+  local tmpdir = "/tmp"
+  repeat
+    for i,v in pairs(pepe.__toinstall) do
+      local ok = true
+      if v.Depends ~= nil then
+        local depends = string.gsub(v.Depends,","," ")
+        for dep in string.gmatch(depends,"%S+") do
+          if pepe.__installed[dep] == nil and ctrl_dep[dep] == nil then
+            ok = false
+            break
+          end
+        end
+      end
+      if ok == true then
+--        if pepe.__installed[i] == nil then
+        tinstall[#tinstall+1] = {}
+        tinstall[#tinstall]["url"] = v.url
+        tinstall[#tinstall]["file"] = v.Filename
+        ctrl_dep[i] = #tinstall
+        pepe.__toinstall[i] = nil
+--        end
+      end
+    end
+  until tcount(pepe.__toinstall) == 0 
+  for i = 1, #tinstall do
+--    print(tinstall[i].url..tinstall[i].file)
+    local tmpfile = string.gsub(tinstall[i].file,"%./","")
+    local tmpurl = tinstall[i].url.."/"
+    os.execute("wget -P "..tmpdir.." "..tmpurl..tmpfile)
+    os.execute("ipkg install "..tmpdir.."/"..tmpfile)
+    os.execute("rm "..tmpdir.."/*.ipk")
+  end
+end
+
+local script = arg[0]
+local cmd = arg[1]
+local pkg_list = ""
+local detailled = false
+for i=2, #arg do
+    if arg[i] == "-r" then
+      use_repo = arg[i+1]
+      i = i + 1
+    elseif arg[i] == "-v" then
+      use_version = arg[i+1]
+      i = i + 1
+    elseif arg[i] == "-d" then
+      detailled = true
+    elseif arg[i] == ">"
+    or arg[i] == ">>" then
+      break
+    else 
+      pkg_list=pkg_list.." "..arg[i]
+    end
+end
+pkg_list = string.trim(pkg_list)
+if pkg_list == nil then 
+  pepe = lpkgClass.new("")
+else
+  pepe = lpkgClass.new(pkg_list)
+end
+
+pepe:repos()
+pepe:installed()
+local time = os.time()
+pepe:load_repo("X-Wrt")
+pepe:load_repo("Internet-wifi")
+pepe:load_repo("packages")
+pepe:load_repo("release")
+local time = os.difftime(os.time(),time)
+
+if cmd == "list" then
+--  pepe = init(pkg_list,use_repo)
+  print("lista de packetes")
+  list_pkgs(pepe.__repo,detailled)
+elseif cmd == "list_installed" then
+  print("List Installed packages")
+  list_installed_pkgs(pepe.__installed)
+elseif cmd == "list_repo" then
+  print("Repository List")
+  repo_list(pepe.__repo)
+elseif cmd == "list_to_install" then
+  print("To install packages")
+  list_toinstall(pepe,use_version)
+elseif cmd == "install" then
+  print("install packages")
+  install_pkgs(pepe,use_version)
+else
+  print(arg[0].." [command] [pacage[*]] [-options]")
+  print("","commands")
+  print("","","list", "list of packages")
+  print("","","install", "install packages")
+end
+
