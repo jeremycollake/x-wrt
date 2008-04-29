@@ -15,7 +15,7 @@
 --
 --------------------------------------------------------------------------------
 --[[
-##WEBIF:name:IW:220:Coova-Chilli
+##WEBIF:name:HotSpot:320:Coova-Chilli
 ]]--
 -- config.lua 
 -- LUA settings and load some functions files

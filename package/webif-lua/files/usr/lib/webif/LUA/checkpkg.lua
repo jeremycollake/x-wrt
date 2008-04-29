@@ -174,13 +174,11 @@ function pkgInstalledClass:install_pkg()
 	page.savebutton ="<input type=\"submit\" name=\"continue\" value=\"Continue\" style=\"width:150px;\" />"
 	print(page:header())
 	print("<pre>")
---[[
-	local install = io.popen("ipkg install "..str_list)
+--	local install = io.popen("ipkg install "..str_list)
+	local install = io.popen("/usr/local/share/lua/5.1/iw/install install "..str_list)
 	for line in install:lines() do
 		print(line)
 	end
-]]--
-  os.execute("/usr/local/share/lua/5.1/iw/install install "..str_list)
 	print("</pre>")
 	print(page:footer())
 	os.exit()
