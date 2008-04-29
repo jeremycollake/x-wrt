@@ -2,7 +2,10 @@
 #
 # IW-Freeradius post-install script.
 #
-
-if [ "`grep 'IW' '${IPKG_INSTROOT}/www/cgi-bin/webif/.categories'`" = "" ]; then
-  echo "##WEBIF:category:IW">>"${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"
+if [ "`grep "Mesh" "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"`" = "##WEBIF:category:Mesh" ]; then
+	cat "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories" |sed '/##WEBIF:category:Mesh/a\
+##WEBIF:category:HotSpot'>"${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"
+else
+	cat "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories" |sed '/##WEBIF:category:Network/a\
+##WEBIF:category:HotSpot'>"${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"
 fi
