@@ -27,15 +27,19 @@
 ]]--
 
 --[[
-##WEBIF:name:IW:150:Wizard
+##WEBIF:name:HotSpot:100:Wizard
 ]]--
 -- config.lua 
 -- LUA settings and load some functions files
 -- 
-dofile("/usr/lib/webif/LUA/config.lua")
+--dofile("/usr/lib/webif/LUA/config.lua")
 --require("tbform")
 --require("radius")
 --require("captiveportal")
+
+require("init")
+require("ipkg")
+require("checkpkg")
 
 function about()
 	form = formClass.new(tr("About"))
@@ -179,6 +183,7 @@ function set_portal(general)
   if tonumber(general.values.portal) == 0 then
     forms = set_users(general)
   else
+    
     require("coovaportal")
     local user_level = tonumber(general.values.user_level) or 0
     local localradius = tonumber(general.values.radius) or 0
@@ -193,11 +198,11 @@ function set_portal(general)
 end
 
 function set_users(general)
-  require("radius")
   local forms = {}
   if tonumber(general.values.radius) < 2 then
     forms = set_communities(general)
   else
+    require("radius")
     forms[1] = radius.add_usr_form()
     forms[2] = radius.user_form()
     setfooter(forms[1])
@@ -284,6 +289,8 @@ end
 __FORM.option = string.trim(__FORM.option)
 if __FORM.option == "about" then
   forms[1] = about()
+elseif __FORM.bt_pkg_install == "Install" then
+  isntall = pkgInstalledClass.new("",true)
 elseif __FORM.option == "config" then
   forms[1] = config() 
 elseif __FORM.option == "wizard" then
@@ -294,8 +301,10 @@ elseif __FORM.option == "wizard" then
   if __FORM.step == "nothing" then
     forms = nothing()
   elseif __FORM.step == "network" then
+    check = pkgInstalledClass.new(ipkg.check(olsr_pkgs),true)
     forms = set_mesh(general)
   elseif __FORM.step == "portal" then
+    check = pkgInstalledClass.new(coova_pkgs,true)
     forms = set_portal(general)
   elseif __FORM.step == "users" then
     forms = set_users(general)
@@ -358,8 +367,8 @@ print(page:header())
 for i=1, #forms do
   forms[i]:print()
 end
---for i, t in pairs(__FORM) do
---  print(i,t,"<br>")
---end
+for i, t in pairs(__FORM) do
+  print(i,t,"<br>")
+end
 print (page:footer())
 
