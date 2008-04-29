@@ -103,7 +103,7 @@ function install_pkgs(pepe)
     local tmpfile = string.gsub(tinstall[i].file,"%./","")
     local tmpurl = tinstall[i].url.."/"
     os.execute("wget -P "..tmpdir.." "..tmpurl..tmpfile)
-    os.execute("ipkg install "..tmpdir.."/"..tmpfile)
+    os.execute("ipkg install "..tmpdir.."/"..tmpfile.." -force-overwrite -force-defaults")
     os.execute("rm "..tmpdir.."/*.ipk")
   end
 end
