@@ -35,17 +35,17 @@ local userlevel = tonumber(radconf.webadmin.userlevel) or 0
 function set_menu()
 --    if userlevel < 4 then 
     -- Muestra menu principiante
-    __MENU.IW.Freeradius = menuClass.new()
-    __MENU.IW.Freeradius:Add("Core","freeradius.sh")
-    __MENU.IW.Freeradius:Add("Users")
-    __MENU.IW.Freeradius.Users = menuClass.new()
-    __MENU.IW.Freeradius.Users:Add("Users","freeradius.sh?option=users")
-    __MENU.IW.Freeradius.Users:Add("Default Values","freeradius.sh?option=users_default")
-    __MENU.IW.Freeradius:Add("Communities")
-    __MENU.IW.Freeradius.Communities = menuClass.new()
-    __MENU.IW.Freeradius.Communities:Add("Communities","freeradius.sh?option=communities")
-    __MENU.IW.Freeradius.Communities:Add("Proxy Server","freeradius.sh?option=proxy")
-    __MENU.IW.Freeradius:Add("Clients","freeradius.sh?option=client")
+    __MENU.HotSpot.Freeradius = menuClass.new()
+    __MENU.HotSpot.Freeradius:Add("Core","freeradius.sh")
+    __MENU.HotSpot.Freeradius:Add("Users")
+    __MENU.HotSpot.Freeradius.Users = menuClass.new()
+    __MENU.HotSpot.Freeradius.Users:Add("Users","freeradius.sh?option=users")
+    __MENU.HotSpot.Freeradius.Users:Add("Default Values","freeradius.sh?option=users_default")
+    __MENU.HotSpot.Freeradius:Add("Communities")
+    __MENU.HotSpot.Freeradius.Communities = menuClass.new()
+    __MENU.HotSpot.Freeradius.Communities:Add("Communities","freeradius.sh?option=communities")
+    __MENU.HotSpot.Freeradius.Communities:Add("Proxy Server","freeradius.sh?option=proxy")
+    __MENU.HotSpot.Freeradius:Add("Clients","freeradius.sh?option=client")
 --    elseif userlevel == 4 then
     -- Menu de Experto edita los archivos directamente
 --      __FORM.__menu = string.sub(__FORM.__menu,1,4)

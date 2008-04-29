@@ -38,31 +38,31 @@ local portal = tonumber(hotspot.service.portal) or 0
 local users = tonumber(hotspot.service.users) or 0
 
 function set_menu()
-  __MENU.IW["Coova-Chilli"] = menuClass.new()
-  __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Core#Core","coova-chilli.sh")
+  __MENU.HotSpot["Coova-Chilli"] = menuClass.new()
+  __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Core#Core","coova-chilli.sh")
   if userlevel > 1 then
-    __MENU.IW["Coova-Chilli"]:Add("chilli_menu_DHCP#Network","coova-chilli.sh?option=net")
+    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_DHCP#Network","coova-chilli.sh?option=net")
 --  if portal > 0 then
-      __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Portal#Portal","coova-chilli.sh?option=uam")
+      __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Portal#Portal","coova-chilli.sh?option=uam")
 --  end
     if users == 0 then
-      __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Radius#Radius","coova-chilli.sh?option=radius")
+      __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Radius#Radius","coova-chilli.sh?option=radius")
     end
-    __MENU.IW["Coova-Chilli"]:Add("chilli_menu_NasId#NAS ID","coova-chilli.sh?option=nasid")
+    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_NasId#NAS ID","coova-chilli.sh?option=nasid")
   end
   if users == 1
   or users == 3 then 
-    __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Users#Users","coova-chilli.sh?option=users")
+    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Users#Users","coova-chilli.sh?option=users")
   end
   if users > 1 then
-    __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Communities#Communities","coova-chilli.sh?option=communities")
+    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Communities#Communities","coova-chilli.sh?option=communities")
   end
   if tonumber(hotspot.service.enable) == 1 then
-    __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Connections#Connections","coova-chilli.sh?option=connections")
+    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Connections#Connections","coova-chilli.sh?option=connections")
   end
---    __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Access#Access","coova-chilli.sh?option=access")
---    __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Proxy#Proxy","coova-chilli.sh?option=proxy")
---    __MENU.IW["Coova-Chilli"]:Add("chilli_menu_Scripts#Extras","coova-chilli.sh?option=extras")
+--    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Access#Access","coova-chilli.sh?option=access")
+--    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Proxy#Proxy","coova-chilli.sh?option=proxy")
+--    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Scripts#Extras","coova-chilli.sh?option=extras")
   
   __WIP = 4
 end
