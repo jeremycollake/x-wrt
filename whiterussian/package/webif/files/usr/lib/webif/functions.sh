@@ -103,12 +103,12 @@ save_setting() {
 	# $3 = value
 	exists /tmp/.webif/* || mkdir -p /tmp/.webif
 	oldval=$(eval "echo \${$2}")
-	oldval=${oldval:-$(nvram get "$2")}
 	grep "^$2=" /tmp/.webif/config-$1 >&- 2>&- && {
 		grep -v "^$2=" /tmp/.webif/config-$1 > /tmp/.webif/config-$1-new 2>&-
 		mv /tmp/.webif/config-$1-new /tmp/.webif/config-$1 2>&- >&-
 		oldval=""
 	}
+	oldval=${oldval:-$(nvram get "$2")}
 	equal "$oldval" "$3" || echo "$2=\"$3\"" >> /tmp/.webif/config-$1
 }
 
