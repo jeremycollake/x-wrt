@@ -19,3 +19,4 @@ if hotspot == 0 then
 end
 local menu = io.open("/www/cgi-bin/webif/.categories","w")
 menu:write(table.concat(t,"\n"))
+

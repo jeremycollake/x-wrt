@@ -83,23 +83,7 @@ function init_list(list)
   return str      
 end
 
-local reboot_list = {}
-local parsers_list = {}
-local old_parsers = {}
-local depends_list = ""
-local stop_list = {}
--- local enable_list = {}
--- local disable_list = {}
-local file_list = {}
-
-local exe_before = {}
-local exe_after = {}
-
-local handler_dir = io.popen("ls /tmp/.uci")
-
-for file in handler_dir:lines() do
-  file_list[file] = ""
-  if io.exists("/usr/lib/webif/apply/"..file) == true then  
+function call_parser(file,parsers_list,depends_list,exe_before,exe_after,reboot_list)
     require("/usr/lib/webif/apply/"..file)
     parsers_list[file] = {p = parser}
     -- Read if this package depends or need others packages to done configuration
@@ -129,6 +113,32 @@ for file in handler_dir:lines() do
     if parser.exe_after then
       for command, msg in pairs(parser.exe_after) do
         exe_after[command] = msg
+      end
+    end
+
+end
+
+local reboot_list = {}
+local parsers_list = {}
+local old_parsers = {}
+local depends_list = ""
+local stop_list = {}
+-- local enable_list = {}
+-- local disable_list = {}
+local file_list = {}
+
+local exe_before = {}
+local exe_after = {}
+
+local handler_dir = io.popen("ls /tmp/.uci")
+
+for file in handler_dir:lines() do
+  file_list[file] = ""
+  if io.exists("/usr/lib/webif/apply/"..file) == true then  
+    call_parser(file,parsers_list,depends_list,exe_before,exe_after,reboot_list)
+    if parser.call_parser then
+      for i in string.gmatch(parser.call_parser,"%S+") do
+        call_parser(i,parsers_list,depends_list,exe_before,exe_after,reboot_list)
       end
     end
   elseif io.exists("/usr/lib/webif/apply-"..file) == true then
@@ -173,6 +183,15 @@ if #reboot_list > 0 then
 end    
 
 print(init_list(exe_after))
+
+--  local form = formClass.new("Apply...",true)
+--  print (form:startFullForm())
+	changes_apply=io.popen ("/usr/lib/webif/apply.sh 2>&1")
+	for linea in changes_apply:lines() do
+		wwwprint(trsh(linea))
+	end
+-- 	print (form:endForm())
+	changes_apply:close()
 
 if __WWW then print(page:footer()) end
 os.exit(0)
