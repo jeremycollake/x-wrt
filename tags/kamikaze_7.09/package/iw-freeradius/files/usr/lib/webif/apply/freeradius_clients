@@ -34,7 +34,7 @@ function process()
   wwwprint("Committing freeradius_clients...")
   iwuci.commit("freeradius_clients")
   local freeradius = uciClass.new("freeradius")
-  if freeradius.webadmin.service == "0" then
+--  if freeradius.webadmin.service == "0" then
     wwwprint(name.." clients... Parsers...")
   -- Process clients.conf
     local sep = ""
@@ -55,5 +55,5 @@ function process()
     local pepe = io.open("/etc/freeradius/clients.conf","w")
     pepe:write(client_str)
     pepe:close()
-  end
+--  end
 end

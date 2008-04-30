@@ -13,8 +13,8 @@
 --
 --
 --------------------------------------------------------------------------------
-__MENU.IW.Wizard = menuClass.new()
-__MENU.IW.Wizard:Add("wizard_menu_general#General","iwhotspothelper.sh")
-__MENU.IW.Wizard:Add("wizard_menu_about#Config","iwhotspothelper.sh?option=config")
-__MENU.IW.Wizard:Add("wizard_menu_about#About","iwhotspothelper.sh?option=about")
+__MENU.HotSpot.Wizard = menuClass.new()
+__MENU.HotSpot.Wizard:Add("wizard_menu_general#General","iwhotspothelper.sh")
+--__MENU.HotSpot.Wizard:Add("wizard_menu_about#Config","iwhotspothelper.sh?option=config")
+--__MENU.HotSpot.Wizard:Add("wizard_menu_about#About","iwhotspothelper.sh?option=about")
 __WIP = 1
