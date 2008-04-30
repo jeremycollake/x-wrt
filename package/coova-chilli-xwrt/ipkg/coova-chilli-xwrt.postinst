@@ -2,10 +2,12 @@
 #
 # Webif post-install script.
 #
-if [ "`grep "Mesh" "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"`" = "##WEBIF:category:Mesh" ]; then
-	cat "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories" |sed '/##WEBIF:category:Mesh/a\
+if [ "`grep "Mesh" "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"`" != "##WEBIF:category:HotSpot" ]; then
+  if [ "`grep "Mesh" "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"`" = "##WEBIF:category:Mesh" ]; then
+	 cat "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories" |sed '/##WEBIF:category:Mesh/a\
 ##WEBIF:category:HotSpot'>"${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"
-else
-	cat "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories" |sed '/##WEBIF:category:Network/a\
+  else
+	 cat "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories" |sed '/##WEBIF:category:Network/a\
 ##WEBIF:category:HotSpot'>"${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"
+  fi
 fi
