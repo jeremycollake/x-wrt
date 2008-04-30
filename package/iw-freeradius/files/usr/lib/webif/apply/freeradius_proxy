@@ -48,6 +48,7 @@ function process()
     end
 
     proxy_str = proxy_str .. "}\n\n"
+    if proxy.realm then
     for i, v in pairs (proxy.realm) do
       proxy_str = proxy_str .. "realm "..v.values.community .." {\n"
       for k, val in pairs(v.values) do
@@ -60,6 +61,7 @@ function process()
         end
       end
       proxy_str = proxy_str .. "}\n\n"
+    end
     end
     local pepe = io.open("/etc/freeradius/proxy.conf","w")
     pepe:write(proxy_str)

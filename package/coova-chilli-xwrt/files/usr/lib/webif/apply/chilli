@@ -23,6 +23,7 @@ setfenv(1, P)
 enable = tonumber(hotspot.service.enable) or 0
 userlevel = tonumber(hotspot.service.userlevel) or 0
 radiususers = tonumber(hotspot.service.users) or 0
+call_parser = "freeradius freeradius_check freeradius_proxy freeradius_clients"
 
 reboot = false                -- reboot device after all apply process
 --exe_before = {} -- execute os process in this table before any process

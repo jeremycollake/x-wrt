@@ -63,6 +63,7 @@ function set_mesh(general)
     forms = set_portal(general)
   else
     forms[1] = olsrd.core_form()
+    forms[1].title = "Mesh Network Settings (OLSR)"
     forms[1]:Add("hidden","step","portal")
     setfooter(forms[1])
   end
@@ -79,6 +80,7 @@ function set_portal(general)
     local user_level = tonumber(general.values.user_level) or 0
     local localradius = tonumber(general.values.radius) or 0
     forms[1] = cportal.core_form()
+    forms[1].title = "Coova Chilli Service"
 --    forms[1] = formClass.new(tr("Captive Portal"))
 --    cportal.net_form(forms[1],user_level)
 --    cportal.radius_form(forms[1],user_level,localradius)
@@ -90,21 +92,22 @@ end
 
 function set_users(general)
   local forms = {}
-  if tonumber(general.values.radius) < 2 then
-    forms = set_communities(general)
-  else
+  if tonumber(general.values.radius) > 1 then
     require("radius")
     forms[1] = radius.add_usr_form()
     forms[2] = radius.user_form()
     setfooter(forms[1])
     forms[1]:Add("hidden","step","communities")
+  else
+    forms = set_communities(general)
   end
   return forms
 end
 
 function set_communities(general)
   local forms = {}
-  if tonumber(general.values.radius) > 1 then -- Local Users
+  if tonumber(general.values.radius) == 1
+  or tonumber(general.values.radius) == 3 then -- Local Users
     require("radius")
     forms[1] = radius.community_form()
 --    forms[2] = add_communities(general)
