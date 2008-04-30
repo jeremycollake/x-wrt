@@ -36,7 +36,7 @@ function process()
   iwuci.commit("freeradius_proxy")
   wwwprint ("Writing proxy.conf ...")
   local freeradius = uciClass.new("freeradius")
-  if freeradius.webadmin.service == "0" then
+--  if enable == 1 then
   -- Process proxy.conf
     local sep = ""
     local proxy = uciClass.new("freeradius_proxy")
@@ -64,7 +64,7 @@ function process()
     local pepe = io.open("/etc/freeradius/proxy.conf","w")
     pepe:write(proxy_str)
     pepe:close()
-  end
+--  end
 end
 
 return parser

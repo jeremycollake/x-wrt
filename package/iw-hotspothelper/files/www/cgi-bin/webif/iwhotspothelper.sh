@@ -32,119 +32,10 @@
 -- config.lua 
 -- LUA settings and load some functions files
 -- 
---dofile("/usr/lib/webif/LUA/config.lua")
---require("tbform")
---require("radius")
---require("captiveportal")
 
 require("init")
 require("ipkg")
 require("checkpkg")
-
-function about()
-	form = formClass.new(tr("About"))
-	form:Add_help(tr("iw_var_iw#Internet-Wifi"),tr([[iw_help_iw#
-        Internet-Wifi is a personal project of community wireless like others. 
-        This settings helper is to help you to configure a hotspot, but is not  
-        only for that community.<br>
-        You can use this to configure your stand-alone hotspot or your own community.
-        If your community will be big, you will need install a server with webserver,
-        radius server, and something to storage the users, time connections, 
-        serve the captive portal and many things more or you can join to 
-        <a href="http://dev.internet-wifi.com.ar/users">Internet-Wifi</a><strong> 
-        (Internet-Wifi is WORK IN PROGRESS the site is not ready yet, but you can
-         use the login page to test your configuration)</strong>. 
-        ]]))
-  return form
-end
-
-function config()
-  wireless = uciClass.new("wireless")
-  local wifi_channel = wireless
-  local wifi_devices = {}
-  for i=1, #wireless["wifi-iface"] do
-    wifi_devices[#wifi_devices+1] = wireless["wifi-iface"][i].values.device
-  end
-----	Input Section formservice
-  if iw_hotspot.interface == nil then iw_hotspot:set("settings","interface") end
-  local interface = {}
-  interface["name"] = iw_hotspot.__PACKAGE..".interface"
-  interface["values"] = iw_hotspot.interface
-   
-  local iw_interface  = interface.values.interface  or "wlan"
-  local iw_ipaddress  = interface.values.ipaddress  or "10.128.0.1"
-  local iw_ipmask     = interface.values.ipamask    or "255.255.255.0"
-  cfg_name = "algo"
-	form = formClass.new(tr("Mesh Network Configuration"))
---	form:Add("select",cfg_name..".mesh","yes",tr("iw_wizard_var_mesh#Mesh Network"),"string")
---	form[cfg_name..".mesh"].options:Add("no","Disable")
---	form[cfg_name..".mesh"].options:Add("yes","Enable")
-	form:Add("text",cfg_name..".interface",iw_interface,tr("iw_wizard_var_interface#Mesh Network"),"string")
-	form:Add("text",cfg_name..".ipaddress",iw_ipaddress,tr("iw_wizard_var_ip#IP Address"),"string")
-  form:Add_help(tr("iwhotspothelper_var_ipaddress#IP Address & Mask"),tr([[All device 
-    in mesh network must be at the same sub-net.<br>
-    node (1) Ip Address : 10.128.0.1 MASK 255.255.255.0 <br>
-    node (2) Ip Address : 10.128.0.2 MASK 255.255.255.0 <br>
-    node (n) Ip Address : 10.128.0.n MASK 255.255.255.0 <br>
-    OR <br>
-    node (1) Ip Address : 10.128.1.1 MASK 255.255.0.0 <br>
-    node (2) Ip Address : 10.128.2.1 MASK 255.255.0.0 <br>
-    node (n) Ip Address : 10.128.n.1 MASK 255.255.0.0 <br>
-    ]]))
-	form:Add("text",cfg_name..".ipmask",iw_ipmask,tr("iw_wizard_var_mask#IP Mask"),"string")
-  
-  form:Add("subtitle","Wireless")
-	form:Add("select",cfg_name..".device",iw_device,tr("iw_wizard_var_wireless_device#Wireless Device"),"string")
-	for i = 1, #wifi_devices do
-    form[cfg_name..".device"].options:Add(wifi_devices[i],wifi_devices[i])
-  end
-	form:Add("text",cfg_name..".channel",iw_channel,tr("iw_wizard_var_wifi_channel#Wireless Channel"),"string")
-	form:Add("text",cfg_name..".ssid",iw_ssid,tr("iw_wizard_var_wifi_essid#SSID"),"string")
-	form:Add_help(tr("iwhotspothelper_var_wireless#Wireless"),tr([[iwhotspothelper_help_wireless#
-    All device must be in Adhoc Mode, have same channel and same ESSID.<br>
-    Channels allocation on the mesh node is usually very simple. Can choose between 
-    three channels (1,6,11), use channel 6 to normal nodes, 11 to backbone noedes
-    and 1 to standart hotspot (not in mesh) access inside of location. This will 
-    ensure that the two networks do not interfere with each other. Less interference
-    will result in better performance.<br>
-    ]]))
-  form:Add_help_link("http://wirelessafrica.meraka.org.za/wiki/images/f/fe/Building_a_Rural_Wireless_Mesh_Network_-_A_DIY_Guide_v0.7_65.pdf",tr("Extracted from Meraka Institute"))
-  
-  form:Add("subtitle","Captive Portal")
-	form:Add("text",cfg_name..".uamserver",iw_uamserver,tr("iw_wizard_var_chilli_uamserver#UAM Server"),"string","width:90%")
-	form:Add("text",cfg_name..".uamsecret",iw_uamsecret,tr("iw_wizard_var_chilli_secret#UAM Secret"),"string")
-	form:Add("text",cfg_name..".uamallowed",iw_uamallowed,tr("iw_wizard_var_chilli_allowed#UAM Allowed"),"string","width:90%")
-	form:Add_help(tr("iw_var_chilliservice#Captive Portal"),tr([[iw_help_chilliservice#
-    <strong><a href="http://www.chillispot.info/">Chillispot</a></strong> - The captive portal technique forces an HTTP 
-    client on a network to see a special web page (usually for authentication 
-    purposes) before surfing the Internet normally. Captive portal turns a Web 
-    browser into a secure authentication device.
-    ]]))
-  form:Add_help_link("http://en.wikipedia.org/wiki/Captive_portal",tr("Extracted from Wikipedia"))
-  form:Add_help(tr("iwhotspothelper_var_uamserver#UAM Server"),tr([[iwhotspothelper_help_uamserver#
-    Is an url of authentication page.
-    ]]))
-  form:Add_help(tr("iwhotspothelper_var_uamsecret#UAM Secret"),tr([[iwhotspothelper_help_uamsecret#
-    Must be the same of authentication page.
-    ]]))
-  form:Add_help(tr("iwhotspothelper_var_uamallowed#UAM Allowed"),tr([[iwhotspothelper_help_uamallowed#
-    List of allowed urls without authentication (for free access).
-    ]]))
-  form:Add("subtitle","Local Radius")
-	form:Add("text",cfg_name..".secret","testing123",tr("iw_wizard_var_freeradius_secret#Local Radius Secret"),"string")
-  form:Add("subtitle","Local User")
-	form:Add("text",cfg_name..".username",iw_username,tr("iw_wizard_var_freeradius_secret#Local Radius Secret"),"string")
-	form:Add("text",cfg_name..".password",iw_password,tr("iw_wizard_var_freeradius_secret#Local Radius Secret"),"string")
-
-  form:Add("subtitle","Communities Radius")
-	form:Add("text",cfg_name..".rmtserver1",iw_rmtserver1,tr("iw_wizard_var_remoteradius_server#Primary Radius"),"string","width:90%")
-	form:Add("text",cfg_name..".rmtserver2",iw_rmtserver2,tr("iw_wizard_var_remoteradius_server#Secondary Radius"),"string","width:90%")
-	form:Add("text",cfg_name..".rmtsecret",iw_rmtsecret,tr("iw_wizard_var_remoteradius_secret#Radius Secret"),"string")
-  form:Add_help(tr("iwhotspothelper_var_communities#Communities Radius"),tr([[iwhotspothelper_help_communities#
-    Remote radius server to provide authentication, authorization, and accounting.
-    ]]))
-    return form
-end
 
 function setfooter(form)
   page.savebutton = "<input type=\"submit\" name=\"__ACTION\" value=\""..tr("Next").."\" style=\"width:100px;\" />"
@@ -211,31 +102,10 @@ function set_users(general)
   return forms
 end
 
- 
-function set_radius(general)
-  local forms = {}
-  if tonumber(general.values.radius) == 1 then -- Local Users
-    forms[1] = radius.add_usr_form()
-    forms[2] = radius.user_form()
-    setfooter(forms[1])
-    forms[1]:Add("hidden","step","set_end")
-  elseif tonumber(general.values.radius) == 2 then -- Communities Users
-    forms[1] = radius.community_form()
-  elseif tonumber(general.values.radius) == 3 then -- Local & Communities Users
-    forms[1] = radius.add_usr_form()
-    forms[2] = radius.user_form()
-    setfooter(forms[1])
-    forms[1]:Add("hidden","step","communities")
-  else
-    return set_end(general)
-  end
-  return forms
-end
-
-
 function set_communities(general)
   local forms = {}
   if tonumber(general.values.radius) > 1 then -- Local Users
+    require("radius")
     forms[1] = radius.community_form()
 --    forms[2] = add_communities(general)
     setfooter(forms[1])
@@ -272,11 +142,11 @@ if iw_hotspot.general == nil then iw_hotspot:set("settings","general") end
 local general = {}
 general["name"] = iw_hotspot.__PACKAGE..".general"
 general["values"] = iw_hotspot.general
-require(".files/iwhotspothelper-menu")
+-- require(".files/iwhotspothelper-menu")
 for k,v in pairs(__FORM) do
   if k == "UCI_SET_VALUE" and string.trim(v) ~= "" then
     if __FORM.UCI_CMD_snwfreeradius_check then
-      __FORM.step = "radius"
+      __FORM.step = "users"
       break
     end
   end
@@ -307,9 +177,11 @@ elseif __FORM.option == "wizard" then
     check = pkgInstalledClass.new(coova_pkgs,true)
     forms = set_portal(general)
   elseif __FORM.step == "users" then
+    check = pkgInstalledClass.new(freeradius_pkgs,true)
     forms = set_users(general)
---  elseif __FORM.step == "communities" then
---      forms = set_communities(general)
+  elseif __FORM.step == "communities" then
+    check = pkgInstalledClass.new(freeradius_pkgs,true)
+      forms = set_communities(general)
   elseif __FORM.step == "set_end" then
     forms = set_end(general)
   end
@@ -367,8 +239,10 @@ print(page:header())
 for i=1, #forms do
   forms[i]:print()
 end
+--[[
 for i, t in pairs(__FORM) do
   print(i,t,"<br>")
 end
+]]--
 print (page:footer())
 

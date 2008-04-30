@@ -1,3 +1,4 @@
+#!/bin/sh
 # Coova Chilli - David Bird <david@coova.com>
 # Licensed under the GPL, see http://coova.org/
 # up.sh /dev/tun0 192.168.0.10 255.255.255.0
@@ -44,7 +45,7 @@ ipt_in() {
     ipt -I FORWARD -i $IF -j ACCEPT
     ipt -I FORWARD -o $IF -j ACCEPT
 
-#    [ "$HS_LAN_ACCESS" != "on" -a "$HS_LAN_ACCESS" != "allow" ] && \
+    [ "$HS_LAN_ACCESS" != "on" -a "$HS_LAN_ACCESS" != "allow" ] && \
 #	ipt -I FORWARD -i $IF -o \! $HS_WANIF -j DROP
 
     [ "$HS_LOCAL_DNS" = "on" ] && \
@@ -53,4 +54,3 @@ ipt_in() {
 
 # site specific stuff optional
 [ -e /etc/chilli/ipup.sh ] && . /etc/chilli/ipup.sh
-

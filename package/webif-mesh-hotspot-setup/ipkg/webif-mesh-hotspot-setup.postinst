@@ -7,7 +7,6 @@ for line in io.lines("/www/cgi-bin/webif/.categories") do
   t[#t+1] = line
   if line == "##WEBIF:category:HotSpot" then
     hotspot = #t
-    break
   end
   if line == "##WEBIF:category:Network" 
   or line == "##WEBIF:category:Mesh" then
