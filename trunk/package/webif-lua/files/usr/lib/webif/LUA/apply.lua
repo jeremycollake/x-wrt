@@ -83,28 +83,13 @@ function init_list(list)
   return str      
 end
 
-local reboot_list = {}
-local parsers_list = {}
-local old_parsers = {}
-local depends_list = ""
-local stop_list = {}
--- local enable_list = {}
--- local disable_list = {}
-local file_list = {}
-
-local exe_before = {}
-local exe_after = {}
-
-local handler_dir = io.popen("ls /tmp/.uci")
-
-for file in handler_dir:lines() do
-  file_list[file] = ""
-  if io.exists("/usr/lib/webif/apply/"..file) == true then  
+function call_parser(file,parsers_list,depends_list,exe_before,exe_after,reboot_list)
     require("/usr/lib/webif/apply/"..file)
     parsers_list[file] = {p = parser}
     -- Read if this package depends or need others packages to done configuration
     if parser.depends_pkgs then
-      depends_list = depends_list ..","..parser.depends_pkgs
+      if depends_list == "" then depends_list = parser.depends_pkgs
+      else depends_list = depends_list ..","..parser.depends_pkgs end
     end
     
     exe_before[parser.init_script.." stop"] = "Stopping "
@@ -131,6 +116,70 @@ for file in handler_dir:lines() do
         exe_after[command] = msg
       end
     end
+
+end
+
+local reboot_list = {}
+local parsers_list = {}
+local old_parsers = {}
+local depends_list = ""
+local stop_list = {}
+-- local enable_list = {}
+-- local disable_list = {}
+local file_list = {}
+
+local exe_before = {}
+local exe_after = {}
+
+local handler_dir = io.popen("ls /tmp/.uci")
+
+for file in handler_dir:lines() do
+  file_list[file] = ""
+  if io.exists("/usr/lib/webif/apply/"..file) == true then  
+--    call_parser(file,parsers_list,depends_list,exe_before,exe_after,reboot_list)
+
+
+    require("/usr/lib/webif/apply/"..file)
+    parsers_list[file] = {p = parser}
+    -- Read if this package depends or need others packages to done configuration
+    if parser.depends_pkgs then
+      if depends_list == "" then depends_list = parser.depends_pkgs
+      else depends_list = depends_list ..","..parser.depends_pkgs end
+    end
+    
+    exe_before[parser.init_script.." stop"] = "Stopping "
+    
+    if parser.enable == nil or tonumber(parser.enable) == 0 then
+      exe_before[parser.init_script.. " disable"] = "Disabling "
+    else
+      exe_before[parser.init_script.. " enable"] = "Enabling "
+      exe_after [parser.init_script.. " start"] = "Starting "
+    end
+    
+    if parser.reboot == true then
+      reboot_list[#reboot_list+1] = file
+    end
+    
+    if parser.exe_before then
+      for command,msg in pairs(parser.exe_before) do
+        exe_before[command] = msg
+      end
+    end
+
+    if parser.exe_after then
+      for command, msg in pairs(parser.exe_after) do
+        exe_after[command] = msg
+      end
+    end
+
+
+
+
+    if parser.call_parser then
+      for i in string.gmatch(parser.call_parser,"%S+") do
+        call_parser(i,parsers_list,depends_list,exe_before,exe_after,reboot_list)
+      end
+    end
   elseif io.exists("/usr/lib/webif/apply-"..file) == true then
     old_parsers[file] = "/usr/lib/webif/apply-"..file
   end
@@ -145,7 +194,8 @@ if __WWW then
 	page.action_review = ""
 	page.action_clear = ""
 	page.savebutton ="<input type=\"submit\" name=\"continue\" value=\"Continue\" style=\"width:150px;\" />"
-  print(page:header()) 
+  print(page:header())
+  wwwprint("Dependencias ",depends_list) 
 end
 local before_str = exe_list(exe_before)
 if before_str ~= "" then
@@ -173,6 +223,15 @@ if #reboot_list > 0 then
 end    
 
 print(init_list(exe_after))
+
+--  local form = formClass.new("Apply...",true)
+--  print (form:startFullForm())
+	changes_apply=io.popen ("/usr/lib/webif/apply.sh 2>&1")
+	for linea in changes_apply:lines() do
+		wwwprint(trsh(linea))
+	end
+-- 	print (form:endForm())
+	changes_apply:close()
 
 if __WWW then print(page:footer()) end
 os.exit(0)

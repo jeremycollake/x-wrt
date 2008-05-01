@@ -7,6 +7,3 @@ config "client" ""
 	option nastype	'chillispot'
 
 
-
-
-

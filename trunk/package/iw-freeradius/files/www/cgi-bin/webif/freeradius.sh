@@ -1,6 +1,6 @@
 #!/usr/bin/lua
 --[[
-##WEBIF:name:IW:250:Freeradius
+##WEBIF:name:HotSpot:450:Freeradius
 ]]--
 --dofile("/usr/lib/webif/LUA/config.lua")
 require("init")

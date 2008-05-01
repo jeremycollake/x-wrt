@@ -1,6 +1,6 @@
 #!/usr/bin/lua
 --[[
-##WEBIF:name:IW:400:OLSR
+##WEBIF:name:HotSpot:120:OLSR
 ]]--
 --dofile("/usr/lib/webif/LUA/config.lua")
 require("init")
