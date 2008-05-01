@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=iw-freeradius
-PKG_VERSION:=0.002
+PKG_VERSION:=0.001
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -12,7 +12,7 @@ define Package/iw-freeradius
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+webif-lua # +freeradius +freeradius-mod-chap +freeradius-mod-files +freeradius-mod-radutmp +freeradius-mod-realm
+  DEPENDS:=+webif-lua
   TITLE:=Freeradius Administrative Console in LUA for X-Wrt.
 endef
 

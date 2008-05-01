@@ -36,7 +36,7 @@ function process()
   iwuci.commit("freeradius_proxy")
   wwwprint ("Writing proxy.conf ...")
   local freeradius = uciClass.new("freeradius")
-  if freeradius.webadmin.service == "0" then
+--  if enable == 1 then
   -- Process proxy.conf
     local sep = ""
     local proxy = uciClass.new("freeradius_proxy")
@@ -48,6 +48,7 @@ function process()
     end
 
     proxy_str = proxy_str .. "}\n\n"
+    if proxy.realm then
     for i, v in pairs (proxy.realm) do
       proxy_str = proxy_str .. "realm "..v.values.community .." {\n"
       for k, val in pairs(v.values) do
@@ -61,10 +62,11 @@ function process()
       end
       proxy_str = proxy_str .. "}\n\n"
     end
+    end
     local pepe = io.open("/etc/freeradius/proxy.conf","w")
     pepe:write(proxy_str)
     pepe:close()
-  end
+--  end
 end
 
 return parser

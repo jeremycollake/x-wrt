@@ -1,7 +1,22 @@
-#!/bin/sh
-#
-# IW-Freeradius post-install script.
-#
-if [ "`grep "IW" "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"`" != "##WEBIF:category:IW" ]; then
-  echo "##WEBIF:category:IW" >> ${IPKG_INSTROOT}/www/cgi-bin/webif/.categories
-fi
+#!/usr/bin/lua
+print("Checking Menu")
+local t = {}
+local hotspot = 0
+local prevmenu = 0
+for line in io.lines("/www/cgi-bin/webif/.categories") do
+  t[#t+1] = line
+  if line == "##WEBIF:category:HotSpot" then
+    hotspot = #t
+  end
+  if line == "##WEBIF:category:Network" 
+  or line == "##WEBIF:category:Mesh" then
+    prevmenu = #t
+  end
+end
+if hotspot == 0 then
+  table.insert(t,prevmenu+1,"##WEBIF:category:HotSpot")
+  print("HotSpot menu was added")
+end
+local menu = io.open("/www/cgi-bin/webif/.categories","w")
+menu:write(table.concat(t,"\n"))
+
