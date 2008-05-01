@@ -175,11 +175,11 @@ for file in handler_dir:lines() do
 
 
 
---    if parser.call_parser then
---      for i in string.gmatch(parser.call_parser,"%S+") do
---        call_parser(i,parsers_list,depends_list,exe_before,exe_after,reboot_list)
---      end
---    end
+    if parser.call_parser then
+      for i in string.gmatch(parser.call_parser,"%S+") do
+        call_parser(i,parsers_list,depends_list,exe_before,exe_after,reboot_list)
+      end
+    end
   elseif io.exists("/usr/lib/webif/apply-"..file) == true then
     old_parsers[file] = "/usr/lib/webif/apply-"..file
   end
@@ -223,7 +223,7 @@ if #reboot_list > 0 then
 end    
 
 print(init_list(exe_after))
---[[
+
 --  local form = formClass.new("Apply...",true)
 --  print (form:startFullForm())
 	changes_apply=io.popen ("/usr/lib/webif/apply.sh 2>&1")
@@ -232,6 +232,6 @@ print(init_list(exe_after))
 	end
 -- 	print (form:endForm())
 	changes_apply:close()
-]]--
+
 if __WWW then print(page:footer()) end
 os.exit(0)
