@@ -36,6 +36,11 @@
 require("init")
 require("ipkg")
 require("checkpkg")
+require("iwuci")
+local olsr_pkgs = "ip,olsrd,olsrd-mod-dyn-gw,olsrd-mod-nameservice,olsrd-mod-txtinfo,iw-olsr"
+local freeradius_pkgs = "libltdl,freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm,iw-freeradius"
+local coova_pkgs = "coova,coova-chilli-xwrt"
+local chilli_pkgs = "chillispot,iw-chillispot"
 
 function setfooter(form)
   page.savebutton = "<input type=\"submit\" name=\"__ACTION\" value=\""..tr("Next").."\" style=\"width:100px;\" />"
@@ -57,11 +62,14 @@ function nothing()
 end
 
 function set_mesh(general)
-  require("olsr")
   local forms = {}
   if tonumber(general.values.mesh) == 0 then
     forms = set_portal(general)
   else
+    check = pkgInstalledClass.new(ipkg.check(olsr_pkgs),true)
+    iwuci.set("olsr.webadmin.enable","1")
+    iwuci.set("olsr.webadmin.userlevel","1")
+    require("olsr")
     forms[1] = olsrd.core_form()
     forms[1].title = "Mesh Network Settings (OLSR)"
     forms[1]:Add("hidden","step","portal")
@@ -75,7 +83,10 @@ function set_portal(general)
   if tonumber(general.values.portal) == 0 then
     forms = set_users(general)
   else
-    
+    check = pkgInstalledClass.new(coova_pkgs,true)
+    iwuci.set("chilli.service","websettings") 
+    iwuci.set("chilli.service.enable","1")
+    iwuci.set("chilli.service.userlevel","1")
     require("coovaportal")
     local user_level = tonumber(general.values.user_level) or 0
     local localradius = tonumber(general.values.radius) or 0
@@ -92,7 +103,18 @@ end
 
 function set_users(general)
   local forms = {}
+  if tonumber(general.values.radius) == 0 then
+    if tonumber(general.values.portal) == 1 then 
+      general.values.radius = 2
+    elseif tonumber(general.values.portal) == 2 then 
+      general.values.radius = 3
+    elseif tonumber(general.values.portal) == 3 then
+      general.values.radius = 3
+    end    
+    iwuci.set("iw_hotspot_wizard.general.radius",general.values.radius)
+  end
   if tonumber(general.values.radius) > 1 then
+    check = pkgInstalledClass.new(freeradius_pkgs,true)
     require("radius")
     forms[1] = radius.add_usr_form()
     forms[2] = radius.user_form()
@@ -108,6 +130,7 @@ function set_communities(general)
   local forms = {}
   if tonumber(general.values.radius) == 1
   or tonumber(general.values.radius) == 3 then -- Local Users
+    check = pkgInstalledClass.new(freeradius_pkgs,true)
     require("radius")
     forms[1] = radius.community_form()
 --    forms[2] = add_communities(general)
@@ -133,10 +156,6 @@ function set_end(general)
 	return forms
 end
 
-local olsr_pkgs = "ip,olsrd,olsrd-mod-dyn-gw,olsrd-mod-nameservice,olsrd-mod-txtinfo,iw-olsr"
-local freeradius_pkgs = "libltdl,freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm,iw-freeradius"
-local coova_pkgs = "coova,coova-chilli-xwrt"
-local chilli_pkgs = "chillispot,iw-chillispot"
 local check_pkgs = ""
 local forms ={}
 
@@ -174,16 +193,12 @@ elseif __FORM.option == "wizard" then
   if __FORM.step == "nothing" then
     forms = nothing()
   elseif __FORM.step == "network" then
-    check = pkgInstalledClass.new(ipkg.check(olsr_pkgs),true)
     forms = set_mesh(general)
   elseif __FORM.step == "portal" then
-    check = pkgInstalledClass.new(coova_pkgs,true)
     forms = set_portal(general)
   elseif __FORM.step == "users" then
-    check = pkgInstalledClass.new(freeradius_pkgs,true)
     forms = set_users(general)
   elseif __FORM.step == "communities" then
-    check = pkgInstalledClass.new(freeradius_pkgs,true)
       forms = set_communities(general)
   elseif __FORM.step == "set_end" then
     forms = set_end(general)
@@ -207,8 +222,8 @@ else
 	form:Add("select",general.name..".portal",general.values.portal,tr("iw_wizard_var_portal#Configure Captive Portal"),"string")
 	form[general.name..".portal"].options:Add("0",tr("No"))
 	form[general.name..".portal"].options:Add("1",tr("Local Coova-Chilli"))
-	form[general.name..".portal"].options:Add("2",tr("Remote Coova-Chilli"))
-	form[general.name..".portal"].options:Add("3",tr("Remote ChilliSpot"))
+--	form[general.name..".portal"].options:Add("2",tr("Remote Coova-Chilli"))
+--	form[general.name..".portal"].options:Add("3",tr("Remote ChilliSpot"))
   form:Add_help(tr("iwhotspothelper_var_portal#Captive Portal"),tr([[iwhotspothelper_help_portal#
     The captive portal technique forces an HTTP client on a network to see a 
     special web page (usually for authentication purposes) before surfing the 
