@@ -1,9 +1,12 @@
 #!/usr/bin/lua
 print("Checking Menu")
+local IPKG_INSTROOT = os.getenv("IPKG_INSTROOT") or ""
+local IPKG_CONF_DIR = os.getenv("IPKG_CONF_DIR") or ""
+local IPKG_OFFLINE_ROOT = os.getenv("IPKG_OFFLINE_ROOT") or ""
 local t = {}
 local hotspot = 0
 local prevmenu = 0
-for line in io.lines("/www/cgi-bin/webif/.categories") do
+for line in io.lines(IPKG_INSTROOT.."/www/cgi-bin/webif/.categories") do
   t[#t+1] = line
   if line == "##WEBIF:category:HotSpot" then
     hotspot = #t
@@ -17,5 +20,5 @@ if hotspot == 0 then
   table.insert(t,prevmenu+1,"##WEBIF:category:HotSpot")
   print("HotSpot menu was added")
 end
-local menu = io.open("/www/cgi-bin/webif/.categories","w")
+local menu = io.open(IPKG_INSTROOT.."/www/cgi-bin/webif/.categories","w")
 menu:write(table.concat(t,"\n"))
