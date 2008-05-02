@@ -102,8 +102,18 @@ function install_pkgs(pepe)
 --    print(tinstall[i].url..tinstall[i].file)
     local tmpfile = string.gsub(tinstall[i].file,"%./","")
     local tmpurl = tinstall[i].url.."/"
-    os.execute("wget -P "..tmpdir.." "..tmpurl..tmpfile)
-    os.execute("ipkg install "..tmpdir.."/"..tmpfile.." -force-overwrite -force-defaults")
+    print("Please wait... ")
+    print("Downloading... "..tmpurl..tmpfile)
+    local info = io.popen("wget -P "..tmpdir.." "..tmpurl..tmpfile)
+    for line in info:lines() do
+      print(line)
+    end
+    info = io.popen("ipkg install "..tmpdir.."/"..tmpfile.." -force-overwrite -force-defaults")
+    for line in info:lines() do
+      print(line)
+    end
+--    os.execute("wget -P "..tmpdir.." "..tmpurl..tmpfile)
+--    os.execute("ipkg install "..tmpdir.."/"..tmpfile.." -force-overwrite -force-defaults")
     os.execute("rm "..tmpdir.."/*.ipk")
   end
 end
