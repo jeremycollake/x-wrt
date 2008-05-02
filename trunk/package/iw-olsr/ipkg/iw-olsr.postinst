@@ -10,6 +10,7 @@ for line in io.lines(IPKG_INSTROOT.."/www/cgi-bin/webif/.categories") do
   t[#t+1] = line
   if line == "##WEBIF:category:HotSpot" then
     hotspot = #t
+    break
   end
   if line == "##WEBIF:category:Network" 
   or line == "##WEBIF:category:Mesh" then
@@ -19,6 +20,7 @@ end
 if hotspot == 0 then
   table.insert(t,prevmenu+1,"##WEBIF:category:HotSpot")
   print("HotSpot menu was added")
+  local menu = io.open(IPKG_INSTROOT.."/www/cgi-bin/webif/.categories","w")
+  menu:write(table.concat(t,"\n"))
+  menu:close()
 end
-local menu = io.open(IPKG_INSTROOT.."/www/cgi-bin/webif/.categories","w")
-menu:write(table.concat(t,"\n"))
