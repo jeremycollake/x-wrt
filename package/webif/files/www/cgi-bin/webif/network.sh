@@ -99,6 +99,7 @@ for interface in $network; do
 		config_get FORM_vpi $interface vpi
 		config_get FORM_macaddr $interface macaddr
 		config_get_bool FORM_defaultroute $interface defaultroute 1
+		[ "$interface" = "lan" ] && config_get_bool FORM_nat $interface nat 1
 	else
 		eval FORM_proto="\$FORM_${interface}_proto"
 		eval FORM_type="\$FORM_${interface}_type"
@@ -120,6 +121,7 @@ for interface in $network; do
 		eval FORM_vpi="\$FORM_${interface}_vpi"
 		eval FORM_macaddr="\$FORM_${interface}_macaddr"
 		eval FORM_defaultroute="\$FORM_${interface}_defaultroute"
+		[ "$interface" = "lan" ] && eval FORM_nat="\$FORM_${interface}_nat"
 	fi
 	config_get FORM_dns $interface dns
 	eval FORM_dnsadd="\$FORM_${interface}_dnsadd"
@@ -312,7 +314,12 @@ EOF
 				fi
 
 				uci_set "network" "$interface" "proto" "$FORM_proto"
-				uci_set "network" "$interface" "type" "$FORM_type"
+				[ "$FORM_type" = "" ] && uci_remove "network" "$interface" "type"
+				[ "$FORM_type" != "" ] && uci_set "network" "$interface" "type" "$FORM_type"
+				if [ "$interface" = "lan" ]; then
+					[ "$FORM_nat" = "" ] && FORM_nat=0
+					uci_set "network" "$interface" "nat" "$FORM_nat"
+				fi
 				uci_set "network" "$interface" "macaddr" "$FORM_macaddr"
 				case "$FORM_proto" in
 					pptp)
@@ -374,6 +381,10 @@ EOF
 display_form <<EOF
 onchange|modechange
 $validate_error
+start_form|@TR<<Nat Mode/Rouer Mode>>
+field|@TR<<Perform Nat>>
+checkbox|lan_nat|$FORM_nat|1
+end_form
 $forms
 EOF
 
