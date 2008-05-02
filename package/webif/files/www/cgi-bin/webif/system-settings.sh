@@ -390,6 +390,16 @@ TIMEZONE_OPTS=$(
 
 )
 #######################################################
+# Web Services Form
+uci_load httpd
+cfg=$CONFIG_SECTION
+
+if empty "$FORM_submit"; then
+  config_get FORM_port "$cfg" port
+else
+  uci_set "httpd" "$cfg" "port" "$FORM_port"
+fi
+
 cat <<EOF
 <script type="text/javascript" src="/webif.js"></script>
 <script type="text/javascript">
@@ -453,6 +463,10 @@ field|@TR<<Theme>>
 select|theme|$FORM_theme
 $THEMES
 $WEBIF_SSL
+end_form
+start_form|@TR<<Web Configurator Settings>>
+field|@TR<<HTTP Port>>
+text|port|$FORM_port
 end_form
 EOF
 
