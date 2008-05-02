@@ -173,6 +173,13 @@ function pkgInstalledClass:install_pkg()
 	page.title = tr("Installing Package")
 	page.savebutton ="<input type=\"submit\" name=\"continue\" value=\"Continue\" style=\"width:150px;\" />"
 	print(page:header())
+	for line in string.gmatch(__MENU.selected,"[^&]+") do
+		key, val = unpack(string.split(line,"="))
+		key = string.trim(key)
+		val = string.trim(val)
+		print ("<input type=\"hidden\" name=\""..key.."\" value=\""..val.."\" />") 
+	end
+	
 	print("<pre>")
 --	local install = io.popen("ipkg install "..str_list)
 	local install = io.popen("/usr/local/share/lua/5.1/iw/install install "..str_list)
