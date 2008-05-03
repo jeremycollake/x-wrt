@@ -6,7 +6,9 @@ local IPKG_OFFLINE_ROOT = os.getenv("IPKG_OFFLINE_ROOT") or ""
 local t = {}
 local hotspot = 0
 local prevmenu = 0
-for line in io.lines(IPKG_INSTROOT.."/www/cgi-bin/webif/.categories") do
+local menufile = io.open(IPKG_INSTROOT.."/www/cgi-bin/webif/.categories")
+if menufile then
+for line in menufile:lines() do
   t[#t+1] = line
   if line == "##WEBIF:category:HotSpot" then
     hotspot = #t
@@ -23,4 +25,5 @@ if hotspot == 0 then
   local menu = io.open(IPKG_INSTROOT.."/www/cgi-bin/webif/.categories","w")
   menu:write(table.concat(t,"\n"))
   menu:close()
+end
 end
