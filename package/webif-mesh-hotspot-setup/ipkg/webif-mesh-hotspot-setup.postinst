@@ -8,22 +8,36 @@ local hotspot = 0
 local prevmenu = 0
 local menufile = io.open(IPKG_INSTROOT.."/www/cgi-bin/webif/.categories")
 if menufile then
-for line in menufile:lines() do
-  t[#t+1] = line
-  if line == "##WEBIF:category:HotSpot" then
-    hotspot = #t
-    break
+  for line in menufile:lines() do
+    t[#t+1] = line
+    if line == "##WEBIF:category:HotSpot" then
+      hotspot = #t
+      break
+    end
+    if line == "##WEBIF:category:Network" 
+    or line == "##WEBIF:category:Mesh" then
+      prevmenu = #t
+    end
   end
-  if line == "##WEBIF:category:Network" 
-  or line == "##WEBIF:category:Mesh" then
-    prevmenu = #t
+  if hotspot == 0 then
+    table.insert(t,prevmenu+1,"##WEBIF:category:HotSpot")
+    print("HotSpot menu was added")
+    local menu = io.open(IPKG_INSTROOT.."/www/cgi-bin/webif/.categories","w")
+    menu:write(table.concat(t,"\n"))
+    menu:close()
   end
-end
-if hotspot == 0 then
-  table.insert(t,prevmenu+1,"##WEBIF:category:HotSpot")
-  print("HotSpot menu was added")
-  local menu = io.open(IPKG_INSTROOT.."/www/cgi-bin/webif/.categories","w")
-  menu:write(table.concat(t,"\n"))
-  menu:close()
-end
+else
+  local categories = [[##WEBIF:category:Info
+##WEBIF:category:Graphs
+##WEBIF:category:Status
+##WEBIF:category:Log
+##WEBIF:category:-
+##WEBIF:category:System
+##WEBIF:category:Network
+##WEBIF:category:HotSpot
+##WEBIF:category:VPN
+##WEBIF:category:-
+##WEBIF:category:Logout
+]]
+  os.execute("echo "..categories.." > "..IPKG_INSTROOT.."/www/cgi-bin/webif/.categories")
 end
