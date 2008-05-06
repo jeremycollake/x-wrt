@@ -1,16 +1,34 @@
 lpkgClass = {} 
 lpkgClass_mt = {__index = lpkgClass} 
 
-function lpkgClass.new(str_pkgs)
+function lpkgClass.new(str_pkgs,str_repos)
 	local self = {}
 	setmetatable(self,lpkgClass_mt)
-	self.__repo = {}
+  self.__repo = {}
 	self.__installed = {}
   self.__toinstall = {}
-	self.search = str_pkgs
+  self.__notfound = {}
+  self.__invalidrepo = {}
+  self.__allready = {}
+  self.repo_list = str_repos or ""
+	self.search = str_pkgs or ""
+	self:repos()
+	self:installed()
+--	self:loadRepo_list(self.repo_list)
 	return self
 end 
 
+function lpkgClass:loadRepo_list(str_repos)
+  if str_repos == "" then
+    for i,v in pairsByKeys(self.__repo) do
+      self:load_repo(i)
+    end
+  else
+    for repo_name in string.gmatch(str_repos,"[^,]+") do
+      self:load_repo(string.trim(repo_name))
+    end
+  end
+end
 
 function lpkgClass:repos()
 	local repos_set = load_file("/etc/ipkg.conf")
@@ -32,32 +50,50 @@ function lpkgClass:installed()
 end
 
 function lpkgClass:load_repo(str_repo)
-  data = load_file("/usr/lib/ipkg/lists/"..str_repo)
-  if self.search then
-    self:do_process(self.search,data,str_repo)
-    self:do_process(self.depend,data,str_repo)
+  local data = load_file("/usr/lib/ipkg/lists/"..str_repo)
+  if data ~= "No such file or directory" then
+    if self.search and self.search ~= "" then
+      self:do_process(self.search,data,str_repo)
+      if self.depend then
+        self:do_process(self.depend,data,str_repo)
+      end
+    else
+      self:process_pkgs_file(data,"",str_repo)
+    end
   else
-    self:process_pkgs_file(newdata,"",str_repo)
+    self.__invalidrepo[#self.__invalidrepo+1] = str_repo
+--    print("Invalid Repo")
   end
 end
 
 function lpkgClass:do_process(str_search,data,str_repo)
-  if str_search == nil then return end
+--  if str_search == nil then 
+--    local newdata = data
+--    self:process_pkgs_file(newdata,"",str_repo)
+--  else
+    local all = false
     for search in string.gmatch(str_search,"%S+") do
 --      print(search)
       local mysearch = string.gsub(search,"*","")
       local newdata = data
       if string.match(search,"*") then
+        all = true
         start = string.find(newdata,"Package: "..mysearch,1,true)
       else
         start = string.find(newdata,"Package: "..mysearch.."\n",1,true)
       end
-      if start ~= nil then
-        newdata = string.sub(newdata,start)
+
+      if start == nil and all == false then
+        self.__notfound[mysearch] = mysearch
+      else      
+        if start ~= nil then
+          newdata = string.sub(newdata,start)
+        end
+        self:process_pkgs_file(newdata,search,str_repo)
       end
-      self:process_pkgs_file(newdata,search,str_repo)
 --      print(self.depend)
     end
+--  end
 end
 
 function lpkgClass:process_pkgs_file(data,search,repo)
@@ -74,7 +110,7 @@ function lpkgClass:process_pkgs_file(data,search,repo)
     end
   end
   local tidx = nil
-	for line in string.gmatch(data,"[^\n]+") do
+  for line in string.gmatch(data,"[^\n]+") do
     local key, desc = unpack(string.split(line,":"))
     if string.trim(key) ~= "" then
       if key and desc == nil then
@@ -82,8 +118,8 @@ function lpkgClass:process_pkgs_file(data,search,repo)
         key = "Description"
       end        
       if key == "Package" then
-       tidx = nil
-       pkg = desc
+        tidx = nil
+        pkg = desc
         if search ~= "" and search ~= nil then
           if all == true then
             if search ~= string.sub(pkg,1,string.len(search)) then break end
@@ -178,4 +214,191 @@ function lpkgClass:check_depends(str)
       end
     end
   end
+end
+
+function lpkgClass:install_pkgs()
+  local ctrl_dep = {}
+  local tinstall = {}
+  
+  repeat
+    for i,v in pairs(self.__toinstall) do
+      local ok = true
+      if v.Depends ~= nil then
+        local depends = string.gsub(v.Depends,","," ")
+        for dep in string.gmatch(depends,"%S+") do
+          if self.__installed[dep] == nil and ctrl_dep[dep] == nil then
+            ok = false
+            break
+          end
+        end
+      end
+      if ok == true then
+--      if self.__installed[i] == nil then
+        tinstall[#tinstall+1] = {}
+        tinstall[#tinstall]["url"] = v.url
+        tinstall[#tinstall]["file"] = v.Filename
+        tinstall[#tinstall]["Package"] = i
+        tinstall[#tinstall]["Version"] = v.Version
+        ctrl_dep[i] = #tinstall
+        self.__toinstall[i] = nil
+        end
+--      end
+    end
+  until tcount(self.__toinstall) == 0 
+  return tinstall
+end
+
+function lpkgClass:loadCtrl(tmpdir)
+  local tidx = {}
+  str_ctrl = load_file(tmpdir.."/control/control")
+  for line in string.gmatch(str_ctrl,"[^\n]+") do
+    local key, desc = unpack(string.split(line,":"))
+    if string.trim(key) ~= "" then
+      if key and desc == nil then
+        desc = key
+        key = "Description"
+      end        
+      if key == "Description" then
+        if tidx["Description"] == nil then
+          tidx["Description"] = desc
+        else
+          tidx["Description"] = tidx["Description"]..desc
+        end
+      else
+        tidx[key] = desc 
+      end
+    end
+  end
+  return tidx  
+end
+
+function lpkgClass:download(url,file,overwrite)
+  local tmpdir = "/tmp/luapkg"
+  local tmpfile = string.gsub(file,"%./","")
+  local tmpurl = url.."/"
+  os.execute("mkdir "..tmpdir.." 2>/dev/null")
+  os.execute("rm "..tmpdir.."/*.ipk 2>/dev/null")
+  os.execute("wget -P "..tmpdir.." "..tmpurl..tmpfile)
+end
+
+function lpkgClass:unpack(tinstall,overwrite) 
+  local tmpdir = "/tmp/luapkg"
+  local tmpfile = string.gsub(tinstall.file,"%./","")
+  local overwrite = overwrite or false -- or uci.get("luapkg.")
+  local warning_exists = false
+  local str_list = ""
+  local str_ctrl = ""
+  local str_exec = ""
+  os.execute("mkdir "..tmpdir.."/control 2>/dev/null")
+  os.execute("mkdir "..tmpdir.."/data 2>/dev/null")
+  os.execute("mkdir "..tmpdir.."/data/usr 2>/dev/null")
+  os.execute("mkdir "..tmpdir.."/data/usr/lib 2>/dev/null")
+  os.execute("mkdir "..tmpdir.."/data/usr/lib/ipkg 2>/dev/null")
+  os.execute("mkdir "..tmpdir.."/data/usr/lib/ipkg/info 2>/dev/null")
+  
+  os.execute("tar xzf "..tmpdir.."/"..tmpfile.." -C "..tmpdir)
+  os.execute("tar xzf "..tmpdir.."/control.tar.gz -C "..tmpdir.."/control")
+  os.execute("tar xzf "..tmpdir.."/data.tar.gz -C "..tmpdir.."/data")
+
+  tctrl_file = self:loadCtrl(tmpdir)
+
+  local list_file = io.popen("ls -R "..tmpdir.."/data")
+  local t_list = {}
+  local prevdir = "/"
+  
+  for line in list_file:lines() do
+    if string.len(line) > 0 then
+      line = string.gsub(line,tmpdir.."/data","")
+      if string.match(line,":") then
+        line = string.gsub(line,":","")
+        prevdir = line
+        if string.len(line) == 0 then line = "/" end
+        t_list[line] = "DIR"
+      else
+        t_list[prevdir.."/"..line] = false
+        if prevdir == "/etc" then
+          if overwrite == true then
+            t_list[prevdir.."/"..line] = false
+          else
+            t_list[prevdir.."/"..line] = io.exists(prevdir.."/"..line)
+            if t_list[prevdir.."/"..line] == true then warning_exists = true end
+          end
+        end
+      end
+    end
+  end
+  
+  for i,v in pairsByKeys(t_list) do
+    str_list = str_list..i.."\n"
+  end
+  
+  control_files = io.popen("ls "..tmpdir.."/control")
+  for line in control_files:lines() do
+    if line == "preinst" then 
+      str_exec = tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package.."."..line
+    end
+    os.execute("mv -f "..tmpdir.."/control/"..line.." "..tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package.."."..line)
+  end
+  os.execute("echo '"..str_list.."' >"..tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package..".list")
+  return t_list, tctrl_file, warning_exists, str_exec
+end
+
+function lpkgClass:wath_we_do(t)
+  for i,v in pairsByKeys(t) do
+    if v == true then
+      repeat
+        print(i)
+        io.write([[==> File on system created by you or by a script.
+==> File also in package provided by package maintainer.
+   What would you like to do about it ?  Your options are:
+    Y or I  : install the package maintainer's version
+    N or O  : keep your currently-installed version
+--      D     : show the differences between the versions (if diff is installed)
+ The default action is to keep your current version.
+
+(Y/I/N/O/D) [default=N] ? ]]) 
+        rspta = io.read()
+        if rspta == "" then rspta = "N" end
+        rspta = string.upper(rspta)
+        if rspta == "Y"
+        or rspta == "I" then
+          t[i] = false
+        end
+      until rspta == "N" or rspta == "O" or rspta == "Y" or rspta == "I"
+    end
+  end
+  return t
+end
+
+function lpkgClass:processFiles(t_list)
+  local tmpdir = "/tmp/luapkg"
+  for i,v in pairsByKeys(t_list) do
+    if v == "DIR" then
+      os.execute("mkdir "..i.." 2> /dev/null")
+    elseif v == false then
+      os.execute("mv "..tmpdir.."/data"..i.." "..i)
+    end
+  end
+end
+
+function lpkgClass:detailled_status()
+  local str_status = ""
+  for i,v in pairsByKeys(self.__installed) do
+    str_status = str_status.."Package: "..v.Package.."\n"
+    str_status = str_status.."Version: "..v.Version.."\n"
+    if (v.Depends) then str_status = str_status.."Depends: "..v.Depends.."\n" end
+    str_status = str_status.."Provides: "..v.Provides.."\n"
+    str_status = str_status.."Status: "..v.Status.."\n"
+    str_status = str_status.."Architecture: "..v.Architecture.."\n"
+    if v.Conffiles then str_status = str_status.."Conffiles: "..v.Conffiles.."\n" end
+    if v["Installed-Time"] then str_status = str_status.."Installed-Time: "..v["Installed-Time"].."\n" end
+    str_status = str_status.."\n"
+  end
+  return str_status
+end
+
+function lpkgClass:write_status()
+  local tmpdir = "/tmp/luapkg"
+  os.execute("echo '"..self:detailled_status().."' >/usr/lib/ipkg/status")
+  os.execute("rm -R "..tmpdir)
 end
