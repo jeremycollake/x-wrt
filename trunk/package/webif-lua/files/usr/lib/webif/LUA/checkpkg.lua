@@ -204,7 +204,15 @@ function pkgInstalledClass:install_pkg()
       os.execute(str_exec)
     end
     print("Copying files")
-    pkg:processFiles(tfiles)
+    rspta, str_cmd = pkg:processFiles(tfiles)
+    if rspta ~= 0 then
+      print ("Error: "..str_cmd)
+    	print("</pre>")
+      print(page:footer())
+      os.exit()
+    end
+      
+--[[
     local str_installed = "Package: "..tctrl_file.Package.."\n"
     str_installed = str_installed.."Version: "..tctrl_file.Version.."\n"
     if tctrl_file.Depends ~= nil then
@@ -218,8 +226,10 @@ function pkgInstalledClass:install_pkg()
       str_installed = str_installed.."Conffiles: "..conffiles.."\n"
     end
     str_installed = str_installed.."Installed-Time: "..tostring(os.time()).."\n"
+    print(str_installed)
     pkg:process_pkgs_file_new(str_installed)
     pkg:write_status()
+]]--
   end
 	print("</pre>")
 	print(page:footer())
