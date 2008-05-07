@@ -190,21 +190,25 @@ function pkgInstalledClass:install_pkg()
     local dest = tinstall[i].Package.." ("..tinstall[i].Version..")"
     print("Installing "..dest)
     print("Downloading "..tinstall[i].url..tinstall[i].file)
-    pkg:download(tinstall[i].url,tinstall[i].file)
+    pkg:download(tinstall[i].url,tinstall[i].file,i)
 
     print("Unpack file "..tinstall[i].file)
-    local tfiles, tctrl_file, warning_exists, str_exec = pkg:unpack(tinstall[i],true)
+    local tfiles, tctrl_file, warning_exists, str_exec = pkg:unpack(tinstall[i],i,true)
 
+--[[
+    esto hay que hacerlo para que pida por web la confirmacion
     if warning_exists == true then
       tfiles = pkg:wath_we_do(tfiles)
     end
+]]--
 
     print("Configuring "..dest)
     if string.len(str_exec) > 0 then
+      print("Executing preinstall "..dest)
       os.execute(str_exec)
     end
     print("Copying files")
-    rspta, str_cmd = pkg:processFiles(tfiles)
+    rspta, str_cmd = pkg:processFiles(tfiles,i)
     if rspta ~= 0 then
       print ("Error: "..str_cmd)
     	print("</pre>")
@@ -212,7 +216,6 @@ function pkgInstalledClass:install_pkg()
       os.exit()
     end
       
---[[
     local str_installed = "Package: "..tctrl_file.Package.."\n"
     str_installed = str_installed.."Version: "..tctrl_file.Version.."\n"
     if tctrl_file.Depends ~= nil then
@@ -228,8 +231,7 @@ function pkgInstalledClass:install_pkg()
     str_installed = str_installed.."Installed-Time: "..tostring(os.time()).."\n"
     print(str_installed)
     pkg:process_pkgs_file_new(str_installed)
-    pkg:write_status()
-]]--
+    pkg:write_status(i)
   end
 	print("</pre>")
 	print(page:footer())

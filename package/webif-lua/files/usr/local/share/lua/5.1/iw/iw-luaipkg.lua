@@ -375,17 +375,19 @@ function lpkgClass:loadCtrl(tmpdir)
   return tidx  
 end
 
-function lpkgClass:download(url,file,overwrite)
-  local tmpdir = "/tmp/luapkg"
+function lpkgClass:download(url,file,str_pkgname)
+  local tmpdir = "/tmp/luapkg/"..str_pkgname
   local tmpfile = string.gsub(file,"%./","")
   local tmpurl = url.."/"
+  
+  os.execute("mkdir /tmp/luapkg/ 2>/dev/null")
+  os.execute("rm -R "..tmpdir.." 2>/dev/null")
   os.execute("mkdir "..tmpdir.." 2>/dev/null")
-  os.execute("rm "..tmpdir.."/*.ipk 2>/dev/null")
-  os.execute("wget -q -P "..tmpdir.." "..tmpurl..tmpfile)
+  return os.execute("wget -q -P "..tmpdir.." "..tmpurl..tmpfile)
 end
 
-function lpkgClass:unpack(tinstall,overwrite) 
-  local tmpdir = "/tmp/luapkg"
+function lpkgClass:unpack(tinstall,str_pkgname,overwrite) 
+  local tmpdir = "/tmp/luapkg/"..str_pkgname
   local tmpfile = string.gsub(tinstall.file,"%./","")
   local overwrite = overwrite or false -- or uci.get("luapkg.")
   local warning_exists = false
@@ -393,8 +395,6 @@ function lpkgClass:unpack(tinstall,overwrite)
   local str_ctrl = ""
   local str_exec = ""
   
-  os.execute("rm -R"..tmpdir.."/control 2>/dev/null")
-  os.execute("rm -R"..tmpdir.."/data 2>/dev/null")
   os.execute("mkdir "..tmpdir.."/control 2>/dev/null")
   os.execute("mkdir "..tmpdir.."/data 2>/dev/null")
   os.execute("mkdir "..tmpdir.."/data/usr 2>/dev/null")
@@ -405,6 +405,7 @@ function lpkgClass:unpack(tinstall,overwrite)
   os.execute("tar xzf "..tmpdir.."/"..tmpfile.." -C "..tmpdir)
   os.execute("tar xzf "..tmpdir.."/control.tar.gz -C "..tmpdir.."/control")
   os.execute("tar xzf "..tmpdir.."/data.tar.gz -C "..tmpdir.."/data")
+  os.execute("rm "..tmpdir.."/*.ipk 2>/dev/null")
 
   tctrl_file = self:loadCtrl(tmpdir)
 
@@ -477,29 +478,16 @@ function lpkgClass:wath_we_do(t)
   return t
 end
 
-function lpkgClass:processFiles(t_list)
-  local tmpdir = "/tmp/luapkg"
---[[
-  for i,v in pairsByKeys(t_list) do
-    if v == true then
-      os.execute("rm "..tmpdir.."/data"..i)
-    end
-  end
-  local rspta = os.execute("cp -pd "..tmpdir.."/data /")
-  if rspta ~= 0 then
---      os.execute("rm -R "..tmpdir)
-    return rspta, "cp -r "..tmpdir.."/data"..i.." "..i
-  end
-]]--    
+function lpkgClass:processFiles(t_list,pkgname)
+  local tmpdir = "/tmp/luapkg/"..pkgname
   for i,v in pairsByKeys(t_list) do
     if v == "DIR" then
       os.execute("mkdir "..i.." 2> /dev/null")
     elseif v == false then
       local rspta = os.execute("cp -pdf "..tmpdir.."/data"..i.." "..i)
---      local rspta,str_error = os.rename(tmpdir.."/data"..i,i)
-      print (i,rspta,str_error)
+--      print (i,rspta,str_error)
       if rspta ~= 0 then
-        os.execute("rm -R "..tmpdir)
+--        os.execute("rm -R "..tmpdir)
         return rspta, "cp -pdf "..tmpdir.."/data"..i.." "..i
       end
       os.execute("rm "..tmpdir.."/data"..i)
@@ -525,8 +513,8 @@ function lpkgClass:detailled_status()
   return str_status
 end
 
-function lpkgClass:write_status()
-  local tmpdir = "/tmp/luapkg"
+function lpkgClass:write_status(pkgname)
+  local tmpdir = "/tmp/luapkg/"..pkgname
   os.execute("echo '"..self:detailled_status().."' >/usr/lib/ipkg/status")
   os.execute("rm -R "..tmpdir)
 end
