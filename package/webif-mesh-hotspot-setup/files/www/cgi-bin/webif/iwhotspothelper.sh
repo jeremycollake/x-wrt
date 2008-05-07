@@ -156,7 +156,7 @@ function set_end(general)
 	return forms
 end
 
-local check_pkgs = ""
+local pkgs_tocheck = ""
 local forms ={}
 
 iw_hotspot = uciClass.new("iw_hotspot_wizard")
@@ -190,6 +190,17 @@ elseif __FORM.option == "wizard" then
   then
     __FORM.step = "nothing"
   end
+  if tonumber(general.values.mesh) == 1 then 
+    pkgs_tocheck = olsr_pkgs 
+  end
+  if tonumber(general.values.portal) == 1 then
+    if pkgs_tocheck == "" then
+      pkgs_tocheck = coova_pkgs..","..freeradius_pkgs
+    else
+      pkgs_tocheck = coova_pkgs..","..freeradius_pkgs..","..pkgs_tocheck
+    end
+  end
+  pkgInstalledClass.new(pkgs_tocheck,true)
   if __FORM.step == "nothing" then
     forms = nothing()
   elseif __FORM.step == "network" then
