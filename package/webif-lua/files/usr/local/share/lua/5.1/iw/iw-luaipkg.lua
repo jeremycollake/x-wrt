@@ -323,7 +323,7 @@ function lpkgClass:autoinstall_pkgs()
   repeat
     for i,v in pairs(self.__toinstall) do
       local ok = true
-      if v.Depends ~= nil then
+      if v.Depends ~= nil and string.trim(v.Depends) ~= "" then
         local depends = string.gsub(v.Depends,","," ")
         for dep in string.gmatch(depends,"%S+") do
           if self.__installed[dep] == nil and ctrl_dep[dep] == nil then
@@ -346,7 +346,8 @@ function lpkgClass:autoinstall_pkgs()
         end
 --      end
     end
-  until tcount(self.__toinstall) == 0 
+--  until tcount(self.__toinstall) == 0 
+  until #self.__toinstall == 0 
   return tinstall
 end
 
@@ -380,7 +381,7 @@ function lpkgClass:download(url,file,overwrite)
   local tmpurl = url.."/"
   os.execute("mkdir "..tmpdir.." 2>/dev/null")
   os.execute("rm "..tmpdir.."/*.ipk 2>/dev/null")
-  os.execute("wget -P "..tmpdir.." "..tmpurl..tmpfile)
+  os.execute("wget -q -P "..tmpdir.." "..tmpurl..tmpfile)
 end
 
 function lpkgClass:unpack(tinstall,overwrite) 
@@ -391,6 +392,9 @@ function lpkgClass:unpack(tinstall,overwrite)
   local str_list = ""
   local str_ctrl = ""
   local str_exec = ""
+  
+  os.execute("rm -R"..tmpdir.."/control 2>/dev/null")
+  os.execute("rm -R"..tmpdir.."/data 2>/dev/null")
   os.execute("mkdir "..tmpdir.."/control 2>/dev/null")
   os.execute("mkdir "..tmpdir.."/data 2>/dev/null")
   os.execute("mkdir "..tmpdir.."/data/usr 2>/dev/null")
@@ -439,7 +443,8 @@ function lpkgClass:unpack(tinstall,overwrite)
     if line == "preinst" then 
       str_exec = tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package.."."..line
     end
-    os.execute("mv -f "..tmpdir.."/control/"..line.." "..tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package.."."..line)
+    os.execute("cp -f "..tmpdir.."/control/"..line.." "..tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package.."."..line)
+    os.execute("rm "..tmpdir.."/control/"..line)
   end
   os.execute("echo '"..str_list.."' >"..tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package..".list")
   return t_list, tctrl_file, warning_exists, str_exec
@@ -474,13 +479,33 @@ end
 
 function lpkgClass:processFiles(t_list)
   local tmpdir = "/tmp/luapkg"
+--[[
+  for i,v in pairsByKeys(t_list) do
+    if v == true then
+      os.execute("rm "..tmpdir.."/data"..i)
+    end
+  end
+  local rspta = os.execute("cp -pd "..tmpdir.."/data /")
+  if rspta ~= 0 then
+--      os.execute("rm -R "..tmpdir)
+    return rspta, "cp -r "..tmpdir.."/data"..i.." "..i
+  end
+]]--    
   for i,v in pairsByKeys(t_list) do
     if v == "DIR" then
       os.execute("mkdir "..i.." 2> /dev/null")
     elseif v == false then
-      os.execute("mv "..tmpdir.."/data"..i.." "..i)
+      local rspta = os.execute("cp -pdf "..tmpdir.."/data"..i.." "..i)
+--      local rspta,str_error = os.rename(tmpdir.."/data"..i,i)
+      print (i,rspta,str_error)
+      if rspta ~= 0 then
+        os.execute("rm -R "..tmpdir)
+        return rspta, "cp -pdf "..tmpdir.."/data"..i.." "..i
+      end
+      os.execute("rm "..tmpdir.."/data"..i)
     end
   end
+  return 0
 end
 
 function lpkgClass:detailled_status()
