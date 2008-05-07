@@ -46,8 +46,9 @@ end
 
 function lpkgClass:installed()
 	local installed_set = load_file("/usr/lib/ipkg/status")
-  self:process_pkgs_file(installed_set)
+  self:process_pkgs_file_new(installed_set)
 end
+
 
 function lpkgClass:load_repo(str_repo)
   local data = load_file("/usr/lib/ipkg/lists/"..str_repo)
@@ -58,7 +59,7 @@ function lpkgClass:load_repo(str_repo)
         self:do_process(self.depend,data,str_repo)
       end
     else
-      self:process_pkgs_file(data,"",str_repo)
+      self:process_pkgs_file_new(data,"",str_repo)
     end
   else
     self.__invalidrepo[#self.__invalidrepo+1] = str_repo
@@ -86,16 +87,114 @@ function lpkgClass:do_process(str_search,data,str_repo)
       if start == nil and all == false then
         self.__notfound[mysearch] = mysearch
       else      
+        self.__notfound[mysearch] = nil
         if start ~= nil then
           newdata = string.sub(newdata,start)
         end
-        self:process_pkgs_file(newdata,search,str_repo)
+        self:process_pkgs_file_new(newdata,search,str_repo)
       end
 --      print(self.depend)
     end
 --  end
 end
 
+function lpkgClass:process_pkgs_file_new(data,search,repo)
+  local pkg = ""
+  local ver = ""
+  local repo = repo or "inst"
+  local all = nil
+  if search then
+    if string.match(search,"*") then
+      all = true
+      search = string.gsub(search,"*","")
+    else
+      all = false
+    end
+  end
+  local tidx = nil
+  for line in string.gmatch(data,"[^\n]+") do
+    local key, desc = unpack(string.split(line,":"))
+    if string.trim(key) ~= "" then
+      if key and desc == nil then
+        desc = key
+        key = "Description"
+      end        
+  
+      if key == "Package" then
+        self:add_new(tidx,repo)
+        tidx = {}
+        pkg = desc
+        if search ~= "" and search ~= nil then
+          if all == true then
+            if search ~= string.sub(pkg,1,string.len(search)) then
+              tidx = nil
+              break 
+            end
+          else
+            if pkg ~= search then
+              tidx = nil
+              break 
+            end
+          end
+        end
+      end
+      if key == "Description" then
+        if tidx["Description"] == nil then
+          tidx["Description"] = desc
+        else
+          tidx["Description"] = tidx["Description"]..desc
+        end
+      else
+        tidx[key] = desc 
+      end
+    end
+  end
+  self:add_new(tidx,repo)
+end
+
+function lpkgClass:add_new(tidx,reponame)
+  if tidx == nil then return end
+  self[#self+1] = tidx
+  if reponame == "inst" then
+    self.__installed[tidx.Package] = self[#self]
+    self[#self]["Repository"] = "Installed"
+  else
+    if self.__installed[tidx.Package] == nil then
+      if self.__toinstall[tidx.Package] == nil then
+        self[#self]["url"] = self.__repo[reponame].url
+        self.__toinstall[tidx.Package] = self[#self]
+      else
+        if self:compareVersion(self.__toinstall[tidx.Package].Version, tidx.Version) == true then
+          self[#self]["url"] = self.__repo[reponame].url
+          self.__toinstall[tidx.Package] = self[#self]
+        end
+      end
+    end
+    self.__repo[reponame]["pkgs"][tidx.Package] = self[#self]
+    self[#self]["Repository"] = reponame
+    if self[tidx.Package] == nil then self[tidx.Package]= {} end
+    if self[tidx.Package][tidx.Version] == nil then self[tidx.Package][tidx.Version]= {} end
+    if self[tidx.Package][tidx.Version][reponame] == nil then self[tidx.Package][tidx.Version][reponame]= self[#self] end
+    if tidx.Depends ~= nil and tidx.Depends ~= "" and repo ~= "inst" then
+      self:check_depends(tidx.Depends)
+    end
+  end
+end
+
+function lpkgClass:compareVersion(a,b)
+  local lena = string.len(a)
+  local lenb = string.len(b)
+  local len = 0
+  if lena > lenb then len = lenb
+  else len = lena end
+  for i=1, len do
+    if string.sub(a,i,i) < string.sub(b,i,i) then return true end
+    if string.sub(a,i,i) > string.sub(b,i,i) then return false end
+  end
+  if lena < lenb then return true end
+  return false
+end
+--[[
 function lpkgClass:process_pkgs_file(data,search,repo)
   local pkg = ""
   local ver = ""
@@ -141,7 +240,7 @@ function lpkgClass:process_pkgs_file(data,search,repo)
           tidx = self[#self]
         end
       end
-      self:add(tidx,pkg,ver,repo,key,desc)
+--      self:add(tidx,pkg,ver,repo,key,desc)
     end
   end
 end
@@ -184,6 +283,7 @@ function lpkgClass:add(tidx,pkg,ver,repo,key,desc)
     tidx[key] = desc 
   end
 end
+]]--
 
 function lpkgClass:check_depends(str)
   local str = string.gsub(str,","," ")
@@ -216,7 +316,7 @@ function lpkgClass:check_depends(str)
   end
 end
 
-function lpkgClass:install_pkgs()
+function lpkgClass:autoinstall_pkgs()
   local ctrl_dep = {}
   local tinstall = {}
   
@@ -235,10 +335,12 @@ function lpkgClass:install_pkgs()
       if ok == true then
 --      if self.__installed[i] == nil then
         tinstall[#tinstall+1] = {}
+        tinstall[#tinstall]["Package"] = v.Package
+        tinstall[#tinstall]["Version"] = v.Version
+        tinstall[#tinstall]["Repository"] = v.Repository
         tinstall[#tinstall]["url"] = v.url
         tinstall[#tinstall]["file"] = v.Filename
-        tinstall[#tinstall]["Package"] = i
-        tinstall[#tinstall]["Version"] = v.Version
+        tinstall[#tinstall]["MD5Sum"] = v.MD5Sum
         ctrl_dep[i] = #tinstall
         self.__toinstall[i] = nil
         end
@@ -385,13 +487,14 @@ function lpkgClass:detailled_status()
   local str_status = ""
   for i,v in pairsByKeys(self.__installed) do
     str_status = str_status.."Package: "..v.Package.."\n"
-    str_status = str_status.."Version: "..v.Version.."\n"
-    if (v.Depends) then str_status = str_status.."Depends: "..v.Depends.."\n" end
-    str_status = str_status.."Provides: "..v.Provides.."\n"
-    str_status = str_status.."Status: "..v.Status.."\n"
-    str_status = str_status.."Architecture: "..v.Architecture.."\n"
+    str_status = str_status.."Status: "..tostring(v.Status).."\n"
+    str_status = str_status.."Root: "..tostring(v.Root).."\n"
     if v.Conffiles then str_status = str_status.."Conffiles: "..v.Conffiles.."\n" end
-    if v["Installed-Time"] then str_status = str_status.."Installed-Time: "..v["Installed-Time"].."\n" end
+    str_status = str_status.."Version: "..v.Version.."\n"
+--    if (v.Depends) then str_status = str_status.."Depends: "..v.Depends.."\n" end
+--    str_status = str_status.."Provides: "..tostring(v.Provides).."\n"
+--    str_status = str_status.."Architecture: "..v.Architecture.."\n"
+--    if v["Installed-Time"] then str_status = str_status.."Installed-Time: "..v["Installed-Time"].."\n" end
     str_status = str_status.."\n"
   end
   return str_status
