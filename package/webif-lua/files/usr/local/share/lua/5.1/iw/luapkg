@@ -57,45 +57,16 @@ function list_pkgs(t,detailled,notinstalled)
   end
 end
 
-function list_toinstall(pepe)
-  local ctrl_dep = {}
-  local tinstall = {}
-  local tmpdir = "/tmp"
-  repeat
-    for i,v in pairs(pepe.__toinstall) do
-      local ok = true
-      if v.Depends ~= nil and string.trim(v.Depends) ~= "" then
-        local depends = string.trim(string.gsub(v.Depends,","," "))
-        for dep in string.gmatch(depends,"%S+") do
-          if pepe.__installed[dep] == nil and ctrl_dep[dep] == nil then
-            ok = false
-            break
-          end
-        end
-      end
-      if ok == true then
---        if pepe.__installed[i] == nil then
-        tinstall[#tinstall+1] = {}
-        tinstall[#tinstall]["Package"] = v.Package
-        tinstall[#tinstall]["Version"] = v.Version
-        tinstall[#tinstall]["Repository"] = v.Repository
-        tinstall[#tinstall]["url"] = v.url
-        tinstall[#tinstall]["file"] = v.Filename
-        tinstall[#tinstall]["MD5Sum"] = v.MD5Sum
-        ctrl_dep[i] = #tinstall
-        pepe.__toinstall[i] = nil
---        end
-      end
-    end
-  until tcount(pepe.__toinstall) == 0 
+function list_toinstall(pkg)
+  local tinstall = pkg:autoinstall_pkgs()
   for i = 1, #tinstall do
 --    print(tinstall[i].url..tinstall[i].file,tinstall[i].MD5Sum)
-    print(tinstall[i].Package..tinstall[i].Version,tinstall[i].Repository)
+    print(tinstall[i].Package,tinstall[i].Version,tinstall[i].Repository)
   end
 end
 
 function install_pkgs(pkg)
-  local tinstall = pkg:install_pkgs()
+  local tinstall = pkg:autoinstall_pkgs()
   print("Please wait... ")
   for i = 1, #tinstall do
     local dest = tinstall[i].Package.." ("..tinstall[i].Version..")"
@@ -186,7 +157,7 @@ elseif cmd == "list_repo" then
   not_found = pkg.__notfound
   invalid_repo = pkg.__invalidrepo
 
-elseif cmd == "list_to_install" then
+elseif cmd == "check" then
   if string.len(pkg_list) > 0 then
     print("To install packages")
     local pkg = lpkgClass.new(pkg_list,use_repo)
@@ -214,7 +185,7 @@ else
   print("","","list                  ", "list of packages")
   print("","","list_installed        ", "list installed packages")
   print("","","list_repo             ", "list repositories")
-  print("","","list_to_install       ", "list selected packages to install")
+  print("","","check                 ", "return list of files to be install")
   print("","","install               ", "install packages")
   print("","package")
   print("","","packagename ...       ", "list of packages (space separated)")
@@ -223,6 +194,19 @@ else
   print("","","-r repository_name,...", "use only repositories in this list (comma separated)")
   print("","","-d                    ", "Detailled list")
   print("","","-notinstalled         ", "list packages not installed")
+  print("How it work")
+  print("  install or check")
+  print("    luapkg install foo*")
+  print("      Read all repositories and select all packages that name start with foo and hight Version of each one and install they")
+  print("")
+  print("    luapkg install foo* -r reponame")
+  print("      Install all packages that name start with foo from repository 'reponame'")
+  print("")
+  print("    luapkg install foo bar*")
+  print("      Read all repositories install foo from repository with hight Version of foo and install all packages that name start with bar from repository with hight Version")
+  print("")
+  print("    luapkg install foo bar* -r reponame")
+  print("      Install foo and all packages that name start with bar from repository 'reponame'")
 end
 local show = false
 for i,v in pairsByKeys(not_found) do

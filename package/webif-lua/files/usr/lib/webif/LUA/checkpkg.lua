@@ -10,6 +10,7 @@
 -- Configuration files referenced:
 --   none
 --------------------------------------------------------------------------------
+require("iw-luaipkg")
 pkgInstalledClass = {} 
 pkgInstalledClass_mt = {__index = pkgInstalledClass} 
 
@@ -158,7 +159,6 @@ end
 
 function pkgInstalledClass:install_pkg()
 	local str_list =""
-	
 	for i, v in pairs(__FORM) do
 		if string.find(i,"pkg_toinstall_",1,true) then
 			if v == "1" then
@@ -173,12 +173,54 @@ function pkgInstalledClass:install_pkg()
 	page.title = tr("Installing Package")
 	page.savebutton ="<input type=\"submit\" name=\"continue\" value=\"Continue\" style=\"width:150px;\" />"
 	print(page:header())
-	print("<pre>")
---	local install = io.popen("ipkg install "..str_list)
-	local install = io.popen("/usr/local/share/lua/5.1/iw/install install "..str_list)
-	for line in install:lines() do
-		print(line)
+	for line in string.gmatch(__MENU.selected,"[^&]+") do
+		key, val = unpack(string.split(line,"="))
+		key = string.trim(key)
+		val = string.trim(val)
+		print ("<input type=\"hidden\" name=\""..key.."\" value=\""..val.."\" />") 
 	end
+	
+	print("<pre>")
+  local pkg = lpkgClass.new(str_list)
+  pkg:loadRepo_list(pkg.repo_list)
+  print(str_list)
+  local tinstall = pkg:autoinstall_pkgs()
+  print("Please wait... ")
+  for i = 1, #tinstall do
+    local dest = tinstall[i].Package.." ("..tinstall[i].Version..")"
+    print("Installing "..dest)
+    print("Downloading "..tinstall[i].url..tinstall[i].file)
+    pkg:download(tinstall[i].url,tinstall[i].file)
+
+    print("Unpack file "..tinstall[i].file)
+    local tfiles, tctrl_file, warning_exists, str_exec = pkg:unpack(tinstall[i],true)
+
+    if warning_exists == true then
+      tfiles = pkg:wath_we_do(tfiles)
+    end
+
+    print("Configuring "..dest)
+    if string.len(str_exec) > 0 then
+      os.execute(str_exec)
+    end
+    print("Copying files")
+    pkg:processFiles(tfiles)
+    local str_installed = "Package: "..tctrl_file.Package.."\n"
+    str_installed = str_installed.."Version: "..tctrl_file.Version.."\n"
+    if tctrl_file.Depends ~= nil then
+      str_installed = str_installed.."Depends: "..tctrl_file.Depends.."\n"
+    end
+    str_installed = str_installed.."Provides: "..tctrl_file.Provides.."\n"
+    str_installed = str_installed.."Root: /\n"
+    str_installed = str_installed.."Status: install ok installed\n"
+    str_installed = str_installed.."Architecture: "..tctrl_file.Architecture.."\n"
+    if conffiles ~= nil then
+      str_installed = str_installed.."Conffiles: "..conffiles.."\n"
+    end
+    str_installed = str_installed.."Installed-Time: "..tostring(os.time()).."\n"
+    pkg:process_pkgs_file_new(str_installed)
+    pkg:write_status()
+  end
 	print("</pre>")
 	print(page:footer())
 	os.exit()
