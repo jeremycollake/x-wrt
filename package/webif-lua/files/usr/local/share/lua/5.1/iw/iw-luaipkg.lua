@@ -9,7 +9,6 @@ function lpkgClass.new(str_pkgs,str_repos)
   self.__toinstall = {}
   self.__notfound = {}
   self.__invalidrepo = {}
-  self.__allready = {}
   self.repo_list = str_repos or ""
 	self.search = str_pkgs or ""
 	self:repos()
@@ -19,7 +18,7 @@ function lpkgClass.new(str_pkgs,str_repos)
 end 
 
 function lpkgClass:loadRepo_list(str_repos)
-  if str_repos == "" then
+  if str_repos == nil or str_repos == "" then
     for i,v in pairsByKeys(self.__repo) do
       self:load_repo(i)
     end
@@ -158,6 +157,7 @@ function lpkgClass:add_new(tidx,reponame)
   if reponame == "inst" then
     self.__installed[tidx.Package] = self[#self]
     self[#self]["Repository"] = "Installed"
+    self[tidx.Package] = self[#self]
   else
     if self.__installed[tidx.Package] == nil then
       if self.__toinstall[tidx.Package] == nil then
