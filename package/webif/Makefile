@@ -184,6 +184,14 @@ define Package/webif/install
 	find $(1) -name .svn | xargs rm -rf
 endef
 
+define Package/webif/conffiles
+/etc/config/webif
+/etc/config/webifopenvpn
+/etc/config/webifssl
+/etc/config/cron
+/etc/config/syslog
+endef
+
 define Package/webif-lang-ca/install
 	mkdir -p $(1)/usr/lib/webif/lang/ca/
 	$(CP) -a ./files/usr/lib/webif/lang/ca/common.txt $(1)/usr/lib/webif/lang/ca/common.txt
