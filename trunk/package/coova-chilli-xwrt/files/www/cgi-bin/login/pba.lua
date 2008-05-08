@@ -1,5 +1,6 @@
 #!/usr/bin/lua
-dofile("/usr/lib/webif/LUA/config.lua")
+require("init")
+--dofile("/usr/lib/webif/LUA/config.lua")
 io.write([[
 Content-Type: text/html;
 Pragma: no-cache 
