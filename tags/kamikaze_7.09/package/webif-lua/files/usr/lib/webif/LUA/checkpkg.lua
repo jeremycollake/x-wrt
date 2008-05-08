@@ -185,7 +185,7 @@ function pkgInstalledClass:install_pkg()
   pkg:loadRepo_list(pkg.repo_list)
   print(str_list)
   local tinstall = pkg:autoinstall_pkgs()
-  print("Please wait... ")
+  print("Please wait... "..tostring(#tinstall))
   for i = 1, #tinstall do
     local dest = tinstall[i].Package.." ("..tinstall[i].Version..")"
     print("Installing "..dest)
@@ -229,7 +229,8 @@ function pkgInstalledClass:install_pkg()
       str_installed = str_installed.."Conffiles: "..conffiles.."\n"
     end
     str_installed = str_installed.."Installed-Time: "..tostring(os.time()).."\n"
-    print(str_installed)
+--    print(str_installed)
+    print(dest.." installed ok")
     pkg:process_pkgs_file_new(str_installed)
     pkg:write_status(i)
   end
