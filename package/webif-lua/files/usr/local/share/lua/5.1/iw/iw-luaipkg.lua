@@ -346,9 +346,16 @@ function lpkgClass:autoinstall_pkgs()
         end
 --      end
     end
---  until tcount(self.__toinstall) == 0 
-  until #self.__toinstall == 0 
+  until self:tcount(self.__toinstall) == 0 
   return tinstall
+end
+
+function lpkgClass:tcount(t)
+  local i = 0
+  for k,v in pairs(t) do
+    i = i +1
+  end
+  return i
 end
 
 function lpkgClass:loadCtrl(tmpdir)
