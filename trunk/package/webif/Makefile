@@ -186,7 +186,6 @@ endef
 
 define Package/webif/conffiles
 /etc/config/webif
-/etc/config/webifopenvpn
 /etc/config/webifssl
 /etc/config/cron
 /etc/config/syslog
