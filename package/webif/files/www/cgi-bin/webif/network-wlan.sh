@@ -818,7 +818,7 @@ EOF
 			for device in $DEVICES; do
 				eval FORM_ap_mode="\$FORM_ap_mode_$device"
 				eval FORM_channel="\$FORM_bgchannel_$device"
-				[ -z "$FORM_channel" ] && eval FORM_channel="\$FORM_achannel_$device"
+				[ "$FORM_ap_mode" = "11a" ] && eval FORM_channel="\$FORM_achannel_$device"
 				eval FORM_maxassoc="\$FORM_maxassoc_$device"
 				eval FORM_distance="\$FORM_distance_$device"
 				eval FORM_diversity="\$FORM_diversity_$device"
