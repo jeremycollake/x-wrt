@@ -381,7 +381,7 @@ EOF
 display_form <<EOF
 onchange|modechange
 $validate_error
-start_form|@TR<<Nat Mode/Rouer Mode>>
+start_form|@TR<<Nat Mode/Router Mode>>
 field|@TR<<Perform Nat>>
 checkbox|lan_nat|$FORM_nat|1
 end_form
