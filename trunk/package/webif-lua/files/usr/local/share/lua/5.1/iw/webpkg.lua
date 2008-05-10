@@ -23,7 +23,20 @@ local len = len
 
 -- no more external access after this point
 setfenv(1, P)
+local hidden_values = {}
 
+function add_hidden(key,val)
+  hidden_values[key] = val
+end
+
+function set_hidden()
+  local str_hidden = ""
+  for key,val in pairs(hidden_values) do
+		str_hidden = str_hidden .. "<input type=\"hidden\" name=\""..key.."\" value=\""..val.."\" />"
+  end
+  return str_hidden
+end 
+    
 function check(pkg_list)
   if __FORM.bt_pkg_install then
     install()
@@ -52,13 +65,12 @@ function form_select(lpkg)
   print("select")
   lpkg:loadRepo_list()
   lpkg:check_notfound()
---  __MENU.selected = string.gsub(__SERVER.REQUEST_URI,"(.*)_changes&(.*)","%2")
+
 --	page.action_apply = ""
 	page.action_review = ""
 --	page.action_clear = ""
-	page.savebutton ="<input type=\"submit\" name=\"bt_pkg_install\" value=\"Install\" style=\"width:150px;\" />"
+	page.savebutton ="<input type=\"submit\" name=\"bt_pkg_install\" value=\"Install\" style=\"width:150px;\" />"..set_hidden()
 --	page.savebutton =""
-
   local inrepo = lpkg:tcount(lpkg.__toinstall)
   local notfound = lpkg:tcount(lpkg.__notfound)
   page.title = tr("Need install ("..inrepo+notfound..") package(s)")
@@ -90,26 +102,15 @@ function form_select(lpkg)
   do_form(forms,{})
 end
 
-function get_hidden(form)
-	for line in string.gmatch(__MENU.selected,"[^&]+") do
-		key, val = unpack(string.split(line,"="))
-		key = string.trim(key)
-    val = string.trim(val)
-		form:Add("hidden",key,val)
-	end
-end
-
 function install()
   local t = {}
   local forms = {}
   local i = 0
---  __MENU.selected = string.gsub(__SERVER.REQUEST_URI,"(.*)_changes&(.*)","%2")
---	page.action_apply = ""
+	page.action_apply = ""
 	page.action_review = ""
---	page.action_clear = ""
-	page.savebutton ="<input type=\"submit\" name=\"bt_pkg_install\" value=\"Install\" style=\"width:150px;\" />"
---	page.savebutton =""
-  
+	page.action_clear = ""
+	page.savebutton ="<input type=\"submit\" name=\"continue\" value=\"Continue\" style=\"width:150px;\" />"..set_hidden()
+	
   page.title = tr("Installing Packages")
   local search = ""
   local repos = ""
@@ -229,10 +230,11 @@ function do_form(forms,t)
   for i=1, #forms do
     forms[i]:print()
   end
---[[
+  
   for i,v in pairs(__FORM) do
     print(i,v,"<br>")
   end
+--[[
   for i,v in pairs(t) do
     print(i,v,"<br>")
   end

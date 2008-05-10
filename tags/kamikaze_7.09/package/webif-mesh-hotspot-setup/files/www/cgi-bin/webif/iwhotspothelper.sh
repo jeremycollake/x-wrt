@@ -184,6 +184,10 @@ for k,v in pairs(__FORM) do
 end
 
 __FORM.option = string.trim(__FORM.option)
+  pkg.add_hidden("__ShowMenu","yes")
+  pkg.add_hidden("option",__FORM.option)
+  pkg.add_hidden("step",__FORM.step)
+
 if __FORM.option == "about" then
   forms[1] = about()
 elseif __FORM.bt_pkg_install == "Install" then
@@ -206,6 +210,7 @@ elseif __FORM.option == "wizard" then
     end
   end
 --  pkgInstalledClass.new(pkgs_tocheck,true)
+
   pkg.check(pkgs_tocheck)
   if __FORM.step == "nothing" then
     forms = nothing()
