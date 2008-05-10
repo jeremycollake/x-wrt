@@ -135,6 +135,14 @@ function set_communities(general)
 --    check = pkgInstalledClass.new(freeradius_pkgs,true)
     require("radius")
     forms[1] = radius.community_form()
+    for i,k in pairs(forms[1]) do
+      if i == "add_community" then
+        forms[1].add_community.value = __SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_proxy=realm&__menu="..__FORM.__menu.."&option=wizard&step=communities"
+      elseif string.match(i,"remove") then
+        local realm_cfg = string.gsub(i,"remove","")
+        forms[1][i].value = __SERVER.SCRIPT_NAME.."?".."UCI_CMD_del"..realm_cfg.."=&__menu="..__FORM.__menu.."&option=wizard&step=communities"
+      end
+    end    
 --    forms[2] = add_communities(general)
     setfooter(forms[1])
     forms[1]:Add("hidden","step","set_end")
@@ -176,9 +184,14 @@ for k,v in pairs(__FORM) do
       break
     end
   end
-  if string.match(k,"UCI_CMD_delfreeradius") then
+  if string.match(k,"UCI_CMD_delfreeradius_proxy") then
     __FORM.option = "wizard"
-    __FORM.step = "radius"
+    __FORM.step = "communities"
+    break
+  end
+  if string.match(k,"UCI_CMD_delfreeradius_check") then
+    __FORM.option = "wizard"
+    __FORM.step = "users"
     break
   end
 end

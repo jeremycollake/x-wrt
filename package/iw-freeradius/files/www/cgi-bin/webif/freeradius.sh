@@ -4,7 +4,8 @@
 ]]--
 --dofile("/usr/lib/webif/LUA/config.lua")
 require("init")
-local chillispot_pkg = pkgInstalledClass.new("libltdl,freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm",true)
+require("webpkg")
+pkg.check("libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm")
 
 require("radius")
 radius.set_menu()

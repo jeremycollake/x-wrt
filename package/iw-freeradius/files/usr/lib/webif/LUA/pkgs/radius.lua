@@ -174,7 +174,7 @@ function community_form()
   local server_val = server[1].values
   form = formClass.new("Comunities Radius")
 --  form:Add("link","add_community",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_proxy=realm&__menu="..__FORM.__menu.."&option=wizard&step=radius",tr("Add Community"))
-  form:Add("link","add_community",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_proxy=realm&__menu="..__FORM.__menu.."&option=proxy",tr("Add Community"))
+  form:Add("link","add_community",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_proxy=realm&__menu="..__FORM.__menu.."&option=communities",tr("Add Community"))
   if freeradius.realm ~= nil then
     for i = 1, #freeradius.realm do
       realm_cfg = freeradius.realm[i].name
@@ -195,7 +195,7 @@ function community_form()
       form[realm_cfg..".ldflag"].options:Add("",tr("&nbsp;"))
       form[realm_cfg..".ldflag"].options:Add("fail_over",tr("Fail over"))
       form[realm_cfg..".ldflag"].options:Add("round_robin",tr("Round robin"))
-      form:Add("link","remove"..realm_cfg,__SERVER.SCRIPT_NAME.."?".."UCI_CMD_del"..realm_cfg.."=&__menu="..__FORM.__menu.."&option=proxy",tr("Remove Community"))
+      form:Add("link","remove"..realm_cfg,__SERVER.SCRIPT_NAME.."?".."UCI_CMD_del"..realm_cfg.."=&__menu="..__FORM.__menu.."&option=communities",tr("Remove Community"))
     end
   end
   return form
@@ -287,7 +287,7 @@ function user_form()
       form:set_col("AcctInterimInt", "freeradius_reply."..name..".Acct_Interim_Interval", acctii)
       form:set_col("MaxDown", "freeradius_reply."..name..".WISPr_Bandwidth_Max_Down", maxdown)
       form:set_col("MaxUp", "freeradius_reply."..name..".WISPr_Bandwidth_Max_Up", maxup)
-      form:set_col("Remove", "Remove_"..name, __SERVER.SCRIPT_NAME.."?".."UCI_CMD_delfreeradius_check."..name.."=&UCI_CMD_delfreeradius_reply."..name.."=&__menu="..__FORM.__menu)
+      form:set_col("Remove", "Remove_"..name, __SERVER.SCRIPT_NAME.."?".."UCI_CMD_delfreeradius_check."..name.."=&UCI_CMD_delfreeradius_reply."..name.."=&__menu="..__FORM.__menu.."&option="..__FORM.option)
     end
   end
   return form
