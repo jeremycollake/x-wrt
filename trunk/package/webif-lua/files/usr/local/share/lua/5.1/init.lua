@@ -5,21 +5,17 @@ require("common")
 
 __SYSTEM  = loadsystemconf()
 
-require("lpkg")
-local pkg = lpkgClass.new("uci")
-if pkg.uci ~= nil then
-  if pkg.uci.Installed ~= nil then
-    __UCI_VERSION = pkg.uci.Installed.Version
-  end
+require("iw-luaipkg")
+local pkg = lpkgClass.new()
+if pkg.__installed.uci ~= nil then
+  __UCI_VERSION = pkg.__installed.uci.Version
 end
-
+pkg = nil
 
 require("translator")
 tr_load()
 -- Functions to manipulate UCI Files
 require("iw-uci")
--- Functions to manipulate Packages
-require ("checkpkg")
 
 if __WWW then
   __WORK_STATE = {"Warning... WORK NOT DONE... Not usefull...","Warning... Work in progress...","Warning... Work Not Tested","Warning... Work in Test"}

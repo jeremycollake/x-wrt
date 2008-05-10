@@ -37,7 +37,8 @@ elseif __FORM.option == "radius" then
 elseif __FORM.option == "nasid" then
   forms[1] = cportal.nasid_form()
 elseif __FORM.option == "users" then
-  local freeradius_pkg = pkgInstalledClass.new("libltdl,freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm",true)
+  require("webpkg")
+  pkg.check("libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm")
   require("radius")
   forms[1] = radius.add_usr_form()
   forms[2] = radius.user_form()

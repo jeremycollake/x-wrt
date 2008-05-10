@@ -7,7 +7,9 @@
 ]]--
 require("net")
 require("tbform")
-require("checkpkg")
+--require("checkpkg")
+--require("iw-luaipkg")
+
 cportal = {}
 local P = {}
 cportal = P
