@@ -9,7 +9,6 @@ function lpkgClass.new(str_pkgs,str_repos)
   self.__toinstall = {}
   self.__notfound = {}
   self.__invalidrepo = {}
-  self.__allready = {}
   self.repo_list = str_repos or ""
 	self.search = str_pkgs or ""
 	self:repos()
@@ -19,7 +18,7 @@ function lpkgClass.new(str_pkgs,str_repos)
 end 
 
 function lpkgClass:loadRepo_list(str_repos)
-  if str_repos == "" then
+  if str_repos == nil or str_repos == "" then
     for i,v in pairsByKeys(self.__repo) do
       self:load_repo(i)
     end
@@ -87,7 +86,7 @@ function lpkgClass:do_process(str_search,data,str_repo)
       if start == nil and all == false then
         self.__notfound[mysearch] = mysearch
       else      
-        self.__notfound[mysearch] = nil
+--        self.__notfound[mysearch] = nil
         if start ~= nil then
           newdata = string.sub(newdata,start)
         end
@@ -158,14 +157,14 @@ function lpkgClass:add_new(tidx,reponame)
   if reponame == "inst" then
     self.__installed[tidx.Package] = self[#self]
     self[#self]["Repository"] = "Installed"
+    self[tidx.Package] = self[#self]
   else
     if self.__installed[tidx.Package] == nil then
+      self[#self]["url"] = self.__repo[reponame].url
       if self.__toinstall[tidx.Package] == nil then
-        self[#self]["url"] = self.__repo[reponame].url
         self.__toinstall[tidx.Package] = self[#self]
       else
         if self:compareVersion(self.__toinstall[tidx.Package].Version, tidx.Version) == true then
-          self[#self]["url"] = self.__repo[reponame].url
           self.__toinstall[tidx.Package] = self[#self]
         end
       end
@@ -316,10 +315,68 @@ function lpkgClass:check_depends(str)
   end
 end
 
+function lpkgClass:check_notfound()
+    for i,v in pairs(self.__notfound) do
+      if self[i] ~= nil then
+        self.__notfound[i] = nil
+      end
+    end
+end
+
 function lpkgClass:autoinstall_pkgs()
   local ctrl_dep = {}
   local tinstall = {}
-  
+  self:check_notfound()
+  local repite = ""
+  local deps =""
+  local not_found = {}
+     
+  repeat
+    for i,v in pairs(self.__toinstall) do
+      local ok = true
+      if v.Depends ~= nil and string.trim(v.Depends) ~= "" then
+        local depends = string.gsub(v.Depends,","," ")
+        for dep in string.gmatch(depends,"%S+") do
+          deps = dep
+          if self.__installed[dep] == nil and ctrl_dep[dep] == nil then
+            ok = false
+            break
+          end
+        end
+      end
+--[[
+      if ok == false then
+        if not_found[deps] == nil then not_found[deps] = 1
+        else not_found[deps] = tonumber(not_found[deps]) + 1 end
+        if not_found[deps] > 1 then 
+          self:loadRepo_list()
+        end
+      end
+]]--        
+      if ok == true then
+--      if self.__installed[i] == nil then
+        tinstall[#tinstall+1] = {}
+        tinstall[#tinstall]["Package"] = v.Package
+        tinstall[#tinstall]["Version"] = v.Version
+        tinstall[#tinstall]["Repository"] = v.Repository
+        tinstall[#tinstall]["url"] = v.url
+        tinstall[#tinstall]["file"] = v.Filename
+        tinstall[#tinstall]["MD5Sum"] = v.MD5Sum
+        ctrl_dep[i] = #tinstall
+        self.__toinstall[i] = nil
+        end
+--      end
+    end
+
+  until self:tcount(self.__toinstall) == 0 
+  return tinstall
+end
+
+--[[
+function lpkgClass:selectinstall_pkgs()
+  local ctrl_dep = {}
+  local tinstall = {}
+  self:check_notfound()
   repeat
     for i,v in pairs(self.__toinstall) do
       local ok = true
@@ -349,6 +406,7 @@ function lpkgClass:autoinstall_pkgs()
   until self:tcount(self.__toinstall) == 0 
   return tinstall
 end
+]]--
 
 function lpkgClass:tcount(t)
   local i = 0
