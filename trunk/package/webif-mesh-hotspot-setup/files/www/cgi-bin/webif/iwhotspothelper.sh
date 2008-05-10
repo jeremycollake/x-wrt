@@ -34,13 +34,15 @@
 -- 
 
 require("init")
-require("ipkg")
-require("checkpkg")
+--require("ipkg")
+--require("checkpkg")
+require("webpkg")
 require("iwuci")
-local olsr_pkgs = "ip,olsrd,olsrd-mod-dyn-gw,olsrd-mod-nameservice,olsrd-mod-txtinfo,iw-olsr"
-local freeradius_pkgs = "libltdl,freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm,iw-freeradius"
-local coova_pkgs = "coova-chilli,coova-chilli-xwrt"
-local chilli_pkgs = "chillispot,iw-chillispot"
+local olsr_pkgs = "ip olsrd olsrd-mod-dyn-gw olsrd-mod-nameservice olsrd-mod-txtinfo iw-olsr"
+local freeradius_pkgs = "libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm iw-freeradius"
+local coova_pkgs = "coova-chilli coova-chilli-xwrt"
+local chilli_pkgs = "chillispot iw-chillispot"
+
 
 function setfooter(form)
   page.savebutton = "<input type=\"submit\" name=\"__ACTION\" value=\""..tr("Next").."\" style=\"width:100px;\" />"
@@ -66,7 +68,7 @@ function set_mesh(general)
   if tonumber(general.values.mesh) == 0 then
     forms = set_portal(general)
   else
-    check = pkgInstalledClass.new(ipkg.check(olsr_pkgs),true)
+--    check = pkgInstalledClass.new(ipkg.check(olsr_pkgs),true)
     iwuci.set("olsr.webadmin.enable","1")
     iwuci.set("olsr.webadmin.userlevel","1")
     require("olsr")
@@ -83,7 +85,7 @@ function set_portal(general)
   if tonumber(general.values.portal) == 0 then
     forms = set_users(general)
   else
-    check = pkgInstalledClass.new(coova_pkgs,true)
+--    check = pkgInstalledClass.new(coova_pkgs,true)
     iwuci.set("chilli.service","websettings") 
     iwuci.set("chilli.service.enable","1")
     iwuci.set("chilli.service.userlevel","1")
@@ -114,7 +116,7 @@ function set_users(general)
     iwuci.set("iw_hotspot_wizard.general.radius",general.values.radius)
   end
   if tonumber(general.values.radius) > 1 then
-    check = pkgInstalledClass.new(freeradius_pkgs,true)
+--    check = pkgInstalledClass.new(freeradius_pkgs,true)
     require("radius")
     forms[1] = radius.add_usr_form()
     forms[2] = radius.user_form()
@@ -130,7 +132,7 @@ function set_communities(general)
   local forms = {}
   if tonumber(general.values.radius) == 1
   or tonumber(general.values.radius) == 3 then -- Local Users
-    check = pkgInstalledClass.new(freeradius_pkgs,true)
+--    check = pkgInstalledClass.new(freeradius_pkgs,true)
     require("radius")
     forms[1] = radius.community_form()
 --    forms[2] = add_communities(general)
@@ -159,7 +161,9 @@ end
 local pkgs_tocheck = ""
 local forms ={}
 
+
 iw_hotspot = uciClass.new("iw_hotspot_wizard")
+
 if iw_hotspot.general == nil then iw_hotspot:set("settings","general") end
 local general = {}
 general["name"] = iw_hotspot.__PACKAGE..".general"
@@ -178,11 +182,12 @@ for k,v in pairs(__FORM) do
     break
   end
 end
+
 __FORM.option = string.trim(__FORM.option)
 if __FORM.option == "about" then
   forms[1] = about()
 elseif __FORM.bt_pkg_install == "Install" then
-  isntall = pkgInstalledClass.new("",true)
+  pkg.check()
 elseif __FORM.option == "config" then
   forms[1] = config() 
 elseif __FORM.option == "wizard" then
@@ -195,12 +200,13 @@ elseif __FORM.option == "wizard" then
   end
   if tonumber(general.values.portal) == 1 then
     if pkgs_tocheck == "" then
-      pkgs_tocheck = coova_pkgs..","..freeradius_pkgs
+      pkgs_tocheck = coova_pkgs.." "..freeradius_pkgs
     else
-      pkgs_tocheck = coova_pkgs..","..freeradius_pkgs..","..pkgs_tocheck
+      pkgs_tocheck = coova_pkgs.." "..freeradius_pkgs.." "..pkgs_tocheck
     end
   end
-  pkgInstalledClass.new(pkgs_tocheck,true)
+--  pkgInstalledClass.new(pkgs_tocheck,true)
+  pkg.check(pkgs_tocheck)
   if __FORM.step == "nothing" then
     forms = nothing()
   elseif __FORM.step == "network" then
@@ -268,10 +274,10 @@ print(page:header())
 for i=1, #forms do
   forms[i]:print()
 end
---[[
 for i, t in pairs(__FORM) do
   print(i,t,"<br>")
 end
+--[[
 ]]--
 print (page:footer())
 
