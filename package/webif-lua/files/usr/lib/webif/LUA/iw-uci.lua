@@ -66,7 +66,7 @@ function uciClass:load_conf(package)
     local var = string.sub(line,1,idx-1)
     local value = string.sub(line,idx+1)
 --		_, _, var, value = string.find(line,"(.*)=(.*)")
-		pkg, con, opt = unpack(string.split(var,"."))
+		local pkg, con, opt = unpack(string.split(var,"."))
 		if self[con] == nil then self[con] = {} end
 		if opt == nil then
       self.sections[#self.sections+1] = {}

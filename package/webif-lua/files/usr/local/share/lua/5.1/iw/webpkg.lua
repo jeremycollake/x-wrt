@@ -25,9 +25,8 @@ local len = len
 setfenv(1, P)
 
 function check(pkg_list)
-    print("check")
   if __FORM.bt_pkg_install then
-    return install()
+    install()
   else
     local lpkg = lpkgClass.new()
     if pkg_list == nil
@@ -65,7 +64,7 @@ function form_select(lpkg)
   page.title = tr("Need install ("..inrepo+notfound..") package(s)")
   forms[#forms+1] = formClass.new(tr("Packages in repositories").. " ("..inrepo..")")
 
-  for i, v in pairs(lpkg.__toinstall) do
+  for i, v in pairsByKeys(lpkg.__toinstall) do
     forms[#forms]:Add("select","rppkg_install_"..i,v.Repository,i,"","width:200px;")
     forms[#forms]["rppkg_install_"..i].options:Add("none",tr("No Install"))
     for k, t in pairs(lpkg[i]) do
@@ -159,7 +158,11 @@ function install()
     print("")
   end
 ]]--
-  print("Please wait... "..tostring(#tinstall))
+  for i, v in pairsByKeys(__FORM) do
+    print(i,v)
+  end
+--  print("Please wait... "..tostring(#tinstall))
+  print("Please wait... Installing".."&nbsp;("..tostring(#tinstall)..") package(s)")
 
   for i = 1, #tinstall do
     local dest = tinstall[i].Package.." ("..tinstall[i].Version..")"
@@ -209,6 +212,7 @@ function install()
   end
   print("</pre>")
   print(page:footer())
+  os.exit(0)
 end
 
 function get_hidden(form)
@@ -225,12 +229,14 @@ function do_form(forms,t)
   for i=1, #forms do
     forms[i]:print()
   end
+--[[
   for i,v in pairs(__FORM) do
     print(i,v,"<br>")
   end
   for i,v in pairs(t) do
     print(i,v,"<br>")
   end
+]]--
   print(page:footer())
   os.exit(0)
 end
