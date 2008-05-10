@@ -279,10 +279,5 @@ print(page:header())
 for i=1, #forms do
   forms[i]:print()
 end
-for i, t in pairs(__FORM) do
-  print(i,t,"<br>")
-end
---[[
-]]--
 print (page:footer())
 

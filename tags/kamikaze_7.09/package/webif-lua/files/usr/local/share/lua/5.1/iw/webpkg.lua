@@ -66,11 +66,11 @@ function form_select(lpkg)
   lpkg:loadRepo_list()
   lpkg:check_notfound()
 
---	page.action_apply = ""
+	page.action_apply = ""
 	page.action_review = ""
---	page.action_clear = ""
+	page.action_clear = ""
 	page.savebutton ="<input type=\"submit\" name=\"bt_pkg_install\" value=\"Install\" style=\"width:150px;\" />"..set_hidden()
---	page.savebutton =""
+
   local inrepo = lpkg:tcount(lpkg.__toinstall)
   local notfound = lpkg:tcount(lpkg.__notfound)
   page.title = tr("Need install ("..inrepo+notfound..") package(s)")
@@ -148,21 +148,7 @@ function install()
   local tinstall = lpkg:autoinstall_pkgs()
   print(page:header())
   print("<pre>")
---[[  
-  for i = 1, #tinstall do
-    print(tinstall[i].Package)
-    for k,v in pairsByKeys(tinstall[i]) do
-      if k ~= "Package" then
-        print(k,v)
-      end
-    end
-    print("")
-  end
-]]--
-  for i, v in pairsByKeys(__FORM) do
-    print(i,v)
-  end
---  print("Please wait... "..tostring(#tinstall))
+
   print("Please wait... Installing".."&nbsp;("..tostring(#tinstall)..") package(s)")
 
   for i = 1, #tinstall do
@@ -206,7 +192,6 @@ function install()
       str_installed = str_installed.."Conffiles: "..conffiles.."\n"
     end
     str_installed = str_installed.."Installed-Time: "..tostring(os.time()).."\n"
---    print(str_installed)
     print(dest.." installed ok")
     lpkg:process_pkgs_file_new(str_installed)
     lpkg:write_status(i)
@@ -216,6 +201,7 @@ function install()
   os.exit(0)
 end
 
+--[[
 function get_hidden(form)
 	for line in string.gmatch(__MENU.selected,"[^&]+") do
 		key, val = unpack(string.split(line,"="))
@@ -224,21 +210,13 @@ function get_hidden(form)
 		form:Add("hidden",key,val)
 	end
 end
+]]--
 
 function do_form(forms,t)
   print(page:header())
   for i=1, #forms do
     forms[i]:print()
   end
-  
-  for i,v in pairs(__FORM) do
-    print(i,v,"<br>")
-  end
---[[
-  for i,v in pairs(t) do
-    print(i,v,"<br>")
-  end
-]]--
   print(page:footer())
   os.exit(0)
 end
