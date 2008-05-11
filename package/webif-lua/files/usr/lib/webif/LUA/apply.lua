@@ -9,9 +9,8 @@ if __WWW then
 end
 first = false
 function install(pkg_list)
-  require("iw-luaipkg")
-  local pkg = lpkgClass.new()
-  pkg = nil
+  require("webpkg")
+  pkg.check(pkg_list)
 end
 
 function exe_list(list)
