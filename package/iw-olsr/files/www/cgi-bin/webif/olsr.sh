@@ -4,7 +4,9 @@
 ]]--
 --dofile("/usr/lib/webif/LUA/config.lua")
 require("init")
-local olsr_pkg = pkgInstalledClass.new("olsrd",true)
+require("webpkg")
+pkg.check("ip olsrd olsrd-mod-dyn-gw olsrd-mod-nameservice olsrd-mod-txtinfo")
+
 require("olsr")
 --olsr = uciClass.new("olsr")
 forms = {}
