@@ -1,0 +1,75 @@
+diff -urN socat-1.6.0.0.old/sslcls.c socat-1.6.0.0.dev/sslcls.c
+--- socat-1.6.0.0.old/sslcls.c	2007-02-26 22:45:24.000000000 +0100
++++ socat-1.6.0.0.dev/sslcls.c	2008-05-12 02:37:20.000000000 +0200
+@@ -35,6 +35,7 @@
+    return result;
+ }
+ 
++#ifndef OPENSSL_NO_SSL2
+ SSL_METHOD *sycSSLv2_client_method(void) {
+    SSL_METHOD *result;
+    Debug("SSLv2_client_method()");
+@@ -50,6 +51,7 @@
+    Debug1("SSLv2_server_method() -> %p", result);
+    return result;
+ }
++#endif
+ 
+ SSL_METHOD *sycSSLv3_client_method(void) {
+    SSL_METHOD *result;
+diff -urN socat-1.6.0.0.old/sslcls.h socat-1.6.0.0.dev/sslcls.h
+--- socat-1.6.0.0.old/sslcls.h	2007-02-26 22:45:24.000000000 +0100
++++ socat-1.6.0.0.dev/sslcls.h	2008-05-12 02:40:44.000000000 +0200
+@@ -10,8 +10,10 @@
+ 
+ void sycSSL_load_error_strings(void);
+ int sycSSL_library_init(void);
++#ifndef OPENSSL_NO_SSL2
+ SSL_METHOD *sycSSLv2_client_method(void);
+ SSL_METHOD *sycSSLv2_server_method(void);
++#endif
+ SSL_METHOD *sycSSLv3_client_method(void);
+ SSL_METHOD *sycSSLv3_server_method(void);
+ SSL_METHOD *sycSSLv23_client_method(void);
+@@ -57,8 +59,10 @@
+ 
+ #define sycSSL_load_error_strings() SSL_load_error_strings()
+ #define sycSSL_library_init() SSL_library_init()
++#ifndef OPENSSL_NO_SSL2
+ #define sycSSLv2_client_method() SSLv2_client_method()
+ #define sycSSLv2_server_method() SSLv2_server_method()
++#endif
+ #define sycSSLv3_client_method() SSLv3_client_method()
+ #define sycSSLv3_server_method() SSLv3_server_method()
+ #define sycSSLv23_client_method() SSLv23_client_method()
+diff -urN socat-1.6.0.0.old/xio-openssl.c socat-1.6.0.0.dev/xio-openssl.c
+--- socat-1.6.0.0.old/xio-openssl.c	2007-02-26 22:45:24.000000000 +0100
++++ socat-1.6.0.0.dev/xio-openssl.c	2008-05-12 02:39:38.000000000 +0200
+@@ -672,9 +672,12 @@
+ 
+    if (!server) {
+       if (me_str != 0) {
++#ifndef OPENSSL_NO_SSL2
+ 	 if (!strcasecmp(me_str, "SSLv2") || !strcasecmp(me_str, "SSL2")) {
+ 	    method = sycSSLv2_client_method();
+-	 } else if (!strcasecmp(me_str, "SSLv3") || !strcasecmp(me_str, "SSL3")) {
++	 } else
++#endif 
++	 if (!strcasecmp(me_str, "SSLv3") || !strcasecmp(me_str, "SSL3")) {
+ 	    method = sycSSLv3_client_method();
+ 	 } else if (!strcasecmp(me_str, "SSLv23") || !strcasecmp(me_str, "SSL23") ||
+ 		    !strcasecmp(me_str, "SSL")) {
+@@ -691,9 +694,12 @@
+       }
+    } else /* server */ {
+       if (me_str != 0) {
++#ifndef OPENSSL_NO_SSL2
+ 	 if (!strcasecmp(me_str, "SSLv2") || !strcasecmp(me_str, "SSL2")) {
+ 	    method = sycSSLv2_server_method();
+-	 } else if (!strcasecmp(me_str, "SSLv3") || !strcasecmp(me_str, "SSL3")) {
++	 } else
++#endif 
++	 if (!strcasecmp(me_str, "SSLv3") || !strcasecmp(me_str, "SSL3")) {
+ 	    method = sycSSLv3_server_method();
+ 	 } else if (!strcasecmp(me_str, "SSLv23") || !strcasecmp(me_str, "SSL23") ||
+ 		    !strcasecmp(me_str, "SSL")) {

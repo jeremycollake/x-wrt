@@ -24,3 +24,32 @@ config BR2_PACKAGE_SOCAT_TOOLS
 	  many more options.
 	  
 	  http://www.dest-unreach.org/socat/
+
+config BR2_PACKAGE_SOCAT_NOSSL
+	tristate "socat-nossl - a multipurpose relay (SOcket CAT) (without SSL support)"
+	default m if CONFIG_DEVEL
+	help
+	  SoCat (for SOcket CAT) establishes two bidirectional byte streams and
+	  transfers data between them.
+	  Data channels may be files, pipes, devices (terminal or modem, etc.), or
+	  sockets (Unix, IPv4, IPv6, raw, UDP, TCP, SSL). It provides forking,
+	  logging and tracing, different modes for interprocess communication and
+	  many more options.
+	  This package is built without SSL support.
+	  
+	  http://www.dest-unreach.org/socat/
+
+config BR2_PACKAGE_SOCAT_NOSSL_TOOLS
+	tristate "socat-nossl-tools - process utilities for socat (without SSL support)"
+	default m if CONFIG_DEVEL
+	depends BR2_PACKAGE_SOCAT_NOSSL
+	help
+	  SoCat (for SOcket CAT) establishes two bidirectional byte streams and
+	  transfers data between them.
+	  Data channels may be files, pipes, devices (terminal or modem, etc.), or
+	  sockets (Unix, IPv4, IPv6, raw, UDP, TCP, SSL). It provides forking,
+	  logging and tracing, different modes for interprocess communication and
+	  many more options.
+	  This package is built without SSL support.
+	  
+	  http://www.dest-unreach.org/socat/

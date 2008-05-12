@@ -156,6 +156,7 @@ package-$(BR2_PACKAGE_SIPSAK) += sipsak
 package-$(BR2_PACKAGE_SMTPTRAPD) += smtptrapd
 package-$(BR2_PACKAGE_SNORT) += snort
 package-$(BR2_PACKAGE_SOCAT) += socat
+package-$(BR2_PACKAGE_SOCAT_NOSSL) += socat
 package-$(BR2_COMPILE_SPCAVIEW) += spcaview
 package-$(BR2_PACKAGE_SPEEX) += speex
 package-$(BR2_PACKAGE_SQLITE3) += sqlite3
@@ -256,6 +257,7 @@ screen-compile: ncurses-compile
 siproxd-compile: libosip2-compile
 sipsak-compile: openssl-compile
 smtptrapd-compile: libpthread-compile
+socat-compile: openssl-compile
 spcaview-compile: libpthread-compile
 sqlite3-compile: ncurses-compile readline-compile
 tcpdump-compile: libpcap-compile

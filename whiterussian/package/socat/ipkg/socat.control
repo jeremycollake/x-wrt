@@ -1,6 +1,7 @@
 Package: socat
 Section: net
 Priority: optional
+Depends: libopenssl
 Description: A multipurpose relay (SOcket CAT)
  SoCat (for SOcket CAT) establishes two bidirectional byte streams and
  transfers data between them.

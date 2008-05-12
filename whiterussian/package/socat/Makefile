@@ -20,11 +20,19 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(TOPDIR)/package/rules.mk
 
-$(eval $(call PKG_template,SOCAT,$(PKG_NAME),$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
-$(eval $(call PKG_template,SOCAT_TOOLS,$(PKG_NAME)-tools,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+SOCAT_CONFIGURE_OPTS:=--enable-openssl
 
-$(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
-	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
+SOCAT_NOSSL_CONFIGURE_OPTS:=--disable-openssl
+
+define PKG_build
+
+ifneq ($(BR2_PACKAGE_$(1)),)
+BUILD_TARGETS += $(PKG_BUILD_DIR)/$(2)
+endif
+
+$(PKG_BUILD_DIR)/$(2): $(PKG_BUILD_DIR)/.prepared
+	mkdir -p $(PKG_BUILD_DIR)/$(2)
+	(cd $(PKG_BUILD_DIR)/$(2); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/include -I$(STAGING_DIR)/usr/include" \
 		LDFLAGS="-L$(STAGING_DIR)/lib -L$(STAGING_DIR)/usr/lib" \
@@ -33,7 +41,7 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		sc_cv_sys_csize_shift=4 \
 		sc_cv_termios_ispeed=no \
 		ac_cv_have_z_modifier=no \
-		./configure \
+		../configure \
 		  --target=$(GNU_TARGET_NAME) \
 		  --host=$(GNU_TARGET_NAME) \
 		  --build=$(GNU_HOST_NAME) \
@@ -53,31 +61,49 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		  --sysconfdir=/etc \
 		  $(DISABLE_LARGEFILE) \
 		  $(DISABLE_NLS) \
+		  --disable-rpath \
 		  --disable-libwrap \
 		  --disable-readline \
 		  --disable-termios \
-		  --disable-openssl \
+		  $$($(1)_CONFIGURE_OPTS) \
 	);
+	-rm -rf $(PKG_INSTALL_DIR)/$(1)
+	$(MAKE) -C $(PKG_BUILD_DIR)/$(2) all
+	mkdir -p $(PKG_INSTALL_DIR)/$(1)
+	$(CP) $(PKG_BUILD_DIR)/$(2)/socat \
+		$(PKG_BUILD_DIR)/$(2)/filan \
+		$(PKG_BUILD_DIR)/$(2)/procan \
+		$(PKG_INSTALL_DIR)/$(1)
+
+$$(IPKG_$(1)): $(PKG_BUILD_DIR)/.installed $(PKG_BUILD_DIR)/$(2)
+	install -m0755 -d $$(IDIR_$(1))/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/$(1)/socat $$(IDIR_$(1))/usr/bin/
+	$(RSTRIP) $$(IDIR_$(1))
+	$(IPKG_BUILD) $$(IDIR_$(1)) $(PACKAGE_DIR)
+
+$$(IPKG_$(1)_TOOLS): $(PKG_BUILD_DIR)/.installed $(PKG_BUILD_DIR)/$(2)
+	install -m0755 -d $$(IDIR_$(1)_TOOLS)/usr/bin
+	$(CP) $(PKG_INSTALL_DIR)/$(1)/filan $$(IDIR_$(1)_TOOLS)/usr/bin/
+	$(CP) $(PKG_INSTALL_DIR)/$(1)/procan $$(IDIR_$(1)_TOOLS)/usr/bin/
+	$(RSTRIP) $$(IDIR_$(1)_TOOLS)
+	$(IPKG_BUILD) $$(IDIR_$(1)_TOOLS) $(PACKAGE_DIR)
+
+endef
+
+$(eval $(call PKG_template,SOCAT,$(PKG_NAME),$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,SOCAT_TOOLS,$(PKG_NAME)-tools,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,SOCAT_NOSSL,$(PKG_NAME)-nossl,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_template,SOCAT_NOSSL_TOOLS,$(PKG_NAME)-nossl-tools,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+
+$(eval $(call PKG_build,SOCAT,$(PKG_NAME),$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+$(eval $(call PKG_build,SOCAT_NOSSL,$(PKG_NAME)-nossl,$(PKG_VERSION)-$(PKG_RELEASE),$(ARCH)))
+
+$(PKG_BUILD_DIR)/.configured:
 	touch $@
 
-$(PKG_BUILD_DIR)/.built:
-	rm -rf $(PKG_INSTALL_DIR)
-	mkdir -p $(PKG_INSTALL_DIR)
-	$(MAKE) -C $(PKG_BUILD_DIR) \
-		$(TARGET_CONFIGURE_OPTS) \
-		DESTDIR="$(PKG_INSTALL_DIR)" \
-		all install
+$(PKG_BUILD_DIR)/.built: $(BUILD_TARGETS)
 	touch $@
 
-$(IPKG_SOCAT):
-	install -m0755 -d $(IDIR_SOCAT)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/socat $(IDIR_SOCAT)/usr/bin/
-	$(RSTRIP) $(IDIR_SOCAT)
-	$(IPKG_BUILD) $(IDIR_SOCAT) $(PACKAGE_DIR)
+$(PKG_BUILD_DIR)/.installed: $(PKG_BUILD_DIR)/.built
+	touch $@
 
-$(IPKG_SOCAT_TOOLS):
-	install -m0755 -d $(IDIR_SOCAT_TOOLS)/usr/bin
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/filan $(IDIR_SOCAT_TOOLS)/usr/bin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/bin/procan $(IDIR_SOCAT_TOOLS)/usr/bin/
-	$(RSTRIP) $(IDIR_SOCAT_TOOLS)
-	$(IPKG_BUILD) $(IDIR_SOCAT_TOOLS) $(PACKAGE_DIR)
