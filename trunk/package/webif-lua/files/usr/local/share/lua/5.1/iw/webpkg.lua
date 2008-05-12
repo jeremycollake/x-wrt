@@ -159,12 +159,14 @@ function install()
 
     print("Unpack file "..tinstall[i].file)
     local tfiles, tctrl_file, warning_exists, str_exec = lpkg:unpack(tinstall[i],i,true)
+
 --[[
     esto hay que hacerlo para que pida por web la confirmacion
     if warning_exists == true then
       tfiles = lpkg:wath_we_do(tfiles)
     end
 ]]--
+
     print("Configuring "..dest)
     if string.len(str_exec) > 0 then
       print("Executing preinstall "..dest)

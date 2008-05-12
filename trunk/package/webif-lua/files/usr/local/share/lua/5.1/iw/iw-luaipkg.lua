@@ -193,102 +193,12 @@ function lpkgClass:compareVersion(a,b)
   if lena < lenb then return true end
   return false
 end
---[[
-function lpkgClass:process_pkgs_file(data,search,repo)
-  local pkg = ""
-  local ver = ""
-  local repo = repo or "inst"
-  local all = nil
-  if search then
-    if string.match(search,"*") then
-      all = true
-      search = string.gsub(search,"*","")
-    else
-      all = false
-    end
-  end
-  local tidx = nil
-  for line in string.gmatch(data,"[^\n]+") do
-    local key, desc = unpack(string.split(line,":"))
-    if string.trim(key) ~= "" then
-      if key and desc == nil then
-        desc = key
-        key = "Description"
-      end        
-      if key == "Package" then
-        tidx = nil
-        pkg = desc
-        if search ~= "" and search ~= nil then
-          if all == true then
-            if search ~= string.sub(pkg,1,string.len(search)) then break end
-          else
-            if pkg ~= search then break end
-          end
-        end
-      elseif key == "Version" then
-        ver = desc
-        if self[pkg] ~= nil then
-          if self[pkg][ver] ~= nil then
-            tidx = self[pkg][ver]
-          else
-            self[#self+1] = {}
-            tidx = self[#self]
-          end
-        else
-          self[#self+1] = {}
-          tidx = self[#self]
-        end
-      end
---      self:add(tidx,pkg,ver,repo,key,desc)
-    end
-  end
-end
-
-function lpkgClass:add(tidx,pkg,ver,repo,key,desc)
-  if pkg == nil
-  or ver == nil
-  or repo == nil 
-  or tidx == nil
-  then return end
-  if self[pkg] == nil then self[pkg] = {} end
-  if self[pkg][ver] == nil then self[pkg][ver] = tidx end
-  if repo == "inst" then
-    if self.__installed[pkg] == nil then self.__installed[pkg] = tidx end
-  else
-    if self.__installed[pkg] == nil then
-      if self.__toinstall[pkg] == nil then
-        tidx["url"] = self.__repo[repo].url
-        self.__toinstall[pkg] = tidx
-      else
-        if self.__toinstall[pkg].Version < ver then
-          tidx["url"] = self.__repo[repo].url
-          self.__toinstall[pkg] = tidx
-        end
-      end
-    end
-    if self.__repo[repo].pkgs[pkg] == nil then self.__repo[repo].pkgs[pkg] = tidx end
-  end
-  if key == "Depends" and repo ~= "inst" then
-      self:check_depends(desc)
-  end
-  if key == "Description" then
-    if tidx["Description"] == nil then
-      tidx["Description"] = desc
-    else
-      tidx["Description"] = tidx["Description"]..desc
-    end
-  else
-    tidx["Package"] = pkg
-    tidx[key] = desc 
-  end
-end
-]]--
 
 function lpkgClass:check_depends(str)
   local str = string.gsub(str,","," ")
   local found = false
   for addsearch in string.gmatch(str,"%S+") do
-    if self.__installed[addsearch] == nil then
+    if self.__installed[addsearch] == nil and not string.match(addsearch,"[(=]") then
       local found = false
       for search in string.gmatch(self.search,"%S+") do
         if search == addsearch then
@@ -330,7 +240,9 @@ function lpkgClass:autoinstall_pkgs()
   local repite = ""
   local deps =""
   local not_found = {}
-     
+  local numpkgs = self:tcount(self.__toinstall)
+  local addcount = 0
+       
   repeat
     for i,v in pairs(self.__toinstall) do
       local ok = true
@@ -338,21 +250,24 @@ function lpkgClass:autoinstall_pkgs()
         local depends = string.gsub(v.Depends,","," ")
         for dep in string.gmatch(depends,"%S+") do
           deps = dep
+          if not string.match(dep,"[(=]") then
           if self.__installed[dep] == nil and ctrl_dep[dep] == nil then
             ok = false
             break
           end
+          end
         end
       end
---[[
+      print(i,deps)
       if ok == false then
         if not_found[deps] == nil then not_found[deps] = 1
         else not_found[deps] = tonumber(not_found[deps]) + 1 end
-        if not_found[deps] > 1 then 
-          self:loadRepo_list()
+        if not_found[deps] > numpkgs then
+          print ("Error :",i,"in repository ",v.Repository, "need ",deps)
+          os.exit(99) 
+--          self:loadRepo_list()
         end
       end
-]]--        
       if ok == true then
 --      if self.__installed[i] == nil then
         tinstall[#tinstall+1] = {}
@@ -371,42 +286,6 @@ function lpkgClass:autoinstall_pkgs()
   until self:tcount(self.__toinstall) == 0 
   return tinstall
 end
-
---[[
-function lpkgClass:selectinstall_pkgs()
-  local ctrl_dep = {}
-  local tinstall = {}
-  self:check_notfound()
-  repeat
-    for i,v in pairs(self.__toinstall) do
-      local ok = true
-      if v.Depends ~= nil and string.trim(v.Depends) ~= "" then
-        local depends = string.gsub(v.Depends,","," ")
-        for dep in string.gmatch(depends,"%S+") do
-          if self.__installed[dep] == nil and ctrl_dep[dep] == nil then
-            ok = false
-            break
-          end
-        end
-      end
-      if ok == true then
---      if self.__installed[i] == nil then
-        tinstall[#tinstall+1] = {}
-        tinstall[#tinstall]["Package"] = v.Package
-        tinstall[#tinstall]["Version"] = v.Version
-        tinstall[#tinstall]["Repository"] = v.Repository
-        tinstall[#tinstall]["url"] = v.url
-        tinstall[#tinstall]["file"] = v.Filename
-        tinstall[#tinstall]["MD5Sum"] = v.MD5Sum
-        ctrl_dep[i] = #tinstall
-        self.__toinstall[i] = nil
-        end
---      end
-    end
-  until self:tcount(self.__toinstall) == 0 
-  return tinstall
-end
-]]--
 
 function lpkgClass:tcount(t)
   local i = 0
@@ -458,7 +337,6 @@ function lpkgClass:unpack(tinstall,str_pkgname,overwrite)
   local warning_exists = false
   local str_list = ""
   local str_ctrl = ""
-  local str_exec = ""
   
   os.execute("mkdir "..tmpdir.."/control 2>/dev/null")
   os.execute("mkdir "..tmpdir.."/data 2>/dev/null")
@@ -468,9 +346,13 @@ function lpkgClass:unpack(tinstall,str_pkgname,overwrite)
   os.execute("mkdir "..tmpdir.."/data/usr/lib/ipkg/info 2>/dev/null")
   
   os.execute("tar xzf "..tmpdir.."/"..tmpfile.." -C "..tmpdir)
-  os.execute("tar xzf "..tmpdir.."/control.tar.gz -C "..tmpdir.."/control")
-  os.execute("tar xzf "..tmpdir.."/data.tar.gz -C "..tmpdir.."/data")
   os.execute("rm "..tmpdir.."/*.ipk 2>/dev/null")
+
+  os.execute("tar xzf "..tmpdir.."/control.tar.gz -C "..tmpdir.."/control")
+  os.execute("rm "..tmpdir.."/control.tar.gz 2>/dev/null")
+
+  os.execute("tar xzf "..tmpdir.."/data.tar.gz -C "..tmpdir.."/data")
+  os.execute("rm "..tmpdir.."/data.tar.gz 2>/dev/null")
 
   tctrl_file = self:loadCtrl(tmpdir)
 
@@ -503,16 +385,22 @@ function lpkgClass:unpack(tinstall,str_pkgname,overwrite)
   for i,v in pairsByKeys(t_list) do
     str_list = str_list..i.."\n"
   end
+  str_list = str_list.."\n"
   
+  local str_exec = ""
   control_files = io.popen("ls "..tmpdir.."/control")
   for line in control_files:lines() do
     if line == "preinst" then 
       str_exec = tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package.."."..line
-    end
+      t_list["/usr/lib/ipkg/info/"..tctrl_file.Package.."."..line] = true
+    else
+      t_list["/usr/lib/ipkg/info/"..tctrl_file.Package.."."..line] = false
+    end  
     os.execute("cp -f "..tmpdir.."/control/"..line.." "..tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package.."."..line)
     os.execute("rm "..tmpdir.."/control/"..line)
   end
   os.execute("echo '"..str_list.."' >"..tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package..".list")
+  t_list["/usr/lib/ipkg/info/"..tctrl_file.Package..".list"] = false
   return t_list, tctrl_file, warning_exists, str_exec
 end
 
@@ -548,14 +436,17 @@ function lpkgClass:processFiles(t_list,pkgname)
   for i,v in pairsByKeys(t_list) do
     if v == "DIR" then
       os.execute("mkdir "..i.." 2> /dev/null")
+      print("mkdir "..i)
     elseif v == false then
       local rspta = os.execute("cp -pdf "..tmpdir.."/data"..i.." "..i)
+      print("cp -pdf "..tmpdir.."/data"..i.." "..i)
 --      print (i,rspta,str_error)
       if rspta ~= 0 then
 --        os.execute("rm -R "..tmpdir)
         return rspta, "cp -pdf "..tmpdir.."/data"..i.." "..i
       end
       os.execute("rm "..tmpdir.."/data"..i)
+      print("rm "..tmpdir.."/data"..i)
     end
   end
   return 0
