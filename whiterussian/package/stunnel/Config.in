@@ -2,6 +2,7 @@ config BR2_PACKAGE_STUNNEL
 	tristate "stunnel - openssl wrapper"
 	select BR2_PACKAGE_LIBOPENSSL
 	select BR2_PACKAGE_LIBWRAP
+	select BR2_PACKAGE_ZLIB
 	default m if CONFIG_DEVEL
 	help
 

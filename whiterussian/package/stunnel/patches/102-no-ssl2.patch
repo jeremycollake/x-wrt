@@ -1,14 +1,27 @@
-diff -baurN stunnel-4.16.orig/src/options.c stunnel-4.16/src/options.c
---- stunnel-4.16.orig/src/options.c	2006-11-03 16:50:59.000000000 +0100
-+++ stunnel-4.16/src/options.c	2006-11-03 16:51:47.000000000 +0100
-@@ -957,8 +957,10 @@
+diff -urN stunnel-4.23.old/src/options.c stunnel-4.23.dev/src/options.c
+--- stunnel-4.23.old/src/options.c	2008-03-27 10:51:45.000000000 +0100
++++ stunnel-4.23.dev/src/options.c	2008-05-13 22:54:11.000000000 +0200
+@@ -1126,9 +1126,11 @@
+         if(!strcasecmp(arg, "all")) {
              section->client_method=SSLv23_client_method;
              section->server_method=SSLv23_server_method;
-         } else if(!strcasecmp(arg, "SSLv2")) {
 +#ifndef OPENSSL_NO_SSL2
+         } else if(!strcasecmp(arg, "SSLv2")) {
              section->client_method=SSLv2_client_method;
              section->server_method=SSLv2_server_method;
 +#endif
          } else if(!strcasecmp(arg, "SSLv3")) {
              section->client_method=SSLv3_client_method;
              section->server_method=SSLv3_server_method;
+@@ -1146,7 +1148,11 @@
+ #endif
+         break;
+     case CMD_HELP:
++#ifndef OPENSSL_NO_SSL2
+         s_log(LOG_RAW, "%-15s = all|SSLv2|SSLv3|TLSv1 SSL method", "sslVersion");
++#else
++        s_log(LOG_RAW, "%-15s = all|SSLv3|TLSv1 SSL method", "sslVersion");
++#endif
+         break;
+     }
+ 

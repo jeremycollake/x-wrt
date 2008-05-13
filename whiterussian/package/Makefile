@@ -272,7 +272,7 @@ wificonf-compile: wireless-tools-compile nvram-compile
 wpa_supplicant-compile: openssl-compile
 xrelayd-compile: xyssl-compile
 
-stunnel-compile: openssl-compile tcp_wrappers-compile
+stunnel-compile: zlib-compile openssl-compile tcp_wrappers-compile
 
 asterisk-compile: ncurses-compile openssl-compile
 ifneq ($(BR2_PACKAGE_ASTERISK_CODEC_SPEEX),)

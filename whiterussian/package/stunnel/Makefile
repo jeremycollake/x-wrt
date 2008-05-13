@@ -1,13 +1,19 @@
-# $Id: Makefile 4782 2006-09-12 12:32:27Z nbd $
+#
+# Copyright (C) 2006 OpenWrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=stunnel
-PKG_VERSION:=4.16
+PKG_VERSION:=4.23
 PKG_RELEASE:=1
-PKG_MD5SUM:=8ea5cae3eeaacc0271b766506b4b9d4a
-PKG_SOURCE_URL:=http://www.stunnel.org/download/stunnel/src/
+
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://www.stunnel.org/download/stunnel/src
+PKG_MD5SUM:=5f3d267c108cc0998b8fcaa16dcc5767
 PKG_CAT:=zcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -21,7 +27,7 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 	(cd $(PKG_BUILD_DIR); rm -rf config.{cache,status} ; \
 		$(TARGET_CONFIGURE_OPTS) \
 		CFLAGS="$(TARGET_CFLAGS)" \
-		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
+		CPPFLAGS="-I$(STAGING_DIR)/usr/include -DPIDFILE=\\\"/var/run/stunnel.pid\\\" -DLIBDIR=\\\"/usr/lib\\\"" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
 		./configure \
 		  --target=$(GNU_TARGET_NAME) \
@@ -41,8 +47,13 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		  --mandir=/usr/share/man \
 		  --sbindir=/usr/sbin \
 		  --sysconfdir=/etc \
+		  $(DISABLE_NLS) \
+		  $(DISABLE_LARGEFILE) \
+		  --disable-rpath \
 		  --with-random=/dev/urandom \
 		  --with-threads=fork \
+		  --enable-ipv6 \
+		  --enable-dh \
 		  --with-ssl=$(STAGING_DIR)/usr \
 	);
 	touch $@
@@ -58,12 +69,13 @@ $(PKG_BUILD_DIR)/.built:
 	touch $@
 
 $(IPKG_STUNNEL):
-	install -d -m0755 $(IDIR_STUNNEL)/usr/sbin $(IDIR_STUNNEL)/usr/lib $(IDIR_STUNNEL)/usr/stunnel
-	install -d -m0755 $(IDIR_STUNNEL)/etc/stunnel $(IDIR_STUNNEL)/etc/init.d
-	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/stunnel $(IDIR_STUNNEL)/usr/sbin/
-	$(CP) $(PKG_INSTALL_DIR)/usr/lib/libstunnel.so $(IDIR_STUNNEL)/usr/sbin/
+	install -d -m0755 $(IDIR_STUNNEL)/usr/sbin \
+		$(IDIR_STUNNEL)/usr/lib \
+		$(IDIR_STUNNEL)/etc/stunnel \
+		$(IDIR_STUNNEL)/etc/init.d
+	$(CP) $(PKG_INSTALL_DIR)/usr/bin/stunnel $(IDIR_STUNNEL)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/lib/stunnel/libstunnel.so $(IDIR_STUNNEL)/usr/lib/
 	$(CP) ./files/stunnel.conf $(IDIR_STUNNEL)/etc/stunnel/stunnel.conf
 	$(CP) ./files/stunnel.init $(IDIR_STUNNEL)/etc/init.d/S90stunnel
-
 	$(RSTRIP) $(IDIR_STUNNEL)
 	$(IPKG_BUILD) $(IDIR_STUNNEL) $(PACKAGE_DIR)

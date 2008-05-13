@@ -1,5 +1,5 @@
 Package: stunnel
 Priority: optional
 Section: net
-Depends: libopenssl, libwrap
+Depends: zlib, libopenssl, libwrap
 Description: wrapper for tcp connections to be wrapped in ssl
