@@ -53,7 +53,6 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		  --with-random=/dev/urandom \
 		  --with-threads=fork \
 		  --enable-ipv6 \
-		  --enable-dh \
 		  --with-ssl=$(STAGING_DIR)/usr \
 	);
 	touch $@
