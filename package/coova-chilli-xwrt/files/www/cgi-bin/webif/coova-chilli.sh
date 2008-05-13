@@ -21,6 +21,7 @@
 -- LUA settings and load some functions files
 -- 
 require("init")
+require("webpkg")
 require("coovaportal")
 -- pageClass is part of the framework 
 page.title = tr("chilli_main_title#Coova-Chilli")

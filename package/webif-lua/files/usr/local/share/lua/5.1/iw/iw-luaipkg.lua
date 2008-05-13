@@ -392,9 +392,11 @@ function lpkgClass:unpack(tinstall,str_pkgname,overwrite)
   for line in control_files:lines() do
     if line == "preinst" then 
       str_exec = tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package.."."..line
-    end
+      t_list["/usr/lib/ipkg/info/"..tctrl_file.Package.."."..line] = true
+    else
+      t_list["/usr/lib/ipkg/info/"..tctrl_file.Package.."."..line] = false
+    end  
     os.execute("cp -f "..tmpdir.."/control/"..line.." "..tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package.."."..line)
-    t_list["/usr/lib/ipkg/info/"..tctrl_file.Package.."."..line] = false
     os.execute("rm "..tmpdir.."/control/"..line)
   end
   os.execute("echo '"..str_list.."' >"..tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package..".list")
