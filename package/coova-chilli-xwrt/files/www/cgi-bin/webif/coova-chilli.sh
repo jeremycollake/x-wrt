@@ -22,6 +22,7 @@
 -- 
 require("init")
 require("coovaportal")
+require("webpkg")
 -- pageClass is part of the framework 
 page.title = tr("chilli_main_title#Coova-Chilli")
 cportal.set_menu()
