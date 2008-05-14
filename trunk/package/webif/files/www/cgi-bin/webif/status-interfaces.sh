@@ -59,7 +59,7 @@ displaydns() {
 	local resconf form_dns_servers
 	resconf=$(cat /etc/dnsmasq.conf 2>/dev/null | grep "^resolv-file=" | cut -d'=' -f 2)
 	resconf="${resconf:-"/etc/resolv.conf /tmp/resolv.conf.auto"}"
-	resconf="`cat $resconf`"
+	resconf="`cat $resconf |grep nameserver |cut -d' ' -f2`"
 	counter=1
 	for dns_server in $resconf; do
 		form_dns_servers="$form_dns_servers
