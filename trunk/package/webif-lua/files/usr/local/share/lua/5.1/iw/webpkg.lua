@@ -160,6 +160,7 @@ function install()
     print("Unpack file "..tinstall[i].file)
     local tfiles, tctrl_file, warning_exists, str_exec = lpkg:unpack(tinstall[i],i,true)
 
+    tfiles, conffiles = pkg:web_wath_we_do(tfiles)
 --[[
     esto hay que hacerlo para que pida por web la confirmacion
     if warning_exists == true then

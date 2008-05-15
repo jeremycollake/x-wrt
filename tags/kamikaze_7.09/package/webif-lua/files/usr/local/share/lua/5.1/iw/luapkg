@@ -69,24 +69,24 @@ function install_pkgs(pkg)
   local tinstall = pkg:autoinstall_pkgs()
   print("Please wait... ")
   for i = 1, #tinstall do
+    local tmpdir = os.time()
     local dest = tinstall[i].Package.." ("..tinstall[i].Version..")"
     print("Installing "..dest)
     print("Downloading "..tinstall[i].url..tinstall[i].file)
-    pkg:download(tinstall[i].url,tinstall[i].file,i)
+    pkg:download(tinstall[i].url,tinstall[i].file,tmpdir)
 
     print("Unpack file "..tinstall[i].file)
-    local tfiles, tctrl_file, warning_exists, str_exec = pkg:unpack(tinstall[i],i)
+--    local tfiles, tctrl_file, warning_exists, str_exec, tprovider_conf = pkg:unpack(tinstall[i],tmpdir)
+    local tfiles, tctrl_file, str_exec = pkg:unpack(tinstall[i],tmpdir)
 
-    if warning_exists == true then
-      tfiles = pkg:wath_we_do(tfiles)
-    end
+    tfiles, conffiles = pkg:wath_we_do(tfiles,tmpdir)
 
     print("Configuring "..dest)
     if string.len(str_exec) > 0 then
       os.execute(str_exec)
     end
     print("Copying files")
-    pkg:processFiles(tfiles,i)
+    pkg:processFiles(tfiles,tmpdir)
     local str_installed = "Package: "..tctrl_file.Package.."\n"
     str_installed = str_installed.."Version: "..tctrl_file.Version.."\n"
     if tctrl_file.Depends ~= nil then
@@ -96,12 +96,15 @@ function install_pkgs(pkg)
     str_installed = str_installed.."Root: /\n"
     str_installed = str_installed.."Status: install ok installed\n"
     str_installed = str_installed.."Architecture: "..tctrl_file.Architecture.."\n"
+    if tctrl_file.Depends ~= nil then
+      str_installed = str_installed.."Depends: "..tctrl_file.Depends.."\n"
+    end
     if conffiles ~= nil then
       str_installed = str_installed.."Conffiles: "..conffiles.."\n"
     end
     str_installed = str_installed.."Installed-Time: "..tostring(os.time()).."\n"
     pkg:process_pkgs_file_new(str_installed)
-    pkg:write_status(i)
+    pkg:write_status(tmpdir)
   end
 end
 

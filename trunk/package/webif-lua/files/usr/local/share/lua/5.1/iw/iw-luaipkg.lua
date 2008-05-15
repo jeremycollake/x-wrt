@@ -242,7 +242,7 @@ function lpkgClass:autoinstall_pkgs()
   local not_found = {}
   local numpkgs = self:tcount(self.__toinstall)
   local addcount = 0
-       
+
   repeat
     for i,v in pairs(self.__toinstall) do
       local ok = true
@@ -258,7 +258,7 @@ function lpkgClass:autoinstall_pkgs()
           end
         end
       end
-      print(i,deps)
+--      print(i,deps)
       if ok == false then
         if not_found[deps] == nil then not_found[deps] = 1
         else not_found[deps] = tonumber(not_found[deps]) + 1 end
@@ -275,12 +275,13 @@ function lpkgClass:autoinstall_pkgs()
         tinstall[#tinstall]["Version"] = v.Version
         tinstall[#tinstall]["Repository"] = v.Repository
         tinstall[#tinstall]["url"] = v.url
+        tinstall[#tinstall]["Depends"] = v.Depends
         tinstall[#tinstall]["file"] = v.Filename
         tinstall[#tinstall]["MD5Sum"] = v.MD5Sum
         ctrl_dep[i] = #tinstall
         self.__toinstall[i] = nil
-        end
---      end
+--        end
+      end
     end
 
   until self:tcount(self.__toinstall) == 0 
@@ -370,14 +371,14 @@ function lpkgClass:unpack(tinstall,str_pkgname,overwrite)
         t_list[line] = "DIR"
       else
         t_list[prevdir.."/"..line] = false
-        if prevdir == "/etc" then
-          if overwrite == true then
-            t_list[prevdir.."/"..line] = false
-          else
-            t_list[prevdir.."/"..line] = io.exists(prevdir.."/"..line)
-            if t_list[prevdir.."/"..line] == true then warning_exists = true end
-          end
-        end
+--        if prevdir == "/etc" then
+--          if overwrite == true then
+--            t_list[prevdir.."/"..line] = false
+--          else
+--            t_list[prevdir.."/"..line] = io.exists(prevdir.."/"..line)
+--            if t_list[prevdir.."/"..line] == true then warning_exists = true end
+--          end
+--        end
       end
     end
   end
@@ -386,49 +387,149 @@ function lpkgClass:unpack(tinstall,str_pkgname,overwrite)
     str_list = str_list..i.."\n"
   end
   str_list = str_list.."\n"
-  
+  self.__tprovider_conf = {}
   local str_exec = ""
   control_files = io.popen("ls "..tmpdir.."/control")
-  for line in control_files:lines() do
-    if line == "preinst" then 
-      str_exec = tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package.."."..line
+  for fileline in control_files:lines() do
+    if fileline == "preinst" then 
+      str_exec = tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package.."."..fileline
       t_list["/usr/lib/ipkg/info/"..tctrl_file.Package.."."..line] = true
+    elseif fileline == "conffiles" then
+      local oldconf = io.open(tmpdir.."/control/"..fileline)
+      for conffile in oldconf:lines() do
+--        print(conffile)
+        self.__tprovider_conf[conffile] = self:calc_md5sum(tmpdir.."/data/"..conffile )
+      end
+      t_list["/usr/lib/ipkg/info/"..tctrl_file.Package.."."..fileline] = true
     else
-      t_list["/usr/lib/ipkg/info/"..tctrl_file.Package.."."..line] = false
+      t_list["/usr/lib/ipkg/info/"..tctrl_file.Package.."."..fileline] = false
     end  
-    os.execute("cp -f "..tmpdir.."/control/"..line.." "..tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package.."."..line)
-    os.execute("rm "..tmpdir.."/control/"..line)
+    os.execute("cp -f "..tmpdir.."/control/"..fileline.." "..tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package.."."..fileline)
+    os.execute("rm "..tmpdir.."/control/"..fileline)
   end
   os.execute("echo '"..str_list.."' >"..tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package..".list")
   t_list["/usr/lib/ipkg/info/"..tctrl_file.Package..".list"] = false
-  return t_list, tctrl_file, warning_exists, str_exec
+--  return t_list, tctrl_file, warning_exists, str_exec, self.__tprovider_conf
+  for filename, md5_val in pairs(self.__tprovider_conf) do
+    if overwrite == true then
+      t_list[filename] = false
+    else
+      if io.exists(filename) == false then
+        t_list[filename] = false
+      else
+        t_list[filename] = self:calc_md5sum(filename)
+      end
+    end
+    print(filename,self.__tprovider_conf[filename],t_list[filename])
+  end
+  return t_list, tctrl_file, str_exec
 end
 
-function lpkgClass:wath_we_do(t)
-  for i,v in pairsByKeys(t) do
-    if v == true then
-      repeat
-        print(i)
-        io.write([[==> File on system created by you or by a script.
+function lpkgClass:calc_md5sum(file)
+  local md5 = ""
+  local calc_file = io.popen("md5sum < "..file)
+  for line in calc_file:lines() do
+--    md5 = unpack(string.split(line," "))
+    md5 = line
+  end
+  return md5
+end 
+
+function lpkgClass:wath_we_do(tfiles,tmpdir)
+  local tmpdir = "/tmp/luapkg/"..tmpdir
+  local msg =[[==> File on system created by you or by a script.
 ==> File also in package provided by package maintainer.
    What would you like to do about it ?  Your options are:
     Y or I  : install the package maintainer's version
     N or O  : keep your currently-installed version
---      D     : show the differences between the versions (if diff is installed)
+      D     : show the differences between the versions (if diff is installed)
  The default action is to keep your current version.
 
-(Y/I/N/O/D) [default=N] ? ]]) 
-        rspta = io.read()
-        if rspta == "" then rspta = "N" end
-        rspta = string.upper(rspta)
-        if rspta == "Y"
-        or rspta == "I" then
-          t[i] = false
-        end
-      until rspta == "N" or rspta == "O" or rspta == "Y" or rspta == "I"
+(Y/I/N/O/D) [default=N] ? ]]
+
+  for filename, md5_provider in pairs(self.__tprovider_conf) do
+    if type(tfiles[filename]) == "string" then
+      if tfiles[filename] ~= self.__tprovider_conf[filename] then
+        repeat
+          print(filename)
+          io.write(msg) 
+          rspta = io.read()
+          if rspta == "" then 
+            rspta = "N"
+          end
+          rspta = string.upper(rspta)
+          if rspta == "Y"
+          or rspta == "I" then
+--          self.__tprovider_conf[filename] = tfiles[filename]
+            tfiles[filename] = false
+          end
+          if rspta == "N"
+          or rspta == "O" then
+            self.__tprovider_conf[filename] = tfiles[filename]
+            tfiles[filename] = true
+          end
+          if rspta == "D" then
+            os.execute("diff "..tmpdir.."/data/"..filename.." "..filename.." | less")
+          end
+        until rspta == "N" or rspta == "O" or rspta == "Y" or rspta == "I"
+      end
     end
   end
-  return t
+  local str_conffiles = ""
+  for filestr, md5str in pairs(self.__tprovider_conf) do
+    if str_conffiles == "" then str_conffiles = filestr.." "..md5str
+    else str_conffiles = str_conffiles.." "..filestr.." "..md5str end
+  end
+  return tfiles, str_conffiles
+end
+
+function lpkgClass:web_wath_we_do(tfiles)
+
+  local msg = [[==> File on system created by you or by a script.
+==> File also in package provided by package maintainer.
+   What would you like to do about it ?  Your options are:
+    Y or I  : install the package maintainer's version
+    N or O  : keep your currently-installed version
+]]
+--      D     : show the differences between the versions (if diff is installed)
+..[[
+ The default action is to keep your current version.
+
+(Y/I/N/O/D) [default=N] ? ]]
+--[[
+  for filename, md5_provider in pairs(self.__tprovider_conf) do
+    if type(tfiles[filename]) == "string" then
+      if tfiles[filename] ~= self.__tprovider_conf[filename] then
+        repeat
+          print(filename)
+          io.write(msg) 
+          rspta = io.read()
+          if rspta == "" then 
+            rspta = "N"
+          end
+          rspta = string.upper(rspta)
+          if rspta == "Y"
+          or rspta == "I" then
+--          self.__tprovider_conf[filename] = tfiles[filename]
+            tfiles[filename] = false
+          end
+          if rspta == "N"
+          or rspta == "O" then
+            self.__tprovider_conf[filename] = tfiles[filename]
+            tfiles[filename] = true
+          end
+        until rspta == "N" or rspta == "O" or rspta == "Y" or rspta == "I"
+      end
+    end
+  end
+]]--
+
+  local str_conffiles = ""
+  for filestr, md5str in pairs(self.__tprovider_conf) do
+    if str_conffiles == "" then str_conffiles = filestr.." "..md5str
+    else str_conffiles = str_conffiles.." "..filestr.." "..md5str end
+  end
+  return tfiles, str_conffiles
 end
 
 function lpkgClass:processFiles(t_list,pkgname)
@@ -436,17 +537,17 @@ function lpkgClass:processFiles(t_list,pkgname)
   for i,v in pairsByKeys(t_list) do
     if v == "DIR" then
       os.execute("mkdir "..i.." 2> /dev/null")
-      print("mkdir "..i)
+--      print("mkdir "..i)
     elseif v == false then
       local rspta = os.execute("cp -pdf "..tmpdir.."/data"..i.." "..i)
-      print("cp -pdf "..tmpdir.."/data"..i.." "..i)
---      print (i,rspta,str_error)
+--      print("cp -pdf "..tmpdir.."/data"..i.." "..i)
+----      print (i,rspta,str_error)
       if rspta ~= 0 then
---        os.execute("rm -R "..tmpdir)
+----        os.execute("rm -R "..tmpdir)
         return rspta, "cp -pdf "..tmpdir.."/data"..i.." "..i
       end
       os.execute("rm "..tmpdir.."/data"..i)
-      print("rm "..tmpdir.."/data"..i)
+--      print("rm "..tmpdir.."/data"..i)
     end
   end
   return 0
@@ -458,6 +559,7 @@ function lpkgClass:detailled_status()
     str_status = str_status.."Package: "..v.Package.."\n"
     str_status = str_status.."Status: "..tostring(v.Status).."\n"
     str_status = str_status.."Root: "..tostring(v.Root).."\n"
+    
     if v.Conffiles then str_status = str_status.."Conffiles: "..v.Conffiles.."\n" end
     str_status = str_status.."Version: "..v.Version.."\n"
 --    if (v.Depends) then str_status = str_status.."Depends: "..v.Depends.."\n" end
