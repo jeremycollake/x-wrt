@@ -111,6 +111,54 @@ function lpkgClass:process_pkgs_file_new(data,search,repo)
     end
   end
   local tidx = nil
+  local desc = ""
+  local key = ""
+  for line in string.gmatch(data,"[^\n]+") do
+    if string.trim(line) ~= "" then
+    if not string.match(line,":") then
+      if tidx[key] == "" then tidx[key] = line
+      else tidx[key] = tidx[key].." "..line end
+    else 
+      key, desc = unpack(string.split(line,":"))
+      if key == "Package" then
+        self:add_new(tidx,repo)
+        tidx = {}
+        pkg = desc
+        if search ~= "" and search ~= nil then
+          if all == true then
+            if search ~= string.sub(pkg,1,string.len(search)) then
+              tidx = nil
+              break 
+            end
+          else
+            if pkg ~= search then
+              tidx = nil
+              break 
+            end
+          end
+        end
+      end
+      tidx[key] = desc 
+    end
+    end
+  end
+  self:add_new(tidx,repo)
+end
+
+function lpkgClass:process_pkgs_file_new1(data,search,repo)
+  local pkg = ""
+  local ver = ""
+  local repo = repo or "inst"
+  local all = nil
+  if search then
+    if string.match(search,"*") then
+      all = true
+      search = string.gsub(search,"*","")
+    else
+      all = false
+    end
+  end
+  local tidx = nil
   for line in string.gmatch(data,"[^\n]+") do
     local key, desc = unpack(string.split(line,":"))
     if string.trim(key) ~= "" then
@@ -558,14 +606,13 @@ function lpkgClass:detailled_status()
   for i,v in pairsByKeys(self.__installed) do
     str_status = str_status.."Package: "..v.Package.."\n"
     str_status = str_status.."Status: "..tostring(v.Status).."\n"
-    str_status = str_status.."Root: "..tostring(v.Root).."\n"
-    
+    if v.Root then str_status = str_status.."Root: "..tostring(v.Root).."\n" end
     if v.Conffiles then str_status = str_status.."Conffiles: "..v.Conffiles.."\n" end
     str_status = str_status.."Version: "..v.Version.."\n"
---    if (v.Depends) then str_status = str_status.."Depends: "..v.Depends.."\n" end
---    str_status = str_status.."Provides: "..tostring(v.Provides).."\n"
---    str_status = str_status.."Architecture: "..v.Architecture.."\n"
---    if v["Installed-Time"] then str_status = str_status.."Installed-Time: "..v["Installed-Time"].."\n" end
+    if v.Depends then str_status = str_status.."Depends: "..v.Depends.."\n" end
+    if v.Provides then str_status = str_status.."Provides: "..tostring(v.Provides).."\n" end
+    if v.Architecture then str_status = str_status.."Architecture: "..v.Architecture.."\n" end
+    if v["Installed-Time"] then str_status = str_status.."Installed-Time: "..v["Installed-Time"].."\n" end
     str_status = str_status.."\n"
   end
   return str_status
