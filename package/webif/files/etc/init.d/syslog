@@ -17,8 +17,9 @@ syslogd_config() {
 	local DEFAULT_ipaddr=""
 	local DEFAULT_port=514
 
-	config_get mark "$cfg" mark
-	[ "$mark" -gt 0 ] 2>>/dev/null || mark=$DEFAULT_mark
+	#config_get mark "$cfg" mark
+	#[ "$mark" -gt 0 ] 2>>/dev/null || mark=$DEFAULT_mark
+	mark="0"
 	config_get type "$cfg" type
 	[ "$type" = "circular" -o "$type" = "file" ] 2>/dev/null || type=$DEFAULT_type
 	config_get file "$cfg" file
