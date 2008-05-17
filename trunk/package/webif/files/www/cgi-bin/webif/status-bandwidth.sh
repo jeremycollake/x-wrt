@@ -4,6 +4,7 @@
 
 header "Status" "Bandwidth" "@TR<<Bandwidth>>"
 has_pkgs bandwidthd
+[ "$FORM_timeline" = "" ] && FORM_timeline=1
 display_form <<EOF
 formtag_begin|filterform|$SCRIPT_NAME
 start_form
