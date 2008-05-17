@@ -101,7 +101,7 @@ function lpkgClass:do_process(str_search,data,str_repo)
       if start == nil and all == false then
         self.__notfound[mysearch] = mysearch
       else      
---        self.__notfound[mysearch] = nil
+        self.__notfound[mysearch] = nil
         if start ~= nil then
           newdata = string.sub(newdata,start)
         end
@@ -411,7 +411,7 @@ function lpkgClass:unpack(tinstall,str_pkgname,overwrite)
   for fileline in control_files:lines() do
     if fileline == "preinst" then 
       str_exec = tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package.."."..fileline
-      t_list["/usr/lib/ipkg/info/"..tctrl_file.Package.."."..line] = true
+      t_list["/usr/lib/ipkg/info/"..tctrl_file.Package.."."..fileline] = true
     elseif fileline == "conffiles" then
       local oldconf = io.open(tmpdir.."/control/"..fileline)
       for conffile in oldconf:lines() do
@@ -703,6 +703,7 @@ end
 function lpkgClass:execute(str_filename,str_script)
   local infodir = self.__installed[str_filename].infodir or "/usr/lib/ipkg/info/"
   local rslt = 0
+  print("Executing "..infodir..str_filename..str_script)
   if io.exists(infodir..str_filename..str_script) then 
     rslt = os.execute(infodir..str_filename..str_script)
     if rslt ~= 0 then
