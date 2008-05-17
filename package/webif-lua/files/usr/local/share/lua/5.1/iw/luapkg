@@ -105,7 +105,85 @@ function install_pkgs(pkg)
     str_installed = str_installed.."Installed-Time: "..tostring(os.time()).."\n"
     pkg:process_pkgs_file_new(str_installed)
     pkg:write_status(tmpdir)
+    pkg:execute(tinstall[i].Package,".postinst")
   end
+end
+
+function remove_pkgs(pkg,recursive)
+--  if conf_files == "keep" then keep_changed = true
+--  elseif conf_files == "del" then del_changed = true
+--  end
+  pkg:remove_make_list()
+  local ask, msg = pkg:remove_check_child(recursive)
+  if ask == true then
+    repeat
+      print("iw-luapkg will be remove this packages")
+      io.write(msg) 
+      rspta = io.read()
+      if rspta == "" then 
+        rspta = "N"
+      end
+      rspta = string.upper(rspta)
+      if rspta == "N" then
+        print("\nNothing to do\nDone.")
+        os.exit(0)
+      end
+    until rspta == "N" or rspta == "Y"
+  end
+  for i=1, #pkg.__toremove do
+    tfilelist = pkg:remove_pkgs(pkg.__toremove[i])
+    if del_changed == true and keep_changed == true then
+      del_changed, keep_changed = nil, nil
+    end
+    if del_changed == true then
+      for i,v in pairs(tfilelist) do
+        tfilelist[i] = false
+      end
+    end
+    if keep_changed ~= true then
+      tfilelist = keep_changed_conf(tfilelist)
+    end
+    local rslt = pkg:execute(pkg.__toremove[i],".prerm")
+    print("Removing "..pkg.__toremove[i])
+    for i, v in pairs(tfilelist) do
+      if v == false then
+        os.execute("rm "..i.." 2>/dev/null")
+--        print("rm "..i,v)
+        print("rm "..i)
+      end
+    end    
+    rslt = pkg:execute(pkg.__toremove[i],".postrm")
+    pkg:remove_done(pkg.__toremove[i])
+  end
+end
+
+--[[
+    
+    print("Processing file list")
+    print("Removing files "..infodir..self.__toremove[i].."*")
+  end
+end
+]]--
+
+function keep_changed_conf(tfilelist)
+  for i,v in pairsByKeys(tfilelist) do
+    if v == true then 
+      repeat
+        print(i.." was chaged")
+        print("   Do you want remove this file?")
+        io.write("   (Y/N) [default=N]? ")
+        rspta = io.read()
+        if rspta == "" then 
+          rspta = "N"
+        end
+        rspta = string.upper(rspta)
+        if rspta == "Y" then
+          tfilelist[i] = false
+        end
+      until rspta == "N" or rspta == "Y"
+    end
+  end
+  return tfilelist      
 end
 
 local script = arg[0]
@@ -126,6 +204,12 @@ for i=2, #arg do
       not_installed = true
     elseif arg[i] == "-d" then
       detailled = true
+    elseif arg[i] == "-recursive" then
+      recursive = true
+    elseif arg[i] == "-keep_changed" then
+      keep_changed = true
+    elseif arg[i] == "-del_changed" then
+      del_changed = true
 --    elseif arg[i] == ">"
 --    or arg[i] == ">>" then
 --      break
@@ -171,6 +255,7 @@ elseif cmd == "check" then
   else
     print([[Package(s) must be especificated]])
   end
+
 elseif cmd == "install" then
   if string.len(pkg_list) > 0 then
     print("install packages")
@@ -182,6 +267,27 @@ elseif cmd == "install" then
   else
     print([[Package(s) must be especificated]])
   end
+
+elseif cmd == "update" then
+    print("Updating packages list")
+    local pkg = lpkgClass.new()
+  	pkg:update()
+    invalid_repo = pkg.__invalidrepo
+
+elseif cmd == "remove" then
+  if string.len(pkg_list) > 0 then
+--    print("Removing packages")
+--    if del_changed == true then conf_files = "del" end
+--    if keep_changed == true then conf_files = "keep" end
+--    if keep_changed == true and del_changed == true then conf_files = nil end
+    local pkg = lpkgClass.new(pkg_list)
+    remove_pkgs(pkg,recursive,conf_files)
+    not_found = pkg.__notfound
+    invalid_repo = pkg.__invalidrepo
+  else
+    print([[Package(s) must be especificated]])
+  end
+
 else
   print(arg[0].." [command] [package[*]] [-options]")
   print("","commands")
@@ -190,26 +296,39 @@ else
   print("","","list_repo             ", "list repositories")
   print("","","check                 ", "return list of files to be install")
   print("","","install               ", "install packages")
+  print("","","update                ", "update list of packages")
+  print("","","remove                ", "update list of packages")
   print("","package")
   print("","","packagename ...       ", "list of packages (space separated)")
-  print("","","packagename* ...      ", "search all packages start with packagename ")
+  print("","","packagename* ...      ", "search all packages start with")
+  print("","","                      ", "packagename ")
   print("","options")
-  print("","","-r repository_name,...", "use only repositories in this list (comma separated)")
+  print("","","-r repository_name,...", "use only repositories in this list ")
+  print("","","                      ", "(comma separated)")
   print("","","-d                    ", "Detailled list")
   print("","","-notinstalled         ", "list packages not installed")
+  print("","","-recursive            ", "Allow ipkg to remove package and all")
+  print("","","                      ", "that depend on it.")
+  print("","","-keep_changed         ", "Keep files controled in conffiles when")
+  print("","","                      ", "they was changed.")
+  print("","","-del_changed          ", "Delete all files controled in conffiles")
   print("How it work")
   print("  install or check")
   print("    luapkg install foo*")
-  print("      Read all repositories and select all packages that name start with foo and hight Version of each one and install they")
+  print("      Read all repositories and select all packages that name start with foo and")
+  print("      hight Version of each one and install they")
   print("")
   print("    luapkg install foo* -r reponame")
   print("      Install all packages that name start with foo from repository 'reponame'")
   print("")
   print("    luapkg install foo bar*")
-  print("      Read all repositories install foo from repository with hight Version of foo and install all packages that name start with bar from repository with hight Version")
+  print("      Read all repositories install foo from repository with hight Version of")
+  print("      foo and install all packages that name start with bar from repository ")
+  print("      with hight Version")
   print("")
   print("    luapkg install foo bar* -r reponame")
-  print("      Install foo and all packages that name start with bar from repository 'reponame'")
+  print("      Install foo and all packages that name start with bar from repository")
+  print("      'reponame'")
 end
 local show = false
 for i,v in pairsByKeys(not_found) do

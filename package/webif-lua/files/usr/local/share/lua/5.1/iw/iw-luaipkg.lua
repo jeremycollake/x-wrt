@@ -13,6 +13,7 @@ function lpkgClass.new(str_pkgs,str_repos)
 	self.search = str_pkgs or ""
 	self:repos()
 	self:installed()
+	self:setparent()
 --	self:loadRepo_list(self.repo_list)
 	return self
 end 
@@ -43,6 +44,25 @@ function lpkgClass:repos()
   end
 end
 
+function lpkgClass:installed_list()
+  local str_list = ""
+  for pkg, t in pairs(self.__installed) do
+    str_list = str_list.." "..pkg
+  end
+  return string.trim(str_list)
+end
+
+function lpkgClass:update()
+  self.search = self:installed_list()
+  for reponame, t in pairsByKeys(self.__repo) do
+    print("Repository: "..reponame)
+    print(t.url)
+    os.execute("wget -q "..t.url.."/Packages -O /usr/lib/ipkg/lists/"..reponame )
+    self:load_repo(reponame)
+  end
+  os.execute("echo '"..self:detailled_status().."' >/usr/lib/ipkg/status")
+end
+
 function lpkgClass:installed()
 	local installed_set = load_file("/usr/lib/ipkg/status")
   self:process_pkgs_file_new(installed_set)
@@ -67,13 +87,8 @@ function lpkgClass:load_repo(str_repo)
 end
 
 function lpkgClass:do_process(str_search,data,str_repo)
---  if str_search == nil then 
---    local newdata = data
---    self:process_pkgs_file(newdata,"",str_repo)
---  else
     local all = false
     for search in string.gmatch(str_search,"%S+") do
---      print(search)
       local mysearch = string.gsub(search,"*","")
       local newdata = data
       if string.match(search,"*") then
@@ -145,60 +160,6 @@ function lpkgClass:process_pkgs_file_new(data,search,repo)
   self:add_new(tidx,repo)
 end
 
-function lpkgClass:process_pkgs_file_new1(data,search,repo)
-  local pkg = ""
-  local ver = ""
-  local repo = repo or "inst"
-  local all = nil
-  if search then
-    if string.match(search,"*") then
-      all = true
-      search = string.gsub(search,"*","")
-    else
-      all = false
-    end
-  end
-  local tidx = nil
-  for line in string.gmatch(data,"[^\n]+") do
-    local key, desc = unpack(string.split(line,":"))
-    if string.trim(key) ~= "" then
-      if key and desc == nil then
-        desc = key
-        key = "Description"
-      end        
-  
-      if key == "Package" then
-        self:add_new(tidx,repo)
-        tidx = {}
-        pkg = desc
-        if search ~= "" and search ~= nil then
-          if all == true then
-            if search ~= string.sub(pkg,1,string.len(search)) then
-              tidx = nil
-              break 
-            end
-          else
-            if pkg ~= search then
-              tidx = nil
-              break 
-            end
-          end
-        end
-      end
-      if key == "Description" then
-        if tidx["Description"] == nil then
-          tidx["Description"] = desc
-        else
-          tidx["Description"] = tidx["Description"]..desc
-        end
-      else
-        tidx[key] = desc 
-      end
-    end
-  end
-  self:add_new(tidx,repo)
-end
-
 function lpkgClass:add_new(tidx,reponame)
   if tidx == nil then return end
   self[#self+1] = tidx
@@ -219,10 +180,19 @@ function lpkgClass:add_new(tidx,reponame)
     end
     self.__repo[reponame]["pkgs"][tidx.Package] = self[#self]
     self[#self]["Repository"] = reponame
+--[[
     if self[tidx.Package] == nil then self[tidx.Package]= {} end
-    if self[tidx.Package][tidx.Version] == nil then self[tidx.Package][tidx.Version]= {} end
-    if self[tidx.Package][tidx.Version][reponame] == nil then self[tidx.Package][tidx.Version][reponame]= self[#self] end
+    if self[tidx.Package][tidx.Version] == nil then self[tidx.Package][tidx.Version] = {} end
+--    if self[tidx.Package][tidx.Version] == nil then self[tidx.Package][tidx.Version] = self[#self] end
+    if self[tidx.Package][tidx.Version][reponame] == nil then self[tidx.Package][tidx.Version][reponame] = self[#self] end
+]]--
     if tidx.Depends ~= nil and tidx.Depends ~= "" and repo ~= "inst" then
+      if self.__installed[tidx.Package] ~= nil then
+        if self.__installed[tidx.Package].Depends == nil
+        and self.__installed[tidx.Package].Version == tidx.Version then 
+          self.__installed[tidx.Package].Depends = tidx.Depends 
+        end
+      end 
       self:check_depends(tidx.Depends)
     end
   end
@@ -468,17 +438,18 @@ function lpkgClass:unpack(tinstall,str_pkgname,overwrite)
         t_list[filename] = self:calc_md5sum(filename)
       end
     end
-    print(filename,self.__tprovider_conf[filename],t_list[filename])
+--    print(filename,self.__tprovider_conf[filename],t_list[filename])
   end
   return t_list, tctrl_file, str_exec
 end
 
 function lpkgClass:calc_md5sum(file)
   local md5 = ""
-  local calc_file = io.popen("md5sum < "..file)
+--  local calc_file = io.popen("md5sum < "..file)
+  local calc_file = io.popen("md5sum "..file)
   for line in calc_file:lines() do
---    md5 = unpack(string.split(line," "))
-    md5 = line
+    md5 = unpack(string.split(line," "))
+--    md5 = line
   end
   return md5
 end 
@@ -602,17 +573,27 @@ function lpkgClass:processFiles(t_list,pkgname)
 end
 
 function lpkgClass:detailled_status()
+	local status_field_list = "Depends Status Conffiles Description"
   local str_status = ""
   for i,v in pairsByKeys(self.__installed) do
-    str_status = str_status.."Package: "..v.Package.."\n"
-    str_status = str_status.."Status: "..tostring(v.Status).."\n"
-    if v.Root then str_status = str_status.."Root: "..tostring(v.Root).."\n" end
-    if v.Conffiles then str_status = str_status.."Conffiles: "..v.Conffiles.."\n" end
+    str_status = str_status.."Package: "..i.."\n"
     str_status = str_status.."Version: "..v.Version.."\n"
-    if v.Depends then str_status = str_status.."Depends: "..v.Depends.."\n" end
-    if v.Provides then str_status = str_status.."Provides: "..tostring(v.Provides).."\n" end
-    if v.Architecture then str_status = str_status.."Architecture: "..v.Architecture.."\n" end
-    if v["Installed-Time"] then str_status = str_status.."Installed-Time: "..v["Installed-Time"].."\n" end
+    if status_field_list == nil or string.trim(status_field_list) == "" then
+      for k,n in pairsByKeys(v) do
+        if k ~= "Package" and k ~= "Version" and n ~= "Installed" and type(n) ~= "table"  and n ~= nil and n ~= "" then
+          str_status = str_status..k..": "..n.."\n"
+        end
+      end
+    else    
+      for field in string.gmatch(status_field_list,"%S+") do
+        field = string.trim(field)
+        if field ~= "Package" and field ~= "Version" then
+          if string.trim(v[field]) ~= "" then
+            if v[field] then str_status = str_status..field..": "..v[field].."\n" end
+          end
+        end
+      end
+    end
     str_status = str_status.."\n"
   end
   return str_status
@@ -623,3 +604,131 @@ function lpkgClass:write_status(pkgname)
   os.execute("echo '"..self:detailled_status().."' >/usr/lib/ipkg/status")
   os.execute("rm -R "..tmpdir)
 end
+
+function lpkgClass:setparent()
+  for i,t in pairs(self.__installed) do
+    if t.Depends then
+    local str = string.gsub(t.Depends,","," ")
+    local found = false
+    for parent in string.gmatch(str,"%S+") do
+      if not string.match(parent,"[(=]") then
+        if self.__installed[parent].child == nil then self.__installed[parent].child = i
+        else self.__installed[parent].child = self.__installed[parent].child.." "..i end
+      end
+    end
+    end  
+  end
+end
+
+function lpkgClass:remove_make_list()
+  self.__toremove = {}
+  self:remove_order(self.search)
+end
+
+function lpkgClass:remove_order(str_child,num)
+  local num = num or 0
+  local tsearch = {}
+  for pkg in string.gmatch(self.search,"%S+") do
+    tsearch[pkg] = 0
+  end
+  for pkg in string.gmatch(str_child,"%S+") do
+    if self.__installed[pkg] then
+      if  self.__toremove[pkg] == nil then
+        if self.__installed[pkg].child ~= nil then
+          self:remove_order(self.__installed[pkg].child,num+1)
+        end
+        self.__toremove[pkg] = num
+--        self.__toremove[pkg] = self.__installed[pkg].Depends
+        self.__toremove[#self.__toremove+1] = pkg
+      end
+      if tsearch[pkg] ~= nil then
+        if self.__toremove[pkg] then self.__toremove[pkg] = 0 end
+--        if self.__toremove[pkg] then self.__toremove[pkg] = "0" end
+      end
+    else
+      self.__notfound[pkg] = 0
+    end
+  end
+end
+
+function lpkgClass:remove_check_child(recursive)
+  local str_msg = "\n\nDo you want remove all this packages (Y/N) [default=N] ? "
+  local ask = false
+  for i = 1, #self.__toremove do
+    if recursive == true then self.__toremove[self.__toremove[i]] = 0 end
+    str_msg = string.rep("\t",self.__toremove[self.__toremove[i]])..self.__toremove[i].."\n"..str_msg
+    if self.__toremove[self.__toremove[i]] > 0 then
+      ask = true
+--      print(self.__toremove[i],self.__toremove[self.__toremove[i]])
+--    else
+--      print(self.__toremove[i].."... removing")
+    end
+  end
+  return ask, str_msg
+end
+
+function lpkgClass:remove_pkgs(pkgname)
+  local infodir = self.__installed[pkgname].infodir or "/usr/lib/ipkg/info/"
+  local tfiles = {}
+  local tconffiles = {}
+  if self.__installed[pkgname].Conffiles then
+    tconffiles = self:read_conffiles(pkgname)
+  end
+  str_files, error = load_file(infodir..pkgname..".list")
+  if error == false then
+    print("Error : "..infodir..pkgname..".list is missing")
+    os.exit(99)
+  end
+  for line in string.gmatch(str_files,"[^\n]+") do
+    if os.execute("[ -f "..line.." ]") == 0 then
+      if tconffiles[line] ~= nil then
+        tfiles[line] = true
+      else
+        tfiles[line] = false
+      end
+    end
+  end
+  return tfiles
+end
+
+function lpkgClass:remove_done(pkgname)
+  local infodir = self.__installed[pkgname].infodir or "/usr/lib/ipkg/info/"
+  os.execute("rm "..infodir..pkgname..".* 2>/dev/null")
+--  print ("rm "..infodir..pkgname..".*")
+  self.__installed[pkgname] = nil
+  os.execute("echo '"..self:detailled_status().."' >/usr/lib/ipkg/status")
+  print("Remove "..pkgname.." done.")
+end
+
+function lpkgClass:execute(str_filename,str_script)
+  local infodir = self.__installed[str_filename].infodir or "/usr/lib/ipkg/info/"
+  local rslt = 0
+  if io.exists(infodir..str_filename..str_script) then 
+    rslt = os.execute(infodir..str_filename..str_script)
+    if rslt ~= 0 then
+      print("Error while execute "..infodir..str_filename..str_script)
+    end
+  end
+  return rslt
+end
+
+function lpkgClass:read_conffiles(pkgname)
+  local tr = {}
+  if self.__installed[pkgname].Conffiles ~= nil then
+    local file = ""
+    for line in string.gmatch(self.__installed[pkgname].Conffiles,"%S+") do
+      if file == "" then 
+        file = line
+      else
+        local md5_str = self:calc_md5sum(file)
+--        print(file,line,md5_str)
+        if md5_str ~= line then
+          tr[file]=line
+        end
+        file = ""
+      end
+    end
+  end
+  return tr
+end
+      
