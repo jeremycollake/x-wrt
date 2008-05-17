@@ -12,8 +12,9 @@ if empty "$FORM_submit"; then
 	eval FORM_ipaddr="\$CONFIG_${syslogd_cfg}_ipaddr"
 	eval FORM_port="\$CONFIG_${syslogd_cfg}_port"
 	FORM_port="${FORM_port:-514}"
-	eval FORM_mark="\$CONFIG_${syslogd_cfg}_mark"
-	FORM_mark="${FORM_mark:-0}"
+	#eval FORM_mark="\$CONFIG_${syslogd_cfg}_mark"
+	#FORM_mark="${FORM_mark:-0}"
+	FORM_mark="0"
 	eval FORM_type="\$CONFIG_${syslogd_cfg}_type"
 	FORM_type="${FORM_type:-circular}"
 	eval FORM_file="\$CONFIG_${syslogd_cfg}_file"
@@ -33,7 +34,7 @@ else
 	validate <<EOF
 ip|FORM_ipaddr|@TR<<Server IP Address>>||$FORM_ipaddr
 int|FORM_port|@TR<<Server Port>>|min=0 max=65535|$FORM_port
-int|FORM_mark|@TR<<Minutes Between Marks>>||$FORM_mark
+int|FORM_mark|@TR<<Minutes Between Marks>>|min=0 max=0|$FORM_mark
 string|FORM_type|@TR<<Log type>>|nospaces|$FORM_type
 string|FORM_file|@TR<<Log File>>|$file_required|$FORM_file
 int|FORM_size|@TR<<Log Size>>|min=1 max=9999 required|$FORM_size
@@ -96,9 +97,10 @@ end_form
 
 start_form|@TR<<Syslog Marks>>
 field|@TR<<Minutes Between Marks>>
-text|mark|$FORM_mark
+text|mark|$FORM_mark||readonly="readonly"
 helpitem|Syslog Marks
 helptext|HelpText Syslog Marks#Periodic marks in your log. This parameter sets the time in minutes between the marks. A value of 0 means no mark.
+helptext|HelpText Syslog Marks_disabled#This feature is currently disabled to prevent system hangs with intensive logging. Use a cron job to reach the similar functionality.
 end_form
 
 start_form|@TR<<Local Log>>
