@@ -149,7 +149,7 @@ function remove_pkgs(pkg,recursive)
       if v == false then
         os.execute("rm "..i.." 2>/dev/null")
 --        print("rm "..i,v)
-        print("rm "..i)
+--        print("rm "..i)
       end
     end    
     rslt = pkg:execute(pkg.__toremove[i],".postrm")
