@@ -57,6 +57,7 @@ function lpkgClass:update()
   for reponame, t in pairsByKeys(self.__repo) do
     print("Repository: "..reponame)
     print(t.url)
+    os.execute("mkdir /usr/lib/ipkg/lists 2>/dev/null")
     os.execute("wget -q "..t.url.."/Packages -O /usr/lib/ipkg/lists/"..reponame )
     self:load_repo(reponame)
   end
@@ -411,14 +412,14 @@ function lpkgClass:unpack(tinstall,str_pkgname,overwrite)
   for fileline in control_files:lines() do
     if fileline == "preinst" then 
       str_exec = tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package.."."..fileline
-      t_list["/usr/lib/ipkg/info/"..tctrl_file.Package.."."..fileline] = true
+      t_list["/usr/lib/ipkg/info/"..tctrl_file.Package.."."..fileline] = false
     elseif fileline == "conffiles" then
       local oldconf = io.open(tmpdir.."/control/"..fileline)
       for conffile in oldconf:lines() do
 --        print(conffile)
         self.__tprovider_conf[conffile] = self:calc_md5sum(tmpdir.."/data/"..conffile )
       end
-      t_list["/usr/lib/ipkg/info/"..tctrl_file.Package.."."..fileline] = true
+      t_list["/usr/lib/ipkg/info/"..tctrl_file.Package.."."..fileline] = false
     else
       t_list["/usr/lib/ipkg/info/"..tctrl_file.Package.."."..fileline] = false
     end  
@@ -703,8 +704,8 @@ end
 function lpkgClass:execute(str_filename,str_script)
   local infodir = self.__installed[str_filename].infodir or "/usr/lib/ipkg/info/"
   local rslt = 0
-  print("Executing "..infodir..str_filename..str_script)
   if io.exists(infodir..str_filename..str_script) then 
+    print("Executing "..infodir..str_filename..str_script)
     rslt = os.execute(infodir..str_filename..str_script)
     if rslt ~= 0 then
       print("Error while execute "..infodir..str_filename..str_script)
