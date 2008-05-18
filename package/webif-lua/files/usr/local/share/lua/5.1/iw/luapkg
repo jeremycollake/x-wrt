@@ -83,7 +83,12 @@ function install_pkgs(pkg)
 
     print("Configuring "..dest)
     if string.len(str_exec) > 0 then
-      os.execute(str_exec)
+      print("Executing "..str_exec)
+      local error = os.execute(str_exec)
+      if error ~= 0 then
+        print("Error while executing "..str_exec)
+        print("Error Number : "..error)
+      end
     end
     print("Copying files")
     pkg:processFiles(tfiles,tmpdir)
