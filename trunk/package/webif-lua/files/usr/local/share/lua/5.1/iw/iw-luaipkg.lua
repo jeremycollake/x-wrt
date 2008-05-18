@@ -181,12 +181,12 @@ function lpkgClass:add_new(tidx,reponame)
     end
     self.__repo[reponame]["pkgs"][tidx.Package] = self[#self]
     self[#self]["Repository"] = reponame
---[[
+
     if self[tidx.Package] == nil then self[tidx.Package]= {} end
     if self[tidx.Package][tidx.Version] == nil then self[tidx.Package][tidx.Version] = {} end
 --    if self[tidx.Package][tidx.Version] == nil then self[tidx.Package][tidx.Version] = self[#self] end
     if self[tidx.Package][tidx.Version][reponame] == nil then self[tidx.Package][tidx.Version][reponame] = self[#self] end
-]]--
+
     if tidx.Depends ~= nil and tidx.Depends ~= "" and repo ~= "inst" then
       if self.__installed[tidx.Package] ~= nil then
         if self.__installed[tidx.Package].Depends == nil
