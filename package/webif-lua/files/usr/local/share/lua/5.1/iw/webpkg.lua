@@ -62,10 +62,8 @@ end
 
 function form_select(lpkg)
   local forms = {}
-  print("select")
   lpkg:loadRepo_list()
   lpkg:check_notfound()
-
 	page.action_apply = ""
 	page.action_review = ""
 	page.action_clear = ""
@@ -85,6 +83,7 @@ function form_select(lpkg)
       end
     end
   end
+  
   forms[#forms]:Add_help(tr("pkg_inRepo#Packages in repositries"),tr("pkg_help_inRepo#Select version and repository to install"))
   if notfound > 0 then
     forms[#forms]:Add("subtitle",tr("Not found in repositories").."("..notfound..")")
@@ -106,6 +105,7 @@ function install()
   local t = {}
   local forms = {}
   local i = 0
+  
 	page.action_apply = ""
 	page.action_review = ""
 	page.action_clear = ""
@@ -150,17 +150,22 @@ function install()
   print("<pre>")
 
   print("Please wait... Installing".."&nbsp;("..tostring(#tinstall)..") package(s)")
+  local tmpdir = os.time()
 
   for i = 1, #tinstall do
     local dest = tinstall[i].Package.." ("..tinstall[i].Version..")"
     print("Installing "..dest)
     print("Downloading "..tinstall[i].url..tinstall[i].file)
-    lpkg:download(tinstall[i].url,tinstall[i].file,i)
 
+    lpkg:download(tinstall[i].url,tinstall[i].file,tmpdir)
     print("Unpack file "..tinstall[i].file)
-    local tfiles, tctrl_file, warning_exists, str_exec = lpkg:unpack(tinstall[i],i,true)
 
-    tfiles, conffiles = pkg:web_wath_we_do(tfiles)
+--    local tfiles, tctrl_file, warning_exists, str_exec = lpkg:unpack(tinstall[i],tmpdir,true)
+--    tfiles, conffiles = pkg:web_wath_we_do(tfiles)
+
+    local tfiles, tctrl_file, str_exec = lpkg:unpack(tinstall[i],tmpdir)
+    tfiles, conffiles = lpkg:web_wath_we_do(tfiles,tmpdir)
+
 --[[
     esto hay que hacerlo para que pida por web la confirmacion
     if warning_exists == true then
@@ -174,7 +179,7 @@ function install()
       os.execute(str_exec)
     end
     print("Copying files")
-    rspta, str_cmd = lpkg:processFiles(tfiles,i)
+    rspta, str_cmd = lpkg:processFiles(tfiles,tmpdir)
 
     if rspta ~= 0 then
       print ("Error: "..str_cmd)
@@ -197,8 +202,10 @@ function install()
     str_installed = str_installed.."Installed-Time: "..tostring(os.time()).."\n"
     print(dest.." installed ok")
     lpkg:process_pkgs_file_new(str_installed)
-    lpkg:write_status(i)
+    lpkg:write_status(tmpdir)
+    lpkg:execute(tinstall[i].Package,".postinst")
   end
+  print("Done.")
   print("</pre>")
   print(page:footer())
   os.exit(0)
