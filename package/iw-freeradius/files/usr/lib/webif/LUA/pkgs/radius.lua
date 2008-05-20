@@ -72,7 +72,7 @@ function core_form()
 	form[websettings[1].name..".userlevel"].options:Add("1","Beginer")
 --	form[websettings[1].name..".userlevel"].options:Add("2","Medium")
 --	form[websettings[1].name..".userlevel"].options:Add("3","Advanced")
-	form[websettings[1].name..".userlevel"].options:Add("4","Expert")
+--	form[websettings[1].name..".userlevel"].options:Add("4","Expert")
 ----	Help section	
 	form:Add_help(tr("freeradius_var_service#Service"),tr("freeradius_help_service#Turns freeradius server enable or disable"))
 	form:Add_help(tr("freeradius_var_mode#Configuration Mode"),tr("freeradius_help_mode#"..[[
