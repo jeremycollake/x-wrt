@@ -82,7 +82,7 @@ function core_form()
 	form[websettings[1].name..".userlevel"].options:Add("0","Select Mode")
 	form[websettings[1].name..".userlevel"].options:Add("1","Beginer")
 --	form[websettings[1].name..".userlevel"].options:Add("2","Advanced")
-	form[websettings[1].name..".userlevel"].options:Add("3","Expert")
+--	form[websettings[1].name..".userlevel"].options:Add("3","Expert")
 	form:Add_help(tr("_var_mode#Configuration Mode"),tr("_help_mode#"..[[
           Select mode of configuration page.<br />
           <strong>Beginer :</strong><br />
