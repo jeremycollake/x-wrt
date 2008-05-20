@@ -315,9 +315,9 @@ function lpkgClass:tcount(t)
   return i
 end
 
-function lpkgClass:loadCtrl(tmpdir)
+function lpkgClass:loadCtrl(file)
   local tidx = {}
-  str_ctrl = load_file(tmpdir.."/control/control")
+  str_ctrl = load_file(file)
   for line in string.gmatch(str_ctrl,"[^\n]+") do
     local key, desc = unpack(string.split(line,":"))
     if string.trim(key) ~= "" then
@@ -343,9 +343,8 @@ function lpkgClass:download(url,file,str_pkgname)
   local tmpdir = "/tmp/luapkg/"..str_pkgname
   local tmpfile = string.gsub(file,"%./","")
   local tmpurl = url.."/"
-  
   os.execute("mkdir /tmp/luapkg/ 2>/dev/null")
-  os.execute("rm -R "..tmpdir.." 2>/dev/null")
+--  os.execute("rm -R "..tmpdir.." 2>/dev/null")
   os.execute("mkdir "..tmpdir.." 2>/dev/null")
   return os.execute("wget -q -P "..tmpdir.." "..tmpurl..tmpfile)
 end
@@ -374,38 +373,9 @@ function lpkgClass:unpack(tinstall,str_pkgname,overwrite)
   os.execute("tar xzf "..tmpdir.."/data.tar.gz -C "..tmpdir.."/data")
   os.execute("rm "..tmpdir.."/data.tar.gz 2>/dev/null")
 
-  tctrl_file = self:loadCtrl(tmpdir)
+  tctrl_file = self:loadCtrl(tmpdir.."/control/control")
+  t_list,str_list = self:make_list(str_pkgname)
 
-  local list_file = io.popen("ls -R "..tmpdir.."/data")
-  local t_list = {}
-  local prevdir = "/"
-  
-  for line in list_file:lines() do
-    if string.len(line) > 0 then
-      line = string.gsub(line,tmpdir.."/data","")
-      if string.match(line,":") then
-        line = string.gsub(line,":","")
-        prevdir = line
-        if string.len(line) == 0 then line = "/" end
-        t_list[line] = "DIR"
-      else
-        t_list[prevdir.."/"..line] = false
---        if prevdir == "/etc" then
---          if overwrite == true then
---            t_list[prevdir.."/"..line] = false
---          else
---            t_list[prevdir.."/"..line] = io.exists(prevdir.."/"..line)
---            if t_list[prevdir.."/"..line] == true then warning_exists = true end
---          end
---        end
-      end
-    end
-  end
-  
-  for i,v in pairsByKeys(t_list) do
-    str_list = str_list..i.."\n"
-  end
-  str_list = str_list.."\n"
   self.__tprovider_conf = {}
   local str_exec = ""
   control_files = io.popen("ls "..tmpdir.."/control")
@@ -426,7 +396,9 @@ function lpkgClass:unpack(tinstall,str_pkgname,overwrite)
     os.execute("cp -f "..tmpdir.."/control/"..fileline.." "..tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package.."."..fileline)
     os.execute("rm "..tmpdir.."/control/"..fileline)
   end
+  
   os.execute("echo '"..str_list.."' >"..tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package..".list")
+  
   t_list["/usr/lib/ipkg/info/"..tctrl_file.Package..".list"] = false
 --  return t_list, tctrl_file, warning_exists, str_exec, self.__tprovider_conf
   for filename, md5_val in pairs(self.__tprovider_conf) do
@@ -444,6 +416,34 @@ function lpkgClass:unpack(tinstall,str_pkgname,overwrite)
   return t_list, tctrl_file, str_exec
 end
 
+function lpkgClass:make_list(pkgname)
+  local tmpdir = "/tmp/luapkg/"..pkgname
+  local str_list = ""
+  local list_file = io.popen("ls -R "..tmpdir.."/data")
+  local t_list = {}
+  local prevdir = "/"
+  
+  for line in list_file:lines() do
+    if string.len(line) > 0 then
+      line = string.gsub(line,tmpdir.."/data","")
+      if string.match(line,":") then
+        line = string.gsub(line,":","")
+        prevdir = line
+        if string.len(line) == 0 then line = "/" end
+        t_list[line] = "DIR"
+      else
+        t_list[prevdir.."/"..line] = false
+      end
+    end
+  end
+  
+  for i,v in pairsByKeys(t_list) do
+    str_list = str_list..i.."\n"
+  end
+  str_list = str_list.."\n"
+  return t_list, str_list
+end
+
 function lpkgClass:calc_md5sum(file)
   local md5 = ""
 --  local calc_file = io.popen("md5sum < "..file)
@@ -455,8 +455,8 @@ function lpkgClass:calc_md5sum(file)
   return md5
 end 
 
-function lpkgClass:wath_we_do(tfiles,tmpdir)
-  local tmpdir = "/tmp/luapkg/"..tmpdir
+function lpkgClass:what_we_do(tfiles,pkgname)
+  local tmpdir = "/tmp/luapkg/"..pkgname
   local msg =[[==> File on system created by you or by a script.
 ==> File also in package provided by package maintainer.
    What would you like to do about it ?  Your options are:
@@ -495,55 +495,6 @@ function lpkgClass:wath_we_do(tfiles,tmpdir)
       end
     end
   end
-  local str_conffiles = ""
-  for filestr, md5str in pairs(self.__tprovider_conf) do
-    if str_conffiles == "" then str_conffiles = filestr.." "..md5str
-    else str_conffiles = str_conffiles.." "..filestr.." "..md5str end
-  end
-  return tfiles, str_conffiles
-end
-
-function lpkgClass:web_wath_we_do(tfiles)
-
-  local msg = [[==> File on system created by you or by a script.
-==> File also in package provided by package maintainer.
-   What would you like to do about it ?  Your options are:
-    Y or I  : install the package maintainer's version
-    N or O  : keep your currently-installed version
-]]
---      D     : show the differences between the versions (if diff is installed)
-..[[
- The default action is to keep your current version.
-
-(Y/I/N/O/D) [default=N] ? ]]
---[[
-  for filename, md5_provider in pairs(self.__tprovider_conf) do
-    if type(tfiles[filename]) == "string" then
-      if tfiles[filename] ~= self.__tprovider_conf[filename] then
-        repeat
-          print(filename)
-          io.write(msg) 
-          rspta = io.read()
-          if rspta == "" then 
-            rspta = "N"
-          end
-          rspta = string.upper(rspta)
-          if rspta == "Y"
-          or rspta == "I" then
---          self.__tprovider_conf[filename] = tfiles[filename]
-            tfiles[filename] = false
-          end
-          if rspta == "N"
-          or rspta == "O" then
-            self.__tprovider_conf[filename] = tfiles[filename]
-            tfiles[filename] = true
-          end
-        until rspta == "N" or rspta == "O" or rspta == "Y" or rspta == "I"
-      end
-    end
-  end
-]]--
-
   local str_conffiles = ""
   for filestr, md5str in pairs(self.__tprovider_conf) do
     if str_conffiles == "" then str_conffiles = filestr.." "..md5str
