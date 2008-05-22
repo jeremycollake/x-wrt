@@ -1,31 +1,29 @@
 diff -urN linux.old/Makefile linux.dev/Makefile
 --- linux.old/Makefile	2005-08-26 13:41:41.689634168 +0200
-+++ linux.dev/Makefile	2005-08-26 13:44:34.233403528 +0200
-@@ -17,9 +17,9 @@
++++ linux.dev/Makefile	2008-05-10 23:06:46.000000000 +0200
+@@ -17,7 +17,7 @@
  FINDHPATH	= $(HPATH)/asm $(HPATH)/linux $(HPATH)/scsi $(HPATH)/net $(HPATH)/math-emu
  
  HOSTCC  	= gcc
 -HOSTCFLAGS	= -Wall -Wstrict-prototypes -O2 -fomit-frame-pointer
 +HOSTCFLAGS	= -Wall -Wstrict-prototypes -Os -fomit-frame-pointer
  
--CROSS_COMPILE 	=
-+CROSS_COMPILE=
+ CROSS_COMPILE 	=
  
- #
- # Include the make variables (CC, etc...)
-@@ -91,8 +91,10 @@
+@@ -91,9 +91,11 @@
  
  CPPFLAGS := -D__KERNEL__ -I$(HPATH)
  
 -CFLAGS := $(CPPFLAGS) -Wall -Wstrict-prototypes -Wno-trigraphs -O2 \
 +CFLAGS := $(CPPFLAGS) -Wall -Wstrict-prototypes -Wno-trigraphs -Os \
  	  -fno-strict-aliasing -fno-common
+ CFLAGS += -fno-builtin-strpbrk -fno-builtin-sprintf
 +
 +
  ifndef CONFIG_FRAME_POINTER
  CFLAGS += -fomit-frame-pointer
  endif
-@@ -354,7 +356,7 @@
+@@ -361,7 +363,7 @@
  	@rm -f .ver1
  
  include/linux/version.h: ./Makefile

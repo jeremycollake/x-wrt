@@ -32,11 +32,15 @@ $(LINUX_HEADERS_DIR)/.unpacked: $(DL_DIR)/$(LINUX_HEADERS_SOURCE)
 		linux-$(LINUX_HEADERS_VERSION)/*/*/Config.in \
 		linux-$(LINUX_HEADERS_VERSION)/*/Config.in
 	ln -sf $(LINUX_HEADERS_DIR)-$(LINUX_HEADERS_VERSION) $(LINUX_HEADERS_DIR)
-	$(SED) 's/@expr length/@-expr length/' $(LINUX_HEADERS_DIR)/Makefile 
 	touch $(LINUX_HEADERS_DIR)/.unpacked
 
-$(LINUX_HEADERS_DIR)/.configured: $(LINUX_HEADERS_DIR)/.unpacked
-	-cp -af ./config.$(LINUX_HEADERS_ARCH) $(LINUX_HEADERS_DIR)/.config
+$(LINUX_HEADERS_DIR)/.patched: $(LINUX_HEADERS_DIR)/.unpacked
+	$(PATCH) $(LINUX_HEADERS_DIR) ./patches
+	$(SED) 's/@expr length/@-expr length/' $(LINUX_HEADERS_DIR)/Makefile 
+	touch $(LINUX_HEADERS_DIR)/.patched
+
+$(LINUX_HEADERS_DIR)/.configured: $(LINUX_HEADERS_DIR)/.patched
+	-cp -af ./config/config.$(LINUX_HEADERS_ARCH) $(LINUX_HEADERS_DIR)/.config
 	$(MAKE) -C $(LINUX_HEADERS_DIR) ARCH=$(LINUX_HEADERS_ARCH) oldconfig include/linux/version.h
 	touch $(LINUX_HEADERS_DIR)/.configured
 

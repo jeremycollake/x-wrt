@@ -824,6 +824,8 @@ CONFIG_B44=y
 # CONFIG_HAMACHI is not set
 # CONFIG_YELLOWFIN is not set
 # CONFIG_R8169 is not set
+# CONFIG_SKGE is not set
+# CONFIG_SKY2 is not set
 # CONFIG_SK98LIN is not set
 # CONFIG_TIGON3 is not set
 # CONFIG_FDDI is not set
@@ -907,6 +909,7 @@ CONFIG_SHAPER=m
 # Input core support
 #
 # CONFIG_INPUT is not set
+# CONFIG_DUMMY_KEYB is not set
 # CONFIG_INPUT_KEYBDEV is not set
 # CONFIG_INPUT_MOUSEDEV is not set
 # CONFIG_INPUT_JOYDEV is not set
@@ -981,6 +984,7 @@ CONFIG_SOFT_WATCHDOG=m
 # CONFIG_W83877F_WDT is not set
 # CONFIG_WDT is not set
 # CONFIG_WDTPCI is not set
+# CONFIG_WDT_W83627 is not set
 # CONFIG_MACHZ_WDT is not set
 # CONFIG_SCx200 is not set
 # CONFIG_SCx200_GPIO is not set
