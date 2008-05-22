@@ -324,6 +324,13 @@ $(eval $(call KMOD_template,BLUETOOTH_HCIUSB,bluetooth-hciusb,\
 $(eval $(call KMOD_template,BLUETOOTH_HCIVHCI,bluetooth-hcivhci,\
         $(MODULES_DIR)/kernel/drivers/bluetooth/hci_vhci.o \
 ))
+$(eval $(call KMOD_template,PARPORT,parport,\
+	$(MODULES_DIR)/kernel/drivers/parport/parport.o \
+	$(MODULES_DIR)/kernel/drivers/char/ppdev.o \
+,CONFIG_PARPORT,,40,parport))
+$(eval $(call KMOD_template,LP,lp,\
+	$(MODULES_DIR)/kernel/drivers/char/lp.o \
+,CONFIG_PARPORT,,60,ppdev lp))
 
 $(TARGETS): $(PACKAGE_DIR)
 

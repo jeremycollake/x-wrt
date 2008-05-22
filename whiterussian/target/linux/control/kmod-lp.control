@@ -1,4 +1,5 @@
 Package: kmod-lp
 Priority: optional
 Section: sys
-Description: Kernel modules for parallel port support and line printer
+Depends: kmod-parport
+Description: Kernel modules for line printer support

@@ -443,11 +443,23 @@ config BR2_PACKAGE_KMOD_NBD
 	help
 	  Kernel module for network block device
 
-config BR2_PACKAGE_KMOD_LP
-	tristate "parallel port and lp support"
+config BR2_PACKAGE_KMOD_PARPORT
+	tristate "parallel port support"
 	default m
 	help
-	  Kernel modules for line printer and parallel port support
+	  Kernel modules for parallel port support
+
+config BR2_PACKAGE_KMOD_SPLINK
+	tristate "parallel port support for Asus WL500g"
+	default m
+	help
+	  Kernel modules for Asus WL500g parallel port support
+
+config BR2_PACKAGE_KMOD_LP
+	tristate "line printer support"
+	default m
+	help
+	  Kernel modules for line printer support
 
 config BR2_PACKAGE_KMOD_CRYPTO
 	tristate "CryptoAPI modules"

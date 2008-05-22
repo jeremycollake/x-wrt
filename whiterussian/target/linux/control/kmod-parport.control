@@ -1,0 +1,4 @@
+Package: kmod-parport
+Priority: optional
+Section: sys
+Description: Kernel modules for parallel port support

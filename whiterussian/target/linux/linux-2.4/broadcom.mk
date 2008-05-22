@@ -9,12 +9,9 @@
 $(eval $(call KMOD_template,BRCM_WL,brcm-wl,\
 	$(MODULES_DIR)/kernel/drivers/net/wl/wl.o \
 ,CONFIG_WL))
-$(eval $(call KMOD_template,LP,lp,\
-	$(MODULES_DIR)/kernel/drivers/parport/parport.o \
+$(eval $(call KMOD_template,SPLINK,splink,\
 	$(MODULES_DIR)/kernel/drivers/parport/parport_splink.o \
-	$(MODULES_DIR)/kernel/drivers/char/lp.o \
-	$(MODULES_DIR)/kernel/drivers/char/ppdev.o \
-,CONFIG_PARPORT,,50,parport parport_splink lp))
+,CONFIG_PARPORT,,50,parport_splink))
 
 LINUX_BINARY_DRIVER_SITE=http://openwrt.org/downloads/sources
 # proprietary driver, extracted from Linksys GPL sourcetree WRT54GS 4.70.6
