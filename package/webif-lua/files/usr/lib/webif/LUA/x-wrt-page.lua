@@ -15,7 +15,9 @@ pageClass_mt = {__index = pageClass}
 
 function pageClass.new (title) 
 	local self = {}
-	self["__DOCTYPE"] = [[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">]]
+	self["__DOCTYPE"] = [[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+]]
 	self["title"] = tr(title)
 	self["body"] = "<body>"
 	self["savebutton"]    = "<input type=\"submit\" name=\"__ACTION\" value=\""..tr("Save Changes").."\" />"
@@ -55,17 +57,17 @@ local header = self.__DOCTYPE ..
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>]]..self.title.." "..__SYSTEM.general.firmware_name..tr("Administrative Console")..[[</title>
-	<link rel="stylesheet" type="text/css" href="/themes/active/waitbox.css" media="screen" />
-	<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
-	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_white.css" title="white" />
-	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_brown.css" title="brown" />
-	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_green.css" title="green" />
-	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_navyblue.css" title="navyblue" />
-	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_black.css" title="black" />
+	<link rel="stylesheet" type="text/css" href="/themes/active/waitbox.css" media="screen" >
+	<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" >
+	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_white.css" title="white" >
+	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_brown.css" title="brown" >
+	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_green.css" title="green" >
+	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_navyblue.css" title="navyblue" >
+	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_black.css" title="black" >
 	<!--[if lt IE 7]
-		<link rel="stylesheet" type="text/css" href="/themes/active/ie_lt7.css" />
+		<link rel="stylesheet" type="text/css" href="/themes/active/ie_lt7.css" >
 	[endif]-->
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
 	<meta http-equiv="expires" content="-1" />
 	<script type="text/javascript" src="/js/styleswitcher.js"></script>
 </head>

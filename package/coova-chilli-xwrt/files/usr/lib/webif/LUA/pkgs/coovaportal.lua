@@ -44,14 +44,15 @@ function set_menu()
   __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Core#Core","coova-chilli.sh")
   if userlevel > 1 then
     __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_DHCP#Network","coova-chilli.sh?option=net")
---  if portal > 0 then
-      __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Portal#Portal","coova-chilli.sh?option=uam")
---  end
+  end
+  __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Portal#Portal","coova-chilli.sh?option=uam")
+
+  if userlevel > 1 then
     if users == 0 then
       __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Radius#Radius","coova-chilli.sh?option=radius")
     end
-    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_NasId#NAS ID","coova-chilli.sh?option=nasid")
   end
+  __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_NasId#NAS ID","coova-chilli.sh?option=nasid")
   if users == 1
   or users == 3 then 
     __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Users#Users","coova-chilli.sh?option=users")
@@ -90,7 +91,7 @@ function core_form()
 	form:Add("select",service.name..".userlevel",cp_userlevel,tr("userlevel#User Level"),"string")
 	form[service.name..".userlevel"].options:Add("0","Select Mode")
 	form[service.name..".userlevel"].options:Add("1","Beginer")
---	form[service.name..".userlevel"].options:Add("2","Medium")
+	form[service.name..".userlevel"].options:Add("2","Medium")
 --	form[service.name..".userlevel"].options:Add("3","Advanced")
 --	form[service.name..".userlevel"].options:Add("4","Expert")
   if userlevel > 1 then
@@ -334,7 +335,7 @@ function uam_form(form,user_level,localuam)
       form:Add_help(tr("cportal_var_uamhomepage#Homepage"),tr("cportal_help_uamhomepage#URL of Welcome Page. Unauthenticated users will be redirected to this address, otherwise specified, they will be redirected to UAM Server instead."))
     end
   end
-  form:Add("text",uam.name..".HS_UAMALLOW",cp_HS_UAMALLOW,tr("cportal_var_uamallowed#UAM Allowed"),"string","width:90%")
+  form:Add("text_area",uam.name..".HS_UAMALLOW",cp_HS_UAMALLOW,tr("cportal_var_uamallowed#UAM Allowed"),"string","width:90%")
   form:Add_help(tr("cportal_var_uamallowed#Allowed URLs"),tr("cportal_help_uamallowed#Comma-seperated list of domain names, urls or network subnets the client can access without authentication (walled gardened)."))
   return form
 end
