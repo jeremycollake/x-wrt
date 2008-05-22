@@ -15,6 +15,7 @@
 config_cb() {
 	[ "$1" = "system" ] && system_cfg="$2"
 	[ "$1" = "server" ] && l2tpns_cfg="$2"
+	[ "$1" = "updatedd" ] && updatedd_cfg="$2"
 }
 
 # this line is for compatibility with webif-lua
@@ -318,13 +319,13 @@ for package in $process_packages; do
 			;;
 		"updatedd")
 			uci_load "updatedd"
-			if [ "$CONFIG_ddns_update" = "1" ]; then
-				/etc/init.d/ddns enable >&- 2>&- <&-
-				/etc/init.d/ddns stop >&- 2>&- <&-
-				/etc/init.d/ddns start >&- 2>&- <&-
+			if [ "$CONFIG_${updatedd_cfg)_update" = "1" ]; then
+				/etc/init.d/updatedd enable >&- 2>&- <&-
+				/etc/init.d/updatedd stop >&- 2>&- <&-
+				/etc/init.d/updatedd start >&- 2>&- <&-
 			else
-				/etc/init.d/ddns disable >&- 2>&- <&-
-				/etc/init.d/ddns stop >&- 2>&- <&-
+				/etc/init.d/updatedd disable >&- 2>&- <&-
+				/etc/init.d/updatedd stop >&- 2>&- <&-
 			fi
 			config_allclear
 		 	;;
