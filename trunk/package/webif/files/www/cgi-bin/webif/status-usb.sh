@@ -87,7 +87,7 @@ EOF
 <div>
 <table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.9em;" border="0" cellpadding="3" cellspacing="2">
 <?
-mounted_devices="$(cat /proc/mounts | grep -e "^/dev/sd[a-p]\{0,2\}[[:space:]]" -e "^/dev/scsi/.*")"
+mounted_devices="$(cat /proc/mounts | grep -e "^/dev/sd[a-p]\{0,2\}" -e "^/dev/scsi/.*")"
 ! equal "$mounted_devices" "" && {
 	echo "$mounted_devices" | awk -v url="$SCRIPT_NAME" '
 	BEGIN {
