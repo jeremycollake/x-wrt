@@ -47,6 +47,8 @@ function formClass:tostring(name)
 	if name ~= nil then 
 		if self[name].input == "text" then
 			return self:text(self[name])
+		elseif self[name].input == "text_area" then
+			return self:text_area(self[name])
 		elseif self[name].input == "checkbox" then
 			return self:checkbox(self[name])
 		elseif self[name].input == "password" then
@@ -121,7 +123,7 @@ function formClass:subtitle(t)
 end
 
 function formClass:hidden(t)
-	return "<input type=\"hidden\" name=\""..t.name.."\" value=\""..t.value.."\" />"
+	return "<input type=\"hidden\" name=\""..t.name.."\" value=\""..t.value.."\" >"
 end
 
 function formClass:link(t)
@@ -195,6 +197,20 @@ function formClass:text(t)
 	str = str .. "<input type=\"hidden\" name=\"val_lbl_"..t.name.."\" value=\""..t.label.."\" />"
 	end
 	str = str .. "<input type=\"text\" name=\""..t.name.."\" value=\""..t.value.."\" "..style..t.script.." />"
+	str = str .. "</td></tr>"
+	return str
+end
+
+function formClass:text_area(t)
+	local style = ""
+	if t.style ~= "" then style = "style=\""..t.style.."\" " end
+	local str  = "<tr><td width=\"40%\">" .. t.label .. "</td>"
+	str = str .. "<td width=\"60%\">"
+	if t.validate ~= "" then
+	str = str .. "<input type=\"hidden\" name=\"val_str_"..t.name.."\" value=\""..t.validate.."\" />"
+	str = str .. "<input type=\"hidden\" name=\"val_lbl_"..t.name.."\" value=\""..t.label.."\" />"
+	end
+	str = str .. "<TEXTAREA name=\""..t.name.."\" rows=\"6\""..style..t.script.." >"..t.value.."</TEXTAREA>"
 	str = str .. "</td></tr>"
 	return str
 end
