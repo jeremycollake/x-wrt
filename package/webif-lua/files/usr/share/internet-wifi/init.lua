@@ -1,5 +1,3 @@
-package.cpath = "?;./?.so;/usr/lib/lua/5.1/?.so" 
-package.path = "?;./?.lua;/usr/local/share/lua/5.1/iw/?.lua;/usr/local/share/lua/5.1/iw/?;/usr/lib/webif/LUA/?.lua;/usr/lib/webif/LUA/pkgs/?.lua;/usr/lib/lua/5.1/?.lua" 
 __WWW = os.getenv("SCRIPT_NAME")
 require("common")
 
