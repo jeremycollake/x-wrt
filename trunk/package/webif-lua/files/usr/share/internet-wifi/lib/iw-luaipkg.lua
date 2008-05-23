@@ -560,14 +560,14 @@ end
 function lpkgClass:setparent()
   for i,t in pairs(self.__installed) do
     if t.Depends then
-    local str = string.gsub(t.Depends,","," ")
-    local found = false
-    for parent in string.gmatch(str,"%S+") do
-      if not string.match(parent,"[(=]") then
-        if self.__installed[parent].child == nil then self.__installed[parent].child = i
-        else self.__installed[parent].child = self.__installed[parent].child.." "..i end
+      local str = string.gsub(t.Depends,","," ")
+      local found = false
+      for parent in string.gmatch(str,"%S+") do
+        if not string.match(parent,"[(=]") then
+          if self.__installed[parent].child == nil then self.__installed[parent].child = i
+          else self.__installed[parent].child = self.__installed[parent].child.." "..i end
+        end
       end
-    end
     end  
   end
 end

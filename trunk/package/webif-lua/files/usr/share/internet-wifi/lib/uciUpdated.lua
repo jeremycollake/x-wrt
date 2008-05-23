@@ -115,7 +115,7 @@ function uciUpdatedClass:review()
 end
 
 function uciUpdatedClass:apply()
-  dofile("/usr/lib/webif/LUA/apply.lua")
+  dofile("/usr/share/internet-wifi/lib/apply.lua")
 --[[
   __RESTART = {}
 	self.count = 0
