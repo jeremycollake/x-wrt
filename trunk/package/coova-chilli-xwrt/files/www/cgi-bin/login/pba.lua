@@ -1,4 +1,5 @@
 #!/usr/bin/lua
+dofile("/usr/share/internet-wifi/set_path.lua")
 require("init")
 --dofile("/usr/lib/webif/LUA/config.lua")
 io.write([[

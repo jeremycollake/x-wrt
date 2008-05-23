@@ -84,7 +84,7 @@ function init_list(list)
 end
 
 function call_parser(file,parsers_list,depends_list,exe_before,exe_after,reboot_list)
-    require("/usr/lib/webif/apply/"..file)
+    require("/usr/share/internet-wifi/applys/"..file)
     parsers_list[file] = {p = parser}
     -- Read if this package depends or need others packages to done configuration
     if parser.depends_pkgs then
@@ -135,11 +135,11 @@ local handler_dir = io.popen("ls /tmp/.uci")
 
 for file in handler_dir:lines() do
   file_list[file] = ""
-  if io.exists("/usr/lib/webif/apply/"..file) == true then  
+  if io.exists("/usr/share/internet-wifi/applys/"..file) == true then  
 --    call_parser(file,parsers_list,depends_list,exe_before,exe_after,reboot_list)
 
 
-    require("/usr/lib/webif/apply/"..file)
+    require("/usr/share/internet-wifi/applys/"..file)
     parsers_list[file] = {p = parser}
     -- Read if this package depends or need others packages to done configuration
     if parser.depends_pkgs then
