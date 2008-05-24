@@ -27,7 +27,7 @@ endef
 
 define Package/webif-freeloader-lang-ca
 $(call Package/webif-lang-freeloader)
-  TITLE:=Catalan language file for webif.
+  TITLE:=Catalan language file for webif-freeloader.
 endef
 
 define Package/webif-freeloader/install 
