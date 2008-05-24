@@ -40,11 +40,6 @@ exists() {
 	( < $1 ) 2>&-
 }
 
-is_bcm947xx() {
-	read _systype < /proc/cpuinfo
-	equal "${_systype##* }" "BCM947XX"
-}
-
 is_kamikaze() {
 	# todo: switch to a more reliable check of kamikaze
 	[ -s "/etc/config/network" ] || grep -iq "KAMIKAZE" "/etc/banner"
