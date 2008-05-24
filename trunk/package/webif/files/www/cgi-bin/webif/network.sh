@@ -145,6 +145,8 @@ for interface in $network; do
 	option|pppoa|@TR<<PPPOA>>
 	option|pptp|@TR<<PPTP>>
 	option|wwan|@TR<<WWAN>>
+	helpitem|Connection Type
+	helptext|Helptext Connection Type#Static IP: IP address of the interface is statically set. DHCP: The interface will fetch its IP address from a dhcp server.
 
 	field|@TR<<Type>>
 	select|${interface}_type|$FORM_type
