@@ -7,7 +7,6 @@ PKG_VERSION:=0.1
 PKG_RELEASE:=1
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
-PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -30,9 +29,11 @@ $(call Package/webif-lang-freeloader)
   TITLE:=Catalan language file for webif-freeloader.
 endef
 
+define Build/Compile
+endef
+
 define Package/webif-freeloader/install 
 	$(CP) -a ./files/* $(1)/
-	$(CP) -a ./ipkg/webif-freeloader.preinst $(1)/CONTROL/preinst
 	$(CP) -a ./ipkg/webif-freeloader.postinst $(1)/CONTROL/postinst
 	$(CP) -a ./ipkg/webif-freeloader.postrm $(1)/CONTROL/postrm
 	chmod -R 755 $(1)/*
@@ -42,7 +43,6 @@ define Package/webif-freeloader/install
 	find $(1) -name CVS | xargs rm -rf
 	find $(1) -name .svn | xargs rm -rf
 	find $(1) -name *~ | xargs rm -rf
-	$(IPKG_BUILD) $(IDIR_WEBIF_FREELOADER) $(PACKAGE_DIR)
 endef
 
 $(eval $(call BuildPackage,webif-freeloader))
