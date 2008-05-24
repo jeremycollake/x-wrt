@@ -133,7 +133,7 @@ install_package() {
 	# try an 'ipkg update' to see if it can locate it. Does
 	# emit output to std devices.
 	echo "@TR<<Installing package>>..."
-	ipkg install "$1" -force-overwrite -force-defaults | grep -q "md5sum mismatch"
+	ipkg install "$1" -force-overwrite -force-defaults | grep -q -e "md5sum mismatch" -e "Cannot find package"
 	[ "$?" = "0" ] && {
 		echo "$1" | grep "://" >> /dev/null
 		! equal "$?" "0" && {
