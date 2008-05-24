@@ -156,7 +156,7 @@ if empty "$FORM_submit"; then
 	time_zoneinfo_part="${time_zoneinfo_part:-"-"}"
 	FORM_system_timezone="${time_zoneinfo_part}@${time_zone_part}"
 
-	is_bcm947xx && {
+	has_nvram_support && {
 		FORM_boot_wait="${boot_wait:-$(nvram get boot_wait)}"
 		FORM_boot_wait="${FORM_boot_wait:-off}"
 		FORM_wait_time="${wait_time:-$(nvram get wait_time)}"
@@ -198,7 +198,7 @@ EOF
 			uci_set "$ntpcliconf" "$server" count "$FORM_ntp_count"
 		done
 
-		is_bcm947xx && {
+		has_nvram_support && {
 			case "$FORM_boot_wait" in
 				on|off) save_setting system boot_wait "$FORM_boot_wait";;
 			esac
@@ -247,9 +247,9 @@ EOF
 )
 
 #####################################################################
-# over/underclocking
+# boot wait time
 #
-is_bcm947xx && {
+has_nvram_support && {
 	#####################################################################
 	# Initialize wait_time form
 	for wtime in $(seq 1 30); do
@@ -302,7 +302,7 @@ THEMES=$(echo "$THEMES" | sort -u)
 }
 LANGUAGES=$(cat "/etc/languages.lst")
 
-is_bcm947xx && {
+has_nvram_support && {
 	bootwait_form="field|@TR<<Boot Wait>>
 	select|boot_wait|$FORM_boot_wait
 	option|on|@TR<<Enabled>>
@@ -407,7 +407,7 @@ cat <<EOF
 function modechange()
 {
 EOF
-is_bcm947xx && cat <<EOF
+has_nvram_support && cat <<EOF
 	if(isset('boot_wait','on'))
 	{
 		document.getElementById('wait_time').disabled = false;
