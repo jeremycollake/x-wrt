@@ -9,8 +9,6 @@
 #
 # Major revisions:
 #
-# NVRAM variables referenced:
-#
 # Configuration files referenced:
 #
 
@@ -22,30 +20,21 @@ indexpage=index.sh
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
 
-awk_call() {
-	local cmd="$1"; shift
-	/usr/bin/awk "$@" -f /usr/lib/webif/common.awk -f - <<EOF
-BEGIN {
-	$cmd
-}
-EOF
-}
-
-awx_call() {
-	local cmd="$1"; shift
-	/usr/bin/awk "$@" -f /usr/lib/webif/common.awx -f - <<EOF
-BEGIN {
-	$cmd
-}
-EOF
-}
-
 categories() {
-	awk_call 'categories()' -v CATEGORY="$1" 
+	grep '##WEBIF:' $cgidir/.categories $cgidir/*.sh 2>/dev/null | \
+		awk -v "selected=$1" \
+			-v "rootdir=$rootdir" \
+			-v "indexpage=$indexpage" \
+			-f /usr/lib/webif/categories.awk -
 }
 
 subcategories() {
-	awk_call 'subcategories()' -v CATEGORY="$1" -v PAGENAME="$2" 
+	grep -H "##WEBIF:name:$1:" $cgidir/*.sh 2>/dev/null | \
+		sed -e 's,^.*/\([a-zA-Z0-9\.\-]*\):\(.*\)$,\2:\1,' | \
+		sort -n | \
+		awk -v "selected=$2" \
+			-v "rootdir=$rootdir" \
+			-f /usr/lib/webif/subcategories.awk -
 }
 
 ShowWIPWarning() {
@@ -61,7 +50,14 @@ ShowNotUpdatedWarning() {
 }
 
 update_changes() {
-	CHANGES="$(awk_call 'print num_changes()')"
+	CHANGES=$(($( (cat /tmp/.webif/config-* ; ls /tmp/.webif/file-*) 2>&- | wc -l)))
+	EDITED_FILES=$(find "/tmp/.webif/edited-files" -type f 2>&- | wc -l)
+	CHANGES=$(($CHANGES + $EDITED_FILES))
+	# calculate and add number of pending uci changes
+	for uci_tmp_file in $(ls /tmp/.uci/* 2>&- | grep -v "\\.lock\$" 2>&-); do
+		CHANGES_CUR=$(cat "$uci_tmp_file" | grep "\\w" | wc -l)
+		CHANGES=$(($CHANGES + $CHANGES_CUR))
+	done
 }
 
 pcnt=0
@@ -108,31 +104,106 @@ EOF
 
 header() {
 	empty "$ERROR" && {
-		_show_info="${SAVED:+@TR<<Settings saved>>}"
+		_saved_title="${SAVED:+: @TR<<Settings saved>>}"
 	} || {
-		_show_info="@TR<<Settings not saved>>"
-	}
-
-	_use_form="$5"
-	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && grep 'root:!' /etc/passwd >&- 2>&- && {
-		_nopasswd=1
-		_use_form=""
-		_show_info=""
-		ERROR=""
+		FORM_submit="";
+		ERROR="<h3 class=\"warning\">$ERROR</h3>"
+		_saved_title=": @TR<<Settings not saved>>"
 	}
 
 	_category="$1"
-	awx_call "render(\"$cgidir/views/header.ahtml\")" \
-		-v CATEGORY="$1" \
-		-v PAGENAME="$2" \
-		-v page_title="$3" \
-		-v html_body_args="$4" \
-		-v show_info="$_show_info" \
-		-v show_error="$ERROR" \
-		-v use_form="$_use_form" \
-		-v subcategories_extra="$SUBCATEGORIES_EXTRA" \
-		-v html_head="$(echo "$header_inject_head" | sed 's/\\/\\\\/g;')" \
-		-v html_body="$(echo "$header_inject_body" | sed 's/\\/\\\\/g;')"
+	uci_load "webif"
+	_firmware_version="$CONFIG_general_firmware_version"
+	_firmware_name="$CONFIG_general_firmware_name"
+	_firmware_subtitle="$CONFIG_general_firmware_subtitle"
+	_use_progressbar="$CONFIG_general_use_progressbar"
+	_uptime="$(uptime)"
+	_loadavg="${_uptime#*load average: }"
+	_uptime="${_uptime#*up }"
+	_uptime="${_uptime%%, load *}"
+	_hostname=$(cat /proc/sys/kernel/hostname)
+	_webif_rev=$(cat /www/.version)
+	_head="${3:+<h2>$3$_saved_title</h2>}"
+	_form="${5:+<form enctype=\"multipart/form-data\" action=\"$5\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />}"
+	_savebutton="${5:+<div class=\"page-save\"><input type=\"submit\" name=\"action\" value=\"@TR<<Save Changes>>\" /></div>}"
+	_categories=$(categories $1)
+	_subcategories=${2:+$(subcategories "$1" "$2")}
+	_pagename="${2:+@TR<<$2>> - }"
+	if ! equal $6 "" && ! equal $6 "0" ; then _pageload="<SCRIPT type='text/javascript'>start=0; end=$6</SCRIPT><SCRIPT src='/js/pageload.js' type='text/javascript'></SCRIPT><DIV id='loadmain'><SCRIPT type='text/javascript'>document.getElementById(\"loadmain\").style.display = \"none\";</SCRIPT>"; _JSload="<SCRIPT type='text/javascript'>load()</SCRIPT>"; fi
+
+	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && grep 'root:!' /etc/passwd >&- 2>&- && {
+		_nopasswd=1
+		_form=""
+		_savebutton=""
+	}
+
+cat <<EOF
+Content-Type: text/html; charset=UTF-8
+Pragma: no-cache
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>$_pagename$_firmware_name @TR<<Administrative Console>></title>
+	<link rel="stylesheet" type="text/css" href="/themes/active/waitbox.css" media="screen" />
+	<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
+	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_white.css" title="white" />
+	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_brown.css" title="brown" />
+	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_green.css" title="green" />
+	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_navyblue.css" title="navyblue" />
+	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_black.css" title="black" />
+	<!--[if lt IE 7]>
+		<link rel="stylesheet" type="text/css" href="/themes/active/ie_lt7.css" />
+	<![endif]-->
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta http-equiv="expires" content="-1" />
+	<script type="text/javascript" src="/js/styleswitcher.js"></script>
+$header_inject_head</head>
+<body>$header_inject_body
+
+<div id="container">
+<div id="header">
+	<h1>@TR<<X-Wrt Administration Console>></h1>
+	<div id="short-status">
+		<h3><strong>@TR<<Status>>:</strong></h3>
+		<ul>
+			<li><strong>$_firmware_name $_firmware_version</strong></li>
+			<li><strong>@TR<<Host>>:</strong> $_hostname</li>
+			<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
+			<li><strong>@TR<<Load>>:</strong> $_loadavg</li>
+		</ul>
+	</div>
+</div>
+
+<div id="mainmenu">
+$_categories
+</div>
+
+<div id="submenu">
+$_subcategories
+</div>
+
+<div id="colorswitcher">
+	<div style="background: #000000" title="black" onclick="setActiveStyleSheet('black'); return false;"></div>
+	<div style="background: #192a65" title="navyblue" onclick="setActiveStyleSheet('navyblue'); return false;"></div>
+	<div style="background: #114488" title="blue" onclick="setActiveStyleSheet('default'); return false;"></div>
+	<div style="background: #2b6d21" title="green" onclick="setActiveStyleSheet('green'); return false;"></div>
+	<div style="background: #e8ca9e" title="brown" onclick="setActiveStyleSheet('brown'); return false;"></div>
+	<div style="background: #fff" title="white" onclick="setActiveStyleSheet('white'); return false;"></div>
+</div>
+EOF
+
+if equal $_use_progressbar "1" ; then echo $_pageload
+else echo "<script type='text/javascript'>function load() { }</script>"
+fi
+
+cat <<EOF
+$_form
+
+<div id="content">
+	$_head
+	$ERROR
+EOF
 
 	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && {
 		! empty "$FORM_passwd1$FORM_passwd2" && {
@@ -188,10 +259,38 @@ EOF
 # footer
 #
 footer() {
-	awx_call "render(\"$cgidir/views/footer.ahtml\")" \
-		-v use_form="$_use_form" \
-		-v CATEGORY="$_category" \
-		-v _endform="${_use_form:+</form>}"
+	update_changes
+	_changes=${CHANGES#0}
+	_changes=${_changes:+(${_changes})}
+	_endform=${_savebutton:+</form>}
+
+cat <<EOF
+</div>
+<br />
+<fieldset id="save">
+	<legend><strong>@TR<<Proceed Changes>></strong></legend>
+	$_savebutton
+EOF
+	equal "$_use_progressbar" "1" && {
+	echo '<script type="text/javascript" src="/js/waitbox.js"></script>'
+	}
+cat <<EOF
+	<ul class="apply">
+		<li><a href="config.sh?mode=save&amp;cat=$_category&amp;prev=$SCRIPT_NAME" rel="lightbox" >@TR<<Apply Changes>> &laquo;</a></li>
+		<li><a href="config.sh?mode=clear&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Clear Changes>> &laquo;</a></li>
+		<li><a href="config.sh?mode=review&amp;cat=$_category&amp;prev=$SCRIPT_NAME">@TR<<Review Changes>> $_changes &laquo;</a></li>
+	</ul>
+</fieldset>
+$_endform
+<hr />
+<div id="footer">
+	<h3>X-Wrt</h3>
+	<em>@TR<<making_usable#End user extensions for OpenWrt>></em>
+</div>
+</div> <!-- End #container -->
+</body>
+</html>
+EOF
 }
 
 #######################################################

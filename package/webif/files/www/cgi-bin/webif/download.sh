@@ -31,7 +31,7 @@
 #  savefile=config.tgz-Fxdc4H
 #  realname=config.tgz
 
-script="${FORM_script:-/cgi-bin/webif/info.awx}"
+script="${FORM_script:-/cgi-bin/webif/info.sh}"
 redir="${script}?path=$FORM_path"
 
 ! empty "$FORM_path" && ! empty "$FORM_savefile" && {
