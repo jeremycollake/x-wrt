@@ -2,6 +2,7 @@
 #
 # Webif^2 utility functions - X-Wrt
 #
+. /etc/functions.sh
 
 #
 # Misc. functions
