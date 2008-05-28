@@ -20,12 +20,24 @@
 #
 header "Status" "Diagnostics" "@TR<<Diagnostics>>" '' "$SCRIPT_NAME"
 
+FORM_ping_hostname=${FORM_ping_hostname:-google.com}
+FORM_tracert_hostname=${FORM_tracert_hostname:-google.com}
+FORM_ping6_hostname=${FORM_ping6_hostname:-ipv6.google.com}
+FORM_tracert6_hostname=${FORM_tracert6_hostname:-ipv6.google.com}
+
+is_package_installed kmod-ipv6
+if [ "$?" = "0" ]; then
+	ipv6_forms="field|
+text|ping6_hostname|$FORM_ping6_hostname
+submit|ping6_button|@TR<<Ping6>>
+field|
+text|tracert6_hostname|$FORM_tracert6_hostname
+submit|tracert6_button|@TR<<TraceRoute6>>"
+fi
+
 OUTPUT_CHECK_DELAY=1  # secs in pseudo-tail check
 diag_command_output=""
 diag_command=""
-
-FORM_ping_hostname=${FORM_ping_hostname:-google.com}
-FORM_tracert_hostname=${FORM_tracert_hostname:-google.com}
 
 display_form <<EOF
 start_form|@TR<<Network Utilities>>
@@ -35,6 +47,7 @@ submit|ping_button|@TR<<Ping>>
 field|
 text|tracert_hostname|$FORM_tracert_hostname
 submit|tracert_button|@TR<<TraceRoute>>
+$ipv6_forms
 end_form
 EOF
 
@@ -44,11 +57,18 @@ does_process_exist() {
 	ps | cut -c 1-6 | grep -q "$1 "
 }
 
-! empty "$FORM_ping_button" || ! empty "$FORM_tracert_button" && {
+! empty "$FORM_ping_button" || ! empty "$FORM_ping6_button" || ! empty "$FORM_tracert_button" || ! empty "$FORM_tracert6_button"&& {
 	! empty "$FORM_ping_button" && {		
 		sanitized=$(echo "$FORM_ping_hostname" | awk -f "/usr/lib/webif/sanitize.awk")	
 		! empty "$sanitized" && {
 			diag_command="ping -c 4 $sanitized"		
+		}
+	}
+
+	! empty "$FORM_ping6_button" && {
+		sanitized=$(echo "$FORM_ping6_hostname" | awk -f "/usr/lib/webif/sanitize.awk")
+		! empty "$sanitized" && {
+			diag_command="ping6 -c 4 $sanitized"
 		}
 	}
 
@@ -60,6 +80,13 @@ does_process_exist() {
 		}
 	}
 
+	! empty "$FORM_tracert6_button" && {
+		echo "$please_wait_msg"
+		sanitized=$(echo "$FORM_tracert6_hostname" | awk -f "/usr/lib/webif/sanitize.awk")
+		! empty "$sanitized" && {
+			diag_command="traceroute6 $sanitized"
+		}
+	}
 	#
 	# every one second take a snapshot of the output file and output new lines since last snapshot.	
 	# we force synchronization by stopping the outputting process while taking a snapshot
