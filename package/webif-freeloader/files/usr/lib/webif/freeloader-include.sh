@@ -41,8 +41,9 @@ uci_add_option_if_not_exists() {
 
 freeloader_init_config() {
 	freeloader_commit=0
+	[ -e /etc/config/freeloader ] || touch /etc/config/freeloader
 	uci_add_option_if_not_exists "freeloader" "download" "enable" "1"
-	uci_add_option_if_not_exists "freeloader" "download" "root" "/mnt/disc0_1/freeloader"
+	uci_add_option_if_not_exists "freeloader" "download" "root" "/mnt/usbdrive/freeloader"
 	uci_add_option_if_not_exists "freeloader" "ctorrent" "downloadrate" ""
 	uci_add_option_if_not_exists "freeloader" "ctorrent" "uploadrate" "12"
 	uci_add_option_if_not_exists "freeloader" "email" "enable" "0"
