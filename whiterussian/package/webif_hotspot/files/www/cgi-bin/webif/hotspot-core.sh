@@ -3,6 +3,7 @@
 . /usr/lib/webif/webif.sh
 
 if empty "$FORM_submit"; then
+	load_settings hotspot
 	FORM_chilli_debug="${chilli_debug:-$(nvram get chilli_debug)}"
 	FORM_chilli_net="${chilli_net:-$(nvram get chilli_net)}"
 	FORM_chilli_dns1="${chilli_dns1:-$(nvram get chilli_dns1)}"

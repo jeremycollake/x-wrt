@@ -3,6 +3,7 @@
 . /usr/lib/webif/webif.sh
 
 if empty "$FORM_submit"; then
+	load_settings hotspot
 	FORM_chilli_uamserver="${chilli_uamserver:-$(nvram get chilli_uamserver)}"
 	FORM_chilli_uamsecret="${chilli_uamsecret:-$(nvram get chilli_uamsecret)}"
 	FORM_chilli_uamhomepage="${chilli_uamhomepage:-$(nvram get chilli_uamhomepage)}"

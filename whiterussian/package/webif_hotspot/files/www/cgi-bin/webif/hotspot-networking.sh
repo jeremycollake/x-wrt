@@ -3,6 +3,7 @@
 . /usr/lib/webif/webif.sh
 
 if empty "$FORM_submit"; then
+	load_settings hotspot
 	FORM_chilli_radiusserver1="${chilli_radiusserver1:-$(nvram get chilli_radiusserver1)}"
 	FORM_chilli_radiusserver2="${chilli_radiusserver2:-$(nvram get chilli_radiusserver2)}"
 	FORM_chilli_radiussecret="${chilli_radiussecret:-$(nvram get chilli_radiussecret)}"
