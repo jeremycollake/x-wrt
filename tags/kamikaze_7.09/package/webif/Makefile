@@ -139,6 +139,11 @@ $(call Package/webif-lang)
   TITLE:=Sedky theme for webif^2
 endef
 
+define Package/webif-theme-clubman
+$(call Package/webif-lang)
+  TITLE:=Clubman theme for webif^2.
+endef
+
 define Build/Prepare
 	$(call Build/Prepare/Default)
 	$(CP) src/* $(PKG_BUILD_DIR)/
@@ -167,6 +172,7 @@ define Package/webif/install
 	rm -rf $(1)/www/themes/zephyr/
 	rm -rf $(1)/www/themes/xwrt-mini/
 	rm -rf $(1)/www/themes/sedky1/
+	rm -rf $(1)/www/themes/clubman/
 	rm -f $(1)/www/cgi-bin/webif/*.wip
 	if [ "$(OPENWRTVERSION)" != "7.06 (Kamikaze)" ]; then \
 		rm -f $(1)/usr/lib/webif/fixed-functions.sh; \
@@ -293,6 +299,10 @@ define Package/webif-theme-sedky1/install
 	$(CP) -a ./files/www/themes/sedky1/* $(1)/www/themes/sedky1/
 endef
 
+define Package/webif-theme-clubman/install
+	mkdir -p $(1)/www/themes/clubman/
+	$(CP) -a ./files/www/themes/clubman/* $(1)/www/themes/clubman/
+endef
 
 $(eval $(call BuildPackage,webif))
 $(eval $(call BuildPackage,webif-lang-ca))
@@ -318,3 +328,4 @@ $(eval $(call BuildPackage,webif-theme-zephyr))
 $(eval $(call BuildPackage,webif-theme-xwrt))
 $(eval $(call BuildPackage,webif-theme-xwrt-mini))
 $(eval $(call BuildPackage,webif-theme-sedky1))
+$(eval $(call BuildPackage,webif-theme-clubman))
