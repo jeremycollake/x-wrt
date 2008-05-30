@@ -20,7 +20,8 @@
 -- config.lua 
 -- LUA settings and load some functions files
 -- 
-dofile("/usr/share/internet-wifi/set_path.lua")
+--dofile("/usr/share/internet-wifi/set_path.lua")
+require("set_path")
 require("init")
 require("coovaportal")
 require("webpkg")

@@ -20,7 +20,10 @@
 -- config.lua 
 -- LUA settings and load some functions files
 -- 
-dofile("/usr/lib/webif/LUA/config.lua")
+--dofile("/usr/lib/webif/LUA/config.lua")
+require("set_path")
+require("init")
+
 -- Chek if the packages are installed, if not install they.
 local chillispot_pkg = pkgInstalledClass.new("chillispot",true)
 -- I move the extra files to other dir to optimize time to make menu in X-Wrt

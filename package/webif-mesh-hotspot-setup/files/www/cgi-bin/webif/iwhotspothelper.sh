@@ -32,7 +32,7 @@
 -- config.lua 
 -- LUA settings and load some functions files
 -- 
-
+require("set_path")
 require("init")
 --require("ipkg")
 --require("checkpkg")

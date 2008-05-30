@@ -2,7 +2,8 @@
 --[[
 ##WEBIF:name:HotSpot:450:Freeradius
 ]]--
-dofile("/usr/share/internet-wifi/set_path.lua")
+--dofile("/usr/share/internet-wifi/set_path.lua")
+require("set_path")
 require("init")
 require("webpkg")
 pkg.check("libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm")
