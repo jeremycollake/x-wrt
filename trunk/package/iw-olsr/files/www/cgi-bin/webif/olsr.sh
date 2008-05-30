@@ -2,7 +2,8 @@
 --[[
 ##WEBIF:name:HotSpot:120:OLSR
 ]]--
-dofile("/usr/share/internet-wifi/set_path.lua")
+--dofile("/usr/share/internet-wifi/set_path.lua")
+require("set_path")
 require("init")
 require("webpkg")
 pkg.check("ip olsrd olsrd-mod-dyn-gw olsrd-mod-nameservice olsrd-mod-txtinfo")
