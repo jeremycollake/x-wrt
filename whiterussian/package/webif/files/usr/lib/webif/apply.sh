@@ -22,6 +22,7 @@ HANDLERS_config='
 	ezipupdate) reload_ezipupdate;;
 	log) reload_log;;
 	network) reload_network;;
+	openvpn) reload_openvpn;;
 	opendns) reload_opendns;;
 	pptp) reload_pptp;;
 	snmp) reload_snmp;;
@@ -151,6 +152,14 @@ reload_network() {
 		restart_dnsmasq
 	}
 	echo_action_done
+}
+
+reload_openvpn() {
+	[ -x /etc/init.d/S??openvpn ] && {
+		echo_restarting_service "@TR<<apply_OpenVPN#OpenVPN>>"
+		/etc/init.d/S??openvpn restart
+		echo_action_done
+	}
 }
 
 reload_opendns() {
