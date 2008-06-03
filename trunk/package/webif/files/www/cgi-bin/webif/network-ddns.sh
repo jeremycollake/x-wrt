@@ -21,11 +21,11 @@ if [ "$cfg" = "" ]; then
 	cfg="$CONFIG_SECTION"
 fi
 if empty "$FORM_submit"; then
-	config_get FORM_service $cfg service 
-	config_get FORM_username $cfg "username"
-	config_get FORM_password $cfg "password"
-	config_get FORM_host $cfg host
-	config_get_bool FORM_update $cfg update 0
+	config_get FORM_service "$cfg" service 
+	config_get FORM_username "$cfg" username
+	config_get FORM_password "$cfg" password
+	config_get FORM_host "$cfg" host
+	config_get_bool FORM_update "$cfg" update 0
 else
 	SAVED=1
 	validate <<EOF
@@ -35,11 +35,11 @@ string|FORM_password|@TR<<Password>>|required|$FORM_password
 string|FORM_host|@TR<<Host Name>>|required|$FORM_host
 EOF
 	equal "$?" 0 && {
-		uci_set updatedd $cfg update "$FORM_update"
-		uci_set updatedd $cfg service "$FORM_service"
-		uci_set updatedd $cfg "username" "$FORM_username"
-		uci_set updatedd $cfg "password" "$FORM_password"
-		uci_set updatedd $cfg host "$FORM_host"
+		uci_set updatedd "$cfg" update "$FORM_update"
+		uci_set updatedd "$cfg" service "$FORM_service"
+		uci_set updatedd "$cfg" username "$FORM_username"
+		uci_set updatedd "$cfg" password "$FORM_password"
+		uci_set updatedd "$cfg" host "$FORM_host"
 	}
 fi
 
