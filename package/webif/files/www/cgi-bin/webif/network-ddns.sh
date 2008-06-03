@@ -1,7 +1,6 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
-
 # todo:
 #  add /enable/disable for mx and wildcard / connection type.
 
@@ -16,6 +15,11 @@ config_cb() {
 }
 
 config_load "updatedd"
+if [ "$cfg" = "" ]; then
+	touch /etc/config/updatedd
+	uci_add updatedd "updatedd"
+	cfg="$CONFIG_SECTION"
+fi
 if empty "$FORM_submit"; then
 	config_get FORM_service $cfg service 
 	config_get FORM_username $cfg "username"
