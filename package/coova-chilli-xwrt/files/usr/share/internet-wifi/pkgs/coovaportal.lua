@@ -106,11 +106,12 @@ function core_form()
     form[service.name..".users"].options:Add("2","Communities Users")
     form[service.name..".users"].options:Add("3","Remote & Local Users")
   end
-  form:Add("select",network.name..".HS_LANIF",network.values.HS_LANIF,tr("cportal_var_device#Device Network"),"string")
-  for k, v in pairs(net.wireless()) do
-    form[network.name..".HS_LANIF"].options:Add(k,k)
+  if userlevel < 2 then
+    form:Add("select",network.name..".HS_LANIF",network.values.HS_LANIF,tr("cportal_var_device#Device Network"),"string")
+    for k, v in pairs(net.wireless()) do
+      form[network.name..".HS_LANIF"].options:Add(k,k)
+    end
   end    
-   
   return form
 end
 
