@@ -16,15 +16,15 @@ libdir=/usr/lib/webif
 wwwdir=/www
 cgidir=/www/cgi-bin/webif
 rootdir=/cgi-bin/webif
-indexpage=index.sh
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
 
 categories() {
-	grep '##WEBIF:' $cgidir/.categories $cgidir/*.sh 2>/dev/null | \
+	grep '##WEBIF' $cgidir/.categories $cgidir/*.sh 2>/dev/null | \
 		awk -v "selected=$1" \
+			-v "USER=$REMOTE_USER" \
 			-v "rootdir=$rootdir" \
-			-v "indexpage=$indexpage" \
+			-f /usr/lib/webif/common.awk \
 			-f /usr/lib/webif/categories.awk -
 }
 
@@ -34,6 +34,8 @@ subcategories() {
 		sort -n | \
 		awk -v "selected=$2" \
 			-v "rootdir=$rootdir" \
+			-v "USER=$REMOTE_USER" \
+			-f /usr/lib/webif/common.awk \
 			-f /usr/lib/webif/subcategories.awk -
 }
 
@@ -254,6 +256,20 @@ EOF
 			apply_passwd
 		}
 	}
+	if [ "$REMOTE_USER" != "root" -a "$REMOTE_USER" != "admin"]; then
+		config_load webif_access_control
+		if [ "$1" != "Graphs" ]; then
+			webifform=`grep "##WEBIF:name:${1}:[0-9][0-9][0-9]:${2}" /www/cgi-bin/webif/*.sh |cut -d':' -f5`
+			config_get_bool permission "$REMOTE_USER" "${1}_${webifform}" 0
+		else
+			config_get_bool permission "$REMOTE_USER" "Graphs" 0
+		fi
+		if [ "$permission" = "0" ]; then
+			echo "Permission Denied"
+			footer
+			exit
+		fi
+	fi
 }
 
 #######################################################
