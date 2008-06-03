@@ -100,9 +100,13 @@ function start_form(title, field_opts, field_opts2) {
 	print "<div class=\"settings\"" field_opts ">"
 	if (title != "") print "<h3><strong>" title "</strong></h3>"
 	print "<div class=\"settings-content\"" field_opts2 ">"
+	print "<table width=\"100%\" summary=\"Settings\">"
 }
 
-function end_form(form_help, form_help_link) {
+function end_form(form_help, form_help_link, field_open) {
+	if (field_open == 1) print "</td></tr>"
+	field_open = 0
+	print "</table>"
 	print "</div>"
 	if (form_help != "" || form_help_link != "") {
 		print "<blockquote class=\"settings-help\">"
@@ -119,6 +123,12 @@ function textinput(name, value) {
 
 function textinput2(name, value, width) {
         return "<input type=\"text\" name=\"" name "\" value=\"" value "\" style=\"width:" width "em;\" />"
+}
+function textinput3(name, value) {
+	print "<input type=\"text\" name=\"" name "\" value=\"" value "\" />"
+}
+function password(name, value, hidden) {
+	print "<input id=\"" name "\" type=\"password\" name=\"" name "\" value=\"" value "\" />" hidden
 }
 function hidden(name, value) {
 	return "<input type=\"hidden\" name=\"" name "\" value=\"" value "\" />"
@@ -141,3 +151,38 @@ function sel_option(name, caption, default, sel) {
 	else sel = ""
 	return "<option value=\"" name "\"" sel ">@TR<<" caption ">></option>"
 }
+
+function field(name, value, hidden) {
+	if (field_open == 1) print "</td></tr>"
+	if (value != "") field_opts=" id=\"" value "\""
+	else field_opts=""
+	if (hidden == "hidden") field_opts = field_opts " style=\"display: none\""
+	print "<tr" field_opts ">"
+	if (name != "") print "<td width=\"40%\">" name "</td><td width=\"60%\">"
+	else print "<td colspan=\"2\">"
+
+	field_open=1
+}
+
+function submit(name, value) {
+	print "<input type=\"submit\" name=\"" name "\" value=\"" value "\" />"
+}
+
+
+function select(name, value) {
+	opts = ""
+	opts = opts " onchange=\"" onchange "(this)\""
+	print "<select id=\"" name "\" name=\"" name "\"" opts ">"
+	select_id = name
+	select_open = 1
+	select_default = value
+}
+
+function option(name, value) {
+	if (name == select_default) option_selected=" selected=\"selected\""
+	else option_selected=""
+	if (value != "") option_title = value
+	else option_title = name
+	print "<option " option_selected " value=\"" name "\">" option_title "</option>"
+}
+

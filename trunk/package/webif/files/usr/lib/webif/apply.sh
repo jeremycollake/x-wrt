@@ -29,6 +29,7 @@ HANDLERS_file='
 	ethers) rm -f /etc/ethers; mv $config /etc/ethers; killall -HUP dnsmasq ;;
 	firewall) mv /tmp/.webif/file-firewall /etc/firewall.config && /etc/init.d/firewall restart && reload_upnpd;;
 	dnsmasq.conf) mv /tmp/.webif/file-dnsmasq.conf /etc/dnsmasq.conf && /etc/init.d/dnsmasq restart;;
+	httpd.conf) mv -f /tmp/.webif/file-httpd.conf /etc/httpd.conf && /etc/init.d/httpd restart;;
 '
 
 # for some reason a for loop with "." doesn't work
