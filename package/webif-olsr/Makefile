@@ -23,7 +23,7 @@ define Package/webif-olsr
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+webif +webif-mesh +ip +olsrd +olsrd-mod-dyn-gw +olsrd-mod-httpinfo +olsrd-mod-nameservice +olsrd-mod-secure +olsrd-mod-tas
+  DEPENDS:=+webif +webif-mesh +ip +olsrd +olsrd-mod-dyn-gw +olsrd-mod-httpinfo +olsrd-mod-nameservice +olsrd-mod-secure
   TITLE:=XWrt olsr mesh plugin
 endef
 

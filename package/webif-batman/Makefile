@@ -23,7 +23,7 @@ define Package/webif-batman
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+webif +webif-mesh +batman
+  DEPENDS:=+webif +webif-mesh +batmand
   TITLE:=XWrt BATMAN mesh plugin
 endef
 
