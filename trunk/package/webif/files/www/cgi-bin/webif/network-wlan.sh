@@ -424,7 +424,7 @@ for device in $DEVICES; do
 					radio|bgscan_$vcfg|$FORM_bgscan|1|@TR<<On>>
 					radio|bgscan_$vcfg|$FORM_bgscan|0|@TR<<Off>>"
 			append forms "$bgscan_field" "$N"
-			append forms "helpitem|Backround Client Scanning" "$N"
+			append forms "helpitem|Background Client Scanning" "$N"
 
 			isolate_field="field|@TR<<AP Isolation>>|isolate_form_$vcfg|hidden
 					radio|isolate_$vcfg|$FORM_isolate|1|@TR<<On>>
