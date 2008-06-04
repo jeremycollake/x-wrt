@@ -320,7 +320,8 @@ for package in $process_packages; do
 			;;
 		"updatedd")
 			uci_load "updatedd"
-			if [ "$CONFIG_${updatedd_cfg}_update" = "1" ]; then
+			config_get_bool test "$updatedd_cfg" update 0
+			if [ 1 - eq "$test" ]; then
 				/etc/init.d/updatedd enable >&- 2>&- <&-
 				/etc/init.d/updatedd stop >&- 2>&- <&-
 				/etc/init.d/updatedd start >&- 2>&- <&-
