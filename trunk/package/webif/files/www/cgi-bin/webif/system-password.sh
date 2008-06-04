@@ -11,17 +11,40 @@ EOF
 		[ -n "$ERROR" ] && ERROR="${ERROR}<br />"
 		ERROR="${ERROR}@TR<<Passwords do not match>><br />"
 	}
-	empty "$ERROR" && {
-		RES=$(
-			(
-				echo "$FORM_pw1"
-				sleep 1
-				echo "$FORM_pw2"
-			) | passwd root 2>&1
-		)
-		equal "$?" 0 || ERROR="<pre>$RES</pre>"
+	if [ "$REMOTE_USER" = "root" -o "$REMOTE_USER" = "admin"]; then
+		empty "$ERROR" && {
+			RES=$(
+				(
+					echo "$FORM_pw1"
+					sleep 1
+					echo "$FORM_pw2"
+				) | passwd root 2>&1
+			)
+			equal "$?" 0 || ERROR="<pre>$RES</pre>"
+		}
 	}
+else
+	exists /tmp/.webif/file-httpd.conf && HTTPD_CONFIG_FILE=/tmp/.webif/file-httpd.conf || HTTPD_CONFIG_FILE=/etc/httpd.conf
+	empty "$ERROR" && {
+		cat $HTTPD_CONFIG_FILE | awk '
+BEGIN {
+	FS=":"
+	if ((ENVIRON["FORM_submit"] != "") && system("/bin/rm /tmp/.webif/file-httpd.conf; touch/tmp/.webif/file-httpd.conf")
 }
+((ENVIRON["FORM_submit"] != "") && ($1 != "")) {
+	if (($1 == "/cgi-bin/webif/") && (ENVIRON["REMOTE_USER"] != $2)) {
+		print $1":"$2":"$3 >> "/tmp/.webif/file-httpd.conf"
+	}
+	if ($1 != "/cgi-bin/webif/") {
+		print $1":"$2 >> "/tmp/.webif/file-httpd.conf"
+	}
+	if (ENVIRON["REMOTE_USER"] == $2) {
+		("httpd -m " ENVIRON["FORM_pw1"]) | getline password
+		print $1":"$2":"password >> "/tmp/.webif/file-httpd.conf"
+	}
+}'
+	}
+fi
 
 header "System" "Password" "@TR<<Password>>" '' "$SCRIPT_NAME"
 
