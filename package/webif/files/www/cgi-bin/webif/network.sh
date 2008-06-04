@@ -130,8 +130,12 @@ for interface in $network; do
 	LISTVAL="$FORM_dns"
 	handle_list "$FORM_dnsremove" "$FORM_dnsadd" "$FORM_dnssubmit" 'ip|FORM_dnsadd|@TR<<DNS Address>>|required' && {
 		FORM_dns="$LISTVAL"
-		[ " " = "$FORM_dns" ] && FORM_dns=""
-		uci_set "network" "$interface" "dns" "$FORM_dns"
+		if [ " " = "$FORM_dns" ]; then
+			FORM_dns=""
+			uci_remove "network" "$interface" dns
+		else
+			uci_set "network" "$interface" "dns" "$FORM_dns"
+		fi
 		FORM_dnsadd=""
 	}
 
