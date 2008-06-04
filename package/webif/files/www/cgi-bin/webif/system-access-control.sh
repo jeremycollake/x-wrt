@@ -16,8 +16,9 @@
 # Configuration files referenced:
 #   /etc/config/webif_access_control
 #
-REMOTE_USER=root
+
 mkdir /tmp/.webif/
+exists /etc/config/webif_access_control || touch /etc/config/webif_access_control
 
 if [ "$FORM_user_add" != "" ]; then
 	validate <<EOF
