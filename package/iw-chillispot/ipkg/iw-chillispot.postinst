@@ -2,6 +2,6 @@
 #
 # Webif post-install script.
 #
-if [ "`grep "IW" "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"`" = "" ]; then
-  echo "##WEBIF:category:IW" >> ${IPKG_INSTROOT}/www/cgi-bin/webif/.categories
-fi
+#if [ "`grep "IW" "${IPKG_INSTROOT}/www/cgi-bin/webif/.categories"`" = "" ]; then
+#  echo "##WEBIF:category:IW" >> ${IPKG_INSTROOT}/www/cgi-bin/webif/.categories
+#fi
