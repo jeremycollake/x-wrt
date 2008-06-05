@@ -32,7 +32,7 @@ endef
 
 define Package/webif-freeloader-lang-cs
   $(call Package/webif-freeloader-lang)
-  TITLE:=Czech language file for webif-freeloader.
+  TITLE:=Czech language file for webif-freeloader
 endef
 
 define Build/Configure
