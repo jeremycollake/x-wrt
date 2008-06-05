@@ -1,4 +1,9 @@
-# $Id: Makefile 4284 2006-07-25 19:07:23Z nbd $
+#
+# Copyright (C) 2006-2008 X-Wrt.org
+#
+# This is free software, licensed under the GNU General Public License v2.
+# See /LICENSE for more information.
+#
 
 include $(TOPDIR)/rules.mk
 
@@ -15,35 +20,46 @@ define Package/webif-freeloader
   CATEGORY:=Administration
   SUBMENU:=webif
   DEPENDS:=+webif
-  TITLE:=An download manager for the webif
+  TITLE:=A download manager for the webif
   VERSION:=$(PKG_VERSION)-$(PKG_RELEASE)
 endef
 
-define Package/webif-lang-freeloader
-$(call Package/webif-freeloader)
+define Package/webif-freeloader-lang
+  $(call Package/webif-freeloader)
+  DEPENDS:=+webif-freeloader
   PKGARCH:=all
 endef
 
 define Package/webif-freeloader-lang-cs
-$(call Package/webif-lang-freeloader)
+  $(call Package/webif-freeloader-lang)
   TITLE:=Czech language file for webif-freeloader.
+endef
+
+define Build/Configure
 endef
 
 define Build/Compile
 endef
 
-define Package/webif-freeloader/install 
+define Package/webif-freeloader/install
 	$(CP) -a ./files/* $(1)/
-	$(CP) -a ./ipkg/webif-freeloader.postinst $(1)/CONTROL/postinst
-	$(CP) -a ./ipkg/webif-freeloader.postrm $(1)/CONTROL/postrm
+	$(INSTALL_BIN) ./ipkg/webif-freeloader.postinst $(1)/CONTROL/postinst
+	$(INSTALL_BIN) ./ipkg/webif-freeloader.postrm $(1)/CONTROL/postrm
 	chmod -R 755 $(1)/*
 	rm -rf $(1)/usr/lib/webif/lang/
 	rm -f $(1)/www/cgi-bin/webif/*.wip
-	chmod 755 $(1)/CONTROL/*inst
-	find $(1) -name CVS | xargs rm -rf
-	find $(1) -name .svn | xargs rm -rf
-	find $(1) -name *~ | xargs rm -rf
+	find $(1) -name 'CVS' -o -name '.svn' -o -name '~' | $(XARGS) rm -rf
+endef
+
+define BuildLang
+  define Package/webif-freeloader-lang-$(1)/install
+	$(INSTALL_DIR) $$(1)/usr/lib/webif/lang/$(1)/
+	$(INSTALL_DATA) ./files/usr/lib/webif/lang/$(1)/*.txt \
+		$$(1)/usr/lib/webif/lang/$(1)/
+  endef
+
+  $$(eval $$(call BuildPackage,webif-freeloader-lang-$(1)))
 endef
 
 $(eval $(call BuildPackage,webif-freeloader))
-$(eval $(call BuildPackage,webif-freeloader-lang-cs))
+$(eval $(call BuildLang,cs))
