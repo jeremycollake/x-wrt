@@ -24,9 +24,9 @@ $(call Package/webif-freeloader)
   PKGARCH:=all
 endef
 
-define Package/webif-freeloader-lang-ca
+define Package/webif-freeloader-lang-cs
 $(call Package/webif-lang-freeloader)
-  TITLE:=Catalan language file for webif-freeloader.
+  TITLE:=Czech language file for webif-freeloader.
 endef
 
 define Build/Compile
@@ -46,4 +46,4 @@ define Package/webif-freeloader/install
 endef
 
 $(eval $(call BuildPackage,webif-freeloader))
-$(eval $(call BuildPackage,webif-freeloader-lang-ca))
+$(eval $(call BuildPackage,webif-freeloader-lang-cs))
