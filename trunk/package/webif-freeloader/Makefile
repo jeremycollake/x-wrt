@@ -20,7 +20,7 @@ define Package/webif-freeloader
   CATEGORY:=Administration
   SUBMENU:=webif
   DEPENDS:=+webif
-  TITLE:=A download manager for the webif
+  TITLE:=A download manager for the webif^2
   VERSION:=$(PKG_VERSION)-$(PKG_RELEASE)
 endef
 
@@ -48,7 +48,7 @@ define Package/webif-freeloader/install
 	chmod -R 755 $(1)/*
 	rm -rf $(1)/usr/lib/webif/lang/
 	rm -f $(1)/www/cgi-bin/webif/*.wip
-	find $(1) -name 'CVS' -o -name '.svn' -o -name '~' | $(XARGS) rm -rf
+	find $(1) -name 'CVS' -o -name '.svn' -o -name '*~' | $(XARGS) rm -rf
 endef
 
 define BuildLang
