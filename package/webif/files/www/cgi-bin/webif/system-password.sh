@@ -2,7 +2,7 @@
 <? 
 . /usr/lib/webif/webif.sh
 
-empty "$FORM_submit" || {
+if ! empty "$FORM_submit" ; then
 	SAVED=1
 	validate <<EOF
 string|FORM_pw1|@TR<<Password>>|required min=5|$FORM_pw1
@@ -11,7 +11,7 @@ EOF
 		[ -n "$ERROR" ] && ERROR="${ERROR}<br />"
 		ERROR="${ERROR}@TR<<Passwords do not match>><br />"
 	}
-	if [ "$REMOTE_USER" = "root" -o "$REMOTE_USER" = "admin"]; then
+	if [ "$REMOTE_USER" = "root" -o "$REMOTE_USER" = "admin" ]; then
 		empty "$ERROR" && {
 			RES=$(
 				(
@@ -22,7 +22,7 @@ EOF
 			)
 			equal "$?" 0 || ERROR="<pre>$RES</pre>"
 		}
-	}
+	fi
 else
 	exists /tmp/.webif/file-httpd.conf && HTTPD_CONFIG_FILE=/tmp/.webif/file-httpd.conf || HTTPD_CONFIG_FILE=/etc/httpd.conf
 	empty "$ERROR" && {
