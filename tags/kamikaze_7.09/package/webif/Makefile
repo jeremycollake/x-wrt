@@ -71,7 +71,7 @@ endef
 
 define Package/webif-lang-it
 $(call Package/webif-lang)
-  TITLE:=wItalian language file for webif.
+  TITLE:=Italian language file for webif.
 endef
 
 define Package/webif-lang-nl
