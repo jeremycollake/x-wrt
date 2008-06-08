@@ -256,7 +256,7 @@ EOF
 			apply_passwd
 		}
 	}
-	if [ "$REMOTE_USER" != "root" -a "$REMOTE_USER" != "admin"]; then
+	if [ "$REMOTE_USER" != "root" -a "$REMOTE_USER" != "admin" ]; then
 		config_load webif_access_control
 		if [ "$1" != "Graphs" ]; then
 			webifform=`grep "##WEBIF:name:${1}:[0-9][0-9][0-9]:${2}" /www/cgi-bin/webif/*.sh |cut -d':' -f5`
