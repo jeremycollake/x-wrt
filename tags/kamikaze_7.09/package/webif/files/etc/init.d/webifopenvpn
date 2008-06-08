@@ -1,82 +1,166 @@
 #!/bin/sh /etc/rc.common
-START=60
-. /lib/config/uci.sh
-uci_load openvpn
 
-status="0"
+START=60
+
+config_cb() {
+	config_get TYPE "$CONFIG_SECTION" TYPE
+	case "$TYPE" in
+		webifopenvpn)
+			append openvpnconfigs "$CONFIG_SECTION" "$N"
+		;;
+	esac
+}
+
+report_log() {
+	[ "$#" -gt 0 ] && logger -s -t "webifopenvpn" "$@"
+}
+
+append_bool() {
+	local section="ovpn"
+	local option="$1"
+	local value="$2"
+	local _loctmp
+	config_get_bool _loctmp "$section" "$option"
+	[ "$_loctmp" -gt 0 ] && append args "$3"
+}
+
+append_parm() {
+	local section="ovpn"
+	local option="$1"
+	local switch="$2"
+	local default="$3"
+	local _loctmp
+	config_get _loctmp "$section" "$option"
+	[ -z "$_loctmp" ] && _loctmp="$default"
+	[ -n "$_loctmp" ] && append args "$switch $_loctmp"
+}
+
 file_check() {
-	for file in "$@"; do
-		if [ ! -f "$file" ]; then
-			logger "$0: Missing $file. Please generate and try again."
-			status="1"
+	while [ -n "$1" ]; do
+		if [ ! -f "$1" ]; then
+			report_log "Missing $1. Please generate and try again."
+			auth_incomplete=1
 		fi
+		shift
 	done
 }
 
 start() {
-	case "$CONFIG_general_mode" in
-		client)
-			SERVER="$CONFIG_client_ipaddr"
-			PROTO="$CONFIG_general_proto"
-			PORT="$CONFIG_general_port"
-	
-			[ "$SERVER" ] || {
-				logger "$0: remote server not configured!"
-				exit
-			}
+	config_load webifopenvpn
+	openvpnconfigs=$(echo "$openvpnconfigs" |uniq)
 
-			[ "$SERVER" ] && {
-				SERVER_OPTION="--remote $SERVER --nobind"
-			}
+	for config in $openvpnconfigs; do
+		config_get CONFIG_ovpn_mode $config "mode"
+		config_get CONFIG_ovpn_enabled $config "enabled"
+		config_get CONFIG_ovpn_port $config "port"
+		config_get CONFIG_ovpn_auth $config "auth"
+		config_get CONFIG_ovpn_proto $config "proto"
+		config_get CONFIG_ovpn_complzo $config "complzo"
+		config_get CONFIG_ovpn_ping $config "ping"
+		config_get CONFIG_ovpn_pingrestart $config "pingrestart"
+		config_get CONFIG_ovpn_persistun $config "persisttun"
+		config_get CONFIG_ovpn_persistkey $config "persistkey"
+		config_get CONFIG_ovpn_ipaddr $config "ipaddr"
+		config_get CONFIG_ovpn_client_to_client $config "client_to_client"
+		config_get CONFIG_ovpn_cmdline $config "cmdline"
+		config_get CONFIG_ovpn_local $config "local"
+		config_get CONFIG_ovpn_remote  $config "remote"
+		config_get dir_name $config "dir"
 
-			case "$CONFIG_client_auth" in
-				cert)
-					file_check "/etc/openvpn/certificate.p12"
-					AUTH_OPTION="--client --pkcs12 /etc/openvpn/certificate.p12"
-				;;
-				psk)
-					file_check "/etc/openvpn/shared.key"
-					AUTH_OPTION="--secret /etc/openvpn/shared.key"
-				;;
-				pem)
-					file_check "/etc/openvpn/ca.crt" "/etc/openvpn/client.crt" "/etc/openvpn/client.key"
-					AUTH_OPTION="--client --ca /etc/openvpn/ca.crt --cert /etc/openvpn/client.crt --key /etc/openvpn/client.key"
-				;;
-				*)
-					logger "$0: unknown authentication type, aborting!"
+		auth_incomplete=0
+		args=""
+
+		case "$CONFIG_ovpn_auth" in
+			cert)
+				file_check "$dir_name/certificate.p12"
+				append args "--pkcs12 $dir_name/certificate.p12"
+			;;
+			psk)
+				file_check "$dir_name/shared.key"
+				append args "--secret $dir_name/shared.key"
+			;;
+			pem)
+				file_check "$dir_name/ca.crt" "$dir_name/client.crt" "$dir_name/client.key"
+				append args "--ca $dir_name/ca.crt --cert $dir_name/client.crt --key $dir_name/client.key"
+				if [ "$CONFIG_ovpn_mode" = "server" ]; then
+					append args "--dh $dir_name/dh.pem"
+				fi
+			;;
+			*)
+				report_log "unknown authentication type, aborting!"
+				auth_incomplete=1
+			;;
+		esac
+		[ "$auth_incomplete" != 0 ] && exit
+
+
+		append_parm "proto" "--proto" "udp"
+		append_parm "port" "--port" "1194"
+
+		append_parm "dev" "--dev" "tun"
+		append_parm "user" "--user" "nobody"
+		append_parm "group" "--group" "nogroup"
+		append_parm "status" "--status" "/tmp/openvpn-status.log"
+		append_parm "verb" "--verb" "1"
+
+		append_bool "comp_lzo" "--comp-lzo"
+		append_bool "persist_tun" "--persist-tun"
+		append_bool "persist_key" "--persist-key"
+		append_bool "client_to_client" "--client-to-client"
+
+		append_parm "ping" "--ping"
+		append_parm "ping_restart" "--ping-restart"
+		pid=$(mktemp /var/run/webifopenvpn.pid.XXXXXX)
+		append_parm "write_pid" "--writepid" "$pid"
+		append_parm "cmdline" ""
+
+		case "$CONFIG_ovpn_mode" in
+			client)
+				if [ -z "$CONFIG_ovpn_ipaddr" ]; then
+					report_log "remote server not configured!"
 					exit
-				;;
-			esac
+				fi
+				if [ "$CONFIG_ovpn_auth" = "pem" ]; then
+					append args "--tls-client"
+				fi
+				append args "--client --remote $CONFIG_client_ipaddr --nobind"
+			;;
+			server)
+				if [ -z "$CONFIG_ovpn_local" ]; then
+					report_log "local VPN endpoint not configured!"
+					exit
+				fi
+				if [ -z "$CONFIG_ovpn_remote" ]; then
+					report_log "remote VPN endpoint not configured!"
+					exit
+				fi
+				if [ "$CONFIG_ovpn_auth" = "pem" ]; then
+					append args "--tls-server"
+				fi
+				append args "--ifconfig $CONFIG_ovpn_local $CONFIG_ovpn_remote"
+			;;
+			*)
+				report_log "unknown mode, aborting!"
+				exit 0
+			;;
+		esac
+		openvpn --daemon $args
+	done
+}
 
-			if [ "$status" = "0" ]; then
-			openvpn --proto  "${PROTO:-udp}"		\
-				--port   "${PORT:-1194}"		\
-				$SERVER_OPTION				\
-				--dev tun				\
-				$AUTH_OPTION				\
-				--comp-lzo				\
-				--daemon				\
-				--status /tmp/openvpn-status.log	\
-				--verb 3
-			fi
-		;;
-		server)
-			echo "Not yet implimented"
-			exit 0
-		;;
-		*)
-			exit 0
-		:;
-	esac	
-}
-restart() {
-		$0 stop
-		sleep 3
-		$0 start
-}
-reload() {
-		killall -SIGHUP openvpn
-}
 stop() {
-		killall openvpn
+	for i in "/var/run/webifopenvpn.pid*"; do
+		webifopenvpn_pid=$(cat "$i" 2>/dev/null)
+		[ -n "$webifopenvpn_pid" ] && [ -d /proc/$webifopenvpn_pid ] && kill -TERM $webifopenvpn_pid 2>/dev/null
+	done
+}
+
+restart() {
+	stop
+	sleep 3
+	start
+}
+
+reload() {
+	restart
 }

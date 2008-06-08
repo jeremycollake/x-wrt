@@ -54,12 +54,12 @@ validate_wireless() {
 # Add Virtual Interface
 if ! empty "$FORM_add_vcfg"; then
 
-	uci_add "wireless" "wifi-iface" ""
-	uci_set "wireless" "cfg$FORM_add_vcfg_number" "device" "$FORM_add_vcfg"
-	uci_set "wireless" "cfg$FORM_add_vcfg_number" "mode" "ap"
-	uci_set "wireless" "cfg$FORM_add_vcfg_number" "ssid" "OpenWrt$FORM_add_vcfg_number"
-	uci_set "wireless" "cfg$FORM_add_vcfg_number" "hidden" "0"
-	uci_set "wireless" "cfg$FORM_add_vcfg_number" "encryption" "none"
+	uci_add "wireless" "wifi-iface" ""; wireless_cfg="$CONFIG_SECTION"
+	uci_set "wireless" "$wireless_cfg" "device" "$FORM_add_vcfg"
+	uci_set "wireless" "$wireless_cfg" "mode" "ap"
+	uci_set "wireless" "$wireless_cfg" "ssid" "OpenWrt$FORM_add_vcfg_number"
+	uci_set "wireless" "$wireless_cfg" "hidden" "0"
+	uci_set "wireless" "$wireless_cfg" "encryption" "none"
 	FORM_add_vcfg=""
 fi
 
@@ -157,7 +157,7 @@ equal "$?" "0" && wpa_supplicant_installed="1"
 #
 for device in $DEVICES; do
 	if empty "$FORM_submit"; then
-		config_get FORM_ap_mode $device mode
+		config_get FORM_ap_mode $device agmode
 		config_get iftype "$device" type
 	        config_get country $device country
 	        config_get FORM_channel $device channel
@@ -165,8 +165,8 @@ for device in $DEVICES; do
 	        config_get FORM_distance $device distance
 	        config_get FORM_txantenna $device txantenna
 	        config_get FORM_rxantenna $device rxantenna
-	        config_get_bool FORM_diversity $device diversity
-	        config_get_bool FORM_disabled $device disabled
+	        config_get_bool FORM_diversity $device diversity 0
+	        config_get_bool FORM_disabled $device disabled 0
 	else
 		config_get country $device country
 		config_get iftype "$device" type
@@ -189,12 +189,12 @@ for device in $DEVICES; do
 		append forms "helpitem|Atheros Wireless Configuration" "$N"
 		append forms "helptext|Helptext Atheros Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-4x ap or 1-4x ap or 1x adhoc" "$N"
 	fi
-	
+
 	mode_disabled="field|@TR<<Radio>>
 			radio|disabled_$device|$FORM_disabled|0|@TR<<On>>
 			radio|disabled_$device|$FORM_disabled|1|@TR<<Off>>"
 	append forms "$mode_disabled" "$N"
-        
+
 	# Initialize channels based on country code
 	# (--- hardly a switch here ---)
 	case "$country" in
@@ -205,7 +205,7 @@ for device in $DEVICES; do
 			BGCHANNELS="1 2 3 4 5 6 7 8 9 10 11"; CHANNEL_MAX=11
 			ACHANNELS="36 40 42 44 48 50 52 56 58 60 64 149 152 153 156 157 160 161";;
 	esac
-        
+
 	if [ "$iftype" = "atheros" ]; then
         	mode_fields="field|@TR<<Mode>>
 			select|ap_mode_$device|$FORM_ap_mode"
@@ -252,7 +252,7 @@ for device in $DEVICES; do
 		done
 	fi
 	append forms "$BG_CHANNELS" "$N"
-	
+
 	if [ "$iftype" = "atheros" ]; then
 		mode_diversity="field|@TR<<Diversity>>
 				radio|diversity_$device|$FORM_diversity|1|@TR<<On>>
@@ -275,7 +275,6 @@ for device in $DEVICES; do
 		append forms "$form_rxant" "$N"
 	fi
 
-
 	#Currently broadcom only.
 	if [ "$iftype" = "broadcom" ]; then
 	maxassoc="field|@TR<<Max Associated Clients (Default 128)>>
@@ -290,7 +289,8 @@ for device in $DEVICES; do
 	append forms "helpitem|Wireless Distance" "$N"
 	append forms "helptext|Helptext Wireless Distance#This is the distance of your longest link." "$N"
 
-	add_vcfg="string|<tr><td><a href=$SCRIPT_NAME?add_vcfg=$device&amp;add_vcfg_number=$vcfg_number>@TR<<Add Virtual Interface>></a>"
+	add_vcfg="field|
+		string|<a href=\"$SCRIPT_NAME?add_vcfg=$device&amp;add_vcfg_number=$vcfg_number\">@TR<<Add Virtual Interface>></a>"
 	append forms "$add_vcfg" "$N"
 	append forms "end_form" "$N"
 
@@ -320,10 +320,19 @@ for device in $DEVICES; do
 				config_get FORM_txpower $vcfg txpower
 				config_get FORM_frag $vcfg frag
 	        		config_get FORM_rts $vcfg rts
-	        		config_get_bool FORM_hidden $vcfg hidden
-	        		config_get_bool FORM_isolate $vcfg isolate
-	        		config_get_bool FORM_bgscan $vcfg bgscan
-	        		config_get_bool FORM_wds $vcfg wds
+	        		config_get_bool FORM_hidden $vcfg hidden 0
+	        		config_get_bool FORM_isolate $vcfg isolate 0
+	        		config_get_bool FORM_bgscan $vcfg bgscan 0
+	        		config_get_bool FORM_wds $vcfg wds 0
+				config_get_bool FORM_doth "$vcfg" 80211h
+				config_get_bool FORM_compression "$vcfg" compression
+				config_get_bool FORM_bursting "$vcfg" bursting
+				config_get_bool FORM_fframes "$vcfg" ff
+				config_get_bool FORM_wmm "$vcfg" wmm
+				config_get_bool FORM_xr "$vcfg" xr
+				config_get_bool FORM_ar "$vcfg" ar
+				config_get_bool FORM_turbo "$vcfg" turbo
+				config_get FORM_macpolicy "$vcfg" macpolicy
 			else
 				eval FORM_key="\$FORM_radius_key_$vcfg"
 				eval FORM_radius_ipaddr="\$FORM_radius_ipaddr_$vcfg"
@@ -352,20 +361,41 @@ for device in $DEVICES; do
 				eval FORM_bgscan="\$FORM_bgscan_$vcfg"
 				eval FORM_frag="\$FORM_frag_$vcfg"
 				eval FORM_rts="\$FORM_rts_$vcfg"
+				eval FORM_doth="\$FORM_doth_$vcfg"
+				eval FORM_compression="\$FORM_compression_$vcfg"
+				eval FORM_bursting="\$FORM_bursting_$vcfg"
+				eval FORM_fframes="\$FORM_fframes_$vcfg"
+				eval FORM_wmm="\$FORM_wmm_$vcfg"
+				eval FORM_xr="\$FORM_xr_$vcfg"
+				eval FORM_ar="\$FORM_ar_$vcfg"
+				eval FORM_turbo="\$FORM_turbo_$vcfg"
+				eval FORM_macpolicy="\$FORM_macpolicy_$vcfg"
 			fi
-			
+
+			config_get FORM_maclist "$vcfg" maclist
+			eval FORM_maclistadd="\$FORM_${vcfg}_maclistadd"
+			eval FORM_maclistremove="\$FORM_${vcfg}_maclistremove"
+			eval FORM_maclistsubmit="\$FORM_${vcfg}_maclistsubmit"
+			LISTVAL="$FORM_maclist"
+			handle_list "$FORM_maclistremove" "$FORM_maclistadd" "$FORM_maclistsubmit" 'mac|FORM_maclistadd|@TR<<MAC Address>>|required' && {
+				FORM_maclist="$LISTVAL"
+				[ " " = "$FORM_maclist" ] && FORM_maclist=""
+				uci_set "wireless" "$vcfg" "maclist" "$FORM_maclist"
+				FORM_maclistadd=""
+			}
+
 			case "$FORM_mode" in
 				ap) let "ap_count+=1";;
 				sta) let "sta_count+=1";;
 				adhoc) let "adhoc_count+=1";;
 			esac
-			
+
 			append forms "start_form|@TR<<Wireless Virtual Adaptor Configuration for Wireless Card>> $FORM_device" "$N"
 			network="field|@TR<<Network>>
 	        	        select|network_$vcfg|$FORM_network
 	        	        $network_options"
 			append forms "$network" "$N"
-			
+
 			if [ "$iftype" != "mac80211" ]; then
 				option_wds="option|wds|@TR<<WDS>>"
 				append forms "helpitem|WDS Connections" "$N"
@@ -394,9 +424,7 @@ for device in $DEVICES; do
 					radio|bgscan_$vcfg|$FORM_bgscan|1|@TR<<On>>
 					radio|bgscan_$vcfg|$FORM_bgscan|0|@TR<<Off>>"
 			append forms "$bgscan_field" "$N"
-			append forms "helpitem|Backround Client Scanning" "$N"
-			append forms "helptext|Helptext Backround Client Scanning#Enables or disables the ablility of a virtual interface to scan for other access points while in client mode. Disabling this allows for higher throughput but keeps your card from roaming to other access points with a higher signal strength." "$N"
-			append forms "helplink|http://madwifi.org/wiki/UserDocs/PerformanceTuning" "$N"
+			append forms "helpitem|Background Client Scanning" "$N"
 
 			isolate_field="field|@TR<<AP Isolation>>|isolate_form_$vcfg|hidden
 					radio|isolate_$vcfg|$FORM_isolate|1|@TR<<On>>
@@ -404,6 +432,62 @@ for device in $DEVICES; do
 			append forms "$isolate_field" "$N"
 
 			if [ "$iftype" = "atheros" ]; then
+				append forms "helptext|Helptext Backround Client Scanning#Enables or disables the ablility of a virtual interface to scan for other access points while in client mode. Disabling this allows for higher throughput but keeps your card from roaming to other access points with a higher signal strength." "$N"
+				append forms "helplink|http://madwifi.org/wiki/UserDocs/PerformanceTuning" "$N"
+				doth="field|@TR<<802.11h>>
+					radio|doth_$vcfg|$FORM_doth|1|@TR<<On>>
+					radio|doth_$vcfg|$FORM_doth|0|@TR<<Off>>"
+				append forms "$doth" "$N"
+
+				compression="field|@TR<<Compression>>
+					radio|compression_$vcfg|$FORM_compression|1|@TR<<On>>
+					radio|compression_$vcfg|$FORM_compression|0|@TR<<Off>>"
+				append forms "$comp" "$N"
+
+				bursting="field|@TR<<Bursting>>
+					radio|bursting_$vcfg|$FORM_bursting|1|@TR<<On>>
+					radio|bursting_$vcfg|$FORM_bursting|0|@TR<<Off>>"
+				append forms "$bursting" "$N"
+
+				fframes="field|@TR<<Fast Frames>>
+					radio|fframes_$vcfg|$FORM_fframes|1|@TR<<On>>
+					radio|fframes_$vcfg|$FORM_fframes|0|@TR<<Off>>"
+				append forms "$ff" "$N"
+
+				wmm="field|@TR<<WMM>>
+					radio|wmm_$vcfg|$FORM_wmm|1|@TR<<On>>
+					radio|wmm_$vcfg|$FORM_wmm|0|@TR<<Off>>"
+				append forms "$wmm" "$N"
+
+				xr="field|@TR<<XR>>
+					radio|xr_$vcfg|$FORM_xr|1|@TR<<On>>
+					radio|xr_$vcfg|$FORM_xr|0|@TR<<Off>>"
+				append forms "$xr" "$N"
+
+				ar="field|@TR<<AR>>
+					radio|ar_$vcfg|$FORM_ar|1|@TR<<On>>
+					radio|ar_$vcfg|$FORM_ar|0|@TR<<Off>>"
+				append forms "$ar" "$N"
+
+				turbo="field|@TR<<Turbo>>
+					radio|turbo_$vcfg|$FORM_turbo|1|@TR<<On>>
+					radio|turbo_$vcfg|$FORM_turbo|0|@TR<<Off>>"
+				append forms "$turbo" "$N"
+
+				rate="field|@TR<<TX Rate>>
+					select|rate_$vcfg|$FORM_rate
+					option|auto|@TR<<Auto>>
+					option|1M|@TR<<1M>>
+					option|2M|@TR<<2M>>
+					option|5.5M|@TR<<5.5M>>
+					option|11M|@TR<<11M>>
+					option|6M|@TR<<6M>>
+					option|12M|@TR<<12M>>
+					option|24M|@TR<<24M>>
+					option|36M|@TR<<36M>>
+					option|54M|@TR<<54M>>"
+				append forms "$rate" "$N"
+
 				eval txpowers="\$CONFIG_wireless_${device}_txpower"
 				[ -z "$txpowers" ] && {
 					txpower=""
@@ -517,6 +601,8 @@ for device in $DEVICES; do
 			if [ "$iftype" = "broadcom" ]; then
 				psk_option="option|psk+psk2|WPA+WPA2 (@TR<<PSK>>)"
 				wpa_option="option|wpa+wpa2|WPA+WPA2 (@TR<<RADIUS>>)"
+			else
+				psk_option="option|psk-mixed/tkip+aes|WPA+WPA2 (@TR<<PSK>>)"
 			fi
 
 			encryption_forms="field|@TR<<Encryption Type>>
@@ -607,6 +693,22 @@ for device in $DEVICES; do
 				append forms "$install_hostapd_mini_button" "$N"
 				append forms "$install_wpa_supplicant_button" "$N"
 			fi
+			
+			append forms "helpitem|Encryption Type" "$N"
+			append forms "helptext|HelpText Encryption Type#WPA (RADIUS) is only supported in Access Point mode. WPA (PSK) does not work in Ad-Hoc mode." "$N"
+
+				macpolicy="field|@TR<<MAC Filter>>
+					select|macpolicy_$vcfg|$FORM_macpolicy
+					option|none|@TR<<Disabled>>
+					option|allow|@TR<<Allow>>
+					option|deny|@TR<<Deny>>"
+				append forms "$macpolicy" "$N"
+
+				maclist="end_form
+					start_form|@TR<<MAC List>>|maclist_form_$vcfg|hidden
+					listedit|${vcfg}_maclist|$SCRIPT_NAME?|$FORM_maclist|$FORM_macadd
+					end_form"
+				append forms "$maclist" "$N"
 
 			###################################################################
 			# set JavaScript
@@ -641,9 +743,9 @@ for device in $DEVICES; do
 						document.getElementById('encryption_$vcfg').value = 'off';
 					}
 				}
-				v = (isset('mode_ap_$device','11b') || isset('mode_ap_$device','11bg') || isset('mode_ap_$device','11g') || ('$iftype'=='broadcom'));
+				v = (isset('ap_mode_$device','11b') || isset('ap_mode_$device','11bg') || isset('ap_mode_$device','11g') || ('$iftype'=='broadcom'));
 				set_visible('bgchannelform_$device', v);
-				v = (isset('mode_ap_$device','11a'));
+				v = (isset('ap_mode_$device','11a'));
 				set_visible('achannelform_$device', v);
 				v = (!isset('mode_$vcfg','wds'));
 				set_visible('broadcast_form_$vcfg', v);
@@ -663,16 +765,18 @@ for device in $DEVICES; do
 				set_visible('install_hostapd_$vcfg', v);
 				v = (('$iftype'=='atheros') && (isset('mode_$vcfg','sta')) && (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2') || isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2')));
 				set_visible('install_wpa_supplicant_$vcfg', v);
-				v = (isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2'));
+				v = (isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2') || isset('encryption_$vcfg','wpa+wpa2'));
 				set_visible('radiuskey_$vcfg', v);
 				set_visible('radius_ip_$vcfg', v);
 				set_visible('radius_port_form_$vcfg', v);
 				v = (('$iftype'!='mac80211') && (isset('mode_$vcfg','ap') || isset('mode_$vcfg','sta')));
-				set_visible('wds_form_$vcfg', v);"
+				set_visible('wds_form_$vcfg', v);
+				v = (!isset('macpolicy_$vcfg','none'));
+				set_visible('maclist_form_$vcfg', v);"
 			append js "$javascript_forms" "$N"
-			remove_vcfg="string|<tr><td><a href="$SCRIPT_NAME?remove_vcfg=$vcfg">@TR<<Remove Virtual Interface>></a>"
-			append forms "helpitem|Encryption Type" "$N"
-			append forms "helptext|HelpText Encryption Type#WPA (RADIUS) is only supported in Access Point mode. WPA (PSK) does not work in Ad-Hoc mode." "$N"
+			remove_vcfg="start_form
+				field|
+				string|<a href=\"$SCRIPT_NAME?remove_vcfg=$vcfg\">@TR<<Remove Virtual Interface>></a>"
 			append forms "$remove_vcfg" "$N"
 			append forms "end_form" "$N"
 			
@@ -690,7 +794,13 @@ for device in $DEVICES; do
 					append validate_forms "wep|FORM_key3_$vcfg|@TR<<WEP Key>> 3||$FORM_key3" "$N"
 					append validate_forms "wep|FORM_key4_$vcfg|@TR<<WEP Key>> 4||$FORM_key4" "$N";;
 			esac
-			append validate_forms "string|FORM_ssid_$vcfg|@TR<<ESSID>>|required|$FORM_ssid" "$N"
+			case "$FORM_mode" in
+				wds)
+					append validate_forms "string|FORM_ssid_$vcfg|@TR<<ESSID>>||$FORM_ssid" "$N"
+					append validate_forms "mac|FORM_bssid_$vcfg|@TR<<BSSID>>||$FORM_bssid" "$N";;
+				*)
+					append validate_forms "string|FORM_ssid_$vcfg|@TR<<ESSID>>|required|$FORM_ssid" "$N";;
+			esac
 			append validate_forms "int|FORM_frag_$vcfg|@TR<<Fragmentation Threshold>>|min=0 max=2346|$FORM_frag" "$N"
 			append validate_forms "int|FORM_rts_$vcfg|@TR<<RTS Threshold>>|min=0 max=2347|$FORM_rts" "$N"
 		fi
@@ -715,8 +825,8 @@ EOF
 				eval FORM_txantenna="\$FORM_txantenna_$device"
 				eval FORM_rxantenna="\$FORM_rxantenna_$device"
 				eval FORM_disabled="\$FORM_disabled_$device"
-				
-				uci_set "wireless" "$device" "mode" "$FORM_ap_mode"
+
+				uci_set "wireless" "$device" "agmode" "$FORM_ap_mode"
 				uci_set "wireless" "$device" "channel" "$FORM_channel"
 				uci_set "wireless" "$device" "maxassoc" "$FORM_maxassoc"
 				uci_set "wireless" "$device" "distance" "$FORM_distance"
@@ -751,6 +861,15 @@ EOF
 						eval FORM_rts="\$FORM_rts_$vcfg"
 						eval FORM_frag="\$FORM_frag_$vcfg"
 						eval FORM_wds="\$FORM_wds_$vcfg"
+						eval FORM_doth="\$FORM_doth_$vcfg"
+						eval FORM_compression="\$FORM_compression_$vcfg"
+						eval FORM_bursting="\$FORM_bursting_$vcfg"
+						eval FORM_fframes="\$FORM_fframes_$vcfg"
+						eval FORM_wmm="\$FORM_wmm_$vcfg"
+						eval FORM_xr="\$FORM_xr_$vcfg"
+						eval FORM_ar="\$FORM_ar_$vcfg"
+						eval FORM_turbo="\$FORM_turbo_$vcfg"
+						eval FORM_macpolicy="\$FORM_macpolicy_$vcfg"
 
 						uci_set "wireless" "$vcfg" "network" "$FORM_network"
 						uci_set "wireless" "$vcfg" "ssid" "$FORM_ssid"
@@ -777,6 +896,15 @@ EOF
 						uci_set "wireless" "$vcfg" "key2" "$FORM_key2"
 						uci_set "wireless" "$vcfg" "key3" "$FORM_key3"
 						uci_set "wireless" "$vcfg" "key4" "$FORM_key4"
+						uci_set "wireless" "$vcfg" "80211h" "$FORM_doth"
+						uci_set "wireless" "$vcfg" "compression" "$FORM_compression"
+						uci_set "wireless" "$vcfg" "bursting" "$FORM_bursting"
+						uci_set "wireless" "$vcfg" "ff" "$FORM_fframes"
+						uci_set "wireless" "$vcfg" "wmm" "$FORM_wmm"
+						uci_set "wireless" "$vcfg" "xr" "$FORM_xr"
+						uci_set "wireless" "$vcfg" "ar" "$FORM_ar"
+						uci_set "wireless" "$vcfg" "turbo" "$FORM_turbo"
+						uci_set "wireless" "$vcfg" "macpolicy" "$FORM_macpolicy"
 					fi
 				done
 			done
@@ -785,7 +913,6 @@ EOF
 fi
 
 header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onload="modechange()"' "$SCRIPT_NAME"
-
 #####################################################################
 # modechange script
 #
@@ -805,7 +932,6 @@ function modechange()
 </script>
 
 EOF
-
 
 display_form <<EOF
 onchange|modechange
