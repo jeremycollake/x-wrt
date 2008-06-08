@@ -2,12 +2,7 @@
 #
 # Webif^2 utility functions - X-Wrt
 #
-# This file is compatible with White Russian and Kamikaze.
-#
 . /etc/functions.sh
-[ -f /etc/functions_ex.sh ] && {
-. /etc/functions_ex.sh
-}
 
 #
 # Misc. functions
@@ -38,16 +33,6 @@ neq() {
 # very crazy, but also very fast :-)
 exists() {
 	( < $1 ) 2>&-
-}
-
-is_bcm947xx() {
-	read _systype < /proc/cpuinfo
-	equal "${_systype##* }" "BCM947XX"
-}
-
-is_kamikaze() {
-	# todo: switch to a more reliable check of kamikaze
-	[ -s "/etc/config/network" ] || grep -iq "KAMIKAZE" "/etc/banner"
 }
 
 has_nvram_support() {
@@ -148,7 +133,9 @@ install_package() {
 	# if package is not found, and it isn't a URL, then it'll
 	# try an 'ipkg update' to see if it can locate it. Does
 	# emit output to std devices.
-	! ipkg install "$1" -force-overwrite -force-defaults && {
+	echo "@TR<<Installing package>>..."
+	ipkg install "$1" -force-overwrite -force-defaults | grep -q -e "md5sum mismatch" -e "Cannot find package"
+	[ "$?" = "0" ] && {
 		echo "$1" | grep "://" >> /dev/null
 		! equal "$?" "0" && {
 			# wasn't a URL, so update

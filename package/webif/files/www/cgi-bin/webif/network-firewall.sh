@@ -3,7 +3,7 @@
 . /usr/lib/webif/webif.sh
 
 mkdir -p /tmp/.webif
-exists /tmp/.webif/file-firewall && FW_FILE=/tmp/.webif/file-firewall || FW_FILE=/etc/config/firewall
+exists /tmp/.webif/file-firewall && FW_FILE=/tmp/.webif/file-firewall || FW_FILE=/etc/firewall.config
 exists "$FW_FILE" || touch "$FW_FILE" >&- 2>&-
 FW_FILE_NEW="/tmp/.webif/file-firewall-new"
 
@@ -39,7 +39,6 @@ EOF
 }
 
 config_load "network"
-config_load "/var/state/network"
 config_get default_lan_target lan ipaddr
 default_lan_target="${default_lan_target:-192.168.1.1}"
 
@@ -336,7 +335,7 @@ END {
 	print "<br /><br />"
 	print "<div class=\\"settings-help\\" style=\\"margin-left:0;\\">"
 	print "<h4>@TR<<Firewall>>:</h4>"
-	print "<p>@TR<<firewall_help_general|Here you can forward ports and more. If you wish to manually configure these instead, use '/etc/config/firewall', not '/etc/firewall.user'. Although either works, only the former is used by this page.>></p>"
+	print "<p>@TR<<firewall_help_general|Here you can forward ports and more. If you wish to manually configure these instead, use '/etc/firewall.config', not '/etc/firewall.user'. Although either works, only the former is used by this page.>></p>"
 	print "<h4>@TR<<Forwarding a port>>:</h4>"
 	print "<p>@TR<<firewall_help_fw_port_example1|If you would like to forward port 999 TCP from the internet to a local computer at 192.168.1.100, it might look like below:>></p>"
 	print "<p>@TR<<firewall_help_fw_port_example|Destination ports: 999 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Target: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: &lt;blank&gt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protocol: TCP>></p>"
