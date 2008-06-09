@@ -297,9 +297,7 @@ THEMES=$(echo "$THEMES" | sort -u)
 #####################################################################
 # Initialize LANGUAGES form
 # create list if it doesn't exist ..
-! exists "/etc/languages.lst" && {
-	/usr/lib/webif/webif-mklanglist.sh
-}
+/usr/lib/webif/webif-mklanglist.sh
 LANGUAGES=$(cat "/etc/languages.lst")
 
 has_nvram_support && {
