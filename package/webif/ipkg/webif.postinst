@@ -116,8 +116,8 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	}
 	uname -a |grep mips |grep "2.6.*" && cat /proc/cpuinfo |grep Broadcom
 	[ $? = 0 ] && {
-		cat /proc/cpuinfo | grep BCM47xx && SYSTYPE="47xx"
-		cat /proc/cpuinfo | grep BCM63xx && SYSTYPE="63xx"
+		cat /proc/cpuinfo | grep BCM47XX && SYSTYPE="47xx"
+		cat /proc/cpuinfo | grep BCM63XX && SYSTYPE="63xx"
 		if [ -n $SYSTYPE ]; then
 			if [ "$revision" = "" ]; then
 				AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/brcm${SYSTYPE}-2.6/packages"
