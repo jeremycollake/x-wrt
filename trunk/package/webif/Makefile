@@ -177,10 +177,12 @@ define Build/Compile
 		src/wepkeygen/keygen.c src/wepkeygen/md5.c \
 		src/webif-page.c src/bstrip.c src/webifmetabin.c
 	$(STRIP) $(PKG_BUILD_DIR)/webifmetabin
+	./create_lang_list.sh . $(PKG_BUILD_DIR)
 endef
 
 define Package/webif/install
 	$(CP) -a ./files/* $(1)/
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/languages.root $(1)/etc/
 	$(INSTALL_BIN) ./ipkg/webif.preinst $(1)/CONTROL/preinst
 	$(INSTALL_BIN) ./ipkg/webif.postinst $(1)/CONTROL/postinst
 	$(SED) 's,$$$$S,$(BOARD)-$(KERNEL),g' $(1)/CONTROL/postinst
