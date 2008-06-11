@@ -1,0 +1,13 @@
+--- busybox-1.4.2.old/networking/httpd.c.old	2008-05-11 21:33:36.000000000 +0200
++++ busybox-1.4.2.dev/networking/httpd.c	2008-06-11 21:10:35.000000000 +0200
+@@ -1403,8 +1403,8 @@
+ 			/* for check next /path:user:password */
+ 			prev = p0;
+ 			u = strchr(request, ':');
+-			if (u == NULL) {
+-				/* bad request, ':' required */
++			if (u == NULL || u == request) {
++				/* bad request, username and ':' required */
+ 				break;
+ 			}
+ 
