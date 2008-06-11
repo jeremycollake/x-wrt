@@ -208,7 +208,7 @@ $_form
 	$ERROR
 EOF
 
-	empty "$REMOTE_USER"  && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && {
+	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && {
 		! empty "$FORM_passwd1$FORM_passwd2" && {
 			equal "$FORM_passwd1" "$FORM_passwd2" && {
 				echo '<pre>'
@@ -256,21 +256,6 @@ EOF
 			apply_passwd
 		}
 	}
-
-	if [ "$REMOTE_USER" != "root" -a "$REMOTE_USER" != "admin" ]; then
-		config_load webif_access_control
-		if [ "$1" != "Graphs" ]; then
-			webifform=`grep "##WEBIF:name:${1}:[0-9][0-9][0-9]:${2}" /www/cgi-bin/webif/*.sh |cut -d':' -f5`
-			config_get_bool permission "$REMOTE_USER" "${1}_${webifform}" 0
-		else
-			config_get_bool permission "$REMOTE_USER" "Graphs" 0
-		fi
-		if [ "$permission" = "0" ]; then
-			echo "Permission Denied"
-			footer
-			exit
-		fi
-	fi
 }
 
 #######################################################
