@@ -1,14 +1,21 @@
 #!/usr/bin/lua
-package.path = package.path .. ";/usr/lib/webif/LUA/?.lua;/usr/share//lua/5.1/?.lua"
+package.cpath = "?;./?.so;/usr/share/internet-wifi/lib.so/?.so;" .. package.cpath 
+package.path = "?;./?.lua;/usr/share/internet-wifi/?.lua;/usr/share/internet-wifi/lib/?.lua;/usr/share/internet-wifi/pkgs/?.lua;" .. package.path 
 -- Common Functions
 require("common")
-local output_file = "/etc/olsrd.conf"
-local previus load_fiel(output_file)
-local prev_len = string.len(previus)
-dofile("/usr/lib/webif/LUA/olsr/parsers")
-local newfile load_file(output_file)
-local new_len = string.len(newfile)
-if prev_len ~= new_len then 
-  os.execute("/etc/init.d/olsrd restart")
-end  
- 
+
+function check_connection(str)
+  local str = str or "google.com"
+  ping = io.popen("ping -c 1 "..str)
+  local ok = false
+  for line in ping:lines() do
+    if string.match(line,"1 packets received") then
+      ok = true
+      print(string.match(line,"1 packets received"))
+    end
+  end
+  if ok == false then os.execute("/etc/init.d/olsrd restart") end
+
+end
+
+check_connection()
