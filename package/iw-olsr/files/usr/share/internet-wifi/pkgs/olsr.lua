@@ -51,7 +51,7 @@ function set_menu()
     __MENU.HotSpot.OLSR:Add("Interfaces","olsr.sh?option=interfaces")
   end
   __MENU.HotSpot.OLSR:Add("Status","olsr.sh?option=status")
---  __MENU.HotSpot.OLSR:Add("Visualization","olsr-viz.sh")
+  __MENU.HotSpot.OLSR:Add("Visualization","olsr.sh?option=viz")
 end
 
 function check_pkg()
@@ -445,12 +445,11 @@ function status_form()
 end
 
 function viz_form()
-  local str = status_str()
   local vizstr = viz_str()
-  form = formClass.new("Status")
-  form:Add("text_line","viz",str)
-  form:Add_help("Network Vizualitation",vizstr)
-  return form
+  form = formClass.new("Network Vizualitation",true)
+  form:Add("text_line","viz",vizstr)
+--  return form
+  return vizstr
 end
 
 function status_str()

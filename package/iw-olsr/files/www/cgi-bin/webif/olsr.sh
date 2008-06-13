@@ -15,6 +15,7 @@ __WIP=2
 olsrd.set_menu()
 local option = string.trim(__FORM.option)
 page.title = "OLSR"
+local str_content = ""
 if option == "" then option = "service" end
 if option == "service" then
   forms[1] = olsrd.core_form()
@@ -29,15 +30,20 @@ elseif option == "status" then
   page.form = ""
   forms[1] = olsrd.status_form()
 elseif option == "viz" then
+  __WIP = 0
   page.__DOCTYPE = ""
   page.form = ""
-  forms[1] = olsrd.viz_form()
+--  forms[1] = olsrd.viz_form()
+  str_content = olsrd.viz_form()
 else
   form.title = __FORM.option.." ".. form.title
 end
 print(page:header())
+print(str_content)
 forms[#forms]:Add_help_link("http://www.olsr.org","About OLSR" )
-for i=1, #forms do
-  forms[i]:print()
+if #forms > 0 then
+  for i=1, #forms do
+    forms[i]:print()
+  end
 end
 print(page:footer())
