@@ -21,7 +21,7 @@ append_bool() {
 	local value="$2"
 	local _loctmp
 	config_get_bool _loctmp "$section" "$option"
-	[ "$_loctmp" -gt 0 ] && append args "$3"
+	[ "$_loctmp" -gt 0 ] && append args "$2"
 }
 
 append_parm() {
@@ -58,7 +58,7 @@ start() {
 		config_get CONFIG_ovpn_complzo $config "complzo"
 		config_get CONFIG_ovpn_ping $config "ping"
 		config_get CONFIG_ovpn_pingrestart $config "pingrestart"
-		config_get CONFIG_ovpn_persistun $config "persisttun"
+		config_get CONFIG_ovpn_persisttun $config "persisttun"
 		config_get CONFIG_ovpn_persistkey $config "persistkey"
 		config_get CONFIG_ovpn_ipaddr $config "ipaddr"
 		config_get CONFIG_ovpn_client_to_client $config "client_to_client"
@@ -104,8 +104,8 @@ start() {
 		append_parm "verb" "--verb" "1"
 
 		append_bool "comp_lzo" "--comp-lzo"
-		append_bool "persist_tun" "--persist-tun"
-		append_bool "persist_key" "--persist-key"
+		append_bool "persisttun" "--persist-tun"
+		append_bool "persistkey" "--persist-key"
 		append_bool "client_to_client" "--client-to-client"
 
 		append_parm "ping" "--ping"
