@@ -249,7 +249,7 @@ else
 			$QUALITY_STRING
 			string|<tr><td><strong>@TR<<Signal>></strong> $SIGNAL_DBM dBm / <strong>@TR<<Noise>></strong> $NOISE_DBM dBm</td></tr><tr><td>
 # I guess is more graphic
-			progressbar|SNR|<strong>@TR<<SNR>></strong> $SIGNAL_INTEGRITY dBm|200|$SNR_PERCENT|$SNR_PERCENT "%"
+			progressbar|SNR|<strong>@TR<<SNR>></strong> $SIGNAL_INTEGRITY dBm|200|$SNR_PERCENT|"$SNR_PERCENT%"
 #			progressbar|SNR|<strong>@TR<<SNR>></strong> $SIGNAL_INTEGRITY dBm|200|$SNR_PERCENT|$SIGNAL_INTEGRITY dBm
 			string|</td></tr><tr><td>&nbsp;</td></tr>"
 
