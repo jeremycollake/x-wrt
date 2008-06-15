@@ -7,32 +7,14 @@ config_cb() {
 }
 
 uci_load syslog
-[ "$?" != "0" ] && {
-	uci_set_default syslog <<EOF
-config 'syslogd'
-	option 'ipaddr' ''
-	option 'port' ''
-	option 'size' '16'
-	option 'type' 'circular'
-	option 'mark' '0'
-	option 'file' '/var/log/messages'
-config 'klogd'
-	option 'conloglevel' ''
-config 'dmesg'
-	option 'buffersize' ''
-config 'dmesgbackup'
-	option 'enabled' '0'
-	option 'file' '/var/log/dmesg'
-	option 'gzip' '1'
-EOF
-	uci_load syslog
-}
 
 if empty "$FORM_submit"; then
 	eval FORM_ipaddr="\$CONFIG_${syslogd_cfg}_ipaddr"
 	eval FORM_port="\$CONFIG_${syslogd_cfg}_port"
 	FORM_port="${FORM_port:-514}"
-#	eval FORM_mark="\$CONFIG_${syslogd_cfg}_mark"
+	#eval FORM_mark="\$CONFIG_${syslogd_cfg}_mark"
+	#FORM_mark="${FORM_mark:-0}"
+	FORM_mark="0"
 	eval FORM_type="\$CONFIG_${syslogd_cfg}_type"
 	FORM_type="${FORM_type:-circular}"
 	eval FORM_file="\$CONFIG_${syslogd_cfg}_file"
@@ -52,7 +34,7 @@ else
 	validate <<EOF
 ip|FORM_ipaddr|@TR<<Server IP Address>>||$FORM_ipaddr
 int|FORM_port|@TR<<Server Port>>|min=0 max=65535|$FORM_port
-int|FORM_mark|@TR<<Minutes Between Marks>>||$FORM_mark
+int|FORM_mark|@TR<<Minutes Between Marks>>|min=0 max=0|$FORM_mark
 string|FORM_type|@TR<<Log type>>|nospaces|$FORM_type
 string|FORM_file|@TR<<Log File>>|$file_required|$FORM_file
 int|FORM_size|@TR<<Log Size>>|min=1 max=9999 required|$FORM_size
@@ -63,13 +45,15 @@ string|FORM_kfile|@TR<<Backup File>>|$kfile_required|$FORM_kfile
 int|FORM_gzip|@TR<<Compress Backup>>||$FORM_gzip
 EOF
 	equal "$?" 0 && {
-		[ -z "$syslogd_cfg" ] && { uci_add syslog syslogd; syslogd_cfg="$CONFIG_SECTION"; }
-		[ -z "$klogd_cfg" ] && { uci_add syslog klogd; klogd_cfg="$CONFIG_SECTION"; }
-		[ -z "$dmesg_cfg" ] && { uci_add syslog dmesg; dmesg_cfg="$CONFIG_SECTION"; }
-		[ -z "$dmesgbackup_cfg" ] && { uci_add syslog dmesgbackup; dmesgbackup_cfg="$CONFIG_SECTION"; }
+		reload_config=0
+		[ -z "$syslogd_cfg" ] && { uci_add syslog syslogd; reload_config=1; }
+		[ -z "$klogd_cfg" ] && { uci_add syslog klogd; reload_config=1; }
+		[ -z "$dmesg_cfg" ] && { uci_add syslog dmesg; reload_config=1; }
+		[ -z "$dmesgbackup_cfg" ] && { uci_add syslog dmesgbackup; reload_config=1; }
+		[ 1 -eq "$reload_config" ] && uci_load syslog
 		uci_set syslog "$syslogd_cfg" ipaddr "$FORM_ipaddr"
 		uci_set syslog "$syslogd_cfg" port "$FORM_port"
-		#uci_set syslog "$syslogd_cfg" mark "$FORM_mark"
+		uci_set syslog "$syslogd_cfg" mark "$FORM_mark"
 		uci_set syslog "$syslogd_cfg" type "$FORM_type"
 		uci_set syslog "$syslogd_cfg" file "$FORM_file"
 		uci_set syslog "$syslogd_cfg" size "$FORM_size"
@@ -110,18 +94,15 @@ text|port|$FORM_port
 helpitem|Remote Syslog
 helptext|HelpText Remote Syslog#IP address and port of the remote logging host. Leave this address blank for no remote logging.
 end_form
-EOF
 
-#display_form <<EOF
-#start_form|@TR<<Syslog Marks>>
-#field|@TR<<Minutes Between Marks>>
-#text|mark|$FORM_mark
-#helpitem|Syslog Marks
-#helptext|HelpText Syslog Marks#Periodic marks in your log. This parameter sets the time in minutes between the marks. A value of 0 means no mark.
-#end_form
-#EOF
+start_form|@TR<<Syslog Marks>>
+field|@TR<<Minutes Between Marks>>
+text|mark|$FORM_mark||readonly="readonly"
+helpitem|Syslog Marks
+helptext|HelpText Syslog Marks#Periodic marks in your log. This parameter sets the time in minutes between the marks. A value of 0 means no mark.
+helptext|HelpText Syslog Marks_disabled#This feature is currently disabled to prevent system hangs with intensive logging. Use a cron job to reach the similar functionality.
+end_form
 
-display_form <<EOF
 start_form|@TR<<Local Log>>
 onchange|modechange
 field|@TR<<Log type>>
