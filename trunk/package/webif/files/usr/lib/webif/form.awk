@@ -140,7 +140,6 @@ $1 ~ /^textarea/ {
 ($1 ~ /^progressbar/) {
 	print "<div class=\"progressbar\" style=\"width:" $4 "px\">"
 	print "	<span class=\"progress\" style=\"width:" $6 "\">" $6 "</span>"	
-#	print "	<span class=\"progress\" style=\"width:" $5 "%\">" $6 "</span>"	
 	print "</div>"
 	#show caption
 	if ($3 != "" ) print "<em>" $3 "</em>"
