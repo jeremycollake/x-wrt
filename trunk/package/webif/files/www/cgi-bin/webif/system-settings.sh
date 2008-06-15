@@ -63,7 +63,16 @@ FORM_hostname="${FORM_hostname:-$CONFIG_systemhostname}"
 FORM_hostname="${FORM_hostname:-OpenWrt}"
 config_clear "$hostname_cfg"
 uci_load "network"
-uci_load "timezone"
+uci_load timezone
+[ "$?" != "0" ] && {
+	uci_set_default timezone <<EOF
+config 'timezone'
+	option 'posixtz' 'UTC+0'
+	option 'zoneinfo' ''
+EOF
+	uci_load timezone
+
+}
 uci_load "$ntpcliconf"
 
 #FIXME: uci_load bug
@@ -180,12 +189,12 @@ EOF
 		time_zoneinfo_part="${FORM_system_timezone%@*}"
 		empty "$hostname_cfg" && {
 			uci_add system system
-			hostname_cfg="cfg1"
+			hostname_cfg="$CONFIG_SECTION"
 		}
 		uci_set "system" "$hostname_cfg" "hostname" "$FORM_hostname"
 		empty "$timezone_cfg" && {
-			uci_add timezone timezone timezone
-			timezone_cfg="timezone"
+			uci_add timezone timezone
+			timezone_cfg="$CONFIG_SECTION"
 		}
 		uci_set timezone "$timezone_cfg" posixtz "$time_zone_part"
 		uci_set timezone "$timezone_cfg" zoneinfo "$time_zoneinfo_part"
