@@ -31,31 +31,21 @@ if [ "$FORM_button_add_network" != "" ]; then
 	fi
 fi
 
-config_cb() {
-	local cfg_type="$1"
-	local cfg_name_dhcp="$2"
-
-	case "$cfg_type" in
-		interface)
-			append network "$cfg_name_dhcp" "$N"
-		;;
-		dhcp)
-			option_cb() {
-				case "$1" in
-					interface)
-						[ "$2" = "$FORM_remove_network" ] && uci_remove "dhcp" "$cfg_name_dhcp";;
-				esac
-			}
-		;;
-	esac
-}
-
 #remove network
 if ! empty "$FORM_remove_network"; then
 	uci_remove "network" "$FORM_remove_network"
-	uci_load dhcp
 fi
 
+config_cb() {
+	local cfg_type="$1"
+	local cfg_name="$2"
+
+	case "$cfg_type" in
+		interface)
+			append network "$cfg_name" "$N"
+		;;
+	esac
+}
 uci_load network
 network=$(echo "$network" |uniq)
 
@@ -97,9 +87,7 @@ for interface in $network; do
 		config_get FORM_demand $interface demand
 		config_get FORM_vci $interface vci
 		config_get FORM_vpi $interface vpi
-		config_get FORM_macaddr $interface macaddr
 		config_get_bool FORM_defaultroute $interface defaultroute 1
-		[ "$interface" = "lan" ] && config_get_bool FORM_nat $interface nat 1
 	else
 		eval FORM_proto="\$FORM_${interface}_proto"
 		eval FORM_type="\$FORM_${interface}_type"
@@ -119,9 +107,7 @@ for interface in $network; do
 		eval FORM_keepalive="\$FORM_${interface}_keepalive"
 		eval FORM_vci="\$FORM_${interface}_vci"
 		eval FORM_vpi="\$FORM_${interface}_vpi"
-		eval FORM_macaddr="\$FORM_${interface}_macaddr"
 		eval FORM_defaultroute="\$FORM_${interface}_defaultroute"
-		[ "$interface" = "lan" ] && eval FORM_nat="\$FORM_${interface}_nat"
 	fi
 	config_get FORM_dns $interface dns
 	eval FORM_dnsadd="\$FORM_${interface}_dnsadd"
@@ -145,17 +131,11 @@ for interface in $network; do
 	option|pppoa|@TR<<PPPOA>>
 	option|pptp|@TR<<PPTP>>
 	option|wwan|@TR<<WWAN>>
-	helpitem|Connection Type
-	helptext|Helptext Connection Type#Static IP: IP address of the interface is statically set. DHCP: The interface will fetch its IP address from a dhcp server.
 
 	field|@TR<<Type>>
 	select|${interface}_type|$FORM_type
 	option||@TR<<None>>
 	option|bridge|@TR<<Bridged>>
-	field|@TR<<MAC Address>>
-	text|${interface}_macaddr|$FORM_macaddr
-	helpitem|MAC Address
-	helptext|Helptext MAC Address#Used to enter a MAC address besides the default one.
 	end_form
 
 	start_form||${interface}_ip_settings|hidden
@@ -262,7 +242,6 @@ for interface in $network; do
 	document.getElementById(\"${interface}_passwd\").value = apnDB[element.value].pass;"
 	append JS_APN_DB "$wwan_js" "$N"
 
-	append validate_forms "mac|FORM_${interface}_macaddr|$interface @TR<<MAC Address>>||$FORM_macaddr" "$N"
 	append validate_forms "ip|FORM_${interface}_ipaddr|$interface @TR<<IP Address>>||$FORM_ipaddr" "$N"
 	append validate_forms "netmask|FORM_${interface}_netmask|$interface @TR<<WAN Netmask>>||$FORM_netmask" "$N"
 	append validate_forms "ip|FORM_${interface}_gateway|$interface @TR<<Default Gateway>>||$FORM_gateway" "$N"
@@ -309,20 +288,13 @@ EOF
 				eval FORM_keepalive="\$FORM_${interface}_keepalive"
 				eval FORM_vci="\$FORM_${interface}_vci"
 				eval FORM_vpi="\$FORM_${interface}_vpi"
-				eval FORM_macaddr="\$FORM_${interface}_macaddr"
 				eval FORM_defaultroute="\$FORM_${interface}_defaultroute"
 				if [ "$FORM_defaultroute" = "" ]; then
 					FORM_defaultroute=0
 				fi
 
 				uci_set "network" "$interface" "proto" "$FORM_proto"
-				[ "$FORM_type" = "" ] && uci_remove "network" "$interface" "type"
-				[ "$FORM_type" != "" ] && uci_set "network" "$interface" "type" "$FORM_type"
-				if [ "$interface" = "lan" ]; then
-					[ "$FORM_nat" = "" ] && FORM_nat=0
-					uci_set "network" "$interface" "nat" "$FORM_nat"
-				fi
-				uci_set "network" "$interface" "macaddr" "$FORM_macaddr"
+				uci_set "network" "$interface" "type" "$FORM_type"
 				case "$FORM_proto" in
 					pptp)
 						uci_set "network" "$interface" "server" "$FORM_pptp_server" ;;
@@ -355,7 +327,9 @@ EOF
 		done
 	}
 fi
+
 header "Network" "Networks" "@TR<<Network Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
+
 #####################################################################
 # modechange script
 #
@@ -383,10 +357,6 @@ EOF
 display_form <<EOF
 onchange|modechange
 $validate_error
-start_form|@TR<<Nat Mode/Router Mode>>
-field|@TR<<Perform Nat>>
-checkbox|lan_nat|$FORM_nat|1
-end_form
 $forms
 EOF
 

@@ -1,31 +1,27 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
+
 # todo:
 #  add /enable/disable for mx and wildcard / connection type.
 
-config_cb() {
-        local cfg_type="$1"
-        local cfg_name="$2"
-        case "$cfg_type" in
-                updatedd)
-                        cfg="$cfg_name"
-                ;;
-        esac
-}
-
-config_load "updatedd"
-if [ "$cfg" = "" ]; then
-	touch /etc/config/updatedd
-	uci_add updatedd "updatedd"
-	cfg="$CONFIG_SECTION"
+uci_load "webif"
+config_get revision general firmware_version
+if [ "$revision" = "7.07" ]; then
+	config_username="user"
+	config_password="passwd"
+else
+	config_username="username"
+	config_password="password"
 fi
+
 if empty "$FORM_submit"; then
-	config_get FORM_service "$cfg" service 
-	config_get FORM_username "$cfg" username
-	config_get FORM_password "$cfg" password
-	config_get FORM_host "$cfg" host
-	config_get_bool FORM_update "$cfg" update 0
+	uci_load "updatedd"
+	config_get FORM_service cfg1 service 
+	config_get FORM_username cfg1 "$config_username"
+	config_get FORM_password cfg1 "$config_password"
+	config_get FORM_host cfg1 host
+	config_get FORM_update cfg1 update
 else
 	SAVED=1
 	validate <<EOF
@@ -35,11 +31,11 @@ string|FORM_password|@TR<<Password>>|required|$FORM_password
 string|FORM_host|@TR<<Host Name>>|required|$FORM_host
 EOF
 	equal "$?" 0 && {
-		uci_set updatedd "$cfg" update "$FORM_update"
-		uci_set updatedd "$cfg" service "$FORM_service"
-		uci_set updatedd "$cfg" username "$FORM_username"
-		uci_set updatedd "$cfg" password "$FORM_password"
-		uci_set updatedd "$cfg" host "$FORM_host"
+		uci_set updatedd cfg1 update "$FORM_update"
+		uci_set updatedd cfg1 service "$FORM_service"
+		uci_set updatedd cfg1 "$config_username" "$FORM_username"
+		uci_set updatedd cfg1 "$config_password" "$FORM_password"
+		uci_set updatedd cfg1 host "$FORM_host"
 	}
 fi
 

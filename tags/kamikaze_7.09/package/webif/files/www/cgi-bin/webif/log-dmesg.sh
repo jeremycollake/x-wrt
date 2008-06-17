@@ -6,7 +6,7 @@ config_cb() {
 	[ -n "$1" ] && eval "$1_cfg=\"$2\""
 }
 
-uci_load "syslog"
+uci_load "/etc/config/syslog"
 
 header_inject_head=$(cat <<EOF
 <style type="text/css">
@@ -95,10 +95,10 @@ let "buffersize *= 1024"
 [ $buffersize -gt 1024 ] || buffersize=""
 dmesg ${buffersize:+-s$buffersize} 2>/dev/null | show_messages
 echo " </pre>"
-config_get_bool dmesgbackup_enabled "${dmesgbackup_cfg}" enabled 0
+config_get_bool dmesgbackup_enabled "${dmesgbackup_cfg}" enabled
 if [ 1 -eq "$dmesgbackup_enabled" ]; then
 	eval dmesgbackup_file="\$CONFIG_${dmesgbackup_cfg}_file"
-	config_get_bool dmesgbackup_gzip "${dmesgbackup_cfg}" gzip 0
+	config_get_bool dmesgbackup_gzip "${dmesgbackup_cfg}" gzip
 	[ 1 -eq "$dmesgbackup_gzip" ] && dmesgbackup_file="$dmesgbackup_file.gz"
 	if [ -f "$dmesgbackup_file" ]; then
 		echo "<div class=\"clearfix\">&nbsp;</div></div>"

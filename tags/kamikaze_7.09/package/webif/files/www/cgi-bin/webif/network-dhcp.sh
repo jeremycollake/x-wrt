@@ -9,9 +9,7 @@
 #
 # Author(s) [in order of work date]:
 #	Travis Kemen	<thepeople@users.berlios.de>
-#	Adam Hill	<adam@voip-x.co.uk>
 # Major revisions:
-#	Allow DHCP options to be specified ( Adam H )
 #
 # UCI variables referenced:
 #
@@ -56,7 +54,7 @@ let "vcfg_number+=1"
 #add dhcp network
 if [ "$FORM_add_dhcp" != "" ]; then
 	uci_add "dhcp" "dhcp" ""
-	uci_set "dhcp" "$CONFIG_SECTION" "interface" "$FORM_network_add"
+	uci_set "dhcp" "cfg$vcfg_number" "interface" "$FORM_network_add"
 	dhcp_cfgs=""
 	dnsmasq_cfgs=""
 	uci_load dhcp
@@ -127,40 +125,20 @@ for config in $dnsmasq_cfgs; do
 	append forms "$form_dnsmasq" "$N"
 done
 
-dhcp_option_select=$(awk -F: '{ print "option|" $1 "|" $2 }' /usr/lib/webif/dhcp_options.dat)
-
 for config in $dhcp_cfgs; do
-	count=1
 	if [ "$FORM_submit" = "" ]; then
 		config_get interface $config interface
 		config_get start $config start
 		config_get limit $config limit
-		config_get options $config options
 		config_get leasetime $config leasetime
 		config_get_bool ignore $config ignore 0
-		for opt in $(echo -n $options | awk -F"-O" '{ for(x=1; x<=NF; x++) print $x }')
-		do
-			eval $(echo -n "$opt" | awk -F, '($1 == "'$interface'") { print "option'"$count"'=\"" $2 "\"; value"'$count'"=\"" $3; for(x=4;x<=NF;x++) print "," $x; print "\"" }' | tr -d '\n')
-			count=$(($count + 1))
-		done
 	else
 		config_get interface $config interface
 		eval start="\$FORM_start_$config"
 		eval limit="\$FORM_limit_$config"
 		eval leasetime="\$FORM_leasetime_$config"
 		eval ignore="\$FORM_ignore_$config"
-		eval "nextopt=\$FORM_option${count}_$config"
-		lastused=0
-		while [ "$nextopt" != "" ]
-		do
-			[ "$nextopt" != "none" ] && lastused=$count
-			eval "option$count=\$nextopt; value$count=\$FORM_value${count}_$config"
-			count=$(($count + 1))
-			eval "nextopt=\$FORM_option${count}_$config"
-		done
-		count=$(($lastused + 1))
 	fi
-	eval "option$count=\"\"; value$count=\"\""
 	
 	#Save networks with a dhcp interface.
 	append dhcp_networks "$interface" "$N"
@@ -188,24 +166,7 @@ for config in $dhcp_cfgs; do
 		text|limit_$config|$limit
 		field|@TR<<Lease Time (in minutes)>>
 		text|leasetime_$config|$leasetime
-		"
-	
-	for loop in $(seq 1 $count)
-	do
-		eval "thisopt=\$option$loop"
-		eval "thisval=\$value$loop"
-		thisval=$(echo -n $thisval | tr -d ' ')
-
-		append form_dhcp "field|@TR<<Option>>
-		select|option${loop}_$config|$thisopt
-		option|none|@TR<<none#None>>
-		$dhcp_option_select
-		text|value${loop}_$config|$thisval
-		"
-	done
-	
-	append form_dhcp "end_form" "$N"
-
+		end_form"
 	append forms "$form_dhcp" "$N"
 
 	append validate_forms "int|start_$config|@TR<<DHCP Start>>||$start" "$N"
@@ -267,37 +228,10 @@ EOF
 				leasetime="${leasetime}m"
 			fi
 			
-			config_get interface $config interface
 			uci_set "dhcp" "$config" "start" "$start"
 			uci_set "dhcp" "$config" "limit" "$limit"
 			uci_set "dhcp" "$config" "leasetime" "$leasetime"
 			uci_set "dhcp" "$config" "ignore" "$ignore"
-			
-			count=1
-			optstring=""
-			eval "nextopt=\$FORM_option${count}_$config"
-			while [ "$nextopt" != "" ]
-			do
-				if [ "$nextopt" != "none" ]
-				then
-					eval "thisval=\$FORM_value${count}_$config"
-					thisval=$(echo -n $thisval | tr -d ' ')
-					if [ "$optstring" = "" ]
-					then
-						optstring="-O $interface,$nextopt,$thisval"
-					else
-						optstring="$optstring -O $interface,$nextopt,$thisval"
-					fi
-				fi
-				count=$(($count + 1))
-				eval "nextopt=\$FORM_option${count}_$config"
-			done
-			if [ "$optstring" != "" ]
-			then
-				uci_set "dhcp" "$config" "options" "$optstring"
-			else
-				uci_remove "dhcp" "$config" "options"
-			fi
 		done
 	}
 fi

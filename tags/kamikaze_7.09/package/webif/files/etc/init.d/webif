@@ -17,17 +17,7 @@ uci_load "webif"
 	while [ -z "$device_name" ]; do
 		uname -a |grep -q "mips"
 		[ $? = "0" ] && {
-			dmesg |grep -q "Searching for RedBoot partition table in spiflash at offset 0x3e0000"
-			[ $? = "0" ] && {
-				device_name="Ubiquiti NanoStation 2"
-				break
-			}
-			dd bs=1 count=19 skip=5 if=/dev/mtd/5 2>/dev/null | strings | grep "FON 2202"
-			[ $? = "0" ] && {
-				device_name="La Fonera 2202"
-				break
-			}
-			dd bs=1 count=19 skip=5 if=/dev/mtd/5 2>/dev/null | strings | grep "MR3201A-FLF-FON" || ifconfig eth0 |grep -q 00:18:84:**:**:**
+	        	dd bs=1 count=19 skip=5 if=/dev/mtd/5 2>/dev/null | strings | grep "MR3201A-FLF-FON" || ifconfig eth0 |grep -q 00:18:84:**:**:**
 			[ $? = "0" ] && {
 				device_name="La Fonera (ACCTON MR3201A)"
 				break

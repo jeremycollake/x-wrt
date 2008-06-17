@@ -6,7 +6,7 @@ config_cb() {
 	[ -n "$1" ] && eval "$1_cfg=\"$2\""
 }
 
-uci_load "syslog"
+uci_load "/etc/config/syslog"
 
 header_inject_head=$(cat <<EOF
 <style type="text/css">

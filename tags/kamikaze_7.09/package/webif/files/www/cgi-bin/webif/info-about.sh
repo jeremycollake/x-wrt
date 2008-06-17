@@ -20,12 +20,12 @@
 header "Info" "About" "<img src=\"/images/abt.jpg\" alt=\"@TR<<About>>\" />@TR<<About>>"
 
 this_revision=$(cat "/www/.version")
-?>
 
+?>
 <script src="/js/scrollbox.js" type="text/javascript"></script>
 <h2><a href="http://www.x-wrt.org">@TR<<X-Wrt Extensions>></a> &ndash; webif&sup2;</h2>
 
-<em>Bleeding Edge - r<? echo "$this_revision" ?></em>
+<em>Milestone 2.7 - r<? echo "$this_revision" ?></em>
 
 <div id="outerscrollBox"  onMouseOver="copyspeed=pausespeed" onMouseOut="copyspeed=marqueespeed">
 
@@ -36,8 +36,6 @@ this_revision=$(cat "/www/.version")
 <ul>
 	<li><a href="mailto:jeremy.collake@gmail.com">Jeremy Collake (db90h)</a></li>
 	<li><a href="mailto:kemen04@gmail.com">Travis Kemen (thepeople)</a></li>
-	<li><a href="mailto:lubek@users.berlios.de">Luboš Staněk (lubek)</a></li>
-	<li><a href="mailto:fofware@users.berlios.de">Fabi&aacuten Omar Franzotti (fofware)</a></li>
 </ul>
 
 <h2>@TR<<Contributing Developers>> <em>(@TR<<sorted_by_name#sorted by name>>)</em></h2>

@@ -6,9 +6,10 @@ HOSTS_FILE=/etc/hosts
 ETHERS_FILE=/etc/ethers
 
 header "Network" "WoL" "@TR<<Wake-On-LAN>>" ''
-
-has_pkgs etherwake
-has_pkgs wol
+# check to make sure busybox's etherwake isn't included
+! exists "/bin/etherwake" && {
+	has_pkgs ether-wake
+}
 ?>
 <br />
 
@@ -28,7 +29,7 @@ empty "$ERROR" && [ -n "$mac" ] && {
 		if [ -n "$res" ]; then echo "$res"; else echo "Waking up $mac..."; fi
 		echo "</p><p>&nbsp;</p>";
 	else
-		echo "<p>&nbsp;</p><p  style=\"background:#ffffc0; color:#c00000; font-weight: bold;\">ERROR: No WOL application given! Please make sure you have installed either wol or etherwake, and you have selected one of them in the form below.</p><p>&nbsp;</p>";
+		echo "<p>&nbsp;</p><p  style=\"background:#ffffc0; color:#c00000; font-weight: bold;\">ERROR: No WOL application given! Please make sure you have installed either wol or ether-wake, and you have selected one of them in the form below.</p><p>&nbsp;</p>";
 	fi
 }
 empty $ERROR || { echo "<h3 class=Error>$ERROR</h3>"; }
@@ -38,7 +39,7 @@ empty $ERROR || { echo "<h3 class=Error>$ERROR</h3>"; }
 <form>
 <table><tr><th>@TR<<WOL application>>:</th><td><select name="wolapp">
 <?
-	for i in etherwake wol; do
+	for i in ether-wake wol; do
 		[ -n `which $i` ] && {
 			echo "<option value=\"$i\" ";
 			[ "$i" = "$FORM_wolapp" ] && echo "SELECTED";

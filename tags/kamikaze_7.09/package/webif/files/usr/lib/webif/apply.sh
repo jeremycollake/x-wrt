@@ -12,24 +12,11 @@
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
 
-config_cb() {
-	[ "$1" = "system" ] && system_cfg="$2"
-	[ "$1" = "server" ] && l2tpns_cfg="$2"
-	[ "$1" = "updatedd" ] && updatedd_cfg="$2"
-}
-
-# this line is for compatibility with webif-lua
-#LUA="/usr/lib/webif/LUA/xwrt-apply.lua"
-#if [ -e $LUA ]; then
-#  /usr/lib/webif/LUA/xwrt-apply.lua 
-#fi
-
 HANDLERS_file='
 	hosts) rm -f /etc/hosts; mv $config /etc/hosts; killall -HUP dnsmasq ;;
 	ethers) rm -f /etc/ethers; mv $config /etc/ethers; killall -HUP dnsmasq ;;
-	firewall) mv /tmp/.webif/file-firewall /etc/firewall.config && /etc/init.d/firewall restart && reload_upnpd;;
+	firewall) mv /tmp/.webif/file-firewall /etc/config/firewall && /etc/init.d/firewall restart && reload_upnpd;;
 	dnsmasq.conf) mv /tmp/.webif/file-dnsmasq.conf /etc/dnsmasq.conf && /etc/init.d/dnsmasq restart;;
-	httpd.conf) mv -f /tmp/.webif/file-httpd.conf /etc/httpd.conf && /etc/init.d/httpd restart;;
 '
 
 # for some reason a for loop with "." doesn't work
@@ -257,9 +244,14 @@ for package in $process_packages; do
 				/etc/init.d/dnsmasq start
 			fi
 			;;
+		"ntp_client")
+			#this is for 7.07 and previous
+			killall ntpclient
+			ACTION="ifup" . /etc/hotplug.d/iface/??-ntpclient &
+			;;
 		"ntpclient")
 			killall ntpclient
-			ACTION="ifup" . /etc/hotplug.d/iface/??-ntpclient; [ -f /etc/rc.d/S??ntpclient ] && /etc/rc.d/S??ntpclient start &
+			ACTION="ifup" . /etc/hotplug.d/iface/??-ntpclient &
 			;;
 		"dhcp")
 			killall dnsmasq
@@ -271,13 +263,20 @@ for package in $process_packages; do
 		"syslog")
 			echo '@TR<<Reloading>> @TR<<syslogd>> ...'
 			/etc/init.d/syslog restart >&- 2>&- ;;
-		"webifopenvpn")
+		"openvpn")
 			echo '@TR<<Reloading>> @TR<<OpenVPN>> ...'
-			if [ ! -e S??webifopenvpn ]; then
+			killall openvpn >&- 2>&- <&-
+			uci_load "openvpn"
+			if [ "$CONFIG_general_mode" = "client" ]; then
 				/etc/init.d/webifopenvpn enable
+			else
+				/etc/init.d/webifopenvpn disable
 			fi
-			/etc/init.d/webifopenvpn restart ;;
+			/etc/init.d/webifopenvpn start ;;
 		"system")
+			config_cb() {
+				[ "$1" = "system" ] && system_cfg="$2"
+			}
 			unset system_cfg
 			config_load system
 			reset_cb
@@ -299,34 +298,22 @@ for package in $process_packages; do
 			;;
 		"l2tpns")
 			echo '@TR<<Exporting>> @TR<<l2tpns server settings>> ...'
-			[ -x "/usr/lib/webif/l2tpns_apply.sh" ] && {
+			[ -e "/usr/lib/webif/l2tpns_apply.sh" ] && {
 				/usr/lib/webif/l2tpns_apply.sh >&- 2>&-
 			}
 
-			unset l2tpns_cfg
-			uci_load "l2tpns"
-			reset_cb
-			config_get test "$l2tpns_cfg" mode
-			if [ "$test" = "enabled" ]; then
-				echo '@TR<<Starting>> @TR<<l2tpns server>> ...'
-				/etc/init.d/l2tpns enable >&- 2>&- <&-
-				/etc/init.d/l2tpns start >&- 2>&- <&-
-			else
-				echo '@TR<<Stopping>> @TR<<l2tpns server>> ...'
-				/etc/init.d/l2tpns disable >&- 2>&- <&-
-				/etc/init.d/l2tpns stop >&- 2>&- <&-
-			fi
-			config_allclear
+			echo '@TR<<Reloading>> @TR<<l2tpns server>> ...'
+			/etc/init.d/l2tpns restart >&- 2>&-
 			;;
 		"updatedd")
 			uci_load "updatedd"
-			if [ "$CONFIG_${updatedd_cfg}_update" = "1" ]; then
-				/etc/init.d/updatedd enable >&- 2>&- <&-
-				/etc/init.d/updatedd stop >&- 2>&- <&-
-				/etc/init.d/updatedd start >&- 2>&- <&-
+			if [ "$CONFIG_ddns_update" = "1" ]; then
+				/etc/init.d/ddns enable >&- 2>&- <&-
+				/etc/init.d/ddns stop >&- 2>&- <&-
+				/etc/init.d/ddns start >&- 2>&- <&-
 			else
-				/etc/init.d/updatedd disable >&- 2>&- <&-
-				/etc/init.d/updatedd stop >&- 2>&- <&-
+				/etc/init.d/ddns disable >&- 2>&- <&-
+				/etc/init.d/ddns stop >&- 2>&- <&-
 			fi
 			config_allclear
 		 	;;

@@ -4,19 +4,19 @@
 
 header "Status" "Interfaces" "@TR<<Interfaces>>"
 
-config_load network
+config_load /etc/config/network
 for cfgsec in $CONFIG_SECTIONS; do
 	eval "cfgtype=\$CONFIG_${cfgsec}_TYPE"
 	[ "$cfgtype" = "interface" ] && {
 		iflow=$(echo "$cfgsec" | tr [A-Z] [a-z])
 		ifupr=$(echo "$cfgsec" | tr [a-z] [A-Z])
-		eval "${iflow}_namen=\"$ifupr\""
+		eval "${iflow}_name=\"$ifupr\""
 		eval "typebr=\"\$CONFIG_${cfgsec}_type\""
 		if [ "$typebr" =  "bridge" ]; then
-			eval "${iflow}_ifacen=\"br-${cfgsec}\""
-			eval "${iflow}_bridgen=\"1\""
+			eval "${iflow}_iface=\"br-${cfgsec}\""
+			eval "${iflow}_bridge=\"1\""
 		else
-			eval "${iflow}_ifacen=\"\$CONFIG_${cfgsec}_ifname\""
+			eval "${iflow}_iface=\"\$CONFIG_${cfgsec}_ifname\""
 		fi
 		if [ "$iflow" != "wan" -a "$iflow" != "lan" ]; then
 			frm_ifaces="$frm_ifaces $iflow"
@@ -24,7 +24,7 @@ for cfgsec in $CONFIG_SECTIONS; do
 	}
 done
 
-config_load wireless
+config_load /etc/config/wireless
 for cfgsec in $CONFIG_SECTIONS; do
 	eval "cfgtype=\$CONFIG_${cfgsec}_TYPE"
 	[ "$cfgtype" = "wifi-iface" ] && {
@@ -46,10 +46,10 @@ for cfgsec in $CONFIG_SECTIONS; do
 				fi
 			;;
 		esac
-		eval "cfgnet=\"\$CONFIG_${cfgsec}_network\""
-		eval "isbridge=\"\$${cfgnet}_bridgen\""
+		eval "cfgnet=\$CONFIG_${cfgsec}_network"
+		eval "isbridge=\"${cfgnet}_bridge\""
 		if [ "$isbridge" != "1" ]; then
-			eval "${cfgnet}_ifacen=\"${cur_iface}\""
+			eval "${cfgnet}_iface=\"${cur_iface}\""
 		fi
 		frm_wifaces="$frm_wifaces $cur_iface"
 	}
@@ -57,16 +57,14 @@ done
 
 displaydns() {
 	local resconf form_dns_servers
-	resconf=$(cat /etc/dnsmasq.conf 2>/dev/null | grep "^resolv-file=" | cut -d'=' -f 2)
-	resconf="${resconf:-"/etc/resolv.conf /tmp/resolv.conf.auto"}"
-	resconf="`cat $resconf |grep nameserver |cut -d' ' -f2`"
-	counter=1
-	for dns_server in $resconf; do
-		form_dns_servers="$form_dns_servers
-field|@TR<<DNS Server>> ${counter}
-string|$dns_server"
-		let "counter+=1"
-	done
+	resconf=$(cat /etc/dnsmasq.conf | grep "^resolv-file=" | cut -d'=' -f 2)
+	resconf="${resconf:-"/etc/resolv.conf"}"
+	form_dns_servers=$(awk '
+BEGIN { counter=1 }
+/nameserver/ {
+	print "field|@TR<<DNS Server>> " counter "|dns_server_" counter "\n string|" $2 "\n" 
+	counter+=1
+}' "$resconf" 2>/dev/null)
 	display_form <<EOF
 start_form|@TR<<DNS Servers>>
 $form_dns_servers
@@ -77,15 +75,12 @@ EOF
 displayiface() {
 	local ifpar="$1"
 	local config ip_addr mac_addr form_mac tx_packets rx_packets tx_bytes rx_bytes
-	eval "iface=\$${ifpar}_ifacen"
+	eval "iface=\$${ifpar}_iface"
 	if [ -n "$iface" ]; then
 		config=$(ifconfig "$iface" 2>/dev/null)
 		[ -n "$config" ] && {
 			ip_addr=$(echo "$config" | grep "inet addr:" | cut -d: -f 2 | cut -d' ' -f 1)
 			ip_addr="${ip_addr:-"&nbsp;"}"
-			ip6_addr=$(echo "$config" |grep "inet6 addr:" | grep "Global" |cut -d' ' -f 13)
-			[ "$ip6_addr" != "" ] && ip6_form="field|@TR<<IP6 Address>>|${ifpar}_ip6_addr
-string|$ip6_addr"
 			mac_addr=$(echo "$config" | grep "HWaddr" | cut -d'H' -f 2 | cut -d' ' -f 2)
 			[ -n "$mac_addr" ] && form_mac="field|@TR<<MAC Address>>|${ifpar}_mac_addr
 string|$mac_addr"
@@ -97,7 +92,7 @@ string|$mac_addr"
 			tx_bytes="${tx_bytes:-0}"
 			rx_bytes=$(echo "$config" | grep "TX bytes:" | sed s/'TX bytes:'//g | sed s/'RX bytes:'//g | cut -d'(' -f 2 | cut -d ')' -f 1)
 			rx_bytes="${rx_bytes:-0}"
-			eval "if_name=\"\$${ifpar}_namen\""
+			eval "if_name=\"\$${ifpar}_name\""
 			case "$ifpar" in
 				wan)
 					form_help="helpitem|WAN
@@ -121,7 +116,6 @@ $form_mac
 $form_help
 field|@TR<<IP Address>>|${ifpar}_ip_addr
 string|$ip_addr
-$ip6_form
 field|@TR<<Received>>|${ifpar}_rx
 string|$rx_packets @TR<<status_interfaces_pkts#pkts>>&nbsp;($rx_bytes)
 field|@TR<<Transmitted>>|${ifpar}_tx
@@ -241,8 +235,8 @@ else
 <tr>
 	<td><div class="smalltext"><pre>
 EOF
-	[ -n "$wan_ifacen" ] && {
-		ifconfig "$wan_ifacen" 2>/dev/null
+	[ -n "$wan_iface" ] && {
+		ifconfig "$wan_iface" 2>/dev/null
 	}
 	cat <<EOF
 </pre></div></td>
@@ -253,20 +247,20 @@ EOF
 <tr>
 	<td><div class="smalltext"><pre>
 EOF
-	[ -n "$lan_ifacen" ] && {
-		ifconfig "$lan_ifacen" 2>/dev/null
+	[ -n "$lan_iface" ] && {
+		ifconfig "$lan_iface" 2>/dev/null
 	}
 	cat <<EOF
 </pre></div></td>
 </tr>
 EOF
 	for iface in $frm_ifaces; do
-		eval "dispiface=\$${iface}_ifacen"
+		eval "dispiface=\$${iface}_iface"
 		[ -n "$dispiface" ] && {
-			eval "if_name=\"\$${iface}_namen\""
+			eval "if_name=\"\$${iface}_name\""
 		cat <<EOF
 <tr>
-	<th><b>@TR<<Interfaces Status Other|Interface>> $if_name</th>
+	<th><b>$if_name @TR<<Interfaces Status Other|Interface>></th>
 </tr>
 <tr>
 	<td><div class="smalltext"><pre>

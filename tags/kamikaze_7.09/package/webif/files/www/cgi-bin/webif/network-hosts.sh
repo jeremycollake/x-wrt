@@ -250,6 +250,7 @@ END {
 	</tr>
 <?
 config_load network
+[ -f /var/state/network ] && . /var/state/network
 config_get excludeiface wan ifname
 cat /proc/net/arp 2>/dev/null | awk -v "exiface=$excludeiface" '
 BEGIN {
