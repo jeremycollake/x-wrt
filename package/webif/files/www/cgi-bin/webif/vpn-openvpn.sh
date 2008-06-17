@@ -4,64 +4,7 @@
 # command line parsing code!
 
 . /usr/lib/webif/webif.sh
-
-config_cb() {
-	local cfg_type="$1"
-	local cfg_name="$2"
-
-	case "$cfg_type" in
-		webifopenvpn)
-			append openvpnconfigs "$cfg_name" "$N"
-		;;
-	esac
-}
-
-#FIXME: uci_load bug
-#uci_load will pass the same config twice when there is a section to be added by using uci_add before a uci_commit happens
-#we will use uniq so we don't try to parse the same config section twice.
-openvpnconfigs=$(echo "$openvpnconfigs" |uniq)
-
-openvpncfg_number=$(echo "$openvpnconfigs" |wc -l)
-let "openvpncfg_number+=1"
-
-# Add Openvpn Section
-if ! empty "$FORM_add_openvpncfg_number"; then
-	[ -e /etc/config/webifopenvpn ] || touch /etc/config/webifopenvpn
-	uci_add webifopenvpn webifopenvpn
-	uci_set webifopenvpn "$CONFIG_SECTION" "mode" ""
-	uci_set webifopenvpn "$CONFIG_SECTION" "enabled"  "1"
-	uci_set webifopenvpn "$CONFIG_SECTION" "port" "1194"
-	uci_set webifopenvpn "$CONFIG_SECTION" "auth" "cert"
-	uci_set webifopenvpn "$CONFIG_SECTION" "proto" "udp"
-	uci_set webifopenvpn "$CONFIG_SECTION" "complzo" "1"
-	uci_set webifopenvpn "$CONFIG_SECTION" "ping" ""
-	uci_set webifopenvpn "$CONFIG_SECTION" "pingrestart" ""
-	uci_set webifopenvpn "$CONFIG_SECTION" "persisttun" ""
-	uci_set webifopenvpn "$CONFIG_SECTION" "persistkey" ""
-	uci_set webifopenvpn "$CONFIG_SECTION" "ipaddr" ""
-	uci_set webifopenvpn "$CONFIG_SECTION" "client_to_client" "0"
-	uci_set webifopenvpn "$CONFIG_SECTION" "cmdline" ""
-	uci_set webifopenvpn "$CONFIG_SECTION" "local" ""
-	uci_set webifopenvpn "$CONFIG_SECTION" "remote" ""
-	#Create Config dir
-	if [ -e  /etc/openvpn/webifopenvpn* ]; then
-		number=$(ls -1d /etc/openvpn/webifopenvpn* | sed -e '$!d' -e 's/.*\([0-9]\+\)$/\1/')
-		let "number+=1"
-	else
-		number="1"
-	fi
-	config_dir="/etc/openvpn/webifopenvpn$number"
-	uci_set webifopenvpn "$CONFIG_SECTION" "dir" "$config_dir"
-	mkdir -p "$config_dir"
-	uci_load
-fi
-
-# Remove Openvpn Section
-if ! empty "$FORM_remove_openvpncfg"; then
-	uci_remove webifopenvpn "$FORM_remove_openvpncfg"
-fi
-
-uci_load "webifopenvpn"
+uci_load "openvpn"
 
 header "VPN" "OpenVPN" "@TR<<OpenVPN>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
@@ -76,287 +19,86 @@ install_package_button=""
 	install_package_button="string|<div class=warning>@TR<<vpn_openvpn_warn#VPN will not work until you install OpenVPN:>> </div>
 		submit|install_package| @TR<<vpn_openvpn_install_package#Install OpenVPN Package>> |"
 
-for config in $openvpnconfigs; do
-	if empty "$FORM_submit"; then
-		config_get dir_name $config "dir"
-		[ -f $dir_name/certificate.p12 ] ||
-			NOCERT=1
-		[ -f $dir_name/shared.key ] ||
-			NOPSK=1
-		[ -f $dir_name/ca.crt ] ||
-			NOROOTCACERT=1
-		[ -f $dir_name/client.crt ] ||
-			NOCLIENTCERT=1
-		[ -f $dir_name/client.key ] ||
-			NOCLIENTKEY=1
-		[ -f $dir_name/dh.pem ] ||
-			NODH=1
-	
-		# general settings
-		config_get FORM_ovpn_mode $config "mode"
-		config_get FORM_ovpn_enabled $config "enabled"
-		config_get FORM_ovpn_port $config "port"
-		config_get FORM_ovpn_auth $config "auth"
-		config_get FORM_ovpn_proto $config "proto"
-		config_get FORM_ovpn_complzo $config "complzo"
-		config_get FORM_ovpn_ping $config "ping"
-		config_get FORM_ovpn_pingrestart $config "pingrestart"
-		config_get FORM_ovpn_persistun $config "persisttun"
-		config_get FORM_ovpn_persistkey $config "persistkey"
-		config_get FORM_ovpn_ipaddr $config "ipaddr"
-		config_get FORM_ovpn_client_to_client $config "client_to_client"
-		config_get FORM_ovpn_cmdline $config "cmdline"
-		config_get FORM_ovpn_local $config "local"
-		config_get FORM_ovpn_remote  $config "remote"
+if empty "$FORM_submit"; then
+	[ -f /etc/openvpn/certificate.p12 ] ||
+		NOCERT=1
+	[ -f /etc/openvpn/shared.key ] ||
+		NOPSK=1
+	[ -f /etc/openvpn/client.crt ] ||
+		NOCLIENTCERT=1
+	[ -f /etc/openvpn/client.key ] ||
+		NOCLIENTKEY=1
 
-	else
-		config_get dir_name $config "dir"
-		#PKCS12
-		[ -f "$FORM_openvpn_pkcs12file" ] && {
-			cp "$FORM_openvpn_pkcs12file" $dir_name/certificate.p12 &&
-				UPLOAD_CERT=1
-		}
-		#PreShared Key
-		[ -f "$FORM_openvpn_pskfile" ] && {
-			cp "$FORM_openvpn_pskfile" $dir_name/shared.key &&
-				UPLOAD_PSK=1
-		}
-		#PEM Cert
-		[ -f "$FORM_openvpn_rootcafile" ] && {
-			cp "$FORM_openvpn_rootcafile" $dir_name/ca.crt &&
-				UPLOAD_ROOTCACERT=1
-		}
-		[ -f "$FORM_openvpn_clientcertfile" ] && {
-			cp "$FORM_openvpn_clientcertfile" $dir_name/client.crt &&
-				UPLOAD_CLIENTCERT=1
-		}
-		[ -f "$FORM_openvpn_clientkeyfile" ] && {
-			cp "$FORM_openvpn_clientkeyfile" $dir_name/client.key &&
-				UPLOAD_CLIENTKEY=1
-		}
-		[ -f "$FORM_openvpn_dh" ] && {
-			cp "$FORM_openvpn_dh" $dir_name/dh.pem &&
-				UPLOAD_DH=1
-		}
-		
-		eval FORM_ovpn_mode="\$FORM_ovpn_mode_$config"
-		eval FORM_ovpn_enabled="\$FORM_ovpn_enabled_$config"
-		eval FORM_ovpn_port="\$FORM_ovpn_port_$config"
-		eval FORM_ovpn_auth="\$FORM_ovpn_auth_$config"
-		eval FORM_ovpn_proto="\$FORM_ovpn_proto_$config"
-		eval FORM_ovpn_complzo="\$FORM_ovpn_complzo_$config"
-		eval FORM_ovpn_ping="\$FORM_ovpn_ping_$config"
-		eval FORM_ovpn_pingrestart="\$FORM_ovpn_pingrestart_$config"
-		eval FORM_ovpn_persistun="\$FORM_ovpn_persistun_$config"
-		eval FORM_ovpn_persistkey="\$FORM_ovpn_persistkey_$config"
-		eval FORM_ovpn_ipaddr="\$FORM_ovpn_ipaddr_$config"
-		eval FORM_ovpn_client_to_client="\$FORM_ovpn_client_to_client_$config"
-		eval FORM_ovpn_cmdline="\$FORM_ovpn_cmdline_$config"
-		eval FORM_ovpn_local="\$FORM_ovpn_local_$config"
-		eval FORM_ovpn_remote="\$FORM_ovpn_remote_$config"
-
-		uci_set webifopenvpn "$config" "mode" "$FORM_ovpn_mode"
-		uci_set webifopenvpn "$config" "enabled"  "$FORM_ovpn_enabled"
-		uci_set webifopenvpn "$config" "port" "$FORM_ovpn_port"
-		uci_set webifopenvpn "$config" "auth" "$FORM_ovpn_auth"
-		uci_set webifopenvpn "$config" "proto" "$FORM_ovpn_proto"
-		uci_set webifopenvpn "$config" "complzo" "$FORM_ovpn_complzo"
-		uci_set webifopenvpn "$config" "ping" "$FORM_ovpn_ping"
-		uci_set webifopenvpn "$config" "pingrestart" "$FORM_ovpn_pingrestart"
-		uci_set webifopenvpn "$config" "persisttun" "$FORM_ovpn_persistun"
-		uci_set webifopenvpn "$config" "persistkey" "$FORM_ovpn_persistkey"
-		uci_set webifopenvpn "$config" "ipaddr" "$FORM_ovpn_ipaddr"
-		uci_set webifopenvpn "$config" "client_to_client" "$FORM_ovpn_client_to_client"
-		uci_set webifopenvpn "$config" "cmdline" "$FORM_ovpn_cmdline"
-		uci_set webifopenvpn "$config" "local" "$FORM_ovpn_local"
-		uci_set webifopenvpn "$config" "remote" "$FORM_ovpn_remote"
-	fi
-	ovpn_form="start_form|@TR<<OpenVPN Config>>
-	field|@TR<<Enabled>>
-	checkbox|ovpn_enabled_$config|$FORM_ovpn_enabled|1
-	field|@TR<<VPN Connection Type>>|mode_$config
-	select|ovpn_mode_$config|$FORM_ovpn_mode
-	option|client|@TR<<Client>>
-	option|server|@TR<<Server>>
-	field|@TR<<Server Address>>|ipaddr_$config|hidden
-	text|ovpn_ipaddr_$config|$FORM_ovpn_ipaddr
-	field|@TR<<Address Pool Start>>|local_$config|hidden
-	text|ovpn_local_$config|$FORM_ovpn_local
-	field|@TR<<Address Pool Stop>>|remote_$config|hidden
-	text|ovpn_remote_$config|$FORM_ovpn_remote
-	field|@TR<<Protocol>>|proto_$config
-	select|ovpn_proto_$config|$FORM_ovpn_proto
-	option|udp|UDP
-	option|tcp|TCP
-	field|@TR<<Server Port (default: 1194)>>|port_$config
-	text|ovpn_port_$config|$FORM_ovpn_port
-	field|@TR<<Authentication Method>>|auth_$config
-	onchange|modechange
-	select|ovpn_auth_$config|$FORM_ovpn_auth
-	option|psk|@TR<<Preshared Key>>
-	option|cert|@TR<<Certificate (PKCS12)>>
-	option|pem|@TR<<Certificate (PEM)>>
-	field|@TR<<Advanced Options>>|advanced_option_$config|hidden
-	checkbox|ovpn_advanced_$config|$FORM_ovpn_advanced_$config|1
-	end_form
-
-	start_form|@TR<<Authentication>>|authentication_$config
-	field|@TR<<Preshared Key Status>>|psk_statusovpn|hidden
-	$(empty "$NOPSK" || echo 'string|<span style="color:red">@TR<<No Keyfile uploaded yet!>></span>')
-	$(empty "$UPLOAD_PSK" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
-	$(empty "$NOPSK" && echo 'string|@TR<<Found Installed Keyfile>>')
-	field|@TR<<Upload Preshared Key>>|psk_$config|hidden
-	upload|openvpn_pskfile
-
-	#PKCS12 Cert
-	field|@TR<<Certificate Status>>|certificate_status_$config|hidden
-	$(empty "$NOCERT" || echo 'string|<span style="color:red">@TR<<No Certificate uploaded yet!>></span>')
-	$(empty "$UPLOAD_CERT" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
-	$(empty "$NOCERT" && echo 'string|@TR<<Found Installed Certificate.>>')
-	field|@TR<<Upload PKCS12 Certificate>>|certificate_$config|hidden
-	upload|openvpn_pkcs12file
-
-	# PEM Cert
-	field|@TR<<Certificate Status>>|root_ca_status_$config|hidden
-	$(empty "$NOROOTCACERT" || echo 'string|<span style="color:red">@TR<<Root CA certificate uploaded yet!>></span>')
-	$(empty "$UPLOAD_ROOTCACERT" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
-	$(empty "$NOROOTCACERT" && echo 'string|@TR<<Found Installed Certificate.>>')
-	field|@TR<<Upload Root CA certificate>>|root_ca_$config|hidden
-	upload|openvpn_rootcafile
-
-	field|@TR<<Certificate Status>>|client_certificate_status_$config|hidden
-	$(empty "$NOCLIENTCERT" || echo 'string|<span style="color:red">@TR<<No client certificate uploaded yet!>></span>')
-	$(empty "$UPLOAD_CLIENTCERT" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
-	$(empty "$NOCLIENTCERT" && echo 'string|@TR<<Found Installed Certificate.>>')
-	field|@TR<<Upload Client Certificate>>|client_certificate_$config|hidden
-	upload|openvpn_clientcertfile
-
-	field|@TR<<Certificate Status>>|client_key_status_$config|hidden
-	$(empty "$NOCLIENTKEY" || echo 'string|<span style="color:red">@TR<<No client key uploaded yet!>></span>')
-	$(empty "$UPLOAD_CLIENTKEY" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
-	$(empty "$NOCLIENTKEY" && echo 'string|@TR<<Found installed client key.>>')
-	field|@TR<<Upload Client Key>>|client_key_$config|hidden
-	upload|openvpn_clientkeyfile
-
-	field|@TR<<Certificate Status>>|dh_status_$config|hidden
-	$(empty "$NODH" || echo 'string|<span style="color:red">@TR<<No  Diffie Hellman parameters uploaded yet!>></span>')
-	$(empty "$UPLOAD_DH" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
-	$(empty "$NODH" && echo 'string|@TR<<Found installed Diffie Hellman parameters.>>')
-	field|@TR<<Upload Diffie Hellman>>|dh_$config|hidden
-	upload|openvpn_dh
-	end_form
-	
-	start_form|@TR<<Advanced Options>>|advanced_$config|hidden
-	field|@TR<<LZO compression>>
-	checkbox|ovpn_complzo_$config|$FORM_ovpn_complzo|1
-	field|@TR<<Ping>>
-	text|ovpn_ping_$config|$FORM_ovpn_ping
-	helpitem|Ping
-	helptext|HelpText Ping#Causes OpenVPN to exit after n seconds pass without reception of a ping or other packet from remote.
-	field|@TR<<Ping restart>>
-	text|ovpn_pingrestart_$config|$FORM_ovpn_pingrestart
-	helpitem|Ping Restart
-	helptext|HelpText Ping Restart#Causes OpenVPN to restart after n seconds pass without reception of a ping or other packet from remote.
-	field|@TR<<Persist tun>>
-	checkbox|ovpn_persisttun_$config|$FORM_ovpn_persisttun|1
-	helpitem|Persistant Tunnel
-	helptext|HelpText Persistant Tunnel#Don't close and reopen TUN/TAP device or run up/down scripts across SIGUSR1 or ping-restart restarts. 
-	field|@TR<<Persist key>>
-	checkbox|ovpn_persistkey_$config|$FORM_ovpn_persistkey|1
-	helpitem|Persistant Key
-	helptext|HelpText Persistant Key#Don't re-read key files across SIGUSR1 or ping-restart.
-	field|@TR<<client-to-client>>
-	checkbox|ovpn_client_to_client_$config|$FORM_ovpn_client_to_client|1
-	helpitem|Client to Client
-	helptext|HelpText Client to Client#When this option is used, each client will "see" the other clients which are currently connected. Otherwise, each client will only see the server.
-	field|@TR<<Extra cmdline arguments>>
-	text|ovpn_cmdline_$config|$FORM_ovpn_cmdline
-	end_form
-	field|
-	string|<a href=\"$SCRIPT_NAME?remove_openvpncfg=$config\">@TR<<Remove OpenVPN Config>></a>"
-	append OVPN "$ovpn_form" "$N"
-done
-
-add_ovpncfg="field|
-string|<a href=\"$SCRIPT_NAME?add_openvpncfg_number=$openvpncfg_number\">@TR<<Add OpenVPN Config>></a>"
-append OVPN "$add_ovpncfg" "$N"
+	FORM_openvpn_cli="$CONFIG_general_mode"
+	FORM_openvpn_cli_server="$CONFIG_client_ipaddr"
+	FORM_openvpn_cli_proto="$CONFIG_general_proto"
+	FORM_openvpn_cli_port="$CONFIG_general_port"
+	FORM_openvpn_cli_port=${FORM_openvpn_cli_port:-1194}
+	FORM_openvpn_cli_auth="$CONFIG_client_auth"
+	FORM_openvpn_cli_auth=${FORM_openvpn_cli_auth:-cert)}
+	FORM_openvpn_cli_psk="$CONFIG_client_psk"
+else
+	#PKCS12
+	[ -d /etc/openvpn ] || mkdir /etc/openvpn
+	[ -f "$FORM_openvpn_pkcs12file" ] && {
+		cp "$FORM_openvpn_pkcs12file" /etc/openvpn/certificate.p12 &&
+			UPLOAD_CERT=1
+	}
+	#PreShared Key
+	[ -f "$FORM_openvpn_pskfile" ] && {
+		cp "$FORM_openvpn_pskfile" /etc/openvpn/shared.key &&
+			UPLOAD_PSK=1
+	}
+	#PEM Cert
+	[ -f "$FORM_openvpn_rootcafile" ] && {
+		cp "$FORM_openvpn_rootcafile" /etc/openvpn/ca.crt &&
+			UPLOAD_ROOTCACERT=1
+	}
+	[ -f "$FORM_openvpn_clientcertfile" ] && {
+		cp "$FORM_openvpn_clientcertfile" /etc/openvpn/client.crt &&
+			UPLOAD_CLIENTCERT=1
+	}
+	[ -f "$FORM_openvpn_clientkeyfile" ] && {
+		cp "$FORM_openvpn_clientkeyfile" /etc/openvpn/client.key &&
+			UPLOAD_CLIENTKEY=1
+	}
+	uci_set "openvpn" "general" "mode" "$FORM_openvpn_cli"
+	uci_set "openvpn" "client" "ipaddr" "$FORM_openvpn_cli_server"
+	uci_set "openvpn" "general" "proto" "$FORM_openvpn_cli_proto"
+	uci_set "openvpn" "general" "port" "$FORM_openvpn_cli_port"
+	uci_set "openvpn" "general" "auth" "$FORM_openvpn_cli_auth"
+	uci_set "openvpn" "client" "psk" "$FORM_openvpn_cli_psk"
+fi
 
 cat <<EOF
 <script type="text/javascript" src="/webif.js "></script>
 <script type="text/javascript">
 <!--
-function modechange(elem)
-{
-	if (elem != undefined)
-	{
-		var config = get_config(elem.name);
-		modechange2(config);
-	}
-	else
-	{
-		configs = new Array('$(echo $openvpnconfigs|sed "s/ /','/g")');
-		for (var i = 0; i < configs.length; ++i)
-		{
-			modechange2(configs[i]);
-		}
-	}
-	hide('save');
-	show('save');
-}
-
-function modechange2(config)
+function modechange()
 {
 	var v;
-	v = checked('ovpn_enabled_' + config + '_1');
-	set_visible('mode_' + config, v);
-	set_visible('port_' + config, v);
-	set_visible('auth_' + config, v);
-	set_visible('proto_' + config, v);
-	set_visible('authentication_' + config, v);
-	set_visible('advanced_option_' + config, v);
-	set_visible('ovpn_advanced_' + config, v);
-	set_visible('advanced_' + config, v);
+	v = isset('openvpn_cli', 'client');
+	set_visible('connection_settings', v);
+	set_visible('authentication', v);
 
-	v = (checked('ovpn_advanced_' + config + '_1') && checked('ovpn_enabled_' + config + '_1'));
-	set_visible('advanced_' + config, v);
+	v = isset('openvpn_cli_auth', 'psk');
+	set_visible('psk_status', v);
+	set_visible('psk', v);
 
-	v = (isset('ovpn_mode_' + config, 'server') && checked('ovpn_enabled_' + config + '_1'));
-	set_visible('advanced_option_' + config, v);
-	set_visible('ovpn_advanced_' + config, v);
-	set_visible('local_' + config, v);	
-	set_visible('remote_' + config, v);
-
-	v = (isset('ovpn_mode_' + config, 'client') && checked('ovpn_enabled_' + config + '_1'));
-	set_visible('ipaddr_' + config, v);
-
-
-	v = isset('ovpn_auth_' + config, 'psk');
-	set_visible('psk_status_' + config, v);
-	set_visible('psk_' + config, v);
-
-	v = isset('ovpn_auth_' + config, 'cert');
-	set_visible('certificate_status_' + config, v);
-	set_visible('certificate_' + config, v);
-
-	v = isset('ovpn_auth_' + config, 'pem');
-	set_visible('root_ca_status_' + config, v);
-	set_visible('root_ca_' + config, v);
-	set_visible('client_certificate_status_' + config, v);
-	set_visible('client_certificate_' + config, v);
-	set_visible('client_key_status_' + config, v);
-	set_visible('client_key_' + config, v);
-
-	v = (isset('ovpn_auth_' + config, 'pem') && isset('ovpn_mode_' + config, 'server'));
-	set_visible('dh_status_' + config, v);
-	set_visible('dh_' + config, v);
-	set_visible('openvpn_dh_' + config, v);
-}
-
-function get_config(name)
-{
-	var a = name.split("_");
-	return a[a.length - 1];
+	v = isset('openvpn_cli_auth', 'cert');
+	set_visible('certificate_status', v);
+	set_visible('certificate', v);
 	
+	v = isset('openvpn_cli_auth', 'pem');
+	set_visible('root_ca_status', v);
+	set_visible('root_ca', v);
+	set_visible('client_certificate_status', v);
+	set_visible('client_certificate', v);
+	set_visible('client_key_status', v);
+	set_visible('client_key', v);
+
+	hide('save');
+	show('save');
 }
 -->
 </script>
@@ -365,7 +107,69 @@ EOF
 display_form <<EOF
 onchange|modechange
 $install_package_button
-$OVPN
+start_form|@TR<<OpenVPN>>
+field|@TR<<Start VPN Connection>>
+select|openvpn_cli|$FORM_openvpn_cli
+option|0|@TR<<Disabled>>
+option|client|@TR<<Enabled>>
+end_form
+
+start_form|@TR<<Connection Settings>>|connection_settings|hidden
+field|@TR<<Server Address>>
+text|openvpn_cli_server|$FORM_openvpn_cli_server
+field|@TR<<Protocol>>
+select|openvpn_cli_proto|$FORM_openvpn_cli_proto
+option|udp|UDP
+option|tcp|TCP
+field|@TR<<Server Port (default: 1194)>>
+text|openvpn_cli_port|$FORM_openvpn_cli_port
+field|@TR<<Authentication Method>>
+onchange|modechange
+select|openvpn_cli_auth|$FORM_openvpn_cli_auth
+option|psk|@TR<<Preshared Key>>
+option|cert|@TR<<Certificate (PKCS12)>>
+option|pem|@TR<<Certificate (PEM)>>
+end_form
+
+#PreShared Key
+start_form|@TR<<Authentication>>|authentication|hidden
+field|@TR<<Preshared Key Status>>|psk_status|hidden
+$(empty "$NOPSK" || echo 'string|<span style="color:red">@TR<<No Keyfile uploaded yet!>></span>')
+$(empty "$UPLOAD_PSK" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
+$(empty "$NOPSK" && echo 'string|@TR<<Found Installed Keyfile>>')
+field|@TR<<Upload Preshared Key>>|psk|hidden
+upload|openvpn_pskfile
+
+#PKCS12 Cert
+field|@TR<<Certificate Status>>|certificate_status|hidden
+$(empty "$NOCERT" || echo 'string|<span style="color:red">@TR<<No Certificate uploaded yet!>></span>')
+$(empty "$UPLOAD_CERT" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
+$(empty "$NOCERT" && echo 'string|@TR<<Found Installed Certificate.>>')
+field|@TR<<Upload PKCS12 Certificate>>|certificate|hidden
+upload|openvpn_pkcs12file
+
+# PEM Cert
+field|@TR<<Certificate Status>>|root_ca_status|hidden
+$(empty "$NOROOTCACERT" || echo 'string|<span style="color:red">@TR<<Root CA certificate uploaded yet!>></span>')
+$(empty "$UPLOAD_ROOTCACERT" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
+$(empty "$NOROOTCACERT" && echo 'string|@TR<<Found Installed Certificate.>>')
+field|@TR<<Upload Root CA certificate>>|root_ca|hidden
+upload|openvpn_rootcafile
+
+field|@TR<<Certificate Status>>|client_certificate_status|hidden
+$(empty "$NOCLIENTCERT" || echo 'string|<span style="color:red">@TR<<No client certificate uploaded yet!>></span>')
+$(empty "$UPLOAD_CLIENTCERT" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
+$(empty "$NOCLIENTCERT" && echo 'string|@TR<<Found Installed Certificate.>>')
+field|@TR<<Upload Client Certificate>>|client_certificate|hidden
+upload|openvpn_clientcertfile
+
+field|@TR<<Certificate Status>>|client_key_status|hidden
+$(empty "$NOCLIENTKEY" || echo 'string|<span style="color:red">@TR<<No client key uploaded yet!>></span>')
+$(empty "$UPLOAD_CLIENTKEY" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
+$(empty "$NOCLIENTKEY" && echo 'string|@TR<<Found installed client key.>>')
+field|@TR<<Upload Client Key>>|client_key|hidden
+upload|openvpn_clientkeyfile
+end_form
 
 EOF
 

@@ -292,13 +292,7 @@ for iface in $system_ifaces; do
 		eval FORM_network_iface="\$FORM_network_$iface"
 		if [ "$FORM_network_iface" = "" ]; then
 			for network in $networks; do
-				config_get type $network type
-				if [ "$type" = "bridge" ]; then
-					#Use device to get the ifname of a bridged connection
-					config_get network_ifname $network device
-				else
-					eval network_ifname="\$ifnames_$network"
-				fi
+				eval network_ifname="\$ifnames_$network"
 				echo $network_ifname |grep -q "$iface"
 				if [ "$?" = "0" ]; then
 					FORM_network_iface="$network"
@@ -309,13 +303,7 @@ for iface in $system_ifaces; do
 			for network in $networks; do
 				changed_ifname=0
 				interfaces=""
-				config_get type $network type
-				if [ "$type" = "bridge" ]; then
-					#Use device to get the ifname of a bridged connection
-					config_get network_ifname $network device
-				else
-					eval network_ifname="\$ifnames_$network"
-				fi
+				eval network_ifnames="\$ifnames_$network"
 				echo $network_ifnames |grep -q "$iface"
 				if [ "$?" = "0" ]; then
 					if [ "$FORM_network_iface" != "$network" ]; then

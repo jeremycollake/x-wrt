@@ -16,15 +16,15 @@ libdir=/usr/lib/webif
 wwwdir=/www
 cgidir=/www/cgi-bin/webif
 rootdir=/cgi-bin/webif
+indexpage=index.sh
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
 
 categories() {
-	grep '##WEBIF' $cgidir/.categories $cgidir/*.sh 2>/dev/null | \
+	grep '##WEBIF:' $cgidir/.categories $cgidir/*.sh 2>/dev/null | \
 		awk -v "selected=$1" \
-			-v "USER=$REMOTE_USER" \
 			-v "rootdir=$rootdir" \
-			-f /usr/lib/webif/common.awk \
+			-v "indexpage=$indexpage" \
 			-f /usr/lib/webif/categories.awk -
 }
 
@@ -34,8 +34,6 @@ subcategories() {
 		sort -n | \
 		awk -v "selected=$2" \
 			-v "rootdir=$rootdir" \
-			-v "USER=$REMOTE_USER" \
-			-f /usr/lib/webif/common.awk \
 			-f /usr/lib/webif/subcategories.awk -
 }
 
@@ -161,7 +159,7 @@ Pragma: no-cache
 	<meta http-equiv="expires" content="-1" />
 	<script type="text/javascript" src="/js/styleswitcher.js"></script>
 $header_inject_head</head>
-<body $4>$header_inject_body
+<body>$header_inject_body
 
 <div id="container">
 <div id="header">

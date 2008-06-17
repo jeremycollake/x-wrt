@@ -7,8 +7,6 @@ subcategories() {
 	sed -n '/:/{s/:.*//;s/^ *\(.*\)/##WEBIF:name:Graphs:2:graphs_if_Traffic#Traffic\>\> \1@TR\<\<:graphs-if.sh?if=\1/;p}'
 	) | \
 	awk -v "selected=$2" \
-	-v "USER=$REMOTE_USER" \
 	-v "rootdir=$rootdir" \
-	-f /usr/lib/webif/common.awk \
 	-f /usr/lib/webif/subcategories.awk -
 }
