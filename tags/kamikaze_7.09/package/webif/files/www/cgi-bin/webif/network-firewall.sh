@@ -335,7 +335,7 @@ END {
 	print "<br /><br />"
 	print "<div class=\\"settings-help\\" style=\\"margin-left:0;\\">"
 	print "<h4>@TR<<Firewall>>:</h4>"
-	print "<p>@TR<<firewall_help_general|Here you can forward ports and more. If you wish to manually configure these instead, make your modifications to '/etc/config/firewall'.>></p>"
+	print "<p>@TR<<firewall_help_general|Here you can forward ports and more. If you wish to manually configure these instead, make your modifications to '/etc/firewall.user.>></p>"
 	print "<h4>@TR<<Forwarding a port>>:</h4>"
 	print "<p>@TR<<firewall_help_fw_port_example1|If you would like to forward port 999 TCP from the internet to a local computer at 192.168.1.100, it might look like below:>></p>"
 	print "<p>@TR<<firewall_help_fw_port_example|Destination ports: 999 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Target: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: &lt;blank&gt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protocol: TCP>></p>"
