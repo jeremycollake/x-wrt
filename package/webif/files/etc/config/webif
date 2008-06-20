@@ -7,7 +7,7 @@ config webif general
 	option use_progressbar ""
 
 config webif theme
-	option id "xwrt"
+	option id "clubman"
 
 config webif qos
 	option show_advanced_rules "0"

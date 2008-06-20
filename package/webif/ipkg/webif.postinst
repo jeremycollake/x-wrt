@@ -56,16 +56,6 @@ DeleteRepository()
 #########################################################################################
 # entry point
 
-# initialize default webif theme
-# create symlink to /www/themes/clubman (do NOT use INSTROOT in first arg).
-rm -rf "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
-ln -sf "/www/themes/clubman" "${IPKG_INSTROOT}/www/themes/active" >&- 2>&-
-[ $? != 0 ] && {
-	# if fs doesn't support symlinks, do a copy
-	mkdir -p "${IPKG_INSTROOT}/www/themes/active"
-	cp -r "${IPKG_INSTROOT}/www/themes/clubman/" "${IPKG_INSTROOT}/www/themes/active/"
-}
-
 # initialize webifmetabin binaries
 # todo: move back to makefile because this won't be cleaned up good
 ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/bstrip"
