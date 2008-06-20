@@ -123,7 +123,7 @@ start() {
 				if [ "$CONFIG_ovpn_auth" = "pem" ]; then
 					append args "--tls-client"
 				fi
-				append args "--client --remote $CONFIG_client_ipaddr --nobind"
+				append args "--remote $CONFIG_ovpn_ipaddr --nobind"
 			;;
 			server)
 				if [ -z "$CONFIG_ovpn_local" ]; then
@@ -149,7 +149,7 @@ start() {
 }
 
 stop() {
-	for i in "/var/run/webifopenvpn.pid*"; do
+	for i in $(ls /var/run/webifopenvpn.pid*); do
 		webifopenvpn_pid=$(cat "$i" 2>/dev/null)
 		[ -n "$webifopenvpn_pid" ] && [ -d /proc/$webifopenvpn_pid ] && kill -TERM $webifopenvpn_pid 2>/dev/null
 	done
