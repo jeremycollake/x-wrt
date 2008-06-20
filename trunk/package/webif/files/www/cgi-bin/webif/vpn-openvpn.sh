@@ -265,7 +265,7 @@ for config in $openvpnconfigs; do
 	checkbox|ovpn_persistkey_$config|$FORM_ovpn_persistkey|1
 	helpitem|Persistant Key
 	helptext|HelpText Persistant Key#Don't re-read key files across SIGUSR1 or ping-restart.
-	field|@TR<<client-to-client>>
+	field|@TR<<client-to-client>>|field_client_to_client_$config|hidden
 	checkbox|ovpn_client_to_client_$config|$FORM_ovpn_client_to_client|1
 	helpitem|Client to Client
 	helptext|HelpText Client to Client#When this option is used, each client will "see" the other clients which are currently connected. Otherwise, each client will only see the server.
@@ -322,13 +322,14 @@ function modechange2(config)
 
 	v = (isset('ovpn_mode_' + config, 'server') && checked('ovpn_enabled_' + config + '_1'));
 	set_visible('advanced_option_' + config, v);
+	set_visible('field_client_to_client_' + config, v);
 	set_visible('ovpn_advanced_' + config, v);
 	set_visible('local_' + config, v);	
 	set_visible('remote_' + config, v);
 
 	v = (isset('ovpn_mode_' + config, 'client') && checked('ovpn_enabled_' + config + '_1'));
 	set_visible('ipaddr_' + config, v);
-
+	set_visible('advanced_option_' + config, v);
 
 	v = isset('ovpn_auth_' + config, 'psk');
 	set_visible('psk_status_' + config, v);
