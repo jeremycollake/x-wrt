@@ -67,11 +67,6 @@ if [ -e ${IPKG_INSTROOT}/etc/openwrt_version ]; then
 	revision="`cat ${IPKG_INSTROOT}/etc/openwrt_version`"
 fi
 if [ "$revision" = "" ]; then
-	grep -q "7.07" "${IPKG_INSTROOT}/etc/banner"
-	[ $? = 0 ] && {
-		revision="7.07"
-	}
-
 	grep -q "7.09" "${IPKG_INSTROOT}/etc/banner"
 	[ $? = 0 ] && {
 		revision="7.09"
