@@ -201,7 +201,7 @@ for config in $openvpnconfigs; do
 	end_form
 
 	start_form|@TR<<Authentication>>|authentication_$config
-	field|@TR<<Preshared Key Status>>|psk_statusovpn|hidden
+	field|@TR<<Preshared Key Status>>|psk_status_$config|hidden
 	$(empty "$NOPSK" || echo 'string|<span style="color:red">@TR<<No Keyfile uploaded yet!>></span>')
 	$(empty "$UPLOAD_PSK" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
 	$(empty "$NOPSK" && echo 'string|@TR<<Found Installed Keyfile>>')
