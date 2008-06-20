@@ -9,6 +9,25 @@ start() {
 . /lib/config/uci.sh
 . /usr/lib/webif/functions.sh
 uci_load "webif"
+	# initialize default webif theme
+	if [ ! -e /www/themes/active ]; then
+		config_get newtheme theme id
+		# if theme isn't present, then install it		
+		! exists "/www/themes/$newtheme/webif.css" && {
+			install_package "webif-theme-$newtheme"	
+		}
+		if ! exists "/www/themes/$newtheme/webif.css"; then
+			rm -rf "/www/themes/active"
+			ln -sf "/www/themes/clubman" "/www/themes/active"
+		else
+			# create symlink to new active theme if its not already set right
+			current_theme=$(ls /www/themes/active -l | cut -d '>' -f 2 | sed s/'\/www\/themes\/'//g)
+			! equal "$current_theme" "$newtheme" && {
+				rm /www/themes/active
+				ln -s /www/themes/$newtheme /www/themes/active
+			}
+		fi
+	fi
 
 	#detect device
 	device_name="$CONFIG_general_device_name"
