@@ -1,6 +1,8 @@
 #!/usr/bin/lua
 --require("cinit")
---require("common")
+package.cpath = "?;./?.so;/usr/share/internet-wifi/lib.so/?.so;/usr/lib/lua/*.so" .. package.cpath 
+package.path = "?;./?.lua;/usr/share/internet-wifi/?.lua;/usr/share/internet-wifi/lib/?.lua;/usr/share/internet-wifi/pkgs/?.lua;" .. package.path 
+require("common")
 wwwprint = print
 if __WWW then
   wwwprint = function (x)
@@ -8,6 +10,7 @@ if __WWW then
   end
 end
 first = false
+
 function install(pkg_list)
   require("webpkg")
   pkg.check(pkg_list)

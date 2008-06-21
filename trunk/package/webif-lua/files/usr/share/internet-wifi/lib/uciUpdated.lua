@@ -13,6 +13,7 @@
 require("common")
 require("form")
 require("validate")
+require("uci_iwaddon")
 uciUpdatedClass = {} 
 uciUpdatedClass_mt = {__index = uciUpdatedClass} 
 
@@ -24,6 +25,22 @@ function uciUpdatedClass.new ()
 end 
 
 function uciUpdatedClass:countUpdated()
+--
+-- this is a very bad idea for security reasons...
+-- but i keep it until i can think something more ...
+-- or somebody suggests something...
+--
+  for i=1, #__UCI_MSG do 
+    if __UCI_MSG[i]["cmd"] == "set" then
+      uci.set(__UCI_MSG[i]["var"].."="..__UCI_MSG[i]["val"])
+    elseif __UCI_MSG[i]["cmd"] == "add" then
+      uci.add(__UCI_MSG[i]["var"].."="..__UCI_MSG[i]["val"])
+    elseif __UCI_MSG[i]["cmd"] == "del" then
+      uci.delete(__UCI_MSG[i]["var"])
+    else
+      print("Error :"..__UCI_MSG[i]["cmd"],__UCI_MSG[i]["var"],__UCI_MSG[i]["val"])
+    end
+  end
   for i=1, #__UCI_CMD do
     if __UCI_CMD[i].cmd == "snw" and __FORM.UCI_SET_VALUE ~= "" then
       __UCI_CMD[i].cmd = "set"
@@ -37,10 +54,12 @@ function uciUpdatedClass:countUpdated()
 		    os.execute("echo \"config '"..grp.."' '"..name.."'\" >>/tmp/.uci/"..__UCI_CMD[i].varname)
 		  else
         if name == "" then
-          os.execute("uci add "..__UCI_CMD[i].varname.." "..grp.." > /dev/null 2>&1")
+          uci.add(__UCI_CMD[i].varname,grp)
+--          os.execute("uci add "..__UCI_CMD[i].varname.." "..grp.." > /dev/null 2>&1")
 --          os.execute("uci add "..self.__PACKAGE.." "..grp)
         else
-          os.execute("uci set "..__UCI_CMD[i].varname.."."..name.."="..grp.." > /dev/null 2>&1")
+          uci.set(__UCI_CMD[i].varname,name,grp)
+--          os.execute("uci set "..__UCI_CMD[i].varname.."."..name.."="..grp.." > /dev/null 2>&1")
 --          os.execute("uci set "..self.__PACKAGE.."."..name.."="..grp)
         end
 		  end
@@ -48,33 +67,46 @@ function uciUpdatedClass:countUpdated()
       if __UCI_VERSION == nil then 
         os.execute("uci "..__UCI_CMD[i].cmd.." "..__UCI_CMD[i].varname)
       else
-        os.execute("uci "..__UCI_CMD[i].cmd.." "..__UCI_CMD[i].varname)
+        uci.delete(__UCI_CMD[i].varname)
+--        os.execute("uci "..__UCI_CMD[i].cmd.." "..__UCI_CMD[i].varname)
       end
     end
   end
+--
+-- End security risk
+--
+
 	for i, v in ipairs(__TOCHECK) do
 --	   v = string.gsub(v,"-","___")
+--[[
 		local uci_val = io.popen("uci get "..v)
 		local uci_value = string.trim(uci_val:read())
 		uci_val:close()
+]]--
+		local uci_value = uci.get(v)
 		if uci_value == nil then uci_value = "" end
 		if __FORM[v] == nil then __FORM[v] = "" end
+--		__FORM[v] = string.trim(__FORM[v])
+--    print(uci_value,__FORM[v])
+    
 		local error = validate(__FORM["val_lbl_"..v],__FORM[v],__FORM["val_str_"..v],v)
 		if error ~=nil then __ERROR[#__ERROR+1] = error end
 		if __FORM[v] ~= uci_value and error==nil then
 			if __FORM[v] == "" then 
-				os.execute("uci del "..v)
+--				os.execute("uci del "..v)
+				uci.del(v)
 			else
-				os.execute("uci set "..v.."="..__FORM[v])
+--				os.execute("uci set "..v.."="..__FORM[v])
+        uci.set(v.."="..__FORM[v])
 			end
 		end
 	end
-	self["count"] = 0
+	uci.save()
+
+	self["count"] = 0 --uci.changes()
 	local BUFSIZE = 2^13     -- 8K
 	assert(os.execute("mkdir /tmp/.uci > /dev/null 2>&1"))
 	local filelist = assert(io.popen("ls /tmp/.uci")) 
---	if filelist == 2 then  end
---	filelist = assert(io.popen("ls /tmp/.uci/"))
 	for filename in filelist:lines() do
 		local lc = 0
 		local f = io.input("/tmp/.uci/"..filename)   -- open input file
