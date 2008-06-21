@@ -351,6 +351,13 @@ function get_post()
         __UCI_CMD[#__UCI_CMD].varname = string.sub(key,12)
         __UCI_CMD[#__UCI_CMD].value = value 
       end
+      if string.match(key, "UCI_MSG_") then
+        __UCI_MSG[#__UCI_MSG+1] = {}
+        __UCI_MSG[#__UCI_MSG]["cmd"] = string.sub(key,9,11)
+--        __UCI_MSG[#__UCI_MSG]["cmd"] = string.sub(__UCI_MSG[#__UCI_MSG]["cmd"],9,11)
+        __UCI_MSG[#__UCI_MSG]["var"] = string.sub(key,12)
+        __UCI_MSG[#__UCI_MSG]["val"] = value
+      end
 			post[key]=value
 		end
 	end

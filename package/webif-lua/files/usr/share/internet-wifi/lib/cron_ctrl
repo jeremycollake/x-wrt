@@ -10,7 +10,7 @@
   Output files
     /etc/crontabs/root
 ]]--
-package.path = package.path .. ";/usr/lib/webif/LUA/?.lua;/usr/share//lua/5.1/?.lua"
+package.path = package.path .. ";/usr/share/internet-wifi/lib/?.lua;"
 -- Common Functions
 require("common")
 

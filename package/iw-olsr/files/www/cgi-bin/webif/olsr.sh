@@ -25,6 +25,13 @@ elseif option == "hna4" then
   forms[1] = olsrd.hna4_form()
 elseif option == "interfaces" then
   forms[1] = olsrd.interfaces_form()
+elseif option == "plugin" then
+  if __FORM["plname"] == nil then
+    forms[1] = olsrd.plugin_list_form()
+--    forms[2] = olsrd.add_plugin_form()
+  else
+    forms[1] = olsrd.plugins_form()
+  end
 elseif option == "status" then
   page.__DOCTYPE = ""
   page.form = ""
@@ -40,10 +47,15 @@ else
 end
 print(page:header())
 print(str_content)
-forms[#forms]:Add_help_link("http://www.olsr.org","About OLSR" )
+--forms[#forms]:Add_help_link("http://www.olsr.org","About OLSR" )
 if #forms > 0 then
   for i=1, #forms do
     forms[i]:print()
   end
 end
+--[[
+for i,v in pairs(__FORM) do
+  print(i,v,"<br/>")
+end
+]]--
 print(page:footer())

@@ -1,6 +1,7 @@
 require("iw-uci")
 require("iwuci")
 require("net")
+require("uci_iwaddon")
 
 parser = {}
 local P = {}
@@ -21,12 +22,19 @@ local net = net
 local tonumber = tonumber
 local os = os
 local tr = tr
+local uci = uci
 
 -- no more external access after this point
 setfenv(1, P)
-local olsr = uciClass.new("olsr")
-local network = uciClass.new("network")
-local wireless = uciClass.new("wireless")
+--local olsr = uciClass.new("olsr")
+--local network = uciClass.new("network")
+--local wireless = uciClass.new("wireless")
+
+uci.commit("olsr")
+
+local olsr = uci.get_all("olsr")
+local network = uci.get_all("network")
+local wireless = uci.get_all("wireless")
 
 enable    = tonumber(olsr.webadmin.enable)    or 0
 userlevel = tonumber(olsr.webadmin.userlevel) or 0
@@ -38,19 +46,19 @@ local ctrl_file   = "/var/etc/olsrd.ctrl"
 exe_after  = {} -- execute os process after all apply process
 --exe_after["/usr/lib/webif/LUA/olsr/netinit.sh"]="Networks"
 exe_after["/etc/init.d/network restart"]="Networks"
+exe_after["wifi"]="Wifi"
 name = "OLSR"
 script = "olsrd"
 init_script = "/etc/init.d/olsrd"
 
 function process()
---  wwwprint("Committing olsr...")
-  iwuci.commit("olsr")
-  write_init()
   wwwprint(name.." Parsers...")
   write_config()
+  write_init()
 end
 
 function write_init()
+  local wififace = uci.get("olsr","webadmin","device")
   local initfile =[[#!/bin/sh /etc/rc.common
 START=50
 
@@ -62,11 +70,6 @@ RUN_D=/var/run
 PID_F=$RUN_D/$BIN.pid
 CRONSET="* * * * * /usr/share/internet-wifi/pkgs/olsr/minute.cron"
 
-write_config_lua () {
-  /usr/lib/webif/LUA/olsr/parsers
-		USE_CONF_F="$CONF_F"
-}
-  
 start() {
 	include /lib/network
 	scan_interfaces
@@ -76,7 +79,7 @@ start() {
 	config_get WANDEV wan device
 	config_get LAN lan ifname
   
-  WIFI=wl0  
+  WIFI=]]..wififace..[[  
   # Allow connections to olsr info port.
   iptables        -A input_wan      -p tcp --dport 1979 -j ACCEPT
   # OLSR needs port 698 to transmit state messages. 
@@ -86,9 +89,6 @@ start() {
 
   iptables -A forwarding_rule -i $WAN -o $WIFI -j ACCEPT
   iptables -A forwarding_rule -i $WIFI -o $WAN -j ACCEPT
-
-  iptables -A forwarding_rule -i $WAN -o $LAN -j ACCEPT
-  iptables -A forwarding_rule -i $LAN -o $WAN -j ACCEPT
   # For forwarding LAN & WIFI in nodes
   iptables -A forwarding_rule -i $LAN -o $WIFI -j ACCEPT
   iptables -A forwarding_rule -i $WIFI -o $LAN -j ACCEPT
@@ -103,6 +103,7 @@ start() {
   iptables -t nat -A POSTROUTING -o $WIFI -j MASQUERADE
   iptables -t nat -A POSTROUTING -o $WAN -j MASQUERADE
   iptables -t nat -A POSTROUTING -o $LAN -j MASQUERADE
+  
   /usr/share/internet-wifi/lib/cron_ctrl add "$CRONSET"
 
 	$BIN -f "$USE_CONF_F" -nofork $OPTIONS &
@@ -124,183 +125,252 @@ end
 
 function write_config()
   local str_olsrconf = ""
-  wwwprint ("Writing "..output_file)
 --  olsr = uciClass.new("olsr")
+  olsr = uci.get_all("olsr")
+-- Network Setting --
   local set_netname = olsr.webadmin.netname or "olsrnet"
   local set_nodenumber = olsr.webadmin.nodenumber or "1"
+  local set_netaddr = olsr.webadmin.ipaddr or "10.128."..set_nodenumber..".1"
+  local set_netmask = olsr.webadmin.netmask or "255.255.0.0"
+
+  wwwprint(tr("Setting networks"))
+  network = uci.get_all("network")
+  if network[set_netname] == nil then 
+    uci.set("network",set_netname,"interface")
+  end
+  uci.set("network",set_netname,"ipaddr",set_netaddr)
+--  wwwprint(tr("Set ipaddress").." "..set_netaddr)
+  uci.set("network",set_netname,"netmask",set_netmask)
+--  wwwprint(tr("Set netmask").." "..set_netmask)
+  uci.set("network",set_netname,"proto","static")
+--  wwwprint(tr("Set proto").." static")
+  uci.set("network",set_netname,"dns","204.225.44.3")
+--  wwwprint(tr("Set DNS").." static")
+  uci.commit("network")
+  os.execute("rm /tmp/.uci/network 2> /dev/null")
+--  os.execute("/etc/init.d/network restart")
+-- Wireless --
   local set_device = olsr.webadmin.device or "wl0"
   local set_ssid = olsr.webadmin.ssid or "X-Wrt"
   local set_channel = olsr.webadmin.channel or "6"
 
-  if network[set_netname] == nil then 
-    network:set("interface",set_netname) end
-  wwwprint(tr("Setting networks"))
-  wwwprint(tr("Set device ")..set_netname)
-  local set_netaddr = olsr.webadmin.ipaddr or "10.128."..set_nodenumber..".1"
-  wwwprint(tr("Set ipaddress ")..set_netaddr)
-  
-  local set_netmask = olsr.webadmin.netmask or "255.255.0.0"
-  wwwprint(tr("Set netmask ")..set_netmask)
-  iwuci.set("network."..olsr.webadmin.netname..".ipaddr",set_netaddr)
-  iwuci.set("network."..olsr.webadmin.netname..".netmask",set_netmask)
-  iwuci.set("network."..olsr.webadmin.netname..".proto","static")
-  wwwprint(tr("Set proto static"))
--- in some situations this need fix and put dynamic dns configuration from olsr network
-  iwuci.set("network."..olsr.webadmin.netname..".dns","204.225.44.3")
-  wififace = wireless["wifi-iface"]
-  wwwprint(tr("Setting Wireless "))
-  wwwprint(tr("Set SSID ")..set_ssid)
-  wwwprint(tr("Set Network ")..set_netname)
-  wwwprint(tr("Set Mode ").."AdHoc")
-  wwwprint(tr("Set Channel ")..set_channel)
-  wwwprint(tr("Enabling Wireless"))
-
+  wwwprint(tr("Setting Wireless"))
+  local wififace = uci.get_type("wireless","wifi-iface")
+--  wwwprint("algo",#wififace)
   for i=1, #wififace do
-    if wififace[i].values.device == set_device then
-      iwuci.set(wififace[i].name..".ssid",set_ssid)
-      iwuci.set(wififace[i].name..".network",set_netname)
-      iwuci.set(wififace[i].name..".mode","adhoc")
-      iwuci.set("wireless."..set_device..".channel",set_channel)
-      iwuci.set("wireless."..set_device..".disabled","0")
+    if wififace[i].device == set_device then
+      uci.set("wireless",wififace[1][".name"],"ssid",set_ssid)
+--      wwwprint(tr("Set SSID").." "..set_ssid)
+      uci.set("wireless",wififace[1][".name"],"network",set_netname)
+--      wwwprint(tr("Set Network").." "..set_netname)
+      uci.set("wireless",wififace[1][".name"],"mode","adhoc")
+--      wwwprint(tr("Set Mode").." ".."AdHoc")
+      uci.set("wireless",set_device,"channel",set_channel)
+--      wwwprint(tr("Set Channel").." "..set_channel)
+      uci.set("wireless",set_device,"disabled","0")
+--      wwwprint(tr("Enabling Wireless"))
       break
     end
   end
-  iwuci.commit("olsrd")
-  iwuci.commit("network")
-  iwuci.commit("wireless")
-  olsr = uciClass.new("olsr")
+  uci.commit("wireless")
+  os.execute("rm /tmp/.uci/wireless 2> /dev/null")
+--  os.execute("wifi")
+-- olsr --
+
+--  olsr = uciClass.new("olsr")
+  olsr = uci.get_all("olsr")
+  if olsr.webadmin == nil then uci.set("olsr","webadmin","websettings") end
+  if olsr.general == nil then uci.set("olsr","general","olsr") end
+  uci.set("olsr","webadmin","netname",set_netname)
+  uci.set("olsr","webadmin","nodenumber",set_nodenumber)
+  uci.set("olsr","webadmin","netmask", set_netmask)
+  uci.set("olsr","webadmin","ipaddr", set_netaddr)
+  uci.set("olsr","webadmin","device", set_device)
+  uci.set("olsr","webadmin","ssid", set_ssid)
+  uci.set("olsr","webadmin","channel", set_channel)
+  uci.set("olsr","webadmin","enable", enable)
+--  wwwprint("general settings")
+  if uci.get("olsr","general","UseHysteresis") == nil then
+    uci.get("olsr","general","UseHysteresis","no") end
+  if uci.get("olsr","general","LinkQualityFishEye") == nil then
+    uci.get("olsr","general","LinkQualityFishEye","1") end
+  if uci.get("olsr","general","IpVersion") == nil then
+    uci.get("olsr","general","IpVersion","4") end
+  if uci.get("olsr","general","AllowNoInt") == nil then
+    uci.get("olsr","general","AllowNoInt","yes") end
+  if uci.get("olsr","general","TcRedundancy") == nil then
+    uci.get("olsr","general","TcRedundancy","2") end
+  if uci.get("olsr","general","LinkQualityLevel") == nil then
+    uci.get("olsr","general","LinkQualityLevel","2") end
+  if uci.get("olsr","general","MprCoverage") == nil then
+    uci.get("olsr","general","MprCoverage","7") end
+  if uci.get("olsr","general","LinkQualityWinSize") == nil then
+    uci.get("olsr","general","LinkQualityWinSize","100") end
+  if uci.get("olsr","general","LinkQualityDijkstraLimit") == nil then
+    uci.get("olsr","general","LinkQualityDijkstraLimit","0 9.0") end
+  if uci.get("olsr","general","DebugLevel") == nil then
+    uci.get("olsr","general","DebugLevel","0") end
+  if uci.get("olsr","general","Pollrate") == nil then
+    uci.get("olsr","general","Pollrate","0.025") end
+  if uci.get("olsr","general","TosValue") == nil then
+    uci.get("olsr","general","TosValue","16") end
+  local interfaces = uci.get_type("olsr","Interface")
+  if interfaces == nil then
+    interface = uci.add("olsr","Interface")
+    uci.set("olsr",interface,"Interface",set_device)
+    uci.save("olsr")
+  end
+  
+--   
+  local iok = false
+  interfaces = uci.get_type("olsr","Interface")
+--  wwwprint("interface settings")
+  for i=1, #interfaces do
+    if uci.get("olsr",interfaces[i][".name"],"MidValidityTime") == nil then
+      uci.set("olsr",interfaces[i][".name"],"MidValidityTime","324.0") end
+    if uci.get("olsr",interfaces[i][".name"],"TcInterval") == nil then
+      uci.set("olsr",interfaces[i][".name"],"TcInterval","4.0") end
+    if uci.get("olsr",interfaces[i][".name"],"HnaValidityTime") == nil then
+      uci.set("olsr",interfaces[i][".name"],"HnaValidityTime","108.0") end
+    if uci.get("olsr",interfaces[i][".name"],"HelloValidityTime") == nil then
+      uci.set("olsr",interfaces[i][".name"],"HelloValidityTime","108.0") end
+    if uci.get("olsr",interfaces[i][".name"],"TcValidityTime") == nil then
+      uci.set("olsr",interfaces[i][".name"],"TcValidityTime","324.0") end
+    if uci.get("olsr",interfaces[i][".name"],"HnaInterval") == nil then
+      uci.set("olsr",interfaces[i][".name"],"HnaInterval","18.0") end
+    if uci.get("olsr",interfaces[i][".name"],"HelloInterval") == nil then
+      uci.set("olsr",interfaces[i][".name"],"HelloInterval","6.0") end
+    if uci.get("olsr",interfaces[i][".name"],"MidInterval") == nil then
+      uci.set("olsr",interfaces[i][".name"],"MidInterval","18.0") end
+    if uci.get("olsr",interfaces[i][".name"],"AutoDetectChanges") == nil then
+      uci.set("olsr",interfaces[i][".name"],"AutoDetectChanges","yes") end
+
+    if #interfaces == 1 then 
+      uci.set("olsr",interfaces[i][".name"],"Interface",set_device)
+    else
+      if uci.get("olsr",interfaces[i][".name"],"Interface") == set_device then
+        iok = true
+        break
+      end
+    end
+  end          
+  uci.save("olsr")
+  uci.commit("olsr")
+  os.execute("rm /tmp/.uci/olsr 2> /dev/null")
+--  wwwprint("end config checking...")
   if tonumber(olsr.webadmin.userlevel) < 2 then
-    str_olsrconf = [[
-DebugLevel 0
-UseHysteresis no
-LinkQualityFishEye 1
-IpVersion 4
-AllowNoInt yes
-TcRedundancy 2
-LinkQualityLevel 2
-MprCoverage 7
-LinkQualityWinSize 100
-TosValue 16
-LinkQualityDijkstraLimit 0 9.0
-Pollrate 0.025
-
-LoadPlugin "olsrd_dyn_gw.so.0.4"
-{
-	PlParam     "Ping"       "141.1.1.1"
-	PlParam     "Ping"       "194.25.2.129"
-}
-
-LoadPlugin "olsrd_nameservice.so.0.3"
-{
-	PlParam "hosts-file" "/var/etc/hosts"
-	PlParam "name" "12-ola-gs"
-	PlParam "suffix" ".olsr"
-}
-
-LoadPlugin "olsrd_txtinfo.so.0.1"
-{
-	PlParam "Accept" "127.0.0.1"
-}
-
-Interface  "]]..olsr.webadmin.device..[["
-{
-	HelloInterval 6.0
-	MidValidityTime 324.0
-	TcInterval 4.0
-	AutoDetectChanges yes
-	HnaValidityTime 108.0
-	HelloValidityTime 108.0
-	TcValidityTime 324.0
-	HnaInterval 18.0
-	MidInterval 18.0
-}
-]]
-    os.execute ("mkdir /var/etc 2>/dev/null")
-    os.execute ("echo '"..string.len(str_olsrconf).."' > "..ctrl_file)
-    os.execute ("echo '"..str_olsrconf.."' > "..output_file)
-  else  
-    for i, v in pairs(olsr.general) do
-      str_olsrconf = str_olsrconf .. i .. " " .. v .. "\n"
-    end
-    local data, size = load_file(ctrl_file)
-    str_olsrconf = str_olsrconf .. "\n"
-
-    if olsr.Hna4 then
-      str_olsrconf = str_olsrconf .. "Hna4\n{\n"
-      for i,t in pairs(olsr.Hna4) do
-        if t.values.NetAddr ~= "0.0.0.0" then 
-          str_olsrconf = str_olsrconf .. '\t'.. t.values.NetAddr .. ' ' .. t.values.NetMask .. '\n'
---        else
---          if tonumber(connection()) > 0 then
---            str_olsrconf = str_olsrconf .. '\t'.. t.values.NetAddr .. ' ' .. t.values.NetMask .. '\n'
---          end
-        end
-      end
-      str_olsrconf = str_olsrconf .. "}\n\n"
-    end
-
-    if olsr.Hna6 then
-      str_olsrconf = str_olsrconf .. "Hna6\n{\n"
-      for i,t in pairs(olsr.Hna6) do
-        str_olsrconf = str_olsrconf .. '\t'.. t.values.NetAddr .. ' ' .. t.values.NetValue .. '\n'
-      end
-      str_olsrconf = str_olsrconf .. "}\n\n"
-    end
-
-    if olsr.IpcConnect then
-      str_olsrconf = str_olsrconf .. "IpConnect \n{\n"
-      if olsr.IpcConnect.MaxConnections then
-        str_olsrconf = str_olsrconf .. "\tMaxConnections " .. olsr.IpcConnect.MaxConnections .. "\n"
-      end
-      if olsr.ipcconnecthost then
-        for i=1, #olsr.ipcconnecthost do
-          for k,v in pairs(olsr.ipcconnecthost[i].values) do
-            str_olsrconf = str_olsrconf .. "\t" .. k .. " " .. v .. "\n"
-          end
-        end
-      end
-
-      if olsr.IpcConnect.Net then
-        str_olsrconf = str_olsrconf .. "\tNet " .. olsr.IpcConnect.Net .. "\n"
-      end
-      str_olsrconf = str_olsrconf .. "}\n\n"
-    end
-
-    for i,t in pairs(olsr.LoadPlugin) do
-      if string.match(t.values.Library,"olsrd_dyn_gw.so") 
-      and not string.match(t.values.Library, "olsrd_dyn_gw_plain.so") then
-        str_olsrconf = str_olsrconf .. "LoadPlugin \"".. t.values.Library .. "\"\n{\n"
-        str_olsrconf = str_olsrconf .. '\tPlParam     "Ping"       "141.1.1.1"\n'
-        str_olsrconf = str_olsrconf .. '\tPlParam     "Ping"       "194.25.2.129"\n'
-      else 
-        str_olsrconf = str_olsrconf .. "LoadPlugin \"".. t.values.Library .. "\"\n{\n"
-        for k,v in pairs(t.values) do
-          if k ~= "Library" then
-            if k == "hosts_file" then k = "hosts-file" end
-            str_olsrconf = str_olsrconf .. '\tPlParam "'.. k .. '" "' .. v .. '"\n'
-          end
-        end
-      end
-      str_olsrconf = str_olsrconf .. "}\n\n"
-    end
-
-    for i,t in pairs(olsr.Interface) do
-      str_olsrconf = str_olsrconf .. "Interface  \"".. t.values.Interface .. "\"\n{\n"
-      for k,v in pairs(t.values) do
-        if k ~= "Interface" then
-          str_olsrconf = str_olsrconf .. '\t'.. k .. ' ' .. v .. '\n'
-        end
-      end
-      str_olsrconf = str_olsrconf .. "}\n\n"
-    end
-    if size ~= string.len(str_olsrconf) then
-      os.execute ("mkdir /var/etc 2>/dev/null")
-      os.execute ("echo '"..string.len(str_olsrconf).."' > "..ctrl_file)
-      os.execute ("echo '"..str_olsrconf.."' > "..output_file)
+--    check_basic configuration
+  else
+  end  
+  
+  local sections = uci.get_all_types("olsr")
+  wwwprint ("Writing "..output_file)
+  local str_gral = ""
+  for k,v in pairs(sections.olsr[1]) do
+    if k ~= ".type"
+    and k ~= ".name" then
+      str_gral = str_gral..k.." "..v.."\n"
     end
   end
-  wwwprint ("olsrd.conf Ok")
---  os.execute("/usr/lib/webif/LUA/olsr/netinit.sh")
+  str_gral = str_gral.."\n"
+-- hna4 --
+  local str_hna4 = ""
+  if sections.Hna4 ~= nil and #sections.Hna4 > 0 then
+    for i = 1, #sections.Hna4 do
+      if sections.Hna4[i].NetAddr ~= nil 
+      and sections.Hna4[i].NetMask ~= nil then 
+        str_hna4 = str_hna4.."\t"..sections.Hna4[i].NetAddr.."\t"..sections.Hna4[i].NetMask.."\n"
+      end
+    end
+
+    if str_hna4 ~= "" then 
+      str_hna4 = "Hna4\n{\n"..str_hna4 .. "}\n\n"
+    end
+  end
+-- hna6 --
+  local str_hna6 = ""
+  if sections.Hna6 ~= nil and #sections.Hna6 > 0 then
+    for i = 1, #sections.Hna6 do
+      if sections.Hna6[i].NetAddr ~= nil and sections.Hna6[i].NetMask ~= nil then 
+        str_hna6 = str_hna6 .. "\t" .. sections.Hna6[i].NetAddr.."\t"..sections.Hna6[i].NetMask.."\n"
+      end
+    end
+    if str_hna6 ~= "" then
+      str_hna6 = "Hna6\n{\n"..str_hna6 .. "}\n"
+    end
+  end
+
+  local str_ipc = ""
+  if sections.ipc ~= nil then
+    str_ipc = "IpcConnect\n{\n"
+    for k, v in pairs(sections.ipc[1]) do
+      if k ~= ".type"
+      and k ~= ".name" then
+        str_ipc = str_ipc .. "\t" .. k .. "\t" .. v .."\n"
+      end
+    end
+    str_ipc = str_ipc .."\n"
+    if sections.ipcHost ~= nil then
+      for i = 1, #sections.ipcHost do
+        str_ipc = str_ipc .. "\tHost\t"..sections.ipcHost[i].Host.."\n"
+      end
+    end
+    str_ipc = str_ipc .."\n"
+    if sections.ipcNet ~= nil then
+      for i = 1, #sections.ipcNet do
+        str_ipc = str_ipc .. "\tNet\t"..sections.ipcNet[i].NetAddr.."\t"..sections.ipcNet[i].NetMask.."\n"
+      end
+    end
+    str_ipc = str_ipc .."}\n\n"
+  end
+
+  local str_plugins = ""
+  for i = 1, #sections.LoadPlugin do
+    local plugin = sections.LoadPlugin[i]
+    if io.exists("/usr/lib/"..plugin.Library) then
+    str_plugins = str_plugins.."LoadPlugin \""..plugin.Library.."\"\n{\n"
+    for k,v in pairs(plugin) do
+      if k ~= ".type"
+      and k ~= ".name"
+      and k ~= "Library" then
+        if k == "hosts_file" then k = "hosts-file" end
+        str_plugins = str_plugins .. "\tPlParam\t".."\""..k.."\"\t".."\""..v.."\"\n"
+      end
+    end
+    if sections[plugin[".name"]] ~= nil then
+      for j = 1, #sections[plugin[".name"]] do
+        for p, n in pairs(sections[plugin[".name"]][j]) do
+          if p ~= ".type"
+          and p ~= ".name" then
+            str_plugins = str_plugins.."\tPlParam\t\""..p.."\"\t\""..n.."\"\n"
+          end
+        end
+      end
+--    str_plugins = str_plugins.."\n"
+    end
+    str_plugins = str_plugins .. "}\n\n"
+    else
+      str_plugins = str_plugins.."###\n### CAUTION!!! this plugins is in your configuration file,\n### but is not Installed, plugin Name : "..plugin.Library.."\n###\n\n"
+    end    
+  end 
+
+  local str_interface = ""
+  for i=1, #sections.Interface do
+    local interface = sections.Interface[i]
+    str_interface = str_interface .. "Interface \""..interface.Interface.."\"\n{\n"
+    for k, v in pairs(interface) do
+      if k ~= ".type"
+      and k ~= ".name"
+      and k ~= "Interface" then
+        str_interface = str_interface .. "\t"..k.."\t"..v.."\n"
+      end
+    end
+    str_interface = str_interface .. "}\n"
+  end
+
+  str_interface = str_interface .. "\n"
+  os.execute ("echo '".."###Conf file writen by IW-OSRL package###\n\n"..str_gral..str_ipc..str_hna4..str_hna6..str_plugins..str_interface.."' > "..output_file)
+  wwwprint("Config file writed ok!")
 end
 
 return parser

@@ -4,6 +4,7 @@
 ]]--
 require("net")
 require("tbform")
+require("uci_iwaddon")
 
 olsrd = {}
 local P = {}
@@ -13,11 +14,13 @@ olsrd = P
 local io = io
 local os = os
 local pairs = pairs
+local pairsByKeys = pairsByKeys
 local assert = assert
 local string = string
 local tonumber = tonumber
 local net = net
-
+local uci = uci
+local __UCI_UPDATED = __UCI_UPDATED
 local uciClass = uciClass
 local menuClass = menuClass
 local __UCI_VERSION = __UCI_VERSION
@@ -30,6 +33,12 @@ local tbformClass = tbformClass
 -- no more external access after this point
 setfenv(1, P)
 
+if __FORM["Library_name"] and __FORM["Library_file"] then
+  uci.set("olsr",__FORM["Library_name"],"LoadPlugin")
+  uci.set("olsr",__FORM["Library_name"],"Library",__FORM["Library_file"])
+  uci.save("olsr")
+end
+
 local olsr = uciClass.new("olsr")
 if olsr.webadmin == nil then webadmin = olsr:set("websettings","webadmin") end
 --if olsr.general == nil then general = olsr:set("olsr","general") end 
@@ -39,15 +48,121 @@ if olsr.webadmin == nil then webadmin = olsr:set("websettings","webadmin") end
 local loc_userlevel = tonumber(olsr.webadmin.userlevel) or 0
 --local userlevel = tonumber(olsr.websettings.userlevel) or 0
 
+function get_installed_plugin(idxfile)
+  idxfile = idxfile or false
+  local t = {}
+  local ok = false
+  local config = uci.get_all("olsr")
+  local files = io.popen("ls /usr/lib/olsrd_*")
+  for line in files:lines() do
+    ok = true 
+    local name = string.gsub(line,".+olsrd_([a-zA-z0-9_]+)\.so.+","%1")
+    local library = string.gsub(line,"\/usr\/lib\/","") 
+    if idxfile == true then
+      t[library] = name
+    else
+      t[name] = library
+    end
+    if name == "dyn_gw" then
+      if config[name] == nil then
+        uci.set("olsr",name,"LoadPlugin")
+        uci.set("olsr",name,"Library",library)
+        uci.set("olsr",name,"Ping","141.1.1.1")
+        local extraparam = uci.add("olsr",name)
+        uci.set("olsr",extraparam,"Ping","194.25.2.129")
+      end
+    elseif name == "nameservice" then
+      if config[name] == nil then
+        local ip = uci.get("network",config.webadmin.netname,"ipaddr")
+        local host = "host"..string.gsub(ip,"(%d+)%.(%d+)%.(%d+)%.(%d+)","%4\.%1\-%2\-%3")
+        uci.set("olsr",name,"LoadPlugin")
+        uci.set("olsr",name,"Library",library)
+        uci.set("olsr",name,"hosts_file","/etc/hosts")
+        uci.set("olsr",name,"name",host)
+        uci.set("olsr",name,"suffix",".olsr")
+        uci.set("olsr",name,"lat","-27.448232")         
+        uci.set("olsr",name,"lon","-58.989523")
+      end
+    elseif name == "txtinfo" then
+      if config[name] == nil then 
+        uci.set("olsr",name,"LoadPlugin")
+        uci.set("olsr",name,"accept","127.0.0.1")
+      end
+
+    end
+    uci.save("olsr")
+  end
+  
+  if ok == false then
+    t = nil
+  end
+  return t
+end 
+
+function get_bad_plugin()
+  local plugin = uci.get_type("olsr","LoadPlugin")
+  local insplugin = get_installed_plugin(true)
+  local badplugin = {}
+  local ok = false
+  local confplugin = uci.get_all("olsr")
+
+  for i=1, #plugin do
+    local library = plugin[i].Library
+    local name = plugin[i][".name"]
+    if insplugin[library] == nil 
+    and io.exists("/usr/lib/"..library) == false then
+      badplugin[name] = library
+      ok = true
+--[[
+    else
+      local newname = string.gsub(library,".*olsrd_([a-zA-z0-9_]+)\.so.+","%1") 
+      if name ~= newname then
+        uci.set("olsr",newname,"LoadPlugin")
+        for k, v in pairs(confplugin[name]) do
+          if k ~= ".name"
+          and k ~= ".type" then
+            uci.set("olsr",newname,k,v)
+          end
+        end
+        uci.delete("olsr",name)
+        uci.commit("olsr")
+      end
+]]--
+    end
+  end
+
+  if ok == false then
+    badplugin = nil
+  end
+  return badplugin
+end
+
 function set_menu()
+  local tplugins = get_installed_plugin()
+  local badplugin = get_bad_plugin() 
   local user_level = loc_userlevel
+  local molsr = uci.get_all("olsr")
   __MENU.HotSpot.OLSR = menuClass.new()
   __MENU.HotSpot.OLSR:Add("Core","olsr.sh")
   if user_level > 1 then
-    __MENU.HotSpot.OLSR:Add("General","olsr.sh?option=general")
---  __MENU.HotSpot.OLSR:Add("Ip Connect","olsr.sh?option=ipconnect")
+    if user_level > 2 then __MENU.HotSpot.OLSR:Add("General","olsr.sh?option=general") end 
+--    __MENU.HotSpot.OLSR:Add("Ip Connect","olsr.sh?option=ipconnect")
     __MENU.HotSpot.OLSR:Add("Hna4","olsr.sh?option=hna4")
-    __MENU.HotSpot.OLSR:Add("Hna6","olsr.sh?option=hna6")
+--    __MENU.HotSpot.OLSR:Add("Hna6","olsr.sh?option=hna6")
+
+    if tplugins ~= nil or badplugin ~= nil then
+      __MENU.HotSpot.OLSR:Add("Plugins")
+      __MENU.HotSpot.OLSR.Plugins = menuClass.new()
+      if badplugin ~= nil then
+        __MENU.HotSpot.OLSR.Plugins:Add("Plugins List","olsr.sh?option=plugin")
+      end
+      
+      for n, file in pairsByKeys(tplugins) do
+        if molsr[n] ~= nil then
+          __MENU.HotSpot.OLSR.Plugins:Add(n,"olsr.sh?option=plugin&plname="..n.."&library="..file)
+        end
+      end
+    end
     __MENU.HotSpot.OLSR:Add("Interfaces","olsr.sh?option=interfaces")
   end
   __MENU.HotSpot.OLSR:Add("Status","olsr.sh?option=status")
@@ -81,6 +196,7 @@ function core_form()
 	form:Add("select",websettings[1].name..".userlevel",websettings_values.userlevel,"Configuration Mode","string")
 	form[websettings[1].name..".userlevel"].options:Add("0","Select Mode")
 	form[websettings[1].name..".userlevel"].options:Add("1","Beginer")
+	form[websettings[1].name..".userlevel"].options:Add("2","Medium")
 --	form[websettings[1].name..".userlevel"].options:Add("2","Advanced")
 --	form[websettings[1].name..".userlevel"].options:Add("3","Expert")
 	form:Add_help(tr("_var_mode#Configuration Mode"),tr("_help_mode#"..[[
@@ -282,6 +398,7 @@ function hna4_form()
       if i > 1 then form:Add("subtitle","Interface") end
       form:Add("text",hna4[i].name..".NetAddr",hna4[i].values.NetAddr,"Net Address","string","width:99%")
       form:Add("text",hna4[i].name..".NetMask",hna4[i].values.NetMask,"Net Mask","string","width:99%")
+      form:Add("link","remove_"..hna4[i].name,__SERVER.SCRIPT_NAME.."?".."UCI_CMD_del"..hna4[i].name.."= &__menu="..__FORM.__menu.."&option=hna4",tr("Remove Network"))
     end
     form:Add_help(tr("olsr_var_NetMask#Net Address"),tr([[
         This optionblock specifies one or more network interfaces on which olsrd 
@@ -298,7 +415,40 @@ function hna4_form()
         interface configurations. 
         ]]))
   end
-  form:Add("link","add_client",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_clients=client&__menu="..__FORM.__menu,tr("Add Client"))
+  form:Add("link","add_Hna4",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setolsr=Hna4&__menu="..__FORM.__menu.."&option=hna4",tr("Add Network"))
+  return form
+end
+
+function hna6_form()
+--  if olsr.Hna6 == nil then hna4 = olsr:set("Hna4") 
+--  else 
+    hna6 = olsr.Hna6 
+--  end
+  local form = formClass.new(tr("Hna6 Settings"))
+  if hna6 then
+    hna6_values = hna6[1].values
+    for i=1,#hna6 do
+      if i > 1 then form:Add("subtitle","Interface") end
+      form:Add("text",hna6[i].name..".NetAddr",hna6[i].values.NetAddr,"Net Address","string","width:99%")
+      form:Add("text",hna6[i].name..".NetMask",hna6[i].values.NetMask,"Net Mask","string","width:99%")
+      form:Add("link","remove_"..hna6[i].name,__SERVER.SCRIPT_NAME.."?".."UCI_CMD_del"..hna6[i].name.."= &__menu="..__FORM.__menu.."&option=hna6",tr("Remove Network"))
+    end
+    form:Add_help(tr("olsr_var_NetMask#Net Address"),tr([[
+        This optionblock specifies one or more network interfaces on which olsrd 
+        should run. Atleast one network interface block must be specified for 
+        olsrd to run! Various parameters can be specified on individual interfaces 
+        or groups of interfaces. This optionblock can be repeated to add multiple 
+        interface configurations. 
+        ]]))
+    form:Add_help(tr("olsr_var_NetMask#Net Mask"),tr([[
+        This optionblock specifies one or more network interfaces on which olsrd 
+        should run. Atleast one network interface block must be specified for 
+        olsrd to run! Various parameters can be specified on individual interfaces 
+        or groups of interfaces. This optionblock can be repeated to add multiple 
+        interface configurations. 
+        ]]))
+  end
+  form:Add("link","add_hna6",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setolsr=hna6&__menu="..__FORM.__menu.."&option=hna6",tr("Add Network"))
   return form
 end
 
@@ -533,5 +683,109 @@ local vizstr = [[
   viz_update();
 </SCRIPT> </P>
 ]]
+
 return vizstr
+
 end
+
+function plugin_list_form(form,user_level)
+  local tplugins = get_installed_plugin()
+  local badplugins = get_bad_plugin()
+  local pl_name = __FORM[plname]
+  local molsr = uci.get_all("olsr")
+  local form = form
+  local user_level = user_level or loc_userlevel
+  form = formClass.new(tr("Plugins List"))
+
+  if badplugins ~= nil then
+    form:Add("subtitle","Configured with unknow Library")
+    for i, v in pairsByKeys(badplugins) do
+--[[
+      form:Add("select","olsr."..i,"keep",i,"string")
+      form["olsr."..i].options:Add("bad","Remove Configuration")
+      form["olsr."..i].options:Add("keep","Keep Configuration")
+]]--
+      for k, v in pairs(molsr[i]) do
+        if k ~= ".name"
+        and k ~= ".type" then
+          form:Add("link","remove_"..v,__SERVER.SCRIPT_NAME.."?__menu="..__FORM.__menu.."&option=plugin&".."UCI_CMD_delolsr."..molsr[i][".name"].."=",tr("Remove").." "..tr("Configuration for").." "..k.." "..v)
+        end
+      end
+      form:Add("text_line","separacion","&nbsp;","algo","algomas")
+    end
+  end
+
+  if tplugins ~= nil then
+    form:Add("subtitle","Libraries installed but not configured")
+    for i, v in pairsByKeys(tplugins) do
+      if molsr[i] == nil then
+        form:Add("link","Add_plugin_"..v,__SERVER.SCRIPT_NAME.."?__menu="..__FORM.__menu.."&option=plugin&".."plname="..i.."&UCI_MSG_setolsr."..i.."=LoadPlugin&UCI_MSG_setolsr."..i..".Library="..v,tr("Configure plugin for Library").." "..v)
+      end
+      form:Add("text_line","separacion","&nbsp;","algo")
+    end
+  end
+  return form
+end
+
+function add_plugin_form(form,user_level)
+  if form == nil then
+    form = formClass.new("Add plugin")
+  else
+    form:Add("subtitle","Add plugin")
+  end
+  form:Add("text_line","add_plugin",[[<table width="99%">
+  <tr><td width="150px">Plugin name</td><td width="400px" >Library file</td></tr>
+  <tr><td ><input type="text" name="Library_name" /></td>
+  <td><input type="text" name="Library_file" style="width:99%" /></td></tr>
+  <tr><td>&nbsp;</td><td align="right"><input type="submit" name="Add_Plagin" value="]]..tr("Add Plugin")..[[" ></td></tr>
+  </table>]])
+  return form
+end
+
+function plugins_form(form,user_level)
+--[[
+  local tplugins = get_installed_plugin()
+  local molsr = uci.get_all("olsr")
+  local form = form
+  local user_level = user_level or loc_userlevel
+  form = formClass.new(pl_name)
+  for k, v in pairs(molsr[pl_name]) do
+    if k ~= ".name"
+    and k ~= ".type" then
+      form:Add("text","olsr."..pl_name.."."..k,v,k,"string","width:99%;")
+    end
+  end
+]]--
+--[[
+  for k, v in pairs(plugin) do
+    if k ~= ".name"
+    and k ~= ".type"
+    and k ~= "Library" then
+      local paramname = uci.add("olsr",pl_name)
+      uci.set("olsr",paramname,k,v)
+      uci.delete("olsr",pl_name,k)
+    end
+  end
+  uci.save("olsr")
+  __UCI_UPDATED:countUpdated()
+]]--
+  local pl_name = __FORM["plname"]
+  local plugin = uci.get_section("olsr",pl_name)
+  form = tbformClass.new(pl_name.." "..tr("Configuration of").." "..plugin.Library)
+  form:Add_col("label", "PlParam", "PlParam", "220px","string,len>1","width:220px")
+  form:Add_col("text", "value", "Value", "220px","string","width:220px")
+  form:Add_col("link", "Remove","Remove", "100px","","width:100px")
+  for k, v in pairs(plugin) do
+    if  k ~= ".name"
+    and k ~= ".type"
+    and k ~= "Library" then
+      form:New_row()
+      form:set_col("PlParam","olsr."..pl_name.."."..k, k)
+      form:set_col("value","olsr."..pl_name.."."..k, v)
+      form:set_col("Remove", "Remove_"..k, __SERVER.SCRIPT_NAME.."?__menu="..__FORM.__menu.."&option="..__FORM.option.."&plname="..__FORM["plname"].."&UCI_MSG_delolsr."..pl_name.."."..k.."=")
+    end
+  end
+  return form
+end
+
+return olsrd

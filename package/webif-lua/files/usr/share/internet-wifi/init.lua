@@ -21,6 +21,7 @@ if __WWW then
   __ERROR   = {} -- __ERROR[#__ERROR][var_name], __ERROR[#__ERROR][msg]
   __TOCHECK = {} -- __TOCHECK[#__TOCHECK]
   __UCI_CMD = {} -- __UCI_CMD[#__UCI_CMD]["command"], __UCI_CMD[#__UCI_CMD_]["varname"]
+  __UCI_MSG = {} -- 
   __SERVER  = get_vars()
 --  if __SERVER.SCRIPT_NAME == nil then __SERVER.SCRIPT_NAME = "pba.sh"
 --  else
