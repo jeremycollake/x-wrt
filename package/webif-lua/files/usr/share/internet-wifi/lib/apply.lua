@@ -141,10 +141,10 @@ for file in handler_dir:lines() do
   if io.exists("/usr/share/internet-wifi/applys/"..file) == true then  
 --    call_parser(file,parsers_list,depends_list,exe_before,exe_after,reboot_list)
 
-
     require("/usr/share/internet-wifi/applys/"..file)
     parsers_list[file] = {p = parser}
     -- Read if this package depends or need others packages to done configuration
+
     if parser.depends_pkgs then
       if depends_list == "" then depends_list = parser.depends_pkgs
       else depends_list = depends_list ..","..parser.depends_pkgs end
@@ -229,12 +229,14 @@ print(init_list(exe_after))
 
 --  local form = formClass.new("Apply...",true)
 --  print (form:startFullForm())
+--[[
 	changes_apply=io.popen ("/usr/lib/webif/apply.sh 2>&1")
 	for linea in changes_apply:lines() do
 		wwwprint(trsh(linea))
 	end
 -- 	print (form:endForm())
 	changes_apply:close()
+]]--
 
 if __WWW then print(page:footer()) end
 os.exit(0)

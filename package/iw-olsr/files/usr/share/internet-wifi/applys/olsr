@@ -1,6 +1,6 @@
-require("iw-uci")
-require("iwuci")
-require("net")
+--require("iw-uci")
+--require("iwuci")
+--require("net")
 require("uci_iwaddon")
 
 parser = {}
@@ -16,9 +16,9 @@ local table = table
 local type = type
 local string = string
 local pairs = pairs
-local iwuci = iwuci
-local uciClass = uciClass
-local net = net
+--local iwuci = iwuci
+--local uciClass = uciClass
+--local net = net
 local tonumber = tonumber
 local os = os
 local tr = tr
@@ -26,11 +26,6 @@ local uci = uci
 
 -- no more external access after this point
 setfenv(1, P)
---local olsr = uciClass.new("olsr")
---local network = uciClass.new("network")
---local wireless = uciClass.new("wireless")
-
-uci.commit("olsr")
 
 local olsr = uci.get_all("olsr")
 local network = uci.get_all("network")
@@ -53,8 +48,9 @@ init_script = "/etc/init.d/olsrd"
 
 function process()
   wwwprint(name.." Parsers...")
-  write_config()
+  process_config()
   write_init()
+  write_config()
 end
 
 function write_init()
@@ -112,7 +108,7 @@ start() {
 	mkdir -p $RUN_D
 	PID=`pidof $BIN`
 	echo ${PID%$$} > $PID_F
-  echo "OLSR is running\n"
+  echo "OLSR is running"
 }
 
 stop() {
@@ -123,9 +119,8 @@ stop() {
   os.execute ("echo '"..initfile.."' > /etc/init.d/olsrd")
 end
 
-function write_config()
+function process_config()
   local str_olsrconf = ""
---  olsr = uciClass.new("olsr")
   olsr = uci.get_all("olsr")
 -- Network Setting --
   local set_netname = olsr.webadmin.netname or "olsrnet"
@@ -147,8 +142,8 @@ function write_config()
   uci.set("network",set_netname,"dns","204.225.44.3")
 --  wwwprint(tr("Set DNS").." static")
   uci.commit("network")
-  os.execute("rm /tmp/.uci/network 2> /dev/null")
---  os.execute("/etc/init.d/network restart")
+--  os.execute("rm /tmp/.uci/network 2> /dev/null")
+
 -- Wireless --
   local set_device = olsr.webadmin.device or "wl0"
   local set_ssid = olsr.webadmin.ssid or "X-Wrt"
@@ -173,7 +168,7 @@ function write_config()
     end
   end
   uci.commit("wireless")
-  os.execute("rm /tmp/.uci/wireless 2> /dev/null")
+--  os.execute("rm /tmp/.uci/wireless 2> /dev/null")
 --  os.execute("wifi")
 -- olsr --
 
@@ -254,15 +249,16 @@ function write_config()
       end
     end
   end          
-  uci.save("olsr")
   uci.commit("olsr")
-  os.execute("rm /tmp/.uci/olsr 2> /dev/null")
+--  os.execute("rm /tmp/.uci/olsr 2> /dev/null")
 --  wwwprint("end config checking...")
-  if tonumber(olsr.webadmin.userlevel) < 2 then
+--  if tonumber(olsr.webadmin.userlevel) < 2 then
 --    check_basic configuration
-  else
-  end  
-  
+--  else
+--  end  
+end
+
+function write_config()  
   local sections = uci.get_all_types("olsr")
   wwwprint ("Writing "..output_file)
   local str_gral = ""
