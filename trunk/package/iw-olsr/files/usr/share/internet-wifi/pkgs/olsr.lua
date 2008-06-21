@@ -4,6 +4,7 @@
 ]]--
 require("net")
 require("tbform")
+require("iw-uci")
 require("uci_iwaddon")
 
 olsrd = {}
@@ -13,6 +14,7 @@ olsrd = P
 -- declare everything this package needs from outside
 local io = io
 local os = os
+local math = math
 local pairs = pairs
 local pairsByKeys = pairsByKeys
 local assert = assert
@@ -32,11 +34,12 @@ local tr = tr
 local tbformClass = tbformClass
 -- no more external access after this point
 setfenv(1, P)
-
+if __WWW ~= nil then
 if __FORM["Library_name"] and __FORM["Library_file"] then
   uci.set("olsr",__FORM["Library_name"],"LoadPlugin")
   uci.set("olsr",__FORM["Library_name"],"Library",__FORM["Library_file"])
   uci.save("olsr")
+end
 end
 
 local olsr = uciClass.new("olsr")
@@ -48,6 +51,46 @@ if olsr.webadmin == nil then webadmin = olsr:set("websettings","webadmin") end
 local loc_userlevel = tonumber(olsr.webadmin.userlevel) or 0
 --local userlevel = tonumber(olsr.websettings.userlevel) or 0
 
+function dyn_gw_default(library)
+  local extra_gw = uci.get_type("olsr","dyn_gw")
+  for i=1, #extra_gw do
+    uci.delete("olsr",extra_gw[i][".name"])
+  end
+  uci.delete("olsr","dyn_gw")
+  uci.set("olsr","dyn_gw","LoadPlugin")
+  uci.set("olsr","dyn_gw","Library",library)
+  uci.set("olsr","dyn_gw","Ping","141.1.1.1")
+  local extraparam = uci.add("olsr","dyn_gw")
+  uci.set("olsr",extraparam,"Ping","194.25.2.129")
+  uci.save("olsr")
+--  __UCI_UPDATED:countUpdated()
+end
+
+function nameservice_default(library)
+  local config = uci.get_all("olsr")
+  uci.delete("olsr","nameservice")
+  local ip = uci.get("network",config.webadmin.netname,"ipaddr")
+  local host = "host"..string.gsub(ip,"(%d+)%.(%d+)%.(%d+)%.(%d+)","%4\.%1\-%2\-%3")
+  uci.set("olsr","nameservice","LoadPlugin")
+  uci.set("olsr","nameservice","Library",library)
+  uci.set("olsr","nameservice","hosts_file","/etc/hosts")
+  uci.set("olsr","nameservice","name",host)
+  uci.set("olsr","nameservice","suffix",".olsr")
+  uci.set("olsr","nameservice","lat","-27.448232")         
+  uci.set("olsr","nameservice","lon","-58.989523")
+  uci.save("olsr")
+--  __UCI_UPDATED:countUpdated()
+end
+
+function txtinfo_default(library)
+  uci.delete("olsr","txtinfo")
+  uci.set("olsr","txtinfo","LoadPlugin")
+  uci.set("olsr","txtinfo","Library",library)
+  uci.set("olsr","txtinfo","accept","127.0.0.1")
+  uci.save("olsr")
+--  __UCI_UPDATED:countUpdated()
+end
+    
 function get_installed_plugin(idxfile)
   idxfile = idxfile or false
   local t = {}
@@ -65,14 +108,17 @@ function get_installed_plugin(idxfile)
     end
     if name == "dyn_gw" then
       if config[name] == nil then
-        uci.set("olsr",name,"LoadPlugin")
-        uci.set("olsr",name,"Library",library)
-        uci.set("olsr",name,"Ping","141.1.1.1")
-        local extraparam = uci.add("olsr",name)
-        uci.set("olsr",extraparam,"Ping","194.25.2.129")
+        dyn_gw_default(library)
+--        uci.set("olsr",name,"LoadPlugin")
+--        uci.set("olsr",name,"Library",library)
+--        uci.set("olsr",name,"Ping","141.1.1.1")
+--        local extraparam = uci.add("olsr",name)
+--        uci.set("olsr",extraparam,"Ping","194.25.2.129")
       end
     elseif name == "nameservice" then
       if config[name] == nil then
+        nameservice_default(library)
+--[[        
         local ip = uci.get("network",config.webadmin.netname,"ipaddr")
         local host = "host"..string.gsub(ip,"(%d+)%.(%d+)%.(%d+)%.(%d+)","%4\.%1\-%2\-%3")
         uci.set("olsr",name,"LoadPlugin")
@@ -82,11 +128,15 @@ function get_installed_plugin(idxfile)
         uci.set("olsr",name,"suffix",".olsr")
         uci.set("olsr",name,"lat","-27.448232")         
         uci.set("olsr",name,"lon","-58.989523")
+]]--
       end
     elseif name == "txtinfo" then
       if config[name] == nil then 
+        txtinfo_default()
+--[[        
         uci.set("olsr",name,"LoadPlugin")
         uci.set("olsr",name,"accept","127.0.0.1")
+]]--
       end
 
     end

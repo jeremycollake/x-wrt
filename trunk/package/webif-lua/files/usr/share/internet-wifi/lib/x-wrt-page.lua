@@ -10,6 +10,8 @@
 -- Configuration files referenced:
 --   none
 --------------------------------------------------------------------------------
+require("uci_iwaddon")
+
 pageClass = {} 
 pageClass_mt = {__index = pageClass} 
 
@@ -120,6 +122,7 @@ return header
 end
 
 function pageClass:footer()
+  local uci_count = uci.updated()
 --	local key, val = "", "" 
 	local str = "<div class=\"page-save\">"
 --	str = str .. [[<input type="hidden" name="__PREVIUS_PAGE" value="]]..menu.selected..[[" />]]
@@ -164,12 +167,12 @@ function pageClass:footer()
 	end
 
 	if self.action_review == nil then
-		self.action_review = [[<a href="]]..__SERVER.SCRIPT_NAME.. [[?__ACTION=review_changes&]]..__MENU.selected..[[" >]]..tr("Review Changes")..[[ (]]..__UCI_UPDATED.count..[[) &laquo;</a>]]
+		self.action_review = [[<a href="]]..__SERVER.SCRIPT_NAME.. [[?__ACTION=review_changes&]]..__MENU.selected..[[" >]]..tr("Review Changes")..[[ (]]..uci_count..[[) &laquo;</a>]]
 	elseif self.action_review ~= "" then
 		if string.match(self.action_review,"?") then
-			self.action_review = string.gsub(self.action_review,"?","?"..__MENU.selected.."&")..[[ (]]..__UCI_UPDATED.count..[[) &laquo;</a>]]
+			self.action_review = string.gsub(self.action_review,"?","?"..__MENU.selected.."&")..[[ (]]..uci_count..[[) &laquo;</a>]]
 		else
-			self.action_review = self.action_review.."?"..__MENU.selected..[[ (]]..__UCI_UPDATED.count..[[) &laquo;</a>]]
+			self.action_review = self.action_review.."?"..__MENU.selected..[[ (]]..uci_count..[[) &laquo;</a>]]
 		end
 	end
 local footer = [[
@@ -184,7 +187,7 @@ if self.form ~= nil and self.form ~= "" then footer = footer..tr(self.savebutton
 --	echo '<script type="text/javascript" src="/js/waitbox.js"></script>'
 --	}
 if tonumber(__SYSTEM.general.use_progressbar) == 1 then footer = footer .. '<script type="text/javascript" src="/js/waitbox.js"></script>' end
-if __UCI_UPDATED.count > 0 then
+if uci_count > 0 then
 footer = footer ..[[
 	<ul class="apply">
 		<li>]]..self.action_apply..[[</li>
