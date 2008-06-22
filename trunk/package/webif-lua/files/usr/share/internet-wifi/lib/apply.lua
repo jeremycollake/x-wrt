@@ -229,14 +229,14 @@ print(init_list(exe_after))
 
 --  local form = formClass.new("Apply...",true)
 --  print (form:startFullForm())
---[[
+
 	changes_apply=io.popen ("/usr/lib/webif/apply.sh 2>&1")
 	for linea in changes_apply:lines() do
 		wwwprint(trsh(linea))
 	end
 -- 	print (form:endForm())
 	changes_apply:close()
-]]--
+
 
 if __WWW then print(page:footer()) end
 os.exit(0)

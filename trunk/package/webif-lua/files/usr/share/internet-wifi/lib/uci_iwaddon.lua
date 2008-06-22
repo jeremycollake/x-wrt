@@ -36,19 +36,26 @@ uci.commit = function (x)
 -- Added uci functions --
 function uci.get_all_types(p)
   local sections = {}
+  local found = false
   p = uci.get_all(p)
   for i, v in pairs(p) do
     if sections[v[".type"]] == nil then sections[v[".type"]] = {} end
     sections[v[".type"]][#sections[v[".type"]]+1] = {}
+    found = true
     for k, o in pairs(v) do
       sections[v[".type"]][#sections[v[".type"]]][k] = o
     end
   end
-  return sections
+  if found == true then
+    return sections
+  else
+    return nil
+  end
 end
 
 function uci.get_type(p,s)
   local sections = {}
+  local found = false
   if string.find(p,".") > 0 and s == nil then
     p,s = unpack(string.split(p,"."))
   end
@@ -56,12 +63,17 @@ function uci.get_type(p,s)
   for i, v in pairs(p) do
     if v[".type"] == s then
       sections[#sections+1] = {}
+      found = true
       for k, o in pairs(v) do
         sections[#sections][k] = o
       end
     end
   end
-  return sections
+  if found == true then
+    return sections
+  else
+    return nil
+  end
 end
 
 function uci.get_section(p,s)

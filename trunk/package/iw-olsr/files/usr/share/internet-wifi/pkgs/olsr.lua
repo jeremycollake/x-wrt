@@ -41,9 +41,125 @@ if __FORM["Library_name"] and __FORM["Library_file"] then
   uci.save("olsr")
 end
 end
+  local molsr = uci.get_all("olsr")
+  if molsr == nil then
+    os.execute("echo '' > /etc/config/olsr 2> /dev/null") 
+    uci.set("olsr","webadmin","websettings")
+    uci.save("olsr")
+  end  
+  if uci.get("olsr","webadmin") == nil then
+    os.execute("cp /etc/config/olsr /etc/config/olsr.backup 2> /dev/null")
+    os.execute("echo '' > /etc/config/olsr 2> /dev/null") 
+    uci.set("olsr","webadmin","websettings")
+    uci.save("olsr")
+  end
+  local set_netname = uci.get("olsr","webadmin","netname") or "olsrnet"
+  local set_nodenumber = uci.get("olsr","webadmin","nodenumber") or "1"
+  local set_netaddr = uci.get("olsr","webadmin","ipaddr") or "10.128."..set_nodenumber..".1"
+  local set_netmask = uci.get("olsr","webadmin","netmask") or "255.255.0.0"
+  local set_device = uci.get("olsr","webadmin","device") or "wl0"
+  local set_ssid = uci.get("olsr","webadmin","ssid") or "X-Wrt"
+  local set_channel = uci.get("olsr","webadmin","channel") or "6"
+-- olsr --
+  if uci.get("olsr","general") == nil then uci.set("olsr","general","olsr") end
+  if uci.get("olsr","webadmin","netname") == nil then
+    uci.set("olsr","webadmin","netname",set_netname)
+  end
+  if uci.get("olsr","webadmin","userlevel") == nil then
+    uci.set("olsr","webadmin","userlevel", "1")
+  end
+  if uci.get("olsr","webadmin","nodenumber") == nil then     
+    uci.set("olsr","webadmin","nodenumber",set_nodenumber)
+  end
+  if uci.get("olsr","webadmin","netmask") == nil then  
+    uci.set("olsr","webadmin","netmask", set_netmask)
+  end
+  if uci.get("olsr","webadmin","ipaddr") == nil then
+    uci.set("olsr","webadmin","ipaddr", set_netaddr)
+  end
+  if uci.get("olsr","webadmin","device") == nil then
+    uci.set("olsr","webadmin","device", set_device)
+  end
+  if uci.get("olsr","webadmin","ssid") == nil then
+    uci.set("olsr","webadmin","ssid", set_ssid)
+  end
+  if uci.get("olsr","webadmin","channel") == nil then
+    uci.set("olsr","webadmin","channel", set_channel)
+  end
+  if uci.get("olsr","webadmin","enable") == nil then
+    uci.set("olsr","webadmin","enable", "1")
+  end
+  uci.save("olsr")
+--  wwwprint("general settings")
+  if uci.get("olsr","general","UseHysteresis") == nil then
+    uci.set("olsr","general","UseHysteresis","no") end
+  if uci.get("olsr","general","LinkQualityFishEye") == nil then
+    uci.set("olsr","general","LinkQualityFishEye","1") end
+  if uci.get("olsr","general","IpVersion") == nil then
+    uci.set("olsr","general","IpVersion","4") end
+  if uci.get("olsr","general","AllowNoInt") == nil then
+    uci.set("olsr","general","AllowNoInt","yes") end
+  if uci.get("olsr","general","TcRedundancy") == nil then
+    uci.set("olsr","general","TcRedundancy","2") end
+  if uci.get("olsr","general","LinkQualityLevel") == nil then
+    uci.set("olsr","general","LinkQualityLevel","2") end
+  if uci.get("olsr","general","MprCoverage") == nil then
+    uci.set("olsr","general","MprCoverage","7") end
+  if uci.get("olsr","general","LinkQualityWinSize") == nil then
+    uci.set("olsr","general","LinkQualityWinSize","100") end
+  if uci.get("olsr","general","LinkQualityDijkstraLimit") == nil then
+    uci.set("olsr","general","LinkQualityDijkstraLimit","0 9.0") end
+  if uci.get("olsr","general","DebugLevel") == nil then
+    uci.set("olsr","general","DebugLevel","0") end
+  if uci.get("olsr","general","Pollrate") == nil then
+    uci.set("olsr","general","Pollrate","0.025") end
+  if uci.get("olsr","general","TosValue") == nil then
+    uci.set("olsr","general","TosValue","16") end
+  uci.save("olsr")
 
+  local interfaces = uci.get_type("olsr","Interface")
+  if interfaces == nil then
+    interface = uci.add("olsr","Interface")
+    uci.set("olsr",interface,"Interface",set_device)
+  end
+  uci.save("olsr")
+--   
+  local iok = false
+  interfaces = uci.get_type("olsr","Interface")
+--  wwwprint("interface settings")
+  for i=1, #interfaces do
+    if uci.get("olsr",interfaces[i][".name"],"MidValidityTime") == nil then
+      uci.set("olsr",interfaces[i][".name"],"MidValidityTime","324.0") end
+    if uci.get("olsr",interfaces[i][".name"],"TcInterval") == nil then
+      uci.set("olsr",interfaces[i][".name"],"TcInterval","4.0") end
+    if uci.get("olsr",interfaces[i][".name"],"HnaValidityTime") == nil then
+      uci.set("olsr",interfaces[i][".name"],"HnaValidityTime","108.0") end
+    if uci.get("olsr",interfaces[i][".name"],"HelloValidityTime") == nil then
+      uci.set("olsr",interfaces[i][".name"],"HelloValidityTime","108.0") end
+    if uci.get("olsr",interfaces[i][".name"],"TcValidityTime") == nil then
+      uci.set("olsr",interfaces[i][".name"],"TcValidityTime","324.0") end
+    if uci.get("olsr",interfaces[i][".name"],"HnaInterval") == nil then
+      uci.set("olsr",interfaces[i][".name"],"HnaInterval","18.0") end
+    if uci.get("olsr",interfaces[i][".name"],"HelloInterval") == nil then
+      uci.set("olsr",interfaces[i][".name"],"HelloInterval","6.0") end
+    if uci.get("olsr",interfaces[i][".name"],"MidInterval") == nil then
+      uci.set("olsr",interfaces[i][".name"],"MidInterval","18.0") end
+    if uci.get("olsr",interfaces[i][".name"],"AutoDetectChanges") == nil then
+      uci.set("olsr",interfaces[i][".name"],"AutoDetectChanges","yes") end
+
+    if #interfaces == 1 then 
+      uci.set("olsr",interfaces[i][".name"],"Interface",set_device)
+    else
+      if uci.get("olsr",interfaces[i][".name"],"Interface") == set_device then
+        iok = true
+        break
+      end
+    end
+  end
+  uci.save("olsr")
+  
 local olsr = uciClass.new("olsr")
-if olsr.webadmin == nil then webadmin = olsr:set("websettings","webadmin") end
+--if olsr.webadmin == nil then webadmin = olsr:set("websettings","webadmin") end
 --if olsr.general == nil then general = olsr:set("olsr","general") end 
 --if olsr.Hna4 == nil then hna4 = olsr:set("Hna4") end 
 --if olsr.Interface == nil then interface = olsr:set("Interface") end 
@@ -53,8 +169,10 @@ local loc_userlevel = tonumber(olsr.webadmin.userlevel) or 0
 
 function dyn_gw_default(library)
   local extra_gw = uci.get_type("olsr","dyn_gw")
+  if extra_gw ~= nil then
   for i=1, #extra_gw do
     uci.delete("olsr",extra_gw[i][".name"])
+  end
   end
   uci.delete("olsr","dyn_gw")
   uci.set("olsr","dyn_gw","LoadPlugin")
@@ -63,13 +181,12 @@ function dyn_gw_default(library)
   local extraparam = uci.add("olsr","dyn_gw")
   uci.set("olsr",extraparam,"Ping","194.25.2.129")
   uci.save("olsr")
---  __UCI_UPDATED:countUpdated()
 end
 
 function nameservice_default(library)
   local config = uci.get_all("olsr")
   uci.delete("olsr","nameservice")
-  local ip = uci.get("network",config.webadmin.netname,"ipaddr")
+  local ip = uci.get("olsr","webadmin","ipaddr")
   local host = "host"..string.gsub(ip,"(%d+)%.(%d+)%.(%d+)%.(%d+)","%4\.%1\-%2\-%3")
   uci.set("olsr","nameservice","LoadPlugin")
   uci.set("olsr","nameservice","Library",library)
@@ -79,7 +196,6 @@ function nameservice_default(library)
   uci.set("olsr","nameservice","lat","-27.448232")         
   uci.set("olsr","nameservice","lon","-58.989523")
   uci.save("olsr")
---  __UCI_UPDATED:countUpdated()
 end
 
 function txtinfo_default(library)
@@ -88,7 +204,6 @@ function txtinfo_default(library)
   uci.set("olsr","txtinfo","Library",library)
   uci.set("olsr","txtinfo","accept","127.0.0.1")
   uci.save("olsr")
---  __UCI_UPDATED:countUpdated()
 end
     
 function get_installed_plugin(idxfile)
@@ -109,36 +224,15 @@ function get_installed_plugin(idxfile)
     if name == "dyn_gw" then
       if config[name] == nil then
         dyn_gw_default(library)
---        uci.set("olsr",name,"LoadPlugin")
---        uci.set("olsr",name,"Library",library)
---        uci.set("olsr",name,"Ping","141.1.1.1")
---        local extraparam = uci.add("olsr",name)
---        uci.set("olsr",extraparam,"Ping","194.25.2.129")
       end
     elseif name == "nameservice" then
       if config[name] == nil then
         nameservice_default(library)
---[[        
-        local ip = uci.get("network",config.webadmin.netname,"ipaddr")
-        local host = "host"..string.gsub(ip,"(%d+)%.(%d+)%.(%d+)%.(%d+)","%4\.%1\-%2\-%3")
-        uci.set("olsr",name,"LoadPlugin")
-        uci.set("olsr",name,"Library",library)
-        uci.set("olsr",name,"hosts_file","/etc/hosts")
-        uci.set("olsr",name,"name",host)
-        uci.set("olsr",name,"suffix",".olsr")
-        uci.set("olsr",name,"lat","-27.448232")         
-        uci.set("olsr",name,"lon","-58.989523")
-]]--
       end
     elseif name == "txtinfo" then
       if config[name] == nil then 
-        txtinfo_default()
---[[        
-        uci.set("olsr",name,"LoadPlugin")
-        uci.set("olsr",name,"accept","127.0.0.1")
-]]--
+        txtinfo_default(library)
       end
-
     end
     uci.save("olsr")
   end
@@ -163,21 +257,6 @@ function get_bad_plugin()
     and io.exists("/usr/lib/"..library) == false then
       badplugin[name] = library
       ok = true
---[[
-    else
-      local newname = string.gsub(library,".*olsrd_([a-zA-z0-9_]+)\.so.+","%1") 
-      if name ~= newname then
-        uci.set("olsr",newname,"LoadPlugin")
-        for k, v in pairs(confplugin[name]) do
-          if k ~= ".name"
-          and k ~= ".type" then
-            uci.set("olsr",newname,k,v)
-          end
-        end
-        uci.delete("olsr",name)
-        uci.commit("olsr")
-      end
-]]--
     end
   end
 

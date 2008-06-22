@@ -1,6 +1,3 @@
---require("iw-uci")
---require("iwuci")
---require("net")
 require("uci_iwaddon")
 
 parser = {}
@@ -16,9 +13,6 @@ local table = table
 local type = type
 local string = string
 local pairs = pairs
---local iwuci = iwuci
---local uciClass = uciClass
---local net = net
 local tonumber = tonumber
 local os = os
 local tr = tr
@@ -121,13 +115,17 @@ end
 
 function process_config()
   local str_olsrconf = ""
+  uci.commit("olsr")
   olsr = uci.get_all("olsr")
--- Network Setting --
   local set_netname = olsr.webadmin.netname or "olsrnet"
   local set_nodenumber = olsr.webadmin.nodenumber or "1"
   local set_netaddr = olsr.webadmin.ipaddr or "10.128."..set_nodenumber..".1"
   local set_netmask = olsr.webadmin.netmask or "255.255.0.0"
+  local set_device = olsr.webadmin.device or "wl0"
+  local set_ssid = olsr.webadmin.ssid or "X-Wrt"
+  local set_channel = olsr.webadmin.channel or "6"
 
+-- Network Setting --
   wwwprint(tr("Setting networks"))
   network = uci.get_all("network")
   if network[set_netname] == nil then 
@@ -145,10 +143,6 @@ function process_config()
 --  os.execute("rm /tmp/.uci/network 2> /dev/null")
 
 -- Wireless --
-  local set_device = olsr.webadmin.device or "wl0"
-  local set_ssid = olsr.webadmin.ssid or "X-Wrt"
-  local set_channel = olsr.webadmin.channel or "6"
-
   wwwprint(tr("Setting Wireless"))
   local wififace = uci.get_type("wireless","wifi-iface")
 --  wwwprint("algo",#wififace)
@@ -168,88 +162,7 @@ function process_config()
     end
   end
   uci.commit("wireless")
---  os.execute("rm /tmp/.uci/wireless 2> /dev/null")
---  os.execute("wifi")
--- olsr --
 
---  olsr = uciClass.new("olsr")
-  olsr = uci.get_all("olsr")
-  if olsr.webadmin == nil then uci.set("olsr","webadmin","websettings") end
-  if olsr.general == nil then uci.set("olsr","general","olsr") end
-  uci.set("olsr","webadmin","netname",set_netname)
-  uci.set("olsr","webadmin","nodenumber",set_nodenumber)
-  uci.set("olsr","webadmin","netmask", set_netmask)
-  uci.set("olsr","webadmin","ipaddr", set_netaddr)
-  uci.set("olsr","webadmin","device", set_device)
-  uci.set("olsr","webadmin","ssid", set_ssid)
-  uci.set("olsr","webadmin","channel", set_channel)
-  uci.set("olsr","webadmin","enable", enable)
---  wwwprint("general settings")
-  if uci.get("olsr","general","UseHysteresis") == nil then
-    uci.get("olsr","general","UseHysteresis","no") end
-  if uci.get("olsr","general","LinkQualityFishEye") == nil then
-    uci.get("olsr","general","LinkQualityFishEye","1") end
-  if uci.get("olsr","general","IpVersion") == nil then
-    uci.get("olsr","general","IpVersion","4") end
-  if uci.get("olsr","general","AllowNoInt") == nil then
-    uci.get("olsr","general","AllowNoInt","yes") end
-  if uci.get("olsr","general","TcRedundancy") == nil then
-    uci.get("olsr","general","TcRedundancy","2") end
-  if uci.get("olsr","general","LinkQualityLevel") == nil then
-    uci.get("olsr","general","LinkQualityLevel","2") end
-  if uci.get("olsr","general","MprCoverage") == nil then
-    uci.get("olsr","general","MprCoverage","7") end
-  if uci.get("olsr","general","LinkQualityWinSize") == nil then
-    uci.get("olsr","general","LinkQualityWinSize","100") end
-  if uci.get("olsr","general","LinkQualityDijkstraLimit") == nil then
-    uci.get("olsr","general","LinkQualityDijkstraLimit","0 9.0") end
-  if uci.get("olsr","general","DebugLevel") == nil then
-    uci.get("olsr","general","DebugLevel","0") end
-  if uci.get("olsr","general","Pollrate") == nil then
-    uci.get("olsr","general","Pollrate","0.025") end
-  if uci.get("olsr","general","TosValue") == nil then
-    uci.get("olsr","general","TosValue","16") end
-  local interfaces = uci.get_type("olsr","Interface")
-  if interfaces == nil then
-    interface = uci.add("olsr","Interface")
-    uci.set("olsr",interface,"Interface",set_device)
-    uci.save("olsr")
-  end
-  
---   
-  local iok = false
-  interfaces = uci.get_type("olsr","Interface")
---  wwwprint("interface settings")
-  for i=1, #interfaces do
-    if uci.get("olsr",interfaces[i][".name"],"MidValidityTime") == nil then
-      uci.set("olsr",interfaces[i][".name"],"MidValidityTime","324.0") end
-    if uci.get("olsr",interfaces[i][".name"],"TcInterval") == nil then
-      uci.set("olsr",interfaces[i][".name"],"TcInterval","4.0") end
-    if uci.get("olsr",interfaces[i][".name"],"HnaValidityTime") == nil then
-      uci.set("olsr",interfaces[i][".name"],"HnaValidityTime","108.0") end
-    if uci.get("olsr",interfaces[i][".name"],"HelloValidityTime") == nil then
-      uci.set("olsr",interfaces[i][".name"],"HelloValidityTime","108.0") end
-    if uci.get("olsr",interfaces[i][".name"],"TcValidityTime") == nil then
-      uci.set("olsr",interfaces[i][".name"],"TcValidityTime","324.0") end
-    if uci.get("olsr",interfaces[i][".name"],"HnaInterval") == nil then
-      uci.set("olsr",interfaces[i][".name"],"HnaInterval","18.0") end
-    if uci.get("olsr",interfaces[i][".name"],"HelloInterval") == nil then
-      uci.set("olsr",interfaces[i][".name"],"HelloInterval","6.0") end
-    if uci.get("olsr",interfaces[i][".name"],"MidInterval") == nil then
-      uci.set("olsr",interfaces[i][".name"],"MidInterval","18.0") end
-    if uci.get("olsr",interfaces[i][".name"],"AutoDetectChanges") == nil then
-      uci.set("olsr",interfaces[i][".name"],"AutoDetectChanges","yes") end
-
-    if #interfaces == 1 then 
-      uci.set("olsr",interfaces[i][".name"],"Interface",set_device)
-    else
-      if uci.get("olsr",interfaces[i][".name"],"Interface") == set_device then
-        iok = true
-        break
-      end
-    end
-  end          
-  uci.commit("olsr")
 --  os.execute("rm /tmp/.uci/olsr 2> /dev/null")
 --  wwwprint("end config checking...")
 --  if tonumber(olsr.webadmin.userlevel) < 2 then
@@ -269,6 +182,7 @@ function write_config()
     end
   end
   str_gral = str_gral.."\n"
+  wwwprint ("General Settings  passed OK! ")
 -- hna4 --
   local str_hna4 = ""
   if sections.Hna4 ~= nil and #sections.Hna4 > 0 then
@@ -278,11 +192,12 @@ function write_config()
         str_hna4 = str_hna4.."\t"..sections.Hna4[i].NetAddr.."\t"..sections.Hna4[i].NetMask.."\n"
       end
     end
-
+  
     if str_hna4 ~= "" then 
       str_hna4 = "Hna4\n{\n"..str_hna4 .. "}\n\n"
     end
   end
+  wwwprint ("Hna4 Settings  passed OK! ")
 -- hna6 --
   local str_hna6 = ""
   if sections.Hna6 ~= nil and #sections.Hna6 > 0 then
@@ -295,6 +210,7 @@ function write_config()
       str_hna6 = "Hna6\n{\n"..str_hna6 .. "}\n"
     end
   end
+  wwwprint ("Hna6 Settings  passed OK! ")
 
   local str_ipc = ""
   if sections.ipc ~= nil then
@@ -319,6 +235,7 @@ function write_config()
     end
     str_ipc = str_ipc .."}\n\n"
   end
+  wwwprint ("IpcConnect Settings  passed OK! ")
 
   local str_plugins = ""
   for i = 1, #sections.LoadPlugin do
@@ -345,9 +262,11 @@ function write_config()
 --    str_plugins = str_plugins.."\n"
     end
     str_plugins = str_plugins .. "}\n\n"
+    wwwprint (plugin.Library.." Plugin Settings  passed OK! ")
     else
       str_plugins = str_plugins.."###\n### CAUTION!!! this plugins is in your configuration file,\n### but is not Installed, plugin Name : "..plugin.Library.."\n###\n\n"
-    end    
+      wwwprint (str_plugins)
+    end
   end 
 
   local str_interface = ""
@@ -365,6 +284,8 @@ function write_config()
   end
 
   str_interface = str_interface .. "\n"
+  wwwprint ("Interface Settings passed OK!")
+
   os.execute ("echo '".."###Conf file writen by IW-OSRL package###\n\n"..str_gral..str_ipc..str_hna4..str_hna6..str_plugins..str_interface.."' > "..output_file)
   wwwprint("Config file writed ok!")
 end
