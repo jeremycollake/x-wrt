@@ -57,9 +57,9 @@ if #forms > 0 then
     forms[i]:print()
   end
 end
-
+--[[
 for i,v in pairs(__FORM) do
   print(i,v,"<br/>")
 end
-
+]]--
 print(page:footer())

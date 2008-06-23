@@ -69,9 +69,10 @@ function set_mesh(general)
     forms = set_portal(general)
   else
 --    check = pkgInstalledClass.new(ipkg.check(olsr_pkgs),true)
-    iwuci.set("olsr.webadmin.enable","1")
-    iwuci.set("olsr.webadmin.userlevel","1")
+--    iwuci.set("olsr.webadmin.enable","1")
+--    iwuci.set("olsr.webadmin.userlevel","1")
     require("olsr")
+    olsrd.get_installed_plugin()
     forms[1] = olsrd.core_form()
     forms[1].title = "Mesh Network Settings (OLSR)"
     forms[1]:Add("hidden","step","portal")
