@@ -11,7 +11,7 @@ pkg.check("ip olsrd olsrd-mod-dyn-gw olsrd-mod-nameservice olsrd-mod-txtinfo")
 require("olsr")
 --olsr = uciClass.new("olsr")
 forms = {}
-__WIP=2
+__WIP=4
 olsrd.set_menu()
 local option = string.trim(__FORM.option)
 page.title = "OLSR"
@@ -21,8 +21,12 @@ if option == "service" then
   forms[1] = olsrd.core_form()
 elseif option == "general" then
   forms[1] = olsrd.general_form()
-elseif option == "hna4" then
-  forms[1] = olsrd.hna4_form()
+elseif option == "Ipc" then
+  forms = olsrd.ipc_form()
+elseif option == "Hna4" then
+  forms[1] = olsrd.hna_form()
+elseif option == "Hna6" then
+  forms[1] = olsrd.hna_form()
 elseif option == "interfaces" then
   forms[1] = olsrd.interfaces_form()
 elseif option == "plugin" then
@@ -30,7 +34,7 @@ elseif option == "plugin" then
     forms[1] = olsrd.plugin_list_form()
 --    forms[2] = olsrd.add_plugin_form()
   else
-    forms[1] = olsrd.plugins_form()
+    forms = olsrd.plugins_form()
   end
 elseif option == "status" then
   page.__DOCTYPE = ""
@@ -53,9 +57,9 @@ if #forms > 0 then
     forms[i]:print()
   end
 end
---[[
+
 for i,v in pairs(__FORM) do
   print(i,v,"<br/>")
 end
-]]--
+
 print(page:footer())

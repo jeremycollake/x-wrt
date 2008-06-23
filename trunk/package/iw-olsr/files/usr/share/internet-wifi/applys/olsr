@@ -119,7 +119,8 @@ function process_config()
   olsr = uci.get_all("olsr")
   local set_netname = olsr.webadmin.netname or "olsrnet"
   local set_nodenumber = olsr.webadmin.nodenumber or "1"
-  local set_netaddr = olsr.webadmin.ipaddr or "10.128."..set_nodenumber..".1"
+--  local set_netaddr = olsr.webadmin.ipaddr or "10.128."..set_nodenumber..".1"
+  local set_netaddr = "10.128."..set_nodenumber..".1"
   local set_netmask = olsr.webadmin.netmask or "255.255.0.0"
   local set_device = olsr.webadmin.device or "wl0"
   local set_ssid = olsr.webadmin.ssid or "X-Wrt"
