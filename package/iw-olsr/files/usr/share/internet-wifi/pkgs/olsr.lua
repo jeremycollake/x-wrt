@@ -63,7 +63,6 @@ setfenv(1, P)
     uci.save("olsr")
   end
 
-
   local molsr = uci.get_all("olsr")
   if molsr == nil then
     os.execute("echo '' > /etc/config/olsr 2> /dev/null") 
@@ -184,6 +183,7 @@ setfenv(1, P)
     end
   end
   uci.save("olsr")
+
   
 local olsr = uciClass.new("olsr")
 --if olsr.webadmin == nil then webadmin = olsr:set("websettings","webadmin") end
@@ -293,6 +293,9 @@ function get_bad_plugin()
   return badplugin
 end
 
+function set_default()
+end
+
 function set_menu()
   local tplugins = get_installed_plugin()
   local badplugin = get_bad_plugin() 
@@ -332,6 +335,7 @@ function check_pkg()
 end
 
 function core_form()
+  set_default()
   if olsr.websettings == nil then websettings = olsr:set("websettings","webadmin") 
   else websettings = olsr.websettings end
   websettings_values = websettings[1].values
@@ -857,11 +861,8 @@ local vizstr = [[
   viz_update();
 </SCRIPT> </P>
 ]]
-
 return vizstr
-
 end
-
 function plugin_list_form(form,user_level)
   local tplugins = get_installed_plugin()
   local badplugins = get_bad_plugin()
