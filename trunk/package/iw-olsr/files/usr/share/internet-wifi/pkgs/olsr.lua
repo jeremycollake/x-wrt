@@ -65,16 +65,19 @@ setfenv(1, P)
 
   local molsr = uci.get_all("olsr")
   if molsr == nil then
-    os.execute("echo '' > /etc/config/olsr 2> /dev/null") 
+    os.execute("echo -n '' > /etc/config/olsr 2> /dev/null") 
     uci.set("olsr","webadmin","websettings")
     uci.save("olsr")
   end  
   if uci.get("olsr","webadmin") == nil then
+    uci.unload("olsr")
     os.execute("cp /etc/config/olsr /etc/config/olsr.backup 2> /dev/null")
-    os.execute("echo '' > /etc/config/olsr 2> /dev/null") 
-    uci.set("olsr","webadmin","websettings")
-    uci.save("olsr")
+    os.execute("echo -n '' > /etc/config/olsr 2> /dev/null") 
   end
+  if uci.get("olsr","webadmin") == nil then
+    uci.set("olsr","webadmin","websettings")
+  end
+  
   local set_netname = uci.get("olsr","webadmin","netname") or "olsrnet"
   local set_nodenumber = uci.get("olsr","webadmin","nodenumber") or "1"
 --  local set_netaddr = uci.get("olsr","webadmin","ipaddr") or "10.128."..set_nodenumber..".1"
@@ -115,6 +118,15 @@ setfenv(1, P)
   if uci.get("olsr","IpcConnect") == nil then
     uci.set("olsr","IpcConnect","ipc")
   end
+  if uci.get("olsr","IpcConnect","MaxConnections") == nil then
+    uci.set("olsr","IpcConnect","MaxConnections","1")
+  end
+
+  if uci.get_type("olsr","ipcHost") == nil then
+    local name = uci.add("olsr","ipcHost")
+    uci.set("olsr",name,"Host","127.0.0.1")
+  end
+
   uci.save("olsr")
 --  wwwprint("general settings")
   if uci.get("olsr","general","UseHysteresis") == nil then
