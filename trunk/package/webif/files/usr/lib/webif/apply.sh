@@ -29,7 +29,7 @@ HANDLERS_file='
 	ethers) rm -f /etc/ethers; mv $config /etc/ethers; killall -HUP dnsmasq ;;
 	firewall) mv /tmp/.webif/file-firewall /etc/firewall.config && /etc/init.d/firewall restart && reload_upnpd;;
 	dnsmasq.conf) mv /tmp/.webif/file-dnsmasq.conf /etc/dnsmasq.conf && /etc/init.d/dnsmasq restart;;
-	httpd.conf) mv -f /tmp/.webif/file-httpd.conf /etc/httpd.conf && /etc/init.d/httpd restart;;
+	httpd.conf) mv -f /tmp/.webif/file-httpd.conf /etc/httpd.conf && HTTP_RESTART=1 ;;
 '
 
 # for some reason a for loop with "." doesn't work
@@ -368,4 +368,6 @@ done
 cd "$pushed_dir"
 rm /tmp/.webif/* >&- 2>&-
 rm /tmp/.uci/* >&- 2>&-
-
+if [ "$HTTP_RESTART" = "1" ]; then
+	/etc/init.d/httpd restart
+fi
