@@ -22,14 +22,13 @@ EOF
 			)
 			equal "$?" 0 || ERROR="<pre>$RES</pre>"
 		}
-	fi
-else
-	exists /tmp/.webif/file-httpd.conf && HTTPD_CONFIG_FILE=/tmp/.webif/file-httpd.conf || HTTPD_CONFIG_FILE=/etc/httpd.conf
-	empty "$ERROR" && {
-		cat $HTTPD_CONFIG_FILE | awk '
+	else
+		exists /tmp/.webif/file-httpd.conf && HTTPD_CONFIG_FILE=/tmp/.webif/file-httpd.conf || HTTPD_CONFIG_FILE=/etc/httpd.conf
+		empty "$ERROR" && {
+			cat $HTTPD_CONFIG_FILE | awk '
 BEGIN {
 	FS=":"
-	if ((ENVIRON["FORM_submit"] != "") && system("/bin/rm /tmp/.webif/file-httpd.conf; touch/tmp/.webif/file-httpd.conf")
+	if (ENVIRON["FORM_submit"] != "") && system("/bin/rm /tmp/.webif/file-httpd.conf; touch/tmp/.webif/file-httpd.conf")
 }
 ((ENVIRON["FORM_submit"] != "") && ($1 != "")) {
 	if (($1 == "/cgi-bin/webif/") && (ENVIRON["REMOTE_USER"] != $2)) {
@@ -44,6 +43,7 @@ BEGIN {
 	}
 }'
 	}
+	fi
 fi
 
 header "System" "Password" "@TR<<Password>>" '' "$SCRIPT_NAME"
