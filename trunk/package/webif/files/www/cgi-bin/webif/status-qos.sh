@@ -113,23 +113,29 @@ echo "<table cellspacing=\"10\" cellpadding=\"10\">
 	$egress_stats_table</tbody></table>"
 
 display_form <<EOF
+string|<br />
+formtag_begin|raw_stats|$SCRIPT_NAME
+submit|show_raw_stats| @TR<< Show raw statistics >>
+formtag_end
 end_form
 EOF
 
 #########################################
 # raw stats
-echo "<br />
-<table style=\"width: 90%; text-align: left;\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\">
-<tbody>
-<tr>
-	<th>@TR<<QoS Packets | Raw Stats>></th>
-</tr>
-<tr>
-<td>"
-echo "<br /><div class=\"smalltext\"><pre>"
-qos-stat
-echo "</pre></div>"
-echo "</td></tr><tr><td><br /><br /></td></tr></tbody></table>"
+! empty "$FORM_show_raw_stats" && {
+	echo "<br />
+	<table style=\"width: 90%; text-align: left;\" border=\"0\" cellpadding=\"2\" cellspacing=\"2\" align=\"center\">
+	<tbody>
+	<tr>
+		<th>@TR<<QoS Packets | Raw Stats>></th>
+	</tr>
+	<tr>
+	<td>"
+	echo "<br /><div class=\"smalltext\"><pre>"
+	qos-stat
+	echo "</pre></div>"
+	echo "</td></tr><tr><td><br /><br /></td></tr></tbody></table>"
+}
 else
 #########################################
 # no QoS Service
