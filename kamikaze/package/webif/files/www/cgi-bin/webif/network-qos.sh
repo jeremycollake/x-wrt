@@ -30,7 +30,7 @@ header "Network" "QoS" "@TR<<QOS Configuration>>" ' onload="modechange()" ' "$SC
 if ! empty "$FORM_install_nbd"; then
 	echo "@TR<<qos_installing#Installing Nbd's QoS scripts>> ...<pre>"
 	! install_package "qos-scripts" && {
-		install_package "http://ftp.berlios.de/pub/xwrt/packages/qos-scripts_0.9.1-1_mipsel.ipk"
+		install_package "http://ftp.berlios.de/pub/xwrt/packages/qos-scripts_0.9.4-1_mipsel.ipk"
 	}
 	echo "</pre>"
 fi

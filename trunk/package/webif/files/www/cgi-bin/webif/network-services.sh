@@ -33,8 +33,8 @@ fi
 
 if ! empty "$FORM_install_linuxigd"; then
 	echo "@TR<<Installing>> linux-igd ...<pre>"		
-	install_package http://ftp.berlios.de/pub/xwrt/packages/libupnp_1.2.1a_mipsel.ipk
-	install_package http://ftp.berlios.de/pub/xwrt/packages/linux-igd_1.0.1.ipk
+	install_package "http://ftp.berlios.de/pub/xwrt/packages/libupnp_1.2.1a_mipsel.ipk"
+	install_package "http://ftp.berlios.de/pub/xwrt/packages/linux-igd_1.0.1.ipk"
 	# if config file doesn't exist, create it since it doesn't come with above pkg at present
 	! exists "/etc/config/upnpd" && {
 		uci_load "upnpd"
@@ -100,7 +100,7 @@ else
 		ipkg remove miniupnpd 2>&1 >> /dev/null
 		# todo: force to use latest package - but since this is a temporary kludge to get
 		#  users upgraded, no big deal.			
-		if ipkg install http://ftp.berlios.de/pub/xwrt/packages/miniupnpd_1.0-RC1-1_mipsel.ipk  2>&1 >> /dev/null; then
+		if ipkg install "http://ftp.berlios.de/pub/xwrt/packages/miniupnpd_1.0-RC3-2_mipsel.ipk"  2>&1 >> /dev/null; then
 			echo " @TR<<Completed successfully>>!<br />"
 		else
 			echo " @TR<<Failed to install>>!<br />"
