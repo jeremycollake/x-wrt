@@ -45,25 +45,27 @@ header_inject_head=$(cat <<EOF
 #viewarea .datecol {
 	width: 17%;
 }
+#viewarea .logfonts {
+	font-family: Courier,"Lucida Console",monospace;
+	font-size: 0.8em;
+	whitespace: pre;
+}
+#viewarea .leglog {
+	margin-top: 0 auto 0 auto;
+	padding: 0 4px 0 4px;
+	width: 99%;
+}
 #viewarea .prelog {
-	margin-top: 0.2em;
-	margin-right: auto;
-	margin-bottom: 1em;
-	margin-left: auto;
+	margin: 0.2em auto 1em auto;
 	padding: 3px;
 	width: 99%;
 	height: 14.0em;
-	font-family: Courier,"Lucida Console",monospace,serif;
-	font-size: 0.8em;
-	background-color: #f8f6f4;
 	overflow: auto;
-	border-width: 0.0834em;
-	border-style: solid;
-	border-color: #c0b8b0;
-	whitespace: pre;
+	border: 1px solid;
 }
 #viewarea fieldset {
 	border: 1px solid;
+	padding: 3px;
 }
 // -->
 </style>
@@ -285,14 +287,36 @@ if [ -f /tmp/currentlogfile ]; then
 
 	if [ $EXTENSION = 'torrent' ]; then
 		echo "<fieldset><legend>@TR<<freeloader-status_Torrent_log#Torrent log>></legend>"
-		echo -n "<pre class=\"prelog\" title=\"@TR<<freeloader-status_Start_log#Start of the log>>\">"
+		echo -n "<pre class=\"logfonts prelog\" title=\"@TR<<freeloader-status_Start_log#Start of the log>>\">"
 		head -c 2000 "$LOG_DIRECTORY/$CURRENT_LOGFILE" | tr '\r' '\n'| sed '/Check exists:/d; s/&/\&amp;/; s/</\&lt;/; s/>/\&gt;/;' | sed 24q
 		echo
 		echo "</pre>"
 		echo -n "<pre class=\"prelog\" title=\"@TR<<freeloader-status_End_log#End of the reversed log>>\">"
 		tail -c 5000 "$LOG_DIRECTORY/$CURRENT_LOGFILE" | tr '\r' '\n' | sed '/Check exists:/d; s/&/\&amp;/; s/</\&lt;/; s/>/\&gt;/; 1!G;h;$!d;' | sed 70q
 		echo
-		echo "</pre></fieldset>"
+		echo "</pre>"
+		echo "<p class=\"logfonts leglog\"><u>@TR<<freeloader-status_Torrent_Legend#Legend>></u>:<br />"
+		echo "/ 0/3/50 [672/672/672] 0MB,1130MB | 0,20K/s | 0,0K E:0,31 P:4/10<br />"
+		echo "- - - -- &nbsp;--- --- --- &nbsp;--- ------ &nbsp;&nbsp;- -- &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- - &nbsp;&nbsp;&nbsp;- -- &nbsp;&nbsp;----<br />"
+		echo "A B C &nbsp;D &nbsp;&nbsp;E &nbsp;&nbsp;F &nbsp;&nbsp;G &nbsp;&nbsp;&nbsp;H &nbsp;&nbsp;&nbsp;&nbsp;I &nbsp;&nbsp;&nbsp;&nbsp;J &nbsp;K &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L M &nbsp;&nbsp;&nbsp;N &nbsp;O &nbsp;&nbsp;&nbsp;&nbsp;P<br />"
+		echo "@TR<<freeloader-status_torrent_leg_A#A: Ticker; this character changes to indicate that the client is running.>><br />"
+		echo "@TR<<freeloader-status_torrent_leg_B#B: Number of seeders (complete peers) to which you are connected.>><br />"
+		echo "@TR<<freeloader-status_torrent_leg_C#C: Number of leechers (incomplete peers) to which you are connected.>><br />"
+		echo "@TR<<freeloader-status_torrent_leg_D#D: Total number of peers in the swarm, as last reported by the tracker.>><br />"
+		echo "@TR<<freeloader-status_torrent_leg_E#E: Number of pieces of the torrent that you have completed.>><br />"
+		echo "@TR<<freeloader-status_torrent_leg_F#F: Total number of pieces in the torrent.>><br />"
+		echo "@TR<<freeloader-status_torrent_leg_G#G: Number of pieces currently available from you and your connected peers.>><br />"
+		echo "@TR<<freeloader-status_torrent_leg_H#H: Total amount of data you have downloaded.>><br />"
+		echo "@TR<<freeloader-status_torrent_leg_I#I: Total amount of data you have uploaded.>><br />"
+		echo "@TR<<freeloader-status_torrent_leg_J#J: Your current total download rate.>><br />"
+		echo "@TR<<freeloader-status_torrent_leg_K#K: Your current total upload rate.>><br />"
+		echo "@TR<<freeloader-status_torrent_leg_L#L: Amount of data downloaded since the last status line update.>><br />"
+		echo "@TR<<freeloader-status_torrent_leg_M#M: Amount of data uploaded since the last status line update.>><br />"
+		echo "@TR<<freeloader-status_torrent_leg_N#N: Number of tracker connection errors.>><br />"
+		echo "@TR<<freeloader-status_torrent_leg_O#O: Number of successful tracker connections.>><br />"
+		echo "@TR<<freeloader-status_torrent_leg_P#P: Completion ratio of current file (when -n is used).>><br />"
+		echo "@TR<<freeloader-status_torrent_leg_Additional#Additional information such as tracker connection status may be displayed at the end of the status line when appropriate.>></p>"
+		echo "</fieldset>"
 	elif [ $EXTENSION = 'link' ]; then
 		echo "<fieldset><legend>@TR<<freeloader-status_Link_log#Link log>></legend>"
 		echo -n "<pre class=\"prelog\" title=\"@TR<<freeloader-status_Start_log#Start of the log>>\">"
