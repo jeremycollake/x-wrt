@@ -202,13 +202,13 @@ EOF
 			}
 		}
 		# webif settings
-		! equal "$FORM_ssl_enable" "$CONFIG_ssl_enable" && ! empty "$CONFIG_ssl_enable" && {
+		! equal "$FORM_ssl_enable" "$CONFIG_ssl_enable" && {
 			uci_set "webif" "ssl" "enable" "$FORM_ssl_enable"
 		}
-		! equal "$FORM_theme" "$CONFIG_theme_id" && ! empty "$CONFIG_theme_id" && {
+		! equal "$FORM_theme" "$CONFIG_theme_id" && {
 			uci_set "webif" "theme" "id" "$FORM_theme"
 		}
-		! equal "$FORM_language" "$CONFIG_general_lang" && ! empty "$CONFIG_general_lang" && {
+		! equal "$FORM_language" "$CONFIG_general_lang" && {
 			uci_set "webif" "general" "lang" "$FORM_language"
 		}
 		is_kamikaze && {	
