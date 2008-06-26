@@ -46,21 +46,21 @@ elseif __FORM.option == "scripts" then
   forms[1] = cportal.script_form()
 elseif __FORM.option == "users" then
   require("webpkg")
-  pkg.check("libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm")
+  pkg.check("iw-freeradius libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm")
   require("radius")
   forms[1] = radius.add_usr_form()
   forms[2] = radius.user_form()
 elseif __FORM.option == "communities" then
-  require("radius")
-  forms[1] = radius.community_form()
-
+    pkg.check("iw-freeradius libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm")
+    require("radius")
+    forms[1] = radius.community_form()
 elseif __FORM.option == "connections" then
   page.savebutton = ""
   forms[1] = cportal.connect_form()
 elseif __FORM.bt_pkg_install == "Install" then
   local freeradius_pkg = pkgInstalledClass.new("libltdl,freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm",true)
 else
-  forms = cportal.core_form()
+  forms[1] = cportal.core_form()
 end
 
 print(page:header())
@@ -68,6 +68,9 @@ for i=1, #forms do
   forms[i]:print()
 end
 --[[
+for i,v in pairs(__SERVER) do
+  print(i,v,"<br>")
+end
 for i,v in pairs(__FORM) do
   print(i,v,"<br>")
 end
