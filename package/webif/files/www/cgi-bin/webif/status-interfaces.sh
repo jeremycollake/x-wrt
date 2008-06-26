@@ -46,8 +46,8 @@ for cfgsec in $CONFIG_SECTIONS; do
 				fi
 			;;
 		esac
-		eval "cfgnet=\$CONFIG_${cfgsec}_network"
-		eval "isbridge=\"${cfgnet}_bridge\""
+		eval "cfgnet=\"\$CONFIG_${cfgsec}_network\""
+		eval "isbridge=\"\$${cfgnet}_bridge\""
 		if [ "$isbridge" != "1" ]; then
 			eval "${cfgnet}_iface=\"${cur_iface}\""
 		fi
