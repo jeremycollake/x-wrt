@@ -99,4 +99,21 @@ function uci.updated()
 	end
   return mycount
 end
-   
+
+function uci.check_set(p,s,o,v)
+  local r
+  if p == nil then return nil end
+  if p and s and o and v then
+    r = uci.get(p,s,o)  
+    if r == nil then
+      uci.set(p,s,o,v)
+      r = v
+    end
+    return r
+  elseif p and s and o and v == nil then
+    if uci.get(p,s) == nil then 
+      return uci.set(p,s,o)
+    end
+  end
+  return nil
+end

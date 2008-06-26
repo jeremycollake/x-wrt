@@ -34,21 +34,41 @@
 -- 
 require("set_path")
 require("init")
---require("ipkg")
---require("checkpkg")
 require("webpkg")
-require("iwuci")
+require("uci_iwaddon")
+
+if uci.get("iw_hotspot_wizard.general") == nil then
+  uci.set("iw_hotspot_wizard.general=settings")
+end
+if uci.get("iw_hotspot_wizard.general.portal") == nil then
+  uci.set("iw_hotspot_wizard.general.portal=0")
+end
+if uci.get("iw_hotspot_wizard.general.mesh") == nil then
+  uci.set("iw_hotspot_wizard.general.mesh=0")
+end
+if uci.get("iw_hotspot_wizard.general.radius") == nil then
+  uci.set("iw_hotspot_wizard.general.radius=0")
+end
+uci.save("iw_hotspot_wizard")
+
+local pkgs_tocheck = ""
+local forms ={}
+local wz = {}
+
+wz.mesh   = tonumber(uci.get("iw_hotspot_wizard.general.mesh"))
+wz.radius = tonumber(uci.get("iw_hotspot_wizard.general.radius")) 
+wz.portal = tonumber(uci.get("iw_hotspot_wizard.general.portal"))
+
 local olsr_pkgs = "ip olsrd olsrd-mod-dyn-gw olsrd-mod-nameservice olsrd-mod-txtinfo iw-olsr"
-local freeradius_pkgs = "libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm iw-freeradius"
+local freeradius_pkgs = "iw-freeradius libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm iw-freeradius"
 local coova_pkgs = "coova-chilli coova-chilli-xwrt"
 local chilli_pkgs = "chillispot iw-chillispot"
 
-
 function setfooter(form)
   page.savebutton = "<input type=\"submit\" name=\"__ACTION\" value=\""..tr("Next").."\" style=\"width:100px;\" />"
-  page.action_apply = ""
-  page.action_clear = ""
-  page.action_review = ""
+--  page.action_apply = ""
+--  page.action_clear = ""
+--  page.action_review = ""
   form:Add("hidden","__ShowMenu","yes")
   form:Add("hidden","option","wizard")
 end
@@ -63,14 +83,11 @@ function nothing()
     return forms
 end
 
-function set_mesh(general)
+function set_mesh()
   local forms = {}
-  if tonumber(general.values.mesh) == 0 then
-    forms = set_portal(general)
+  if tonumber(wz.mesh) == 0 then
+    forms = set_portal()
   else
---    check = pkgInstalledClass.new(ipkg.check(olsr_pkgs),true)
---    iwuci.set("olsr.webadmin.enable","1")
---    iwuci.set("olsr.webadmin.userlevel","1")
     require("olsr")
     olsrd.get_installed_plugin()
     forms[1] = olsrd.core_form()
@@ -81,59 +98,72 @@ function set_mesh(general)
   return forms
 end 
 
-function set_portal(general)
+function set_portal()
   local forms = {}
-  if tonumber(general.values.portal) == 0 then
-    forms = set_users(general)
+  if wz.portal == 0 then
+    forms = set_communities()
   else
---    check = pkgInstalledClass.new(coova_pkgs,true)
-    iwuci.set("chilli.service","websettings") 
-    iwuci.set("chilli.service.enable","1")
-    iwuci.set("chilli.service.userlevel","1")
-    require("coovaportal")
-    local user_level = tonumber(general.values.user_level) or 0
-    local localradius = tonumber(general.values.radius) or 0
-    forms[1] = cportal.core_form()
-    forms[1].title = "Coova Chilli Service"
---    forms[1] = formClass.new(tr("Captive Portal"))
---    cportal.net_form(forms[1],user_level)
---    cportal.radius_form(forms[1],user_level,localradius)
-    setfooter(forms[1])
-    forms[1]:Add("hidden","step","users")
+    if wz.radius == 0 then 
+      wz.radius = 1
+      uci.set("iw_hotspot_wizard.general.radius=1")
+      uci.save("iw_hotspot_wizard")
+    end
+    if wz.portal == 1 then
+      pkg.check(coova_pkgs)
+      require("coovaportal")
+      forms[1] = cportal.core_form(nil,1,wz.radius)
+      forms[1].title = "Coova Chilli Service"
+      setfooter(forms[1])
+    else
+      pkg.check(chilli_pkgs)
+      require("chilliportal")
+      forms[1] = cportal.core_form(nil,1,wz.radius)
+      setfooter(forms[1])
+    end  
+    forms[1]:Add("hidden","step","communities")
   end
   return forms
 end
 
-function set_users(general)
+function set_users()
   local forms = {}
-  if tonumber(general.values.radius) == 0 then
-    if tonumber(general.values.portal) == 1 then 
-      general.values.radius = 2
-    elseif tonumber(general.values.portal) == 2 then 
-      general.values.radius = 3
-    elseif tonumber(general.values.portal) == 3 then
-      general.values.radius = 3
-    end    
-    iwuci.set("iw_hotspot_wizard.general.radius",general.values.radius)
-  end
-  if tonumber(general.values.radius) > 1 then
---    check = pkgInstalledClass.new(freeradius_pkgs,true)
+  if wz.radius > 1 then
+    pkg.check(freeradius_pkgs)
     require("radius")
     forms[1] = radius.add_usr_form()
     forms[2] = radius.user_form()
     setfooter(forms[1])
-    forms[1]:Add("hidden","step","communities")
+    forms[1]:Add("hidden","step","set_end")
   else
-    forms = set_communities(general)
+    forms = set_end()
   end
   return forms
 end
 
-function set_communities(general)
+function set_communities()
   local forms = {}
-  if tonumber(general.values.radius) == 1
-  or tonumber(general.values.radius) == 3 then -- Local Users
---    check = pkgInstalledClass.new(freeradius_pkgs,true)
+  if wz.radius == 0 then
+    if wz.portal ~= 0 then 
+      wz.radius = 1
+    end    
+    uci.set("iw_hotspot_wizard","general","radius",wz.radius)
+  end
+  if wz.radius == 1 then
+  -- configura el raduis en el cportal
+    if wz.portal == 0 then
+--      mensaje de eroor
+    elseif wz.portal == 1 then
+      pkg.check(coova_pkgs)
+      require("coovaportal")
+    elseif wz.portal == 3 then
+      pkg.check(chilli_pkgs)
+      require("chilliportal")
+    end          
+    forms[1] = cportal.radius_form(nil,1,wz.radius)
+    forms[1]:Add("hidden","step","set_end")
+    setfooter(forms[1])
+  elseif wz.radius == 3 then
+    pkg.check(freeradius_pkgs)
     require("radius")
     forms[1] = radius.community_form()
     for i,k in pairs(forms[1]) do
@@ -144,40 +174,43 @@ function set_communities(general)
         forms[1][i].value = __SERVER.SCRIPT_NAME.."?".."UCI_CMD_del"..realm_cfg.."=&__menu="..__FORM.__menu.."&option=wizard&step=communities"
       end
     end    
---    forms[2] = add_communities(general)
     setfooter(forms[1])
-    forms[1]:Add("hidden","step","set_end")
+    if wz.radius == 3 then
+      forms[1]:Add("hidden","step","users")
+    else
+      forms[1]:Add("hidden","step","set_end")
+    end
+  elseif wz.radius == 2 then
+    forms = set_users()
   else
-    return set_end(general)
+    forms = set_end()
+  end
+  if wz.radius > 1 then
+    if wz.portal == 1 then
+      require("coovaportal")
+    elseif wz.portal == 3 then
+      require("chilliportal")
+    end
+    cportal.set_rad_local(1,wz.radius)
   end
   return forms
 end
 
-function set_end(general)
+function set_end()
   local forms = {}
-  if tonumber(general.values.mesh) > 0 then
+  if wz.mesh > 0 then
     forms[#forms+1] = formClass.new(tr("Mesh Network Configuration"))
 	end
-  if tonumber(general.values.portal) > 0 then
+  if wz.portal > 0 then
     forms[#forms+1] = formClass.new(tr("Captive portal configured"))
 	end
-  if tonumber(general.values.radius) > 0 then
+  if wz.radius > 0 then
     forms[#forms+1] = formClass.new(tr("Radius Server configured"))
 	end
 	return forms
 end
 
-local pkgs_tocheck = ""
-local forms ={}
 
-
-iw_hotspot = uciClass.new("iw_hotspot_wizard")
-
-if iw_hotspot.general == nil then iw_hotspot:set("settings","general") end
-local general = {}
-general["name"] = iw_hotspot.__PACKAGE..".general"
-general["values"] = iw_hotspot.general
--- require(".files/iwhotspothelper-menu")
 for k,v in pairs(__FORM) do
   if k == "UCI_SET_VALUE" and string.trim(v) ~= "" then
     if __FORM.UCI_CMD_snwfreeradius_check then
@@ -198,9 +231,9 @@ for k,v in pairs(__FORM) do
 end
 
 __FORM.option = string.trim(__FORM.option)
-  pkg.add_hidden("__ShowMenu","yes")
-  pkg.add_hidden("option",__FORM.option)
-  pkg.add_hidden("step",__FORM.step)
+pkg.add_hidden("__ShowMenu","yes")
+pkg.add_hidden("option",__FORM.option)
+pkg.add_hidden("step",__FORM.step)
 
 if __FORM.option == "about" then
   forms[1] = about()
@@ -209,45 +242,46 @@ elseif __FORM.bt_pkg_install == "Install" then
 elseif __FORM.option == "config" then
   forms[1] = config() 
 elseif __FORM.option == "wizard" then
-  if tonumber(general.values.mesh) + tonumber(general.values.portal) + tonumber(general.values.radius) == 0 
-  then
-    __FORM.step = "nothing"
+
+  if wz.mesh + wz.portal + wz.radius == 0 then
+    __FORM.step = nothing()
+  elseif wz.portal == 0 and wz.radius == 1 then
+    __FORM.step = no_portal()
   end
-  if tonumber(general.values.mesh) == 1 then 
+  if wz.mesh == 1 then 
     pkgs_tocheck = olsr_pkgs 
   end
-  if tonumber(general.values.portal) == 1 then
-    if pkgs_tocheck == "" then
-      pkgs_tocheck = coova_pkgs.." "..freeradius_pkgs
-    else
-      pkgs_tocheck = coova_pkgs.." "..freeradius_pkgs.." "..pkgs_tocheck
-    end
+  if wz.portal == 1 then
+    pkgs_tocheck = coova_pkgs.." "..pkgs_tocheck
   end
---  pkgInstalledClass.new(pkgs_tocheck,true)
-
+  if wz.portal == 2 then
+    pkgs_tocheck = chilli_pkgs.." "..pkgs_tocheck
+  end
+  if wz.radius > 1 then
+      pkgs_tocheck = freeradius_pkgs.." "..pkgs_tocheck
+  end
   pkg.check(pkgs_tocheck)
-  if __FORM.step == "nothing" then
-    forms = nothing()
-  elseif __FORM.step == "network" then
-    forms = set_mesh(general)
+  if __FORM.step == "network" then
+    forms = set_mesh()
   elseif __FORM.step == "portal" then
-    forms = set_portal(general)
+    forms = set_portal()
   elseif __FORM.step == "users" then
-    forms = set_users(general)
+    forms = set_users()
   elseif __FORM.step == "communities" then
-      forms = set_communities(general)
+      forms = set_communities()
   elseif __FORM.step == "set_end" then
-    forms = set_end(general)
+    forms = set_end()
   end
   -- Check packages to remove --
 -- Need function  
   -- Check packages to install --
 --  local pkgs = pkgInstalledClass.new(check_pkgs,true)
+
 else
   form = formClass.new(tr("Select what you want"))
-	form:Add("select",general.name..".mesh",general.values.mesh,tr("iw_wizard_var_portal#Configure Mesh Network"),"string")
-	form[general.name..".mesh"].options:Add("0",tr("No"))
-	form[general.name..".mesh"].options:Add("1",tr("OLSR"))
+	form:Add("select","iw_hotspot_wizard.general.mesh",uci.get("iw_hotspot_wizard.general.mesh"),tr("iw_wizard_var_portal#Configure Mesh Network"),"string")
+	form["iw_hotspot_wizard.general.mesh"].options:Add("0",tr("No"))
+	form["iw_hotspot_wizard.general.mesh"].options:Add("1",tr("OLSR"))
   form:Add_help(tr("iwhotspothelper_var_mesh#Mesh Network"),tr([[iwhotspothelper_help_mesh#
     Mesh networking is a way to route data, voice and instructions between nodes. 
     It allows for continuous connections and reconfiguration around broken or 
@@ -255,11 +289,11 @@ else
     ]]))
   form:Add_help_link("http://en.wikipedia.org/wiki/Mesh_network",tr("Extracted from Wikipedia"))
 
-	form:Add("select",general.name..".portal",general.values.portal,tr("iw_wizard_var_portal#Configure Captive Portal"),"string")
-	form[general.name..".portal"].options:Add("0",tr("No"))
-	form[general.name..".portal"].options:Add("1",tr("Local Coova-Chilli"))
---	form[general.name..".portal"].options:Add("2",tr("Remote Coova-Chilli"))
---	form[general.name..".portal"].options:Add("3",tr("Remote ChilliSpot"))
+	form:Add("select","iw_hotspot_wizard.general.portal",uci.get("iw_hotspot_wizard.general.portal"),tr("iw_wizard_var_portal#Configure Captive Portal"),"string")
+	form["iw_hotspot_wizard.general.portal"].options:Add("0",tr("No"))
+	form["iw_hotspot_wizard.general.portal"].options:Add("1",tr("Local Coova-Chilli"))
+--	form["iw_hotspot_wizard.general.portal"].options:Add("2",tr("Remote Coova-Chilli"))
+	form["iw_hotspot_wizard.general.portal"].options:Add("3",tr("Remote ChilliSpot"))
   form:Add_help(tr("iwhotspothelper_var_portal#Captive Portal"),tr([[iwhotspothelper_help_portal#
     The captive portal technique forces an HTTP client on a network to see a 
     special web page (usually for authentication purposes) before surfing the 
@@ -268,11 +302,11 @@ else
     ]]))
   form:Add_help_link("http://en.wikipedia.org/wiki/Captive_portal",tr("Extracted from Wikipedia"))
   
-	form:Add("select",general.name..".radius",general.values.radius,tr("iw_wizard_var_portal#Configure Radius Server"),"string")
-	form[general.name..".radius"].options:Add("0","No")
-	form[general.name..".radius"].options:Add("2","Local Users")
-	form[general.name..".radius"].options:Add("1","Communities Users")
-	form[general.name..".radius"].options:Add("3","Local and Communities Users")
+	form:Add("select","iw_hotspot_wizard.general.radius",uci.get("iw_hotspot_wizard.general.radius"),tr("iw_wizard_var_portal#Authentication Users"),"string")
+	form["iw_hotspot_wizard.general.radius"].options:Add("0","No")
+	form["iw_hotspot_wizard.general.radius"].options:Add("2","Local Users")
+	form["iw_hotspot_wizard.general.radius"].options:Add("1","Communities Users")
+	form["iw_hotspot_wizard.general.radius"].options:Add("3","Communities & Local Users")
   form:Add_help(tr("iwhotspothelper_var_radius#Radius Server"),tr([[iwhotspothelper_help_radius#
     Radius server is an AAA (authentication, authorization, and accounting) protocol
     for controlling access to network resources.
@@ -288,10 +322,16 @@ else
   form:Add("hidden","step","network")
   forms[1]=form
 end
+
 page.title = tr("iw_wizard_main_title#Hotspot helper Settings")
 print(page:header())
 for i=1, #forms do
   forms[i]:print()
 end
+--[[
+for i,v in pairs(__SERVER) do
+  print(i,v,"<br>")
+end
+]]--
 print (page:footer())
 

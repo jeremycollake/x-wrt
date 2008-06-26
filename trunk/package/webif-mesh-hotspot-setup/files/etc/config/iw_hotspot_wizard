@@ -1,6 +1,0 @@
-
-config 'settings' 'general'
-	option 'mesh' '0'
-	option 'portal' '0'
-	option 'radius' '0'
-
