@@ -36,7 +36,7 @@ for cfgsec in $CONFIG_SECTIONS; do
 				cur_iface=$(printf "ath%d" "$(( $ath_cnt - 1))")
 			;;
 			*)
-				eval "wdcnt=${wdevice}_cnt"
+				eval "wdcnt=\$${wdevice}_cnt"
 				wdcnt=$(( $wdcnt + 1 ))
 				eval "${wdevice}_cnt=$wdcnt"
 				if [ "$wdcnt" -gt 1 ]; then
