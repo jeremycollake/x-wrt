@@ -1,46 +1,46 @@
-require("iw-uci")
-require("iwuci")
+require("uci_iwaddon")
 
 parser = {}
 local P = {}
 parser = P
 -- Import Section:
 -- declare everything this package needs from outside
-local io = io
 local wwwprint = wwwprint
 if wwwprint == nil then wwwprint=print end
+local uci = uci
+local io = io
+local string = string
 local oldprint = oldprint
 local table = table
 local pairs = pairs
-local iwuci = iwuci
-local uciClass = uciClass
 local tonumber = tonumber
-
-local hotspot = uciClass.new("chilli")
 -- no more external access after this point
 setfenv(1, P)
 
-enable = tonumber(hotspot.service.enable) or 0
-userlevel = tonumber(hotspot.service.userlevel) or 0
-radiususers = tonumber(hotspot.service.users) or 0
-call_parser = "freeradius freeradius_check freeradius_proxy freeradius_clients"
+script = "chilli"
+init_script = "/etc/init.d/chilli"
+
+enable = tonumber(uci.get("coovachilli.webadmin.enable")) or 0
+local userlevel = tonumber(uci.get("coovachilli.webadmin.userlevel")) or 0
+local radiususers = tonumber(uci.get("coovachilli.webadmin.radconf")) or 0
+-- call_parser = "freeradius freeradius_check freeradius_proxy freeradius_clients"
 
 reboot = false                -- reboot device after all apply process
 --exe_before = {} -- execute os process in this table before any process
 exe_after  = {} -- execute os process after all apply process
-if radiususers > 0 then
+if radiususers > 1 then
   exe_after["/etc/init.d/radiusd restart"]="freeradius"
 end
-script = "chilli"
-init_script = "/etc/init.d/chilli"
+--depends_pkgs = "libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm iw-freeradius"
 
-depends_pkgs = "libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm iw-freeradius"
 
 function process()
---  if userlevel < 2 then basic_settings() end
-  wwwprint("Chilli Parsers...")
-  uci.commit("coovachilli")
-  radiususers = tonumber(uci.get("coovachilli.webadmin.radconf)) or 0
+  if uci.commit("coovachilli") == true then
+    wwwprint("coovachilli commited OK!")
+  end
+  
+  radiususers = tonumber(uci.get("coovachilli.webadmin.radconf")) or 0
+
   if radiususers > 1 then
     wwwprint("Checking freeradius installation")
     local write_file
@@ -55,46 +55,15 @@ function process()
       write_file:close()
     end
   end
+
   write_init()
   write_config()
 end
 
---[[
-function basic_settings()
-  iwuci.set("chilli.service","websettings") 
-  iwuci.set("chilli.service.portal","2") 
-  iwuci.set("chilli.service.users","1") 
-  iwuci.set("chilli.network","chilli") 
-  iwuci.set("chilli.network.HS_UAMLISTEN","192.168.182.1") 
-  iwuci.set("chilli.network.HS_NETWORK","192.168.182.0") 
-  iwuci.set("chilli.network.HS_NETMASK","255.255.255.0") 
-  iwuci.set("chilli.network.HS_DNS1","192.168.182.1")
-  iwuci.set("chilli.network.HS_DNS2","204.225.44.3")
-
-  iwuci.set("chilli.radius","chilli")
-  iwuci.set("chilli.radius.HS_RADIUS","127.0.0.1")
-  iwuci.set("chilli.radius.HS_RADIUS2","127.0.0.1")
-  iwuci.set("chilli.radius.HS_RADSECRET", 'testing123')
-  iwuci.set("chilli.radius.HS_RADAUTH",'1812')
-  iwuci.set("chilli.radius.HS_RADACCT",'1813')
-  
-  iwuci.set("chilli.nasid","chilli")
-  iwuci.set("chilli.nasid.HS_NASID","X-Wrtnas")
-  iwuci.set("chilli.nasid.HS_LOC_NAME","My X-Wrt Hotspot")
-  iwuci.set("chilli.nasid.HS_LOC_NETWORK","X-Wrt Network")
-
-  iwuci.set("chilli.uam","chilli")
-  iwuci.set("chilli.uam.HS_UAMSERVER","192.168.182.1") 
-  iwuci.set("chilli.uam.HS_UAMPORT","3990") 
-  iwuci.set("chilli.uam.HS_UAMFORMAT","http://$HS_UAMSERVER/cgi-bin/login/pba.lua") 
-  iwuci.set("chilli.uam.HS_UAMHOMEPAGE","http://$HS_UAMLISTEN:$HS_UAMPORT/www/coova.html")
-  iwuci.set("chilli.uam.HS_UAMALLOW","x-wrt.org")
-end
-]]--
 
 function write_init()
   wwwprint ("Writing init file /etc/init.d/chilli")
-  init_file = [[#!/bin/sh /etc/rc.common
+  local init_file = [[#!/bin/sh /etc/rc.common
 START=59
 
 EXTRA_COMMANDS="status checkrunning radconfig condrestart"
@@ -184,11 +153,11 @@ condrestart() {
   write_file = io.open("/etc/init.d/chilli","w")
   write_file:write(init_file)
   write_file:close()
+  wwwprint("/etc/init.d/chilli writed OK!")
 end
 
 function write_config()
   wwwprint ("Writing configuration file /etc/chilli/config")
-  require("uci_iwaddon")
   local coovadir = uci.get_type("coovachilli","coovadir")
   local str_set="#### This conf file was writed by iw-apply for coova ####\n"
   for x,y in pairs(coovadir) do
@@ -199,7 +168,6 @@ function write_config()
       end
     end
   end
-
   local chillisettings = uci.get_type("coovachilli","settings")
   for x,y in pairs(chillisettings) do
     for k, v in pairs(y) do
@@ -213,6 +181,7 @@ function write_config()
   write_file = io.open("/etc/chilli/config","w")
   write_file:write(str_set)
   write_file:close()
+  wwwprint("/etc/chilli/config writed OK!")
 end
 
 return parser
