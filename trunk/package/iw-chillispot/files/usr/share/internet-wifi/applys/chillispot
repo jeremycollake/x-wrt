@@ -17,13 +17,13 @@ setfenv(1, P)
 enable = tonumber(uci.get("chillispot.webadmin.enable")) or 0
 userlevel = tonumber(uci.get("chillispot.webadmin.userlevel")) or 0
 radiususers = tonumber(uci.get("chillispot.webadmin.radconf")) or 0
--- call_parser = "freeradius freeradius_check freeradius_proxy freeradius_clients"
 
 reboot = false                -- reboot device after all apply process
 --exe_before = {} -- execute os process in this table before any process
 
 exe_after  = {} -- execute os process after all apply process
 if radiususers > 1 then
+  call_parser = "freeradius freeradius_check freeradius_proxy freeradius_clients"
   exe_after["/etc/init.d/radiusd restart"]="freeradius"
 end
 
@@ -74,7 +74,7 @@ stop() {
 }
 
 ]]
-  print ("Writing init file /etc/init.d/chilli".."<br>")
+  wwwprint ("init file /etc/init.d/chilli writed OK!".."<br>")
   write_file = io.open("/etc/init.d/chilli","w")
   write_file:write(init_file)
   write_file:close()
