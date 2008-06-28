@@ -36,6 +36,12 @@ setfenv(1, P)
     uci.set("chillispot.net=settings")
   end
 
+	if uci.get("chillispot","scripts") == nil then
+    uci.set("chillispot","scripts","settings")
+  end
+	uci.check_set("chillispot","scripts","ipup","/etc/chilli.ipup")
+	uci.check_set("chillispot","scripts","ipdown","/etc/chilli.ipdown")
+
   if uci.get("chillispot","webadmin","chillispot") == nil then
     uci.set("chillispot","webadmin","chillispot")
   end
@@ -161,6 +167,7 @@ function core_form(form,user_level,rad_conf)
       form["chillispot.net.dhcpif"].options:Add(k,k)
     end
   end    
+  uci.save("chillispot") 
   return form
 end
 
@@ -242,6 +249,7 @@ function net_form(form,user_level,localuam)
     end
   end
 ----	Help section	
+  uci.save("chillispot") 
   return form
 end
 
@@ -318,6 +326,7 @@ function radius_form(form,user_level,rad_conf)
           ]]))
       end
     end
+  uci.save("chillispot") 
   return form
 end
 
@@ -337,6 +346,7 @@ function access_form(form,user_level,localrad)
 
 	form:Add("text","chillispot.access.macsuffix",uci.get("chillispot.access.macsuffix"),tr("chilli_var_macsuffix#MAC Suffix"),"string")
 	form:Add_help(tr("chilli_var_macsuffix#MAC Suffix"),tr("chilli_help_macsuffix#Suffix to add to the username in-order to form the username."))
+  uci.save("chillispot") 
   return form
 end
 
@@ -354,21 +364,25 @@ function proxy_form(form,user_level,localrad)
 
 	form:Add("text","chillispot.proxy.proxyclient",uci.get("chillispot.proxy.proxyclient"),tr("chilli_var_proxyclient#Client"),"string")
 	form:Add_help(tr("chilli_var_proxyclient#Client"),tr("chilli_help_proxyclient#Clients from which we accept RADIUS Requests."))
+  uci.save("chillispot") 
   return form
 end
 
 function script_form(form,user_level,localrad)
   local user_level = user_level or userlevel
+	if uci.get("chillispot","scripts") == nil then
+    uci.set("chillispot","scripts","settings")
+  end
 
 	form = formClass.new(tr("chilli_title_scripts#Scripts Settings"))
-
-	form:Add("text","chillispot.scripts.ipup",uci.get("chillispot.scripts.ipup"),tr("chilli_var_ipup#IP Up"),"string","width:90%")
-	form:Add("text","chillispot.scripts.ipdown",uci.get("chillispot.scripts.ipdown"),tr("chilli_var_ipdown#IP Down"),"string","width:90%")
+	form:Add("text","chillispot.scripts.ipup",uci.get("chillispot","scripts","ipup",""),tr("chilli_var_ipup#IP Up"),"string","width:90%")
+	form:Add("text","chillispot.scripts.ipdown",uci.get("chillispot","scripts","ipdown",""),tr("chilli_var_ipdown#IP Down"),"string","width:90%")
 	form:Add_help(tr("chilli_help_title_ip#/etc/chilli.ipup and /etc/chilli.ipdown"),tr("chilli_help_ip#Script executed after network interface has been brought up. Executed with the following parameters: (devicename) (ip address) (mask)."))
 
-	form:Add("text","chillispot.scripts.conup",uci.get("chillispot.scripts.conup"),tr("chilli_var_conup#Connection Up"),"string","width:90%")
-	form:Add("text","chillispot.scripts.condown",uci.get("chillispot.scripts.condown"),tr("chilli_var_condown#Connection Down"),"string","width:90%")
+	form:Add("text","chillispot.scripts.conup",uci.get("chillispot","scripts","conup",""),tr("chilli_var_conup#Connection Up"),"string","width:90%")
+	form:Add("text","chillispot.scripts.condown",uci.get("chillispot","scripts","condown",""),tr("chilli_var_condown#Connection Down"),"string","width:90%")
 	form:Add_help(tr("chilli_help_title_con#/etc/chilli.conup and /etc/chilli.condown"),tr("chilli_help_con#Script executed after a user has disconnected. Executed with the following parameters: (devicename) (ip address) (mask) (user ip address) (user mac address) (filter ID)."))
+  uci.save("chillispot")
   return form
 end
 

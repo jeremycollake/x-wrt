@@ -1,0 +1,85 @@
+#!/usr/bin/lua
+dofile("/www/cgi-bin/webif/set_path.lua")
+require("common")
+require("uci_iwaddon")
+local str = ""
+local dev = arg[1]
+local addr = arg[2]
+local mask = arg[3]
+local uamp = uci.get("chillispot","uam","HS_UAMPORT") or 3990
+local net = {}
+tmpnet = io.popen("ipcalc.sh "..addr.." "..mask)
+for line in tmpnet:lines() do
+  local t = string.split(line,"=")
+  net[t[1]] = t[2]
+end
+local wan = "eth0.1"
+tmpnet = io.popen("route -n|grep '^0.0.0.0'|head -n1|awk '{print $8}'")
+for line in tmpnet:lines() do
+  wan = line
+end
+local ipt = {}
+ipt[1] = {}
+ipt[1]["nat"] = ""
+ipt[1]["up"] = "-A"
+ipt[1]["down"] = "-D"
+ipt[1]["rule"] = "INPUT -p tcp -m tcp --dport "..uamp.." --syn -j ACCEPT"
+
+ipt[2] = {}
+ipt[2]["nat"] = ""
+ipt[2]["up"] = "-N"
+ipt[2]["down"] = "-X"
+ipt[2]["rule"] = "CHILLI_ACCEPT"
+
+ipt[3] = {}
+ipt[3]["nat"] = ""
+ipt[3]["up"] = "-A"
+ipt[3]["down"] = "-D"
+ipt[3]["rule"] = "CHILLI_ACCEPT -i "..wan.." -j RETURN"
+
+ipt[4] = {}
+ipt[4]["nat"] = ""
+ipt[4]["up"] = "-A"
+ipt[4]["down"] = "-D"
+ipt[4]["rule"] = "CHILLI_ACCEPT -j ACCEPT"
+
+ipt[5] = {}
+ipt[5]["nat"] = ""
+ipt[5]["up"] = "-A"
+ipt[5]["down"] = "-D"
+ipt[5]["rule"] = "INPUT -j CHILLI_ACCEPT"
+
+ipt[6] = {}
+ipt[6]["nat"] = ""
+ipt[6]["up"] = "-A"
+ipt[6]["down"] = "-D"
+ipt[6]["rule"] = "FORWARD -i "..dev.." -o "..dev.." -j ACCEPT"
+
+ipt[7] = {}
+ipt[7]["nat"] = ""
+ipt[7]["up"] = "-A"
+ipt[7]["down"] = "-D"
+ipt[7]["rule"] = "FORWARD -i "..dev.." -o "..wan.." -j ACCEPT"
+
+ipt[8] = {}
+ipt[8]["nat"] = ""
+ipt[8]["up"] = "-A"
+ipt[8]["down"] = "-D"
+ipt[8]["rule"] = "FORWARD -i "..wan.." -o "..dev.." -j ACCEPT"
+
+ipt[9] = {}
+ipt[9]["nat"] = "-t nat"
+ipt[9]["up"] = "-A"
+ipt[9]["down"] = "-D"
+ipt[9]["rule"] = "POSTROUTING --src "..net.NETWORK.."/"..mask.." -o "..wan.." -j MASQUERADE"
+
+local rev = #ipt+1
+for i=1, #ipt do
+  local j = rev - i
+  str = str.."iptables "..ipt[j]["nat"].." "..ipt[j]["down"].." "..ipt[j]["rule"].."\n"
+  os.execute("iptables "..ipt[i]["nat"].." "..ipt[i]["up"].." "..ipt[i]["rule"])
+end
+
+local write_file = io.open("/var/run/chilli.iptables","w+")
+write_file:write(str)
+write_file:close()
