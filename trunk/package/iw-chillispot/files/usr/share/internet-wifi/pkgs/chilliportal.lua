@@ -26,47 +26,47 @@ local tr = tr
 local tbformClass = tbformClass
 -- no more external access after this point
 setfenv(1, P)
-  if uci.get("chillispot.radius") == nil then
-    uci.set("chillispot.radius=settings")
-  end
-  if uci.get("chillispot.uam") == nil then
-    uci.set("chillispot.uam=settings")
-  end
-  if uci.get("chillispot.net") == nil then
-    uci.set("chillispot.net=settings")
-  end
 
-	if uci.get("chillispot","scripts") == nil then
-    uci.set("chillispot","scripts","settings")
+local ifwifi = uci.get_type("wireless","wifi-iface")
+  if uci.get("chillispot.webadmin.ifwifi") and uci.get("chillispot.net.dhcpif") == nil then
+    uci.check_set("network","wifi","interface")
+    uci.set("network","wifi","proto","static")
+    uci.set("network","wifi","type","bridge")
+--    uci.save("network")
+    if uci.get("network.wifi.ifname") == nil then
+      uci.set("network","wifi","ifname",uci.get("chillispot.webadmin.ifwifi"))
+    elseif not string.gmatch(uci.get("network.wifi.ifname"),uci.get("chillispot.webadmin.ifwifi")) then
+      uci.set("network","wifi","ifname", uci.get("network.wifi.ifname").." "..uci.get("chillispot.webadmin.ifwifi"))
+    end
+--  uci.set("network",set_netname,"dns","204.225.44.3")
+    uci.save("network")
+    local network = uci.get_all("network")
+    if network.wifi.type ~= "bridge" then
+      print("pepe")
+      if network.wifi.ifname ~= nil then
+        print("pepe")
+        uci.set("chillispot","net","dhcpif",network.wifi.ifname)
+      end
+    else
+      uci.set("chillispot","net","dhcpif","br-wifi")
+    end
+    uci.save("chillispot")
   end
+  
+  uci.check_set("chillispot","radius","settings")
+  uci.check_set("chillispot","uam","settings")
+  uci.check_set("chillispot","net","settings")
+  uci.check_set("chillispot","scripts","settings")
 	uci.check_set("chillispot","scripts","ipup","/etc/chilli.ipup")
 	uci.check_set("chillispot","scripts","ipdown","/etc/chilli.ipdown")
 
-  if uci.get("chillispot","webadmin","chillispot") == nil then
-    uci.set("chillispot","webadmin","chillispot")
-  end
-  if uci.get("chillispot","webadmin","enable") == nil then
-    uci.set("chillispot","webadmin","enable","1")
-  end
-  if uci.get("chillispot","webadmin","userlevel") == nil then
-    uci.set("chillispot","webadmin","userlevel","1")
-  end
-  if uci.get("chillispot","webadmin","portal") == nil then
-    uci.set("chillispot","webadmin","portal","0")
-  end
-  if uci.get("chillispot","webadmin","radconf") == nil then
-    uci.set("chillispot","webadmin","radconf","1")
-  end
---  if uci.get("chillispot","settings") == nil then
---    uci.set("chillispot","settings","chilli")
---  end
-  uci.save("chillispot")
-  if uci.get("chillispot","uam","uamserver") == nil then
-    uci.set("chillispot","uam","uamserver","http://www.internet-wifi.com.ar/hotspotlogin_m.php")
-  end
-  if uci.get("chillispot","uam","uamsecret") == nil then
-    uci.set("chillispot","uam","uamsecret","Internet-Wifi")
-  end
+  uci.check_set("chillispot","webadmin","chillispot")
+  uci.check_set("chillispot","webadmin","enable","1")
+  uci.check_set("chillispot","webadmin","userlevel","1")
+  uci.check_set("chillispot","webadmin","portal","0")
+  uci.check_set("chillispot","webadmin","radconf","1")
+  uci.check_set("chillispot","uam","uamserver","http://www.internet-wifi.com.ar/hotspotlogin_m.php")
+  uci.check_set("chillispot","uam","uamsecret","Internet-Wifi")
 --  if uci.get("chillispot","uam","uamhomepage") == nil then
 --    uci.set("chillispot","uam","uamhomepage","http://192.168.182.1/owner.html")
 --  end
@@ -76,38 +76,26 @@ setfenv(1, P)
 --  if uci.get("chillispot.uam.uamport") == nil then
 --    uci.set("chillispot.uam.uamport=3990")
 --  end
-  if uci.get("chillispot.uam.uamallowed") == nil then
-    uci.set("chillispot","uam","uamallowed","x-wrt.org,www.internet-wifi.com.ar")
-  end
-  uci.save("chillispot")
+--  if uci.get("chillispot.uam.uamallowed") == nil then
+  uci.check_set("chillispot","uam","uamallowed","x-wrt.org,www.internet-wifi.com.ar")
+--  end
 --  if uci.get("chillispot.net.net") == nil then
-----    uci.set("chillispot","net","net",uci.get("chillispot.uam.uamlisten").."/24")
 --    uci.set("chillispot","net","net","uci.get("chillispot.uam.uamlisten").."/24")
 --  end
-  if uci.get("chillispot.net.uamanydns") == nil then
-    uci.set("chillispot.net.uamanydns=1")
-  end
+  uci.check_set("chillispot","net","uamanydns","1")
 --  if uci.get("chillispot.net.dns1") == nil then
 --    uci.set("chillispot","net","dns1",uci.get("chillispot.uam.uamlisten"))
 --    uci.set("chillispot","net","dns1","192.168.1.1"))
 --  end
-  
-  uci.save("chillispot")
-
-local userlevel = tonumber(uci.get("chillispot","webadmin","userlevel"))
-local radconf = tonumber(uci.get("chillispot","webadmin","radconf"))
-
-if uci.get("chillispot","radius","radiusserver1") == nil then 
-  uci.set("chillispot","radius","radiusserver1","rad01.internet-wifi.com.ar")
-end
-if uci.get("chillispot","radius","radiusserver2") == nil then
-  uci.set("chillispot","radius","radiusserver2","rad02.internet-wifi.com.ar")
-end
-if uci.get("chillispot.radius.radiussecret") == nil then
-  uci.set("chillispot.radius.radiussecret=Internet-Wifi")
-end
 uci.save("chillispot")
 
+local userlevel = tonumber(uci.check_set("chillispot","webadmin","userlevel","1"))
+local radconf = tonumber(uci.check_set("chillispot","webadmin","radconf","1"))
+
+  uci.check_set("chillispot","radius","radiusserver1","rad01.internet-wifi.com.ar")
+  uci.check_set("chillispot","radius","radiusserver2","rad02.internet-wifi.com.ar")
+  uci.check_set("chillispot","radius","radiussecret","Internet-Wifi")
+uci.save("chillispot")
 
 function set_menu()
   __MENU.HotSpot["Chilli Spot"] = menuClass.new()
@@ -153,6 +141,8 @@ function core_form(form,user_level,rad_conf)
     form["chillispot.webadmin.userlevel"].options:Add("2","Medium")
     form["chillispot.webadmin.userlevel"].options:Add("3","Advanced")
 --    form["chillispot.webadmin.userlevel"].options:Add("4","Expert")
+  else
+    uci.set("chillispot.webadmin.userlevel=1")
   end
   if user_level > 1 then
     form:Add("select","chillispot.webadmin.radconf",uci.get("chillispot","webadmin","radconf"),tr("authentication_users#Authenticate Users Mode"),"string")
@@ -160,12 +150,15 @@ function core_form(form,user_level,rad_conf)
     form["chillispot.webadmin.radconf"].options:Add("1","Communities Users")
     form["chillispot.webadmin.radconf"].options:Add("3","Communities & Local Users")
   end
-
   if user_level < 2 then
-    form:Add("select","chillispot.net.dhcpif",uci.check_set("chillispot","net","dhcpif","wifi"),tr("cportal_var_device#Device Network"),"string")
-    for k, v in pairs(net.dev_list()) do
-      form["chillispot.net.dhcpif"].options:Add(v,k)
-    end
+    if #ifwifi > 1 then
+      form:Add("select","chillispot.webadmin.ifwifi",uci.get("chillispot","webadmin","ifwifi"),tr("cportal_var_ifwifi#Wireless Interface"),"string")
+      for k, v in pairs(ifwifi) do
+        form["chillispot.webadmin.ifwifi"].options:Add(v.device,v.device)
+      end
+    else
+      uci.set("chillispot","webadmin","ifwifi",ifwifi[1].device)
+    end    
   end    
   uci.save("chillispot") 
   return form

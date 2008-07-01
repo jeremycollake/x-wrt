@@ -26,6 +26,8 @@ if radiususers > 1 then
   call_parser = "freeradius freeradius_check freeradius_proxy freeradius_clients"
   exe_after["/etc/init.d/radiusd restart"]="freeradius"
 end
+exe_after["/etc/init.d/network restart"]="network"
+exe_after["wifi"]="wifi"
 
 script = "chilli"
 init_script = "/etc/init.d/chilli"
@@ -35,7 +37,6 @@ init_script = "/etc/init.d/chilli"
 function process()
 --  if userlevel < 2 then basic_settings() end
   wwwprint("Chilli Parsers...")
-  uci.commit("chillispot")
 
   radiususers = tonumber(uci.get("chillispot.webadmin.radconf"))
   if radiususers > 1 then
@@ -52,6 +53,45 @@ function process()
       write_file:close()
     end
   end
+  if uci.get("chillispot.webadmin.ifwifi") and uci.get("chillispot.net.dhcpif") == nil then
+    uci.check_set("network","wifi","interface")
+    uci.set("network","wifi","proto","static")
+    uci.set("network","wifi","type","bridge")
+--    uci.save("network")
+    if uci.get("network.wifi.ifname") == nil then
+      uci.set("network","wifi","ifname",uci.get("chillispot.webadmin.ifwifi"))
+    elseif not string.gmatch(uci.get("network.wifi.ifname"),uci.get("chillispot.webadmin.ifwifi")) then
+      uci.set("network","wifi","ifname", uci.get("network.wifi.ifname").." "..uci.get("chillispot.webadmin.ifwifi"))
+    end
+--  uci.set("network",set_netname,"dns","204.225.44.3")
+    uci.save("network")
+    local network = uci.get_all("network")
+    if network.wifi.type ~= "bridge" then
+      if network.wifi.ifname ~= nil then
+        uci.set("chillispot","net","dhcpif",network.wifi.ifname)
+      end
+    else
+      uci.set("chillispot","net","dhcpif","br-wifi")
+    end
+    uci.save("chillispot")
+  end
+  local network = uci.get_all("network")
+  if uci.get("chillispot","webadmin","enable") == "1" then
+    local wififace = uci.get_type("wireless","wifi-iface")
+    for i=1, #wififace do
+      if wififace[i].device == network.wifi.ifname then
+        uci.set("wireless",wififace[1][".name"],"ssid","X-Wrt")
+        uci.set("wireless",wififace[1][".name"],"network","wifi")
+        uci.set("wireless",network.wifi.ifname,"disabled","0")
+        break
+      end
+    end
+  else
+    uci.set("wireless",network.wifi.ifname,"disabled", "0")
+  end    
+  uci.commit("network")
+  uci.commit("wireless")
+  uci.commit("chillispot")
   write_init()
   write_config()
 end
@@ -66,7 +106,6 @@ PID_F=$RUN_D/chilli.pid
 
 start() {
 	/usr/sbin/chilli
-  /etc/init.d/firewall restart
 }
 
 stop() {
