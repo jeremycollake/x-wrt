@@ -12,7 +12,7 @@ define Package/coova-chilli-xwrt
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+webif-lua +coova-chilli
+  DEPENDS:=+webif-lua
   TITLE:=Coovachilli for X-Wrt
 endef
 

@@ -10,6 +10,7 @@
 -- Configuration files referenced:
 --   none
 --------------------------------------------------------------------------------
+require("uci_iwaddon")
 -- This functions read the system settings
 function loadsystemconf()
 	local self = sys_info_load()

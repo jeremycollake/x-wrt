@@ -7,8 +7,6 @@
 ]]--
 require("net")
 require("tbform")
---require("checkpkg")
---require("iw-luaipkg")
 require("uci_iwaddon")
 
 cportal = {}
@@ -142,8 +140,8 @@ function core_form()
   end
   if userlevel < 2 then
     form:Add("select","coovachilli.net.HS_LANIF",uci.check_set("coovachilli","net","HS_LANIF","wl0"),tr("cportal_var_device#Device Network"),"string")
-    for k, v in pairs(net.wireless()) do
-      form["coovachilli.net.HS_LANIF"].options:Add(k,k)
+    for k, v in pairs(net.dev_list()) do
+      form["coovachilli.net.HS_LANIF"].options:Add(v,k)
     end
   end
   uci.save("coovachilli")

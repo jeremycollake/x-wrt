@@ -1,5 +1,5 @@
 #!/usr/bin/lua
-dofile("/usr/share/internet-wifi/set_path.lua")
+dofile("/www/cgi-bin/webif/set_path.lua")
 require("init")
 require("olsrdata")
 olsrdata = olsrdataClass.new()

@@ -117,3 +117,16 @@ function uci.check_set(p,s,o,v)
   end
   return nil
 end
+
+function uci.isdiff_set(p,s,o,v)
+  local r
+  if p and s and o and v then
+    r = uci.get(p,s,o)  
+    if r ~= v then
+      uci.set(p,s,o,v)
+      r = v
+    end
+    return r
+  end
+  return nil
+end
