@@ -15,7 +15,7 @@ local io = io
 local string = string
 local uci = uci
 
-local uciClass = uciClass
+--local uciClass = uciClass
 local menuClass = menuClass
 local __UCI_VERSION = __UCI_VERSION
 local formClass = formClass
@@ -162,9 +162,9 @@ function core_form(form,user_level,rad_conf)
   end
 
   if user_level < 2 then
-    form:Add("select","chillispot.net.dhcpif",uci.check_set("chillispot","net","dhcpif","wl0"),tr("cportal_var_device#Device Network"),"string")
-    for k, v in pairs(net.wireless()) do
-      form["chillispot.net.dhcpif"].options:Add(k,k)
+    form:Add("select","chillispot.net.dhcpif",uci.check_set("chillispot","net","dhcpif","wifi"),tr("cportal_var_device#Device Network"),"string")
+    for k, v in pairs(net.dev_list()) do
+      form["chillispot.net.dhcpif"].options:Add(v,k)
     end
   end    
   uci.save("chillispot") 
@@ -204,10 +204,10 @@ function net_form(form,user_level,localuam)
   if user_level > 1 then 
     form = formClass.new(tr("chilli_dhcp_title#DHCP Settings"))
 ----	Input Section form
-    form:Add("select","chillispot.net.dhcpif",uci.get("chillispot.net.dhcpif"),tr("chilli_var_dhcpif#Interface"))
---    for i,v in pairsByKeys(get_interfaces()) do
---      form["chillispot.net.dhcpif"].options:Add(i,i)
---    end
+    form:Add("select","chillispot.net.dhcpif",uci.check_set("chillispot","net","dhcpif","wifi"),tr("cportal_var_device#Device Network"),"string")
+    for k, v in pairs(net.dev_list()) do
+      form["chillispot.net.dhcpif"].options:Add(v,k)
+    end
   	form:Add_help(tr("chilli_var_dhcpif#Interface"),tr("chilli_help_dhcpif#This is the network interface which is connected to the access points."))
     if user_level > 2 then
       form:Add("text","chillispot.net.domain",uci.get("chillispot.net.domain"),tr("chilli_var_doman#Domain"),"string","width:90%")

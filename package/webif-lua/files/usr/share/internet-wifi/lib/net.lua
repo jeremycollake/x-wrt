@@ -9,6 +9,8 @@
     uci.commit [<package> ... ]
 
 ]]--
+require("uci_iwaddon")
+
 net = {}
 local P = {}
 net = P
@@ -22,6 +24,7 @@ local string = string
 local __UCI_VERSION = __UCI_VERSION
 local pairs = pairs
 local listtovars = listtovars
+local uci = uci
  
 -- no more external access after this point
 setfenv(1, P)
@@ -154,3 +157,38 @@ function getdev(lan)
   end
   return nil
 end
+
+function dev_list()
+  wireless =uci.get_type("wireless","wifi-iface")
+  local nets = {}
+  for i=1, #wireless do
+    local netname = wireless[i].device
+    local t = uci.get_section("network",wireless[i].network)
+    if t ~= nil then
+      uci.check_set("network",wireless[i].network,"ifname",device)
+      netname = t[".name"]
+    end
+    nets[netname] = wireless[i].device
+  end
+  networks = uci.get_type("network","interface")
+  for i, t in pairs(networks) do
+    if networks[i].type == "bridge" then
+      nets[networks[i][".name"]] = "br-"..networks[i][".name"]
+    else
+      if nets[networks[i][".name"]] == nil then
+        nets[networks[i][".name"]] = networks[i].ifname
+      else
+        if networks[i].ifname then
+          if not string.match(networks[i].ifname,nets[networks[i][".name"]]) then
+            nets[networks[i][".name"]] = networks[i].ifname .. nets[networks[i][".name"]]
+          else
+            nets[networks[i][".name"]] = networks[i].ifname
+          end
+        end
+      end
+    end 
+  end
+  return nets
+end
+
+return net

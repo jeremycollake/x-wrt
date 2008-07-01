@@ -20,13 +20,14 @@ local uci = uci
 
 -- no more external access after this point
 setfenv(1, P)
+local ifwifi = uci.get_type("wireless","wifi-iface")
 
 local olsr = uci.get_all("olsr")
 local network = uci.get_all("network")
 local wireless = uci.get_all("wireless")
 
 enable    = tonumber(olsr.webadmin.enable)    or 0
-userlevel = tonumber(olsr.webadmin.userlevel) or 0
+userlevel = tonumber(olsr.webadmin.userlevel) or 1
 reboot    = false                -- reboot device after all apply process
 
 local output_file = "/etc/olsrd.conf"
@@ -69,7 +70,7 @@ start() {
 	config_get WANDEV wan device
 	config_get LAN lan ifname
   
-  WIFI=]]..wififace..[[  
+  WIFI="]]..wififace..[["  
   # Allow connections to olsr info port.
   iptables        -A input_wan      -p tcp --dport 1979 -j ACCEPT
   # OLSR needs port 698 to transmit state messages. 
@@ -107,6 +108,20 @@ start() {
 
 stop() {
   /usr/share/internet-wifi/lib/cron_ctrl del "$CRONSET"
+  iptables -t nat -D POSTROUTING -o $LAN -j MASQUERADE
+  iptables -t nat -D POSTROUTING -o $WAN -j MASQUERADE
+  iptables -t nat -D POSTROUTING -o $WIFI -j MASQUERADE
+  iptables -D forwarding_rule -i $LAN -o $LAN -j ACCEPT
+  iptables -D forwarding_rule -i $WIFI -o $WIFI -j ACCEPT
+  iptables -D forwarding_rule -i $WIFI -o $LAN -j ACCEPT
+  iptables -D forwarding_rule -i $LAN -o $WIFI -j ACCEPT
+  iptables -D forwarding_rule -i $WIFI -o $WAN -j ACCEPT
+  iptables -D forwarding_rule -i $WAN -o $WIFI -j ACCEPT
+
+  iptables -D input_rule -p tcp --dport 53 -j ACCEPT
+  iptables -D input_rule -p udp --dport 53 -j ACCEPT
+  iptables -D input_rule -p udp --dport 698 -j ACCEPT
+  iptables -D input_wan  -p tcp --dport 1979 -j ACCEPT
 	killall olsrd
 }
 ]]
@@ -115,61 +130,48 @@ end
 
 function process_config()
   local str_olsrconf = ""
+  if userlevel < 2 then
+    uci.set("olsr","webadmin","ipaddr","10.128."..olsr.webadmin.nodenumber..".1")
+    uci.set("olsr","webadmin","netmask","255.255.0.0")
+    uci.set("olsr","webadmin","device",olsr.webadmin.ifwifi)
+  end
+  local netnm = olsr.webadmin.netname
+  if network[netnm] == nil then 
+    uci.set("network",netnm,"interface")
+  end
+  uci.set("network",netnm,"proto","static")
+  uci.set("network",netnm,"type","bridge")
+  uci.set("network",netnm,"ipaddr",olsr.webadmin.ipaddr)
+  uci.set("network",netnm,"netmask",olsr.webadmin.netmask)
+  if network[netnm].ifname == nil then
+    uci.set("network",netnm,"ifname",olsr.webadmin.ifwifi)
+  elseif not string.gmatch(network[netnm].ifname,olsr.webadmin.ifwifi) then
+    uci.set("network",netnm,"ifname", network[netnm].ifname.." "..olsr.webadmin.ifwifi)
+  end
+--  uci.set("network",set_netname,"dns","204.225.44.3")
+  uci.commit("network")
+  network = uci.get_all("network")
+  if network[netnm].type ~= "bridge" then
+    if network[netnm].ifname ~= nil then
+      uci.set("olsr","webadmin","device",network[netnm].ifname)
+    end
+  else
+    uci.set("olsr","webadmin","device","br-"..netnm)
+  end
   uci.commit("olsr")
   olsr = uci.get_all("olsr")
-  local set_netname = olsr.webadmin.netname or "olsrnet"
-  local set_nodenumber = olsr.webadmin.nodenumber or "1"
---  local set_netaddr = olsr.webadmin.ipaddr or "10.128."..set_nodenumber..".1"
-  local set_netaddr = "10.128."..set_nodenumber..".1"
-  local set_netmask = olsr.webadmin.netmask or "255.255.0.0"
-  local set_device = olsr.webadmin.device or "wl0"
-  local set_ssid = olsr.webadmin.ssid or "X-Wrt"
-  local set_channel = olsr.webadmin.channel or "6"
-
--- Network Setting --
-  wwwprint(tr("Setting networks"))
-  network = uci.get_all("network")
-  if network[set_netname] == nil then 
-    uci.set("network",set_netname,"interface")
-  end
-  uci.set("network",set_netname,"ipaddr",set_netaddr)
---  wwwprint(tr("Set ipaddress").." "..set_netaddr)
-  uci.set("network",set_netname,"netmask",set_netmask)
---  wwwprint(tr("Set netmask").." "..set_netmask)
-  uci.set("network",set_netname,"proto","static")
---  wwwprint(tr("Set proto").." static")
-  uci.set("network",set_netname,"dns","204.225.44.3")
---  wwwprint(tr("Set DNS").." static")
-  uci.commit("network")
---  os.execute("rm /tmp/.uci/network 2> /dev/null")
-
--- Wireless --
-  wwwprint(tr("Setting Wireless"))
   local wififace = uci.get_type("wireless","wifi-iface")
---  wwwprint("algo",#wififace)
   for i=1, #wififace do
-    if wififace[i].device == set_device then
-      uci.set("wireless",wififace[1][".name"],"ssid",set_ssid)
---      wwwprint(tr("Set SSID").." "..set_ssid)
-      uci.set("wireless",wififace[1][".name"],"network",set_netname)
---      wwwprint(tr("Set Network").." "..set_netname)
+    if wififace[i].device == olsr.webadmin.ifwifi then
+      uci.set("wireless",wififace[1][".name"],"ssid",olsr.webadmin.ssid)
+      uci.set("wireless",wififace[1][".name"],"network",netnm)
       uci.set("wireless",wififace[1][".name"],"mode","adhoc")
---      wwwprint(tr("Set Mode").." ".."AdHoc")
-      uci.set("wireless",set_device,"channel",set_channel)
---      wwwprint(tr("Set Channel").." "..set_channel)
-      uci.set("wireless",set_device,"disabled","0")
---      wwwprint(tr("Enabling Wireless"))
+      uci.set("wireless",olsr.webadmin.ifwifi,"channel",olsr.webadmin.channel)
+      uci.set("wireless",olsr.webadmin.ifwifi,"disabled","0")
       break
     end
   end
   uci.commit("wireless")
-
---  os.execute("rm /tmp/.uci/olsr 2> /dev/null")
---  wwwprint("end config checking...")
---  if tonumber(olsr.webadmin.userlevel) < 2 then
---    check_basic configuration
---  else
---  end  
 end
 
 function write_config()  

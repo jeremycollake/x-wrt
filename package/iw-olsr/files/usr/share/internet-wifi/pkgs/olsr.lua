@@ -4,7 +4,7 @@
 ]]--
 require("net")
 require("tbform")
-require("iw-uci")
+-- require("iw-uci")
 require("uci_iwaddon")
 
 olsrd = {}
@@ -24,7 +24,7 @@ local tostring = tostring
 local net = net
 local uci = uci
 local __UCI_UPDATED = __UCI_UPDATED
-local uciClass = uciClass
+-- local uciClass = uciClass
 local menuClass = menuClass
 local __UCI_VERSION = __UCI_VERSION
 local formClass = formClass
@@ -35,6 +35,8 @@ local tr = tr
 local tbformClass = tbformClass
 -- no more external access after this point
 setfenv(1, P)
+local ifwifi = uci.get_type("wireless","wifi-iface")
+
   if __FORM["Library_name"] and __FORM["Library_file"] then
     uci.set("olsr",__FORM["Library_name"],"LoadPlugin")
     uci.set("olsr",__FORM["Library_name"],"Library",__FORM["Library_file"])
@@ -77,82 +79,61 @@ setfenv(1, P)
   if uci.get("olsr","webadmin") == nil then
     uci.set("olsr","webadmin","websettings")
   end
-  
-  local set_netname = uci.get("olsr","webadmin","netname") or "olsrnet"
-  local set_nodenumber = uci.get("olsr","webadmin","nodenumber") or "1"
---  local set_netaddr = uci.get("olsr","webadmin","ipaddr") or "10.128."..set_nodenumber..".1"
-  local set_netaddr = "10.128."..set_nodenumber..".1"
-  local set_netmask = uci.get("olsr","webadmin","netmask") or "255.255.0.0"
-  local set_device = uci.get("olsr","webadmin","device") or "wl0"
-  local set_ssid = uci.get("olsr","webadmin","ssid") or "X-Wrt"
-  local set_channel = uci.get("olsr","webadmin","channel") or "6"
+
+  local userlevel = tonumber(uci.check_set("olsr","webadmin","userlevel","1")) or 1
+
+  if #ifwifi == 1 and uci.get("olsr","webadmin","ifwifi") ~= ifwifi[1].device then
+    uci.set("olsr","webadmin","ifwifi",ifwifi[1].device)
+  end
+
+  uci.check_set("olsr","webadmin","netname","wifi")
+  local set_nodenumber = uci.check_set("olsr","webadmin","nodenumber","1")
+  uci.check_set("olsr","webadmin","ipaddr","10.128."..set_nodenumber..".1")
+  uci.check_set("olsr","webadmin","netmask","255.255.0.0")
+  if userlevel < 2 then
+    uci.isdiff_set("olsr","webadmin","ipaddr","10.128."..set_nodenumber..".1")
+    uci.isdiff_set("olsr","webadmin","netmask","255.255.0.0")
+  end
+
+  local set_device = uci.check_set("olsr","webadmin","device","br-wifi")
+  uci.check_set("olsr","webadmin","ssid","X-Wrt")
+  uci.check_set("olsr","webadmin","channel","6")
+
 -- olsr --
   if uci.get("olsr","general") == nil then uci.set("olsr","general","olsr") end
-  if uci.get("olsr","webadmin","netname") == nil then
-    uci.set("olsr","webadmin","netname",set_netname)
-  end
-  if uci.get("olsr","webadmin","userlevel") == nil then
-    uci.set("olsr","webadmin","userlevel", "1")
-  end
-  if uci.get("olsr","webadmin","nodenumber") == nil then     
-    uci.set("olsr","webadmin","nodenumber",set_nodenumber)
-  end
-  if uci.get("olsr","webadmin","netmask") == nil then  
-    uci.set("olsr","webadmin","netmask", set_netmask)
-  end
-  if uci.get("olsr","webadmin","ipaddr") == nil then
-    uci.set("olsr","webadmin","ipaddr", set_netaddr)
-  end
-  if uci.get("olsr","webadmin","device") == nil then
-    uci.set("olsr","webadmin","device", set_device)
-  end
-  if uci.get("olsr","webadmin","ssid") == nil then
-    uci.set("olsr","webadmin","ssid", set_ssid)
-  end
-  if uci.get("olsr","webadmin","channel") == nil then
-    uci.set("olsr","webadmin","channel", set_channel)
-  end
-  if uci.get("olsr","webadmin","enable") == nil then
-    uci.set("olsr","webadmin","enable", "1")
-  end
+--[[
+  uci.check_set("olsr","webadmin","netname",set_netname)
+  uci.check_set("olsr","webadmin","userlevel", "1")
+  uci.check_set("olsr","webadmin","nodenumber",set_nodenumber)
+  uci.check_set("olsr","webadmin","netmask", set_netmask)
+  uci.check_set("olsr","webadmin","ipaddr", set_netaddr)
+  uci.check_set("olsr","webadmin","device", set_device)
+  uci.check_set("olsr","webadmin","ssid", set_ssid)
+  uci.check_set("olsr","webadmin","channel", set_channel)
+  uci.check_set("olsr","webadmin","enable", "1")
+]]--
   if uci.get("olsr","IpcConnect") == nil then
     uci.set("olsr","IpcConnect","ipc")
   end
-  if uci.get("olsr","IpcConnect","MaxConnections") == nil then
-    uci.set("olsr","IpcConnect","MaxConnections","1")
-  end
+  uci.check_set("olsr","IpcConnect","MaxConnections","1")
 
   if uci.get_type("olsr","ipcHost") == nil then
     local name = uci.add("olsr","ipcHost")
     uci.set("olsr",name,"Host","127.0.0.1")
   end
 
-  uci.save("olsr")
---  wwwprint("general settings")
-  if uci.get("olsr","general","UseHysteresis") == nil then
-    uci.set("olsr","general","UseHysteresis","no") end
-  if uci.get("olsr","general","LinkQualityFishEye") == nil then
-    uci.set("olsr","general","LinkQualityFishEye","1") end
-  if uci.get("olsr","general","IpVersion") == nil then
-    uci.set("olsr","general","IpVersion","4") end
-  if uci.get("olsr","general","AllowNoInt") == nil then
-    uci.set("olsr","general","AllowNoInt","yes") end
-  if uci.get("olsr","general","TcRedundancy") == nil then
-    uci.set("olsr","general","TcRedundancy","2") end
-  if uci.get("olsr","general","LinkQualityLevel") == nil then
-    uci.set("olsr","general","LinkQualityLevel","2") end
-  if uci.get("olsr","general","MprCoverage") == nil then
-    uci.set("olsr","general","MprCoverage","7") end
-  if uci.get("olsr","general","LinkQualityWinSize") == nil then
-    uci.set("olsr","general","LinkQualityWinSize","100") end
-  if uci.get("olsr","general","LinkQualityDijkstraLimit") == nil then
-    uci.set("olsr","general","LinkQualityDijkstraLimit","0 9.0") end
-  if uci.get("olsr","general","DebugLevel") == nil then
-    uci.set("olsr","general","DebugLevel","0") end
-  if uci.get("olsr","general","Pollrate") == nil then
-    uci.set("olsr","general","Pollrate","0.025") end
-  if uci.get("olsr","general","TosValue") == nil then
-    uci.set("olsr","general","TosValue","16") end
+  uci.check_set("olsr","general","UseHysteresis","no")
+  uci.check_set("olsr","general","LinkQualityFishEye","1")
+  uci.check_set("olsr","general","IpVersion","4")
+  uci.check_set("olsr","general","AllowNoInt","yes")
+  uci.check_set("olsr","general","TcRedundancy","2")
+  uci.check_set("olsr","general","LinkQualityLevel","2")
+  uci.check_set("olsr","general","MprCoverage","7")
+  uci.check_set("olsr","general","LinkQualityWinSize","100")
+  uci.check_set("olsr","general","LinkQualityDijkstraLimit","0 9.0")
+  uci.check_set("olsr","general","DebugLevel","0")
+  uci.check_set("olsr","general","Pollrate","0.025")
+  uci.check_set("olsr","general","TosValue","16")
   uci.save("olsr")
 
   local interfaces = uci.get_type("olsr","Interface")
@@ -164,26 +145,16 @@ setfenv(1, P)
 --   
   local iok = false
   interfaces = uci.get_type("olsr","Interface")
---  wwwprint("interface settings")
   for i=1, #interfaces do
-    if uci.get("olsr",interfaces[i][".name"],"MidValidityTime") == nil then
-      uci.set("olsr",interfaces[i][".name"],"MidValidityTime","324.0") end
-    if uci.get("olsr",interfaces[i][".name"],"TcInterval") == nil then
-      uci.set("olsr",interfaces[i][".name"],"TcInterval","4.0") end
-    if uci.get("olsr",interfaces[i][".name"],"HnaValidityTime") == nil then
-      uci.set("olsr",interfaces[i][".name"],"HnaValidityTime","108.0") end
-    if uci.get("olsr",interfaces[i][".name"],"HelloValidityTime") == nil then
-      uci.set("olsr",interfaces[i][".name"],"HelloValidityTime","108.0") end
-    if uci.get("olsr",interfaces[i][".name"],"TcValidityTime") == nil then
-      uci.set("olsr",interfaces[i][".name"],"TcValidityTime","324.0") end
-    if uci.get("olsr",interfaces[i][".name"],"HnaInterval") == nil then
-      uci.set("olsr",interfaces[i][".name"],"HnaInterval","18.0") end
-    if uci.get("olsr",interfaces[i][".name"],"HelloInterval") == nil then
-      uci.set("olsr",interfaces[i][".name"],"HelloInterval","6.0") end
-    if uci.get("olsr",interfaces[i][".name"],"MidInterval") == nil then
-      uci.set("olsr",interfaces[i][".name"],"MidInterval","18.0") end
-    if uci.get("olsr",interfaces[i][".name"],"AutoDetectChanges") == nil then
-      uci.set("olsr",interfaces[i][".name"],"AutoDetectChanges","yes") end
+      uci.check_set("olsr",interfaces[i][".name"],"MidValidityTime","324.0") 
+      uci.check_set("olsr",interfaces[i][".name"],"TcInterval","4.0")
+      uci.check_set("olsr",interfaces[i][".name"],"HnaValidityTime","108.0")
+      uci.check_set("olsr",interfaces[i][".name"],"HelloValidityTime","108.0")
+      uci.check_set("olsr",interfaces[i][".name"],"TcValidityTime","324.0")
+      uci.check_set("olsr",interfaces[i][".name"],"HnaInterval","18.0")
+      uci.check_set("olsr",interfaces[i][".name"],"HelloInterval","6.0")
+      uci.check_set("olsr",interfaces[i][".name"],"MidInterval","18.0")
+      uci.check_set("olsr",interfaces[i][".name"],"AutoDetectChanges","yes")
 
     if #interfaces == 1 then 
       uci.set("olsr",interfaces[i][".name"],"Interface",set_device)
@@ -194,24 +165,16 @@ setfenv(1, P)
       end
     end
   end
+
   uci.save("olsr")
 
   
-local olsr = uciClass.new("olsr")
---if olsr.webadmin == nil then webadmin = olsr:set("websettings","webadmin") end
---if olsr.general == nil then general = olsr:set("olsr","general") end 
---if olsr.Hna4 == nil then hna4 = olsr:set("Hna4") end 
---if olsr.Interface == nil then interface = olsr:set("Interface") end 
- 
-local loc_userlevel = tonumber(olsr.webadmin.userlevel) or 0
---local userlevel = tonumber(olsr.websettings.userlevel) or 0
-
 function dyn_gw_default(library)
   local extra_gw = uci.get_type("olsr","dyn_gw")
   if extra_gw ~= nil then
-  for i=1, #extra_gw do
-    uci.delete("olsr",extra_gw[i][".name"])
-  end
+    for i=1, #extra_gw do
+      uci.delete("olsr",extra_gw[i][".name"])
+    end
   end
   uci.delete("olsr","dyn_gw")
   uci.set("olsr","dyn_gw","LoadPlugin")
@@ -306,12 +269,13 @@ function get_bad_plugin()
 end
 
 function set_default()
+
 end
 
 function set_menu()
   local tplugins = get_installed_plugin()
   local badplugin = get_bad_plugin() 
-  local user_level = loc_userlevel
+  local user_level = userlevel or 1
   local molsr = uci.get_all("olsr")
   __MENU.HotSpot.OLSR = menuClass.new()
   __MENU.HotSpot.OLSR:Add("Core","olsr.sh")
@@ -348,31 +312,23 @@ end
 
 function core_form()
   set_default()
-  if olsr.websettings == nil then websettings = olsr:set("websettings","webadmin") 
-  else websettings = olsr.websettings end
-  websettings_values = websettings[1].values
-  if websettings_values.netname == nil then websettings_values.netname = "olsrnet" end
-  if websettings_values.ssid == nil then websettings_values.ssid = "X-Wrt" end
-  if websettings_values.channel == nil then websettings_values.channel = "6" end
-  local mydev 
-  mydev = net.wireless()
-   
+
   local form = formClass.new(tr("Service Settings"))
-  form:Add("select",websettings[1].name..".enable",websettings_values.enable,"Service","string")
-	form[websettings[1].name..".enable"].options:Add("0","Disable")
-	form[websettings[1].name..".enable"].options:Add("1","Enable")
+  form:Add("select","olsr.webadmin.enable",uci.check_set("olsr","webadmin","enable","1"),"Service","string")
+	form["olsr.webadmin.enable"].options:Add("0","Disable")
+	form["olsr.webadmin.enable"].options:Add("1","Enable")
 	form:Add_help(tr("olsr_msg#Olsr"),tr([[olsr_help_msg#OLSR is a great routing protocol.<br />
     Remember set all Access Point in Ad-hoc mode, the same ESSID at everyone and
     thoes IP in same subnet "10.128.1.1" mask "255.255.0.0" 
     ]]))
 	form:Add_help(tr("olsr_var_service#Service"),tr("olsr_help_service#Turns olsr enable or disable"))
 
-	form:Add("select",websettings[1].name..".userlevel",websettings_values.userlevel,"Configuration Mode","string")
-	form[websettings[1].name..".userlevel"].options:Add("0","Select Mode")
-	form[websettings[1].name..".userlevel"].options:Add("1","Beginer")
-	form[websettings[1].name..".userlevel"].options:Add("2","Medium")
-	form[websettings[1].name..".userlevel"].options:Add("3","Advanced")
---	form[websettings[1].name..".userlevel"].options:Add("3","Expert")
+	form:Add("select","olsr.webadmin.userlevel",uci.check_set("olsr","webadmin","userlevel","1"),"Configuration Mode","string")
+	form["olsr.webadmin.userlevel"].options:Add("0","Select Mode")
+	form["olsr.webadmin.userlevel"].options:Add("1","Beginer")
+	form["olsr.webadmin.userlevel"].options:Add("2","Medium")
+	form["olsr.webadmin.userlevel"].options:Add("3","Advanced")
+--	form[websettings[1].name..".userlevel"].options:Add("4","Expert")
 	form:Add_help(tr("_var_mode#Configuration Mode"),tr("_help_mode#"..[[
           Select mode of configuration page.<br />
           <strong>Beginer :</strong><br />
@@ -381,23 +337,32 @@ function core_form()
           <strong>Expert :</strong><br />
           This mode keep your configurations file and you edit they by your self.
           ]]))
-  form:Add("text",websettings[1].name..".netname",websettings_values.netname,tr("olsrdNetName#OLSR Net Name"),"string")
-  form:Add("text",websettings[1].name..".nodenumber",websettings_values.nodenumber,tr("olsrdNodeNum#OLSR Node Number"))
-  form:Add("select",websettings[1].name..".device",websettings_values.device,tr("cportal_var_device#Device Network"),"string")
-  for k, v in pairs(net.wireless()) do
-    form[websettings[1].name..".device"].options:Add(k,k)
+  if userlevel > 1 then
+    form:Add("text","olsr.webadmin.netname",uci.check_set("olsr","webadmin","netname","wifi"),tr("olsrdNetName#Network Name"),"string")
+  end
+  if userlevel < 2 then
+    form:Add("text","olsr.webadmin.nodenumber",uci.check_set("olsr","webadmin","nodenumber","1"),tr("olsrdNodeNum#OLSR Node Number"))
+  else
+    form:Add("text","olsr.webadmin.ipaddr",uci.check_set("olsr","webadmin","ipaddr","10.128.1.1"),tr("olsrdNodeNum#OLSR Node Number"))
+    form:Add("text","olsr.webadmin.netmask",uci.check_set("olsr","webadmin","netmask","255.255.0.0"),tr("olsrdNodeNum#OLSR Node Number"))
+  end
+  if #ifwifi > 1 then
+    form:Add("select","olsr.webadmin.ifwifi",uci.check_set("olsr","webadmin","device","br-wifi"),tr("cportal_var_device#Device Network"),"string")
+    for k, v in pairs(ifwifi) do
+      form["olsr.webadmin.ifwifi"].options:Add(v.device,v.device)
+    end
+  else
+    uci.set("olsr","webadmin","ifwifi",ifwifi[1].device)
   end    
-  form:Add("text",websettings[1].name..".ssid",websettings_values.ssid,tr("olsrdSsId#SSID"),"string")
-  form:Add("text",websettings[1].name..".channel",websettings_values.channel,tr("olsrdChannel#Wifi Channel"),"int,>0,<15")
+  form:Add("text","olsr.webadmin.ssid",uci.check_set("olsr","webadmin","ssid","X-Wrt"),tr("olsrdSsId#SSID"),"string")
+  form:Add("text","olsr.webadmin.channel",uci.check_set("olsr","webadmin","channel","6"),tr("olsrdChannel#Wifi Channel"),"int,>0,<15")
+  uci.save("olsr")
   return form
 end
 
 function general_form()
-  if olsr.general == nil then general = olsr:set("olsr","general") 
-  else general = olsr.general end
---  general_values = general[1].values
   local form = formClass.new(tr("General Settings"))
-  form:Add("select","olsr.general.IpVersion",general.IpVersion,tr("Ip Version"),"string")
+  form:Add("select","olsr.general.IpVersion",uci.check_set("olsr","general","IpVersion","4"),tr("Ip Version"),"string")
 	form["olsr.general.IpVersion"].options:Add("4","4")
 	form["olsr.general.IpVersion"].options:Add("6","6")
 	form:Add_help(tr("olsr_var_IpVersion#Ip Version"),tr([[Olsrd supports both IP
@@ -405,7 +370,7 @@ function general_form()
    Defaults to 4. 
   ]]))
 	
-  form:Add("select","olsr.general.AllowNoInt",general.AllowNoInt,tr("Allow No Interface"),"string")
+  form:Add("select","olsr.general.AllowNoInt",uci.check_set("olsr","general","AllowNoInt","yes"),tr("Allow No Interface"),"string")
 	form["olsr.general.AllowNoInt"].options:Add("yes",tr("Yes"))
 	form["olsr.general.AllowNoInt"].options:Add("no",tr("No"))
 	form:Add_help(tr("olsr_var_AllowNoInt#Allow No Interface"),tr([[
@@ -415,17 +380,17 @@ function general_form()
     addittion of interfaces in run-time. This option specifies if olsrd should 
     keep running if no network interfaces are available. Defaults to yes.
     ]]))
-  form:Add("select","olsr.general.TosValue",general.TosValue,tr("Tos Value"),"string")
+  form:Add("select","olsr.general.TosValue",uci.check_set("olsr","general","TosValue","16"),tr("Tos Value"),"string")
 	form["olsr.general.TosValue"].options:Add("16","16")
   for i=0, 15 do
-  local j = tostring(i)
-	form["olsr.general.TosValue"].options:Add(j,j)
+    local j = tostring(i)
+    form["olsr.general.TosValue"].options:Add(j,j)
 	end
 	form:Add_help(tr("olsr_var_TosValuet#Tos Value"),tr([[
     This value controls the type of service value to set in the IP header of 
     OLSR control traffic. Defaults to 16
     ]]))
-  form:Add("text","olsr.general.Willingness",general.Willingness,tr("Willingness"),"int,>=0,<8")
+  form:Add("text","olsr.general.Willingness",uci.get("olsr","general","Willingness"),tr("Willingness"),"int,>=0,<8")
 	form:Add_help(tr("olsr_var_Willingness#Willingness"),tr([[
     Nodes participating in a OLSR routed network will announce their willingness 
     to act as relays for OLSR control traffic for their neighbors. This option 
@@ -437,40 +402,40 @@ function general_form()
     willingness according to this info. If no such info can be retrieved 
     willingness is set to 4. 
     ]]))
-  form:Add("select","olsr.general.UseHysteresis",general.UseHysteresis,tr("Use Hysteresis"),"string")
+  form:Add("select","olsr.general.UseHysteresis",uci.check_set("olsr","general","UseHysteresis","no"),tr("Use Hysteresis"),"string")
 	form["olsr.general.UseHysteresis"].options:Add("yes",tr("Yes"))
 	form["olsr.general.UseHysteresis"].options:Add("no",tr("No"))
 	form:Add_help(tr("olsr_var_UseHysteresis#Use Hysteresis"),tr([[
     If set to yes hysteresis will be used as explained in section 14 of RFC3626. 
     ]]))
-  if olsr.general.UseHysteresis == "yes" then
-    form:Add("text","olsr.general.HystScaling",general.HystScaling,tr("Hysteresis Scaling"),"int,>=0.01,<=0.99")
+  if uci.get("olsr","general","UseHysteresis") == "yes" then
+    form:Add("text","olsr.general.HystScaling",uci.get("olsr","general","HystScaling"),tr("Hysteresis Scaling"),"int,>=0.01,<=0.99")
   	form:Add_help(tr("olsr_var_HystScaling#Hysteresis Scaling"),tr([[
       Sets the scaling value used by the hysteresis algorithm. This must be a 
       positive floating point value smaller than 1.0. Consult RFC3626 for 
       details. The default value is 0.5.  
       ]]))
-    form:Add("text","olsr.general.HystThrHigh",general.HystThrHigh,tr("Hysteresis High Mark"),"int,>=0.01,<=0.99")
+    form:Add("text","olsr.general.HystThrHigh",uci.get("olsr","general","HystThrHigh"),tr("Hysteresis High Mark"),"int,>=0.01,<=0.99")
   	form:Add_help(tr("olsr_var_HystThrHigh#Hysteresis High Mark"),tr([[
       This option sets the upper threshold for accepting a link in hysteresis 
       calculation. The value must be higher than the one set as the lower 
       threshold. Defaults to 0.8.  
       ]]))
-    form:Add("text","olsr.general.HystThrLow",general.HystThrLow,tr("Hysteresis Low Mark"),"int,>=0.01,<=0.99")
+    form:Add("text","olsr.general.HystThrLow",uci.get("olsr","general","HystThrLow"),tr("Hysteresis Low Mark"),"int,>=0.01,<=0.99")
   	form:Add_help(tr("olsr_var_HystThrLow#Hysteresis Low Mark"),tr([[
       This option sets the lower threshold for setting a link to asymmetric 
       using hysteresis. The value must be lower than the one set as the upper 
       threshold. Defaults to 0.3.  
       ]]))
   end
-  form:Add("text","olsr.general.Pollrate",general.Pollrate,tr("Poll rate"),"int")
+  form:Add("text","olsr.general.Pollrate",uci.check_set("olsr","general","Pollrate","0.025"),tr("Poll rate"),"int")
   form:Add_help(tr("olsr_var_Pollratew#Poll rate"),tr([[
       This option sets the interval, in seconds, that the olsrd event scheduler 
       should be set to poll. A setting of 0.2 will set olsrd to poll for events 
       every 0.2 seconds. Defaults to 0.1.  
     ]]))
 
-  form:Add("select","olsr.general.TcRedundancy",general.TcRedundancy,tr("TC Redundancy"),"string")
+  form:Add("select","olsr.general.TcRedundancy",uci.check_set("olsr","general","TcRedundancy","2"),tr("TC Redundancy"),"string")
 	form["olsr.general.TcRedundancy"].options:Add("0","0")
 	form["olsr.general.TcRedundancy"].options:Add("1","1")
 	form["olsr.general.TcRedundancy"].options:Add("2","2")
@@ -485,14 +450,14 @@ function general_form()
       node. Defaults to 0.    
       ]]))
 
-  form:Add("text","olsr.general.MprCoverage",general.MprCoverage,tr("Mpr Coverage"),"int")
+  form:Add("text","olsr.general.MprCoverage",uci.get("olsr","general","MprCoverage",""),tr("Mpr Coverage"),"int")
   form:Add_help(tr("olsr_var_MprCoverage#Mpr Coverage"),tr([[
       This value decides how many MPRs a node should attempt to select for every 
       two hop neighbor. Defaults to 1 , and any other setting will severly 
       reduce the optimization introduced by the MPR secheme!  
     ]]))
 
-  form:Add("select","olsr.general.LinkQualityLevel",general.LinkQualityLevel,tr("Link Quality Level"),"string")
+  form:Add("select","olsr.general.LinkQualityLevel",uci.check_set("olsr","general","LinkQualityLevel","2"),tr("Link Quality Level"),"string")
 	form["olsr.general.LinkQualityLevel"].options:Add("0","0")
 	form["olsr.general.LinkQualityLevel"].options:Add("1","1")
 	form["olsr.general.LinkQualityLevel"].options:Add("2","2")
@@ -505,30 +470,22 @@ function general_form()
       only be set to 1 or 2 if such a setting is used by all other nodes in the 
       network.  
     ]]))
-  form:Add("checkbox","olsr.general.LinkQualityFishEye",general.LinkQualityFishEye,tr("Link Quality Fish Eye"),"string")
+  form:Add("checkbox","olsr.general.LinkQualityFishEye",uci.get("olsr","general","LinkQualityFishEye"),tr("Link Quality Fish Eye"),"string")
   form:Add_help(tr("olsr_var_LinkQualityFishEye#Link Quality Fish Eye"),tr([[
     Looking for documentation
     ]]))
-  form:Add("text","olsr.general.LinkQualityWinSize",general.LinkQualityWinSize,tr("Link Quality WinSize"),"string")
+  form:Add("text","olsr.general.LinkQualityWinSize",uci.get("olsr","general","LinkQualityWinSize"),tr("Link Quality WinSize"),"string")
   form:Add_help(tr("olsr_var_LinkQualityWinSize#Link Quality WinSize"),tr([[
     Looking for documentation
     ]]))
-  form:Add("text","olsr.general.LinkQualityDijkstraLimit",general.LinkQualityDijkstraLimit,tr("Link Quality DijkstraLimit"),"string")
+  form:Add("text","olsr.general.LinkQualityDijkstraLimit",uci.get("olsr","general","LinkQualityDijkstraLimit"),tr("Link Quality DijkstraLimit"),"string")
   form:Add_help(tr("olsr_var_LinkQualityDijkstraLimit#Link Quality DijkstraLimit"),tr([[
     Looking for documentation
     ]]))
---
---  form:Add("text","olsr.general.FIBMetric",general.FIBMetric,tr("FIBMetric"),"string")
---  form:Add_help(tr("olsr_var_FIBMetric#FIBMetric"),tr([[
---    Looking for documentation
---    ]]))
---  form:Add("text","olsr.general.NatThreshold",general.NatThreshold,tr("NatThreshold"),"string")
---  form:Add_help(tr("olsr_var_NatThreshold#NatThreshold"),tr([[
---    Looking for documentation
---    ]]))
---
+  uci.save("olsr")
   return form
 end
+
 function ipc_form()
   local forms = {}
   forms[#forms+1] = formClass.new("IpcConnect "..tr("Settings"))
@@ -590,17 +547,6 @@ function ipc_form()
   </tr>
   </table>]])
   
---[[
-  local ipcNets = uci.get_type("olsr","ipcNet")
-  if ipcNets then
-    for i = 1, #ipcNets do
-      forms[#forms]:Add("text","olsr."..ipcNets[i][".name"]..".NetAddr",ipcNets[i].NetAddr,tr("Net Address"),"string")
-      forms[#forms]:Add("text","olsr."..ipcNets[i][".name"]..".NetMask",ipcNets[i].NetMask,tr("Net Mask"),"string")
-    end
-
-  end
-  
-]]--
   return forms
 end
 
@@ -646,24 +592,16 @@ end
 
 function interfaces_form(form,user_level)
   local form = form
-  local user_level = user_level or loc_userlevel
-  local mydev 
-  mydev = net.wireless()
-  if olsr.Interface == nil then interface = olsr:set("Interface") 
-  else interface = olsr.Interface end
+  local user_level = user_level or userlevel
+
+  interface = uci.get_type("olsr","Interface")
   form = formClass.new(tr("Interfaces Settings"))
   for i=1,#interface do
     if i > 1 then form:Add("subtitle","Interface") end
-    form:Add("select",interface[i].name..".Interface",interface[i].values.Interface,tr("cportal_var_device#Device Network"),"string")
-      form[interface[i].name..".Interface"].options:Add("wl0","wl0")
---      form[interface[i].name..".Interface"].options:Add(type(mydev),type(mydev))
-    if mydev == nil then 
-      form[interface[i].name..".Interface"].options:Add("nil","nil")
-    end    
---    for k, v in pairs(dev) do
---      form[interface[i].name..".Interface"].options:Add(k,k)
---    end
---    form:Add("text",interface[i].name..".Interface",interface[i].values.Interface,"Interface","string")
+    form:Add("select","olsr."..interface[i][".name"]..".Interface",uci.check_set("olsr",interface[i][".name"],"Interface","br-wifi"),tr("cportal_var_device#Device Network"),"string")
+    for k, v in pairs(net.dev_list()) do
+      form["olsr."..interface[i][".name"]..".Interface"].options:Add(k,k)
+    end
     form:Add_help(tr("olsr_var_Interface#Interface"),tr([[
       This optionblock specifies one or more network interfaces on which olsrd 
       should run. Atleast one network interface block must be specified for 
@@ -673,11 +611,11 @@ function interfaces_form(form,user_level)
       ]]))
 
     if user_level > 1 then
-      form:Add("select",interface[i].name..".AutoDetectChanges",interface[i].values.AutoDetectChanges,"AutoDetectChanges","string")
-    	form[interface[i].name..".AutoDetectChanges"].options:Add("no","No")  
-      form[interface[i].name..".AutoDetectChanges"].options:Add("yes",tr("Yes"))  
+      form:Add("select","olsr."..interface[i][".name"]..".AutoDetectChanges",uci.check_set("olsr",interface[i][".name"],"AutoDetectChanges","yes"),"AutoDetectChanges","string")
+    	form["olsr."..interface[i][".name"]..".AutoDetectChanges"].options:Add("no","No")  
+      form["olsr."..interface[i][".name"]..".AutoDetectChanges"].options:Add("yes",tr("Yes"))  
 
-      form:Add("text",interface[i].name..".Ip4Broadcast",interface[i].values.Ip4Broadcast,"Ip4Broadcast","string")
+      form:Add("text","olsr."..interface[i][".name"]..".Ip4Broadcast",uci.get("olsr.",interface[i][".name"],"Ip4Broadcast",""),"Ip4Broadcast","string")
       form:Add_help(tr("olsr_var_Ip4Broadcast#Ip4Broadcast"),tr([[
         Forces the given IPv4 broadcast address to be used as destination address 
         for all outgoing OLSR traffic on the interface. In reallity only the 
@@ -686,23 +624,23 @@ function interfaces_form(form,user_level)
         This address will also be updated in run-time if a change is detected. 
         ]]))
 
-      form:Add("select",interface[i].name..".Ip6AddrType",interface[i].values.Ip6AddrType,"Ip6AddrType","string")
-      form[interface[i].name..".Ip6AddrType"].options:Add(""," ")  
-      form[interface[i].name..".Ip6AddrType"].options:Add("site-local",tr("site-local"))  
-      form[interface[i].name..".Ip6AddrType"].options:Add("global","global")  
+      form:Add("select","olsr."..interface[i][".name"]..".Ip6AddrType",uci.get("olsr",interface[i][".name"],"Ip6AddrType",""),"Ip6AddrType","string")
+      form["olsr."..interface[i][".name"]..".Ip6AddrType"].options:Add(""," ")  
+      form["olsr."..interface[i][".name"]..".Ip6AddrType"].options:Add("site-local",tr("site-local"))  
+      form["olsr."..interface[i][".name"]..".Ip6AddrType"].options:Add("global","global")  
       form:Add_help(tr("olsr_var_Ip6AddrType#Ip6AddrType"),tr([[
         This option sets what IPv6 address type is to be used in interface address 
         detection. Defaults to site-local.  
         ]]))
 
-      form:Add("text",interface[i].name..".Ip6MulticastSite",interface[i].values.Ip6MulticastSite,"Ip6MulticastSite","string")
+      form:Add("text","olsr."..interface[i][".name"]..".Ip6MulticastSite",uci.get("olsr",interface[i][".name"],"Ip6MulticastSite",""),"Ip6MulticastSite","string")
       form:Add_help(tr("olsr_var_Ip6MulticastSite#Ip6MulticastSite"),tr([[
         Sets the destionation of outgoing OLSR traffic on this interface to use 
         the specified IPv6 multicast address as destination if the site-local 
         address type is set on this interface.  
         ]]))
 
-      form:Add("text",interface[i].name..".Ip6MulticastGlobal",interface[i].values.Ip6MulticastGlobal,"Ip6MulticastGlobal","string")
+      form:Add("text","olsr."..interface[i][".name"]..".Ip6MulticastGlobal",uci.get("olsr",interface[i][".name"],"Ip6MulticastGlobal",""),"Ip6MulticastGlobal","string")
       form:Add_help(tr("olsr_var_Ip6MulticastGlobal#Ip6MulticastGlobal"),tr([[
         Sets the destionation of outgoing OLSR traffic on this interface to use 
         the specified IPv6 multicast address as destination if the global address 
@@ -710,26 +648,26 @@ function interfaces_form(form,user_level)
         ]]))
 
       form:Add("subtitle","&nbsp;")
-      form:Add("text",interface[i].name..".HelloInterval",interface[i].values.HelloInterval,"HelloInterval","int,>=0")
+      form:Add("text","olsr."..interface[i][".name"]..".HelloInterval",uci.check_set("olsr",interface[i][".name"],"HelloInterval","18.0"),"HelloInterval","int,>=0")
       form:Add_help(tr("olsr_var_HelloInterval#HelloInterval"),tr([[
         Sets the interval on which HELLO messages will be generated and 
         transmitted on this interface.   
         ]]))
 
-      form:Add("text",interface[i].name..".HelloValidityTime",interface[i].values.HelloValidityTime,"HelloValidityTime","int,>=0")
+      form:Add("text","olsr."..interface[i][".name"]..".HelloValidityTime",uci.check_set("olsr",interface[i][".name"],"HelloValidityTime","108.0"),"HelloValidityTime","int,>=0")
       form:Add_help(tr("olsr_var_HelloValidityTime#HelloValidityTime"),tr([[
         Sets the validity time to be announced in HELLO messages generated by this 
         host on this interface. This value must be larger than than the HELLO 
         generation interval to make any sense. Defaults to 3 * the generation interval.  
         ]]))
 
-      form:Add("text",interface[i].name..".TcInterval",interface[i].values.TcInterval,"TcInterval","int,>=0")
+      form:Add("text","olsr."..interface[i][".name"]..".TcInterval",uci.check_set("olsr",interface[i][".name"],"TcInterval","4.0"),"TcInterval","int,>=0")
       form:Add_help(tr("olsr_var_TcInterval#TcInterval"),tr([[
         Sets the interval on which TC messages will be generated and transmitted 
         on this interface.   
         ]]))
 
-      form:Add("text",interface[i].name..".TcValidityTime",interface[i].values.TcValidityTime,"TcValidityTime","int,>=0")
+      form:Add("text","olsr."..interface[i][".name"]..".TcValidityTime",uci.check_set("olsr",interface[i][".name"],"TcValidityTime","324.0"),"TcValidityTime","int,>=0")
       form:Add_help(tr("olsr_var_TcValidityTime#TcValidityTime"),tr([[
         Sets the validity time to be announced in TC messages generated by this 
         host on this interface. This value must be larger than than the TC 
@@ -737,13 +675,13 @@ function interfaces_form(form,user_level)
         interval.   
         ]]))
 
-      form:Add("text",interface[i].name..".MidInterval",interface[i].values.MidInterval,"MidInterval","int,>=0")
+      form:Add("text","olsr."..interface[i][".name"]..".MidInterval",uci.check_set("olsr",interface[i][".name"],"MidInterval","18.0"),"MidInterval","int,>=0")
       form:Add_help(tr("olsr_var_MidInterval#MidInterval"),tr([[
         Sets the interval on which MID messages will be generated and transmitted 
         on this interface.   
         ]]))
 
-      form:Add("text",interface[i].name..".MidValidityTime",interface[i].values.MidValidityTime,"MidValidityTime","int,>=0")
+      form:Add("text","olsr."..interface[i][".name"]..".MidValidityTime",uci.check_set("olsr",interface[i][".name"],"MidValidityTime","324.0"),"MidValidityTime","int,>=0")
       form:Add_help(tr("olsr_var_MidValidityTime#MidValidityTime"),tr([[
         Sets the validity time to be announced in MID messages generated by this 
         host on this interface. This value must be larger than than the MID 
@@ -751,20 +689,20 @@ function interfaces_form(form,user_level)
         interval.    
         ]]))
 
-      form:Add("text",interface[i].name..".HnaInterval",interface[i].values.HnaInterval,"HnaInterval","int,>=0")
+      form:Add("text","olsr."..interface[i][".name"]..".HnaInterval",uci.check_set("olsr",interface[i][".name"],"HnaInterval","18.0"),"HnaInterval","int,>=0")
       form:Add_help(tr("olsr_var_HnaInterval#HnaInterval"),tr([[
         Sets the interval on which HNA messages will be generated and transmitted 
         on this interface.    
         ]]))
 
-      form:Add("text",interface[i].name..".HnaValidityTime",interface[i].values.HnaValidityTime,"HnaValidityTime","int,>=0")
+      form:Add("text","olsr."..interface[i][".name"]..".HnaValidityTime",uci.check_set("olsr",interface[i][".name"],"HnaValidityTime","108.0"),"HnaValidityTime","int,>=0")
       form:Add_help(tr("olsr_var_HnaValidityTime#HnaValidityTime"),tr([[
         Sets the validity time to be announced in HNA messages generated by this 
         host on this interface. This value must be larger than than the HNA generation 
         interval to make any sense. Defaults to 3 * the generation interval.    
         ]]))
 
-      form:Add("text",interface[i].name..".Weight",interface[i].values.Weight,"Weight","int,>=0")
+      form:Add("text","olsr."..interface[i][".name"]..".Weight",uci.get("olsr",interface[i][".name"],"Weight"),"Weight","int,>=0")
       form:Add_help(tr("olsr_var_Weight#Weight"),tr([[
         When multiple links exist between hosts the weight of the interface is used 
         to determine the link to route by. Normally the weight is automatically 
@@ -773,6 +711,7 @@ function interfaces_form(form,user_level)
         ]]))
     end
   end
+  uci.save("olsr")
   return form
 end
 
@@ -881,7 +820,7 @@ function plugin_list_form(form,user_level)
   local pl_name = __FORM[plname]
   local molsr = uci.get_all("olsr")
   local form = form
-  local user_level = user_level or loc_userlevel
+  local user_level = user_level or userlevel
   form = formClass.new(tr("Plugins List"))
 
   if badplugins ~= nil then
