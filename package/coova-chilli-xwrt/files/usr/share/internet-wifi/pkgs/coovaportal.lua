@@ -142,10 +142,10 @@ end
 
 function core_form()
   form = formClass.new(tr("chilli_title_service#Service"))
-	form:Add("select","coovachilli.webadmin.enable",uci.check_set("coovachilli","webadmin","enable","0"),tr("chilli_var_service#Service"),"string")
+	form:Add("select","coovachilli.webadmin.enable",uci.check_set("coovachilli","webadmin","enable","1"),tr("chilli_var_service#Service"),"string")
 	form["coovachilli.webadmin.enable"].options:Add("0","Disable")
 	form["coovachilli.webadmin.enable"].options:Add("1","Enable")
-  if string.find(__SERVER["SCRIPT_FILENAME"],"chillispot.sh") then
+  if string.match(__SERVER["SCRIPT_FILENAME"],"coova.chilli.sh") then
   	form:Add("select","coovachilli.webadmin.userlevel",uci.check_set("coovachilli","webadmin","userlevel","0"),tr("userlevel#User Level"),"string")
     form["coovachilli.webadmin.userlevel"].options:Add("0","Select Mode")
     form["coovachilli.webadmin.userlevel"].options:Add("1","Beginer")

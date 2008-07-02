@@ -139,16 +139,6 @@ stop() {
 end
 
 function process_config()
---[[
-  for i, t in pairs(olsr) do
-    wwwprint(i,t)
-    if type(t) == "table" then
-      for k, v in pairs(t) do
-        wwwprint(k,v)
-      end
-    end
-  end
-]]--
 --  local olsr = uci.get_all("olsr")
   if userlevel < 2 then
     uci.set("olsr","webadmin","ipaddr","10.128."..olsr.webadmin.nodenumber..".1")
@@ -172,7 +162,6 @@ function process_config()
   elseif not string.gmatch(network[netnm].ifname,olsr.webadmin.ifwifi) then
     uci.set("network",netnm,"ifname", network[netnm].ifname.." "..olsr.webadmin.ifwifi)
   end
---  uci.set("network",set_netname,"dns","204.225.44.3")
   uci.save("network")
   network = uci.get_all("network")
   if network[netnm].type ~= "bridge" then
