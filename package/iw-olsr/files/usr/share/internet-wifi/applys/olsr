@@ -135,7 +135,7 @@ function process_config()
     uci.set("olsr","webadmin","netmask","255.255.0.0")
     uci.set("olsr","webadmin","device",olsr.webadmin.ifwifi)
     uci.save("olsr")
-    uci.get_all("olsr")
+    olsr = uci.get_all("olsr")
   end
   local netnm = olsr.webadmin.netname
   if network[netnm] == nil then 
