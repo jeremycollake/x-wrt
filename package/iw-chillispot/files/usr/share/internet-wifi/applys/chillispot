@@ -53,6 +53,7 @@ function process()
       write_file:close()
     end
   end
+
   if uci.get("chillispot.webadmin.ifwifi") and uci.get("chillispot.net.dhcpif") == nil then
     uci.check_set("network","wifi","interface")
     uci.set("network","wifi","proto","static")
@@ -75,6 +76,7 @@ function process()
     end
     uci.save("chillispot")
   end
+
   local network = uci.get_all("network")
   if uci.get("chillispot","webadmin","enable") == "1" then
     local wififace = uci.get_type("wireless","wifi-iface")
