@@ -42,9 +42,7 @@ local ifwifi = uci.get_type("wireless","wifi-iface")
     uci.save("network")
     local network = uci.get_all("network")
     if network.wifi.type ~= "bridge" then
-      print("pepe")
       if network.wifi.ifname ~= nil then
-        print("pepe")
         uci.set("chillispot","net","dhcpif",network.wifi.ifname)
       end
     else

@@ -33,6 +33,31 @@ local tr = tr
 local tbformClass = tbformClass
 -- no more external access after this point
 setfenv(1, P)
+local ifwifi = uci.get_type("wireless","wifi-iface")
+
+  if uci.get("coovachilli.webadmin.ifwifi") and uci.get("coovachilli.net.HS_LANIF") == nil then
+    uci.check_set("network","wifi","interface")
+    uci.set("network","wifi","proto","static")
+    uci.set("network","wifi","type","bridge")
+--    uci.save("network")
+    if uci.get("network.wifi.ifname") == nil then
+      uci.set("network","wifi","ifname",uci.get("coovachilli.webadmin.ifwifi"))
+    elseif not string.gmatch(uci.get("network.wifi.ifname"),uci.get("coovachilli.webadmin.ifwifi")) then
+      uci.set("network","wifi","ifname", uci.get("network.wifi.ifname").." "..uci.get("coovachilli.webadmin.ifwifi"))
+    end
+--  uci.set("network",set_netname,"dns","204.225.44.3")
+    uci.save("network")
+    local network = uci.get_all("network")
+    if network.wifi.type ~= "bridge" then
+      if network.wifi.ifname ~= nil then
+        uci.set("coovachilli","net","HS_LANIF",network.wifi.ifname)
+      end
+    else
+      uci.set("coovachilli","net","HS_LANIF","br-wifi")
+    end
+    uci.save("coovachilli")
+  end
+  
 
 uci.check_set("coovachilli","webadmin","coova")
 uci.check_set("coovachilli","net","settings")
@@ -49,7 +74,7 @@ uci.check_set("coovachilli","net","HS_DNS1","192.168.182.1")
 uci.check_set("coovachilli","net","HS_DNS2","204.225.44.3")
 uci.check_set("coovachilli","net","HS_NETWORK","192.168.182.0")
 uci.check_set("coovachilli","net","HS_NETMASK","255.255.255.0")
-uci.check_set("coovachilli","net","HS_LANIF","wl0")
+--uci.check_set("coovachilli","net","HS_LANIF","wl0")
 
 uci.check_set("coovachilli","uam","settings")
 uci.check_set("coovachilli","uam","HS_UAMSERVER","192.168.182.1")
@@ -120,12 +145,16 @@ function core_form()
 	form:Add("select","coovachilli.webadmin.enable",uci.check_set("coovachilli","webadmin","enable","0"),tr("chilli_var_service#Service"),"string")
 	form["coovachilli.webadmin.enable"].options:Add("0","Disable")
 	form["coovachilli.webadmin.enable"].options:Add("1","Enable")
-	form:Add("select","coovachilli.webadmin.userlevel",uci.check_set("coovachilli","webadmin","userlevel","0"),tr("userlevel#User Level"),"string")
-	form["coovachilli.webadmin.userlevel"].options:Add("0","Select Mode")
-	form["coovachilli.webadmin.userlevel"].options:Add("1","Beginer")
-	form["coovachilli.webadmin.userlevel"].options:Add("2","Medium")
---	form["coovachilli.webadmin.userlevel"].options:Add("3","Advanced")
---	form["coovachilli.webadmin.userlevel"].options:Add("4","Expert")
+  if string.find(__SERVER["SCRIPT_FILENAME"],"chillispot.sh") then
+  	form:Add("select","coovachilli.webadmin.userlevel",uci.check_set("coovachilli","webadmin","userlevel","0"),tr("userlevel#User Level"),"string")
+    form["coovachilli.webadmin.userlevel"].options:Add("0","Select Mode")
+    form["coovachilli.webadmin.userlevel"].options:Add("1","Beginer")
+    form["coovachilli.webadmin.userlevel"].options:Add("2","Medium")
+--    form["coovachilli.webadmin.userlevel"].options:Add("3","Advanced")
+--    form["coovachilli.webadmin.userlevel"].options:Add("4","Expert")
+  else
+    uci.set("coovachilli.webadmin.userlevel=1")
+  end
   if userlevel > 1 then
   	form:Add("select","coovachilli.webadmin.portal",uci.check_set("coovachilli","webadmin","portal","2"),tr("portal#Portal Settings"),"string")
 --  	form["coovachilli.webadmin.portal"].options:Add("0","Coova Server")
@@ -138,12 +167,22 @@ function core_form()
     form["coovachilli.webadmin.radconf"].options:Add("1","Communities Users")
     form["coovachilli.webadmin.radconf"].options:Add("3","Remote & Local Users")
   end
+--  if userlevel < 2 then
+--    form:Add("select","coovachilli.net.HS_LANIF",uci.check_set("coovachilli","net","HS_LANIF","wl0"),tr("cportal_var_device#Device Network"),"string")
+--    for k, v in pairs(net.dev_list()) do
+--      form["coovachilli.net.HS_LANIF"].options:Add(v,k)
+--    end
+--  end
   if userlevel < 2 then
-    form:Add("select","coovachilli.net.HS_LANIF",uci.check_set("coovachilli","net","HS_LANIF","wl0"),tr("cportal_var_device#Device Network"),"string")
-    for k, v in pairs(net.dev_list()) do
-      form["coovachilli.net.HS_LANIF"].options:Add(v,k)
-    end
-  end
+    if #ifwifi > 1 then
+      form:Add("select","coovachilli.webadmin.ifwifi",uci.get("coovachilli","webadmin","ifwifi"),tr("cportal_var_ifwifi#Wireless Interface"),"string")
+      for k, v in pairs(ifwifi) do
+        form["coovachilli.webadmin.ifwifi"].options:Add(v.device,v.device)
+      end
+    else
+      uci.set("coovachilli","webadmin","ifwifi",ifwifi[1].device)
+    end    
+  end    
   uci.save("coovachilli")
   return form
 end
@@ -225,16 +264,16 @@ function radius_form(form,user_level,localrad)
     end    
   end
 ----	Input Section form
-    form:Add("text","coovachilli.radius.HS_RADIUS",uci.check_set("coovachilli","radius","HS_RADIUS","rad01.internet-wifi.com.ar"),tr("chilli_var_radiusserver1#Primary Radius"),"string","width:90%")
-    form:Add("text","coovachilli.radius.HS_RADIUS2",uci.check_set("coovachilli","radius","HS_RADIUS2","rad02.internet-wifi.com.ar"),tr("chilli_var_radiusserver2#Secondary Radius"),"string","width:90%")
-    form:Add_help(tr("chilli_help_title_radiusserver#Primary / Secondary Radius"),tr("chilli_help_radiusserver#Primary and Secondary Radius Server|Ip or url address of Radius Servers. If you have only one radius server you should set Secondary radius server to the same value as Primary radius server."))
+  form:Add("text","coovachilli.radius.HS_RADIUS",uci.check_set("coovachilli","radius","HS_RADIUS","rad01.internet-wifi.com.ar"),tr("chilli_var_radiusserver1#Primary Radius"),"string","width:90%")
+  form:Add("text","coovachilli.radius.HS_RADIUS2",uci.check_set("coovachilli","radius","HS_RADIUS2","rad02.internet-wifi.com.ar"),tr("chilli_var_radiusserver2#Secondary Radius"),"string","width:90%")
+  form:Add_help(tr("chilli_help_title_radiusserver#Primary / Secondary Radius"),tr("chilli_help_radiusserver#Primary and Secondary Radius Server|Ip or url address of Radius Servers. If you have only one radius server you should set Secondary radius server to the same value as Primary radius server."))
 
-    form:Add("text","coovachilli.radius.HS_RADSECRET",uci.check_set("coovachilli","radius","HS_RADSECRET","testing123"),tr("chilli_var_rradiussecret#Remote Radius Secret"),"string")
-    form:Add_help(tr("chilli_var_rradiussecret#Radius Secret"),tr("chilli_help_radiussecret#Radius shared secret for both servers."))
+  form:Add("text","coovachilli.radius.HS_RADSECRET",uci.check_set("coovachilli","radius","HS_RADSECRET","testing123"),tr("chilli_var_rradiussecret#Remote Radius Secret"),"string")
+  form:Add_help(tr("chilli_var_rradiussecret#Radius Secret"),tr("chilli_help_radiussecret#Radius shared secret for both servers."))
 
-    form:Add("text","coovachilli.radius.HS_RADAUTH",uci.check_set("coovachilli","radius","HS_RADAUTH",""),tr("chilli_var_radiusauthport#Authentication Port"),"string")
-    form:Add("text","coovachilli.radius.HS_RADACCT",uci.check_set("coovachilli","radius","HS_RADACCT",""),tr("chilli_var_radiusacctport#Accounting Port"),"string")
-    form:Add_help(tr("chilli_help_title_radiusports#Authentication / Accounting Ports"),tr("chilli_help_radiusports#Radius authentication and accounting port|The UDP port number to use for radius authentication and accounting requests. The same port number is used for both radiusserver1 and radiusserver2."))
+  form:Add("text","coovachilli.radius.HS_RADAUTH",uci.check_set("coovachilli","radius","HS_RADAUTH",""),tr("chilli_var_radiusauthport#Authentication Port"),"string")
+  form:Add("text","coovachilli.radius.HS_RADACCT",uci.check_set("coovachilli","radius","HS_RADACCT",""),tr("chilli_var_radiusacctport#Accounting Port"),"string")
+  form:Add_help(tr("chilli_help_title_radiusports#Authentication / Accounting Ports"),tr("chilli_help_radiusports#Radius authentication and accounting port|The UDP port number to use for radius authentication and accounting requests. The same port number is used for both radiusserver1 and radiusserver2."))
 --  end
   return form
 end
