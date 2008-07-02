@@ -107,6 +107,16 @@ start() {
 }
 
 stop() {
+	include /lib/network
+	scan_interfaces
+	config_load /var/state/network
+	
+	config_get WAN wan ifname
+	config_get WANDEV wan device
+	config_get LAN lan ifname
+  
+  WIFI="]]..wififace..[["  
+
   /usr/share/internet-wifi/lib/cron_ctrl del "$CRONSET"
   iptables -t nat -D POSTROUTING -o $LAN -j MASQUERADE
   iptables -t nat -D POSTROUTING -o $WAN -j MASQUERADE
@@ -129,7 +139,17 @@ stop() {
 end
 
 function process_config()
-  local str_olsrconf = ""
+--[[
+  for i, t in pairs(olsr) do
+    wwwprint(i,t)
+    if type(t) == "table" then
+      for k, v in pairs(t) do
+        wwwprint(k,v)
+      end
+    end
+  end
+]]--
+--  local olsr = uci.get_all("olsr")
   if userlevel < 2 then
     uci.set("olsr","webadmin","ipaddr","10.128."..olsr.webadmin.nodenumber..".1")
     uci.set("olsr","webadmin","netmask","255.255.0.0")
@@ -140,6 +160,8 @@ function process_config()
   local netnm = olsr.webadmin.netname
   if network[netnm] == nil then 
     uci.set("network",netnm,"interface")
+    uci.save("network")
+    network = uci.get_all("network")
   end
   uci.set("network",netnm,"proto","static")
   uci.set("network",netnm,"type","bridge")
@@ -151,7 +173,7 @@ function process_config()
     uci.set("network",netnm,"ifname", network[netnm].ifname.." "..olsr.webadmin.ifwifi)
   end
 --  uci.set("network",set_netname,"dns","204.225.44.3")
-  uci.commit("network")
+  uci.save("network")
   network = uci.get_all("network")
   if network[netnm].type ~= "bridge" then
     if network[netnm].ifname ~= nil then
@@ -160,7 +182,7 @@ function process_config()
   else
     uci.set("olsr","webadmin","device","br-"..netnm)
   end
-  uci.commit("olsr")
+  uci.save("olsr")
   olsr = uci.get_all("olsr")
   local wififace = uci.get_type("wireless","wifi-iface")
   for i=1, #wififace do
@@ -173,7 +195,9 @@ function process_config()
       break
     end
   end
+  uci.commit("network")
   uci.commit("wireless")
+--  uci.commit("olsr")
 end
 
 function write_config()  
