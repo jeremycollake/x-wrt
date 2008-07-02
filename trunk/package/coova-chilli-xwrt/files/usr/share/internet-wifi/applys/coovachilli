@@ -53,9 +53,7 @@ function process()
       write_file:close()
     end
   end
-  wwwprint("algo")
   if uci.get("coovachilli.webadmin.ifwifi") and uci.get("coovachilli.net.HS_LANIF") == nil then
-    wwwprint("algoentro")
     uci.check_set("network","wifi","interface")
     uci.set("network","wifi","proto","static")
     uci.set("network","wifi","type","bridge")
@@ -77,14 +75,13 @@ function process()
     end
     uci.save("coovachilli")
   end
-  wwwprint("algo1")
   local network = uci.get_all("network")
   if uci.get("coovachilli","webadmin","enable") == "1" then
     local wififace = uci.get_type("wireless","wifi-iface")
     for i=1, #wififace do
       if wififace[i].device == network.wifi.ifname then
-        uci.set("wireless",wififace[1][".name"],"ssid","X-Wrt")
-        uci.set("wireless",wififace[1][".name"],"network","wifi")
+--        uci.set("wireless",wififace[1][".name"],"ssid","X-Wrt")
+--        uci.set("wireless",wififace[1][".name"],"network","wifi")
         uci.set("wireless",network.wifi.ifname,"disabled","0")
         break
       end

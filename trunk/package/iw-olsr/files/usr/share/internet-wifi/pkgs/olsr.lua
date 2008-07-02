@@ -323,13 +323,14 @@ function core_form()
     ]]))
 	form:Add_help(tr("olsr_var_service#Service"),tr("olsr_help_service#Turns olsr enable or disable"))
 
-	form:Add("select","olsr.webadmin.userlevel",uci.check_set("olsr","webadmin","userlevel","1"),"Configuration Mode","string")
-	form["olsr.webadmin.userlevel"].options:Add("0","Select Mode")
-	form["olsr.webadmin.userlevel"].options:Add("1","Beginer")
-	form["olsr.webadmin.userlevel"].options:Add("2","Medium")
-	form["olsr.webadmin.userlevel"].options:Add("3","Advanced")
---	form[websettings[1].name..".userlevel"].options:Add("4","Expert")
-	form:Add_help(tr("_var_mode#Configuration Mode"),tr("_help_mode#"..[[
+  if string.match(__SERVER["SCRIPT_FILENAME"],"coova.chilli.sh") then
+  	form:Add("select","olsr.webadmin.userlevel",uci.check_set("olsr","webadmin","userlevel","1"),"Configuration Mode","string")
+    form["olsr.webadmin.userlevel"].options:Add("0","Select Mode")
+    form["olsr.webadmin.userlevel"].options:Add("1","Beginer")
+    form["olsr.webadmin.userlevel"].options:Add("2","Medium")
+    form["olsr.webadmin.userlevel"].options:Add("3","Advanced")
+--    form[websettings[1].name..".userlevel"].options:Add("4","Expert")
+    form:Add_help(tr("_var_mode#Configuration Mode"),tr("_help_mode#"..[[
           Select mode of configuration page.<br />
           <strong>Beginer :</strong><br />
           This basic mode write the propers configuration files.
@@ -337,6 +338,9 @@ function core_form()
           <strong>Expert :</strong><br />
           This mode keep your configurations file and you edit they by your self.
           ]]))
+  else
+    uci.set("olsr","webadmin","userlevel","1")
+  end
   if userlevel > 1 then
     form:Add("text","olsr.webadmin.netname",uci.check_set("olsr","webadmin","netname","wifi"),tr("olsrdNetName#Network Name"),"string")
   end
