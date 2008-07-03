@@ -8,7 +8,7 @@ local libdir = io.popen("ls "..IPKG_INSTROOT..path)
 for file in libdir:lines() do
   io.write("Compilling "..file)
   local out = string.gsub(file,".lua",".out")
-  if os.execute("luac -s -o "..path..file.." "..path..file) == 0 then
+  if os.execute("luac -s -o "..IPKG_INSTROOT..path..file.." "..IPKG_INSTROOT..path..file) == 0 then
     print("..OK!!!")
   else
     print(" ERROR!!")
