@@ -323,7 +323,7 @@ function core_form()
     ]]))
 	form:Add_help(tr("olsr_var_service#Service"),tr("olsr_help_service#Turns olsr enable or disable"))
 
-  if string.match(__SERVER["SCRIPT_FILENAME"],"coova.chilli.sh") then
+  if string.match(__SERVER["SCRIPT_FILENAME"],"olsr.sh") then
   	form:Add("select","olsr.webadmin.userlevel",uci.check_set("olsr","webadmin","userlevel","1"),"Configuration Mode","string")
     form["olsr.webadmin.userlevel"].options:Add("0","Select Mode")
     form["olsr.webadmin.userlevel"].options:Add("1","Beginer")
