@@ -1,0 +1,17 @@
+#!/usr/bin/lua
+print("Compile files... to save space")
+local IPKG_INSTROOT = os.getenv("IPKG_INSTROOT") or ""
+local IPKG_CONF_DIR = os.getenv("IPKG_CONF_DIR") or ""
+local IPKG_OFFLINE_ROOT = os.getenv("IPKG_OFFLINE_ROOT") or ""
+local path = "/usr/share/internet-wifi/lib/"
+local libdir = io.popen("ls "..IPKG_INSTROOT..path)
+for file in libdir:lines() do
+  io.write("Compilling "..file)
+  local out = string.gsub(file,".lua",".out")
+--  print(out,file)
+  if os.execute("luac -s -o "..path..file.." "..path..file) == 0 then
+    print("..OK!!!")
+  else
+    print(" ERROR!!")
+  end
+end
