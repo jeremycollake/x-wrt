@@ -235,6 +235,10 @@ function get_installed_plugin(idxfile)
       if config[name] == nil then 
         txtinfo_default(library)
       end
+--    else
+--      uci.delete("olsr",name)
+--      uci.set("olsr",name,"LoadPlugin")
+--      uci.set("olsr",name,"Library",library)
     end
     uci.save("olsr")
   end
@@ -277,6 +281,12 @@ function set_menu()
   local badplugin = get_bad_plugin() 
   local user_level = userlevel or 1
   local molsr = uci.get_all("olsr")
+  local plnotconf = false
+  for n, file in pairsByKeys(tplugins) do
+    if molsr[n] == nil then
+      plnotconf = true
+    end
+  end
   __MENU.HotSpot.OLSR = menuClass.new()
   __MENU.HotSpot.OLSR:Add("Core","olsr.sh")
   if user_level > 1 then
@@ -290,7 +300,8 @@ function set_menu()
     if tplugins ~= nil or badplugin ~= nil then
       __MENU.HotSpot.OLSR:Add("Plugins")
       __MENU.HotSpot.OLSR.Plugins = menuClass.new()
-      if badplugin ~= nil then
+      if badplugin ~= nil
+      or plnotconf == true then
         __MENU.HotSpot.OLSR.Plugins:Add("Plugins List","olsr.sh?option=plugin")
       end
       
