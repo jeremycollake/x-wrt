@@ -14,7 +14,10 @@ function check_connection(str)
       print(string.match(line,"1 packets received"))
     end
   end
-  if ok == false then os.execute("/etc/init.d/olsrd restart") end
+  if ok == false then
+  os.execute("ifup wan") 
+--  os.execute("/etc/init.d/olsrd restart") 
+  end
 
 end
 
