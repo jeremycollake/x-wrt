@@ -94,7 +94,7 @@ function uciUpdatedClass:countUpdated()
 		if __FORM[v] ~= uci_value and error==nil then
 			if __FORM[v] == "" then 
 --				os.execute("uci del "..v)
-				uci.del(v)
+				uci.delete(v)
 			else
 --				os.execute("uci set "..v.."="..__FORM[v])
         uci.set(v.."="..__FORM[v])
