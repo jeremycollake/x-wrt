@@ -29,25 +29,25 @@ setfenv(1, P)
 
 local ifwifi = uci.get_type("wireless","wifi-iface")
   if uci.get("chillispot.webadmin.ifwifi") and uci.get("chillispot.net.dhcpif") == nil then
-    uci.check_set("network","wifi","interface")
-    uci.set("network","wifi","proto","static")
-    uci.set("network","wifi","type","bridge")
+    uci.check_set("network","chilli","interface")
+    uci.set("network","chilli","proto","static")
+    uci.set("network","chilli","type","bridge")
 --    uci.save("network")
-    if uci.get("network.wifi.ifname") == nil then
-      uci.set("network","wifi","ifname",uci.get("chillispot.webadmin.ifwifi"))
-    elseif not string.gmatch(uci.get("network.wifi.ifname"),uci.get("chillispot.webadmin.ifwifi")) then
-      uci.set("network","wifi","ifname", uci.get("network.wifi.ifname").." "..uci.get("chillispot.webadmin.ifwifi"))
+    if uci.get("network.chilli.ifname") == nil then
+      uci.set("network","chilli","ifname",uci.get("chillispot.webadmin.ifwifi"))
+    elseif not string.gmatch(uci.get("network.chilli.ifname"),uci.get("chillispot.webadmin.ifwifi")) then
+      uci.set("network","chilli","ifname", uci.get("network.chilli.ifname").." "..uci.get("chillispot.webadmin.ifwifi"))
     end
 --  uci.set("network",set_netname,"dns","204.225.44.3")
     uci.save("network")
     local network = uci.get_all("network")
-    if network.wifi.type ~= "bridge" then
-      if network.wifi.ifname ~= nil then
-        uci.set("chillispot","net","dhcpif",network.wifi.ifname)
-      end
-    else
-      uci.set("chillispot","net","dhcpif","br-wifi")
-    end
+--    if network.chilli.type ~= "bridge" then
+--      if network.chilli.ifname ~= nil then
+--        uci.set("chillispot","net","dhcpif",network.chilli.ifname)
+--      end
+--    else
+      uci.set("chillispot","net","dhcpif","br-chilli")
+--    end
     uci.save("chillispot")
   end
   
@@ -195,7 +195,7 @@ function net_form(form,user_level,localuam)
   if user_level > 1 then 
     form = formClass.new(tr("chilli_dhcp_title#DHCP Settings"))
 ----	Input Section form
-    form:Add("select","chillispot.net.dhcpif",uci.check_set("chillispot","net","dhcpif","wifi"),tr("cportal_var_device#Device Network"),"string")
+    form:Add("select","chillispot.net.dhcpif",uci.check_set("chillispot","net","dhcpif","chilli"),tr("cportal_var_device#Device Network"),"string")
     for k, v in pairs(net.dev_list()) do
       form["chillispot.net.dhcpif"].options:Add(v,k)
     end
