@@ -7,6 +7,7 @@ parser = P
 local io = io
 local wwwprint = wwwprint
 if wwwprint == nil then wwwprint=print end
+local string = string
 local table = table
 local pairs = pairs
 local uci = uci
@@ -57,7 +58,7 @@ function process()
   if userlevel < 2 then
     uci.set("chillispot","webadmin","ipaddr","192.168.20.1")
     uci.set("chillispot","webadmin","netmask","255.255.255.0")
-    uci.set("chillispot","webadmin","device",chillispot.webadmin.ifwifi)
+    uci.set("chillispot","webadmin","device",uci.get("chillispot","webadmin","ifwifi"))
   end
   uci.save("chillispot")
   local chilli = uci.get_all("chillispot")
@@ -72,13 +73,16 @@ function process()
     uci.check_set("network",netnm,"interface")
     uci.set("network",netnm,"proto","static")
     uci.set("network",netnm,"type","bridge")
+    uci.set("network",netnm,"ipaddr",chilli.webadmin.ipaddr)
+    uci.set("network",netnm,"netmask",chilli.webadmin.netmask)
+    uci.save("network")
     if uci.get("network",netnm,"ifname") == nil then
       uci.set("network",netnm,"ifname",uci.get("chillispot.webadmin.ifwifi"))
-    elseif not string.gmatch(uci.get("network.chilli.ifname"),uci.get("chillispot.webadmin.ifwifi")) then
+    elseif not string.gmatch(uci.get("network",netnm,"ifname"),uci.get("chillispot.webadmin.ifwifi")) then
       uci.set("network",netnm,"ifname", uci.get("network",netnm,"ifname").." "..uci.get("chillispot.webadmin.ifwifi"))
     end
     uci.save("network")
-    local network = uci.get_all("network")
+    network = uci.get_all("network")
     if network[netnm].type ~= "bridge" then
       if network[netnm].ifname ~= nil then
         uci.set("chillispot","net","dhcpif",network[netnm].ifname)
@@ -89,7 +93,7 @@ function process()
     uci.save("chillispot")
 --  end
 
-  local network = uci.get_all("network")
+  network = uci.get_all("network")
   if uci.get("chillispot","webadmin","enable") == "1" then
     local wififace = uci.get_type("wireless","wifi-iface")
     for i=1, #wififace do
