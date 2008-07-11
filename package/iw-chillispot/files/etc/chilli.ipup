@@ -6,14 +6,17 @@ local str = ""
 local dev = arg[1]
 local addr = arg[2]
 local mask = arg[3]
-local uamp = uci.get("chillispot","uam","HS_UAMPORT") or 3990
+local uamp = uci.get("chillispot","uam","uamport") or 3990
+local chillinet = uci.get("chillispot","net","dhcpif")
 local net = {}
+-- os.execute("echo '"..dev.." "..addr.." ".." "..mask.."' > /tmp/chilliup")
 tmpnet = io.popen("ipcalc.sh "..addr.." "..mask)
 for line in tmpnet:lines() do
   local t = string.split(line,"=")
   net[t[1]] = t[2]
 end
 local wan = "eth0.1"
+
 tmpnet = io.popen("route -n|grep '^0.0.0.0'|head -n1|awk '{print $8}'")
 for line in tmpnet:lines() do
   wan = line
@@ -68,10 +71,34 @@ ipt[8]["down"] = "-D"
 ipt[8]["rule"] = "FORWARD -i "..wan.." -o "..dev.." -j ACCEPT"
 
 ipt[9] = {}
-ipt[9]["nat"] = "-t nat"
+ipt[9]["nat"] = ""
 ipt[9]["up"] = "-A"
 ipt[9]["down"] = "-D"
-ipt[9]["rule"] = "POSTROUTING --src "..net.NETWORK.."/"..mask.." -o "..wan.." -j MASQUERADE"
+ipt[9]["rule"] = "FORWARD -i "..wan.." -o "..chillinet.." -j ACCEPT"
+
+ipt[10] = {}
+ipt[10]["nat"] = ""
+ipt[10]["up"] = "-A"
+ipt[10]["down"] = "-D"
+ipt[10]["rule"] = "FORWARD -i "..chillinet.." -o "..wan.." -j ACCEPT"
+
+ipt[11] = {}
+ipt[11]["nat"] = ""
+ipt[11]["up"] = "-A"
+ipt[11]["down"] = "-D"
+ipt[11]["rule"] = "FORWARD -i "..dev.." -o "..chillinet.." -j ACCEPT"
+
+ipt[12] = {}
+ipt[12]["nat"] = ""
+ipt[12]["up"] = "-A"
+ipt[12]["down"] = "-D"
+ipt[12]["rule"] = "FORWARD -i "..chillinet.." -o "..dev.." -j ACCEPT"
+
+ipt[13] = {}
+ipt[13]["nat"] = "-t nat"
+ipt[13]["up"] = "-A"
+ipt[13]["down"] = "-D"
+ipt[13]["rule"] = "POSTROUTING --src "..net.NETWORK.."/"..mask.." -o "..dev.." -j MASQUERADE"
 
 local rev = #ipt+1
 for i=1, #ipt do

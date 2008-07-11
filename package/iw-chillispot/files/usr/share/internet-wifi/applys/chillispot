@@ -53,36 +53,48 @@ function process()
       write_file:close()
     end
   end
-
-  if uci.get("chillispot.webadmin.ifwifi") and uci.get("chillispot.net.dhcpif") == nil then
-    uci.check_set("network","chilli","interface")
-    uci.set("network","chilli","proto","static")
-    uci.set("network","chilli","type","bridge")
---    uci.save("network")
-    if uci.get("network.chilli.ifname") == nil then
-      uci.set("network","chilli","ifname",uci.get("chillispot.webadmin.ifwifi"))
+  local netnm = uci.check_set("chillispot","webadmin","netname","chilli")
+  if userlevel < 2 then
+    uci.set("chillispot","webadmin","ipaddr","192.168.20.1")
+    uci.set("chillispot","webadmin","netmask","255.255.255.0")
+    uci.set("chillispot","webadmin","device",chillispot.webadmin.ifwifi)
+  end
+  uci.save("chillispot")
+  local chilli = uci.get_all("chillispot")
+  local network = uci.get_all("network")
+  if network[netnm] == nil then 
+    uci.set("network",netnm,"interface")
+    uci.save("network")
+    network = uci.get_all("network")
+  end
+    
+--  if uci.get("chillispot.webadmin.ifwifi") and uci.get("chillispot.net.dhcpif") == nil then
+    uci.check_set("network",netnm,"interface")
+    uci.set("network",netnm,"proto","static")
+    uci.set("network",netnm,"type","bridge")
+    if uci.get("network",netnm,"ifname") == nil then
+      uci.set("network",netnm,"ifname",uci.get("chillispot.webadmin.ifwifi"))
     elseif not string.gmatch(uci.get("network.chilli.ifname"),uci.get("chillispot.webadmin.ifwifi")) then
-      uci.set("network","chilli","ifname", uci.get("network.chilli.ifname").." "..uci.get("chillispot.webadmin.ifwifi"))
+      uci.set("network",netnm,"ifname", uci.get("network",netnm,"ifname").." "..uci.get("chillispot.webadmin.ifwifi"))
     end
---  uci.set("network",set_netname,"dns","204.225.44.3")
     uci.save("network")
     local network = uci.get_all("network")
-    if network.chilli.type ~= "bridge" then
-      if network.chilli.ifname ~= nil then
-        uci.set("chillispot","net","dhcpif",network.chilli.ifname)
+    if network[netnm].type ~= "bridge" then
+      if network[netnm].ifname ~= nil then
+        uci.set("chillispot","net","dhcpif",network[netnm].ifname)
       end
     else
-      uci.set("chillispot","net","dhcpif","br-chilli")
+      uci.set("chillispot","net","dhcpif","br-"..netnm)
     end
     uci.save("chillispot")
-  end
+--  end
 
   local network = uci.get_all("network")
   if uci.get("chillispot","webadmin","enable") == "1" then
     local wififace = uci.get_type("wireless","wifi-iface")
     for i=1, #wififace do
-      if wififace[i].device == network.chilli.ifname then
-        uci.set("wireless",network.chilli.ifname,"disabled","0")
+      if wififace[i].device == network[netnm].ifname then
+        uci.set("wireless",network[netnm].ifname,"disabled","0")
         break
       end
     end
@@ -97,7 +109,7 @@ end
 function write_init()
   wwwprint ("Writing init file /etc/init.d/chilli")
   local init_file = [[#!/bin/sh /etc/rc.common
-START=50
+START=59
 
 RUN_D=/var/run
 PID_F=$RUN_D/chilli.pid
