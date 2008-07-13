@@ -113,7 +113,7 @@ end
 function write_init()
   wwwprint ("Writing init file /etc/init.d/chilli")
   local init_file = [[#!/bin/sh /etc/rc.common
-START=59
+START=69
 
 RUN_D=/var/run
 PID_F=$RUN_D/chilli.pid
