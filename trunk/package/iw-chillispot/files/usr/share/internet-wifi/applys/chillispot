@@ -117,12 +117,15 @@ START=69
 
 RUN_D=/var/run
 PID_F=$RUN_D/chilli.pid
+CRONSET="* * * * * /usr/share/internet-wifi/pkgs/chilli/minute.cron"
 
 start() {
 	/usr/sbin/chilli
+  /usr/share/internet-wifi/lib/cron_ctrl add "$CRONSET"
 }
 
 stop() {
+  /usr/share/internet-wifi/lib/cron_ctrl del "$CRONSET"
 	[ -f $PID_F ] && kill $(cat $PID_F) >/dev/null 2>&1
 }
 

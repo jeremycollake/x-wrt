@@ -95,20 +95,20 @@ ipt[#ipt]["up"] = "-A"
 ipt[#ipt]["down"] = "-D"
 ipt[#ipt]["rule"] = "FORWARD -i "..chillinet.." -o "..dev.." -j ACCEPT"
 
--- this was moved to olsr ip tables
---if olsrnet ~= nil then
---  ipt[#ipt+1] = {}
---  ipt[#ipt]["nat"] = ""
---  ipt[#ipt]["up"] = "-A"
---  ipt[#ipt]["down"] = "-D"
---  ipt[#ipt]["rule"] = "FORWARD -i "..olsrnet.." -o "..chillinet.." -j ACCEPT"
 
---  ipt[#ipt+1] = {}
---  ipt[#ipt]["nat"] = ""
---  ipt[#ipt]["up"] = "-A"
---  ipt[#ipt]["down"] = "-D"
---  ipt[#ipt]["rule"] = "FORWARD -i "..chillinet.." -o "..olsrnet.." -j ACCEPT"
---end
+if olsrnet ~= nil then
+  ipt[#ipt+1] = {}
+  ipt[#ipt]["nat"] = ""
+  ipt[#ipt]["up"] = "-A"
+  ipt[#ipt]["down"] = "-D"
+  ipt[#ipt]["rule"] = "FORWARD -i "..olsrnet.." -o "..dev.." -j ACCEPT"
+
+  ipt[#ipt+1] = {}
+  ipt[#ipt]["nat"] = ""
+  ipt[#ipt]["up"] = "-A"
+  ipt[#ipt]["down"] = "-D"
+  ipt[#ipt]["rule"] = "FORWARD -i "..dev.." -o "..olsrnet.." -j ACCEPT"
+end
 
 ipt[#ipt+1] = {}
 ipt[#ipt]["nat"] = "-t nat"
