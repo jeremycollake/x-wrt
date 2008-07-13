@@ -1,6 +1,6 @@
-diff -urN socat-1.6.0.0.old/sslcls.c socat-1.6.0.0.dev/sslcls.c
---- socat-1.6.0.0.old/sslcls.c	2007-02-26 22:45:24.000000000 +0100
-+++ socat-1.6.0.0.dev/sslcls.c	2008-05-12 02:37:20.000000000 +0200
+diff -urN socat-1.6.0.1.old/sslcls.c socat-1.6.0.1.dev/sslcls.c
+--- socat-1.6.0.1.old/sslcls.c	2008-02-09 22:59:11.000000000 +0100
++++ socat-1.6.0.1.dev/sslcls.c	2008-07-02 10:35:59.000000000 +0200
 @@ -35,6 +35,7 @@
     return result;
  }
@@ -17,9 +17,9 @@ diff -urN socat-1.6.0.0.old/sslcls.c socat-1.6.0.0.dev/sslcls.c
  
  SSL_METHOD *sycSSLv3_client_method(void) {
     SSL_METHOD *result;
-diff -urN socat-1.6.0.0.old/sslcls.h socat-1.6.0.0.dev/sslcls.h
---- socat-1.6.0.0.old/sslcls.h	2007-02-26 22:45:24.000000000 +0100
-+++ socat-1.6.0.0.dev/sslcls.h	2008-05-12 02:40:44.000000000 +0200
+diff -urN socat-1.6.0.1.old/sslcls.h socat-1.6.0.1.dev/sslcls.h
+--- socat-1.6.0.1.old/sslcls.h	2008-02-09 22:59:11.000000000 +0100
++++ socat-1.6.0.1.dev/sslcls.h	2008-07-02 10:35:59.000000000 +0200
 @@ -10,8 +10,10 @@
  
  void sycSSL_load_error_strings(void);
@@ -42,10 +42,10 @@ diff -urN socat-1.6.0.0.old/sslcls.h socat-1.6.0.0.dev/sslcls.h
  #define sycSSLv3_client_method() SSLv3_client_method()
  #define sycSSLv3_server_method() SSLv3_server_method()
  #define sycSSLv23_client_method() SSLv23_client_method()
-diff -urN socat-1.6.0.0.old/xio-openssl.c socat-1.6.0.0.dev/xio-openssl.c
---- socat-1.6.0.0.old/xio-openssl.c	2007-02-26 22:45:24.000000000 +0100
-+++ socat-1.6.0.0.dev/xio-openssl.c	2008-05-12 02:39:38.000000000 +0200
-@@ -672,9 +672,12 @@
+diff -urN socat-1.6.0.1.old/xio-openssl.c socat-1.6.0.1.dev/xio-openssl.c
+--- socat-1.6.0.1.old/xio-openssl.c	2008-02-09 22:59:11.000000000 +0100
++++ socat-1.6.0.1.dev/xio-openssl.c	2008-07-02 10:35:59.000000000 +0200
+@@ -676,9 +676,12 @@
  
     if (!server) {
        if (me_str != 0) {
@@ -59,7 +59,7 @@ diff -urN socat-1.6.0.0.old/xio-openssl.c socat-1.6.0.0.dev/xio-openssl.c
  	    method = sycSSLv3_client_method();
  	 } else if (!strcasecmp(me_str, "SSLv23") || !strcasecmp(me_str, "SSL23") ||
  		    !strcasecmp(me_str, "SSL")) {
-@@ -691,9 +694,12 @@
+@@ -695,9 +698,12 @@
        }
     } else /* server */ {
        if (me_str != 0) {

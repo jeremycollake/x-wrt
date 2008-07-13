@@ -1,0 +1,13 @@
+diff -urN socat-1.6.0.1.old/Makefile.in socat-1.6.0.1.dev/Makefile.in
+--- socat-1.6.0.1.old/Makefile.in	2008-02-09 22:59:11.000000000 +0100
++++ socat-1.6.0.1.dev/Makefile.in	2008-07-02 10:55:31.000000000 +0200
+@@ -37,7 +37,8 @@
+ 
+ #0 CFLAGS = @CFLAGS@ $(CCOPTS) $(DEFS) $(INCLS)
+ CFLAGS = @CFLAGS@ $(CCOPTS) $(DEFS) $(CPPFLAGS)
+-CLIBS = $(LIBS)
++LDFLAGS = @LDFLAGS@
++CLIBS = $(LDFLAGS) $(LIBS)
+ #CLIBS = $(LIBS) -lm -lefence
+ XIOSRCS = xioinitialize.c xiohelp.c xioparam.c xiodiag.c xioopen.c xioopts.c \
+ 	xiosignal.c xiosigchld.c xioread.c xiowrite.c \
