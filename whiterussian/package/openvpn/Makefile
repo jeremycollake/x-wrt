@@ -8,7 +8,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=openvpn
 PKG_VERSION:=2.0.9
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
 PKG_SOURCE_URL:=http://openvpn.net/release @SF/openvpn
@@ -56,6 +56,7 @@ $(PKG_BUILD_DIR)/.configured: $(PKG_BUILD_DIR)/.prepared
 		CFLAGS="$(strip $(TARGET_CFLAGS))" \
 		CPPFLAGS="-I$(STAGING_DIR)/usr/include" \
 		LDFLAGS="-L$(STAGING_DIR)/usr/lib" \
+		ac_cv_func_epoll_create=no \
 		./configure \
 		  --target=$(GNU_TARGET_NAME) \
 		  --host=$(GNU_TARGET_NAME) \
