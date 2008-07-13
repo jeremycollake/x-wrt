@@ -86,6 +86,7 @@ $(IPKG_E2FSPROGS): $(PKG_BUILD_DIR)/.built
 	ln -sf mke2fs $(IDIR_E2FSPROGS)/usr/sbin/mkfs.ext2
 	ln -sf mke2fs $(IDIR_E2FSPROGS)/usr/sbin/mkfs.ext3
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/badblocks $(IDIR_E2FSPROGS)/usr/sbin/
+	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/blkid $(IDIR_E2FSPROGS)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/e2label $(IDIR_E2FSPROGS)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/filefrag $(IDIR_E2FSPROGS)/usr/sbin/
 	$(CP) $(PKG_INSTALL_DIR)/usr/sbin/logsave $(IDIR_E2FSPROGS)/usr/sbin/
