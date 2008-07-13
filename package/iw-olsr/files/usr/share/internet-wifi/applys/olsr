@@ -90,6 +90,9 @@ start() {
   # For connecting a wired lan client of node 1 to wired lan client of node 2
   iptables -A forwarding_rule -i $LAN -o $LAN -j ACCEPT
   
+  iptables -A FORWARD -i br-wifi -o br-chilli -j ACCEPT
+  iptables -A FORWARD -i br-chilli -o br-wifi -j ACCEPT
+  
   # Masquerade all trafic
   iptables -t nat -A POSTROUTING -o $WIFI -j MASQUERADE
   iptables -t nat -A POSTROUTING -o $WAN -j MASQUERADE
