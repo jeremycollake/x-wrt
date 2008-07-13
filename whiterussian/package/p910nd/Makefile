@@ -8,12 +8,12 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=p910nd
-PKG_VERSION:=0.91
+PKG_VERSION:=0.92
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.bz2
 PKG_SOURCE_URL:=http://etherboot.sourceforge.net/p910nd
-PKG_MD5SUM:=e9000417318756cf8887882e66504dee
+PKG_MD5SUM:=d0d0d0500d151c1a49dcb69dd94b8357
 PKG_CAT:=bzcat
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
@@ -28,7 +28,7 @@ $(PKG_BUILD_DIR)/.configured:
 $(PKG_BUILD_DIR)/.built:
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		CC=$(TARGET_CC) $(TARGET_CONFIGURE_OPTS) \
-		CFLAGS="$(TARGET_CFLAGS) -DLOCKFILE_DIR=\"\\\"/tmp\\\"\""
+		CFLAGS="$(TARGET_CFLAGS) -DLOCKFILE_DIR=\"\\\"/tmp\\\"\" -DPRINTERFILE=\"\\\"/dev/printers/%c\\\"\""
 	touch $@
 
 $(IPKG_P910ND): $(PKG_BUILD_DIR)/.built
