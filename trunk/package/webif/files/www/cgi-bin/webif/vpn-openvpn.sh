@@ -244,6 +244,9 @@ for config in $openvpnconfigs; do
 	$(empty "$NODH" && echo 'string|@TR<<Found installed Diffie Hellman parameters.>>')
 	field|@TR<<Upload Diffie Hellman>>|dh_$config|hidden
 	upload|openvpn_dh
+
+	helpitem|Uploading Keys
+	helptext|HelpText Uploading Keys#Only one key/certificate may be uploaded at a time.
 	end_form
 	
 	start_form|@TR<<Advanced Options>>|advanced_$config|hidden
