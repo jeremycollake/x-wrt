@@ -180,9 +180,9 @@ for config in $openvpnconfigs; do
 	option|server|@TR<<Server>>
 	field|@TR<<Server Address>>|ipaddr_$config|hidden
 	text|ovpn_ipaddr_$config|$FORM_ovpn_ipaddr
-	field|@TR<<Address Pool Start>>|local_$config|hidden
+	field|@TR<<Local Address>>|local_$config|hidden
 	text|ovpn_local_$config|$FORM_ovpn_local
-	field|@TR<<Address Pool Stop>>|remote_$config|hidden
+	field|@TR<<Remote Address>>|remote_$config|hidden
 	text|ovpn_remote_$config|$FORM_ovpn_remote
 	field|@TR<<Protocol>>|proto_$config
 	select|ovpn_proto_$config|$FORM_ovpn_proto
@@ -333,6 +333,8 @@ function modechange2(config)
 	v = (isset('ovpn_mode_' + config, 'client') && checked('ovpn_enabled_' + config + '_1'));
 	set_visible('ipaddr_' + config, v);
 	set_visible('advanced_option_' + config, v);
+	set_visible('local_' + config, v);	
+	set_visible('remote_' + config, v);
 
 	v = isset('ovpn_auth_' + config, 'psk');
 	set_visible('psk_status_' + config, v);

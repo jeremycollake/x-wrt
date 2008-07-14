@@ -113,6 +113,9 @@ start() {
 		pid=$(mktemp /var/run/webifopenvpn.pid.XXXXXX)
 		append_parm "write_pid" "--writepid" "$pid"
 		append_parm "cmdline" ""
+		if [ -n "$CONFIG_ovpn_local" -a -n "$CONFIG_ovpn_remote" ]; then
+			append args "--ifconfig $CONFIG_ovpn_local $CONFIG_ovpn_remote"
+		fi
 
 		case "$CONFIG_ovpn_mode" in
 			client)
@@ -137,7 +140,6 @@ start() {
 				if [ "$CONFIG_ovpn_auth" = "pem" ]; then
 					append args "--tls-server"
 				fi
-				append args "--ifconfig $CONFIG_ovpn_local $CONFIG_ovpn_remote"
 			;;
 			*)
 				report_log "unknown mode, aborting!"
