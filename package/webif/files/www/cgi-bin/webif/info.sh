@@ -84,7 +84,7 @@ if [ -n "$FORM_install_webif" ]; then
 	echo "@TR<<info_wait_install#Please wait, installation may take a minute>> ... <br />"
 	echo "<pre>"
 	ipkg -V 0 update
-	ipkg install "${version_url}${package_filename}" -force-overwrite -force-reinstall| uniq
+	ipkg install "${version_url}${package_filename}" -force-overwrite -force-reinstall -force-defaults| uniq
 	echo "</pre>"
 	this_revision=$(cat "/www/.version")
 	# update the active language package
@@ -92,7 +92,7 @@ if [ -n "$FORM_install_webif" ]; then
 	! equal "$(ipkg status "webif-lang-${curlang}" |grep "Status:" | grep " installed" )" "" && {
 		webif_version=$(ipkg status webif | awk '/Version:/ { print $2 }')
 		echo "<pre>"
-		ipkg install "${version_url}packages/webif-lang-${curlang}_${webif_version}_mipsel.ipk" -force-reinstall -force-overwrite | uniq
+		ipkg install "${version_url}packages/webif-lang-${curlang}_${webif_version}_mipsel.ipk" -force-reinstall -force-overwrite -force-defaults | uniq
 		echo "</pre>"
 	}
 fi
