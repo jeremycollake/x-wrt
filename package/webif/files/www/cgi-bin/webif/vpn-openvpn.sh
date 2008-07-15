@@ -278,6 +278,51 @@ for config in $openvpnconfigs; do
 	field|
 	string|<a href=\"$SCRIPT_NAME?remove_openvpncfg=$config\">@TR<<Remove OpenVPN Config>></a>"
 	append OVPN "$ovpn_form" "$N"
+	
+	javascript_forms="
+	v = checked('ovpn_enabled_${config}_1');
+	set_visible('mode_$config', v);
+	set_visible('port_$config', v);
+	set_visible('auth_$config', v);
+	set_visible('proto_$config', v);
+	set_visible('authentication_$config', v);
+	set_visible('advanced_option_$config', v);
+	set_visible('ovpn_advanced_$config', v);
+	set_visible('advanced_$config', v);
+	set_visible('local_$config', v);	
+	set_visible('remote_$config', v);
+	set_visible('advanced_option_$config', v);
+
+	v = (checked('ovpn_advanced_${config}_1') && checked('ovpn_enabled_${config}_1'));
+	set_visible('advanced_$config', v);
+
+	v = (isset('ovpn_mode_$config','server') && checked('ovpn_enabled_${config}_1'));
+	set_visible('field_client_to_client_$config', v);
+
+	v = (isset('ovpn_mode_$config','client') && checked('ovpn_enabled_${config}_1'));
+	set_visible('ipaddr_$config', v);
+
+	v = isset('ovpn_auth_$config','psk');
+	set_visible('psk_status_$config', v);
+	set_visible('psk_$config', v);
+
+	v = isset('ovpn_auth_$config','cert');
+	set_visible('certificate_status_$config', v);
+	set_visible('certificate_$config', v);
+
+	v = isset('ovpn_auth_$config','pem');
+	set_visible('root_ca_status_$config', v);
+	set_visible('root_ca_$config', v);
+	set_visible('client_certificate_status_$config', v);
+	set_visible('client_certificate_$config', v);
+	set_visible('client_key_status_$config', v);
+	set_visible('client_key_$config', v);
+
+	v = (isset('ovpn_auth_$config','pem') && isset('ovpn_mode_$config','server'));
+	set_visible('dh_status_$config', v);
+	set_visible('dh_$config', v);
+	set_visible('openvpn_dh_$config', v);"
+	append js "$javascript_forms" "$N"
 done
 
 add_ovpncfg="field|
@@ -285,87 +330,20 @@ string|<a href=\"$SCRIPT_NAME?add_openvpncfg_number=$openvpncfg_number\">@TR<<Ad
 append OVPN "$add_ovpncfg" "$N"
 
 cat <<EOF
-<script type="text/javascript" src="/webif.js "></script>
+<script type="text/javascript" src="/webif.js"></script>
 <script type="text/javascript">
 <!--
-function modechange(elem)
+function modechange()
 {
-	if (elem != undefined)
-	{
-		var config = get_config(elem.name);
-		modechange2(config);
-	}
-	else
-	{
-		configs = new Array('$(echo $openvpnconfigs|sed "s/ /','/g")');
-		for (var i = 0; i < configs.length; ++i)
-		{
-			modechange2(configs[i]);
-		}
-	}
+	var v;
+	$js
+
 	hide('save');
 	show('save');
 }
-
-function modechange2(config)
-{
-	var v;
-	v = checked('ovpn_enabled_' + config + '_1');
-	set_visible('mode_' + config, v);
-	set_visible('port_' + config, v);
-	set_visible('auth_' + config, v);
-	set_visible('proto_' + config, v);
-	set_visible('authentication_' + config, v);
-	set_visible('advanced_option_' + config, v);
-	set_visible('ovpn_advanced_' + config, v);
-	set_visible('advanced_' + config, v);
-
-	v = (checked('ovpn_advanced_' + config + '_1') && checked('ovpn_enabled_' + config + '_1'));
-	set_visible('advanced_' + config, v);
-
-	v = (isset('ovpn_mode_' + config, 'server') && checked('ovpn_enabled_' + config + '_1'));
-	set_visible('advanced_option_' + config, v);
-	set_visible('field_client_to_client_' + config, v);
-	set_visible('ovpn_advanced_' + config, v);
-	set_visible('local_' + config, v);	
-	set_visible('remote_' + config, v);
-
-	v = (isset('ovpn_mode_' + config, 'client') && checked('ovpn_enabled_' + config + '_1'));
-	set_visible('ipaddr_' + config, v);
-	set_visible('advanced_option_' + config, v);
-	set_visible('local_' + config, v);	
-	set_visible('remote_' + config, v);
-
-	v = isset('ovpn_auth_' + config, 'psk');
-	set_visible('psk_status_' + config, v);
-	set_visible('psk_' + config, v);
-
-	v = isset('ovpn_auth_' + config, 'cert');
-	set_visible('certificate_status_' + config, v);
-	set_visible('certificate_' + config, v);
-
-	v = isset('ovpn_auth_' + config, 'pem');
-	set_visible('root_ca_status_' + config, v);
-	set_visible('root_ca_' + config, v);
-	set_visible('client_certificate_status_' + config, v);
-	set_visible('client_certificate_' + config, v);
-	set_visible('client_key_status_' + config, v);
-	set_visible('client_key_' + config, v);
-
-	v = (isset('ovpn_auth_' + config, 'pem') && isset('ovpn_mode_' + config, 'server'));
-	set_visible('dh_status_' + config, v);
-	set_visible('dh_' + config, v);
-	set_visible('openvpn_dh_' + config, v);
-}
-
-function get_config(name)
-{
-	var a = name.split("_");
-	return a[a.length - 1];
-	
-}
 -->
 </script>
+
 EOF
 
 display_form <<EOF
