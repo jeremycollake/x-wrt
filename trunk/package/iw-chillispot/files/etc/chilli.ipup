@@ -29,31 +29,7 @@ ipt[#ipt]["up"] = "-A"
 ipt[#ipt]["down"] = "-D"
 ipt[#ipt]["rule"] = "INPUT -p tcp -m tcp --dport "..uamp.." --syn -j ACCEPT"
 
-ipt[#ipt+1] = {}
-ipt[#ipt]["nat"] = ""
-ipt[#ipt]["up"] = "-N"
-ipt[#ipt]["down"] = "-X"
-ipt[#ipt]["rule"] = "CHILLI_ACCEPT"
-
-ipt[#ipt+1] = {}
-ipt[#ipt]["nat"] = ""
-ipt[#ipt]["up"] = "-A"
-ipt[#ipt]["down"] = "-D"
-ipt[#ipt]["rule"] = "CHILLI_ACCEPT -i "..wan.." -j RETURN"
-
-ipt[#ipt+1] = {}
-ipt[#ipt]["nat"] = ""
-ipt[#ipt]["up"] = "-A"
-ipt[#ipt]["down"] = "-D"
-ipt[#ipt]["rule"] = "CHILLI_ACCEPT -j ACCEPT"
-
-ipt[#ipt+1] = {}
-ipt[#ipt]["nat"] = ""
-ipt[#ipt]["up"] = "-A"
-ipt[#ipt]["down"] = "-D"
-ipt[#ipt]["rule"] = "INPUT -j CHILLI_ACCEPT"
-
-ipt[#ipt+1] = {}
+ ipt[#ipt+1] = {}
 ipt[#ipt]["nat"] = ""
 ipt[#ipt]["up"] = "-A"
 ipt[#ipt]["down"] = "-D"
@@ -114,7 +90,7 @@ ipt[#ipt+1] = {}
 ipt[#ipt]["nat"] = "-t nat"
 ipt[#ipt]["up"] = "-A"
 ipt[#ipt]["down"] = "-D"
-ipt[#ipt]["rule"] = "POSTROUTING --src "..net.NETWORK.."/"..mask.." -o "..dev.." -j MASQUERADE"
+ipt[#ipt]["rule"] = "POSTROUTING --src "..net.NETWORK.."/"..mask.." -o "..wan.." -j MASQUERADE"
 
 local rev = #ipt+1
 for i=1, #ipt do
