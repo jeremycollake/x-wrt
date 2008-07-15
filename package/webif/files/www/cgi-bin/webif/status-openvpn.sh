@@ -81,6 +81,7 @@ empty "$openvpn_enabled" || {
 			} || {
 				echo '@TR<<status_openvpn_OpenVPN_not_running#OpenVPN is not running>> <a href="?action=start">@TR<<status_openvpn_start_now#[start now]>></a>'
 			}
+			echo "<br/>"
 			let "vcfg_number+=1"
 		} || {
 			echo "$ERROR"
