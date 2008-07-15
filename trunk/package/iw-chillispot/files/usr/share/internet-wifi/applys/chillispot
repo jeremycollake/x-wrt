@@ -98,6 +98,9 @@ function process()
     local wififace = uci.get_type("wireless","wifi-iface")
     for i=1, #wififace do
       if wififace[i].device == network[netnm].ifname then
+        if wififace[i].network == "lan" or wififace[i].network ~= "wifi" then
+          uci.set("wireless",wififace[i][".name"],"network",uci.get("chillispot","webadmin","netname"))
+        end
         uci.set("wireless",network[netnm].ifname,"disabled","0")
         break
       end
