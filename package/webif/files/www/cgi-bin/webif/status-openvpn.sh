@@ -1,7 +1,7 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
-
+vcfg_number=0
 config_cb() {
 	local cfg_type="$1"
 	local cfg_name="$2"
@@ -63,7 +63,6 @@ empty "$openvpn_enabled" || {
 		esac
 
 		empty "$ERROR" && {
-			vcfg_number=0
 			DEVICES=$(egrep "(tun$vcfg_number)" /proc/net/dev | cut -d: -f1 | tr -d ' ')
 			empty "$DEVICES" && {
 				echo "@TR<<status_openvpn_no_active_tunnel#no active tunnel found>>"
