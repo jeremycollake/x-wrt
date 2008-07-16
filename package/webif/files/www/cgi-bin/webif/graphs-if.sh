@@ -11,9 +11,9 @@ header "Graphs" "graphs_if_Traffic#Traffic>> $FORM_if@TR<<" "@TR<<graphs_if_Traf
 #	<object data="" width="500" height="250" type="image/svg+xml">@TR<<graphs_svg_required#This object requires the SVG support.>></object>
 ?>
 <center>
-<?if [ "$FORM_if" ] ?>
+<? if [ -n "$FORM_if" ]; then ?>
 	<embed src="/cgi-bin/webif/graph_if_svg.sh?if=<? echo -n ${FORM_if} ?>"
 		width="500" height="250" type="image/svg+xml" />
-<?fi?>
+<? fi ?>
 </center>
 <? footer ?>
