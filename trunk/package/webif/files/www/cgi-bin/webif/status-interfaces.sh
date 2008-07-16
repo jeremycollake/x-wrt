@@ -75,6 +75,7 @@ EOF
 }
 
 displayiface() {
+	unset ip6_addr_link ip6_addr_global ip6_addrs ip6_form ip6_addr_host
 	local ifpar="$1"
 	local config ip_addr mac_addr form_mac tx_packets rx_packets tx_bytes rx_bytes
 	eval "iface=\$${ifpar}_ifacen"
@@ -83,9 +84,36 @@ displayiface() {
 		[ -n "$config" ] && {
 			ip_addr=$(echo "$config" | grep "inet addr:" | cut -d: -f 2 | cut -d' ' -f 1)
 			ip_addr="${ip_addr:-"&nbsp;"}"
-			ip6_addr=$(echo "$config" |grep "inet6 addr:" | grep "Global" |cut -d' ' -f 13)
-			[ "$ip6_addr" != "" ] && ip6_form="field|@TR<<IP6 Address>>|${ifpar}_ip6_addr
-string|$ip6_addr"
+			ip6_addrs=$(echo "$config" |grep "inet6 addr:")
+			[ "$ip6_addrs" != "" ] && {
+				echo "$ip6_addrs" | grep -q "Global"
+				[ "$?" = "0" ] && {
+					ip6_addr_global=$(echo "$ip6_addrs" | grep "Global" |cut -d' ' -f 13)
+					[ "$ip6_addr_global" != "" ] && {
+						ip6_form="$ip6_form
+field|@TR<<IP6 Global Address>>|${ifpar}_ip6_addr_global
+string|$ip6_addr_global"
+					}
+				}
+				echo "$ip6_addrs" | grep -q "Link"
+				[ "$?" = "0" ] && {
+					ip6_addr_link=$(echo "$ip6_addrs" | grep "Link" |cut -d' ' -f 13)
+					[ "$ip6_addr_link" != "" ] && {
+						ip6_form="$ip6_form
+field|@TR<<IP6 Link Address>>|${ifpar}_ip6_addr_link
+string|$ip6_addr_link"
+					}
+				}
+				echo "$ip6_addrs" | grep -q "Host"
+				[ "$?" = "0" ] && {
+					ip6_addr_host=$(echo "$ip6_addrs" | grep "Host" |cut -d' ' -f 13)
+					[ "$ip6_addr_host" != "" ] && {
+						ip6_form="$ip6_form
+field|@TR<<IP6 Host Address>>|${ifpar}_ip6_addr_host
+string|$ip6_addr_host"
+					}
+				}
+			}
 			mac_addr=$(echo "$config" | grep "HWaddr" | cut -d'H' -f 2 | cut -d' ' -f 2)
 			[ -n "$mac_addr" ] && form_mac="field|@TR<<MAC Address>>|${ifpar}_mac_addr
 string|$mac_addr"
