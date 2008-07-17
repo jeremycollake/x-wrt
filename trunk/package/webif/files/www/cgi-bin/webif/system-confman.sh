@@ -3,12 +3,12 @@
 
 COPY_FILES="/etc/firewall.config
 /etc/firewall.user
-/etc/httpd.conf
-/etc/ssl"
+/etc/httpd.conf"
 
 COPY_DIRS="/etc/config
 /etc/openvpn
-/etc/crontabs"
+/etc/crontabs
+/etc/ssl"
 
 . /usr/lib/webif/webif.sh
 uci_load "system"
