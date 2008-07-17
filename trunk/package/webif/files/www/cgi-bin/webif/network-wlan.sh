@@ -18,6 +18,21 @@
 # Configuration files referenced:
 #   wireless
 #
+if [ -n "$FORM_generate_wireless" ]; then
+	wifi detect > /etc/config/wireless
+	unset FORM_submit
+fi
+if [ ! -s /etc/config/wireless ]; then
+	header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onload="modechange()"' "$SCRIPT_NAME"
+	echo "@TR<<Generate Wireless Config Waring#No wireless configuration detected. Please make sure you have the correct wireless driver installed for your device.>>"
+	display_form <<EOF
+onchange|modechange
+submit|generate_wireless|@TR<<Generate Wireless Config>>
+EOF
+	footer
+	break
+fi
+
 dmesg_txt="$(dmesg)"
 adhoc_count=0
 ap_count=0
