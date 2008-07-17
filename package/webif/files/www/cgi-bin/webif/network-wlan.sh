@@ -32,7 +32,25 @@ EOF
 	footer
 	break
 fi
+if [ ! -f /usr/lib/webif/channels.lst ]; then
+	iwlist channel 2>&- |grep -q "GHz"
+	if [ "$?" != "0" ]; then
+		is_package_installed kmod-madwifi
+		if [ "$?" != "0" ]; then
+			wlanconfig ath create wlandev wifi0 wlanmode ap 2>&-
+			cleanup=1
+		fi
+	fi
+	BGCHANNELS="$(iwlist channel 2>&- |grep -v "no frequency information." |grep -v "[Ff]requenc" |grep -v "Current" |grep "2.[0-9]" |cut -d' ' -f12)"
+	ACHANNELS="$(iwlist channel 2>&- |grep -v "no frequency information." |grep -v "[Ff]requenc" |grep -v "Current" |grep "5.[0-9]" |cut -d' ' -f12)"
+	echo "BGCHANNELS=\"${BGCHANNELS}\"" > /usr/lib/webif/channels.lst
+	echo "ACHANNELS=\"${ACHANNELS}\"" >> /usr/lib/webif/channels.lst
+	if [ "$cleanup" = "1" ]; then
+		wifi
+	fi
+fi
 
+. /usr/lib/webif/channels.lst
 dmesg_txt="$(dmesg)"
 adhoc_count=0
 ap_count=0
@@ -209,17 +227,6 @@ for device in $DEVICES; do
 			radio|disabled_$device|$FORM_disabled|0|@TR<<On>>
 			radio|disabled_$device|$FORM_disabled|1|@TR<<Off>>"
 	append forms "$mode_disabled" "$N"
-
-	# Initialize channels based on country code
-	# (--- hardly a switch here ---)
-	case "$country" in
-		All|all|ALL) 
-			BGCHANNELS="1 2 3 4 5 6 7 8 9 10 11 12 13 14"; CHANNEL_MAX=14
-			ACHANNELS="36 40 42 44 48 50 52 56 58 60 64 149 152 153 156 157 160 161";;
-		*) 
-			BGCHANNELS="1 2 3 4 5 6 7 8 9 10 11"; CHANNEL_MAX=11
-			ACHANNELS="36 40 42 44 48 50 52 56 58 60 64 149 152 153 156 157 160 161";;
-	esac
 
 	if [ "$iftype" = "atheros" ]; then
         	mode_fields="field|@TR<<Mode>>
