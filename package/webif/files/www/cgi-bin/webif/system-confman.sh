@@ -1,9 +1,14 @@
 #!/usr/bin/webif-page "-U /tmp -u 4096"
 <?
 
-COPY_FILES="/etc/*"
+COPY_FILES="/etc/firewall.config
+/etc/firewall.user
+/etc/httpd.conf
+/etc/ssl"
 
-COPY_DIRS="/etc"
+COPY_DIRS="/etc/config
+/etc/openvpn
+/etc/crontabs"
 
 . /usr/lib/webif/webif.sh
 uci_load "system"
@@ -73,6 +78,7 @@ if ! equal $FORM_download "" ; then
 			cp -afr $dir/* $tmp$dir/ 2>/dev/null
 			}
 		done
+		[ -n "$tmp" ] && rm $tmp/etc/banner
 		(cd $tmp; tar czf $tgz *)
 		rm -rf $tmp 2>/dev/null
 		DOWNLOAD config.tgz
