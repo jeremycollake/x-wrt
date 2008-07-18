@@ -84,12 +84,6 @@ function printStatus() {
 <table style="width: 90%; text-align: left;" border="0" cellpadding="2" cellspacing="2" align="center">
 <tbody>
 	<tr>
-		<td>@TR<<Options>>:</td>
-		<td>
-			<input type="checkbox" name="erase_fs" value="1" />@TR<<Erase_JFFS2|Erase JFFS2 partition>>
-		</td>
-	</tr>
-	<tr>
 		<td>@TR<<Firmware_image|Firmware image to upload:>></td>
 		<td>
 			<input type="file" name="firmware" />
