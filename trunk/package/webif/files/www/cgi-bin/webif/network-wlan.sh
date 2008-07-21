@@ -55,7 +55,7 @@ if [ ! -f /usr/lib/webif/channels.lst ]; then
 fi
 
 . /usr/lib/webif/channels.lst
-if [ -e "$BGCHANNELS" -a -e "$ACHANNELS" ]; then
+if [ -z "$BGCHANNELS" -a -z "$ACHANNELS" ]; then
 	generate_channels
 fi
 
