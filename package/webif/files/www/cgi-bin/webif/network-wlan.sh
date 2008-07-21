@@ -32,25 +32,33 @@ EOF
 	footer
 	break
 fi
-if [ ! -f /usr/lib/webif/channels.lst ]; then
+generate_channels() {
 	iwlist channel 2>&- |grep -q "GHz"
 	if [ "$?" != "0" ]; then
 		is_package_installed kmod-madwifi
-		if [ "$?" != "0" ]; then
+		if [ "$?" = "0" ]; then
 			wlanconfig ath create wlandev wifi0 wlanmode ap 2>&-
 			cleanup=1
 		fi
+		BGCHANNELS="$(iwlist channel 2>&- |grep -v "no frequency information." |grep -v "[Ff]requenc" |grep -v "Current" |grep "2.[0-9]" |cut -d' ' -f12)"
+		ACHANNELS="$(iwlist channel 2>&- |grep -v "no frequency information." |grep -v "[Ff]requenc" |grep -v "Current" |grep "5.[0-9]" |cut -d' ' -f12)"
+		echo "BGCHANNELS=\"${BGCHANNELS}\"" > /usr/lib/webif/channels.lst
+		echo "ACHANNELS=\"${ACHANNELS}\"" >> /usr/lib/webif/channels.lst
+		if [ "$cleanup" = "1" ]; then
+			wifi
+		fi
 	fi
-	BGCHANNELS="$(iwlist channel 2>&- |grep -v "no frequency information." |grep -v "[Ff]requenc" |grep -v "Current" |grep "2.[0-9]" |cut -d' ' -f12)"
-	ACHANNELS="$(iwlist channel 2>&- |grep -v "no frequency information." |grep -v "[Ff]requenc" |grep -v "Current" |grep "5.[0-9]" |cut -d' ' -f12)"
-	echo "BGCHANNELS=\"${BGCHANNELS}\"" > /usr/lib/webif/channels.lst
-	echo "ACHANNELS=\"${ACHANNELS}\"" >> /usr/lib/webif/channels.lst
-	if [ "$cleanup" = "1" ]; then
-		wifi
-	fi
+}
+
+if [ ! -f /usr/lib/webif/channels.lst ]; then
+	generate_channels
 fi
 
 . /usr/lib/webif/channels.lst
+if [ -e "$BGCHANNELS" -a -e "$ACHANNELS" ]; then
+	generate_channels
+fi
+
 dmesg_txt="$(dmesg)"
 adhoc_count=0
 ap_count=0
