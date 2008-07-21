@@ -141,6 +141,7 @@ for config in $openvpnconfigs; do
 		
 		eval FORM_ovpn_mode="\$FORM_ovpn_mode_$config"
 		eval FORM_ovpn_enabled="\$FORM_ovpn_enabled_$config"
+		[ -z "$FORM_ovpn_enabled" ] && FORM_ovpn_enabled=0
 		eval FORM_ovpn_port="\$FORM_ovpn_port_$config"
 		eval FORM_ovpn_auth="\$FORM_ovpn_auth_$config"
 		eval FORM_ovpn_proto="\$FORM_ovpn_proto_$config"
@@ -156,7 +157,7 @@ for config in $openvpnconfigs; do
 		eval FORM_ovpn_remote="\$FORM_ovpn_remote_$config"
 
 		uci_set webifopenvpn "$config" "mode" "$FORM_ovpn_mode"
-		uci_set webifopenvpn "$config" "enabled"  "$FORM_ovpn_enabled"
+		uci_set webifopenvpn "$config" "enabled" "$FORM_ovpn_enabled"
 		uci_set webifopenvpn "$config" "port" "$FORM_ovpn_port"
 		uci_set webifopenvpn "$config" "auth" "$FORM_ovpn_auth"
 		uci_set webifopenvpn "$config" "proto" "$FORM_ovpn_proto"
