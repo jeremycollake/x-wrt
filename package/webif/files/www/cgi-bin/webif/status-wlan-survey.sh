@@ -108,10 +108,11 @@ EOF
 		}
 		echo "$type" |grep -q atheros
 		[ "$?" = 0 ] && {
-			wifi down
-			wlanconfig ath0 create wlandev wifi0 wlanmode sta
+			wifi down >/dev/null
+			wlanconfig ath0 create wlandev wifi0 wlanmode sta >/dev/null
 			scan_iface=1
 			ifconfig ath0 up
+			sleep 3
 		}
 			
 	done
@@ -265,7 +266,7 @@ rm -f "$tempfile2"
 if ! empty "$FORM_clientswitch"; then
 	#echo "<tr><td>Restoring settings...</tr></td>"
 	# restore radio to its original state
-	wifi
+	wifi >/dev/null
 fi
 fi # end if is in 'allowed to scan' mode
 
