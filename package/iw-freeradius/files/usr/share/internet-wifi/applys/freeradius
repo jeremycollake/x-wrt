@@ -89,7 +89,7 @@ nospace_user = no
 nospace_pass = no
 security {
 	max_attributes = 200
-	reject_delay = 1
+	reject_delay = 0
 	status_server = no
 }
 proxy_requests  = yes

@@ -34,6 +34,9 @@ function tbformClass.new (str_title)
 	setmetatable(self,tbformClass_mt) 
 	self["title"] = str_title or "Title of Form"
 	self["col"] = {}
+	self.th_font_size="12px"
+	self.tr_font_size="12px"
+	self.td_font_size="11px"
 	return self 
 end 
 
@@ -84,14 +87,14 @@ function tbformClass:startForm()
 	<style type='text/css'>
 	<!--
 	th {
-    font-size: 12px;
+    font-size: ]]..self.th_font_size..[[;
 	}
 	-->
 	</style>
 ]]
   str = str .. "<tr>"
   for i=1, #self["col"] do
-    str = str .. "<th width=\""..self["col"][i]["size"].."\">"..self["col"][i]["title"].."</th>"
+    str = str .. "<th style=\""..self["col"][i]["size"].."\">"..self["col"][i]["title"].."</th>"
   end
   str = str .. "</tr>"
   return str
@@ -103,7 +106,7 @@ function tbformClass:lines()
     str = str .. "<tr>"
     for i,v in pairs(c) do
       if self["col"][i]["input"] == "label" then
-        str = str .. "<td width=\""..self["col"][i]["size"].."\">"..self[r][i]["value"].."</td>"
+        str = str .. "<td style=\""..self["col"][i]["size"].."\" >"..self[r][i]["value"].."</td>"
       elseif self["col"][i]["input"] == "text" then
         str = str .. self:str_text(r,i)
       elseif self["col"][i]["input"] == "select" then
@@ -122,7 +125,7 @@ function tbformClass:endForm()
 end
 
 function tbformClass:str_select(r,i)
-  local str = "<td width=\""..self["col"][i]["size"].."\">"
+  local str = "<td style=\""..self["col"][i]["size"].."\">"
   local style = ""
   if self["col"][i]["style"] ~= nil then style = " style=\""..self["col"][i]["style"].."\"" end
   if self["col"][i]["validate"] ~= "" then
@@ -143,7 +146,7 @@ function tbformClass:str_select(r,i)
 end
 
 function tbformClass:str_text(r,i)
-  local str = "<td width=\""..self["col"][i]["size"].."\">"
+  local str = "<td style=\""..self["col"][i]["size"].."\">"
   local style = ""
   if self["col"][i]["style"] ~= nil then style = " style=\""..self["col"][i]["style"].."\"" end
   if self["col"][i]["validate"] ~= "" then
@@ -156,5 +159,5 @@ function tbformClass:str_text(r,i)
 end
 
 function tbformClass:str_link(r,i)
-  return [[<td><a href="]]..self[r][i].value..[[">]]..self["col"][i].title..[[</a></td>]]
+  return [[<td style="]]..self["col"][i]["size"]..[["><a href="]]..self[r][i].value..[[">]]..self["col"][i].title..[[</a></td>]]
 end
