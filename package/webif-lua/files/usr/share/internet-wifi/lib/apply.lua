@@ -12,8 +12,10 @@ end
 first = false
 
 function install(pkg_list)
-  require("webpkg")
-  pkg.check(pkg_list)
+  if __WWW then
+    require("webpkg")
+    pkg.check(pkg_list)
+  end
 end
 
 function exe_list(list)
@@ -134,9 +136,19 @@ local file_list = {}
 local exe_before = {}
 local exe_after = {}
 
-local handler_dir = io.popen("ls /tmp/.uci")
+local file_to_process = {}
+for i=1, #arg do
+  file_to_process[#file_to_process+1] = arg[i]
+end
 
+
+local handler_dir = io.popen("ls /tmp/.uci")
 for file in handler_dir:lines() do
+  file_to_process[#file_to_process+1] = file
+end
+
+for i=1, #file_to_process do
+  local file = file_to_process[i]
   file_list[file] = ""
   if io.exists("/usr/share/internet-wifi/applys/"..file) == true then  
 --    call_parser(file,parsers_list,depends_list,exe_before,exe_after,reboot_list)
@@ -174,9 +186,6 @@ for file in handler_dir:lines() do
         exe_after[command] = msg
       end
     end
-
-
-
 
     if parser.call_parser then
       for i in string.gmatch(parser.call_parser,"%S+") do
