@@ -169,6 +169,7 @@ $1 ~ /^end_form/ {
 	field_open = field_open
 	form_help = form_help
 	end_form(form_help, form_help_link, field_open);
+	field_open = 0
 	form_help = ""
 	form_help_link = ""
 }
