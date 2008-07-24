@@ -39,6 +39,9 @@ config_cb() {
 		dnsmasq)
 			append dnsmasq_cfgs "$cfg_name" "$N"
 		;;
+		host)
+			append host_cfgs "$cfg_name" "$N"
+		;;
 	esac
 }
 uci_load network
@@ -57,10 +60,25 @@ let "vcfg_number+=1"
 if [ "$FORM_add_dhcp" != "" ]; then
 	uci_add "dhcp" "dhcp" ""
 	uci_set "dhcp" "$CONFIG_SECTION" "interface" "$FORM_network_add"
-	dhcp_cfgs=""
-	dnsmasq_cfgs=""
+	unset host_cfgs dnsmasq_cfgs dnsmasq_cfgs
 	uci_load dhcp
 	let "vcfg_number+=1"
+fi
+
+#remove static address
+if [ "$FORM_remove_static" != "" ]; then
+	uci_remove "dhcp" "$FORM_remove_static"
+	unset host_cfgs dnsmasq_cfgs dnsmasq_cfgs
+	uci_load dhcp
+fi
+#add static address
+if [ -n "$FORM_static_name" -a -n "$FORM_static_mac_addr" -a -n "FORM_static_ip_addr" ]; then
+	uci_add "dhcp" "host" ""
+	uci_set "dhcp" "$CONFIG_SECTION" "name" "$FORM_static_name"
+	uci_set "dhcp" "$CONFIG_SECTION" "mac" "$FORM_static_mac_addr"
+	uci_set "dhcp" "$CONFIG_SECTION" "ip" "$FORM_static_ip_addr"
+	unset host_cfgs dnsmasq_cfgs dnsmasq_cfgs FORM_static_name FORM_static_mac_addr FORM_static_ip_addr
+	uci_load dhcp
 fi
 
 dnsmasq_cfgs=$(echo "$dnsmasq_cfgs" |uniq)
@@ -329,6 +347,100 @@ onchange|modechange
 $validate_error
 $forms
 EOF
+
+display_form <<EOF
+start_form|@TR<<network_hosts_DHCP_Static_IPs#Static IP addresses (for DHCP)>>
+field|@TR<<Name>>
+text|static_name|$FORM_static_name
+field|@TR<<MAC Address>>
+text|static_mac_addr|$FORM_static_mac_addr
+field|@TR<<IP Address>>
+text|static_ip_addr|$FORM_static_ip_addr
+helpitem|network_hosts_Static_IPs#Static IP addresses
+helptext|network_hosts_Static_IPs_helptext#The file /etc/ethers contains database information regarding known 48-bit ethernet addresses of hosts on an Internetwork. The DHCP server uses the matching IP address instead of allocating a new one from the pool for any MAC address listed in this file.
+end_form
+EOF
+
+cat <<EOF
+<hr class="separator" />
+<h5><strong>@TR<<network_dhcp_static_addresses#Static Addresses>></strong></h5>
+<table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;" border="0" cellpadding="3" cellspacing="2">
+<tr>
+	<th>@TR<<network_hosts_MAC#MAC Address>></th>
+	<th>@TR<<network_hosts_IP#IP Address>></th>
+	<th>@TR<<network_hosts_Name#Name>></th>
+	<th></th>
+</tr>
+EOF
+
+odd=0
+for config in $host_cfgs; do
+	config_get mac $config mac
+	config_get ip $config ip
+	config_get name $config name
+	if [ "$odd" = 0 ]; then
+		echo "<tr>"
+		let odd+=1
+	else
+		echo "<tr class=\"odd\">"
+		let odd-=1
+	fi
+	echo "<td>${mac}</td>"
+	echo "<td>${ip}</td>"
+	echo "<td>${name}</td>"
+	echo "<td><a href=\"$SCRIPT_NAME?remove_static=${config}\">@TR<<Remove>> ${name}</a></td>"
+done
+echo "</table><br />"
+
+cat <<EOF
+<hr class="separator" />
+<h5><strong>@TR<<network_hosts_Active_Leases#Active DHCP Leases>></strong></h5>
+<table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;" border="0" cellpadding="3" cellspacing="2">
+<tr>
+	<th>@TR<<network_hosts_MAC#MAC Address>></th>
+	<th>@TR<<network_hosts_IP#IP Address>></th>
+	<th>@TR<<network_hosts_Name#Name>></th>
+	<th>@TR<<network_hosts_Expires#Expires in>></th>
+</tr>
+EOF
+
+cat /tmp/dhcp.leases 2>/dev/null | awk -v date="$(date +%s)" '
+BEGIN {
+	odd=1
+	counter = 0
+}
+$1 > 0 {
+	counter++
+	if (odd == 1)
+	{
+		print "	<tr>"
+		odd--
+	} else {
+		print "	<tr class=\"odd\">"
+		odd++
+	}
+	print "		<td>" $2 "</td>"
+	print "		<td>" $3 "</td>"
+	print "		<td>" $4 "</td>"
+	print "		<td>"
+	t = $1 - date
+	h = int(t / 60 / 60)
+	if (h > 0) printf h "@TR<<network_hosts_h#h>> "
+	m = int(t / 60 % 60)
+	if (m > 0) printf m "@TR<<network_hosts_min#min>> "
+	s = int(t % 60)
+	printf s "@TR<<network_hosts_sec#sec>> "
+	print "		</td>"
+	print "	</tr>"
+}
+END {
+	if (counter == 0) {
+		print "	<tr>"
+		print "		<td colspan=\"4\">@TR<<network_hosts_No_leases#There are no known DHCP leases.>></td>"
+		print "	</tr>"
+	}
+	print "</table>"
+}'
 
 footer ?>
 <!--
