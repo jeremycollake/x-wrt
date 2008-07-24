@@ -364,7 +364,7 @@ EOF
 cat <<EOF
 <hr class="separator" />
 <h5><strong>@TR<<network_dhcp_static_addresses#Static Addresses>></strong></h5>
-<table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;" border="0" cellpadding="3" cellspacing="2">
+<table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;" border="0" cellpadding="3" cellspacing="2" summary="Settings">
 <tr>
 	<th>@TR<<network_hosts_MAC#MAC Address>></th>
 	<th>@TR<<network_hosts_IP#IP Address>></th>
@@ -388,14 +388,14 @@ for config in $host_cfgs; do
 	echo "<td>${mac}</td>"
 	echo "<td>${ip}</td>"
 	echo "<td>${name}</td>"
-	echo "<td><a href=\"$SCRIPT_NAME?remove_static=${config}\">@TR<<Remove>> ${name}</a></td>"
+	echo "<td><a href=\"$SCRIPT_NAME?remove_static=${config}\">@TR<<Remove>> ${name}</a></td></tr>"
 done
 echo "</table><br />"
 
 cat <<EOF
 <hr class="separator" />
 <h5><strong>@TR<<network_hosts_Active_Leases#Active DHCP Leases>></strong></h5>
-<table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;" border="0" cellpadding="3" cellspacing="2">
+<table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;" border="0" cellpadding="3" cellspacing="2" summary="Settings">
 <tr>
 	<th>@TR<<network_hosts_MAC#MAC Address>></th>
 	<th>@TR<<network_hosts_IP#IP Address>></th>
