@@ -36,6 +36,11 @@ uci_load "webif"
 	while [ -z "$device_name" ]; do
 		uname -a |grep -q "mips"
 		[ $? = "0" ] && {
+			cat /dev/mtd0 |strings |grep "Ubiquiti ar2315/6 based board"
+			[ $? = "0" ] && {
+				device_name="Ubiquiti ar2315/6 based board"
+				break
+			}
 			dd bs=1 count=19 skip=5 if=/dev/mtd/5 2>/dev/null | strings | grep "FON 2202"
 			[ $? = "0" ] && {
 				device_name="La Fonera 2202"
