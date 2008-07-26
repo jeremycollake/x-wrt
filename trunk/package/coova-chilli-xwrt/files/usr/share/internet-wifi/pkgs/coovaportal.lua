@@ -204,18 +204,19 @@ function net_form(form,user_level,localuam)
   else
     dev = net.wireless() -- for beginers users
   end
-  form:Add("select","coovachilli.net.HS_LANIF",uci.check_set("coovachilli.net.HS_LANIF"),tr("cportal_var_device#Device Network"),"string")
+  form:Add("select","coovachilli.net.HS_LANIF",uci.check_set("coovachilli","net","HS_LANIF","br-wifi"),tr("cportal_var_device#Device Network"),"string")
   for k, v in pairs(dev) do
     form["coovachilli.net.HS_LANIF"].options:Add(k,k)
   end
   form:Add("text", "coovachilli.net.HS_DNS_DOMAIN", uci.check_set("coovachilli","net","HS_DNS_DOMAIN",""),tr("cportal_var_net#Domain"),"string")
-  form:Add("text", "coovachilli.net.HS_UAMLISTEN", uci.check_set("coovachilli","net","HS_UAMLISTEN","192.168.182.1"),tr("cportal_var_net#Listen"),"string")
-  form:Add("text", "coovachilli.net.HS_UAMPORT", uci.check_set("coovachilli","net","HS_UAMPORT","3990"),tr("cportal_var_net#Port"),"string")
+  form:Add("text", "coovachilli.uam.HS_UAMSERVER", uci.check_set("coovachilli","uam","HS_UAMSERVER","192.168.182.1"),tr("cportal_var_uamserver#Server"),"string")
+  form:Add("text", "coovachilli.uam.HS_UAMLISTEN", uci.check_set("coovachilli","uam","HS_UAMLISTEN","192.168.182.1"),tr("cportal_var_uamlisten#Listen"),"string")
+  form:Add("text", "coovachilli.uam.HS_UAMPORT", uci.check_set("coovachilli","uam","HS_UAMPORT","3990"),tr("cportal_var_net#Port"),"string")
   form:Add("text", "coovachilli.net.HS_NETWORK", uci.check_set("coovachilli","net","HS_NETWORK","192.168.182.0"),tr("cportal_var_net#Network"),"string")
   form:Add("text", "coovachilli.net.HS_NETMASK", uci.check_set("coovachilli","net","HS_NETMASK","255.255.255.0"),tr("cportal_var_net#Network"),"string")
   form:Add("text", "coovachilli.net.HS_STATIP", uci.check_set("coovachilli","net","HS_STATIP",""),tr("cportal_var_staticip#Static IP"),"string")
   form:Add("text", "coovachilli.net.HS_STATIP_MASK", uci.check_set("coovachilli","net","HS_STATIP_MASK",""),tr("cportal_var_staticip#Static IP Mask"),"string")
-  form:Add("text", "coovachilli.net.HS_DYNIP", uci.check_set("coovachilli","net","HS_DYNIP","1"),tr("cportal_var_dynip#Dynamic IP"),"string")
+  form:Add("text", "coovachilli.net.HS_DYNIP", uci.check_set("coovachilli","net","HS_DYNIP",""),tr("cportal_var_dynip#Dynamic IP"),"string")
   form:Add("text", "coovachilli.net.HS_DYNIP_MASK", uci.check_set("coovachilli","net","HS_DYNIP_MASK",""),tr("cportal_var_staticip#Dynamic IP Mask"),"string")
   form:Add("text", "coovachilli.net.HS_DNS1", uci.check_set("coovachilli","net","HS_DNS1","192.168.182.1"),tr("cportal_var_dns#DNS Server").." 1","string")
   form:Add("text", "coovachilli.net.HS_DNS2", uci.check_set("coovachilli","net","HS_DNS2","204.225.44.3"),tr("cportal_var_dns#DNS Server").." 2","string")
