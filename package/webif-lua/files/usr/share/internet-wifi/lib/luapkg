@@ -1,5 +1,5 @@
 #!/usr/bin/lua
-dofile("/usr/share/internet-wifi/set_path.lua")
+dofile("/www/cgi-bin/webif/set_path.lua")
 
 require("common")
 require("iw-luaipkg")
@@ -78,7 +78,7 @@ function install_pkgs(pkg)
 --    local tfiles, tctrl_file, warning_exists, str_exec, tprovider_conf = pkg:unpack(tinstall[i],tmpdir)
     local tfiles, tctrl_file, str_exec = pkg:unpack(tinstall[i],tmpdir)
 
-    tfiles, conffiles = pkg:wath_we_do(tfiles,tmpdir)
+    tfiles, conffiles = pkg:what_we_do(tfiles,tmpdir)
 
     print("Configuring "..dest)
     if string.len(str_exec) > 0 then
