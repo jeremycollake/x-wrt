@@ -7,4 +7,4 @@ config BR2_PACKAGE_SMTPTRAPD
 	  a RFC 2821 compliant SMTP service that always returns a 4xx soft 
 	  error to the RCPT TO verb.
 	  
-	  http://smtptrapd.inodes.org/
+	  http://smtptrapd.sourceforge.net/

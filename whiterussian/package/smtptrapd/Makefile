@@ -12,7 +12,7 @@ PKG_VERSION:=1.5
 PKG_RELEASE:=1
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
-PKG_SOURCE_URL:=http://smtptrapd.inodes.org
+PKG_SOURCE_URL:=@SF/$(PKG_NAME)
 PKG_MD5SUM:=edc5f2f3ea9f9bdd9e0f479a58903bf1
 PKG_CAT:=zcat
 
