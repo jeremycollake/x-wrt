@@ -14,5 +14,5 @@ for file in libdir:lines() do
     print(" ERROR!!")
   end
 end
-os.execue("ln -s /usr/share/internet-wifi/lib/luapkg /usr/bin")
-os.execue("ln -s /usr/share/internet-wifi/lib/parser /usr/bin")
+--os.execue("ln -s /usr/share/internet-wifi/lib/luapkg /usr/bin")
+--os.execue("ln -s /usr/share/internet-wifi/lib/parser /usr/bin")
