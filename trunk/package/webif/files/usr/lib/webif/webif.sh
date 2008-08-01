@@ -328,7 +328,7 @@ display_form() {
 	fi
 }
 
-list_remove() {
+handle_list_remove() {
 	echo "$1 " | awk '
 BEGIN {
 	RS=" "
@@ -347,7 +347,7 @@ handle_list() {
 	# $4 - validate
 
 	empty "$1" || {
-		LISTVAL="$(list_remove "$LISTVAL" "$1") "
+		LISTVAL="$(handle_list_remove "$LISTVAL" "$1") "
 		LISTVAL="${LISTVAL# }"
 		LISTVAL="${LISTVAL%% }"
 		_changed=1
