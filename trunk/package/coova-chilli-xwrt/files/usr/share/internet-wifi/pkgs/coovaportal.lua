@@ -18,6 +18,7 @@ local tonumber = tonumber
 local pairs = pairs
 local print = print
 local net = net
+local os = os
 local io = io
 local string = string
 local uci = uci
@@ -395,6 +396,12 @@ function extras_form()
 end
 
 function connect_form(form,user_level,localuam)
+  if __FORM["authorize"] ~= nil then
+    os.execute("chilli_query authorize sessionid "..__FORM["authorize"])
+  end
+  if __FORM["release"] ~= nil then
+    os.execute("chilli_query dhcp-release "..__FORM["release"])
+  end
   local authenticated = {["0"] = "No",["1"] = "Yes"}
   local form = tbformClass.new("Captive Portal - Connection List")
   form = tbformClass.new("Local Users")
@@ -406,7 +413,7 @@ function connect_form(form,user_level,localuam)
   form:Add_col("label", "Auth", "Aut", "width:40px;font-size:11px;","int","width:40px;font-size:11px;")
   form:Add_col("label", "SessTime", "Session Time", "width:90px;font-size:11px;","int","width:90px;font-size:11px;")
   form:Add_col("label", "IdleTime", "Idle Time", "width:100px;font-size:11px;","int","width:100px;font-size:11px;")
---  form:Add_col("label", "startpage", "Start Page", "width:100px;font-size:11px;","int","width:100px;font-size:11px;")
+  form:Add_col("label", "action", " ", "width:200px;font-size:11px;","int","width:200px;font-size:11px;")
   connected = io.popen("chilli_query list")
   for line in connected:lines() do
     local tline = string.split(line," ")
@@ -418,7 +425,14 @@ function connect_form(form,user_level,localuam)
     user = tline[6]         
     sessTime = tline[7]         
     idleTime = tline[8]
-    startPage = tline[9]         
+    startPage = tline[9]
+    if tonumber(tline[5]) == 1 then
+--      action = [[<a onclick="javascript:return confirm('Logout user ]]..tline[6]..[[?');" href=\"?release="..tline[1].."\">logout</a>]]
+      action = [[<a href="?release=]]..tline[1].."&__menu="..__FORM["__menu"].."&option="..__FORM["option"]..[[">logout</a>]]
+    else
+      action = "<a href=\"?release="..tline[1].."&__menu="..__FORM["__menu"].."&option="..__FORM["option"].."\">release</a> - <a href=\"?authorize="..tline[4].."&__menu="..__FORM["__menu"].."&option="..__FORM["option"].."\">authorize</a>"
+    end
+  
     form:New_row()
 
     form:set_col("Username",sessId..".Username",user)
@@ -429,8 +443,9 @@ function connect_form(form,user_level,localuam)
     form:set_col("Auth",sessId..".Auth",authen)
     form:set_col("SessTime",sessId..".SessTime",sessTime)
     form:set_col("IdleTime",sessId..".IdleTime",idleTime)
---    form:set_col("startpage",sessId..".startpage",startPage)
+    form:set_col("action",sessId..".action",action)
   end
   return form
 end
 
+return cportal
