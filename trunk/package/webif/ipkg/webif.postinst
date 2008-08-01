@@ -91,18 +91,18 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 
 
 	# initialize ipkg.conf
-	uname -a |grep mips |grep 2.4 && cat /proc/cpuinfo |grep Broadcom
-	[ $? = 0 ] && {		
+	uname -a |grep "mips" |grep -q "2.4" && cat /proc/cpuinfo |grep -q "Broadcom"
+	[ $? = 0 ] && {
 		if [ "$revision" = "" ]; then
 			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/brcm-2.4/packages"
 		else
 			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/brcm-2.4/packages"
 		fi
 	}
-	uname -a |grep mips |grep "2.6.*" && cat /proc/cpuinfo |grep Broadcom
+	uname -a |grep "mips" |grep -q "2.6.*" && cat /proc/cpuinfo |grep -q "Broadcom"
 	[ $? = 0 ] && {
-		cat /proc/cpuinfo | grep BCM47XX && SYSTYPE="47xx"
-		cat /proc/cpuinfo | grep BCM63XX && SYSTYPE="63xx"
+		cat /proc/cpuinfo | grep -q "BCM47XX" && SYSTYPE="47xx"
+		cat /proc/cpuinfo | grep -q "BCM63XX" && SYSTYPE="63xx"
 		if [ -n $SYSTYPE ]; then
 			if [ "$revision" = "" ]; then
 				AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/brcm${SYSTYPE}-2.6/packages"
@@ -112,7 +112,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 		fi
 		unset SYSTYPE
 	}
-	uname -a |grep "2.6" |grep "i\?86"
+	uname -a |grep "2.6" |grep -q "i\?86"
 	[ $? = 0 ] && {
 		if [ "$revision" = "" ]; then
 			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/x86-2.6/packages"
@@ -120,7 +120,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/x86-2.6/packages"
 		fi
 	}
-	uname -a |grep mips |grep 2.6 && cat /proc/cpuinfo |grep Atheros
+	uname -a |grep "mips" |grep -q "2.6" && cat /proc/cpuinfo |grep -q "Atheros"
 	[ $? = 0 ] && {
 		if [ "$revision" = "" ]; then
 			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/atheros-2.6/packages"
@@ -128,7 +128,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/atheros-2.6/packages"
 		fi
 	}
-	uname -a |grep mips |grep 2.6 && cat /proc/cpuinfo |grep WP54
+	uname -a |grep "mips" |grep -q "2.6" && cat /proc/cpuinfo |grep -q "WP54"
 	[ $? = "0" ] && {
 		if [ "$revision" = "" ]; then
 			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/adm5120-2.6/packages"
@@ -136,7 +136,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/adm5120-2.6/packages"
 		fi
 	}
-	cat /proc/cpuinfo |grep "IXP4\?\?"
+	cat /proc/cpuinfo |grep -q "IXP4\?\?"
 	[ $? = "0" ] && {
 		if [ "$revision" = "" ]; then
 			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/ixp4xx-2.6/packages"
