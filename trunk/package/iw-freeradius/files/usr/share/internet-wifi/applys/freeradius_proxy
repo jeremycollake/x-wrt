@@ -26,13 +26,13 @@ enable    = tonumber(freeradius.webadmin.enable)    or 0
 userlevel = tonumber(freeradius.webadmin.userlevel) or 0
 reboot    = false                -- reboot device after all apply process
 
-name = "Freeradius"
+name = "Freeradius Proxy"
 script = "radiusd"
 init_script = "/etc/init.d/radiusd"
 
 function process()
   wwwprint("")
-  wwwprint(name.." Proxy... Parsers...")
+  wwwprint(name.." Parsers...")
   wwwprint("Committing freeradius_proxy...")
   iwuci.commit("freeradius_proxy")
   wwwprint ("Writing proxy.conf ...")
