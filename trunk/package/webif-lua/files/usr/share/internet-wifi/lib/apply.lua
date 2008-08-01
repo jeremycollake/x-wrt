@@ -216,10 +216,13 @@ end
 
 -- After isntall all needed packages commit files with parsers
 -- and execute the parsers
+
 for f, d in pairs(parsers_list) do
-  wwwprint("Commiting "..f)
+  wwwprint("Processing "..f)
   d.p.process()
   file_list[f] = true
+  wwwprint(f.." end")
+  wwwprint("")
 end
 
 if #reboot_list > 0 then
