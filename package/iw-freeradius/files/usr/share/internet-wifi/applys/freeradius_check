@@ -26,12 +26,12 @@ enable    = tonumber(freeradius.webadmin.enable)    or 0
 userlevel = tonumber(freeradius.webadmin.userlevel) or 0
 reboot    = false                -- reboot device after all apply process
 
-name = "Freeradius"
+name = "Freeradius Users"
 script = "radiusd"
 init_script = "/etc/init.d/radiusd"
 
 function process()
-  wwwprint(name.."users Parsers...")
+  wwwprint(name.." Parsers...")
   wwwprint("Committing freeradius_check...")
   iwuci.commit("freeradius_check")
   wwwprint ("Committing freeradius_reply...")

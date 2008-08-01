@@ -218,10 +218,10 @@ end
 -- and execute the parsers
 
 for f, d in pairs(parsers_list) do
-  wwwprint("Processing "..f)
+  wwwprint("Processing "..d.p.name)
   d.p.process()
   file_list[f] = true
-  wwwprint(f.." end")
+  wwwprint(d.p.name.." end")
   wwwprint("")
 end
 
