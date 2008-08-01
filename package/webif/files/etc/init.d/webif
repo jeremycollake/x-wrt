@@ -21,9 +21,9 @@ uci_load "webif"
 			ln -sf "/www/themes/clubman" "/www/themes/active"
 		else
 			# create symlink to new active theme if its not already set right
-			current_theme=$(ls /www/themes/active -l | cut -d '>' -f 2 | sed s/'\/www\/themes\/'//g)
+			current_theme=$(ls -l /www/themes/active 2>/dev/null | cut -d '>' -f 2 | sed s/'\/www\/themes\/'//g)
 			! equal "$current_theme" "$newtheme" && {
-				rm /www/themes/active
+				rm /www/themes/active 2>/dev/null
 				ln -s /www/themes/$newtheme /www/themes/active
 			}
 		fi
