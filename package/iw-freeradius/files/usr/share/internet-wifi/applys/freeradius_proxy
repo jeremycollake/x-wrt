@@ -31,7 +31,8 @@ script = "radiusd"
 init_script = "/etc/init.d/radiusd"
 
 function process()
-  wwwprint(name.."proxy... Parsers...")
+  wwwprint("")
+  wwwprint(name.." Proxy... Parsers...")
   wwwprint("Committing freeradius_proxy...")
   iwuci.commit("freeradius_proxy")
   wwwprint ("Writing proxy.conf ...")
@@ -49,23 +50,25 @@ function process()
 
     proxy_str = proxy_str .. "}\n\n"
     if proxy.realm then
-    for i, v in pairs (proxy.realm) do
-      proxy_str = proxy_str .. "realm "..v.values.community .." {\n"
-      for k, val in pairs(v.values) do
-        if k ~= "community" then
-          if k == "nostrip" then
-            proxy_str = proxy_str.."\t".."nostrip\n"
-          else
-            proxy_str = proxy_str .. "\t"..k.."="..val.."\n"
+      for i, v in pairs (proxy.realm) do
+        proxy_str = proxy_str .. "realm "..v.values.community .." {\n"
+        for k, val in pairs(v.values) do
+          if k ~= "community" then
+            if k == "nostrip" then
+              proxy_str = proxy_str.."\t".."nostrip\n"
+            else
+              proxy_str = proxy_str .. "\t"..k.."="..val.."\n"
+            end
           end
         end
+        proxy_str = proxy_str .. "}\n\n"
       end
-      proxy_str = proxy_str .. "}\n\n"
-    end
     end
     local pepe = io.open("/etc/freeradius/proxy.conf","w")
     pepe:write(proxy_str)
     pepe:close()
+  wwwprint("/etc/freeradius/proxy.conf writed OK!")
+  wwwprint("")
 --  end
 end
 
