@@ -17,13 +17,14 @@ local tonumber = tonumber
 -- no more external access after this point
 setfenv(1, P)
 
+name = "Coovachilli"
 script = "chilli"
 init_script = "/etc/init.d/chilli"
 
 enable = tonumber(uci.get("coovachilli.webadmin.enable")) or 0
 local userlevel = tonumber(uci.get("coovachilli.webadmin.userlevel")) or 0
 local radiususers = tonumber(uci.get("coovachilli.webadmin.radconf")) or 0
-call_parser = "freeradius freeradius_check freeradius_proxy freeradius_clients"
+call_parser = "freeradius freeradius_check freeradius_clients freeradius_proxy"
 
 reboot = false                -- reboot device after all apply process
 --exe_before = {} -- execute os process in this table before any process
