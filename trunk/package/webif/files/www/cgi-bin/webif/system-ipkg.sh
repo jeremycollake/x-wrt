@@ -28,6 +28,13 @@
 #
 #
 
+lists_path=$(cat /etc/ipkg.conf 2>/dev/null | grep ^lists_dir | cut -d' ' -f3)
+if [ -z "$lists_path" ]; then
+	lists_path="/usr/lib/ipkg/lists"
+else
+	lists_path="${lists_path%%/}"
+fi
+
 header "System" "Packages" "<img src=\"/images/pkg.jpg\" alt />&nbsp;@TR<<system_ipkg_Packages#Packages>>" '' "$SCRIPT_NAME"
 
 cat <<EOF
@@ -83,13 +90,13 @@ EOF
 	remove_lines_from_file "/etc/ipkg.conf" "$repo_src_line"
 	# manually remove package lists since ipkg update won't..
 	# todo: odd issue where 'rm -f /usr/lib/ipkg/lists/* does not work - openwrt should investigate
-	rm "/usr/lib/ipkg/lists/$FORM_remove_repo_name" >&- 2>&-
+	rm "${lists_path}/$FORM_remove_repo_name" >&- 2>&-
 	echo "<br />Repository source was removed: $FORM_remove_repo_name<br />"
 }
 
 equal "$repo_update_needed" "1" && {
 	echo "<br />Repository sources updated. Performing update of package lists ...<br /><pre>"	
-	mkdir "/usr/lib/ipkg/lists" >&- 2>&-
+	mkdir "$lists_path" >&- 2>&-
 	ipkg update
 	echo "</pre>"
 }
@@ -181,10 +188,10 @@ ipkg list_installed | awk -F ' ' '
 	<br />
 	<table class="packages"><tr class="packages"><th width="150">@TR<<system_ipkg_th_action#Action>></th><th width="250">@TR<<system_ipkg_th_package#Package>></th><th width=150>@TR<<system_ipkg_th_version#Version>></th><th>@TR<<system_ipkg_th_desc#Description>></th></tr>
 <?
-repo_list=$(awk '/^[[:space:]]*src[[:space:]]/ { printf " /usr/lib/ipkg/lists/" $2 }' /etc/ipkg.conf)
+repo_list=$(awk -v lists="$lists_path" '/^[[:space:]]*src[[:space:]]/ { printf " " lists "/" $2 }' /etc/ipkg.conf)
 status_list=$(awk '/^[[:space:]]*dest[[:space:]]/ { if ($3 == "/") printf " /usr/lib/ipkg/status"; else printf " "$3"/usr/lib/ipkg/status" }' /etc/ipkg.conf)
 [ -z "$status_list" ] && status_list="/usr/lib/ipkg/status"
-egrep 'Package:|Description:|Version:' $status_list $repo_list 2>&- | sed -e 's, ,,' -e 's,^[^:]*/usr/lib/ipkg/lists/,,' | awk -F: '
+egrep 'Package:|Description:|Version:' $status_list $repo_list 2>&- | sed -e 's, ,,' -e "s,^[^:]*${lists_path}/,," | awk -F: '
 $1 ~ /status/ {
 	installed[$3]++;
 }
