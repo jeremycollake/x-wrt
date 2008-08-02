@@ -5,8 +5,14 @@ languages_lst="/etc/languages.lst"
 if [ ! -f "$languages_lst" ]; then
 	cp -pf "$languages_root" "$languages_lst" 2>/dev/null
 fi
+lists_path=$(cat /etc/ipkg.conf 2>/dev/null | grep ^lists_dir | cut -d' ' -f3)
+if [ -z "$lists_path" ]; then
+	lists_path="/usr/lib/ipkg/lists"
+else
+	lists_path="${lists_path%%/}"
+fi
 # rebuild the language list only after ipkg update
-for listfile in $(ls /usr/lib/ipkg/lists/* 2>/dev/null); do
+for listfile in $(ls "${lists_path}/*" 2>/dev/null); do
 	[ "$listfile" -nt "$languages_lst" ] && LANGLIST_NEEDS_UPDATE=1
 done
 if [ "$LANGLIST_NEEDS_UPDATE" -eq "1" ]; then
