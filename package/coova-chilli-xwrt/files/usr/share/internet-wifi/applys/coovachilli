@@ -7,6 +7,7 @@ parser = P
 -- declare everything this package needs from outside
 local wwwprint = wwwprint
 if wwwprint == nil then wwwprint=print end
+local ipcalc = ipcalc
 local uci = uci
 local io = io
 local string = string
@@ -39,7 +40,8 @@ exe_after["wifi"]="wifi"
 
 function process()
   radiususers = tonumber(uci.get("coovachilli.webadmin.radconf")) or 0
-
+  t = ipcalc(coovachilli.net.HS_UAMLISTEN,coovachilli.net.HS_NETMASK)
+  uci.set("coovachilli","net","HS_NETWORK",t["NETWORK"])
   if radiususers > 1 then
     wwwprint("Checking freeradius installation")
     local write_file
