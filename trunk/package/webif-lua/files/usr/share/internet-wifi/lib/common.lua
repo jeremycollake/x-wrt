@@ -67,6 +67,39 @@ function load_file(filename)
 	return data, string.len(data)
 end
 
+function ipcalc(ip,mask,start,num)
+  local getcalc
+  if ip ~= nil 
+  and mask ~= nil
+  and start ~= nil
+  and num ~= nil then
+    getcalc = io.popen("/bin/ipcalc.sh "..ip.." "..mask.." "..start.." "..num)
+  elseif ip ~= nil
+  and mask ~= nil
+  and start ~= nil then
+    getcalc = io.popen("/bin/ipcalc.sh "..ip.." "..mask.." "..start)
+  elseif ip ~= nil
+  and mask ~= nil then
+    getcalc = io.popen("/bin/ipcalc.sh "..ip.." "..mask)
+  else
+    return nil
+  end
+
+  local t = {}
+
+  if getcalc then   
+    for line in getcalc:lines() do
+      local key, value = unpack(string.split(line,"="))
+      t[key]=value
+--      print(key,value)
+    end
+    getcalc:close()
+  else 
+    t = nil
+  end
+  return t
+end
+
 function io.exists( file )
     local f = io.open( file, "r" )
     if f then

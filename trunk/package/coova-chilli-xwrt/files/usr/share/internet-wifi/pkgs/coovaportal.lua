@@ -73,7 +73,7 @@ uci.check_set("coovachilli","dir","HS_WWWBIN","/etc/chilli/wwwsh")
 uci.check_set("coovachilli","net","settings")
 uci.check_set("coovachilli","net","HS_DNS1","192.168.182.1")
 uci.check_set("coovachilli","net","HS_DNS2","204.225.44.3")
-uci.check_set("coovachilli","net","HS_NETWORK","192.168.182.0")
+-- uci.check_set("coovachilli","net","HS_NETWORK","192.168.182.0")
 uci.check_set("coovachilli","net","HS_NETMASK","255.255.255.0")
 --uci.check_set("coovachilli","net","HS_LANIF","wl0")
 
@@ -104,10 +104,10 @@ if portal == 2 and userlevel < 2 then
   uci.set("coovachilli","uam","HS_UAMHOMEPAGE","http://\$HS_UAMLISTEN:\$HS_UAMPORT/www/coova.html")
   uci.set("coovachilli","uam","HS_UAMALLOW","x-wrt.org,coova.org,www.internet-wifi.com.ar")
 --[[
-  uci.set("coovachilli","radius","HS_RADAUTH","1812")
-  uci.set("coovachilli","radius","HS_RADIUS2","127.0.0.1")
-  uci.set("coovachilli","radius","HS_RADACCT","1813")
   uci.set("coovachilli","radius","HS_RADIUS","127.0.0.1")
+  uci.set("coovachilli","radius","HS_RADIUS2","127.0.0.1")
+  uci.set("coovachilli","radius","HS_RADAUTH","1812")
+  uci.set("coovachilli","radius","HS_RADACCT","1813")
   uci.set("coovachilli","radius","HS_RADSECRET","testing123")
 ]]--
 end
@@ -151,7 +151,7 @@ function core_form()
     form["coovachilli.webadmin.userlevel"].options:Add("0","Select Mode")
     form["coovachilli.webadmin.userlevel"].options:Add("1","Beginer")
     form["coovachilli.webadmin.userlevel"].options:Add("2","Medium")
---    form["coovachilli.webadmin.userlevel"].options:Add("3","Advanced")
+    form["coovachilli.webadmin.userlevel"].options:Add("3","Advanced")
 --    form["coovachilli.webadmin.userlevel"].options:Add("4","Expert")
   else
     uci.set("coovachilli.webadmin.userlevel=1")
@@ -209,18 +209,34 @@ function net_form(form,user_level,localuam)
   for k, v in pairs(dev) do
     form["coovachilli.net.HS_LANIF"].options:Add(k,k)
   end
-  form:Add("text", "coovachilli.net.HS_DNS_DOMAIN", uci.check_set("coovachilli","net","HS_DNS_DOMAIN",""),tr("cportal_var_net#Domain"),"string")
-  form:Add("text", "coovachilli.uam.HS_UAMSERVER", uci.check_set("coovachilli","uam","HS_UAMSERVER","192.168.182.1"),tr("cportal_var_uamserver#Server"),"string")
-  form:Add("text", "coovachilli.uam.HS_UAMLISTEN", uci.check_set("coovachilli","uam","HS_UAMLISTEN","192.168.182.1"),tr("cportal_var_uamlisten#Listen"),"string")
-  form:Add("text", "coovachilli.uam.HS_UAMPORT", uci.check_set("coovachilli","uam","HS_UAMPORT","3990"),tr("cportal_var_net#Port"),"string")
-  form:Add("text", "coovachilli.net.HS_NETWORK", uci.check_set("coovachilli","net","HS_NETWORK","192.168.182.0"),tr("cportal_var_net#Network"),"string")
-  form:Add("text", "coovachilli.net.HS_NETMASK", uci.check_set("coovachilli","net","HS_NETMASK","255.255.255.0"),tr("cportal_var_net#Network"),"string")
-  form:Add("text", "coovachilli.net.HS_STATIP", uci.check_set("coovachilli","net","HS_STATIP",""),tr("cportal_var_staticip#Static IP"),"string")
-  form:Add("text", "coovachilli.net.HS_STATIP_MASK", uci.check_set("coovachilli","net","HS_STATIP_MASK",""),tr("cportal_var_staticip#Static IP Mask"),"string")
+  form:Add("subtitle","HotSpot DHCP Configuration")
+  form:Add("text", "coovachilli.uam.HS_UAMLISTEN", uci.check_set("coovachilli","uam","HS_UAMLISTEN","192.168.182.1"),tr("cportal_var_uamlisten#HotSpot Internal IP Address"),"string")
+--  This param can be calculated 
+--  form:Add("text", "coovachilli.net.HS_NETWORK", uci.check_set("coovachilli","net","HS_NETWORK","192.168.182.0"),tr("cportal_var_net#HotSpot DHCP Network"),"string")
+  form:Add("text", "coovachilli.net.HS_NETMASK", uci.check_set("coovachilli","net","HS_NETMASK","255.255.255.0"),tr("cportal_var_net#HotSpot DHCP Netmask"),"string")
+  form:Add("subtitle","Optional Advanced Settings")
   form:Add("text", "coovachilli.net.HS_DYNIP", uci.check_set("coovachilli","net","HS_DYNIP",""),tr("cportal_var_dynip#Dynamic IP"),"string")
   form:Add("text", "coovachilli.net.HS_DYNIP_MASK", uci.check_set("coovachilli","net","HS_DYNIP_MASK",""),tr("cportal_var_staticip#Dynamic IP Mask"),"string")
+  form:Add("text", "coovachilli.net.HS_STATIP", uci.check_set("coovachilli","net","HS_STATIP",""),tr("cportal_var_staticip#Static IP"),"string")
+  form:Add("text", "coovachilli.net.HS_STATIP_MASK", uci.check_set("coovachilli","net","HS_STATIP_MASK",""),tr("cportal_var_staticip#Static IP Mask"),"string")
+
+--  This do not work or I don't understand How it work  
+  form:Add("select","coovachilli.uam.HS_ANYIP", uci.check_set("coovachilli","uam","HS_ANYIP","1"),tr("cportal_var_anyip#Allow Any IP"),"int")
+  form["coovachilli.uam.HS_ANYIP"].options:Add("0",tr("disable#Disable"))
+  form["coovachilli.uam.HS_ANYIP"].options:Add("1",tr("enable#Enable"))
+
+  form:Add("subtitle","Extras")  
+  form:Add("text", "coovachilli.net.HS_DNS_DOMAIN", uci.check_set("coovachilli","net","HS_DNS_DOMAIN",""),tr("cportal_var_net#Domain"),"string")
   form:Add("text", "coovachilli.net.HS_DNS1", uci.check_set("coovachilli","net","HS_DNS1","192.168.182.1"),tr("cportal_var_dns#DNS Server").." 1","string")
   form:Add("text", "coovachilli.net.HS_DNS2", uci.check_set("coovachilli","net","HS_DNS2","204.225.44.3"),tr("cportal_var_dns#DNS Server").." 2","string")
+--[[
+  form:Add("select","coovachilli.uam.HS_ANYDNS", uci.check_set("coovachilli","uam","HS_ANYDNS","1"),tr("cportal_var_anydns#Allow Any DNS"),"int")
+  form["coovachilli.uam.HS_ANYDNS"].options:Add("0",tr("disable#Disable"))
+  form["coovachilli.uam.HS_ANYDNS"].options:Add("1",tr("enable#Enable"))
+]]--
+
+--  form:Add("text", "coovachilli.uam.HS_UAMSERVER", uci.check_set("coovachilli","uam","HS_UAMSERVER","192.168.182.1"),tr("cportal_var_uamserver#Server"),"string")
+--  form:Add("text", "coovachilli.uam.HS_UAMPORT", uci.check_set("coovachilli","uam","HS_UAMPORT","3990"),tr("cportal_var_net#Port"),"string")
   return form
 end
 
@@ -300,25 +316,6 @@ function nasid_form(form,user_level)
   return form
 end
 
-function disconnect_form()
-  form:Add("subtitle","Radius request disconnection")
-	form:Add("text",cfg_chilli..".coaport",      chilli_val.coaport,tr("chilli_var_coaport#UDP port"),"string")
-	form:Add("checkbox",cfg_chilli..".coanoipcheck",chilli_val.coanoipcheck ,tr("chilli_var_coanoipcheck#No check radius IP"),"string")
-----	Help section	
-
-	form:Add_help(tr("chilli_var_coaport#UDP port"),tr(
-          [[chilli_help_coaport#
-          UDP port to listen to for accepting radius disconnect requests. 
-          ]]))
-	form:Add_help(tr("chilli_var_coanoipcheck#No check radius IP"),tr(
-          [[
-          If this option is given no check is performed on the source IP address 
-          of radius disconnect requests. Otherwise it is checked that radius 
-          disconnect requests originate from radiusserver1 or radiusserver2.  
-          ]]))
-  return form
-end
-
 function uam_form(form,user_level,localuam)
   if form ~= nil then form:Add("subtitle","Captive Portal - Universal Authentication Method") end
   local form = form or formClass.new("Captive Portal - Univesal Authentication Method")
@@ -334,12 +331,12 @@ function uam_form(form,user_level,localuam)
 
     form:Add("text","coovachilli.uam.HS_UAMSECRET",uci.check_set("coovachilli","uam","HS_UAMSECRET",""),tr("cportal_var_uamsecret#UAM Secret"),"string")
     form:Add_help(tr("cportal_var_uamsecret#Web Secret"),tr("cportal_help_uamsecret#Shared secret between HotSpot and Webserver (UAM Server)."))
-
-    if user_level > 2 then
-      form:Add("text","coovachilli.uam.HS_UAMHOMEPAGE",uci.check_set("coovachilli","uam","HS_UAMHOMEPAGE","http://\$HS_UAMLISTEN:\$HS_UAMPORT/www/coova.html"),tr("cportal_var_uamhomepage#UAM Home Page"),"string","width:90%")
-      form:Add_help(tr("cportal_var_uamhomepage#Homepage"),tr("cportal_help_uamhomepage#URL of Welcome Page. Unauthenticated users will be redirected to this address, otherwise specified, they will be redirected to UAM Server instead."))
-    end
   end
+  if user_level > 2 then
+    form:Add("text","coovachilli.uam.HS_UAMHOMEPAGE",uci.check_set("coovachilli","uam","HS_UAMHOMEPAGE","http://\$HS_UAMLISTEN:\$HS_UAMPORT/www/coova.html"),tr("cportal_var_uamhomepage#UAM Home Page"),"string","width:90%")
+    form:Add_help(tr("cportal_var_uamhomepage#Homepage"),tr("cportal_help_uamhomepage#URL of Welcome Page. Unauthenticated users will be redirected to this address, otherwise specified, they will be redirected to UAM Server instead."))
+  end
+
   form:Add("text_area","coovachilli.uam.HS_UAMALLOW",uci.check_set("coovachilli","uam","HS_UAMALLOW","x-wrt.org,coova.org,www.internet-wifi.com.ar"),tr("cportal_var_uamallowed#UAM Allowed"),"string","width:90%")
   form:Add_help(tr("cportal_var_uamallowed#Allowed URLs"),tr("cportal_help_uamallowed#Comma-seperated list of domain names, urls or network subnets the client can access without authentication (walled gardened)."))
   uci.save("coovachilli")
