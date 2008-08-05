@@ -57,8 +57,8 @@ function lpkgClass:update()
   for reponame, t in pairsByKeys(self.__repo) do
     print("Repository: "..reponame)
     print(t.url)
-    os.execute("mkdir /usr/lib/ipkg/lists 2>/dev/null")
-    os.execute("wget -q "..t.url.."/Packages -O /usr/lib/ipkg/lists/"..reponame )
+    os.execute("mkdir /var/ipkg-lists 2>/dev/null")
+    os.execute("wget -q "..t.url.."/Packages -O /var/ipkg-lists/"..reponame )
     self:load_repo(reponame)
   end
   os.execute("echo '"..self:detailled_status().."' >/usr/lib/ipkg/status")
@@ -71,7 +71,7 @@ end
 
 
 function lpkgClass:load_repo(str_repo)
-  local data = load_file("/usr/lib/ipkg/lists/"..str_repo)
+  local data = load_file("/var/ipkg-lists/"..str_repo)
   if data ~= "No such file or directory" then
     if self.search and self.search ~= "" then
       self:do_process(self.search,data,str_repo)
