@@ -686,7 +686,7 @@ info_Find_more => Aby uzyskać więcej informacji o Webif&sup2; (w języku angie
 info_link_X-Wrt => X-Wrt
 info_link_Forum => Forum
 info_link_Wiki => Wiki
-info_link_Trac => Trac
+info_link_Project => Projekt
 
 
 ## network hosts
