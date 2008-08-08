@@ -138,7 +138,7 @@ header() {
 		_form=""
 		_savebutton=""
 	}
-
+[ -f /www/themes/active/webif_header_info ] && . /www/themes/active/webif_header_info
 cat <<EOF
 Content-Type: text/html; charset=UTF-8
 Pragma: no-cache
@@ -149,14 +149,7 @@ Pragma: no-cache
 <title>$_pagename$_firmware_name @TR<<Administrative Console>></title>
 	<link rel="stylesheet" type="text/css" href="/themes/active/waitbox.css" media="screen" />
 	<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
-	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_white.css" title="white" />
-	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_brown.css" title="brown" />
-	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_green.css" title="green" />
-	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_navyblue.css" title="navyblue" />
-	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_black.css" title="black" />
-	<!--[if lt IE 7]>
-		<link rel="stylesheet" type="text/css" href="/themes/active/ie_lt7.css" />
-	<![endif]-->
+	$webif_header_title
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="expires" content="-1" />
 	<script type="text/javascript" src="/js/styleswitcher.js"></script>
@@ -186,14 +179,7 @@ $_categories
 $_subcategories
 </div>
 
-<div id="colorswitcher">
-	<div style="background: #000000" title="black" onclick="setActiveStyleSheet('black'); return false;"></div>
-	<div style="background: #192a65" title="navyblue" onclick="setActiveStyleSheet('navyblue'); return false;"></div>
-	<div style="background: #114488" title="blue" onclick="setActiveStyleSheet('default'); return false;"></div>
-	<div style="background: #2b6d21" title="green" onclick="setActiveStyleSheet('green'); return false;"></div>
-	<div style="background: #e8ca9e" title="brown" onclick="setActiveStyleSheet('brown'); return false;"></div>
-	<div style="background: #fff" title="white" onclick="setActiveStyleSheet('white'); return false;"></div>
-</div>
+$colorswitcher
 EOF
 
 if equal $_use_progressbar "1" ; then echo $_pageload
