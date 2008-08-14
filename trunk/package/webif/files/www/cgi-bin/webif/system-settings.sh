@@ -48,7 +48,7 @@ config_cb() {
 		timezone)
 			timezone_cfg="$cfg_name"
 		;;
-		ntp_client|ntpclient)
+		ntp_client|ntpclient|ntpserver)
 			append ntpservers "$cfg_name" "$N"
 		;;
 	esac
