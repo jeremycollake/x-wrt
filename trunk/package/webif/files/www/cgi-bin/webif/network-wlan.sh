@@ -37,7 +37,7 @@ generate_channels() {
 	if [ "$?" = "0" ]; then
 		is_package_installed kmod-madwifi
 		if [ "$?" = "0" ]; then
-			wlanconfig ath create wlandev wifi0 wlanmode ap 2>&-
+			wlanconfig ath create wlandev wifi0 wlanmode ap >/dev/null
 			cleanup=1
 		fi
 	fi
