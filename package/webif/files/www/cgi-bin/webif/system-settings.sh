@@ -337,7 +337,7 @@ for server in $ntpservers; do
 		eval FORM_ntp_count="\$FORM_ntp_count_$server"
 	fi
 	#add check for blank config, the only time it will be seen is when config section is waitings to be removed
-	if [ "$FORM_ntp_port" != "" -o "$FORM_ntp_count" != "" -o "$FORM_ntp_server" != "" ]; then
+	if [ "$FORM_ntp_port" != "" -o "$FORM_ntp_server" != "" ]; then
 		if [ "$FORM_ntp_port" = "" ]; then
 			FORM_ntp_port=123
 		fi
