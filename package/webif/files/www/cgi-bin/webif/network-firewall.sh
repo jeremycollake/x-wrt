@@ -1,353 +1,282 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
+###################################################################
+# Firewall configuration
+#
+# Description:
+#	Firewall configuration.
+#
+# Author(s) [in order of work date]:
+#       Original webif authors.
+#	Travis Kemen	<kemen04@gmail.com>
+# Major revisions:
+#
+# UCI variables referenced:
+#
+# Configuration files referenced:
+#   firewall
+#
 
-mkdir -p /tmp/.webif
-exists /tmp/.webif/file-firewall && FW_FILE=/tmp/.webif/file-firewall || FW_FILE=/etc/firewall.config
-exists "$FW_FILE" || touch "$FW_FILE" >&- 2>&-
-FW_FILE_NEW="/tmp/.webif/file-firewall-new"
+#remove rule
+if ! empty "$FORM_remove_vcfg"; then
+	uci_remove "firewall" "$FORM_remove_vcfg"
+fi
 
-empty "$FORM_cancel" || {
-	FORM_save=""
-	FORM_edit=""
-}
+#Add new rule
+if [ -n "$FORM_port_rule" ]; then
+	uci_add "firewall" "rule" "$FORM_name"; add_rule_cfg="$CONFIG_SECTION"
+	uci_set "firewall" "$add_rule_cfg" "src" "wan"
+	uci_set "firewall" "$add_rule_cfg" "proto" "$FORM_protocol_rule"
+	uci_set "firewall" "$add_rule_cfg" "src_ip" "$FORM_src_ip_rule"
+	uci_set "firewall" "$add_rule_cfg" "dest_ip" "$FORM_dest_ip_rule"
+	uci_set "firewall" "$add_rule_cfg" "dest_port" "$FORM_port_rule"
+	uci_set "firewall" "$add_rule_cfg" "target" "ACCEPT"
+fi
+#Add new rule
+if [ -n "$FORM_dest_port_redirect" ]; then
+	uci_add "firewall" "redirect" "$FORM_name_redirect"; add_redirect_cfg="$CONFIG_SECTION"
+	uci_set "firewall" "$add_redirect_cfg" "src" "wan"
+	uci_set "firewall" "$add_redirect_cfg" "proto" "$FORM_protocol_redirect"
+	uci_set "firewall" "$add_redirect_cfg" "src_ip" "$FORM_src_ip_redirect"
+	uci_set "firewall" "$add_redirect_cfg" "src_dport" "$FORM_src_dport_redirect"
+	uci_set "firewall" "$add_redirect_cfg" "dest_ip" "$FORM_dest_ip_redirect"
+	uci_set "firewall" "$add_redirect_cfg" "dest_port" "$FORM_dest_port_redirect"
+fi
 
-empty "$FORM_save" || {
-	SAVED=1
-	case "$FORM_proto" in
-		tcp|udp|"") proto_valid=1;;
-		*) proto_valid=invalid;;
+config_cb() {
+	local cfg_type="$1"
+	local cfg_name="$2"
+
+	case "$cfg_type" in
+		forwarding)
+			append forwarding_cfgs "$cfg_name"
+	        ;;
+	        zone)
+			append zone_cfgs "$cfg_name" "$N"
+	        ;;
+		rule)
+			append rule_cfgs "$cfg_name" "$N"
+		;;
+		redirect)
+			append redirect_cfgs "$cfg_name" "$N"
+		;;
+		interface)
+			append network_devices "$cfg_name"
+		;;
 	esac
-	validate <<EOF
-int|proto_valid|@TR<<Protocol>>||$proto_valid
-string|FORM_target|@TR<<Target>>|required|$FORM_target
-string|FORM_proto|@TR<<Protocol>>||$FORM_proto
-ip|FORM_src|@TR<<Source IP>>||$FORM_src
-ip|FORM_dest|@TR<<Destination IP>>||$FORM_dest
-ports|FORM_sport|@TR<<Source Ports>>||$FORM_sport
-ports|FORM_dport|@TR<<Destination Ports>>||$FORM_dport
-ip|FORM_target_ip|@TR<<Forward to>>||$FORM_target_ip
-port|FORM_target_port|@TR<<Port>>||$FORM_target_port
-EOF
-	equal "$?" 0 || {
-		unset FORM_save
-	}
-	equal "$FORM_target" "forward" && empty "$FORM_target_ip$FORM_target_port" && {
-		ERROR="${ERROR}@TR<<No_Target_IP_Port|Target IP and Port cannot both be empty>><br />"
-		FORM_save=""
-	}
+}
+cur_color="odd"
+get_tr() {
+	if equal "$cur_color" "odd"; then
+		cur_color="even"
+		tr="string|<tr>"
+	else
+		cur_color="odd"
+		tr="string|<tr class=\"odd\">"
+	fi
 }
 
-config_load "network"
-config_get default_lan_target lan ipaddr
-default_lan_target="${default_lan_target:-192.168.1.1}"
+uci_load firewall
 
-empty "$FORM_up$FORM_down$FORM_save$FORM_delete$FORM_new" || {
-	empty "$FORM_up" || equal "$FORM_up" 1 || {
-		FORM_down="$(($FORM_up - 1))"
-	}
-	awk \
-		-v down="$FORM_down" \
-		-v save="$FORM_save" \
-		-v del="$FORM_delete" \
-		-v edit="$FORM_edit" \
-		-v proto="$FORM_proto" \
-		-v src="$FORM_src" \
-		-v sport="$FORM_sport" \
-		-v dest="$FORM_dest" \
-		-v dport="$FORM_dport" \
-		-v layer7="$FORM_layer7" \
-		-v target="$FORM_target" \
-		-v target_ip="$FORM_target_ip" \
-		-v target_port="$FORM_target_port" \
-		-v new="$FORM_new" \
-		-v new_target="$FORM_new_target" \
-		-v default_lan_target="$default_lan_target" \
-		-f - "$FW_FILE" > "$FW_FILE_NEW" <<EOF
-BEGIN {
-	FS=":"
-}
+get_tr
+form="string|<div class=\"settings\">
+	string|<h3><strong>@TR<<Incoming>></strong></h3>
+	string|<table style=\"width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"3\" cellspacing=\"2\" summary=\"@TR<<Incomimg>>\">
+	$tr
+	string|<th>@TR<<Name>></th>
+	string|<th>@TR<<Protocol>></th>
+	string|<th>@TR<<Source IP>></th>
+	string|<th>@TR<<Destination IP>></th>
+	string|<th>@TR<<Port>></th>
+	string|</tr>"
+append forms "$form" "$N"
+for rule in $rule_cfgs; do
+	if [ "$FORM_submit" = "" -o "$add_rule_cfg" = "$rule" ]; then
+		config_get FORM_protocol $rule proto
+		config_get FORM_src_ip $rule src_ip
+		config_get FORM_dest_ip $rule dest_ip
+		config_get FORM_port $rule dest_port
+	else
+		eval FORM_protocol="\$FORM_protocol_$rule"
+		eval FORM_src_ip="\$FORM_src_ip_$rule"
+		eval FORM_dest_ip="\$FORM_dest_ip_$rule"
+		eval FORM_port="\$FORM_port_$rule"
+		uci_set firewall "$rule" "proto" "$FORM_protocol"
+		uci_set firewall "$rule" "src_ip" "$FORM_src_ip"
+		uci_set firewall "$rule" "dest_ip" "$FORM_dest_ip"
+		uci_set firewall "$rule" "dest_port" "$FORM_port"
+	fi
+		
+	echo "$rule" |grep -q "cfg*****" && name="" || name="$rule"
+	get_tr
+	form="$tr
+		string|<td>$name</td>
+		string|<td>
+		select|protocol_$rule|$FORM_protocol
+		option|tcp|TCP
+		option|udp|UDP
+		string|</td>
+		string|<td>
+		text|src_ip_$rule|$FORM_src_ip
+		string|</td>
+		string|<td>
+		text|dest_ip_$rule|$FORM_dest_ip
+		string|</td>
+		string|<td>
+		text|port_$rule|$FORM_port
+		string|</td>
+		string|<td>
+		string|<a href=\"$SCRIPT_NAME?remove_vcfg=$rule\">@TR<<Remove Rule>></a>
+		string|</td>
+		string|</tr>"
+	append forms "$form" "$N"
+done
+get_tr
+form="$tr
+	string|<td>
+	text|name|
+	string|</td>
+	string|<td>
+	select|protocol_rule
+	option|tcp|TCP
+	option|udp|UDP
+	string|</td>
+	string|<td>
+	text|src_ip_rule
+	string|</td>
+	string|<td>
+	text|dest_ip_rule
+	string|</td>
+	string|<td>
+	text|port_rule|
+	string|</td>
+	string|<td>
+	string|&nbsp;
+	string|</td>
+	string|</tr>
+	string|</table></div>"
+append forms "$form" "$N"
 
-function addnew(new) {
-	new = target ":";
-	if (proto != "") new = new "proto=" proto " "
-	if (src != "") new = new "src=" src " "
-	if (dest != "") new = new "dest=" dest " "
-	if (sport != "") new = new "sport=" sport " "
-	if (dport != "") new = new "dport=" dport " "
-	if (layer7 != "") new = new "layer7=" layer7 " "
-	gsub(/ $/, "", new);
-	if (target == "forward") {
-		new = new ":" target_ip
-		if (target_port != "") new = new ":" target_port
-	}
-	print new
-}
+#PORT Forwarding
+cur_color="odd"
+get_tr
+form="string|<div class=\"settings\">
+	string|<h3><strong>@TR<<Port Forwarding>></strong></h3>
+	string|<table style=\"width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"3\" cellspacing=\"2\" summary=\"@TR<<Port Forwarding>>\">
+	$tr
+	string|<th>@TR<<Name>></th>
+	string|<th>@TR<<Protocol>></th>
+	string|<th>@TR<<Source IP>></th>
+	string|<th>@TR<<Destination Port>></th>
+	string|<th>@TR<<To IP Address>></th>
+	string|<th>@TR<<To Port>></th>
+	string|</tr>"
+append forms "$form" "$N"
 
-(\$1 == "drop") || (\$1 == "accept") || (\$1 == "forward" ) {
-	n++
-	if (noprint == 1) {
-		noprint = 0
-	}
-	if (down == n) {
-		line_down = \$0
-		noprint = 1
-	}
-	if (del == n) {
-		noprint = 1
-	}
-	if (edit == n) {
-		if ((target == "forward") && (target == \$1)) {
-			noprint = 1
-		}
-		if ((\$1 != "forward") && ((target == "accept") || (target == "drop"))) {
-			noprint = 1
-		}
-		if (noprint == 1) {
-			addnew()
-		}
-	}
-}
+for rule in $redirect_cfgs; do
+	if [ "$FORM_submit" = "" -o "$add_redirect_cfg" = "$rule" ]; then
+		config_get FORM_protocol $rule proto
+		config_get FORM_src_ip $rule src_ip
+		config_get FORM_dest_ip $rule dest_ip
+		config_get FORM_src_dport $rule src_dport
+		config_get FORM_dest_port $rule dest_port
+	else
+		eval FORM_protocol="\$FORM_protocol_$rule"
+		eval FORM_src_ip="\$FORM_src_ip_$rule"
+		eval FORM_dest_ip="\$FORM_dest_ip_$rule"
+		eval FORM_dest_port="\$FORM_dest_port_$rule"
+		eval FORM_src_dport="\$FORM_src_dport_$rule"
+		uci_set firewall "$rule" "proto" "$FORM_protocol"
+		uci_set firewall "$rule" "src_ip" "$FORM_src_ip"
+		uci_set firewall "$rule" "dest_ip" "$FORM_dest_ip"
+		uci_set firewall "$rule" "src_dport" "$FORM_src_dport"
+		uci_set firewall "$rule" "dest_port" "$FORM_dest_port"
+	fi
+		
+	echo "$rule" |grep -q "cfg*****" && name="" || name="$rule"
+	get_tr
+	form="$tr
+		string|<td>$name</td>
+		string|<td>
+		select|protocol_$rule|$FORM_protocol
+		option|tcp|TCP
+		option|udp|UDP
+		string|</td>
+		string|<td>
+		text|src_ip_$rule|$FORM_src_ip
+		string|</td>
+		string|<td>
+		text|src_dport_$rule|$FORM_src_dport
+		string|</td>
+		string|<td>
+		text|dest_ip_$rule|$FORM_dest_ip
+		string|</td>
+		string|<td>
+		text|dest_port_$rule|$FORM_dest_port
+		string|</td>
+		string|<td>
+		string|<a href=\"$SCRIPT_NAME?remove_vcfg=$rule\">@TR<<Remove Rule>></a>
+		string|</td>
+		string|</tr>"
+	append forms "$form" "$N"
+done
+get_tr
+form="$tr
+	string|<td>
+	text|name_redirect|
+	string|</td>
+	string|<td>
+	select|protocol_redirect
+	option|tcp|TCP
+	option|udp|UDP
+	string|</td>
+	string|<td>
+	text|src_ip_redirect
+	string|</td>
+	string|<td>
+	text|src_dport_redirect
+	string|</td>
+	string|<td>
+	text|dest_ip_redirect
+	string|</td>
+	string|<td>
+	text|dest_port_redirect
+	string|</td>
+	string|<td>
+	string|&nbsp;
+	string|</td>
+	string|</tr>
+	string|</table></div>"
+append forms "$form" "$N"
+		
 
-{
-	if ((\$1 == "drop") || (\$1 == "accept") || (\$1 == "forward" )) {
-		if (noprint != 1) print \$0
-	} else {
-		print \$0
-	}
-}
 
-(line_down != "") && (n > down) {
-	print line_down
-	line_down = ""
-}
-
-END {
-	if (line_down != "") print line_down
-	if (new_target == "forward") new_target = new_target "::" default_lan_target
-	if ((new != "") && (new_target != "")) print new_target
-}
-EOF
-	FW_FILE=/tmp/.webif/file-firewall
-	mv "$FW_FILE_NEW" "$FW_FILE"
-	empty "$FORM_new" && FORM_edit=""
-}
-
-header_inject_head=$(cat <<EOF
-<style type="text/css">
+header "Network" "Firewall" "@TR<<Firewall>>" 'onload="modechange()"' "$SCRIPT_NAME"
+#####################################################################
+# modechange script
+#
+cat <<EOF
+<script type="text/javascript" src="/webif.js"></script>
+<script type="text/javascript">
 <!--
-td.edit_title {
-	font-weight: bold;
-	text-align: right;
-	padding-top: 0.8em;
-	padding-right: 0.5em;
-	padding-bottom: auto;
-}
-td.match_title {
-	width: 10em;
-	text-align: right;
-	padding-top: 0.8em;
-	padding-right: 0.5em;
-	padding-bottom: auto;
+function modechange()
+{
+	var v;
+	$js
+
+	hide('save');
+	show('save');
 }
 -->
-</style>
+</script>
 
 EOF
-)
 
-header "Network" "Firewall" "@TR<<Firewall Configuration>>" ''
-
-awk \
-	-v edit="$FORM_edit" \
-	-v save="$FORM_save" \
-	-v proto="$FORM_proto" \
-	-v src="$FORM_src" \
-	-v sport="$FORM_sport" \
-	-v dest="$FORM_dest" \
-	-v dport="$FORM_dport" \
-	-v layer7="$FORM_layer7" \
-	-v target="$FORM_target" \
-	-v target_ip="$FORM_target_ip" \
-	-v target_port="$FORM_target_port" \
-	-v del_proto="$FORM_del_proto" \
-	-v del_src="$FORM_del_src" \
-	-v del_sport="$FORM_del_sport" \
-	-v del_dest="$FORM_del_dest" \
-	-v del_dport="$FORM_del_dport" \
-	-v del_layer7="$FORM_del_layer7" \
-	-v data_submit="$FORM_data_submit" \
-	-v new_match="$FORM_new_match" \
-	-f /usr/lib/webif/common.awk \
-	-f /usr/lib/common.awk \
-	-f - "$FW_FILE" <<EOF
-function set_data() {
-	_l["proto"] = proto
-	_l["src"] = src
-	_l["sport"] = sport
-	_l["dest"] = dest
-	_l["dport"] = dport
-	_l["layer7"] = layer7
-
-	if (del_proto != "") _l["proto"] = ""
-	if (del_src != "") _l["src"] = ""
-	if (del_sport != "") _l["sport"] = ""
-	if (del_dest != "") _l["dest"] = ""
-	if (del_dport != "") _l["dport"] = ""
-	if (del_layer7 != "") _l["layer7"] = ""
-}
-function iptstr2web(str, ret) {
-	ret = ""
-	str2data(str);
-	if (_l["proto"] != "") ret = ret "@TR<<Protocol>>: " _l["proto"] "<br />"
-	if (_l["src"] != "") ret = ret "@TR<<Source IP>>: " _l["src"] "<br />"
-	if (_l["sport"] != "") ret = ret "@TR<<Source Ports>>: " _l["sport"] "<br />"
-	if (_l["dest"] != "") ret = ret "@TR<<Destination IP>>: " _l["dest"] "<br />"
-	if (_l["dport"] != "") ret = ret "@TR<<Destination Ports>>: " _l["dport"] "<br />"
-#	if (_l["layer7"] != "") ret = ret "@TR<<Application Protocol>>: " _l["layer7"] "<br />"
-	if (ret == "") ret = ret "@TR<<Everything>>"
-	return ret
-}
-function delbutton(name) {
-	return button("del_" name, "Delete")
-}
-function input_line(caption, name, value) {
-	return "<tr><td class=\\"match_title\\">@TR<<" caption ">>: </td><td>" textinput(name, value) delbutton(name) "</td></tr>"
-}
-function iptstr2edit(str, edit) {
-	edit = ""
-	str2data(str);
-	if (int(data_submit) == 1) set_data()
-	if (new_match == "proto") _l["proto"] = "tcp"
-	if ((new_match == "src") || (new_match == "dest")) _l[new_match] = "0.0.0.0"
-	if ((new_match == "sport") || (new_match == "dport")) _l[new_match] = "0"
-	if ((new_match != "") && (_l[new_match] == "")) _l[new_match] = " "
-
-	if (_l["proto"] != "") {
-		edit = edit "<tr><td class=\\"match_title\\">@TR<<Protocol>>: </td><td>"
-		edit = edit "<select name=\\"proto\\">"
-		edit = edit sel_option("tcp", "TCP", _l["proto"])
-		edit = edit sel_option("udp", "UDP", _l["proto"])
-		edit = edit "</select>" delbutton("proto")
-		edit = edit "</td></tr>"
-	}
-	if (_l["src"] != "") edit = edit input_line("Source IP", "src", _l["src"])
-	if (_l["sport"] != "") edit = edit input_line("Source Ports", "sport", _l["sport"])
-	if (_l["dest"] != "") edit = edit input_line("Destination IP", "dest", _l["dest"])
-	if (_l["dport"] != "") edit = edit input_line("Destination Ports", "dport", _l["dport"])
-	if (_l["layer7"] != "") edit = edit input_line("Application Protocol", "layer7", _l["layer7"])
-
-	edit = edit "<tr><td class=\\"match_title\\">&nbsp;</td><td><select name=\\"new_match\\">"
-	edit = edit sel_option("none", "---")
-	if (_l["proto"] == "") edit = edit sel_option("proto", "Protocol")
-	if (_l["src"] == "") edit = edit sel_option("src", "Source IP")
-	if (_l["dest"] == "") edit = edit sel_option("dest", "Destination IP")
-	if ((_l["proto"] == "tcp") || (_l["proto"] == "udp") || (_l["proto"] == "")) {
-		if (_l["sport"] == "") edit = edit sel_option("sport", "Source Ports")
-		if (_l["dport"] == "") edit = edit sel_option("dport", "Destination Ports")
-#		if (_l["layer7"] == "") edit = edit sel_option("layer7", "Application Protocol")
-	}
-	edit = edit "</select>"
-	edit = edit button("add_match", "Add") "</td></tr>"
-
-	return edit
-}
-
-BEGIN {
-	print start_form("@TR<<Firewall Rules>>");
-	print "<table width=\\"100%\\">"
-	print "<tr><th>@TR<<Match>></th><th>@TR<<Target>></th><th>@TR<<Port>></th><th>&nbsp;</th></tr>"
-	FS=":"
-	n = 0
-}
-
-(\$1 == "drop") || (\$1 == "accept") || (\$1 == "forward" ) {
-	n++
-	print "<tr><td colspan=\\"5\\"><hr class=\\"separator\\" /></td></tr>"
-	if (n == edit) {
-		print "<form enctype=\\"multipart/form-data\\" method=\\"post\\" action=\\"$SCRIPT_NAME\\">"
-		print hidden("data_submit", "1") hidden("edit", edit)
-		print "<tr><td colspan=\\"5\\">"
-		print "<table width=\\"100%\\">"
-		print iptstr2edit(\$2)
-		print "<tr><td><hr class=\\"separator\\" /></td><td>&nbsp;</td></tr>"
-	} else {
-		printf "<tr><td>" iptstr2web(\$2) "</td>"
-	}
-}
-
-(\$1 == "drop") || (\$1 == "accept") {
-	if (n == edit) {
-		if (int(data_submit) == 1) \$1 = target
-		printf "<tr>"
-		printf "<td class=\\"edit_title\\">@TR<<Target>>:</td><td>"
-		printf "<select name=\\"target\\">"
-		printf sel_option("accept", "Accept", \$1)
-		printf sel_option("drop", "Drop", \$1)
-		printf "</td>"
-		printf "</tr>"
-	} else {
-		printf "<td colspan=\\"2\\">" \$1 "</td>"
-	}
-}
-
-\$1 == "forward" {
-	if (n == edit) {
-		if (target_ip == "") target_ip = \$3
-		if (target_port == "") target_port = \$4
-		print "<tr><td class=\\"edit_title\\">@TR<<Forward to>>:</b></td><td>" textinput("target_ip", target_ip) hidden("target", "forward") "</td></tr>"
-		print "<tr><td class=\\"edit_title\\">@TR<<Port>>:</b></td><td>" textinput("target_port", target_port) "</td></tr>"
-	} else {
-		if (\$3 \$4 == "") \$3 = "forward"
-		printf "<td>" \$3 "</td><td>" \$4 "</td>"
-	}
-}
-
-(\$1 == "drop") || (\$1 == "accept") || (\$1 == "forward" ) {
-	if (n == edit) {
-		printf "<tr><td>&nbsp;</td><td>" button("save", "Save") button("cancel", "Cancel") "</td></tr>"
-
-		print "</table>"
-		print "</td></tr>"
-		print "</form>"
-	} else {
-		printf "<td style=\\"text-align: right; padding-right: 0.5em\\">"
-		printf "<a href=\\"$SCRIPT_NAME?up=" n "\\">@TR<<Up>></a><br />"
-		printf "<a href=\\"$SCRIPT_NAME?down=" n "\\">@TR<<Down>></a>"
-		printf "</td><td>"
-		printf "<a href=\\"$SCRIPT_NAME?edit=" n "\\">@TR<<Edit>></a><br />"
-		printf "<a href=\\"$SCRIPT_NAME?delete=" n "\\">@TR<<Delete>></a>"
-		print "</td></tr>"
-	}
-}
-
-END {
-	print "<tr><td colspan=\\"5\\"><hr class=\\"separator\\" /></td></tr>"
-	print "<tr><td class=\\"edit_title\\">@TR<<New Rule>>: </td><td colspan=\\"4\\">"
-	print "<form method=\\"post\\" action=\\"$SCRIPT_NAME\\" enctype=\\"multipart/form-data\\">"
-	print hidden("edit", n + 1);
-	print "<select name=\\"new_target\\">"
-	print sel_option("forward", "Forward")
-	print sel_option("accept", "Accept")
-	print sel_option("drop", "Drop")
-	print "</select>" button("new", "Add") "</form></td></tr>"
-	print "</table>"
-	print "<br /><br />"
-	print "<div class=\\"settings-help\\" style=\\"margin-left:0;\\">"
-	print "<h4>@TR<<Firewall>>:</h4>"
-	print "<p>@TR<<firewall_help_general|Here you can forward ports and more. If you wish to manually configure these instead, use '/etc/firewall.config', not '/etc/firewall.user'. Although either works, only the former is used by this page.>></p>"
-	print "<h4>@TR<<Forwarding a port>>:</h4>"
-	print "<p>@TR<<firewall_help_fw_port_example1|If you would like to forward port 999 TCP from the internet to a local computer at 192.168.1.100, it might look like below:>></p>"
-	print "<p>@TR<<firewall_help_fw_port_example|Destination ports: 999 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Target: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: &lt;blank&gt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protocol: TCP>></p>"
-	print "<h4>@TR<<Forwarding a port range>>:</h4>"
-	print "<p>@TR<<firewall_help_fw_portrange|If you would like to forward ports 2000-3000 TCP from the internet to a local computer at 192.168.1.100, it might look like below:>></p>"
-	print "<p>@TR<<firewall_help_fw_portrange_example|Destination ports: 2000-3000 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Target: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: &lt;blank&gt; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protocol: TCP>></p>"
-	print "<h4>@TR<<Forwarding a port to a different port>>:</h4>"
-	print "<p>@TR<<firewall_help_fw_example2|If you would like to forward port 8888 TCP from the internet to 192.168.1.100 at port 80, it might look like below:>></p>"
-	print "<p>@TR<<firewall_help_fw_port_example2|Destination ports: 8888 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Target: 192.168.1.100 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Port: 80 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Protocol: TCP>></p>"
-	print "</div>"
-	print end_form(" ");
-}
+display_form <<EOF
+onchange|modechange
+$validate_error
+$forms
 EOF
 
 footer ?>
