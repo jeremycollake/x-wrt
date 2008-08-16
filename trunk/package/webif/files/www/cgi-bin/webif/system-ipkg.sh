@@ -28,9 +28,9 @@
 #
 #
 
-lists_path=$(cat /etc/ipkg.conf 2>/dev/null | grep ^lists_dir | cut -d' ' -f3)
+lists_path=$(cat /etc/opkg.conf 2>/dev/null | grep ^lists_dir | cut -d' ' -f3)
 if [ -z "$lists_path" ]; then
-	lists_path="/usr/lib/ipkg/lists"
+	lists_path="/usr/lib/opkg/lists"
 else
 	lists_path="${lists_path%%/}"
 fi
@@ -74,11 +74,11 @@ EOF
 		# since firstboot doesn't make a copy of ipkg.conf, we must do it
 		# todo: need a mutex or lock here
 		tmpfile=$(mktemp "/tmp/.webif-ipkg-XXXXXX")
-		cp -p "/etc/ipkg.conf" "$tmpfile"
+		cp -p "/etc/opkg.conf" "$tmpfile"
 		echo "src $FORM_reponame $FORM_repourl" > "$tmpfile"
-		cat "/etc/ipkg.conf" >>"$tmpfile"
-		rm "/etc/ipkg.conf"
-		mv "$tmpfile" "/etc/ipkg.conf"
+		cat "/etc/opkg.conf" >>"$tmpfile"
+		rm "/etc/opkg.conf"
+		mv "$tmpfile" "/etc/opkg.conf"
 	else
 		echo "<h3 class=\"warning\">$ERROR</h3>"
 	fi
@@ -87,9 +87,9 @@ EOF
 ! empty "$FORM_remove_repo_name" && ! empty "$FORM_remove_repo_url" && {	
 	repo_update_needed=1
 	repo_src_line="src $FORM_remove_repo_name $FORM_remove_repo_url"
-	remove_lines_from_file "/etc/ipkg.conf" "$repo_src_line"
+	remove_lines_from_file "/etc/opkg.conf" "$repo_src_line"
 	# manually remove package lists since ipkg update won't..
-	# todo: odd issue where 'rm -f /usr/lib/ipkg/lists/* does not work - openwrt should investigate
+	# todo: odd issue where 'rm -f /usr/lib/opkg/lists/* does not work - openwrt should investigate
 	rm "${lists_path}/$FORM_remove_repo_name" >&- 2>&-
 	echo "<br />Repository source was removed: $FORM_remove_repo_name<br />"
 }
@@ -97,11 +97,11 @@ EOF
 equal "$repo_update_needed" "1" && {
 	echo "<br />Repository sources updated. Performing update of package lists ...<br /><pre>"	
 	mkdir "$lists_path" >&- 2>&-
-	ipkg update
+	opkg update
 	echo "</pre>"
 }
 
-repo_list=$(awk '/^[[:space:]]*src[[:space:]]/ { print "<tr class=\"repositories\"><td><a href=\"./system-ipkg.sh?remove_repo_name=" $2 "&amp;remove_repo_url=" $3 "\">@TR<<system_ipkg_removerepo#remove>></a>&nbsp;&nbsp;" $2 "</td><td colspan=\"2\">" $3 "</td></tr>"}' /etc/ipkg.conf)
+repo_list=$(awk '/^[[:space:]]*src[[:space:]]/ { print "<tr class=\"repositories\"><td><a href=\"./system-ipkg.sh?remove_repo_name=" $2 "&amp;remove_repo_url=" $3 "\">@TR<<system_ipkg_removerepo#remove>></a>&nbsp;&nbsp;" $2 "</td><td colspan=\"2\">" $3 "</td></tr>"}' /etc/opkg.conf)
 
 display_form <<EOF
 start_form|@TR<<system_ipkg_addrepo#Add Repository>>
@@ -149,7 +149,7 @@ EOF
 <?
 if [ "$FORM_action" = "update" ]; then
 	echo "<pre>@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
-	ipkg update
+	opkg update
 	echo "</pre>"
 elif [ "$FORM_action" = "install" ]; then
 	echo "<pre>@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
@@ -157,7 +157,7 @@ elif [ "$FORM_action" = "install" ]; then
 	echo "</pre>"
 elif [ "$FORM_action" = "remove" ]; then
 	echo "<pre>@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
-	ipkg remove `echo "$FORM_pkg" | sed -e 's, ,+,g'`
+	opkg remove `echo "$FORM_pkg" | sed -e 's, ,+,g'`
 	echo "</pre>"
 fi
 ?>
@@ -165,7 +165,7 @@ fi
 	<br />
 	<table class="packages"><tr class="packages"><th width="150">@TR<<system_ipkg_th_action#Action>></th><th width="200">@TR<<system_ipkg_th_package#Package>></th><th width=150>@TR<<system_ipkg_th_version#Version>></th><th>@TR<<system_ipkg_th_desc#Description>></th></tr>
 <?
-ipkg list_installed | awk -F ' ' '
+opkg list_installed | awk -F ' ' '
 ($2 !~ /terminated/) && ($1 !~ /Done./) {
 	link=$1
 	gsub(/\+/,"%2B",link)
@@ -188,9 +188,9 @@ ipkg list_installed | awk -F ' ' '
 	<br />
 	<table class="packages"><tr class="packages"><th width="150">@TR<<system_ipkg_th_action#Action>></th><th width="250">@TR<<system_ipkg_th_package#Package>></th><th width=150>@TR<<system_ipkg_th_version#Version>></th><th>@TR<<system_ipkg_th_desc#Description>></th></tr>
 <?
-repo_list=$(awk -v lists="$lists_path" '/^[[:space:]]*src[[:space:]]/ { printf " " lists "/" $2 }' /etc/ipkg.conf)
-status_list=$(awk '/^[[:space:]]*dest[[:space:]]/ { if ($3 == "/") printf " /usr/lib/ipkg/status"; else printf " "$3"/usr/lib/ipkg/status" }' /etc/ipkg.conf)
-[ -z "$status_list" ] && status_list="/usr/lib/ipkg/status"
+repo_list=$(awk -v lists="$lists_path" '/^[[:space:]]*src[[:space:]]/ { printf " " lists "/" $2 }' /etc/opkg.conf)
+status_list=$(awk '/^[[:space:]]*dest[[:space:]]/ { if ($3 == "/") printf " /usr/lib/opkg/status"; else printf " "$3"/usr/lib/opkg/status" }' /etc/opkg.conf)
+[ -z "$status_list" ] && status_list="/usr/lib/opkg/status"
 egrep 'Package:|Description:|Version:' $status_list $repo_list 2>&- | sed -e 's, ,,' -e "s,^[^:]*${lists_path}/,," | awk -F: '
 $1 ~ /status/ {
 	installed[$3]++;

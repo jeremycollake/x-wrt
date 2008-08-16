@@ -115,12 +115,12 @@ validate() {
 is_package_installed() {
 	# $1 = package name
 	# returns 0 if package is installed.
-	for LOCATION in $(grep "^dest\>" /etc/ipkg.conf 2>/dev/null | cut -d ' ' -f 3); do
+	for LOCATION in $(grep "^dest\>" /etc/opkg.conf 2>/dev/null | cut -d ' ' -f 3); do
 
 		if [ "$LOCATION" = "/" ]; then
-		        paths="$paths /usr/lib/ipkg/status"
+		        paths="$paths /usr/lib/opkg/status"
 		else
-		        paths="$paths $LOCATION/usr/lib/ipkg/status"
+		        paths="$paths $LOCATION/usr/lib/opkg/status"
 		fi
 	done
 	[ -z "$paths" ] && return 1
@@ -131,16 +131,16 @@ install_package() {
 	# $1 = package name or URL
 	# returns 0 if success.
 	# if package is not found, and it isn't a URL, then it'll
-	# try an 'ipkg update' to see if it can locate it. Does
+	# try an 'opkg update' to see if it can locate it. Does
 	# emit output to std devices.
 	echo "@TR<<Installing package>>..."
-	ipkg install "$1" -force-overwrite -force-defaults | grep -q -e "md5sum mismatch" -e "Cannot find package"
+	opkg install "$1" -force-overwrite -force-defaults | grep -q -e "md5sum mismatch" -e "Cannot find package"
 	[ "$?" = "0" ] && {
 		echo "$1" | grep "://" >> /dev/null
 		! equal "$?" "0" && {
 			# wasn't a URL, so update
-			ipkg update
-			ipkg install "$1" -force-overwrite -force-defaults
+			opkg update
+			opkg install "$1" -force-overwrite -force-defaults
 		}
 	}
 }
@@ -148,11 +148,11 @@ install_package() {
 remove_package() {
 	# $1 = package name
 	# returns 0 if success.
-	ipkg remove "$1"
+	opkg remove "$1"
 }
 
 update_package_list() {
-	ipkg update >> /dev/null
+	opkg update >> /dev/null
 }
 
 has_pkgs() {
@@ -161,7 +161,7 @@ has_pkgs() {
 	local retval=0;
 	for pkg in "$@"; do
 		pcnt=$((pcnt + 1))
-		empty $(ipkg list_installed | grep "^$pkg ") && {
+		empty $(opkg list_installed | grep "^$pkg ") && {
 			echo -n "<p>@TR<<features_require_package#Features on this page require the package>>: \"<b>$pkg</b>\". &nbsp;<a href=\"/cgi-bin/webif/system-ipkg.sh?action=install&amp;pkg=$pkg&amp;prev=$SCRIPT_NAME\">@TR<<features_install#install now>></a>.</p>"
 			retval=1;
 			nothave=$((nothave + 1))

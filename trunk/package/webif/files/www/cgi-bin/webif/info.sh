@@ -45,7 +45,7 @@ else
 fi
 # let the user to serve it locally, it requires the X-Wrt (local) repository to be present
 config_get_bool local_update general local_update 0
-[ 1 -eq "$local_update" ] && version_url=$(sed '/^src[[:space:]]*X-Wrt[[:space:]]*/!d; s/^src[[:space:]]*X-Wrt[[:space:]]*//g; s/\/packages.*$/\//g' /etc/ipkg.conf 2>/dev/null)
+[ 1 -eq "$local_update" ] && version_url=$(sed '/^src[[:space:]]*X-Wrt[[:space:]]*/!d; s/^src[[:space:]]*X-Wrt[[:space:]]*//g; s/\/packages.*$/\//g' /etc/opkg.conf 2>/dev/null)
 [ -z "$version_url" ] && version_url="http://downloads.x-wrt.org/xwrt/kamikaze/$version_path/$target_path/"
 this_revision=$(cat "/www/.version" 2>/dev/null)
 revision_text=" r$this_revision "
@@ -83,16 +83,16 @@ fi
 if [ -n "$FORM_install_webif" ]; then
 	echo "@TR<<info_wait_install#Please wait, installation may take a minute>> ... <br />"
 	echo "<pre>"
-	ipkg -V 0 update
-	ipkg install "${version_url}${package_filename}" -force-overwrite -force-reinstall -force-defaults| uniq
+	opkg -V 0 update
+	opkg install "${version_url}${package_filename}" -force-overwrite -force-reinstall -force-defaults| uniq
 	echo "</pre>"
 	this_revision=$(cat "/www/.version")
 	# update the active language package
 	curlang="$(cat "/etc/config/webif" |grep "lang=" |cut -d'=' -f2)"
-	! equal "$(ipkg status "webif-lang-${curlang}" |grep "Status:" | grep " installed" )" "" && {
-		webif_version=$(ipkg status webif | awk '/Version:/ { print $2 }')
+	! equal "$(opkg status "webif-lang-${curlang}" |grep "Status:" | grep " installed" )" "" && {
+		webif_version=$(opkg status webif | awk '/Version:/ { print $2 }')
 		echo "<pre>"
-		ipkg install "${version_url}packages/webif-lang-${curlang}_${webif_version}_mipsel.ipk" -force-reinstall -force-overwrite -force-defaults | uniq
+		opkg install "${version_url}packages/webif-lang-${curlang}_${webif_version}_mipsel.ipk" -force-reinstall -force-overwrite -force-defaults | uniq
 		echo "</pre>"
 	}
 fi

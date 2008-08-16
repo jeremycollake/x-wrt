@@ -53,7 +53,7 @@ for service in $services; do
 	service_option="$service_option
 option|$service"
 	
-	ipkg list_installed | grep -q "$service"
+	opkg list_installed | grep -q "$service"
 	! equal "$?" 0 && {
 		package_checker="$package_checker
 field|@TR<<Dynamic DNS Package>>|install_$service|hidden
