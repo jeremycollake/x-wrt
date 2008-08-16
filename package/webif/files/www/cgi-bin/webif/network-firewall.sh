@@ -8,14 +8,14 @@
 #	Firewall configuration.
 #
 # Author(s) [in order of work date]:
-#       Original webif authors.
+#	Original webif authors.
 #	Travis Kemen	<kemen04@gmail.com>
 # Major revisions:
 #
 # UCI variables referenced:
 #
 # Configuration files referenced:
-#   firewall
+#	firewall
 #
 
 #remove rule
@@ -51,10 +51,10 @@ config_cb() {
 	case "$cfg_type" in
 		forwarding)
 			append forwarding_cfgs "$cfg_name"
-	        ;;
-	        zone)
+		;;
+		zone)
 			append zone_cfgs "$cfg_name" "$N"
-	        ;;
+		;;
 		rule)
 			append rule_cfgs "$cfg_name" "$N"
 		;;
@@ -107,7 +107,7 @@ for rule in $rule_cfgs; do
 		uci_set firewall "$rule" "dest_ip" "$FORM_dest_ip"
 		uci_set firewall "$rule" "dest_port" "$FORM_port"
 	fi
-		
+
 	echo "$rule" |grep -q "cfg*****" && name="" || name="$rule"
 	get_tr
 	form="$tr
@@ -193,7 +193,7 @@ for rule in $redirect_cfgs; do
 		uci_set firewall "$rule" "src_dport" "$FORM_src_dport"
 		uci_set firewall "$rule" "dest_port" "$FORM_dest_port"
 	fi
-		
+
 	echo "$rule" |grep -q "cfg*****" && name="" || name="$rule"
 	get_tr
 	form="$tr
@@ -249,7 +249,7 @@ form="$tr
 	string|</tr>
 	string|</table></div>"
 append forms "$form" "$N"
-		
+
 
 
 header "Network" "Firewall" "@TR<<Firewall>>" 'onload="modechange()"' "$SCRIPT_NAME"
