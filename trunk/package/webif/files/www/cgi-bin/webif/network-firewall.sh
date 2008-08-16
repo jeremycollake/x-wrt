@@ -176,7 +176,7 @@ append forms "$form" "$N"
 
 for rule in $redirect_cfgs; do
 	if [ "$FORM_submit" = "" -o "$add_redirect_cfg" = "$rule" ]; then
-		config_get FORM_protocol $rule proto
+		config_get FORM_protocol $rule protocol
 		config_get FORM_src_ip $rule src_ip
 		config_get FORM_dest_ip $rule dest_ip
 		config_get FORM_src_dport $rule src_dport
