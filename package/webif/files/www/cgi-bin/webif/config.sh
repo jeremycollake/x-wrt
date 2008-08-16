@@ -46,7 +46,7 @@ case "$FORM_mode" in
 			EDITED_FILES="$EDITED_FILES $edited_file"
 		done
 
-		EDITED_FILES="${EDITED_FILES:+<h3 style="display:inline">Edited files: </h3>$EDITED_FILES<br />}"
+		EDITED_FILES="${EDITED_FILES:+<h3 style="display:inline">@TR<<Edited files:>> </h3>$EDITED_FILES<br />}"
 		echo "$EDITED_FILES"
 		;;
 	save)
