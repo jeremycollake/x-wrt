@@ -187,7 +187,7 @@ for rule in $redirect_cfgs; do
 		eval FORM_dest_ip="\$FORM_dest_ip_$rule"
 		eval FORM_dest_port="\$FORM_dest_port_$rule"
 		eval FORM_src_dport="\$FORM_src_dport_$rule"
-		uci_set firewall "$rule" "proto" "$FORM_protocol"
+		uci_set firewall "$rule" "protocol" "$FORM_protocol"
 		uci_set firewall "$rule" "src_ip" "$FORM_src_ip"
 		uci_set firewall "$rule" "dest_ip" "$FORM_dest_ip"
 		uci_set firewall "$rule" "src_dport" "$FORM_src_dport"
