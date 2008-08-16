@@ -27,7 +27,6 @@ config_cb() {
 HANDLERS_file='
 	hosts) rm -f /etc/hosts; mv $config /etc/hosts; killall -HUP dnsmasq ;;
 	ethers) rm -f /etc/ethers; mv $config /etc/ethers; killall -HUP dnsmasq ;;
-	firewall) mv /tmp/.webif/file-firewall /etc/firewall.config && /etc/init.d/firewall restart && reload_upnpd;;
 	dnsmasq.conf) mv /tmp/.webif/file-dnsmasq.conf /etc/dnsmasq.conf && /etc/init.d/dnsmasq restart;;
 	httpd.conf) mv -f /tmp/.webif/file-httpd.conf /etc/httpd.conf && HTTP_RESTART=1 ;;
 '
@@ -353,6 +352,9 @@ for package in $process_packages; do
 				}
 			fi
 			config_allclear
+			;;
+		"firewall")
+			/etc/init.d/firewall restart && reload_upnpd
 			;;
 	esac
 done
