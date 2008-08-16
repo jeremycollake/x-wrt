@@ -114,7 +114,7 @@ generate_ssl_key() {
 		inst_packages="$inst_packages openssl-util"
 		inst_links="$inst_links /tmp/usr/bin/openssl"
 	}
-	[ -n "$inst_packages" ] && ipkg -d ram install $inst_packages -force-overwrite
+	[ -n "$inst_packages" ] && opkg -d ram install $inst_packages -force-overwrite
 	is_package_installed "openssl-util"
 	if [ "$?" = "0" ]; then
 		for llib in $inst_links; do
@@ -136,7 +136,7 @@ generate_ssl_key() {
 		unset RANDFILE
 	fi
 	[ -n "$libsymlinks" ] && rm -f $libsymlinks
-	[ -n "$inst_packages" ] && ipkg remove $inst_packages
+	[ -n "$inst_packages" ] && opkg remove $inst_packages
 }
 
 if ! empty "$FORM_install_stunnel"; then

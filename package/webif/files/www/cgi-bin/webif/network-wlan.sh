@@ -167,7 +167,7 @@ fi
 if ! empty "$FORM_install_hostapd"; then
 	hostapd_mini_installed="0"
 	is_package_installed hostapd-mini
-	equal "$?" "0" && ipkg remove "hostapd-mini"
+	equal "$?" "0" && opkg remove "hostapd-mini"
 	echo "Installing HostAPD package ...<pre>"
 	install_package "hostapd"
 	echo "</pre>"

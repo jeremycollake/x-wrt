@@ -34,9 +34,9 @@ AddRepository()
 {
 	# $1=reponame
 	# $2=repourl
-	cat "${IPKG_INSTROOT}/etc/ipkg.conf" | grep -q "$2"
+	cat "${IPKG_INSTROOT}/etc/opkg.conf" | grep -q "$2"
 	[ "$?" != "0" ] && {
-		echo "src $1 $2" >> "${IPKG_INSTROOT}/etc/ipkg.conf"
+		echo "src $1 $2" >> "${IPKG_INSTROOT}/etc/opkg.conf"
 		IPKG_UPDATE_NEEDED="1"
 	}
 }
@@ -45,10 +45,10 @@ IPKG_UPDATE_NEEDED="0"
 DeleteRepository()
 {
 	# $1=repourl
-	cat "${IPKG_INSTROOT}/etc/ipkg.conf" | grep -q "$1"
+	cat "${IPKG_INSTROOT}/etc/opkg.conf" | grep -q "$1"
 	[ "$?" = "0" ] && {
 		repo_url_sed=$(echo "$1" | sed s/'\/'/'\\\/'/g)
-		cat "${IPKG_INSTROOT}/etc/ipkg.conf" |  sed /$repo_url_sed/d > "${IPKG_INSTROOT}/etc/ipkg.conf"
+		cat "${IPKG_INSTROOT}/etc/opkg.conf" |  sed /$repo_url_sed/d > "${IPKG_INSTROOT}/etc/opkg.conf"
 		IPKG_UPDATE_NEEDED="1"
 	}
 }
@@ -153,7 +153,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 		fi
 	}
 
-	[ "$IPKG_UPDATE_NEEDED" = "1" ] && ipkg update
+	[ "$IPKG_UPDATE_NEEDED" = "1" ] && opkg update
 	
 	# force re-initialization of extension package lists
 	/usr/lib/webif/webif-mklanglist.sh

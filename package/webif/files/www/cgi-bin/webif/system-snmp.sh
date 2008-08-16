@@ -56,7 +56,7 @@ if ! empty "$FORM_remove_snmpd"; then
 	echo "</pre>"
 fi
 
-ipkg_listinst=$(ipkg list_installed)
+ipkg_listinst=$(opkg list_installed)
 snmpd_installed="0"
 
 echo "$ipkg_listinst" | grep -q "snmpd"

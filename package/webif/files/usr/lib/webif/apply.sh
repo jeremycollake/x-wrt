@@ -148,12 +148,12 @@ switch_language() {
 		! equal "$newlang" "en" && {
 			# build URL for package
 			#  since the original webif may be installed to, have to make sure we get latest ver
-			webif_version=$(ipkg status webif | awk '/Version:/ { print $2 }')
-			xwrt_repo_url=$(cat /etc/ipkg.conf | grep X-Wrt | cut -d' ' -f3)
+			webif_version=$(opkg status webif | awk '/Version:/ { print $2 }')
+			xwrt_repo_url=$(cat /etc/opkg.conf | grep X-Wrt | cut -d' ' -f3)
 			# always install language pack, since it may have been updated without package version change
-			ipkg install "${xwrt_repo_url}/webif-lang-${newlang}_${webif_version}_all.ipk" -force-reinstall -force-overwrite | uniq
+			opkg install "${xwrt_repo_url}/webif-lang-${newlang}_${webif_version}_all.ipk" -force-reinstall -force-overwrite | uniq
 			# switch to it if installed, even old one, otherwise return to previous
-			if equal "$(ipkg status "webif-lang-${newlang}" |grep "Status:" |grep " installed" )" ""; then
+			if equal "$(opkg status "webif-lang-${newlang}" |grep "Status:" |grep " installed" )" ""; then
 				echo '@TR<<Error installing language pack>>!'
 			fi
 		}
