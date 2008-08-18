@@ -20,15 +20,14 @@
 #   none
 #
 
-# handle old/current ntpclient configuration
-grep -q "^[[:space:]]*ntpclient)" /etc/hotplug.d/iface/*-ntpclient 2>/dev/null && ntpcliconf="ntpclient" || ntpcliconf="ntp_client"
+# ntpcliconf variable left here incase name changes again.
+ntpcliconf="ntpclient"
 
 # Add NTP Server
 if ! empty "$FORM_add_ntpcfg_number"; then
 	uci_add "$ntpcliconf" "$ntpcliconf"
 	uci_set "$ntpcliconf" "$CONFIG_SECTION" "hostname" ""
 	uci_set "$ntpcliconf" "$CONFIG_SECTION" "port" "123"
-	uci_set "$ntpcliconf" "$CONFIG_SECTION" "count" "1"
 	FORM_add_ntpcfg=""
 fi
 
@@ -48,9 +47,11 @@ config_cb() {
 		timezone)
 			timezone_cfg="$cfg_name"
 		;;
-		ntp_client|ntpclient|ntpserver)
+		ntpserver)
 			append ntpservers "$cfg_name" "$N"
 		;;
+		ntpclient)
+			append ntpclient_cfgs "$cfg_name" "$N"
 	esac
 }
 
@@ -201,10 +202,8 @@ EOF
 		for server in $ntpservers; do
 			eval FORM_ntp_server="\$FORM_ntp_server_$server"
 			eval FORM_ntp_port="\$FORM_ntp_port_$server"
-			eval FORM_ntp_count="\$FORM_ntp_count_$server"
 			uci_set "$ntpcliconf" "$server" hostname "$FORM_ntp_server"
 			uci_set "$ntpcliconf" "$server" port "$FORM_ntp_port"
-			uci_set "$ntpcliconf" "$server" count "$FORM_ntp_count"
 		done
 
 		has_nvram_support && {
@@ -330,26 +329,19 @@ for server in $ntpservers; do
 	if empty "$FORM_submit"; then
 		config_get FORM_ntp_server $server hostname
 		config_get FORM_ntp_port $server port
-		config_get FORM_ntp_count $server count
 	else
 		eval FORM_ntp_server="\$FORM_ntp_server_$server"
 		eval FORM_ntp_port="\$FORM_ntp_port_$server"
-		eval FORM_ntp_count="\$FORM_ntp_count_$server"
 	fi
 	#add check for blank config, the only time it will be seen is when config section is waitings to be removed
 	if [ "$FORM_ntp_port" != "" -o "$FORM_ntp_server" != "" ]; then
 		if [ "$FORM_ntp_port" = "" ]; then
 			FORM_ntp_port=123
 		fi
-		if [ "$FORM_ntp_count" = "" ]; then
-			FORM_ntp_count=1
-		fi
 		ntp_form="field|@TR<<NTP Server>>
 		text|ntp_server_$server|$FORM_ntp_server
 		field|@TR<<NTP Server Port>>
 		text|ntp_port_$server|$FORM_ntp_port
-		field|@TR<<NTP Count>>
-		text|ntp_count_$server|$FORM_ntp_count
 		field|
 		string|<a href=\"$SCRIPT_NAME?remove_ntpcfg=$server\">@TR<<Remove NTP Server>></a>"
 		append NTP "$ntp_form" "$N"
