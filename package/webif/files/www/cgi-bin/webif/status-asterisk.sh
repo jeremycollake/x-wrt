@@ -7,7 +7,7 @@ if [ -e /var/run/asterisk.pid ]; then
 
 ast_pid=$(cat /var/run/asterisk.pid)
 
-ast_proc_info="$(cat /proc/$ast_pid/cmdline | sed 's/\0/ /g')"
+ast_proc_info="$(cat /proc/$ast_pid/cmdline | tr '\0' ' ')"
 
 asterisk_exec="$(echo $ast_proc_info | awk '{print $1}')"
 
