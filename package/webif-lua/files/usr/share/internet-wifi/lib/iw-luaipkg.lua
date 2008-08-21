@@ -1,9 +1,15 @@
+require("common")
 lpkgClass = {} 
 lpkgClass_mt = {__index = lpkgClass} 
 
 function lpkgClass.new(str_pkgs,str_repos)
 	local self = {}
 	setmetatable(self,lpkgClass_mt)
+  if io.exists("/etc/ipkg.conf") == true then
+    self.pkg = "ipkg"
+  else
+    self.pkg = "opkg"
+  end
   self.__repo = {}
 	self.__installed = {}
   self.__toinstall = {}
@@ -31,7 +37,7 @@ function lpkgClass:loadRepo_list(str_repos)
 end
 
 function lpkgClass:repos()
-	local repos_set = load_file("/etc/ipkg.conf")
+	local repos_set = load_file("/etc/"..self.pkg..".conf")
 	for line in string.gmatch(repos_set,"[^\n]+") do
     _, _, reponame, url = string.find(line,"src%s([a-zA-Z0-9_-]+)%s(.*)")
     if reponame ~= nil then
@@ -57,21 +63,21 @@ function lpkgClass:update()
   for reponame, t in pairsByKeys(self.__repo) do
     print("Repository: "..reponame)
     print(t.url)
-    os.execute("mkdir /var/ipkg-lists 2>/dev/null")
-    os.execute("wget -q "..t.url.."/Packages -O /var/ipkg-lists/"..reponame )
+    os.execute("mkdir /var/"..self.pkg.."-lists 2>/dev/null")
+    os.execute("wget -q "..t.url.."/Packages -O /var/"..self.pkg.."-lists/"..reponame )
     self:load_repo(reponame)
   end
-  os.execute("echo '"..self:detailled_status().."' >/usr/lib/ipkg/status")
+  os.execute("echo '"..self:detailled_status().."' >/usr/lib/"..self.pkg.."/status")
 end
 
 function lpkgClass:installed()
-	local installed_set = load_file("/usr/lib/ipkg/status")
+	local installed_set = load_file("/usr/lib/"..self.pkg.."/status")
   self:process_pkgs_file_new(installed_set)
 end
 
 
 function lpkgClass:load_repo(str_repo)
-  local data = load_file("/var/ipkg-lists/"..str_repo)
+  local data = load_file("/var/"..self.pkg.."-lists/"..str_repo)
   if data ~= "No such file or directory" then
     if self.search and self.search ~= "" then
       self:do_process(self.search,data,str_repo)
@@ -361,8 +367,8 @@ function lpkgClass:unpack(tinstall,str_pkgname,overwrite)
   os.execute("mkdir "..tmpdir.."/data 2>/dev/null")
   os.execute("mkdir "..tmpdir.."/data/usr 2>/dev/null")
   os.execute("mkdir "..tmpdir.."/data/usr/lib 2>/dev/null")
-  os.execute("mkdir "..tmpdir.."/data/usr/lib/ipkg 2>/dev/null")
-  os.execute("mkdir "..tmpdir.."/data/usr/lib/ipkg/info 2>/dev/null")
+  os.execute("mkdir "..tmpdir.."/data/usr/lib/"..self.pkg.." 2>/dev/null")
+  os.execute("mkdir "..tmpdir.."/data/usr/lib/"..self.pkg.."/info 2>/dev/null")
   
   os.execute("tar xzf "..tmpdir.."/"..tmpfile.." -C "..tmpdir)
   os.execute("rm "..tmpdir.."/*.ipk 2>/dev/null")
@@ -381,25 +387,25 @@ function lpkgClass:unpack(tinstall,str_pkgname,overwrite)
   control_files = io.popen("ls "..tmpdir.."/control")
   for fileline in control_files:lines() do
     if fileline == "preinst" then 
-      str_exec = tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package.."."..fileline
-      t_list["/usr/lib/ipkg/info/"..tctrl_file.Package.."."..fileline] = false
+      str_exec = tmpdir.."/data/usr/lib/"..self.pkg.."/info/"..tctrl_file.Package.."."..fileline
+      t_list["/usr/lib/"..self.pkg.."/info/"..tctrl_file.Package.."."..fileline] = false
     elseif fileline == "conffiles" then
       local oldconf = io.open(tmpdir.."/control/"..fileline)
       for conffile in oldconf:lines() do
 --        print(conffile)
         self.__tprovider_conf[conffile] = self:calc_md5sum(tmpdir.."/data/"..conffile )
       end
-      t_list["/usr/lib/ipkg/info/"..tctrl_file.Package.."."..fileline] = false
+      t_list["/usr/lib/"..self.pkg.."/info/"..tctrl_file.Package.."."..fileline] = false
     else
-      t_list["/usr/lib/ipkg/info/"..tctrl_file.Package.."."..fileline] = false
+      t_list["/usr/lib/"..self.pkg.."/info/"..tctrl_file.Package.."."..fileline] = false
     end  
-    os.execute("cp -f "..tmpdir.."/control/"..fileline.." "..tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package.."."..fileline)
+    os.execute("cp -f "..tmpdir.."/control/"..fileline.." "..tmpdir.."/data/usr/lib/"..self.pkg.."/info/"..tctrl_file.Package.."."..fileline)
     os.execute("rm "..tmpdir.."/control/"..fileline)
   end
   
-  os.execute("echo '"..str_list.."' >"..tmpdir.."/data/usr/lib/ipkg/info/"..tctrl_file.Package..".list")
+  os.execute("echo '"..str_list.."' >"..tmpdir.."/data/usr/lib/"..self.pkg.."/info/"..tctrl_file.Package..".list")
   
-  t_list["/usr/lib/ipkg/info/"..tctrl_file.Package..".list"] = false
+  t_list["/usr/lib/"..self.pkg.."/info/"..tctrl_file.Package..".list"] = false
 --  return t_list, tctrl_file, warning_exists, str_exec, self.__tprovider_conf
   for filename, md5_val in pairs(self.__tprovider_conf) do
     if overwrite == true then
@@ -553,7 +559,7 @@ end
 
 function lpkgClass:write_status(pkgname)
   local tmpdir = "/tmp/luapkg/"..pkgname
-  os.execute("echo '"..self:detailled_status().."' >/usr/lib/ipkg/status")
+  os.execute("echo '"..self:detailled_status().."' >/usr/lib/"..self.pkg.."/status")
   os.execute("rm -R "..tmpdir)
 end
 
@@ -620,7 +626,7 @@ function lpkgClass:remove_check_child(recursive)
 end
 
 function lpkgClass:remove_pkgs(pkgname)
-  local infodir = self.__installed[pkgname].infodir or "/usr/lib/ipkg/info/"
+  local infodir = self.__installed[pkgname].infodir or "/usr/lib/"..self.pkg.."/info/"
   local tfiles = {}
   local tconffiles = {}
   if self.__installed[pkgname].Conffiles then
@@ -644,16 +650,16 @@ function lpkgClass:remove_pkgs(pkgname)
 end
 
 function lpkgClass:remove_done(pkgname)
-  local infodir = self.__installed[pkgname].infodir or "/usr/lib/ipkg/info/"
+  local infodir = self.__installed[pkgname].infodir or "/usr/lib/"..self.pkg.."/info/"
   os.execute("rm "..infodir..pkgname..".* 2>/dev/null")
 --  print ("rm "..infodir..pkgname..".*")
   self.__installed[pkgname] = nil
-  os.execute("echo '"..self:detailled_status().."' >/usr/lib/ipkg/status")
+  os.execute("echo '"..self:detailled_status().."' >/usr/lib/"..self.pkg.."/status")
   print("Remove "..pkgname.." done.")
 end
 
 function lpkgClass:execute(str_filename,str_script)
-  local infodir = self.__installed[str_filename].infodir or "/usr/lib/ipkg/info/"
+  local infodir = self.__installed[str_filename].infodir or "/usr/lib/"..self.pkg.."/info/"
   local rslt = 0
   if io.exists(infodir..str_filename..str_script) then 
     print("Executing "..infodir..str_filename..str_script)
