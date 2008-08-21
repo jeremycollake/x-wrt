@@ -14,6 +14,7 @@ local uci = uci
 local tonumber = tonumber
 -- no more external access after this point
 setfenv(1, P)
+name = "ChilliSpot"
 
 enable = tonumber(uci.get("chillispot.webadmin.enable")) or 0
 userlevel = tonumber(uci.get("chillispot.webadmin.userlevel")) or 0
@@ -24,7 +25,7 @@ reboot = false                -- reboot device after all apply process
 
 exe_after  = {} -- execute os process after all apply process
 if radiususers > 1 then
-  call_parser = "freeradius freeradius_check freeradius_proxy freeradius_clients"
+  call_parser = "freeradius freeradius_check freeradius_clients freeradius_proxy"
   exe_after["/etc/init.d/radiusd restart"]="freeradius"
 end
 exe_after["/etc/init.d/network restart"]="network"
@@ -35,10 +36,65 @@ init_script = "/etc/init.d/chilli"
 
 -- depends_pkgs = "libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm iw-freeradius"
 
+function set_network()
+  local tun_network = uci.get("chillispot","webadmin","uamlisten")
+  
+  if tun_network then
+    
+  
+  else
+    uci.delete("chillispot","net","net")
+    set_dynip()
+    set_statip()
+  end
+end
+
+function set_dynip(default)
+  if default ~= true then
+  else
+    uci.delete("chillispot","net","dynip")
+  end
+end
+
+function set_default_statip(default)
+  uci.delete("chillispot","net","statip")
+end
+
+function process_networks_values()
+  local uamlisten = uci.get("chillispot","webadmin","uamlisten")
+  if uamlisten == nil then set_default_network end
+  local netmask = uci.get("chillispot","webadmin","netmask") or "255.255.255.0"
+  
+  local dynip = uci.get("chillispot","webadmin","dynip")
+  local dynip_mask = uci.get("chillispot","webadmin","dynip_mask")
+  
+  local staticip = uci.get("chillispot","webadmin","staticip")
+  local staticip_mask = uci.get("chillispot","webadmin","staticip_mask")
+
+  if uamlisten then
+    process_uamlisten
+  else
+    wwwprint("Assign 192.168.182.1 to uam")
+  local tnetwork = ipcalc(uamlisten,netmask)
+  uamlisten = tnetwork["IP"]
+  netmask = tnetwork["NETMASK"]
+  local network = tnetwork["NETWORK"]
+  local netprefix = tnetwork["PREFIX"]
+  local tdyn
+  local tstatic
+  if dynip then
+    if dynip_mask then
+      tdyn = ipcalc(dynip,dynip_mask)
+    els
+    local tstatic = ipcalc(staticip,staticip_mask)
+  
+  stat
+end
 function process()
 --  if userlevel < 2 then basic_settings() end
   wwwprint("Chilli Parsers...")
-
+  process_networks_values()
+  
   radiususers = tonumber(uci.get("chillispot.webadmin.radconf"))
   if radiususers > 1 then
     wwwprint("Checking freeradius installation")
