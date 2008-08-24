@@ -30,7 +30,7 @@ function uciUpdatedClass:countUpdated()
 -- but i keep it until i can think something more ...
 -- or somebody suggests something...
 --
-  for i=1, #__UCI_MSG do 
+  for i=1, #__UCI_MSG do
     if __UCI_MSG[i]["cmd"] == "set" then
       uci.set(__UCI_MSG[i]["var"].."="..__UCI_MSG[i]["val"])
     elseif __UCI_MSG[i]["cmd"] == "add" then
@@ -75,15 +75,20 @@ function uciUpdatedClass:countUpdated()
 --
 -- End security risk
 --
-
-	for i, v in ipairs(__TOCHECK) do
+	local saveList = {}
+  for i, v in ipairs(__TOCHECK) do
 --	   v = string.gsub(v,"-","___")
 --[[
 		local uci_val = io.popen("uci get "..v)
 		local uci_value = string.trim(uci_val:read())
 		uci_val:close()
 ]]--
+		local uciparam = {}
+    for value in string.gmatch(v,"[^.]+") do
+      uciparam[#uciparam+1] = value
+    end
 		local uci_value = uci.get(v)
+		
 		if uci_value == nil then uci_value = "" end
 		if __FORM[v] == nil then __FORM[v] = "" end
 --		__FORM[v] = string.trim(__FORM[v])
@@ -97,11 +102,15 @@ function uciUpdatedClass:countUpdated()
 				uci.delete(v)
 			else
 --				os.execute("uci set "..v.."="..__FORM[v])
-        uci.set(v.."="..__FORM[v])
+--        local okset = uci.set(v.."="..__FORM[v])
+        local okset = uci.set(uciparam[1],uciparam[2],uciparam[3],__FORM[v])
 			end
 		end
+		saveList[uciparam[1]] = "to_save"
 	end
-	uci.save()
+  for s, v in pairs(saveList) do
+    uci.save(s)
+  end
 end
 
 function uciUpdatedClass:readUpdated()

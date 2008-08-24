@@ -1,2 +1,2 @@
-package.cpath = "?;./?.so;/usr/share/internet-wifi/lib.so/?.so;" .. package.cpath 
-package.path = "?;./?.lua;/usr/share/internet-wifi/?.lua;/usr/share/internet-wifi/lib/?.lua;/usr/share/internet-wifi/pkgs/?.lua;" .. package.path 
+--package.cpath = "?;./?.so;/usr/share/internet-wifi/lib.so/?.so;" .. package.cpath 
+package.path = package.path .. "/usr/lib/lua-wrt/?.lua;/usr/lib/lua-wrt/pkgs/?.lua;/usr/lib/lua-wrt/applys/?.lua;" 
