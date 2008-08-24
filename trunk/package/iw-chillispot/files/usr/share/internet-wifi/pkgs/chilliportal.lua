@@ -14,6 +14,9 @@ local net = net
 local io = io
 local string = string
 local uci = uci
+local table = table
+local unpack = unpack
+local tostring = tostring
 
 --local uciClass = uciClass
 local menuClass = menuClass
@@ -24,8 +27,22 @@ local __FORM = __FORM
 local __MENU = __MENU
 local tr = tr
 local tbformClass = tbformClass
+
 -- no more external access after this point
 setfenv(1, P)
+
+local chillisetting = nil
+if io.exists("/etc/chilli.conf") then
+  chillisetting = io.totable("/etc/chilli.conf",true)
+end
+
+local conf_file = {}
+if chillisetting then
+  for i=1, #chillisetting do
+    local key, value = unpack(string.split(chillisetting[i]," "))
+    conf_file[tostring(key)] = tostring(value)
+  end
+end
 
 local ifwifi = uci.get_type("wireless","wifi-iface")
   if uci.get("chillispot.webadmin.ifwifi") and uci.get("chillispot.net.dhcpif") == nil then
@@ -50,19 +67,21 @@ local ifwifi = uci.get_type("wireless","wifi-iface")
 --    end
     uci.save("chillispot")
   end
-  
+--[[  
   uci.check_set("chillispot","radius","settings")
   uci.check_set("chillispot","uam","settings")
   uci.check_set("chillispot","net","settings")
   uci.check_set("chillispot","scripts","settings")
 	uci.check_set("chillispot","scripts","ipup","/etc/chilli.ipup")
 	uci.check_set("chillispot","scripts","ipdown","/etc/chilli.ipdown")
-
+]]--
   uci.check_set("chillispot","webadmin","chillispot")
   uci.check_set("chillispot","webadmin","enable","1")
   uci.check_set("chillispot","webadmin","userlevel","1")
   uci.check_set("chillispot","webadmin","portal","0")
   uci.check_set("chillispot","webadmin","radconf","1")
+
+--[[
   uci.check_set("chillispot","uam","uamserver","http://www.internet-wifi.com.ar/hotspotlogin_m.php")
   uci.check_set("chillispot","uam","uamsecret","Internet-Wifi")
 --  if uci.get("chillispot","uam","uamhomepage") == nil then
@@ -86,14 +105,17 @@ local ifwifi = uci.get_type("wireless","wifi-iface")
 --    uci.set("chillispot","net","dns1","192.168.1.1"))
 --  end
 uci.save("chillispot")
+]]--
 
 local userlevel = tonumber(uci.check_set("chillispot","webadmin","userlevel","1"))
 local radconf = tonumber(uci.check_set("chillispot","webadmin","radconf","1"))
 
+--[[
   uci.check_set("chillispot","radius","radiusserver1","rad01.internet-wifi.com.ar")
   uci.check_set("chillispot","radius","radiusserver2","rad02.internet-wifi.com.ar")
   uci.check_set("chillispot","radius","radiussecret","Internet-Wifi")
 uci.save("chillispot")
+]]--
 
 function set_menu()
   __MENU.HotSpot["Chilli Spot"] = menuClass.new()
@@ -148,6 +170,7 @@ function core_form(form,user_level,rad_conf)
     form["chillispot.webadmin.radconf"].options:Add("1","Communities Users")
     form["chillispot.webadmin.radconf"].options:Add("3","Communities & Local Users")
   end
+--[[
   if user_level < 2 then
     if #ifwifi > 1 then
       form:Add("select","chillispot.webadmin.ifwifi",uci.get("chillispot","webadmin","ifwifi"),tr("cportal_var_ifwifi#Wireless Interface"),"string")
@@ -157,14 +180,23 @@ function core_form(form,user_level,rad_conf)
     else
       uci.set("chillispot","webadmin","ifwifi",ifwifi[1].device)
     end    
-  end    
+  end
+]]--
+      
+  
   uci.save("chillispot") 
+  if conf_file then
+    for k, v in pairs(conf_file) do
+      form:Add("text_line","conf_"..k, k.."="..v)
+    end
+  end   
+
   return form
 end
 
 function uam_form(form,user_level,localuam) 
   local user_level = user_level or userlevel
-  
+
 	form = formClass.new(tr("chilli_portal_title#Portal Settings"))
 ----	Input Section form
   if user_level > 1 then
@@ -176,13 +208,6 @@ function uam_form(form,user_level,localuam)
 
     form:Add("text","chillispot.uam.uamhomepage",uci.get("chillispot.uam.uamhomepage"),tr("chilli_var_uamhomepage#UAM Home Page"),"string","width:90%")
     form:Add_help(tr("chilli_var_uamhomepage#UAM Homepage"),tr("chilli_help_uamhomepage#URL of Welcome Page. Unauthenticated users will be redirected to this address, otherwise specified, they will be redirected to UAM Server instead."))
-    if user_level > 2 then
-      form:Add("text","chillispot.uam.uamlisten",uci.get("chillispot.uam.uamlisten"),tr("chilli_var_uamlisten#UAM Listen"),"string","width:90%")
-      form:Add_help(tr("chilli_var_uamlisten#UAM Listen"),tr("chilli_help_uamlisten#IP Address to listen to for authentication requests."))
-
-      form:Add("text","chillispot.uam.uamport",uci.get("chillispot.uam.uamport"),tr("chilli_var_uamport#UAM Port"),"string")
-      form:Add_help(tr("chilli_var_uamport#UAM Port"),tr("chilli_help_uamport#TCP port to listen to for authentication requests."))
-    end
   end
   form:Add("text_area","chillispot.uam.uamallowed",uci.get("chillispot.uam.uamallowed"),tr("chilli_var_uamallowed#UAM Allowed"),"string","width:90%")
   form:Add_help(tr("chilli_var_uamallowed#UAM Allowed"),tr("chilli_help_uamallowed#Comma-seperated list of domain names, urls or network subnets the client can access without authentication (walled gardened)."))
@@ -193,32 +218,51 @@ function net_form(form,user_level,localuam)
   local user_level = user_level or userlevel
 
   if user_level > 1 then 
-    form = formClass.new(tr("chilli_dhcp_title#DHCP Settings"))
+    form = formClass.new(tr("cportal_dhcp_title#Network Settings"))
 ----	Input Section form
-    form:Add("select","chillispot.net.dhcpif",uci.check_set("chillispot","net","dhcpif","chilli"),tr("cportal_var_device#Device Network"),"string")
+    form:Add("select","chillispot.webadmin.interface",uci.check_set("chillispot","webadmin","interface","br-wifi"),tr("cportal_var_interface#Interface Network"),"string")
     for k, v in pairs(net.dev_list()) do
-      form["chillispot.net.dhcpif"].options:Add(v,k)
+      form["chillispot.webadmin.interface"].options:Add(v,k)
     end
   	form:Add_help(tr("chilli_var_dhcpif#Interface"),tr("chilli_help_dhcpif#This is the network interface which is connected to the access points."))
+
     if user_level > 2 then
+      form:Add("subtitle","UAM Settings")
+      form:Add("text","chillispot.webadmin.uamlisten",uci.get("chillispot.webadmin.uamlisten"),tr("cportal_var_uamlisten#HotSpot Internal IP Address"),"string")
+      form:Add_help(tr("cportal_var_uamlisten#UAM Listen"),tr("cportal_help_uamlisten#IP Address to listen to for authentication requests."))
+
+      form:Add("text","chillispot.webadmin.netmask",uci.get("chillispot.webadmin.netmask"),tr("cportal_var_netmask#HotSpot DHCP Netmask"),"string")
+      form:Add_help(tr("cportal_var_uamlisten#UAM Listen"),tr("chilli_help_uamlisten#IP Address to listen to for authentication requests."))
+
+      form:Add("text","chillispot.webadmin.uamport",uci.get("chillispot.webadmin.uamport"),tr("cportal_var_uamport#UAM Port"),"string")
+      form:Add_help(tr("cportal_var_uamport#UAM Port"),tr("chilli_help_uamport#TCP port to listen to for authentication requests."))
+    end
+
+--    This will be calculated with uamlisten and netmask
+--    form:Add("text","chillispot.net.net",uci.get("chillispot.net.net"),tr("chilli_var_net#Network"),"string")
+--  	form:Add_help(tr("chilli_var_net#Network"),tr("chilli_help_net#Client's DHCP Network IP Subnet (192.168.182.0/24 by default)."))
+    if user_level > 2 then
+      form:Add("subtitle","DHCP Settings")
       form:Add("text","chillispot.net.domain",uci.get("chillispot.net.domain"),tr("chilli_var_doman#Domain"),"string","width:90%")
       form:Add_help(tr("chilli_var_domain#Domain Name"),tr("chilli_help_domain#Will be suggested to the client."))
-    end
-    form:Add("text","chillispot.net.net",uci.get("chillispot.net.net"),tr("chilli_var_net#Network"),"string")
-  	form:Add_help(tr("chilli_var_net#Network"),tr("chilli_help_net#Client's DHCP Network IP Subnet (192.168.182.0/24 by default)."))
-    if user_level > 2 then
-      form:Add("text","chillispot.net.dynip",uci.get("chillispot.net.dynip"),tr("chilli_var_dynip#Dynamic IP Pool"),"string")
-      form:Add_help(tr("chilli_var_dynip#Dynamic IP Pool"),tr("chilli_help_dynip#Allocation of dynamic IP Addresses to clients."))
 
-      form:Add("text","chillispot.net.statip",uci.get("chillispot.net.statip"),tr("chilli_var_statip#Static IP Pool"),"string")
+      form:Add("text","chillispot.webadmin.dynip",uci.get("chillispot.net.dynip"),tr("chilli_var_dynip#Dynamic IP Pool"),"string")
+      form:Add("text","chillispot.webadmin.dynip_mask",uci.get("chillispot.net.dynip_mask"),tr("cportal_var_dynip_mask#Dynamic Netmask"),"string")
+      form:Add_help(tr("chilli_var_dynip#Dynamic IP Pool"),tr("chilli_help_dynip#Allocation of dynamic IP Addresses to clients."))
+      form:Add("text_line","blanck_line","&nbsp;","")
+      form:Add("text","chillispot.webadmin.staticip",uci.get("chillispot.net.staticip"),tr("chilli_var_staticip#Static IP Pool"),"string")
+      form:Add("text","chillispot.webadmin.staticip_mask",uci.get("chillispot.net.staticip_mask"),tr("cportal_var_statip_mask#Static Netmask"),"string")
       form:Add_help(tr("chilli_var_statip#Static IP Pool"),tr("chilli_help_statip#Allocation of static IP Addresses."))
+      form:Add("text_line","blanck_line","&nbsp;","")
     end
   end
-	form:Add("checkbox","chillispot.net.uamanydns",uci.get("chillispot.net.uamanydns"),tr("chilli_var_uamanydns#Any DNS"))
   if user_level > 1 then
     form:Add("text","chillispot.net.dns1",uci.get("chillispot.net.dns1"),tr("chilli_var_dns1#Primary DNS"),"string")
     form:Add("text","chillispot.net.dns2",uci.get("chillispot.net.dns2"),tr("chilli_var_dns2#Secondary DNS"),"string")
   	form:Add_help(tr("chilli_var_uamanydns#Any DNS"),tr("chilli_help_uamanydns#If enabled, users will be allowed to user any other dns server they specify."))
+  end
+  form:Add("checkbox","chillispot.net.uamanydns",uci.get("chillispot.net.uamanydns"),tr("chilli_var_uamanydns#Any DNS"))
+  if user_level > 1 then
     if user_level > 2 then
       form:Add("text","chillispot.net.dhcpmac",uci.get("chillispot.net.dhcpmac"),tr("chilli_var_dhcpmac#DHCP MAC"),"string")
     	form:Add_help(tr("chilli_var_dhcpmac#DHCP MAC"),tr([[chilli_help_dhcpmac#

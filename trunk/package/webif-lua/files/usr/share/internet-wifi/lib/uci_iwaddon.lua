@@ -8,6 +8,7 @@ end
 -- Customized uci functions --
 uci_save = uci.save
 uci_commit = uci.commit
+uci_set = uci.set
 
 uci.save = function (x)
   local ret
@@ -31,7 +32,25 @@ uci.commit = function (x)
     os.execute("rm /tmp/.uci/"..x.." 2> /dev/null")
   end
   return ret
+end
+
+uci.set = function(p,s,o,v)
+  if p == nil then return false end
+  if v == nil then
+    if o == nil then
+      if s == nil then
+        return os.execute("uci set "..p)
+      else
+        return os.execute("uci set "..p.."="..s)
+      end
+    else
+      os.execute("uci set "..p.."."..s.."="..o)
+      return true
+    end 
+  else
+    return uci_set(p,s,o,v)
   end
+end
 
 -- Added uci functions --
 function uci.get_all_types(p)
