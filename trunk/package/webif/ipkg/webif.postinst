@@ -173,6 +173,9 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 
 	# test installation successfulness
 	TestInstall
+	# If installing on the router lets assume password is set.
+	echo '/cgi-bin/webif/:root:$p$root' >> /etc/httpd.conf
+	echo '/cgi-bin/webif/:admin:$p$root' >> /etc/httpd.conf
 	if [ -e /etc/httpd.conf ]; then
 		httpd_1=$(cat /tmp/httpd.conf.old)
 		httpd_2=$(cat /etc/httpd.conf)
