@@ -116,6 +116,7 @@ for rule in $rule_cfgs; do
 		select|protocol_$rule|$FORM_protocol
 		option|tcp|TCP
 		option|udp|UDP
+		option|tcpudp|Both
 		string|</td>
 		string|<td>
 		text|src_ip_$rule|$FORM_src_ip
