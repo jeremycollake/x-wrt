@@ -322,10 +322,10 @@ EOF
 				uci_set "network" "$interface" "proto" "$FORM_proto"
 				[ "$FORM_type" = "" ] && uci_remove "network" "$interface" "type"
 				[ "$FORM_type" != "" ] && uci_set "network" "$interface" "type" "$FORM_type"
-				if [ "$interface" = "lan" ]; then
-					[ "$FORM_nat" = "" ] && FORM_nat=0
-					uci_set "network" "$interface" "nat" "$FORM_nat"
-				fi
+				#if [ "$interface" = "lan" ]; then
+				#	[ "$FORM_nat" = "" ] && FORM_nat=0
+				#	uci_set "network" "$interface" "nat" "$FORM_nat"
+				#fi
 				uci_set "network" "$interface" "macaddr" "$FORM_macaddr"
 				case "$FORM_proto" in
 					pptp)
@@ -387,10 +387,6 @@ EOF
 display_form <<EOF
 onchange|modechange
 $validate_error
-start_form|@TR<<Nat Mode/Router Mode>>
-field|@TR<<Perform Nat>>
-checkbox|lan_nat|$FORM_nat|1
-end_form
 $forms
 EOF
 
