@@ -81,6 +81,9 @@ if [ -n "${IPKG_INSTROOT}" ]; then
 	fi
 	if [ "$revision" = "" ]; then
 		AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/$repo/packages"
+		echo 'dest root /' >> "${IPKG_INSTROOT}/etc/opkg.conf"
+		echo 'dest ram /tmp' >> "${IPKG_INSTROOT}/etc/opkg.conf"
+		echo 'lists_dir ext /var/opkg-lists' >> "${IPKG_INSTROOT}/etc/opkg.conf"
 	else
 		AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/$repo/packages"
 	fi
