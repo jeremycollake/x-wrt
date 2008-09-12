@@ -142,6 +142,7 @@ form="$tr
 	select|protocol_rule
 	option|tcp|TCP
 	option|udp|UDP
+	option|tcpudp|Both
 	string|</td>
 	string|<td>
 	text|src_ip_rule
@@ -203,6 +204,7 @@ for rule in $redirect_cfgs; do
 		select|protocol_$rule|$FORM_protocol
 		option|tcp|TCP
 		option|udp|UDP
+		option|tcpudp|Both
 		string|</td>
 		string|<td>
 		text|src_ip_$rule|$FORM_src_ip
@@ -231,6 +233,7 @@ form="$tr
 	select|protocol_redirect
 	option|tcp|TCP
 	option|udp|UDP
+	option|tcpudp|Both
 	string|</td>
 	string|<td>
 	text|src_ip_redirect
