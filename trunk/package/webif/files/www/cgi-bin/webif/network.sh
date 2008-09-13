@@ -20,6 +20,9 @@
 #   /etc/config/network
 #
 
+is_package_installed kmod-ipv6
+equal "$?" "0" && ipv6_installed="1"
+
 #Add new network
 if [ "$FORM_button_add_network" != "" ]; then
 	if [ "$FORM_add_network" = "" ]; then
@@ -99,6 +102,8 @@ for interface in $network; do
 		config_get FORM_vpi $interface vpi
 		config_get FORM_macaddr $interface macaddr
 		config_get_bool FORM_defaultroute $interface defaultroute 1
+		config_get FORM_ip6addr $interface ip6addr
+		config_get FORM_gateway6 $interface ip6gw
 	else
 		eval FORM_proto="\$FORM_${interface}_proto"
 		eval FORM_type="\$FORM_${interface}_type"
@@ -120,6 +125,8 @@ for interface in $network; do
 		eval FORM_vpi="\$FORM_${interface}_vpi"
 		eval FORM_macaddr="\$FORM_${interface}_macaddr"
 		eval FORM_defaultroute="\$FORM_${interface}_defaultroute"
+		eval FORM_ip6addr="\$FORM_${interface}_ip6addr"
+		eval FORM_gateway6="\$FORM_${interface}_gateway6"
 	fi
 	config_get FORM_dns $interface dns
 	eval FORM_dnsadd="\$FORM_${interface}_dnsadd"
@@ -167,6 +174,10 @@ for interface in $network; do
 	text|${interface}_netmask|$FORM_netmask
 	field|@TR<<Default Gateway>>|field_${interface}_gateway|hidden
 	text|${interface}_gateway|$FORM_gateway
+	field|@TR<<IPv6 Address>>|field_${interface}_ip6addr|hidden
+	text|${interface}_ip6addr|$FORM_ip6addr
+	field|@TR<<Default IPv6 Gateway>>|field_${interface}_gateway6|hidden
+	text|${interface}_gateway6|$FORM_gateway6
 	field|@TR<<PPTP Server IP>>|field_${interface}_pptp_server|hidden
 	text|${interface}_pptp_server|$FORM_pptp_server
 	helpitem|IP Settings
@@ -244,6 +255,10 @@ for interface in $network; do
 		v = (isset('${interface}_proto', 'static'));
 		set_visible('field_${interface}_gateway', v);
 		set_visible('field_${interface}_dns', v);
+		
+		v = (isset('${interface}_proto', 'static') && ('$ipv6_installed'=='1'));
+		set_visible('field_${interface}_ip6addr', v);
+		set_visible('field_${interface}_gateway6', v);
 
 		v = (isset('${interface}_proto', 'pptp'));
 		set_visible('field_${interface}_pptp_server', v);
@@ -296,8 +311,10 @@ EOF
 				eval FORM_proto="\$FORM_${interface}_proto"
 				eval FORM_type="\$FORM_${interface}_type"
 				eval FORM_ipaddr="\$FORM_${interface}_ipaddr"
+				eval FORM_ip6addr="\$FORM_${interface}_ip6addr"
 				eval FORM_netmask="\$FORM_${interface}_netmask"
 				eval FORM_gateway="\$FORM_${interface}_gateway"
+				eval FORM_gateway6="\$FORM_${interface}_gateway6"
 				eval FORM_pptp_server="\$FORM_${interface}_pptp_server"
 				eval FORM_service="\$FORM_${interface}_service"
 				eval FORM_pincode="\$FORM_${interface}_pincode"
@@ -346,8 +363,10 @@ EOF
 				esac
 
 				uci_set "network" "$interface" "ipaddr" "$FORM_ipaddr"
+				uci_set "network" "$interface" "ip6addr" "$FORM_ip6addr"
 				uci_set "network" "$interface" "netmask" "$FORM_netmask"
 				uci_set "network" "$interface" "gateway" "$FORM_gateway"
+				uci_set "network" "$interface" "ip6gw" "$FORM_gateway6"
 
 			fi
 		done
