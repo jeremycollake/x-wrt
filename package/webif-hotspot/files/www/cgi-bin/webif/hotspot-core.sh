@@ -89,7 +89,11 @@ fi
 display_form <<EOF
 start_form|@TR<<hotspot_core_Core_Settings#Core Settings>>
 EOF
-if ! is_package_installed "chillispot"; then
+
+is_package_installed chillispot
+equal "$?" "0" && chillispot_installed="1"
+
+if [ "$chillispot_installed" = "1" ]; then
 	display_form <<EOF
 field|
 string|<div class=warning>@TR<<hotspot_common_package_required#HotSpot will not work until you install ChilliSpot>>:</div>
