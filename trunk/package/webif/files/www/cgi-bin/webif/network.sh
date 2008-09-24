@@ -442,8 +442,13 @@ EOF
 						uci_set "network" "$interface" "vpi" "$FORM_vpi"
 						uci_set "network" "$interface" "vci" "$FORM_vci"
 						uci_set "network" "$interface" "mtu" "$FORM_mtu"
-						uci_set "network" "$interface" "keepalive" "$FORM_keepalive"
-						uci_set "network" "$interface" "demand" "$FORM_demand"
+						if [ "$FORM_ppp_redial" = "persist" ]; then
+							uci_set "network" "$interface" "keepalive" "$FORM_keepalive"
+							uci_remove "network" "$interface" "demand"
+						else
+							uci_remove "network" "$interface" "keepalive"
+							uci_set "network" "$interface" "demand" "$FORM_demand"
+						fi
 						uci_set "network" "$interface" "defaultroute" "$FORM_defaultroute"
 						uci_set "network" "$interface" "ppp_redial" "$FORM_ppp_redial";;
 				esac
