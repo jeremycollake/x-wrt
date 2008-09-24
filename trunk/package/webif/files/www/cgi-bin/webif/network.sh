@@ -23,6 +23,9 @@
 is_package_installed kmod-ipv6
 equal "$?" "0" && ipv6_installed="1"
 
+is_package_installed aiccu
+equal "$?" "0" && aiccu_installed="1"
+
 #Add new network
 if [ "$FORM_button_add_network" != "" ]; then
 	if [ "$FORM_add_network" = "" ]; then
@@ -50,6 +53,9 @@ config_cb() {
 				esac
 			}
 		;;
+		aiccu)
+			append aiccu_sections "$cfg_name_dhcp" "$N"
+		;;
 	esac
 }
 
@@ -76,6 +82,86 @@ WWAN_COUNTRY_LIST=$(
 			 print "	apnDB." $1 ".pass = \"" $5 "\";\n"}' < /usr/lib/webif/apn.csv
 	)
 append JS_APN_DB "$JS_APN" "$N"
+
+if [ "$aiccu_installed" = "1" ]; then
+	uci_load aiccu
+	for cfgs_section in $aiccu_sections; do
+		if ! empty "$FORM_submit"; then
+			eval FORM_aiccu_username="\$FORM_${cfgs_section}_username"
+			eval FORM_aiccu_provider="\$FORM_${cfgs_section}_provider"
+			eval FORM_aiccu_protocol="\$FORM_${cfgs_section}_protocol"
+			eval FORM_aiccu_server="\$FORM_${cfgs_section}_server"
+			eval FORM_aiccu_tls="\$FORM_${cfgs_section}_tls"
+			eval FORM_aiccu_password="\$FORM_${cfgs_section}_password"
+			eval FORM_aiccu_tunnel_id="\$FORM_${cfgs_section}_tunnel_id"
+			eval FORM_aiccu_default_route="\$FORM_${cfgs_section}_default_route"
+			eval FORM_aiccu_nat="\$FORM_${cfgs_section}_nat"
+			eval FORM_aiccu_heartbeat="\$FORM_${cfgs_section}_heartbeat"
+			case  "$FORM_aiccu_provider" in
+				other)
+					uci_set "aiccu" "$cfgs_section" "protocol" "$FORM_aiccu_protocol"
+					uci_set "aiccu" "$cfgs_section" "server" "$FORM_aiccu_server"
+					uci_set "aiccu" "$cfgs_section" "requiretls" "$FORM_aiccu_tls"
+				;;
+			esac
+			uci_set "aiccu" "$cfgs_section" "provider" "$FORM_aiccu_provider"
+			uci_set "aiccu" "$cfgs_section" "username" "$FORM_aiccu_username"
+			uci_set "aiccu" "$cfgs_section" "password" "$FORM_aiccu_password"
+			uci_set "aiccu" "$cfgs_section" "tunnel_id" "$FORM_aiccu_tunnel_id"
+			uci_set "aiccu" "$cfgs_section" "defaultroute" "$FORM_aiccu_default_route"
+			uci_set "aiccu" "$cfgs_section" "nat" "$FORM_aiccu_nat"
+			uci_set "aiccu" "$cfgs_section" "heartbeat" "$FORM_aiccu_heartbeat"
+			config_get FORM_aiccu_interface $cfgs_section interface
+			[ "$FORM_aiccu_interface" = "" ] && uci_set "aiccu" "$cfgs_section" "interface" "aiccu"
+		else
+			config_get FORM_aiccu_provider $cfgs_section provider
+			config_get FORM_aiccu_username $cfgs_section username
+			config_get FORM_aiccu_password $cfgs_section password
+			config_get FORM_aiccu_server $cfgs_section server
+			config_get FORM_aiccu_protocol $cfgs_section protocol
+			config_get FORM_aiccu_tunnel_id $cfgs_section tunnel_id
+			config_get_bool FORM_aiccu_tls $cfgs_section requiretls 0
+			config_get_bool FORM_aiccu_default_route $cfgs_section defaultroute 1
+			config_get_bool FORM_aiccu_nat $cfgs_section nat 1
+			config_get_bool FORM_aiccu_heartbeat $cfgs_section heatbeat 1
+		fi
+		aiccu_forms="start_form|Aiccu @TR<<Configuration>>
+			field|@TR<<Tunnel Broker>>
+			select|${cfgs_section}_provider|$FORM_aiccu_provider
+			option|sixxs|@TR<<SixXS>>
+			option|other|@TR<<Other>>
+			field|@TR<<Username>>
+			text|${cfgs_section}_username|$FORM_aiccu_username
+			field|@TR<<Password>>
+			text|${cfgs_section}_password|$FORM_aiccu_password
+			field|@TR<<Server>>|field_${cfgs_section}_server|hidden
+			text|${cfgs_section}_server|$FORM_aiccu_server
+			field|@TR<<Protocol>>|field_${cfgs_section}_protocol|hidden
+			select|${cfgs_section}_protocol|$FORM_aiccu_protocol
+			option|tic|@TR<<tic>>
+			option|tsp|@TR<<tsp>>
+			option|l2tp|@TR<<l2tp>>
+			option|none|@TR<<None>>
+			field|@TR<<Tunnel ID>>
+			text|${cfgs_section}_tunnel_id|$FORM_aiccu_tunnel_id
+			field|@TR<<Require TLS>>|field_${cfgs_section}_tls|hidden
+			checkbox|${cfgs_section}_tls|$FORM_aiccu_tls|1
+			field|@TR<<Default IPv6 Route>>
+			checkbox|${cfgs_section}_default_route|$FORM_aiccu_default_route|1
+			field|@TR<<Behind NAT>>
+			checkbox|${cfgs_section}_nat|$FORM_aiccu_nat|1
+			field|@TR<<Heartbeat>>
+			checkbox|${cfgs_section}_heartbeat|$FORM_aiccu_heartbeat|1
+			end_form"
+		append forms "$aiccu_forms" "$N"
+		javascript_forms="
+			v = (isset('${cfgs_section}_provider', 'other'));
+			set_visible('field_${cfgs_section}_protocol', v);
+			set_visible('field_${cfgs_section}_tls', v);
+			set_visible('field_${cfgs_section}_server', v);"
+		append js "$javascript_forms" "$N"
+	done
+fi
 
 for interface in $network; do
 	config_get delete_check $interface proto
