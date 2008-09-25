@@ -16,8 +16,6 @@ config_cb() {
 
 uci_load "l2tpns"
 
-header "VPN" "L2TPns" "@TR<<L2TPns>>" '' "$SCRIPT_NAME"
-
 if ! empty "$FORM_install_package"; then
 	echo "@TR<<l2tpns_Installing_package#Installing l2tpns package ...>><pre>"
 	install_package "l2tpns"
@@ -61,6 +59,7 @@ string|FORM_server_radius_accounting|@TR<<l2tpns_RADIUS_Accounting#RADIUS Accoun
 string|FORM_server_radius_secret|@TR<<l2tpns_RADIUS_Secret#RADIUS Secret>>||$FORM_server_radius_secret
 EOF
 	equal "$?" 0 && {
+		[ -e "/etc/config/l2tpns" ] || touch "/etc/config/l2tpns"
 		[ "$server_cfg" = "" ] && {
 			uci_add "l2tpns" "server"
 			uci_load "l2tpns"
@@ -80,6 +79,8 @@ EOF
 		uci_set "l2tpns" "$server_cfg" "radius_secret" "$FORM_server_radius_secret"
 	}
 fi
+
+header "VPN" "L2TPns" "@TR<<L2TPns>>" 'onload="modechange()"' "$SCRIPT_NAME"
 
 cat <<EOF
 <script type="text/javascript" src="/webif.js "></script>
