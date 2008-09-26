@@ -26,6 +26,9 @@ equal "$?" "0" && ipv6_installed="1"
 is_package_installed aiccu
 equal "$?" "0" && aiccu_installed="1"
 
+is_package_installed radvd
+equal "$?" "0" && radvd_installed="1"
+
 #Add new network
 if [ "$FORM_button_add_network" != "" ]; then
 	if [ "$FORM_add_network" = "" ]; then
