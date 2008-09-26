@@ -193,7 +193,6 @@ define Package/webif/install
 		$(1)/www/themes/xwrt-mini/ \
 		$(1)/www/themes/sedky1/ \
 		$(1)/www/themes/xwrt/ \
-		$(1)/www/cgi-bin/webif/*.wip
 	./embed_rev.sh $(1)
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/webifmetabin $(1)/usr/bin/webifmetabin
