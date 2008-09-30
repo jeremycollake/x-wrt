@@ -108,9 +108,9 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 		cat /proc/cpuinfo | grep -q "BCM63XX" && SYSTYPE="63xx"
 		if [ -n $SYSTYPE ]; then
 			if [ "$revision" = "" ]; then
-				AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/brcm${SYSTYPE}-2.6/packages"
+				AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/brcm${SYSTYPE}/packages"
 			else
-				AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/brcm${SYSTYPE}-2.6/packages"
+				AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/brcm${SYSTYPE}/packages"
 			fi
 		fi
 		unset SYSTYPE
@@ -118,41 +118,41 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	uname -a |grep "2.6" |grep -q "i\?86"
 	[ $? = 0 ] && {
 		if [ "$revision" = "" ]; then
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/x86-2.6/packages"
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/x86/packages"
 		else
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/x86-2.6/packages"
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/x86/packages"
 		fi
 	}
 	uname -a |grep "mips" |grep -q "2.6" && cat /proc/cpuinfo |grep -q "Atheros"
 	[ $? = 0 ] && {
 		if [ "$revision" = "" ]; then
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/atheros-2.6/packages"
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/atheros/packages"
 		else
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/atheros-2.6/packages"
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/atheros/packages"
 		fi
 	}
 	uname -a |grep "mips" |grep -q "2.6" && cat /proc/cpuinfo |grep -q "WP54"
 	[ $? = "0" ] && {
 		if [ "$revision" = "" ]; then
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/adm5120-2.6/packages"
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/adm5120/packages"
 		else
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/adm5120-2.6/packages"
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/adm5120/packages"
 		fi
 	}
 	cat /proc/cpuinfo |grep -q "IXP4\?\?"
 	[ $? = "0" ] && {
 		if [ "$revision" = "" ]; then
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/ixp4xx-2.6/packages"
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/ixp4xx/packages"
 		else
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/ixp4xx-2.6/packages"
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/ixp4xx/packages"
 		fi
 	}
 	[ "$(uname -m)" = "avr32" ] && cat /proc/cpuinfo | grep -q "AVR32"
 	[ $? = "0" ] && {
 		if [ "$revision" = "" ]; then
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/avr32-2.6/packages"
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/avr32/packages"
 		else
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/avr32-2.6/packages"
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/avr32/packages"
 		fi
 	}
 
