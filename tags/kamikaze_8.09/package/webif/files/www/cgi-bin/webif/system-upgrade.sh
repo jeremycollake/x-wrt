@@ -28,6 +28,8 @@ if [ "$target" = "x86-2.6" -o "$target" = "brcm" ]; then
 	if empty "$FORM_submit"; then
 display_form <<EOF
 start_form
+field|@TR<<Do not save current configuration>>
+checkbox|nokeepconfig|$FORM_nokeepconfig|1
 field|@TR<<Firmware Image>>
 upload|upgradefile
 submit|upgrade| @TR<<Upgrade>> |
@@ -35,7 +37,11 @@ end_form
 EOF
 	else
 		echo "<br />Upgrading firmware, please wait ... <br />"
-		sysupgrade $FORM_upgradefile
+		if [ "$FORM_nokeepconfig" = "1" ]; then
+			sysupgrade -n $FORM_upgradefile
+		else
+			sysupgrade $FORM_upgradefile
+		fi
 		echo "@TR<<done>>."
 	fi
 else
