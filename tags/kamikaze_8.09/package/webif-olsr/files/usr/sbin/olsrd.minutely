@@ -1,0 +1,121 @@
+#!/bin/sh
+
+# To be run every minute
+
+wdev=$(l=$(grep : /proc/net/wireless);l=${l%:*};echo ${l##* })
+test -n "$wdev" || exit
+
+test -f /var/run/status.${wdev} || wifi wdog
+wstat=$(grep $wdev: /proc/net/dev|if read l;then set ${l#*:};echo $1;fi)
+ostat=$(cat /var/run/status.$wdev 2>&-)
+echo $wstat>/var/run/status.$wdev
+eval $(/usr/sbin/wl -i $wdev status|sed -e"s/^Supported //;s/: \+\([^	]*\)/='\1';/g")
+rand=$(dd if=/dev/urandom bs=2 count=1 2>&-|hexdump|if read line;then echo 0x${line#* };fi)
+ff_bssid=$(uci get mesh.wireless.ff_bssid|sed -e "y/abcdef/ABCDEF/")
+BSSID=$(echo $BSSID|sed -e "y/abcdef/ABCDEF/")
+ff_ping="$(uci get olsr.plugins.ff_ping)"
+
+#reread /var/hosts.olsr
+test -f /var/run/dnsmasq.pid && kill -HUP $(cat /var/run/dnsmasq.pid)
+
+if [ 1 -eq $(( $rand % 1234 )) ] || [ -z "$(pidof olsrd)" ];then
+	# Restart approx every day
+	logger -t cron.minutely "restarting olsrd"
+	/etc/init.d/olsrd stop
+	/etc/init.d/olsrd start
+elif [ "" != "$ostat" ] && [ "$ostat" = "$wstat" ] || [ "Ad Hoc" = "$Mode" ] && [ "$Channel" != "$(uci get wireless.${wdev}.channel)" ] || [ "Ad Hoc" = "$Mode" ] && [ -n "$ff_bssid" ] && [ "$BSSID" != "$ff_bssid" ];then
+	# Wifi dead? Try restart
+	logger -t cron.minutely "restarting wifi"
+	wifi up
+elif test -z "$ff_ping" && grep -q olsrd_dyn_gw.so /var/etc/olsrd.conf 2>&-;then
+	eval $(ip route list exact 0/0 table all|while read l;do
+		set $l;
+		eval "last0=\$$#"
+		eval "last1=\$$(( $# - 1 ))"
+		if [ "default" = "$1" ] && [ "via" = "$2" ] && ( [ "metric" != "$last1" ] || [ "0" = "$last0" ] );then
+			test "dyngw" = "$tab" && ip route flush table dyngw
+			test "table" = "$last1" && tab=$last0 || tab=
+			echo defgw=$3
+			echo tabgw=$tab
+		fi
+	done)
+	if [ -n "$defgw" ]; then
+		hyst=$(cat /var/run/dyngw.hyst 2>&-)
+		test -z "$hyst" && hyst=0
+		case $(( $rand % 9 )) in
+			0) ip=198.41.0.4;;
+			1) ip=192.33.4.12;;
+			2) ip=128.8.10.90;;
+			3) ip=192.5.5.241;;
+			4) ip=192.36.148.17;;
+			5) ip=192.58.128.30;;
+			6) ip=193.0.14.129;;
+			7) ip=198.32.64.12;;
+			8) ip=202.12.27.33;;
+			*) exit;;
+		esac
+		ok=0
+		eval $(traceroute -w 4 -m 4 -n $ip 2>&-|sed -ne '/^ \+[0-9]\+ \+[0-9]\+\.[0-9]\+\.[0-9]\+\.[0-9]\+ /{s/.*/ok=$(( $ok + 1));/;p}')
+		if [ $ok -gt 2 ];then
+			hyst=0
+			if [ "dyngw" = "$tabgw" ];then
+				logger -t cron.minutely "activated HNA4 for $defgw"
+				ip route flush table dyngw
+				ip route add default via $defgw
+			fi
+		else
+			test "$hyst" -lt 2 && hyst=$(( $hyst + 1 ))
+			if [ $hyst -eq 2 ] && [ "dyngw" != "$tabgw" ];then
+				logger -t cron.minutely "deactivated HNA4 for $defgw"
+
+				if ! ip rule ls 2>&-|grep -q dyngw 2>&-; then
+					ip rule add iif lo table dyngw
+				fi
+				ip route flush table dyngw
+
+				# Terminate lookup in tab dyngw for dest IPs
+				# handled in tab main. Otherwise *all* packets will
+				# go to the defroute activated here.
+				ip route list proto kernel|while read l;do
+					set $l
+					ip route add throw $1 table dyngw
+				done
+				ip route add default via $defgw table dyngw
+				ip route del default
+			fi
+		fi
+		echo $hyst>/var/run/dyngw.hyst
+	fi
+elif test -n "$ff_ping" && grep -q olsrd_dyn_gw_plain.so /var/etc/olsrd.conf 2>&-;then
+	eval $(ip route list table dyngw|while read line;do
+		set $line;
+		if [ "via" = "$2" ];then
+			if [ -z "$list" ];then list=$1;else list="$list $1";fi
+			echo pinglist=\"$list\"
+			echo defgw=$3
+		fi
+	done)
+	if [ -n "$pinglist" ];then
+		ok=0
+		for pingip in $pinglist;do
+			ok=$(ping -c 1 -q $pingip 2>&-|grep "packets received"|cut -d' ' -f4)
+			if [ $ok -gt 0 ];then break;fi
+		done
+		hyst=$(cat /var/run/dyngw.hyst 2>&-)
+		test -z "$hyst" && hyst=0
+		if [ $ok -gt 0 ];then
+			if [ $hyst -gt 0 ];then
+				ip route add default via $defgw
+				logger -t cron.minutely "activated HNA4 for $defgw"
+			fi
+			hyst=0
+		else
+			hyst=$(( $hyst + 1 ))
+			if [ $hyst -eq 2 ];then
+				ip route del default via $defgw
+				logger -t cron.minutely "deactivated HNA4 for $defgw"
+			fi
+		fi
+		echo $hyst>/var/run/dyngw.hyst
+	fi
+fi

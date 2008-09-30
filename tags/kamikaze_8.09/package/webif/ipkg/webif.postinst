@@ -1,0 +1,197 @@
+#!/bin/sh
+#
+# Webif post-install script.
+#
+
+
+#########################################################################################
+# functions
+
+TestInstall()
+{
+	this_version="__SVN_REVISION__"
+	installed_version=$(cat "${IPKG_INSTROOT}/www/.version")
+	if [ -f "/www/.version" ] && [ "$this_version" = "$installed_version" ]; then
+		echo "SUCCESS! Webif^2 installation appears OK. Welcome to X-Wrt!"
+		echo "You may need to do a hard REFRESH to clear old CSS style from your browser."
+	else
+		echo "WARNING: Installation may have failed."
+		echo " Detected r$installed_version is installed, but this is r$this_version."
+	fi
+}
+
+ExecuteIfExists()
+{
+	# $1 = exec name
+	# $2-$9 = params
+	[ -f "$1" ] && {
+		"$1" "$2" "$3" "$4" "$5" "$6" "$7" "$8" "$9"
+	}
+}
+
+IPKG_UPDATE_NEEDED="0"
+AddRepository()
+{
+	# $1=reponame
+	# $2=repourl
+	cat "${IPKG_INSTROOT}/etc/opkg.conf" | grep -q "$2"
+	[ "$?" != "0" ] && {
+		echo "src $1 $2" >> "${IPKG_INSTROOT}/etc/opkg.conf"
+		IPKG_UPDATE_NEEDED="1"
+	}
+}
+
+IPKG_UPDATE_NEEDED="0"
+DeleteRepository()
+{
+	# $1=repourl
+	cat "${IPKG_INSTROOT}/etc/opkg.conf" | grep -q "$1"
+	[ "$?" = "0" ] && {
+		repo_url_sed=$(echo "$1" | sed s/'\/'/'\\\/'/g)
+		cat "${IPKG_INSTROOT}/etc/opkg.conf" |  sed /$repo_url_sed/d > "${IPKG_INSTROOT}/etc/opkg.conf"
+		IPKG_UPDATE_NEEDED="1"
+	}
+}
+
+#########################################################################################
+# entry point
+
+# initialize webifmetabin binaries
+# todo: move back to makefile because this won't be cleaned up good
+ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/bstrip"
+ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/webif-page"
+ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/wepkeygen"
+ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/int2human"
+
+if [ -e ${IPKG_INSTROOT}/etc/openwrt_version ]; then
+	revision="`cat ${IPKG_INSTROOT}/etc/openwrt_version`"
+fi
+if [ "$revision" = "" ]; then
+	grep -q "7.09" "${IPKG_INSTROOT}/etc/banner"
+	[ $? = 0 ] && {
+		revision="7.09"
+	}
+fi
+
+# don't run below on 'real' system
+if [ -n "${IPKG_INSTROOT}" ]; then
+	repo="$S"
+	if [ "$repo" = "brcm-2.4-2.4" ]; then
+		repo="brcm-2.4"
+	fi
+	if [ "$revision" = "" ]; then
+		AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/$repo/packages"
+		echo 'dest root /' >> "${IPKG_INSTROOT}/etc/opkg.conf"
+		echo 'dest ram /tmp' >> "${IPKG_INSTROOT}/etc/opkg.conf"
+		echo 'lists_dir ext /var/opkg-lists' >> "${IPKG_INSTROOT}/etc/opkg.conf"
+	else
+		AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/$repo/packages"
+	fi
+fi
+
+# only run below on 'real' system (not image builder)
+if [ -z "${IPKG_INSTROOT}" ]; then
+
+
+	# initialize ipkg.conf
+	uname -a |grep "mips" |grep -q "2.4" && cat /proc/cpuinfo |grep -q "Broadcom"
+	[ $? = 0 ] && {
+		if [ "$revision" = "" ]; then
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/brcm-2.4/packages"
+		else
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/brcm-2.4/packages"
+		fi
+	}
+	uname -a |grep "mips" |grep -q "2.6.*" && cat /proc/cpuinfo |grep -q "Broadcom"
+	[ $? = 0 ] && {
+		cat /proc/cpuinfo | grep -q "BCM47XX" && SYSTYPE="47xx"
+		cat /proc/cpuinfo | grep -q "BCM63XX" && SYSTYPE="63xx"
+		if [ -n $SYSTYPE ]; then
+			if [ "$revision" = "" ]; then
+				AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/brcm${SYSTYPE}-2.6/packages"
+			else
+				AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/brcm${SYSTYPE}-2.6/packages"
+			fi
+		fi
+		unset SYSTYPE
+	}
+	uname -a |grep "2.6" |grep -q "i\?86"
+	[ $? = 0 ] && {
+		if [ "$revision" = "" ]; then
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/x86-2.6/packages"
+		else
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/x86-2.6/packages"
+		fi
+	}
+	uname -a |grep "mips" |grep -q "2.6" && cat /proc/cpuinfo |grep -q "Atheros"
+	[ $? = 0 ] && {
+		if [ "$revision" = "" ]; then
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/atheros-2.6/packages"
+		else
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/atheros-2.6/packages"
+		fi
+	}
+	uname -a |grep "mips" |grep -q "2.6" && cat /proc/cpuinfo |grep -q "WP54"
+	[ $? = "0" ] && {
+		if [ "$revision" = "" ]; then
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/adm5120-2.6/packages"
+		else
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/adm5120-2.6/packages"
+		fi
+	}
+	cat /proc/cpuinfo |grep -q "IXP4\?\?"
+	[ $? = "0" ] && {
+		if [ "$revision" = "" ]; then
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/ixp4xx-2.6/packages"
+		else
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/ixp4xx-2.6/packages"
+		fi
+	}
+	[ "$(uname -m)" = "avr32" ] && cat /proc/cpuinfo | grep -q "AVR32"
+	[ $? = "0" ] && {
+		if [ "$revision" = "" ]; then
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/avr32-2.6/packages"
+		else
+			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/avr32-2.6/packages"
+		fi
+	}
+
+	[ "$IPKG_UPDATE_NEEDED" = "1" ] && opkg update
+	
+	# force re-initialization of extension package lists
+	/usr/lib/webif/webif-mklanglist.sh
+	/usr/lib/webif/webif-mkthemelist.sh
+
+	/etc/init.d/webif enable
+	/etc/init.d/custom-user-startup enable
+
+	# start X-Wrt specific services
+	/etc/init.d/syslog enable
+	/etc/init.d/dmesgbackup enable
+	/etc/init.d/timezone enable
+	/etc/init.d/webiffirewalllog enable
+	
+	ExecuteIfExists "/etc/init.d/timezone" start
+	ExecuteIfExists "/etc/init.d/webif" start
+
+	# test installation successfulness
+	TestInstall
+	# If installing on the router lets assume password is set.
+	echo '/cgi-bin/webif/:root:$p$root' >> /etc/httpd.conf
+	echo '/cgi-bin/webif/:admin:$p$root' >> /etc/httpd.conf
+	if [ -e /etc/httpd.conf ]; then
+		httpd_1=$(cat /tmp/httpd.conf.old)
+		httpd_2=$(cat /etc/httpd.conf)
+		[ "$httpd_1" != "$httpd_2" ] && {
+			echo "Reinitializing httpd ..."		
+			killall -HUP httpd
+		}
+	fi
+
+fi
+
+#remove lock file if it exists otherwise it can cause issues on first apply.
+if [ -e "/tmp/.uci/webif.lock" ]; then
+	rm -f tmp/.uci/webif.lock
+fi
+exit 0

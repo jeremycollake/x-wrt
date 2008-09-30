@@ -1,0 +1,38 @@
+#!/bin/sh
+
+. /etc/ppp/functions.sh
+
+getpid() { echo -n $(ps aux|grep -v grep|grep "pppd call pptp:$1"|awk '{print $1}'); }
+runppp() { pppd call pptp:$1 updetach; }
+
+case "$1" in
+    start)
+	build_chap_secrets
+	for module in slhc ppp_generic ppp_async ip_gre arc4 sha1 ppp_mppe_mppc; do 
+	    /sbin/insmod $module 2>&- >&-
+	done
+	if [ -n "$2" ]; then
+	    runppp "$2"
+	else
+	    for peer in $(cut -f1 -d' ' /etc/ppp/peers.pptp 2>&-); do
+		runppp $peer
+	    done
+	fi
+	;;
+    stop)
+	if [ -n "$2" ]; then
+	    pid=$(getpid "$2")
+	    [ -n "$pid" ] && kill $pid
+	else
+	    killall pppd
+	fi
+	;;
+    status)
+	if [ -n "$2" ]; then
+	    getpid "$2"
+	else
+	    echo "Usage: $0 status <peer>"
+	fi
+	;;
+esac
+
