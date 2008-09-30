@@ -62,7 +62,7 @@ config_cb() {
 			append redirect_cfgs "$cfg_name" "$N"
 		;;
 		interface)
-			append network_devices "$cfg_name"
+			append network_cfgs "$cfg_name"
 		;;
 	esac
 }
@@ -78,6 +78,9 @@ get_tr() {
 }
 
 uci_load firewall
+uci_load network
+
+
 
 get_tr
 form="string|<div class=\"settings\">
