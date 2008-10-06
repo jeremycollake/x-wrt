@@ -1,25 +1,7 @@
 #!/usr/bin/lua
---------------------------------------------------------------------------------
--- coovachilli.sh
--- This script is writen in LUA, the extension is ".sh" for compatibilities
--- reasons width menu system of X-Wrt
---
--- Description:
---        Administrative console to Chillispot
---
--- Author(s) [in order of work date]:
---       Fabián Omar Franzotti
---         
--- Configuration files referenced:
---    hotspot
---
---------------------------------------------------------------------------------
 --[[
 ##WEBIF:name:HotSpot:320:Coova-Chilli
 ]]--
--- config.lua 
--- LUA settings and load some functions files
--- 
 require("init")
 require("webpkg")
 require("coovaportal")
