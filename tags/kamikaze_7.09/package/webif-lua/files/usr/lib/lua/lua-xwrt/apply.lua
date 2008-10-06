@@ -135,11 +135,10 @@ local handler_dir = io.popen("ls /tmp/.uci")
 
 for file in handler_dir:lines() do
   file_list[file] = ""
-  if io.exists("/usr/lib/lua-xwrt/applys/"..file) == true then  
+  if io.exists("/usr/lib/lua/lua-xwrt/applys/"..file) == true then  
 --    call_parser(file,parsers_list,depends_list,exe_before,exe_after,reboot_list)
 
-
-    require("/usr/lib/lua-xwrt/applys/"..file)
+    dofile("/usr/lib/lua/lua-xwrt/applys/"..file)
     parsers_list[file] = {p = parser}
     -- Read if this package depends or need others packages to done configuration
     if parser.depends_pkgs then
@@ -172,9 +171,6 @@ for file in handler_dir:lines() do
       end
     end
 
-
-
-
     if parser.call_parser then
       for i in string.gmatch(parser.call_parser,"%S+") do
         call_parser(i,parsers_list,depends_list,exe_before,exe_after,reboot_list)
@@ -195,13 +191,13 @@ if __WWW then
 	page.action_clear = ""
 	page.savebutton ="<input type=\"submit\" name=\"continue\" value=\"Continue\" style=\"width:150px;\" />"
   print(page:header())
-  wwwprint("Dependencias ",depends_list) 
+  wwwprint("Dependencias "..depends_list) 
 end
+
 local before_str = exe_list(exe_before)
 if before_str ~= "" then
   wwwprint(before_str)
 end
-
 -- After isntall all needed packages commit files with parsers
 -- and execute the parsers
 for f, d in pairs(parsers_list) do
