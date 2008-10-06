@@ -105,6 +105,7 @@ end
 
 function set_users(general)
   local forms = {}
+--[[
   if tonumber(general.values.radius) == 0 then
     if tonumber(general.values.portal) == 1 then 
       general.values.radius = 2
@@ -115,6 +116,7 @@ function set_users(general)
     end    
     iwuci.set("iw_hotspot_wizard.general.radius",general.values.radius)
   end
+]]--
   if tonumber(general.values.radius) > 1 then
 --    check = pkgInstalledClass.new(freeradius_pkgs,true)
     require("radius")
