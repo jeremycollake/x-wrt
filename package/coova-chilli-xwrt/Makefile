@@ -1,6 +1,6 @@
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=coova-chilli-xwrt
+PKG_NAME:=webif-coova-chilli-xwrt
 PKG_VERSION:=0.2
 PKG_RELEASE:=1
 
@@ -9,7 +9,7 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/coova-chilli-xwrt
+define Package/webif-coova-chilli-xwrt
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
@@ -20,7 +20,7 @@ endef
 define Build/Compile
 endef
 
-define Package/coova-chilli-xwrt/install
+define Package/webif-coova-chilli-xwrt/install
 	$(CP) -a ./files/* $(1)/
 	chmod -R 755 $(1)/*
 	rm -rf $(1)/usr/lib/webif/lang/
@@ -33,4 +33,4 @@ define Package/coova-chilli-xwrt/install
 	find $(1) -name *~ | xargs rm -rf
 endef
 
-$(eval $(call BuildPackage,coova-chilli-xwrt))
+$(eval $(call BuildPackage,webif-coova-chilli-xwrt))
