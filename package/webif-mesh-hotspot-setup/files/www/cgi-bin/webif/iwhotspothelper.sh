@@ -217,7 +217,7 @@ elseif __FORM.option == "wizard" then
   end
   if tonumber(general.values.portal) == 1 then
     if pkgs_tocheck == "" then
-      pkgs_tocheck = coova_pkgs.." "..freeradius_pkgs
+      pkgs_tocheck = coova_pkgs -- .." "..freeradius_pkgs
     else
       pkgs_tocheck = coova_pkgs.." "..freeradius_pkgs.." "..pkgs_tocheck
     end

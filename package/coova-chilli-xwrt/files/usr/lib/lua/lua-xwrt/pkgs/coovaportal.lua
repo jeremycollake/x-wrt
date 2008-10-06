@@ -47,11 +47,11 @@ function set_menu()
   end
   __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Portal#Portal","coova-chilli.sh?option=uam")
 
-  if userlevel > 1 then
+--  if userlevel > 1 then
     if users == 0 then
       __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Radius#Radius","coova-chilli.sh?option=radius")
     end
-  end
+--  end
   __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_NasId#NAS ID","coova-chilli.sh?option=nasid")
   if users == 1
   or users == 3 then 

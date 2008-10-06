@@ -1,0 +1,73 @@
+#!/usr/bin/lua
+--[[
+  cron_ctrl
+  Author(s) [in order of work date]:
+       Fabián Omar Franzotti (fofware@users.berlios.de)
+         
+  Configuration files referenced:
+  
+
+  Output files
+    /etc/crontabs/root
+]]--
+package.path = package.path .. ";/usr/lib/webif/LUA/?.lua;/usr/share//lua/5.1/?.lua"
+-- Common Functions
+require("common")
+
+function save_cron(str)
+  os.execute("echo '"..string.trim(str).."' | crontab - 2>&-")
+end
+
+function add(arg)
+  local cron = io.totable("/etc/crontabs/root",true)
+  local str_cron =""
+  if cron then
+    for l=1, #cron do
+      for i=2, #arg do
+        if arg[i] == cron[l] then 
+          arg[i] = nil 
+        end
+      end
+    end
+  end
+  for i=1, #cron do
+    str_cron = str_cron .. cron[i] .. "\n"
+  end
+  for i=2, #arg do
+    str_cron = str_cron .. arg[i] .. "\n"
+  end
+  save_cron(str_cron)
+end
+
+function del(arg)
+  local cron = io.totable("/etc/crontabs/root",true)
+  local str_cron =""
+  if cron then
+    for l=2, #arg do
+      for i=1, #cron do
+        if arg[l] == cron[i] then 
+          cron[i] = nil 
+        end
+      end
+    end
+  end
+  for i,l in ipairs(cron) do
+    str_cron = str_cron .. cron[i] .. "\n"
+    print(cron[i])
+  end
+  save_cron(str_cron)
+end
+
+local cmd = arg[1]
+if cmd == "add" then
+  add(arg)
+elseif cmd == "del" then
+  del(arg)
+else
+  print (" ")
+  print ("Syntax :"..arg[0].." [command] [cron_line cron_line ....]")
+  print (" ")
+  print ("Available commands :")
+  print ("\tadd\tAdd one or more crontabs line")
+  print ("\tdel\tRemove one or more crontabs line")
+end
