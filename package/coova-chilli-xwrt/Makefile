@@ -2,7 +2,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=coova-chilli-xwrt
 PKG_VERSION:=0.2
-PKG_RELEASE:=1
+PKG_RELEASE:=2
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
@@ -25,8 +25,7 @@ define Package/coova-chilli-xwrt/install
 	chmod -R 755 $(1)/*
 	rm -rf $(1)/usr/lib/webif/lang/
 	rm -f $(1)/www/cgi-bin/webif/*.wip
-	$(CP) -a ./ipkg/coova-chilli-xwrt.postinst $(1)/CONTROL/preinst
-#	$(CP) -a ./ipkg/coova-chilli-xwrt.postrm $(1)/CONTROL/postrm
+	$(CP) -a ./ipkg/coova-chilli-xwrt.postinst $(1)/CONTROL/postinst
 	chmod 755 $(1)/CONTROL/*inst
 	find $(1) -name CVS | xargs rm -rf
 	find $(1) -name .svn | xargs rm -rf
