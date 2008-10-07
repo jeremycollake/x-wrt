@@ -41,31 +41,31 @@ local users = tonumber(hotspot.service.users) or 0
 
 function set_menu()
   __MENU.HotSpot["Coova-Chilli"] = menuClass.new()
-  __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Core#Core","coova-chilli.sh")
+  __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Core#Core","coovachilli.sh")
   if userlevel > 1 then
-    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_DHCP#Network","coova-chilli.sh?option=net")
+    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_DHCP#Network","coovachilli.sh?option=net")
   end
-  __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Portal#Portal","coova-chilli.sh?option=uam")
+  __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Portal#Portal","coovachilli.sh?option=uam")
 
 --  if userlevel > 1 then
     if users == 0 then
-      __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Radius#Radius","coova-chilli.sh?option=radius")
+      __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Radius#Radius","coovachilli.sh?option=radius")
     end
 --  end
-  __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_NasId#NAS ID","coova-chilli.sh?option=nasid")
+  __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_NasId#NAS ID","coovachilli.sh?option=nasid")
   if users == 1
   or users == 3 then 
-    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Users#Users","coova-chilli.sh?option=users")
+    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Users#Users","coovachilli.sh?option=users")
   end
   if users > 1 then
-    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Communities#Communities","coova-chilli.sh?option=communities")
+    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Communities#Communities","coovachilli.sh?option=communities")
   end
   if tonumber(hotspot.service.enable) == 1 then
-    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Connections#Connections","coova-chilli.sh?option=connections")
+    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Connections#Connections","coovachilli.sh?option=connections")
   end
---    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Access#Access","coova-chilli.sh?option=access")
---    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Proxy#Proxy","coova-chilli.sh?option=proxy")
---    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Scripts#Extras","coova-chilli.sh?option=extras")
+--    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Access#Access","coovachilli.sh?option=access")
+--    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Proxy#Proxy","coovachilli.sh?option=proxy")
+--    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Scripts#Extras","coovachilli.sh?option=extras")
   
   __WIP = 4
 end
@@ -77,6 +77,7 @@ function core_form()
   local network = {}
   network["values"] = hotspot.network or hotspot:set("chilli","network")
   network["name"] = hotspot.__PACKAGE..".network"
+  local cp_HS_DNS_DOMAIN = network.values.HS_DNS_DOMAIN
   cp_enable = service.values.enable or "0"
   cp_userlevel = service.values.userlevel or "0"
   cp_portal = service.values.portal or "0"
@@ -113,6 +114,7 @@ function core_form()
   for k, v in pairs(net.wireless()) do
     form[network.name..".HS_LANIF"].options:Add(k,k)
   end    
+  form:Add("text", network.name..".HS_DNS_DOMAIN", cp_HS_DNS_DOMAIN,tr("cportal_var_net#Domain"),"string")
    
   return form
 end
@@ -393,18 +395,24 @@ function extras_form()
 end
 
 function connect_form(form,user_level,localuam)
+  if __FORM["authorize"] ~= nil then
+    os.execute("chilli_query authorize sessionid "..__FORM["authorize"])
+  end
+  if __FORM["release"] ~= nil then
+    os.execute("chilli_query dhcp-release "..__FORM["release"])
+  end
   local authenticated = {["0"] = "No",["1"] = "Yes"}
   local form = tbformClass.new("Captive Portal - Connection List")
   form = tbformClass.new("Local Users")
-  form:Add_col("label", "Username","Username", "120px")
-  form:Add_col("label", "MAC-Address", "MAC Address", "160px","string","width:160px")
-  form:Add_col("label", "IP-Address", "IP Address", "140px","string","width:140px")
-  form:Add_col("label", "Status", "Status", "60px","string","width:60px")
-  form:Add_col("label", "Session-ID", "Session ID", "170px","int","width:170px")
-  form:Add_col("label", "Auth", "Aut", "40px","int","width:40px")
-  form:Add_col("label", "SessTime", "Session Time", "90px","int","width:90px")
-  form:Add_col("label", "IdleTime", "Idle Time", "100px","int","width:100px")
---  form:Add_col("label", "startpage", "Start Page", "100px","int","width:100px")
+  form:Add_col("label", "Username","Username", "width:150px;font-size:11px;","","width:150px;font-size:11px;")
+  form:Add_col("label", "MAC-Address", "MAC Address", "width:160px;font-size:11px;","string","width:160px;font-size:11px;")
+  form:Add_col("label", "IP-Address", "IP Address", "width:140px;font-size:11px;","string","width:140px;font-size:11px;")
+  form:Add_col("label", "Status", "Status", "width:60px;font-size:11px;","string","width:60px;font-size:11px;")
+  form:Add_col("label", "Session-ID", "Session ID", "width:170px;font-size:11px;","int","width:170px;font-size:11px;")
+  form:Add_col("label", "Auth", "Aut", "width:40px;font-size:11px;","int","width:40px;font-size:11px;")
+  form:Add_col("label", "SessTime", "Session Time", "width:90px;font-size:11px;","int","width:90px;font-size:11px;")
+  form:Add_col("label", "IdleTime", "Idle Time", "width:100px;font-size:11px;","int","width:100px;font-size:11px;")
+  form:Add_col("label", "action", " ", "width:200px;font-size:11px;","int","width:200px;font-size:11px;")
   connected = io.popen("chilli_query list")
   for line in connected:lines() do
     local tline = string.split(line," ")
@@ -416,7 +424,14 @@ function connect_form(form,user_level,localuam)
     user = tline[6]         
     sessTime = tline[7]         
     idleTime = tline[8]
-    startPage = tline[9]         
+    startPage = tline[9]
+    if tonumber(tline[5]) == 1 then
+--      action = [[<a onclick="javascript:return confirm('Logout user ]]..tline[6]..[[?');" href=\"?release="..tline[1].."\">logout</a>]]
+      action = [[<a href="?release=]]..tline[1].."&__menu="..__FORM["__menu"].."&option="..__FORM["option"]..[[">logout</a>]]
+    else
+      action = "<a href=\"?release="..tline[1].."&__menu="..__FORM["__menu"].."&option="..__FORM["option"].."\">release</a> - <a href=\"?authorize="..tline[4].."&__menu="..__FORM["__menu"].."&option="..__FORM["option"].."\">authorize</a>"
+    end
+  
     form:New_row()
 
     form:set_col("Username",sessId..".Username",user)
@@ -427,7 +442,7 @@ function connect_form(form,user_level,localuam)
     form:set_col("Auth",sessId..".Auth",authen)
     form:set_col("SessTime",sessId..".SessTime",sessTime)
     form:set_col("IdleTime",sessId..".IdleTime",idleTime)
---    form:set_col("startpage",sessId..".startpage",startPage)
+    form:set_col("action",sessId..".action",action)
   end
   return form
 end
