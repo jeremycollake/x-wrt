@@ -13,7 +13,7 @@ define Package/webif-coova-chilli-xwrt
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+webif-lua
+  DEPENDS:=+webif-lua +coova-chilli
   TITLE:=XWrt Mesh-Network and HotSpot configuration pages
 endef
 
