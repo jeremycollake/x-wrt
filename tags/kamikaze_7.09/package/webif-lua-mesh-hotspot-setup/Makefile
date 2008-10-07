@@ -1,6 +1,6 @@
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=webif-mesh-hotspot-setup
+PKG_NAME:=webif-lua-mesh-hotspot-setup
 PKG_VERSION:=0.2
 PKG_RELEASE:=1
 
@@ -9,7 +9,7 @@ PKG_INSTALL_DIR:=$(PKG_BUILD_DIR)/ipkg-install
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/webif-mesh-hotspot-setup
+define Package/webif-lua-mesh-hotspot-setup
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
@@ -20,7 +20,7 @@ endef
 define Build/Compile
 endef
 
-define Package/webif-mesh-hotspot-setup/install
+define Package/webif-lua-mesh-hotspot-setup/install
 	$(CP) -a ./files/* $(1)/
 	chmod -R 755 $(1)/*
 	rm -rf $(1)/usr/lib/webif/lang/
@@ -33,4 +33,4 @@ define Package/webif-mesh-hotspot-setup/install
 	find $(1) -name *~ | xargs rm -rf
 endef
 
-$(eval $(call BuildPackage,webif-mesh-hotspot-setup))
+$(eval $(call BuildPackage,webif-lua-mesh-hotspot-setup))
