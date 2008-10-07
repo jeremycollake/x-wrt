@@ -1,6 +1,6 @@
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=iw-chillispot
+PKG_NAME:=webif-lua-chillispot
 PKG_VERSION:=0.003
 PKG_RELEASE:=1
 
@@ -8,7 +8,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/iw-chillispot
+define Package/webif-lua-chillispot
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
@@ -19,7 +19,7 @@ endef
 define Build/Compile
 endef
 
-define Package/iw-chillispot/install
+define Package/webif-lua-chillispot/install
 	$(CP) -a ./files/* $(1)/
 	chmod -R 755 $(1)/*
 	rm -rf $(1)/usr/lib/webif/lang/
@@ -32,4 +32,4 @@ define Package/iw-chillispot/install
 	find $(1) -name *~ | xargs rm -rf
 endef
 
-$(eval $(call BuildPackage,iw-chillispot))
+$(eval $(call BuildPackage,webif-lua-chillispot))

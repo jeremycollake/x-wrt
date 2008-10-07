@@ -1,6 +1,6 @@
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=iw-freeradius
+PKG_NAME:=webif-lua-freeradius
 PKG_VERSION:=0.2
 PKG_RELEASE:=1
 
@@ -8,7 +8,7 @@ PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
 
 include $(INCLUDE_DIR)/package.mk
 
-define Package/iw-freeradius
+define Package/webif-lua-freeradius
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
@@ -16,14 +16,14 @@ define Package/iw-freeradius
   TITLE:=Freeradius Administrative Console in LUA for X-Wrt.
 endef
 
-define Package/iw-freeradius/description
+define Package/webif-lua-freeradius/description
  Basic Freeradius Administrative Console in LUA for X-Wrt.
 endef
 
 define Build/Compile
 endef
 
-define Package/iw-freeradius/install
+define Package/webif-lua-freeradius/install
 	$(CP) -a ./files/* $(1)/
 	chmod -R 755 $(1)/*
 	rm -rf $(1)/usr/lib/webif/lang/
@@ -35,4 +35,4 @@ define Package/iw-freeradius/install
 	find $(1) -name *~ | xargs rm -rf
 endef
 
-$(eval $(call BuildPackage,iw-freeradius))
+$(eval $(call BuildPackage,webif-lua-freeradius))
