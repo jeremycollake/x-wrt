@@ -1,0 +1,93 @@
+require("iw-uci")
+require("iwuci")
+
+parser = {}
+local P = {}
+parser = P
+-- Import Section:
+-- declare everything this package needs from outside
+local io = io
+local wwwprint = wwwprint
+if wwwprint == nil then wwwprint=print end
+local oldprint = oldprint
+local table = table
+local type = type
+local string = string
+local pairs = pairs
+local iwuci = iwuci
+local uciClass = uciClass
+local tonumber = tonumber
+
+local freeradius = uciClass.new("freeradius")
+-- no more external access after this point
+setfenv(1, P)
+
+enable    = tonumber(freeradius.webadmin.enable)    or 0
+userlevel = tonumber(freeradius.webadmin.userlevel) or 0
+reboot    = false                -- reboot device after all apply process
+
+name = "Freeradius"
+script = "radiusd"
+init_script = "/etc/init.d/radiusd"
+
+function process()
+  wwwprint(name.."users Parsers...")
+  wwwprint("Committing freeradius_check...")
+  iwuci.commit("freeradius_check")
+  wwwprint ("Committing freeradius_reply...")
+  iwuci.commit("freeradius_reply")
+
+  local freeradius = uciClass.new("freeradius")
+  if tonumber(freeradius.webadmin.userlevel) < 4 then
+    wwwprint ("Writing users...<br>")
+-- Process users
+    local user_str = ""
+    local sep = ""
+    local users_chk = uciClass.new("freeradius_check")
+    local users_rpl = uciClass.new("freeradius_reply")
+    for i=1 ,#users_chk.sections do
+      local name = users_chk.sections[i].name
+      if name ~= "default" then
+        local checks = users_chk[name]
+        local replys = users_rpl[name]
+        user_str = user_str .. "\n\n"..name
+        sep = "\t"
+        for j, k in pairs(checks) do
+          if type(k) ~= "table" then
+            if string.trim(j) == "User_Password" then
+              user_str = user_str..sep.. string.gsub(j,"_","-").." := \""..k.."\""
+            else
+              user_str = user_str..sep.. string.gsub(j,"_","-").." := "..k
+            end
+            sep = ", "
+          end
+        end    
+        sep = "\n\t"
+        for j, k in pairs(replys) do
+          if type(k) ~= "table" then
+            user_str = user_str..sep.. string.gsub(j,"_","-").." = "..k
+            sep = ", "
+          end
+        end
+      end
+    end
+    sep = ""
+    user_str = user_str.."\n\nDEFAULT\t"
+    for i, v in pairs (users_chk.default) do
+      if type(v) ~= "table" then
+        user_str = user_str..sep..string.gsub(i,"_","-").." := "..v
+        sep = ", "
+      end
+    end
+    sep = "\n\t"
+    for i, v in pairs (users_rpl.default) do
+      if type(v) ~= "table" then
+        user_str = user_str..sep..string.gsub(i,"_","-").." = "..v
+        sep = ",\n\t"
+      end
+    end
+    local pepe = io.open("/etc/freeradius/users","w")
+    pepe:write(user_str)
+    pepe:close()
+  end
+end
