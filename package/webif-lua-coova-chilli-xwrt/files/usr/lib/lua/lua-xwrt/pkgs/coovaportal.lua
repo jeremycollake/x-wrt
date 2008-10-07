@@ -77,7 +77,6 @@ function core_form()
   local network = {}
   network["values"] = hotspot.network or hotspot:set("chilli","network")
   network["name"] = hotspot.__PACKAGE..".network"
-  local cp_HS_DNS_DOMAIN = network.values.HS_DNS_DOMAIN
   cp_enable = service.values.enable or "0"
   cp_userlevel = service.values.userlevel or "0"
   cp_portal = service.values.portal or "0"
@@ -114,7 +113,6 @@ function core_form()
   for k, v in pairs(net.wireless()) do
     form[network.name..".HS_LANIF"].options:Add(k,k)
   end    
-  form:Add("text", network.name..".HS_DNS_DOMAIN", cp_HS_DNS_DOMAIN,tr("cportal_var_net#Domain"),"string")
    
   return form
 end
@@ -446,4 +444,3 @@ function connect_form(form,user_level,localuam)
   end
   return form
 end
-
