@@ -1,0 +1,270 @@
+#!/usr/bin/lua
+--[[
+  olsr apply parsers
+  Author(s) [in order of work date]:
+       Fabián Omar Franzotti (fofware@users.berlios.de)
+         
+  Configuration files referenced:
+    olsr
+
+  Output files
+    /etc/olsrd.conf
+
+]]--
+package.cpath = "./?.so;/usr/lib/lua/5.1/?.so" 
+package.path = "./?.lua;/usr/lib/webif/LUA/?.lua;/usr/lib/webif/LUA/pkgs/?.lua;/usr/lib/lua/5.1/?.lua;/usr/lib/lua/5.1/?/init.lua;/usr/lib/lua/5.1/?.lua;/usr/lib/lua/5.1/?/init.lua" 
+require("common")
+-- Functions to manipulate UCI Files
+require("iw-uci")
+require("net")
+require("iwuci")
+
+function connection()
+  local nets = net.networks()
+  local link = false
+  if nets.wan.state == "UP" then
+    ping = io.popen("ping -c 2 66.94.234.13")
+    for line in ping:lines() do
+      if string.match(line,"packets received") then 
+        return string.match(line,"(%d+) packets received")
+      end
+    end
+  end
+  return 0
+end
+
+
+local output_file = "/etc/olsrd.conf"
+local ctrl_file   = "/var/etc/olsrd.ctrl"
+local str_olsrconf = ""
+
+require("iwuci")
+local olsr = uciClass.new("olsr")
+local network = uciClass.new("network")
+local wireless = uciClass.new("wireless")
+
+
+local initfile =[[#!/bin/sh /etc/rc.common
+START=50
+
+BIN=olsrd
+CONF_F=/var/etc/olsrd.conf
+USE_CONF_F=/etc/olsrd.conf
+DEFAULT=/etc/default/olsrd
+RUN_D=/var/run
+PID_F=$RUN_D/$BIN.pid
+CRONSET="* * * * * /usr/lib/webif/LUA/olsr/minute.cron"
+
+write_config_lua () {
+  /usr/lib/webif/LUA/olsr/parsers
+		USE_CONF_F="$CONF_F"
+}
+  
+start() {
+	include /lib/network
+	scan_interfaces
+	config_load /var/state/network
+	
+	config_get WAN wan ifname
+	config_get WANDEV wan device
+	config_get LAN lan ifname
+  
+  WIFI=wl0  
+  # Allow connections to olsr info port.
+  iptables        -A input_wan      -p tcp --dport 1979 -j ACCEPT
+  # OLSR needs port 698 to transmit state messages. 
+  iptables -A input_rule -p udp --dport 698 -j ACCEPT
+  iptables -A input_rule -p udp --dport 53 -j ACCEPT
+  iptables -A input_rule -p tcp --dport 53 -j ACCEPT
+
+  iptables -A forwarding_rule -i $WAN -o $WIFI -j ACCEPT
+  iptables -A forwarding_rule -i $WIFI -o $WAN -j ACCEPT
+  # For forwarding LAN & WIFI in nodes
+  iptables -A forwarding_rule -i $LAN -o $WIFI -j ACCEPT
+
+  # For WIFI clients to connect to nodes.
+  iptables -A forwarding_rule -i $WIFI -o $WIFI -j ACCEPT
+
+  # For connecting a wired lan client of node 1 to wired lan client of node 2
+  iptables -A forwarding_rule -i $LAN -o $LAN -j ACCEPT
+  
+  # Masquerade all trafic
+  iptables -t nat -A POSTROUTING -o $WIFI -j MASQUERADE
+  iptables -t nat -A POSTROUTING -o $WAN -j MASQUERADE
+#  /usr/lib/webif/LUA/cron_ctrl add "$CRONSET"
+
+	$BIN -f "$USE_CONF_F" -nofork $OPTIONS &
+
+	# write pid file (but strip out own pid ($$))
+	mkdir -p $RUN_D
+	PID=`pidof $BIN`
+	echo ${PID%$$} > $PID_F
+  echo "OLSR is running\n"
+}
+
+stop() {
+#  /usr/lib/webif/LUA/cron_ctrl del "$CRONSET"
+	killall olsrd
+}
+
+]]
+
+os.execute ("echo '"..initfile.."' > /etc/init.d/olsrd")
+
+local set_netname = olsr.webadmin.netname or "olsrnet"
+local set_nodenumber = olsr.webadmin.nodenumber or "1"
+local set_device = olsr.webadmin.device or "wl0"
+local set_ssid = olsr.webadmin.ssid or "X-Wrt"
+local set_channel = olsr.webadmin.channel or "6"
+
+if network[set_netname] == nil then 
+  network:set("interface",set_netname) end
+
+local set_netaddr = olsr.webadmin.ipaddr or "10.128."..olsr.webadmin.nodenumber..".1"
+local set_netmask = olsr.webadmin.netmask or "255.255.0.0"
+iwuci.set("network."..olsr.webadmin.netname..".ipaddr",set_netaddr)
+iwuci.set("network."..olsr.webadmin.netname..".netmask",set_netmask)
+iwuci.set("network."..olsr.webadmin.netname..".proto","static")
+-- in some situations this need fix and put dynamic dns configuration from olsr network
+iwuci.set("network."..olsr.webadmin.netname..".dns","204.225.44.3")
+wififace = wireless["wifi-iface"]
+for i=1, #wififace do
+  if wififace[i].values.device == set_device then
+    iwuci.set(wififace[i].name..".ssid",set_ssid)
+    iwuci.set(wififace[i].name..".network",set_netname)
+    iwuci.set(wififace[i].name..".mode","adhoc")
+    iwuci.set("wireless."..set_device..".channel",set_channel)
+    iwuci.set("wireless."..set_device..".disabled","0")
+    break
+  end
+end
+
+if tonumber(olsr.webadmin.userlevel) < 2 then
+  str_olsrconf = [[
+DebugLevel 0
+UseHysteresis no
+LinkQualityFishEye 1
+IpVersion 4
+AllowNoInt yes
+TcRedundancy 2
+LinkQualityLevel 2
+MprCoverage 7
+LinkQualityWinSize 100
+TosValue 16
+LinkQualityDijkstraLimit 0 9.0
+Pollrate 0.025
+
+LoadPlugin "olsrd_dyn_gw.so.0.4"
+{
+	PlParam     "Ping"       "141.1.1.1"
+	PlParam     "Ping"       "194.25.2.129"
+}
+
+LoadPlugin "olsrd_nameservice.so.0.3"
+{
+	PlParam "hosts-file" "/var/etc/hosts"
+	PlParam "name" "12-ola-gs"
+	PlParam "suffix" ".olsr"
+}
+
+LoadPlugin "olsrd_txtinfo.so.0.1"
+{
+	PlParam "Accept" "127.0.0.1"
+}
+
+Interface  "]]..olsr.webadmin.device..[["
+{
+	HelloInterval 6.0
+	MidValidityTime 324.0
+	TcInterval 4.0
+	AutoDetectChanges yes
+	HnaValidityTime 108.0
+	HelloValidityTime 108.0
+	TcValidityTime 324.0
+	HnaInterval 18.0
+	MidInterval 18.0
+}
+]]
+  os.execute ("echo '"..string.len(str_olsrconf).."' > "..ctrl_file)
+  os.execute ("echo '"..str_olsrconf.."' > "..output_file)
+else  
+  for i, v in pairs(olsr.general) do
+    str_olsrconf = str_olsrconf .. i .. " " .. v .. "\n"
+  end
+  local data, size = load_file(ctrl_file)
+  str_olsrconf = str_olsrconf .. "\n"
+
+  if olsr.Hna4 then
+    str_olsrconf = str_olsrconf .. "Hna4\n{\n"
+    for i,t in pairs(olsr.Hna4) do
+      if t.values.NetAddr ~= "0.0.0.0" then 
+        str_olsrconf = str_olsrconf .. '\t'.. t.values.NetAddr .. ' ' .. t.values.NetMask .. '\n'
+--    else
+--      if tonumber(connection()) > 0 then
+--        str_olsrconf = str_olsrconf .. '\t'.. t.values.NetAddr .. ' ' .. t.values.NetMask .. '\n'
+--      end
+      end
+    end
+    str_olsrconf = str_olsrconf .. "}\n\n"
+  end
+
+  if olsr.Hna6 then
+    str_olsrconf = str_olsrconf .. "Hna6\n{\n"
+    for i,t in pairs(olsr.Hna6) do
+      str_olsrconf = str_olsrconf .. '\t'.. t.values.NetAddr .. ' ' .. t.values.NetValue .. '\n'
+    end
+    str_olsrconf = str_olsrconf .. "}\n\n"
+  end
+
+  if olsr.IpcConnect then
+    str_olsrconf = str_olsrconf .. "IpConnect \n{\n"
+    if olsr.IpcConnect.MaxConnections then
+      str_olsrconf = str_olsrconf .. "\tMaxConnections " .. olsr.IpcConnect.MaxConnections .. "\n"
+    end
+    if olsr.ipcconnecthost then
+      for i=1, #olsr.ipcconnecthost do
+        for k,v in pairs(olsr.ipcconnecthost[i].values) do
+          str_olsrconf = str_olsrconf .. "\t" .. k .. " " .. v .. "\n"
+        end
+      end
+    end
+
+    if olsr.IpcConnect.Net then
+      str_olsrconf = str_olsrconf .. "\tNet " .. olsr.IpcConnect.Net .. "\n"
+    end
+    str_olsrconf = str_olsrconf .. "}\n\n"
+  end
+
+  for i,t in pairs(olsr.LoadPlugin) do
+    if string.match(t.values.Library,"olsrd_dyn_gw.so") 
+    and not string.match(t.values.Library, "olsrd_dyn_gw_plain.so") then
+      str_olsrconf = str_olsrconf .. "LoadPlugin \"".. t.values.Library .. "\"\n{\n"
+      str_olsrconf = str_olsrconf .. '\tPlParam     "Ping"       "141.1.1.1"\n'
+      str_olsrconf = str_olsrconf .. '\tPlParam     "Ping"       "194.25.2.129"\n'
+    else 
+      str_olsrconf = str_olsrconf .. "LoadPlugin \"".. t.values.Library .. "\"\n{\n"
+      for k,v in pairs(t.values) do
+        if k ~= "Library" then
+          if k == "hosts_file" then k = "hosts-file" end
+          str_olsrconf = str_olsrconf .. '\tPlParam "'.. k .. '" "' .. v .. '"\n'
+        end
+      end
+    end
+    str_olsrconf = str_olsrconf .. "}\n\n"
+  end
+
+  for i,t in pairs(olsr.Interface) do
+    str_olsrconf = str_olsrconf .. "Interface  \"".. t.values.Interface .. "\"\n{\n"
+    for k,v in pairs(t.values) do
+      if k ~= "Interface" then
+        str_olsrconf = str_olsrconf .. '\t'.. k .. ' ' .. v .. '\n'
+      end
+    end
+    str_olsrconf = str_olsrconf .. "}\n\n"
+  end
+  if size ~= string.len(str_olsrconf) then
+    os.execute ("mkdir /var/etc 2>/dev/null")
+    os.execute ("echo '"..string.len(str_olsrconf).."' > "..ctrl_file)
+    os.execute ("echo '"..str_olsrconf.."' > "..output_file)
+  end
+end
