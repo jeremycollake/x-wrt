@@ -38,10 +38,10 @@ require("init")
 --require("checkpkg")
 require("webpkg")
 require("iwuci")
-local olsr_pkgs = "ip olsrd olsrd-mod-dyn-gw olsrd-mod-nameservice olsrd-mod-txtinfo iw-olsr"
-local freeradius_pkgs = "libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm iw-freeradius"
-local coova_pkgs = "coova-chilli coova-chilli-xwrt"
-local chilli_pkgs = "chillispot iw-chillispot"
+local olsr_pkgs = "ip olsrd olsrd-mod-dyn-gw olsrd-mod-nameservice olsrd-mod-txtinfo webif-lua-olsr"
+local freeradius_pkgs = "" --"libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm webif-lua-freeradius"
+local coova_pkgs = "coova-chilli webif-lua-coova-chilli"
+local chilli_pkgs = "chillispot webif-lua-chillispot"
 
 
 function setfooter(form)
