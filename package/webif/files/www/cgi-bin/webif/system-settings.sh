@@ -102,17 +102,17 @@ generate_ssl_key() {
 	local inst_packages inst_links llib llink libsymlinks
 	is_package_installed "zlib"
 	[ "$?" != "0" ] && {
-		inst_packages="$inst_packages zlib"
+		inst_packages="zlib $inst_packages"
 		inst_links="$inst_links /tmp/usr/lib/libz.so.*"
 	}
 	is_package_installed "libopenssl"
 	[ "$?" != "0" ] && {
-		inst_packages="$inst_packages libopenssl"
+		inst_packages="libopenssl $inst_packages"
 		inst_links="$inst_links /tmp/usr/lib/libssl.so.* /tmp/usr/lib/libcrypto.so.*"
 	}
 	is_package_installed "openssl-util"
 	[ "$?" != "0" ] && {
-		inst_packages="$inst_packages openssl-util"
+		inst_packages="openssl-util $inst_packages"
 		inst_links="$inst_links /tmp/usr/bin/openssl"
 	}
 	[ -n "$inst_packages" ] && opkg -d ram install $inst_packages -force-overwrite
