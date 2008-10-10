@@ -203,11 +203,8 @@ EOF
 					sleep 1
 					echo "$FORM_passwd2"
 				) | passwd root 2>&1 && apply_passwd
-				echo '/cgi-bin/webif/:root:$p$root' >> /etc/httpd.conf
-				echo '/cgi-bin/webif/:admin:$p$root' >> /etc/httpd.conf
 				echo '</pre>'
 				footer
-				killall -HUP httpd
 				exit
 			} || {
 				echo "<h3 class=\"warning\">@TR<<Password_mismatch#The entered passwords do not match!>></h3>"
@@ -245,7 +242,7 @@ EOF
 			apply_passwd
 		}
 	}
-	if [ "$REMOTE_USER" != "" -a "$REMOTE_USER" != "root" -a "$REMOTE_USER" != "admin" ]; then
+	if [ "$REMOTE_USER" != "root" -a "$REMOTE_USER" != "admin" ]; then
 		config_load webif_access_control
 		if [ "$1" != "Graphs" ]; then
 			webifform=`grep "##WEBIF:name:${1}:[0-9][0-9][0-9]:${2}" /www/cgi-bin/webif/*.sh |cut -d':' -f5`
