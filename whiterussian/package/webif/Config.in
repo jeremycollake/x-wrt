@@ -130,6 +130,13 @@ config BR2_PACKAGE_WEBIF_LANG_PT
         help
           Portuguese language file for webif
 
+config BR2_PACKAGE_WEBIF_LANG_RO
+	tristate "webif-lang-ro - Romanian language file for webif"
+	select BR2_PACKAGE_WEBIF
+	default m
+	help
+	  Romanian language file for webif
+
 config BR2_PACKAGE_WEBIF_LANG_RU
 	tristate "webif-lang-ru - Russian language file for webif"
 	select BR2_PACKAGE_WEBIF

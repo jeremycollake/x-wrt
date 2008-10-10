@@ -1,0 +1,356 @@
+﻿# leave at least one comment here to skip the BOM character
+# language name
+lang => Română
+
+# Common
+Settings saved => Salvat
+Settings not saved => Nesalvat
+Save Changes => Salvare
+Apply Changes => Aplică schimbările
+Clear Changes => Renunţă la schimbări
+Review Changes => Revezi schimbările
+Host Name => Numele maşinii
+Uptime => Uptime
+Load => Încărcare
+Version => Versiune
+Categories => Categorii
+Subcategories => Subcategorii
+more... => mai mult...
+Add => Adaugă
+Remove => Scoate
+
+Warning => Atenţie
+Password_warning => Nu aţi configurat nicio parolă pentru interfaţa web şi accesul SSH.<br /> Introduceţi una acum (numele de utilizator va fi 'root'). 
+
+# Categories
+Info => Info
+About => Despre
+Router Info => Informaţii ruter
+
+Status => Stare
+Connections => Conexiuni la reţea
+DHCP => DHCP
+Wireless => Wi-Fi
+
+System => Sistem
+Password => Parolă
+Settings => Setări
+Installed Software => Pachete instalate
+Firmware Upgrade => Actualizare firmware
+
+Network => Reţea
+LAN => LAN
+WAN => Internet
+Wireless => Wi-Fi
+Advanced Wireless => Wi-Fi (avansat)
+Hosts => Calculatoare
+
+
+# 'About' page
+Copyright => Copyright
+
+GPL_Text => Acest program este liber; îl puteţi redistribui <br />şi/sau modifica potrivit termenilor General Public License aşa cum este <br />publicată de către Free Sofware Foundation; fie sub versiunea <br />2 a licenţei, sau o versiune ulterioară, la alegerea dvs..
+Contributions by => Contribuţii de
+Layout based on => Layout bazat pe
+by => de
+
+
+No config change. => Nicio schimbare.
+Config discarded. => Configutaţie abandonată.
+Config changes: => Configuraşia actuală:
+Updating config... => Actualizare configuraţie...
+
+
+# 'Router Info' page
+Firmware Version => Versiunea de firmware
+Kernel Version => Versiunea de kernel
+Current Date/Time => Data şi ora
+MAC Address => Adresa MAC
+
+
+# 'Connections' page
+Connection Status => Starea conexiunilor
+Physical Connections => Conexiuni fizice
+Router Connections => Conexiuni la ruter
+
+
+# 'DHCP' page
+status_leases_dhcp_leases => DHCP Leases
+status_leases_IP => Adresa IP
+status_leases_MAC => Adresa MAC
+status_leases_Name => Nume
+status_leases_Expires => Expiră în
+
+
+# 'Wireless Status' page
+Wireless Status => Starea Wi-Fi
+
+# 'Password' page
+Password Change => Schimbarea parolei
+New Password => Noua parolă
+Confirm Password => Confirmaţi parola
+
+# 'System Settings' page
+System Settings => Parametrii sistemului
+Host Name => Numele sistemului
+Language => Limbă
+
+# 'Installed Software' page
+Installed Packages => Pachete instalate
+Update package lists => Actualizaţi listele de pachete
+Uninstall => Dezinstalare
+Install => Instalare
+
+
+# 'Firmware Upgrade' page
+Firmware format => Formatul firmware-ului
+Error => Eroare
+done => gata
+Invalid_formt => Firmware-ul nu este într-un format valid
+Erase_JFFS2 => Şterge partiţia JFFS2
+Options => Opţiuni
+Firmware_image => Fişier firmware
+Upgrade => Actualizare
+Upgrading... => Actualizare în curs...
+
+# 'LAN Settings' page
+LAN Settings => Setări LAN
+LAN Configuration => Configuraţie LAN
+Netmask => Masca de reţea
+Default Gateway => Gateway implicit
+DNS Servers => Servere DNS din reţea
+DNS Address => Adrese DNS
+
+Note => Notă
+
+
+# 'WAN Settings' page
+WAN Settings => Setări Internet
+WAN Configuration => Configuraţie Internet
+PPTP Server IP => Adresa IP a serverului PPTP
+Connection Type => Tip de conexiune
+No WAN => Fără configurare WAN
+DHCP => DHCP
+Static IP => IP static
+IP Settings => Parametrii IP
+PPP Settings => Parametrii PPP
+Redial Policy => Politica de re-formare
+Connect on Demand => Conectare la cerere
+Keep Alive => Keep Alive
+Maximum Idle Time => Timpul maxim de inactivitate
+Redial Timeout => Timpul înainte de re-formare
+
+MTU => MTU (dimensiunea maximă a pachetelor)
+Username => Nume de utilizator
+
+
+# 'Wireless Configuration' page
+Wireless Configuration => Configuraţie Wi-Fi
+Wireless Interface => Interfaţă Wi-Fi
+WEP Key => Cheie WEP
+Selected WEP Key => Cheia WEP selectată
+WPA PSK => WPA PSK
+ESSID => ESSID
+Channel => Canal
+RADIUS IP Address => Adresa IP a serverului RADIUS
+RADIUS Server Key => Cheia serverului RADIUS
+Enabled => Activat
+Disabled => Dezactivat
+ESSID Broadcast => Broadcast ESSID
+Show => Arată
+Hide => Ascunde
+WLAN Mode => Mod de funcţionare Wi-Fi
+Access Point => Access Point
+Client => Client
+Bridge => Punte
+Ad-Hoc => Ad-Hoc
+Encryption Settings => Setări criptare
+Encryption Type => Tip de criptare
+PSK => PSK
+WPA Mode => Mod WPA
+WPA Algorithms => Algoritmi WPA
+WEP Keys => Chei WEP
+
+
+# 'Advanced Wireless Configuration' page
+Advanced Wireless Configuration => Configuraţie avansată Wi-Fi 
+WDS Connections => Conexiuni WDS
+MAC Filter List => Filtrare după adresă MAC
+Filter Mode => Mod de filtrare
+Allow => Permite
+Deny => Refuză
+Set => Setare
+Settings => Setări
+Automatic WDS => WDS automatic
+WDS watchdog timeout => Timeout de inactivitate WDS
+Antenna selection => Selecţionarea antenei
+
+# "Hosts" page
+
+MAC Address => Adresă MAC
+Configured Hosts => Gazde configurate
+DHCP Static => DHCP Static
+Host Names => Numele gazdelor
+
+Up => Sus
+Down => Jos
+Edit => Editare
+Delete => Şterge
+Save => Salvează
+Cancel => Renunţă
+
+Forward => Transferă
+Accept => Acceptă
+Drop => Ignoră
+
+Firewall => Firewall
+Firewall Rules => Reguli firewall
+Firewall Configuration => Configuraţie firewall
+
+New Rule => Regulă nouă
+Match => Potrivire
+Target => Destinaţie
+Port => Port
+
+Protocol => Protocol
+Source IP => IP sursă
+Destination IP => IP destinaţie
+Source Ports => Porturi sursă
+Destination Ports => Porturi destinaţie
+
+Forward to => Transferă către
+Port => Port
+
+
+Helptext ESSID => Numele reţelei wireless
+Helptext DNS save => Este recomandat să vă salvaţi setările înainte de a adăuga/elimina servere DNS
+
+
+Helptext Operation mode => Configurează modul de funcţionare al
+reţelei dvs. wireless. Modul Client nu va schimba parametrii interfeţei dvs. Anumiţi parametrii ai plăcii Wi-Fi vor fi modificaţi pentru a putea funcţiona în modul reţea wireless.
+Helptext Encryption Type => 'WPA (RADIUS)' nu funcţionează decât în modul AccessPoint. <br /> 'WPA (PSK)' nun funcţionează în modul Ad-hoc.
+Helptext IP Settings => Parametrii IP sunt opţionali pentru DHCP şi PPTP. Dacă îi configuraţi, vor fi folosiţi ca parametrii impliciţi în cazul în care serverul DHCP nu răspunde.
+Helptext Idle Time => Numărul de secunde fără trafic internet care trebuie să treacă înainte ca ruterul să deconecteze conexiunea la internet (conexiune la cerere)
+Helptext Redial Timeout => Numărul de secunde care trebuie să treacă între două apeluri la furnizorul de acces internet, dacă după primul apel sună ocupat.
+
+
+## new format
+## you are free to translate the part between "new format comments"
+## replace any text after "=" and ">" with your translation
+
+
+## network hosts
+network_hosts_host_IP_invalid => Adresa IP a gazdei
+network_hosts_Host_Name => Numele gazdei
+network_hosts_MAC => Adresa MAC
+network_hosts_static_IP_invalid => Adresă IP statică
+network_hosts_Configured_Hosts => Gazde configurate
+network_hosts_Host_Names => Numele gazdelor
+network_hosts_IP => Adresa IP
+network_hosts_Remove => Şterge
+network_hosts_Add => Adaugă
+network_hosts_Host_Names_helptext => Fişierul /etc/hosts este folosit pentru a căuta adresa IP a unui dispozitiv conectat la o reţea. Fişierul o mapare mulţi-la-1 ]ntre numele dispoyitivelor ;i adresele IP. C\nd un dispoyitiv este accesat cu numele, sistemul încearcă să găseascănumele în acest fişier înainte de a apela la serverele DNS.
+network_hosts_DHCP_Static_IPs => Adrese IP statice (pentru DHCP)
+network_hosts_Static_IPs => Adrese IP statice
+network_hosts_Static_IPs_helptext => Fişierul /etc/ethers conţine o bază de date cu adresele MAC cunoscute. Serverul DHCP foloseşte adresele IP corespunzătoare acestor MAC-uri în loc să aloce o adresă nouă din pool.
+network_hosts_Active_Leases => Adrese DHCP active
+network_hosts_Name => Nume
+network_hosts_Expires => Expiră în
+network_hosts_h => h
+network_hosts_min => min
+network_hosts_sec => sec
+network_hosts_No_leases => Nu există adrese alocate prin DHCP.
+Network => Reţea
+Hosts => Gazde
+
+
+## status-leases.sh
+Status => Stare
+DHCP Clients => Clienţi DHCP
+status_leases_dhcp_leases => Adrese alocate prin DHCP
+status_leases_MAC => Adresă MAC
+status_leases_IP => Adresă IP
+status_leases_Name => Nume
+status_leases_Expires => Expiră în
+status_leases_h => h
+status_leases_min => min
+status_leases_sec => sec
+status_leases_no_leases => Nu exită adrese alocate prin DHCP.
+status_leases_dhcp_leases => Adrese alocate prin DHCP
+status_leases_dhcp_leases_helptext => Adresele DHCP sunt atribuite clienţilor din reţea care cer o adresă IP de la serverul DHCP al ruterului. Clienţii care au cerut adresa IP înainte de ultima repornire a ruterului nu vor apărea până nu vor solicita actualizarea adresei IP.
+status_leases_additional => Informaţii suplimentare
+status_leases_arp_title => Cache pentru protocolul de rezolvare a adreselor (ARP)
+status_leases_HW => Tip HW
+status_leases_Flags => Flaguri
+status_leases_Mask => Mască
+status_leases_completed => completat
+status_leases_permanent => permanent
+status_leases_published => publicat
+status_leases_no_arp_record => Cache-le ARP nu conţine nico înregistrare corespunzătoare.
+status_leases_ethers_title => Corespondenţe între adrese MAC şi adrese IP (/etc/ethers)
+status_leases_ethers_empty => Fişierul /etc/ethers nu conţine nicio pereche IP/MAC.
+status_leases_no_ethers => Fişierul /etc/ethers nu există.
+
+
+## status-usb.sh
+status_usb_umount_error_in => Eroare în
+Status => Stare
+USB => USB
+status_usb_USB_Devices => Dispozitive USB
+status_usb_All_connected_devices => Toate dispozitivele conectat (cu excepţia hub-urilor de sistem)
+status_usb_Bus => Bus
+status_usb_Device => Dispozitiv
+status_usb_Product => Produs
+status_usb_Manufacturer => Producător
+status_usb_VPIDs => VendorID:ProdID
+status_usb_USB_version => Versiune USB
+status_usb_Mounted_USB_SCSI => Dispozitive USB / SCSI montate
+status_usb_filesystems => Sisteme de fişiere
+status_usb_Device_Path => Calea către device
+status_usb_Mount_Point => Punct de montare
+status_usb_File_System => Sistem de fişiere
+status_usb_Read_Write => Citire/Scriere
+status_usb_Action => Acţiune
+status_usb_ro => Doar citire
+status_usb_rw => Citire/Scriere
+status_usb_umount => demontează
+status_usb_swaps => Swap-uri
+status_usb_swap_PartitionFilename => Partiţie/Nume fişier
+status_usb_swap_Type => Tip
+status_usb_swap_Size => Dimensiune
+status_usb_swap_Used => Folosit
+status_usb_swap_Priority => Prioritate
+status_usb_swap_partition => partiţie
+status_usb_swap_file => fişier
+status_usb_Loaded_USB_drivers => Drivere USB încărcate
+
+
+## status-wwaninfo.sh
+Status => Stare
+UMTS => UMTS
+status_wwaninfo_UG_Status => Stare UMTS/GPRS
+status_wwaninfo_no_UG_device => Nu există device-uri UMTS / GPRS
+status_wwaninfo_device_info => Informaţii despre dispozitive
+status_wwaninfo_dev_th_Information => Informaţii
+status_wwaninfo_dev_th_Value => Valoare
+status_wwaninfo_no_UG_device_info => Nu a fost raportată nicio informaţie despre dispozitiv
+status_wwaninfo_Signal_Quality => Calitatea semnalului
+status_wwaninfo_quality_unknown => Calitatea semnalului este invalidă/necunoscută
+status_wwaninfo_Power_Ratio => Puterea (dBm)
+status_wwaninfo_Legend => Legendă
+status_wwaninfo_quality_Unreliable => Inacceptabilă
+status_wwaninfo_quality_Workable => Acceptabilă
+status_wwaninfo_quality_Good => Bună
+status_wwaninfo_quality_Excellent => Excelentă
+status_wwaninfo_wrong_value => Valoare gresită
+
+
+## new format
+
+
+
+Available packages => Pachete disponibile
+qos_enabled => Activat
+qos_adv_enabled => Activat
+qos_disabled => Dezactivat
+qos_adv_disabled => Dezactivat

@@ -1,0 +1,7 @@
+Package: webif-lang-ro
+Maintainer: X-Wrt Project
+Section: net
+Depends: webif
+Priority: normal
+Description: Romanian language file for webif.
+
