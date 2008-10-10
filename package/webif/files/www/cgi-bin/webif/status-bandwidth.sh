@@ -3,8 +3,15 @@
 . /usr/lib/webif/webif.sh
 
 header "Status" "Bandwidth" "@TR<<Bandwidth>>"
-has_pkgs bandwidthd
+if [ "$FORM_install_bandwidthd" != "" ]; then
+	install_package bandwidthd
+	/etc/init.d/bandwidthd enable
+	/etc/init.d/bandwidthd start
+fi
+is_package_installed bandwidthd
+[ "$?" = "0" ] && bandwidthd_installed=1
 [ "$FORM_timeline" = "" ] && FORM_timeline=1
+display_menu() {
 display_form <<EOF
 formtag_begin|filterform|$SCRIPT_NAME
 start_form
@@ -18,12 +25,21 @@ string|</td></tr><tr><td>
 submit|timelinesubmit|@TR<<Submit>>
 end_form
 EOF
+}
 if [ "$FORM_timeline" = "1" ]; then
 	cat /www/bandwidthd/index.html |grep -q "bandwidthd has nothing to graph."
+	[ "$?" = "0" ] && graphs=0
 else
 	cat /www/bandwidthd/index${FORM_timeline}.html |grep -q "bandwidthd has nothing to graph."
+	[ "$?" = "0" ] && graphs=0
 fi
-if [ "$?" != "0" ]; then
+if [ "$bandwidthd_installed" != "1" ]; then
+display_form <<EOF
+string|<div class=\"warning\">@TR<<status_bandwidth_feature_requires_bandwidthd#Bandwidthd is not installed>>:</div>
+submit|install_bandwidthd|@TR<<system_settings_Install_Bandwidthd#Install Bandwidthd>>
+EOF
+elif [ "$graphs" != "0" ]; then
+	display_menu
 	echo "<center><table width="100%" border=1 cellspacing=0>"
 	if [ "$FORM_timeline" = "1" ]; then
 		cat /www/bandwidthd/index.html |grep "TR"
@@ -61,6 +77,7 @@ EOF
 		fi
 	done
 else
+	display_menu
 	echo "@TR<<Bandwidth chart has not yet been generated, please try again later.>>"
 fi
 footer ?>
