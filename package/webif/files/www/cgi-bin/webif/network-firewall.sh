@@ -122,7 +122,7 @@ append forms "$form" "$N"
 
 get_tr
 form="string|<div class=\"settings\">
-	string|<h3><strong>@TR<<Incoming>></strong></h3>
+	string|<h3><strong>@TR<<Incoming Ports>></strong></h3>
 	string|<table style=\"width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"3\" cellspacing=\"2\" summary=\"@TR<<Incomimg Ports>>\">
 	$tr
 	string|<th>@TR<<Name>></th>
