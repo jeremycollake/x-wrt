@@ -23,7 +23,7 @@ if ! empty "$FORM_remove_vcfg"; then
 	uci_remove "firewall" "$FORM_remove_vcfg"
 fi
 
-#Add new rule
+#Add new rules
 if [ -n "$FORM_port_rule" ]; then
 	uci_add "firewall" "rule" "$FORM_name"; add_rule_cfg="$CONFIG_SECTION"
 	uci_set "firewall" "$add_rule_cfg" "src" "wan"
@@ -33,7 +33,6 @@ if [ -n "$FORM_port_rule" ]; then
 	uci_set "firewall" "$add_rule_cfg" "dest_port" "$FORM_port_rule"
 	uci_set "firewall" "$add_rule_cfg" "target" "ACCEPT"
 fi
-#Add new rule
 if [ -n "$FORM_dest_port_redirect" ]; then
 	uci_add "firewall" "redirect" "$FORM_name_redirect"; add_redirect_cfg="$CONFIG_SECTION"
 	uci_set "firewall" "$add_redirect_cfg" "src" "wan"
@@ -43,7 +42,11 @@ if [ -n "$FORM_dest_port_redirect" ]; then
 	uci_set "firewall" "$add_redirect_cfg" "dest_ip" "$FORM_dest_ip_redirect"
 	uci_set "firewall" "$add_redirect_cfg" "dest_port" "$FORM_dest_port_redirect"
 fi
-
+if [ -n "$FORM_add_rule_add" ]; then
+	uci_add "firewall" "forwarding" ""; add_rule_cfg="$CONFIG_SECTION"
+	uci_set firewall "$add_rule_cfg" src "$FORM_src_add"
+	uci_set firewall "$add_rule_cfg" dest "$FORM_dest_add"
+fi
 config_cb() {
 	local cfg_type="$1"
 	local cfg_name="$2"
@@ -62,7 +65,9 @@ config_cb() {
 			append redirect_cfgs "$cfg_name" "$N"
 		;;
 		interface)
-			append network_devices "$cfg_name"
+			if [ "$cfg_name" != "loopback" ]; then
+				append networks "option|$cfg_name" "$N"
+			fi
 		;;
 	esac
 }
@@ -78,11 +83,47 @@ get_tr() {
 }
 
 uci_load firewall
+uci_load network
+append forms "start_form|@TR<<Forwarding Configuration>>" "$N"
+for zone in $forwarding_cfgs; do
+	eval FORM_remove=\$FORM_remove_rule_$zone
+	if [ "$FORM_remove" != "" ]; then
+		uci_remove "firewall" "$zone"
+	fi
+	if [ "$FORM_submit" != "" ]; then
+		eval FORM_src=\$FORM_src_$zone
+		eval FORM_dest=\$FORM_dest_$zone
+		uci_set firewall "$zone" src "$FORM_src"
+		uci_set firewall "$zone" dest "$FORM_dest"
+	else
+		config_get FORM_src $zone src
+		config_get FORM_dest $zone dest
+	fi
+	if [ "$FORM_remove" = "" ]; then
+		form="field|@TR<<Allow traffic originating from>>
+			select|FORM_src_$zone|$FORM_src
+			$networks
+			string|@TR<<to>>
+			select|FORM_dest_$zone|$FORM_dest
+			$networks
+			submit|remove_rule_$zone|@TR<<Remove Rule>>"
+		append forms "$form" "$N"
+	fi
+done
+form="field|@TR<<Allow traffic originating from>>
+	select|src_add
+	$networks
+	string|@TR<<to>>
+	select|dest_add
+	$networks
+	submit|add_rule_add|@TR<<Add Rule>>
+	end_form"
+append forms "$form" "$N"
 
 get_tr
 form="string|<div class=\"settings\">
 	string|<h3><strong>@TR<<Incoming>></strong></h3>
-	string|<table style=\"width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"3\" cellspacing=\"2\" summary=\"@TR<<Incomimg>>\">
+	string|<table style=\"width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"3\" cellspacing=\"2\" summary=\"@TR<<Incomimg Ports>>\">
 	$tr
 	string|<th>@TR<<Name>></th>
 	string|<th>@TR<<Protocol>></th>
