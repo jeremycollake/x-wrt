@@ -1,4 +1,5 @@
 #!/usr/bin/lua
+--[[
 print("Compile files... to save space")
 local IPKG_INSTROOT = os.getenv("IPKG_INSTROOT") or ""
 local IPKG_CONF_DIR = os.getenv("IPKG_CONF_DIR") or ""
@@ -16,3 +17,4 @@ for file in libdir:lines() do
 end
 os.execue("ln -s /usr/share/internet-wifi/lib/luapkg /usr/bin")
 os.execue("ln -s /usr/share/internet-wifi/lib/parser /usr/bin")
+]]--
