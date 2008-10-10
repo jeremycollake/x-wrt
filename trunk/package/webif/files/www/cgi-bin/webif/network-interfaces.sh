@@ -253,7 +253,13 @@ if [ "$switch_interfaces" != "" ]; then
 		eval FORM_network_vlan="\$FORM_network_vlan$count"
 		if [ "$FORM_network_vlan" = "" ]; then
 			for network in $networks; do
-				eval network_ifname="\$ifnames_$network"
+				config_get type $network type
+				if [ "$type" = "bridge" ]; then
+					#Use device to get the ifname of a bridged connection
+					config_get network_ifname $network device
+				else
+					eval network_ifname="\$ifnames_$network"
+				fi
 				echo $network_ifname |grep -q "eth0.$count"
 				if [ "$?" = "0" ]; then
 					FORM_network_vlan="$network"
