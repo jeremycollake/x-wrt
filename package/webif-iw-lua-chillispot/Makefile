@@ -27,7 +27,7 @@ define Package/webif-iw-lua-chillispot/install
 	rm -rf $(1)/usr/lib/webif/lang/
 	rm -f $(1)/www/cgi-bin/webif/*.wip
 	
-#	$(CP) -a ./ipkg/webif-iw-lua-chillispot.postinst $(1)/CONTROL/postinst
+	$(CP) -a ./ipkg/webif-iw-lua-chillispot.postinst $(1)/CONTROL/postinst
 #	chmod 755 $(1)/CONTROL/*inst
 	
 	find $(1) -name CVS | xargs rm -rf
