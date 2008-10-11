@@ -22,7 +22,7 @@ endef
 define Package/webif-iw-lua-chillispot/install
 	$(CP) -a ./files/* $(1)/
 	chmod -R 755 $(1)/www/*
-	$(CP) -a ./wilibs/* $(1)/usr/lib/lua/lua-xwrt/
+	$(CP) -a ./iwlibs/* $(1)/usr/lib/lua/lua-xwrt/
 #	chmod -R 755 $(1)/usr/lib/lua/lua-xwrt/*
 	rm -rf $(1)/usr/lib/webif/lang/
 	rm -f $(1)/www/cgi-bin/webif/*.wip
