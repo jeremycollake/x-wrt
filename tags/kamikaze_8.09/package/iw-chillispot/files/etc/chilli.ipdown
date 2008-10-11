@@ -1,3 +1,0 @@
-#!/bin/sh
-[ -e "/var/run/chilli.iptables" ] && sh /var/run/chilli.iptables 2>/dev/null
-rm -f /var/run/chilli.iptables 2>/dev/null
