@@ -21,13 +21,13 @@ name = "ChilliSpot"
 
 enable = tonumber(uci.get("chillispot.webadmin.enable")) or 0
 userlevel = tonumber(uci.get("chillispot.webadmin.userlevel")) or 0
-radiususers = tonumber(uci.get("chillispot.webadmin.radconf")) or 0
+radconf = tonumber(uci.get("chillispot.webadmin.radconf")) or 0
 
 reboot = false                -- reboot device after all apply process
 --exe_before = {} -- execute os process in this table before any process
 
 exe_after  = {} -- execute os process after all apply process
-if radiususers > 1 then
+if radconf > 1 then
   call_parser = "freeradius freeradius_check freeradius_clients freeradius_proxy"
   exe_after["/etc/init.d/radiusd restart"]="freeradius"
 end

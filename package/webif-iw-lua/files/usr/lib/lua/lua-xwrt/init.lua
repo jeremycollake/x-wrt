@@ -45,7 +45,6 @@ __MENU = menuClass.new()
 -- menu   = menuClass.new()
 -- menu:loadXWRT_Category()
   require("x-wrt-page")
-
 --config = uciclass.new(nil)
 -- validate_post()
   if page == nil then
