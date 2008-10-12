@@ -21,7 +21,7 @@ endef
 
 define Package/webif-iw-lua-coovachilli/install
 	$(CP) -a ./files/* $(1)/
-	chmod -R 755 $(1)/www/*
+	chmod -R 755 $(1)/*
 	rm -rf $(1)/usr/lib/webif/lang/
 	rm -f $(1)/www/cgi-bin/webif/*.wip
 	$(CP) -a ./ipkg/webif-iw-lua-coovachilli.postinst $(1)/CONTROL/postinst
