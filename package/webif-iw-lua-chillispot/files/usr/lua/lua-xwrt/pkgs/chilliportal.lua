@@ -55,6 +55,7 @@ end
 ]]--
 
 uci.check_set("chillispot","settings","chillispot")
+uci.check_set("chillispot","checked","chillispot")
 uci.check_set("chillispot","webadmin","chillispot")
 uci.check_set("chillispot","webadmin","enable","0")
 
@@ -293,7 +294,7 @@ function net_form(form,user_level,localuam)
     form:Add("text","chillispot.settings.dns2",uci.get("chillispot.settings.dns2"),tr("chilli_var_dns2#Secondary DNS"),"string")
   end
   
-  form:Add("checkbox","chillispot.settings.uamanydns",uci.check_set("chillispot","settings","uamanydns","1"),tr("chilli_var_uamanydns#Any DNS"))
+  form:Add("checkbox","chillispot.checked.uamanydns",uci.check_set("chillispot","checked","uamanydns","1"),tr("chilli_var_uamanydns#Any DNS"))
   form:Add_help(tr("chilli_var_uamanydns#Any DNS"),tr("chilli_help_uamanydns#If enabled, users will be allowed to user any other dns server they specify."))
   
   if user_level > 1 then
@@ -308,7 +309,7 @@ function net_form(form,user_level,localuam)
     form:Add("text","chillispot.settings.lease",uci.get("chillispot.settings.lease"),tr("chilli_var_lease#Lease Time"),"string")
     form:Add_help(tr("chilli_var_lease#DHCP Lease"),tr("chilli_help_lease#Time before DHCP lease expires"))
     if user_level > 3 then
-      form:Add("checkbox","chillispot.settings.eapolenable",uci.get("chillispot.settings.eapolenable"),tr("chilli_var_eapolenable#Enable IEEE 802.1x authentication"),"string")
+      form:Add("checkbox","chillispot.checked.eapolenable",uci.get("chillispot.checked.eapolenable"),tr("chilli_var_eapolenable#Enable IEEE 802.1x authentication"),"string")
       form:Add_help(tr("chilli_var_eapolenable#Enable IEEE 802.1x authentication"),tr([[
         If this option is given IEEE 802.1x authentication is enabled. 
         ChilliSpot will listen for EAP authentication requests on the interface 
@@ -394,7 +395,7 @@ function radius_form(form,user_level,rad_conf)
           UDP port to listen to for accepting radius disconnect requests. 
           ]]))
 
-        form:Add("checkbox","chillispot.settings.coanoipcheck",  uci.get("chillispot.settings.coanoipcheck") ,tr("chilli_var_coanoipcheck#No check radius IP"),"string")
+        form:Add("checkbox","chillispot.checked.coanoipcheck",  uci.get("chillispot.checked.coanoipcheck") ,tr("chilli_var_coanoipcheck#No check radius IP"),"string")
         form:Add_help(tr("chilli_var_coanoipcheck#No check radius IP"),tr(
           [[
           If this option is given no check is performed on the source IP address 
@@ -412,7 +413,7 @@ function access_form(form,user_level,localrad)
 
 	form = formClass.new(tr("chilli_title_access#Access List Setting"))
 
-	form:Add("checkbox","chillispot.settings.macauth",uci.get("chillispot.settings.macauth"),tr("chilli_var_macauth#MAC Authentication"))
+	form:Add("checkbox","chillispot.checked.macauth",uci.get("chillispot.checked.macauth"),tr("chilli_var_macauth#MAC Authentication"))
 	form:Add_help(tr("chilli_var_macauth#MAC Authentication"),tr("chilli_help_macauth#If enabled, users will be authenticated only based on their MAC Address."))
 
 	form:Add("text","chillispot.settings.macallowed",uci.get("chillispot.settings.macallowed"),tr("chilli_var_macallowed#MAC Allowed"),"string","width:90%")

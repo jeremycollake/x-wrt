@@ -59,10 +59,10 @@ wz.mesh   = tonumber(uci.get("iw_hotspot_wizard.general.mesh"))
 wz.radius = tonumber(uci.get("iw_hotspot_wizard.general.radius")) 
 wz.portal = tonumber(uci.get("iw_hotspot_wizard.general.portal"))
 
-local olsr_pkgs = "ip olsrd olsrd-mod-dyn-gw olsrd-mod-nameservice olsrd-mod-txtinfo iw-xwrt-lua-olsr"
-local freeradius_pkgs = "" --"x-wrt-iw-freeradius libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm x-wrt-iw-freeradius"
-local coova_pkgs = "coova-chilli iw-xwrt-lua-coovachilli"
-local chilli_pkgs = "chillispot iw-xwrt-lua-chillispot"
+local olsr_pkgs = "ip olsrd olsrd-mod-dyn-gw olsrd-mod-nameservice olsrd-mod-txtinfo webif-iw-lua-olsr"
+local freeradius_pkgs = "" --"webif-iw-lua-freeradius libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm"
+local coova_pkgs = "coova-chilli webif-iw-lua-coovachilli"
+local chilli_pkgs = "chillispot webif-iw-lua-chillispot"
 
 function setfooter(form)
   page.savebutton = "<input type=\"submit\" name=\"__ACTION\" value=\""..tr("Next").."\" style=\"width:100px;\" />"
@@ -104,8 +104,8 @@ function set_portal()
     forms = set_communities()
   else
     if wz.radius == 0 then 
-      wz.radius = 1
-      uci.set("iw_hotspot_wizard.general.radius=1")
+      wz.radius = 0
+      uci.set("iw_hotspot_wizard.general.radius=0")
       uci.save("iw_hotspot_wizard")
     end
     if wz.portal == 1 then
@@ -142,12 +142,14 @@ end
 
 function set_communities()
   local forms = {}
+--[[
   if wz.radius == 0 then
     if wz.portal ~= 0 then 
       wz.radius = 1
     end    
     uci.set("iw_hotspot_wizard","general","radius",wz.radius)
   end
+]]--
   if wz.radius == 1 then
   -- configura el raduis en el cportal
     if wz.portal == 0 then
@@ -185,14 +187,14 @@ function set_communities()
   else
     forms = set_end()
   end
-  if wz.radius > 1 then
+--  if wz.radius > 1 then
     if wz.portal == 1 then
       require("coovaportal")
     elseif wz.portal == 3 then
       require("chilliportal")
     end
     cportal.set_rad_local(1,wz.radius)
-  end
+--  end
   return forms
 end
 
@@ -316,7 +318,7 @@ else
     ]]))
   form:Add_help_link("http://en.wikipedia.org/wiki/Captive_portal",tr("Extracted from Wikipedia"))
   
-	form:Add("select","iw_hotspot_wizard.general.radius",uci.get("iw_hotspot_wizard.general.radius"),tr("iw_wizard_var_portal#Authentication Users"),"string")
+	form:Add("select","iw_hotspot_wizard.general.radius",uci.get("iw_hotspot_wizard.general.radius"),tr("iw_wizard_var_portal#Configure Radius Server"),"string")
 	form["iw_hotspot_wizard.general.radius"].options:Add("0","No")
 	form["iw_hotspot_wizard.general.radius"].options:Add("2","Local Users")
 	form["iw_hotspot_wizard.general.radius"].options:Add("1","Communities Users")

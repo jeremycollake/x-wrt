@@ -82,7 +82,7 @@ local ifwifi = uci.get_type("wireless","wifi-iface")
     uci.set("olsr","webadmin","websettings")
   end
   uci.check_set("olsr","system","websettings")
-  uci.check_set("olsr","system","apply","/usr/lib/lua/lua-wrt/applys/apply_olsr.lua")
+  uci.check_set("olsr","system","apply","/usr/lib/lua/lua-xwrt/applys/apply_olsr.lua")
   
   local userlevel = tonumber(uci.check_set("olsr","webadmin","userlevel","1"))
 
