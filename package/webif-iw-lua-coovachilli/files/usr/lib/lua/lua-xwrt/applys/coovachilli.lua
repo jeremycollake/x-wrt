@@ -41,64 +41,6 @@ exe_after["wifi"]="wifi"
 
 
 function process()
---[[
-  radiususers = tonumber(uci.get("coovachilli.webadmin.radconf")) or 0
-  t = net.ipcalc(uci.get("coovachilli","uam","HS_UAMLISTEN"),uci.get("coovachilli","net","HS_NETMASK"))
-  uci.set("coovachilli","net","HS_NETWORK",t["NETWORK"])
-  if radiususers > 1 then
-    wwwprint("Checking freeradius installation")
-    local write_file
-    if io.exists("/usr/share/freeradius/dictionary") then
-      local dict = io.totable("/usr/share/freeradius/dictionary",true)
-      wwwprint("Updating /usr/share/freeradius/dictionary")
-      if dict[1] ~= "$INCLUDE dictionary.chillispot" then
-        table.insert(dict,1,"$INCLUDE dictionary.chillispot")
-      end
-      write_file = io.open("/usr/share/freeradius/dictionary","w")
-      write_file:write(table.concat(dict,'\n'))
-      write_file:close()
-    end
-  end
-  if uci.get("coovachilli.webadmin.ifwifi") and uci.get("coovachilli.net.HS_LANIF") == nil then
-    uci.check_set("network","wifi","interface")
-    uci.set("network","wifi","proto","static")
-    uci.set("network","wifi","type","bridge")
---    uci.save("network")
-    if uci.get("network.wifi.ifname") == nil then
-      uci.set("network","wifi","ifname",uci.get("coovachilli.webadmin.ifwifi"))
-    elseif not string.gmatch(uci.get("network.wifi.ifname"),uci.get("coovachilli.webadmin.ifwifi")) then
-      uci.set("network","wifi","ifname", uci.get("network.wifi.ifname").." "..uci.get("coovachilli.webadmin.ifwifi"))
-    end
---  uci.set("network",set_netname,"dns","204.225.44.3")
-    uci.save("network")
-    local network = uci.get_all("network")
-    if network.wifi.type ~= "bridge" then
-      if network.wifi.ifname ~= nil then
-        uci.set("coovachilli","net","HS_LANIF",network.wifi.ifname)
-      end
-    else
-      uci.set("coovachilli","net","HS_LANIF","br-wifi")
-    end
-    uci.save("coovachilli")
-  end
-  local network = uci.get_all("network")
-  if uci.get("coovachilli","webadmin","enable") == "1" then
-    local wififace = uci.get_type("wireless","wifi-iface")
-    for i=1, #wififace do
-      if wififace[i].device == network.wifi.ifname then
---        uci.set("wireless",wififace[1][".name"],"ssid","X-Wrt")
---        uci.set("wireless",wififace[1][".name"],"network","wifi")
-        uci.set("wireless",network.wifi.ifname,"disabled","0")
-        break
-      end
-    end
-  else
-    uci.set("wireless",network.wifi.ifname,"disabled", "0")
-  end    
-  uci.commit("network")
-  uci.commit("wireless")
-  uci.commit("coovachilli")
-]]--
   write_init()
   write_config()
   uci.commit("coovachilli")

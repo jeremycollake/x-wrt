@@ -245,11 +245,6 @@ function net_form(form,user_level,localuam)
   	form:Add("text", "coovachilli.settings.HS_DNS_DOMAIN", uci.check_set("coovachilli","settings","HS_DNS_DOMAIN",""),tr("cportal_var_net#Domain"),"string")
   	form:Add("text", "coovachilli.settings.HS_DNS1", uci.check_set("coovachilli","settings","HS_DNS1","192.168.182.1"),tr("cportal_var_dns#DNS Server").." 1","string")
   	form:Add("text", "coovachilli.settings.HS_DNS2", uci.check_set("coovachilli","settings","HS_DNS2","204.225.44.3"),tr("cportal_var_dns#DNS Server").." 2","string")
---[[
-  form:Add("select","coovachilli.settings.HS_ANYDNS", uci.check_set("coovachilli","settings","HS_ANYDNS","1"),tr("cportal_var_anydns#Allow Any DNS"),"int")
-  form["coovachilli.check.HS_ANYDNS"].options:Add("0",tr("disable#Disable"))
-  form["coovachilli.check.HS_ANYDNS"].options:Add("1",tr("enable#Enable"))
-]]--
 
 --  form:Add("text", "coovachilli.settings.HS_UAMSERVER", uci.check_set("coovachilli","settings","HS_UAMSERVER","192.168.182.1"),tr("cportal_var_uamserver#Server"),"string")
 --  form:Add("text", "coovachilli.settings.HS_UAMPORT", uci.check_set("coovachilli","settings","HS_UAMPORT","3990"),tr("cportal_var_net#Port"),"string")
@@ -258,20 +253,6 @@ function net_form(form,user_level,localuam)
   return form
 end
 
-function set_rad_local(user_level, localrad)
-  local localrad = localrad or radconf
-  local user_level = user_level or userlevel
-  uci.set("coovachilli","webadmin","radconf",localrad)  
-  uci.set("coovachilli","webadmin","userlevel",user_level)
-
-  uci.set("coovachilli","settings","HS_RADIUS","127.0.0.1") 
-  uci.set("coovachilli","settings","HS_RADIUS2","127.0.0.1") 
-  uci.set("coovachilli","settings","HS_RADAUTH","1812") 
-  uci.set("coovachilli","settings","HS_RADACCT","1813") 
-  uci.set("coovachilli","settings","HS_RADSECRET","testing123")
-  uci.save("coovachilli") 
-end
-    
 function radius_form(form,user_level,rad_conf)
   local user_level = user_level or userlevel
   local form = form
@@ -287,8 +268,8 @@ function radius_form(form,user_level,rad_conf)
 	  form:Add("text","coovachilli.settings.HS_RADIUS",uci.check_set("coovachilli","settings","HS_RADIUS","rad01.internet-wifi.com.ar"),tr("chilli_var_radiusserver1#Primary Radius"),"string,required","width:90%")
   	form:Add("text","coovachilli.settings.HS_RADIUS2",uci.check_set("coovachilli","settings","HS_RADIUS2","rad02.internet-wifi.com.ar"),tr("chilli_var_radiusserver2#Secondary Radius"),"string,required","width:90%")
   	form:Add_help(tr("chilli_help_title_radiusserver#Primary / Secondary Radius"),tr("chilli_help_radiusserver#Primary and Secondary Radius Server|Ip or url address of Radius Servers. If you have only one radius server you should set Secondary radius server to the same value as Primary radius server."))
-  	form:Add("text","coovachilli.settings.HS_RADAUTH",uci.check_set("coovachilli","settings","HS_RADAUTH",""),tr("chilli_var_radiusauthport#Authentication Port"),"int,>0")
-  	form:Add("text","coovachilli.settings.HS_RADACCT",uci.check_set("coovachilli","settings","HS_RADACCT",""),tr("chilli_var_radiusacctport#Accounting Port"),"int,>0")
+  	form:Add("text","coovachilli.settings.HS_RADAUTH",uci.check_set("coovachilli","settings","HS_RADAUTH","1812"),tr("chilli_var_radiusauthport#Authentication Port"),"int,>0")
+  	form:Add("text","coovachilli.settings.HS_RADACCT",uci.check_set("coovachilli","settings","HS_RADACCT","1813"),tr("chilli_var_radiusacctport#Accounting Port"),"int,>0")
   	form:Add_help(tr("chilli_help_title_radiusports#Authentication / Accounting Ports"),tr("chilli_help_radiusports#Radius authentication and accounting port|The UDP port number to use for radius authentication and accounting requests. The same port number is used for both radiusserver1 and radiusserver2."))
 	else
     uci.set("coovachilli","settings","HS_RADIUS","127.0.0.1") 
@@ -313,12 +294,13 @@ function nasid_form(form,user_level)
   end
 --  form:Add("subtitle",tr("NAS Identification"))
 	form:Add("text","coovachilli.settings.HS_NASID",uci.check_set("coovachilli","settings","HS_NASID","X-Wrt NAS"),tr("cportal_var_radiusnasid#NAS ID"),"string")
-  form:Add("text","coovachilli.settings.HS_LOC_NAME",uci.check_set("coovachilli","settings","HS_LOC_NAME","My X-Wrt HotSpot"),tr("cportal_var_radiusnasip#Location Name"),"string")
-	form:Add("text","coovachilli.settings.HS_LOC_NETWORK",uci.check_set("coovachilli","settings","HS_LOC_NETWORK","X-Wrt Network"),tr("cportal_var_radiusnasporttype#Network name"),"string")
+  form:Add("text","coovachilli.settings.HS_LOC_NAME",uci.get("coovachilli","settings","HS_LOC_NAME"),tr("cportal_var_radiusnasip#Location Name"),"string")
+  form:Add_help(tr("chilli_var_radiuslocationname#Location Name"),tr("chilli_help_radiuslocationname#WISPr Location Name. Should be in the format: &lt;HOTSPOT_OPERATOR_NAME&gt;, &lt;LOCATION&gt;"))
 	if user_level > 1 then
-	form:Add("text","coovachilli.settings.HS_LOC_AC",uci.check_set("coovachilli","settings","HS_LOC_AC",""),tr("cportal_var_radiuslocationid#Phone area code"),"string")
-	form:Add("text","coovachilli.settings.HS_LOC_CC",uci.check_set("coovachilli","settings","HS_LOC_CC",""),tr("cportal_var_radiuslocationname#Phone country code"),"string")
-	form:Add("text","coovachilli.settings.HS_LOC_ISOCC",uci.check_set("coovachilli","settings","HS_LOC_ISOCC",""),tr("cportal_var_isocc#ISO Country code"),"string")
+		form:Add("text","coovachilli.settings.HS_LOC_NETWORK",uci.check_set("coovachilli","settings","HS_LOC_NETWORK","X-Wrt Network"),tr("cportal_var_radiusnasporttype#Network name"),"string")
+		form:Add("text","coovachilli.settings.HS_LOC_ISOCC",uci.check_set("coovachilli","settings","HS_LOC_ISOCC",""),tr("cportal_var_isocc#ISO Country code"),"string")
+		form:Add("text","coovachilli.settings.HS_LOC_CC",uci.check_set("coovachilli","settings","HS_LOC_CC",""),tr("cportal_var_radiuslocationname#Phone country code"),"string")
+		form:Add("text","coovachilli.settings.HS_LOC_AC",uci.check_set("coovachilli","settings","HS_LOC_AC",""),tr("cportal_var_radiuslocationid#Phone area code"),"string")
 	end
   uci.save("coovachilli")
   return form
@@ -348,10 +330,6 @@ function uam_form(form,user_level,local_portal)
     	form:Add("text","coovachilli.settings.HS_UAMHOMEPAGE",uci.check_set("coovachilli","settings","HS_UAMHOMEPAGE","http://\$HS_UAMLISTEN:\$HS_UAMPORT/www/coova.html"),tr("cportal_var_uamhomepage#UAM Home Page"),"string","width:90%")
     	form:Add_help(tr("cportal_var_uamhomepage#Homepage"),tr("cportal_help_uamhomepage#URL of Welcome Page. Unauthenticated users will be redirected to this address, otherwise specified, they will be redirected to UAM Server instead."))
   	end
---[[
-  form:Add("text_area","coovachilli.settings.HS_UAMALLOW",uci.check_set("coovachilli","settings","HS_UAMALLOW","x-wrt.org,coova.org,www.internet-wifi.com.ar"),tr("cportal_var_uamallowed#UAM Allowed"),"string","width:90%")
-  form:Add_help(tr("cportal_var_uamallowed#Allowed URLs"),tr("cportal_help_uamallowed#Comma-seperated list of domain names, urls or network subnets the client can access without authentication (walled gardened)."))
-]]--
   	uci.save("coovachilli")
   end
   form =  add_allowed_site(form,user_level)
@@ -403,57 +381,7 @@ function add_allowed_site(form,user_level)
     strallowed = strallowed..[[</table>]]
     form:Add("text_line","sitesallowed",strallowed)
   end
-
   return form
-end
-
-function extras_form()
---[[
-  local form = form
-  local user_level = user_level or 0
-  local localuam = localuam or 0
-  local extras = {}
-  extras["values"] = hotspot.extas or hotspot:set("chilli","extras")
-  extras["name"] = hotspot.__PACKAGE..".extras"
-
-  cp_HS_RADCONF     = extras.values.HS_RADCONF or "off"
-#
-# HS_ANYIP=on		   # Allow any IP address on subscriber LAN
-#
-# HS_MACAUTH=on		   # To turn on MAC Authentication
-#
-# HS_MACAUTHMODE=local	   # To allow MAC Authentication based on macallowed, not RADIUS
-#
-# HS_MACALLOWED="..."      # List of MAC addresses to authenticate (comma seperated)
-#
-# HS_USELOCALUSERS=on      # To use the /etc/chilli/localusers file
-#
-# HS_OPENIDAUTH=on	   # To inform the RADIUS server to allow OpenID Auth
-#
-# HS_WPAGUESTS=on	   # To inform the RADIUS server to allow WPA Guests
-#
-# HS_DNSPARANOIA=on	   # To drop DNS packets containing something other
-#			   # than A, CNAME, SOA, or MX records
-#
-# HS_OPENIDAUTH=on	   # To inform the RADIUS server to allow OpenID Auth
-#			   # Will also configure the embedded login forms for OpenID
-#
-# HS_USE_MAP=on		   # Short hand for allowing the required google
-#			   # sites to use Google maps (adds many google sites!)
-#
-###
-#   Other feature settings and their defaults
-#
-# HS_DEFSESSIONTIMEOUT=0   # Default session-timeout if not defined by RADIUS (0 for unlimited)
-#
-# HS_DEFIDLETIMEOUT=0	   # Default idle-timeout if not defined by RADIUS (0 for unlimited)
-]]--
---[[
-  form:Add("select",extras.name..".HS_RADCONF",cp_HS_RADCONF,tr("cportal_var_HS_RADCONF#Radius Configuration"),"string")
-    form[extras.name..".HS_RADCONF"].options:Add("off",tr("Off))
-    form[extras.name..".HS_RADCONF"].options:Add("on",tr("On))
-  Add_help(tr("cportal_var_HS_RADCONF#Radius Configuration"),tr("Get some configurations from RADIUS or a URL ('on' and 'url' respectively)")
-]]--
 end
 
 function connect_form(form,user_level,localuam)
@@ -488,7 +416,6 @@ function connect_form(form,user_level,localuam)
     idleTime = tline[8]
     startPage = tline[9]
     if tonumber(tline[5]) == 1 then
---      action = [[<a onclick="javascript:return confirm('Logout user ]]..tline[6]..[[?');" href=\"?release="..tline[1].."\">logout</a>]]
       action = [[<a href="?release=]]..tline[1].."&__menu="..__FORM["__menu"].."&option="..__FORM["option"]..[[">logout</a>]]
     else
       action = "<a href=\"?release="..tline[1].."&__menu="..__FORM["__menu"].."&option="..__FORM["option"].."\">release</a> - <a href=\"?authorize="..tline[4].."&__menu="..__FORM["__menu"].."&option="..__FORM["option"].."\">authorize</a>"
