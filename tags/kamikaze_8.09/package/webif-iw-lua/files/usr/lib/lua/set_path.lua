@@ -1,2 +1,2 @@
-package.cpath = "?;./?.so;/usr/lib/lua/?.so;/usr/lib/lua/lua-wrt/?.so" .. package.cpath 
+package.cpath = "?;./?.so;/usr/lib/lua/?.so;/usr/lib/lua/lua-xwrt/?.so" .. package.cpath 
 package.path = "/usr/lib/lua/lua-xwrt/?.lua;/usr/lib/lua/lua-xwrt/pkgs/?.lua;/usr/lib/lua/lua-xwrt/applys/?.lua;"..package.path 

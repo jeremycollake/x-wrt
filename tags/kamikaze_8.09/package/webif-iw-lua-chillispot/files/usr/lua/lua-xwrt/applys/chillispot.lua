@@ -374,7 +374,7 @@ stop() {
   write_file:write(init_file)
   write_file:close()
 end
-
+--[[
 function write_config()
   local conf_file ="#### This conf file was writed by iw-apply for chillispot ####\n"
   local chillisetting = uci.get_section("chillispot","settings")
@@ -408,6 +408,80 @@ function write_config()
   write_file = io.open("/etc/chilli.conf","w")
   write_file:write(conf_file)
   write_file:close()
+end
+]]--
+function set_alloweds()
+	chilli = uci.get_all("chillispot")
+	allowed = uci.get_type("chillispot","sitesallowed")
+	tallow = {}
+	if allowed then
+		for i,t in pairs(allowed) do
+			sites = string.gsub(t.site," ","")
+			for site in string.gmatch(sites,"[^,]+") do
+				tallow[site] = "" 
+			end
+		end
+	end
+	if chilli.settings.HS_RADIUS then tallow[chilli.settings.HS_RADIUS] = "" end
+	if chilli.settings.HS_RADIUS2 then tallow[chilli.settings.HS_RADIUS2] ="" end
+	if chilli.settings.HS_DNS1 then tallow[chilli.settings.HS_DNS1] ="" end
+	if chilli.settings.HS_DNS2 then tallow[chilli.settings.HS_DNS2] ="" end
+	if chilli.settings.HS_UAMLISTEN then tallow[chilli.settings.HS_UAMLISTEN] ="" end
+	tallow["x-wrt.org"] = ""
+	tallow["openwrt.org"] = ""
+	tallow["www.internet-wifi.com.ar"] = ""
+	tallow["www.chillispot.info"] = ""
+	if chilli.system.paypal ~= nil then
+		tallow["www.paypal.com"] = ""
+		tallow["66.211.168.0/24"] = ""
+		tallow["64.4.241.0/24"] = ""
+		tallow["216.113.188.0/24"] = ""
+		tallow["www.paypalobjects.com"] = ""
+		tallow["88.221.0.0/16"] = ""
+		tallow["84.53.0.0/16"] = ""
+		tallow["67.133.200.0/22"] = ""
+		tallow["72.246.0.0/15"] = ""
+		tallow["paypal.112.2o7.net"] = ""
+		tallow["216.52.17.0/24"] = ""
+		tallow["70.42.134.0/24"] = ""
+		tallow["128.242.125.0/24"] = ""
+	end 
+	local allow_str =""
+	local sep_str = ""
+	for i, v in pairs(tallow) do
+		allow_str = allow_str..sep_str..i
+		sep_str=","
+	end
+	return allow_str
+end
+
+function write_config()
+  wwwprint ("Writing configuration file /etc/chilli/config")
+	local settings = uci.get_section("coovachilli","settings")
+	conf_str = "#### This conf file was writed by webif-iw-lua-coovachilli-apply ####\n"
+	if settings then
+		for i, t in pairs(settings) do
+			if not string.match(i,"[.]") then
+      	if string.match(t,"%s") then t = "\""..t.."\"" end
+				conf_str = conf_str .. i.." "..t.."\n"
+			end
+		end
+	end
+	conf_str = conf_str.."uamallowed "..set_alloweds().."\n"
+
+  local setting = uci.get_section("chillispot","checked")
+  for k,v in pairs(setting) do
+    if not string.match(k,"[.]") then
+      if tonumber(v) == 1 then
+        conf_str = conf_file .. k .. "\n"
+      end
+    end
+  end
+	conf_str .. "\n"
+  write_file = io.open("/etc/chilli/config","w")
+  write_file:write(conf_str)
+  write_file:close()
+  wwwprint("/etc/chilli/config writed OK!")
 end
 
 return parser

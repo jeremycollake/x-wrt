@@ -104,8 +104,9 @@ end
 
 --function call_parser(file,parsers_list,depends_list,exe_before,exe_after,reboot_list)
 function call_parser(file)
-    local apply_file = uci.get(file,"system","apply")
-    require(apply_file)
+  local apply_file = uci.get(file,"system","apply") or "/usr/lib/lua/lua-xwrt/applys/"..file..".lua"
+--		print(1,apply_file,file)
+    dofile(apply_file)
     parsers_list[file] = {p = parser}
     -- Read if this package depends or need others packages to done configuration
     if parser.depends_pkgs then
@@ -161,7 +162,8 @@ end
 for i=1, #file_to_process do
   local file = file_to_process[i]
   file_list[file] = ""
-  local apply_file = uci.get(file,"system","apply")
+  local apply_file = uci.get(file,"system","apply") or "/usr/lib/lua/lua-xwrt/applys/"..file..".lua"
+--	print(0,apply_file,file)
   if apply_file and io.exists(apply_file) == true then
 --    call_parser(file,parsers_list,depends_list,exe_before,exe_after,reboot_list)
     dofile(apply_file)

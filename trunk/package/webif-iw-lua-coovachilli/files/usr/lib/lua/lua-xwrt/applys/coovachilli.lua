@@ -26,12 +26,13 @@ init_script = "/etc/init.d/chilli"
 enable = tonumber(uci.get("coovachilli.webadmin.enable")) or 0
 local userlevel = tonumber(uci.get("coovachilli.webadmin.userlevel")) or 0
 local radiususers = tonumber(uci.get("coovachilli.webadmin.radconf")) or 0
-call_parser = "freeradius freeradius_check freeradius_clients freeradius_proxy"
+call_parser = nil
 
 reboot = false                -- reboot device after all apply process
 --exe_before = {} -- execute os process in this table before any process
 exe_after  = {} -- execute os process after all apply process
 if radiususers > 1 then
+	call_parser = "freeradius freeradius_check freeradius_clients freeradius_proxy"
   exe_after["/etc/init.d/radiusd restart"]="freeradius"
 end
 --depends_pkgs = "libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm iw-freeradius"
@@ -40,8 +41,9 @@ exe_after["wifi"]="wifi"
 
 
 function process()
+--[[
   radiususers = tonumber(uci.get("coovachilli.webadmin.radconf")) or 0
-  t = ipcalc(uci.get("coovachilli","uam","HS_UAMLISTEN"),uci.get("coovachilli","net","HS_NETMASK"))
+  t = net.ipcalc(uci.get("coovachilli","uam","HS_UAMLISTEN"),uci.get("coovachilli","net","HS_NETMASK"))
   uci.set("coovachilli","net","HS_NETWORK",t["NETWORK"])
   if radiususers > 1 then
     wwwprint("Checking freeradius installation")
@@ -96,8 +98,10 @@ function process()
   uci.commit("network")
   uci.commit("wireless")
   uci.commit("coovachilli")
+]]--
   write_init()
   write_config()
+  uci.commit("coovachilli")
 end
 
 
@@ -196,30 +200,67 @@ condrestart() {
   wwwprint("/etc/init.d/chilli writed OK!")
 end
 
+function set_alloweds()
+	coovachilli = uci.get_all("coovachilli")
+	allowed = uci.get_type("coovachilli","sitesallowed")
+	tallow = {}
+	if allowed then
+		for i,t in pairs(allowed) do
+			sites = string.gsub(t.site," ","")
+			for site in string.gmatch(sites,"[^,]+") do
+				tallow[site] = "" 
+			end
+		end
+	end
+	if coovachilli.settings.HS_RADIUS then tallow[coovachilli.settings.HS_RADIUS] = "" end
+	if coovachilli.settings.HS_RADIUS2 then tallow[coovachilli.settings.HS_RADIUS2] ="" end
+	if coovachilli.settings.HS_DNS1 then tallow[coovachilli.settings.HS_DNS1] ="" end
+	if coovachilli.settings.HS_DNS2 then tallow[coovachilli.settings.HS_DNS2] ="" end
+	if coovachilli.settings.HS_UAMLISTEN then tallow[coovachilli.settings.HS_UAMLISTEN] ="" end
+	tallow["x-wrt.org"] = ""
+	tallow["openwrt.org"] = ""
+	tallow["www.internet-wifi.com.ar"] = ""
+	tallow["coova.org"] = ""
+	if coovachilli.system.paypal ~= nil then
+		tallow["www.paypal.com"] = ""
+		tallow["66.211.168.0/24"] = ""
+		tallow["64.4.241.0/24"] = ""
+		tallow["216.113.188.0/24"] = ""
+		tallow["www.paypalobjects.com"] = ""
+		tallow["88.221.0.0/16"] = ""
+		tallow["84.53.0.0/16"] = ""
+		tallow["67.133.200.0/22"] = ""
+		tallow["72.246.0.0/15"] = ""
+		tallow["paypal.112.2o7.net"] = ""
+		tallow["216.52.17.0/24"] = ""
+		tallow["70.42.134.0/24"] = ""
+		tallow["128.242.125.0/24"] = ""
+	end 
+	local allow_str =""
+	local sep_str = ""
+	for i, v in pairs(tallow) do
+		allow_str = allow_str..sep_str..i
+		sep_str=","
+	end
+	return allow_str
+end
+
 function write_config()
   wwwprint ("Writing configuration file /etc/chilli/config")
-  local coovadir = uci.get_type("coovachilli","coovadir")
-  local str_set="#### This conf file was writed by iw-apply for coova ####\n"
-  for x,y in pairs(coovadir) do
-    for k, v in pairs(y) do
-      if k ~= ".type"
-      and k ~= ".name" then
-        str_set = str_set..k.."="..v.."\n"
-      end
-    end
-  end
-  local chillisettings = uci.get_type("coovachilli","settings")
-  for x,y in pairs(chillisettings) do
-    for k, v in pairs(y) do
-      if k ~= ".type"
-      and k ~= ".name" then
-        if string.match(v,"%s") then v = "\""..v.."\"" end
-        str_set = str_set..k.."="..v.."\n"
-      end
-    end
-  end
+	settings = uci.get_section("coovachilli","settings")
+	conf_str = "#### This conf file was writed by webif-iw-lua-coovachilli-apply ####\n"
+	if settings then
+		for i, t in pairs(settings) do
+			if not string.match(i,"[.]") then
+      	if string.match(t,"%s") then t = "\""..t.."\"" end
+				conf_str = conf_str .. i.."="..t.."\n"
+			end
+		end
+	end
+	conf_str = conf_str.."HS_UAMALLOW="..set_alloweds().."\n"
+
   write_file = io.open("/etc/chilli/config","w")
-  write_file:write(str_set)
+  write_file:write(conf_str)
   write_file:close()
   wwwprint("/etc/chilli/config writed OK!")
 end

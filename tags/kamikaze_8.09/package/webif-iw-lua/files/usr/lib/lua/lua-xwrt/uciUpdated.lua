@@ -160,7 +160,8 @@ end
 
 function uciUpdatedClass:apply()
   self:readUpdated()
-  dofile("/usr/lib/lua/lua-wrt/apply.lua")
+  dofile("/usr/lib/lua/lua-xwrt/apply.lua")
+--  require("apply.lua")
 	os.exit()
 end
 
