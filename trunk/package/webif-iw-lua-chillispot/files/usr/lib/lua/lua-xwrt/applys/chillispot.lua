@@ -38,31 +38,6 @@ script = "chilli"
 init_script = "/etc/init.d/chilli"
 
 -- depends_pkgs = "libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm iw-freeradius"
---[[
-function set_network()
-  local tun_network = uci.get("chillispot","webadmin","uamlisten")
-  
-  if tun_network then
-    
-  
-  else
-    uci.delete("chillispot","net","net")
-    set_dynip()
-    set_statip()
-  end
-end
-
-function set_dynip(default)
-  if default ~= true then
-  else
-    uci.delete("chillispot","net","dynip")
-  end
-end
-
-function set_default_statip(default)
-  uci.delete("chillispot","net","statip")
-end
-]]--
 
 function process_networks_values()
   local systemoption = tonumber(uci.get("chillispot","system","dhcpif"))
@@ -209,144 +184,11 @@ function process_networks_values()
     uci.save("chillispot")
   end
 
---[[
--- Esto todavia no esta hecho es para controlar las 
-  local dynip = uci.get("chillispot","webadmin","dynip")
-  local dynip_mask = uci.get("chillispot","webadmin","dynip_mask") or "255.255.255.0"
-  local statip = uci.get("chillispot","settings","statip")
-  local statip_mask = uci.get("chillispot","settings","statip") or "255.255.255.0"
-  local tdynip = {}
-  if dynip ~= nil then
-    tdynip = ipcalc(dynip,dynip_mask)
-  end
-  if statip ~= nil then
-    tstatip = ipcalc(statip,statip_mask)
-  end
-]]--      
---[[
-#  net 192.168.182.0/24
-#dynip 192.168.182.0/24
-#statip 192.168.182.0/24
-#dns1 172.16.0.5
-#dns2 172.16.0.6
-uamserver https://radius.chillispot.org/hotspotlogin
-#uamhomepage http://192.168.182.1/welcome.html
-#uamsecret ht2eb8ej6s4et3rg1ulp
-#uamlisten 192.168.182.1
-#uamport 3990
-]]--   
---[[      
-  local uamlisten = uci.get("chillispot","webadmin","uamlisten")
-  if uamlisten == nil then set_default_network end
-  local netmask = uci.get("chillispot","webadmin","netmask") or "255.255.255.0"
-  
-  local dynip = uci.get("chillispot","webadmin","dynip")
-  local dynip_mask = uci.get("chillispot","webadmin","dynip_mask")
-  
-  local staticip = uci.get("chillispot","webadmin","staticip")
-  local staticip_mask = uci.get("chillispot","webadmin","staticip_mask")
-
-  if uamlisten then
-    process_uamlisten
-  else
-    wwwprint("Assign 192.168.182.1 to uam")
-  local tnetwork = ipcalc(uamlisten,netmask)
-  uamlisten = tnetwork["IP"]
-  netmask = tnetwork["NETMASK"]
-  local network = tnetwork["NETWORK"]
-  local netprefix = tnetwork["PREFIX"]
-  local tdyn
-  local tstatic
-  if dynip then
-    if dynip_mask then
-      tdyn = ipcalc(dynip,dynip_mask)
-    els
-    local tstatic = ipcalc(staticip,staticip_mask)
-  
-  stat
-]]--
 end
 
 function process()
---  if userlevel < 2 then basic_settings() end
---  wwwprint("Chilli Parsers...")
   process_networks_values()
   write_config()  
-  
---[[  
-  radiususers = tonumber(uci.get("chillispot.webadmin.radconf"))
-  if radiususers > 1 then
-    wwwprint("Checking freeradius installation")
-    local write_file
-    if io.exists("/usr/share/freeradius/dictionary") then
-      local dict = io.totable("/usr/share/freeradius/dictionary",true)
-      wwwprint("Updating /usr/share/freeradius/dictionary")
-      if dict[1] ~= "$INCLUDE dictionary.chillispot" then
-        table.insert(dict,1,"$INCLUDE dictionary.chillispot")
-      end
-      write_file = io.open("/usr/share/freeradius/dictionary","w")
-      write_file:write(table.concat(dict,'\n'))
-      write_file:close()
-    end
-  end
-  local netnm = uci.check_set("chillispot","webadmin","netname","chilli")
-  if userlevel < 2 then
-    uci.set("chillispot","webadmin","ipaddr","192.168.20.1")
-    uci.set("chillispot","webadmin","netmask","255.255.255.0")
-    uci.set("chillispot","webadmin","device",uci.get("chillispot","webadmin","ifwifi"))
-  end
-  uci.save("chillispot")
-  local chilli = uci.get_all("chillispot")
-  local network = uci.get_all("network")
-  if network[netnm] == nil then 
-    uci.set("network",netnm,"interface")
-    uci.save("network")
-    network = uci.get_all("network")
-  end
-    
---  if uci.get("chillispot.webadmin.ifwifi") and uci.get("chillispot.net.dhcpif") == nil then
-    uci.check_set("network",netnm,"interface")
-    uci.set("network",netnm,"proto","static")
-    uci.set("network",netnm,"type","bridge")
-    uci.set("network",netnm,"ipaddr",chilli.webadmin.ipaddr)
-    uci.set("network",netnm,"netmask",chilli.webadmin.netmask)
-    uci.save("network")
-    if uci.get("network",netnm,"ifname") == nil then
-      uci.set("network",netnm,"ifname",uci.get("chillispot.webadmin.ifwifi"))
-    elseif not string.gmatch(uci.get("network",netnm,"ifname"),uci.get("chillispot.webadmin.ifwifi")) then
-      uci.set("network",netnm,"ifname", uci.get("network",netnm,"ifname").." "..uci.get("chillispot.webadmin.ifwifi"))
-    end
-    uci.save("network")
-    network = uci.get_all("network")
-    if network[netnm].type ~= "bridge" then
-      if network[netnm].ifname ~= nil then
-        uci.set("chillispot","net","dhcpif",network[netnm].ifname)
-      end
-    else
-      uci.set("chillispot","net","dhcpif","br-"..netnm)
-    end
-    uci.save("chillispot")
---  end
-
-  network = uci.get_all("network")
-  if uci.get("chillispot","webadmin","enable") == "1" then
-    local wififace = uci.get_type("wireless","wifi-iface")
-    for i=1, #wififace do
-      if wififace[i].device == network[netnm].ifname then
-        if wififace[i].network == "lan" or wififace[i].network ~= "wifi" then
-          uci.set("wireless",wififace[i][".name"],"network",uci.get("chillispot","webadmin","netname"))
-        end
-        uci.set("wireless",network[netnm].ifname,"disabled","0")
-        break
-      end
-    end
-  end    
-  uci.commit("network")
-  uci.commit("wireless")
-  uci.commit("chillispot")
-  write_init()
-  write_config()
-]]--
 end
 
 function write_init()
@@ -356,7 +198,7 @@ START=69
 
 RUN_D=/var/run
 PID_F=$RUN_D/chilli.pid
-CRONSET="* * * * * /usr/lib/lua/lua-wrt/pkgs/chilli/minute.cron"
+CRONSET="* * * * * /usr/lib/lua/lua-xwrt/pkgs/chilli/minute.cron"
 
 start() {
 	/usr/sbin/chilli
@@ -374,42 +216,7 @@ stop() {
   write_file:write(init_file)
   write_file:close()
 end
---[[
-function write_config()
-  local conf_file ="#### This conf file was writed by iw-apply for chillispot ####\n"
-  local chillisetting = uci.get_section("chillispot","settings")
-  for k,v in pairs(chillisetting) do
-    if not string.match(k,"[.]") then
-      if k == "debug"
-      or k == "macauth"
-      or k == "uamanydns"
-      or k == "coanoipcheck"
-      or k == "acctupdate"
-      or k == "fg"
-      or k == "eapolenable" then
-        if tonumber(v) == 1 then
-          conf_file = conf_file .. k .. "\n"
-        end
-      else
-        conf_file = conf_file .. k .. " " .. v .. "\n"
-      end
-    end
-  end
-  chillisetting = uci.get_type("chillispot","sitesallowed")
-  if chillisetting then
-    local sep = " "
-    conf_file = conf_file .. "uamallowed"
-    for i=1, #chillisetting do
-      conf_file = conf_file .. sep .. chillisetting[i].site
-      sep = ","
-    end
-  end
-  conf_file = conf_file.."\n"
-  write_file = io.open("/etc/chilli.conf","w")
-  write_file:write(conf_file)
-  write_file:close()
-end
-]]--
+
 function set_alloweds()
 	chilli = uci.get_all("chillispot")
 	allowed = uci.get_type("chillispot","sitesallowed")
@@ -468,7 +275,6 @@ function write_config()
 		end
 	end
 	conf_str = conf_str.."uamallowed "..set_alloweds().."\n"
-
   local setting = uci.get_section("chillispot","checked")
   for k,v in pairs(setting) do
     if not string.match(k,"[.]") then
@@ -477,6 +283,21 @@ function write_config()
       end
     end
   end
+  chillisetting = uci.get_section("chillispot","webadmin")
+  if chillisetting then
+    if chillisetting.isocc
+    or chillisetting.cc
+    or chillisetting.ac
+    or chillisetting.netname then
+    	local isocc = chillisetting.isocc or ""
+    	local cc = chillisetting.cc or ""
+    	local ac = chillisetting.ac or ""
+    	local netname = chillisetting.netname or ""
+    	netname = string.gsub(netname," ","_")
+    	conf_file = conf_file .. "radiuslocationid isocc="..isocc..",cc="..cc..",ac="..ac..",network="..netname
+    	isocc=AR,cc=54,ac=372,network=Coova,X_Wrt_Network
+    end
+	end
 	conf_str .. "\n"
   write_file = io.open("/etc/chilli/config","w")
   write_file:write(conf_str)

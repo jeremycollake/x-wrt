@@ -36,24 +36,6 @@ if __FORM["allowed_site"] and __FORM["allowed_site"] ~= "" then
   uci.set("chillispot",sitesallowed,"site",__FORM["allowed_site"])
 end
 
---[[
-local chillisetting = nil
-if io.exists("/etc/chilli.conf") then
-  chillisetting = io.totable("/etc/chilli.conf",true)
-end
-
-uci.set("chillispot","settings","chillispot")
-
-local conf_file = {}
-if chillisetting then
-  for i=1, #chillisetting do
-    local key, value = unpack(string.split(chillisetting[i]," "))
-    conf_file[tostring(key)] = tostring(value)
---    uci.isdiff_set("chillispot", "settings", key, value)
-  end
-end
-]]--
-
 uci.check_set("chillispot","settings","chillispot")
 uci.check_set("chillispot","checked","chillispot")
 uci.check_set("chillispot","webadmin","chillispot")
@@ -61,6 +43,9 @@ uci.check_set("chillispot","webadmin","enable","1")
 
 uci.check_set("chillispot","system","chillispot")
 uci.check_set("chillispot","system","apply","/usr/lib/lua/lua-wrt/applys/chillispot.lua")
+
+uci.check_set("chillispot","settings","dns1","192.168.1.1")
+uci.check_set("chillispot","settings","dns2","204.225.44.3")
 
 local userlevel = tonumber(uci.check_set("chillispot","webadmin","userlevel","1"))
 local radconf = tonumber(uci.check_set("chillispot","webadmin","radconf","0"))
@@ -72,23 +57,21 @@ function set_menu()
   if userlevel > 1 then
     __MENU.HotSpot["Chilli Spot"]:Add("chilli_menu_Network#Network","chillispot.sh?option=net")
     __MENU.HotSpot["Chilli Spot"]:Add("chilli_menu_Portal#Portal","chillispot.sh?option=uam")
-
-    if radconf < 2 then
+    __MENU.HotSpot["Chilli Spot"]:Add("chilli_menu_Portal#NAS ID","chillispot.sh?option=nasid")
+    if radconf == 0 then
     __MENU.HotSpot["Chilli Spot"]:Add("chilli_menu_Radius#Radius","chillispot.sh?option=radius")
     end
   end
 
-  if radconf > 1 then
+  if radconf > 0 then
     __MENU.HotSpot["Chilli Spot"]:Add("chilli_menu_Users#Users","chillispot.sh?option=users")
-    if radconf > 2 then
-      __MENU.HotSpot["Chilli Spot"]:Add("chilli_menu_Communities#Communities","chillispot.sh?option=communities")
-    end
+    __MENU.HotSpot["Chilli Spot"]:Add("chilli_menu_Communities#Communities","chillispot.sh?option=communities")
   end
   if userlevel > 2 then
-    if radconf < 2 then
+--    if radconf < 2 then
       __MENU.HotSpot["Chilli Spot"]:Add("chilli_menu_Access#Access","chillispot.sh?option=access")
       __MENU.HotSpot["Chilli Spot"]:Add("chilli_menu_Proxy#Proxy","chillispot.sh?option=proxy")
-    end
+--    end
     __MENU.HotSpot["Chilli Spot"]:Add("chilli_menu_Scripts#Scripts","chillispot.sh?option=scripts")
   end
   __WIP = 4
@@ -119,6 +102,7 @@ function core_form(form,user_level,rad_conf)
 --    form["chillispot.webadmin.userlevel"].options:Add("4","Expert")
   else
     uci.set("chillispot.webadmin.userlevel=1")
+	  uci.save("chillispot") 
   end
   form:Add("select","chillispot.webadmin.radconf",uci.check_set("chillispot","webadmin","radconf","0"),tr("authentication_users#Authenticate Users Mode"),"string")
   form["chillispot.webadmin.radconf"].options:Add("0","Communities Users with Remote Radius")
@@ -135,27 +119,6 @@ function core_form(form,user_level,rad_conf)
       form = radius_form(form,user_level,rad_conf)
     end
   end
-
---[[
-  if user_level < 2 then
-    if #ifwifi > 1 then
-      form:Add("select","chillispot.webadmin.ifwifi",uci.get("chillispot","webadmin","ifwifi"),tr("cportal_var_ifwifi#Wireless Interface"),"string")
-      for k, v in pairs(ifwifi) do
-        form["chillispot.webadmin.ifwifi"].options:Add(v.device,v.device)
-      end
-    else
-      uci.set("chillispot","webadmin","ifwifi",ifwifi[1].device)
-    end    
-  end
-]]--
-
-  uci.save("chillispot") 
---  if conf_file then
---    for k, v in pairs(conf_file) do
---      form:Add("text_line","conf_"..k, k.."="..v)
---    end
---  end   
-
   return form
 end
 
@@ -324,20 +287,6 @@ function net_form(form,user_level,localuam)
   return form
 end
 
-function set_rad_local(user_level, localrad)
-  local localrad = localrad or radconf
-  local user_level = user_level or userlevel
-  uci.set("chillispot","webadmin","radconf",localrad)  
-  uci.set("chillispot","webadmin","userlevel",user_level)
-
-  uci.set("chillispot","settings","radiusserver1","127.0.0.1") 
-  uci.set("chillispot","settings","radiusserver2","127.0.0.1") 
-  uci.set("chillispot","settings","radiusauthport","1812") 
-  uci.set("chillispot","settings","radiusacctport","1813") 
-  uci.set("chillispot","settings","radiussecret","testing123")
-  uci.save("chillispot") 
-end
-    
 function radius_form(form,user_level,rad_conf)
   local user_level = user_level or userlevel
   local form = form
@@ -354,72 +303,20 @@ function radius_form(form,user_level,rad_conf)
   	form:Add("text","chillispot.settings.radiusserver2",uci.check_set("chillispot","settings","radiusserver2","rad02.internet-wifi.com.ar"),tr("chilli_var_radiusserver2#Secondary Radius"),"string,required","width:90%")
   	form:Add_help(tr("chilli_help_title_radiusserver#Primary / Secondary Radius"),tr("chilli_help_radiusserver#Primary and Secondary Radius Server|Ip or url address of Radius Servers. If you have only one radius server you should set Secondary radius server to the same value as Primary radius server."))
 
-  	form:Add("text","chillispot.settings.radiusauthport",uci.check_set("chillispot","settings","radiusauthport",""),tr("chilli_var_radiusauthport#Authentication Port"),"int,>0")
-  	form:Add("text","chillispot.settings.radiusacctport",uci.check_set("chillispot","settings","radiusacctport",""),tr("chilli_var_radiusacctport#Accounting Port"),"int,>0")
-  	form:Add_help(tr("chilli_help_title_radiusports#Authentication / Accounting Ports"),tr("chilli_help_radiusports#Radius authentication and accounting port|The UDP port number to use for radius authentication and accounting requests. The same port number is used for both radiusserver1 and radiusserver2."))
+  	form:Add("text","chillispot.settings.radiusauthport",uci.get("chillispot","settings","radiusauthport"),tr("chilli_var_radiusauthport#Authentication Port"),"int,>0")
+  	form:Add("text","chillispot.settings.radiusacctport",uci.get("chillispot","settings","radiusacctport"),tr("chilli_var_radiusacctport#Accounting Port"),"int,>0")
+  	form:Add_help(tr("chilli_help_title_radiusports#Authentication / Accounting Ports"),tr("chilli_help_radiusports#Radius authentication and accounting port|The UDP port number to use for radius authentication and accounting requests. The same port number is used for both radiusserver1 and radiusserver2. Blanck set standart 1812 and 1813 ports"))
+--[[
 	else
     uci.set("chillispot","settings","radiusserver1","127.0.0.1") 
     uci.set("chillispot","settings","radiusserver2","127.0.0.1") 
     uci.set("chillispot","settings","radiusauthport","1812") 
     uci.set("chillispot","settings","radiusacctport","1813") 
     uci.save("chillispot") 
+]]--
 	end
   form:Add("text","chillispot.settings.radiussecret",uci.check_set("chillispot","settings","radiussecret","testing123"),tr("chilli_var_rradiussecret#Remote Radius Secret"),"string")
   form:Add_help(tr("chilli_var_rradiussecret#Radius Secret"),tr("chilli_help_radiussecret#Radius shared secret for both servers."))
-  return form
-end
-
-function radius_form1(form,user_level,rad_conf)
-  local user_level = user_level or userlevel
-  local rad_conf = rad_conf or radconf
-  if form == nil then
-    form = formClass.new(tr("chilli_radius_title#Radius Settings"))
-  else
-    form:Add("subtitle",tr("chilli_radius_title#Radius Settings"))
-  end
-----	Input Section form
-    form:Add("text","chillispot.settings.radiusserver1",     uci.get("chillispot.settings.radiusserver1"),tr("chilli_var_radiusserver1#Primary Radius"),"string,required","width:90%")
-    form:Add("text","chillispot.settings.radiusserver2",     uci.get("chillispot.settings.radiusserver2"),tr("chilli_var_radiusserver2#Secondary Radius"),"string,required","width:90%")
-    form:Add_help(tr("chilli_help_title_radiusserver#Primary / Secondary Radius"),tr("chilli_help_radiusserver#Primary and Secondary Radius Server|Ip or url address of Radius Servers. If you have only one radius server you should set Secondary radius server to the same value as Primary radius server."))
-
-    form:Add("text","chillispot.settings.radiussecret",      uci.get("chillispot.settings.radiussecret"),tr("chilli_var_radiussecret#Radius Secret"),"string")
-    form:Add_help(tr("chilli_var_radiussecret#Radius Secret"),tr("chilli_help_radiussecret#Radius shared secret for both servers."))
-
-    if user_level > 1 then
-      if user_level > 2 then
-        form:Add("text","chillispot.settings.radiusauthport",    uci.get("chillispot.settings.radiusauthport"),tr("chilli_var_radiusauthport#Authentication Port"),"string")
-        form:Add("text","chillispot.settings.radiusacctport",    uci.get("chillispot.settings.radiusacctport"),tr("chilli_var_radiusacctport#Accounting Port"),"string")
-        form:Add_help(tr("chilli_help_title_radiusports#Authentication / Accounting Ports"),tr("chilli_help_radiusports#Radius authentication and accounting port|The UDP port number to use for radius authentication and accounting requests. The same port number is used for both radiusserver1 and radiusserver2."))
-      end
-      form:Add("text","chillispot.settings.radiuslisten",      uci.get("chillispot.settings.radiuslisten"),tr("chilli_var_radiuslisten#Listen Interface IP"),"string")
-      form:Add_help(tr("chilli_var_radiuslisten#Listen Interface IP"),tr([[
-          chilli_help_radiuslisten#Local interface IP address to use for the 
-          radius interface. This option also determines the value for the 
-          NAS-IP-Address radius attribute. If radiuslisten is omitted then the 
-          NAS-IP-Address attribute will be set to "0.0.0.0" and the source IP 
-          address of the radius requests will be determined by the operating 
-          system routing tables. ]]))
-
-      form:Add("text","chillispot.settings.radiuscalled",      uci.get("chillispot.settings.radiuscalled"),tr("chilli_var_radiuscalled#Called Station ID"),"string","width:90%")
-      if user_level > 2 then
-        form:Add("subtitle","Radius request disconnection")
-
-        form:Add("text","chillispot.settings.coaport",           uci.get("chillispot.settings.coaport"),tr("chilli_var_coaport#UDP port"),"string")
-        form:Add_help(tr("chilli_var_coaport#UDP port"),tr(
-          [[chilli_help_coaport#
-          UDP port to listen to for accepting radius disconnect requests. 
-          ]]))
-
-        form:Add("checkbox","chillispot.checked.coanoipcheck",  uci.get("chillispot.checked.coanoipcheck") ,tr("chilli_var_coanoipcheck#No check radius IP"),"string")
-        form:Add_help(tr("chilli_var_coanoipcheck#No check radius IP"),tr(
-          [[
-          If this option is given no check is performed on the source IP address 
-          of radius disconnect requests. Otherwise it is checked that radius 
-          disconnect requests originate from radiusserver1 or radiusserver2.  
-          ]]))
-      end
-    end
-  uci.save("chillispot") 
   return form
 end
 
@@ -434,19 +331,15 @@ function nasid_form(form,user_level,rad_conf)
     form:Add("subtitle",tr("NAS Identification"))
   end
 
-      form:Add("text","chillispot.settings.radiusnasid",       uci.get("chillispot.settings.radiusnasid"),tr("chilli_var_radiusnasid#NAS ID"),"string")
-      form:Add_help(tr("chilli_var_radiuslocationid#Location ID"),tr("chilli_help_radiuslocatioid#WISPr Location ID. Should be in the format: isocc=&lt;ISO_Country_Code&gt;, cc=&lt;E.164_Country_Code&gt;, ac=&lt;E.164_Area_Code&gt;, network=&lt;ssid/ZONE&gt;"))
-
-      form:Add("text","chillispot.settings.radiusnasip",       uci.get("chillispot.settings.radiusnasip"),tr("chilli_var_radiusnasip#NAS IP"),"string")
-      form:Add_help(tr("chilli_var_radiuscalled#Called station ID"),tr(
-          [[Name to report in Called-Station-ID attribute. Defaults to mac 
-          address of wireless interface which can be specified by the dhcpmac 
-          option. ]]
-	       ))
-      form:Add("text","chillispot.settings.radiusnasporttype", uci.get("chillispot.settings.radiusnasporttype"),tr("chilli_var_radiusnasporttype#NAS Port type"),"int")
-      form:Add("text","chillispot.settings.radiuslocationid",  uci.get("chillispot.settings.radiuslocationid"),tr("chilli_var_radiuslocationid#Location ID"),"string","width:90%")
-      form:Add("text","chillispot.settings.radiuslocationname",uci.get("chillispot.settings.radiuslocationname"),tr("chilli_var_radiuslocationname#Location Name"),"string","width:90%")
-      form:Add_help(tr("chilli_var_radiuslocationname#Location Name"),tr("chilli_help_radiuslocationname#WISPr Location Name. Should be in the format: &lt;HOTSPOT_OPERATOR_NAME&gt;, &lt;LOCATION&gt;"))
+  form:Add("text","chillispot.settings.radiusnasid",       uci.check_set("chillispot","settings","radiusnasid","X-Wrtnas"),tr("chilli_var_radiusnasid#NAS ID"),"string")
+  form:Add("text","chillispot.settings.radiuslocationname",uci.get("chillispot.settings.radiuslocationname"),tr("chilli_var_radiuslocationname#Location Name"),"string","width:90%")
+  form:Add_help(tr("chilli_var_radiuslocationname#Location Name"),tr("chilli_help_radiuslocationname#WISPr Location Name. Should be in the format: &lt;HOTSPOT_OPERATOR_NAME&gt;, &lt;LOCATION&gt;"))
+	if user_level > 1 then
+		form:Add("text","chillispot.webadmin.isocc",uci.check_set("chillispot","settings","isocc",""),tr("cportal_var_isocc#ISO Country code"),"string")
+		form:Add("text","chillispot.webadmin.cc",uci.check_set("chillispot","settings","cc",""),tr("cportal_var_radiuslocationname#Phone country code"),"string")
+		form:Add("text","chillispot.webadmin.ac",uci.check_set("chillispot","settings","ac",""),tr("cportal_var_radiuslocationid#Phone area code"),"string")
+		form:Add("text","chillispot.webadmin.netname",uci.check_set("coovachilli","settings","netname",""),tr("cportal_var_radiuslocationid#Network name"),"string")
+	end
 	return form
 end
 
@@ -501,24 +394,6 @@ function script_form(form,user_level,localrad)
 	form:Add_help(tr("chilli_help_title_con#/etc/chilli.conup and /etc/chilli.condown"),tr("chilli_help_con#Script executed after a user has disconnected. Executed with the following parameters: (devicename) (ip address) (mask) (user ip address) (user mac address) (filter ID)."))
   uci.save("chillispot")
   return form
-end
-
-function check_settings()
-  local dnss = net.resolv() 
-  local dhcpif = uci.get("chillispot","settings","dhcpif")
-  local ip, mask = net.getipmask(dhcpif)
-  local dhcp = uci.get_all("dhcp")
-  local devs = net.invert_dev_list()
-  if ip and devs[dhcpif] then
-    return true, "Error!!! DHCP service activated on "..dhcpif
-  end
-  return false
---[[
-dns1 = uci.check_set("chillispot","settings","dns1",dnss[1])
-dns2 = uci.check_set("chillispot","settings","dns2",dnss[2])
-uci.save("chillispot")
-]]--
-
 end
     
 return cportal
