@@ -320,9 +320,9 @@ else
   
 	form:Add("select","iw_hotspot_wizard.general.radius",uci.get("iw_hotspot_wizard.general.radius"),tr("iw_wizard_var_portal#Configure Radius Server"),"string")
 	form["iw_hotspot_wizard.general.radius"].options:Add("0","No")
-	form["iw_hotspot_wizard.general.radius"].options:Add("2","Local Users")
-	form["iw_hotspot_wizard.general.radius"].options:Add("1","Communities Users")
-	form["iw_hotspot_wizard.general.radius"].options:Add("3","Communities & Local Users")
+	form["iw_hotspot_wizard.general.radius"].options:Add("1","Local Users with Local Radius")
+	form["iw_hotspot_wizard.general.radius"].options:Add("2","Communities Users with Local Radius")
+	form["iw_hotspot_wizard.general.radius"].options:Add("3","Communities & Local Users with Local Radius")
   form:Add_help(tr("iwhotspothelper_var_radius#Radius Server"),tr([[iwhotspothelper_help_radius#
     Radius server is an AAA (authentication, authorization, and accounting) protocol
     for controlling access to network resources.

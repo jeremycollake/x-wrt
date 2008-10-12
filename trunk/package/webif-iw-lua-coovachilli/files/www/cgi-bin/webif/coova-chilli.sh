@@ -20,13 +20,12 @@
 -- config.lua 
 -- LUA settings and load some functions files
 -- 
---dofile("/usr/share/internet-wifi/set_path.lua")
 require("set_path")
 require("init")
 require("coovaportal")
 require("webpkg")
 -- pageClass is part of the framework 
-page.title = tr("chilli_main_title#Coova-Chilli")
+--page.title = tr("chilli_main_title#Coova-Chilli")
 cportal.set_menu()
 __WIP=2
 local forms = {}

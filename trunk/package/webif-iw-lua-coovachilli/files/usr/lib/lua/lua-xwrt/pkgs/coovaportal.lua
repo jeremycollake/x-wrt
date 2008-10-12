@@ -41,7 +41,6 @@ if __FORM["allowed_site"] and __FORM["allowed_site"] ~= "" then
   uci.set("coovachilli",sitesallowed,"site",__FORM["allowed_site"])
 end
 
-
 local ifwifi = uci.get_type("wireless","wifi-iface")
 uci.check_set("coovachilli","webadmin","coovachilli")
 uci.check_set("coovachilli","system","coovachilli")
@@ -147,8 +146,9 @@ function create_net(form,user_level,rad)
 end
 
 function core_form(form,user_level,rad_conf)
-  user_level = user_level or userlevel;
-  rad_conf = rad_conf or radconf
+  local user_level = user_level or userlevel;
+  local rad_conf = rad_conf or radconf
+  local form = form
   
   if form == nil then
     form = formClass.new(tr("chilli_title_service#Service"))
@@ -159,6 +159,8 @@ function core_form(form,user_level,rad_conf)
 	form:Add("select","coovachilli.webadmin.enable",uci.check_set("coovachilli","webadmin","enable","1"),tr("chilli_var_service#Service"),"string")
 	form["coovachilli.webadmin.enable"].options:Add("0","Disable")
 	form["coovachilli.webadmin.enable"].options:Add("1","Enable")
+  form:Add_help(tr("chillispot_var_enable#Service"),tr("chilli_help_enable#Enable or disable service."))
+
   if string.match(__SERVER["SCRIPT_FILENAME"],"coova.chilli.sh") then
   	form:Add("select","coovachilli.webadmin.userlevel",uci.check_set("coovachilli","webadmin","userlevel","0"),tr("userlevel#User Level"),"string")
     form["coovachilli.webadmin.userlevel"].options:Add("0","Select Mode")
@@ -169,23 +171,25 @@ function core_form(form,user_level,rad_conf)
   else
     uci.set("coovachilli.webadmin.userlevel=1")
   end
+--[[
   if user_level > 1 then
   	form:Add("select","coovachilli.webadmin.portal",uci.check_set("coovachilli","webadmin","portal","2"),tr("portal#Portal Settings"),"string")
 --  	form["coovachilli.webadmin.portal"].options:Add("0","Coova Server")
     form["coovachilli.webadmin.portal"].options:Add("1","Internal Server")
     form["coovachilli.webadmin.portal"].options:Add("2","Remote Server")
-
-    form:Add("select","coovachilli.webadmin.radconf",uci.check_set("coovachilli","webadmin","radconf","1"),tr("authentication_users#Authenticate Users Mode"),"string")
-    form["coovachilli.webadmin.radconf"].options:Add("2","Local Radius Users")
---    form["coovachilli.webadmin.radconf"].options:Add("0","Remote Radius")
-    form["coovachilli.webadmin.radconf"].options:Add("1","Communities Users")
-    form["coovachilli.webadmin.radconf"].options:Add("3","Remote & Local Users")
   end
+]]--
+  form:Add("select","coovachilli.webadmin.radconf",uci.check_set("coovachilli","webadmin","radconf","0"),tr("authentication_users#Authenticate Users Mode"),"string")
+  form["coovachilli.webadmin.radconf"].options:Add("0","Communities Users with Remote Radius")
+  form["coovachilli.webadmin.radconf"].options:Add("1","Local Users with Local Radius")
+  form["coovachilli.webadmin.radconf"].options:Add("2","Comunities Users with Local Radius")
+  form["coovachilli.webadmin.radconf"].options:Add("3","Communities & Local Users with Local Radius")
+  form:Add_help(tr("chillispot_var_authentication_users#Authenticate Users Mode"),tr("chillispot_help_authentication_users#Select authentication Mode."))
   uci.save("coovachilli")
   if user_level < 2 then
 		form = nasid_form(form, user_level)
-  	form = net_form(form,user_level,localuam)
-		form = uam_form(form,user_level,localuam)
+  	form = net_form(form,user_level,portal)
+		form = uam_form(form,user_level,portal)
 		form = radius_form(form,user_level, rad_conf)
 	end    
   return form
@@ -278,39 +282,20 @@ function radius_form(form,user_level,rad_conf)
   else
     form:Add("subtitle",tr("Radius Settings"))
   end
-
---[[
-  if userlevel ~= user_level then uci.set("coovachilli","webadmin","user",user_level) end
-  if localrad ~= radconf then 
-    uci.set("coovachilli","webadmin","radconf",localrad)
-  end
-  if localrad == 1 then 
-    uci.set("coovachilli","settings","HS_RADIUS","rad01.internet-wifi.com.ar") 
-    uci.set("coovachilli","settings","HS_RADIUS2","rad02.internet-wifi.com.ar") 
-    uci.set("coovachilli","settings","HS_RADAUTH","1812") 
-    uci.set("coovachilli","settings","HS_RADACCT","1813") 
-    uci.set("coovachilli","settings","HS_RADSECRET","Internet-Wifi")
-    uci.save("coovachilli") 
-  end
-
-  if form == nil then
-    form = formClass.new(tr("Captive Portal - Radius Settings"))
-  else
-    if localrad == 0 then
-      form:Add("subtitle",tr("Remote").." "..tr("Radius Settings"))
-    else
-      form:Add("subtitle",tr("Local").." "..tr("Radius Settings"))
-    end    
-  end
-]]--
 ----	Input Section form
 	if rad_conf == 0 then
-  form:Add("text","coovachilli.settings.HS_RADIUS",uci.check_set("coovachilli","settings","HS_RADIUS","rad01.internet-wifi.com.ar"),tr("chilli_var_radiusserver1#Primary Radius"),"string,required","width:90%")
-  form:Add("text","coovachilli.settings.HS_RADIUS2",uci.check_set("coovachilli","settings","HS_RADIUS2","rad02.internet-wifi.com.ar"),tr("chilli_var_radiusserver2#Secondary Radius"),"string,required","width:90%")
-  form:Add_help(tr("chilli_help_title_radiusserver#Primary / Secondary Radius"),tr("chilli_help_radiusserver#Primary and Secondary Radius Server|Ip or url address of Radius Servers. If you have only one radius server you should set Secondary radius server to the same value as Primary radius server."))
-  form:Add("text","coovachilli.settings.HS_RADAUTH",uci.check_set("coovachilli","settings","HS_RADAUTH",""),tr("chilli_var_radiusauthport#Authentication Port"),"int,>0")
-  form:Add("text","coovachilli.settings.HS_RADACCT",uci.check_set("coovachilli","settings","HS_RADACCT",""),tr("chilli_var_radiusacctport#Accounting Port"),"int,>0")
-  form:Add_help(tr("chilli_help_title_radiusports#Authentication / Accounting Ports"),tr("chilli_help_radiusports#Radius authentication and accounting port|The UDP port number to use for radius authentication and accounting requests. The same port number is used for both radiusserver1 and radiusserver2."))
+	  form:Add("text","coovachilli.settings.HS_RADIUS",uci.check_set("coovachilli","settings","HS_RADIUS","rad01.internet-wifi.com.ar"),tr("chilli_var_radiusserver1#Primary Radius"),"string,required","width:90%")
+  	form:Add("text","coovachilli.settings.HS_RADIUS2",uci.check_set("coovachilli","settings","HS_RADIUS2","rad02.internet-wifi.com.ar"),tr("chilli_var_radiusserver2#Secondary Radius"),"string,required","width:90%")
+  	form:Add_help(tr("chilli_help_title_radiusserver#Primary / Secondary Radius"),tr("chilli_help_radiusserver#Primary and Secondary Radius Server|Ip or url address of Radius Servers. If you have only one radius server you should set Secondary radius server to the same value as Primary radius server."))
+  	form:Add("text","coovachilli.settings.HS_RADAUTH",uci.check_set("coovachilli","settings","HS_RADAUTH",""),tr("chilli_var_radiusauthport#Authentication Port"),"int,>0")
+  	form:Add("text","coovachilli.settings.HS_RADACCT",uci.check_set("coovachilli","settings","HS_RADACCT",""),tr("chilli_var_radiusacctport#Accounting Port"),"int,>0")
+  	form:Add_help(tr("chilli_help_title_radiusports#Authentication / Accounting Ports"),tr("chilli_help_radiusports#Radius authentication and accounting port|The UDP port number to use for radius authentication and accounting requests. The same port number is used for both radiusserver1 and radiusserver2."))
+	else
+    uci.set("coovachilli","settings","HS_RADIUS","127.0.0.1") 
+    uci.set("coovachilli","settings","HS_RADIUS2","127.0.0.1") 
+    uci.set("coovachilli","settings","HS_RADAUTH","1812") 
+    uci.set("coovachilli","settings","HS_RADACCT","1813") 
+    uci.save("coovachilli") 
 	end
   form:Add("text","coovachilli.settings.HS_RADSECRET",uci.check_set("coovachilli","settings","HS_RADSECRET","testing123"),tr("chilli_var_rradiussecret#Remote Radius Secret"),"string")
   form:Add_help(tr("chilli_var_rradiussecret#Radius Secret"),tr("chilli_help_radiussecret#Radius shared secret for both servers."))
@@ -345,30 +330,29 @@ function uam_form(form,user_level,local_portal)
 	local form = form
 	 
 	if user_level > 1 then
-  if form ~= nil then form:Add("subtitle","Captive Portal - Universal Authentication Method") end
-  local form = form or formClass.new("Captive Portal - Universal Authentication Method")
-  local user_level = user_level or userlevel
-  local localuam = localuam or portal
+	  if form ~= nil then form:Add("subtitle","Captive Portal - Universal Authentication Method") end
+  	local form = form or formClass.new("Captive Portal - Universal Authentication Method")
+  	local user_level = user_level or userlevel
+  	local localuam = localuam or portal
+  	if user_level > 1 and local_portal < 2 then
+    	form:Add("text","coovachilli.settings.HS_UAMSERVER",uci.check_set("coovachilli","settings","HS_UAMSERVER","192.168.182.1"),tr("cportal_var_uamserver#URL of Web Server"),"string","width:90%")
+    	form:Add_help(tr("cportal_var_uamserver#URL of Web Server"),tr("cportal_help_uamserver#URL of a Webserver handling the authentication."))
 
-  if user_level > 1 and local_portal < 2 then
-    form:Add("text","coovachilli.settings.HS_UAMSERVER",uci.check_set("coovachilli","settings","HS_UAMSERVER","192.168.182.1"),tr("cportal_var_uamserver#URL of Web Server"),"string","width:90%")
-    form:Add_help(tr("cportal_var_uamserver#URL of Web Server"),tr("cportal_help_uamserver#URL of a Webserver handling the authentication."))
+    	form:Add("text","coovachilli.settings.HS_UAMFORMAT",uci.check_set("coovachilli","settings","HS_UAMFORMAT","http://\$HS_UAMSERVER/cgi-bin/login/login"),tr("cportal_var_format#Path of Login Page"),"string","width:90%")
+    	form:Add_help(tr("cportal_var_format#URL of Web Server"),tr("cportal_help_format#URL of a Webserver handling the authentication."))
 
-    form:Add("text","coovachilli.settings.HS_UAMFORMAT",uci.check_set("coovachilli","settings","HS_UAMFORMAT","http://\$HS_UAMSERVER/cgi-bin/login/login"),tr("cportal_var_format#Path of Login Page"),"string","width:90%")
-    form:Add_help(tr("cportal_var_format#URL of Web Server"),tr("cportal_help_format#URL of a Webserver handling the authentication."))
-
-    form:Add("text","coovachilli.settings.HS_UAMSECRET",uci.check_set("coovachilli","settings","HS_UAMSECRET",""),tr("cportal_var_uamsecret#UAM Secret"),"string")
-    form:Add_help(tr("cportal_var_uamsecret#Web Secret"),tr("cportal_help_uamsecret#Shared secret between HotSpot and Webserver (UAM Server)."))
-  end
-  if user_level > 2 then
-    form:Add("text","coovachilli.settings.HS_UAMHOMEPAGE",uci.check_set("coovachilli","settings","HS_UAMHOMEPAGE","http://\$HS_UAMLISTEN:\$HS_UAMPORT/www/coova.html"),tr("cportal_var_uamhomepage#UAM Home Page"),"string","width:90%")
-    form:Add_help(tr("cportal_var_uamhomepage#Homepage"),tr("cportal_help_uamhomepage#URL of Welcome Page. Unauthenticated users will be redirected to this address, otherwise specified, they will be redirected to UAM Server instead."))
-  end
+    	form:Add("text","coovachilli.settings.HS_UAMSECRET",uci.check_set("coovachilli","settings","HS_UAMSECRET",""),tr("cportal_var_uamsecret#UAM Secret"),"string")
+    	form:Add_help(tr("cportal_var_uamsecret#Web Secret"),tr("cportal_help_uamsecret#Shared secret between HotSpot and Webserver (UAM Server)."))
+  	end
+  	if user_level > 2 then
+    	form:Add("text","coovachilli.settings.HS_UAMHOMEPAGE",uci.check_set("coovachilli","settings","HS_UAMHOMEPAGE","http://\$HS_UAMLISTEN:\$HS_UAMPORT/www/coova.html"),tr("cportal_var_uamhomepage#UAM Home Page"),"string","width:90%")
+    	form:Add_help(tr("cportal_var_uamhomepage#Homepage"),tr("cportal_help_uamhomepage#URL of Welcome Page. Unauthenticated users will be redirected to this address, otherwise specified, they will be redirected to UAM Server instead."))
+  	end
 --[[
   form:Add("text_area","coovachilli.settings.HS_UAMALLOW",uci.check_set("coovachilli","settings","HS_UAMALLOW","x-wrt.org,coova.org,www.internet-wifi.com.ar"),tr("cportal_var_uamallowed#UAM Allowed"),"string","width:90%")
   form:Add_help(tr("cportal_var_uamallowed#Allowed URLs"),tr("cportal_help_uamallowed#Comma-seperated list of domain names, urls or network subnets the client can access without authentication (walled gardened)."))
 ]]--
-  uci.save("coovachilli")
+  	uci.save("coovachilli")
   end
   form =  add_allowed_site(form,user_level)
   return form
@@ -401,7 +385,6 @@ function add_allowed_site(form,user_level)
 	str = str .. "<input type=\"submit\" name=\""..t.name.."\" value=\""..tr(t.btlabel).."\""..t.script.." />"
   str = str .. "</td></tr></table>"
   form:Add("text_line","varname",str,"Aca Va el Label","string")
-
   form:Add_help(tr("chilli_var_uamallowed#Sites Allowed"),tr("chilli_help_uamallowed#Comma-seperated list of domain names, urls or network subnets the client can access without authentication (walled gardened)."))
   local sitesallowed = uci.get_type("coovachilli","sitesallowed")
   if sitesallowed then 
