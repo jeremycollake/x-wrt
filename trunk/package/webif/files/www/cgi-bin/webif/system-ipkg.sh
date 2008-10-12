@@ -101,7 +101,7 @@ equal "$repo_update_needed" "1" && {
 	echo "</pre>"
 }
 
-repo_list=$(awk '/^[[:space:]]*src[[:space:]]/ { print "<tr class=\"repositories\"><td><a href=\"./system-ipkg.sh?remove_repo_name=" $2 "&amp;remove_repo_url=" $3 "\">@TR<<system_ipkg_removerepo#remove>></a>&nbsp;&nbsp;" $2 "</td><td colspan=\"2\">" $3 "</td></tr>"}' /etc/opkg.conf)
+repo_list=$(awk '/^[[:space:]]*src[\/gz]*[[:space:]]/ { print "<tr class=\"repositories\"><td><a href=\"./system-ipkg.sh?remove_repo_name=" $2 "&amp;remove_repo_url=" $3 "\">@TR<<system_ipkg_removerepo#remove>></a>&nbsp;&nbsp;" $2 "</td><td colspan=\"2\">" $3 "</td></tr>"}' /etc/opkg.conf)
 
 display_form <<EOF
 start_form|@TR<<system_ipkg_addrepo#Add Repository>>
@@ -188,7 +188,7 @@ opkg list_installed |grep -e "Collected errors:" -e "has no architecture specifi
 	<br />
 	<table class="packages"><tr class="packages"><th width="150">@TR<<system_ipkg_th_action#Action>></th><th width="250">@TR<<system_ipkg_th_package#Package>></th><th width=150>@TR<<system_ipkg_th_version#Version>></th><th>@TR<<system_ipkg_th_desc#Description>></th></tr>
 <?
-repo_list=$(awk -v lists="$lists_path" '/^[[:space:]]*src[[:space:]]/ { printf " " lists "/" $2 }' /etc/opkg.conf)
+repo_list=$(awk -v lists="$lists_path" '/^[[:space:]]*src[\/gz]*[[:space:]]/ { printf " " lists "/" $2 }' /etc/opkg.conf)
 status_list=$(awk '/^[[:space:]]*dest[[:space:]]/ { if ($3 == "/") printf " /usr/lib/opkg/status"; else printf " "$3"/usr/lib/opkg/status" }' /etc/opkg.conf)
 [ -z "$status_list" ] && status_list="/usr/lib/opkg/status"
 egrep 'Package:|Description:|Version:' $status_list $repo_list 2>&- | sed -e 's, ,,' -e "s,^[^:]*${lists_path}/,," | awk -F: '
