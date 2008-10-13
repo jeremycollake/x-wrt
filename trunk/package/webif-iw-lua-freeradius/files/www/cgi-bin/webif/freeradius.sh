@@ -2,7 +2,6 @@
 --[[
 ##WEBIF:name:HotSpot:450:Freeradius
 ]]--
---dofile("/usr/share/internet-wifi/set_path.lua")
 require("set_path")
 require("init")
 require("webpkg")
@@ -18,9 +17,7 @@ __WIP = 4
 
 if option == "users" then
 --  page.title = tr("Freeradius Users")
---  forms[#forms+1] = radius.defaul_user_form()
   forms[#forms+1] = radius.add_usr_form()
---  radius.add_usr_form(forms[#forms])
   forms[#forms+1] = radius.user_form()
 elseif option == "users_default" then
   forms[#forms+1] = radius.defaul_user_form()
@@ -39,4 +36,9 @@ print(page:header())
 for i=1, #forms do
   forms[i]:print()
 end
+--[[
+for k,v in pairs(__FORM) do
+	print(k,v,"<br>")
+end
+]]--
 print (page:footer())

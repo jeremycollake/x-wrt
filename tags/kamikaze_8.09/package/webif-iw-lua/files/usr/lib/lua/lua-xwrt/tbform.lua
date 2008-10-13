@@ -31,6 +31,7 @@ tbformClass_mt = {__index = tbformClass}
 
 function tbformClass.new (str_title) 
 	local self = {}
+	self.classname = "tbform"
 	setmetatable(self,tbformClass_mt) 
 	self["title"] = str_title or "Title of Form"
 	self["col"] = {}
