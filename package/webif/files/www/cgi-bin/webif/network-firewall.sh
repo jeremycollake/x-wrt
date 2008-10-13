@@ -43,9 +43,9 @@ if [ -n "$FORM_dest_port_redirect" ]; then
 	uci_set "firewall" "$add_redirect_cfg" "dest_port" "$FORM_dest_port_redirect"
 fi
 if [ -n "$FORM_add_rule_add" ]; then
-	uci_add "firewall" "forwarding" ""; add_rule_cfg="$CONFIG_SECTION"
-	uci_set firewall "$add_rule_cfg" src "$FORM_src_add"
-	uci_set firewall "$add_rule_cfg" dest "$FORM_dest_add"
+	uci_add "firewall" "forwarding" ""; add_foreward_cfg="$CONFIG_SECTION"
+	uci_set firewall "$add_foreward_cfg" src "$FORM_src_add"
+	uci_set firewall "$add_foreward_cfg" dest "$FORM_dest_add"
 fi
 config_cb() {
 	local cfg_type="$1"
@@ -90,23 +90,23 @@ for zone in $forwarding_cfgs; do
 	if [ "$FORM_remove" != "" ]; then
 		uci_remove "firewall" "$zone"
 	fi
-	if [ "$FORM_submit" != "" ]; then
-		eval FORM_src=\$FORM_src_$zone
-		eval FORM_dest=\$FORM_dest_$zone
-		uci_set firewall "$zone" src "$FORM_src"
-		uci_set firewall "$zone" dest "$FORM_dest"
-	else
+	if [ "$FORM_submit" = "" -o "$add_foreward_cfg" = "$zone" ]; then
 		config_get FORM_src $zone src
 		config_get FORM_dest $zone dest
+	else
+		eval FORM_src="\$FORM_src_$zone"
+		eval FORM_dest="\$FORM_dest_$zone"
+		uci_set firewall "$zone" src "$FORM_src"
+		uci_set firewall "$zone" dest "$FORM_dest"
 	fi
 	if [ "$FORM_remove" = "" ]; then
 		form="field|@TR<<Allow traffic originating from>>
-			select|FORM_src_$zone|$FORM_src
+			select|src_${zone}|$FORM_src
 			$networks
 			string|@TR<<to>>
-			select|FORM_dest_$zone|$FORM_dest
+			select|dest_${zone}|$FORM_dest
 			$networks
-			submit|remove_rule_$zone|@TR<<Remove Rule>>"
+			submit|remove_rule_${zone}|@TR<<Remove Rule>>"
 		append forms "$form" "$N"
 	fi
 done
