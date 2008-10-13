@@ -86,7 +86,7 @@ EOF
 
 ! empty "$FORM_remove_repo_name" && ! empty "$FORM_remove_repo_url" && {	
 	repo_update_needed=1
-	repo_src_line="src $FORM_remove_repo_name $FORM_remove_repo_url"
+	repo_src_line="src[\/gz]* $FORM_remove_repo_name $FORM_remove_repo_url"
 	remove_lines_from_file "/etc/opkg.conf" "$repo_src_line"
 	# manually remove package lists since ipkg update won't..
 	# todo: odd issue where 'rm -f /usr/lib/opkg/lists/* does not work - openwrt should investigate
