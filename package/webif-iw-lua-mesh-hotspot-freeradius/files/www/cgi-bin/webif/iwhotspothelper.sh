@@ -34,33 +34,21 @@
 -- 
 require("set_path")
 require("init")
+require("tbform")
 require("webpkg")
 require("uci_iwaddon")
-
-if uci.get("iw_hotspot_wizard.general") == nil then
-  uci.set("iw_hotspot_wizard.general=settings")
-end
-if uci.get("iw_hotspot_wizard.general.portal") == nil then
-  uci.set("iw_hotspot_wizard.general.portal=0")
-end
-if uci.get("iw_hotspot_wizard.general.mesh") == nil then
-  uci.set("iw_hotspot_wizard.general.mesh=0")
-end
-if uci.get("iw_hotspot_wizard.general.radius") == nil then
-  uci.set("iw_hotspot_wizard.general.radius=0")
-end
-uci.save("iw_hotspot_wizard")
 
 local pkgs_tocheck = ""
 local forms ={}
 local wz = {}
 
-wz.mesh   = tonumber(uci.get("iw_hotspot_wizard.general.mesh"))
-wz.radius = tonumber(uci.get("iw_hotspot_wizard.general.radius")) 
-wz.portal = tonumber(uci.get("iw_hotspot_wizard.general.portal"))
+wz.mesh   = tonumber(uci.check_set("iw_hotspot_wizard","general","mesh","0"))
+wz.radius = tonumber(uci.check_set("iw_hotspot_wizard","general","radius","0")) 
+wz.portal = tonumber(uci.check_set("iw_hotspot_wizard","general","portal","0"))
+uci.save("iw_hotspot_wizard")
 
 local olsr_pkgs = "ip olsrd olsrd-mod-dyn-gw olsrd-mod-nameservice olsrd-mod-txtinfo webif-iw-lua-olsr"
-local freeradius_pkgs = "" --"webif-iw-lua-freeradius libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm"
+local freeradius_pkgs = "webif-iw-lua-freeradius libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm"
 local coova_pkgs = "coova-chilli webif-iw-lua-coovachilli"
 local chilli_pkgs = "chillispot webif-iw-lua-chillispot"
 
@@ -103,31 +91,57 @@ function set_portal()
   if wz.portal == 0 then
     forms = set_communities()
   else
-    if wz.radius == 0 then 
-      wz.radius = 0
-      uci.set("iw_hotspot_wizard.general.radius=0")
-      uci.save("iw_hotspot_wizard")
-    end
     if wz.portal == 1 then
       pkg.check(coova_pkgs)
       require("coovaportal")
-      forms[1] = cportal.core_form(nil,1,wz.radius)
-      forms[1].title = "Coova Chilli Service"
-      setfooter(forms[1])
-    else
+    elseif wz.portal == 2 then
       pkg.check(chilli_pkgs)
       require("chilliportal")
-      forms[1] = cportal.core_form(nil,1,wz.radius)
-      setfooter(forms[1])
+--      forms[1] = cportal.core_form(nil,1,wz.radius)
+--      setfooter(forms[1])
     end  
+    forms[1] = cportal.core_form(nil,1,wz.radius)
+--    forms[1].title = "Coova Chilli Service"
+    setfooter(forms[1])
     forms[1]:Add("hidden","step","communities")
   end
   return forms
 end
 
+function set_communities()
+  local forms = {}
+	if wz.radius == 0 then
+		forms = set_end()
+	elseif wz.radius == 1 then
+		forms = set_users()
+	else
+	  pkg.check(freeradius_pkgs)
+    require("radius")
+    forms[1] = radius.community_form()
+    for i,k in pairs(forms[1]) do
+      if i == "add_community" then
+--        forms[1].add_community.value = __SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_proxy=realm&__menu="..__FORM.__menu.."&option=wizard&step=communities"
+				  forms[1].add_community.value = __SERVER.SCRIPT_NAME.."?".."Add_Proxy=realm&__menu="..__FORM.__menu.."&option=wizard&step=communities"
+      elseif string.match(i,"remove") then
+        local realm_cfg = string.gsub(i,"remove","")
+--        forms[1][i].value = __SERVER.SCRIPT_NAME.."?".."UCI_CMD_del"..realm_cfg.."=&__menu="..__FORM.__menu.."&option=wizard&step=communities"
+        forms[1][i].value = __SERVER.SCRIPT_NAME.."?".."Remove_Proxy="..realm_cfg.."&__menu="..__FORM.__menu.."&option=wizard&step=communities"
+      end
+    end    
+    setfooter(forms[1])
+    if wz.radius == 3 then
+      forms[1]:Add("hidden","step","users")
+    else
+      forms[1]:Add("hidden","step","set_end")
+    end
+	end
+  return forms
+end	
+
 function set_users()
   local forms = {}
-  if wz.radius > 1 then
+  if wz.radius == 1
+	or wz.radius == 3 then
     pkg.check(freeradius_pkgs)
     require("radius")
     forms[1] = radius.add_usr_form()
@@ -137,64 +151,6 @@ function set_users()
   else
     forms = set_end()
   end
-  return forms
-end
-
-function set_communities()
-  local forms = {}
---[[
-  if wz.radius == 0 then
-    if wz.portal ~= 0 then 
-      wz.radius = 1
-    end    
-    uci.set("iw_hotspot_wizard","general","radius",wz.radius)
-  end
-]]--
-  if wz.radius == 1 then
-  -- configura el raduis en el cportal
-    if wz.portal == 0 then
---      mensaje de eroor
-    elseif wz.portal == 1 then
-      pkg.check(coova_pkgs)
-      require("coovaportal")
-    elseif wz.portal == 3 then
-      pkg.check(chilli_pkgs)
-      require("chilliportal")
-    end          
-    forms[1] = cportal.radius_form(nil,1,wz.radius)
-    forms[1]:Add("hidden","step","set_end")
-    setfooter(forms[1])
-  elseif wz.radius == 3 then
-    pkg.check(freeradius_pkgs)
-    require("radius")
-    forms[1] = radius.community_form()
-    for i,k in pairs(forms[1]) do
-      if i == "add_community" then
-        forms[1].add_community.value = __SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_proxy=realm&__menu="..__FORM.__menu.."&option=wizard&step=communities"
-      elseif string.match(i,"remove") then
-        local realm_cfg = string.gsub(i,"remove","")
-        forms[1][i].value = __SERVER.SCRIPT_NAME.."?".."UCI_CMD_del"..realm_cfg.."=&__menu="..__FORM.__menu.."&option=wizard&step=communities"
-      end
-    end    
-    setfooter(forms[1])
-    if wz.radius == 3 then
-      forms[1]:Add("hidden","step","users")
-    else
-      forms[1]:Add("hidden","step","set_end")
-    end
-  elseif wz.radius == 2 then
-    forms = set_users()
-  else
-    forms = set_end()
-  end
---  if wz.radius > 1 then
-    if wz.portal == 1 then
-      require("coovaportal")
-    elseif wz.portal == 3 then
-      require("chilliportal")
-    end
-    cportal.set_rad_local(1,wz.radius)
---  end
   return forms
 end
 
@@ -231,6 +187,7 @@ for k,v in pairs(__FORM) do
     __FORM.step = "communities"
     break
   end
+  
   if string.match(k,"UCI_CMD_delfreeradius_check") then
     __FORM.option = "wizard"
     __FORM.step = "users"
@@ -258,11 +215,10 @@ elseif __FORM.bt_pkg_install == "Install" then
 elseif __FORM.option == "config" then
   forms[1] = config() 
 elseif __FORM.option == "wizard" then
-
   if wz.mesh + wz.portal + wz.radius == 0 then
     __FORM.step = nothing()
-  elseif wz.portal == 0 and wz.radius == 1 then
-    __FORM.step = no_portal()
+--  elseif wz.portal == 0 and wz.radius == 1 then
+--    __FORM.step = no_portal()
   end
   if wz.mesh == 1 then 
     pkgs_tocheck = olsr_pkgs 
@@ -289,9 +245,9 @@ elseif __FORM.option == "wizard" then
     forms = set_end()
   end
   -- Check packages to remove --
--- Need function  
+	-- Need function  
   -- Check packages to install --
---  local pkgs = pkgInstalledClass.new(check_pkgs,true)
+	--  local pkgs = pkgInstalledClass.new(check_pkgs,true)
 
 else
   form = formClass.new(tr("Select what you want"))
@@ -342,8 +298,10 @@ end
 page.title = tr("iw_wizard_main_title#Hotspot helper Settings")
 print(page:header())
 for i=1, #forms do
-  forms[i]:Add("hidden","prev_option",__FORM["option"])
-  forms[i]:Add("hidden","prev_step",__FORM["step"])
+	if forms[i].classname ~= "tbform" then
+  	forms[i]:Add("hidden","prev_option",__FORM["option"])
+  	forms[i]:Add("hidden","prev_step",__FORM["step"])
+	end
   forms[i]:print()
 end
 --[[

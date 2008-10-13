@@ -15,6 +15,8 @@ inputoptionsClass_mt = {__index = inputoptionsClass}
 
 function inputoptionsClass.new () 
 	local self = {}
+	self.classname = "form"
+	
 	setmetatable(self,inputoptionsClass_mt) 
 	return self 
 end

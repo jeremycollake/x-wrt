@@ -6,6 +6,7 @@
 
 ]]--
 require("tbform")
+require("uci_iwaddon")
 radius = {}
 local P = {}
 radius = P
@@ -16,6 +17,11 @@ local os = os
 local assert = assert
 local string = string
 local tonumber = tonumber
+local tostring = tostring
+local type = type
+local uci = uci
+local print = print
+local pairs = pairs
 
 local uciClass = uciClass
 local menuClass = menuClass
@@ -31,6 +37,16 @@ setfenv(1, P)
 
 local radconf = uciClass.new("freeradius")
 local userlevel = tonumber(radconf.webadmin.userlevel) or 0
+
+if __FORM["Add_Proxy"] then 
+	uci.add("freeradius_proxy","realm") 
+	uci.save("freeradius_proxy")
+end
+
+if __FORM["Remove_Proxy"] then 
+	uci.delete("freeradius_proxy",__FORM["Remove_Proxy"]) 
+	uci.save("freeradius_proxy")
+end
 
 function set_menu()
 --    if userlevel < 4 then 
@@ -168,6 +184,46 @@ function proxy_settings_form()
 end
 
 function community_form()
+	local proxy = uci.get_type("freeradius_proxy","realm")
+  form = formClass.new("Comunities Radius")
+  form:Add("link","add_community",__SERVER.SCRIPT_NAME.."?".."Add_Proxy=realm&__menu="..__FORM.__menu.."&option=communities",tr("Add Community"))
+--[[
+for i, t in pairs(proxy) do
+	print(i,t)
+	for k,v in pairs(t) do
+		if not string.match(k,"[.]") then
+			print("",k,v)
+		end
+	end
+end
+]]--
+	if proxy then
+    for i = 1, #proxy do
+      local name = proxy[i].community
+      local cfg_name = "freeradius_proxy."..proxy[i][".name"]
+      if name == nil then name = "New Community" end
+      form:Add("subtitle","&nbsp;"..name)
+      form:Add("text",cfg_name..".community", proxy[i].community, tr("Community name"), "string", "width:99%")
+
+      form:Add("select",cfg_name..".type",proxy[i].type,"Type","string")
+      form[cfg_name..".type"].options:Add("radius",tr("Radius"))
+
+      form:Add("text",cfg_name..".authhost", proxy[i].authhost,"authhost","string","width:99%")
+      form:Add("text",cfg_name..".accthost", proxy[i].accthost,"accthost","string","width:99%")
+      form:Add("text",cfg_name..".secret", proxy[i].secret,"secret","string","width:99%")
+      form:Add("checkbox",cfg_name..".nostrip", proxy[i].nostrip,"No Strip","string","width:99%")
+      form:Add("select",cfg_name..".ldflag", proxy[i].ldflag,"ldflag","string")
+      form[cfg_name..".ldflag"].options:Add("",tr("&nbsp;"))
+      form[cfg_name..".ldflag"].options:Add("fail_over",tr("Fail over"))
+      form[cfg_name..".ldflag"].options:Add("round_robin",tr("Round robin"))
+--      form:Add("link","remove"..realm_cfg,__SERVER.SCRIPT_NAME.."?".."UCI_CMD_del"..realm_cfg.."=&__menu="..__FORM.__menu.."&option=communities",tr("Remove Community"))
+      form:Add("link","remove"..proxy[i][".name"],__SERVER.SCRIPT_NAME.."?".."Remove_Proxy="..proxy[i][".name"].."&__menu="..__FORM.__menu.."&option=communities",tr("Remove Community"))
+    end
+  end
+  return form
+end
+
+function community_form1()
   local freeradius = uciClass.new("freeradius_proxy")
   if freeradius.server == nil then server = freeradius:set("server") else server = freeradius.server end
   local server_cfg = server[1].name
@@ -246,36 +302,35 @@ function defaul_user_form()
 end
 
 function user_form()
-  local freeradius_check = uciClass.new("freeradius_check")
-  local freeradius_reply = uciClass.new("freeradius_reply")
-  local users = freeradius_check.sections
+	local checks = uci.get_all("freeradius_check")
+	local replys = uci.get_all("freeradius_reply")
+
   form = tbformClass.new("Local Users")
   form:Add_col("label", "Username","Username", "120px")
-  form:Add_col("text", "Password", "Password", "120px","string,len>5","width:120px")
+  form:Add_col("text", "Password","Password", "120px","string,len>5","width:120px")
   form:Add_col("text", "Expiration", "Expiration", "120px","string","width:120px")
   form:Add_col("select", "FallThrough", "Fall Through", "100px","string","width:100px")
-    form.col[form.col.FallThrough].options:Add("yes","Yes")
-    form.col[form.col.FallThrough].options:Add("no","No")
+  form.col[form.col.FallThrough].options:Add("yes","Yes")
+  form.col[form.col.FallThrough].options:Add("no","No")
   form:Add_col("text", "Simultaneous", "Simultaneous", "80px","int","width:80px")
   form:Add_col("text", "IdleTimeout", "Idle Timeout", "80px","int","width:80px")
-  form:Add_col("text", "AcctInterimInt", "Acct Interim Interval", "90px","int","width:90px")
+  form:Add_col("text", "AcctInterimInt", "Interim Int", "90px","int","width:90px")
   form:Add_col("text", "MaxDown", "MaxDown", "100px","int","width:100px")
   form:Add_col("text", "MaxUp", "MaxUp", "100px","int","width:100px")
   form:Add_col("link", "Remove","Remove ", "100px","","width:100px")
-  for i=1, #users do
-    local name = users[i].name
-    if name ~= "default" then
-      local checks = freeradius_check[name]
-      local replys = freeradius_reply[name]
 
-      password = checks.User_Password or ""
-      expiration = checks.Expiration or ""
-      fall = replys.Fall_Through or ""
-      simul = checks.Simultaneous_Use or ""
-      itimeout = replys.Idle_Timeout or ""
-      acctii = replys.Acct_Interim_Interval or ""
-      maxdown = replys.WISPr_Bandwidth_Max_Down or ""
-      maxup = replys.WISPr_Bandwidth_Max_Up or ""
+	for name, check in pairs(checks) do
+		if name ~= "default" then
+			local reply = replys[name]
+
+    	local password = check.User_Password or ""
+    	local expiration = check.Expiration or ""
+    	local fall = reply.Fall_Through or ""
+    	local simul = check.Simultaneous_Use or ""
+    	local itimeout = reply.Idle_Timeout or ""
+    	local acctii = reply.Acct_Interim_Interval or ""
+    	local maxdown = reply.WISPr_Bandwidth_Max_Down or ""
+    	local maxup = reply.WISPr_Bandwidth_Max_Up or ""
       form:New_row()
 
       form:set_col("Username","freeradius_check."..name..".Username", name)
@@ -290,6 +345,7 @@ function user_form()
       form:set_col("Remove", "Remove_"..name, __SERVER.SCRIPT_NAME.."?".."UCI_CMD_delfreeradius_check."..name.."=&UCI_CMD_delfreeradius_reply."..name.."=&__menu="..__FORM.__menu.."&option="..__FORM.option)
     end
   end
+
   return form
 end
 
@@ -303,3 +359,5 @@ function add_usr_form(form,user_level)
   form:Add("uci_set_config","freeradius_check,freeradius_reply","user",tr("freerad_add_user#New User"),"string")
   return form
 end
+
+return radius
