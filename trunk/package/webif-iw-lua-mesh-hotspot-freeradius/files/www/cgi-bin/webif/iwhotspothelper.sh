@@ -34,18 +34,22 @@
 -- 
 require("set_path")
 require("init")
-require("tbform")
 require("webpkg")
 require("uci_iwaddon")
 
 local pkgs_tocheck = ""
 local forms ={}
 local wz = {}
-
+uci.check_set("iw_hotspot_wizard","general","wizard")
 wz.mesh   = tonumber(uci.check_set("iw_hotspot_wizard","general","mesh","0"))
 wz.radius = tonumber(uci.check_set("iw_hotspot_wizard","general","radius","0")) 
 wz.portal = tonumber(uci.check_set("iw_hotspot_wizard","general","portal","0"))
 uci.save("iw_hotspot_wizard")
+pepe = ""
+for i,v in pairs(__FORM) do
+	pepe = pepe..i.."="..v.."<BR>"
+end
+pepe = pepe..wz.mesh.."-"..wz.radius.."-"..wz.portal.."<br><br>"
 
 local olsr_pkgs = "ip olsrd olsrd-mod-dyn-gw olsrd-mod-nameservice olsrd-mod-txtinfo webif-iw-lua-olsr"
 local freeradius_pkgs = "webif-iw-lua-freeradius libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm"
@@ -251,7 +255,7 @@ elseif __FORM.option == "wizard" then
 
 else
   form = formClass.new(tr("Select what you want"))
-	form:Add("select","iw_hotspot_wizard.general.mesh",uci.get("iw_hotspot_wizard.general.mesh"),tr("iw_wizard_var_portal#Configure Mesh Network"),"string")
+	form:Add("select","iw_hotspot_wizard.general.mesh",uci.get("iw_hotspot_wizard.general.mesh"),tr("iw_wizard_var_portal#Mesh Network"),"string")
 	form["iw_hotspot_wizard.general.mesh"].options:Add("0",tr("No"))
 	form["iw_hotspot_wizard.general.mesh"].options:Add("1",tr("OLSR"))
   form:Add_help(tr("iwhotspothelper_var_mesh#Mesh Network"),tr([[iwhotspothelper_help_mesh#
@@ -261,7 +265,7 @@ else
     ]]))
   form:Add_help_link("http://en.wikipedia.org/wiki/Mesh_network",tr("Extracted from Wikipedia"))
 
-	form:Add("select","iw_hotspot_wizard.general.portal",uci.get("iw_hotspot_wizard.general.portal"),tr("iw_wizard_var_portal#Configure Captive Portal"),"string")
+	form:Add("select","iw_hotspot_wizard.general.portal",uci.get("iw_hotspot_wizard.general.portal"),tr("iw_wizard_var_portal#Captive Portal"),"string")
 	form["iw_hotspot_wizard.general.portal"].options:Add("0",tr("No"))
 	form["iw_hotspot_wizard.general.portal"].options:Add("1",tr("Local Coova-Chilli"))
 --	form["iw_hotspot_wizard.general.portal"].options:Add("2",tr("Remote Coova-Chilli"))
@@ -274,7 +278,7 @@ else
     ]]))
   form:Add_help_link("http://en.wikipedia.org/wiki/Captive_portal",tr("Extracted from Wikipedia"))
   
-	form:Add("select","iw_hotspot_wizard.general.radius",uci.get("iw_hotspot_wizard.general.radius"),tr("iw_wizard_var_portal#Configure Radius Server"),"string")
+	form:Add("select","iw_hotspot_wizard.general.radius",uci.get("iw_hotspot_wizard.general.radius"),tr("iw_wizard_var_portal#Radius Server"),"string")
 	form["iw_hotspot_wizard.general.radius"].options:Add("0","No")
 	form["iw_hotspot_wizard.general.radius"].options:Add("1","Local Users with Local Radius")
 	form["iw_hotspot_wizard.general.radius"].options:Add("2","Communities Users with Local Radius")
@@ -305,9 +309,11 @@ for i=1, #forms do
   forms[i]:print()
 end
 --[[
+print(pepe)
 for i,v in pairs(__FORM) do
   print(i,v,"<br>")
 end
+print(wz.mesh.."-"..wz.radius.."-"..wz.portal.."<br><br>")
 for i,v in pairs(__SERVER) do
   print(i,v,"<br>")
 end

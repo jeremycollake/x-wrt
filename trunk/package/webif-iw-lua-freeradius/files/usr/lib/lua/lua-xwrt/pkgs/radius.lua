@@ -187,16 +187,6 @@ function community_form()
 	local proxy = uci.get_type("freeradius_proxy","realm")
   form = formClass.new("Comunities Radius")
   form:Add("link","add_community",__SERVER.SCRIPT_NAME.."?".."Add_Proxy=realm&__menu="..__FORM.__menu.."&option=communities",tr("Add Community"))
---[[
-for i, t in pairs(proxy) do
-	print(i,t)
-	for k,v in pairs(t) do
-		if not string.match(k,"[.]") then
-			print("",k,v)
-		end
-	end
-end
-]]--
 	if proxy then
     for i = 1, #proxy do
       local name = proxy[i].community
@@ -218,40 +208,6 @@ end
       form[cfg_name..".ldflag"].options:Add("round_robin",tr("Round robin"))
 --      form:Add("link","remove"..realm_cfg,__SERVER.SCRIPT_NAME.."?".."UCI_CMD_del"..realm_cfg.."=&__menu="..__FORM.__menu.."&option=communities",tr("Remove Community"))
       form:Add("link","remove"..proxy[i][".name"],__SERVER.SCRIPT_NAME.."?".."Remove_Proxy="..proxy[i][".name"].."&__menu="..__FORM.__menu.."&option=communities",tr("Remove Community"))
-    end
-  end
-  return form
-end
-
-function community_form1()
-  local freeradius = uciClass.new("freeradius_proxy")
-  if freeradius.server == nil then server = freeradius:set("server") else server = freeradius.server end
-  local server_cfg = server[1].name
-  local server_val = server[1].values
-  form = formClass.new("Comunities Radius")
---  form:Add("link","add_community",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_proxy=realm&__menu="..__FORM.__menu.."&option=wizard&step=radius",tr("Add Community"))
-  form:Add("link","add_community",__SERVER.SCRIPT_NAME.."?".."UCI_CMD_setfreeradius_proxy=realm&__menu="..__FORM.__menu.."&option=communities",tr("Add Community"))
-  if freeradius.realm ~= nil then
-    for i = 1, #freeradius.realm do
-      realm_cfg = freeradius.realm[i].name
-      realm_val = freeradius.realm[i].values
-      local name = realm_val.community
-      if name == nil then name = "New Community" end
-      form:Add("subtitle","&nbsp;"..name)
-      form:Add("text",realm_cfg..".community", realm_val.community,"Community","string","width:99%")
-
-      form:Add("select",realm_cfg..".type",realm_val.type,"Type","string")
-      form[realm_cfg..".type"].options:Add("radius",tr("Radius"))
-
-      form:Add("text",realm_cfg..".authhost", realm_val.authhost,"authhost","string","width:99%")
-      form:Add("text",realm_cfg..".accthost", realm_val.accthost,"accthost","string","width:99%")
-      form:Add("text",realm_cfg..".secret", realm_val.secret,"secret","string","width:99%")
-      form:Add("checkbox",realm_cfg..".nostrip", realm_val.nostrip,"No Strip","string","width:99%")
-      form:Add("select",realm_cfg..".ldflag",realm_val.ldflag,"ldflag","string")
-      form[realm_cfg..".ldflag"].options:Add("",tr("&nbsp;"))
-      form[realm_cfg..".ldflag"].options:Add("fail_over",tr("Fail over"))
-      form[realm_cfg..".ldflag"].options:Add("round_robin",tr("Round robin"))
-      form:Add("link","remove"..realm_cfg,__SERVER.SCRIPT_NAME.."?".."UCI_CMD_del"..realm_cfg.."=&__menu="..__FORM.__menu.."&option=communities",tr("Remove Community"))
     end
   end
   return form

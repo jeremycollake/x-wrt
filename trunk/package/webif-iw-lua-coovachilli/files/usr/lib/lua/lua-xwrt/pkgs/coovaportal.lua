@@ -168,8 +168,15 @@ function core_form(form,user_level,rad_conf)
     form["coovachilli.webadmin.userlevel"].options:Add("2","Medium")
     form["coovachilli.webadmin.userlevel"].options:Add("3","Advanced")
 --    form["coovachilli.webadmin.userlevel"].options:Add("4","Expert")
+	  form:Add("select","coovachilli.webadmin.radconf",uci.check_set("coovachilli","webadmin","radconf","0"),tr("authentication_users#Authenticate Users Mode"),"string")
+  	form["coovachilli.webadmin.radconf"].options:Add("0","Communities Users with Remote Radius")
+  	form["coovachilli.webadmin.radconf"].options:Add("1","Local Users with Local Radius")
+  	form["coovachilli.webadmin.radconf"].options:Add("2","Comunities Users with Local Radius")
+  	form["coovachilli.webadmin.radconf"].options:Add("3","Communities & Local Users with Local Radius")
+  	form:Add_help(tr("chillispot_var_authentication_users#Authenticate Users Mode"),tr("chillispot_help_authentication_users#Select authentication Mode."))
   else
-    uci.set("coovachilli.webadmin.userlevel=1")
+    uci.set("coovachilli","webadmin","userlevel",user_level)
+    uci.set("coovachilli","webadmin","radconf",rad_conf)
   end
 --[[
   if user_level > 1 then
@@ -179,12 +186,6 @@ function core_form(form,user_level,rad_conf)
     form["coovachilli.webadmin.portal"].options:Add("2","Remote Server")
   end
 ]]--
-  form:Add("select","coovachilli.webadmin.radconf",uci.check_set("coovachilli","webadmin","radconf","0"),tr("authentication_users#Authenticate Users Mode"),"string")
-  form["coovachilli.webadmin.radconf"].options:Add("0","Communities Users with Remote Radius")
-  form["coovachilli.webadmin.radconf"].options:Add("1","Local Users with Local Radius")
-  form["coovachilli.webadmin.radconf"].options:Add("2","Comunities Users with Local Radius")
-  form["coovachilli.webadmin.radconf"].options:Add("3","Communities & Local Users with Local Radius")
-  form:Add_help(tr("chillispot_var_authentication_users#Authenticate Users Mode"),tr("chillispot_help_authentication_users#Select authentication Mode."))
   uci.save("coovachilli")
   if user_level < 2 then
 		form = nasid_form(form, user_level)
