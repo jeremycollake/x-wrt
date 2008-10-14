@@ -923,7 +923,7 @@ EOF
 						
 						case "$FORM_encryption" in
 							wep) uci_set "wireless" "$vcfg" "key" "$FORM_wep_key";;
-							psk|psk2|psk+psk2) uci_set "wireless" "$vcfg" "key" "$FORM_wpa_psk";;
+							psk|psk2|psk+psk2|*mixed*) uci_set "wireless" "$vcfg" "key" "$FORM_wpa_psk";;
 							wpa|wpa2|wpa+wpa2) uci_set "wireless" "$vcfg" "key" "$FORM_radius_key";;
 						esac
 						uci_set "wireless" "$vcfg" "key1" "$FORM_key1"
