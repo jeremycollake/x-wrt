@@ -20,20 +20,20 @@ user_string="$REMOTE_USER"
 machinfo=$(uname -a 2>/dev/null)
 if $(echo "$machinfo" | grep -q "mips"); then
 	if $(echo "$board_type" | grep -q "Atheros"); then
-		target_path="atheros-2.6"
+		target_path="atheros"
 	elif $(echo "$board_type" | grep -q "WP54"); then
-		target_path="adm5120-2.6"
+		target_path="adm5120"
 	elif $(echo "$machinfo" | grep -q "2\.4"); then
 		target_path="brcm-2.4"
 	elif $(echo "$machinfo" | grep -q "2\.6"); then
-		target_path="brcm-2.6"
+		target_path="brcm47xx"
 	fi
 elif $(echo "$machinfo" | grep -q " i[0-9]86 "); then
-	target_path="x86-2.6"
+	target_path="x86"
 elif $(echo "$machinfo" | grep -q " avr32 "); then
-	target_path="avr32-2.6"
+	target_path="avr32"
 elif $(cat /proc/cpuinfo 2>/dev/null | grep -q "IXP4"); then
-	target_path="ixp4xx-2.6"
+	target_path="ixp4xx"
 fi
 package_filename="webif_latest_stable.ipk"
 if $(echo "$firmware_version" | grep -q "r[[:digit:]]*"); then
