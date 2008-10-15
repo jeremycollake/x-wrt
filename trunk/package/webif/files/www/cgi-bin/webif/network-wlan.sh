@@ -761,11 +761,23 @@ for device in $DEVICES; do
 				//
 				if (isset('mode_$vcfg','adhoc'))
 				{
-					if (isset('encryption_$vcfg','psk'))
+					if (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2'))
 					{
-						document.getElementById('encryption_$vcfg').value = 'off';
+						document.getElementById('encryption_$vcfg').value = 'none';
 					}
 				}
+
+				//
+				//wpa_supplicant does not support psk+psk2
+				//
+				if (isset('mode_$vcfg','sta') && ('$iftype'=='atheros'))
+				{
+					if (isset('encryption_$vcfg','psk-mixed/tkip+aes'))
+					{
+						document.getElementById('encryption_$vcfg').value = 'none';
+					}
+				}
+
 				//
 				// force encryption listbox to no selection if user tries
 				// to set WPA (Radius) with anything but AP mode.
@@ -774,7 +786,7 @@ for device in $DEVICES; do
 				{
 					if (isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2'))
 					{
-						document.getElementById('encryption_$vcfg').value = 'off';
+						document.getElementById('encryption_$vcfg').value = 'none';
 					}
 				}
 				v = (isset('ap_mode_$device','11b') || isset('ap_mode_$device','11bg') || isset('ap_mode_$device','11g') || ('$iftype'=='broadcom'));
