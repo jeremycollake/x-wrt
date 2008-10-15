@@ -40,6 +40,9 @@ if __FORM["allowed_site"] and __FORM["allowed_site"] ~= "" then
   local sitesallowed = uci.add("coovachilli","sitesallowed")
   uci.set("coovachilli",sitesallowed,"site",__FORM["allowed_site"])
 end
+if __FORM["DeleteAllowed"] then
+	uci.delete("coovachilli",__FORM["DeleteAllowed"])
+end
 
 local ifwifi = uci.get_type("wireless","wifi-iface")
 uci.check_set("coovachilli","webadmin","coovachilli")
@@ -59,7 +62,7 @@ local radconf   = tonumber(uci.check_set("coovachilli","webadmin","radconf","0")
 -- portal = 2 la página de login en un servidor Externo
 local portal    = tonumber(uci.check_set("coovachilli","webadmin","portal","1"))
 
-uci.check_set("coovachilli","settings","HS_ANYDNS","1")
+uci.check_set("coovachilli","settings","HS_ANYDNS","on")
 uci.check_set("coovachilli","settings","HS_DNS1","192.168.182.1")
 uci.check_set("coovachilli","settings","HS_DNS2","204.225.44.3")
 uci.check_set("coovachilli","settings","HS_NETMASK","255.255.255.0")
@@ -107,13 +110,13 @@ function set_menu()
   if radconf > 1 then
     __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Communities#Communities","coova-chilli.sh?option=communities")
   end
---  if tonumber(hotspot.service.enable) == 1 then
-    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Connections#Connections","coova-chilli.sh?option=connections")
---  end
 --    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Access#Access","coova-chilli.sh?option=access")
 --    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Proxy#Proxy","coova-chilli.sh?option=proxy")
 --    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Scripts#Extras","coova-chilli.sh?option=extras")
   end
+--  if tonumber(hotspot.service.enable) == 1 then
+    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Connections#Connections","coova-chilli.sh?option=connections")
+--  end
   
   __WIP = 4
 end
@@ -376,7 +379,7 @@ function add_allowed_site(form,user_level)
       strallowed = strallowed .. [[</td><td width="20%" ><a href="]]
       local sstep = ""
       if __FORM.step~=nil then sstep = "&step="..__FORM.step end
-      strallowed = strallowed ..__SERVER.SCRIPT_NAME.."?".."UCI_CMD_delchillispot."..sitesallowed[i][".name"].."=&__menu="..__FORM.__menu.."&option="..__FORM.option..sstep
+      strallowed = strallowed ..__SERVER.SCRIPT_NAME.."?".."DeleteAllowed="..sitesallowed[i][".name"].."&__menu="..__FORM.__menu.."&option="..__FORM.option..sstep
       strallowed = strallowed ..[[">]]..tr("remove_lnk#remove it")..[[</a></td></tr>]]
     end
     strallowed = strallowed..[[</table>]]
