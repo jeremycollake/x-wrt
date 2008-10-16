@@ -66,8 +66,13 @@ uci_load "webif"
 		if $(uname -m | grep -q "i.86"); then
 			ifconfig eth0 |grep -q 00:0D:B9:**:**:**
 			[ $? = "0" ] && {
-				device_name="PC Engines WRAP"
-				break
+				if [ "300" -lt `cat /proc/cpuinfo |grep "cpu MHz" |cut -d':' -f2 |cut -d'.' -f1` ]; then
+					device_name="PC Engines Alix"
+					break
+				else
+					device_name="PC Engines WRAP"
+					break
+				fi
 			}
 			for id in $(ls -l /sys/devices/pci*/ 2>/dev/null | sed '/^d/!d; s/^.*[[:space:]]//g; /^\./d'); do
 				for vendor in vendor subsystem_vendor; do
