@@ -144,9 +144,9 @@ function networks()
     if network[i].ifname == nil then
       network[i].ifname, dev = setdev(network[i].ipaddr, dev)
     end
-    for j,v in pairs(dev[network[i].ifname]) do
-      network[i][j] = v
-    end
+--    for j,v in pairs(dev[network[i].ifname]) do
+--      network[i][j] = v
+--    end
     t[network[i][".name"]] = network[i]
   end
   return t

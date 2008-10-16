@@ -166,11 +166,11 @@ function set_forwarding(src,dest)
 	print(src, dest)
 	if src and dest then
 		if forwardings[src] and forwardings[src][dest] then
-			print("dice que existe")
+--			print("dice que existe")
 			cfgret = forwardings[src][dest]
 		else
-			print("set_zone ",src)
-			print("set_zone ",dest)
+--			print("set_zone ",src)
+--			print("set_zone ",dest)
 			set_zone(src)
 			set_zone(dest)
 			cfgret = uci.add("firewall","forwarding")
