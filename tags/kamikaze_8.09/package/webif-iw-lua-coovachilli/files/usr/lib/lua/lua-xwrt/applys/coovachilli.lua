@@ -197,7 +197,7 @@ function set_networks()
 	wwwprint("Configuring Networks")
 	local hs_iflan = uci.get("coovachilli","webadmin","HS_LANIF")
 	local iflan, ifwifi = unpack(string.split(hs_iflan,":"))
-	uci.set("wireless",ifwifi,"disabled","1")
+	uci.set("wireless",ifwifi,"disabled","0")
 	local wireless = uci.get_type("wireless","wifi-iface")
 	wwwprint("Network "..iflan)
 	for i=1, #wireless do
