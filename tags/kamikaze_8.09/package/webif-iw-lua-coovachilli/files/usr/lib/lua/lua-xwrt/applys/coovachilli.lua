@@ -1,6 +1,7 @@
 require("uci_iwaddon")
 require("firewall")
 require("common")
+require("net")
 
 parser = {}
 local P = {}
@@ -19,6 +20,7 @@ local table = table
 local pairs = pairs
 local tonumber = tonumber
 local firewall = firewall
+local net = net
 -- no more external access after this point
 setfenv(1, P)
 
@@ -195,7 +197,6 @@ end
 
 function set_networks()
 	wwwprint("Configuring Networks")
-	
 	local hs_iflan = uci.get("coovachilli","webadmin","HS_LANIF")
 	local iflan, ifwifi = unpack(string.split(hs_iflan,":"))
 	uci.set("wireless",ifwifi,"disabled","0")
@@ -208,11 +209,6 @@ function set_networks()
 			break
 		end
 	end
-	local ip = uci.get("network",iflan,"ipaddr")
-	local mask = uci.get("network",iflan,"netmask")
-	tnet = net.get_unique_ip(ip,mask,iflan)
-	uci.check_set("network",iflan,"ipaddr",tnet.IP)
-	uci.check_set("network",iflan,"netmask",tnet.NETMASK)
 	uci.set("network",iflan,"ifname",ifwifi)
 	firewall.set_forwarding(iflan,"wan")
 	wwwprint("Setting firewall")
@@ -220,10 +216,15 @@ function set_networks()
 		firewall.set_forwarding(iflan,"lan")
 		firewall.set_forwarding("lan","wifi")
 	end
-
-	if uci.get("network",iflan,"type") == "bridge" then iflan = "br-"..iflan end
-	uci.set("coovachilli","settings","HS_LANIF",iflan)
+	local devlan = iflan
+	if uci.get("network",iflan,"type") == "bridge" then devlan = "br-"..iflan end
+	uci.set("coovachilli","settings","HS_LANIF",devlan)
 	wwwprint("Set dhcpif = "..iflan)
+	local ip = uci.get("network",iflan,"ipaddr")
+	local mask = uci.get("network",iflan,"netmask")
+	tnet = net.get_unique_ip(ip,mask,iflan)
+	uci.check_set("network",iflan,"ipaddr",tnet.IP)
+	uci.check_set("network",iflan,"netmask",tnet.NETMASK)
 	uci.save("network")
 	uci.save("wireless")
 	uci.save("coovachilli")

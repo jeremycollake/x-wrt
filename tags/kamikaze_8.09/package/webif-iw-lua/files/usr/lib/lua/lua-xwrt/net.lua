@@ -301,14 +301,12 @@ function check_dup_ip(tnet,iflan)
 end
 
 function get_unique_ip(ip,mask,iflan)
-	if ip == nil or ip == "" then
-		ip = "10.11.0.1"
-	end
-	if mask == nil or mask == "" then
-		mask = "255.255.255.0"
-	end
-	tnet = ipcalc(ip,mask)
+	local ip = ip or "10.11.0.1"
+	local mask = mask or "255.255.255.0"
+	if ip == "" then ip = "10.11.0.1" end
+	if mask == "" then mask = "255.255.255.0" end
 
+	local tnet = ipcalc(ip,mask)
 	if check_dup_ip(tnet,iflan) == false then
 		tnet = other_ip(tnet,iflan)
 	end
