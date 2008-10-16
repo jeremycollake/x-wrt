@@ -195,6 +195,7 @@ end
 
 function set_networks()
 	wwwprint("Configuring Networks")
+	
 	local hs_iflan = uci.get("coovachilli","webadmin","HS_LANIF")
 	local iflan, ifwifi = unpack(string.split(hs_iflan,":"))
 	uci.set("wireless",ifwifi,"disabled","0")
@@ -207,7 +208,11 @@ function set_networks()
 			break
 		end
 	end
-
+	local ip = uci.get("network",iflan,"ipaddr")
+	local mask = uci.get("network",iflan,"netmask")
+	tnet = net.get_unique_ip(ip,mask,iflan)
+	uci.check_set("network",iflan,"ipaddr",tnet.IP)
+	uci.check_set("network",iflan,"netmask",tnet.NETMASK)
 	uci.set("network",iflan,"ifname",ifwifi)
 	firewall.set_forwarding(iflan,"wan")
 	wwwprint("Setting firewall")

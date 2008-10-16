@@ -21,7 +21,8 @@ local pairs = pairs
 local listtovars = listtovars
 local uci = uci
 local print = print
- 
+local tonumber = tonumber
+
 -- no more external access after this point
 setfenv(1, P)
 
@@ -245,6 +246,73 @@ function dev_list()
     end 
   end
   return nets
+end
+
+function other_ip(tnet,iflan)
+	repeat 
+		local ip = string.split(tnet.IP,".")
+		local mask = string.split(tnet.NETMASK,".")
+		local idx = 3
+		for i=3,1,-1 do
+			if tonumber(mask[i]) ~= 0 then 
+				idx = i 
+				break
+			end 
+		end
+		ip[idx] = tonumber(ip[idx])+1
+		if ip[idx] > 254 then ip[idx] = 1 end
+		local newip = ""
+		local sep = ""
+		for i = 1, 4 do
+			newip = newip..sep..ip[i]
+			sep = "."
+		end
+
+		tnet = ipcalc(newip,tnet.NETMASK)
+		local ok = check_dup_ip(tnet,iflan)
+	until ok == true
+	return tnet
+end
+
+function check_dup_ip(tnet,iflan)
+	local ok = true
+	local tifaces = {}
+	for i, t in pairs(ifconfig()) do
+		if t.ipaddr 
+		and t.ipaddr ~= "127.0.0.1" 
+		and i ~= iflan
+		and i ~= "br-"..iflan
+		then
+			tifaces[#tifaces+1] = {}
+			local tif = ipcalc(t.ipaddr,t.netmask)
+			tifaces[#tifaces]["name"] = i
+			tifaces[#tifaces]["ipaddr"] = t.ipaddr
+			tifaces[#tifaces]["netmask"] = t.netmask
+			tifaces[#tifaces]["NETWORK"] = tif.NETWORK
+		end
+	end
+	for i=1, #tifaces do
+		if tifaces[i].NETWORK == tnet.NETWORK then
+			ok = false
+			break
+		end
+	end
+	return ok
+end
+
+function get_unique_ip(ip,mask,iflan)
+	if ip == nil or ip == "" then
+		ip = "10.11.0.1"
+	end
+	if mask == nil or mask == "" then
+		mask = "255.255.255.0"
+	end
+	tnet = ipcalc(ip,mask)
+
+	if check_dup_ip(tnet,iflan) == false then
+		tnet = other_ip(tnet,iflan)
+	end
+	return tnet
 end
 
 return net
