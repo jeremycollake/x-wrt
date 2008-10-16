@@ -8,7 +8,7 @@
 require("net")
 require("tbform")
 require("uci_iwaddon")
-
+require("firewall")
 cportal = {}
 local P = {}
 cportal = P
@@ -44,7 +44,6 @@ if __FORM["DeleteAllowed"] then
 	uci.delete("coovachilli",__FORM["DeleteAllowed"])
 end
 
-local ifwifi = uci.get_type("wireless","wifi-iface")
 uci.check_set("coovachilli","webadmin","coovachilli")
 uci.check_set("coovachilli","system","coovachilli")
 
@@ -121,31 +120,42 @@ function set_menu()
   __WIP = 4
 end
 
-function get_wifinet()
+function get_wifinet(user_level)
+	local user_level = user_level or userlevel
   local t = {}
   local n = 0
+  local filternet = {}
+  filternet["wan"] = ""
+  filternet["loopback"] = ""
+  if user_level < 2 then
+  	filternet["lan"] = ""
+  end
+	uci.check_set("network","wifi","interface")
+	uci.check_set("network","wifi","proto","static")
+	uci.check_set("network","wifi","type","bridge")
+--	uci.check_set("network","wifi","ifname",iwifi[i].device)
+--	uci.check_set("network","wifi","ipaddr","192.168.2.2")
+--	uci.check_set("network","wifi","netmask","255.255.255.0")
+  print("aca ta")
+	uci.save("network")
+  print("aca ta")
+  
   local nets = net.networks()
+  print("aca ta")
   local iwifi = uci.get_type("wireless","wifi-iface")
-  for i=1, #iwifi do
-    if nets[iwifi[i].network] then 
-      if nets[iwifi[i].network].type == "bridge" then
+	for i, u in pairs(nets) do
+		if filternet[i] == nil then
+			for j=1, #iwifi do
+				local name = i.." on "..iwifi[j].device
+				t[name]=i..":"..iwifi[j].device
         n = n + 1
-        t["br-"..iwifi[i].network]=iwifi[i].network
-      end
-    end
-  end
+			end
+		end
+	end
+  print("aca ta")
+		
   local unico = next(t)
-  return t, n, unico
-end
-
-function create_net(form,user_level,rad)
-  local nets = net.networks()
-  local iwifi = uci.get_type("wireless","wifi-iface")
-  if #wifi > 1 then
-    
-  else
-    uci.set("network")
-  end
+  return t, n, t[unico]
 end
 
 function core_form(form,user_level,rad_conf)
@@ -202,7 +212,7 @@ end
 function net_form(form,user_level,localuam)
   local user_level = user_level or userlevel
   local form = form
-  local ifiw, n, unico = get_wifinet()
+  local ifiw, n, unico = get_wifinet(user_level)
 
 	if user_level > 1 or n > 1 then
   	if form == nil then
@@ -211,25 +221,31 @@ function net_form(form,user_level,localuam)
     	form:Add("subtitle",tr("Network Settings"))
   	end
 
-  	if user_level < 2 then
+--  	if user_level < 2 then
     	if tonumber(n) > 1 then
-      	form:Add("select","coovachilli.settings.HS_LANIF",uci.get("coovachilli","settings","HS_LANIF"),tr("cportal_var_ifwifi#Wireless Interface"),"string")
+      	form:Add("select","coovachilli.webadmin.HS_LANIF",uci.get("coovachilli","settings","HS_LANIF"),tr("cportal_var_ifwifi#Wireless Interface"),"string")
       	for k, v in pairs(ifiw) do
-        	form["coovachilli.settings.HS_LANIF"].options:Add(k,v)
+        	form["coovachilli.webadmin.HS_LANIF"].options:Add(v,k)
       	end
-    	else
-      	uci.set("coovachilli","settings","HS_LANIF",unico)
     	end    
-  	end
+--  	end
+  else
+    uci.set("coovachilli","webadmin","HS_LANIF",unico)
+    uci.save("coovachilli")
 	end
 
   if user_level > 1 then
+--[[
 	  local dev
     dev = net.invert_dev_list() -- for advanced users
 	  form:Add("select","coovachilli.settings.HS_LANIF",uci.check_set("coovachilli","settings","HS_LANIF","br-wifi"),tr("cportal_var_device#Device Network"),"string")
   	for k, v in pairs(dev) do
-    	form["coovachilli.settings.HS_LANIF"].options:Add(k,k)
+    	if v ~= "loopback"
+    	and v ~= "wan" then
+				form["coovachilli.settings.HS_LANIF"].options:Add(k,v)
+			end
   	end
+]]--
 	  form:Add("text", "coovachilli.settings.HS_UAMLISTEN", uci.check_set("coovachilli","settings","HS_UAMLISTEN","192.168.182.1"),tr("cportal_var_uamlisten#HotSpot Internal IP Address"),"string")
 --  This param can be calculated 
 --  form:Add("text", "coovachilli.settings.HS_NETWORK", uci.check_set("coovachilli","settings","HS_NETWORK","192.168.182.0"),tr("cportal_var_net#HotSpot DHCP Network"),"string")

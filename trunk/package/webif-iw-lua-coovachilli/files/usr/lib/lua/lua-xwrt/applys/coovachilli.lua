@@ -1,4 +1,5 @@
 require("uci_iwaddon")
+require("firewall")
 require("common")
 
 parser = {}
@@ -12,10 +13,12 @@ local ipcalc = ipcalc
 local uci = uci
 local io = io
 local string = string
+local unpack = unpack
 local oldprint = oldprint
 local table = table
 local pairs = pairs
 local tonumber = tonumber
+local firewall = firewall
 -- no more external access after this point
 setfenv(1, P)
 
@@ -38,12 +41,15 @@ end
 --depends_pkgs = "libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm iw-freeradius"
 exe_after["/etc/init.d/network restart"]="network"
 exe_after["wifi"]="wifi"
+exe_after["/etc/init.d/firewall restart"]="firewallwifi"
 
 
 function process()
   write_init()
   write_config()
   uci.commit("coovachilli")
+  uci.commit("network")
+  uci.commit("wireless")
 end
 
 
@@ -187,18 +193,55 @@ function set_alloweds()
 	return allow_str
 end
 
+function set_networks()
+	wwwprint("Configuring Networks")
+	local hs_iflan = uci.get("coovachilli","webadmin","HS_LANIF")
+	local iflan, ifwifi = unpack(string.split(hs_iflan,":"))
+	uci.set("wireless",ifwifi,"disabled","1")
+	local wireless = uci.get_type("wireless","wifi-iface")
+	wwwprint("Network "..iflan)
+	for i=1, #wireless do
+		if wireless[i].device == ifwifi then
+			wwwprint("Wireless "..ifwifi)
+			uci.set("wireless",wireless[i][".name"],"network",iflan)
+			break
+		end
+	end
+
+	uci.set("network",iflan,"ifname",ifwifi)
+	firewall.set_forwarding(iflan,"wan")
+	wwwprint("Setting firewall")
+	if iflan ~= "lan" then
+		firewall.set_forwarding(iflan,"lan")
+		firewall.set_forwarding("lan","wifi")
+	end
+
+	if uci.get("network",iflan,"type") == "bridge" then iflan = "br-"..iflan end
+	uci.set("coovachilli","settings","HS_LANIF",iflan)
+	wwwprint("Set dhcpif = "..iflan)
+	uci.save("network")
+	uci.save("wireless")
+	uci.save("coovachilli")
+	wwwprint("Network setting ok")
+end
+
 function write_config()
+	if uci.get("coovachilli","webadmin","userlevel") == "1" then set_networks() end
   wwwprint ("Writing configuration file /etc/chilli/config")
 	settings = uci.get_section("coovachilli","settings")
 	conf_str = "#### This conf file was writed by webif-iw-lua-coovachilli-apply ####\n"
 	if settings then
 		for i, t in pairs(settings) do
-			if not string.match(i,"[.]") then
+			if not string.match(i,"[.]") 
+			and i ~= "HS_UAMHOMEPAGE" 
+			and i ~= "HS_UAMFORMAT" then
       	if string.match(t,"%s") then t = "\""..t.."\"" end
 				conf_str = conf_str .. i.."="..t.."\n"
 			end
 		end
 	end
+	conf_str = conf_str.."HS_UAMHOMEPAGE="..uci.get("coovachilli","settings","HS_UAMHOMEPAGE").."\n"
+	conf_str = conf_str.."HS_UAMFORMAT="..uci.get("coovachilli","settings","HS_UAMFORMAT").."\n"
 	conf_str = conf_str.."HS_UAMALLOW="..set_alloweds().."\n"
 
   write_file = io.open("/etc/chilli/config","w")
