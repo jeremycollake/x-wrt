@@ -25,7 +25,7 @@ tr_load()
 self = uciUpdatedClass.new()
 require("uci")
 local handler_list = {}
-handler_dir = io.popen("ls /usr/lib/webif/apply")
+handler_dir = io.popen("ls /usr/lib/lua/lua-xwrt/applys")
 for line in handler_dir:lines() do
   handler_list[#handler_list+1] = line
 end
@@ -36,7 +36,7 @@ for k,t in pairsByKeys(self) do
       if handler_list[i] == k then
         print (k)
         found = true
-        dofile("/usr/lib/webif/apply/"..k)
+        dofile("/usr/lib/lua/lua-xwrt/applys/"..k)
         break
       end
     end
