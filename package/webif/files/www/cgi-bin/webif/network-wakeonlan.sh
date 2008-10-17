@@ -1,9 +1,29 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
-
 HOSTS_FILE=/etc/hosts
 ETHERS_FILE=/tmp/dhcp.leases
+
+config_cb() {
+	local cfg_type="$1"
+	local cfg_name="$2"
+
+	case "$cfg_type" in
+		host)
+			append host_cfgs "$cfg_name" "$N"
+		;;
+	esac
+}
+uci_load dhcp
+for cfgs in $host_cfgs; do
+	config_get name "$cfgs" name
+	config_get ip "$cfgs" ip
+	config_get macaddr "$cfgs" mac
+	cat $ETHERS_FILE |grep -q $macaddr
+	[ "$?" != "0" ] && {
+		append static_hosts "$name $ip $macaddr" "$N"
+	}
+done
 
 header "Network" "WoL" "@TR<<Wake-On-LAN>>" ''
 
@@ -63,6 +83,14 @@ if [ -e "$ETHERS_FILE" ]; then
 	{
 		if ($2 ~ /^[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}/) {
 			print "<tr><td>" $4 "</td><td>" $3 "</td><td>" $2 "</td><td><button name=\"wake\" type=\"submit\" value=\"" $2 "\">Wake up</button></td></tr>"
+		}
+	}'
+fi
+if [ -n "$static_hosts" ]; then
+	echo $static_hosts | awk '
+	{
+		if ($3 ~ /^[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}/) {
+			print "<tr><td>" $1 "</td><td>" $2 "</td><td>" $3 "</td><td><button name=\"wake\" type=\"submit\" value=\"" $3 "\">Wake up</button></td></tr>"
 		}
 	}'
 fi
