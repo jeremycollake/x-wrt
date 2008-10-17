@@ -74,6 +74,11 @@ uci_load "webif"
 					break
 				fi
 			}
+			cat /proc/cpuinfo |grep -q "Geode"
+			[ $? = "0" ] && {
+				device_name="Generic AMD Geode Device"
+				break
+			}
 			for id in $(ls -l /sys/devices/pci*/ 2>/dev/null | sed '/^d/!d; s/^.*[[:space:]]//g; /^\./d'); do
 				for vendor in vendor subsystem_vendor; do
 					if cat "/sys/devices/pci${id%:*}/$id/$vendor" 2>/dev/null | grep -qi "0x15ad"; then
