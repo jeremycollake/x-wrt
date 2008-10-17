@@ -1,14 +1,7 @@
---[[
-    Availables functions
-    check_pkg
-    core_form
-    community_form
-
-]]--
 require("net")
 require("tbform")
 require("uci_iwaddon")
-require("firewall")
+
 cportal = {}
 local P = {}
 cportal = P
@@ -24,9 +17,8 @@ local string = string
 local uci = uci
 local next = next
 
---local uciClass = uciClass
 local menuClass = menuClass
-local __UCI_VERSION = __UCI_VERSION
+--local __UCI_VERSION = __UCI_VERSION
 local formClass = formClass
 local __SERVER = __SERVER
 local __FORM = __FORM
