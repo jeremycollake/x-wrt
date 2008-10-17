@@ -34,7 +34,7 @@ EOF
 fi
 generate_channels() {
 	iwlist channel 2>&- |grep -q "GHz"
-	if [ "$?" = "0" ]; then
+	if [ "$?" != "0" ]; then
 		is_package_installed kmod-madwifi
 		if [ "$?" = "0" ]; then
 			wlanconfig ath create wlandev wifi0 wlanmode ap >/dev/null
