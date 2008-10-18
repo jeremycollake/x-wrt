@@ -80,26 +80,43 @@ function init_list(list)
     tres[#tres+1]=i
   end
   local end_line = "\n"
+  local spaces = "    "
+  local font = ""
+  local end_font ="Error!!!"..end_line
   local str = ""
-  if __WWW then end_line = "<br>" end
+  if __WWW then
+		end_line = "<br>"
+		spaces = "&nbsp;&nbsp;&nbsp;&nbsp;"
+		font="<font color='red'><strong>"
+		end_font = "</strong></font>" 
+	end
   for i=1, #tres do
---    os.execute(tres[i])
-    wwwprint(tres[i])
-    os.execute(tres[i].." > /tmp/start")
-    for li in io.input("/tmp/start"):lines() do
-      str = str..li..end_line
+    io.write(tres[i]..end_line)
+		local error = os.execute(tres[i].." > /tmp/"..i.."start 2> /tmp/"..i.."starterror")
+    for li in io.input("/tmp/"..i.."start"):lines() do
+    	io.write(spaces..li..end_line)
     end
-    os.execute("rm /tmp/start")
-
+		local myerror = io.totable("/tmp/"..i.."starterror")
+		if #myerror > 1 then
+			io.write(font.."<h4>"..tres[i].." Done with Error!!!</h4>"..end_line ) 
+			for i,t in pairs(myerror) do
+				io.write(spaces..t..end_line)
+			end			
+	    io.write(end_font)
+		end
+    os.execute("rm /tmp/"..i.."start")
+    os.execute("rm /tmp/"..i.."starterror")
 --[[
     exe_handler = io.popen( tres[i].." 2>&1" )
+--    exe_handler = io.popen( tres[i] )
     for line in exe_handler:lines() do
+			io.write(line..end_line)
       str = str..line..end_line
     end
     exe_handler:close()
 ]]--
+		io.write(end_line)
   end
-  return str      
 end
 
 --function call_parser(file,parsers_list,depends_list,exe_before,exe_after,reboot_list)
@@ -163,7 +180,6 @@ for i=1, #file_to_process do
   local file = file_to_process[i]
   file_list[file] = ""
   local apply_file = uci.get(file,"system","apply") or "/usr/lib/lua/lua-xwrt/applys/"..file..".lua"
---	print(0,apply_file,file)
   if apply_file and io.exists(apply_file) == true then
 --    call_parser(file,parsers_list,depends_list,exe_before,exe_after,reboot_list)
     dofile(apply_file)
@@ -230,9 +246,9 @@ if __WWW then
 --  wwwprint("Dependencias ",depends_list) 
 end
 local before_str = exe_list(exe_before)
-if before_str ~= "" then
-  wwwprint(before_str)
-end
+--if before_str ~= "" then
+--  wwwprint(before_str)
+--end
 
 -- After isntall all needed packages commit files with parsers
 -- and execute the parsers
@@ -257,8 +273,10 @@ if #reboot_list > 0 then
   os.execute("reboot")
   os.exit(0)
 end    
-
-print(init_list(exe_after))
+wwwprint("")
+wwwprint("Please wait... Starting services...")
+--print(init_list(exe_after))
+init_list(exe_after)
 
 --  local form = formClass.new("Apply...",true)
 --  print (form:startFullForm())
