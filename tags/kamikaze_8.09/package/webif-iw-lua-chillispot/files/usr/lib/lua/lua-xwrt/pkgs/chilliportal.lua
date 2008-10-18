@@ -39,7 +39,7 @@ uci.check_set("chillispot","webadmin","chillispot")
 uci.check_set("chillispot","webadmin","enable","1")
 
 uci.check_set("chillispot","system","chillispot")
-uci.check_set("chillispot","system","apply","/usr/lib/lua/lua-wrt/applys/chillispot.lua")
+uci.check_set("chillispot","system","apply","/usr/lib/lua/lua-xwrt/applys/chillispot.lua")
 
 uci.check_set("chillispot","settings","dns1","192.168.1.1")
 uci.check_set("chillispot","settings","dns2","204.225.44.3")
