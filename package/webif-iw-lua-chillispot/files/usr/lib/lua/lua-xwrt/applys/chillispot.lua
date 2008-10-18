@@ -1,3 +1,4 @@
+require("set_path")
 require("uci_iwaddon")
 require("firewall")
 require("common")
@@ -46,7 +47,6 @@ exe_after["/etc/init.d/firewall restart"]="firewall"
 -- depends_pkgs = "libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm iw-freeradius"
 
 function process()
---  process_networks_values()
   write_config()  
   uci.commit("coovachilli")
   uci.commit("network")
@@ -161,7 +161,8 @@ function set_networks()
 end
 
 function write_config()
-  wwwprint ("Writing configuration file /etc/chilli/config")
+	if uci.get("chillispot","webadmin","userlevel") == "1" then set_networks() end
+  io.write("Writing configuration file /etc/chilli.conf")
 	local settings = uci.get_section("chillispot","settings")
 	conf_str = "#### This conf file was writed by webif-iw-lua-chillispot-apply ####\n"
 	if settings then
@@ -169,38 +170,38 @@ function write_config()
 			if not string.match(i,"[.]") then
       	if string.match(t,"%s") then t = "\""..t.."\"" end
 				conf_str = conf_str .. i.." "..t.."\n"
+				io.write(".")
 			end
 		end
 	end
+
 	conf_str = conf_str.."uamallowed "..set_alloweds().."\n"
-  local setting = uci.get_section("chillispot","checked")
-  for k,v in pairs(setting) do
-    if not string.match(k,"[.]") then
-      if tonumber(v) == 1 then
-        conf_str = conf_file .. k .. "\n"
-      end
-    end
+
+  local settings = uci.get_section("chillispot","checked")
+	if settings then
+	  for k,v in pairs(settings) do
+  	  if not string.match(k,"[.]") then
+    	  if tonumber(v) == 1 then
+      	  conf_str = conf_str .. k .. "\n"
+				io.write(".")
+      	end
+    	end
+  	end
   end
-  chillisetting = uci.get_section("chillispot","webadmin")
-  if chillisetting then
-    if chillisetting.isocc
-    or chillisetting.cc
-    or chillisetting.ac
-    or chillisetting.netname then
-    	local isocc = chillisetting.isocc or ""
-    	local cc = chillisetting.cc or ""
-    	local ac = chillisetting.ac or ""
-    	local netname = chillisetting.netname or ""
-    	netname = string.gsub(netname," ","_")
-    	conf_file = conf_file .. "radiuslocationid isocc="..isocc..",cc="..cc..",ac="..ac..",network="..netname
-    	isocc=AR,cc=54,ac=372,network=Coova,X_Wrt_Network
-    end
-	end
-	conf_str .. "\n"
-  write_file = io.open("/etc/chilli/config","w")
+	local isocc = uci.get("chillispot","webadmin","isocc") or ""
+  local cc = uci.get("chillispot","webadmin","cc") or ""
+  local ac = uci.get("chillispot","webadmin","ac") or ""
+  local netname = uci.get("chillispot","webadmin","netname") or ""
+	if isocc..cc..ac..netname ~= "" then
+    netname = string.gsub(netname," ","_")
+    conf_str = conf_str .. "radiuslocationid isocc="..isocc..",cc="..cc..",ac="..ac..",network="..netname
+  end
+	conf_str = conf_str .. "\n"
+  local write_file = io.open("/etc/chilli.conf","w")
   write_file:write(conf_str)
   write_file:close()
-  wwwprint("/etc/chilli/config writed OK!")
+  wwwprint("/etc/chilli.conf writed OK!")
+
 end
 
 return parser

@@ -163,16 +163,16 @@ function set_forwarding(src,dest)
 	cfgret = nil
 	local src = has_value(src)
 	local dest = has_value(dest)
-	print(src, dest)
+--	print(src, dest)
 	if src and dest then
+		set_zone(src)
+		set_zone(dest)
 		if forwardings[src] and forwardings[src][dest] then
 --			print("dice que existe")
 			cfgret = forwardings[src][dest]
 		else
 --			print("set_zone ",src)
 --			print("set_zone ",dest)
-			set_zone(src)
-			set_zone(dest)
 			cfgret = uci.add("firewall","forwarding")
 			if cfgret then
 				uci.set("firewall",cfgret,"src",src)
