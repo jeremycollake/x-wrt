@@ -1,46 +1,146 @@
 #!/usr/bin/lua
-print("caca")
 require("set_path")
---require("init")
 require("uci_iwaddon")
+--require("init")
 --print (uci.get("coovachilli","settings","HS_UAMSERVER"),uci.get("coovachilli","settings","HS_UAMPORT"))
-io.write([[
-Content-Type: text/html;
-Pragma: no-cache 
+print([[
+Content-Type: text/html; charset=UTF-8
+Pragma: no-cache
 ]])
-io.write([[
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-<html><head>
+print([[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">]])
+print([[
+<head>
 <title>X-Wrt for end users</title>
-<link rel="stylesheet" type="text/css" href="http://]]..uci.check_set("coovachilli","settings","HS_UAMSERVER","192.168.182.1")..[[/themes/active/waitbox.css" media="screen" />
-<link rel="stylesheet" type="text/css" href="http://]]..uci.get("coovachilli","settings","HS_UAMSERVER")..[[/themes/active/webif.css" />
-<SCRIPT SRC="http://]]..uci.get("coovachilli","settings","HS_UAMSERVER")..[[:]]..uci.check_set("coovachilli","settings","HS_PORT","3990")..[[/www/ChilliLibrary.js" LANGUAGE="JavaScript1.2" TYPE="text/javascript"></SCRIPT>
+<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
+<SCRIPT SRC="/js/ChilliLibrary.js" LANGUAGE="JavaScript1.2" TYPE="text/javascript"></SCRIPT>
 
 <SCRIPT LANGUAGE="JavaScript1.2" TYPE="text/javascript">
 chilliController.host = ']]..uci.get("coovachilli","settings","HS_UAMSERVER")..[[';
 chilliController.port = ]]..uci.get("coovachilli","settings","HS_UAMPORT")..[[;
-
 </SCRIPT>
-
-<SCRIPT SRC="http://]]..uci.get("coovachilli","settings","HS_UAMSERVER")..[[:]]..uci.get("coovachilli","settings","HS_UAMPORT")..[[/www/chilliController.js" LANGUAGE="JavaScript1.2" TYPE="text/javascript" >
-</SCRIPT>
-
+<SCRIPT SRC="/js/chilliController.js" LANGUAGE="JavaScript1.2" TYPE="text/javascript"></SCRIPT>
 <SCRIPT LANGUAGE="JavaScript1.2" TYPE="text/javascript">
 setTimeout('chilliController.refresh()', 0);
 </SCRIPT>
 
 </head>
 <body>
+]])
+print([[
 <div id="container"> 
-<div id="header"><h1>X-Wrt</h1>
-<em>OpenWrt for end users</em>
-<div id="mainmenu"> 
-</div>
+	<div id="header"><h1>X-Wrt</h1>
+		<em>OpenWrt for end users</em>
+	</div>
+		<div id="mainmenu">
+		</div>
+]])
+print([[
+<div id="content">
+	<div id="Chilli">
+  <center>
+    <table border="1">
+      <tr><td>
+        <div id="locationName" style="padding:5px 0px 0px 2px;font-size:120%;"></div>
+      </td></tr>
+      <tr><td>
+        <div id="chilliPage">
+          <div id="logonPage" style="display:none;">
+            <form onSubmit="return false;" name="logon">
+              <!--
+              <div id="openIDSelect" style="font-size:70%;padding-top:4px;float:right;display:none;">
+                <a href="#" onclick="javascript:return openID();"><img border="0" src="images/openid.gif"/></a>
+              </div>
+              <div id="openIDForm" style="display:none;background-color:white;position:absolute;padding:10px;border:solid 1px orange">
+                OpenID URL: <input style="font-size:60%;" name="username" type="text" id="username" size="30" value="http://"/>
+              </div>
+              -->
+              <table id="logonTable" border="0" >
+                <tr>
+                  <td colspan="2" style="font-size:120%;">
+                    <div id="logonMessage" style="font-size:70%;padding-top:4px;">Login:</div>
+                  </td>
+                </tr>
+
+                <tr id="usernameRow">
+                  <td id="usernameLabel"><b>Username</b></td>
+                  <td><input name="username" type="text" id="username" size="20"/></td>
+                </tr>
+                <tr id="passwordRow">
+                  <td id="passwordLabel"><b>Password</b></td>
+                  <td><input name="password" type="password" id="password" size="20"/></td>
+                </tr>
+                <tr>
+                  <td colspan="2"><input type="submit" value="Connect" onClick="connect();"/></td>
+                </tr>	
+                <!--
+                <tr id="signUpRow">
+                  <td id="signUp" colspan="2" style="font-size: 50%">
+                    <a target="_blank" href="https://coova.org/app/c/signup.html">Sign up</a> for an account
+                  </td>
+                </tr>
+                -->
+              </table>		
+            </form>
+          </div>
+          <div id="statusPage" style="display:none;">
+            <table border="0" id="statusTable" style="padding-top:4px;font-size:70%">
+              <tr id="connectRow">
+                <td><span id="statusMessage">Connected</span></td>
+                <td><a href="#" onClick="return disconnect();">logout</a></td>
+              </tr>
+              <tr id="sessionIdRow">
+                <td id="sessionIdLabel" class="chilliLabel"><b>Session ID</b></td>
+                <td id="sessionId" class="chilliValue">Not available</td>
+              </tr>
+              <tr id="sessionTimeoutRow">
+                <td id="sessionTimeoutLabel" class="chilliLabel"><b>Max Session Time</b></td>
+                <td id="sessionTimeout" class="chilliValue">Not available</td>
+              </tr>
+              <tr id="idleTimeoutRow">
+                <td id="idleTimeoutLabel" class="chilliLabel"><b>Max Idle Time</b></td>
+                <td id="idleTimeout" class="chilliValue">Not available</td>
+              </tr>
+              <tr id="startTimeRow">
+                <td id="startTimeLabel" class="chilliLabel"><b>Start Time</b></td>
+                <td id="startTime" class="chilliValue">Not available</td>
+              </tr>
+              <tr id="sessionTimeRow">
+                <td id="sessionTimeLabel" class="chilliLabel"><b>Session Time</b></td>
+                <td id="sessionTime" class="chilliValue">Not available</td>
+              </tr>
+              <tr id="idleTimeRow">
+                <td id="idleTimeLabel" class="chilliLabel"><b>Idle Time</b></td>
+                <td id="idleTime" class="chilliValue">Not available</td>
+              </tr>
+              <tr id="inputOctetsRow">
+                <td id="inputOctetsLabel" class="chilliLabel"><b>Downloaded</b></td>
+                <td id="inputOctets" class="chilliValue">N/A</td>
+              </tr>
+              <tr id="outputOctetsRow">
+                <td id="outputOctetsLabel" class="chilliValueLabel"><b>Uploaded</b></td>
+                <td id="outputOctets" class="chilliValue">N/A</td>
+              </tr>
+              <tr id="originalURLRow">
+                <td id="originalURLLabel" class="chilliValueLabel"><b>Original URL</b></td>
+                <td id="originalURL" class="chilliValue">N/A</td>
+              </tr>
+            </table>
+          </div>
+        </div> <!-- chillipage -->
+      </td></tr>
+    </table>
+	  <div id="errorPage" style="display:none;">
+  	  <span id="errorMessage">Error</span>
+  	</div>
+  </center>
+	</div>
+<!--
+	<div id="debugPage" style="display:inline;">
+  	<textarea id="debugarea" rows="20" cols="60">
+  	</textarea>
+	</div>
+-->
 </div>
 ]])
-
---local tmpl = load_file("/etc/chilli/www/json_html.tmpl")
---local chilliwww = "http://"..uci.get("coovachilli","uam","HS_UAMSERVER")..":"..uci.get("coovachilli","uam","HS_UAMPORT")
---tmpl = string.gsub(tmpl,"CHILLIWWW",chilliwww) 
---print( tmpl )
---print("</div></body></html>")
+print("</div></body></html>")
