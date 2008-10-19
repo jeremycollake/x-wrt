@@ -44,6 +44,7 @@ uci.check_set("coovachilli","system","apply","/usr/lib/lua/lua-xwrt/applys/coova
 
 uci.check_set("coovachilli","settings","coovachilli")
 uci.check_set("coovachilli","checked","coovachilli")
+
 uci.check_set("coovachilli","settings","HS_WWWDIR","/etc/chilli/www")
 uci.check_set("coovachilli","settings","HS_WWWBIN","/etc/chilli/wwwsh")
 
@@ -52,7 +53,6 @@ local radconf   = tonumber(uci.check_set("coovachilli","webadmin","radconf","0")
 -- portal = 1 la pagina de login en el AP
 -- portal = 2 la página de login en un servidor Externo
 local portal    = tonumber(uci.check_set("coovachilli","webadmin","portal","1"))
-
 uci.check_set("coovachilli","settings","HS_ANYDNS","on")
 uci.check_set("coovachilli","settings","HS_DNS1","192.168.182.1")
 uci.check_set("coovachilli","settings","HS_DNS2","204.225.44.3")
@@ -81,32 +81,31 @@ if radconf > 0 then
   uci.check_set("coovachilli","settings","HS_RADIUS","127.0.0.1")
   uci.check_set("coovachilli","settings","HS_RADSECRET","testing123")
 end
-
 uci.save("coovachilli")
 
 function set_menu()
   __MENU.HotSpot["Coova-Chilli"] = menuClass.new()
-  __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Core#Core","coova-chilli.sh")
+  __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Core#Core","coovachilli.sh")
   if userlevel > 1 then
-    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_DHCP#Network","coova-chilli.sh?option=net")
-  __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Portal#Portal","coova-chilli.sh?option=uam")
+    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_DHCP#Network","coovachilli.sh?option=net")
+  	__MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Portal#Portal","coovachilli.sh?option=uam")
 
-  if radconf < 2 then
-    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Radius#Radius","coova-chilli.sh?option=radius")
-  end
-  __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_NasId#NAS ID","coova-chilli.sh?option=nasid")
-  if radconf > 1 then
-    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Users#Users","coova-chilli.sh?option=users")
-  end
-  if radconf > 1 then
-    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Communities#Communities","coova-chilli.sh?option=communities")
-  end
---    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Access#Access","coova-chilli.sh?option=access")
---    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Proxy#Proxy","coova-chilli.sh?option=proxy")
---    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Scripts#Extras","coova-chilli.sh?option=extras")
+  	if radconf < 2 then
+    	__MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Radius#Radius","coovachilli.sh?option=radius")
+  	end
+  	__MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_NasId#NAS ID","coovachilli.sh?option=nasid")
+  	if radconf > 1 then
+    	__MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Users#Users","coovachilli.sh?option=users")
+  	end
+  	if radconf > 1 then
+    	__MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Communities#Communities","coovachilli.sh?option=communities")
+  	end
+--    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Access#Access","coovachilli.sh?option=access")
+--    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Proxy#Proxy","coovachilli.sh?option=proxy")
+--    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Scripts#Extras","coovachilli.sh?option=extras")
   end
 --  if tonumber(hotspot.service.enable) == 1 then
-    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Connections#Connections","coova-chilli.sh?option=connections")
+    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Connections#Connections","coovachilli.sh?option=connections")
 --  end
   
   __WIP = 4
@@ -128,12 +127,9 @@ function get_wifinet(user_level)
 --	uci.check_set("network","wifi","ifname",iwifi[i].device)
 --	uci.check_set("network","wifi","ipaddr","192.168.2.2")
 --	uci.check_set("network","wifi","netmask","255.255.255.0")
-  print("aca ta")
 	uci.save("network")
-  print("aca ta")
   
   local nets = net.networks()
-  print("aca ta")
   local iwifi = uci.get_type("wireless","wifi-iface")
 	for i, u in pairs(nets) do
 		if filternet[i] == nil then
@@ -144,8 +140,6 @@ function get_wifinet(user_level)
 			end
 		end
 	end
-  print("aca ta")
-		
   local unico = next(t)
   return t, n, t[unico]
 end
@@ -166,7 +160,7 @@ function core_form(form,user_level,rad_conf)
 	form["coovachilli.webadmin.enable"].options:Add("1","Enable")
   form:Add_help(tr("chillispot_var_enable#Service"),tr("chilli_help_enable#Enable or disable service."))
 
-  if string.match(__SERVER["SCRIPT_FILENAME"],"coova.chilli.sh") then
+  if string.match(__SERVER["SCRIPT_FILENAME"],"coovachilli.sh") then
   	form:Add("select","coovachilli.webadmin.userlevel",uci.check_set("coovachilli","webadmin","userlevel","0"),tr("userlevel#User Level"),"string")
     form["coovachilli.webadmin.userlevel"].options:Add("0","Select Mode")
     form["coovachilli.webadmin.userlevel"].options:Add("1","Beginer")
@@ -205,7 +199,6 @@ function net_form(form,user_level,localuam)
   local user_level = user_level or userlevel
   local form = form
   local ifiw, n, unico = get_wifinet(user_level)
-
 	if user_level > 1 or n > 1 then
   	if form == nil then
     	form = formClass.new(tr("Network Settings"))
@@ -386,8 +379,10 @@ function add_allowed_site(form,user_level)
       strallowed = strallowed .. sitesallowed[i].site
       strallowed = strallowed .. [[</td><td width="20%" ><a href="]]
       local sstep = ""
+      local soption = ""
+      if __FORM.option~=nil then soption = "&option="..__FORM.option end
       if __FORM.step~=nil then sstep = "&step="..__FORM.step end
-      strallowed = strallowed ..__SERVER.SCRIPT_NAME.."?".."DeleteAllowed="..sitesallowed[i][".name"].."&__menu="..__FORM.__menu.."&option="..__FORM.option..sstep
+      strallowed = strallowed ..__SERVER.SCRIPT_NAME.."?".."DeleteAllowed="..sitesallowed[i][".name"].."&__menu="..__FORM.__menu..soption..sstep
       strallowed = strallowed ..[[">]]..tr("remove_lnk#remove it")..[[</a></td></tr>]]
     end
     strallowed = strallowed..[[</table>]]
