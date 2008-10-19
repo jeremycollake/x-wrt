@@ -1,6 +1,6 @@
 #!/usr/bin/lua
 --------------------------------------------------------------------------------
--- coovachilli.sh
+-- chillispot.sh
 -- This script is writen in LUA, the extension is ".sh" for compatibilities
 -- reasons width menu system of X-Wrt
 --
@@ -15,7 +15,7 @@
 --
 --------------------------------------------------------------------------------
 --[[
-##WEBIF:name:HotSpot:320:Coova-Chilli
+##WEBIF:name:HotSpot:410:Coova-Chilli
 ]]--
 -- config.lua 
 -- LUA settings and load some functions files
@@ -25,7 +25,7 @@ require("init")
 require("coovaportal")
 require("webpkg")
 -- pageClass is part of the framework 
-page.title = tr("chilli_main_title#Coova-Chilli")
+page.title = tr("chilli_main_title#Chilli Spot")
 cportal.set_menu()
 __WIP=2
 local forms = {}
@@ -38,14 +38,22 @@ elseif __FORM.option == "radius" then
   forms[1] = cportal.radius_form()
 elseif __FORM.option == "nasid" then
   forms[1] = cportal.nasid_form()
+elseif __FORM.option == "access" then
+  forms[1] = cportal.access_form()
+elseif __FORM.option == "proxy" then
+  forms[1] = cportal.proxy_form()
+elseif __FORM.option == "scripts" then
+  forms[1] = cportal.script_form()
 elseif __FORM.option == "users" then
-  pkg.check("iw-freeradius libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm")
+  require("webpkg")
+  pkg.check("x-wrt-iw-freeradius libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm")
   require("radius")
   forms[1] = radius.add_usr_form()
   forms[2] = radius.user_form()
 elseif __FORM.option == "communities" then
-  require("radius")
-  forms[1] = radius.community_form()
+    pkg.check("x-wrt-iw-freeradius libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm")
+    require("radius")
+    forms[1] = radius.community_form()
 elseif __FORM.option == "connections" then
   page.savebutton = ""
   forms[1] = cportal.connect_form()
@@ -60,6 +68,17 @@ for i=1, #forms do
   forms[i]:print()
 end
 --[[
+for m,n in pairs(forms[1]) do
+  print(m,n,"<br>")
+  for u,v in pairs(n) do
+    print("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;",u,v,"<br>")
+  end
+end
+]]--
+--[[
+for i,v in pairs(__SERVER) do
+  print(i,v,"<br>")
+end
 for i,v in pairs(__FORM) do
   print(i,v,"<br>")
 end
