@@ -24,6 +24,7 @@ define Package/webif-iw-lua-coovachilli/install
 	chmod -R 755 $(1)/*
 	rm -rf $(1)/usr/lib/webif/lang/
 	rm -f $(1)/www/cgi-bin/webif/*.wip
+	$(CP) -a ./ipkg/webif-iw-lua-coovachilli.postinst $(1)/CONTROL/postinst
 
 	find $(1) -name CVS | xargs rm -rf
 	find $(1) -name .svn | xargs rm -rf

@@ -1,0 +1,5 @@
+#!/bin/sh
+ln -s ${IPKG_INSTROOT}/etc/chilli/www/chilliControler.js ${IPKG_INSTROOT}/www/js
+ln -s ${IPKG_INSTROOT}/etc/chilli/www/ChilliLibrary.js ${IPKG_INSTROOT}/www/js
+ln -s ${IPKG_INSTROOT}/etc/chilli/www/wait.gif ${IPKG_INSTROOT}/www/images
+ln -s ${IPKG_INSTROOT}/etc/chilli/www/openid.gif ${IPKG_INSTROOT}/www/images
