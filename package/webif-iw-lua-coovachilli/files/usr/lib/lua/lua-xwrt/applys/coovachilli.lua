@@ -2,7 +2,6 @@ require("uci_iwaddon")
 require("firewall")
 require("common")
 require("net")
-
 parser = {}
 local P = {}
 parser = P
