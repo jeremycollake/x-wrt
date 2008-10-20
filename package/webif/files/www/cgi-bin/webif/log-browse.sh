@@ -117,19 +117,22 @@ BEGIN {
 	if ( ( filter != "" ) && ( $0 !~ filter ) ) next;
 
 	i=1; #field counter
+	space=" "
 
-	while ( ($i !~ /IN=/)  && (i <= NF) ) i++;
 	if ( i > NF) next;
 	action=""
 	idx=index($i,"IN=");
-        if ( ( idx == 1 ) && ( $(i-2) == "kernel:" ) )
-                prefix=$(i-1);
-        else    prefix=substr($i, 1, idx-1);
-
-#	split($i, champs, ":");
-#	if_in=substr( champs[4], 4, length(champs[4]) - 3);
-#	action=champs[3];
-#	prefix=champs[2];
+	prefix=""
+	while ( ($i != "kernel:") ) i++;
+	prefix=""
+	i++
+	while ( ($i !~ /IN=/) ) {
+		if (prefix == "")
+			prefix=(prefix, $i)
+		else
+			 prefix=(prefix, space, $i)
+		i++
+	}
 
 	while ( ($i !~ /OUT=/) && (i <= NF) ) i++;
 	if ( i > NF) next;
