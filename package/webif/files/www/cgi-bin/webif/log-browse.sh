@@ -79,7 +79,7 @@ fi
 
 header "Log" "Firewall Log View" "@TR<<Netfilter Log>>" '' "$SCRIPT_NAME"
 
-has_pkgs kmod-ipt-extra iptables-mod-extra
+has_pkgs iptables-mod-filter
 
 # request for filtering -----------------------
 display_form <<EOF
