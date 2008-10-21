@@ -27,8 +27,11 @@ function pageClass.new (title)
 	self["action_clear"]  = nil
 	self["action_review"] = nil
 	self["form"]          = [[<form enctype="multipart/form-data" action="]]..__SERVER.SCRIPT_NAME..[[" method="post">]]
-
-
+	self["header"] = nil
+	self["container"] = nil
+	self["redirect"] = nil
+	self["extrahead"] = nil
+	
 	setmetatable(self,pageClass_mt) 
 	self:Init()
 	return self 
@@ -54,8 +57,8 @@ print ([[
 Content-Type: text/html; charset=UTF-8
 Pragma: no-cache
 ]])
-local header = self.__DOCTYPE ..
-[[
+local header = self.__DOCTYPE
+self["header"] = [[
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>]]..self.title.." "..__SYSTEM.general.firmware_name..tr("Administrative Console")..[[</title>
@@ -70,10 +73,20 @@ local header = self.__DOCTYPE ..
 		<link rel="stylesheet" type="text/css" href="/themes/active/ie_lt7.css" >
 	[endif]-->
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" >
+]]
+if self.extrahead then
+	self["header"] = self["header"]..self.extrahead
+end
+if self.redirect then
+	self["header"] = self["header"]..self.redirect
+end
+self["header"] = self["header"]..[[
 	<meta http-equiv="expires" content="-1" />
 	<script type="text/javascript" src="/js/styleswitcher.js"></script>
 </head>
-]] .. self.body .. [[
+]]
+header = header .. self["header"] .. self.body
+self.container = [[
 <div id="container">
  <div id="header">
 	<em>]]..tr("making_usable#End user extensions for OpenWrt")..[[</em>
@@ -99,26 +112,26 @@ local header = self.__DOCTYPE ..
 </div>
 ]]
 if __SYSTEM.general.use_progressbar == 1 then 
-	header = header .. [[
+	self.container = self.container .. [[
 	<script type="text/javascript">start=0; end=10</SCRIPT>
 	<script src="/js/pageload.js" type="text/javascript"></SCRIPT>
 	<div id="loadmain">
 	<script type="text/javascript">document.getElementById(\"loadmain\").style.display = \"none\";</script>";
 	_JSload="<script type='text/javascript'>load()</script>
 ]]
-else header = header ..  "<script type=\"text/javascript\">function load() { }</script>\n" end
+else self.container = self.container ..  "<script type=\"text/javascript\">function load() { }</script>\n" end
 
-header = header..self.form..[[
+self.container = self.container..self.form..[[
 
 <div id="content">
 	<h2>]]
 if self.image ~= nil then
-	header = header .. "<img src=\""..self.image.."\" />&nbsp;"..tr(self.title).."</h2>"
+	self.container = self.container .. "<img src=\""..self.image.."\" />&nbsp;"..tr(self.title).."</h2>"
 else
-	header = header ..tr(self.title).."</h2>"
+	self.container = self.container ..tr(self.title).."</h2>"
 end
-if __WIP >0 then header = header .."<h3 CLASS=\"warning\"> "..tr(__WORK_STATE[__WIP]).."</h3>" end 
-return header
+if __WIP >0 then self.container = self.container .."<h3 CLASS=\"warning\"> "..tr(__WORK_STATE[__WIP]).."</h3>" end 
+return header .. self.container
 end
 
 function pageClass:footer()

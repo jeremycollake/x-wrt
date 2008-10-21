@@ -223,6 +223,7 @@ function set_networks()
 	tnet = net.get_unique_ip(ip,mask,iflan)
 	uci.check_set("network",iflan,"ipaddr",tnet.IP)
 	uci.check_set("network",iflan,"netmask",tnet.NETMASK)
+	uci.isdiff_set("coovachilli","settings","HS_UAMFORMAT","http://"..uci.get("coovachilli","settings","HS_UAMSERVER").."/cgi-bin/login/login")
 	uci.save("network")
 	uci.save("wireless")
 	uci.save("coovachilli")
@@ -244,8 +245,12 @@ function write_config()
 			end
 		end
 	end
-	conf_str = conf_str.."HS_UAMHOMEPAGE="..uci.get("coovachilli","settings","HS_UAMHOMEPAGE").."\n"
-	conf_str = conf_str.."HS_UAMFORMAT="..uci.get("coovachilli","settings","HS_UAMFORMAT").."\n"
+	if uci.get("coovachilli","settings","HS_UAMHOMEPAGE") then
+		conf_str = conf_str.."HS_UAMHOMEPAGE="..uci.get("coovachilli","settings","HS_UAMHOMEPAGE").."\n"
+	end
+	if uci.get("coovachilli","settings","HS_UAMFORMAT") then
+		conf_str = conf_str.."HS_UAMFORMAT="..uci.get("coovachilli","settings","HS_UAMFORMAT").."\n"
+	end
 	conf_str = conf_str.."HS_UAMALLOW="..set_alloweds().."\n"
 
   write_file = io.open("/etc/chilli/config","w")
