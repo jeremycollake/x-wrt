@@ -328,18 +328,16 @@ function uam_form(form,user_level,local_portal)
   	if user_level > 1 then
     	form:Add("text","coovachilli.settings.HS_UAMSERVER",uci.check_set("coovachilli","settings","HS_UAMSERVER","192.168.182.1"),tr("cportal_var_uamserver#URL of Web Server"),"string","width:90%")
     	form:Add_help(tr("cportal_var_uamserver#URL of Web Server"),tr("cportal_help_uamserver#URL of a Webserver handling the authentication."))
-			local def_hompage = "http://"..uci.get("coovachilli","settings","HS_UAMSERVER").."/cgi-bin/login/home.lua"
 --    	form:Add("text","coovachilli.settings.HS_UAMFORMAT",uci.get("coovachilli","settings","HS_UAMFORMAT","http://\$HS_UAMSERVER/cgi-bin/login/login"),tr("cportal_var_format#Path of Login Page"),"string","width:90%")
-    	form:Add("text","coovachilli.settings.HS_UAMFORMAT",uci.check_set("coovachilli","settings","HS_UAMFORMAT",def_homepage),tr("cportal_var_format#Login Page"),"string","width:90%")
-    	form:Add_help(tr("cportal_var_format#URL of Web Server"),tr("cportal_help_format#URL of a Webserver handling the authentication."))
-
+    	form:Add("text","coovachilli.settings.HS_UAMFORMAT",uci.get("coovachilli","settings","HS_UAMFORMAT"),tr("cportal_var_format#Login Page"),"string","width:90%")
+    	form:Add_help(tr("cportal_var_format#URL of Web Server"),tr("cportal_help_format#URL of a Webserver handling the authentication. To use the internal login page put <br>http://url_of_web_server/cgi-bin/login/login"))
     	form:Add("text","coovachilli.settings.HS_UAMSECRET",uci.get("coovachilli","settings","HS_UAMSECRET"),tr("cportal_var_uamsecret#UAM Secret"),"string")
     	form:Add_help(tr("cportal_var_uamsecret#Web Secret"),tr("cportal_help_uamsecret#Shared secret between HotSpot and Webserver (UAM Server)."))
   	end
   	if user_level > 2 then
 --    	form:Add("text","coovachilli.settings.HS_UAMHOMEPAGE",uci.check_set("coovachilli","settings","HS_UAMHOMEPAGE","http://\$HS_UAMLISTEN:\$HS_UAMPORT/www/coova.html"),tr("cportal_var_uamhomepage#UAM Home Page"),"string","width:90%")
     	form:Add("text","coovachilli.settings.HS_UAMHOMEPAGE",uci.get("coovachilli","settings","HS_UAMHOMEPAGE"),tr("cportal_var_uamhomepage#UAM Home Page"),"string","width:90%")
-    	form:Add_help(tr("cportal_var_uamhomepage#Homepage"),tr("cportal_help_uamhomepage#URL of Welcome Page. Unauthenticated users will be redirected to this address, otherwise specified, they will be redirected to UAM Server instead."))
+    	form:Add_help(tr("cportal_var_uamhomepage#Homepage"),tr("cportal_help_uamhomepage#URL of Welcome Page. Unauthenticated users will be redirected to this address, otherwise specified, they will be redirected to UAM Server instead. To use the internal login page put <br>http://url_of_web_server/cgi-bin/login/home.lua"))
     	form:Add("text","coovachilli.homepage.redirect",uci.get("coovachilli","homepage","redirect"),tr("cportal_var_uamhomepage#Redirection time"),"int,required,>=0")
     	form:Add_help(tr("cportal_var_homepage_redirection#Redirection time"),tr("cportal_help_homepage_redirection#Seconds of redirection time. 0 = not redirection"))
 
