@@ -328,9 +328,9 @@ function uam_form(form,user_level,local_portal)
   	if user_level > 1 then
     	form:Add("text","coovachilli.settings.HS_UAMSERVER",uci.check_set("coovachilli","settings","HS_UAMSERVER","192.168.182.1"),tr("cportal_var_uamserver#URL of Web Server"),"string","width:90%")
     	form:Add_help(tr("cportal_var_uamserver#URL of Web Server"),tr("cportal_help_uamserver#URL of a Webserver handling the authentication."))
-
+			local def_hompage = "http://"..uci.get("coovachilli","settings","HS_UAMSERVER").."/cgi-bin/login/home.lua"
 --    	form:Add("text","coovachilli.settings.HS_UAMFORMAT",uci.get("coovachilli","settings","HS_UAMFORMAT","http://\$HS_UAMSERVER/cgi-bin/login/login"),tr("cportal_var_format#Path of Login Page"),"string","width:90%")
-    	form:Add("text","coovachilli.settings.HS_UAMFORMAT",uci.get("coovachilli","settings","HS_UAMFORMAT"),tr("cportal_var_format#Login Page"),"string","width:90%")
+    	form:Add("text","coovachilli.settings.HS_UAMFORMAT",uci.check_set("coovachilli","settings","HS_UAMFORMAT",def_homepage),tr("cportal_var_format#Login Page"),"string","width:90%")
     	form:Add_help(tr("cportal_var_format#URL of Web Server"),tr("cportal_help_format#URL of a Webserver handling the authentication."))
 
     	form:Add("text","coovachilli.settings.HS_UAMSECRET",uci.get("coovachilli","settings","HS_UAMSECRET"),tr("cportal_var_uamsecret#UAM Secret"),"string")
