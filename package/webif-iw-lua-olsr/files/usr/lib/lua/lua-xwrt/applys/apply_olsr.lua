@@ -60,18 +60,18 @@ USE_CONF_F=/etc/olsrd.conf
 DEFAULT=/etc/default/olsrd
 RUN_D=/var/run
 PID_F=$RUN_D/$BIN.pid
-CRONSET="* * * * * /usr/lib/lua/lua-wrt/pkgs/olsr/minute.cron"
+CRONSET="* * * * * /usr/lib/lua/lua-xwrt/pkgs/olsr/minute.cron"
 
 start() {
-	include /lib/network
-	scan_interfaces
-	config_load /var/state/network
+#	include /lib/network
+#	scan_interfaces
+#	config_load /var/state/network
 	
-	config_get WAN wan ifname
-	config_get WANDEV wan device
-	config_get LAN lan ifname
+#	config_get WAN wan ifname
+#	config_get WANDEV wan device
+#	config_get LAN lan ifname
   
-  WIFI="]]..wififace..[["  
+#  WIFI="]]..wififace..[["  
   # Allow connections to olsr info port.
 #  iptables        -A input_wan      -p tcp --dport 1979 -j ACCEPT
   # OLSR needs port 698 to transmit state messages. 
@@ -95,11 +95,11 @@ start() {
 #  iptables -A FORWARD -i br-chilli -o br-wifi -j ACCEPT
   
   # Masquerade all trafic
-  iptables -t nat -A POSTROUTING -o $WIFI -j MASQUERADE
-  iptables -t nat -A POSTROUTING -o $WAN -j MASQUERADE
-  iptables -t nat -A POSTROUTING -o $LAN -j MASQUERADE
+#  iptables -t nat -A POSTROUTING -o $WIFI -j MASQUERADE
+#  iptables -t nat -A POSTROUTING -o $WAN -j MASQUERADE
+#  iptables -t nat -A POSTROUTING -o $LAN -j MASQUERADE
   
-  /usr/lib/lua/lua-wrt/cron_ctrl add "$CRONSET"
+  /usr/lib/lua/lua-xwrt/cron_ctrl add "$CRONSET"
 
 	$BIN -f "$USE_CONF_F" -nofork $OPTIONS &
 
@@ -111,20 +111,20 @@ start() {
 }
 
 stop() {
-	include /lib/network
-	scan_interfaces
-	config_load /var/state/network
+#	include /lib/network
+#	scan_interfaces
+#	config_load /var/state/network
 	
-	config_get WAN wan ifname
-	config_get WANDEV wan device
-	config_get LAN lan ifname
+#	config_get WAN wan ifname
+#	config_get WANDEV wan device
+#	config_get LAN lan ifname
   
-  WIFI="]]..wififace..[["  
+#  WIFI="]]..wififace..[["  
 
-  /usr/lib/lua/lua-wrt/cron_ctrl del "$CRONSET"
-  iptables -t nat -D POSTROUTING -o $LAN -j MASQUERADE
-  iptables -t nat -D POSTROUTING -o $WAN -j MASQUERADE
-  iptables -t nat -D POSTROUTING -o $WIFI -j MASQUERADE
+  /usr/lib/lua/lua-xwrt/cron_ctrl del "$CRONSET"
+#  iptables -t nat -D POSTROUTING -o $LAN -j MASQUERADE
+#  iptables -t nat -D POSTROUTING -o $WAN -j MASQUERADE
+#  iptables -t nat -D POSTROUTING -o $WIFI -j MASQUERADE
 #  iptables -D forwarding_rule -i $LAN -o $LAN -j ACCEPT
 #  iptables -D forwarding_rule -i $WIFI -o $WIFI -j ACCEPT
 #  iptables -D forwarding_rule -i $WIFI -o $LAN -j ACCEPT
@@ -200,9 +200,6 @@ function write_config()
   local str_gral = ""
   for k,v in pairs(sections.olsr[1]) do
     if  not string.match(k,"[.]") then
---    if k ~= ".type"
---    and k ~= ".anonymous"
---    and k ~= ".name" then
       str_gral = str_gral..k.." "..v.."\n"
     end
   end
@@ -242,9 +239,6 @@ function write_config()
     str_ipc = "IpcConnect\n{\n"
     for k, v in pairs(sections.ipc[1]) do
       if  not string.match(k,"[.]") then
---      if k ~= ".type"
---      and k ~= ".anonymous"
---      and k ~= ".name" then
         str_ipc = str_ipc .. "\t" .. k .. "\t" .. v .."\n"
       end
     end
@@ -271,9 +265,6 @@ function write_config()
     str_plugins = str_plugins.."LoadPlugin \""..plugin.Library.."\"\n{\n"
     for k,v in pairs(plugin) do
       if  not string.match(k,"[.]")
---      if k ~= ".type"
---      and k ~= ".name"
---      and k ~= ".anonymous"
       and k ~= "Library" then
         if k == "hosts_file" then k = "hosts-file" end
         k = string.gsub(k,"_","-")
@@ -284,9 +275,6 @@ function write_config()
       for j = 1, #sections[plugin[".name"]] do
         for p, n in pairs(sections[plugin[".name"]][j]) do
           if  not string.match(p,"[.]") then
---          if p ~= ".type"
---          and p ~= ".anonymous"
---          and p ~= ".name" then
             str_plugins = str_plugins.."\tPlParam\t\""..p.."\"\t\""..n.."\"\n"
           end
         end
@@ -307,9 +295,6 @@ function write_config()
     str_interface = str_interface .. "Interface \""..interface.Interface.."\"\n{\n"
     for k, v in pairs(interface) do
       if  not string.match(k,"[.]")
---      if k ~= ".type"
---      and k ~= ".anonymous"
---      and k ~= ".name"
       and k ~= "Interface" then
         str_interface = str_interface .. "\t"..k.."\t"..v.."\n"
       end
