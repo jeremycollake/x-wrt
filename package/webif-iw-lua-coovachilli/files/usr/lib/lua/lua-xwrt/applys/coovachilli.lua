@@ -232,6 +232,11 @@ end
 
 function write_config()
 	if uci.get("coovachilli","webadmin","userlevel") == "1" then set_networks() end
+	local chillip = uci.get("coovachilli","settings","HS_UAMLISTEN")
+	local chillimask = uci.check_set("coovachilli","settings","HS_NETMASK","255.255.255.0")
+	local tnet = net.ipcalc(chillip,chillimask)
+	uci.set("coovachilli","settings","HS_NETWORK",tnet.NETWORK)
+	uci.set("coovachilli","settings","HS_UAMSERVER",chillip)
   wwwprint ("Writing configuration file /etc/chilli/config")
 	settings = uci.get_section("coovachilli","settings")
 	conf_str = "#### This conf file was writed by webif-iw-lua-coovachilli-apply ####\n"
