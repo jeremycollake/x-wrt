@@ -25,9 +25,9 @@ require("init")
 require("coovaportal")
 require("webpkg")
 -- pageClass is part of the framework 
-page.title = tr("chilli_main_title#Chilli Spot")
+page.title = "Coova-Chilli"
 cportal.set_menu()
-__WIP=2
+__WIP=4
 local forms = {}
 __FORM.option = string.trim(__FORM.option)
 if __FORM.option == "net" then
