@@ -60,10 +60,10 @@ uci.check_set("coovachilli","settings","HS_ANYDNS","on")
 uci.check_set("coovachilli","settings","HS_DNS1","192.168.182.1")
 uci.check_set("coovachilli","settings","HS_DNS2","204.225.44.3")
 uci.check_set("coovachilli","settings","HS_NETMASK","255.255.255.0")
-uci.check_set("coovachilli","settings","HS_NETWORK","192.168.182.0")
+--uci.check_set("coovachilli","settings","HS_NETWORK","192.168.182.0")
 uci.check_set("coovachilli","settings","HS_LANIF","br-wifi")
 
-uci.check_set("coovachilli","settings","HS_UAMSERVER","192.168.182.1")
+--uci.check_set("coovachilli","settings","HS_UAMSERVER","192.168.182.1")
 uci.check_set("coovachilli","settings","HS_UAMLISTEN","192.168.182.1")
 uci.check_set("coovachilli","settings","HS_UAMPORT","3990")
 --uci.check_set("coovachilli","settings","HS_UAMHOMEPAGE","http://$HS_UAMLISTEN:$HS_UAMPORT/www/coova.html")
@@ -326,8 +326,8 @@ function uam_form(form,user_level,local_portal)
   	local localuam = localuam or portal
 --  	if user_level > 1 and local_portal < 2 then
   	if user_level > 1 then
-    	form:Add("text","coovachilli.settings.HS_UAMSERVER",uci.check_set("coovachilli","settings","HS_UAMSERVER","192.168.182.1"),tr("cportal_var_uamserver#URL of Web Server"),"string","width:90%")
-    	form:Add_help(tr("cportal_var_uamserver#URL of Web Server"),tr("cportal_help_uamserver#URL of a Webserver handling the authentication."))
+--    	form:Add("text","coovachilli.settings.HS_UAMSERVER",uci.check_set("coovachilli","settings","HS_UAMSERVER","192.168.182.1"),tr("cportal_var_uamserver#URL of Web Server"),"string","width:90%")
+--    	form:Add_help(tr("cportal_var_uamserver#URL of Web Server"),tr("cportal_help_uamserver#URL of a Webserver handling the authentication."))
 --    	form:Add("text","coovachilli.settings.HS_UAMFORMAT",uci.get("coovachilli","settings","HS_UAMFORMAT","http://\$HS_UAMSERVER/cgi-bin/login/login"),tr("cportal_var_format#Path of Login Page"),"string","width:90%")
     	form:Add("text","coovachilli.settings.HS_UAMFORMAT",uci.get("coovachilli","settings","HS_UAMFORMAT"),tr("cportal_var_format#Login Page"),"string","width:90%")
     	form:Add_help(tr("cportal_var_format#URL of Web Server"),tr("cportal_help_format#URL of a Webserver handling the authentication. To use the internal login page put <br>http://url_of_web_server/cgi-bin/login/login"))
