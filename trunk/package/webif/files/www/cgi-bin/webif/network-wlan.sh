@@ -210,7 +210,7 @@ for device in $DEVICES; do
 	        config_get_bool FORM_diversity $device diversity 1
 	        config_get_bool FORM_disabled $device disabled 0
 		config_get FORM_antenna $device antenna
-		[ -n $FORM_antenna ]; FORM_antenna=auto
+		[ -n $FORM_antenna ] && FORM_antenna=auto
 	else
 		config_get country $device country
 		config_get iftype "$device" type
