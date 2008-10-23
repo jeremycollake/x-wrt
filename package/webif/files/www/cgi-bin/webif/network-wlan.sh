@@ -502,21 +502,22 @@ for device in $DEVICES; do
 					radio|wmm_$vcfg|$FORM_wmm|1|@TR<<On>>
 					radio|wmm_$vcfg|$FORM_wmm|0|@TR<<Off>>"
 				append forms "$wmm" "$N"
+				if [ "$_device" != "NanoStation2" -a "$_device" != "NanoStation5" ]; then
+					xr="field|@TR<<XR>>
+						radio|xr_$vcfg|$FORM_xr|1|@TR<<On>>
+						radio|xr_$vcfg|$FORM_xr|0|@TR<<Off>>"
+					append forms "$xr" "$N"
 
-				xr="field|@TR<<XR>>
-					radio|xr_$vcfg|$FORM_xr|1|@TR<<On>>
-					radio|xr_$vcfg|$FORM_xr|0|@TR<<Off>>"
-				append forms "$xr" "$N"
+					ar="field|@TR<<AR>>
+						radio|ar_$vcfg|$FORM_ar|1|@TR<<On>>
+						radio|ar_$vcfg|$FORM_ar|0|@TR<<Off>>"
+					append forms "$ar" "$N"
 
-				ar="field|@TR<<AR>>
-					radio|ar_$vcfg|$FORM_ar|1|@TR<<On>>
-					radio|ar_$vcfg|$FORM_ar|0|@TR<<Off>>"
-				append forms "$ar" "$N"
-
-				turbo="field|@TR<<Turbo>>
-					radio|turbo_$vcfg|$FORM_turbo|1|@TR<<On>>
-					radio|turbo_$vcfg|$FORM_turbo|0|@TR<<Off>>"
-				append forms "$turbo" "$N"
+					turbo="field|@TR<<Turbo>>
+						radio|turbo_$vcfg|$FORM_turbo|1|@TR<<On>>
+						radio|turbo_$vcfg|$FORM_turbo|0|@TR<<Off>>"
+					append forms "$turbo" "$N"
+				fi
 
 				rate="field|@TR<<TX Rate>>
 					select|rate_$vcfg|$FORM_rate
