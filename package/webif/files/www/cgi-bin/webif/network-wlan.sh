@@ -205,10 +205,12 @@ for device in $DEVICES; do
 	        config_get FORM_channel $device channel
 	        config_get FORM_maxassoc $device maxassoc
 	        config_get FORM_distance $device distance
-	        config_get FORM_txantenna $device txantenna 0
-	        config_get FORM_rxantenna $device rxantenna 0
+	        config_get_bool FORM_txantenna $device txantenna 0
+	        config_get_bool FORM_rxantenna $device rxantenna 0
 	        config_get_bool FORM_diversity $device diversity 1
 	        config_get_bool FORM_disabled $device disabled 0
+		config_get FORM_antenna $device antenna
+		[ -n $FORM_antenna ]; FORM_antenna=auto
 	else
 		config_get country $device country
 		config_get iftype "$device" type
@@ -221,6 +223,7 @@ for device in $DEVICES; do
 		eval FORM_txantenna="\$FORM_txantenna_$device"
 		eval FORM_rxantenna="\$FORM_rxantenna_$device"
 		eval FORM_disabled="\$FORM_disabled_$device"
+		eval FORM_antenna="\$FORM_antenna_$device"
 	fi
 
 	append forms "start_form|@TR<<Wireless Adapter>> $device @TR<< Configuration>>" "$N"
@@ -285,25 +288,35 @@ for device in $DEVICES; do
 	append forms "$BG_CHANNELS" "$N"
 
 	if [ "$iftype" = "atheros" ]; then
-		mode_diversity="field|@TR<<Diversity>>
-				radio|diversity_$device|$FORM_diversity|1|@TR<<On>>
-				radio|diversity_$device|$FORM_diversity|0|@TR<<Off>>"      	
-		append forms "$mode_diversity" "$N"
-		append forms "helpitem|Diversity" "$N"
-		append forms "helptext|Helptext Diversity#Used on systems with multiple antennas to help improve reception. Disable if you only have one antenna." "$N"
-		append forms "helplink|http://madwifi.org/wiki/UserDocs/AntennaDiversity" "$N"
+		if [ "$_device" != "NanoStation2" -a "$_device" != "NanoStation5" ]; then
+			mode_diversity="field|@TR<<Diversity>>
+					radio|diversity_$device|$FORM_diversity|1|@TR<<On>>
+					radio|diversity_$device|$FORM_diversity|0|@TR<<Off>>"      	
+			append forms "$mode_diversity" "$N"
+			append forms "helpitem|Diversity" "$N"
+			append forms "helptext|Helptext Diversity#Used on systems with multiple antennas to help improve reception. Disable if you only have one antenna." "$N"
+			append forms "helplink|http://madwifi.org/wiki/UserDocs/AntennaDiversity" "$N"
 
-		form_txant="field|@TR<<TX Antenna>>
-			radio|txantenna_$device|$FORM_txantenna|0|@TR<<Auto>>
-			radio|txantenna_$device|$FORM_txantenna|1|@TR<<Antenna 1>>
-			radio|txantenna_$device|$FORM_txantenna|2|@TR<<Antenna 2>>"
-		append forms "$form_txant" "$N"
+			form_txant="field|@TR<<TX Antenna>>
+				radio|txantenna_$device|$FORM_txantenna|0|@TR<<Auto>>
+				radio|txantenna_$device|$FORM_txantenna|1|@TR<<Antenna 1>>
+				radio|txantenna_$device|$FORM_txantenna|2|@TR<<Antenna 2>>"
+			append forms "$form_txant" "$N"
 
-		form_rxant="field|@TR<<RX Antenna>>
-			radio|rxantenna_$device|$FORM_rxantenna|0|@TR<<Auto>>
-			radio|rxantenna_$device|$FORM_rxantenna|1|@TR<<Antenna 1>>
-			radio|rxantenna_$device|$FORM_rxantenna|2|@TR<<Antenna 2>>"
-		append forms "$form_rxant" "$N"
+			form_rxant="field|@TR<<RX Antenna>>
+				radio|rxantenna_$device|$FORM_rxantenna|0|@TR<<Auto>>
+				radio|rxantenna_$device|$FORM_rxantenna|1|@TR<<Antenna 1>>
+				radio|rxantenna_$device|$FORM_rxantenna|2|@TR<<Antenna 2>>"
+			append forms "$form_rxant" "$N"
+		else
+			form_antenna_selection="field|@TR<<Antenna>>
+					select|antenna_$device|$FORM_antenna
+					option|auto|@TR<<Internal Auto>>
+					option|horizontal|@TR<<Internal Horizontal>>
+					option|vertical|@TR<<Internal Vertical>>
+					option|external|@TR<<External>>"
+			append forms "$form_antenna_selection" "$N"
+		fi
 	fi
 
 	#Currently broadcom only.
@@ -871,6 +884,7 @@ EOF
 				eval FORM_txantenna="\$FORM_txantenna_$device"
 				eval FORM_rxantenna="\$FORM_rxantenna_$device"
 				eval FORM_disabled="\$FORM_disabled_$device"
+				eval FORM_antenna="\$FORM_antenna_$device"
 
 				uci_set "wireless" "$device" "agmode" "$FORM_ap_mode"
 				uci_set "wireless" "$device" "channel" "$FORM_channel"
@@ -880,6 +894,7 @@ EOF
 				uci_set "wireless" "$device" "txantenna" "$FORM_txantenna"
 				uci_set "wireless" "$device" "rxantenna" "$FORM_rxantenna"
 				uci_set "wireless" "$device" "disabled" "$FORM_disabled"
+				uci_set "wireless" "$device" "antenna" "$FORM_antenna"
 
 				for vcfg in $vface; do
      		  			config_get FORM_device $vcfg device
