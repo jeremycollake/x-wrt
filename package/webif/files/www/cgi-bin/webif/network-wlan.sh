@@ -478,7 +478,7 @@ for device in $DEVICES; do
 			if [ "$iftype" = "atheros" ]; then
 				append forms "helptext|Helptext Backround Client Scanning#Enables or disables the ablility of a virtual interface to scan for other access points while in client mode. Disabling this allows for higher throughput but keeps your card from roaming to other access points with a higher signal strength." "$N"
 				append forms "helplink|http://madwifi.org/wiki/UserDocs/PerformanceTuning" "$N"
-				doth="field|@TR<<802.11h>>
+				doth="field|@TR<<DFS/TPC>>
 					radio|doth_$vcfg|$FORM_doth|1|@TR<<On>>
 					radio|doth_$vcfg|$FORM_doth|0|@TR<<Off>>"
 				append forms "$doth" "$N"
