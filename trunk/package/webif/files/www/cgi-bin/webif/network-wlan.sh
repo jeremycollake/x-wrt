@@ -46,7 +46,7 @@ generate_channels() {
 	echo "BGCHANNELS=\"${BGCHANNELS}\"" > /usr/lib/webif/channels.lst
 	echo "ACHANNELS=\"${ACHANNELS}\"" >> /usr/lib/webif/channels.lst
 	if [ "$cleanup" = "1" ]; then
-		wifi
+		wifi 2>&1
 	fi
 }
 
