@@ -87,7 +87,7 @@ if [ -e "$ETHERS_FILE" ]; then
 	}'
 fi
 if [ -n "$static_hosts" ]; then
-	echo $static_hosts | awk '
+	echo "$static_hosts" | awk '
 	{
 		if ($3 ~ /^[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}:[[:xdigit:]]{2,2}/) {
 			print "<tr><td>" $1 "</td><td>" $2 "</td><td>" $3 "</td><td><button name=\"wake\" type=\"submit\" value=\"" $3 "\">Wake up</button></td></tr>"
