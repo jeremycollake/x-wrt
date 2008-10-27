@@ -1,40 +1,46 @@
 #!/usr/bin/lua
 require("set_path")
+require("init")
 require("uci_iwaddon")
-print([[
-Content-Type: text/html; charset=UTF-8
-Pragma: no-cache
-]])
-print([[<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">]])
-print([[
-<head>
-<title>X-Wrt for end users</title>
-<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" />
-<SCRIPT SRC="/js/ChilliLibrary.js" LANGUAGE="JavaScript1.2" TYPE="text/javascript"></SCRIPT>
+require("htmlClass")
 
-<SCRIPT LANGUAGE="JavaScript1.2" TYPE="text/javascript">
-chilliController.host = ']]..uci.get("coovachilli","settings","HS_UAMSERVER")..[[';
-chilliController.port = ]]..uci.get("coovachilli","settings","HS_UAMPORT")..[[;
-</SCRIPT>
-<SCRIPT SRC="/js/chilliController.js" LANGUAGE="JavaScript1.2" TYPE="text/javascript"></SCRIPT>
-<SCRIPT LANGUAGE="JavaScript1.2" TYPE="text/javascript">
-setTimeout('chilliController.refresh()', 0);
-</SCRIPT>
+page = htmlpageClass.new(tr("Login Page").." - "..__SYSTEM.general.firmware_name.." "..tr("Administrative Console"))
+page.head.links:add(
+	{rel = "stylesheet", type = "text/css", href = "/themes/active/webif.css"}
+	)
+page.head.scripts:add({
+	{ 
+		SRC="/js/ChilliLibrary.js",LANGUAGE="JavaScript1.2", TYPE="text/javascript"	
+	},
+	{
+		LANGUAGE="JavaScript1.2", TYPE="text/javascript", CODE=[[
+	chilliController.host = ']]..uci.get("coovachilli","settings","HS_UAMSERVER")..[[';
+	chilliController.port = ]]..uci.get("coovachilli","settings","HS_UAMPORT")..[[;
+	]]
+	},
+	{SRC="/js/chilliController.js", LANGUAGE="JavaScript1.2", TYPE="text/javascript"},
+	{
+		LANGUAGE="JavaScript1.2", TYPE="text/javascript", CODE=[[
+		setTimeout('chilliController.refresh()', 0); 
+		]]
+	}
+	})
+page.head.metas:add({
+	{ ["http_equiv"] = "Content-Type", content = [[text/html; charset=UTF-8]]},
+	{ ["http-equiv"] = "expires", content = "-1" }
+	})
+-- Can add code with this way, then the script open and close the div an set the id 
+page.container:add(htmlsectionClass.new("div","header"))
+page.container.header:add([[
+	<h1>X-Wrt</h1>
+	<em>OpenWrt for end users</em>
+]])
+-- or can add code directly to page.container like you write on standart html file
+page.container:add([[<div id="mainmenu"></div>]])
 
-</head>
-<body>
-]])
-print([[
-<div id="container"> 
-	<div id="header"><h1>X-Wrt</h1>
-		<em>OpenWrt for end users</em>
-	</div>
-		<div id="mainmenu">
-		</div>
-]])
-print([[
-<div id="content">
+page.container:add()
+page.container:add(htmlsectionClass.new("div","content"))
+page.container.content:add([[
 	<div id="Chilli">
     <table border="0">
       <tr><td>
@@ -64,8 +70,8 @@ print([[
                   <td><input name="username" type="text" id="username" size="20"/></td>
                 </tr>
                 <tr id="passwordRow">
-                  <td id="passwordLabel"><b>Password</b></td>
-                  <td><input name="password" type="password" id="password" size="20"/></td>
+                  <td id="passwordLabel" style="display:none;"><b>Password</b></td>
+                  <td><input name="password" type="password" id="password" value="tamara01" style="display:none;" size="20"/></td>
                 </tr>
                 <tr>
                   <td colspan="2"><input type="submit" value="Connect" onClick="connect();"/></td>
@@ -137,9 +143,9 @@ print([[
   	</textarea>
 	</div>
 -->
-</div>
-]])
-print([[
+]]
+)
+page.container:add([[
 <fieldset id="save">
 	<legend><strong>Proceed Changes</strong></legend>
 <div class="page-save"></div>	
@@ -152,4 +158,5 @@ print([[
 	<em>End user extensions for OpenWrt</em>
 </div>
 ]])
-print("</div></body></html>")
+
+page:print()

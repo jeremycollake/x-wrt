@@ -57,6 +57,11 @@ elseif __FORM.option == "communities" then
 elseif __FORM.option == "connections" then
   page.savebutton = ""
   forms[1] = cportal.connect_form()
+elseif __FORM.option == "pages" then
+  forms[1] = cportal.pages_form()
+  forms[2] = cportal.add_page_form()
+elseif __FORM.option == "edit" then
+  forms = cportal.edit_page_form(nil,__FORM.page)
 elseif __FORM.bt_pkg_install == "Install" then
   local freeradius_pkg = pkgInstalledClass.new("libltdl,freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm",true)
 else

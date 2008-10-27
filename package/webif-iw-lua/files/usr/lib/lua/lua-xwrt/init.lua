@@ -15,6 +15,11 @@ tr_load()
 -- Functions to manipulate UCI Files
 require("iw-uci")
 
+  require("menu")
+__MENU = menuClass.new()
+-- menu   = menuClass.new()
+-- menu:loadXWRT_Category()
+
 if __WWW then
   __WORK_STATE = {"Warning... WORK NOT DONE... Not usefull...","Warning... Work in progress...","Warning... Work Not Tested","Warning... Work in Test"}
   __WIP = 0 
@@ -23,6 +28,11 @@ if __WWW then
   __UCI_CMD = {} -- __UCI_CMD[#__UCI_CMD]["command"], __UCI_CMD[#__UCI_CMD_]["varname"]
   __UCI_MSG = {} -- 
   __SERVER  = get_vars()
+  if __SERVER.SCRIPT_NAME then
+    if string.match(__SERVER.SCRIPT_NAME,"webif") then
+      __MENU:loadXWRT()
+    end
+  end
 --  if __SERVER.SCRIPT_NAME == nil then __SERVER.SCRIPT_NAME = "pba.sh"
 --  else
   __FORM    = get_post()
@@ -35,15 +45,6 @@ if __WWW then
 -- Function to validate form values
   require("validate")
 -- Functions for menu
-  require("menu")
-__MENU = menuClass.new()
-  if __SERVER.SCRIPT_NAME then
-    if string.match(__SERVER.SCRIPT_NAME,"webif") then
-      __MENU:loadXWRT()
-    end
-  end
--- menu   = menuClass.new()
--- menu:loadXWRT_Category()
   require("x-wrt-page")
 --config = uciclass.new(nil)
 -- validate_post()
