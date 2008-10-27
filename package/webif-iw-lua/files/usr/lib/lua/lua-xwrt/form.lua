@@ -48,7 +48,7 @@ end
 function formClass:tostring(name)
 	if name ~= nil then 
 		if self[name].input == "text" then
-			return self:text(self[name])
+			return self:text_box(self[name])
 		elseif self[name].input == "disable_text" then
 			return self:disable_text(self[name])
 		elseif self[name].input == "text_area" then
@@ -67,6 +67,8 @@ function formClass:tostring(name)
 			return self:subtitle(self[name])
 		elseif self[name].input == "link" then
 			return self:link(self[name])
+		elseif self[name].input == "show_text" then
+			return self:show_text(self[name])
 		elseif self[name].input == "text_line" then
 			return self:text_line(self[name])
 		elseif self[name].input == "hidden_set" then
@@ -95,6 +97,14 @@ function formClass:tostring(name)
 --			form:Add_help(error["var_name"],error["msg"])
 --		end
 --	end
+end
+
+function formClass:text()
+	return self:tostring()
+end
+
+function formClass:add(str_input,str_name,str_value,str_label,str_validate,str_style,str_script)
+	self:Add(str_input,str_name,str_value,str_label,str_validate,str_style,str_script)
 end
 
 function formClass:Add(str_input,str_name,str_value,str_label,str_validate,str_style,str_script)
@@ -191,7 +201,7 @@ function formClass:hidden_set(t)
 end
 
 
-function formClass:text(t)
+function formClass:text_box(t)
 	local style = ""
 	if t.style ~= "" then style = "style=\""..t.style.."\" " end
 	local str  = "<tr><td width=\"40%\">" .. t.label .. "</td>"
@@ -201,6 +211,16 @@ function formClass:text(t)
 	str = str .. "<input type=\"hidden\" name=\"val_lbl_"..t.name.."\" value=\""..t.label.."\" />"
 	end
 	str = str .. "<input type=\"text\" name=\""..t.name.."\" value=\""..t.value.."\" "..style..t.script.." />"
+	str = str .. "</td></tr>"
+	return str
+end
+
+function formClass:show_text(t)
+	local style = ""
+	if t.style ~= "" then style = "style=\""..t.style.."\" " end
+	local str  = "<tr><td width=\"40%\">" .. t.label .. "</td>"
+	str = str .. "<td width=\"60%\""..style..">"
+	str = str .. t.value
 	str = str .. "</td></tr>"
 	return str
 end
