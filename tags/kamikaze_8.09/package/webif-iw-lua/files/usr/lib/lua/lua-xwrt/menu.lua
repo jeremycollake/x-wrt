@@ -25,6 +25,10 @@ function menuClass:print()
   print(self) 
 end 
 
+function menuClass:add(name,val)
+	self:Add(name,val)
+end
+
 function menuClass:Add(name,val)
 	if val == nil then val = "" end
 	if self[name]==nil or name == "-" then
@@ -44,6 +48,7 @@ function menuClass:Add(name,val)
 
 end
 
+--[[
 function menuClass:Show()
 	print ("<table border=\"1\">")
 	print ("<tr>")
@@ -118,6 +123,7 @@ function menuClass:ShowT()
 	end
 	print ("</table>")
 end
+]]--
 
 function menuClass:tohtml()
 	local typemenu = "mainmenu"
@@ -183,6 +189,10 @@ newstyle =[[
 	return _strMenu..newstyle
 end
 
+function menuClass:text()
+	return self:tohtml()
+end
+
 function menuClass:selmenu(menu,menutype,menupath,sel)
 	local vars
 	if vars == nil then vars = get_vars() end
@@ -212,6 +222,7 @@ function menuClass:selmenu(menu,menutype,menupath,sel)
 		if i == sel then 
 			_strMenu = _strMenu.."\t<li class=\"selected\"><a href=\""..link.."?__menu="..menupath..i..option.."\">"..tr(v.name).."</a></li>\n"
 			self.selected = "__menu="..menupath..i..tostring(option)
+--			self.selected = "__menu="..menupath..i..option
 			sel = i
  		else
 			if v.name == "-" then 

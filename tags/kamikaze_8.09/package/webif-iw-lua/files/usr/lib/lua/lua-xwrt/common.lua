@@ -259,6 +259,20 @@ function listtovars(strlist,cnt)
 	return unpack(t)
 end
 
+function ordertable(tin,strfield)
+	local tout = {}
+	local missing = 0
+	for i=1, #tin do
+		local idx = tonumber(tin[i][strfield])
+		if tin[i][strfield] == nil then
+			idx = #tin-missing
+			missing = missing + 1
+		end
+		tout[idx] = tin[i]
+	end
+	return tout
+end
+
 function string.totable(strlist)
 	local t = {}
 	for col in string.gmatch(strlist, "%S+") do

@@ -9,6 +9,7 @@ cportal = P
 -- declare everything this package needs from outside
 local tonumber = tonumber
 local pairs = pairs
+local ipairs = ipairs
 local print = print
 local net = net
 local os = os
@@ -16,6 +17,8 @@ local io = io
 local string = string
 local uci = uci
 local next = next
+local ordertable = ordertable
+local loadfile = loadfile
 
 local menuClass = menuClass
 --local __UCI_VERSION = __UCI_VERSION
@@ -34,6 +37,13 @@ if __FORM["allowed_site"] and __FORM["allowed_site"] ~= "" then
 end
 if __FORM["DeleteAllowed"] then
 	uci.delete("coovachilli",__FORM["DeleteAllowed"])
+end
+
+if __FORM["pagemenu"] and string.trim(__FORM["pagemenu"])~= "" then
+	local pages = uci.add("coovachilli","pages")
+	uci.set("coovachilli",pages,"pagemenu", __FORM["pagemenu"])
+	uci.set("coovachilli",pages,"pagetitle",__FORM["pagetitle"])
+	uci.set("coovachilli",pages,"pagetype", __FORM["pagetype"])
 end
 
 uci.check_set("coovachilli","webadmin","coovachilli")
@@ -107,11 +117,26 @@ function set_menu()
 --    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Proxy#Proxy","coovachilli.sh?option=proxy")
 --    __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Scripts#Extras","coovachilli.sh?option=extras")
   end
+  
+	__MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_pages#HotSpotPages")
+	__MENU.HotSpot["Coova-Chilli"]["chilli_menu_pages#HotSpotPages"] = menuClass.new()
+	__MENU.HotSpot["Coova-Chilli"]["chilli_menu_pages#HotSpotPages"]:Add("Define","coovachilli.sh?option=pages") 
+	local npages = ordertable(uci.get_type("coovachilli","pages"),"menuorder")
+	if npages then
+--		__MENU.HotSpot["Coova-Chilli"]["chilli_menu_pages#HotSpotPages"]:Add("Edit")
+--		__MENU.HotSpot["Coova-Chilli"]["chilli_menu_pages#HotSpotPages"]:Add("View")
+--		__MENU.HotSpot["Coova-Chilli"]["chilli_menu_pages#HotSpotPages"]["Edit"] = menuClass.new()
+--		__MENU.HotSpot["Coova-Chilli"]["chilli_menu_pages#HotSpotPages"]["View"] = menuClass.new()
+		for i, t in ipairs(npages) do
+--			__MENU.HotSpot["Coova-Chilli"]["chilli_menu_pages#HotSpotPages"]["Edit"]:Add(t.pagemenu,"coovachilli.sh?option=editpage&page="..t[".name"])
+--			__MENU.HotSpot["Coova-Chilli"]["chilli_menu_pages#HotSpotPages"]["View"]:Add(t.pagemenu,"coovachilli.sh?option=showpage&page="..t[".name"])
+			__MENU.HotSpot["Coova-Chilli"]["chilli_menu_pages#HotSpotPages"]:Add(t.pagemenu,"coovachilli.sh?option=edit&page="..t[".name"])
+		end
+	end
+
 --  if tonumber(hotspot.service.enable) == 1 then
     __MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_Connections#Connections","coovachilli.sh?option=connections")
 --  end
-  
-  __WIP = 4
 end
 
 function get_wifinet(user_level)
@@ -448,6 +473,141 @@ function connect_form(form,user_level,localuam)
     form:set_col("action",sessId..".action",action)
   end
   return form
+end
+
+function pages_form(form,user_level,localuam)
+	local user_level = user_level or userlevel
+	local pages = ordertable(uci.get_type("coovachilli","pages"),"menuorder")
+  form = tbformClass.new("HotSpot Pages")
+  form:Add_col("text","menuorder", "Order", "20px","int>0","width:20px")
+  form:Add_col("text","pagemenu", "Menu Option", "220px","string","width:220px")
+  form:Add_col("text", "pagetitle", "Page Title","220px","string","width:220px")
+  form:Add_col("label", "pagetype", "Type", "100px","string","width:100px")
+--  form.col[form.col.type].options:Add("html","HTML")
+--  form.col[form.col.type].options:Add("fields","Fields List")
+  form:Add_col("link", "Show", "Show", "100px","","width:100px")
+  form:Add_col("link", "Edit", "Edit", "100px","","width:100px")
+  form:Add_col("link", "Remove","Remove ", "100px","","width:100px")
+	for i=1, #pages do
+		local menuorder = pages[i].menuorder or "0"
+		local pagemenu  = pages[i].pagemenu 
+		local pagetitle = pages[i].pagetitle or ""
+		local pagetype  = pages[i].pagetype or ""
+		local name = pages[i][".name"]
+    form:New_row()
+    form:set_col("menuorder","coovachilli."..name..".menuorder", menuorder)
+    form:set_col("pagemenu","coovachilli."..name..".pagemenu", pagemenu)
+    form:set_col("pagetitle","coovachilli."..name..".pagetitle", pagetitle)
+    form:set_col("pagetype","coovachilli."..name..".pagetype", pagetype)
+    form:set_col("Show", "Show_"..name, __SERVER.SCRIPT_NAME.."?".."#"..name)
+    form:set_col("Edit", "Edit_"..name, __SERVER.SCRIPT_NAME.."?".."#"..name)
+    form:set_col("Remove", "Remove_"..name, __SERVER.SCRIPT_NAME.."?".."#."..name)
+--    form:set_col("Remove", "Remove_"..name, __SERVER.SCRIPT_NAME.."?".."#."..name.."&__menu="..__FORM.__menu.."&option="..__FORM.option)
+
+  end
+  return form
+end
+
+function add_page_form(form,user_level)
+  if form == nil then
+    form = formClass.new("Add new page",true)
+  else
+    form:Add("subtitle","Add new page")
+  end
+  form:Add("text_line","add_plugin",[[
+	<table>
+  <tr>
+		<td width="220px">Menu Order</td>
+		<td width="220px">Menu name</td>
+		<td width="220px">Page's Title</td>
+		<td width="220px">Page's Type</td>
+	</tr>
+  <tr>
+		<td><input type="text" name="menuorder" /></td>
+		<td><input type="text" name="pagemenu" /></td>
+  	<td><input type="text" name="pagetitle" /></td>
+  	<td>
+			<select name="pagetype" />
+				<option value="fields">Fields List</option>
+				<option value="html">HTML include</option>
+				<option value="file">External file</option>
+			</select>
+		</td>
+	</tr>
+  </table>]])
+  return form
+end
+
+function edit_page_form(user_level,inpage)
+	local mypage = uci.get_section("coovachilli",inpage)
+	local forms = {}
+	if mypage.pagetype == "file" then
+		forms[1] = edit_file_page(inpage,mypage)
+	elseif mypage.pagetype == "html" then
+		forms[1] = edit_html_page(inpage,mypage)
+  else
+		forms = edit_fields_page(inpage,mypage)
+  end
+	return forms
+end
+
+function edit_file_page(inpage,mypage)
+--	local mypage = uci.get_section("coovachilli",inpage)
+	form = formClass.new(tr("Customized Page"))
+  form:Add("text","coovachilli."..inpage.."filename",uci.get("coovachilli",inpage,"filename"),tr("File name"))
+	return form
+end
+
+function edit_html_page(inpage,mypage)
+--	local mypage = uci.get_section("coovachilli",inpage)
+	local mycode = loadfile("/www/cgi-bin/login/"..mypage.htmlcode)
+	mycode = "adasdasdasdasd asd ad"
+  local form = formClass.new(mypage.pagetitle,true)
+  form:Add("text","coovachilli."..inpage.."htmlcode",uci.get("coovachilli",inpage,"htmlcode"),tr("HTML code"),"string")
+  form:Add("text_area","coovachilli_file."..inpage.."htmlcode",mycode,tr("HTML code"),"string","float:right;width:90%;height:300px;")
+--   form:Add("text_area","coovachilli."..inpage.."htmlcode",uci.get("coovachilli",inpage,"htmlcode"),tr("HTML code"),"string","float:right;width:90%;height:300px;")
+	return form
+end
+
+function edit_fields_page(inpage,mypage)
+  local forms = {}
+  local form = tbformClass.new(mypage.pagetitle)
+  form:Add_col("label", "PlParam", "PlParam", "220px","string,len>1","width:220px")
+  form:Add_col("text", "value", "Value", "220px","string","width:220px")
+  form:Add_col("link", "Remove","Remove", "100px","","width:100px")
+  for k, v in pairs(mypage) do
+    if  not string.match(k,"[.]") 
+		and k~="pagetype"
+		then
+      form:New_row()
+      form:set_col("PlParam","coovachilli."..inpage.."."..k, k)
+      form:set_col("value","coovachilli."..inpage.."."..k, v)
+      form:set_col("Remove", "Remove_"..k, __SERVER.SCRIPT_NAME.."?__menu="..__FORM.__menu.."&option="..__FORM.option.."&plname="..__FORM["page"].."&UCI_MSG_delolsr."..inpage.."."..k.."=")
+    end
+  end
+--[[
+  duplicate_param = uci.get_type("olsr",pl_name)
+  if duplicate_param ~= nil then
+    for i=1, #duplicate_param do
+      form:New_row()
+      for k, v in pairs(duplicate_param[i]) do
+        form:set_col("PlParam","olsr."..duplicate_param[i][".name"].."."..k,k)
+        form:set_col("value","olsr."..duplicate_param[i][".name"].."."..k,v) 
+        form:set_col("Remove", "Remove_"..k, __SERVER.SCRIPT_NAME.."?__menu="..__FORM.__menu.."&option="..__FORM.option.."&plname="..__FORM["plname"].."&UCI_MSG_delolsr."..duplicate_param[i][".name"].."=")
+      end
+    end
+  end
+]]--
+  forms[1] = form
+  form = formClass.new(tr("Add new parameter"))
+  form:Add("text_line","add_parameter",[[<table width="500px">
+  <tr><td width="180px"><strong>]]..tr("Parameter name")..[[</strong></td><td width="220px" ><strong>]]..tr("Parameter Value")..[[</strong></td></tr>
+  <tr><td ><input type="text" name="Parameter_name" style="width:180px;"/></td>
+  <td><input type="text" name="Parameter_value" style="width:220px;" /></td>
+  <td width="100px"><input type="submit" name="Add_Plagin" value="]]..tr("Add new")..[[" style="width:100px;" ></td></tr>
+  </table>]])
+  forms[2] = form
+	return forms
 end
 
 return cportal
