@@ -1,0 +1,85 @@
+#!/usr/bin/lua
+require("set_path")
+require("init")
+require("uci_iwaddon")
+require("xwrtpage")
+
+local htmlCode = nil
+
+function show_fields(o)
+	if o.title then
+		htmlCode = htmlCode ..([[<tr><td colspan="2" style="color: #000;font-weight: bold;white-space: normal;text-align: center;background: #f9f9f9 url(/themes/clubman/mainnav_bg.png) repeat-x bottom; padding:4px 0 4px 10px;">]]..o.title..[[</td></tr>]])
+	end
+	for i,t in ipairs(o) do
+		for k, v in pairs(t) do
+			if type(k) == "number" then
+				htmlCode = htmlCode ..([[<tr><td colspan="2" style="color: #222;font-weight: normal;white-space: normal;text-align: center">]]..v..[[</td></tr>]])
+			else
+				htmlCode = htmlCode ..([[<tr><td>]]..k..[[</td><td>]]..v..[[</td></tr>]])
+			end
+		end
+	end
+end
+
+local chilli = uci.get_all("chillipages")
+local npages = ordertable(uci.get_type("chillipages","pages"),"menuorder")
+
+local uamPort = uci.get("coovachilli","settings","HS_UAMPORT") or "3990"
+local uamServer = uci.get("coovachilli","settings","HS_UAMSERVER") or "192.168.182.1"
+
+page = xwrtpageClass.new(uci.get("coovachilli","settings","HS_LOC_NAME"))
+page.savebutton = ""
+page.action_apply = ""
+page.action_clear = ""
+page.action_review = ""
+
+if tonumber(uci.get("coovachilli","homepage","redirect")) > 0 then
+	page.head.metas:add([[<meta http-equiv="refresh" content="]]..uci.get("coovachilli","homepage","redirect")..[[; URL=http://]]..uamServer..[[:]]..uamPort..[[/prelogin">]])
+end
+
+local option = nil
+if string.trim(__FORM.option) == "" then
+	__FORM.option = npages[1][".name"]
+	__FORM.__menu = 2
+end
+option = string.trim(__FORM.option)
+__MENU:Add("Go to Internet",[[http://]]..uamServer..[[:]]..uamPort..[[/prelogin]])
+for i, t in pairs(npages) do
+	if t.pagetype == "file" then
+		__MENU:Add(t.pagemenu,t.filename)
+	else
+		__MENU:Add(t.pagemenu,"?__menu="..(tonumber(i)+1).."&option="..t[".name"])
+	end
+end
+
+local toshow = uci.get_section("chillipages",option)
+
+if toshow.pagetype == "html" then
+	htmlCode = load_file(toshow.filename)
+end
+
+if toshow.pagetitle then
+	local form = formClass.new(toshow.pagetitle,true)
+	if toshow.pagetype == "fields" then
+		htmlCode = [[<center><table border="0" cellspacing="10">]]
+		htmlCode = htmlCode ..[[<col style="font-weight: bold;white-space: nowrap;" align="right" />]]
+		htmlCode = htmlCode ..[[<col style="color: #222;" align="left" />]]
+		entry = show_fields
+		dofile(toshow.filename)
+		htmlCode = htmlCode ..("</table></center>")
+	end
+	form:Add("text_line","htmlCode",htmlCode)
+	page.content:add(form:text())
+else
+	if toshow.pagetype == "fields" then
+		htmlCode = [[<center><table border="0" cellspacing="10">]]
+		htmlCode = htmlCode ..[[<col style="font-weight: bold;white-space: nowrap;" align="right" />]]
+		htmlCode = htmlCode ..[[<col style="color: #222;" align="left" />]]
+		entry = show_fields
+		dofile(toshow.filename)
+		htmlCode = htmlCode ..("</table></center>")
+	end
+	page.content:add(htmlCode)
+end	
+page:print()
+ 

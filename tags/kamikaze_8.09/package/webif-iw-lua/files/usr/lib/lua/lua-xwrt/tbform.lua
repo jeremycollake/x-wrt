@@ -160,5 +160,7 @@ function tbformClass:str_text(r,i)
 end
 
 function tbformClass:str_link(r,i)
-  return [[<td style="]]..self["col"][i]["size"]..[["><a href="]]..self[r][i].value..[[">]]..self["col"][i].title..[[</a></td>]]
+  local script = ""
+  if self["col"][i]["script"] then script = self["col"][i]["script"] end
+  return [[<td style="]]..self["col"][i]["size"]..[["><a href="]]..self[r][i].value..[[" ]]..script..[[ >]]..self["col"][i].title..[[</a></td>]]
 end

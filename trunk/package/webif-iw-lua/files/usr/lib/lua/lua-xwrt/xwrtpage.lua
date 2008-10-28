@@ -75,7 +75,7 @@ function xwrtpageClass:init()
 	self.container:add(htmlsectionClass.new("div","header"))
 	self.container.header:add(self:set_header())
 
-	self.container:add(__MENU:text())
+	self.container:add(self:set_menu())
 
 	if uci.get("webif.general.use_progressbar") == "1" then
 		self.container:add([[
@@ -123,6 +123,13 @@ function xwrtpageClass:set_header()
 ]]
 				end
 end
+
+function xwrtpageClass:set_menu()
+	return	function()
+						return __MENU:text()
+					end
+end
+
 function xwrtpageClass:set_content()
 	return function()
 					local str = "<h2>"

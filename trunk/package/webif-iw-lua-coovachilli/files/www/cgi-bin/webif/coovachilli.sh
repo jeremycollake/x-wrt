@@ -23,6 +23,7 @@
 require("set_path")
 require("init")
 require("coovaportal")
+print("ok")
 require("webpkg")
 -- pageClass is part of the framework 
 page.title = "Coova-Chilli"
@@ -58,8 +59,8 @@ elseif __FORM.option == "connections" then
   page.savebutton = ""
   forms[1] = cportal.connect_form()
 elseif __FORM.option == "pages" then
-  forms[1] = cportal.pages_form()
-  forms[2] = cportal.add_page_form()
+  forms[#forms+1] = cportal.pages_form()
+  forms[#forms+1] = cportal.add_page_form()
 elseif __FORM.option == "edit" then
   forms = cportal.edit_page_form(nil,__FORM.page)
 elseif __FORM.bt_pkg_install == "Install" then

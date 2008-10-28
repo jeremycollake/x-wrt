@@ -10,6 +10,7 @@ cportal = P
 local tonumber = tonumber
 local pairs = pairs
 local ipairs = ipairs
+local pairsByKeys = pairsByKeys
 local print = print
 local net = net
 local os = os
@@ -18,7 +19,7 @@ local string = string
 local uci = uci
 local next = next
 local ordertable = ordertable
-local loadfile = loadfile
+local load_file = load_file
 
 local menuClass = menuClass
 --local __UCI_VERSION = __UCI_VERSION
@@ -31,20 +32,45 @@ local tbformClass = tbformClass
 -- no more external access after this point
 setfenv(1, P)
 
+if __FORM.pageremove and __FORM.pageremove ~= "" then
+	os.execute("rm "..uci.get("chillipages",__FORM.pageremove,"filename"))
+	uci.delete("chillipages",__FORM.pageremove)
+end
+
 if __FORM["allowed_site"] and __FORM["allowed_site"] ~= "" then
   local sitesallowed = uci.add("coovachilli","sitesallowed")
   uci.set("coovachilli",sitesallowed,"site",__FORM["allowed_site"])
 end
+
 if __FORM["DeleteAllowed"] then
 	uci.delete("coovachilli",__FORM["DeleteAllowed"])
 end
 
+
+
 if __FORM["pagemenu"] and string.trim(__FORM["pagemenu"])~= "" then
-	local pages = uci.add("coovachilli","pages")
-	uci.set("coovachilli",pages,"pagemenu", __FORM["pagemenu"])
-	uci.set("coovachilli",pages,"pagetitle",__FORM["pagetitle"])
-	uci.set("coovachilli",pages,"pagetype", __FORM["pagetype"])
+	local pages = uci.add("chillipages","pages")
+	uci.set("chillipages",pages,"pagemenu", __FORM["pagemenu"])
+	uci.set("chillipages",pages,"pagetitle",__FORM["pagetitle"])
+	uci.set("chillipages",pages,"pagetype", __FORM["pagetype"])
+	uci.set("chillipages",pages,"menuorder", __FORM["menuorder"])
+	local deffile = ""
+	local findfile = "/usr/lib/lua/lua-xwrt/pkgs/coovachilli/"..pages
+	if  __FORM.pagetype == "html" then
+		deffile = "/usr/lib/lua/lua-xwrt/pkgs/coovachilli/html_example"
+		uci.set("chillipages",pages,"filename", filefind)
+	elseif  __FORM.pagetype == "fields" then
+		deffile = "/usr/lib/lua/lua-xwrt/pkgs/coovachilli/field_example"
+		findfile = "/usr/lib/lua/lua-xwrt/pkgs/coovachilli/"..pages
+		uci.set("chillipages",pages,"filename", findfile)
+	else
+		deffile = "/www/file_example.html"
+		findfile = "/www/"..pages
+		uci.set("chillipages",pages,"filename", "/"..pages)
+	end	
+  os.execute("cp "..deffile.." "..findfile)
 end
+uci.save("chillipages")
 
 uci.check_set("coovachilli","webadmin","coovachilli")
 uci.check_set("coovachilli","system","coovachilli")
@@ -79,7 +105,6 @@ uci.check_set("coovachilli","settings","HS_UAMPORT","3990")
 --uci.check_set("coovachilli","settings","HS_UAMHOMEPAGE","http://$HS_UAMLISTEN:$HS_UAMPORT/www/coova.html")
 --uci.check_set("coovachilli","settings","HS_UAMFORMAT","http://$HS_UAMSERVER/cgi-bin/login/login")
 
-
 uci.check_set("coovachilli","settings","HS_NASID","X-Wrtnas")
 uci.check_set("coovachilli","settings","HS_LOC_NAME","My X-Wrt Hotspot")
 uci.check_set("coovachilli","settings","HS_LOC_NETWORK","X-Wrt Network")
@@ -94,7 +119,45 @@ if radconf > 0 then
   uci.check_set("coovachilli","settings","HS_RADIUS","127.0.0.1")
   uci.check_set("coovachilli","settings","HS_RADSECRET","testing123")
 end
+
+if uci.check_set("coovachilli","webadmin","loginpage","1") == "1" then
+	uci.set("coovachilli","settings","HS_UAMFORMAT", "http://"..uci.get("coovachilli","settings","HS_UAMLISTEN").."/cgi-bin/login/login")
+end
+
+if uci.check_set("coovachilli","webadmin","homepage","0") == "0" then
+	uci.delete("coovachilli","settings","HS_UAMHOMEPAGE")
+elseif uci.get("coovachilli","webadmin","homepage") == "1" then
+	uci.set("coovachilli","settings","HS_UAMHOMEPAGE","http://"..uci.get("coovachilli","settings","HS_UAMLISTEN").."/cgi-bin/login/home")
+	local pages = uci.get_type("chillipages","pages") 
+	if pages == nil then
+		local newpage = uci.set("chillipages","pages")
+		uci.set("chillipage",newpage,"menuorder","1") 
+		uci.set("chillipage",newpage,"pagemenu","About") 
+		uci.set("chillipage",newpage,"pagetitle","X-Wrt Infopage") 
+		uci.set("chillipage",newpage,"pagetype","html")
+		uci.set("chillipage",newpage,"filename","/usr/lib/lua/lua-xwrt/pkgs/coovachilli/"..newpage)
+		os.execute("cp /usr/lib/lua/lua-xwrt/pkgs/coovachilli/html_example /usr/lib/lua/lua-xwrt/pkgs/coovachilli/"..newpage)
+	end
+	uci.save("chillipages")
+end
+
 uci.save("coovachilli")
+
+function reorderpages()
+	local tin = ordertable(uci.get_type("chillipages","pages"),"menuorder")
+	if tin then
+		idx = 1
+		for i,t in pairsByKeys(tin) do
+			if tonumber(i) ~= idx then
+				uci.set("chillipages",t[".name"],"menuorder",idx)
+			end
+			idx = idx + 1
+		end
+		uci.save("chillipages")
+		return ordertable(uci.get_type("chillipages","pages"),"menuorder")
+	end
+	return nil
+end	
 
 function set_menu()
   __MENU.HotSpot["Coova-Chilli"] = menuClass.new()
@@ -121,7 +184,7 @@ function set_menu()
 	__MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_pages#HotSpotPages")
 	__MENU.HotSpot["Coova-Chilli"]["chilli_menu_pages#HotSpotPages"] = menuClass.new()
 	__MENU.HotSpot["Coova-Chilli"]["chilli_menu_pages#HotSpotPages"]:Add("Define","coovachilli.sh?option=pages") 
-	local npages = ordertable(uci.get_type("coovachilli","pages"),"menuorder")
+	local npages = reorderpages()
 	if npages then
 --		__MENU.HotSpot["Coova-Chilli"]["chilli_menu_pages#HotSpotPages"]:Add("Edit")
 --		__MENU.HotSpot["Coova-Chilli"]["chilli_menu_pages#HotSpotPages"]:Add("View")
@@ -187,6 +250,17 @@ function core_form(form,user_level,rad_conf)
 	form["coovachilli.webadmin.enable"].options:Add("0","Disable")
 	form["coovachilli.webadmin.enable"].options:Add("1","Enable")
   form:Add_help(tr("chillispot_var_enable#Service"),tr("chilli_help_enable#Enable or disable service."))
+
+	form:Add("select","coovachilli.webadmin.loginpage",uci.check_set("coovachilli","webadmin","loginpage","1"),tr("chilli_var_loginpage#Login Page"),"string")
+	form["coovachilli.webadmin.loginpage"].options:Add("0","External")
+	form["coovachilli.webadmin.loginpage"].options:Add("1","Internal")
+  form:Add_help(tr("chillispot_var_loginpage#Login Page"),tr("chilli_help_loginpage#Set internal or external login page."))
+
+	form:Add("select","coovachilli.webadmin.homepage",uci.check_set("coovachilli","webadmin","homepage","0"),tr("chilli_var_homepage#Home Page"),"string")
+	form["coovachilli.webadmin.homepage"].options:Add("0","Disable")
+	form["coovachilli.webadmin.homepage"].options:Add("1","Internal")
+	form["coovachilli.webadmin.homepage"].options:Add("2","External")
+  form:Add_help(tr("chillispot_var_homepage#Internal Home Page"),tr("chilli_help_homepage#Set disable, internal home page or external home page."))
 
   if string.match(__SERVER["SCRIPT_FILENAME"],"coovachilli.sh") then
   	form:Add("select","coovachilli.webadmin.userlevel",uci.check_set("coovachilli","webadmin","userlevel","0"),tr("userlevel#User Level"),"string")
@@ -343,28 +417,37 @@ function uam_form(form,user_level,local_portal)
 	local user_level = user_level or userlevel
 	local local_portal = local_portal or portal
 	local form = form
+	local homeset = tonumber(uci.get("coovachilli","webadmin","homepage"))
+	local loginset = tonumber(uci.get("coovachilli", "webadmin", "loginpage"))
 	 
+	if user_level > 1 or loginset == 0 then
 	  if form ~= nil then form:Add("subtitle","Captive Portal - Universal Authentication Method")
 	  else form = form or formClass.new("Captive Portal - Universal Authentication Method") end
-	if user_level > 1 then
+
   	local user_level = user_level or userlevel
   	local localuam = localuam or portal
 --  	if user_level > 1 and local_portal < 2 then
-  	if user_level > 1 then
+--  	if user_level > 1 then
 --    	form:Add("text","coovachilli.settings.HS_UAMSERVER",uci.check_set("coovachilli","settings","HS_UAMSERVER","192.168.182.1"),tr("cportal_var_uamserver#URL of Web Server"),"string","width:90%")
 --    	form:Add_help(tr("cportal_var_uamserver#URL of Web Server"),tr("cportal_help_uamserver#URL of a Webserver handling the authentication."))
 --    	form:Add("text","coovachilli.settings.HS_UAMFORMAT",uci.get("coovachilli","settings","HS_UAMFORMAT","http://\$HS_UAMSERVER/cgi-bin/login/login"),tr("cportal_var_format#Path of Login Page"),"string","width:90%")
-    	form:Add("text","coovachilli.settings.HS_UAMFORMAT",uci.get("coovachilli","settings","HS_UAMFORMAT"),tr("cportal_var_format#Login Page"),"string","width:90%")
-    	form:Add_help(tr("cportal_var_format#URL of Web Server"),tr("cportal_help_format#URL of a Webserver handling the authentication. To use the internal login page put <br>http://url_of_web_server/cgi-bin/login/login"))
-    	form:Add("text","coovachilli.settings.HS_UAMSECRET",uci.get("coovachilli","settings","HS_UAMSECRET"),tr("cportal_var_uamsecret#UAM Secret"),"string")
-    	form:Add_help(tr("cportal_var_uamsecret#Web Secret"),tr("cportal_help_uamsecret#Shared secret between HotSpot and Webserver (UAM Server)."))
-  	end
+			if loginset == 0 then 
+    		form:Add("text","coovachilli.settings.HS_UAMFORMAT",uci.get("coovachilli","settings","HS_UAMFORMAT"),tr("cportal_var_format#Login Page"),"string","width:90%")
+    		form:Add_help(tr("cportal_var_format#URL of Web Server"),tr("cportal_help_format#URL of a Webserver handling the authentication. To use the internal login page put <br>http://url_of_web_server/cgi-bin/login/login"))
+	    	form:Add("text","coovachilli.settings.HS_UAMSECRET",uci.get("coovachilli","settings","HS_UAMSECRET"),tr("cportal_var_uamsecret#UAM Secret"),"string")
+  	  	form:Add_help(tr("cportal_var_uamsecret#Web Secret"),tr("cportal_help_uamsecret#Shared secret between HotSpot and Webserver (UAM Server)."))
+    	end
+--  	end
   	if user_level > 2 then
 --    	form:Add("text","coovachilli.settings.HS_UAMHOMEPAGE",uci.check_set("coovachilli","settings","HS_UAMHOMEPAGE","http://\$HS_UAMLISTEN:\$HS_UAMPORT/www/coova.html"),tr("cportal_var_uamhomepage#UAM Home Page"),"string","width:90%")
-    	form:Add("text","coovachilli.settings.HS_UAMHOMEPAGE",uci.get("coovachilli","settings","HS_UAMHOMEPAGE"),tr("cportal_var_uamhomepage#UAM Home Page"),"string","width:90%")
-    	form:Add_help(tr("cportal_var_uamhomepage#Homepage"),tr("cportal_help_uamhomepage#URL of Welcome Page. Unauthenticated users will be redirected to this address, otherwise specified, they will be redirected to UAM Server instead. To use the internal login page put <br>http://url_of_web_server/cgi-bin/login/home.lua"))
-    	form:Add("text","coovachilli.homepage.redirect",uci.get("coovachilli","homepage","redirect"),tr("cportal_var_uamhomepage#Redirection time"),"int,required,>=0")
-    	form:Add_help(tr("cportal_var_homepage_redirection#Redirection time"),tr("cportal_help_homepage_redirection#Seconds of redirection time. 0 = not redirection"))
+			if homeset == 2 then 
+    		form:Add("text","coovachilli.settings.HS_UAMHOMEPAGE",uci.get("coovachilli","settings","HS_UAMHOMEPAGE"),tr("cportal_var_uamhomepage#UAM Home Page"),"string","width:90%")
+    		form:Add_help(tr("cportal_var_uamhomepage#Homepage"),tr("cportal_help_uamhomepage#URL of Welcome Page. Unauthenticated users will be redirected to this address, otherwise specified, they will be redirected to UAM Server instead. To use the internal login page put <br>http://url_of_web_server/cgi-bin/login/home"))
+			end
+			if homeset > 0 then    	
+    		form:Add("text","coovachilli.homepage.redirect",uci.get("coovachilli","homepage","redirect"),tr("cportal_var_uamhomepage#Redirection time"),"int,required,>=0")
+    		form:Add_help(tr("cportal_var_homepage_redirection#Redirection time"),tr("cportal_help_homepage_redirection#Seconds of redirection time. 0 = not redirection"))
+    	end
 
   	end
   	uci.save("coovachilli")
@@ -477,35 +560,35 @@ end
 
 function pages_form(form,user_level,localuam)
 	local user_level = user_level or userlevel
-	local pages = ordertable(uci.get_type("coovachilli","pages"),"menuorder")
-  form = tbformClass.new("HotSpot Pages")
-  form:Add_col("text","menuorder", "Order", "20px","int>0","width:20px")
-  form:Add_col("text","pagemenu", "Menu Option", "220px","string","width:220px")
-  form:Add_col("text", "pagetitle", "Page Title","220px","string","width:220px")
-  form:Add_col("label", "pagetype", "Type", "100px","string","width:100px")
---  form.col[form.col.type].options:Add("html","HTML")
---  form.col[form.col.type].options:Add("fields","Fields List")
-  form:Add_col("link", "Show", "Show", "100px","","width:100px")
-  form:Add_col("link", "Edit", "Edit", "100px","","width:100px")
-  form:Add_col("link", "Remove","Remove ", "100px","","width:100px")
-	for i=1, #pages do
-		local menuorder = pages[i].menuorder or "0"
-		local pagemenu  = pages[i].pagemenu 
-		local pagetitle = pages[i].pagetitle or ""
-		local pagetype  = pages[i].pagetype or ""
-		local name = pages[i][".name"]
-    form:New_row()
-    form:set_col("menuorder","coovachilli."..name..".menuorder", menuorder)
-    form:set_col("pagemenu","coovachilli."..name..".pagemenu", pagemenu)
-    form:set_col("pagetitle","coovachilli."..name..".pagetitle", pagetitle)
-    form:set_col("pagetype","coovachilli."..name..".pagetype", pagetype)
-    form:set_col("Show", "Show_"..name, __SERVER.SCRIPT_NAME.."?".."#"..name)
-    form:set_col("Edit", "Edit_"..name, __SERVER.SCRIPT_NAME.."?".."#"..name)
-    form:set_col("Remove", "Remove_"..name, __SERVER.SCRIPT_NAME.."?".."#."..name)
---    form:set_col("Remove", "Remove_"..name, __SERVER.SCRIPT_NAME.."?".."#."..name.."&__menu="..__FORM.__menu.."&option="..__FORM.option)
-
+	local pages = reorderpages()
+	if pages then
+	  form = tbformClass.new("HotSpot Pages")
+  	form:Add_col("text","menuorder", "Order", "20px","int>0","width:20px")
+  	form:Add_col("text","pagemenu", "Menu Option", "220px","string","width:220px")
+  	form:Add_col("text", "pagetitle", "Page Title","220px","string","width:220px")
+  	form:Add_col("label", "pagetype", "Type", "100px","string","width:100px")
+--  	form.col[form.col.type].options:Add("html","HTML")
+--  	form.col[form.col.type].options:Add("fields","Fields List")
+--  	form:Add_col("link", "Remove","Remove", "100px","","width:100px",[[onclick="return confirm(]]..tr("This page will be deleted")..[[);"]])
+  	form:Add_col("link", "Remove","Remove", "100px","","width:100px",[[onclick="return confirm('This page will be deleted');"]])
+		for i=1, #pages do
+			local menuorder = pages[i].menuorder or "0"
+			local pagemenu  = pages[i].pagemenu 
+			local pagetitle = pages[i].pagetitle or ""
+			local pagetype  = pages[i].pagetype or ""
+			local name = pages[i][".name"]
+    	form:New_row()
+    	form:set_col("menuorder","chillipages."..name..".menuorder", menuorder)
+    	form:set_col("pagemenu","chillipages."..name..".pagemenu", pagemenu)
+    	form:set_col("pagetitle","chillipages."..name..".pagetitle", pagetitle)
+    	form:set_col("pagetype","chillipages."..name..".pagetype", pagetype)
+--    	form:set_col("Show", "Show_"..name, "/cgi-bin/login/home.lua?option="..name)
+--    	form:set_col("Edit", "Edit_"..name, "&nbsp;&nbsp;")
+    	form:set_col("Remove", "Remove_"..name, __SERVER.SCRIPT_NAME.."?pageremove="..name.."&__menu="..__FORM.__menu.."&option="..__FORM.option)
+  	end
+	  return form
   end
-  return form
+  return nil
 end
 
 function add_page_form(form,user_level)
@@ -539,12 +622,12 @@ function add_page_form(form,user_level)
 end
 
 function edit_page_form(user_level,inpage)
-	local mypage = uci.get_section("coovachilli",inpage)
+	local mypage = uci.get_section("chillipages",inpage)
 	local forms = {}
 	if mypage.pagetype == "file" then
-		forms[1] = edit_file_page(inpage,mypage)
+		forms = edit_fields_page(inpage,mypage)
 	elseif mypage.pagetype == "html" then
-		forms[1] = edit_html_page(inpage,mypage)
+		forms = edit_fields_page(inpage,mypage)
   else
 		forms = edit_fields_page(inpage,mypage)
   end
@@ -552,60 +635,67 @@ function edit_page_form(user_level,inpage)
 end
 
 function edit_file_page(inpage,mypage)
---	local mypage = uci.get_section("coovachilli",inpage)
+--	local mypage = uci.get_section("chillipages",inpage)
 	form = formClass.new(tr("Customized Page"))
-  form:Add("text","coovachilli."..inpage.."filename",uci.get("coovachilli",inpage,"filename"),tr("File name"))
+  form:Add("text","chillipages."..inpage.."filename",uci.get("chillipages",inpage,"filename"),tr("File name"))
 	return form
 end
 
 function edit_html_page(inpage,mypage)
---	local mypage = uci.get_section("coovachilli",inpage)
+--	local mypage = uci.get_section("chillipages",inpage)
 	local mycode = loadfile("/www/cgi-bin/login/"..mypage.htmlcode)
 	mycode = "adasdasdasdasd asd ad"
   local form = formClass.new(mypage.pagetitle,true)
-  form:Add("text","coovachilli."..inpage.."htmlcode",uci.get("coovachilli",inpage,"htmlcode"),tr("HTML code"),"string")
-  form:Add("text_area","coovachilli_file."..inpage.."htmlcode",mycode,tr("HTML code"),"string","float:right;width:90%;height:300px;")
---   form:Add("text_area","coovachilli."..inpage.."htmlcode",uci.get("coovachilli",inpage,"htmlcode"),tr("HTML code"),"string","float:right;width:90%;height:300px;")
+  form:Add("text","chillipages."..inpage.."htmlcode",uci.get("chillipages",inpage,"htmlcode"),tr("HTML code"),"string")
+  form:Add("text_area" ,"coovachilli_file."..inpage.."htmlcode",mycode,tr("HTML code"),"string","float:right;width:90%;height:300px;")
+--   form:Add("text_area","chillipages."..inpage.."htmlcode",uci.get("chillipages",inpage,"htmlcode"),tr("HTML code"),"string","float:right;width:90%;height:300px;")
 	return form
 end
 
 function edit_fields_page(inpage,mypage)
   local forms = {}
-  local form = tbformClass.new(mypage.pagetitle)
-  form:Add_col("label", "PlParam", "PlParam", "220px","string,len>1","width:220px")
-  form:Add_col("text", "value", "Value", "220px","string","width:220px")
-  form:Add_col("link", "Remove","Remove", "100px","","width:100px")
-  for k, v in pairs(mypage) do
-    if  not string.match(k,"[.]") 
-		and k~="pagetype"
-		then
-      form:New_row()
-      form:set_col("PlParam","coovachilli."..inpage.."."..k, k)
-      form:set_col("value","coovachilli."..inpage.."."..k, v)
-      form:set_col("Remove", "Remove_"..k, __SERVER.SCRIPT_NAME.."?__menu="..__FORM.__menu.."&option="..__FORM.option.."&plname="..__FORM["page"].."&UCI_MSG_delolsr."..inpage.."."..k.."=")
-    end
-  end
---[[
-  duplicate_param = uci.get_type("olsr",pl_name)
-  if duplicate_param ~= nil then
-    for i=1, #duplicate_param do
-      form:New_row()
-      for k, v in pairs(duplicate_param[i]) do
-        form:set_col("PlParam","olsr."..duplicate_param[i][".name"].."."..k,k)
-        form:set_col("value","olsr."..duplicate_param[i][".name"].."."..k,v) 
-        form:set_col("Remove", "Remove_"..k, __SERVER.SCRIPT_NAME.."?__menu="..__FORM.__menu.."&option="..__FORM.option.."&plname="..__FORM["plname"].."&UCI_MSG_delolsr."..duplicate_param[i][".name"].."=")
-      end
-    end
-  end
-]]--
+	local deffile = ""
+	local findfile = ""
+	if mypage.pagetype == "html" then
+		deffile = "/usr/lib/lua/lua-xwrt/pkgs/coovachilli/html_example"
+		findfile = mypage.filename
+	elseif mypage.pagetype == "fields" then
+		deffile = "/usr/lib/lua/lua-xwrt/pkgs/coovachilli/field_example"
+		findfile = mypage.filename
+	else
+		deffile = "/www/file_example.html"
+		findfile = "/www"..mypage.filename
+	end	
+
+	if __FORM.filecontent then
+	  local write_file = io.open(findfile,"w")
+  	write_file:write(__FORM.filecontent)
+  	write_file:close()
+	end
+
+  local form = formClass.new(mypage.pagetitle)
+	form:add("disabled_text","chillipages."..inpage..".pagetype",uci.get("chillipages",inpage,"pagetype"),"Page type","","")
+	form:add("disabled_text","chillipages."..inpage..".menuorder",uci.get("chillipages",inpage,"menuorder"),"Menu order","","")
+	form:add("text_box","chillipages."..inpage..".pagemenu",uci.get("chillipages",inpage,"pagemenu"),"Menu name","string","width:99%;")
+	if mypage.pagetype ~= "file" then
+		form:add("text_box","chillipages."..inpage..".pagetitle",uci.get("chillipages",inpage,"pagetitle"),"Title of page","string","width:99%;")
+	end
+	form:add("disabled_text","chillipages."..inpage..".filename",uci.get("chillipages",inpage,"filename"),"File name","","width:99%;")
   forms[1] = form
-  form = formClass.new(tr("Add new parameter"))
-  form:Add("text_line","add_parameter",[[<table width="500px">
-  <tr><td width="180px"><strong>]]..tr("Parameter name")..[[</strong></td><td width="220px" ><strong>]]..tr("Parameter Value")..[[</strong></td></tr>
-  <tr><td ><input type="text" name="Parameter_name" style="width:180px;"/></td>
-  <td><input type="text" name="Parameter_value" style="width:220px;" /></td>
-  <td width="100px"><input type="submit" name="Add_Plagin" value="]]..tr("Add new")..[[" style="width:100px;" ></td></tr>
-  </table>]])
+	if io.exists(findfile) == false then
+  	os.execute("cp "..deffile.." "..findfile)
+	end
+	if __FORM.filecontent1 then
+		filecontent = __FORM.filecontent1
+	  local write_file = io.open(findfile,"w")
+  	write_file:write(__FORM.filecontent1)
+  	write_file:close()
+	else
+  		filecontent = load_file(findfile)
+  end
+
+  form = formClass.new(tr("File Content"),true)
+  form:Add("text_line","filecontent",[[<TEXTAREA name="filecontent1" rows="15" wrap="off" style="width:100%">]]..filecontent..[[</TEXTAREA>]])
   forms[2] = form
 	return forms
 end
