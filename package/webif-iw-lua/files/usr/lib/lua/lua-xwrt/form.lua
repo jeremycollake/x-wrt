@@ -49,8 +49,10 @@ function formClass:tostring(name)
 	if name ~= nil then 
 		if self[name].input == "text" then
 			return self:text_box(self[name])
-		elseif self[name].input == "disable_text" then
-			return self:disable_text(self[name])
+		elseif self[name].input == "text_box" then
+			return self:text_box(self[name])
+		elseif self[name].input == "disabled_text" then
+			return self:disabled_text(self[name])
 		elseif self[name].input == "text_area" then
 			return self:text_area(self[name])
 		elseif self[name].input == "checkbox" then
@@ -225,7 +227,7 @@ function formClass:show_text(t)
 	return str
 end
 
-function formClass:disable_text(t)
+function formClass:disabled_text(t)
 	local style = ""
 	if t.style ~= "" then style = "style=\""..t.style.."\" " end
 	local str  = "<tr><td width=\"40%\">" .. t.label .. "</td>"
@@ -234,7 +236,7 @@ function formClass:disable_text(t)
 	str = str .. "<input type=\"hidden\" name=\"val_str_"..t.name.."\" value=\""..t.validate.."\" />"
 	str = str .. "<input type=\"hidden\" name=\"val_lbl_"..t.name.."\" value=\""..t.label.."\" />"
 	end
-	str = str .. "<input type=\"text\" name=\""..t.name.."\" value=\""..t.value.."\" "..style..t.script.." />"
+	str = str .. "<input type=\"text\" name=\""..t.name.."\" value=\""..t.value.."\" "..style..t.script.." disabled=\"disabled\"/>"
 	str = str .. "</td></tr>"
 	return str
 end
@@ -248,7 +250,7 @@ function formClass:text_area(t)
 	str = str .. "<input type=\"hidden\" name=\"val_str_"..t.name.."\" value=\""..t.validate.."\" />"
 	str = str .. "<input type=\"hidden\" name=\"val_lbl_"..t.name.."\" value=\""..t.label.."\" />"
 	end
-	str = str .. "<TEXTAREA name=\""..t.name.."\" rows=\"6\""..style..t.script.." >"..t.value.."</TEXTAREA>"
+	str = str .. "<TEXTAREA name=\""..t.name.."\" rows=\"6\" wrap=\"off\" "..style..t.script.." >"..t.value.."</TEXTAREA>"
 	str = str .. "</td></tr>"
 	return str
 end

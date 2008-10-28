@@ -262,15 +262,23 @@ end
 function ordertable(tin,strfield)
 	local tout = {}
 	local missing = 0
-	for i=1, #tin do
-		local idx = tonumber(tin[i][strfield])
-		if tin[i][strfield] == nil then
-			idx = #tin-missing
-			missing = missing + 1
+	if tin then
+		for i=1, #tin do
+			local idx = tonumber(tin[i][strfield])
+			repeat
+				if tin[i][strfield] == nil then
+					idx = #tin-missing
+					missing = missing + 1
+				end
+				if tout[idx] then
+					idx = idx + 1
+				end
+			until tout[idx] == nil
+			tout[idx] = tin[i]
 		end
-		tout[idx] = tin[i]
+		return tout
 	end
-	return tout
+	return nil
 end
 
 function string.totable(strlist)
