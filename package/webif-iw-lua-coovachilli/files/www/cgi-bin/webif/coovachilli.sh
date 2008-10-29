@@ -23,7 +23,6 @@
 require("set_path")
 require("init")
 require("coovaportal")
-print("ok")
 require("webpkg")
 -- pageClass is part of the framework 
 page.title = "Coova-Chilli"
