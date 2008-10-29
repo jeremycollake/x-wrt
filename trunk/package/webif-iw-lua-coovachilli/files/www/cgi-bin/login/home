@@ -34,7 +34,8 @@ page.action_clear = ""
 page.action_review = ""
 
 if tonumber(uci.get("coovachilli","homepage","redirect")) > 0 then
-	page.head.metas:add([[<meta http-equiv="refresh" content="]]..uci.get("coovachilli","homepage","redirect")..[[; URL=http://]]..uamServer..[[:]]..uamPort..[[/prelogin">]])
+	local address =uci.get("coovachilli","homepage","redirect").."; URL=http://"..uamServer..":"..uamPort.."/prelogin"
+	page.head.metas:add({["http-equiv"]="refresh", content=address})
 end
 
 local option = nil
