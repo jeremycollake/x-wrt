@@ -16,6 +16,7 @@ local net = net
 local os = os
 local io = io
 local string = string
+local tostring = tostring
 local uci = uci
 local next = next
 local ordertable = ordertable
@@ -130,12 +131,12 @@ elseif uci.get("coovachilli","webadmin","homepage") == "1" then
 	uci.set("coovachilli","settings","HS_UAMHOMEPAGE","http://"..uci.get("coovachilli","settings","HS_UAMLISTEN").."/cgi-bin/login/home")
 	local pages = uci.get_type("chillipages","pages") 
 	if pages == nil then
-		local newpage = uci.set("chillipages","pages")
-		uci.set("chillipage",newpage,"menuorder","1") 
-		uci.set("chillipage",newpage,"pagemenu","About") 
-		uci.set("chillipage",newpage,"pagetitle","X-Wrt Infopage") 
-		uci.set("chillipage",newpage,"pagetype","html")
-		uci.set("chillipage",newpage,"filename","/usr/lib/lua/lua-xwrt/pkgs/coovachilli/"..newpage)
+		local newpage = uci.add("chillipages","pages")
+		uci.set("chillipages",newpage,"menuorder","1") 
+		uci.set("chillipages",newpage,"pagemenu","About") 
+		uci.set("chillipages",newpage,"pagetitle","X-Wrt Infopage") 
+		uci.set("chillipages",newpage,"pagetype","html")
+		uci.set("chillipages",newpage,"filename","/usr/lib/lua/lua-xwrt/pkgs/coovachilli/"..newpage)
 		os.execute("cp /usr/lib/lua/lua-xwrt/pkgs/coovachilli/html_example /usr/lib/lua/lua-xwrt/pkgs/coovachilli/"..newpage)
 	end
 	uci.save("chillipages")
@@ -420,7 +421,7 @@ function uam_form(form,user_level,local_portal)
 	local homeset = tonumber(uci.get("coovachilli","webadmin","homepage"))
 	local loginset = tonumber(uci.get("coovachilli", "webadmin", "loginpage"))
 	 
-	if user_level > 1 or loginset == 0 then
+	if user_level > 1 or loginset == 0 or homeset > 0 then
 	  if form ~= nil then form:Add("subtitle","Captive Portal - Universal Authentication Method")
 	  else form = form or formClass.new("Captive Portal - Universal Authentication Method") end
 
@@ -438,14 +439,18 @@ function uam_form(form,user_level,local_portal)
   	  	form:Add_help(tr("cportal_var_uamsecret#Web Secret"),tr("cportal_help_uamsecret#Shared secret between HotSpot and Webserver (UAM Server)."))
     	end
 --  	end
-  	if user_level > 2 then
+  	if user_level > 2 or homeset > 0 then
 --    	form:Add("text","coovachilli.settings.HS_UAMHOMEPAGE",uci.check_set("coovachilli","settings","HS_UAMHOMEPAGE","http://\$HS_UAMLISTEN:\$HS_UAMPORT/www/coova.html"),tr("cportal_var_uamhomepage#UAM Home Page"),"string","width:90%")
 			if homeset == 2 then 
     		form:Add("text","coovachilli.settings.HS_UAMHOMEPAGE",uci.get("coovachilli","settings","HS_UAMHOMEPAGE"),tr("cportal_var_uamhomepage#UAM Home Page"),"string","width:90%")
     		form:Add_help(tr("cportal_var_uamhomepage#Homepage"),tr("cportal_help_uamhomepage#URL of Welcome Page. Unauthenticated users will be redirected to this address, otherwise specified, they will be redirected to UAM Server instead. To use the internal login page put <br>http://url_of_web_server/cgi-bin/login/home"))
 			end
 			if homeset > 0 then    	
-    		form:Add("text","coovachilli.homepage.redirect",uci.get("coovachilli","homepage","redirect"),tr("cportal_var_uamhomepage#Redirection time"),"int,required,>=0")
+--    		form:Add("text","coovachilli.homepage.redirect",uci.get("coovachilli","homepage","redirect"),tr("cportal_var_uamhomepage#Redirection time"),"int,required,>=0")
+    		form:Add("select","coovachilli.homepage.redirect",uci.get("coovachilli","homepage","redirect"),tr("cportal_var_uamhomepage#Redirection time"),"int,required,>=0")
+				for i=0, 30 do
+					form["coovachilli.homepage.redirect"].options:Add(tostring(i),tostring(i))
+				end				
     		form:Add_help(tr("cportal_var_homepage_redirection#Redirection time"),tr("cportal_help_homepage_redirection#Seconds of redirection time. 0 = not redirection"))
     	end
 
