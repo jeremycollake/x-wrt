@@ -26,6 +26,8 @@ enable    = tonumber(freeradius.webadmin.enable)    or 0
 userlevel = tonumber(freeradius.webadmin.userlevel) or 0
 reboot    = false                -- reboot device after all apply process
 
+call_parser = "freeradius freeradius_check freeradius_proxy"
+
 name = "Freeradius Clients"
 script = "radiusd"
 init_script = "/etc/init.d/radiusd"
