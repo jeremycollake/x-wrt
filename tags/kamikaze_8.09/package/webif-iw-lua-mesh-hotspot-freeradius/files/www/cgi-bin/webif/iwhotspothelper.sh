@@ -11,7 +11,7 @@
           OLSR Routing protocol for mesh Network
 
   Author(s) [in order of work date]:
-         Fabián Omar Franzotti
+         FabiÃ¡n Omar Franzotti
          
     Configuration files referenced:
       iw_settings
@@ -95,17 +95,9 @@ function set_portal()
   if wz.portal == 0 then
     forms = set_communities()
   else
-    if wz.portal == 1 then
-      pkg.check(coova_pkgs)
-      require("coovaportal")
-    elseif wz.portal == 2 then
-      pkg.check(chilli_pkgs)
-      require("chilliportal")
---      forms[1] = cportal.core_form(nil,1,wz.radius)
---      setfooter(forms[1])
-    end  
+    pkg.check(coova_pkgs)
+    require("coovaportal")
     forms[1] = cportal.core_form(nil,1,wz.radius)
---    forms[1].title = "Coova Chilli Service"
     setfooter(forms[1])
     forms[1]:Add("hidden","step","communities")
   end
@@ -221,22 +213,25 @@ elseif __FORM.option == "config" then
 elseif __FORM.option == "wizard" then
   if wz.mesh + wz.portal + wz.radius == 0 then
     __FORM.step = nothing()
---  elseif wz.portal == 0 and wz.radius == 1 then
---    __FORM.step = no_portal()
   end
+
   if wz.mesh == 1 then 
     pkgs_tocheck = olsr_pkgs 
   end
+  
   if wz.portal == 1 then
     pkgs_tocheck = coova_pkgs.." "..pkgs_tocheck
   end
-  if wz.portal == 2 then
-    pkgs_tocheck = chilli_pkgs.." "..pkgs_tocheck
-  end
-  if wz.radius > 1 then
+  if wz.radius > 0 then
       pkgs_tocheck = freeradius_pkgs.." "..pkgs_tocheck
   end
   pkg.check(pkgs_tocheck)
+  if wz.radius > 0 then 
+	  uci.check_set("freeradius","webadmin","websettings")
+		uci.set("freeradius","webadmin","enable","1")
+		uci.save("freeradius")
+	end
+	
   if __FORM.step == "network" then
     forms = set_mesh()
   elseif __FORM.step == "portal" then
@@ -267,9 +262,7 @@ else
 
 	form:Add("select","iw_hotspot_wizard.general.portal",uci.get("iw_hotspot_wizard.general.portal"),tr("iw_wizard_var_portal#Captive Portal"),"string")
 	form["iw_hotspot_wizard.general.portal"].options:Add("0",tr("No"))
-	form["iw_hotspot_wizard.general.portal"].options:Add("1",tr("Local Coova-Chilli"))
---	form["iw_hotspot_wizard.general.portal"].options:Add("2",tr("Remote Coova-Chilli"))
-	form["iw_hotspot_wizard.general.portal"].options:Add("3",tr("Remote ChilliSpot"))
+	form["iw_hotspot_wizard.general.portal"].options:Add("1",tr("Coova-Chilli"))
   form:Add_help(tr("iwhotspothelper_var_portal#Captive Portal"),tr([[iwhotspothelper_help_portal#
     The captive portal technique forces an HTTP client on a network to see a 
     special web page (usually for authentication purposes) before surfing the 
@@ -319,4 +312,3 @@ for i,v in pairs(__SERVER) do
 end
 ]]--
 print (page:footer())
-
