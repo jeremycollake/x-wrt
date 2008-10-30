@@ -205,7 +205,7 @@ EOF
 					sleep 1
 					echo "$FORM_passwd2"
 				) | passwd root 2>&1 && apply_passwd
-				echo '</pre>'
+				echo '</pre><meta http-equiv="refresh" content="4; URL=/cgi-bin/webif/info.sh">'
 				footer
 				exit
 			} || {
