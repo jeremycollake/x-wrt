@@ -25,7 +25,7 @@ ntpcliconf="ntpclient"
 
 # Add NTP Server
 if ! empty "$FORM_add_ntpcfg_number"; then
-	uci_add "$ntpcliconf" "$ntpcliconf"
+	uci_add "$ntpcliconf" "ntpserver"
 	uci_set "$ntpcliconf" "$CONFIG_SECTION" "hostname" ""
 	uci_set "$ntpcliconf" "$CONFIG_SECTION" "port" "123"
 	FORM_add_ntpcfg=""
