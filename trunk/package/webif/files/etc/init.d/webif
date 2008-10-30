@@ -40,7 +40,7 @@ uci_load "webif"
 				device_name="La Fonera 2"
 				break
 			}
-			ddif=/dev/mtd5 2>/dev/null | strings | grep "MR3201A-FLF-FON" || ifconfig eth0 |grep -q 00:18:84:**:**:**
+			dd if=/dev/mtd5 2>/dev/null | strings | grep "MR3201A-FLF-FON" || ifconfig eth0 |grep -q 00:18:84:**:**:**
 			[ $? = "0" ] && {
 				device_name="La Fonera (ACCTON MR3201A)"
 				break
