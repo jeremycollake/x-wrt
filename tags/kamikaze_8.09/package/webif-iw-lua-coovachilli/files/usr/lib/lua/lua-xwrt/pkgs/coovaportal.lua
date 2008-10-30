@@ -125,21 +125,22 @@ if uci.check_set("coovachilli","webadmin","loginpage","1") == "1" then
 	uci.set("coovachilli","settings","HS_UAMFORMAT", "http://"..uci.get("coovachilli","settings","HS_UAMLISTEN").."/cgi-bin/login/login")
 end
 
+local pages = uci.get_type("chillipages","pages") 
+if pages == nil then
+	local newpage = uci.add("chillipages","pages")
+	uci.set("chillipages",newpage,"menuorder","1") 
+	uci.set("chillipages",newpage,"pagemenu","About") 
+	uci.set("chillipages",newpage,"pagetitle","X-Wrt Infopage") 
+	uci.set("chillipages",newpage,"pagetype","html")
+	uci.set("chillipages",newpage,"filename","/usr/lib/lua/lua-xwrt/pkgs/coovachilli/"..newpage)
+	os.execute("cp /usr/lib/lua/lua-xwrt/pkgs/coovachilli/html_example /usr/lib/lua/lua-xwrt/pkgs/coovachilli/"..newpage)
+	uci.save("chillipages")
+end
+
 if uci.check_set("coovachilli","webadmin","homepage","0") == "0" then
 	uci.delete("coovachilli","settings","HS_UAMHOMEPAGE")
 elseif uci.get("coovachilli","webadmin","homepage") == "1" then
 	uci.set("coovachilli","settings","HS_UAMHOMEPAGE","http://"..uci.get("coovachilli","settings","HS_UAMLISTEN").."/cgi-bin/login/home")
-	local pages = uci.get_type("chillipages","pages") 
-	if pages == nil then
-		local newpage = uci.add("chillipages","pages")
-		uci.set("chillipages",newpage,"menuorder","1") 
-		uci.set("chillipages",newpage,"pagemenu","About") 
-		uci.set("chillipages",newpage,"pagetitle","X-Wrt Infopage") 
-		uci.set("chillipages",newpage,"pagetype","html")
-		uci.set("chillipages",newpage,"filename","/usr/lib/lua/lua-xwrt/pkgs/coovachilli/"..newpage)
-		os.execute("cp /usr/lib/lua/lua-xwrt/pkgs/coovachilli/html_example /usr/lib/lua/lua-xwrt/pkgs/coovachilli/"..newpage)
-	end
-	uci.save("chillipages")
 end
 
 uci.save("coovachilli")
