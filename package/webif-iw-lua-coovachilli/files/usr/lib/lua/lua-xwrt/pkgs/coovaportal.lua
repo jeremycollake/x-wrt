@@ -387,7 +387,7 @@ function radius_form(form,user_level,rad_conf)
     uci.set("coovachilli","settings","HS_RADACCT","1813") 
     uci.save("coovachilli") 
 	end
-  form:Add("text","coovachilli.settings.HS_RADSECRET",uci.check_set("coovachilli","settings","HS_RADSECRET","testing123"),tr("chilli_var_rradiussecret#Remote Radius Secret"),"string")
+  form:Add("text","coovachilli.settings.HS_RADSECRET",uci.check_set("coovachilli","settings","HS_RADSECRET","testing123"),tr("chilli_var_rradiussecret#Radius Secret"),"string")
   form:Add_help(tr("chilli_var_rradiussecret#Radius Secret"),tr("chilli_help_radiussecret#Radius shared secret for both servers."))
   return form
 end
