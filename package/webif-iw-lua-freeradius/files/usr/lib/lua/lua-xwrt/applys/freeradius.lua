@@ -1,6 +1,5 @@
 require("iw-uci")
 require("iwuci")
-
 parser = {}
 local P = {}
 parser = P
@@ -32,13 +31,11 @@ init_script = "/etc/init.d/radiusd"
 
 function process()
   wwwprint(name.." Parsers...")
-  iwuci.commit("freeradius")
-  freeradius = uciClass.new("freeradius")
-
-  if tonumber(freeradius.webadmin.userlevel) < 4 then
+  uci.commit("freeradius")
+  if tonumber(uci.get("freeradius","webadmin","userlevel")) < 4 then
     wwwprint("Checking freeradius dictionary to chilli")
     local write_file
-    if io.exists("/usr/share/freeradius/dictionary") then
+    if io.exists("/usr/share/freeradius/dictionary.chillispot") then
       local dict = io.totable("/usr/share/freeradius/dictionary",true)
       wwwprint("Updating /usr/share/freeradius/dictionary")
       if dict[1] ~= "$INCLUDE dictionary.chillispot" then
