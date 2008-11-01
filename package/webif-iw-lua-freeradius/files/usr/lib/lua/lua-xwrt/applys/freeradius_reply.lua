@@ -9,4 +9,4 @@
 --    freeradius-reply
 --
 --------------------------------------------------------------------------------
-dofile("/usr/lib/lua/lua-wrt/applys/freeradius_check")
+dofile("/usr/lib/lua/lua-xwrt/applys/freeradius_check.lua")
