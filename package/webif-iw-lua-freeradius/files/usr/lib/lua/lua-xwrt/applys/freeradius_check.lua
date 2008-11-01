@@ -1,6 +1,5 @@
 require("set_path")
 require("uci_iwaddon")
-print("aca esta en check")
 parser = {}
 local P = {}
 parser = P

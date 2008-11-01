@@ -29,7 +29,6 @@ script = "radiusd"
 init_script = "/etc/init.d/radiusd"
 
 function process()
-  wwwprint(name.." Parsers...")
   uci.commit("freeradius_proxy")
   wwwprint ("Writing proxy.conf ...")
   -- Process proxy.conf

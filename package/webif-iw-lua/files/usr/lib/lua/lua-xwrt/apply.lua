@@ -173,7 +173,6 @@ for i=1, #file_to_process do
   local file = file_to_process[i]
   file_list[file] = ""
   local apply_file = uci.get(file,"system","apply") or "/usr/lib/lua/lua-xwrt/applys/"..file..".lua"
-print(file,apply_file)
   if apply_file and io.exists(apply_file) == true then
 --    call_parser(file,parsers_list,depends_list,exe_before,exe_after,reboot_list)
     dofile(apply_file)
