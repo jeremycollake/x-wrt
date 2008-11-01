@@ -1,8 +1,6 @@
-print("client_client")
-require("iw-uci")
-print("client_client")
-require("iwuci")
-print("client_client")
+--require("iw-uci")
+--require("iwuci")
+require("uci_iwaddon")
 
 parser = {}
 local P = {}
@@ -17,11 +15,11 @@ local table = table
 local type = type
 local string = string
 local pairs = pairs
-local iwuci = iwuci
-local uciClass = uciClass
+--local iwuci = iwuci
+--local uciClass = uciClass
 local tonumber = tonumber
+local uci = uci
 
-print("client_client")
 local freeradius = uciClass.new("freeradius")
 -- no more external access after this point
 setfenv(1, P)
@@ -37,9 +35,7 @@ script = "radiusd"
 init_script = "/etc/init.d/radiusd"
 
 function process()
-  wwwprint("Committing freeradius_clients...")
-  iwuci.commit("freeradius_clients")
-  local freeradius = uciClass.new("freeradius")
+  uci.commit("freeradius_clients")
     wwwprint(name.." clients... Parsers...")
   -- Process clients.conf
 		local config = uci.get_all("freeradius_clients")

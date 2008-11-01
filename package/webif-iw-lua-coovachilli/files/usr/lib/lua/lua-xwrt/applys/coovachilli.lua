@@ -29,7 +29,6 @@ enable = tonumber(uci.get("coovachilli.webadmin.enable")) or 0
 local userlevel = tonumber(uci.get("coovachilli.webadmin.userlevel")) or 0
 local radconf = tonumber(uci.get("coovachilli.webadmin.radconf")) or 0
 call_parser = nil
-wwwprint("chilli")
 reboot = false                -- reboot device after all apply process
 --exe_before = {} -- execute os process in this table before any process
 exe_after  = {} -- execute os process after all apply process

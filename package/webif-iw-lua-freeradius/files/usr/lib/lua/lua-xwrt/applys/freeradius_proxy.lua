@@ -1,5 +1,6 @@
 require("iw-uci")
 require("iwuci")
+require("uci_iwaddon")
 
 parser = {}
 local P = {}
@@ -17,6 +18,7 @@ local pairs = pairs
 local iwuci = iwuci
 local uciClass = uciClass
 local tonumber = tonumber
+local uci = uci
 
 local freeradius = uciClass.new("freeradius")
 -- no more external access after this point
@@ -31,13 +33,10 @@ call_parser = "freeradius freeradius_check freeradius_clients"
 name = "Freeradius Proxy"
 script = "radiusd"
 init_script = "/etc/init.d/radiusd"
-wwwprint("proxy_proxy")
 
 function process()
-  wwwprint("")
   wwwprint(name.." Parsers...")
-  wwwprint("Committing freeradius_proxy...")
-  iwuci.commit("freeradius_proxy")
+  uci.commit("freeradius_proxy")
   wwwprint ("Writing proxy.conf ...")
   local freeradius = uciClass.new("freeradius")
   -- Process proxy.conf
