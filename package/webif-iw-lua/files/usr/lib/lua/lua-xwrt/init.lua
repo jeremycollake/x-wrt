@@ -1,8 +1,8 @@
 __WWW = os.getenv("SCRIPT_NAME")
 require("common")
+require("uci_iwaddon")
 
 __SYSTEM  = loadsystemconf()
-
 require("iw-luaipkg")
 local pkg = lpkgClass.new()
 if pkg.__installed.uci ~= nil then
@@ -13,7 +13,7 @@ pkg = nil
 require("translator")
 tr_load()
 -- Functions to manipulate UCI Files
-require("iw-uci")
+--require("iw-uci")
 
   require("menu")
 __MENU = menuClass.new()

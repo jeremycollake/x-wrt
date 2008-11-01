@@ -13,8 +13,8 @@
 --------------------------------------------------------------------------------
 __tr = {}
 function tr_load()
-	local lang = __SYSTEM.general.lang
-	if lang == nil or lang == "en" then return end
+	local lang = uci.get("webif","general","lang") or "en"
+	if lang == "en" then return end
 	local file = "/usr/lib/webif/lang/"..lang.."/common.txt"
 
 	local data = ""
