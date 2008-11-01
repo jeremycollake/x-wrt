@@ -1,5 +1,3 @@
---require("iw-uci")
---require("iwuci")
 require("uci_iwaddon")
 parser = {}
 local P = {}
@@ -13,16 +11,14 @@ local oldprint = oldprint
 local table = table
 local pairs = pairs
 local iwuci = iwuci
-local uciClass = uciClass
 local tonumber = tonumber
 local uci = uci
 
-local freeradius = uciClass.new("freeradius")
 -- no more external access after this point
 setfenv(1, P)
 
-enable    = tonumber(freeradius.webadmin.enable)    or 0
-userlevel = tonumber(freeradius.webadmin.userlevel) or 0
+enable    = tonumber(uci.check_set("freeradius","webadmin","enable","1"))
+userlevel = tonumber(uci.check_set("freeradius","webadmin","userlevel","1"))
 reboot    = false                -- reboot device after all apply process
 
 call_parser = "freeradius_check freeradius_clients freeradius_proxy"
