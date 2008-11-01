@@ -31,6 +31,7 @@ call_parser = "freeradius freeradius_check freeradius_clients"
 name = "Freeradius Proxy"
 script = "radiusd"
 init_script = "/etc/init.d/radiusd"
+wwwprint("proxy_proxy")
 
 function process()
   wwwprint("")
@@ -39,39 +40,38 @@ function process()
   iwuci.commit("freeradius_proxy")
   wwwprint ("Writing proxy.conf ...")
   local freeradius = uciClass.new("freeradius")
---  if enable == 1 then
   -- Process proxy.conf
-    local sep = ""
-    local proxy = uciClass.new("freeradius_proxy")
-    local proxy_str = "proxy server {\n"
-    for i, v in pairs (proxy.server) do
-      for k, val in pairs(v.values) do
-        proxy_str = proxy_str .. k .."="..val.."\n"
-      end
-    end
+		local config = uci.get_type("freeradius_proxy","server")
+		local proxy_str = ""
+		local sep = "\n"
+		for i, t in pairs(config) do
+			proxy_str = "proxy server {"
+			sep = "\n"
+			for k,v in pairs(t) do
+				if not string.match(k,"[.]") then
+					proxy_str = proxy_str .. sep .. k .. "=" .. v
+				end
+			end
+			proxy_str = proxy_str .. sep .."}\n\n" 
+		end
 
-    proxy_str = proxy_str .. "}\n\n"
-    if proxy.realm then
-      for i, v in pairs (proxy.realm) do
-        proxy_str = proxy_str .. "realm "..v.values.community .." {\n"
-        for k, val in pairs(v.values) do
-          if k ~= "community" then
-            if k == "nostrip" then
-              proxy_str = proxy_str.."\t".."nostrip\n"
-            else
-              proxy_str = proxy_str .. "\t"..k.."="..val.."\n"
-            end
-          end
-        end
-        proxy_str = proxy_str .. "}\n\n"
-      end
-    end
+		config = uci.get_type("freeradius_proxy","realm")
+		for i, t in pairs(config) do
+			proxy_str = proxy_str.."realm "..t["community"].." {"
+			sep = "\n"
+			for k,v in pairs(t) do
+				if not string.match(k,"[.]")
+				and k ~= "community" 
+				then
+					proxy_str = proxy_str .. sep .. k .. "=" .. v
+				end
+			end
+			proxy_str = proxy_str .. sep .."}\n\n" 
+		end
     local pepe = io.open("/etc/freeradius/proxy.conf","w")
     pepe:write(proxy_str)
     pepe:close()
   wwwprint("/etc/freeradius/proxy.conf writed OK!")
-  wwwprint("")
---  end
 end
 
 return parser

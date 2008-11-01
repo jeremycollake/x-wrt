@@ -29,14 +29,14 @@ enable = tonumber(uci.get("coovachilli.webadmin.enable")) or 0
 local userlevel = tonumber(uci.get("coovachilli.webadmin.userlevel")) or 0
 local radconf = tonumber(uci.get("coovachilli.webadmin.radconf")) or 0
 call_parser = nil
-
+wwwprint("chilli")
 reboot = false                -- reboot device after all apply process
 --exe_before = {} -- execute os process in this table before any process
 exe_after  = {} -- execute os process after all apply process
-if radconf > 1 then
-	call_parser = "freeradius freeradius_check freeradius_clients freeradius_proxy"
-  exe_after["/etc/init.d/radiusd restart"]="freeradius"
-end
+--if radconf > 1 then
+--	call_parser = "freeradius freeradius_check freeradius_clients freeradius_proxy"
+--  exe_after["/etc/init.d/radiusd restart"]="freeradius"
+--end
 --depends_pkgs = "libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm iw-freeradius"
 exe_after["/etc/init.d/network restart"]="network"
 exe_after["wifi"]="wifi"

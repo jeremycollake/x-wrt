@@ -45,11 +45,14 @@ wz.mesh   = tonumber(uci.check_set("iw_hotspot_wizard","general","mesh","0"))
 wz.radius = tonumber(uci.check_set("iw_hotspot_wizard","general","radius","0")) 
 wz.portal = tonumber(uci.check_set("iw_hotspot_wizard","general","portal","0"))
 uci.save("iw_hotspot_wizard")
+
+--[[
 pepe = ""
 for i,v in pairs(__FORM) do
 	pepe = pepe..i.."="..v.."<BR>"
 end
 pepe = pepe..wz.mesh.."-"..wz.radius.."-"..wz.portal.."<br><br>"
+]]--
 
 local olsr_pkgs = "ip olsrd olsrd-mod-dyn-gw olsrd-mod-nameservice olsrd-mod-txtinfo webif-iw-lua-olsr"
 local freeradius_pkgs = "webif-iw-lua-freeradius libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm"
@@ -136,14 +139,13 @@ end
 
 function set_users()
   local forms = {}
-  if wz.radius == 1
-	or wz.radius == 3 then
+  if wz.radius > 0 then
     pkg.check(freeradius_pkgs)
     require("radius")
-    forms[1] = radius.add_usr_form()
-    forms[2] = radius.user_form()
-    setfooter(forms[1])
-    forms[1]:Add("hidden","step","set_end")
+    forms[2] = radius.add_usr_form()
+    forms[1] = radius.user_form()
+    setfooter(forms[2])
+    forms[2]:Add("hidden","step","set_end")
   else
     forms = set_end()
   end
@@ -172,18 +174,15 @@ if tonumber(#__ERROR) > 0 then
 end
 
 for k,v in pairs(__FORM) do
-  if k == "UCI_SET_VALUE" and string.trim(v) ~= "" then
-    if __FORM.UCI_CMD_snwfreeradius_check then
-      __FORM.step = "users"
-      break
-    end
+  if k == "Add_User" and string.trim(v) ~= "" then
+    __FORM.step = "users"
+    break
   end
   if string.match(k,"UCI_CMD_delfreeradius_proxy") then
     __FORM.option = "wizard"
     __FORM.step = "communities"
     break
   end
-  
   if string.match(k,"UCI_CMD_delfreeradius_check") then
     __FORM.option = "wizard"
     __FORM.step = "users"
@@ -239,7 +238,7 @@ elseif __FORM.option == "wizard" then
   elseif __FORM.step == "users" then
     forms = set_users()
   elseif __FORM.step == "communities" then
-      forms = set_communities()
+    forms = set_communities()
   elseif __FORM.step == "set_end" then
     forms = set_end()
   end
@@ -247,7 +246,6 @@ elseif __FORM.option == "wizard" then
 	-- Need function  
   -- Check packages to install --
 	--  local pkgs = pkgInstalledClass.new(check_pkgs,true)
-
 else
   form = formClass.new(tr("Select what you want"))
 	form:Add("select","iw_hotspot_wizard.general.mesh",uci.get("iw_hotspot_wizard.general.mesh"),tr("iw_wizard_var_portal#Mesh Network"),"string")
@@ -259,7 +257,6 @@ else
     blocked paths by "hopping" from node to node until the destination is reached. 
     ]]))
   form:Add_help_link("http://en.wikipedia.org/wiki/Mesh_network",tr("Extracted from Wikipedia"))
-
 	form:Add("select","iw_hotspot_wizard.general.portal",uci.get("iw_hotspot_wizard.general.portal"),tr("iw_wizard_var_portal#Captive Portal"),"string")
 	form["iw_hotspot_wizard.general.portal"].options:Add("0",tr("No"))
 	form["iw_hotspot_wizard.general.portal"].options:Add("1",tr("Coova-Chilli"))

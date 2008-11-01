@@ -83,7 +83,16 @@ end
 function tbformClass:startForm()
 	local str =[[
 	<div class="settings">
-	<h3><strong>]]..self.title..[[</strong></h3>
+	<h3><strong>]]..self.title..[[</strong></h3>]]
+	if #__ERROR > 0 then
+		str = str..[[<pre><font color="red">]]
+		str = str..[[<h1><strong>]]..tr("Invalid input!!!")..[[</strong></h1>]]
+		for i,error in ipairs(__ERROR) do
+			str = str .. error.var_name.." "..error.msg.."("..error.var..")\n"
+		end
+		str = str.."</font></pre>"
+  end
+	str = str ..[[
 	<table>
 	<style type='text/css'>
 	<!--

@@ -1,5 +1,6 @@
 require("iw-uci")
 require("iwuci")
+require("uci_iwaddon")
 
 parser = {}
 local P = {}
@@ -17,6 +18,7 @@ local pairs = pairs
 local iwuci = iwuci
 local uciClass = uciClass
 local tonumber = tonumber
+local uci = uci
 
 local freeradius = uciClass.new("freeradius")
 -- no more external access after this point
@@ -34,60 +36,50 @@ init_script = "/etc/init.d/radiusd"
 
 function process()
   wwwprint(name.." Parsers...")
-  wwwprint("Committing freeradius_check...")
-  iwuci.commit("freeradius_check")
-  wwwprint ("Committing freeradius_reply...")
-  iwuci.commit("freeradius_reply")
+	uci.commit("freeradius_check")
+	uci.commit("freeradius_reply")
 
-  local freeradius = uciClass.new("freeradius")
-  if tonumber(freeradius.webadmin.userlevel) < 4 then
+--  local freeradius = uciClass.new("freeradius")
+  if tonumber(uci.get("freeradius","webadmin","userlevel")) < 4 then
     wwwprint ("Writing users...<br>")
 -- Process users
-    local user_str = ""
-    local sep = ""
-    local users_chk = uciClass.new("freeradius_check")
-    local users_rpl = uciClass.new("freeradius_reply")
-    for i=1 ,#users_chk.sections do
-      local name = users_chk.sections[i].name
-      if name ~= "default" then
-        local checks = users_chk[name]
-        local replys = users_rpl[name]
-        user_str = user_str .. "\n\n"..name
-        sep = "\t"
-        for j, k in pairs(checks) do
-          if type(k) ~= "table" then
-            if string.trim(j) == "User_Password" then
-              user_str = user_str..sep.. string.gsub(j,"_","-").." := \""..k.."\""
-            else
-              user_str = user_str..sep.. string.gsub(j,"_","-").." := "..k
-            end
-            sep = ", "
-          end
-        end    
-        sep = "\n\t"
-        for j, k in pairs(replys) do
-          if type(k) ~= "table" then
-            user_str = user_str..sep.. string.gsub(j,"_","-").." = "..k
-            sep = ", "
-          end
-        end
-      end
-    end
-    sep = ""
-    user_str = user_str.."\n\nDEFAULT\t"
-    for i, v in pairs (users_chk.default) do
-      if type(v) ~= "table" then
-        user_str = user_str..sep..string.gsub(i,"_","-").." := "..v
-        sep = ", "
-      end
-    end
-    sep = "\n\t"
-    for i, v in pairs (users_rpl.default) do
-      if type(v) ~= "table" then
-        user_str = user_str..sep..string.gsub(i,"_","-").." = "..v
-        sep = ",\n\t"
-      end
-    end
+	  local user_str = ""
+  	local sep = ""
+		local users = {}
+		if uci.get_section("freeradius_check","default")
+		or uci.get_section("freeradius_reply","default")
+		then users["default"] = "DEFAULT" end
+
+		for i,t in pairs(uci.get_type("freeradius_check","user")) do
+			users[t[".name"]] = t[".name"]
+		end 
+		for i,t in pairs(uci.get_type("freeradius_check","user")) do
+			users[t[".name"]] = t[".name"] 
+		end 
+	
+		for name, n in pairs(users) do
+			user_str = user_str..sep..n
+			sep = "\t"
+			for k,v in pairs(uci.get_section("freeradius_check",name)) do
+				if not string.match(k,"[.]") then
+      		if string.trim(k) == "User_Password" then
+        		user_str = user_str..sep.. string.gsub(k,"_","-").." := \""..v.."\""
+      		else
+        		user_str = user_str..sep.. string.gsub(k,"_","-").." := "..v
+      		end
+      		sep = ", "
+				end
+			end
+			sep = "\n\t"
+			for k,v in pairs(uci.get_section("freeradius_reply",name)) do
+				if not string.match(k,"[.]") then
+					user_str = user_str .. sep.. string.gsub(k,"_","-").." = "..v
+    	    sep = "\n\t"
+				end
+			end
+			sep = "\n\n"
+	
+		end
     local pepe = io.open("/etc/freeradius/users","w")
     pepe:write(user_str)
     pepe:close()
