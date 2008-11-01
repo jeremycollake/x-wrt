@@ -35,7 +35,6 @@ script = "radiusd"
 init_script = "/etc/init.d/radiusd"
 
 function process()
-  wwwprint(name.." Parsers...")
 	uci.commit("freeradius_check")
 	uci.commit("freeradius_reply")
   if tonumber(uci.get("freeradius","webadmin","userlevel")) < 4 then
