@@ -23,7 +23,6 @@ local uci = uci
 local print = print
 local pairs = pairs
 
-local uciClass = uciClass
 local menuClass = menuClass
 local __UCI_VERSION = __UCI_VERSION
 local formClass = formClass
@@ -35,12 +34,24 @@ local tbformClass = tbformClass
 -- no more external access after this point
 setfenv(1, P)
 
+
 uci.check_set("freeradius","system","freeradius")
 uci.check_set("freeradius","system","apply","/usr/lib/lua/lua-xwrt/applys/freeradius.lua")
+uci.check_set("freeradius","system","Simultaneous_Use","1")
+uci.check_set("freeradius","system","Idle_Timeout","390")
+uci.check_set("freeradius","system","Acct_Interim_Interval","600")
+uci.check_set("freeradius","system","WISPr_Bandwidth_Max_Down","512000")
+uci.check_set("freeradius","system","WISPr_Bandwidth_Max_Up","25600")
+uci.check_set("freeradius","system","Fall_Through","yes")
+
+uci.check_set("freeradius_users","system","freeradius")
+uci.check_set("freeradius_users","system","apply","/usr/lib/lua/lua-xwrt/applys/freeradius_check.lua")
+
 uci.check_set("freeradius_check","system","freeradius")
 uci.check_set("freeradius_check","system","apply","/usr/lib/lua/lua-xwrt/applys/freeradius_check.lua")
 uci.check_set("freeradius_reply","system","freeradius")
-uci.check_set("freeradius_reply","system","apply","/usr/lib/lua/lua-xwrt/applys/freeradius_reply.lua")
+uci.check_set("freeradius_reply","system","apply","/usr/lib/lua/lua-xwrt/applys/freeradius_check.lua")
+
 uci.check_set("freeradius_clients","system","freeradius")
 uci.check_set("freeradius_clients","system","apply","/usr/lib/lua/lua-xwrt/applys/freeradius_clients.lua")
 uci.check_set("freeradius_proxy","system","freeradius")
@@ -51,9 +62,10 @@ uci.save("freeradius_check")
 uci.save("freeradius_reply")
 uci.save("freeradius_clients")
 uci.save("freeradius_proxy")
+print("radius -1")
 
-local radconf = uciClass.new("freeradius")
-local userlevel = tonumber(radconf.webadmin.userlevel) or 0
+local userlevel = tonumber(uci.check_set("freeradius","webadmin","userlevel","1"))
+
 if __FORM["Add_Proxy"] then 
 	uci.add("freeradius_proxy","realm") 
 	uci.save("freeradius_proxy")
@@ -69,7 +81,7 @@ function set_menu()
     -- Muestra menu principiante
     __MENU.HotSpot.Freeradius = menuClass.new()
     __MENU.HotSpot.Freeradius:Add("Core","freeradius.sh")
-    __MENU.HotSpot.Freeradius:Add("Users")
+    __MENU.HotSpot.Freeradius:Add("Users","freeradius.sh?option=users")
     __MENU.HotSpot.Freeradius.Users = menuClass.new()
     __MENU.HotSpot.Freeradius.Users:Add("Users","freeradius.sh?option=users")
     __MENU.HotSpot.Freeradius.Users:Add("Default Values","freeradius.sh?option=users_default")
@@ -82,10 +94,6 @@ function set_menu()
     -- Menu de Experto edita los archivos directamente
 --      __FORM.__menu = string.sub(__FORM.__menu,1,4)
 --    end
-end
-
-function check_pkg()
-  local freeradius_pkg = pkgInstalledClass.new("freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm",true)
 end
 
 function core_form1()
@@ -390,12 +398,15 @@ end
 function defaul_user_form()
   local form = formClass.new("Default Settings")
   form:Add("subtitle","Check Settings")
-  form:Add("text","freeradius_check.default.Simultaneous_Use",uci.check_set("freeradius_check","default","Simultaneous_Use","1"),tr("freerad_var_simultaneous#Simultaneos Use"),"int")
+  form:Add("text","freeradius_check.default.Simultaneous_Use",uci.check_set("freeradius","system","Simultaneous_Use","1"),tr("freerad_var_simultaneous#Simultaneos Use"),"int")
   form:Add("subtitle","Reply Settings")
-  form:Add("text","freeradius_reply.default.Idle_Timeout",uci.check_set("freeradius_reply","default","Idle_Timeout","700"),tr("freerad_var_idle_timeout#Idle Timeout"),"int")
-  form:Add("text","freeradius_reply.default.Acct_Interim_Interval",uci.check_set("freeradius_reply","default","Acct_Interim_Interval","600"),tr("freerad_var_Acct_Interim_Interval#Account Interim Interval"),"int")
-  form:Add("text","freeradius_reply.default.WISPr_Bandwidth_Max_Down",uci.check_set("freeradius_reply","default","WISPr_Bandwidth_Max_Down","512000"),tr("freerad_var_maxdown#Max Bandwidth Down"),"int")
-  form:Add("text","freeradius_reply.default.WISPr_Bandwidth_Max_Up",uci.check_set("freeradius_reply","default","WISPr_Bandwidth_Max_Up","25600"),tr("freerad_var_maxup#Max Bandwidth Up"),"int")
+  form:Add("text","freeradius.system.Idle_Timeout",uci.check_set("freeradius","system","Idle_Timeout","390"),tr("freerad_var_idle_timeout#Idle Timeout"),"int")
+  form:Add("text","freeradius.system.Acct_Interim_Interval",uci.check_set("freeradius","system","Acct_Interim_Interval","600"),tr("freerad_var_Acct_Interim_Interval#Account Interim Interval"),"int")
+  form:Add("text","freeradius.system.WISPr_Bandwidth_Max_Down",uci.check_set("freeradius","system","WISPr_Bandwidth_Max_Down","512000"),tr("freerad_var_maxdown#Max Bandwidth Down"),"int")
+  form:Add("text","freeradius.system.WISPr_Bandwidth_Max_Up",uci.check_set("freeradius","system","WISPr_Bandwidth_Max_Up","25600"),tr("freerad_var_maxup#Max Bandwidth Up"),"int")
+  form:Add("select","freeradius.system.Fall_Through",uci.check_set("freeradius","system","Fall_Through","no"),tr("freerad_var_fall_through#Fall Through"),"string")
+  form["freeradius.system.Fall_Through"].options:Add("yes","Yes")
+  form["freeradius.system.Fall_Through"].options:Add("no","No")
 
   form:Add_help(tr("freerad_var_simultaneous#Simultaneos Use"),tr([[freerad_help_simultaneous#Set max simultaneous connection for account.]]))
   form:Add_help(tr("freerad_var_idle_timeout#Idle Timeout"),tr([[freerad_help_idle_timeout#Specifies the maximum length of time, in seconds, that a subscriber session can remain idle before it is disconnected.]]))
@@ -472,8 +483,14 @@ function add_usr_form(form,user_level)
 	and pass ~= ""
 	then 
 		uci.set("freeradius_check",user,"user")
+		uci.set("freeradius_check",user,"Simultaneous_Use","1")
 		uci.set("freeradius_reply",user,"user")
 		uci.set("freeradius_check",user,"User_Password",pass)
+		uci.set("freeradius_reply",user,"Fall_Through",uci.check_set("freeradius","system","Fall_Through","no"))
+		uci.set("freeradius_reply",user,"Idle_Timeout",uci.check_set("freeradius","system","Idle_Timeout","390"))
+		uci.set("freeradius_reply",user,"Acct_Interim_Interval",uci.check_set("freeradius","system","Acct_Interim_Interval","600"))
+		uci.set("freeradius_reply",user,"WISPr_Bandwidth_Max_Down",uci.check_set("freeradius","system","WISPr_Bandwidth_Max_Down","512000"))
+		uci.set("freeradius_reply",user,"WISPr_Bandwidth_Max_Up",uci.check_set("freeradius","system","WISPr_Bandwidth_Max_Up","25000"))
 		uci.save("freeradius_check")
 		uci.save("freeradius_reply")
 	end

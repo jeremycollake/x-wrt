@@ -1,7 +1,6 @@
-require("iw-uci")
-require("iwuci")
+require("set_path")
 require("uci_iwaddon")
-
+print("aca esta en check")
 parser = {}
 local P = {}
 parser = P
@@ -15,19 +14,15 @@ local table = table
 local type = type
 local string = string
 local pairs = pairs
-local iwuci = iwuci
-local uciClass = uciClass
 local tonumber = tonumber
 local uci = uci
-
-local freeradius = uciClass.new("freeradius")
+local print = print
 -- no more external access after this point
 setfenv(1, P)
 
-enable    = tonumber(freeradius.webadmin.enable)    or 0
-userlevel = tonumber(freeradius.webadmin.userlevel) or 0
+enable    = tonumber(uci.check_set("freeradius","webadmin","enable","1"))
+userlevel = tonumber(uci.check_set("freeradius","webadmin","userlevel","1"))
 reboot    = false                -- reboot device after all apply process
-
 call_parser = "freeradius freeradius_clients freeradius_proxy"
 
 name = "Freeradius Users"
@@ -50,12 +45,11 @@ function process()
 		for i,t in pairs(uci.get_type("freeradius_check","user")) do
 			users[t[".name"]] = t[".name"]
 		end 
-    wwwprint ("leyo check...<br>")
+
 		for i,t in pairs(uci.get_type("freeradius_reply","user")) do
 			users[t[".name"]] = t[".name"] 
 		end 
 	
-    wwwprint ("leyo check...<br>")
 		for name, n in pairs(users) do
 			user_str = user_str..sep..n
 			sep = "\t"
@@ -73,7 +67,7 @@ function process()
 			for k,v in pairs(uci.get_section("freeradius_reply",name)) do
 				if not string.match(k,"[.]") then
 					user_str = user_str .. sep.. string.gsub(k,"_","-").." = "..v
-    	    sep = "\n\t"
+    	    sep = ",\n\t"
 				end
 			end
 			sep = "\n\n"

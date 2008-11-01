@@ -1,6 +1,6 @@
 # freeradius_check
-config "default" "default"
-	option Simultaneous_Use	'1'
+#config "default" "default"
+#	option Simultaneous_Use	'1'
 
 config "user" "steve"
 	option User_Password	'testing123'

@@ -1,7 +1,4 @@
 #!/usr/bin/lua
---require("cinit")
---package.cpath = "?;./?.so;/usr/share/internet-wifi/lib.so/?.so;/usr/lib/lua/*.so" .. package.cpath 
---package.path = "?;./?.lua;/usr/lib/lua/?.lua;/usr/lib/lua/lua-wrt/?.lua;/usr/lib/lua/lua-wrt/pkgs/?.lua;" .. package.path 
 require("set_path")
 require("common")
 wwwprint = print
@@ -11,8 +8,6 @@ local parsers_list = {}
 local old_parsers = {}
 local depends_list = ""
 local stop_list = {}
--- local enable_list = {}
--- local disable_list = {}
 local file_list = {}
 
 local exe_before = {}
@@ -122,7 +117,6 @@ end
 --function call_parser(file,parsers_list,depends_list,exe_before,exe_after,reboot_list)
 function call_parser(file)
   local apply_file = uci.get(file,"system","apply") or "/usr/lib/lua/lua-xwrt/applys/"..file..".lua"
---		print(1,apply_file,file)
     dofile(apply_file)
     parsers_list[file] = {p = parser}
     -- Read if this package depends or need others packages to done configuration
@@ -164,7 +158,6 @@ function call_parser(file)
     wwwprint("-------------------------")
 ]]--
 end
-
 local file_to_process = {}
 for i=1, #arg do
   file_to_process[#file_to_process+1] = arg[i]
@@ -180,6 +173,7 @@ for i=1, #file_to_process do
   local file = file_to_process[i]
   file_list[file] = ""
   local apply_file = uci.get(file,"system","apply") or "/usr/lib/lua/lua-xwrt/applys/"..file..".lua"
+print(file,apply_file)
   if apply_file and io.exists(apply_file) == true then
 --    call_parser(file,parsers_list,depends_list,exe_before,exe_after,reboot_list)
     dofile(apply_file)
