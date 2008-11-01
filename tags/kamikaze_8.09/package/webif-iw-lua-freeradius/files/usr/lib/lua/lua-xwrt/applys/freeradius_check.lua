@@ -38,8 +38,6 @@ function process()
   wwwprint(name.." Parsers...")
 	uci.commit("freeradius_check")
 	uci.commit("freeradius_reply")
-
---  local freeradius = uciClass.new("freeradius")
   if tonumber(uci.get("freeradius","webadmin","userlevel")) < 4 then
     wwwprint ("Writing users...<br>")
 -- Process users
@@ -53,10 +51,12 @@ function process()
 		for i,t in pairs(uci.get_type("freeradius_check","user")) do
 			users[t[".name"]] = t[".name"]
 		end 
-		for i,t in pairs(uci.get_type("freeradius_check","user")) do
+    wwwprint ("leyo check...<br>")
+		for i,t in pairs(uci.get_type("freeradius_reply","user")) do
 			users[t[".name"]] = t[".name"] 
 		end 
 	
+    wwwprint ("leyo check...<br>")
 		for name, n in pairs(users) do
 			user_str = user_str..sep..n
 			sep = "\t"
@@ -78,7 +78,6 @@ function process()
 				end
 			end
 			sep = "\n\n"
-	
 		end
     local pepe = io.open("/etc/freeradius/users","w")
     pepe:write(user_str)

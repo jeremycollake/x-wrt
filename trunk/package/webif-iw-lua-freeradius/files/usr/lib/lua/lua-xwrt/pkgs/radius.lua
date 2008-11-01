@@ -404,8 +404,6 @@ function defaul_user_form()
 end
 
 function user_form()
-	local checks = uci.get_all("freeradius_check")
-	local replys = uci.get_all("freeradius_reply")
 
   form = tbformClass.new("Local Users")
   form:Add_col("label", "Username","Username", "120px")
@@ -421,9 +419,22 @@ function user_form()
   form:Add_col("text", "MaxUp", "MaxUp", "100px","int","width:100px")
   form:Add_col("link", "Remove","Remove ", "100px","","width:100px")
 
-	for name, check in pairs(checks) do
-		if name ~= "default" then
-			local reply = replys[name]
+	local checks = uci.get_type("freeradius_check","user")
+	local replys = uci.get_type("freeradius_reply","user")
+	local users = {}
+	if checks then
+	for i, t in pairs(checks) do
+		users[t[".name"]] = t
+	end
+	end
+	if replys then
+	for i, t in pairs(replys) do
+		users[t[".name"]] = t
+	end
+	end
+	for name, t in pairs(users) do
+			local reply = uci.get_section("freeradius_reply",name)
+			local check = uci.get_section("freeradius_check",name)
     	local password = check.User_Password or ""
     	local expiration = check.Expiration or ""
     	local fall = reply.Fall_Through or ""
@@ -444,7 +455,6 @@ function user_form()
       form:set_col("MaxDown", "freeradius_reply."..name..".WISPr_Bandwidth_Max_Down", maxdown)
       form:set_col("MaxUp", "freeradius_reply."..name..".WISPr_Bandwidth_Max_Up", maxup)
       form:set_col("Remove", "Remove_"..name, __SERVER.SCRIPT_NAME.."?".."UCI_CMD_delfreeradius_check."..name.."=&UCI_CMD_delfreeradius_reply."..name.."=&__menu="..__FORM.__menu.."&option="..__FORM.option)
-    end
   end
   return form
 end
