@@ -36,22 +36,23 @@ init_script = "/etc/init.d/radiusd"
 
 function process()
   uci.commit("freeradius_clients")
-    wwwprint(name.." clients... Parsers...")
   -- Process clients.conf
 		local config = uci.get_all("freeradius_clients")
 		local client_str = ""
 		local sep = "\n"
 		for i,t in pairs(config) do
-			client_str = client_str .."client "..(t.client).." {"
-			for k,v in pairs(t) do
-				if not string.match(k,"[.]")
-				and k ~= "client"
-				then
-					client_str = client_str .. sep .. k .. "=" .. v
---					print("",k,v)
+			if i ~= "system" then
+				client_str = client_str .."client "..(t.client).." {"
+				for k,v in pairs(t) do
+					if not string.match(k,"[.]")
+					and k ~= "client"
+					then
+						client_str = client_str .. sep .. k .. "=" .. v
+--						print("",k,v)
+					end
 				end
+				client_str = client_str .. sep .. "}\n"
 			end
-			client_str = client_str .. sep .. "}\n"
 		end
     local pepe = io.open("/etc/freeradius/clients.conf","w")
     pepe:write(client_str)
