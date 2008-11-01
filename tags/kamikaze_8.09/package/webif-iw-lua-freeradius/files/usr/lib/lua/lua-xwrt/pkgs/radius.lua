@@ -42,10 +42,16 @@ uci.check_set("freeradius_check","system","apply","/usr/lib/lua/lua-xwrt/applys/
 uci.check_set("freeradius_reply","system","freeradius")
 uci.check_set("freeradius_reply","system","apply","/usr/lib/lua/lua-xwrt/applys/freeradius_reply.lua")
 uci.check_set("freeradius_clients","system","freeradius")
-uci.check_set("freeradius_proxy","system","apply","/usr/lib/lua/lua-xwrt/applys/freeradius_proxy.lua")
+uci.check_set("freeradius_clients","system","apply","/usr/lib/lua/lua-xwrt/applys/freeradius_clients.lua")
 uci.check_set("freeradius_proxy","system","freeradius")
 uci.check_set("freeradius_proxy","system","apply","/usr/lib/lua/lua-xwrt/applys/freeradius_proxy.lua")
 uci.check_set("freeradius","webadmin","userlevel","1")
+uci.save("freeradius")
+uci.save("freeradius_check")
+uci.save("freeradius_reply")
+uci.save("freeradius_clients")
+uci.save("freeradius_proxy")
+
 local radconf = uciClass.new("freeradius")
 local userlevel = tonumber(radconf.webadmin.userlevel) or 0
 if __FORM["Add_Proxy"] then 
