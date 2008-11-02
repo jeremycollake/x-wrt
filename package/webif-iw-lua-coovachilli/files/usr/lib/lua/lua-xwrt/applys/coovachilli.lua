@@ -222,7 +222,10 @@ function set_networks()
 	tnet = net.get_unique_ip(ip,mask,iflan)
 	uci.check_set("network",iflan,"ipaddr",tnet.IP)
 	uci.check_set("network",iflan,"netmask",tnet.NETMASK)
-	uci.isdiff_set("coovachilli","settings","HS_UAMFORMAT","http://"..uci.get("coovachilli","settings","HS_UAMSERVER").."/cgi-bin/login/login")
+	uci.check_set("coovachilli","settings","HS_UAMFORMAT","http://"..uci.get("coovachilli","settings","HS_UAMSERVER").."/cgi-bin/login/login")
+	if uci.check_set("coovachilli","webadmin","loginpage","1") == "1" then
+		uci.set("coovachilli","settings","HS_UAMFORMAT", "http://"..uci.get("coovachilli","settings","HS_UAMLISTEN").."/cgi-bin/login/login")
+	end
 	uci.save("network")
 	uci.save("wireless")
 	uci.save("coovachilli")
@@ -252,6 +255,7 @@ function write_config()
 		end
 	end
 	if uci.get("coovachilli","settings","HS_UAMHOMEPAGE") then
+
 		conf_str = conf_str.."HS_UAMHOMEPAGE="..uci.get("coovachilli","settings","HS_UAMHOMEPAGE").."\n"
 	end
 	if uci.get("coovachilli","settings","HS_UAMFORMAT") then
