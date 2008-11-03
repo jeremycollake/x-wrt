@@ -30,23 +30,17 @@ uci_load "webif"
 	fi
 
 	#detect device
-	device_name="$CONFIG_general_device_name"
-	
 	[ -z "$device_name" ] && [ -f "/proc/diag/model" ] && device_name=$(cat "/proc/diag/model")
+	[ -z "$device_name" ] && [ -f "/proc/sys/dev/wifi0/dev_name" ] && device_name=$(cat "/proc/sys/dev/wifi0/dev_name")
 	while [ -z "$device_name" ]; do
 		uname -a |grep -q "mips"
 		[ $? = "0" ] && {
-			cat /dev/mtd0 |strings |grep "Ubiquiti ar2315/6 based board"
+			dd if=/dev/mtd0 2>/dev/null | strings | grep "FON 2202"
 			[ $? = "0" ] && {
-				device_name="Ubiquiti ar2315/6 based board"
+				device_name="La Fonera 2"
 				break
 			}
-			dd bs=1 count=19 skip=5 if=/dev/mtd/5 2>/dev/null | strings | grep "FON 2202"
-			[ $? = "0" ] && {
-				device_name="La Fonera 2202"
-				break
-			}
-			dd bs=1 count=19 skip=5 if=/dev/mtd/5 2>/dev/null | strings | grep "MR3201A-FLF-FON" || ifconfig eth0 |grep -q 00:18:84:**:**:**
+			dd if=/dev/mtd5 2>/dev/null | strings | grep "MR3201A-FLF-FON" || ifconfig eth0 |grep -q 00:18:84:**:**:**
 			[ $? = "0" ] && {
 				device_name="La Fonera (ACCTON MR3201A)"
 				break
@@ -66,7 +60,17 @@ uci_load "webif"
 		if $(uname -m | grep -q "i.86"); then
 			ifconfig eth0 |grep -q 00:0D:B9:**:**:**
 			[ $? = "0" ] && {
-				device_name="PC Engines WRAP"
+				if [ "300" -lt `cat /proc/cpuinfo |grep "cpu MHz" |cut -d':' -f2 |cut -d'.' -f1` ]; then
+					device_name="PC Engines Alix"
+					break
+				else
+					device_name="PC Engines WRAP"
+					break
+				fi
+			}
+			cat /proc/cpuinfo |grep -q "Geode"
+			[ $? = "0" ] && {
+				device_name="Generic AMD Geode Device"
 				break
 			}
 			for id in $(ls -l /sys/devices/pci*/ 2>/dev/null | sed '/^d/!d; s/^.*[[:space:]]//g; /^\./d'); do
@@ -114,39 +118,38 @@ uci_load "webif"
 		}
 		break
 	done
-	if [ -z "$CONFIG_general_firmware_version" -o -z "$CONFIG_general_firmware_name" ]; then
-		#detect firmware info
-		firmware_name=$CONFIG_general_firmware_name
-		firmware_subtitle=$CONFIG_general_firmware_subtitle
-		firmware_version=$CONFIG_general_firmware_version
 
-		if grep -qi "KAMIKAZE" "/etc/banner"; then
-			firmware_name="OpenWrt Kamikaze"
-		else	
-			firmware_name="Unknown Wrt"
-		fi	
-		firmware_subtitle="With X-Wrt Extensions"
+	#detect firmware info
+	firmware_name=$CONFIG_general_firmware_name
+	firmware_subtitle=$CONFIG_general_firmware_subtitle
+	firmware_version=$CONFIG_general_firmware_version
 
-		if [ -f "/etc/openwrt_version" ]; then
-			firmware_version=$(cat "/etc/openwrt_version")
-		elif grep -q "KAMIKAZE" "/etc/banner"; then
-			firmware_version=$(cat /etc/banner |grep KAMIKAZE |cut -d '(' -f 2 |cut -d ')' -f 1)
-		else
-			firmware_version="unknown"
-		fi
+	if grep -qi "KAMIKAZE" "/etc/banner"; then
+		firmware_name="OpenWrt Kamikaze"
+	else	
+		firmware_name="Unknown Wrt"
+	fi	
+	firmware_subtitle="With X-Wrt Extensions"
 
-		#
-		# if any variables changed, commit the change
-		#
+	if [ -f "/etc/openwrt_version" ]; then
+		firmware_version=$(cat "/etc/openwrt_version")
+	elif grep -q "KAMIKAZE" "/etc/banner"; then
+		firmware_version=$(cat /etc/banner |grep KAMIKAZE |cut -d '(' -f 2 |cut -d ')' -f 1)
+	else
+		firmware_version="unknown"
+	fi
 
-		if [ "$CONFIG_general_firmware_version" != "$firmware_version" ] ||
-			[ "$CONFIG_general_firmware_name" != "$firmware_name" ] ||
-			[ "$CONFIG_general_firmware_subtitle" != "$firmware_subtitle" ]; then
-			echo "Committing new firmware id ..."
-			uci_set "webif" "general" "firmware_name" "$firmware_name"
-			uci_set "webif" "general" "firmware_version" "$firmware_version"
-			uci_set "webif" "general" "firmware_subtitle" "$firmware_subtitle"
-		fi
+	#
+	# if any variables changed, commit the change
+	#
+
+	if [ "$CONFIG_general_firmware_version" != "$firmware_version" ] ||
+		[ "$CONFIG_general_firmware_name" != "$firmware_name" ] ||
+		[ "$CONFIG_general_firmware_subtitle" != "$firmware_subtitle" ]; then
+		echo "Committing new firmware id ..."
+		uci_set "webif" "general" "firmware_name" "$firmware_name"
+		uci_set "webif" "general" "firmware_version" "$firmware_version"
+		uci_set "webif" "general" "firmware_subtitle" "$firmware_subtitle"
 	fi
 
 	[ "$device_name" != "$CONFIG_general_device_name" ] && {

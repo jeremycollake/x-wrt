@@ -95,11 +95,15 @@ if [ "$aiccu_installed" = "1" ]; then
 			eval FORM_aiccu_protocol="\$FORM_${cfgs_section}_protocol"
 			eval FORM_aiccu_server="\$FORM_${cfgs_section}_server"
 			eval FORM_aiccu_tls="\$FORM_${cfgs_section}_tls"
+			[ "$FORM_aiccu_tls" = "" ] && FORM_aiccu_tls="0"
 			eval FORM_aiccu_password="\$FORM_${cfgs_section}_password"
 			eval FORM_aiccu_tunnel_id="\$FORM_${cfgs_section}_tunnel_id"
 			eval FORM_aiccu_default_route="\$FORM_${cfgs_section}_default_route"
+			[ "$FORM_aiccu_default_route" = "" ] && FORM_aiccu_default_route="0"
 			eval FORM_aiccu_nat="\$FORM_${cfgs_section}_nat"
+			[ "$FORM_aiccu_nat" = "" ] && FORM_aiccu_nat="0"
 			eval FORM_aiccu_heartbeat="\$FORM_${cfgs_section}_heartbeat"
+			[ "$FORM_aiccu_heartbeat" = "" ] && FORM_aiccu_heartbeat="0"
 			case  "$FORM_aiccu_provider" in
 				other)
 					uci_set "aiccu" "$cfgs_section" "protocol" "$FORM_aiccu_protocol"

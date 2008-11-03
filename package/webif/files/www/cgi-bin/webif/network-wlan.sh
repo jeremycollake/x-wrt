@@ -34,7 +34,7 @@ EOF
 fi
 generate_channels() {
 	iwlist channel 2>&- |grep -q "GHz"
-	if [ "$?" = "0" ]; then
+	if [ "$?" != "0" ]; then
 		is_package_installed kmod-madwifi
 		if [ "$?" = "0" ]; then
 			wlanconfig ath create wlandev wifi0 wlanmode ap >/dev/null
@@ -46,7 +46,7 @@ generate_channels() {
 	echo "BGCHANNELS=\"${BGCHANNELS}\"" > /usr/lib/webif/channels.lst
 	echo "ACHANNELS=\"${ACHANNELS}\"" >> /usr/lib/webif/channels.lst
 	if [ "$cleanup" = "1" ]; then
-		wifi
+		wifi 2>&1
 	fi
 }
 
@@ -205,10 +205,12 @@ for device in $DEVICES; do
 	        config_get FORM_channel $device channel
 	        config_get FORM_maxassoc $device maxassoc
 	        config_get FORM_distance $device distance
-	        config_get FORM_txantenna $device txantenna 0
-	        config_get FORM_rxantenna $device rxantenna 0
+	        config_get_bool FORM_txantenna $device txantenna 0
+	        config_get_bool FORM_rxantenna $device rxantenna 0
 	        config_get_bool FORM_diversity $device diversity 1
 	        config_get_bool FORM_disabled $device disabled 0
+		config_get FORM_antenna $device antenna
+		[ -n $FORM_antenna ] && FORM_antenna=auto
 	else
 		config_get country $device country
 		config_get iftype "$device" type
@@ -221,6 +223,7 @@ for device in $DEVICES; do
 		eval FORM_txantenna="\$FORM_txantenna_$device"
 		eval FORM_rxantenna="\$FORM_rxantenna_$device"
 		eval FORM_disabled="\$FORM_disabled_$device"
+		eval FORM_antenna="\$FORM_antenna_$device"
 	fi
 
 	append forms "start_form|@TR<<Wireless Adapter>> $device @TR<< Configuration>>" "$N"
@@ -285,25 +288,35 @@ for device in $DEVICES; do
 	append forms "$BG_CHANNELS" "$N"
 
 	if [ "$iftype" = "atheros" ]; then
-		mode_diversity="field|@TR<<Diversity>>
-				radio|diversity_$device|$FORM_diversity|1|@TR<<On>>
-				radio|diversity_$device|$FORM_diversity|0|@TR<<Off>>"      	
-		append forms "$mode_diversity" "$N"
-		append forms "helpitem|Diversity" "$N"
-		append forms "helptext|Helptext Diversity#Used on systems with multiple antennas to help improve reception. Disable if you only have one antenna." "$N"
-		append forms "helplink|http://madwifi.org/wiki/UserDocs/AntennaDiversity" "$N"
+		if [ "$_device" != "NanoStation2" -a "$_device" != "NanoStation5" ]; then
+			mode_diversity="field|@TR<<Diversity>>
+					radio|diversity_$device|$FORM_diversity|1|@TR<<On>>
+					radio|diversity_$device|$FORM_diversity|0|@TR<<Off>>"      	
+			append forms "$mode_diversity" "$N"
+			append forms "helpitem|Diversity" "$N"
+			append forms "helptext|Helptext Diversity#Used on systems with multiple antennas to help improve reception. Disable if you only have one antenna." "$N"
+			append forms "helplink|http://madwifi.org/wiki/UserDocs/AntennaDiversity" "$N"
 
-		form_txant="field|@TR<<TX Antenna>>
-			radio|txantenna_$device|$FORM_txantenna|0|@TR<<Auto>>
-			radio|txantenna_$device|$FORM_txantenna|1|@TR<<Antenna 1>>
-			radio|txantenna_$device|$FORM_txantenna|2|@TR<<Antenna 2>>"
-		append forms "$form_txant" "$N"
+			form_txant="field|@TR<<TX Antenna>>
+				radio|txantenna_$device|$FORM_txantenna|0|@TR<<Auto>>
+				radio|txantenna_$device|$FORM_txantenna|1|@TR<<Antenna 1>>
+				radio|txantenna_$device|$FORM_txantenna|2|@TR<<Antenna 2>>"
+			append forms "$form_txant" "$N"
 
-		form_rxant="field|@TR<<RX Antenna>>
-			radio|rxantenna_$device|$FORM_rxantenna|0|@TR<<Auto>>
-			radio|rxantenna_$device|$FORM_rxantenna|1|@TR<<Antenna 1>>
-			radio|rxantenna_$device|$FORM_rxantenna|2|@TR<<Antenna 2>>"
-		append forms "$form_rxant" "$N"
+			form_rxant="field|@TR<<RX Antenna>>
+				radio|rxantenna_$device|$FORM_rxantenna|0|@TR<<Auto>>
+				radio|rxantenna_$device|$FORM_rxantenna|1|@TR<<Antenna 1>>
+				radio|rxantenna_$device|$FORM_rxantenna|2|@TR<<Antenna 2>>"
+			append forms "$form_rxant" "$N"
+		else
+			form_antenna_selection="field|@TR<<Antenna>>
+					select|antenna_$device|$FORM_antenna
+					option|auto|@TR<<Internal Auto>>
+					option|horizontal|@TR<<Internal Horizontal>>
+					option|vertical|@TR<<Internal Vertical>>
+					option|external|@TR<<External>>"
+			append forms "$form_antenna_selection" "$N"
+		fi
 	fi
 
 	#Currently broadcom only.
@@ -465,7 +478,7 @@ for device in $DEVICES; do
 			if [ "$iftype" = "atheros" ]; then
 				append forms "helptext|Helptext Backround Client Scanning#Enables or disables the ablility of a virtual interface to scan for other access points while in client mode. Disabling this allows for higher throughput but keeps your card from roaming to other access points with a higher signal strength." "$N"
 				append forms "helplink|http://madwifi.org/wiki/UserDocs/PerformanceTuning" "$N"
-				doth="field|@TR<<802.11h>>
+				doth="field|@TR<<DFS/TPC>>
 					radio|doth_$vcfg|$FORM_doth|1|@TR<<On>>
 					radio|doth_$vcfg|$FORM_doth|0|@TR<<Off>>"
 				append forms "$doth" "$N"
@@ -489,21 +502,22 @@ for device in $DEVICES; do
 					radio|wmm_$vcfg|$FORM_wmm|1|@TR<<On>>
 					radio|wmm_$vcfg|$FORM_wmm|0|@TR<<Off>>"
 				append forms "$wmm" "$N"
+				if [ "$_device" != "NanoStation2" -a "$_device" != "NanoStation5" ]; then
+					xr="field|@TR<<XR>>
+						radio|xr_$vcfg|$FORM_xr|1|@TR<<On>>
+						radio|xr_$vcfg|$FORM_xr|0|@TR<<Off>>"
+					append forms "$xr" "$N"
 
-				xr="field|@TR<<XR>>
-					radio|xr_$vcfg|$FORM_xr|1|@TR<<On>>
-					radio|xr_$vcfg|$FORM_xr|0|@TR<<Off>>"
-				append forms "$xr" "$N"
+					ar="field|@TR<<AR>>
+						radio|ar_$vcfg|$FORM_ar|1|@TR<<On>>
+						radio|ar_$vcfg|$FORM_ar|0|@TR<<Off>>"
+					append forms "$ar" "$N"
 
-				ar="field|@TR<<AR>>
-					radio|ar_$vcfg|$FORM_ar|1|@TR<<On>>
-					radio|ar_$vcfg|$FORM_ar|0|@TR<<Off>>"
-				append forms "$ar" "$N"
-
-				turbo="field|@TR<<Turbo>>
-					radio|turbo_$vcfg|$FORM_turbo|1|@TR<<On>>
-					radio|turbo_$vcfg|$FORM_turbo|0|@TR<<Off>>"
-				append forms "$turbo" "$N"
+					turbo="field|@TR<<Turbo>>
+						radio|turbo_$vcfg|$FORM_turbo|1|@TR<<On>>
+						radio|turbo_$vcfg|$FORM_turbo|0|@TR<<Off>>"
+					append forms "$turbo" "$N"
+				fi
 
 				rate="field|@TR<<TX Rate>>
 					select|rate_$vcfg|$FORM_rate
@@ -761,11 +775,23 @@ for device in $DEVICES; do
 				//
 				if (isset('mode_$vcfg','adhoc'))
 				{
-					if (isset('encryption_$vcfg','psk'))
+					if (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2'))
 					{
-						document.getElementById('encryption_$vcfg').value = 'off';
+						document.getElementById('encryption_$vcfg').value = 'none';
 					}
 				}
+
+				//
+				//wpa_supplicant does not support psk+psk2
+				//
+				if (isset('mode_$vcfg','sta') && ('$iftype'=='atheros'))
+				{
+					if (isset('encryption_$vcfg','psk-mixed/tkip+aes'))
+					{
+						document.getElementById('encryption_$vcfg').value = 'none';
+					}
+				}
+
 				//
 				// force encryption listbox to no selection if user tries
 				// to set WPA (Radius) with anything but AP mode.
@@ -774,7 +800,7 @@ for device in $DEVICES; do
 				{
 					if (isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2'))
 					{
-						document.getElementById('encryption_$vcfg').value = 'off';
+						document.getElementById('encryption_$vcfg').value = 'none';
 					}
 				}
 				v = (isset('ap_mode_$device','11b') || isset('ap_mode_$device','11bg') || isset('ap_mode_$device','11g') || ('$iftype'=='broadcom'));
@@ -789,7 +815,7 @@ for device in $DEVICES; do
 				set_visible('bgscan_form_$vcfg', v);
 				v = (isset('mode_$vcfg','ap'));
 				set_visible('isolate_form_$vcfg', v);
-				v = (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2') || isset('encryption_$vcfg','psk+psk2'));
+				v = (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2') || isset('encryption_$vcfg','psk+psk2')  || isset('encryption_$vcfg','psk-mixed/tkip+aes'));
 				set_visible('wpapsk_$vcfg', v);
 				v = (('$iftype'=='broadcom') && (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2') || isset('encryption_$vcfg','psk+psk2') || isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2') || isset('encryption_$vcfg','wpa+wpa2')));
 				set_visible('install_nas_$vcfg', v);
@@ -859,6 +885,7 @@ EOF
 				eval FORM_txantenna="\$FORM_txantenna_$device"
 				eval FORM_rxantenna="\$FORM_rxantenna_$device"
 				eval FORM_disabled="\$FORM_disabled_$device"
+				eval FORM_antenna="\$FORM_antenna_$device"
 
 				uci_set "wireless" "$device" "agmode" "$FORM_ap_mode"
 				uci_set "wireless" "$device" "channel" "$FORM_channel"
@@ -868,6 +895,7 @@ EOF
 				uci_set "wireless" "$device" "txantenna" "$FORM_txantenna"
 				uci_set "wireless" "$device" "rxantenna" "$FORM_rxantenna"
 				uci_set "wireless" "$device" "disabled" "$FORM_disabled"
+				uci_set "wireless" "$device" "antenna" "$FORM_antenna"
 
 				for vcfg in $vface; do
      		  			config_get FORM_device $vcfg device
@@ -923,7 +951,7 @@ EOF
 						
 						case "$FORM_encryption" in
 							wep) uci_set "wireless" "$vcfg" "key" "$FORM_wep_key";;
-							psk|psk2|psk+psk2) uci_set "wireless" "$vcfg" "key" "$FORM_wpa_psk";;
+							psk|psk2|psk+psk2|*mixed*) uci_set "wireless" "$vcfg" "key" "$FORM_wpa_psk";;
 							wpa|wpa2|wpa+wpa2) uci_set "wireless" "$vcfg" "key" "$FORM_radius_key";;
 						esac
 						uci_set "wireless" "$vcfg" "key1" "$FORM_key1"
