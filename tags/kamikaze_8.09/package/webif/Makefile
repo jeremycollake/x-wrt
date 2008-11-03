@@ -185,7 +185,7 @@ define Package/webif/install
 	$(INSTALL_DATA) $(PKG_BUILD_DIR)/languages.root $(1)/etc/
 	$(INSTALL_BIN) ./ipkg/webif.preinst $(1)/CONTROL/preinst
 	$(INSTALL_BIN) ./ipkg/webif.postinst $(1)/CONTROL/postinst
-	$(SED) 's,$$$$S,$(BOARD)-$(KERNEL),g' $(1)/CONTROL/postinst
+	$(SED) 's,$$$$S,$(BOARD),g' $(1)/CONTROL/postinst
 	chmod -R 755 $(1)/*
 	rm -rf \
 		$(1)/usr/lib/webif/lang/ \

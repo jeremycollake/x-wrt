@@ -19,6 +19,9 @@ rootdir=/cgi-bin/webif
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
 
+uci_load "webif"
+_device="$CONFIG_general_device_name"
+
 categories() {
 	grep '##WEBIF' $cgidir/.categories $cgidir/*.sh 2>/dev/null | \
 		awk -v "selected=$1" \
@@ -114,7 +117,6 @@ header() {
 	}
 
 	_category="$1"
-	uci_load "webif"
 	_firmware_version="$CONFIG_general_firmware_version"
 	_firmware_name="$CONFIG_general_firmware_name"
 	_firmware_subtitle="$CONFIG_general_firmware_subtitle"
@@ -203,7 +205,7 @@ EOF
 					sleep 1
 					echo "$FORM_passwd2"
 				) | passwd root 2>&1 && apply_passwd
-				echo '</pre>'
+				echo '</pre><meta http-equiv="refresh" content="4; URL=/cgi-bin/webif/info.sh">'
 				footer
 				exit
 			} || {
