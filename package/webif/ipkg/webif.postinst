@@ -77,13 +77,18 @@ fi
 if [ -n "${IPKG_INSTROOT}" ]; then
 	repo="$S"
 	if [ "$revision" = "" ]; then
-		AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/8.09_RC1/$repo/packages"
-		AddRepository "OpenWrt" "http://downloads.openwrt.org/kamikaze/8.09_RC1/$repo/packages"
+		AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/$repo/packages"
+		AddRepository "OpenWrt" "http://downloads.openwrt.org/kamikaze/snapshots/$repo/packages"
 		echo 'dest root /' >> "${IPKG_INSTROOT}/etc/opkg.conf"
 		echo 'dest ram /tmp' >> "${IPKG_INSTROOT}/etc/opkg.conf"
 		echo 'lists_dir ext /var/opkg-lists' >> "${IPKG_INSTROOT}/etc/opkg.conf"
-	else
+	elif [ "$revision" = "8.09" ]; then
+		revision="8.09_RC1"
 		AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/$repo/packages"
+		AddRepository "OpenWrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/$repo/packages"
+		echo 'dest root /' >> "${IPKG_INSTROOT}/etc/opkg.conf"
+		echo 'dest ram /tmp' >> "${IPKG_INSTROOT}/etc/opkg.conf"
+		echo 'lists_dir ext /var/opkg-lists' >> "${IPKG_INSTROOT}/etc/opkg.conf"
 	fi
 fi
 
