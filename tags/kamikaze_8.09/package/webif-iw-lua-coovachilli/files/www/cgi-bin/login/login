@@ -128,6 +128,10 @@ page.container.content:add([[
                 <td id="originalURLLabel" class="chilliValueLabel"><b>Original URL</b></td>
                 <td id="originalURL" class="chilliValue">N/A</td>
               </tr>
+              <tr id="leftTimeRow">
+                <td id="leftTimeLabel" class="chilliValueLabel"><b>Left Time</b></td>
+                <td id="leftTime" class="chilliValue">N/A</td>
+              </tr>
             </table>
           </div>
         </div> <!-- chillipage -->
