@@ -8,7 +8,6 @@
 #	Services control page.
 #       This page enables the user to enable/disabled/start 
 #		and stop the services in the directory /etc/init.d
-#       should be synchronized between branches
 #
 # Author(s) [in order of work date]:
 #       m4rc0 <jansssenmaj@gmail.com>
