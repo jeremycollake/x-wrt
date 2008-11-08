@@ -27,17 +27,37 @@
 #       /usr/lib/webif/common.awk
 #       /usr/lib/webif/browser.awk
 #       /usr/lib/webif/editor.awk
-#
+# 
+
+
+ls /etc/rc.d > /tmp/rc.d 2>/dev/null
+ls /etc/init.d > /tmp/init.d 2>/dev/null
+
 
 header "System" "Service" "@TR<<Services>>" '' "$SCRIPT_NAME"
-echo "<table>"
-ls -l /etc/init.d/ | awk 'NF == 9 {print "<tr><td>",$9,"</td><td>",$7,$6,$8,"</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=prio&queue=normal&torrent=" $9 "\">prio</a>","</td><td>","<a href=\"freeloader-status.sh?action=remove&queue=normal&torrent=" $9 "\">remove</a>","</td></tr>"};NF > 9 {filename=$9;for (i=10;i<= NF; i++){filename = filename " " $i};print "<tr><td>",filename,"</td><td>",$7,$6,$8,"</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=prio&queue=normal&torrent="filename"\">prio</a>","</td><td>","<a href=\"freeloader-status.sh?action=remove&queue=normal&torrent="filename"\">remove</a>","</td></tr>"}'
+
+
+echo "<table class=\"packages\">"
+
+
+for line in `cat /tmp/init.d`; do
+
+	if [ "`cat /tmp/rc.d | grep $line`" != "" ]; then
+		echo "<tr class=\"packages\"><td><img width=\"15\" src=\"/images/service_enabled.png\" alt=\"Service Enabled\" /></td><td>&nbsp;</td><td>$line</td>" 
+	else
+		echo "<tr class=\"packages\"><td><img width=\"15\" src=\"/images/service_disabled.png\" alt=\"Service Disabled\" /></td><td>&nbsp;</td><td>$line</td>" 
+	fi
+
+done
+
+
+
 echo "</table>"
 
-echo "<table border=1>"
-ls -l /etc/init.d/fstab | awk 'NF == 9 {print "<tr><td>",$9,"</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=prio&queue=normal&torrent=" $9 "\">prio</a>","</td><td>","<a href=\"freeloader-status.sh?action=remove&queue=normal&torrent=" $9 "\">remove</a>","</td></tr>"};NF > 9 {filename=$9;for (i=10;i<= NF; i++){filename = filename " " $i};print "<tr><td>",filename,"</td><td>",$7,$6,$8,"</td><td>","&nbsp;","</td><td>","<a href=\"freeloader-status.sh?action=prio&queue=normal&torrent="filename"\">prio</a>","</td><td>","<a href=\"freeloader-status.sh?action=remove&queue=normal&torrent="filename"\">remove</a>","</td></tr>"}'
-echo "</table>"
 
+
+rm /tmp/rc.d > /dev/null 2>&1
+rm /tmp/init.d > /dev/null 2>&1
 
 footer ?>
 <!--
