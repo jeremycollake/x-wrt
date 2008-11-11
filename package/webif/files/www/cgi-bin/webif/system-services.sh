@@ -24,7 +24,7 @@
 # Required components:
 # 
 
-header "System" "Service" "@TR<<Services>>" '' "$SCRIPT_NAME"
+header "System" "Services" "@TR<<Services>>" '' "$SCRIPT_NAME"
 
 if [ "$FORM_service" != "" ] && [ "$FORM_action" != "" ]; then
 	/etc/init.d/$FORM_service $FORM_action > /dev/null 2>&1
