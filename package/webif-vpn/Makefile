@@ -27,9 +27,6 @@ define Package/webif-vpn/install
 	chmod -R 755 $(1)/*
 	rm -rf $(1)/usr/lib/webif/lang/
 	rm -f $(1)/www/cgi-bin/webif/*.wip
-	$(CP) -a ./ipkg/webif-vpn.postinst $(1)/CONTROL/preinst
-	$(CP) -a ./ipkg/webif-vpn.postrm $(1)/CONTROL/postrm
-	chmod 755 $(1)/CONTROL/*inst
 	find $(1) -name CVS | xargs rm -rf
 	find $(1) -name .svn | xargs rm -rf
 	find $(1) -name *~ | xargs rm -rf
