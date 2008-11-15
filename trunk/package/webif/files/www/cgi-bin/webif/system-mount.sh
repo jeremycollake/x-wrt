@@ -13,6 +13,7 @@
 #
 # Major revisions:
 #		2008-11-12	Initial release
+#		2008-11-15  Made editable
 #
 # NVRAM variables referenced:
 #       none
@@ -114,7 +115,7 @@ if (doAction == 'update'){
 
 if (doAction == 'add'){
 	
-	document.location.href='/cgi-bin/webif/system-mount.sh?target='+document.getElementById('txtTarget').value+'&device='+document.getElementById('txtDevice').value+'&fstype='+document.getElementById('txtFStype').value+'&options='+document.getElementById('txtOptions').value+'&enabled='+document.getElementById('txtEnabled').value;
+	document.location.href='/cgi-bin/webif/system-mount.sh?target='+escape(document.getElementById('txtTarget').value)+'&device='+escape(document.getElementById('txtDevice').value)+'&fstype='+escape(document.getElementById('txtFStype').value)+'&options='+escape(document.getElementById('txtOptions').value)+'&enabled='+escape(document.getElementById('txtEnabled').value);
 	
 	}
 
