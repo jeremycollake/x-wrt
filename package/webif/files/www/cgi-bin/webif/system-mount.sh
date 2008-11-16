@@ -27,6 +27,7 @@
 
 header "System" "Mountpoints" "@TR<<Mountpoints>>" '' "$SCRIPT_NAME"
 
+# Add new mountpint
 if ! empty "$FORM_target"; then
 	uci_add "fstab" "mount" ""; mountpoint="$CONFIG_SECTION"
 	uci_set "fstab" "$mountpoint" "target" "$FORM_target"
@@ -37,6 +38,7 @@ if ! empty "$FORM_target"; then
 	FORM_target=""
 fi
 
+# Remove selected mountpoint
 if ! empty "$FORM_remove_mountpoint"; then
 	uci_remove "fstab" "$FORM_remove_mountpoint"
 fi
@@ -55,6 +57,7 @@ config_cb() {
 	        ;;	esac
 }
 
+# change rowcolors
 get_tr() {
 	if equal "$cur_color" "odd"; then
 		cur_color="even"
@@ -71,6 +74,7 @@ cat <<EOF
 <script type="text/javascript" language="JavaScript"><!--
  
 var cX = 0; var cY = 0; var rX = 0; var rY = 0; var MountPoint = ''; var SwapMountPoint = ''; ConfigChanged = false;
+
 function UpdateCursorPosition(e){ cX = e.pageX; cY = e.pageY;}
 function UpdateCursorPositionDocAll(e){ cX = event.clientX; cY = event.clientY;}
 
@@ -208,6 +212,7 @@ function SetConfigChanged() {
 //--></script>
 EOF
 
+# floating div for editing the mountpoints
 echo "<div id=\"EditWindow\" style=\"display:none;position:absolute;border-style: solid;background-color: white;padding: 5px;\">"
 echo "<table style=\"text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\" summary=\"@TR<<Mountpoints>>\">"
 echo "<tr><td width=\"100\"><strong>Target</strong></td><td colspan=\"2\"><input type=\"text\" id=\"txtTarget\" name=\"txtTarget\" value=\"\" onChange=\"SetConfigChanged()\" /></td></tr>"
@@ -223,6 +228,7 @@ echo "</tr>"
 echo "</table>"
 echo "</div>"
 
+# floating div for editing swap
 echo "<div id=\"EditSwapWindow\" style=\"display:none;position:absolute;border-style: solid;background-color: white;padding: 5px;\">"
 echo "<table style=\"text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\" summary=\"@TR<<swap>>\">"
 echo "<tr><td width=\"100\"><strong>Device</strong></td><td colspan=\"2\"><input type=\"text\" id=\"txtDeviceSwap\" name=\"txtDeviceSwap\" value=\"\" onChange=\"SetConfigChanged()\" /></td></tr>"
@@ -235,10 +241,6 @@ echo "</table>"
 echo "</div>"
 
 uci_load fstab
-
-if [ $FORM_submit != "" ]; then
-	uci_set fstab 'mount' 'enabled' '0'
-fi
 
 cur_color="odd"
 echo "<h3><strong>@TR<<Mountpoint configurations>></strong></h3>"
@@ -282,8 +284,10 @@ for mountpoint in $MOUNTPOINTS; do
 	else
 		ENABLEDIMAGE="<img width=\"17\" src=\"/images/service_disabled.png\" alt=\"Mountpoint Disabled\" />"
 	fi
-
-	FORM_escOPTIONS=`echo "$FORM_OPTIONS" | sed -e 's/"/%22/g' | sed -e 's/\\\/\\\\\\\/g'` # de '\\\\\\\' --> \ = voor escape SH, \\ wordt \ voor escape CAT, dan \\\\ om java te escapen om \\ te krijgen
+	
+	#                  1              23                                       4567
+	# de '\\\\\\\' --> \ = escape SH, \\ becomes \ which will escape CAT, last: \\\\ om java te escapen om \\ te krijgen
+	FORM_escOPTIONS=`echo "$FORM_OPTIONS" | sed -e 's/"/%22/g' | sed -e 's/\\\/\\\\\\\/g'` 
 
 	get_tr
 	echo $tr"<td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"5\">$ENABLEDIMAGE</td><td width=\"100\"><strong>Target</strong></td><td>$FORM_TARGET</td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"5\"><a href=\"javascript:OpenEditWindow('EditWindow','$FORM_TARGET','$FORM_DEVICE','$FORM_FSTYPE','$FORM_escOPTIONS','$FORM_ENABLED','$mountpoint')\">@TR<<edit>></a></td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"5\"><a href=\"javascript:RemoveMount('$mountpoint')\">@TR<<remove>></a></td></tr>"
