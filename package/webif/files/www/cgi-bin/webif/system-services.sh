@@ -26,6 +26,19 @@
 
 header "System" "Services" "@TR<<Services>>" '' "$SCRIPT_NAME"
 
+
+# change rowcolors
+get_tr() {
+	if equal "$cur_color" "odd"; then
+		cur_color="even"
+		tr="<tr>"
+	else
+		cur_color="odd"
+		tr="<tr class=\"odd\">"
+	fi
+}
+
+
 #check if a service with an action is selected
 if [ "$FORM_service" != "" ] && [ "$FORM_action" != "" ]; then
 	/etc/init.d/$FORM_service $FORM_action > /dev/null 2>&1
@@ -35,14 +48,14 @@ fi
 ls /etc/rc.d > /tmp/rc.d 2>/dev/null
 ls /etc/init.d > /tmp/init.d 2>/dev/null
 
-echo "<table class=\"packages\" border=\"0\" width=\"100%\">"
+echo "<table style=\"width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\" summary=\"@TR<<Services>>\">"
 echo "<tr>"
 echo "<td>"
 
-echo "<table border=\"0\">"
+echo "<table style=\"margin-left: 2.5em; text-align: left;\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\" summary=\"@TR<<Services>>\">"
 
 # set the color-switch
-rowselect="true"
+cur_color="odd"
 
 #for each service in init.d.....
 for service in `cat /tmp/init.d`; do
@@ -51,15 +64,8 @@ for service in `cat /tmp/init.d`; do
 	if [ "$service" != "rcS" ]; then
 		
 		# select the right color
-		if [ "$rowselect" == "false" ]; then
-			color="#E5E7E9"
-			rowselect="true"
-		else
-			color="#FFFFFF"
-			rowselect="false"
-		fi
-		
-		echo "<tr bgcolor=\"$color\">"
+		get_tr
+		echo $tr
 
 		#check if current $service is in the rc.d list
 		if [ "`cat /tmp/rc.d | grep $service`" != "" ]; then
@@ -95,7 +101,7 @@ echo "</table>"
 echo "</td>"
 
 echo "<td valign=\"top\">"
-echo "<table border=\"0\">"
+echo "<table style=\"margin-left: 2.5em; text-align: left;\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\" summary=\"@TR<<Services>>\">"
 echo "<tr>"
 echo "<td><img width=\"17\" src=\"/images/service_enabled.png\" alt=\"Service Enabled\" /></td>"
 echo "<td>@TR<<system_services_service_enabled#Service Enabled>></td>"
