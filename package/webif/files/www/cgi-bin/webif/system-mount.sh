@@ -141,32 +141,18 @@ function RemoveMount(mountpoint) {
 	document.location.href='/cgi-bin/webif/system-mount.sh?remove_mountpoint='+mountpoint;
 	}
 
-function OpenEditWindow(d,TARGET,DEVICE,FSTYPE,OPTIONS,ENABLED,MOUNTPOINT) {
+function OpenEditWindow(d,MOUNTPOINT) {
 if(d.length < 1) { return; }
 
-OPTIONS = replaceAll(OPTIONS, "%22" , "\\"" );
+document.getElementById('txtTarget').value = document.getElementById('TARGET_'+MOUNTPOINT).value;
+document.getElementById('txtDevice').value = document.getElementById('DEVICE_'+MOUNTPOINT).value;
+document.getElementById('txtFStype').value = document.getElementById('FSTYPE_'+MOUNTPOINT).value;
+document.getElementById('txtOptions').value = document.getElementById('OPTIONS_'+MOUNTPOINT).value;
+document.getElementById('txtEnabled').value = document.getElementById('ENABLED_'+MOUNTPOINT).value;
 
-if ( MOUNTPOINT == 'newMount' ){
-	document.getElementById('txtTarget').value = document.getElementById('TARGET_newMount').value;
-	document.getElementById('txtDevice').value = document.getElementById('DEVICE_newMount').value;
-	document.getElementById('txtFStype').value = document.getElementById('FSTYPE_newMount').value;
-	document.getElementById('txtOptions').value = document.getElementById('OPTIONS_newMount').value;
-	document.getElementById('txtEnabled').value = document.getElementById('ENABLED_newMount').value;
 
-	document.getElementById('EditWindowAdd').style.display = "block";
-	document.getElementById('EditWindowUpdate').style.display = "none";
-	}
-
-	else{
-	document.getElementById('txtTarget').value = TARGET;
-	document.getElementById('txtDevice').value = DEVICE;
-	document.getElementById('txtFStype').value = FSTYPE;
-	document.getElementById('txtOptions').value = OPTIONS;
-	document.getElementById('txtEnabled').value = ENABLED;
-
-	document.getElementById('EditWindowAdd').style.display = "none";
-	document.getElementById('EditWindowUpdate').style.display = "block";
-	}
+document.getElementById('EditWindowAdd').style.display = "none";
+document.getElementById('EditWindowUpdate').style.display = "block";
 
 var dd = document.getElementById(d);
 AssignPosition(dd);
@@ -175,11 +161,12 @@ dd.style.display = "block";
 MountPoint = MOUNTPOINT;
 }
 
-function OpenEditSwapWindow(d,DEVICE,ENABLED,SWAP) {
+function OpenEditSwapWindow(d, SWAP) {
 if(d.length < 1) { return; }
 
-document.getElementById('txtDeviceSwap').value = DEVICE;
-document.getElementById('txtEnabledSwap').value = ENABLED;
+document.getElementById('txtDeviceSwap').value = document.getElementById('DEVICESWAP_'+SWAP).value;
+document.getElementById('txtEnabledSwap').value = document.getElementById('ENABLEDSWAP_'+SWAP).value;
+
 
 var dd = document.getElementById(d);
 AssignPosition(dd);
@@ -287,28 +274,22 @@ for mountpoint in $MOUNTPOINTS; do
 	
 	#                  1              23                                       4567
 	# de '\\\\\\\' --> \ = escape SH, \\ becomes \ which will escape CAT, last: \\\\ om java te escapen om \\ te krijgen
-	FORM_escOPTIONS=`echo "$FORM_OPTIONS" | sed -e 's/"/%22/g' | sed -e 's/\\\/\\\\\\\/g'` 
+	#FORM_escOPTIONS=`echo "$FORM_OPTIONS" | sed -e 's/"/%22/g' | sed -e 's/\\\/\\\\\\\/g'` 
+	
+	FORM_escOPTIONS=`echo "$FORM_OPTIONS" | sed -e 's/"/\&#34;/g'` 
 
 	get_tr
-	echo $tr"<td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"5\">$ENABLEDIMAGE</td><td width=\"100\"><strong>Target</strong></td><td>$FORM_TARGET</td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"5\"><a href=\"javascript:OpenEditWindow('EditWindow','$FORM_TARGET','$FORM_DEVICE','$FORM_FSTYPE','$FORM_escOPTIONS','$FORM_ENABLED','$mountpoint')\">@TR<<edit>></a></td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"5\"><a href=\"javascript:RemoveMount('$mountpoint')\">@TR<<remove>></a></td></tr>"
-	echo $tr"<td width=\"100\"><strong>Device</strong></td><td>$FORM_DEVICE</td></tr>"
-	echo $tr"<td width=\"100\"><strong>FStype</strong></td><td>$FORM_FSTYPE</td></tr>"
-	echo $tr"<td width=\"100\"><strong>Options</strong></td><td>$FORM_OPTIONS</td></tr>"
-	echo $tr"<td width=\"100\"><strong>Enabled</strong></td><td>$FORM_ENABLED</td></tr>"
+	echo $tr"<td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"5\">$ENABLEDIMAGE</td><td width=\"100\"><strong>Target</strong></td><td>$FORM_TARGET</td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"5\"><a href=\"javascript:OpenEditWindow('EditWindow','$mountpoint')\">@TR<<edit>></a></td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"5\"><a href=\"javascript:RemoveMount('$mountpoint')\">@TR<<remove>></a></td><td><input id=\"TARGET_$mountpoint\" type=\"hidden\" name=\"TARGET_$mountpoint\" value=\"$FORM_TARGET\" /></td></tr>"
+	echo $tr"<td width=\"100\"><strong>Device</strong></td><td>$FORM_DEVICE</td><td><input id=\"DEVICE_$mountpoint\" type=\"hidden\" name=\"DEVICE_$mountpoint\" value=\"$FORM_DEVICE\" /></td></tr>"
+	echo $tr"<td width=\"100\"><strong>FStype</strong></td><td>$FORM_FSTYPE</td><td><input id=\"FSTYPE_$mountpoint\" type=\"hidden\" name=\"FSTYPE_$mountpoint\" value=\"$FORM_FSTYPE\" /></td></tr>"
+	echo $tr"<td width=\"100\"><strong>Options</strong></td><td>$FORM_OPTIONS</td><td><input id=\"OPTIONS_$mountpoint\" type=\"hidden\" name=\"OPTIONS_$mountpoint\" value=\"$FORM_escOPTIONS\" /></td></tr>"
+	echo $tr"<td width=\"100\"><strong>Enabled</strong></td><td>$FORM_ENABLED</td><td><input id=\"ENABLED_$mountpoint\" type=\"hidden\" name=\"ENABLED_$mountpoint\" value=\"$FORM_ENABLED\" /></td></tr>"
 	echo "<tr><td colspan=\"5\"><img alt=\"\" height=\"5\" width=\"1\" src=\"/images/pixel.gif\" /></td></tr>"
 done
 
-echo "<tr><td colspan=\"3\">&nbsp;</td><td>&nbsp;</td><td align=\"center\"><a href=\"javascript:OpenEditWindow('EditWindow','','','','','','newMount')\">@TR<<add>></a></td></tr>"
+echo "<tr><td colspan=\"3\">&nbsp;</td><td>&nbsp;</td><td align=\"center\"><a href=\"javascript:OpenEditWindow('EditWindow','newMount')\">@TR<<add>></a></td></tr>"
 
 echo "</table><br />"
-
-for mountpoint in $MOUNTPOINTS; do
-	echo "<input id=\"TARGET_$mountpoint\" type=\"hidden\" name=\"TARGET_$mountpoint\" value=\"\" />"
-	echo "<input id=\"DEVICE_$mountpoint\" type=\"hidden\" name=\"DEVICE_$mountpoint\" value=\"\" />"
-	echo "<input id=\"FSTYPE_$mountpoint\" type=\"hidden\" name=\"FSTYPE_$mountpoint\" value=\"\" />"
-	echo "<input id=\"OPTIONS_$mountpoint\" type=\"hidden\" name=\"OPTIONS_$mountpoint\" value=\"\" />"
-	echo "<input id=\"ENABLED_$mountpoint\" type=\"hidden\" name=\"ENABLED_$mountpoint\" value=\"\" />"
-done
 
 echo "<input id=\"TARGET_newMount\" type=\"hidden\" name=\"TARGET_newMount\" value=\"\" />"
 echo "<input id=\"DEVICE_newMount\" type=\"hidden\" name=\"DEVICE_newMount\" value=\"\" />"
@@ -347,17 +328,11 @@ for swap in $SWAP; do
 	fi
 
 	get_tr
-	echo $tr"<td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"2\">$ENABLEDIMAGE</td><td width=\"100\"><strong>Device</strong></td><td>$FORM_DEVICESWAP</td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"5\"><a href=\"javascript:OpenEditSwapWindow('EditSwapWindow','$FORM_DEVICESWAP','$FORM_ENABLEDSWAP','$swap')\">@TR<<edit>></a></td></tr>"
-	echo $tr"<td width=\"100\"><strong>Enabled</strong></td><td>$FORM_ENABLEDSWAP</td></tr>"
+	echo $tr"<td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"2\">$ENABLEDIMAGE</td><td width=\"100\"><strong>Device</strong></td><td>$FORM_DEVICESWAP</td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"5\"><a href=\"javascript:OpenEditSwapWindow('EditSwapWindow','$swap')\">@TR<<edit>></a></td><td><input id=\"DEVICESWAP_$swap\" type=\"hidden\" name=\"DEVICESWAP_$swap\" value=\"$FORM_DEVICESWAP\" /></td></tr>"
+	echo $tr"<td width=\"100\"><strong>Enabled</strong></td><td>$FORM_ENABLEDSWAP</td><td><input id=\"ENABLEDSWAP_$swap\" type=\"hidden\" name=\"ENABLEDSWAP_$swap\" value=\"$FORM_ENABLEDSWAP\" /></td></tr>"
 	echo "<tr><td colspan=\"3\"><img alt=\"\" height=\"5\" width=\"1\" src=\"/images/pixel.gif\" /></td></tr>"
 done
 echo "</table>"
-
-for swap in $SWAP; do
-	echo "<input id=\"DEVICESWAP_$swap\" type=\"hidden\" name=\"DEVICESWAP_$swap\" value=\"\" />"
-	echo "<input id=\"ENABLEDSWAP_$swap\" type=\"hidden\" name=\"ENABLEDSWAP_$swap\" value=\"\" />"
-done
-
 
 footer ?>
 <!--
