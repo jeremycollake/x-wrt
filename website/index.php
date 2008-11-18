@@ -80,9 +80,8 @@ $rss = fetch_rss('http://forum.x-wrt.org/index.php/board,3.0.html?type=rss;actio
       </h1><p><strong>X-Wrt</strong> is a set of packages and patches to enhance the end user experience of OpenWrt. It is NOT a fork of OpenWrt.
         We work in conjunction with the OpenWrt developers to extend OpenWrt.</p>
 	<p>
-        Our packages currently work with the latest public release of OpenWrt, Kamikaze 7.09, and the previous release, White Russian.
-        The packages for White Russian are the most stable, and we provide updated Whiterussian images with X-Wrt preinstalled. We also provide Kamikaze
-        images with X-Wrt preinstalled. Please see the Downloads/Install page for more information.
+        Our packages currently work with the latest public release of OpenWrt, Kamikaze 7.09, and the previous release, White Russian. We are working actively towards a stable version of the webif for OpenWrt's next release 8.09. There are currently snapshots of 8.09RC1 uploaded, you can help by testing them and reporting bugs.
+        Please see the Downloads/Install page for more information.
 	</p>
 	<p>More on the <a href="about.html">about page</a></p>
 
