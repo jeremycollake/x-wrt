@@ -36,7 +36,6 @@ if [ "$FORM_button_add_network" != "" ]; then
 	else
 		uci_add "network" "interface" "$FORM_add_network"
 		uci_set "network" "$FORM_add_network" "proto" "none"
-		submit="0"
 	fi
 fi
 
@@ -197,6 +196,12 @@ for interface in $network; do
 		config_get_bool FORM_defaultroute $interface defaultroute 1
 		config_get FORM_ip6addr $interface ip6addr
 		config_get FORM_gateway6 $interface ip6gw
+		config_get FORM_dns $interface dns
+		eval FORM_dnsremove="\$FORM_${interface}_dnsremove"
+		if [ "$FORM_dnsremove" != "" ]; then
+			list_remove FORM_dns "$FORM_dnsremove"
+			uci_set "network" "$interface" "dns" "$FORM_dns"
+		fi
 	else
 		eval FORM_proto="\$FORM_${interface}_proto"
 		eval FORM_type="\$FORM_${interface}_type"
@@ -220,22 +225,62 @@ for interface in $network; do
 		eval FORM_defaultroute="\$FORM_${interface}_defaultroute"
 		eval FORM_ip6addr="\$FORM_${interface}_ip6addr"
 		eval FORM_gateway6="\$FORM_${interface}_gateway6"
-	fi
-	config_get FORM_dns $interface dns
-	eval FORM_dnsadd="\$FORM_${interface}_dnsadd"
-	eval FORM_dnsremove="\$FORM_${interface}_dnsremove"
-	eval FORM_dnssubmit="\$FORM_${interface}_dnssubmit"
-	LISTVAL="$FORM_dns"
-	handle_list "$FORM_dnsremove" "$FORM_dnsadd" "$FORM_dnssubmit" 'ip|FORM_dnsadd|@TR<<DNS Address>>|required' && {
-		FORM_dns="$LISTVAL"
-		if [ " " = "$FORM_dns" ]; then
-			FORM_dns=""
-			uci_remove "network" "$interface" dns
-		else
-			uci_set "network" "$interface" "dns" "$FORM_dns"
+		eval FORM_dnsadd="\$FORM_${interface}_dnsadd"
+		config_get FORM_dns $interface dns
+		[ $FORM_dnsadd != "" ] && FORM_dns="$FORM_dns $FORM_dnsadd"
+		if [ "$FORM_defaultroute" = "" ]; then
+			FORM_defaultroute=0
 		fi
-		FORM_dnsadd=""
-	}
+		validate <<EOF
+mac|FORM_${interface}_macaddr|$interface @TR<<MAC Address>>||$FORM_macaddr
+ip|FORM_${interface}_ipaddr|$interface @TR<<IP Address>>||$FORM_ipaddr
+netmask|FORM_${interface}_netmask|$interface @TR<<WAN Netmask>>||$FORM_netmask
+ip|FORM_${interface}_gateway|$interface @TR<<Default Gateway>>||$FORM_gateway
+ip|FORM_${interface}_pptp_server|$interface @TR<<PPTP Server IP>>||$FORM_pptp_server
+ip|FORM_dnsadd|@TR<<DNS Address>>|required||$FORM_dnsadd
+EOF
+		equal "$?" 0 && {
+			uci_set "network" "$interface" "proto" "$FORM_proto"
+			[ "$FORM_type" = "" ] && uci_remove "network" "$interface" "type"
+			[ "$FORM_type" != "" ] && uci_set "network" "$interface" "type" "$FORM_type"
+			uci_set "network" "$interface" "macaddr" "$FORM_macaddr"
+			case "$FORM_proto" in
+				pptp)
+					uci_set "network" "$interface" "server" "$FORM_pptp_server" ;;
+				wwan)
+					if ! equal "$FORM_pincode" "-@@-"; then
+						uci_set "network" "$interface" "pincode" "$FORM_pincode"
+					fi
+					uci_set "network" "$interface" "service" "$FORM_service"
+					uci_set "network" "$interface" "country" "$FORM_country"
+					uci_set "network" "$interface" "apn" "$FORM_apn" ;;
+			esac
+			case "$FORM_proto" in
+				pppoe|pppoa|pptp|wwan)
+					uci_set "network" "$interface" "username" "$FORM_username"
+					uci_set "network" "$interface" "password" "$FORM_passwd"
+					uci_set "network" "$interface" "vpi" "$FORM_vpi"
+					uci_set "network" "$interface" "vci" "$FORM_vci"
+					uci_set "network" "$interface" "mtu" "$FORM_mtu"
+					if [ "$FORM_ppp_redial" = "persist" ]; then
+						uci_set "network" "$interface" "keepalive" "$FORM_keepalive"
+						uci_remove "network" "$interface" "demand"
+					else
+						uci_remove "network" "$interface" "keepalive"
+						uci_set "network" "$interface" "demand" "$FORM_demand"
+					fi
+					uci_set "network" "$interface" "defaultroute" "$FORM_defaultroute"
+					uci_set "network" "$interface" "ppp_redial" "$FORM_ppp_redial";;
+			esac
+
+			uci_set "network" "$interface" "ipaddr" "$FORM_ipaddr"
+			uci_set "network" "$interface" "ip6addr" "$FORM_ip6addr"
+			uci_set "network" "$interface" "netmask" "$FORM_netmask"
+			uci_set "network" "$interface" "gateway" "$FORM_gateway"
+			uci_set "network" "$interface" "ip6gw" "$FORM_gateway6"
+			uci_set "network" "$interface" "dns" "$FORM_dns"
+		}
+	fi
 
 	network_options="start_form|$interface @TR<<Configuration>>
 	field|@TR<<Connection Type>>
@@ -372,11 +417,6 @@ for interface in $network; do
 	document.getElementById(\"${interface}_passwd\").value = apnDB[element.value].pass;"
 	append JS_APN_DB "$wwan_js" "$N"
 
-	append validate_forms "mac|FORM_${interface}_macaddr|$interface @TR<<MAC Address>>||$FORM_macaddr" "$N"
-	append validate_forms "ip|FORM_${interface}_ipaddr|$interface @TR<<IP Address>>||$FORM_ipaddr" "$N"
-	append validate_forms "netmask|FORM_${interface}_netmask|$interface @TR<<WAN Netmask>>||$FORM_netmask" "$N"
-	append validate_forms "ip|FORM_${interface}_gateway|$interface @TR<<Default Gateway>>||$FORM_gateway" "$N"
-	append validate_forms "ip|FORM_${interface}_pptp_server|$interface @TR<<PPTP Server IP>>||$FORM_pptp_server" "$N"
 	fi
 	fi
 done
@@ -389,87 +429,6 @@ submit|button_add_network| @TR<<Add Network>> |
 end_form"
 append forms "$add_network_form" "$N"
 
-if [ "$submit" = "0" ]; then
-	FORM_submit=""
-fi
-
-if ! empty "$FORM_submit"; then
-	SAVED=1
-	validate <<EOF
-$validate_forms
-EOF
-	equal "$?" 0 && {
-		for interface in $network; do
-			if [ "$interface" != "loopback" ]; then
-				eval FORM_proto="\$FORM_${interface}_proto"
-				eval FORM_type="\$FORM_${interface}_type"
-				eval FORM_ipaddr="\$FORM_${interface}_ipaddr"
-				eval FORM_ip6addr="\$FORM_${interface}_ip6addr"
-				eval FORM_netmask="\$FORM_${interface}_netmask"
-				eval FORM_gateway="\$FORM_${interface}_gateway"
-				eval FORM_gateway6="\$FORM_${interface}_gateway6"
-				eval FORM_pptp_server="\$FORM_${interface}_pptp_server"
-				eval FORM_service="\$FORM_${interface}_service"
-				eval FORM_pincode="\$FORM_${interface}_pincode"
-				eval FORM_country="\$FORM_${interface}_country"
-				eval FORM_apn="\$FORM_${interface}_apn"
-				eval FORM_username="\$FORM_${interface}_username"
-				eval FORM_passwd="\$FORM_${interface}_passwd"
-				eval FORM_mtu="\$FORM_${interface}_mtu"
-				eval FORM_ppp_redial="\$FORM_${interface}_ppp_redial"
-				eval FORM_demand="\$FORM_${interface}_demand"
-				eval FORM_keepalive="\$FORM_${interface}_keepalive"
-				eval FORM_vci="\$FORM_${interface}_vci"
-				eval FORM_vpi="\$FORM_${interface}_vpi"
-				eval FORM_macaddr="\$FORM_${interface}_macaddr"
-				eval FORM_defaultroute="\$FORM_${interface}_defaultroute"
-				if [ "$FORM_defaultroute" = "" ]; then
-					FORM_defaultroute=0
-				fi
-
-				uci_set "network" "$interface" "proto" "$FORM_proto"
-				[ "$FORM_type" = "" ] && uci_remove "network" "$interface" "type"
-				[ "$FORM_type" != "" ] && uci_set "network" "$interface" "type" "$FORM_type"
-				uci_set "network" "$interface" "macaddr" "$FORM_macaddr"
-				case "$FORM_proto" in
-					pptp)
-						uci_set "network" "$interface" "server" "$FORM_pptp_server" ;;
-					wwan)
-						if ! equal "$FORM_pincode" "-@@-"; then
-							uci_set "network" "$interface" "pincode" "$FORM_pincode"
-						fi
-						uci_set "network" "$interface" "service" "$FORM_service"
-						uci_set "network" "$interface" "country" "$FORM_country"
-						uci_set "network" "$interface" "apn" "$FORM_apn" ;;
-				esac
-				case "$FORM_proto" in
-					pppoe|pppoa|pptp|wwan)
-						uci_set "network" "$interface" "username" "$FORM_username"
-						uci_set "network" "$interface" "password" "$FORM_passwd"
-						uci_set "network" "$interface" "vpi" "$FORM_vpi"
-						uci_set "network" "$interface" "vci" "$FORM_vci"
-						uci_set "network" "$interface" "mtu" "$FORM_mtu"
-						if [ "$FORM_ppp_redial" = "persist" ]; then
-							uci_set "network" "$interface" "keepalive" "$FORM_keepalive"
-							uci_remove "network" "$interface" "demand"
-						else
-							uci_remove "network" "$interface" "keepalive"
-							uci_set "network" "$interface" "demand" "$FORM_demand"
-						fi
-						uci_set "network" "$interface" "defaultroute" "$FORM_defaultroute"
-						uci_set "network" "$interface" "ppp_redial" "$FORM_ppp_redial";;
-				esac
-
-				uci_set "network" "$interface" "ipaddr" "$FORM_ipaddr"
-				uci_set "network" "$interface" "ip6addr" "$FORM_ip6addr"
-				uci_set "network" "$interface" "netmask" "$FORM_netmask"
-				uci_set "network" "$interface" "gateway" "$FORM_gateway"
-				uci_set "network" "$interface" "ip6gw" "$FORM_gateway6"
-
-			fi
-		done
-	}
-fi
 header "Network" "Networks" "@TR<<Network Configuration>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 #####################################################################
 # modechange script
