@@ -100,7 +100,7 @@ if(document.all) {
 	}
 
 d.style.left = (cX-150) + "px";
-d.style.top = (cY-230) + "px";
+d.style.top = (cY-240) + "px";
 
 }
 
@@ -150,6 +150,13 @@ document.getElementById('txtFStype').value = document.getElementById('FSTYPE_'+M
 document.getElementById('txtOptions').value = document.getElementById('OPTIONS_'+MOUNTPOINT).value;
 document.getElementById('txtEnabled').value = document.getElementById('ENABLED_'+MOUNTPOINT).value;
 
+if (document.getElementById('ENABLED_'+MOUNTPOINT).value == '1') {
+		document.forms[0].MountEnable.checked = true;
+	}
+	else {
+		document.forms[0].MountEnable.checked = false;
+	}
+
 
 document.getElementById('EditWindowAdd').style.display = "none";
 document.getElementById('EditWindowUpdate').style.display = "block";
@@ -166,6 +173,13 @@ if(d.length < 1) { return; }
 
 document.getElementById('txtDeviceSwap').value = document.getElementById('DEVICESWAP_'+SWAP).value;
 document.getElementById('txtEnabledSwap').value = document.getElementById('ENABLEDSWAP_'+SWAP).value;
+
+if (document.getElementById('ENABLEDSWAP_'+SWAP).value == '1') {
+		document.forms[0].SwapEnable.checked = true;
+	}
+	else {
+		document.forms[0].SwapEnable.checked = false;
+	}
 
 
 var dd = document.getElementById(d);
@@ -196,6 +210,31 @@ function SetConfigChanged() {
 	
 	}
 
+function SetEnabledStatusMount() {
+
+	if (document.forms[0].MountEnable.checked == false) {
+		document.getElementById('txtEnabled').value ='0';
+		}
+		
+	else {
+		document.getElementById('txtEnabled').value ='1';
+		}
+	ConfigChanged = true;
+	}
+
+function SetEnabledStatusSwap() {
+
+	if (document.forms[0].SwapEnable.checked == false) {
+		document.getElementById('txtEnabledSwap').value ='0';
+		}
+		
+	else {
+		document.getElementById('txtEnabledSwap').value ='1';
+		}
+	ConfigChanged = true;
+	}
+	
+	
 //--></script>
 EOF
 
@@ -206,7 +245,10 @@ echo "<tr><td width=\"100\"><strong>Target</strong></td><td colspan=\"2\"><input
 echo "<tr><td width=\"100\"><strong>Device</strong></td><td colspan=\"2\"><input type=\"text\" id=\"txtDevice\" name=\"txtDevice\" value=\"\" onChange=\"SetConfigChanged()\" /></td></tr>"
 echo "<tr><td width=\"100\"><strong>FStype</strong></td><td colspan=\"2\"><input type=\"text\" id=\"txtFStype\" name=\"txtFStype\" value=\"\" onChange=\"SetConfigChanged()\" /></td></tr>"
 echo "<tr><td width=\"100\"><strong>Options</strong></td><td colspan=\"2\"><input type=\"text\" id=\"txtOptions\" name=\"txtOptions\" value=\"\" onChange=\"SetConfigChanged()\" /></td></tr>"
-echo "<tr><td width=\"100\"><strong>Enabled</strong></td><td colspan=\"2\"><input type=\"text\" id=\"txtEnabled\" name=\"txtEnabled\" value=\"\" onChange=\"SetConfigChanged()\" /></td></tr>"
+echo "<tr>"
+echo "<td width=\"100\"><strong>Enabled</strong></td>"
+echo "<td colspan=\"2\"><input type=\"checkbox\" id=\"MountEnable\" name=\"MountEnable\" onchange=\"SetEnabledStatusMount();\" /><input type=\"hidden\" id=\"txtEnabled\" name=\"txtEnabled\" value=\"\" /></td>"
+echo "</tr>"
 echo "<tr>"
 echo "<td colspan=\"2\"><div id=\"EditWindowAdd\" style=\"display:none;\"><a href=\"javascript:HideContent('EditWindow','add')\">@TR<<Add>></a></div>"
 echo "<div id=\"EditWindowUpdate\" style=\"display:none;\"><a href=\"javascript:HideContent('EditWindow','update')\">@TR<<Update>></a></div></td>"
@@ -219,7 +261,10 @@ echo "</div>"
 echo "<div id=\"EditSwapWindow\" style=\"display:none;position:absolute;border-style: solid;background-color: white;padding: 5px;\">"
 echo "<table style=\"text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\" summary=\"@TR<<swap>>\">"
 echo "<tr><td width=\"100\"><strong>Device</strong></td><td colspan=\"2\"><input type=\"text\" id=\"txtDeviceSwap\" name=\"txtDeviceSwap\" value=\"\" onChange=\"SetConfigChanged()\" /></td></tr>"
-echo "<tr><td width=\"100\"><strong>Enabled</strong></td><td colspan=\"2\"><input type=\"text\" id=\"txtEnabledSwap\" name=\"txtEnabledSwap\" value=\"\" onChange=\"SetConfigChanged()\" /></td></tr>"
+echo "<tr>"
+echo "<td width=\"100\"><strong>Enabled</strong></td>"
+echo "<td colspan=\"2\"><input type=\"checkbox\" id=\"SwapEnable\" name=\"SwapEnable\" onchange=\"SetEnabledStatusSwap();\" /><input type=\"hidden\" id=\"txtEnabledSwap\" name=\"txtEnabledSwap\" value=\"\" onChange=\"SetConfigChanged()\" /></td>"
+echo "</tr>"
 echo "<tr>"
 echo "<td colspan=\"2\"><a href=\"javascript:HideContentSwap('EditSwapWindow','update')\">@TR<<Update>></a></td>"
 echo "<td><a href=\"javascript:HideContentSwap('EditSwapWindow','cancel')\">@TR<<Cancel>></a></td>"
@@ -231,7 +276,7 @@ uci_load fstab
 
 cur_color="odd"
 echo "<h3><strong>@TR<<Mountpoint configurations>></strong></h3>"
-echo "<div id=\"WarningConfigChange\" style=\"left:600px;top:0px;display:none;position:absolute;border-style: solid;background-color: white;padding: 5px;\"><img width=\"17\" src=\"/images/warning.png\" alt=\"Configuration changed\" /> Configuration changed. Press 'Save Changes'</div>"
+echo "<div id=\"WarningConfigChange\" style=\"left:300px;top:0px;display:none;position:absolute;border-style: solid;background-color: white;padding: 5px;\"><img width=\"17\" src=\"/images/warning.png\" alt=\"Configuration changed\" /> Configuration changed. Press 'Save Changes'</div>"
 echo "<table style=\"width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\" summary=\"@TR<<Mountpoints>>\">"
 for mountpoint in $MOUNTPOINTS; do
 
@@ -268,8 +313,10 @@ for mountpoint in $MOUNTPOINTS; do
 	#check if mountpoint is enabled
 	if [ "$FORM_ENABLED" == "1" ]; then
 		ENABLEDIMAGE="<img width=\"17\" src=\"/images/service_enabled.png\" alt=\"Mountpoint Enabled\" />"
+		MOUNT_ENABLED="Yes"
 	else
 		ENABLEDIMAGE="<img width=\"17\" src=\"/images/service_disabled.png\" alt=\"Mountpoint Disabled\" />"
+		MOUNT_ENABLED="No"
 	fi
 	
 	#                  1              23                                       4567
@@ -283,7 +330,7 @@ for mountpoint in $MOUNTPOINTS; do
 	echo $tr"<td width=\"100\"><strong>Device</strong></td><td>$FORM_DEVICE</td><td><input id=\"DEVICE_$mountpoint\" type=\"hidden\" name=\"DEVICE_$mountpoint\" value=\"$FORM_DEVICE\" /></td></tr>"
 	echo $tr"<td width=\"100\"><strong>FStype</strong></td><td>$FORM_FSTYPE</td><td><input id=\"FSTYPE_$mountpoint\" type=\"hidden\" name=\"FSTYPE_$mountpoint\" value=\"$FORM_FSTYPE\" /></td></tr>"
 	echo $tr"<td width=\"100\"><strong>Options</strong></td><td>$FORM_OPTIONS</td><td><input id=\"OPTIONS_$mountpoint\" type=\"hidden\" name=\"OPTIONS_$mountpoint\" value=\"$FORM_escOPTIONS\" /></td></tr>"
-	echo $tr"<td width=\"100\"><strong>Enabled</strong></td><td>$FORM_ENABLED</td><td><input id=\"ENABLED_$mountpoint\" type=\"hidden\" name=\"ENABLED_$mountpoint\" value=\"$FORM_ENABLED\" /></td></tr>"
+	echo $tr"<td width=\"100\"><strong>Enabled</strong></td><td>$MOUNT_ENABLED</td><td><input id=\"ENABLED_$mountpoint\" type=\"hidden\" name=\"ENABLED_$mountpoint\" value=\"$FORM_ENABLED\" /></td></tr>"
 	echo "<tr><td colspan=\"5\"><img alt=\"\" height=\"5\" width=\"1\" src=\"/images/pixel.gif\" /></td></tr>"
 done
 
@@ -323,13 +370,15 @@ for swap in $SWAP; do
 	#check if swap is enabled
 	if [ "$FORM_ENABLEDSWAP" == "1" ]; then
 		ENABLEDIMAGE="<img width=\"17\" src=\"/images/service_enabled.png\" alt=\"Swap Enabled\" />"
+		SWAP_ENABLEDSWAP="Yes"
 	else
 		ENABLEDIMAGE="<img width=\"17\" src=\"/images/service_disabled.png\" alt=\"Swap Disabled\" />"
+		SWAP_ENABLEDSWAP="No"
 	fi
 
 	get_tr
 	echo $tr"<td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"2\">$ENABLEDIMAGE</td><td width=\"100\"><strong>Device</strong></td><td>$FORM_DEVICESWAP</td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"5\"><a href=\"javascript:OpenEditSwapWindow('EditSwapWindow','$swap')\">@TR<<edit>></a></td><td><input id=\"DEVICESWAP_$swap\" type=\"hidden\" name=\"DEVICESWAP_$swap\" value=\"$FORM_DEVICESWAP\" /></td></tr>"
-	echo $tr"<td width=\"100\"><strong>Enabled</strong></td><td>$FORM_ENABLEDSWAP</td><td><input id=\"ENABLEDSWAP_$swap\" type=\"hidden\" name=\"ENABLEDSWAP_$swap\" value=\"$FORM_ENABLEDSWAP\" /></td></tr>"
+	echo $tr"<td width=\"100\"><strong>Enabled</strong></td><td>$SWAP_ENABLEDSWAP</td><td><input id=\"ENABLEDSWAP_$swap\" type=\"hidden\" name=\"ENABLEDSWAP_$swap\" value=\"$FORM_ENABLEDSWAP\" /></td></tr>"
 	echo "<tr><td colspan=\"3\"><img alt=\"\" height=\"5\" width=\"1\" src=\"/images/pixel.gif\" /></td></tr>"
 done
 echo "</table>"
