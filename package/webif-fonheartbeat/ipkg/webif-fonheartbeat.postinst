@@ -13,8 +13,6 @@ if [ "`cat /root/.ssh/known_hosts|grep download.fon.com`" = "" ]; then
 fi
 
 
-
-
 if [ ! -f /etc/crontabs/root ]; then
 	echo "+ crontab 'root' not found, creating file"
 	touch /etc/crontabs/root
@@ -25,7 +23,7 @@ fi
 if [ "`cat /etc/crontabs/root|grep fonheartbeat`" = "" ]; then
 
 	echo "+ no entry found in crontab, adding fonheartbeat"
-	echo "0,30 * * * *    /init.d/fonheartbeat start" >> /etc/crontabs/root
+	echo "0,30 * * * *    /etc/init.d/fonheartbeat start" >> /etc/crontabs/root
 	
 	echo "+ restarting cron"
 	/etc/init.d/cron restart
