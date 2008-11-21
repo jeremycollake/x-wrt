@@ -28,14 +28,14 @@
 header "System" "Mountpoints" "@TR<<Mountpoints>>" '' "$SCRIPT_NAME"
 
 # Add new mountpint
-if ! empty "$FORM_target"; then
+if ! empty "$FORM_TARGET_newMount"; then
 	uci_add "fstab" "mount" ""; mountpoint="$CONFIG_SECTION"
-	uci_set "fstab" "$mountpoint" "target" "$FORM_target"
-	uci_set "fstab" "$mountpoint" "device" "$FORM_device"
-	uci_set "fstab" "$mountpoint" "fstype" "$FORM_fstype"
-	uci_set "fstab" "$mountpoint" "options" "$FORM_options"
-	uci_set "fstab" "$mountpoint" "enabled" "$FORM_enabled"
-	FORM_target=""
+	uci_set "fstab" "$mountpoint" "target" "$FORM_TARGET_newMount"
+	uci_set "fstab" "$mountpoint" "device" "$FORM_DEVICE_newMount"
+	uci_set "fstab" "$mountpoint" "fstype" "$FORM_FSTYPE_newMount"
+	uci_set "fstab" "$mountpoint" "options" "$FORM_OPTIONS_newMount"
+	uci_set "fstab" "$mountpoint" "enabled" "$FORM_ENABLED_newMount"
+	FORM_TARGET_newMount=""
 fi
 
 # Remove selected mountpoint
