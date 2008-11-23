@@ -138,7 +138,7 @@ function replaceAll(text, strA, strB)
 
 
 function RemoveMount(mountpoint) {
-	document.location.href='/cgi-bin/webif/system-mount.sh?remove_mountpoint='+mountpoint;
+	document.location.href='$SCRIPT_NAME?remove_mountpoint='+mountpoint;
 	}
 
 function OpenEditWindow(d,MOUNTPOINT) {
