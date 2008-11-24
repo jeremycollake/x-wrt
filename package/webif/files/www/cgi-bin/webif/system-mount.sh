@@ -331,7 +331,7 @@ for mountpoint in $MOUNTPOINTS; do
 	echo $tr"<td width=\"100\"><strong>FStype</strong></td><td>$FORM_FSTYPE</td><td><input id=\"FSTYPE_$mountpoint\" type=\"hidden\" name=\"FSTYPE_$mountpoint\" value=\"$FORM_FSTYPE\" /></td></tr>"
 	echo $tr"<td width=\"100\"><strong>Options</strong></td><td>$FORM_OPTIONS</td><td><input id=\"OPTIONS_$mountpoint\" type=\"hidden\" name=\"OPTIONS_$mountpoint\" value=\"$FORM_escOPTIONS\" /></td></tr>"
 	echo $tr"<td width=\"100\"><strong>Enabled</strong></td><td>$MOUNT_ENABLED</td><td><input id=\"ENABLED_$mountpoint\" type=\"hidden\" name=\"ENABLED_$mountpoint\" value=\"$FORM_ENABLED\" /></td></tr>"
-	echo "<tr><td colspan=\"5\"><img alt=\"\" height=\"5\" width=\"1\" src=\"/images/pixel.gif\" /></td></tr>"
+	echo "<tr><td colspan=\"6\"><img alt=\"\" height=\"5\" width=\"1\" src=\"/images/pixel.gif\" /></td></tr>"
 done
 
 echo "<tr><td colspan=\"3\">&nbsp;</td><td>&nbsp;</td><td align=\"center\"><a href=\"javascript:OpenEditWindow('EditWindow','newMount')\">@TR<<add>></a></td></tr>"
