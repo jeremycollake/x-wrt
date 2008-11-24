@@ -334,7 +334,7 @@ for mountpoint in $MOUNTPOINTS; do
 	echo "<tr><td colspan=\"6\"><img alt=\"\" height=\"5\" width=\"1\" src=\"/images/pixel.gif\" /></td></tr>"
 done
 
-echo "<tr><td colspan=\"3\">&nbsp;</td><td>&nbsp;</td><td align=\"center\"><a href=\"javascript:OpenEditWindow('EditWindow','newMount')\">@TR<<add>></a></td></tr>"
+echo "<tr><td colspan=\"3\">&nbsp;</td><td>&nbsp;</td><td align=\"center\"><a href=\"javascript:OpenEditWindow('EditWindow','newMount')\">@TR<<add>></a></td><td></td></tr>"
 
 echo "</table><br />"
 
