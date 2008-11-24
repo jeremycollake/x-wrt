@@ -118,24 +118,7 @@ if (doAction == 'update' && ConfigChanged == true ){
 	document.getElementById('WarningConfigChange').style.display = "block";
 	}
 
-if (doAction == 'add'){
-	
-	document.location.href='/cgi-bin/webif/system-mount.sh?target='+escape(document.getElementById('txtTarget').value)+'&device='+escape(document.getElementById('txtDevice').value)+'&fstype='+escape(document.getElementById('txtFStype').value)+'&options='+escape(document.getElementById('txtOptions').value)+'&enabled='+escape(document.getElementById('txtEnabled').value);
-	
-	}
-
 }
-
-
-function replaceAll(text, strA, strB)
-{
-    while ( text.indexOf(strA) != -1)
-    {
-        text = text.replace(strA,strB);
-    }
-    return text;
-}
-
 
 function RemoveMount(mountpoint) {
 	document.location.href='$SCRIPT_NAME?remove_mountpoint='+mountpoint;
@@ -157,9 +140,6 @@ if (document.getElementById('ENABLED_'+MOUNTPOINT).value == '1') {
 		document.forms[0].MountEnable.checked = false;
 	}
 
-
-document.getElementById('EditWindowAdd').style.display = "none";
-document.getElementById('EditWindowUpdate').style.display = "block";
 
 var dd = document.getElementById(d);
 AssignPosition(dd);
@@ -250,8 +230,7 @@ echo "<td width=\"100\"><strong>Enabled</strong></td>"
 echo "<td colspan=\"2\"><input type=\"checkbox\" id=\"MountEnable\" name=\"MountEnable\" onchange=\"SetEnabledStatusMount();\" /><input type=\"hidden\" id=\"txtEnabled\" name=\"txtEnabled\" value=\"\" /></td>"
 echo "</tr>"
 echo "<tr>"
-echo "<td colspan=\"2\"><div id=\"EditWindowAdd\" style=\"display:none;\"><a href=\"javascript:HideContent('EditWindow','add')\">@TR<<Add>></a></div>"
-echo "<div id=\"EditWindowUpdate\" style=\"display:none;\"><a href=\"javascript:HideContent('EditWindow','update')\">@TR<<Update>></a></div></td>"
+echo "<td colspan=\"2\"><a href=\"javascript:HideContent('EditWindow','update')\">@TR<<Update>></a></td>"
 echo "<td><a href=\"javascript:HideContent('EditWindow','cancel')\">@TR<<Cancel>></a></td>"
 echo "</tr>"
 echo "</table>"
@@ -342,7 +321,7 @@ echo "<input id=\"TARGET_newMount\" type=\"hidden\" name=\"TARGET_newMount\" val
 echo "<input id=\"DEVICE_newMount\" type=\"hidden\" name=\"DEVICE_newMount\" value=\"\" />"
 echo "<input id=\"FSTYPE_newMount\" type=\"hidden\" name=\"FSTYPE_newMount\" value=\"\" />"
 echo "<input id=\"OPTIONS_newMount\" type=\"hidden\" name=\"OPTIONS_newMount\" value=\"\" />"
-echo "<input id=\"ENABLED_newMount\" type=\"hidden\" name=\"ENABLED_newMount\" value=\"\" />"
+echo "<input id=\"ENABLED_newMount\" type=\"hidden\" name=\"ENABLED_newMount\" value=\"0\" />"
 
 
 cur_color="odd"
