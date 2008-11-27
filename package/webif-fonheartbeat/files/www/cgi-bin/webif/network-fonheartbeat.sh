@@ -189,18 +189,18 @@ else
 	eval FORM_ENABLED="\$FORM_ENABLED_${heartbeat_cfg}"
 
 	if [ "$FORM_MAC" != "" ]; then
-		uci_set fonheartbeat $heartbeat_cfg "mac" $FORM_MAC
-		uci_set fonheartbeat $heartbeat_cfg "wlmac" $FORM_WLMAC
-		uci_set fonheartbeat $heartbeat_cfg "fonrev" $FORM_FONREV
-		uci_set fonheartbeat $heartbeat_cfg "firmware" $FORM_FIRMWARE
-		uci_set fonheartbeat $heartbeat_cfg "chillver" $FORM_CHILLVER
-		uci_set fonheartbeat $heartbeat_cfg "thclver" $FORM_THCLVER
-		uci_set fonheartbeat $heartbeat_cfg "device" $FORM_DEVICE
-		uci_set fonheartbeat $heartbeat_cfg "fonkey" $FORM_FONKEY
-		uci_set fonheartbeat $heartbeat_cfg "port" $FORM_PORT
-		uci_set fonheartbeat $heartbeat_cfg "server" $FORM_SERVER
-		uci_set fonheartbeat $heartbeat_cfg "user" $FORM_USER
-		uci_set fonheartbeat $heartbeat_cfg "enabled" $FORM_ENABLED
+		uci_set "fonheartbeat" "$heartbeat_cfg" "mac" "$FORM_MAC"
+		uci_set "fonheartbeat" "$heartbeat_cfg" "wlmac" "$FORM_WLMAC"
+		uci_set "fonheartbeat" "$heartbeat_cfg" "fonrev" "$FORM_FONREV"
+		uci_set "fonheartbeat" "$heartbeat_cfg" "firmware" "$FORM_FIRMWARE"
+		uci_set "fonheartbeat" "$heartbeat_cfg" "chillver" "$FORM_CHILLVER"
+		uci_set "fonheartbeat" "$heartbeat_cfg" "thclver" "$FORM_THCLVER"
+		uci_set "fonheartbeat" "$heartbeat_cfg" "device" "$FORM_DEVICE"
+		uci_set "fonheartbeat" "$heartbeat_cfg" "fonkey" "$FORM_FONKEY"
+		uci_set "fonheartbeat" "$heartbeat_cfg" "port" "$FORM_PORT"
+		uci_set "fonheartbeat" "$heartbeat_cfg" "server" "$FORM_SERVER"
+		uci_set "fonheartbeat" "$heartbeat_cfg" "user" "$FORM_USER"
+		uci_set "fonheartbeat" "$heartbeat_cfg" "enabled" "$FORM_ENABLED"
 	else
 		config_get FORM_MAC $heartbeat_cfg mac
 		config_get FORM_WLMAC $heartbeat_cfg wlmac
