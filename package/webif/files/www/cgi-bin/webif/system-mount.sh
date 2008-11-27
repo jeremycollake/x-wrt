@@ -274,11 +274,11 @@ for mountpoint in $MOUNTPOINTS; do
 		eval FORM_ENABLED="\$FORM_ENABLED_${mountpoint}"
 	
 		if [ "$FORM_TARGET" != "" ]; then
-			uci_set fstab $mountpoint "target" $FORM_TARGET
-			uci_set fstab $mountpoint "device" $FORM_DEVICE
-			uci_set fstab $mountpoint "fstype" $FORM_FSTYPE
-			uci_set fstab $mountpoint "options" $FORM_OPTIONS
-			uci_set fstab $mountpoint "enabled" $FORM_ENABLED
+			uci_set "fstab" "$mountpoint" "target" "$FORM_TARGET"
+			uci_set "fstab" "$mountpoint" "device" "$FORM_DEVICE"
+			uci_set "fstab" "$mountpoint" "fstype" "$FORM_FSTYPE"
+			uci_set "fstab" "$mountpoint" "options" "$FORM_OPTIONS"
+			uci_set "fstab" "$mountpoint" "enabled" "$FORM_ENABLED"
 		else
 			config_get FORM_TARGET $mountpoint target
 			config_get FORM_DEVICE $mountpoint device
