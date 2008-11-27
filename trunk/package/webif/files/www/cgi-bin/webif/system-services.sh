@@ -48,6 +48,7 @@ fi
 ls /etc/rc.d > /tmp/rc.d 2>/dev/null
 ls /etc/init.d > /tmp/init.d 2>/dev/null
 
+echo "<h3><strong>@TR<<Available services>></strong></h3>"
 echo "<table style=\"width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\" summary=\"@TR<<Services>>\">"
 echo "<tr>"
 echo "<td>"
