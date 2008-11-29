@@ -29,6 +29,7 @@ configdir="/etc/config"
 if ! empty "$FORM_delete_crontab" ; then
 	if [ -f "$configdir/crontabs_$FORM_delete_crontab" ]; then
 		rm -f $configdir/crontabs_$FORM_delete_crontab
+		rm -f /etc/crontabs/$FORM_delete_crontab
 		rm -f /tmp/current_crontab
 	fi
 fi

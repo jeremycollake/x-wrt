@@ -1,0 +1,48 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2008 x-wrt.org
+START=40
+
+config_cb() {
+	local cfg_type="$1"
+	local cfg_name="$2"
+
+	case "$cfg_type" in
+		crontab)
+			append CRONTABS_cfg "$cfg_name"
+		;;
+		
+	esac
+}
+
+start () {
+
+	for crontabfile in $(ls /etc/config/crontabs_*| sed -e 's/.*\/// ' -e 's/crontabs_//'); do
+
+		config_load crontabs_$crontabfile
+		echo "# WARNING: this is an auto generated file, please use uci to set cron entries" > /tmp/$crontabfile
+		echo "# this file is generated from /etc/config/crontabs_$crontabfile" >> /tmp/$crontabfile
+		echo >> /tmp/$crontabfile
+		
+		for crontab in $CRONTABS_cfg; do
+			config_get MINUTES $crontab minutes
+			config_get HOURS $crontab hours
+			config_get DAYS $crontab days
+			config_get MONTHS $crontab months
+			config_get WEEKDAYS $crontab weekdays
+			config_get COMMAND $crontab command
+			config_get ENABLED $crontab enabled
+
+			if [ "$MINUTES" != "" ] && [ "$HOURS" != "" ] && [ "$DAYS" != "" ] && [ "$MONTHS" != "" ] && [ "$WEEKDAYS" != "" ] && [ "$COMMAND" != "" ] && [ "$ENABLED" = "1" ]; then
+				echo $MINUTES" "$HOURS" "$DAYS" "$MONTHS" "$WEEKDAYS" "$COMMAND >> /tmp/$crontabfile
+			fi
+
+			unset CONFIG_${crontab}_minutes
+			unset CONFIG_${crontab}_hours
+			unset CONFIG_${crontab}_days
+			unset CONFIG_${crontab}_months
+			unset CONFIG_${crontab}_weekdays
+			unset CONFIG_${crontab}_command
+			unset CONFIG_${crontab}_enabled
+		done
+	done
+}
