@@ -133,6 +133,8 @@ header() {
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}
 	_pagename="${2:+@TR<<$2>> - }"
+	_time="`date +%T`"
+	_date="`date +%F`"
 	if ! equal $6 "" && ! equal $6 "0" ; then _pageload="<SCRIPT type='text/javascript'>start=0; end=$6</SCRIPT><SCRIPT src='/js/pageload.js' type='text/javascript'></SCRIPT><DIV id='loadmain'><SCRIPT type='text/javascript'>document.getElementById(\"loadmain\").style.display = \"none\";</SCRIPT>"; _JSload="<SCRIPT type='text/javascript'>load()</SCRIPT>"; fi
 
 	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && grep 'root:!' /etc/passwd >&- 2>&- && {
@@ -155,6 +157,7 @@ Pragma: no-cache
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="expires" content="-1" />
 	<script type="text/javascript" src="/js/styleswitcher.js"></script>
+	<script type="text/javascript" src="/js/dynamicheader.js"></script>
 $header_inject_head</head>
 <body $4>$header_inject_body
 
@@ -166,9 +169,11 @@ $header_inject_head</head>
 		<h3><strong>@TR<<Status>>:</strong></h3>
 		<ul>
 			<li><strong>$_firmware_name $_firmware_version</strong></li>
-			<li><strong>@TR<<Host>>:</strong> $_hostname</li>
-			<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
-			<li><strong>@TR<<Load>>:</strong> $_loadavg</li>
+			<li><strong>@TR<<Host>>: </strong>$_hostname</li>
+			<li><strong>@TR<<Uptime>>: </strong><font id="d_uptime">$_uptime</font></li>
+			<li><strong>@TR<<Date>>: </strong><font id="d_date">$_date</font></li>
+			<li><strong>@TR<<Time>>: </strong><font id="d_time">$_time</font></li>
+			<li><strong>@TR<<Load>>: </strong><font id="d_loadavg">$_loadavg</font></li>
 		</ul>
 	</div>
 </div>
