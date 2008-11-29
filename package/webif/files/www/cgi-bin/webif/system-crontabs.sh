@@ -68,7 +68,7 @@ if ! empty "$FORM_MINUTES_newCron"; then
 	uci_set "crontabs_$selectedcrontab" "$crontab" "days" "$FORM_DAYS_newCron"
 	uci_set "crontabs_$selectedcrontab" "$crontab" "months" "$FORM_MONTHS_newCron"
 	uci_set "crontabs_$selectedcrontab" "$crontab" "weekdays" "$FORM_WEEKDAYS_newCron"
-	uci_set "crontabs_$selectedcrontab" "$crontab" "user" "$FORM_USER_newCron"
+	#uci_set "crontabs_$selectedcrontab" "$crontab" "user" "$FORM_USER_newCron"
 	uci_set "crontabs_$selectedcrontab" "$crontab" "command" "$FORM_COMMAND_newCron"
 	uci_set "crontabs_$selectedcrontab" "$crontab" "enabled" "$FORM_ENABLED_newCron"
 	FORM_MINUTES_newCron=""
@@ -193,7 +193,7 @@ else {
 	SetValueSelect('sltMonths','',document.getElementById('MONTHS_'+CRONTAB).value,0);
 	SetValueSelect('sltDaysOfWeek','',document.getElementById('WEEKDAYS_'+CRONTAB).value,1);
 
-	document.getElementById('txtUsername').value = document.getElementById('USER_'+CRONTAB).value;
+	//document.getElementById('txtUsername').value = document.getElementById('USER_'+CRONTAB).value;
 	document.getElementById('txtCommand').value = document.getElementById('COMMAND_'+CRONTAB).value;
 
 	if (document.getElementById('ENABLED_'+CRONTAB).value == '1') {
@@ -209,7 +209,7 @@ else {
 }
 
 var dd = document.getElementById(d);
-AssignPosition(dd,710,495);
+AssignPosition(dd,710,480);
 dd.style.display = "block";
 
 CronTab = CRONTAB;
@@ -221,16 +221,16 @@ function HideContent(d,doAction) {
 	if(d.length < 1) { return; }
 	document.getElementById(d).style.display = "none";
 
-	if (doAction == 'update' && document.getElementById('txtUsername').value != '' && document.getElementById('txtCommand').value != ''){
-
-	document.getElementById('MINUTES_'+CronTab).value = document.getElementById('txthMinutes').value;
-	document.getElementById('HOURS_'+CronTab).value = document.getElementById('txthHours').value;
-	document.getElementById('DAYS_'+CronTab).value = document.getElementById('txthDays').value;
-	document.getElementById('MONTHS_'+CronTab).value = document.getElementById('txthMonths').value;
-	document.getElementById('WEEKDAYS_'+CronTab).value = document.getElementById('txthDaysOfWeek').value;
-	document.getElementById('USER_'+CronTab).value = document.getElementById('txtUsername').value;
-	document.getElementById('COMMAND_'+CronTab).value = document.getElementById('txtCommand').value;
-	document.getElementById('ENABLED_'+CronTab).value = document.getElementById('txthCronEnabled').value;
+	//if (doAction == 'update' && document.getElementById('txtUsername').value != '' && document.getElementById('txtCommand').value != ''){
+	if (doAction == 'update' && document.getElementById('txtCommand').value != ''){
+		document.getElementById('MINUTES_'+CronTab).value = document.getElementById('txthMinutes').value;
+		document.getElementById('HOURS_'+CronTab).value = document.getElementById('txthHours').value;
+		document.getElementById('DAYS_'+CronTab).value = document.getElementById('txthDays').value;
+		document.getElementById('MONTHS_'+CronTab).value = document.getElementById('txthMonths').value;
+		document.getElementById('WEEKDAYS_'+CronTab).value = document.getElementById('txthDaysOfWeek').value;
+		//document.getElementById('USER_'+CronTab).value = document.getElementById('txtUsername').value;
+		document.getElementById('COMMAND_'+CronTab).value = document.getElementById('txtCommand').value;
+		document.getElementById('ENABLED_'+CronTab).value = document.getElementById('txthCronEnabled').value;
 	}
 
 	if (ConfigChanged == true) {
@@ -330,13 +330,13 @@ function BuildInterval(ChangeConfig) {
 	IntervalString = IntervalString + CheckValueSelect('sltMonths','') + ' ';
 	IntervalString = IntervalString + CheckValueSelect('sltDaysOfWeek','') + ' ';
 
-	if ( document.getElementById('txtUsername').value != '' ) {
-		IntervalString = IntervalString + document.getElementById('txtUsername').value + ' ';
-	}
-	else {
-		IntervalString = IntervalString + 'user' + ' ';
-		document.getElementById('txtUsername').value = 'user';
-	}
+//	if ( document.getElementById('txtUsername').value != '' ) {
+//		IntervalString = IntervalString + document.getElementById('txtUsername').value + ' ';
+//	}
+//	else {
+//		IntervalString = IntervalString + 'user' + ' ';
+//		document.getElementById('txtUsername').value = 'user';
+//	}
 
 	if ( document.getElementById('txtCommand').value != '' ) {
 		IntervalString = IntervalString + document.getElementById('txtCommand').value;
@@ -366,7 +366,7 @@ function ResetForm() {
 
 	document.getElementById('chkCronEnabled').checked = false;
 	
-	document.getElementById('txtUsername').value = '$selectedcrontab';
+	//document.getElementById('txtUsername').value = '$selectedcrontab';
 	document.getElementById('txtCommand').value = '';
 	document.getElementById('txtCrontabEntry').value = '';
 	
@@ -583,9 +583,9 @@ echo "<td>&nbsp;</td>"
 echo "<td>&nbsp;</td>"
 echo "</tr>"
 echo "<tr><td colspan=\"5\">&nbsp;</td></tr>"
-echo "<tr><td align=\"right\"><strong>User</strong></td><td colspan=\"3\"><input style=\"width:400px;\" id=\"txtUsername\" type=\"text\" name=\"txtUsername\" value=\"\" /></td><td><a href=\"javascript:BuildInterval(true);\">generate crontab entry</a></td></tr>"
-echo "<tr><td align=\"right\"><strong>Command</strong></td><td colspan=\"3\"><input style=\"width:400px;\" id=\"txtCommand\" type=\"text\" name=\"txtCommand\" value=\"\" /></td><td><a href=\"javascript:ResetForm();\">reset form</a></td></tr>"
-echo "<tr><td align=\"right\"><strong>Enabled</strong></td><td colspan=\"4\"><input type=\"checkbox\" id=\"chkCronEnabled\" name=\"chkCronEnabled\" onchange=\"SetEnabledStatusCron();\"/><input type=\"hidden\" id=\"txthCronEnabled\" name=\"txthCronEnabled\" value=\"0\" /></td></tr>"
+#echo "<tr><td align=\"right\"><strong>User</strong></td><td colspan=\"3\"><input style=\"width:400px;\" id=\"txtUsername\" type=\"text\" name=\"txtUsername\" value=\"\" /></td><td><a href=\"javascript:BuildInterval(true);\">generate crontab entry</a></td></tr>"
+echo "<tr><td align=\"right\"><strong>Command</strong></td><td colspan=\"3\"><input style=\"width:400px;\" id=\"txtCommand\" type=\"text\" name=\"txtCommand\" value=\"\" /></td><td><a href=\"javascript:BuildInterval(true);\">generate crontab entry</a></td></tr>"
+echo "<tr><td align=\"right\"><strong>Enabled</strong></td><td colspan=\"3\"><input type=\"checkbox\" id=\"chkCronEnabled\" name=\"chkCronEnabled\" onchange=\"SetEnabledStatusCron();\"/><input type=\"hidden\" id=\"txthCronEnabled\" name=\"txthCronEnabled\" value=\"0\" /></td><td><a href=\"javascript:ResetForm();\">reset form</a></td></tr>"
 echo "<tr><td colspan=\"5\">&nbsp;</td></tr>"
 echo "<tr><td align=\"right\"><strong>Crontab entry</strong></td><td colspan=\"4\"><input readonly=\"readonly\" style=\"width:400px;\" id=\"txtCrontabEntry\" type=\"text\" name=\"txtCrontabEntry\" value=\"\" /></td></tr>"
 echo "<tr><td colspan=\"5\"></td></tr>"
@@ -664,7 +664,7 @@ for crontab in $CRONTABS_cfg; do
 		config_get FORM_DAYS $crontab days
 		config_get FORM_MONTHS $crontab months
 		config_get FORM_WEEKDAYS $crontab weekdays
-		config_get FORM_USER $crontab user
+		#config_get FORM_USER $crontab user
 		config_get FORM_COMMAND $crontab command
 		config_get FORM_ENABLED $crontab enabled
 	else
@@ -675,7 +675,7 @@ for crontab in $CRONTABS_cfg; do
 		eval FORM_DAYS="\$FORM_DAYS_${crontab}"
 		eval FORM_MONTHS="\$FORM_MONTHS_${crontab}"
 		eval FORM_WEEKDAYS="\$FORM_WEEKDAYS_${crontab}"
-		eval FORM_USER="\$FORM_USER_${crontab}"
+		#eval FORM_USER="\$FORM_USER_${crontab}"
 		eval FORM_COMMAND="\$FORM_COMMAND_${crontab}"
 		eval FORM_ENABLED="\$FORM_ENABLED_${crontab}"
 
@@ -686,7 +686,7 @@ for crontab in $CRONTABS_cfg; do
 			uci_set "crontabs_$selectedcrontab" "$crontab" "days" "$FORM_DAYS"
 			uci_set "crontabs_$selectedcrontab" "$crontab" "months" "$FORM_MONTHS"
 			uci_set "crontabs_$selectedcrontab" "$crontab" "weekdays" "$FORM_WEEKDAYS"
-			uci_set "crontabs_$selectedcrontab" "$crontab" "user" "$FORM_USER"
+			#uci_set "crontabs_$selectedcrontab" "$crontab" "user" "$FORM_USER"
 			uci_set "crontabs_$selectedcrontab" "$crontab" "command" "$FORM_COMMAND"
 			uci_set "crontabs_$selectedcrontab" "$crontab" "enabled" "$FORM_ENABLED"
 		else
@@ -695,7 +695,7 @@ for crontab in $CRONTABS_cfg; do
 			config_get FORM_DAYS $crontab days
 			config_get FORM_MONTHS $crontab months
 			config_get FORM_WEEKDAYS $crontab weekdays
-			config_get FORM_USER $crontab user
+			#config_get FORM_USER $crontab user
 			config_get FORM_COMMAND $crontab command
 			config_get FORM_ENABLED $crontab enabled
 		fi
@@ -713,12 +713,12 @@ for crontab in $CRONTABS_cfg; do
 	FORM_escCOMMAND=`echo "$FORM_COMMAND" | sed -e 's/\&/\&amp;/g' -e 's/"/\&quot;/g' -e 's/</\&lt;/g' -e 's/>/\&gt;/g'` 	
 	
 	get_tr
-	echo $tr"<td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"8\">$ENABLEDIMAGE</td><td width=\"100\"><strong>Minutes</strong></td><td>$FORM_MINUTES</td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"8\"><a href=\"javascript:OpenEditWindow('EditWindow','$crontab')\">@TR<<edit>></a></td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"8\"><a href=\"javascript:RemoveCrontabEntry('$crontab')\">@TR<<remove>></a></td><td><input id=\"MINUTES_$crontab\" type=\"hidden\" name=\"MINUTES_$crontab\" value=\"$FORM_MINUTES\" /></td></tr>"
+	echo $tr"<td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"7\">$ENABLEDIMAGE</td><td width=\"100\"><strong>Minutes</strong></td><td>$FORM_MINUTES</td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"7\"><a href=\"javascript:OpenEditWindow('EditWindow','$crontab')\">@TR<<edit>></a></td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"7\"><a href=\"javascript:RemoveCrontabEntry('$crontab')\">@TR<<remove>></a></td><td><input id=\"MINUTES_$crontab\" type=\"hidden\" name=\"MINUTES_$crontab\" value=\"$FORM_MINUTES\" /></td></tr>"
 	echo $tr"<td width=\"100\"><strong>Hours</strong></td><td>$FORM_HOURS</td><td><input id=\"HOURS_$crontab\" type=\"hidden\" name=\"HOURS_$crontab\" value=\"$FORM_HOURS\" /></td></tr>"
 	echo $tr"<td width=\"100\"><strong>Days</strong></td><td>$FORM_DAYS</td><td><input id=\"DAYS_$crontab\" type=\"hidden\" name=\"DAYS_$crontab\" value=\"$FORM_DAYS\" /></td></tr>"
 	echo $tr"<td width=\"100\"><strong>Months</strong></td><td>$FORM_MONTHS</td><td><input id=\"MONTHS_$crontab\" type=\"hidden\" name=\"MONTHS_$crontab\" value=\"$FORM_MONTHS\" /></td></tr>"
 	echo $tr"<td width=\"100\"><strong>Weekdays</strong></td><td>$FORM_WEEKDAYS</td><td><input id=\"WEEKDAYS_$crontab\" type=\"hidden\" name=\"WEEKDAYS_$crontab\" value=\"$FORM_WEEKDAYS\" /></td></tr>"
-	echo $tr"<td width=\"100\"><strong>User</strong></td><td>$FORM_USER</td><td><input id=\"USER_$crontab\" type=\"hidden\" name=\"USER_$crontab\" value=\"$FORM_USER\" /></td></tr>"
+	#echo $tr"<td width=\"100\"><strong>User</strong></td><td>$FORM_USER</td><td><input id=\"USER_$crontab\" type=\"hidden\" name=\"USER_$crontab\" value=\"$FORM_USER\" /></td></tr>"
 	echo $tr"<td width=\"100\"><strong>Command</strong></td><td>$FORM_escCOMMAND</td><td><input id=\"COMMAND_$crontab\" type=\"hidden\" name=\"COMMAND_$crontab\" value=\"$FORM_escCOMMAND\" /></td></tr>"
 	echo $tr"<td width=\"100\"><strong>Enabled</strong></td><td>$CRON_ENABLED</td><td><input id=\"ENABLED_$crontab\" type=\"hidden\" name=\"ENABLED_$crontab\" value=\"$FORM_ENABLED\" /></td></tr>"
 	echo "<tr><td colspan=\"6\"><img alt=\"\" height=\"5\" width=\"1\" src=\"/images/pixel.gif\" /></td></tr>"
@@ -735,7 +735,7 @@ echo "<input id=\"HOURS_newCron\" type=\"hidden\" name=\"HOURS_newCron\" value=\
 echo "<input id=\"DAYS_newCron\" type=\"hidden\" name=\"DAYS_newCron\" value=\"\" />"
 echo "<input id=\"MONTHS_newCron\" type=\"hidden\" name=\"MONTHS_newCron\" value=\"\" />"
 echo "<input id=\"WEEKDAYS_newCron\" type=\"hidden\" name=\"WEEKDAYS_newCron\" value=\"\" />"
-echo "<input id=\"USER_newCron\" type=\"hidden\" name=\"USER_newCron\" value=\"\" />"
+#echo "<input id=\"USER_newCron\" type=\"hidden\" name=\"USER_newCron\" value=\"\" />"
 echo "<input id=\"COMMAND_newCron\" type=\"hidden\" name=\"COMMAND_newCron\" value=\"\" />"
 echo "<input id=\"ENABLED_newCron\" type=\"hidden\" name=\"ENABLED_newCron\" value=\"\" />"
 
