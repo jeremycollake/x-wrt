@@ -82,7 +82,7 @@ config_cb() {
 
 	case "$cfg_type" in
 		crontab)
-			append CRONTABS_cfg "$cfg_name"
+			append CRONTABS_cfg "$cfg_name" "$N"
 		;;
 		
 	esac
@@ -597,7 +597,7 @@ echo "</div>"
 # floating div for creating new crontab config
 echo "<div id=\"NewCrontabConfig\" style=\"display:none;position:absolute;border-style: solid;background-color: white;padding: 5px;\">"
 echo "<table style=\"text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\" summary=\"@TR<<New Crontab Config>>\">"
-echo "<tr><td width=\"100\"><strong>Username</strong></td><td colspan=\"2\"><input type=\"text\" id=\"txtConfigName\" name=\"txtConfigName\" value=\"\" /></td></tr>"
+echo "<tr><td width=\"100\"><strong>Config name</strong></td><td colspan=\"2\"><input type=\"text\" id=\"txtConfigName\" name=\"txtConfigName\" value=\"\" /></td></tr>"
 echo "<tr>"
 echo "<td colspan=\"2\"><a href=\"javascript:HideNewCrontabConfig('NewCrontabConfig','new')\">@TR<<Ok>></a></td>"
 echo "<td><a href=\"javascript:HideNewCrontabConfig('NewCrontabConfig','cancel')\">@TR<<Cancel>></a></td>"
@@ -605,7 +605,7 @@ echo "</tr>"
 echo "</table>"
 echo "</div>"
 
-# floating div for creating new crontab config
+# floating div for deleting crontab config
 echo "<div id=\"DeleteCrontabConfig\" style=\"display:none;position:absolute;border-style: solid;background-color: white;padding: 5px;\">"
 echo "<table style=\"text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\" summary=\"@TR<<New Crontab Config>>\">"
 echo "<tr><td width=\"200\" colspan=\"3\">@TR<<Do you want to delete this configuration file>>?</td></tr>"
@@ -657,7 +657,12 @@ echo "<br />"
 echo "<h3><strong>@TR<<Crontab configuration $selectedcrontab>></strong></h3>"
 echo "<table style=\"width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\" summary=\"@TR<<Crontabs>>\">"
 
+echo "naam = " $CRONTABS_cfg "<br />"
+
 for crontab in $CRONTABS_cfg; do
+
+	echo "naam = " $crontab "<br />"
+
 
 	if  [ "$FORM_submit" = "" ]; then
 		config_get FORM_MINUTES $crontab minutes
@@ -715,7 +720,7 @@ for crontab in $CRONTABS_cfg; do
 	
 	get_tr
 	echo $tr"<td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"7\">$ENABLEDIMAGE</td><td width=\"100\"><strong>Minutes</strong></td><td>$FORM_MINUTES</td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"7\"><a href=\"javascript:OpenEditWindow('EditWindow','$crontab')\">@TR<<edit>></a></td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"7\"><a href=\"javascript:RemoveCrontabEntry('$crontab')\">@TR<<remove>></a></td><td><input id=\"MINUTES_$crontab\" type=\"hidden\" name=\"MINUTES_$crontab\" value=\"$FORM_MINUTES\" /></td></tr>"
-	echo $tr"<td width=\"100\"><strong>Hours</strong></td><td>$FORM_HOURS</td><td><input id=\"HOURS_$crontab\" type=\"hidden\" name=\"HOURS_$crontab\" value=\"$FORM_HOURS\" /></td></tr>"
+	echo $tr"<td width=\"100\"><strong>$crontab</strong></td><td>$FORM_HOURS</td><td><input id=\"HOURS_$crontab\" type=\"hidden\" name=\"HOURS_$crontab\" value=\"$FORM_HOURS\" /></td></tr>"
 	echo $tr"<td width=\"100\"><strong>Days</strong></td><td>$FORM_DAYS</td><td><input id=\"DAYS_$crontab\" type=\"hidden\" name=\"DAYS_$crontab\" value=\"$FORM_DAYS\" /></td></tr>"
 	echo $tr"<td width=\"100\"><strong>Months</strong></td><td>$FORM_MONTHS</td><td><input id=\"MONTHS_$crontab\" type=\"hidden\" name=\"MONTHS_$crontab\" value=\"$FORM_MONTHS\" /></td></tr>"
 	echo $tr"<td width=\"100\"><strong>Weekdays</strong></td><td>$FORM_WEEKDAYS</td><td><input id=\"WEEKDAYS_$crontab\" type=\"hidden\" name=\"WEEKDAYS_$crontab\" value=\"$FORM_WEEKDAYS\" /></td></tr>"
