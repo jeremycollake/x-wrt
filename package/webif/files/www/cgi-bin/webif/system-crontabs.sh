@@ -23,55 +23,22 @@
 
 header "System" "Crontabs" "@TR<<Crontabs>>" '' "$SCRIPT_NAME"
 
-configdir="/etc/config"
-
-# 1. Delete crontabconfig file
-if ! empty "$FORM_delete_crontab" ; then
-	if [ -f "$configdir/crontabs_$FORM_delete_crontab" ]; then
-		rm -f $configdir/crontabs_$FORM_delete_crontab
-		rm -f /etc/crontabs/$FORM_delete_crontab
-		rm -f /tmp/current_crontab
-	fi
-fi
-
-#2. Create new crontabconfig file
-if ! empty "$FORM_new_crontab" ; then
-	if [ ! -f "$configdir/crontabs_$FORM_new_crontab" ]; then
-		touch $configdir/crontabs_$FORM_new_crontab
-		echo $FORM_new_crontab > /tmp/current_crontab
-	fi
-fi
-
-
-#3. Read or set current crontab file
-if [ "$FORM_selectedcrontab" == "" ]; then
-	if [ -f "/tmp/current_crontab" ]; then
-		selectedcrontab=`cat /tmp/current_crontab`	
-	else 
-		echo "root" > /tmp/current_crontab
-		selectedcrontab="root"
-	fi
-else
-	selectedcrontab="$FORM_selectedcrontab"
-	echo $selectedcrontab > /tmp/current_crontab
-fi
-
 # Remove selected crontabentry
 if  ! empty "$FORM_remove_crontabentry" ; then
-	uci_remove "crontabs_$selectedcrontab" "$FORM_remove_crontabentry"
+	uci_remove "crontabs" "$FORM_remove_crontabentry"
 fi
 
 # Add new cron-entry
 if ! empty "$FORM_MINUTES_newCron"; then
-	uci_add "crontabs_$selectedcrontab" "crontab" ""; crontab="$CONFIG_SECTION"
-	uci_set "crontabs_$selectedcrontab" "$crontab" "minutes" "$FORM_MINUTES_newCron"
-	uci_set "crontabs_$selectedcrontab" "$crontab" "hours" "$FORM_HOURS_newCron"
-	uci_set "crontabs_$selectedcrontab" "$crontab" "days" "$FORM_DAYS_newCron"
-	uci_set "crontabs_$selectedcrontab" "$crontab" "months" "$FORM_MONTHS_newCron"
-	uci_set "crontabs_$selectedcrontab" "$crontab" "weekdays" "$FORM_WEEKDAYS_newCron"
-	#uci_set "crontabs_$selectedcrontab" "$crontab" "user" "$FORM_USER_newCron"
-	uci_set "crontabs_$selectedcrontab" "$crontab" "command" "$FORM_COMMAND_newCron"
-	uci_set "crontabs_$selectedcrontab" "$crontab" "enabled" "$FORM_ENABLED_newCron"
+	uci_add "crontabs" "crontab" ""; crontab="$CONFIG_SECTION"
+	uci_set "crontabs" "$crontab" "minutes" "$FORM_MINUTES_newCron"
+	uci_set "crontabs" "$crontab" "hours" "$FORM_HOURS_newCron"
+	uci_set "crontabs" "$crontab" "days" "$FORM_DAYS_newCron"
+	uci_set "crontabs" "$crontab" "months" "$FORM_MONTHS_newCron"
+	uci_set "crontabs" "$crontab" "weekdays" "$FORM_WEEKDAYS_newCron"
+	#uci_set "crontabs" "$crontab" "user" "$FORM_USER_newCron"
+	uci_set "crontabs" "$crontab" "command" "$FORM_COMMAND_newCron"
+	uci_set "crontabs" "$crontab" "enabled" "$FORM_ENABLED_newCron"
 	FORM_MINUTES_newCron=""
 fi
 
@@ -82,7 +49,7 @@ config_cb() {
 
 	case "$cfg_type" in
 		crontab)
-			append CRONTABS_cfg "$cfg_name" "$N"
+			append CRONTABS_cfg "$cfg_name"
 		;;
 		
 	esac
@@ -135,54 +102,11 @@ d.style.top = (cY-offsetY) + "px";
 
 }
 
-function OpenNewCronConfig(d) {
-if(d.length < 1) { return; }
-
-HideAllWindows();
-
-document.getElementById('txtConfigName').value = '';
-
-var dd = document.getElementById(d);
-AssignPosition(dd,100,200);
-dd.style.display = "block";
-}
-
-function OpenDeleteCronConfig(d) {
-if(d.length < 1) { return; }
-
-HideAllWindows();
-
-var dd = document.getElementById(d);
-AssignPosition(dd,110,200);
-dd.style.display = "block";
-}
-
-function HideNewCrontabConfig(d,doAction) {
-	if(d.length < 1) { return; }
-	document.getElementById(d).style.display = "none";
-	
-	var ConfigName = document.getElementById('txtConfigName').value
-
-	if (doAction == 'new' && ConfigName != '') {
-			document.location.href='$SCRIPT_NAME?new_crontab='+ConfigName;
-	}
-}
-
-function HideDeleteCrontabConfig(d,doAction) {
-	if(d.length < 1) { return; }
-	document.getElementById(d).style.display = "none";
-
-	if (doAction == 'ok') {
-			document.location.href='$SCRIPT_NAME?delete_crontab=$selectedcrontab';
-	}
-	
-}
-
 
 function OpenEditWindow(d,CRONTAB) {
 if(d.length < 1) { return; }
 
-HideAllWindows();
+document.getElementById('EditWindow').style.display = "none";
 
 if (CRONTAB == 'newCron') {
 	ResetForm();
@@ -484,11 +408,6 @@ function RemoveCrontabEntry(crontabentry) {
 	document.location.href='$SCRIPT_NAME?remove_crontabentry='+crontabentry;
 }
 
-function HideAllWindows() {
-	document.getElementById('EditWindow').style.display = "none";
-	document.getElementById('NewCrontabConfig').style.display = "none";
-	document.getElementById('DeleteCrontabConfig').style.display = "none";
-}
 
 //--></script>
 EOF
@@ -594,75 +513,14 @@ echo "<tr><td colspan=\"3\">&nbsp;</td><td colspan=\"2\"><a href=\"javascript:Hi
 echo "</table>"
 echo "</div>"
 
-# floating div for creating new crontab config
-echo "<div id=\"NewCrontabConfig\" style=\"display:none;position:absolute;border-style: solid;background-color: white;padding: 5px;\">"
-echo "<table style=\"text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\" summary=\"@TR<<New Crontab Config>>\">"
-echo "<tr><td width=\"100\"><strong>Config name</strong></td><td colspan=\"2\"><input type=\"text\" id=\"txtConfigName\" name=\"txtConfigName\" value=\"\" /></td></tr>"
-echo "<tr>"
-echo "<td colspan=\"2\"><a href=\"javascript:HideNewCrontabConfig('NewCrontabConfig','new')\">@TR<<Ok>></a></td>"
-echo "<td><a href=\"javascript:HideNewCrontabConfig('NewCrontabConfig','cancel')\">@TR<<Cancel>></a></td>"
-echo "</tr>"
-echo "</table>"
-echo "</div>"
-
-# floating div for deleting crontab config
-echo "<div id=\"DeleteCrontabConfig\" style=\"display:none;position:absolute;border-style: solid;background-color: white;padding: 5px;\">"
-echo "<table style=\"text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\" summary=\"@TR<<New Crontab Config>>\">"
-echo "<tr><td width=\"200\" colspan=\"3\">@TR<<Do you want to delete this configuration file>>?</td></tr>"
-echo "<tr>"
-echo "<td colspan=\"2\"><a href=\"javascript:HideDeleteCrontabConfig('DeleteCrontabConfig','ok')\">@TR<<Ok>></a></td>"
-echo "<td><a href=\"javascript:HideDeleteCrontabConfig('DeleteCrontabConfig','cancel')\">@TR<<Cancel>></a></td>"
-echo "</tr>"
-echo "</table>"
-echo "</div>"
-
-cellcount=0
-cellmax=4
-
-echo "<h3><strong>@TR<<Available Crontab configurations>></strong></h3>"
+echo "<h3><strong>@TR<<Crontab configuration root>></strong></h3>"
 echo "<div id=\"WarningConfigChange\" style=\"left:300px;top:0px;display:none;position:absolute;border-style: solid;background-color: white;padding: 5px;\"><img width=\"17\" src=\"/images/warning.png\" alt=\"Configuration changed\" /> Configuration changed. Press 'Save Changes'</div>"
 echo "<table style=\"width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\" summary=\"@TR<<Crontabs>>\">"
-echo "<tr>"
-for crontab in $(ls $configdir/crontabs_*| sed -e 's/.*\///' -e 's/crontabs_//'); do
 
-	if [ "$selectedcrontab" != "$crontab" ]; then
-		echo "<td valign=\"middle\"><img width=\"17\" src=\"/images/calender.png\" alt=\"Crontab\" /><a href=\"$SCRIPT_NAME?selectedcrontab=$crontab\">"$crontab"</a></td>"
-	else
-		echo "<td valign=\"middle\"><img width=\"17\" src=\"/images/calender.png\" alt=\"Crontab\" />"$crontab"</td>"
-	fi
-	cellcount=$(($cellcount+1))
-	if [ $cellcount = $cellmax ]; then
-		echo "</tr><tr>"
-		cellcount=0
-	fi
-
-done
-
-remainder=$(($cellmax-$cellcount))
-i=1; while [ $i -le $remainder ]; do echo "<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>"; i=$(($i+1)); done
-
-echo "<td width=\"150\">"
-echo "<div><img width=\"17\" src=\"/images/service_enable.png\" alt=\"Crontab\" /><a href=\"javascript:OpenNewCronConfig('NewCrontabConfig');\">new crontab</a></div>"
-echo "<div><img width=\"17\" src=\"/images/service_disable.png\" alt=\"Crontab\" /><a href=\"javascript:OpenDeleteCronConfig('DeleteCrontabConfig');\">remove crontab</a></div>"
-echo "</td>"
-
-
-echo "</tr>"
-echo "</table>"
-
-uci_load crontabs_$selectedcrontab
-
+uci_load crontabs
 cur_color="odd"
-echo "<br />"
-echo "<h3><strong>@TR<<Crontab configuration $selectedcrontab>></strong></h3>"
-echo "<table style=\"width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"2\" cellspacing=\"1\" summary=\"@TR<<Crontabs>>\">"
-
-echo "naam = " $CRONTABS_cfg "<br />"
 
 for crontab in $CRONTABS_cfg; do
-
-	echo "naam = " $crontab "<br />"
-
 
 	if  [ "$FORM_submit" = "" ]; then
 		config_get FORM_MINUTES $crontab minutes
@@ -687,14 +545,14 @@ for crontab in $CRONTABS_cfg; do
 
 		if [ "$FORM_MINUTES" != "" ]; then
 		
-			uci_set "crontabs_$selectedcrontab" "$crontab" "minutes" "$FORM_MINUTES"
-			uci_set "crontabs_$selectedcrontab" "$crontab" "hours" "$FORM_HOURS"
-			uci_set "crontabs_$selectedcrontab" "$crontab" "days" "$FORM_DAYS"
-			uci_set "crontabs_$selectedcrontab" "$crontab" "months" "$FORM_MONTHS"
-			uci_set "crontabs_$selectedcrontab" "$crontab" "weekdays" "$FORM_WEEKDAYS"
-			#uci_set "crontabs_$selectedcrontab" "$crontab" "user" "$FORM_USER"
-			uci_set "crontabs_$selectedcrontab" "$crontab" "command" "$FORM_COMMAND"
-			uci_set "crontabs_$selectedcrontab" "$crontab" "enabled" "$FORM_ENABLED"
+			uci_set "crontabs" "$crontab" "minutes" "$FORM_MINUTES"
+			uci_set "crontabs" "$crontab" "hours" "$FORM_HOURS"
+			uci_set "crontabs" "$crontab" "days" "$FORM_DAYS"
+			uci_set "crontabs" "$crontab" "months" "$FORM_MONTHS"
+			uci_set "crontabs" "$crontab" "weekdays" "$FORM_WEEKDAYS"
+			#uci_set "crontabs" "$crontab" "user" "$FORM_USER"
+			uci_set "crontabs" "$crontab" "command" "$FORM_COMMAND"
+			uci_set "crontabs" "$crontab" "enabled" "$FORM_ENABLED"
 		else
 			config_get FORM_MINUTES $crontab minutes
 			config_get FORM_HOURS $crontab hours
