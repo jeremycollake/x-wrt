@@ -23,6 +23,12 @@
 
 header "System" "Crontabs" "@TR<<Crontabs>>" '' "$SCRIPT_NAME"
 
+#Check if config file exists
+if [ ! -f /etc/config/crontabs ]; then
+	touch /etc/config/crontabs
+fi 
+
+
 # Remove selected crontabentry
 if  ! empty "$FORM_remove_crontabentry" ; then
 	uci_remove "crontabs" "$FORM_remove_crontabentry"
