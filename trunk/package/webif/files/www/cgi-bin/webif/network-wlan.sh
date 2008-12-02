@@ -37,7 +37,7 @@ generate_channels() {
 	if [ "$?" != "0" ]; then
 		is_package_installed kmod-madwifi
 		if [ "$?" = "0" ]; then
-			wlanconfig ath create wlandev wifi0 wlanmode ap >/dev/null
+			wlanconfig ath create wlandev wifi0 wlanmode ap 2>&1
 			cleanup=1
 		fi
 	fi
@@ -46,7 +46,7 @@ generate_channels() {
 	echo "BGCHANNELS=\"${BGCHANNELS}\"" > /usr/lib/webif/channels.lst
 	echo "ACHANNELS=\"${ACHANNELS}\"" >> /usr/lib/webif/channels.lst
 	if [ "$cleanup" = "1" ]; then
-		wifi 2>&1
+		wifi 2>/dev/null >/dev/null
 	fi
 }
 
