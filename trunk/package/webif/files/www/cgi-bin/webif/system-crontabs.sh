@@ -578,7 +578,7 @@ for crontab in $CRONTABS_cfg; do
 	
 	get_tr
 	echo $tr"<td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"7\">$ENABLEDIMAGE</td><td width=\"100\"><strong>Minutes</strong></td><td>$FORM_MINUTES</td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"7\"><a href=\"javascript:OpenEditWindow('EditWindow','$crontab')\">@TR<<edit>></a></td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"7\"><a href=\"javascript:RemoveCrontabEntry('$crontab')\">@TR<<remove>></a></td><td><input id=\"MINUTES_$crontab\" type=\"hidden\" name=\"MINUTES_$crontab\" value=\"$FORM_MINUTES\" /></td></tr>"
-	echo $tr"<td width=\"100\"><strong>$crontab</strong></td><td>$FORM_HOURS</td><td><input id=\"HOURS_$crontab\" type=\"hidden\" name=\"HOURS_$crontab\" value=\"$FORM_HOURS\" /></td></tr>"
+	echo $tr"<td width=\"100\"><strong>Hours</strong></td><td>$FORM_HOURS</td><td><input id=\"HOURS_$crontab\" type=\"hidden\" name=\"HOURS_$crontab\" value=\"$FORM_HOURS\" /></td></tr>"
 	echo $tr"<td width=\"100\"><strong>Days</strong></td><td>$FORM_DAYS</td><td><input id=\"DAYS_$crontab\" type=\"hidden\" name=\"DAYS_$crontab\" value=\"$FORM_DAYS\" /></td></tr>"
 	echo $tr"<td width=\"100\"><strong>Months</strong></td><td>$FORM_MONTHS</td><td><input id=\"MONTHS_$crontab\" type=\"hidden\" name=\"MONTHS_$crontab\" value=\"$FORM_MONTHS\" /></td></tr>"
 	echo $tr"<td width=\"100\"><strong>Weekdays</strong></td><td>$FORM_WEEKDAYS</td><td><input id=\"WEEKDAYS_$crontab\" type=\"hidden\" name=\"WEEKDAYS_$crontab\" value=\"$FORM_WEEKDAYS\" /></td></tr>"
