@@ -1,9 +1,0 @@
-config 'crontab'
-	option 'enabled' '0'
-	option 'minutes' '*'
-	option 'hours' '*'
-	option 'days' '*'
-	option 'months' '*'
-	option 'weekdays' '*'
-	option 'command' 'echo "X-WRT -- End user extensions for OpenWrt" | logger'
-
