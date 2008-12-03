@@ -2,7 +2,7 @@
 <?
 . /usr/lib/webif/webif.sh
 
-header "Status" "Bandwidth" "@TR<<Bandwidth>>"
+header "Status" "Bandwidth" "@TR<<Bandwidth>>" 'onload="modechange()"' "$SCRIPT_NAME"
 if [ "$FORM_install_bandwidthd" != "" ]; then
 	install_package bandwidthd
 	/etc/init.d/bandwidthd enable
