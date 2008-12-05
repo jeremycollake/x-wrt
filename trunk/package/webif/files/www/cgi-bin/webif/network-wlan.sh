@@ -208,7 +208,7 @@ for device in $DEVICES; do
 	        config_get FORM_txantenna $device txantenna
 		[ -z $FORM_txantenna ] && FORM_txantenna=0
 	        config_get FORM_rxantenna $device rxantenna
-		[ -z $FORM_raxntenna ] && FORM_rxantenna=0
+		[ -z $FORM_rxantenna ] && FORM_rxantenna=0
 	        config_get_bool FORM_diversity $device diversity 1
 	        config_get_bool FORM_disabled $device disabled 0
 		config_get FORM_antenna $device antenna
