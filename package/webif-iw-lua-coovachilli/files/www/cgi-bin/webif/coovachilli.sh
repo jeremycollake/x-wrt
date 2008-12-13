@@ -29,7 +29,7 @@ page.title = "Coova-Chilli"
 cportal.set_menu()
 __WIP=4
 local forms = {}
-__FORM.option = string.trim(__FORM.option)
+__FORM.option = string.trim(__FORM.option) or ""
 if __FORM.option == "net" then
   forms[1] = cportal.net_form()
 elseif __FORM.option == "uam" then
@@ -62,10 +62,11 @@ elseif __FORM.option == "pages" then
   forms[#forms+1] = cportal.add_page_form()
 elseif __FORM.option == "edit" then
   forms = cportal.edit_page_form(nil,__FORM.page)
-elseif __FORM.bt_pkg_install == "Install" then
-  local freeradius_pkg = pkgInstalledClass.new("libltdl,freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm",true)
+--elseif __FORM.bt_pkg_install == "Install" then
+--  local freeradius_pkg = pkgInstalledClass.new("libltdl,freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm",true)
 else
   forms[1] = cportal.core_form()
+  print("pepito")
 end
 
 print(page:header())
