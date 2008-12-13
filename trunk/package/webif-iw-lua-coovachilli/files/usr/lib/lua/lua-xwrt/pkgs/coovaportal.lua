@@ -19,6 +19,7 @@ local string = string
 local tostring = tostring
 local uci = uci
 local next = next
+local type = type
 local ordertable = ordertable
 local load_file = load_file
 
@@ -114,6 +115,7 @@ uci.check_set("coovachilli","settings","HS_LOC_NETWORK","X-Wrt Network")
 
 uci.check_set("coovachilli","settings","HS_RADAUTH","1812")
 uci.check_set("coovachilli","settings","HS_RADACCT","1813")
+
 
 if radconf > 0 then
   uci.check_set("coovachilli","settings","HS_RADIUS2","127.0.0.1")
@@ -292,7 +294,7 @@ function core_form(form,user_level,rad_conf)
   uci.save("coovachilli")
   if user_level < 2 then
 		form = nasid_form(form, user_level)
-  	form = net_form(form,user_level,portal)
+		form = net_form(form,user_level,portal)
 		form = uam_form(form,user_level,portal)
 		form = radius_form(form,user_level, rad_conf)
 	end    
@@ -421,27 +423,26 @@ function uam_form(form,user_level,local_portal)
 	local form = form
 	local homeset = tonumber(uci.get("coovachilli","webadmin","homepage"))
 	local loginset = tonumber(uci.get("coovachilli", "webadmin", "loginpage"))
-	 
+	
 	if user_level > 1 or loginset == 0 or homeset > 0 then
-	  if form ~= nil then form:Add("subtitle","Captive Portal - Universal Authentication Method")
-	  else form = form or formClass.new("Captive Portal - Universal Authentication Method") end
-
-  	local user_level = user_level or userlevel
-  	local localuam = localuam or portal
+		if form ~= nil then form:Add("subtitle","Captive Portal - Universal Authentication Method")
+		else form = form or formClass.new("Captive Portal - Universal Authentication Method") end
+--		local user_level = user_level or userlevel
+		local localuam = localuam or portal
 --  	if user_level > 1 and local_portal < 2 then
 --  	if user_level > 1 then
 --    	form:Add("text","coovachilli.settings.HS_UAMSERVER",uci.check_set("coovachilli","settings","HS_UAMSERVER","192.168.182.1"),tr("cportal_var_uamserver#URL of Web Server"),"string","width:90%")
 --    	form:Add_help(tr("cportal_var_uamserver#URL of Web Server"),tr("cportal_help_uamserver#URL of a Webserver handling the authentication."))
 --    	form:Add("text","coovachilli.settings.HS_UAMFORMAT",uci.get("coovachilli","settings","HS_UAMFORMAT","http://\$HS_UAMSERVER/cgi-bin/login/login"),tr("cportal_var_format#Path of Login Page"),"string","width:90%")
-			if loginset == 0 then 
+		if loginset == 0 then 
     		form:Add("text","coovachilli.settings.HS_UAMFORMAT",uci.get("coovachilli","settings","HS_UAMFORMAT"),tr("cportal_var_format#Login Page"),"string","width:90%")
     		form:Add_help(tr("cportal_var_format#URL of Web Server"),tr("cportal_help_format#URL of a Webserver handling the authentication. To use the internal login page put <br>http://url_of_web_server/cgi-bin/login/login"))
 	    	form:Add("text","coovachilli.settings.HS_UAMSECRET",uci.get("coovachilli","settings","HS_UAMSECRET"),tr("cportal_var_uamsecret#UAM Secret"),"string")
-  	  	form:Add_help(tr("cportal_var_uamsecret#Web Secret"),tr("cportal_help_uamsecret#Shared secret between HotSpot and Webserver (UAM Server)."))
+			form:Add_help(tr("cportal_var_uamsecret#Web Secret"),tr("cportal_help_uamsecret#Shared secret between HotSpot and Webserver (UAM Server)."))
     	end
 --  	end
   	if user_level > 2 or homeset > 0 then
---    	form:Add("text","coovachilli.settings.HS_UAMHOMEPAGE",uci.check_set("coovachilli","settings","HS_UAMHOMEPAGE","http://\$HS_UAMLISTEN:\$HS_UAMPORT/www/coova.html"),tr("cportal_var_uamhomepage#UAM Home Page"),"string","width:90%")
+	--    	form:Add("text","coovachilli.settings.HS_UAMHOMEPAGE",uci.check_set("coovachilli","settings","HS_UAMHOMEPAGE","http://\$HS_UAMLISTEN:\$HS_UAMPORT/www/coova.html"),tr("cportal_var_uamhomepage#UAM Home Page"),"string","width:90%")
 			if homeset == 2 then 
     		form:Add("text","coovachilli.settings.HS_UAMHOMEPAGE",uci.get("coovachilli","settings","HS_UAMHOMEPAGE"),tr("cportal_var_uamhomepage#UAM Home Page"),"string","width:90%")
     		form:Add_help(tr("cportal_var_uamhomepage#Homepage"),tr("cportal_help_uamhomepage#URL of Welcome Page. Unauthenticated users will be redirected to this address, otherwise specified, they will be redirected to UAM Server instead. To use the internal login page put <br>http://url_of_web_server/cgi-bin/login/home"))
@@ -501,9 +502,11 @@ function add_allowed_site(form,user_level)
       strallowed = strallowed .. [[</td><td width="20%" ><a href="]]
       local sstep = ""
       local soption = ""
+      local smenu = ""
       if __FORM.option~=nil then soption = "&option="..__FORM.option end
       if __FORM.step~=nil then sstep = "&step="..__FORM.step end
-      strallowed = strallowed ..__SERVER.SCRIPT_NAME.."?".."DeleteAllowed="..sitesallowed[i][".name"].."&__menu="..__FORM.__menu..soption..sstep
+			if __FORM.__menu ~= nil then smenu = "&__menu="..__FORM.__menu end
+      strallowed = strallowed ..__SERVER.SCRIPT_NAME.."?".."DeleteAllowed="..sitesallowed[i][".name"]..smenu..soption..sstep
       strallowed = strallowed ..[[">]]..tr("remove_lnk#remove it")..[[</a></td></tr>]]
     end
     strallowed = strallowed..[[</table>]]
