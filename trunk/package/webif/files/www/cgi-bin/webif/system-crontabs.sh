@@ -103,6 +103,8 @@ if(document.all) {
 	cY += rY;
 	}
 
+if (cY < 280) { cY = cY + 100; }
+	
 d.style.left = (cX-offsetX) + "px";
 d.style.top = (cY-offsetY) + "px";
 
