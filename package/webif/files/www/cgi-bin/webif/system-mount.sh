@@ -10,10 +10,12 @@
 #
 # Author(s) [in order of work date]:
 #       m4rc0 <jansssenmaj@gmail.com>
+#       IVBela <ivbela@gmail.com>
 #
 # Major revisions:
 #		2008-11-12	Initial release
 #		2008-11-15  Made editable
+#		2008-12-20  Added mount/umount support
 #
 # NVRAM variables referenced:
 #       none
@@ -43,6 +45,17 @@ if ! empty "$FORM_remove_mountpoint"; then
 	uci_remove "fstab" "$FORM_remove_mountpoint"
 fi
 
+# Mount/Unmount selected mountpoint
+if ! empty "$FORM_domount_mountpoint"; then
+  case "$FORM_domount_action" in
+    mount)
+      mount $FORM_domount_mountpoint
+    ;;
+    umount)
+      umount $FORM_domount_mountpoint
+    ;;
+  esac
+fi
 
 config_cb() {
 	local cfg_type="$1"
@@ -122,6 +135,10 @@ if (doAction == 'update' && ConfigChanged == true ){
 
 function RemoveMount(mountpoint) {
 	document.location.href='$SCRIPT_NAME?remove_mountpoint='+mountpoint;
+	}
+
+function DoMount(mountpoint,doAction) {
+	document.location.href='$SCRIPT_NAME?domount_mountpoint='+mountpoint+'&domount_action='+doAction;
 	}
 
 function OpenEditWindow(d,MOUNTPOINT) {
@@ -298,6 +315,17 @@ for mountpoint in $MOUNTPOINTS; do
 		MOUNT_ENABLED="No"
 	fi
 	
+	#check if mountpoint is mounted
+	if grep -q $FORM_TARGET /proc/mounts; then
+		MOUNT_MOUNTED="Yes"
+		MOUNT_TEXT="umount"
+		MOUNT_ACTION="umount"
+	else
+		MOUNT_MOUNTED="No"
+		MOUNT_TEXT="mount"
+		MOUNT_ACTION="mount"
+	fi
+	
 	#                  1              23                                       4567
 	# de '\\\\\\\' --> \ = escape SH, \\ becomes \ which will escape CAT, last: \\\\ om java te escapen om \\ te krijgen
 	#FORM_escOPTIONS=`echo "$FORM_OPTIONS" | sed -e 's/"/%22/g' | sed -e 's/\\\/\\\\\\\/g'` 
@@ -305,11 +333,12 @@ for mountpoint in $MOUNTPOINTS; do
 	FORM_escOPTIONS=`echo "$FORM_OPTIONS" | sed -e 's/"/\&#34;/g'` 
 
 	get_tr
-	echo $tr"<td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"5\">$ENABLEDIMAGE</td><td width=\"100\"><strong>Target</strong></td><td>$FORM_TARGET</td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"5\"><a href=\"javascript:OpenEditWindow('EditWindow','$mountpoint')\">@TR<<edit>></a></td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"5\"><a href=\"javascript:RemoveMount('$mountpoint')\">@TR<<remove>></a></td><td><input id=\"TARGET_$mountpoint\" type=\"hidden\" name=\"TARGET_$mountpoint\" value=\"$FORM_TARGET\" /></td></tr>"
+	echo $tr"<td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"6\">$ENABLEDIMAGE</td><td width=\"100\"><strong>Target</strong></td><td>$FORM_TARGET</td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"6\"><a href=\"javascript:OpenEditWindow('EditWindow','$mountpoint')\">@TR<<edit>></a></td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"6\"><a href=\"javascript:RemoveMount('$mountpoint')\">@TR<<remove>></a></td><td width=\"35\" align=\"center\" valign=\"middle\" rowspan=\"6\"><a href=\"javascript:DoMount('$FORM_TARGET','$MOUNT_ACTION')\">$MOUNT_TEXT</a></td><td><input id=\"TARGET_$mountpoint\" type=\"hidden\" name=\"TARGET_$mountpoint\" value=\"$FORM_TARGET\" /></td></tr>"
 	echo $tr"<td width=\"100\"><strong>Device</strong></td><td>$FORM_DEVICE</td><td><input id=\"DEVICE_$mountpoint\" type=\"hidden\" name=\"DEVICE_$mountpoint\" value=\"$FORM_DEVICE\" /></td></tr>"
 	echo $tr"<td width=\"100\"><strong>FStype</strong></td><td>$FORM_FSTYPE</td><td><input id=\"FSTYPE_$mountpoint\" type=\"hidden\" name=\"FSTYPE_$mountpoint\" value=\"$FORM_FSTYPE\" /></td></tr>"
 	echo $tr"<td width=\"100\"><strong>Options</strong></td><td>$FORM_OPTIONS</td><td><input id=\"OPTIONS_$mountpoint\" type=\"hidden\" name=\"OPTIONS_$mountpoint\" value=\"$FORM_escOPTIONS\" /></td></tr>"
 	echo $tr"<td width=\"100\"><strong>Enabled</strong></td><td>$MOUNT_ENABLED</td><td><input id=\"ENABLED_$mountpoint\" type=\"hidden\" name=\"ENABLED_$mountpoint\" value=\"$FORM_ENABLED\" /></td></tr>"
+	echo $tr"<td width=\"100\"><strong>Mounted</strong></td><td>$MOUNT_MOUNTED</td><td><input id=\"MOUNTED_$mountpoint\" type=\"hidden\" name=\"MOUNTED_$mountpoint\" value=\"$FORM_MOUNTED\" /></td></tr>"
 	echo "<tr><td colspan=\"6\"><img alt=\"\" height=\"5\" width=\"1\" src=\"/images/pixel.gif\" /></td></tr>"
 done
 
