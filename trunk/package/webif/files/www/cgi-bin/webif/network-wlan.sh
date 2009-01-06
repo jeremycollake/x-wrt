@@ -199,7 +199,7 @@ equal "$?" "0" && wpa_supplicant_installed="1"
 #
 for device in $DEVICES; do
 	if empty "$FORM_submit"; then
-		config_get FORM_ap_mode $device agmode
+		config_get FORM_ap_mode $device hwmode
 		config_get iftype "$device" type
 	        config_get country $device country
 	        config_get FORM_channel $device channel
@@ -887,7 +887,7 @@ EOF
 				eval FORM_disabled="\$FORM_disabled_$device"
 				eval FORM_antenna="\$FORM_antenna_$device"
 
-				uci_set "wireless" "$device" "agmode" "$FORM_ap_mode"
+				uci_set "wireless" "$device" "hwmode" "$FORM_ap_mode"
 				uci_set "wireless" "$device" "channel" "$FORM_channel"
 				uci_set "wireless" "$device" "maxassoc" "$FORM_maxassoc"
 				uci_set "wireless" "$device" "distance" "$FORM_distance"
