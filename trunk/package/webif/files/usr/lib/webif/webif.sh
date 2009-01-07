@@ -157,7 +157,6 @@ Pragma: no-cache
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 	<meta http-equiv="expires" content="-1" />
 	<script type="text/javascript" src="/js/styleswitcher.js"></script>
-	<script type="text/javascript" src="/js/dynamicheader.js"></script>
 $header_inject_head</head>
 <body $4>$header_inject_body
 
@@ -170,10 +169,10 @@ $header_inject_head</head>
 		<ul>
 			<li><strong>$_firmware_name $_firmware_version</strong></li>
 			<li><strong>@TR<<Host>>: </strong>$_hostname</li>
-			<li><strong>@TR<<Uptime>>: </strong><font id="d_uptime">$_uptime</font></li>
-			<li><strong>@TR<<Date>>: </strong><font id="d_date">$_date</font></li>
-			<li><strong>@TR<<Time>>: </strong><font id="d_time">$_time</font></li>
-			<li><strong>@TR<<Load>>: </strong><font id="d_loadavg">$_loadavg</font></li>
+			<li><strong>@TR<<Uptime>>: </strong>$_uptime</li>
+			<li><strong>@TR<<Date>>: </strong>$_date</li>
+			<li><strong>@TR<<Time>>: </strong>$_time</li>
+			<li><strong>@TR<<Load>>: </strong>$_loadavg</li>
 		</ul>
 	</div>
 </div>
