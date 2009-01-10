@@ -37,7 +37,7 @@ generate_channels() {
 	if [ "$?" != "0" ]; then
 		is_package_installed kmod-madwifi
 		if [ "$?" = "0" ]; then
-			wlanconfig ath create wlandev wifi0 wlanmode ap >/dev/null
+			wlanconfig ath create wlandev wifi0 wlanmode ap 2>/dev/null >/dev/null
 			cleanup=1
 		fi
 	fi
@@ -46,7 +46,7 @@ generate_channels() {
 	echo "BGCHANNELS=\"${BGCHANNELS}\"" > /usr/lib/webif/channels.lst
 	echo "ACHANNELS=\"${ACHANNELS}\"" >> /usr/lib/webif/channels.lst
 	if [ "$cleanup" = "1" ]; then
-		wifi 2>&1
+		wifi 2>/dev/null >/dev/null
 	fi
 }
 
@@ -199,20 +199,20 @@ equal "$?" "0" && wpa_supplicant_installed="1"
 #
 for device in $DEVICES; do
 	if empty "$FORM_submit"; then
-		config_get FORM_ap_mode $device agmode
+		config_get FORM_ap_mode $device hwmode
 		config_get iftype "$device" type
 	        config_get country $device country
 	        config_get FORM_channel $device channel
 	        config_get FORM_maxassoc $device maxassoc
 	        config_get FORM_distance $device distance
 	        config_get FORM_txantenna $device txantenna
-		[ -n $FORM_txantenna ] && FORM_txantenna=0
+		[ -z $FORM_txantenna ] && FORM_txantenna=0
 	        config_get FORM_rxantenna $device rxantenna
-		[ -n $FORM_raxntenna ] && FORM_rxantenna=0
+		[ -z $FORM_rxantenna ] && FORM_rxantenna=0
 	        config_get_bool FORM_diversity $device diversity 1
 	        config_get_bool FORM_disabled $device disabled 0
 		config_get FORM_antenna $device antenna
-		[ -n $FORM_antenna ] && FORM_antenna=auto
+		[ -z $FORM_antenna ] && FORM_antenna=auto
 	else
 		config_get country $device country
 		config_get iftype "$device" type
@@ -379,6 +379,12 @@ for device in $DEVICES; do
 				config_get_bool FORM_ar "$vcfg" ar
 				config_get_bool FORM_turbo "$vcfg" turbo
 				config_get FORM_macpolicy "$vcfg" macpolicy
+				config_get FORM_maclist "$vcfg" maclist
+				eval FORM_maclistremove="\$FORM_${vcfg}_maclistremove"
+				if [ "$FORM_maclistremove" != "" ]; then
+					list_remove FORM_maclist "$FORM_maclistremove"
+					uci_set "wireless" "$vcfg" "maclist" "$FORM_maclist"
+				fi
 			else
 				eval FORM_key="\$FORM_radius_key_$vcfg"
 				eval FORM_radius_ipaddr="\$FORM_radius_ipaddr_$vcfg"
@@ -416,19 +422,10 @@ for device in $DEVICES; do
 				eval FORM_ar="\$FORM_ar_$vcfg"
 				eval FORM_turbo="\$FORM_turbo_$vcfg"
 				eval FORM_macpolicy="\$FORM_macpolicy_$vcfg"
+				eval FORM_maclistadd="\$FORM_${vcfg}_maclistadd"
+				config_get FORM_maclist "$vcfg" maclist
+				[ $FORM_maclistadd != "" ] && FORM_maclist="$FORM_maclist $FORM_maclistadd"
 			fi
-
-			config_get FORM_maclist "$vcfg" maclist
-			eval FORM_maclistadd="\$FORM_${vcfg}_maclistadd"
-			eval FORM_maclistremove="\$FORM_${vcfg}_maclistremove"
-			eval FORM_maclistsubmit="\$FORM_${vcfg}_maclistsubmit"
-			LISTVAL="$FORM_maclist"
-			handle_list "$FORM_maclistremove" "$FORM_maclistadd" "$FORM_maclistsubmit" 'mac|FORM_maclistadd|@TR<<MAC Address>>|required' && {
-				FORM_maclist="$LISTVAL"
-				[ " " = "$FORM_maclist" ] && FORM_maclist=""
-				uci_set "wireless" "$vcfg" "maclist" "$FORM_maclist"
-				FORM_maclistadd=""
-			}
 
 			case "$FORM_mode" in
 				ap) let "ap_count+=1";;
@@ -865,6 +862,7 @@ for device in $DEVICES; do
 			esac
 			append validate_forms "int|FORM_frag_$vcfg|@TR<<Fragmentation Threshold>>|min=0 max=2346|$FORM_frag" "$N"
 			append validate_forms "int|FORM_rts_$vcfg|@TR<<RTS Threshold>>|min=0 max=2347|$FORM_rts" "$N"
+			append validate_forms "mac|FORM_maclistadd_$vcfg|@TR<<MAC Address>>||$FORM_maclistadd" "$N"
 		fi
 	done
 	validate_wireless $iftype
@@ -889,7 +887,7 @@ EOF
 				eval FORM_disabled="\$FORM_disabled_$device"
 				eval FORM_antenna="\$FORM_antenna_$device"
 
-				uci_set "wireless" "$device" "agmode" "$FORM_ap_mode"
+				uci_set "wireless" "$device" "hwmode" "$FORM_ap_mode"
 				uci_set "wireless" "$device" "channel" "$FORM_channel"
 				uci_set "wireless" "$device" "maxassoc" "$FORM_maxassoc"
 				uci_set "wireless" "$device" "distance" "$FORM_distance"
@@ -934,6 +932,9 @@ EOF
 						eval FORM_ar="\$FORM_ar_$vcfg"
 						eval FORM_turbo="\$FORM_turbo_$vcfg"
 						eval FORM_macpolicy="\$FORM_macpolicy_$vcfg"
+						eval FORM_maclistadd="\$FORM_${vcfg}_maclistadd"
+						config_get FORM_maclist "$vcfg" maclist
+						[ $FORM_maclistadd != "" ] && FORM_maclist="$FORM_maclist $FORM_maclistadd"
 
 						uci_set "wireless" "$vcfg" "network" "$FORM_network"
 						uci_set "wireless" "$vcfg" "ssid" "$FORM_ssid"
@@ -969,6 +970,7 @@ EOF
 						uci_set "wireless" "$vcfg" "ar" "$FORM_ar"
 						uci_set "wireless" "$vcfg" "turbo" "$FORM_turbo"
 						uci_set "wireless" "$vcfg" "macpolicy" "$FORM_macpolicy"
+						uci_set "wireless" "$vcfg" "maclist" "$FORM_maclist"
 					fi
 				done
 			done
