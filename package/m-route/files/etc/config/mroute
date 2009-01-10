@@ -12,7 +12,7 @@ config 'mroute' 'settings'
 	option 'resetif' '5'
 
 config 'wanif' 'wan'
-	option 'name' 'Multy'
+	option 'name' 'WAN'
 	option 'weight' '3'
 
 #config 'wanif' 'wan1'
