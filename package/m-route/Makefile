@@ -11,7 +11,6 @@ include $(INCLUDE_DIR)/package.mk
 define Package/m-route
   SECTION:=admin
   CATEGORY:=Network
-#  SUBMENU:=
   DEPENDS:=+ip
   TITLE:=Load Balancing scrip for Multi Wan Connections
 endef
@@ -30,4 +29,4 @@ define Package/m-route/install
 	find $(1) -name *~ | xargs rm -rf
 endef
 
-$(eval $(call BuildPackage,webif-iw-lua-olsr))
+$(eval $(call BuildPackage,m-route))
