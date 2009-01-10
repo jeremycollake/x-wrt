@@ -65,7 +65,7 @@ ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/int2human"
 
 if [ -e ${IPKG_INSTROOT}/etc/openwrt_version ]; then
 	revision="`cat ${IPKG_INSTROOT}/etc/openwrt_version`"
-	[ "$revision" = "8.09" ] && revision="8.09_RC1"
+	[ "$revision" = "8.09" ] && revision="8.09_RC2"
 fi
 if [ "$revision" = "" ]; then
 	grep -q "8.09" "${IPKG_INSTROOT}/etc/banner"
