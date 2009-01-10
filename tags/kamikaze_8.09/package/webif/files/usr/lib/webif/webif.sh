@@ -133,6 +133,8 @@ header() {
 	_categories=$(categories $1)
 	_subcategories=${2:+$(subcategories "$1" "$2")}
 	_pagename="${2:+@TR<<$2>> - }"
+	_time="`date +%T`"
+	_date="`date +%F`"
 	if ! equal $6 "" && ! equal $6 "0" ; then _pageload="<SCRIPT type='text/javascript'>start=0; end=$6</SCRIPT><SCRIPT src='/js/pageload.js' type='text/javascript'></SCRIPT><DIV id='loadmain'><SCRIPT type='text/javascript'>document.getElementById(\"loadmain\").style.display = \"none\";</SCRIPT>"; _JSload="<SCRIPT type='text/javascript'>load()</SCRIPT>"; fi
 
 	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && grep 'root:!' /etc/passwd >&- 2>&- && {
@@ -166,9 +168,11 @@ $header_inject_head</head>
 		<h3><strong>@TR<<Status>>:</strong></h3>
 		<ul>
 			<li><strong>$_firmware_name $_firmware_version</strong></li>
-			<li><strong>@TR<<Host>>:</strong> $_hostname</li>
-			<li><strong>@TR<<Uptime>>:</strong> $_uptime</li>
-			<li><strong>@TR<<Load>>:</strong> $_loadavg</li>
+			<li><strong>@TR<<Host>>: </strong>$_hostname</li>
+			<li><strong>@TR<<Uptime>>: </strong>$_uptime</li>
+			<li><strong>@TR<<Date>>: </strong>$_date</li>
+			<li><strong>@TR<<Time>>: </strong>$_time</li>
+			<li><strong>@TR<<Load>>: </strong>$_loadavg</li>
 		</ul>
 	</div>
 </div>
@@ -313,49 +317,6 @@ display_form() {
 		awk -F'|' -f /usr/lib/webif/common.awk -f /usr/lib/webif/form.awk
 	else
 		echo "$1" | awk -F'|' -f /usr/lib/webif/common.awk -f /usr/lib/webif/form.awk
-	fi
-}
-
-handle_list_remove() {
-	echo "$1 " | awk '
-BEGIN {
-	RS=" "
-	FS=":"
-}
-($0 !~ /^'"$2"'/) && ($0 != "") {
-	printf " " $0
-	first = 0
-}'
-}
-
-handle_list() {
-	# $1 - remove
-	# $2 - add
-	# $3 - submit
-	# $4 - validate
-
-	empty "$1" || {
-		LISTVAL="$(handle_list_remove "$LISTVAL" "$1") "
-		LISTVAL="${LISTVAL# }"
-		LISTVAL="${LISTVAL%% }"
-		_changed=1
-	}
-
-	empty "$3" || {
-		validate "${4:-none}|$2" && {
-			LISTVAL="$LISTVAL $2"
-			_changed=1
-		}
-	}
-
-	LISTVAL="${LISTVAL# }"
-	LISTVAL="${LISTVAL%% }"
-	LISTVAL="${LISTVAL:- }"
-
-	if empty "$_changed"; then
-		return 255
-	else
-		return 0
 	fi
 }
 
