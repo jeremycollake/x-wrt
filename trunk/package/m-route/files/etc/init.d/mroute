@@ -1,0 +1,46 @@
+#!/bin/sh /etc/rc.common
+# Copyright (C) 2008 OpenWrt.org
+
+START=44
+RUN_D=/var/run
+PID_F=$RUN_D/mroute.pid
+PID=`pidof mroute`
+RUNING=`echo $PID | wc | awk '{ print $2 }'`
+if [ $RUNING -eq 1 ]; then
+	if [ -f $PID_F ]; then
+		rm $PID_F
+	fi
+fi
+
+start() {
+	if [ ! -f $PID_F ]; then
+		mkdir -p $RUN_D
+		PID=`pidof mroute`
+		echo "$PID > $PID_F"
+		echo $PID > $PID_F
+		echo "starting mroute ..."
+		. /lib/mroute/mroute
+		gwping
+	else
+		echo "mroute is running ... "
+	fi
+}
+
+stop() {
+	if [ $RUNING -gt 1 ]; then
+		echo -n "stoping mroute... "
+		PID=`cat $PID_F`
+		echo "$PID_F > $PID"
+		kill $PID
+		rm $PID_F
+	else
+		echo "mroute is not running"
+	fi
+}
+
+restart(){
+	stop
+	sleep 2
+	start
+}
+
