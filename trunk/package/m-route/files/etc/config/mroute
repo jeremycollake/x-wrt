@@ -1,0 +1,27 @@
+config 'websettings' 'webadmin'
+	option 'userlevel' '1'
+
+config 'mroute' 'settings'
+	option 'os' 'OpenWrt'
+	option 'debug' '1'
+	option 'sleeptime' '5'
+	option 'testip' '204.225.44.3'
+	option 'timeout' '2'
+	option 'success' '2'
+	option 'failure' '3'
+	option 'resetif' '5'
+
+config 'wanif' 'wan'
+	option 'name' 'Multy'
+	option 'weight' '3'
+
+#config 'wanif' 'wan1'
+#	option 'name' 'Arnet'
+#	option 'weight' '2'
+
+#config 'wanif' 'wifi'
+#	option 'name' 'Wifi'
+#	option 'weight' '1'
+
+config 'lanif' 'lan'
+
