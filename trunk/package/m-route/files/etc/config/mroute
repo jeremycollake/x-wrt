@@ -3,7 +3,7 @@ config 'websettings' 'webadmin'
 
 config 'mroute' 'settings'
 	option 'os' 'OpenWrt'
-	option 'debug' '1'
+	option 'debug' '0'
 	option 'sleeptime' '5'
 	option 'testip' '204.225.44.3'
 	option 'timeout' '2'
