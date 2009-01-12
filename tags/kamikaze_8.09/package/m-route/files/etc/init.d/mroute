@@ -7,6 +7,8 @@ EXTRA_COMMANDS="status active"
 EXTRA_HELP="	status	Show current status
 	active	Show Active connections"
 
+. /lib/mroute/mroute
+
 RUN_D=/var/run
 PID_F=$RUN_D/mroute.pid
 PID=`cat $PID_F 2> /dev/null`
@@ -23,7 +25,6 @@ start() {
 #		echo "$PID > $PID_F $name"
 		echo $PID > $PID_F
 		logger -t mroute -p 5 -s "Starting.... PID $PID"
-		. /lib/mroute/mroute
 		gwping
 	else
 		echo "mroute is running ... "
@@ -38,7 +39,6 @@ stop() {
 		}
 		PID=`cat $PID_F`
 		logger -t mroute -p 5 -s "stoping mroute... PID $PID"
-		. /lib/mroute/mroute
 		for i in $(seq 1 $WAN_DEVCOUNT)
 		do
 			get_wan_values $i
@@ -51,11 +51,11 @@ stop() {
 		rm /var/run/mroute.active 2> /dev/null
 		logger -t mroute -p 5 -s "Stoped"
 		echo ""
-		echo "Restarting Network .... Please wait..."
-		ifup -a
-		wifi
-		sleep 5
-		echo ""
+#		echo "Restarting Network .... Please wait..."
+#		ifup -a
+#		wifi
+#		sleep 5
+#		echo ""
 		ip route 
 	else
 		echo "mroute is not running"
