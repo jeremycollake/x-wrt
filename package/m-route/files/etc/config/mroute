@@ -24,4 +24,5 @@ config 'wanif' 'wan'
 #	option 'weight' '1'
 
 config 'lanif' 'lan'
+	option 'name' 'LAN'
 

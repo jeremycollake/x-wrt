@@ -57,6 +57,7 @@ local __FORM = __FORM
 local __MENU = __MENU
 local user_level_select = user_level_select
 local service_state_select = service_state_select
+local print = print
 local tr = tr
 local uci = uci
 local tbformClass = tbformClass
@@ -129,12 +130,29 @@ function interfaces_form(form, userlevel)
   form.col[form.col.ifname].options:Add("wanif","WAN (Internet)")
   form.col[form.col.ifname].options:Add("lanif","LAN (Local Net)")
   form:Add_col("text", "name","Name", "120px","string","width:120px")
-  form:Add_col("text", "weight", "Weight", "60px","int, >0","width:60px")
+  form:Add_col("text", "weight", "Weight", "60px","int","width:60px")
   form:Add_col("text", "ports", "Ports", "200px","string","width:200px")
 	for k, v in pairs (net.dev_list()) do
 		if k ~= "loopback" then
-			if __FORM["Type"..k] == "none" then
-				uci.delete("mroute",k)
+			if __FORM["Type"..k] ~= nil then
+				if __FORM["Type"..k] == "none" then
+					uci.delete("mroute",k)
+				else
+					if __FORM["Type"..k] == "lanif" then
+						uci.check_set("mroute",k,"lanif")
+					elseif __FORM["Type"..k] == "wanif" then
+						uci.check_set("mroute",k,"wanif")
+					end
+					local weight = __FORM["mroute."..k..".weight"] or 1
+					local name = __FORM["mroute."..k..".name"] or k
+					local ports = __FORM["mroute."..k..".ports"] or ""
+					uci.set("mroute",k,"name", name) 
+					if __FORM["Type"..k] ~= "lanif" then
+						uci.set("mroute",k,"weight", weight)
+						if ports ~= "" then
+							uci.set("mroute",k,"ports",ports) end
+					end
+				end
 				uci.save("mroute")
 			end
 			form:New_row()
@@ -149,50 +167,15 @@ function interfaces_form(form, userlevel)
 				name = ifvalues.name or k
 				weight = ifvalues.weight or ""
 				ports = ifvalues.ports or ""
-				form:set_col("name","mroute."..k..".name",name)
+			end
+			if network ~= "lanif" then
 				form:set_col("weight","mroute."..k..".weight",weight)
 				form:set_col("ports","mroute."..k..".ports",ports)
 			end
+			form:set_col("name","mroute."..k..".name",name)
 			form:set_col("ifname","Type"..k, network)
 		end
 	end
---	local checks = uci.get_type("freeradius_check","user")
---	local replys = uci.get_type("freeradius_reply","user")
---	local users = {}
---	if checks then
---	for i, t in pairs(checks) do
---		users[t[".name"]] = t
---	end
---	end
---	if replys then
---	for i, t in pairs(replys) do
---		users[t[".name"]] = t
---	end
---	end
---	for name, t in pairs(users) do
---			local reply = uci.get_section("freeradius_reply",name)
---			local check = uci.get_section("freeradius_check",name)
---    	local password = check.User_Password or ""
---    	local expiration = check.Expiration or ""
---    	local fall = reply.Fall_Through or ""
---    	local simul = check.Simultaneous_Use or ""
---    	local itimeout = reply.Idle_Timeout or ""
---    	local acctii = reply.Acct_Interim_Interval or ""
---    	local maxdown = reply.WISPr_Bandwidth_Max_Down or ""
---    	local maxup = reply.WISPr_Bandwidth_Max_Up or ""
---      form:New_row()
-
---      form:set_col("Username","freeradius_check."..name..".Username", name)
---      form:set_col("Password","freeradius_check."..name..".User_Password", password)
-----      form:set_col("Expiration","freeradius_check."..name..".Expiration", expiration)
---      form:set_col("FallThrough", "freeradius_reply."..name..".Fall_Through", fall)
---      form:set_col("Simultaneous", "freeradius_check."..name..".Simultaneous_Use", simul)
---      form:set_col("IdleTimeout", "freeradius_reply."..name..".Idle_Timeout", itimeout)
---      form:set_col("AcctInterimInt", "freeradius_reply."..name..".Acct_Interim_Interval", acctii)
---      form:set_col("MaxDown", "freeradius_reply."..name..".WISPr_Bandwidth_Max_Down", maxdown)
---      form:set_col("MaxUp", "freeradius_reply."..name..".WISPr_Bandwidth_Max_Up", maxup)
---      form:set_col("Remove", "Remove_"..name, __SERVER.SCRIPT_NAME.."?".."UCI_CMD_delfreeradius_check."..name.."=&UCI_CMD_delfreeradius_reply."..name.."=&__menu="..__FORM.__menu.."&option="..__FORM.option)
---  end
   return form
 end
 

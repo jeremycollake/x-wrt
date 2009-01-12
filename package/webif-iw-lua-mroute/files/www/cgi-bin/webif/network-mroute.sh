@@ -57,7 +57,9 @@ print(page:header())
 for i=1, #forms do
   forms[i]:print()
 end
+--[[
 for k, v in pairs(__FORM) do
 	print(k,v,"<br>")
 end
+]]--
 print (page:footer())
