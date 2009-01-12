@@ -70,20 +70,20 @@ restart(){
 
 disable() {
 	name="$(basename "${initscript}")"
-	rm -f "$IPKG_INSTROOT"/etc/rc.d/T??$name
+	rm -f "$IPKG_INSTROOT"/etc/rc.d/SS??$name
 	rm -f "$IPKG_INSTROOT"/etc/rc.d/K??$name
 }
 
 enable() {
 	name="$(basename "${initscript}")"
 	disable
-	[ "$START" ] && ln -s "../init.d/$name" "$IPKG_INSTROOT/etc/rc.d/T${START}${name##S[0-9][0-9]}"
+	[ "$START" ] && ln -s "../init.d/$name" "$IPKG_INSTROOT/etc/rc.d/SS${START}${name##SS[0-9][0-9]}"
 	[ "$STOP"  ] && ln -s "../init.d/$name" "$IPKG_INSTROOT/etc/rc.d/K${STOP}${name##K[0-9][0-9]}"
 }
 
 enabled() {
 	name="$(basename "${initscript}")"
-	[ -x "$IPKG_INSTROOT/etc/rc.d/T${START}${name##S[0-9][0-9]}" ]
+	[ -x "$IPKG_INSTROOT/etc/rc.d/SS${START}${name##SS[0-9][0-9]}" ]
 }
 
 status() {
