@@ -2,23 +2,27 @@
 # Copyright (C) 2008 OpenWrt.org
 
 START=10
+
+EXTRA_COMMANDS="status active"
+EXTRA_HELP="	status	Show current status
+	active	Show Active connections"
+
 RUN_D=/var/run
 PID_F=$RUN_D/mroute.pid
-PID=`pidof mroute`
-RUNING=`echo $PID | wc | awk '{ print $2 }'`
-if [ $RUNING -eq 1 ]; then
-	if [ -f $PID_F ]; then
-		rm $PID_F
-	fi
-fi
+PID=`cat $PID_F 2> /dev/null`
 
 start() {
 	if [ ! -f $PID_F ]; then
+		[ -f /usr/share/udhcpc/default.mroute ] && {
+			mv /usr/share/udhcpc/default.script /usr/share/udhcpc/default.script.orig
+			mv /usr/share/udhcpc/default.mroute /usr/share/udhcpc/default.script
+		}
 		mkdir -p $RUN_D
-		PID=`pidof mroute`
-		echo "$PID > $PID_F"
+		name="$(basename "${initscript}")"
+		PID=`pidof $name`
+#		echo "$PID > $PID_F $name"
 		echo $PID > $PID_F
-		echo "starting mroute ..."
+		logger -t mroute -p 5 -s "Starting.... PID $PID"
 		. /lib/mroute/mroute
 		gwping
 	else
@@ -27,12 +31,32 @@ start() {
 }
 
 stop() {
-	if [ $RUNING -gt 1 ]; then
-		echo -n "stoping mroute... "
+	if [ "$PID" != "" ]; then
+		[ -f /usr/share/udhcpc/default.script.orig ] && {
+			mv /usr/share/udhcpc/default.script /usr/share/udhcpc/default.mroute
+			mv /usr/share/udhcpc/default.script.orig /usr/share/udhcpc/default.script
+		}
 		PID=`cat $PID_F`
-		echo "$PID_F > $PID"
+		logger -t mroute -p 5 -s "stoping mroute... PID $PID"
+		. /lib/mroute/mroute
+		for i in $(seq 1 $WAN_DEVCOUNT)
+		do
+			get_wan_values $i
+			del_rt_rule $RT_TABLE
+			delete_wan_rt
+		done
+		eval "`ip route | grep "default" | awk '{ print "ip route del default"}'`"
 		kill $PID
-		rm $PID_F
+		rm $PID_F 2> /dev/null
+		rm /var/run/mroute.active 2> /dev/null
+		logger -t mroute -p 5 -s "Stoped"
+		echo ""
+		echo "Restarting Network .... Please wait..."
+		ifup -a
+		wifi
+		sleep 5
+		echo ""
+		ip route 
 	else
 		echo "mroute is not running"
 	fi
@@ -62,3 +86,15 @@ enabled() {
 	[ -x "$IPKG_INSTROOT/etc/rc.d/T${START}${name##S[0-9][0-9]}" ]
 }
 
+status() {
+	if [ ! -f $PID_F ]; then
+		echo "stoped"
+	else
+		echo "running"
+	fi
+}
+
+active() {
+		STATUS=`cat /var/run/mroute.active 2> /dev/null`
+		echo $STATUS
+}
