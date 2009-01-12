@@ -20,6 +20,16 @@ config_cb() {
 	esac
 }
 
+log_info() {
+		logger -t mroute -p $1 -s $2
+}
+
+log_debug() {
+	if [ $DEBUG -eq 1 ]; then
+		logger -t mroute -p $1 -s $2
+	fi
+}
+
 get_if_data () {
 	uci_load network
 	config_get ifname $1 ifname
@@ -150,10 +160,11 @@ check_working () {
 }
 
 set_routing () {
-	MSG=`date`
+	DATE=`date`
+	MSG=""
 	ROUTE="ip route replace default scope global "
 	if [ $R -gt 1 ]; then
-		MSG="$MSG Active Load Balance conections ($R)"
+		MSG="Active Load Balancing connections ($R)"
 		for i in $(seq 1 $R); do
 			GW=`eval echo "$"RGW$i`
 			WAN_IF=`eval echo "$"RWAN_IF$i`
@@ -162,29 +173,36 @@ set_routing () {
 			ROUTE="$ROUTE nexthop via $GW dev $WAN_IF weight $RW"
 			MSG="$MSG, $NAME"
 		done
+		LEVEL=5
 	elif [ $R -eq 1 ]; then
-		MSG="$MSG  Active connection $RNAME1"
+		LEVEL=4
+		MSG="Active connection $RNAME1"
 		ROUTE="ip route replace default scope global via $RGW1 dev $RWAN_IF1"
 	elif [ $R -eq 0 ]; then
-		MSG="$MSG No active connections"
+		MSG="No active connections"
+		LEVEL=3
 	fi
-	echo $MSG
+	log_info $LEVEL "$MSG"
+#	echo "$DATE - $MSG"
+	echo $MSG > /var/run/mroute.active
 	if [ $R -gt 0 ]; then
 #		ip route flush cache
+		eval "`ip route | grep "default" | awk '{ print "ip route del default"}'`"
 		`$ROUTE`
 	fi
 }
 
 gwping () {
+	init
 	PR=0
 	while : ; do
 		for p in $(seq 1 $WAN_DEVCOUNT); do
 			get_wan_values $p
 			if [[ "$WAN_IF" != "" && "$WAN_GW" != "" && "$WAN_IP" != "" ]]; then
-				check_duplicate_rt_openwrt $WAN_GW
+####				check_duplicate_rt_openwrt $WAN_GW
 				ping_iface $p
 			else
-				echo "Interface $WAN_DEV is not ready $COUNT"
+				log_info 3 "Interface $WAN_DEV is not ready $COUNT"
 				LLS=1
 				COUNT=`expr $COUNT + 1`
 				if [ $COUNT -gt $RESETIFACE ]; then
@@ -193,12 +211,12 @@ gwping () {
 					sleep 2
 					ifup $WAN_DEV ###### > /dev/null 2>&1
 					if [ $? -eq 0 ]; then
-					set_up_wan_iface $WAN_DEV $p
-					if [[ "$WAN_IF" != "" && "$WAN_GW" != "" && "$WAN_IP" != "" ]]; then
-						set_wan_rt
-						add_rt_rule $WAN_IP $RT_TABLE
-						ping_iface $p
-					fi
+						set_up_wan_iface $WAN_DEV $p
+						if [[ "$WAN_IF" != "" && "$WAN_GW" != "" && "$WAN_IP" != "" ]]; then
+							set_wan_rt
+							add_rt_rule $WAN_IP $RT_TABLE
+							ping_iface $p
+						fi
 					fi
 				else
 					set_up_wan_iface $WAN_DEV $p
@@ -233,17 +251,17 @@ gwping () {
 	done
 }
 
-check_duplicate_rt_openwrt () {
-### Time on time OpenWrt add by it self default route
-### so, this function is for delete all routing that exists in balanced routing
-
-	CRGW=`ip route list | grep "nexthop via $1" | awk '{ print $3}'`
-	if [ "$CRGW" != "" ]; then
-		if [ "`ip route list default via $CRGW`" != "" ]; then
-			ip route del default via $CRGW
-		fi 
-	fi
-}
+#check_duplicate_rt_openwrt () {
+#### Time on time OpenWrt add by it self default route
+#### so, this function is for delete all routing that exists in balanced routing
+#### the better way is modify /usr/share/default.script, thanks xMff of openwrt-devel chanel
+#	CRGW=`ip route list | grep "nexthop via $1" | awk '{ print $3}'`
+#	if [ "$CRGW" != "" ]; then
+#		if [ "`ip route list default via $CRGW`" != "" ]; then
+#			ip route del default via $CRGW
+#		fi 
+#	fi
+#}
 
 ping_check () {
 	RETVAL=1
@@ -256,7 +274,7 @@ ping_check () {
 			ping -W $TIMEOUT -I $WAN_IF -c 1 $TESTIP > /dev/null  2>&1
 			RETVAL=$?
 		else #### Interface not found ####
-			echo "Interface for $WAN_IF missing"
+			log_info 3 "Interface for $WAN_IF missing"
 			if [[  "$WAN_IP" != "" || "$WAN_GW" != ""  ]]; then
 				remove_WAN_IF $1
 			fi
@@ -267,7 +285,7 @@ ping_check () {
 
 remove_WAN_IF () {
 	if [ "$WAN_INET" != "static" ]; then
-		del_rt_rule RT_TABLE
+		del_rt_rule $RT_TABLE
 		delete_wan_rt			
 		eval WAN_IF$1=""
 		eval WAN_GW$1=""
@@ -289,23 +307,27 @@ ping_iface () {
 		if [ $? -eq 1 ]; then
 			COUNT=`expr $FAILUREREPEATCOUNT + 1`
 		fi
-		if [ $DEBUG -eq 1 ]; then
+#		if [ $DEBUG -eq 1 ]; then
 			if [ $CPS -ne 0 ]; then
-				echo `date` $WAN_NAME Ping timeout count $COUNT
+#				echo `date` $WAN_NAME Ping timeout count $COUNT
+				log_debug 4 "$WAN_NAME Ping timeout count $COUNT"
 			else
-				echo `date` $WAN_NAME Ping OK count $COUNT
+#				echo `date` $WAN_NAME Ping OK count $COUNT
+				log_debug 5 "$WAN_NAME Ping OK count $COUNT"
 			fi
-		fi
+#		fi
 	else
 		if [ $LPS -ne $LLS ]; then
 			COUNT=`expr $COUNT + 1`
-			if [ $DEBUG -eq 1 ]; then
+#			if [ $DEBUG -eq 1 ]; then
 				if [ $CPS -eq 0 ]; then
-					echo `date` $WAN_NAME Ping OK count $COUNT
+#					echo `date` $WAN_NAME Ping OK count $COUNT
+					log_debug 5 "$WAN_NAME Ping OK count $COUNT"
 				else
-					echo `date` $WAN_NAME Ping Timeout count $COUNT
+#					echo `date` $WAN_NAME Ping Timeout count $COUNT
+					log_debug 4 "$WAN_NAME Ping timeout count $COUNT"
 				fi
-			fi
+#			fi
 		fi
 	fi
 
@@ -329,7 +351,8 @@ ping_iface () {
 			else
 				STATE="Down"
 			fi
-			echo `date` Status changed for $WAN_NAME to $STATE
+			log_debug 4 "Status changed for $WAN_NAME to $STATE"
+#			echo `date` Status changed for $WAN_NAME to $STATE
 		fi
 #		if [ $COUNT -ge $FAILUREREPEATCOUNT ]; then
 #			remove_WAN_IF $1
@@ -354,16 +377,16 @@ set_wan_rt () {
 	do
 		RT1_TABLE=`eval echo "$"RT_TABLE$rt`
 		RUN="ip route add $WAN_NET dev $WAN_IF src $WAN_IP table $RT1_TABLE"
-		echo $RUN
+		log_debug 5 "$RUN"
 		`$RUN`
 	done
 
 	RUN="ip route add 127.0.0.0/8 dev lo table $RT_TABLE"
-	echo $RUN
+	log_debug 5 "$RUN"
 	`$RUN`
 
 	RUN="ip route add default via $WAN_GW table $RT_TABLE"
-	echo $RUN
+	log_debug 5 "$RUN"
 	`$RUN`
 
 	set_lan_rt $RT_TABLE
@@ -378,7 +401,7 @@ set_lan_rt () {
 		LAN_NET=`eval echo "$"LAN_NET$lan`
 
 		RUN="ip route add $LAN_NET dev $LAN_IF table $RT_TABLE"
-		echo $RUN
+		log_debug 5 "$RUN"
 		`$RUN`
 	done
 }
@@ -386,7 +409,7 @@ set_lan_rt () {
 delete_wan_rt () {
 	WAN_STATE=1
 	RUN="ip route flush table $RT_TABLE"
-	echo $RUN
+	log_debug 5 "$RUN"
 	`$RUN 2> /dev/null`
 }
 
@@ -400,7 +423,7 @@ add_rt_rule () {
 	else
 		RUN="ip rule add from $WAN_IP table $RT_TABLE"
 	fi
-	echo $RUN
+	log_debug 5 "$RUN"
 	`$RUN`
 }
 
@@ -420,8 +443,26 @@ load_settings () {
 	RESETIFACE="$CONFIG_settings_resetif"
 }
 
+init () {
+	for i in $(seq 1 $WAN_DEVCOUNT)
+	do
+		get_wan_values $i
+		delete_wan_rt
+		set_wan_rt
+	done
+
+	for i in $(seq 1 $WAN_DEVCOUNT)
+	do
+		get_wan_values $i
+		del_rt_rule $RT_TABLE
+#		if [ $WAN_STATE -eq 0 ]; then
+			add_rt_rule $WAN_IP $RT_TABLE
+#		fi
+	done
+}
+
 load_settings
-echo $OS $DEBUG
+#echo $OS $DEBUG
 
 i=0
 for iface in $LAN_DEV_LIST; do
@@ -439,8 +480,6 @@ for iface in $WAN_DEV_LIST; do
 	set_up_wan_iface $iface $i
 done
 WAN_DEVCOUNT=$i
-
-create_rt_tables
 
 #for i in $(seq 1 $LAN_DEVCOUNT); do
 #	get_lan_values $i
@@ -460,20 +499,6 @@ create_rt_tables
 #	echo ""
 #done
 
-for i in $(seq 1 $WAN_DEVCOUNT)
-do
-	get_wan_values $i
-	delete_wan_rt
-	set_wan_rt
-done
-
-for i in $(seq 1 $WAN_DEVCOUNT)
-do
-	get_wan_values $i
-	del_rt_rule $RT_TABLE
-#	if [ $WAN_STATE -eq 0 ]; then
-		add_rt_rule $WAN_IP $RT_TABLE
-#	fi
-done
+create_rt_tables
 
 #gwping
