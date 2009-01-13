@@ -1,5 +1,7 @@
+
 config 'websettings' 'webadmin'
 	option 'userlevel' '1'
+	option 'enable' '1'
 
 config 'mroute' 'settings'
 	option 'os' 'OpenWrt'
@@ -13,16 +15,10 @@ config 'mroute' 'settings'
 
 config 'wanif' 'wan'
 	option 'name' 'WAN'
-	option 'weight' '3'
-
-#config 'wanif' 'wan1'
-#	option 'name' 'Arnet'
-#	option 'weight' '2'
-
-#config 'wanif' 'wifi'
-#	option 'name' 'Wifi'
-#	option 'weight' '1'
+	option 'weight' '1'
 
 config 'lanif' 'lan'
 	option 'name' 'LAN'
 
+config 'mroute' 'system'
+	option 'apply' '/usr/lib/lua/lua-xwrt/applys/mroute.lua'
