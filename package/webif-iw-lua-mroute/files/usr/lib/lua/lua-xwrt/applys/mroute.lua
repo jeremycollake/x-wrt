@@ -48,10 +48,12 @@ function process()
 	local wan_list = uci.get_type("mroute","wanif")
 	for l = 1, #lan_list do
 		for w = 1, #wan_list do
+			firewall.set_zone(wan_list[w][".name"],"REJECT","ACCEPT","REJECT","1")
 			firewall.set_forwarding(lan_list[l][".name"],wan_list[w][".name"])
 		end
 	end
   uci.commit("mroute")
+	uci.commit("firewall")
 end
 
 return parser
