@@ -66,11 +66,18 @@ local net = net
 -- no more external access after this point
 setfenv(1, P)
 
+uci.check_set("mroute","webadmin","mroute")
+uci.check_set("mroute","system","mroute")
+uci.check_set("mroute","webadmin","enable","1")
+uci.check_set("mroute","system","apply","/usr/lib/lua/lua-xwrt/applys/mroute.lua")
+uci.save("mroute")
+
 function set_menu()
   __MENU.Network["M-Routes"] = menuClass.new()
   __MENU.Network["M-Routes"]:Add("mroute_menu_Core#Core","network-mroute.sh?option=core")
+  __MENU.Network["M-Routes"]:Add("mroute_menu_Interfaces#Interfaces","network-mroute.sh?option=ifaces")
   __MENU.Network["M-Routes"]:Add("mroute_menu_TuneUp#Tune UP","network-mroute.sh?option=tuneup")
-  __MENU.Network["M-Routes"]:Add("mroute_menu_Status#Status","network-mroute.sh?option=status")
+--  __MENU.Network["M-Routes"]:Add("mroute_menu_Status#Status","network-mroute.sh?option=status")
 end
 
 function core_form()
@@ -131,7 +138,7 @@ function interfaces_form(form, userlevel)
   form.col[form.col.ifname].options:Add("lanif","LAN (Local Net)")
   form:Add_col("text", "name","Name", "120px","string","width:120px")
   form:Add_col("text", "weight", "Weight", "60px","int","width:60px")
-  form:Add_col("text", "ports", "Ports", "200px","string","width:200px")
+--  form:Add_col("text", "ports", "Ports", "200px","string","width:200px")
 	for k, v in pairs (net.dev_list()) do
 		if k ~= "loopback" then
 			if __FORM["Type"..k] ~= nil then
@@ -170,7 +177,7 @@ function interfaces_form(form, userlevel)
 			end
 			if network ~= "lanif" then
 				form:set_col("weight","mroute."..k..".weight",weight)
-				form:set_col("ports","mroute."..k..".ports",ports)
+--				form:set_col("ports","mroute."..k..".ports",ports)
 			end
 			form:set_col("name","mroute."..k..".name",name)
 			form:set_col("ifname","Type"..k, network)

@@ -1,504 +1,88 @@
-#!/bin/sh
-. "/usr/lib/webif/webif.sh"
-config_cb() {
-	local cfg_type="$1"
-	local cfg_name="$2"
+. /lib/mroute/mroute-functions
 
-	case "$cfg_type" in
-		interface)
-			append network "$cfg_name" "$N"
-		;;
-		wanif)
-			append WAN_DEV_LIST "$cfg_name" "$N"
-		;;
-		lanif)
-			append LAN_DEV_LIST "$cfg_name" "$N"
-		;;
-#		mroute)
-#			append Rforwarding_cfgs "$cfg_name"
-#		;;
-	esac
-}
+RUN_D=/var/run
+PID_F=$RUN_D/mroute.pid
+PID=`cat $PID_F 2> /dev/null`
 
-log_info() {
-		logger -t mroute -p $1 -s $2
-}
-
-log_debug() {
-	if [ $DEBUG -eq 1 ]; then
-		logger -t mroute -p $1 -s $2
+start() {
+	if [ ! -f $PID_F ]; then
+		[ -f /usr/share/udhcpc/default.mroute ] && {
+			mv /usr/share/udhcpc/default.script /usr/share/udhcpc/default.script.orig
+			mv /usr/share/udhcpc/default.mroute /usr/share/udhcpc/default.script
+		}
+		mkdir -p $RUN_D
+#		name="$(basename "${initscript}")"
+#		PID=`pidof $name`
+		PID=`ps | grep "/bin/sh /lib/mroute/mroute start" | sed '/grep/d' | awk '{ print $1 }'`
+#		echo "$PID > $PID_F $name"
+		echo $PID > $PID_F
+#		logger -t mroute -p 5 -s "Starting.... PID $PID"
+		logger -t mroute -p 5 -s "Starting.... "
+		gwping
+	else
+		echo "mroute is running ... "
+		exit 1
 	fi
 }
 
-get_if_data () {
-	uci_load network
-	config_get ifname $1 ifname
-	config_get INET $1 proto
-	config_get calc_IP $1 ipaddr
-	config_get calc_MASK $1 netmask
-	config_get GW $1 gateway
-	calc_NET=`ipcalc.sh $calc_IP $calc_MASK | grep NETWORK | egrep -o '\b[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\b'`
-	calc_PREFIX=`ipcalc.sh $calc_IP $calc_MASK | grep PREFIX | egrep -o '\b[0-9]{1,2}\b'`
-	if [[ "$calc_NET" != "" && "$calc_PREFIX" != "" ]]; then
-		calc_NET="$calc_NET/$calc_PREFIX"
-	fi
-	calc_NETWORK=${calc_NET:-$GW}
-}
-
-set_wan_values () {
-	eval WAN_STATE$2=1
-	WAN_IF=""
-	WAN_GW=""
-	WAN_IP=""
-	WAN_NET=""
-	get_if_data $1
-	eval WAN_INET$2=$INET
-
-	if [ "$ifname" != "" ]; then
-		eval WAN_IF$2=$ifname
-		if [ "$GW" != "" ]; then 
-			eval WAN_GW$2=$GW
-			eval WAN_STATE$2=0
-			if [ "$calc_IP" != "" ]; then
-				eval WAN_IP$2=$calc_IP
-				eval WAN_NET$2=$calc_NETWORK
-			fi
-		fi
-	fi
-}
-
-set_lan_values () {
-	get_if_data $1
-	eval LAN_DEV$2=$1
-	eval LAN_IF$2=$ifname
-	eval LAN_IP$2=$calc_IP
-	eval LAN_MASK$2=$calc_MASK
-	eval LAN_NET$2=$calc_NETWORK
-}
-
-set_up_wan_iface() {
-#	$1 = iface
-#	$2 = idx
-	eval WAN_DEV$2=$1
-	eval WAN_WEIGHT$2=${WEIGHT:-"2"}
-	eval WAN_NAME$2=${NAME:$1}
-	eval LLS$2=1
-	eval LPS$2=1
-	eval CLS$2=1
-	set_wan_values $1 $2
-}
-
-get_wan_values () {
-	LLS=`eval echo "$"LLS$1`
-	LPS=`eval echo "$"LPS$1`
-	CLS=`eval echo "$"CLS$1`
-	COUNT=`eval echo "$"COUNT$1`
-	STATE=`eval echo "$"STATE$i`
-
-	WAN_DEV=`eval echo "$"WAN_DEV$1`
-	WAN_IF=`eval echo "$"WAN_IF$1`
-	WAN_INET=`eval echo "$"WAN_INET$1`
-
-	WAN_IP=`eval echo "$"WAN_IP$1`
-	WAN_GW=`eval echo "$"WAN_GW$1`
-	WAN_NET=`eval echo "$"WAN_NET$1`
-	
-	WAN_WEIGHT=`eval echo "$"WAN_WEIGHT$1`
-	WAN_STATE=`eval echo "$"WAN_STATE$1`
-	WAN_NAME=`eval echo "$"WAN_NAME$1`
-	RT_TABLE=`eval echo "$"RT_TABLE$1`
-}	
-
-get_lan_values () {
-	LAN_DEV=`eval echo "$"LAN_DEV$1`
-	LAN_IF=`eval echo "$"LAN_IF$1`
-	LAN_IP=`eval echo "$"LAN_IP$1`
-	LAN_MASK=`eval echo "$"LAN_MASK$1`
-	LAN_NET=`eval echo "$"LAN_NET$1`
-}
-
-create_rt_tables () {
-#
-# reserved values
-#
-#	echo 255 local > /etc/iproute2/rt_tables
-#	echo 254 main >> /etc/iproute2/rt_tables
-#	echo 253 default >> /etc/iproute2/rt_tables
-#	echo 0 unspec >> /etc/iproute2/rt_tables
-	n=200
-	for i in $(seq 1 $WAN_DEVCOUNT); do
-		RT=`eval echo "$"WAN_DEV$i`
-		RT=$RT"_rt"
-		if [ -z "`cat /etc/iproute2/rt_tables | grep $RT`" ] ; then
-			while [ "`cat /etc/iproute2/rt_tables | grep "^$n"`" ]
-			do
-				n=`expr $n + 1`
-			done
-			echo "$n $RT" >> /etc/iproute2/rt_tables 
-			n=`expr $n + 1`
-		fi
-		eval RT_TABLE$i=$RT
-		RT_COUNT=$i
-	done
-}
-
-check_working () {
-	for i in $(seq 1 $WAN_DEVCOUNT); do
-		if [[ `eval echo "$"LLS$i` -eq 0 ]]; then
-			eval RGW=`eval echo "$"WAN_GW$i`
-			eval RWAN_IF=`eval echo "$"WAN_IF$i`
-			eval RWAN_IP=`eval echo "$"WAN_IP$i`
-			if [[ "$RGW" != "" && "$RWAN_IF" != "" && "$RWAN_IP" != "" ]]; then
-				R=`expr $R + 1`
-				eval RGW$R=$RGW
-				eval RWAN_IF$R=$RWAN_IF
-				eval RNAME$R=`eval echo "$"WAN_NAME$i`
-				eval RW$R=`eval echo "$"WAN_WEIGHT$i`
-			fi
-		fi
-	done
-}
-
-set_routing () {
-	DATE=`date`
-	MSG=""
-	ROUTE="ip route replace default scope global "
-	if [ $R -gt 1 ]; then
-		MSG="Active Load Balancing connections ($R)"
-		for i in $(seq 1 $R); do
-			GW=`eval echo "$"RGW$i`
-			WAN_IF=`eval echo "$"RWAN_IF$i`
-			RW=`eval echo "$"RW$i`
-			NAME=`eval echo "$"RNAME$i`
-			ROUTE="$ROUTE nexthop via $GW dev $WAN_IF weight $RW"
-			MSG="$MSG, $NAME"
+stop() {
+	if [ -f $PID_F ]; then
+		[ -f /usr/share/udhcpc/default.script.orig ] && {
+			mv /usr/share/udhcpc/default.script /usr/share/udhcpc/default.mroute
+			mv /usr/share/udhcpc/default.script.orig /usr/share/udhcpc/default.script
+		}
+		PID=`ps | grep "/bin/sh /lib/mroute/mroute start" | sed '/grep/d' | awk '{ print $1 }'`
+		logger -t mroute -p 5 -s "stoping mroute... PID $PID"
+		for i in $(seq 1 $WAN_DEVCOUNT)
+		do
+			get_wan_values $i
+			del_rt_rule $RT_TABLE
+			delete_wan_rt
 		done
-		LEVEL=5
-	elif [ $R -eq 1 ]; then
-		LEVEL=4
-		MSG="Active connection $RNAME1"
-		ROUTE="ip route replace default scope global via $RGW1 dev $RWAN_IF1"
-	elif [ $R -eq 0 ]; then
-		MSG="No active connections"
-		LEVEL=3
-	fi
-	log_info $LEVEL "$MSG"
-#	echo "$DATE - $MSG"
-	echo $MSG > /var/run/mroute.active
-	if [ $R -gt 0 ]; then
-#		ip route flush cache
 		eval "`ip route | grep "default" | awk '{ print "ip route del default"}'`"
-		`$ROUTE`
-	fi
-}
-
-gwping () {
-	init
-	PR=0
-	while : ; do
-		for p in $(seq 1 $WAN_DEVCOUNT); do
-			get_wan_values $p
-			if [[ "$WAN_IF" != "" && "$WAN_GW" != "" && "$WAN_IP" != "" ]]; then
-####				check_duplicate_rt_openwrt $WAN_GW
-				ping_iface $p
-			else
-				log_info 3 "Interface $WAN_DEV is not ready $COUNT"
-				LLS=1
-				COUNT=`expr $COUNT + 1`
-				if [ $COUNT -gt $RESETIFACE ]; then
-					COUNT=0
-					ifdown $WAN_DEV > /dev/null 2>&1
-					sleep 2
-					ifup $WAN_DEV ###### > /dev/null 2>&1
-					if [ $? -eq 0 ]; then
-						set_up_wan_iface $WAN_DEV $p
-						if [[ "$WAN_IF" != "" && "$WAN_GW" != "" && "$WAN_IP" != "" ]]; then
-							set_wan_rt
-							add_rt_rule $WAN_IP $RT_TABLE
-							ping_iface $p
-						fi
-					fi
-				else
-					set_up_wan_iface $WAN_DEV $p
-					if [[ "$WAN_IF" != "" && "$WAN_GW" != "" && "$WAN_IP" != "" ]]; then
-						set_wan_rt
-						add_rt_rule $WAN_IP $RT_TABLE
-					else
-					 WAN_IF=""
-					 WAN_GW=""
-					 WAN_IP=""
-					 LLS=1
-					fi
-				fi
-			fi
-			eval WAN_STATE$p=$WAN_STATE
-			eval LPS$p=$LPS
-			eval CPS$p=$CPS
-			eval CLS$p=$CLS
-			eval LLS$p=$LLS
-			eval COUNT$p=$COUNT
-		done
-
-		R=0
-		check_working
-		if [ $PR -ne $R ]; then
-			set_routing 
-		fi
-		PR=$R
-		
-		sleep $SLEEPTIME
-		load_settings
-	done
-}
-
-#check_duplicate_rt_openwrt () {
-#### Time on time OpenWrt add by it self default route
-#### so, this function is for delete all routing that exists in balanced routing
-#### the better way is modify /usr/share/default.script, thanks xMff of openwrt-devel chanel
-#	CRGW=`ip route list | grep "nexthop via $1" | awk '{ print $3}'`
-#	if [ "$CRGW" != "" ]; then
-#		if [ "`ip route list default via $CRGW`" != "" ]; then
-#			ip route del default via $CRGW
-#		fi 
-#	fi
-#}
-
-ping_check () {
-	RETVAL=1
-	if [ "$WAN_IF" != "" ]; then
-		ifconfig $WAN_IF > /dev/null  2>&1
-		RETVAL=$?
-		if [ $RETVAL -eq 0 ]; then
-			ip route replace default via $WAN_GW dev $WAN_IF table default
-			sleep 1 
-			ping -W $TIMEOUT -I $WAN_IF -c 1 $TESTIP > /dev/null  2>&1
-			RETVAL=$?
-		else #### Interface not found ####
-			log_info 3 "Interface for $WAN_IF missing"
-			if [[  "$WAN_IP" != "" || "$WAN_GW" != ""  ]]; then
-				remove_WAN_IF $1
-			fi
-			LLS=1
-		fi
-	fi
-}
-
-remove_WAN_IF () {
-	if [ "$WAN_INET" != "static" ]; then
-		del_rt_rule $RT_TABLE
-		delete_wan_rt			
-		eval WAN_IF$1=""
-		eval WAN_GW$1=""
-		eval WAN_IF$1=""
-	fi
-}
-
-ping_iface () {
-	ping_check $1
-	if [ $RETVAL -ne 0 ]; then
-		CPS=1
+		kill $PID 2 > /dev/null
+		rm $PID_F 2> /dev/null
+		rm /var/run/mroute.active 2> /dev/null
+		logger -t mroute -p 5 -s "Stoped"
+		echo ""
+#		echo "Restarting Network .... Please wait..."
+#		ifup -a
+#		wifi
+#		sleep 5
+#		echo ""
+		ip route 
 	else
-		CPS=0
+		echo "mroute is not running"
+		exit 1
 	fi
-	if [ $LPS -ne $CPS ]; then
-#echo "LPS -ne CPS"
-		COUNT=1
-		ifconfig $WAN_IF > /dev/null  2>&1
-		if [ $? -eq 1 ]; then
-			COUNT=`expr $FAILUREREPEATCOUNT + 1`
-		fi
-#		if [ $DEBUG -eq 1 ]; then
-			if [ $CPS -ne 0 ]; then
-#				echo `date` $WAN_NAME Ping timeout count $COUNT
-				log_debug 4 "$WAN_NAME Ping timeout count $COUNT"
-			else
-#				echo `date` $WAN_NAME Ping OK count $COUNT
-				log_debug 5 "$WAN_NAME Ping OK count $COUNT"
-			fi
-#		fi
+	exit 0
+}
+
+restart(){
+	stop
+	sleep 2
+	start
+}
+
+status() {
+	if [ ! -f $PID_F ]; then
+		echo "stoped"
 	else
-		if [ $LPS -ne $LLS ]; then
-			COUNT=`expr $COUNT + 1`
-#			if [ $DEBUG -eq 1 ]; then
-				if [ $CPS -eq 0 ]; then
-#					echo `date` $WAN_NAME Ping OK count $COUNT
-					log_debug 5 "$WAN_NAME Ping OK count $COUNT"
-				else
-#					echo `date` $WAN_NAME Ping Timeout count $COUNT
-					log_debug 4 "$WAN_NAME Ping timeout count $COUNT"
-				fi
-#			fi
-		fi
+		echo "running"
 	fi
-
-	GO="NO"
-	if [ $COUNT -ge $SUCCESSREPEATCOUNT ]; then
-		if [ $LLS -eq 1 ]; then
-			GO="YES"
-		fi
-	fi
-
-	if [ $COUNT -ge $FAILUREREPEATCOUNT ]; then
-		if [ $LLS -eq 0 ]; then
-			GO="YES"
-		fi
-	fi
-
-	if [ "$GO" = "YES" ]; then
-		if [ $DEBUG -eq 1 ]; then
-			if [ $LLS -eq 1 ]; then
-				STATE="Up"
-			else
-				STATE="Down"
-			fi
-			log_debug 4 "Status changed for $WAN_NAME to $STATE"
-#			echo `date` Status changed for $WAN_NAME to $STATE
-		fi
-#		if [ $COUNT -ge $FAILUREREPEATCOUNT ]; then
-#			remove_WAN_IF $1
-#			WAN_STATE=1
-#		fi
-		CLS=0
-		COUNT=0
-		if [ $LLS -eq 1 ]; then
-			LLS=0
-		else
-			LLS=1
-		fi
-	else 
-		CLS=1
-	fi
-	LPS=$CPS
+	exit 0
 }
 
-set_wan_rt () {
-	WAN_STATE=0
-	for rt in $(seq 1 $RT_COUNT)
-	do
-		RT1_TABLE=`eval echo "$"RT_TABLE$rt`
-		RUN="ip route add $WAN_NET dev $WAN_IF src $WAN_IP table $RT1_TABLE"
-		log_debug 5 "$RUN"
-		`$RUN`
-	done
-
-	RUN="ip route add 127.0.0.0/8 dev lo table $RT_TABLE"
-	log_debug 5 "$RUN"
-	`$RUN`
-
-	RUN="ip route add default via $WAN_GW table $RT_TABLE"
-	log_debug 5 "$RUN"
-	`$RUN`
-
-	set_lan_rt $RT_TABLE
+active() {
+		STATUS=`cat /var/run/mroute.active 2> /dev/null`
+		echo $STATUS
+		exit 0
 }
 
-set_lan_rt () {
-	RT_TABLE=$1
-	for lan in $(seq 1 $LAN_DEVCOUNT)
-	do
-		LAN_IF=`eval echo "$"LAN_IF$lan`
-		LAN_IP=`eval echo "$"LAN_IP$lan`
-		LAN_NET=`eval echo "$"LAN_NET$lan`
-
-		RUN="ip route add $LAN_NET dev $LAN_IF table $RT_TABLE"
-		log_debug 5 "$RUN"
-		`$RUN`
-	done
-}
-
-delete_wan_rt () {
-	WAN_STATE=1
-	RUN="ip route flush table $RT_TABLE"
-	log_debug 5 "$RUN"
-	`$RUN 2> /dev/null`
-}
-
-add_rt_rule () {
-	WAN_IP=$1
-	RT_TABLE=$2
-	MARK=$3
-	MARK=${MARK:-0}
-	if [ $MARK -ne 0 ]; then
-		RUN="ip rule add from $WAN_IP fwmark $MARK table $RT_TABLE"
-	else
-		RUN="ip rule add from $WAN_IP table $RT_TABLE"
-	fi
-	log_debug 5 "$RUN"
-	`$RUN`
-}
-
-del_rt_rule () {
-	`ip rule | grep $1 | awk {'print "ip rule del " $2 " " $3'}`
-}
-
-load_settings () {
-	uci_load mroute
-	OS="$CONFIG_settings_os"
-	DEBUG="$CONFIG_settings_debug"
-	SLEEPTIME="$CONFIG_settings_sleeptime"
-	TESTIP="$CONFIG_settings_testip"
-	TIMEOUT="$CONFIG_settings_timeout"
-	SUCCESSREPEATCOUNT="$CONFIG_settings_success"
-	FAILUREREPEATCOUNT="$CONFIG_settings_failure"
-	RESETIFACE="$CONFIG_settings_resetif"
-}
-
-init () {
-	for i in $(seq 1 $WAN_DEVCOUNT)
-	do
-		get_wan_values $i
-		delete_wan_rt
-		set_wan_rt
-	done
-
-	for i in $(seq 1 $WAN_DEVCOUNT)
-	do
-		get_wan_values $i
-		del_rt_rule $RT_TABLE
-#		if [ $WAN_STATE -eq 0 ]; then
-			add_rt_rule $WAN_IP $RT_TABLE
-#		fi
-	done
-}
-
-load_settings
-#echo $OS $DEBUG
-
-i=0
-for iface in $LAN_DEV_LIST; do
-	i=`expr $i + 1`
-	set_lan_values $iface $i
-done
-LAN_DEVCOUNT=$i
-
-i=0
-for iface in $WAN_DEV_LIST; do
-	i=`expr $i + 1`
-	eval COUNT$i=0
-	config_get NAME $iface name
-	config_get WEIGHT $iface weight
-	set_up_wan_iface $iface $i
-done
-WAN_DEVCOUNT=$i
-
-#for i in $(seq 1 $LAN_DEVCOUNT); do
-#	get_lan_values $i
-#	echo $LAN_DEV $LAN_IF
-#	echo "	LAN_DEV=$LAN_DEV LAN_IF=$LAN_IF"
-#	echo "	LAN_IP=$LAN_IP LAN_MASK=$LAN_MASK LAN_NET=$LAN_NET"
-#	echo ""
-#done
-
-#for i in $(seq 1 $WAN_DEVCOUNT); do
-#	get_wan_values $i
-#	echo $WAN_DEV $WAN_IF
-#	echo "	LLS=$LLS LPS=$LPS CLS=$CLS COUNT=$COUNT STATE=$STATE"
-#	echo "	WAN_DEV=$WAN_DEV WAN_IF=$WAN_IF WAN_INET=$WAN_INET"
-#	echo "	WAN_IP=$WAN_IP WAN_GW=$WAN_GW WAN_NET=$WAN_NET"
-#	echo "	WAN_NAME=$WAN_NAME WAN_WEIGHT=$WAN_WEIGHT WAN_STATE=$WAN_STATE RT_TABLE=$RT_TABLE" 
-#	echo ""
-#done
-
-create_rt_tables
-
-#gwping
+case $1 in
+	stop) stop ;;
+	status) status ;;
+	restart) restart ;;
+	active) active ;;
+	*) start ;;
+esac	

@@ -43,14 +43,13 @@ __FORM.option = string.trim(__FORM.option) or ""
 forms = {}
 if __FORM.option == "status" then
 --	forms[#forms+1] = mroute.status_form()
+elseif __FORM.option == "ifaces" then
 	forms[#forms+1] = mroute.interfaces_form()
-elseif __FORM.option == "iface" then
-	forms[#forms+1] = mroute.tuneup_form()
 elseif __FORM.option == "tuneup" then
 	forms[#forms+1] = mroute.tuneup_form()
 else
 	forms[#forms+1] = mroute.core_form()
-	forms[#forms+1] = mroute.interfaces_form()
+--	forms[#forms+1] = mroute.interfaces_form()
 end
 
 print(page:header())
