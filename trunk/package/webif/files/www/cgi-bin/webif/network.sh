@@ -237,7 +237,7 @@ ip|FORM_${interface}_ipaddr|$interface @TR<<IP Address>>||$FORM_ipaddr
 netmask|FORM_${interface}_netmask|$interface @TR<<WAN Netmask>>||$FORM_netmask
 ip|FORM_${interface}_gateway|$interface @TR<<Default Gateway>>||$FORM_gateway
 ip|FORM_${interface}_pptp_server|$interface @TR<<PPTP Server IP>>||$FORM_pptp_server
-ip|FORM_dnsadd|@TR<<DNS Address>>|required||$FORM_dnsadd
+ip|FORM_dnsadd|@TR<<DNS Address>>||$FORM_dnsadd
 EOF
 		equal "$?" 0 && {
 			uci_set "network" "$interface" "proto" "$FORM_proto"
