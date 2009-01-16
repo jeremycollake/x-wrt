@@ -153,7 +153,7 @@ if [ "$switch_interfaces" != "" ]; then
 			for network in $networks; do
 				changed_ifname=0
 				interfaces=""
-				eval network_ifnames="\$ifnames_$network"
+				eval network_ifnames="\$ifname_$network"
 				echo $network_ifnames |grep -q "eth0.$count"
 				if [ "$?" = "0" ]; then
 					if [ "$FORM_network_vlan" != "$network" ]; then
@@ -181,6 +181,7 @@ if [ "$switch_interfaces" != "" ]; then
 							interfaces="eth0.$count"
 							changed_ifname=1
 						fi
+						export ifname_$network="$interfaces"
 					fi
 				fi
 				if [ "$changed_ifname" = "1" ]; then
