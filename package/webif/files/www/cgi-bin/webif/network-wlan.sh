@@ -279,7 +279,7 @@ for device in $DEVICES; do
 				option|$ch"
 		done
 		append forms "$A_CHANNELS" "$N"
-	elif [ "$iftype" = "broadcom" ]; then
+	else
 		BG_CHANNELS="field|@TR<<Channel>>|bgchannelform_$device
 			select|bgchannel_$device|$FORM_channel
 			option|0|@TR<<Auto>>"
