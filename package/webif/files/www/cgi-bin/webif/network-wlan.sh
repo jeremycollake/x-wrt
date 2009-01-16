@@ -803,7 +803,7 @@ for device in $DEVICES; do
 						document.getElementById('encryption_$vcfg').value = 'none';
 					}
 				}
-				v = (isset('ap_mode_$device','11b') || isset('ap_mode_$device','11bg') || isset('ap_mode_$device','11g') || ('$iftype'=='broadcom'));
+				v = (isset('ap_mode_$device','11b') || isset('ap_mode_$device','11bg') || isset('ap_mode_$device','11g') || ('$iftype'!='atheros'));
 				set_visible('bgchannelform_$device', v);
 				v = (isset('ap_mode_$device','11a'));
 				set_visible('achannelform_$device', v);
