@@ -29,6 +29,7 @@ if [ -n "$FORM_port_rule" ]; then
 string|FORM_name|@TR<<Name>>|nospaces|$FORM_name
 ip|FORM_src_ip_rule|@TR<<Source IP Address>>||$FORM_src_ip_rule
 ip|FORM_dest_ip_rule|@TR<<Destination IP Address>>||$FORM_dest_ip_rule
+ports|FORM_port_rule|@TR<<Destination Port>>||$FORM_port_rule
 EOF
 	equal "$?" 0 && {
 		uci_add "firewall" "rule" "$FORM_name"; add_rule_cfg="$CONFIG_SECTION"
@@ -38,13 +39,16 @@ EOF
 		uci_set "firewall" "$add_rule_cfg" "dest_ip" "$FORM_dest_ip_rule"
 		uci_set "firewall" "$add_rule_cfg" "dest_port" "$FORM_port_rule"
 		uci_set "firewall" "$add_rule_cfg" "target" "ACCEPT"
+		unset FORM_port_rule FORM_dest_ip_rule FORM_src_ip_rule FORM_protocol_rule FORM_name
 	}
 fi
-if [ -n "$FORM_dest_port_redirect" ]; then
+if [ -n "$FORM_dest_ip_redirect" ]; then
 	validate <<EOF
 string|FORM_name_redirect|@TR<<Name>>|nospaces|$FORM_name_redirect
 ip|FORM_src_ip_redirect|@TR<<Source IP Address>>||$FORM_src_ip_redirect
-ip|FORM_dest_ip_redirect|@TR<<To IP Address>>||$FORM_dest_ip_redirect
+ports|FORM_src_dport_redirect|@TR<<Destination Port>>|required|$FORM_src_dport_redirect
+ip|FORM_dest_ip_redirect|@TR<<To IP Address>>|required|$FORM_dest_ip_redirect
+ports|FORM_dest_port_redirect|@TR<<To Port>>||$FORM_dest_port_redirect
 EOF
 	equal "$?" 0 && {
 		uci_add "firewall" "redirect" "$FORM_name_redirect"; add_redirect_cfg="$CONFIG_SECTION"
@@ -53,7 +57,9 @@ EOF
 		uci_set "firewall" "$add_redirect_cfg" "src_ip" "$FORM_src_ip_redirect"
 		uci_set "firewall" "$add_redirect_cfg" "src_dport" "$FORM_src_dport_redirect"
 		uci_set "firewall" "$add_redirect_cfg" "dest_ip" "$FORM_dest_ip_redirect"
+		[ "$FORM_dest_port_redirect" = "" ] && FORM_dest_port_redirect="$FORM_src_dport_redirect"
 		uci_set "firewall" "$add_redirect_cfg" "dest_port" "$FORM_dest_port_redirect"
+		unset FORM_dest_port_redirect FORM_dest_ip_redirect FORM_src_dport_redirect FORM_src_ip_redirect FORM_protocol_redirect FORM_name_redirect
 	}
 fi
 if [ -n "$FORM_add_rule_add" ]; then
@@ -160,6 +166,7 @@ for rule in $rule_cfgs; do
 		validate <<EOF
 ip|FORM_src_ip|@TR<<Source IP Address>>||$FORM_src_ip
 ip|FORM_dest_ip|@TR<<Destination IP Address>>||$FORM_dest_ip
+ports|FORM_port|@TR<<Destination Port>>||$FORM_port
 EOF
 		equal "$?" 0 && {
 			uci_set firewall "$rule" "proto" "$FORM_protocol"
@@ -253,12 +260,16 @@ for rule in $redirect_cfgs; do
 		validate <<EOF
 ip|FORM_src_ip_rule|@TR<<Source IP Address>>||$FORM_src_ip_rule
 ip|FORM_dest_ip_rule|@TR<<Destination IP Address>>||$FORM_dest_ip_rule
+ports|FORM_src_dport|@TR<<Destination Port>>|required|$FORM_src_dport
+ip|FORM_dest_ip|@TR<<To IP>>|required|$FORM_dest_ip
+ports|FORM_dest_dport|@TR<<To Port>>||$FORM_dest_dport
 EOF
 		equal "$?" 0 && {
 			uci_set firewall "$rule" "proto" "$FORM_protocol"
 			uci_set firewall "$rule" "src_ip" "$FORM_src_ip"
 			uci_set firewall "$rule" "dest_ip" "$FORM_dest_ip"
 			uci_set firewall "$rule" "src_dport" "$FORM_src_dport"
+			[ "$FORM_dest_port" = "" ] && FORM_dest_port="$FORM_src_dport"
 			uci_set firewall "$rule" "dest_port" "$FORM_dest_port"
 		}
 	fi

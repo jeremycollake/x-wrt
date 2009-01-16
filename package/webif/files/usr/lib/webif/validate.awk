@@ -5,7 +5,7 @@
 # $5 = value
 BEGIN {
 	FS="|"
-	output=''
+	output=""
 }
 
 { 
@@ -138,7 +138,7 @@ $1 == "mac" {
 
 $1 == "port" {
 	valid_type = 1
-	if ((value != "") && (value !~ /^[[:digit:]]{1,5}$/)) {
+	if ((value != "") && (value !~ /^[[:digit:]]{1,5}$/) && (value > "65535")) {
 		valid = 0
 		verr = "@TR<<Invalid value>>"
 	}
@@ -223,12 +223,11 @@ valid == 1 {
 }
 
 valid_type == 1 {
-	if (valid == 1) output = output $2 "=\"" value "\";\n"
-	else error = error "@TR<<Error in>> " $3 ": " verr "<br />"
+	if (valid == 0) error = error "@TR<<Error in>> " $3 ": " verr "<br />"
 }
 
 END {
-	print output "ERROR=\"" error "\";\n"
+	print "ERROR=\"" error "\";\n"
 	if (error == "") print "return 0"
 	else print "return 255"
 }
