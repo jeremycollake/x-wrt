@@ -809,7 +809,7 @@ for device in $DEVICES; do
 				set_visible('achannelform_$device', v);
 				v = (!isset('mode_$vcfg','wds'));
 				set_visible('broadcast_form_$vcfg', v);
-				v = (isset('mode_$vcfg','wds'));
+				v = ((isset('mode_$vcfg','wds')) || (isset('mode_$vcfg','adhoc') && ('$iftype'=='mac80211')));
 				set_visible('bssid_form_$vcfg', v);
 				v = (isset('mode_$vcfg','sta'));
 				set_visible('bgscan_form_$vcfg', v);
@@ -819,11 +819,11 @@ for device in $DEVICES; do
 				set_visible('wpapsk_$vcfg', v);
 				v = (('$iftype'=='broadcom') && (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2') || isset('encryption_$vcfg','psk+psk2') || isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2') || isset('encryption_$vcfg','wpa+wpa2')));
 				set_visible('install_nas_$vcfg', v);
-				v = (('$iftype'=='atheros') && (!isset('mode_$vcfg','sta')) && (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2')));
+				v = (('$iftype'!='broadcom') && (!isset('mode_$vcfg','sta')) && (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2')));
 				set_visible('install_hostapd_mini_$vcfg', v);
-				v = (('$iftype'=='atheros') && (!isset('mode_$vcfg','sta')) && (isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2')));
+				v = (('$iftype'!='broadcom') && (!isset('mode_$vcfg','sta')) && (isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2')));
 				set_visible('install_hostapd_$vcfg', v);
-				v = (('$iftype'=='atheros') && (isset('mode_$vcfg','sta')) && (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2') || isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2')));
+				v = (('$iftype'!='broadcom') && (isset('mode_$vcfg','sta')) && (isset('encryption_$vcfg','psk') || isset('encryption_$vcfg','psk2') || isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2')));
 				set_visible('install_wpa_supplicant_$vcfg', v);
 				v = (isset('encryption_$vcfg','wpa') || isset('encryption_$vcfg','wpa2') || isset('encryption_$vcfg','wpa+wpa2'));
 				set_visible('radiuskey_$vcfg', v);
