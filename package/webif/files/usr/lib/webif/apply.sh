@@ -336,19 +336,19 @@ for package in $process_packages; do
 			/etc/init.d/timezone restart
 			;;
 		"webifssl")
-			config_load webifssl
-			config_get_bool test matrixtunnel enable 0
+			config_load webif
+			config_get_bool test general ssl 0
 			if [ 1 -eq "$test" ]; then
-				[ -f /etc/init.d/webifssl ] && {
-					#echo '@TR<<Starting>> @TR<<webif^2 ssl tunnel>> ...'
-					/etc/init.d/webifssl enable >&- 2>&- <&-
-					/etc/init.d/webifssl start
+				[ -f /etc/init.d/stunnel ] && {
+					#echo '@TR<<Starting SSL>> ...'
+					/etc/init.d/stunnel enable >&- 2>&- <&-
+					/etc/init.d/stunnel start
 				}
 			else
 				[ -f /etc/init.d/webifssl ] && {
-					#echo '@TR<<Stopping>> @TR<<webif^2 ssl tunnel>> ...'
-					/etc/init.d/webifssl stop
-					/etc/init.d/webifssl disable >&- 2>&- <&-
+					#echo '@TR<<Stopping SSL>> ...'
+					/etc/init.d/stunnel stop
+					/etc/init.d/stunnel disable >&- 2>&- <&-
 				}
 			fi
 			config_allclear
