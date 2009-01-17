@@ -24,7 +24,7 @@ if ! empty "$FORM_remove_vcfg"; then
 fi
 
 #Add new rules
-if [ -n "$FORM_port_rule" ]; then
+if [ -n "$FORM_port_rule" -a "$FORM_port_select_rule" = "custom" ]; then
 	validate <<EOF
 string|FORM_name|@TR<<Name>>|nospaces|$FORM_name
 ip|FORM_src_ip_rule|@TR<<Source IP Address>>||$FORM_src_ip_rule
@@ -32,6 +32,7 @@ ip|FORM_dest_ip_rule|@TR<<Destination IP Address>>||$FORM_dest_ip_rule
 ports|FORM_port_rule|@TR<<Destination Port>>||$FORM_port_rule
 EOF
 	equal "$?" 0 && {
+		[ "$FORM_port_select_rule" != "custom" ] && FORM_port_rule="$FORM_port_select_rule"
 		uci_add "firewall" "rule" "$FORM_name"; add_rule_cfg="$CONFIG_SECTION"
 		uci_set "firewall" "$add_rule_cfg" "src" "wan"
 		uci_set "firewall" "$add_rule_cfg" "proto" "$FORM_protocol_rule"
@@ -40,6 +41,7 @@ EOF
 		uci_set "firewall" "$add_rule_cfg" "dest_port" "$FORM_port_rule"
 		uci_set "firewall" "$add_rule_cfg" "target" "ACCEPT"
 		unset FORM_port_rule FORM_dest_ip_rule FORM_src_ip_rule FORM_protocol_rule FORM_name
+		FORM_port_select_rule=custom
 	}
 fi
 if [ -n "$FORM_dest_ip_redirect" ]; then
@@ -51,6 +53,7 @@ ip|FORM_dest_ip_redirect|@TR<<To IP Address>>|required|$FORM_dest_ip_redirect
 ports|FORM_dest_port_redirect|@TR<<To Port>>||$FORM_dest_port_redirect
 EOF
 	equal "$?" 0 && {
+		[ "$FORM_port_select_redirect" != "custom" ] && FORM_port_rule="$FORM_port_select_redirect"
 		uci_add "firewall" "redirect" "$FORM_name_redirect"; add_redirect_cfg="$CONFIG_SECTION"
 		uci_set "firewall" "$add_redirect_cfg" "src" "wan"
 		uci_set "firewall" "$add_redirect_cfg" "proto" "$FORM_protocol_redirect"
@@ -60,6 +63,7 @@ EOF
 		[ "$FORM_dest_port_redirect" = "" ] && FORM_dest_port_redirect="$FORM_src_dport_redirect"
 		uci_set "firewall" "$add_redirect_cfg" "dest_port" "$FORM_dest_port_redirect"
 		unset FORM_dest_port_redirect FORM_dest_ip_redirect FORM_src_dport_redirect FORM_src_ip_redirect FORM_protocol_redirect FORM_name_redirect
+		FORM_port_select_redirect=custom
 	}
 fi
 if [ -n "$FORM_add_rule_add" ]; then
@@ -158,6 +162,7 @@ for rule in $rule_cfgs; do
 		config_get FORM_src_ip $rule src_ip
 		config_get FORM_dest_ip $rule dest_ip
 		config_get FORM_port $rule dest_port
+		FORM_port_select_rule=custom
 	else
 		eval FORM_protocol="\$FORM_protocol_$rule"
 		eval FORM_src_ip="\$FORM_src_ip_$rule"
@@ -219,6 +224,14 @@ form="$tr
 	text|dest_ip_rule|$FORM_dest_ip_rule
 	string|</td>
 	string|<td>
+	select|port_select_rule|$FORM_port_select_rule
+	option|custom|@TR<<Custom>>
+	option|22|SSH
+	option|25|SMTP
+	option|110|POP3
+	option|143|IMAP
+	option|80|HTTP
+	option|443|HTTPS
 	text|port_rule|$FORM_port_rule
 	string|</td>
 	string|<td>
@@ -251,6 +264,7 @@ for rule in $redirect_cfgs; do
 		config_get FORM_dest_ip $rule dest_ip
 		config_get FORM_src_dport $rule src_dport
 		config_get FORM_dest_port $rule dest_port
+		FORM_port_select_redirect=custom
 	else
 		eval FORM_protocol="\$FORM_protocol_$rule"
 		eval FORM_src_ip="\$FORM_src_ip_$rule"
@@ -323,6 +337,14 @@ form="$tr
 	text|dest_ip_redirect|$FORM_dest_ip_redirect
 	string|</td>
 	string|<td>
+	select|port_select_redirect|$FORM_port_select_redirect
+	option|custom|@TR<<Custom>>
+	option|22|SSH
+	option|25|SMTP
+	option|110|POP3
+	option|143|IMAP
+	option|80|HTTP
+	option|443|HTTPS
 	text|dest_port_redirect|$FORM_dest_port_redirect
 	string|</td>
 	string|<td>
@@ -346,6 +368,11 @@ function modechange()
 {
 	var v;
 	$js
+
+	v = (isset('port_select_rule','custom'));
+	set_visible('port_rule', v);
+	v = (isset('port_select_redirect','custom'));
+	set_visible('port_redirect', v);
 
 	hide('save');
 	show('save');
