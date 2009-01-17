@@ -141,6 +141,7 @@ install_package() {
 			# wasn't a URL, so update
 			opkg update
 			opkg install "$1" -force-overwrite -force-defaults
+			[ "$?" != "0" ] && echo "Package install failed."
 		}
 	}
 }
