@@ -237,9 +237,9 @@ ip|FORM_${interface}_ipaddr|$interface @TR<<IP Address>>||$FORM_ipaddr
 netmask|FORM_${interface}_netmask|$interface @TR<<WAN Netmask>>||$FORM_netmask
 ip|FORM_${interface}_gateway|$interface @TR<<Default Gateway>>||$FORM_gateway
 ip|FORM_${interface}_pptp_server|$interface @TR<<PPTP Server IP>>||$FORM_pptp_server
-ip|FORM_dnsadd|@TR<<DNS Address>>|required||$FORM_dnsadd
+ip|FORM_dnsadd|@TR<<DNS Address>>||$FORM_dnsadd
 EOF
-		equal "$?" 0 && {
+		[ "$?" = "0" -a "$interface" != "$FORM_add_network" ] && {
 			uci_set "network" "$interface" "proto" "$FORM_proto"
 			[ "$FORM_type" = "" ] && uci_remove "network" "$interface" "type"
 			[ "$FORM_type" != "" ] && uci_set "network" "$interface" "type" "$FORM_type"
@@ -424,7 +424,7 @@ done
 add_network_form="
 start_form
 field|@TR<<Add Network>>|field_add_network
-text|add_network|$FORM_add_network
+text|add_network
 submit|button_add_network| @TR<<Add Network>> |
 end_form"
 append forms "$add_network_form" "$N"
