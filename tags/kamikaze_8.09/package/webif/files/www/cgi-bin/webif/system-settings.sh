@@ -56,7 +56,6 @@ config_cb() {
 }
 
 uci_load "webif"
-uci_load "webifssl"
 uci_load "system"
 #We have to load the system host name setting here because ntp_client also uses the hostname setting.
 eval CONFIG_systemhostname="\$CONFIG_${hostname_cfg}_hostname"
@@ -132,7 +131,7 @@ generate_ssl_key() {
 		fi
 		export RANDFILE="/tmp/.rnd"
 		dd if=/dev/urandom of="$RANDFILE" count=1 bs=512 2>/dev/null
-		(openssl genrsa -out /etc/ssl/matrixtunnel.key 2048; openssl req -new -batch -nodes -key /etc/ssl/matrixtunnel.key -out /etc/ssl/matrixtunnel.csr; openssl x509 -req -days 365 -in /etc/ssl/matrixtunnel.csr -signkey /etc/ssl/matrixtunnel.key -out /etc/ssl/matrixtunnel.cert)
+		(openssl genrsa -out /etc/stunnel/stunnel.key 2048; openssl req -new -batch -nodes -key /etc/stunnel/stunnel.key -out /etc/stunnel/stunnel.csr; openssl x509 -req -days 365 -in /etc/stunnel/stunnel.csr -signkey /etc/stunnel/stunnel.key -out /etc/stunnel/stunnel.cert)
 		rm -f "$RANDFILE" 2>/dev/null
 		unset RANDFILE
 	fi
@@ -141,10 +140,10 @@ generate_ssl_key() {
 }
 
 if ! empty "$FORM_install_stunnel"; then
-	echo "@TR<<system_settings_Installing_MatrixTunnel_package#Installing MatrixTunnel package>> ...<pre>"
-	install_package "matrixtunnel"
-	is_package_installed "matrixtunnel"
-	[ "$?" = "0" ] && [ ! -e /etc/ssl/matrixtunnel.key -o ! -e /etc/ssl/matrixtunnel.cert ] && {
+	echo "@TR<<system_settings_Installing_STunnel_package#Installing STunnel package>> ...<pre>"
+	install_package "stunnel"
+	is_package_installed "stunnel"
+	[ "$?" = "0" ] && [ ! -e /etc/stunnel/stunnel.key -o ! -e /etc/stunnel/stunnel.cert ] && {
 		echo "@TR<<system_settings_Generating_SSL_certificate#Generating SSL certificate>> ..."
 		generate_ssl_key
 	}
@@ -177,7 +176,7 @@ if empty "$FORM_submit"; then
 	if equal $FORM_effect "1" ; then FORM_effect="checked" ; fi	# -- effects checkbox
 	FORM_language="${CONFIG_general_lang:-en}"	
 	FORM_theme=${CONFIG_theme_id:-xwrt}
-	FORM_ssl_enable="${CONFIG_matrixtunnel_enable:-0}"
+	FORM_ssl_enable="${CONFIG_general_ssl:-0}"
 else
 #####################################################################
 # save forms
@@ -217,9 +216,9 @@ EOF
 		}
 		# webif settings
 		# fix emptying the field when not present
-		FORM_ssl_enable="${FORM_ssl_enable:-$CONFIG_matrixtunnel_enable}"
+		FORM_ssl_enable="${FORM_ssl_enable:-$CONFIG_general_ssl}"
 		FORM_ssl_enable="${FORM_ssl_enable:-0}"
-		uci_set "webifssl" "matrixtunnel" "enable" "$FORM_ssl_enable"
+		uci_set "webif" "general" "ssl" "$FORM_ssl_enable"
 		uci_set "webif" "theme" "id" "$FORM_theme"
 		uci_set "webif" "general" "lang" "$FORM_language"
 		uci_set "webif" "general" "use_progressbar" "$FORM_effect_enable"
@@ -230,13 +229,13 @@ EOF
 fi
 
 WEBIF_SSL="field|@TR<<system_settings_Webif_SSL#Webif&sup2; SSL>>"
-is_package_installed "matrixtunnel"
+is_package_installed "stunnel"
 if [ "$?" != "0" ]; then
 	WEBIF_SSL="$WEBIF_SSL
-string|<div class=\"warning\">@TR<<system_settings_Feature_requires_matrixtunnel#MatrixTunnel package is not installed. You need to install it for ssl support>>:</div>
-submit|install_stunnel| @TR<<system_settings_Install_MatrixTunnel#Install MatrixTunnel>> |"
+string|<div class=\"warning\">@TR<<system_settings_Feature_requires_stunnel#STunnel package is not installed. You need to install it for ssl support>>:</div>
+submit|install_stunnel| @TR<<system_settings_Install_stunnel#Install STunnel>> |"
 else
-	if [ -e /etc/ssl/matrixtunnel.key -a -e /etc/ssl/matrixtunnel.cert ]; then
+	if [ -e /etc/stunnel/stunnel.key -a -e /etc/stunnel/stunnel.cert ]; then
 		WEBIF_SSL="$WEBIF_SSL
 select|ssl_enable|$FORM_ssl_enable
 option|0|@TR<<system_settings_webifssl_Off#Off>>
