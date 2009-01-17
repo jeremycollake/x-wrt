@@ -6,15 +6,34 @@
 		set_zone(zone,input,output,forward,masq)
 			input, output, forward, masq can be nil
 			this function create or modify the values of zone
-		
+
 		delete_zone(zone)
 			this function delete zones and all forwardings to this zone name
-		
+
 		set_forwarding(src,dest)
 			this functin create forwarding
-		
+
 		delete_forwarding(src,dest)
 			this function delete forwarding
+
+		set_rule(name, src, src_ip, src_mac, src_port, dest, dest_ip, dest_port, proto, target)
+			this functin create rule
+
+		set_redirect(args)
+			this functin create rule
+			args=	{name=".....", src="....", src_ip=".....", src_mac=".....", src_port="....", 
+						 src_dport=".....", dest_ip=".....", dest_port=".....", proto="....."
+						}
+			return name_of_uci_section	if create or modify redirect
+						 nil									if redirect have a multiple matches, need more parameters
+		get_name(f_type, args)
+			this function find uci name
+			args is a table {	src="....", src_ip="....", src_mac="....", 
+												src_port=".....", src_dport="....", dest="....", 
+												dest_ip="....", dest_port="....", proto="....."}
+			returns name_of_uci_section if have a single match
+							"duplicate"					if have multiple matches
+							nil 								if have not matches
 ]]--
 require("uci_iwaddon")
 require("common")
@@ -36,6 +55,8 @@ function reset()
 	uci.save("firewall")
 	all = {}
 	zones = {}
+	rules = {}
+	redirects = {}
 	forwardings = {}
 	defaults = {}
 	all = uci.get_all("firewall")
@@ -46,6 +67,14 @@ function reset()
 		if t[".type"] == "forwarding" then
 			if forwardings[t.src] == nil then forwardings[t.src] = {} end
 			forwardings[t.src][t.dest] = i
+		end
+		if t[".type"] == "rule" then
+			if rules[i] == nil then rules[i] = {} end
+			rules[i] = t
+		end
+		if t[".type"] == "redirect" then
+			if redirects[i] == nil then redirects[i] = {} end
+			redirects[i] = t
 		end
 		if t[".type"] == "defaults" then
 			defaults = t
@@ -197,9 +226,117 @@ function delete_forwarding(src,dest)
 	return ret
 end
 
+function get_name(f_type,a)
+	local tfind = {}
+	local f_type=f_type
+	local src=a.src
+	local src_ip=a.src_ip
+	local src_mac=a.src_mac
+	local src_port=a.src_port
+	local src_dport=a.src_dport
+	local dest_ip=a.dest_ip
+	local dest_port=a.dest_port
+	local proto=a.proto
+	local search = ""
+	for k,v in pairs(a) do
+		search = search..k.."="..v.." "
+	end
+--	print(f_type, search)
+	if f_type == "forwarding" then
+		if forwardings[a.src] == nil then return nil end
+		return forwardings[a.src][a.dest]
+	elseif f_type == "rule" then
+		tfind = rules
+	elseif f_type == "redirect" then
+		tfind = redirects
+	else
+		tfind = all
+	end
+
+	local cnt=0
+	local name=nil
+	for nm, tf in pairs(tfind) do
+		local ok=true
+		for k, v in pairs(a) do
+			if k ~= "name" then
+				if has_value(tf[k])~=has_value(v) then ok=false end
+			end
+		end
+		if ok == true then
+			cnt=cnt+1
+			name=nm
+		end
+	end
+	if cnt > 1 then name = "duplicate" end
+	return name
+end
+
+function set_redirect(a)
+	return set_firewall("redirect", redirects, a)
+end
+
+function set_rule(a)
+--print("set_rule")
+	return set_firewall("rule", rules, a)
+end
+
+function set_firewall(f_type,t_find,a)
+	local f_type = f_type
+	local t_find = t_find
+	local exists = false
+	local name = get_name(f_type,a)
+	if name == "duplicate" then return nil end
+--print(f_type, t_find)
+	a.name = has_value(a.name)
+	if a.name == name then
+		exists = true
+	else
+print(f_type,a.name)
+		uci.set("firewall",name,a.name)
+print("va a reset")
+		reset()
+print("vuelve de reset")
+		exists = true
+	end
+print(exists,a.name)
+for i, t in pairs(all) do
+	print(i,t)
+	for k, v in pairs(t) do
+		print("",k,v)
+	end
+end
+	if exists == false then
+		if a.name then
+			uci.set("firewall",f_type,a.name)
+		else
+			a.name=uci.add("firewall",f_type)
+		end
+	end
+
+	if exists == true then
+print(t_find[a.name])
+		for op, vl in pairs(t_find[a.name]) do
+--print(op, vl)
+			if a[op] == nil then
+				uci.delete("firewall",a.name,op)
+			end
+		end
+	end
+
+	for op, vl in pairs(a) do
+		if op ~= "name" then
+--print(a.name,op,vl)
+			uci.isdiff_set("firewall",a.name,op,vl)
+		end
+	end
+	reset()
+	return a.name
+end
 -- defaults --
 all = {}
 zones = {}
+rules = {}
+redirects = {}
 forwardings = {}
 defaults = {}
 reset()
