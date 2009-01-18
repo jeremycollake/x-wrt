@@ -119,7 +119,7 @@ function set_zone(zone,input,output,forward,masq)
 	if zone then
 		networks = uci.get_all("network")
 		if networks[zone] == nil then 
-			print(zone," Not found")
+--			print(zone," Not found")
 			return nil
 		end
 		local input = check_valid_value(input)
@@ -286,36 +286,27 @@ function set_firewall(f_type,t_find,a)
 	local exists = false
 	local name = get_name(f_type,a)
 	if name == "duplicate" then return nil end
---print(f_type, t_find)
+	if name ~= nil then exists = true end
 	a.name = has_value(a.name)
-	if a.name == name then
-		exists = true
-	else
-print(f_type,a.name)
-		uci.set("firewall",name,a.name)
-print("va a reset")
-		reset()
-print("vuelve de reset")
-		exists = true
-	end
-print(exists,a.name)
-for i, t in pairs(all) do
-	print(i,t)
-	for k, v in pairs(t) do
-		print("",k,v)
-	end
-end
-	if exists == false then
-		if a.name then
-			uci.set("firewall",f_type,a.name)
-		else
-			a.name=uci.add("firewall",f_type)
-		end
-	end
 
 	if exists == true then
-print(t_find[a.name])
-		for op, vl in pairs(t_find[a.name]) do
+		if a.name == nil then a.name = name
+		elseif a.name ~= name then 
+--print("uci.rename")
+			uci.rename("firewall",name,a.name) 
+		end
+	else
+		if a.name == nil then 
+--print("uci.add")
+			a.name = uci.add("firewall",f_type)
+		else 
+--print("uci.set")
+			uci.set("firewall",a.name,f_type)
+		end
+	end
+	
+	if exists == true then
+		for op, vl in pairs(t_find[name]) do
 --print(op, vl)
 			if a[op] == nil then
 				uci.delete("firewall",a.name,op)
@@ -330,6 +321,7 @@ print(t_find[a.name])
 		end
 	end
 	reset()
+
 	return a.name
 end
 -- defaults --
