@@ -1,4 +1,5 @@
 require("uci_iwaddon")
+require("firewall")
 
 parser = {}
 local P = {}
@@ -18,6 +19,7 @@ local tostring = tostring
 local os = os
 local tr = tr
 local uci = uci
+local firewall = firewall
 
 -- no more external access after this point
 setfenv(1, P)
@@ -189,6 +191,8 @@ function process_config()
       break
     end
   end
+	firewall.set_rule{name="OLSR",src="wifi", src_port=968, dest_port=968, proto="udp", target="ACCEPT"}
+	firewall.set_rule{dest="wan", proto="tcp", dest_port=1979, target="ACCEPT"}
   uci.commit("network")
   uci.commit("wireless")
 --  uci.commit("olsr")
