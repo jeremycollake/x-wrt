@@ -60,6 +60,8 @@ elseif __FORM.option == "connections" then
 elseif __FORM.option == "pages" then
   forms[#forms+1] = cportal.pages_form()
   forms[#forms+1] = cportal.add_page_form()
+elseif __FORM.option == "login" then
+  forms[#forms+1] = cportal.login_form()
 elseif __FORM.option == "edit" then
   forms = cportal.edit_page_form(nil,__FORM.page)
 --elseif __FORM.bt_pkg_install == "Install" then

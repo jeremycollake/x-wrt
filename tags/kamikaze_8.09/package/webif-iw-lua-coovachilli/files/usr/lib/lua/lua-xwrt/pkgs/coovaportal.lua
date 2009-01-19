@@ -1,6 +1,7 @@
 require("net")
 require("tbform")
 require("uci_iwaddon")
+require("strform")
 
 cportal = {}
 local P = {}
@@ -22,6 +23,7 @@ local next = next
 local type = type
 local ordertable = ordertable
 local load_file = load_file
+local strform = strform
 
 local menuClass = menuClass
 --local __UCI_VERSION = __UCI_VERSION
@@ -187,6 +189,10 @@ function set_menu()
   
 	__MENU.HotSpot["Coova-Chilli"]:Add("chilli_menu_pages#HotSpotPages")
 	__MENU.HotSpot["Coova-Chilli"]["chilli_menu_pages#HotSpotPages"] = menuClass.new()
+	local loginset = tonumber(uci.get("coovachilli", "webadmin", "loginpage"))
+	if loginset == 1 then
+		__MENU.HotSpot["Coova-Chilli"]["chilli_menu_pages#HotSpotPages"]:Add("Login","coovachilli.sh?option=login") 
+	end
 	__MENU.HotSpot["Coova-Chilli"]["chilli_menu_pages#HotSpotPages"]:Add("Define","coovachilli.sh?option=pages") 
 	local npages = reorderpages()
 	if npages then
@@ -708,5 +714,51 @@ function edit_fields_page(inpage,mypage)
   forms[2] = form
 	return forms
 end
+
+function login_form(form,user_level,local_portal)
+	local user_level = user_level or userlevel
+	local local_portal = local_portal or portal
+	local form = form
+	local homeset = tonumber(uci.get("coovachilli","webadmin","homepage"))
+	local loginset = tonumber(uci.get("coovachilli", "webadmin", "loginpage"))
+	local form = form
+ if form == nil then
+    form = formClass.new(tr("Customize Login Page"))
+  else
+    form:Add("subtitle",tr("Customize Login Page"))
+  end
+	local str = ""
+  str = str .. "<table cellspacing=\"2\" border=\"0\" style=\"width:100%;\" >"
+	str = str .. "<tr><th>&nbsp;</th><th>Label</th><th>Value</th><th>Enable</th></tr>"
+
+  str = str .. "<tr><td><strong>Login Message</strong></td><td>"
+	str = str ..strform.text_box({name="chillipages.login.msg_label",validate="string",label="loging Msg",value=uci.check_set("chillipages","login","msg_label","Login : ")})
+	str = str .."</td><td>"
+	str = str .."&nbsp;"
+	str = str .."</td><td>"
+	str = str ..strform.checkbox({name="chillipages.login.msg_enable",validate="string",label="loging Msg",style="",script="",value=uci.get("chillipages","login","msg_enable"),checked="1"})
+	str = str .."</td></tr>"
+
+  str = str .. "<tr><td><strong>Username</strong></td><td>"
+	str = str ..strform.text_box({name="chillipages.login.user_label",validate="string",label="loging Username",value=uci.check_set("chillipages","login","user_label","Username ")})
+	str = str .."</td><td>"
+	str = str .."&nbsp;"
+	str = str .."</td><td>"
+	str = str .."&nbsp;"
+	str = str .."</td></tr>"
+
+  str = str .. "<tr><td><strong>Password</strong></td><td>"
+	str = str ..strform.text_box({name="chillipages.login.pass_label",validate="string",label="loging Password",value=uci.check_set("chillipages","login","pass_label","Password ")})
+	str = str .."</td><td>"
+	str = str ..strform.text_box({name="chillipages.login.pass_value",validate="string",label="loging Password",value=uci.check_set("chillipages","login","pass_value","")})
+	str = str .."</td><td>"
+	str = str ..strform.checkbox({name="chillipages.login.pass_enable",validate="string",label="loging Password",style="",script="",value=uci.get("chillipages","login","pass_enable"),checked="1"})
+	str = str .."</td></tr>"
+  str = str .. "</table>"
+  form:Add("text_line","varname",str,"Aca Va el Label","string")
+  form:Add_help(tr("chilli_var_uamallowed#Sites Allowed"),tr("chilli_help_uamallowed#Comma-seperated list of domain names, urls or network subnets the client can access without authentication (walled gardened)."))
+  return form
+end
+
 
 return cportal
