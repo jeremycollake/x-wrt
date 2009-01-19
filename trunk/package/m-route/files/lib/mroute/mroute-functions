@@ -197,6 +197,11 @@ gwping () {
 	PR=0
 	while : ; do
 		for p in $(seq 1 $WAN_DEVCOUNT); do
+			CHECK_DEFROUTE=`ip route | grep "default"`
+			if [ "$CHECK_DEFROUTE" = "" -a $PR -ne 0 ]; then 
+				PR=0
+				log_info 4 "No default route"
+			fi
 			get_wan_values $p
 			if [[ "$WAN_IF" != "" && "$WAN_GW" != "" && "$WAN_IP" != "" ]]; then
 ####				check_duplicate_rt_openwrt $WAN_GW
