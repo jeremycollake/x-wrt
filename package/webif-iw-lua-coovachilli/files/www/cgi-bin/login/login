@@ -4,6 +4,13 @@ require("init")
 require("uci_iwaddon")
 require("htmlClass")
 
+user_label  = uci.get("chillipages","login","user_label")
+pass_enable = tonumber(uci.get("chillipages","login","pass_enable") or 0)
+pass_label  = uci.get("chillipages","login","pass_label")
+pass_value	= uci.get("chillipages","login","pass_value")
+msg_label		= uci.get("chillipages","login","msg_label")
+msg_enable	= tonumber(uci.get("chillipages","login","msg_enable") or 0)
+
 page = htmlpageClass.new(tr("Login Page").." - "..__SYSTEM.general.firmware_name.." "..tr("Administrative Console"))
 page.head.links:add(
 	{rel = "stylesheet", type = "text/css", href = "/themes/active/webif.css"}
@@ -37,10 +44,9 @@ page.container.header:add([[
 ]])
 -- or can add code directly to page.container like you write on standart html file
 page.container:add([[<div id="mainmenu"></div>]])
-
 page.container:add()
 page.container:add(htmlsectionClass.new("div","content"))
-page.container.content:add([[
+local strpage = [[
 	<div id="Chilli">
     <table border="0">
       <tr><td>
@@ -61,17 +67,33 @@ page.container.content:add([[
               <table id="logonTable" border="0" >
                 <tr>
                   <td colspan="2" style="font-size:120%;">
-                    <div id="logonMessage" style="font-size:70%;padding-top:4px;">Login:</div>
+                    <div id="logonMessage" style="font-size:70%;padding-top:4px; ]]
+										if msg_enable == 0 then
+										strpage=strpage..[[ display:none; ]]
+										end
+										strpage=strpage..[[">]]..msg_label..[[</div>
                   </td>
                 </tr>
-
                 <tr id="usernameRow">
-                  <td id="usernameLabel"><b>Username</b></td>
+                  <td id="usernameLabel"><b>]]..user_label..[[ </b></td>
                   <td><input name="username" type="text" id="username" size="20"/></td>
                 </tr>
-                <tr id="passwordRow">
-                  <td id="passwordLabel"><b>Password</b></td>
-                  <td><input name="password" type="password" id="password" size="20"/></td>
+								]]
+								
+								if pass_enable == 0 then
+								strpage=strpage..[[
+                <tr id="passwordRow" style="display:none">]]
+								else 
+								strpage=strpage..[[
+								<tr id="passwordRow" > ]]
+								end
+								strpage=strpage..[[
+                  <td id="passwordLabel" ><b> ]]..pass_label..[[ </b></td>
+                  <td><input name="password" type="password" id="password"]]
+								if pass_enable == 0 then
+								strpage=strpage..[[  value="]]..pass_value..[["]]
+								end
+								strpage=strpage..[[ size="20"/></td>
                 </tr>
                 <tr>
                   <td colspan="2"><input type="submit" value="Connect" onClick="connect();"/></td>
@@ -148,7 +170,8 @@ page.container.content:add([[
 	</div>
 -->
 ]]
-)
+
+page.container.content:add(strpage)
 page.container:add([[
 <fieldset id="save">
 	<legend><strong>Proceed Changes</strong></legend>
