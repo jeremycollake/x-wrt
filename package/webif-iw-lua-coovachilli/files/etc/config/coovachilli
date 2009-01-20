@@ -1,7 +1,0 @@
-config 'loginpage' 'login'
-	option	'user_label'	'Username'
-	option	'pass_label'	'Password'
-	option	'pass_value'	''
-	option	'pass_enable'	'1'
-	option	'msg_label'	'Login :'
-	option	'msg_enable'	'1'	
