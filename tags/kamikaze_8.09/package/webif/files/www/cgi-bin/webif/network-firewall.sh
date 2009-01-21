@@ -60,7 +60,7 @@ EOF
 		uci_set "firewall" "$add_redirect_cfg" "src_ip" "$FORM_src_ip_redirect"
 		uci_set "firewall" "$add_redirect_cfg" "src_dport" "$FORM_src_dport_redirect"
 		uci_set "firewall" "$add_redirect_cfg" "dest_ip" "$FORM_dest_ip_redirect"
-		[ "$FORM_dest_port_redirect" = "" ] && FORM_dest_port_redirect="$FORM_src_dport_redirect"
+		[ "$FORM_dest_port_redirect" = "" -a "0" != "$(echo "$FORM_src_dport_redirect" |grep -q "-" -e ":";echo "$?")" ] && FORM_dest_port_redirect="$FORM_src_dport_redirect"
 		uci_set "firewall" "$add_redirect_cfg" "dest_port" "$FORM_dest_port_redirect"
 		unset FORM_dest_port_redirect FORM_dest_ip_redirect FORM_src_dport_redirect FORM_src_ip_redirect FORM_protocol_redirect FORM_name_redirect
 		FORM_port_select_redirect=custom
@@ -283,7 +283,7 @@ EOF
 			uci_set firewall "$rule" "src_ip" "$FORM_src_ip"
 			uci_set firewall "$rule" "dest_ip" "$FORM_dest_ip"
 			uci_set firewall "$rule" "src_dport" "$FORM_src_dport"
-			[ "$FORM_dest_port" = "" ] && FORM_dest_port="$FORM_src_dport"
+			[ "$FORM_dest_port" = "" -a "0" != "$(echo "$FORM_src_dport_redirect" |grep -q "-" -e ":";echo "$?")" ] && FORM_dest_port="$FORM_src_dport"
 			uci_set firewall "$rule" "dest_port" "$FORM_dest_port"
 		}
 	fi
