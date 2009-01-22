@@ -201,11 +201,11 @@ for device in $DEVICES; do
 	if empty "$FORM_submit"; then
 		config_get FORM_ap_mode $device hwmode
 		config_get iftype "$device" type
-	        config_get country $device country
-	        config_get FORM_channel $device channel
-	        config_get FORM_maxassoc $device maxassoc
-	        config_get FORM_distance $device distance
-	        config_get FORM_txantenna $device txantenna
+		config_get country $device country
+		config_get FORM_channel $device channel
+		config_get FORM_maxassoc $device maxassoc
+		config_get FORM_distance $device distance
+		config_get FORM_txantenna $device txantenna
 		[ -z $FORM_txantenna ] && FORM_txantenna=0
 	        config_get FORM_rxantenna $device rxantenna
 		[ -z $FORM_rxantenna ] && FORM_rxantenna=0
@@ -214,8 +214,8 @@ for device in $DEVICES; do
 		config_get FORM_antenna $device antenna
 		[ -z $FORM_antenna ] && FORM_antenna=auto
 	else
-		config_get country $device country
 		config_get iftype "$device" type
+		eval FORM_country="\$FORM_country_$device"
 		eval FORM_ap_mode="\$FORM_ap_mode_$device"
 		eval FORM_channel="\$FORM_bgchannel_$device"
 		[ -z "$FORM_channel" ] && eval FORM_channel="\$FORM_achannel_$device"
@@ -235,6 +235,7 @@ int|FORM_distance_$vcfg|@TR<<Distance>>||$FORM_distance
 int|FORM_maxassoc_$vcfg|@TR<<Max Associated Clients>>||$FORM_maxassoc
 EOF
 			if [ "$?" = 0 ]; then
+				uci_set "wireless" "$device" "country" "$FORM_country"
 				uci_set "wireless" "$device" "hwmode" "$FORM_ap_mode"
 				uci_set "wireless" "$device" "channel" "$FORM_channel"
 				uci_set "wireless" "$device" "maxassoc" "$FORM_maxassoc"
@@ -254,6 +255,14 @@ EOF
 		append forms "helpitem|Broadcom Wireless Configuration" "$N"
 		append forms "helptext|Helptext Broadcom Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-3x ap or 1-4x ap or 1x adhoc" "$N"
 	elif [ "$iftype" = "atheros" ]; then
+		ccSelect="0"
+		[ -e /proc/sys/dev/$device/countrycode ] && ccSelect="$(cat /proc/sys/dev/$device/countrycode)"
+		mode_country="field|@TR<<Country Code>>
+		select|country_$device|$FORM_country
+		option|0|@TR<<Default (or unset)>>$(equal "$ccSelect" '0' && echo ' ** CURRENT')
+		option|840|@TR<<United States>>$(equal "$ccSelect" '840' && echo ' ** CURRENT')
+		option|826|@TR<<UK and US 5.18-5.70GHz>>$(equal "$ccSelect" '826' && echo ' ** CURRENT')"
+		append forms "$mode_country" "$N"
 		append forms "helpitem|Atheros Wireless Configuration" "$N"
 		append forms "helptext|Helptext Atheros Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-4x ap or 1-4x ap or 1x adhoc" "$N"
 	fi
