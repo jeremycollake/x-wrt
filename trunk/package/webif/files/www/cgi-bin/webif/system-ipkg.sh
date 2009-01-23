@@ -191,7 +191,7 @@ opkg list_installed |grep -e "Collected errors:" -e "has no architecture specifi
 repo_list=$(awk -v lists="$lists_path" '/^[[:space:]]*src[\/gz]*[[:space:]]/ { printf " " lists "/" $2 }' /etc/opkg.conf)
 status_list=$(awk '/^[[:space:]]*dest[[:space:]]/ { if ($3 == "/") printf " /usr/lib/opkg/status"; else printf " "$3"/usr/lib/opkg/status" }' /etc/opkg.conf)
 [ -z "$status_list" ] && status_list="/usr/lib/opkg/status"
-egrep 'Package:|Description:|Version:' $status_list $repo_list 2>&- | sed -e 's, ,,' -e "s,^[^:]*${lists_path}/,," | awk -F: '
+egrep 'Package:|Description:|Version:' $status_list $repo_list 2>&- | sed -e 's, ,,' -e 's,^[^:]*${lists_path}/,,' | awk -F: '
 $1 ~ /status/ {
 	installed[$3]++;
 }
