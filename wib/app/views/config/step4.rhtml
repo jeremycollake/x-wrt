@@ -1,0 +1,7 @@
+Choose Category: <%= select_tag "category", "<option value=\"none\"></option>"+options_for_select(@categories.collect { |c| [c.name, c.id] }) %>
+
+<%= observe_form(:wib_form, :update => :cat_details, :url => { :action => 'packages' }, :loading => "Element.show('loading')", :complete => "Element.hide('loading')") %>
+
+<span id="loading" style="display:none">Loading package list...</span>
+<div id="cat_details">
+</div>

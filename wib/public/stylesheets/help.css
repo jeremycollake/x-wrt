@@ -1,0 +1,31 @@
+body {
+  font-family: Arial, helvetica, sans;
+}
+
+table#heading {
+  display: block;
+  color: white;
+  background-color: #114488;
+}
+
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
+}
+
+#content {
+  display: block;
+}
+
+#bottombar {
+  display: block;
+  height: 18px;
+  background: #114488;
+}
+
+#bottombar a {
+  color: white;
+}

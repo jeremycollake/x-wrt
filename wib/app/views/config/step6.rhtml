@@ -1,0 +1,34 @@
+<script type="text/javascript">
+var timeout = 6000;
+var running = 1;
+function do_refresh() {
+	if (!running)
+		return 0;
+	<%= remote_function ( :update => "download", :url => { :action => :wait_for_image }, :complete => "process_request(request)") %>;
+	start_refresh();
+}
+
+function start_refresh() {
+	setTimeout('do_refresh()', timeout);
+}
+
+function process_request(request) {
+	var reg1 = /are ready/;
+	var reg2 = /being created/;
+	if (reg1.test(request.responseText)) {
+		running = 0;
+	} else if (reg2.test(request.responseText)) {
+		timeout = 2000;
+	}
+}
+</script>
+
+<div id="dl_action">
+<h2>Your configuration is complete.</h2>
+
+<%= link_to_remote "Create Image", {:update => "download", :loading => "Element.show('download'); Element.hide('dl_action'); start_refresh()", :url => {:action => 'create_image'}, :complete => "process_request(request)"}, :class => 'createbutton' %>
+</div>
+
+<div id="download" style="display:none">
+</div>
+

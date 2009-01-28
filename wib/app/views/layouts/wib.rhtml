@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+  <head>
+    <title>OpenWrt Web Image Builder</title>
+    <%= stylesheet_link_tag 'wib.css' %>
+    <%= javascript_include_tag :defaults %>
+    <%= javascript_include_tag "wib" %>
+	<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+  </head>
+  <body>
+    <div id="headline">
+      <h1>OpenWrt Web Image Builder</h1>
+    </div>
+    <div id="sidebar">
+      <h2>Overview</h2>
+      <ol>
+        <%@steps = [
+           "Welcome",
+           "Choose your Target System",
+           "Choose your Filesystem",
+           "Choose your Target Profile",
+           "Modify Package Selection",
+		   "Modify your Image Config",
+           "Create your Images"
+        ]%>
+        <%for @i in 0 .. (@steps.length - 1)%>
+          <% if @step == @i %><li class="active"><strong><% else %><li><% end %>
+            <% if @i < @step %>
+              <%= link_to(@steps.at(@i), { :action => 'step'+@i.to_s }) %>
+            <% else %>
+              <%= @steps.at(@i) %>
+            <% end %>
+          <% if @step == @i %></strong><% end %></li>
+        <% end %>
+      </ol>
+    </div>
+    <%= start_form_tag({:action => 'index'}, :id => "wib_form") %> 
+      <h1>
+        <% if @step > 0 %>Step <%= @step %>:<% end %>
+        <%= @steps.at(@step) %>
+      </h1>
+      <div id="content">
+        <p id="notice"><%= flash[:notice] %></p>
+        <%= @content_for_layout %>
+      </div>
+      <div class="clearfix">&nbsp;</div>
+      <div id="bottombar">
+        <%= hidden_field_tag "from", @step %>
+        <div class="left">
+          <% if @step > 0 %>
+            <%= submit_tag "Back", :class => "button" %><br />
+            <em><%= @steps.at(@step - 1) %></em>
+          <% end %>
+        </div>
+        <div class="right">
+          <% if @step < @steps.length - 1 %>
+            <%= submit_tag "Next", :class => "button" %><br />
+            <em><%= @steps.at(@step + 1) %></em>
+          <% end %>
+        </div><div class="clearfix">&nbsp;</div>
+      </div>
+    <%= end_form_tag %>
+  </body>
+</html>
+

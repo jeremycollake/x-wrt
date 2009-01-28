@@ -1,0 +1,3 @@
+class StHelpController < ApplicationController
+  
+end

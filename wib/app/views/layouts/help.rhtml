@@ -1,0 +1,27 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+  <head>
+    <title>OpenWrt Web Image Builder Help</title>
+    <%= stylesheet_link_tag 'help.css' %>
+  </head>
+  <body>
+    <table id="heading">
+      <tr>
+        <td>
+          <strong>OpenWrt Web Image Builder Help</strong>
+	</td>
+      </tr>
+      <tr>
+        <td>
+	  <h1><%= @title -%></h1>
+	</td>
+      </tr>
+    </table>
+    <div id="content">
+      <%= @content_for_layout %>
+    </div>
+    <div id="bottombar" class="right">
+      <%= link_to_function "close window", "window.close()" %>
+    </div>
+  </body>
+</html>

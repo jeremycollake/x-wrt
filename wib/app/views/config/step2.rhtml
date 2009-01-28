@@ -1,0 +1,15 @@
+<ul>
+<% for f in @filesystems %>
+  <li><label for="config_filesystem_<%= f.id.to_s %>">
+    <%= radio_button 'config', 'filesystem', f.id, {
+		"checked" => if @filesystems.index(f) == 0
+			"checked"
+		else
+			nil
+		end
+	} -%>
+    <strong><%= f.name -%></strong><br />
+    <%= f.description -%>
+  </label></li>
+<% end %>
+</ul>

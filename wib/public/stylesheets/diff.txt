@@ -1,0 +1,29 @@
+--- wib.css	2007-01-15 23:16:26.816484848 +0100
++++ wib.css	2007-01-15 23:35:40.000000000 +0100
+@@ -173,12 +160,15 @@
+ }
+ 
+ ul input {
+-	float: left;
+-	margin: 0.5em;
++	position: absolute;
++	margin-top: 0.2em;
++	margin-left: -2em;
+ }
++
+ ul label {
+ 	display: block;
+ 	padding: 0.2em;
++	margin-left: 2em;
+ }
+ 
+ ul label:hover {
+@@ -188,6 +178,4 @@
+ label em {
+ 	position: absolute;
+ 	right: 5em;
+-}
+-
+-
++}
+\ No newline at end of file

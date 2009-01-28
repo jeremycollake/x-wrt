@@ -1,0 +1,14 @@
+<% if @category %>
+<%= hidden_field_tag "oldcat", @category.id %>
+<h2><%= @category.name -%></h2>
+<p><%= @category.description -%></p>
+<ul>
+  <% for package in @packages %>
+    <li><label for="packages_<%= package.id.to_s %>" style="display:block">
+      <%= check_box_tag "packages[]", package.id, @config.packages.include?(package.id), {"id" => "packages_" + package.id.to_s } -%>
+      <strong><%= package.name -%></strong><em>(Version: <%= package.version -%>)</em><br />
+    <%= package.title -%>
+	</label></li>
+  <% end %>
+</ul>
+<% end %>

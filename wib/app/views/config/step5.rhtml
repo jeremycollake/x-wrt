@@ -1,0 +1,9 @@
+<% for pkg in @preconfig %>
+  <h2><%= pkg.name %></h2>
+  <ul>
+  <% for cfg in pkg.preconfigs %>
+    <% cfgid = "preconfig_" + cfg.configstr.gsub(/[\-\.]/, "_") %>
+    <li><label for="<%= cfgid %>"><%= cfg.label %>: <input class="text" type="text" id="<%= cfgid %>" name="<%= cfgid %>" value="<%= (params[cfgid] ? param[cfgid]: cfg.defaultstr) %>"></label></li>
+  <% end %>
+  </ul>
+<% end %>

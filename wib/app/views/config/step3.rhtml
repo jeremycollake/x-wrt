@@ -1,0 +1,16 @@
+<ul>
+<% for p in @profiles %>
+  <li><label for="profile_<%= p.id %>">
+    <%= radio_button_tag 'profile', p.id, (@config.profile == p.id), {
+		"id" => "profile_" + p.id.to_s,
+		"checked" => if @profiles.index(p) == 0
+			"checked"
+		else
+			nil
+		end
+	} -%>
+    <strong><%= p.title -%></strong><br />
+	<%= p.description -%>
+  </label></li>
+<% end %>
+</ul>

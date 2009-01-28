@@ -1,0 +1,7 @@
+<h2>Your images are ready:</h2>
+<ul>
+  <% for f in @files %>
+    <li><%= link_to f, {:action => 'download', :filename => f} %></li>
+  <% end %>
+</ul>
+

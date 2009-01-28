@@ -1,0 +1,8 @@
+<span class="notice">
+  <% if @queued == 1 %>
+    Your images are being created. This might take a while... 
+  <% else %>
+    Your build request is in the queue at position: <%= @queued - 1 %>
+  <% end %>
+</span>
+

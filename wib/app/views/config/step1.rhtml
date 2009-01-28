@@ -1,0 +1,16 @@
+<ul>
+<% for board in @boards %>
+  <li><label for="config_board_<%= board.id.to_s %>">
+    <%= radio_button 'config', 'board', board.id, { 
+		"id" => "config_board_" + board.id.to_s,
+		"checked" => if @boards.length == 1 then
+			"checked"
+		else
+			nil
+		end
+	} -%>
+    <strong><%= board.title %></strong><br />
+	<%= board.description %>
+  </label></li>
+<% end %>
+</ul>

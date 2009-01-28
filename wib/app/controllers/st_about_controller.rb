@@ -1,0 +1,3 @@
+class StAboutController < ApplicationController
+  
+end
