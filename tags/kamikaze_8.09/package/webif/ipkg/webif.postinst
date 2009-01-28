@@ -83,12 +83,14 @@ if [ -n "${IPKG_INSTROOT}" ]; then
 		echo 'dest root /' >> "${IPKG_INSTROOT}/etc/opkg.conf"
 		echo 'dest ram /tmp' >> "${IPKG_INSTROOT}/etc/opkg.conf"
 		echo 'lists_dir ext /var/opkg-lists' >> "${IPKG_INSTROOT}/etc/opkg.conf"
+		echo 'option overlay_root /jffs'>> "${IPKG_INSTROOT}/etc/opkg.conf"
 	else
 		AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/$repo/packages"
 		AddRepository "OpenWrt" "http://downloads.openwrt.org/kamikaze/$revision/$repo/packages"
 		echo 'dest root /' >> "${IPKG_INSTROOT}/etc/opkg.conf"
 		echo 'dest ram /tmp' >> "${IPKG_INSTROOT}/etc/opkg.conf"
 		echo 'lists_dir ext /var/opkg-lists' >> "${IPKG_INSTROOT}/etc/opkg.conf"
+		echo 'option overlay_root /jffs'>> "${IPKG_INSTROOT}/etc/opkg.conf"
 	fi
 fi
 
