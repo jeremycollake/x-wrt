@@ -421,8 +421,8 @@ EOF
 				
 				eval FORM_encryption="\$FORM_encryption_$vcfg"
 				case "$FORM_encryption" in
-					psk|psk2) eval FORM_key="\$FORM_wpa_psk_$vcfg";;
-					wpa|wpa2) eval FORM_key="\$FORM_radius_key_$vcfg";;
+					psk|psk2|psk-mixe*|psk+psk2) eval FORM_key="\$FORM_wpa_psk_$vcfg";;
+					wpa|wpa2|wpa+wpa2) eval FORM_key="\$FORM_radius_key_$vcfg";;
 				esac
 				eval FORM_mode="\$FORM_mode_$vcfg"
 				eval FORM_server="\$FORM_server_$vcfg"
