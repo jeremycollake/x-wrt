@@ -201,11 +201,11 @@ for device in $DEVICES; do
 	if empty "$FORM_submit"; then
 		config_get FORM_ap_mode $device hwmode
 		config_get iftype "$device" type
-	        config_get country $device country
-	        config_get FORM_channel $device channel
-	        config_get FORM_maxassoc $device maxassoc
-	        config_get FORM_distance $device distance
-	        config_get FORM_txantenna $device txantenna
+		config_get country $device country
+		config_get FORM_channel $device channel
+		config_get FORM_maxassoc $device maxassoc
+		config_get FORM_distance $device distance
+		config_get FORM_txantenna $device txantenna
 		[ -z $FORM_txantenna ] && FORM_txantenna=0
 	        config_get FORM_rxantenna $device rxantenna
 		[ -z $FORM_rxantenna ] && FORM_rxantenna=0
@@ -214,8 +214,8 @@ for device in $DEVICES; do
 		config_get FORM_antenna $device antenna
 		[ -z $FORM_antenna ] && FORM_antenna=auto
 	else
-		config_get country $device country
 		config_get iftype "$device" type
+		eval FORM_country="\$FORM_country_$device"
 		eval FORM_ap_mode="\$FORM_ap_mode_$device"
 		eval FORM_channel="\$FORM_bgchannel_$device"
 		[ -z "$FORM_channel" ] && eval FORM_channel="\$FORM_achannel_$device"
@@ -226,6 +226,27 @@ for device in $DEVICES; do
 		eval FORM_rxantenna="\$FORM_rxantenna_$device"
 		eval FORM_disabled="\$FORM_disabled_$device"
 		eval FORM_antenna="\$FORM_antenna_$device"
+
+		empty "$FORM_generate_wep_128" && empty "$FORM_generate_wep_40" &&
+		{
+			SAVED=1
+			validate <<EOF
+int|FORM_distance_$vcfg|@TR<<Distance>>||$FORM_distance
+int|FORM_maxassoc_$vcfg|@TR<<Max Associated Clients>>||$FORM_maxassoc
+EOF
+			if [ "$?" = 0 ]; then
+				uci_set "wireless" "$device" "country" "$FORM_country"
+				uci_set "wireless" "$device" "hwmode" "$FORM_ap_mode"
+				uci_set "wireless" "$device" "channel" "$FORM_channel"
+				uci_set "wireless" "$device" "maxassoc" "$FORM_maxassoc"
+				uci_set "wireless" "$device" "distance" "$FORM_distance"
+				uci_set "wireless" "$device" "diversity" "$FORM_diversity"
+				uci_set "wireless" "$device" "txantenna" "$FORM_txantenna"
+				uci_set "wireless" "$device" "rxantenna" "$FORM_rxantenna"
+				uci_set "wireless" "$device" "disabled" "$FORM_disabled"
+				uci_set "wireless" "$device" "antenna" "$FORM_antenna"
+			fi
+		}
 	fi
 
 	append forms "start_form|@TR<<Wireless Adapter>> $device @TR<< Configuration>>" "$N"
@@ -234,6 +255,14 @@ for device in $DEVICES; do
 		append forms "helpitem|Broadcom Wireless Configuration" "$N"
 		append forms "helptext|Helptext Broadcom Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-3x ap or 1-4x ap or 1x adhoc" "$N"
 	elif [ "$iftype" = "atheros" ]; then
+		ccSelect="0"
+		[ -e /proc/sys/dev/$device/countrycode ] && ccSelect="$(cat /proc/sys/dev/$device/countrycode)"
+		mode_country="field|@TR<<Country Code>>
+		select|country_$device|$FORM_country
+		option|0|@TR<<Default (or unset)>>$(equal "$ccSelect" '0' && echo ' ** CURRENT')
+		option|840|@TR<<United States>>$(equal "$ccSelect" '840' && echo ' ** CURRENT')
+		option|826|@TR<<UK and US 5.18-5.70GHz>>$(equal "$ccSelect" '826' && echo ' ** CURRENT')"
+		append forms "$mode_country" "$N"
 		append forms "helpitem|Atheros Wireless Configuration" "$N"
 		append forms "helptext|Helptext Atheros Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-4x ap or 1-4x ap or 1x adhoc" "$N"
 	fi
@@ -392,8 +421,8 @@ for device in $DEVICES; do
 				
 				eval FORM_encryption="\$FORM_encryption_$vcfg"
 				case "$FORM_encryption" in
-					psk|psk2) eval FORM_key="\$FORM_wpa_psk_$vcfg";;
-					wpa|wpa2) eval FORM_key="\$FORM_radius_key_$vcfg";;
+					psk|psk2|psk-mixe*|psk+psk2) eval FORM_key="\$FORM_wpa_psk_$vcfg";;
+					wpa|wpa2|wpa+wpa2) eval FORM_key="\$FORM_radius_key_$vcfg";;
 				esac
 				eval FORM_mode="\$FORM_mode_$vcfg"
 				eval FORM_server="\$FORM_server_$vcfg"
@@ -426,6 +455,72 @@ for device in $DEVICES; do
 				eval FORM_maclistadd="\$FORM_${vcfg}_maclistadd"
 				config_get FORM_maclist "$vcfg" maclist
 				[ $FORM_maclistadd != "" ] && FORM_maclist="$FORM_maclist $FORM_maclistadd"
+				empty "$FORM_generate_wep_128" && empty "$FORM_generate_wep_40" &&
+				{
+					case "$FORM_encryption" in
+						psk|psk2|psk+psk2) append validate_forms "wpapsk|FORM_wpa_psk_$vcfg|@TR<<WPA PSK#WPA Pre-Shared Key>>|min=8 max=63 required|$FORM_key" "$N";;
+						wpa|wpa2|wpa+wpa2) append validate_forms "string|FORM_radius_key_$vcfg|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_key" "$N"
+							append validate_forms "ip|FORM_server_$vcfg|@TR<<RADIUS IP Address>>|required|$FORM_server" "$N"
+							append validate_forms "port|FORM_radius_port_$vcfg|@TR<<RADIUS Port>>|required|$FORM_radius_port" "$N";;
+						wep)
+							append validate_forms "int|FORM_wep_key_$vcfg|@TR<<Selected WEP Key>>|min=1 max=4|$FORM_wep_key" "$N"
+							append validate_forms "wep|FORM_key1_$vcfg|@TR<<WEP Key>> 1|required|$FORM_key1" "$N"
+							append validate_forms "wep|FORM_key2_$vcfg|@TR<<WEP Key>> 2||$FORM_key2" "$N"
+							append validate_forms "wep|FORM_key3_$vcfg|@TR<<WEP Key>> 3||$FORM_key3" "$N"
+							append validate_forms "wep|FORM_key4_$vcfg|@TR<<WEP Key>> 4||$FORM_key4" "$N";;
+					esac
+					case "$FORM_mode" in
+						wds)
+							append validate_forms "string|FORM_ssid_$vcfg|@TR<<ESSID>>||$FORM_ssid" "$N"
+							append validate_forms "mac|FORM_bssid_$vcfg|@TR<<BSSID>>||$FORM_bssid" "$N";;
+						*)
+							append validate_forms "string|FORM_ssid_$vcfg|@TR<<ESSID>>|required|$FORM_ssid" "$N";;
+					esac
+					SAVED=1
+					validate <<EOF
+$validate_forms
+append validate_forms "int|FORM_frag_$vcfg|@TR<<Fragmentation Threshold>>|min=0 max=2346|$FORM_frag" "$N"
+append validate_forms "int|FORM_rts_$vcfg|@TR<<RTS Threshold>>|min=0 max=2347|$FORM_rts" "$N"
+append validate_forms "mac|FORM_maclistadd_$vcfg|@TR<<MAC Address>>||$FORM_maclistadd" "$N"
+EOF
+					if [ "$?" = 0 ]; then
+						uci_set "wireless" "$vcfg" "network" "$FORM_network"
+						uci_set "wireless" "$vcfg" "ssid" "$FORM_ssid"
+						FORM_bssid="`echo "$FORM_bssid" |tr "[A-Z]" "[a-z]"`"
+						uci_set "wireless" "$vcfg" "bssid" "$FORM_bssid"
+						uci_set "wireless" "$vcfg" "mode" "$FORM_mode"
+						uci_set "wireless" "$vcfg" "encryption" "$FORM_encryption"
+						uci_set "wireless" "$vcfg" "server" "$FORM_server"
+						uci_set "wireless" "$vcfg" "port" "$FORM_radius_port"
+						uci_set "wireless" "$vcfg" "hidden" "$FORM_hidden"
+						uci_set "wireless" "$vcfg" "isolate" "$FORM_isolate"
+						uci_set "wireless" "$vcfg" "txpower" "$FORM_txpower"
+						uci_set "wireless" "$vcfg" "bgscan" "$FORM_bgscan"
+						uci_set "wireless" "$vcfg" "frag" "$FORM_frag"
+						uci_set "wireless" "$vcfg" "rts" "$FORM_rts"
+						uci_set "wireless" "$vcfg" "wds" "$FORM_wds"
+
+						case "$FORM_encryption" in
+							wep) uci_set "wireless" "$vcfg" "key" "$FORM_wep_key";;
+							psk|psk2|psk+psk2|*mixed*) uci_set "wireless" "$vcfg" "key" "$FORM_wpa_psk";;
+							wpa|wpa2|wpa+wpa2) uci_set "wireless" "$vcfg" "key" "$FORM_radius_key";;
+						esac
+						uci_set "wireless" "$vcfg" "key1" "$FORM_key1"
+						uci_set "wireless" "$vcfg" "key2" "$FORM_key2"
+						uci_set "wireless" "$vcfg" "key3" "$FORM_key3"
+						uci_set "wireless" "$vcfg" "key4" "$FORM_key4"
+						uci_set "wireless" "$vcfg" "80211h" "$FORM_doth"
+						uci_set "wireless" "$vcfg" "compression" "$FORM_compression"
+						uci_set "wireless" "$vcfg" "bursting" "$FORM_bursting"
+						uci_set "wireless" "$vcfg" "ff" "$FORM_fframes"
+						uci_set "wireless" "$vcfg" "wmm" "$FORM_wmm"
+						uci_set "wireless" "$vcfg" "xr" "$FORM_xr"
+						uci_set "wireless" "$vcfg" "ar" "$FORM_ar"
+						uci_set "wireless" "$vcfg" "turbo" "$FORM_turbo"
+						uci_set "wireless" "$vcfg" "macpolicy" "$FORM_macpolicy"
+						uci_set "wireless" "$vcfg" "maclist" "$FORM_maclist"
+					fi
+				}
 			fi
 
 			case "$FORM_mode" in
@@ -839,145 +934,10 @@ for device in $DEVICES; do
 				string|<a href=\"$SCRIPT_NAME?remove_vcfg=$vcfg\">@TR<<Remove Virtual Interface>></a>"
 			append forms "$remove_vcfg" "$N"
 			append forms "end_form" "$N"
-			
-			###################################################################
-			# set validate forms
-			case "$FORM_encryption" in
-				psk|psk2|psk+psk2) append validate_forms "wpapsk|FORM_wpa_psk_$vcfg|@TR<<WPA PSK#WPA Pre-Shared Key>>|min=8 max=63 required|$FORM_key" "$N";;
-				wpa|wpa2|wpa+wpa2) append validate_forms "string|FORM_radius_key_$vcfg|@TR<<RADIUS Server Key>>|min=4 max=63 required|$FORM_key" "$N"
-					append validate_forms "ip|FORM_server_$vcfg|@TR<<RADIUS IP Address>>|required|$FORM_server" "$N"
-					append validate_forms "port|FORM_radius_port_$vcfg|@TR<<RADIUS Port>>|required|$FORM_radius_port" "$N";;
-				wep)
-					append validate_forms "int|FORM_wep_key_$vcfg|@TR<<Selected WEP Key>>|min=1 max=4|$FORM_wep_key" "$N"
-					append validate_forms "wep|FORM_key1_$vcfg|@TR<<WEP Key>> 1|required|$FORM_key1" "$N"
-					append validate_forms "wep|FORM_key2_$vcfg|@TR<<WEP Key>> 2||$FORM_key2" "$N"
-					append validate_forms "wep|FORM_key3_$vcfg|@TR<<WEP Key>> 3||$FORM_key3" "$N"
-					append validate_forms "wep|FORM_key4_$vcfg|@TR<<WEP Key>> 4||$FORM_key4" "$N";;
-			esac
-			case "$FORM_mode" in
-				wds)
-					append validate_forms "string|FORM_ssid_$vcfg|@TR<<ESSID>>||$FORM_ssid" "$N"
-					append validate_forms "mac|FORM_bssid_$vcfg|@TR<<BSSID>>||$FORM_bssid" "$N";;
-				*)
-					append validate_forms "string|FORM_ssid_$vcfg|@TR<<ESSID>>|required|$FORM_ssid" "$N";;
-			esac
-			append validate_forms "int|FORM_frag_$vcfg|@TR<<Fragmentation Threshold>>|min=0 max=2346|$FORM_frag" "$N"
-			append validate_forms "int|FORM_rts_$vcfg|@TR<<RTS Threshold>>|min=0 max=2347|$FORM_rts" "$N"
-			append validate_forms "mac|FORM_maclistadd_$vcfg|@TR<<MAC Address>>||$FORM_maclistadd" "$N"
 		fi
 	done
 	validate_wireless $iftype
 done
-if ! empty "$FORM_submit"; then
-	empty "$FORM_generate_wep_128" && empty "$FORM_generate_wep_40" &&
-	{
-		SAVED=1
-		validate <<EOF
-$validate_forms
-EOF
-		equal "$?" 0 && {
-			for device in $DEVICES; do
-				eval FORM_ap_mode="\$FORM_ap_mode_$device"
-				eval FORM_channel="\$FORM_bgchannel_$device"
-				[ "$FORM_ap_mode" = "11a" ] && eval FORM_channel="\$FORM_achannel_$device"
-				eval FORM_maxassoc="\$FORM_maxassoc_$device"
-				eval FORM_distance="\$FORM_distance_$device"
-				eval FORM_diversity="\$FORM_diversity_$device"
-				eval FORM_txantenna="\$FORM_txantenna_$device"
-				eval FORM_rxantenna="\$FORM_rxantenna_$device"
-				eval FORM_disabled="\$FORM_disabled_$device"
-				eval FORM_antenna="\$FORM_antenna_$device"
-
-				uci_set "wireless" "$device" "hwmode" "$FORM_ap_mode"
-				uci_set "wireless" "$device" "channel" "$FORM_channel"
-				uci_set "wireless" "$device" "maxassoc" "$FORM_maxassoc"
-				uci_set "wireless" "$device" "distance" "$FORM_distance"
-				uci_set "wireless" "$device" "diversity" "$FORM_diversity"
-				uci_set "wireless" "$device" "txantenna" "$FORM_txantenna"
-				uci_set "wireless" "$device" "rxantenna" "$FORM_rxantenna"
-				uci_set "wireless" "$device" "disabled" "$FORM_disabled"
-				uci_set "wireless" "$device" "antenna" "$FORM_antenna"
-
-				for vcfg in $vface; do
-     		  			config_get FORM_device $vcfg device
-     		  			if [ "$FORM_device" = "$device" ]; then
-						eval FORM_radius_key="\$FORM_radius_key_$vcfg"
-						eval FORM_radius_ipaddr="\$FORM_radius_ipaddr_$vcfg"
-						eval FORM_wpa_psk="\$FORM_wpa_psk_$vcfg"
-						eval FORM_encryption="\$FORM_encryption_$vcfg"
-						eval FORM_mode="\$FORM_mode_$vcfg"
-						eval FORM_server="\$FORM_server_$vcfg"
-						eval FORM_radius_port="\$FORM_radius_port_$vcfg"
-						eval FORM_hidden="\$FORM_broadcast_$vcfg"
-						eval FORM_isolate="\$FORM_isolate_$vcfg"
-						eval FORM_wep_key="\$FORM_wep_key_$vcfg"
-						eval FORM_key1="\$FORM_key1_$vcfg"
-						eval FORM_key2="\$FORM_key2_$vcfg"
-						eval FORM_key3="\$FORM_key3_$vcfg"
-						eval FORM_key4="\$FORM_key4_$vcfg"
-						eval FORM_broadcast="\$FORM_broadcast_$vcfg"
-						eval FORM_ssid="\$FORM_ssid_$vcfg"
-						eval FORM_bssid="\$FORM_bssid_$vcfg"
-						eval FORM_network="\$FORM_network_$vcfg"
-						eval FORM_txpower="\$FORM_txpower_$vcfg"
-						eval FORM_bgscan="\$FORM_bgscan_$vcfg"
-						eval FORM_rts="\$FORM_rts_$vcfg"
-						eval FORM_frag="\$FORM_frag_$vcfg"
-						eval FORM_wds="\$FORM_wds_$vcfg"
-						eval FORM_doth="\$FORM_doth_$vcfg"
-						eval FORM_compression="\$FORM_compression_$vcfg"
-						eval FORM_bursting="\$FORM_bursting_$vcfg"
-						eval FORM_fframes="\$FORM_fframes_$vcfg"
-						eval FORM_wmm="\$FORM_wmm_$vcfg"
-						eval FORM_xr="\$FORM_xr_$vcfg"
-						eval FORM_ar="\$FORM_ar_$vcfg"
-						eval FORM_turbo="\$FORM_turbo_$vcfg"
-						eval FORM_macpolicy="\$FORM_macpolicy_$vcfg"
-						eval FORM_maclistadd="\$FORM_${vcfg}_maclistadd"
-						config_get FORM_maclist "$vcfg" maclist
-						[ $FORM_maclistadd != "" ] && FORM_maclist="$FORM_maclist $FORM_maclistadd"
-
-						uci_set "wireless" "$vcfg" "network" "$FORM_network"
-						uci_set "wireless" "$vcfg" "ssid" "$FORM_ssid"
-						FORM_bssid="`echo "$FORM_bssid" |tr "[A-Z]" "[a-z]"`"
-						uci_set "wireless" "$vcfg" "bssid" "$FORM_bssid"
-						uci_set "wireless" "$vcfg" "mode" "$FORM_mode"
-						uci_set "wireless" "$vcfg" "encryption" "$FORM_encryption"
-						uci_set "wireless" "$vcfg" "server" "$FORM_server"
-						uci_set "wireless" "$vcfg" "port" "$FORM_radius_port"
-						uci_set "wireless" "$vcfg" "hidden" "$FORM_hidden"
-						uci_set "wireless" "$vcfg" "isolate" "$FORM_isolate"
-						uci_set "wireless" "$vcfg" "txpower" "$FORM_txpower"
-						uci_set "wireless" "$vcfg" "bgscan" "$FORM_bgscan"
-						uci_set "wireless" "$vcfg" "frag" "$FORM_frag"
-						uci_set "wireless" "$vcfg" "rts" "$FORM_rts"
-						uci_set "wireless" "$vcfg" "wds" "$FORM_wds"
-						
-						case "$FORM_encryption" in
-							wep) uci_set "wireless" "$vcfg" "key" "$FORM_wep_key";;
-							psk|psk2|psk+psk2|*mixed*) uci_set "wireless" "$vcfg" "key" "$FORM_wpa_psk";;
-							wpa|wpa2|wpa+wpa2) uci_set "wireless" "$vcfg" "key" "$FORM_radius_key";;
-						esac
-						uci_set "wireless" "$vcfg" "key1" "$FORM_key1"
-						uci_set "wireless" "$vcfg" "key2" "$FORM_key2"
-						uci_set "wireless" "$vcfg" "key3" "$FORM_key3"
-						uci_set "wireless" "$vcfg" "key4" "$FORM_key4"
-						uci_set "wireless" "$vcfg" "80211h" "$FORM_doth"
-						uci_set "wireless" "$vcfg" "compression" "$FORM_compression"
-						uci_set "wireless" "$vcfg" "bursting" "$FORM_bursting"
-						uci_set "wireless" "$vcfg" "ff" "$FORM_fframes"
-						uci_set "wireless" "$vcfg" "wmm" "$FORM_wmm"
-						uci_set "wireless" "$vcfg" "xr" "$FORM_xr"
-						uci_set "wireless" "$vcfg" "ar" "$FORM_ar"
-						uci_set "wireless" "$vcfg" "turbo" "$FORM_turbo"
-						uci_set "wireless" "$vcfg" "macpolicy" "$FORM_macpolicy"
-						uci_set "wireless" "$vcfg" "maclist" "$FORM_maclist"
-					fi
-				done
-			done
-		}
-	}
-fi
 
 header "Network" "Wireless" "@TR<<Wireless Configuration>>" 'onload="modechange()"' "$SCRIPT_NAME"
 #####################################################################
