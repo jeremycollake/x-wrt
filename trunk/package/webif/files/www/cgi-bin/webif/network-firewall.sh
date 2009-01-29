@@ -22,7 +22,7 @@
 if ! empty "$FORM_remove_vcfg"; then
 	uci_remove "firewall" "$FORM_remove_vcfg"
 fi
-
+[ -z "$FORM_port_select_rule" ] && FORM_port_select_rule=custom
 #Add new rules
 if [ -n "$FORM_port_rule" -o "$FORM_port_select_rule" != "custom" ]; then
 	validate <<EOF
