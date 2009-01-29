@@ -24,7 +24,7 @@ if ! empty "$FORM_remove_vcfg"; then
 fi
 
 #Add new rules
-if [ -n "$FORM_port_rule" -a "$FORM_port_select_rule" = "custom" ]; then
+if [ -n "$FORM_port_rule" -o "$FORM_port_select_rule" != "custom" ]; then
 	validate <<EOF
 string|FORM_name|@TR<<Name>>|nospaces|$FORM_name
 ip|FORM_src_ip_rule|@TR<<Source IP Address>>||$FORM_src_ip_rule
