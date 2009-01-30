@@ -29,30 +29,6 @@ ExecuteIfExists()
 	}
 }
 
-IPKG_UPDATE_NEEDED="0"
-AddRepository()
-{
-	# $1=reponame
-	# $2=repourl
-	cat "${IPKG_INSTROOT}/etc/opkg.conf" | grep -q "$2"
-	[ "$?" != "0" ] && {
-		echo "src $1 $2" >> "${IPKG_INSTROOT}/etc/opkg.conf"
-		IPKG_UPDATE_NEEDED="1"
-	}
-}
-
-IPKG_UPDATE_NEEDED="0"
-DeleteRepository()
-{
-	# $1=repourl
-	cat "${IPKG_INSTROOT}/etc/opkg.conf" | grep -q "$1"
-	[ "$?" = "0" ] && {
-		repo_url_sed=$(echo "$1" | sed s/'\/'/'\\\/'/g)
-		cat "${IPKG_INSTROOT}/etc/opkg.conf" |  sed /$repo_url_sed/d > "${IPKG_INSTROOT}/etc/opkg.conf"
-		IPKG_UPDATE_NEEDED="1"
-	}
-}
-
 #########################################################################################
 # entry point
 
@@ -63,103 +39,8 @@ ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/webif-page"
 ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/wepkeygen"
 ln -sf /usr/bin/webifmetabin "${IPKG_INSTROOT}/usr/bin/int2human"
 
-if [ -e ${IPKG_INSTROOT}/etc/openwrt_version ]; then
-	revision="`cat ${IPKG_INSTROOT}/etc/openwrt_version`"
-fi
-if [ "$revision" = "" ]; then
-	grep -q "7.09" "${IPKG_INSTROOT}/etc/banner"
-	[ $? = 0 ] && {
-		revision="7.09"
-	}
-fi
-
-# don't run below on 'real' system
-if [ -n "${IPKG_INSTROOT}" ]; then
-	repo="$S"
-	if [ "$revision" = "" ]; then
-		AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/$repo/packages"
-		echo 'dest root /' >> "${IPKG_INSTROOT}/etc/opkg.conf"
-		echo 'dest ram /tmp' >> "${IPKG_INSTROOT}/etc/opkg.conf"
-		echo 'lists_dir ext /var/opkg-lists' >> "${IPKG_INSTROOT}/etc/opkg.conf"
-		echo 'option overlay_root /jffs'>> "${IPKG_INSTROOT}/etc/opkg.conf"
-	else
-		AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/$repo/packages"
-	fi
-fi
-
 # only run below on 'real' system (not image builder)
 if [ -z "${IPKG_INSTROOT}" ]; then
-
-
-	# initialize ipkg.conf
-	uname -a |grep "mips" |grep -q "2.4" && cat /proc/cpuinfo |grep -q "Broadcom"
-	[ $? = 0 ] && {
-		if [ "$revision" = "" ]; then
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/brcm-2.4/packages"
-		else
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/brcm-2.4/packages"
-		fi
-	}
-	uname -a |grep "mips" |grep -q "2.6.*" && cat /proc/cpuinfo |grep -q "Broadcom"
-	[ $? = 0 ] && {
-		cat /proc/cpuinfo | grep -q "BCM47XX" && SYSTYPE="47xx"
-		cat /proc/cpuinfo | grep -q "BCM63XX" && SYSTYPE="63xx"
-		if [ -n $SYSTYPE ]; then
-			if [ "$revision" = "" ]; then
-				AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/brcm${SYSTYPE}/packages"
-			else
-				AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/brcm${SYSTYPE}/packages"
-			fi
-		fi
-		unset SYSTYPE
-	}
-	uname -a |grep "2.6" |grep -q "i\?86"
-	[ $? = 0 ] && {
-		if [ "$revision" = "" ]; then
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/x86/packages"
-		else
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/x86/packages"
-		fi
-	}
-	uname -a |grep "mips" |grep -q "2.6" && cat /proc/cpuinfo |grep -q "Atheros"
-	[ $? = 0 ] && {
-		if [ "$revision" = "" ]; then
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/atheros/packages"
-		else
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/atheros/packages"
-		fi
-	}
-	uname -a |grep "mips" |grep -q "2.6" && cat /proc/cpuinfo |grep -q "WP54"
-	[ $? = "0" ] && {
-		if [ "$revision" = "" ]; then
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/adm5120/packages"
-		else
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/adm5120/packages"
-		fi
-	}
-	cat /proc/cpuinfo |grep -q "IXP4\?\?"
-	[ $? = "0" ] && {
-		if [ "$revision" = "" ]; then
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/ixp4xx/packages"
-		else
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/ixp4xx/packages"
-		fi
-	}
-	[ "$(uname -m)" = "avr32" ] && cat /proc/cpuinfo | grep -q "AVR32"
-	[ $? = "0" ] && {
-		if [ "$revision" = "" ]; then
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/snapshots/avr32/packages"
-		else
-			AddRepository "X-Wrt" "http://downloads.x-wrt.org/xwrt/kamikaze/$revision/avr32/packages"
-		fi
-	}
-
-	[ "$IPKG_UPDATE_NEEDED" = "1" ] && opkg update
-	
-	# force re-initialization of extension package lists
-	/usr/lib/webif/webif-mklanglist.sh
-	/usr/lib/webif/webif-mkthemelist.sh
-
 	/etc/init.d/webif enable
 	/etc/init.d/custom-user-startup enable
 

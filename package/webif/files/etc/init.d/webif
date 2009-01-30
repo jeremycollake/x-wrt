@@ -139,6 +139,22 @@ uci_load "webif"
 		firmware_version="unknown"
 	fi
 
+	if [ "$firmware_version" = "8.09" ]; then
+		unmarkedrccheck=$(cat /etc/banner |grep KAMIKAZE |cut -d '(' -f 2 |cut -d ')' -f 1 |cut -d' ' -f 2)
+		[ "$unmarkedrccheck" = "r14214" ] && firmware_version=8.09_RC2
+	fi
+	
+	if [ "$CONFIG_general_firstboot" = "1" ]; then
+		opkg_revision=$(cat /etc/opkg.conf |grep "OpenWrt" |cut -d'/' -f5)
+		opkg_arch=$(cat /etc/opkg.conf |grep "OpenWrt" |cut -d'/' -f6)
+		echo "src X-Wrt http://downloads.x-wrt.org/xwrt/kamikaze/$opkg_revision/$opkg_arch/packages" >> /etc/opkg.conf
+		opkg update
+		# force re-initialization of extension package lists
+		/usr/lib/webif/webif-mklanglist.sh
+		/usr/lib/webif/webif-mkthemelist.sh
+		uci_set "webif" "general" "firstboot" "0"
+	fi
+
 	#
 	# if any variables changed, commit the change
 	#
