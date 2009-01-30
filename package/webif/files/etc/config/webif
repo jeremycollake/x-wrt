@@ -5,6 +5,7 @@ config webif general
 	option firmware_subtitle "With X-Wrt Extensions"
 	option device_name ""
 	option use_progressbar ""
+	option firstboot	"1"
 
 config webif theme
 	option id "clubman"
