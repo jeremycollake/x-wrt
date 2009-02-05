@@ -70,6 +70,7 @@ if [ -n "$FORM_add_rule_add" ]; then
 	uci_add "firewall" "forwarding" ""; add_foreward_cfg="$CONFIG_SECTION"
 	uci_set firewall "$add_foreward_cfg" src "$FORM_src_add"
 	uci_set firewall "$add_foreward_cfg" dest "$FORM_dest_add"
+	uci_set firewall "$add_foreward_cfg" mtu_fix "$FORM_mss"
 fi
 config_cb() {
 	local cfg_type="$1"
@@ -117,11 +118,14 @@ for zone in $forwarding_cfgs; do
 	if [ "$FORM_submit" = "" -o "$add_foreward_cfg" = "$zone" ]; then
 		config_get FORM_src $zone src
 		config_get FORM_dest $zone dest
+		config_get FORM_mss $zone mtu_fix
 	else
 		eval FORM_src="\$FORM_src_$zone"
 		eval FORM_dest="\$FORM_dest_$zone"
+		eval FORM_mss="\$FORM_mss_$zone"
 		uci_set firewall "$zone" src "$FORM_src"
 		uci_set firewall "$zone" dest "$FORM_dest"
+		uci_set firewall "$zone" mtu_fix "$FORM_mss"
 	fi
 	if [ "$FORM_remove" = "" ]; then
 		form="field|@TR<<Allow traffic originating from>>
@@ -130,6 +134,8 @@ for zone in $forwarding_cfgs; do
 			string|@TR<<to>>
 			select|dest_${zone}|$FORM_dest
 			$networks
+			string|@TR<<Fix MTU>>
+			checkbox|mss_$zone|$FORM_mss|1
 			submit|remove_rule_${zone}|@TR<<Remove Rule>>"
 		append forms "$form" "$N"
 	fi
@@ -140,6 +146,8 @@ form="field|@TR<<Allow traffic originating from>>
 	string|@TR<<to>>
 	select|dest_add
 	$networks
+	string|@TR<<Fix MTU>>
+	checkbox|mss|0|1
 	submit|add_rule_add|@TR<<Add Rule>>
 	end_form"
 append forms "$form" "$N"
