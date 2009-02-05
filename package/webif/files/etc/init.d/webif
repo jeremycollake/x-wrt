@@ -145,8 +145,8 @@ uci_load "webif"
 	fi
 	
 	if [ "$CONFIG_general_firstboot" = "1" ]; then
-		opkg_revision=$(cat /etc/opkg.conf |grep "OpenWrt" |cut -d'/' -f5)
-		opkg_arch=$(cat /etc/opkg.conf |grep "OpenWrt" |cut -d'/' -f6)
+		opkg_revision=$(cat /etc/opkg.conf |grep "openwrt" |cut -d':' -f2 |cut -d'/' -f4)
+		opkg_arch=$(cat /etc/opkg.conf |grep "openwrt" |cut -d':' -f2 |cut -d'/' -f5)
 		echo "src X-Wrt http://downloads.x-wrt.org/xwrt/kamikaze/$opkg_revision/$opkg_arch/packages" >> /etc/opkg.conf
 		opkg update
 		# force re-initialization of extension package lists
