@@ -1,6 +1,7 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
+. /www/cgi-bin/webif/graphs-subcategories.sh
 
 header "Graphs" "Bandwidth" "@TR<<Bandwidth>>" 'onload="modechange()"' "$SCRIPT_NAME"
 if [ "$FORM_install_bandwidthd" != "" ]; then
