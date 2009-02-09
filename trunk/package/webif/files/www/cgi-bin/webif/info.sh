@@ -4,7 +4,7 @@
 
 header "Info" "System" "<img src=\"/images/blkbox.jpg\" alt=\"@TR<<System Information>>\"/>@TR<<System Information>>"
 
-[ -z "$_device" ] && _device="unidentified")
+[ -z "$_device" ] && _device="unidentified"
 _kversion=$(uname -srv 2>/dev/null)
 _mac=$(/sbin/ifconfig eth0 2>/dev/null | grep HWaddr | cut -b39-)
 board_type=$(cat /proc/cpuinfo 2>/dev/null | sed 2,20d | cut -c16-)
