@@ -175,7 +175,7 @@ displaywiface() {
 			wlan_freq=$(echo "$wconfig" | grep "Frequency:" | cut -d':' -f 3 | cut -d' ' -f 1)
 			wlan_freq="${wlan_freq:-0}"
 			wlan_ap=$(echo "$wconfig" | sed '/Access Point:/!d; s/^.*Access Point://; s/[[:space:]]//')
-			wlan_txpwr=$(echo "$wconfig" | sed '/Tx-Power=/!d; s/^.*Tx-Power=//; s/[[:space:]].*$//')
+			wlan_txpwr=$(echo "$wconfig" | sed '/Tx-Power[=:]/!d; s/^.*Tx-Power[=:]//; s/[[:space:]].*$//')
 			wlan_txpwr="${wlan_txpwr:-0}"
 			wlan_key=$(echo "$wconfig" | sed '/Encryption key:/!d; s/^.*Encryption key://; s/[[:space:]].*$//')
 			wlan_secmode=$(echo "$wconfig" | sed '/Security mode:/!d; s/^.*Security mode://')

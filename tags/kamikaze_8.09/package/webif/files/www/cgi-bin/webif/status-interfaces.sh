@@ -175,7 +175,7 @@ displaywiface() {
 			wlan_freq=$(echo "$wconfig" | grep "Frequency:" | cut -d':' -f 3 | cut -d' ' -f 1)
 			wlan_freq="${wlan_freq:-0}"
 			wlan_ap=$(echo "$wconfig" | sed '/Access Point:/!d; s/^.*Access Point://; s/[[:space:]]//')
-			wlan_txpwr=$(echo "$wconfig" | sed '/Tx-Power=/!d; s/^.*Tx-Power=//; s/[[:space:]].*$//')
+			wlan_txpwr=$(echo "$wconfig" | sed '/Tx-Power[=:]/!d; s/^.*Tx-Power[=:]//; s/[[:space:]].*$//')
 			wlan_txpwr="${wlan_txpwr:-0}"
 			wlan_key=$(echo "$wconfig" | sed '/Encryption key:/!d; s/^.*Encryption key://; s/[[:space:]].*$//')
 			wlan_secmode=$(echo "$wconfig" | sed '/Security mode:/!d; s/^.*Security mode://')
@@ -196,6 +196,11 @@ displaywiface() {
 				wlan_noise=$(echo "$wconfig" | sed '/Noise level=/!d; s/^.*Noise level=//; s/[[:space:]].*$//')
 			fi
 			wlan_noise="${wlan_noise:-0}"
+			wlan_signal=$(echo "$wconfig" | sed '/Link Signal level:/!d; s/^.*Link Signal level://; s/[[:space:]].*$//')
+			if [ -z "$wlan_signal" ]; then
+				wlan_signal=$(echo "$wconfig" | sed '/Signal level=/!d; s/^.*Signal level=//; s/[[:space:]].*$//')
+			fi
+			wlan_signal="${wlan_signal:-0}"
 			[ "$wnum" = "0" ] && wnum=""
 			display_form <<EOF
 start_form|@TR<<WLAN>> $wnum
@@ -211,6 +216,8 @@ field|@TR<<Transmit Power>>|wlan_txpwr
 string|$wlan_txpwr @TR<<dBm>>
 field|@TR<<Noise Level>>|wlan_noise
 string|$wlan_noise @TR<<dBm>>
+field|@TR<<Signal Level>>|wlan_signal
+string|$wlan_signal @TR<<dBm>>
 field|@TR<<Encryption Key>>|wlan_key
 string|$wlan_key
 field|@TR<<Security mode>>|wlan_secmode
