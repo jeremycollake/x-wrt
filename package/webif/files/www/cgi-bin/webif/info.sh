@@ -4,13 +4,7 @@
 
 header "Info" "System" "<img src=\"/images/blkbox.jpg\" alt=\"@TR<<System Information>>\"/>@TR<<System Information>>"
 
-uci_load "webif"
-firmware_version="$CONFIG_general_firmware_version"
-firmware_name="$CONFIG_general_firmware_name"
-firmware_subtitle="$CONFIG_general_firmware_subtitle"
-device_name="$CONFIG_general_device_name"
-[ -z "$device_name" ] && device_name="unidentified"
-device_string=$(echo "$device_name" && ! empty "$device_version" && echo "$device_version")
+[ -z "$_device" ] && _device="unidentified"
 _kversion=$(uname -srv 2>/dev/null)
 _mac=$(/sbin/ifconfig eth0 2>/dev/null | grep HWaddr | cut -b39-)
 board_type=$(cat /proc/cpuinfo 2>/dev/null | sed 2,20d | cut -c16-)
@@ -18,37 +12,15 @@ board_type=$(cat /proc/cpuinfo 2>/dev/null | sed 2,20d | cut -c16-)
 user_string="$REMOTE_USER"
 [ -z "$user_string" ] && user_string="not logged in"
 machinfo=$(uname -a 2>/dev/null)
-if $(echo "$machinfo" | grep -q "mips"); then
-	if $(echo "$board_type" | grep -q "Atheros"); then
-		target_path="atheros"
-	elif $(echo "$board_type" | grep -q "WP54"); then
-		target_path="adm5120"
-	elif $(echo "$machinfo" | grep -q "2\.4"); then
-		target_path="brcm-2.4"
-	elif $(echo "$machinfo" | grep -q "2\.6"); then
-		target_path="brcm47xx"
-	fi
-elif $(echo "$machinfo" | grep -q " i[0-9]86 "); then
-	target_path="x86"
-elif $(echo "$machinfo" | grep -q " avr32 "); then
-	target_path="avr32"
-elif $(cat /proc/cpuinfo 2>/dev/null | grep -q "IXP4"); then
-	target_path="ixp4xx"
-fi
+
 package_filename="webif_latest_stable.ipk"
-if $(echo "$firmware_version" | grep -q "r[[:digit:]]*"); then
-	version_path="snapshots"
+if $(echo "$_firmware_version" | grep -q "r[[:digit:]]*"); then
 	svn_path="trunk"
 else
-	version_path="$firmware_version"
-	svn_path="tags/kamikaze_$firmware_version"
+	svn_path="tags/kamikaze_$_firmware_version"
 fi
-# let the user to serve it locally, it requires the X-Wrt (local) repository to be present
-config_get_bool local_update general local_update 0
-[ 1 -eq "$local_update" ] && version_url=$(sed '/^src[[:space:]]*X-Wrt[[:space:]]*/!d; s/^src[[:space:]]*X-Wrt[[:space:]]*//g; s/\/packages.*$/\//g' /etc/opkg.conf 2>/dev/null)
-[ -z "$version_url" ] && version_url="http://downloads.x-wrt.org/xwrt/kamikaze/$version_path/$target_path/"
-this_revision=$(cat "/www/.version" 2>/dev/null)
-revision_text=" r$this_revision "
+version_url=$(sed '/^src[[:space:]]*X-Wrt[[:space:]]*/!d; s/^src[[:space:]]*X-Wrt[[:space:]]*//g; s/\/packages.*$/\//g' /etc/opkg.conf 2>/dev/null)
+revision_text=" r$_webif_rev "
 version_file=".version-stable"
 daily_checked=""
 upgrade_button=""
@@ -109,7 +81,7 @@ cat <<EOF
 <tbody>
 	<tr>
 		<td width="100"><strong>@TR<<Firmware>></strong></td><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</td>
-		<td>$firmware_name - $firmware_subtitle $firmware_version</td>
+		<td>$_firmware_name - $_firmware_subtitle $_firmware_version</td>
 	</tr>
 	<tr>
 		<td><strong>@TR<<Kernel>></strong></td><td>&nbsp;</td>
@@ -120,7 +92,7 @@ cat <<EOF
 		<td>$_mac</td>
 	</tr>
 	<tr>
-		<td><strong>@TR<<Device>></strong></td><td>&nbsp;</td><td>$device_string</td>
+		<td><strong>@TR<<Device>></strong></td><td>&nbsp;</td><td>$_device</td>
 	</tr>
 	<tr>
 		<td><strong>@TR<<Board>></strong></td><td>&nbsp;</td><td>$board_type</td>
