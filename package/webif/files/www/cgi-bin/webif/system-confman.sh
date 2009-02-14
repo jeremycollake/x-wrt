@@ -24,8 +24,10 @@ if $(echo "$machinfo" | grep -q "mips"); then
 		full_flash="0"
 	elif $(echo "$machinfo" | grep -q "2\.4"); then
 		full_flash="1"
+		mtd_path="/dev/mtdblock/1"
 	elif $(echo "$machinfo" | grep -q "2\.6"); then
 		full_flash="1"
+		mtd_path="/dev/mtdblock1"
 	fi
 elif $(echo "$machinfo" | grep -q " i[0-9]86 "); then
 	full_flash="0"
@@ -50,8 +52,7 @@ if ! equal $FORM_download "" ; then
 
 		tmp=/tmp/flash_$FORM_name.trx
 		tgz=/www/flash_$FORM_name.trx
-		mount -o remount,ro /dev/mtdblock/4 / 2>/dev/null
-		dd if=/dev/mtdblock/1 > $tmp 2>/dev/null
+		dd if=$mtd_path > $tmp 2>/dev/null
 		ln -s $tmp $tgz 2>/dev/null
 		DOWNLOAD flash_$FORM_name.trx
 		sleep 25 ; rm $tmp ; rm $tgz
