@@ -23,6 +23,9 @@ if ! empty "$FORM_remove_vcfg"; then
 	uci_remove "firewall" "$FORM_remove_vcfg"
 fi
 [ -z "$FORM_port_select_rule" ] && FORM_port_select_rule=custom
+[ -z "$FORM_target_rule" ] && FORM_target_rule=ACCEPT
+[ -z "$FORM_src_rule" ] && FORM_src_rule=wan
+[ -z "$FORM_dest_rule" ] && FORM_dest_rule=lan
 #Add new rules
 if [ -n "$FORM_port_rule" -o "$FORM_port_select_rule" != "custom" ]; then
 	validate <<EOF
@@ -34,14 +37,16 @@ EOF
 	equal "$?" 0 && {
 		[ "$FORM_port_select_rule" != "custom" ] && FORM_port_rule="$FORM_port_select_rule"
 		uci_add "firewall" "rule" "$FORM_name"; add_rule_cfg="$CONFIG_SECTION"
-		uci_set "firewall" "$add_rule_cfg" "src" "wan"
 		uci_set "firewall" "$add_rule_cfg" "proto" "$FORM_protocol_rule"
+		uci_set "firewall" "$add_rule_cfg" "src" "$FORM_src_rule"
+		uci_set "firewall" "$add_rule_cfg" "dest" "$FORM_dest_rule"
 		uci_set "firewall" "$add_rule_cfg" "src_ip" "$FORM_src_ip_rule"
 		uci_set "firewall" "$add_rule_cfg" "dest_ip" "$FORM_dest_ip_rule"
 		uci_set "firewall" "$add_rule_cfg" "dest_port" "$FORM_port_rule"
-		uci_set "firewall" "$add_rule_cfg" "target" "ACCEPT"
-		unset FORM_port_rule FORM_dest_ip_rule FORM_src_ip_rule FORM_protocol_rule FORM_name
+		uci_set "firewall" "$add_rule_cfg" "target" "$FORM_target_rule"
+		unset FORM_port_rule FORM_dest_ip_rule FORM_src_ip_rule FORM_protocol_rule FORM_name FORM_src FORM_dest
 		FORM_port_select_rule=custom
+		FORM_src=wan
 	}
 fi
 if [ -n "$FORM_dest_ip_redirect" ]; then
@@ -158,6 +163,8 @@ form="string|<div class=\"settings\">
 	string|<table style=\"width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;\" border=\"0\" cellpadding=\"3\" cellspacing=\"2\" summary=\"@TR<<Incomimg Ports>>\">
 	$tr
 	string|<th>@TR<<Name>></th>
+	string|<th>@TR<<Source>></th>
+	string|<th>@TR<<Destination>></th>
 	string|<th>@TR<<Protocol>></th>
 	string|<th>@TR<<Source IP>></th>
 	string|<th>@TR<<Destination IP>></th>
@@ -166,26 +173,35 @@ form="string|<div class=\"settings\">
 append forms "$form" "$N"
 for rule in $rule_cfgs; do
 	if [ "$FORM_submit" = "" -o "$add_rule_cfg" = "$rule" ]; then
+		config_get FORM_src $rule src
+		config_get FORM_dest $rule dest
 		config_get FORM_protocol $rule proto
 		config_get FORM_src_ip $rule src_ip
 		config_get FORM_dest_ip $rule dest_ip
+		config_get FORM_target $rule target
 		config_get FORM_port $rule dest_port
 		FORM_port_select_rule=custom
 	else
+		eval FORM_src="\$FORM_src_$rule"
+		eval FORM_dest="\$FORM_dest_$rule"
 		eval FORM_protocol="\$FORM_protocol_$rule"
 		eval FORM_src_ip="\$FORM_src_ip_$rule"
 		eval FORM_dest_ip="\$FORM_dest_ip_$rule"
 		eval FORM_port="\$FORM_port_$rule"
+		eval FORM_target="\$FORM_target_$rule"
 		validate <<EOF
 ip|FORM_src_ip|@TR<<Source IP Address>>||$FORM_src_ip
 ip|FORM_dest_ip|@TR<<Destination IP Address>>||$FORM_dest_ip
 ports|FORM_port|@TR<<Destination Port>>||$FORM_port
 EOF
 		equal "$?" 0 && {
+			uci_set firewall "$rule" "src" "$FORM_src"
+			uci_set firewall "$rule" "dest" "$FORM_dest"
 			uci_set firewall "$rule" "proto" "$FORM_protocol"
 			uci_set firewall "$rule" "src_ip" "$FORM_src_ip"
 			uci_set firewall "$rule" "dest_ip" "$FORM_dest_ip"
 			uci_set firewall "$rule" "dest_port" "$FORM_port"
+			uci_set firewall "$rule" "target" "$FORM_target"
 		}
 	fi
 
@@ -194,10 +210,19 @@ EOF
 	form="$tr
 		string|<td>$name</td>
 		string|<td>
+		select|src_$rule|$FORM_src
+		$networks
+		string|</td>
+		string|<td>
+		select|dest_$rule|$FORM_dest
+		$networks
+		string|</td>
+		string|<td>
 		select|protocol_$rule|$FORM_protocol
 		option|tcp|TCP
 		option|udp|UDP
 		option|tcpudp|Both
+		option|icmp|ICMP
 		string|</td>
 		string|<td>
 		text|src_ip_$rule|$FORM_src_ip
@@ -207,6 +232,12 @@ EOF
 		string|</td>
 		string|<td>
 		text|port_$rule|$FORM_port
+		string|</td>
+		string|<td>
+		select|target_$rule|$FORM_target
+		option|ACCEPT|@TR<<Accept>>
+		option|DROP|@TR<<Drop>>
+		option|REJECT|@TR<<Reject>>
 		string|</td>
 		string|<td>
 		string|<a href=\"$SCRIPT_NAME?remove_vcfg=$rule\">@TR<<Remove Rule>></a>
@@ -220,10 +251,19 @@ form="$tr
 	text|name|$FORM_name
 	string|</td>
 	string|<td>
+	select|src_$rule|$FORM_src_rule
+	$networks
+	string|</td>
+	string|<td>
+	select|dest_$rule|$FORM_dest_rule
+	$networks
+	string|</td>
+	string|<td>
 	select|protocol_rule|$FORM_protocol_rule
 	option|tcp|TCP
 	option|udp|UDP
 	option|tcpudp|Both
+	option|icmp|ICMP
 	string|</td>
 	string|<td>
 	text|src_ip_rule|$FORM_src_ip_rule
@@ -241,6 +281,12 @@ form="$tr
 	option|80|HTTP
 	option|443|HTTPS
 	text|port_rule|$FORM_port_rule
+	string|</td>
+	string|<td>
+	select|target_rule|$FORM_target_rule
+	option|ACCEPT|@TR<<Accept>>
+	option|DROP|@TR<<Drop>>
+	option|REJECT|@TR<<Reject>>
 	string|</td>
 	string|<td>
 	string|&nbsp;
