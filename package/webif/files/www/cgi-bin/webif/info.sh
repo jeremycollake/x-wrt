@@ -21,6 +21,7 @@ else
 fi
 version_url=$(sed '/^src[[:space:]]*X-Wrt[[:space:]]*/!d; s/^src[[:space:]]*X-Wrt[[:space:]]*//g; s/\/packages.*$/\//g' /etc/opkg.conf 2>/dev/null)
 revision_text=" r$_webif_rev "
+this_revision="$_webif_rev"
 version_file=".version-stable"
 daily_checked=""
 upgrade_button=""
