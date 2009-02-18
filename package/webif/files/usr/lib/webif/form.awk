@@ -135,11 +135,18 @@ $1 ~ /^textarea/ {
 	print "</textarea>"
 }
 #####################################################
-# progressbar|id|title|width_percent|percent_complete|filled_caption|unfilled_caption
+# progressbar|id|title|width_pixels|percent_complete|filled_caption|unfilled_caption
 # 
 ($1 ~ /^progressbar/) {
-	print "<div class=\"progressbar\" style=\"width:" $4 "px\">"
-	print "	<span class=\"progress\" style=\"width:" $6 "\">" $6 "</span>"	
+	tID = " "
+	if ( $2 != "" ) { tID = "id=\""$2"\"" } else { tID = "" }
+	if ( $5 !~ /%/ ) { tWIDTH = $5 } else {
+		zz = split($5,t,"%")
+		tWIDTH = t[1]
+	}
+	print "<div class=\"progressbar\" " tID " style=\"width:" $4 "px\">"
+	print "	<span class=\"progress\" style=\"width:" tWIDTH "%\">" $6 "</span>"
+	if ( $7 != "" ) print " <span class=\"progress\" style=\"width:" 100-tWIDTH "%\">" $7 "</span>"
 	print "</div>"
 	#show caption
 	if ($3 != "" ) print "<em>" $3 "</em>"
