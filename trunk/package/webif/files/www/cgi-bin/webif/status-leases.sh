@@ -31,6 +31,12 @@
 config_cb() {
 	cfg_type="$1"
 	cfg_name="$2"
+
+	case "$cfg_type" in
+		host)
+			hosts_sections="${hosts_sections} ${cfg_name}"
+		;;
+	esac
 }
 option_cb() {
 	local var_name="$1"; shift
@@ -57,7 +63,8 @@ header "Status" "DHCP Clients" "@TR<<status_leases_dhcp_leases#DHCP Leases>>"
 		<th>@TR<<status_leases_Name#Name>></th>
 		<th>@TR<<status_leases_Expires#Expires in>></th>
 	</tr>
-<? exists "$leasefile" && awk -vdate="$(date +%s)" '
+<?
+exists "$leasefile" && awk -vdate="$(date +%s)" '
 $1 > 0 {
 	print "	<tr>"
 	print "		<td>" $2 "</td>"
@@ -112,7 +119,7 @@ exists "$leasefile" && grep -q "." "$leasefile" > /dev/null
 <?
 uci_load "network"
 excludeiface="$CONFIG_wan_ifname"
-cat /proc/net/arp | awk -v "exiface=$excludeiface" '
+cat /proc/net/arp 2>/dev/null | awk -v exiface="$excludeiface" '
 BEGIN {
 	cntr=0
 }
@@ -199,6 +206,76 @@ cat <<EOF
 
 EOF
 } # equal "$includeethers" "1"
+?>
+
+<br />
+
+<h5><strong>@TR<<status_leases_hosts_title#Hosts IP to Hostname File Map (/etc/hosts)>></strong></h5>
+<table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;" border="0" cellpadding="3" cellspacing="2">
+<tbody>
+	<tr>
+		<th>@TR<<status_leases_IP#IP Address>></th>
+		<th>@TR<<status_leases_Hostname#Hostname>></th>
+	</tr>
+<?
+exists /etc/hosts && cat /etc/hosts 2>/dev/null | awk '
+BEGIN {
+	cntr=0
+}
+($1 ~ /^[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}$/) {
+	print "	<tr>"
+	print "		<td>" $1 "</td>"
+	print "		<td>" $2 "</td>"
+	print "	</tr>"
+	cntr++
+}
+END {
+	if (cntr == 0) {
+		print "	<tr>"
+		print "		<td>@TR<<status_leases_hosts_empty#File /etc/hostss does not contain any IP address/Hostname pair.>></td>"
+		print "	</tr>"
+	}
+}'
+! exists /etc/hosts && {
+	cat <<EOF
+	<tr>
+		<td>@TR<<status_leases_no_hosts#File /etc/hosts does not exist.>></td>
+	</tr>
+EOF
+}
+cat <<EOF
+</tbody>
+</table>
+
+<br />
+
+EOF
+
+! empty "${hosts_sections}" && {
+	cat <<EOF
+<h5><strong>@TR<<status_leases_dhcphosts_title#DHCP Static IP Addresses Map>></strong></h5>
+<table style="width: 90%; margin-left: 2.5em; text-align: left; font-size: 0.8em;" border="0" cellpadding="3" cellspacing="2">
+<tbody>
+	<tr>
+		<th>@TR<<status_leases_MAC#MAC Address>></th>
+		<th>@TR<<status_leases_IP#IP Address>></th>
+		<th>@TR<<status_leases_Hostname#Hostname>></th>
+	</tr>
+EOF
+	for hsec in ${hosts_sections}; do
+		echo "	<tr>"
+		for nm in mac ip name; do
+			eval "value=\"\${CONFIG_${hsec}_${nm}}\""
+			echo "	<td>${value:-&nbsp;}</td>"
+		done
+		echo "	</tr>"
+	done
+	cat <<EOF
+</tbody>
+</table>
+
+EOF
+}
 
 footer ?>
 <!--
