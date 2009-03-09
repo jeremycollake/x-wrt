@@ -127,9 +127,8 @@ echo "</form>"
 <tbody>
 <?
 
-proclist=$(echo -n "";ps)
-echo "$proclist" | grep -v "[p]s " | sed 's/\(.\{5\}\)[[:space:]]\(.\{8\}\)[[:space:]]\(.\{6\}\)[[:space:]]\(.\{4\}\)/\1|\2|\3|\4|/' |
-	awk -F "|" -v interval="$FORM_interval" -v siglist="$signal_list" -v url="$SCRIPT_NAME" '
+proclist=$(echo -n "";ps); echo "$proclist" | grep -v "[p]s " |
+	awk -v interval="$FORM_interval" -v siglist="$signal_list" -v url="$SCRIPT_NAME" '
 BEGIN {
 	odd=1
 	tr_ind = ""
@@ -182,7 +181,7 @@ function readcmdline(pid) {
 		}
 		print td_ind "<td>" lcol "</td>"
 		if (interval < 1) {
-			if (lcol ~ /^\[/)
+			if ((lcol ~ /^\[/) || lcol ~ /init/)
 				print td_ind "<td>&nbsp;</td>"
 			else {
 				print td_ind "<td class=\"buttons\"><form method=\"post\" action=\""url"\">" siglist "<input type=\"hidden\" value=\"" pid "\" name=\"pid\" />&nbsp;<input type=\"submit\" value=\" @TR<<status_processes_Send_signal#Send>> \" name=\"kill\" /></form></td>"
