@@ -5,9 +5,11 @@
 
 header "Graphs" "Bandwidth" "@TR<<Bandwidth>>" 'onload="modechange()"' "$SCRIPT_NAME"
 if [ "$FORM_install_bandwidthd" != "" ]; then
+	echo "Installing $service package ...<pre>"
 	install_package bandwidthd
 	/etc/init.d/bandwidthd enable
 	/etc/init.d/bandwidthd start
+	echo "</pre>"
 fi
 is_package_installed bandwidthd
 [ "$?" = "0" ] && bandwidthd_installed=1
