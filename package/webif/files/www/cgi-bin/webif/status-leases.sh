@@ -57,7 +57,7 @@ header "Status" "DHCP Clients" "@TR<<status_leases_dhcp_leases#DHCP Leases>>"
 		<th>@TR<<status_leases_Name#Name>></th>
 		<th>@TR<<status_leases_Expires#Expires in>></th>
 	</tr>
-<? exists $leasefile && awk -vdate="$(date +%s)" '
+<? exists "$leasefile" && awk -vdate="$(date +%s)" '
 $1 > 0 {
 	print "	<tr>"
 	print "		<td>" $2 "</td>"
@@ -74,8 +74,8 @@ $1 > 0 {
 	printf "	</td>"
 	print "	</tr>"
 }
-' $leasefile
-exists $leasefile && grep -q "." $leasefile > /dev/null
+' "$leasefile"
+exists "$leasefile" && grep -q "." "$leasefile" > /dev/null
 ! equal "$?" "0" && {
 	echo "	<tr>"
 	echo "		<td>@TR<<status_leases_no_leases#There are no known DHCP leases.>></td>"
@@ -111,7 +111,7 @@ exists $leasefile && grep -q "." $leasefile > /dev/null
 	</tr>
 <?
 uci_load "network"
-excludeiface=$CONFIG_wan_ifname
+excludeiface="$CONFIG_wan_ifname"
 cat /proc/net/arp | awk -v "exiface=$excludeiface" '
 BEGIN {
 	cntr=0
