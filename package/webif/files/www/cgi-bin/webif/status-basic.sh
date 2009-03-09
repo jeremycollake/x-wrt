@@ -69,14 +69,14 @@ df | uniq | awk 'BEGIN { mcount=0 };
 		if( tab == 1 )
 		{
 			filled_caption=$4;
-			print "string|<tr id=\""var"\" class=\""$5"\"><td><strong>"$5"</strong><br /><em>"var"</em></td><td>"
+			print "string|<tr><td><strong>"$5"</strong><br /><em>"var"</em></td><td>"
 			print "progressbar|mount_" mcount "|" $2 "@TR<<KiB>> @TR<<mount_of#of>> " $1 "@TR<<KiB>>|200|" $4 "|" filled_caption "|"; mcount+=1
 			print "string|</td></tr>"
 		}
 		else if( $5 != "" )
 		{
 			filled_caption=$5;
-			print "string|<tr id=\""$1"\" class=\""$6"\"><td><strong>"$6"</strong><br /><em>"$1"</em></td><td>"
+			print "string|<tr><td><strong>"$6"</strong><br /><em>"$1"</em></td><td>"
 			print "progressbar|mount_" mcount "|" $3 "@TR<<KiB>> @TR<<mount_of#of>> " $2 "@TR<<KiB>>|200|" $5 "|" filled_caption "|"; mcount+=1
 			print "string|</td></tr>"
 		}
