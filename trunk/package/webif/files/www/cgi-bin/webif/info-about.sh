@@ -52,7 +52,7 @@ this_revision=$(cat "/www/.version")
 	<li><a href="mailto:mtsales@users.berlios.de">Mario Sales</a></li>
 	<li><a href="mailto:markus@freewrt.org">Markus Wigge</a></li>
 	<li><a href="mailto:liran@enginx.com">Liran Tal</a></li>
-	<li><a href="mailto:o.hardy@mail2web.com">Olivier Hardy (SeDkY)</li>
+	<li><a href="mailto:o.hardy@mail2web.com">Olivier Hardy (SeDkY)</a></li>
 	<li><a href="mailto:seitel@users.berlios.de">Stefan Eitel</a></li>
 	<li><a href="mailto:tyardley@users.berlios.de">Tim Yardley (lst)</a></li>
 </ul>
@@ -70,7 +70,7 @@ this_revision=$(cat "/www/.version")
 
 <p>@TR<<This device is running>> <a href="http://www.openwrt.org">OpenWrt</a> @TR<<or a close derivative>>.</p>
 
-<p>@TR<<GPL_Text#This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.>>
+<p>@TR<<GPL_Text#This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.>></p>
 
 </div></div> <!-- End scrollBox -->
 

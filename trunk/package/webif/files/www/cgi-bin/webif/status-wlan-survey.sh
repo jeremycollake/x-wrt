@@ -232,7 +232,7 @@ else
 		# only show quality if it's not 0/0
 		#
 		if ! equal "$QUALITY" "0/0"; then
-			QUALITY_STRING="string|<tr><td>@TR<<Quality>> $QUALITY</tr></td>"
+			QUALITY_STRING="string|<tr><td>@TR<<Quality>> $QUALITY</td></tr>"
 		fi
 
 		NOISE_BASE=-99
