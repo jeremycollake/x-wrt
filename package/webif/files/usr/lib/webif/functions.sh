@@ -134,13 +134,13 @@ install_package() {
 	# try an 'opkg update' to see if it can locate it. Does
 	# emit output to std devices.
 	echo "@TR<<Installing package>>..."
-	opkg install "$1" -force-overwrite -force-defaults | grep -q -e "md5sum mismatch" -e "Cannot find package"
+	opkg -force-overwrite -force-defaults install "$1" | grep -q -e "md5sum mismatch" -e "Cannot find package"
 	[ "$?" = "0" ] && {
 		echo "$1" | grep "://" >> /dev/null
 		! equal "$?" "0" && {
 			# wasn't a URL, so update
 			opkg update
-			opkg install "$1" -force-overwrite -force-defaults
+			opkg -force-overwrite -force-defaults install "$1"
 			[ "$?" != "0" ] && echo "Package install failed."
 		}
 	}

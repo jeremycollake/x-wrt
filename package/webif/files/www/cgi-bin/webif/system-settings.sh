@@ -114,7 +114,7 @@ generate_ssl_key() {
 		inst_packages="openssl-util $inst_packages"
 		inst_links="$inst_links /tmp/usr/bin/openssl"
 	}
-	[ -n "$inst_packages" ] && opkg -d ram install $inst_packages -force-overwrite
+	[ -n "$inst_packages" ] && opkg -force-overwrite -d ram install $inst_packages
 	is_package_installed "openssl-util"
 	if [ "$?" = "0" ]; then
 		for llib in $inst_links; do
