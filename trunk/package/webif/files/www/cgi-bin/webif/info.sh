@@ -26,7 +26,7 @@ version_file=".version-stable"
 daily_checked=""
 upgrade_button=""
 
-equal "$FORM_check_daily" "1" && {	
+equal "$FORM_check_daily" "1" && {
 	version_file=".version"
 	package_filename="webif_latest.ipk"
 	daily_checked="checked=\"checked\""
@@ -36,11 +36,11 @@ if [ -n "$FORM_update_check" ]; then
 	echo "@TR<<Please wait>> ...<br />"
 	tmpfile=$(mktemp "/tmp/.webif-XXXXXX")
 	rm -f $tmpfile
-	wget -q "$version_url$version_file" -O "$tmpfile" 2>&-	
-	! exists "$tmpfile" && echo "doesn't exist" > "$tmpfile"		
+	wget -q "$version_url$version_file" -O "$tmpfile" 2>&-
+	! exists "$tmpfile" && echo "doesn't exist" > "$tmpfile"
 	cat $tmpfile | grep -q "doesn't exist"
 	if [ $? = 0 ]; then
-		revision_text="<em class="warning">@TR<<info_error_checking#ERROR CHECKING FOR UPDATE>><em>"
+		revision_text="<em class=\"warning\">@TR<<info_error_checking#ERROR CHECKING FOR UPDATE>></em>"
 	else
 		latest_revision=$(cat $tmpfile)
 		if [ "$this_revision" -lt "$latest_revision" ]; then
@@ -57,7 +57,7 @@ if [ -n "$FORM_install_webif" ]; then
 	echo "@TR<<info_wait_install#Please wait, installation may take a minute>> ... <br />"
 	echo "<pre>"
 	opkg -V 0 update
-	opkg install "${version_url}${package_filename}" -force-overwrite -force-reinstall -force-defaults| uniq
+	opkg -force-overwrite -force-reinstall -force-defaults install "${version_url}${package_filename}"| uniq
 	echo "</pre>"
 	this_revision=$(cat "/www/.version")
 	# update the active language package
@@ -65,7 +65,7 @@ if [ -n "$FORM_install_webif" ]; then
 	! equal "$(opkg status "webif-lang-${curlang}" |grep "Status:" | grep " installed" )" "" && {
 		webif_version=$(opkg status webif | awk '/Version:/ { print $2 }')
 		echo "<pre>"
-		opkg install "${version_url}packages/webif-lang-${curlang}_${webif_version}_mipsel.ipk" -force-reinstall -force-overwrite -force-defaults | uniq
+		opkg -force-reinstall -force-overwrite -force-defaults install "${version_url}packages/webif-lang-${curlang}_${webif_version}_mipsel.ipk" | uniq
 		echo "</pre>"
 	}
 fi
