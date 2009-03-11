@@ -18,9 +18,15 @@ option_cb() {
 				resolvfile) resolvfile="$var_value" ;;
 			esac
 		;;
+		aiccu)
+			case "$var_name" in
+				interface)  aiccu_iface="$var_value" ;;
+			esac
+		;;
 	esac
 }
 config_load dhcp
+config_load aiccu
 reset_cb
 
 config_load network
@@ -106,10 +112,15 @@ END {
 displayiface() {
 	local ifpar="$1"; [ -z "$ifpar" ] && return
 	local iface iname config
-	eval iface="\$${ifpar}_ifacen"
-	[ -z "$iface" ] && return
-	eval iname="\$${ifpar}_namen"
-	[ -z "iname" ] && iname="$iface"
+	if [ "$2" != "aiccu" ]; then
+		eval iface="\$${ifpar}_ifacen"
+		[ -z "$iface" ] && return
+		eval iname="\$${ifpar}_namen"
+		[ -z "iname" ] && iname="$iface"
+	else
+		iface="$ifpar"
+		iname="aiccu"
+	fi
 	config=$(ifconfig "$iface" 2>/dev/null)
 	[ -n "$config" ] && echo "$config" | awk -v iface="$iface" -v iname="$iname" '
 function colonstr(strc, nparts, colparts) {
@@ -318,6 +329,7 @@ displayiface wan
 displaydns wan
 displayiface lan
 displaydns lan
+displayiface $aiccu_iface aiccu
 for iface in $frm_ifaces; do
 	displayiface $iface
 done
