@@ -196,6 +196,9 @@ END {
 		} else if (iname == "LOOPBACK") {
 			print "helpitem|LOOPBACK"
 			print "helptext|LOOPBACK_helptext#A loopback interface is a type of '\''circuitless IP address'\'' or '\''virtual IP'\'' address, as the IP address is not associated with any one particular interface (or circuit) on the host or router. Any traffic that a computer program sends on the loopback network is addressed to the same computer."
+		} else if (iname == "aiccu") {
+			print "helpitem|aiccu"
+			print "helptext|aiccu_helptext#Automatic IPv6 Connectivity Client Utility used to connect to a IPv6 tunnel broker."
 		}
 		print "end_form"
 	}
