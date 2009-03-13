@@ -3,7 +3,7 @@
 . /usr/lib/webif/webif.sh
 . /www/cgi-bin/webif/graphs-subcategories.sh
 
-header "Graphs" "Bandwidth" "@TR<<Bandwidth>>" 'onload="modechange()"' "$SCRIPT_NAME"
+header "Graphs" "graphs_bandwidth_subcategory#Bandwidth" "@TR<<Bandwidth>>" 'onload="modechange()"' "$SCRIPT_NAME"
 if [ "$FORM_install_bandwidthd" != "" ]; then
 	echo "Installing $service package ...<pre>"
 	install_package bandwidthd
@@ -85,5 +85,5 @@ else
 fi
 footer ?>
 <!--
-##WEBIF:name:Graphs:160:Bandwidth
+##WEBIF:name:Graphs:160:graphs_bandwidth_subcategory#Bandwidth
 -->

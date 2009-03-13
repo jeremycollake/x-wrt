@@ -19,7 +19,7 @@ header_inject_head=$(cat <<EOF
 EOF
 )
 
-header "Graphs" "vnStat"
+header "Graphs" "graphs_vnstat_subcategory#Vnstat" "" "" ""
 has_pkgs vnstati
 
 LIB_D=${IPKG_INSTROOT}/var/lib/vnstat
@@ -107,5 +107,5 @@ fi
 
 footer ?>
 <!--
-##WEBIF:name:Graphs:3:vnStat
+##WEBIF:name:Graphs:3:graphs_vnstat_subcategory#Vnstat
 -->
