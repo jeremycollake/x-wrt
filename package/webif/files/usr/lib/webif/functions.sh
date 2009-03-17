@@ -134,24 +134,27 @@ install_package() {
 	# try an 'opkg update' to see if it can locate it. Does
 	# emit output to std devices.
 	echo "@TR<<Installing package>>..."
-	local locfifo=$(mktemp /tmp/.webif_pkg-XXXXXX)
-	opkg -force-overwrite -force-defaults install "$1" | tee "$locfifo"
-	grep -q -e "md5sum mismatch" -e "Cannot find package" -e "value: 716563936" "$locfifo" && {
-		echo "$1" | grep "://" >> /dev/null
-		! equal "$?" "0" && {
+	local retval
+	opkg -force-overwrite -force-defaults install "$@"
+	retval="$?"
+	[ "$retval" != "0" ] && {
+		! equal "$(echo "$1" | grep -q ":\/\/")" "0" && {
 			# wasn't a URL, so update
+			echo "@TR<<Refreshing outdated packages lists>>..."
 			opkg update
-			opkg -force-overwrite -force-defaults install "$1"
-			[ "$?" != "0" ] && echo "Package install failed."
+			opkg -force-overwrite -force-defaults install "$@"
+			retval="$?"
 		}
 	}
-	rm -f "$locfifo" >/dev/null 2>&1
+	[ "$retval" != "0" ] && echo "@TR<<Package install failed.>>"
+	[ "$retval" -eq 0 ]
 }
 
 remove_package() {
-	# $1 = package name
+	# global PKG_REMOVE_OPTIONS
+	# $1 = package names
 	# returns 0 if success.
-	opkg remove "$1"
+	opkg $PKG_REMOVE_OPTIONS remove "$@"
 }
 
 update_package_list() {
