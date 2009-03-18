@@ -284,18 +284,6 @@ for package in $process_packages; do
 			echo "${hostname:-OpenWrt}" > /proc/sys/kernel/hostname
 			config_allclear
 			;;
-		"snmp")
-			echo '@TR<<Exporting>> @TR<<snmp settings>> ...'
-			[ -e "/sbin/save_snmp" ] && {
-				/sbin/save_snmp >&- 2>&-
-			}
-			
-			echo '@TR<<Reloading>> @TR<<snmp settings>> ...'
-			[ ! -e "/etc/init.d/snmpd" ] && {
-				ln -s "/etc/init.d/snmpd" "/etc/init.d/S92snmpd" 2>/dev/null
-			}
-			/etc/init.d/S??snmpd restart >&- 2>&-
-			;;
 		"l2tpns")
 			echo '@TR<<Exporting>> @TR<<l2tpns server settings>> ...'
 			[ -x "/usr/lib/webif/l2tpns_apply.sh" ] && {
