@@ -135,7 +135,7 @@ install_package() {
 	# emit output to std devices.
 	echo "@TR<<Installing package>>..."
 	local retval
-	opkg -force-overwrite -force-defaults install "$@"
+	opkg -force-overwrite -force-defaults install "$@" | sed 's/&/\&amp;/; s/"/\&#34;/; s/'\''/\&#39;/; s/\$/\&#36;/; s/</\&lt;/; s/>/\&gt;/; s/\\/\&#92;/; s/|/\&#124;/;'
 	retval="$?"
 	[ "$retval" != "0" ] && {
 		! equal "$(echo "$1" | grep -q ":\/\/")" "0" && {
@@ -154,7 +154,7 @@ remove_package() {
 	# global PKG_REMOVE_OPTIONS
 	# $1 = package names
 	# returns 0 if success.
-	opkg $PKG_REMOVE_OPTIONS remove "$@"
+	opkg $PKG_REMOVE_OPTIONS remove "$@" | sed 's/&/\&amp;/; s/"/\&#34;/; s/'\''/\&#39;/; s/\$/\&#36;/; s/</\&lt;/; s/>/\&gt;/; s/\\/\&#92;/; s/|/\&#124;/;'
 }
 
 update_package_list() {
