@@ -408,14 +408,13 @@ form="$tr
 	string|</table></div>"
 append forms "$form" "$N"
 
+header_inject_head="<script type=\"text/javascript\" src=\"/webif.js\"></script>"
 
-
-header "Network" "Firewall" "@TR<<Firewall>>" 'onload="modechange()"' "$SCRIPT_NAME"
+header "Network" "Firewall" "@TR<<Firewall>>" 'onload="modechange()" onkeydown="return processKey(event)"' "$SCRIPT_NAME"
 #####################################################################
 # modechange script
 #
 cat <<EOF
-<script type="text/javascript" src="/webif.js"></script>
 <script type="text/javascript">
 <!--
 function modechange()
