@@ -101,6 +101,7 @@ function start_form(title, field_opts, field_opts2) {
 	if (title != "") print "<h3><strong>" title "</strong></h3>"
 	print "<div class=\"settings-content\"" field_opts2 ">"
 	print "<table width=\"100%\" summary=\"Settings\">"
+	field_open = 0
 }
 
 function end_form(form_help, form_help_link, field_open) {
