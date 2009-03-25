@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<?
+<%
 . /usr/lib/webif/webif.sh
 ###################################################################
 # Crontabs
@@ -275,8 +275,8 @@ function BuildInterval(ChangeConfig) {
 		IntervalString = IntervalString + document.getElementById('txtCommand').value;
 	}
 	else {
-		IntervalString = IntervalString + 'echo "X-WRT -- End user extensions for OpenWrt" | logger' + ' ';
-		document.getElementById('txtCommand').value = 'echo "X-WRT -- End user extensions for OpenWrt" | logger';
+		IntervalString = IntervalString + 'echo "X-WRT \-\- End user extensions for OpenWrt" | logger' + ' ';
+		document.getElementById('txtCommand').value = 'echo "X-WRT \-\- End user extensions for OpenWrt" | logger';
 	}
 	
 	document.getElementById('txtCrontabEntry').value = IntervalString;
@@ -612,7 +612,7 @@ echo "<input id=\"COMMAND_newCron\" type=\"hidden\" name=\"COMMAND_newCron\" val
 echo "<input id=\"ENABLED_newCron\" type=\"hidden\" name=\"ENABLED_newCron\" value=\"\" />"
 
 
-footer ?>
+footer %>
 <!--
-##WEBIF:name:System:126:Crontabs
+##WEBIF:name:System:130:Crontabs
 -->

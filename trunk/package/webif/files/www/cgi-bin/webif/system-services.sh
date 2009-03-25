@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<?
+<%
 . /usr/lib/webif/webif.sh
 ###################################################################
 # Services
@@ -132,7 +132,7 @@ cat <<EOF
 </table>
 EOF
 
-footer ?>
+footer %>
 <!--
-##WEBIF:name:System:126:Services
+##WEBIF:name:System:140:Services
 -->
