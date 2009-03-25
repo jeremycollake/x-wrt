@@ -62,4 +62,4 @@ define BuildLang
 endef
 
 $(eval $(call BuildPackage,webif-fonheartbeat))
-$(eval $(call BuildLang,cs))
+#$(eval $(call BuildLang,cs))
