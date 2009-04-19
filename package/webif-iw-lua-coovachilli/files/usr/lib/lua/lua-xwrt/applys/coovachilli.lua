@@ -207,12 +207,12 @@ function set_networks()
 		end
 	end
 	uci.set("network",iflan,"ifname",ifwifi)
-	firewall.set_forwarding(iflan,"wan")
-	wwwprint("Setting firewall")
-	if iflan ~= "lan" then
-		firewall.set_forwarding(iflan,"lan")
-		firewall.set_forwarding("lan","wifi")
-	end
+--	firewall.set_forwarding(iflan,"wan")
+--	wwwprint("Setting firewall")
+--	if iflan ~= "lan" then
+--		firewall.set_forwarding(iflan,"lan")
+--		firewall.set_forwarding("lan","wifi")
+--	end
 	local devlan = iflan
 	if uci.get("network",iflan,"type") == "bridge" then devlan = "br-"..iflan end
 	uci.set("coovachilli","settings","HS_LANIF",devlan)
