@@ -1,13 +1,7 @@
-# freeradius_reply
 
-#config "default" "default"
-#	option Idle_Timeout	'700'
-#	option Acct_Interim_Interval	'600'
-#	option WISPr_Bandwidth_Max_Down	'512000'
-#	option WISPr_Bandwidth_Max_Up	'25600'
-#	option Fall_Through	'yes'
+config 'user' 'steve'
+	option 'Fall_Through' 'no'
 
-config "user" "steve"
-	option Fall_Through	'no'
-
+config 'freeradius' 'system'
+	option 'apply' '/usr/lib/lua/lua-xwrt/applys/freeradius_check.lua'
 

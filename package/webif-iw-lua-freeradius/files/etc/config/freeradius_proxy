@@ -1,13 +1,12 @@
-# freeradius_proxy
 
-config "server" ""
-	option synchronous	'no'
-	option default_fallback	'yes'
-	option post_proxy_authorize	'no'
-	option retry_delay	'5'
-	option retry_count	'3'
-	option dead_time	'121'
+config 'server'
+	option 'synchronous' 'no'
+	option 'default_fallback' 'yes'
+	option 'post_proxy_authorize' 'no'
+	option 'retry_delay' '5'
+	option 'retry_count' '3'
+	option 'dead_time' '121'
 
-
-
+config 'freeradius' 'system'
+	option 'apply' '/usr/lib/lua/lua-xwrt/applys/freeradius_proxy.lua'
 

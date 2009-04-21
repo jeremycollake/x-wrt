@@ -164,10 +164,10 @@ function set_alloweds()
 	if coovachilli.settings.HS_DNS1 then tallow[coovachilli.settings.HS_DNS1] ="" end
 	if coovachilli.settings.HS_DNS2 then tallow[coovachilli.settings.HS_DNS2] ="" end
 	if coovachilli.settings.HS_UAMLISTEN then tallow[coovachilli.settings.HS_UAMLISTEN] ="" end
-	tallow["x-wrt.org"] = ""
-	tallow["openwrt.org"] = ""
-	tallow["www.internet-wifi.com.ar"] = ""
-	tallow["coova.org"] = ""
+--	tallow["x-wrt.org"] = ""
+--	tallow["openwrt.org"] = ""
+--	tallow["www.internet-wifi.com.ar"] = ""
+--	tallow["coova.org"] = ""
 	if coovachilli.system.paypal ~= nil then
 		tallow["www.paypal.com"] = ""
 		tallow["66.211.168.0/24"] = ""
