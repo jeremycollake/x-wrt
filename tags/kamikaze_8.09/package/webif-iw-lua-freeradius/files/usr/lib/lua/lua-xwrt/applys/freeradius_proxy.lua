@@ -41,23 +41,26 @@ function process()
 			for k,v in pairs(t) do
 				if not string.match(k,"[.]") then
 					proxy_str = proxy_str .. sep .. k .. "=" .. v
+--					wwwprint(k.." "..v)
 				end
 			end
 			proxy_str = proxy_str .. sep .."}\n\n" 
 		end
 
 		config = uci.get_type("freeradius_proxy","realm")
-		for i, t in pairs(config) do
-			proxy_str = proxy_str.."realm "..t["community"].." {"
-			sep = "\n"
-			for k,v in pairs(t) do
-				if not string.match(k,"[.]")
-				and k ~= "community" 
-				then
-					proxy_str = proxy_str .. sep .. k .. "=" .. v
+		if config then
+			for i, t in pairs(config) do
+				proxy_str = proxy_str.."realm "..t["community"].." {"
+				sep = "\n"
+				for k,v in pairs(t) do
+					if not string.match(k,"[.]")
+					and k ~= "community" 
+					then
+						proxy_str = proxy_str .. sep .. k .. "=" .. v
+					end
 				end
+				proxy_str = proxy_str .. sep .."}\n\n" 
 			end
-			proxy_str = proxy_str .. sep .."}\n\n" 
 		end
     local pepe = io.open("/etc/freeradius/proxy.conf","w")
     pepe:write(proxy_str)
