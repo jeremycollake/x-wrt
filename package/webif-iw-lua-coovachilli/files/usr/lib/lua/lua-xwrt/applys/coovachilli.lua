@@ -206,7 +206,7 @@ function set_networks()
 			break
 		end
 	end
-	uci.set("network",iflan,"ifname",ifwifi)
+--	uci.set("network",iflan,"ifname",ifwifi)
 --	firewall.set_forwarding(iflan,"wan")
 --	wwwprint("Setting firewall")
 --	if iflan ~= "lan" then
