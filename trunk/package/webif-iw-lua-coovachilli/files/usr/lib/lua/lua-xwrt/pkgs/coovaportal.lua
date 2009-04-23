@@ -276,9 +276,15 @@ function core_form(form,user_level,rad_conf)
   	form:Add("select","coovachilli.webadmin.userlevel",uci.check_set("coovachilli","webadmin","userlevel","0"),tr("userlevel#User Level"),"string")
     form["coovachilli.webadmin.userlevel"].options:Add("0","Select Mode")
     form["coovachilli.webadmin.userlevel"].options:Add("1","Beginer")
-    form["coovachilli.webadmin.userlevel"].options:Add("2","Medium")
+--    form["coovachilli.webadmin.userlevel"].options:Add("2","Medium")
     form["coovachilli.webadmin.userlevel"].options:Add("3","Advanced")
 --    form["coovachilli.webadmin.userlevel"].options:Add("4","Expert")
+		form:Add_help(tr("chillispot_var_UserLevel#User Level"),tr([[
+			chilli_help_UserLevel#<strong>Beginer:</strong> Do all necesary setting for you, including Wireless and Networ settings<br>
+			<strong>Advanced:</strong> In this mode you can set more options, but not check that you do and not set or check Wireless and/or Networks.<br>
+			<strong>Note:</strong> Could be good idea if at first time you use beginer mode.
+			]]))
+
 	  form:Add("select","coovachilli.webadmin.radconf",uci.check_set("coovachilli","webadmin","radconf","0"),tr("authentication_users#Authenticate Users Mode"),"string")
   	form["coovachilli.webadmin.radconf"].options:Add("0","Communities Users with Remote Radius")
   	form["coovachilli.webadmin.radconf"].options:Add("1","Local Users with Local Radius")

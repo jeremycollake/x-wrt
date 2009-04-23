@@ -39,7 +39,7 @@ exe_after  = {} -- execute os process after all apply process
 --depends_pkgs = "libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm iw-freeradius"
 exe_after["/etc/init.d/network restart"]="network"
 exe_after["wifi"]="wifi"
-exe_after["/etc/init.d/firewall restart"]="firewallwifi"
+--exe_after["/etc/init.d/firewall restart"]="firewallwifi"
 
 -- depends_pkgs = "libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm iw-freeradius"
 
