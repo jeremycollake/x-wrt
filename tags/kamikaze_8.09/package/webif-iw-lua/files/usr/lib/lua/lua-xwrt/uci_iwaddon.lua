@@ -101,6 +101,23 @@ function uci.get_type(p,s)
   end
 end
 
+function uci.get_section_name ( p, t, args )
+	local sections = uci.get_type(p,t)
+	local names = {}
+	for i=1, #sections do
+		local ok = true
+		for k,v in pairs(args) do
+			if sections[i][k] ~= v then ok = false end
+		end
+		if ok == true then
+			names[#names+1]=sections[i][".name"]
+		end
+	end
+	if #names == 0 then return nil
+	elseif #names == 1 then return names[1]
+	else return "Error fond "..#names.."sections with that criterion search" end
+end
+
 function uci.get_section(p,s)
   local t = uci.get_all(p)
   return t[s]
