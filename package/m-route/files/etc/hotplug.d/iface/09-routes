@@ -29,7 +29,7 @@ add_new_wan () {
 
 add_wan_default () {
 	local RUN="ip route add default via $new_gateway table ${INTERFACE}_rt"
-	log_debug 5 "add_wan:$RUN"
+	log_debug 5 "add_wan($new_name):$RUN"
 	eval $RUN
 }
 
@@ -42,7 +42,7 @@ add_net_to_rt () {
 	# ipaddr = $6
 	local RUN="ip route add $4 dev $5 src $6 table $3"
 	[ -z "$6" ] && RUN="ip route add $4 dev $5 table $3"
-	log_debug 5 "$2 $1 $3:$RUN"
+	log_debug 5 "$2 ($new_name)$1 $3:$RUN"
 	eval $RUN
 }
 
@@ -53,7 +53,7 @@ add_rule () {
 	else
 		RUN="ip rule add from $new_ipaddr fwmark $new_mark table ${INTERFACE}_rt"
 	fi
-	log_debug 5 "add_rule:$RUN"
+	log_debug 5 "add_rule($new_name):$RUN"
 	eval $RUN
 }
 
@@ -65,7 +65,7 @@ remove_wan () {
 	unset RUN
 	RUN=$(ip rule | grep ${1}_rt | awk {'print "ip rule del " $2 " " $3"; "'})
 	[ -z "$RUN" ] && return
-	log_debug 5 "remove_wan $1:$RUN"
+	log_debug 5 "remove_wan($new_name) $1:$RUN"
 	eval $RUN
 }
 remove_net_from_table () {
@@ -75,8 +75,9 @@ remove_net_from_table () {
 	local table
 	config_get table $1 rt_table
 	$RUN="ip route del $2 dev $3 table $table"
-	log_debug 5 "remove_net_from_table:$RUN"
-	log_debug 5 "remove_net_from_table:ip route flush cache"
+	log_debug 5 "remove_net_from_table($new_name):$RUN"
+	eval $RUN
+	log_debug 5 "remove_net_from_table($new_name):ip route flush cache"
 	ip route flush cache
 }
 
@@ -107,8 +108,6 @@ set_route () {
 	local COUNT=0
 	local ROUTE
 	local ONE_ROUTE
-#	local last_device
-#	local last_gateway
 	
 	config_load mroute
 	config_foreach add_route wanif
@@ -137,7 +136,7 @@ set_route () {
 
 come_up () {
 		[ "$(uci_get "mroute.$INTERFACE")" = "wanif" ] && {
-			echo "Entering multi-wan configuration for $INTERFACE interface"
+			echo "Entering multi-wan configuration for ($new_name) $INTERFACE interface"
 			set_rtTables $INTERFACE
 			echo "0" > /proc/sys/net/ipv4/conf/$DEVICE/rp_filter
 			config_load mroute
@@ -173,7 +172,9 @@ local new_ipaddr=$(uci_get "network.$INTERFACE.ipaddr")
 local new_netmask=$(uci_get "network.$INTERFACE.netmask")
 new_netmask=${new_netmask:-"255.255.255.0"}
 local new_gateway=$(uci_get "network.$INTERFACE.lease_gateway")
+local new_name=$(uci_get "mroute.$INTERFACE.name")
 new_gateway=${new_gateway:-$(uci_get "network.$INTERFACE.gateway")}
+[ "$new_gateway" = "0.0.0.0" ] && unset new_gateway
 local calc=$(ipcalc.sh $new_ipaddr $new_netmask)
 local prefix=${calc##*=}
 local new_network=${calc##*NETWORK=}
@@ -182,23 +183,23 @@ new_network=$(echo $new_network | sed 's/.PRE.*//')
 
 case "$ACTION" in
 	ifup)
-		come_up 
+		[ -z "$new_gatewa" ] && come_up 
 		[ "$(uci_get "mroute.$INTERFACE")" = "wanif" ] && set_route
 	;;
 	update)
-#		local old_device=$(uci_get "mroute.$INTERFACE.device")
-#		local old_ipaddr=$(uci_get "mroute.$INTERFACE.ipaddr")
-#		local old_netmask=$(uci_get "mroute.$INTERFACE.netmask")
-#		local old_gateway=$(uci_get "mroute.$INTERFACE.gateway")
-#		[ "$old_device" != "$DEVICE" -o \
-#		  "$old_ipaddr" != "$new_ipaddr" -o \
-#		  "$old_gateway" != "$new_gateway" -o \
-#		  "$old_network" != "$new_network" ] && {
-#			go_down
-#			sleep 2
-#			come_up
-#			[ "$(uci_get "mroute.$INTERFACE")" = "wanif" ] && set_route
-#		}
+		local old_device=$(uci_get "mroute.$INTERFACE.device")
+		local old_ipaddr=$(uci_get "mroute.$INTERFACE.ipaddr")
+		local old_netmask=$(uci_get "mroute.$INTERFACE.netmask")
+		local old_gateway=$(uci_get "mroute.$INTERFACE.gateway")
+		[ "$old_device" != "$DEVICE" -o \
+		  "$old_ipaddr" != "$new_ipaddr" -o \
+		  "$old_gateway" != "$new_gateway" -o \
+		  "$old_network" != "$new_network" ] && {
+			go_down
+			sleep 2
+			come_up
+			[ "$(uci_get "mroute.$INTERFACE")" = "wanif" ] && set_route
+		}
 		log_debug 5 "update proccess for $INTERFACE"
 	;;
 	ifdown)
