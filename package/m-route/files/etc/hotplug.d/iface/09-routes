@@ -48,11 +48,36 @@ add_net_to_rt () {
 
 add_rule () {
 	local RUN
-	if [ -z "$new_mark" ]; then
+	local mark=$(uci_get "mroute.${INTERFACE}.mark")
+	[ -n "$mark" ] && {
+		config_foreach add_lans_rules lanif
+	}
+#	if [ -z "$mark" ]; then
 		RUN="ip rule add from $new_ipaddr table ${INTERFACE}_rt"
-	else
-		RUN="ip rule add from $new_ipaddr fwmark $new_mark table ${INTERFACE}_rt"
-	fi
+#	else
+#		RUN="ip rule add from $new_ipaddr fwmark $mark table ${INTERFACE}_rt"
+#	fi
+#	echo "$mark"
+	log_debug 5 "add_rule($new_name):$RUN"
+	eval $RUN
+}
+
+add_lans_rules () {
+	local lan_device
+	local lan_ipaddr
+	config_get lan_device $1 device
+	config_get lan_ipaddr $1 ipaddr
+	config_get lan_network $1 network
+	local ports=$(uci_get "mroute.$INTERFACE.ports" )
+	for port in $ports; do
+		RUN="iptables -A PREROUTING -t mangle -i $lan_device -p tcp --dport $port -j MARK --set-mark $mark"
+#		RUN="iptables -A OUTPUT -t mangle -s $lan_network -p tcp --dport $port -j MARK --set-mark $mark"
+		echo $RUN
+#		log_debug 5 "add_rule($new_name):$RUN"
+		eval $RUN
+	done
+	RUN="ip rule add from $lan_ipaddr fwmark $mark table ${INTERFACE}_rt"
+#		RUN="ip rule add fwmark $mark table ${INTERFACE}_rt"
 	log_debug 5 "add_rule($new_name):$RUN"
 	eval $RUN
 }
@@ -63,11 +88,34 @@ remove_wan () {
 	log_debug 5 "remove_wan $1:$RUN"
 	eval "$RUN 2> /dev/null"
 	unset RUN
-	RUN=$(ip rule | grep ${1}_rt | awk {'print "ip rule del " $2 " " $3"; "'})
-	[ -z "$RUN" ] && return
-	log_debug 5 "remove_wan($new_name) $1:$RUN"
-	eval $RUN
+#	RUN=$(ip rule | grep ${1}_rt | awk {'print "ip rule del " $2 " " $3"; "'})
+	RUN=$(ip rule | grep ${1}_rt | awk {'if ($4 == "fwmark") print "ip rule del " $2 " " $3 " " $4 " " $5 "; "; else print "ip rule del " $2 " " $3 "; "'})
+	[ -n "$RUN" ] && {
+		log_debug 5 "remove_wan($new_name) $1:$RUN"
+		eval $RUN
+	}
+	local mark=$(uci_get "mroute.$INTERFACE.mark" )
+	[ -n "$mark" ] && {
+		config_foreach remove_lans_rules lanif
+	}
 }
+
+remove_lans_rules () {
+	local lan_device
+	local lan_ipaddr
+	config_get lan_device $1 device
+	config_get lan_ipaddr $1 ipaddr
+	config_get lan_network $1 network
+	local ports=$(uci_get "mroute.$INTERFACE.ports" )
+	for port in $ports; do
+		RUN="iptables -D PREROUTING -t mangle -i $lan_device -p tcp --dport $port -j MARK --set-mark $mark"
+#		RUN="iptables -D OUTPUT -t mangle -s $lan_network -p tcp --dport $port -j MARK --set-mark $mark"
+		echo $RUN
+#		log_debug 5 "add_rule($new_name):$RUN"
+		eval $RUN
+	done
+}
+
 remove_net_from_table () {
 	# ifname = $1
 	# network = $2
@@ -123,6 +171,7 @@ set_route () {
 			ROUTE=$ONE_ROUTE
 		;;
 		*)
+#			ROUTE=${ROUTE#* }
 			ROUTE="ip route replace default scope global $ROUTE"
 			MSG="Active Load Balancing connections ($COUNT)"
 			LEVEL=5
@@ -145,6 +194,8 @@ come_up () {
 			add_net_to_rt $INTERFACE "add_it_self" ${INTERFACE}_rt $new_network $DEVICE $new_ipaddr
 			config_foreach add_new_wan wanif
 			config_foreach add_new_wan lanif
+			add_net_to_rt $INTERFACE "add_new_wan" ${INTERFACE}_rt 127.0.0.0/8 lo
+
 			add_wan_default
 			add_rule
 			uci_set_state mroute $INTERFACE rt_table ${INTERFACE}_rt
