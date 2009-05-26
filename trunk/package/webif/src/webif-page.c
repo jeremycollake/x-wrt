@@ -89,6 +89,7 @@ char *strip_next_token(char *pszSource, char *pszToken, int nTokenLen)
 		else if(pszSource[nI]==cClosingQuote) /* if in quoted string, and ending quote */
 		{			
 			pszToken[nTokenIndex]=0; /* terminate token */
+			nI++; /* advance to the next source char */
 			break;
 		}
 		pszToken[nTokenIndex]=pszSource[nI];
