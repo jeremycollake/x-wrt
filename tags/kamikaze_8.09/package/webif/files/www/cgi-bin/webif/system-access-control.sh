@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<?
+<%
 . "/usr/lib/webif/webif.sh"
 
 ###################################################################
@@ -39,11 +39,12 @@ EOF
 		uci_add "webif_access_control" "accesscontrol" "${FORM_user_add}"
 	}
 fi
-header "System" "Access Control" "@TR<<Access Control>>" ' onload="modechange()" ' "$SCRIPT_NAME"
+header "System" "Access Control" "@TR<<Access Control>>" '' "$SCRIPT_NAME"
 exists /tmp/.webif/file-httpd.conf && HTTPD_CONFIG_FILE=/tmp/.webif/file-httpd.conf || HTTPD_CONFIG_FILE=/etc/httpd.conf
 cat $HTTPD_CONFIG_FILE | awk '
 BEGIN {
 	FS=":"
+	ucount = 0
 	include("/usr/lib/webif/common.awk")
 	start_form("Users")
 	if ((ENVIRON["FORM_submit"] != "") && ((ENVIRON["FORM_change_password_"$2] != "") || (ENVIRON["FORM_remove_user_"$2] == ""))) system("/bin/rm /tmp/.webif/file-httpd.conf; touch/tmp/.webif/file-httpd.conf")
@@ -52,8 +53,11 @@ BEGIN {
 	if (ENVIRON["FORM_remove_user_" $2] == "") {
 		field($2)
 		password("user_"$2, ENVIRON["FORM_user_" $2])
+		field("&nbsp;","")
 		submit("change_password_"$2, "Change Password")
+		field("&nbsp;","")
 		submit("remove_user_"$2, "Remove "$2)
+		ucount = ucount + 1
 	}
 }
 ((ENVIRON["FORM_submit"] != "") && ($1 != "")) {
@@ -69,7 +73,10 @@ BEGIN {
 	}
 }
 END {
-	end_form()
+	if (ucount == 0) {
+		print "<tr><td>No users defined."
+	}
+	end_form("","",1)
 	start_form("Add User")
 	field("Username")
 	textinput3("user_add", ENVIRON["FORM_user_add"])
@@ -77,8 +84,9 @@ END {
 	password("password_add")
 	field("Confirm Password")
 	password("password2_add")
+	field("&nbsp;","")
 	submit("add_user", "Add User")
-	end_form()
+	end_form("","",1)
 }'
 exists /tmp/.webif/file-httpd.conf && HTTPD_CONFIG_FILE=/tmp/.webif/file-httpd.conf || HTTPD_CONFIG_FILE=/etc/httpd.conf
 users=`cat $HTTPD_CONFIG_FILE | awk '
@@ -141,14 +149,16 @@ BEGIN {
 		}
 		option("1", "@TR<<Enabled>>")
 		option("0", "@TR<<Disabled>>")
+		print "</select>"
+		select_open = 0
 	}
 }
 END {
-	end_form()
+	end_form("","",1)
 }'
 done
 
-footer ?>
+footer %>
 
 <!--
 ##WEBIF:name:System:150:Access Control

@@ -134,22 +134,27 @@ install_package() {
 	# try an 'opkg update' to see if it can locate it. Does
 	# emit output to std devices.
 	echo "@TR<<Installing package>>..."
-	opkg install "$1" -force-overwrite -force-defaults | grep -q -e "md5sum mismatch" -e "Cannot find package"
-	[ "$?" = "0" ] && {
-		echo "$1" | grep "://" >> /dev/null
-		! equal "$?" "0" && {
+	local retval
+	opkg -force-overwrite -force-defaults install "$@" | sed 's/&/\&amp;/; s/"/\&#34;/; s/'\''/\&#39;/; s/\$/\&#36;/; s/</\&lt;/; s/>/\&gt;/; s/\\/\&#92;/; s/|/\&#124;/;'
+	retval="$?"
+	[ "$retval" != "0" ] && {
+		! equal "$(echo "$1" | grep -q ":\/\/")" "0" && {
 			# wasn't a URL, so update
+			echo "@TR<<Refreshing outdated packages lists>>..."
 			opkg update
-			opkg install "$1" -force-overwrite -force-defaults
-			[ "$?" != "0" ] && echo "Package install failed."
+			opkg -force-overwrite -force-defaults install "$@"
+			retval="$?"
 		}
 	}
+	[ "$retval" != "0" ] && echo "@TR<<Package install failed.>>"
+	[ "$retval" -eq 0 ]
 }
 
 remove_package() {
-	# $1 = package name
+	# global PKG_REMOVE_OPTIONS
+	# $1 = package names
 	# returns 0 if success.
-	opkg remove "$1"
+	opkg $PKG_REMOVE_OPTIONS remove "$@" | sed 's/&/\&amp;/; s/"/\&#34;/; s/'\''/\&#39;/; s/\$/\&#36;/; s/</\&lt;/; s/>/\&gt;/; s/\\/\&#92;/; s/|/\&#124;/;'
 }
 
 update_package_list() {

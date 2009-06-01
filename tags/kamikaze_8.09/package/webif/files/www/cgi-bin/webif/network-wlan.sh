@@ -251,7 +251,7 @@ EOF
 
 	append forms "start_form|@TR<<Wireless Adapter>> $device @TR<< Configuration>>" "$N"
 	if [ "$iftype" = "broadcom" ]; then
-		[ "`uname -r`" != "2.4.35.4" ] && uci_set "wireless" "$device" "type" "mac80211"
+		[ "$(uname -r | cut -d'.' -f2)" != "4" ] && uci_set "wireless" "$device" "type" "mac80211"
 		append forms "helpitem|Broadcom Wireless Configuration" "$N"
 		append forms "helptext|Helptext Broadcom Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-3x ap or 1-4x ap or 1x adhoc" "$N"
 	elif [ "$iftype" = "atheros" ]; then

@@ -8,7 +8,8 @@ COPY_FILES="/etc/firewall.config
 COPY_DIRS="/etc/config
 /etc/openvpn
 /etc/crontabs
-/etc/ssl"
+/etc/ssl
+/etc/dropbear"
 
 . /usr/lib/webif/webif.sh
 uci_load "system"
