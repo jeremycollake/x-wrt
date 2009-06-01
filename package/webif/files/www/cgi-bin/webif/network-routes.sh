@@ -1,5 +1,5 @@
 #!/usr/bin/webif-page
-<?
+<%
 . /usr/lib/webif/webif.sh
 ###################################################################
 # Static routes display and configuration
@@ -8,12 +8,10 @@
 #	Route configuration
 #
 # Author(s) [in order of work date]:
-#	???		( Someone else did most of the work! )
+#	Lubos Stanek <lubek@users.berlios.de>
 #	Adam Hill	<adam@voip-x.co.uk>
 # Major revisions:
 #	Allow static IPV4 routes to be added
-#
-# UCI variables referenced:
 #
 # Configuration files referenced:
 #   network
@@ -90,6 +88,7 @@ display_config_routes() {
 	cat <<EOF
 <div class="settings">
 <h3><strong>@TR<<network_routes_static_Configured_IPv${ipv}_Static_Routes#Configured IPv${ipv} Static Routes>></strong></h3>
+<form enctype="multipart/form-data" action="/cgi-bin/webif/network-routes.sh" method="post"><input type="hidden" name="submit" value="1" />
 <table>
 <tbody>
 <tr>
@@ -137,30 +136,34 @@ EOF
 	done
 	if [ "$ipv" = "4" ]
  	then
-		echo "<form enctype=\"multipart/form-data\" action=\"/cgi-bin/webif/network-routes.sh\" method=\"post\"><input type=\"hidden\" name=\"submit\" value=\"1\" />
-		<tr>
-		<td><input type=\"text\" size=\"15\" name=\"target\" value=\"$FORM_target\"></td>
-		<td><input type=\"text\" size=\"15\" name=\"gateway\" value=\"$FORM_gateway\"></td>
-		<td><input type=\"text\" size=\"15\" name=\"netmask\" value=\"$FORM_netmask\"></td>
-		<td><input type=\"text\" size=\"3\" name=\"metric\" value=\"$FORM_metric\"></td>
-		<td><select id=\"interface\" name=\"interface\">
-		"
+		cat <<EOF
+<tr>
+	<td><input type="text" size="15" name="target" value="$FORM_target" /></td>
+	<td><input type="text" size="15" name="gateway" value="$FORM_gateway" /></td>
+	<td><input type="text" size="15" name="netmask" value="$FORM_netmask" /></td>
+	<td><input type="text" size="3" name="metric" value="$FORM_metric" /></td>
+	<td><select id="interface" name="interface">
+EOF
 		for iface in $ifacelist
 		do
-			echo "<option value=\"$iface\""
-			[ "$FORM_interface" = "$iface" ] && echo "selected=\"selected\""
-			echo ">$iface</option>$N"
+			echo -n "	<option value=\"$iface\""
+			[ "$FORM_interface" = "$iface" ] && echo -n "selected=\"selected\""
+			echo ">$iface</option>"
 		done
-#echo $ifacelist | awk -F":" 'BEGIN { RS=" " } { print "<option value=\"" $1 "\">" $1 "</option>" }'
-		echo "</select></td>
-		<td><input type=\"text\" size=\"15\" name=\"rtname\" value=\"$FORM_rtname\"></td>
-		<td><input type=\"submit\" name=\"add_route\" value=\"Add\"></td>
-		</tr></form>"
+		#echo $ifacelist | awk -vseliface="$iface" -F":" 'BEGIN { RS=" " } { print "<option value=\"" $1 ($1 == seliface ? "selected=\"selected\"" : "") "\">" $1 "</option>" }'
+
+		cat <<EOF
+	</select></td>
+	<td><input type="text" size="15" name="rtname" value="$FORM_rtname" /></td>
+	<td><input type="submit" name="add_route" value="Add" /></td>
+</tr>
+EOF
 	fi
 
 	cat <<EOF
 </tbody>
 </table>
+</form>
 <div class="clearfix">&nbsp;</div>
 </div>
 EOF
@@ -269,7 +272,7 @@ display_config_routes "6"
 display_kernel_routes "4"
 [ -f /proc/net/ipv6_route ] && display_kernel_routes "6"
 
-footer ?>
+footer %>
 <!--
 ##WEBIF:name:Network:500:Routes
 -->

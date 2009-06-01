@@ -7,13 +7,16 @@
 . /www/cgi-bin/webif/graphs-subcategories.sh
 
 header "Graphs" "graphs_if_Traffic#Traffic>> $FORM_if@TR<<" "@TR<<graphs_if_Traffic_of_Interface#Traffic of Interface>> $FORM_if" "" ""
-# IE (all versions) does not support the object tag with svg!
-#	<object data="" width="500" height="250" type="image/svg+xml">@TR<<graphs_svg_required#This object requires the SVG support.>></object>
+# This construction supports all recent browsers, degrades correctly, 
+# see http://joliclic.free.fr/html/object-tag/en/object-svg.html
 ?>
 <center>
 <? if [ -n "$FORM_if" ]; then ?>
-	<embed src="/cgi-bin/webif/graph_if_svg.sh?if=<? echo -n ${FORM_if} ?>"
-		width="500" height="250" type="image/svg+xml" />
+	<object type="image/svg+xml" data="/cgi-bin/webif/graph_if_svg.sh?if=<? echo -n ${FORM_if} ?>"
+		width="500" height="250">
+		<param name="src" value="/cgi-bin/webif/graph_if_svg.sh?if=<? echo -n ${FORM_if} ?>" />
+		<a href="http://www.adobe.com/svg/viewer/install/main.html">@TR<<graphs_svg_download#If the graph is not fuctioning download the viewer here.>></a>
+	</object>
 <? fi ?>
 </center>
 <? footer ?>

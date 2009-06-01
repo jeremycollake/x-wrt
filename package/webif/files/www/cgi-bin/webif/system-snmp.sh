@@ -14,109 +14,16 @@
 #	Liran Tal <liran at enginx.com>
 #	Lubos Stanek <lubek at users.berlios.de>
 #
-# NVRAM variables referenced:
-#	snmp_private_name
-#	snmp_private_src
-#	snmp_public_name
-#	snmp_public_src
-#
 # Configuration files referenced:
 #	none
 #
 
-config_cb() {
-	local cfg_type="$1"
-	local cfg_name="$2"
-
-	case "$cfg_type" in
-		snmp)
-			snmp_cfg="$cfg_name"
-		;;
-	esac
-}
-
-uci_load "snmp"
-
-header "System" "SNMP" "@TR<<SNMP Settings>>" '' "$SCRIPT_NAME"
-
-if ! empty "$FORM_install_snmpd"; then
-	echo "@TR<<Installing SNMPd package>> ...<pre>"
-	install_package snmpd
-	echo "</pre>"
-fi
-
-if ! empty "$FORM_remove_snmpd"; then
-	echo "@TR<<Removing SNMPd package>> ...<pre>"
-	/etc/init.d/S??snmpd stop 2> /dev/null
-	/etc/init.d/snmpd stop 2> /dev/null
-	rm -f "/etc/init.d/S??snmpd" 2> /dev/null
-	remove_package snmpd
-	remove_package libnetsnmp 2>/dev/null
-	remove_package libelf 2>/dev/null
-	echo "</pre>"
-fi
-
-ipkg_listinst=$(opkg list_installed)
-snmpd_installed="0"
-
-echo "$ipkg_listinst" | grep -q "snmpd"
-equal "$?" "0" && {
-	snmpd_installed="1"
-	remove_snmpd_button="field|@TR<<Remove SNMPd>>
-	submit|remove_snmpd| @TR<<Remove>> |"
-}
-
-if empty "$FORM_submit"; then
-	eval FORM_snmp_private_name="\$CONFIG_${snmp_cfg}_privatename"
-	eval FORM_snmp_private_src="\$CONFIG_${snmp_cfg}_privatesrc"
-	eval FORM_snmp_public_name="\$CONFIG_${snmp_cfg}_publicname"
-	eval FORM_snmp_public_src="\$CONFIG_${snmp_cfg}_publicsrc"
-else
-	SAVED=1
-	validate <<EOF
-string|FORM_snmp_private_name|@TR<<SNMP Private Community Name>>||$FORM_snmp_private_name
-string|FORM_snmp_private_src|@TR<<SNMP Private Source>>||$FORM_snmp_private_src
-string|FORM_snmp_public_name|@TR<<SNMP Public Community Name>>||$FORM_snmp_public_name
-string|FORM_snmp_public_src|@TR<<SNMP Public Source>>||$FORM_snmp_public_src
-EOF
-	equal "$?" 0 && {
-		empty "$snmp_cfg" && {
-			uci_add snmp snmp snmp
-			snmp_cfg="snmp"
-		}
-		uci_set snmp "$snmp_cfg" privatename "$FORM_snmp_private_name"
-		uci_set snmp "$snmp_cfg" privatesrc "$FORM_snmp_private_src"
-		uci_set snmp "$snmp_cfg" publicname "$FORM_snmp_public_name"
-		uci_set snmp "$snmp_cfg" publicsrc "$FORM_snmp_public_src"
-	}
-fi
-
-if equal "$snmpd_installed" "1" ; then
-	primary_snmpd_form="field|@TR<<SNMP Public Community Name>>|snmp_public_name
-	text|snmp_public_name|$FORM_snmp_public_name
-	helpitem|SNMP Community Name
-	helptext|Helptext SNMP Community Name#The SNMP community name identifies a group of devices and management systems that share authentication, access control of this group. Although PUBLIC and PRIVATE are commonly used, it is strongly suggested to use hard to guess names. The only worse thing than PUBLIC and PRIVATE, is to leave the community name blank! The community name can be considered a group password.
-	field|@TR<<SNMP Public Source>>|snmp_public_src
-	text|snmp_public_src|$FORM_snmp_public_src
-	helpitem|SNMP Source
-	helptext|Helptext SNMP Source#SNMP source defines the IP address, hostname or network mask for management systems that can read information from this 'public' community device or control this 'private' comunity device.
-	field|@TR<<SNMP Private Community Name>>|snmp_private_name
-	text|snmp_private_name|$FORM_snmp_private_name
-	field|@TR<<SNMP Private Source>>|snmp_private_src
-	text|snmp_private_src|$FORM_snmp_private_src
-	$remove_snmpd_button"
-else
-	install_snmpd_button="field|@TR<<Install SNMPd>>
-submit|install_snmpd| @TR<<Install>> |"
-	install_snmpd_help="helpitem|Install SNMPd
-helptext|HelPText install_snmpd_help#Simple Network Management Protocol (SNMP) is a widely used protocol for monitoring the health and welfare of network equipment (eg. routers), computer equipment and even devices like UPSs."
-fi
+header "System" "SNMP" "@TR<<SNMP Settings>>" ''
 
 display_form <<EOF
 start_form|@TR<<SNMP Settings>>
-$primary_snmpd_form
-$install_snmpd_button
-$install_snmpd_help
+field|
+string|$(ShowWIPWarning)
 end_form
 EOF
 

@@ -1,12 +1,15 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
+. /www/cgi-bin/webif/graphs-subcategories.sh
 
-header "Status" "Bandwidth" "@TR<<Bandwidth>>" 'onload="modechange()"' "$SCRIPT_NAME"
+header "Graphs" "graphs_bandwidth_subcategory#Bandwidth" "@TR<<Bandwidth>>" 'onload="modechange()"' "$SCRIPT_NAME"
 if [ "$FORM_install_bandwidthd" != "" ]; then
+	echo "Installing $service package ...<pre>"
 	install_package bandwidthd
 	/etc/init.d/bandwidthd enable
 	/etc/init.d/bandwidthd start
+	echo "</pre>"
 fi
 is_package_installed bandwidthd
 [ "$?" = "0" ] && bandwidthd_installed=1
@@ -82,5 +85,5 @@ else
 fi
 footer ?>
 <!--
-##WEBIF:name:Status:160:Bandwidth
+##WEBIF:name:Graphs:160:graphs_bandwidth_subcategory#Bandwidth
 -->

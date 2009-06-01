@@ -12,9 +12,9 @@ uci_load "webif"
 	# initialize default webif theme
 	if [ ! -e /www/themes/active ]; then
 		config_get newtheme theme id
-		# if theme isn't present, then install it		
+		# if theme isn't present, then install it
 		! exists "/www/themes/$newtheme/webif.css" && {
-			install_package "webif-theme-$newtheme"	
+			install_package "webif-theme-$newtheme"
 		}
 		if ! exists "/www/themes/$newtheme/webif.css"; then
 			rm -rf "/www/themes/active"
@@ -32,7 +32,7 @@ uci_load "webif"
 	#detect device
 	[ -z "$device_name" ] && [ -f "/proc/diag/model" ] && device_name=$(cat "/proc/diag/model")
 	[ -z "$device_name" ] && [ -f "/proc/sys/dev/wifi0/dev_name" ] && device_name=$(cat "/proc/sys/dev/wifi0/dev_name")
-	while [ -z "$device_name" ]; do
+	while [ "$device_name" = "Generic" -o -z "$device_name" ]; do
 		uname -a |grep -q "mips"
 		[ $? = "0" ] && {
 			dd if=/dev/mtd0 2>/dev/null | strings | grep "FON 2202"
@@ -40,7 +40,7 @@ uci_load "webif"
 				device_name="La Fonera 2"
 				break
 			}
-			dd if=/dev/mtd5 2>/dev/null | strings | grep "MR3201A-FLF-FON" || ifconfig eth0 |grep -q 00:18:84:**:**:**
+			dd if=/dev/$(cat /proc/mtd | sed '/boardconfig/!d; s/:.*//' ) 2>/dev/null | strings | grep -q "MR3201A-FLF-FON" || ifconfig eth0 |grep -q 00:18:84:**:**:**
 			[ $? = "0" ] && {
 				device_name="La Fonera (ACCTON MR3201A)"
 				break
@@ -148,8 +148,8 @@ uci_load "webif"
 		#Remove old X-Wrt repositories incase this is a upgrade.
 		xwrt_repos=$(cat /etc/opkg.conf | grep -v "downloads.x-wrt.org")
 		echo "$xwrt_repos" > /etc/opkg.conf
-		opkg_revision=$(cat /etc/opkg.conf |grep "openwrt" |cut -d':' -f2 |cut -d'/' -f5)
-		opkg_arch=$(cat /etc/opkg.conf |grep "openwrt" |cut -d':' -f2 |cut -d'/' -f6)
+		opkg_revision=$(cat /etc/opkg.conf |grep "openwrt" |cut -d':' -f2 |cut -d'/' -f4)
+		opkg_arch=$(cat /etc/opkg.conf |grep "openwrt" |cut -d':' -f2 |cut -d'/' -f5)
 		echo "src X-Wrt http://downloads.x-wrt.org/xwrt/kamikaze/$opkg_revision/$opkg_arch/packages" >> /etc/opkg.conf
 		opkg update
 		# force re-initialization of extension package lists
@@ -172,8 +172,8 @@ uci_load "webif"
 	fi
 
 	[ "$device_name" != "$CONFIG_general_device_name" ] && {
-		echo "Device: $device_name" 	
-		echo "Committing new device id ..."		
+		echo "Device: $device_name"
+		echo "Committing new device id ..."
 		uci_set "webif" "general" "device_name" "$device_name"
 	}
 

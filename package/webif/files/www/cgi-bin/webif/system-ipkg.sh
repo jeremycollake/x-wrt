@@ -35,7 +35,7 @@ else
 	lists_path="${lists_path%%/}"
 fi
 
-header "System" "Packages" "<img src=\"/images/pkg.jpg\" alt />&nbsp;@TR<<system_ipkg_Packages#Packages>>" '' "$SCRIPT_NAME"
+header "System" "Packages" "<img src=\"/images/pkg.jpg\" alt=\"\" />&nbsp;@TR<<system_ipkg_Packages#Packages>>" '' "$SCRIPT_NAME"
 
 cat <<EOF
 <script type="text/javascript">
@@ -84,7 +84,7 @@ EOF
 	fi
 }
 
-! empty "$FORM_remove_repo_name" && ! empty "$FORM_remove_repo_url" && {	
+! empty "$FORM_remove_repo_name" && ! empty "$FORM_remove_repo_url" && {
 	repo_update_needed=1
 	repo_src_line="src[\/gz]* $FORM_remove_repo_name $FORM_remove_repo_url"
 	remove_lines_from_file "/etc/opkg.conf" "$repo_src_line"
@@ -94,12 +94,24 @@ EOF
 	echo "<br />Repository source was removed: $FORM_remove_repo_name<br />"
 }
 
+! empty "$FORM_update_package_lists" && repo_update_needed=1
+
 equal "$repo_update_needed" "1" && {
 	echo "<br />Repository sources updated. Performing update of package lists ...<br /><pre>"	
 	mkdir "$lists_path" >&- 2>&-
 	opkg update
 	echo "</pre>"
 }
+
+if [ "$FORM_action" = "install" ]; then
+	echo "<pre>@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
+	install_package `echo "$FORM_pkg" | sed -e 's, ,+,g'`
+	echo "</pre>"
+elif [ "$FORM_action" = "remove" ]; then
+	echo "<pre>@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
+	opkg remove `echo "$FORM_pkg" | sed -e 's, ,+,g'`
+	echo "</pre>"
+fi
 
 repo_list=$(awk '/^[[:space:]]*src[\/gz]*[[:space:]]/ { print "<tr class=\"repositories\"><td><a href=\"./system-ipkg.sh?remove_repo_name=" $2 "&amp;remove_repo_url=" $3 "\">@TR<<system_ipkg_removerepo#remove>></a>&nbsp;&nbsp;" $2 "</td><td colspan=\"2\">" $3 "</td></tr>"}' /etc/opkg.conf)
 
@@ -137,33 +149,22 @@ EOF
 
 display_form <<EOF
 start_form|@TR<<system_ipkg_packagesavailable#Packages Available>>|||nohelp
-EOF
-?>
-<tr><td><a href="system-ipkg.sh?action=update">@TR<<system_ipkg_updatelists#Update package lists>></a></td></tr>
-<?
-display_form <<EOF
+field|&nbsp;
+submit|update_package_lists|@TR<<system_ipkg_updatelists#Update package lists>>|
 end_form
 EOF
 ?>
 
-<?
-if [ "$FORM_action" = "update" ]; then
-	echo "<pre>@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
-	opkg update
-	echo "</pre>"
-elif [ "$FORM_action" = "install" ]; then
-	echo "<pre>@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
-	install_package `echo "$FORM_pkg" | sed -e 's, ,+,g'`
-	echo "</pre>"
-elif [ "$FORM_action" = "remove" ]; then
-	echo "<pre>@TR<<system_ipkg_pleasewait#Please wait>> ...<br />"
-	opkg remove `echo "$FORM_pkg" | sed -e 's, ,+,g'`
-	echo "</pre>"
-fi
-?>
-	<h3>@TR<<system_ipkg_installedpackages#Installed Packages>></h3>
-	<br />
-	<table class="packages"><tr class="packages"><th width="150">@TR<<system_ipkg_th_action#Action>></th><th width="200">@TR<<system_ipkg_th_package#Package>></th><th width=150>@TR<<system_ipkg_th_version#Version>></th><th>@TR<<system_ipkg_th_desc#Description>></th></tr>
+<div class="settings">
+<h3>@TR<<system_ipkg_installedpackages#Installed Packages>></h3>
+<div class="packages">
+<table>
+<tr>
+	<th width="150">@TR<<system_ipkg_th_action#Action>></th>
+	<th width="200">@TR<<system_ipkg_th_package#Package>></th>
+	<th width="150">@TR<<system_ipkg_th_version#Version>></th>
+	<th>@TR<<system_ipkg_th_desc#Description>></th>
+</tr>
 <?
 opkg list_installed |grep -e "Collected errors:" -e "has no architecture specified" -v | awk -F ' ' '
 ($2 !~ /terminated/) && ($1 !~ /Done./) {
@@ -181,17 +182,25 @@ opkg list_installed |grep -e "Collected errors:" -e "has no architecture specifi
 	print "<tr class=\"packages\"><td><a href=\"javascript:confirmT('\''remove'\'','\''" link "'\'')\">@TR<<system_ipkg_Uninstall#Uninstall>></a></td><td>" $1 "</td><td>" version "</td><td>" desc "</td></tr>"
 }
 '
+display_form <<EOF
+end_form
+EOF
 ?>
-	</table>
-	<br />
-	<h3>@TR<<system_ipkg_availablepackages#Available packages>></h3>
-	<br />
-	<table class="packages"><tr class="packages"><th width="150">@TR<<system_ipkg_th_action#Action>></th><th width="250">@TR<<system_ipkg_th_package#Package>></th><th width=150>@TR<<system_ipkg_th_version#Version>></th><th>@TR<<system_ipkg_th_desc#Description>></th></tr>
+<div class="settings">
+<h3>@TR<<system_ipkg_availablepackages#Available packages>></h3>
+<div class="packages">
+<table>
+<tr>
+	<th width="150">@TR<<system_ipkg_th_action#Action>></th>
+	<th width="250">@TR<<system_ipkg_th_package#Package>></th>
+	<th width="150">@TR<<system_ipkg_th_version#Version>></th>
+	<th>@TR<<system_ipkg_th_desc#Description>></th>
+</tr>
 <?
 repo_list=$(awk -v lists="$lists_path" '/^[[:space:]]*src[\/gz]*[[:space:]]/ { printf " " lists "/" $2 }' /etc/opkg.conf)
 status_list=$(awk '/^[[:space:]]*dest[[:space:]]/ { if ($3 == "/") printf " /usr/lib/opkg/status"; else printf " "$3"/usr/lib/opkg/status" }' /etc/opkg.conf)
 [ -z "$status_list" ] && status_list="/usr/lib/opkg/status"
-egrep 'Package:|Description:|Version:' $status_list $repo_list 2>&- | sed -e 's, ,,' -e 's,^[^:]*${lists_path}/,,' | awk -F: '
+egrep 'Package:|Description:|Version:' $status_list $repo_list 2>&- | sed -e 's, ,,' -e "s,^[^:]*${lists_path}/,," | awk -F: '
 $1 ~ /status/ {
 	installed[$3]++;
 }
@@ -212,12 +221,7 @@ $1 ~ /status/ {
 	current=$1
 }
 '
-?>
-</table>
-<?
-# todo: temporary fix for a display error in Opera
 display_form <<EOF
-start_form||||nohelp
 end_form
 EOF
 

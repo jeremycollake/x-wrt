@@ -150,7 +150,7 @@ switch_language() {
 			webif_version=$(opkg status webif | awk '/Version:/ { print $2 }')
 			xwrt_repo_url=$(cat /etc/opkg.conf | grep X-Wrt | cut -d' ' -f3)
 			# always install language pack, since it may have been updated without package version change
-			opkg install "${xwrt_repo_url}/webif-lang-${newlang}_${webif_version}_all.ipk" -force-reinstall -force-overwrite | uniq
+			opkg -force-reinstall -force-overwrite install "${xwrt_repo_url}/webif-lang-${newlang}_${webif_version}_all.ipk" | uniq
 			# switch to it if installed, even old one, otherwise return to previous
 			if equal "$(opkg status "webif-lang-${newlang}" |grep "Status:" |grep " installed" )" ""; then
 				echo '@TR<<Error installing language pack>>!'
@@ -283,18 +283,6 @@ for package in $process_packages; do
 			config_get hostname "$system_cfg" hostname
 			echo "${hostname:-OpenWrt}" > /proc/sys/kernel/hostname
 			config_allclear
-			;;
-		"snmp")
-			echo '@TR<<Exporting>> @TR<<snmp settings>> ...'
-			[ -e "/sbin/save_snmp" ] && {
-				/sbin/save_snmp >&- 2>&-
-			}
-			
-			echo '@TR<<Reloading>> @TR<<snmp settings>> ...'
-			[ ! -e "/etc/init.d/snmpd" ] && {
-				ln -s "/etc/init.d/snmpd" "/etc/init.d/S92snmpd" 2>/dev/null
-			}
-			/etc/init.d/S??snmpd restart >&- 2>&-
 			;;
 		"l2tpns")
 			echo '@TR<<Exporting>> @TR<<l2tpns server settings>> ...'
