@@ -3,7 +3,9 @@
 
 COPY_FILES="/etc/firewall.config
 /etc/firewall.user
-/etc/httpd.conf"
+/etc/httpd.conf
+/etc/hosts
+/etc/ethers"
 
 COPY_DIRS="/etc/config
 /etc/openvpn
