@@ -1,0 +1,189 @@
+#!/usr/bin/lua
+require("set_path")
+require("init")
+require("uci_iwaddon")
+require("htmlClass")
+
+user_label  = uci.get("chillipages","login","user_label")
+pass_enable = tonumber(uci.get("chillipages","login","pass_enable") or 0)
+pass_label  = uci.get("chillipages","login","pass_label")
+pass_value	= uci.get("chillipages","login","pass_value")
+msg_label		= uci.get("chillipages","login","msg_label")
+msg_enable	= tonumber(uci.get("chillipages","login","msg_enable") or 0)
+
+page = htmlpageClass.new(tr("Login Page").." - "..__SYSTEM.general.firmware_name.." "..tr("Administrative Console"))
+page.head.links:add(
+	{rel = "stylesheet", type = "text/css", href = "/themes/active/webif.css"}
+	)
+page.head.scripts:add({
+	{ 
+		SRC="/js/ChilliLibrary.js",LANGUAGE="JavaScript1.2", TYPE="text/javascript"	
+	},
+	{
+		LANGUAGE="JavaScript1.2", TYPE="text/javascript", CODE=[[
+	chilliController.host = ']]..uci.get("coovachilli","settings","HS_UAMSERVER")..[[';
+	chilliController.port = ]]..uci.get("coovachilli","settings","HS_UAMPORT")..[[;
+	]]
+	},
+	{SRC="/js/chilliController.js", LANGUAGE="JavaScript1.2", TYPE="text/javascript"},
+	{
+		LANGUAGE="JavaScript1.2", TYPE="text/javascript", CODE=[[
+		setTimeout('chilliController.refresh()', 0); 
+		]]
+	}
+	})
+page.head.metas:add({
+	{ ["http_equiv"] = "Content-Type", content = [[text/html; charset=UTF-8]]},
+	{ ["http-equiv"] = "expires", content = "-1" }
+	})
+-- Can add code with this way, then the script open and close the div an set the id 
+page.container:add(htmlsectionClass.new("div","header"))
+page.container.header:add([[
+	<h1>X-Wrt</h1>
+	<em>OpenWrt for end users</em>
+]])
+-- or can add code directly to page.container like you write on standart html file
+page.container:add([[<div id="mainmenu"></div>]])
+page.container:add()
+page.container:add(htmlsectionClass.new("div","content"))
+local strpage = [[
+	<div id="Chilli">
+    <table border="0">
+      <tr><td>
+        <div id="locationName" style="padding:5px 0px 0px 2px;font-size:120%;"></div>
+      </td></tr>
+      <tr><td>
+        <div id="chilliPage">
+          <div id="logonPage" style="display:none;">
+            <form onSubmit="return false;" name="logon">
+              <!--
+              <div id="openIDSelect" style="font-size:70%;padding-top:4px;float:right;display:none;">
+                <a href="#" onclick="javascript:return openID();"><img border="0" src="images/openid.gif"/></a>
+              </div>
+              <div id="openIDForm" style="display:none;background-color:white;position:absolute;padding:10px;border:solid 1px orange">
+                OpenID URL: <input style="font-size:60%;" name="username" type="text" id="username" size="30" value="http://"/>
+              </div>
+              -->
+              <table id="logonTable" border="0" >
+                <tr>
+                  <td colspan="2" style="font-size:120%;">
+                    <div id="logonMessage" style="font-size:70%;padding-top:4px; ]]
+										if msg_enable == 0 then
+										strpage=strpage..[[ display:none; ]]
+										end
+										strpage=strpage..[[">]]..msg_label..[[</div>
+                  </td>
+                </tr>
+                <tr id="usernameRow">
+                  <td id="usernameLabel"><b>]]..user_label..[[ </b></td>
+                  <td><input name="username" type="text" id="username" size="20"/></td>
+                </tr>
+								]]
+								
+								if pass_enable == 0 then
+								strpage=strpage..[[
+                <tr id="passwordRow" style="display:none">]]
+								else 
+								strpage=strpage..[[
+								<tr id="passwordRow" > ]]
+								end
+								strpage=strpage..[[
+                  <td id="passwordLabel" ><b> ]]..pass_label..[[ </b></td>
+                  <td><input name="password" type="password" id="password"]]
+								if pass_enable == 0 then
+								strpage=strpage..[[  value="]]..pass_value..[["]]
+								end
+								strpage=strpage..[[ size="20"/></td>
+                </tr>
+                <tr>
+                  <td colspan="2"><input type="submit" value="Connect" onClick="connect();"/></td>
+                </tr>	
+                <!--
+                <tr id="signUpRow">
+                  <td id="signUp" colspan="2" style="font-size: 50%">
+                    <a target="_blank" href="https://coova.org/app/c/signup.html">Sign up</a> for an account
+                  </td>
+                </tr>
+                -->
+              </table>		
+            </form>
+          </div>
+          <div id="statusPage" style="display:none;">
+            <table border="0" id="statusTable" style="padding-top:4px;font-size:70%">
+              <tr id="connectRow">
+                <td><span id="statusMessage">Connected</span></td>
+                <td><a href="#" onClick="return disconnect();">logout</a></td>
+              </tr>
+              <tr id="sessionIdRow">
+                <td id="sessionIdLabel" class="chilliLabel"><b>Session ID</b></td>
+                <td id="sessionId" class="chilliValue">Not available</td>
+              </tr>
+              <tr id="sessionTimeoutRow">
+                <td id="sessionTimeoutLabel" class="chilliLabel"><b>Max Session Time</b></td>
+                <td id="sessionTimeout" class="chilliValue">Not available</td>
+              </tr>
+              <tr id="idleTimeoutRow">
+                <td id="idleTimeoutLabel" class="chilliLabel"><b>Max Idle Time</b></td>
+                <td id="idleTimeout" class="chilliValue">Not available</td>
+              </tr>
+              <tr id="startTimeRow">
+                <td id="startTimeLabel" class="chilliLabel"><b>Start Time</b></td>
+                <td id="startTime" class="chilliValue">Not available</td>
+              </tr>
+              <tr id="sessionTimeRow">
+                <td id="sessionTimeLabel" class="chilliLabel"><b>Session Time</b></td>
+                <td id="sessionTime" class="chilliValue">Not available</td>
+              </tr>
+              <tr id="idleTimeRow">
+                <td id="idleTimeLabel" class="chilliLabel"><b>Idle Time</b></td>
+                <td id="idleTime" class="chilliValue">Not available</td>
+              </tr>
+              <tr id="inputOctetsRow">
+                <td id="inputOctetsLabel" class="chilliLabel"><b>Downloaded</b></td>
+                <td id="inputOctets" class="chilliValue">N/A</td>
+              </tr>
+              <tr id="outputOctetsRow">
+                <td id="outputOctetsLabel" class="chilliValueLabel"><b>Uploaded</b></td>
+                <td id="outputOctets" class="chilliValue">N/A</td>
+              </tr>
+              <tr id="originalURLRow">
+                <td id="originalURLLabel" class="chilliValueLabel"><b>Original URL</b></td>
+                <td id="originalURL" class="chilliValue">N/A</td>
+              </tr>
+              <tr id="leftTimeRow">
+                <td id="leftTimeLabel" class="chilliValueLabel"><b>Left Time</b></td>
+                <td id="leftTime" class="chilliValue">N/A</td>
+              </tr>
+            </table>
+          </div>
+        </div> <!-- chillipage -->
+      </td></tr>
+    </table>
+	  <div id="errorPage" style="display:none;">
+  	  <span id="errorMessage">Error</span>
+  	</div>
+	</div>
+<!--
+	<div id="debugPage" style="display:inline;">
+  	<textarea id="debugarea" rows="20" cols="60">
+  	</textarea>
+	</div>
+-->
+]]
+
+page.container.content:add(strpage)
+page.container:add([[
+<fieldset id="save">
+	<legend><strong>Proceed Changes</strong></legend>
+<div class="page-save"></div>	
+	<ul class="apply">
+	</ul>
+</fieldset>
+<hr />
+<div id="footer">
+	<h3>X-Wrt</h3>
+	<em>End user extensions for OpenWrt</em>
+</div>
+]])
+
+page:print()

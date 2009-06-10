@@ -1,0 +1,173 @@
+#!/usr/bin/lua
+require("set_path")
+require("init")
+require("uci_iwaddon")
+require("htmlClass")
+require("md5")
+
+user_label  = uci.get("chillipages","login","user_label")
+pass_enable = tonumber(uci.get("chillipages","login","pass_enable") or 0)
+pass_label  = uci.get("chillipages","login","pass_label")
+pass_value	= uci.get("chillipages","login","pass_value")
+msg_label		= uci.get("chillipages","login","msg_label")
+msg_enable	= tonumber(uci.get("chillipages","login","msg_enable") or 0)
+
+function notyet()
+	local strpage = [[ 
+	<form METHOD="get" name="logon" >
+		<INPUT TYPE="HIDDEN" NAME="nasid"   VALUE="]]..__FORM['nasid']..[[" />
+		<INPUT TYPE="HIDDEN" NAME="challenge"    VALUE="]]..__FORM['challenge']..[[" />
+		<INPUT TYPE="HIDDEN" NAME="uamip"   VALUE="]]..__FORM['uamip']..[[" />
+		<INPUT TYPE="HIDDEN" NAME="uamport" VALUE="]]..__FORM['uamport']..[[" />
+		<INPUT TYPE="HIDDEN" NAME="userurl" VALUE="]]..__FORM['userurl']..[[" />
+
+    <table id="logonTable" border="0" >
+      <tr>
+        <td colspan="2" style="font-size:120%;">
+          <div id="logonMessage" style="font-size:70%;padding-top:4px; ]]
+						if msg_enable == 0 then
+							strpage=strpage..[[ display:none; ]]
+						end
+						strpage=strpage..[[">]]..msg_label..[[</div>
+        </td>
+      </tr>
+      <tr id="usernameRow">
+        <td id="usernameLabel"><b>]]..user_label..[[ </b></td>
+        <td><input name="username" type="text" id="username" size="20"/></td>
+      </tr>
+]]
+
+	if pass_enable == 0 then
+		strpage=strpage..[[			<tr id="passwordRow" style="display:none">]]
+	else 
+		strpage=strpage..[[			<tr id="passwordRow" > ]]
+	end
+	strpage=strpage..[[
+				<td id="passwordLabel" ><b> ]]..pass_label..[[ </b></td>
+				<td><input name="password" type="password" id="password"]]
+	if pass_enable == 0 then
+		strpage=strpage..[[  value="]]..pass_value..[["]]
+	end
+	strpage=strpage..[[ size="20"/></td>
+			</tr>
+			<tr>
+				<!--td colspan="2"><input type="submit" value="Connect" onClick="connect();"/></td-->
+				<td colspan="2"><input type="submit" name="login" value="Identificarse" /></td>
+			</tr>	
+		</table>		
+	</form>
+]]
+return strpage;
+end
+
+function sumhexa (k)
+--  k = core.sum(k)
+  return (string.gsub(k, ".", function (c)
+           return string.format("%02x", string.byte(c))
+         end))
+end
+
+function encriptpass()
+--	$hexchal = pack ("H32", $_GET['chal']);
+--	if (isset ($this->uamsecret)) {
+--		$newchal = pack ("H*", md5($hexchal . $this->uamsecret));
+--	} else {
+--		$newchal = $hexchal;
+--	}
+--	$response = md5("\0" . $_GET['Password'] . $newchal);
+--	$newpwd = pack("a32", $_GET['Password']);
+--	$pappassword = implode ("", unpack("H32", ($newpwd ^ $newchal)));
+--	$this->title = 'Logging in to HotSpot'; 
+--	$this->headline = 'Logging in to HotSpot';
+--	$this->bodytext = ''; 
+--	$this->strForm .="<html><head><META NAME=\"author\" CONTENT=\"Fabian Omar Franzotti\">";
+--	$this->strForm .="<meta http-equiv=\"Cache-control\" content=\"no-cache\">";
+--	$this->strForm .="<meta http-equiv=\"Pragma\" content=\"no-cache\">";
+page.head.metas:add({
+	{ ["http-equiv"] = "Cache-control", content="no-cache" },
+	{ ["http-equiv"] = "Pragma", content="no-cache" }
+	})
+	response=sumhexa(md5.sum(__FORM["password"]..__FORM["challenge"]))
+--	if ((isset ($uamsecret)) && isset($userpassword)) {
+--		$this->strForm .= '<meta http-equiv="refresh" content="30;url=http://' . $_GET['uamip'] . ':' . $_GET['uamport'] . '/logon?username=' . $_GET['UserName'] . '&password=' . $pappassword . '">';
+
+--		page.head.metas:add(
+--			{ ["http-equiv"] = "refresh", content=[[10;url=http://]]..__FORM["uamip"]..":"..__FORM["uamport"].."/logon?username="..__FORM["username"].."&password="..__FORM["password"].."&userurl="..__FORM["userurl"] }
+--		)
+
+		
+--	} else {
+--		$this->strForm .= '<meta http-equiv="refresh" content="30;url=http://' . $_GET['uamip'] . ':' . $_GET['uamport'] . '/logon?username=' . $_GET['UserName'] . '&response=' . $response . '&userurl=' . $_GET['userurl'] . '">';
+page.head.metas:add(
+	{ ["http-equiv"] = "refresh", content=[[10;url=http://]]..__FORM["uamip"]..":"..__FORM["uamport"].."/logon?username="..__FORM["username"].."&response="..response.."&userurl="..__FORM["userurl"] }
+	)
+--	}
+--	$this->strForm .="<link rel=\"icon\" href=\"/favicon.ico\" type=\"image/x-icon\"><link rel=\"shortcut icon\" href=\"/favicon.ico\" type=\"image/x-icon\"><link rel=\"stylesheet\" type=\"text/css\" href=\"css/NiftyLayout.css\" media=\"screen\">";
+--	$this->strForm .="<script src=\"niftycube.js\" type=\"text/javascript\" language=\"javascript\"></script><script src=\"libraries/niftyLayout.js\" type=\"text/javascript\" language=\"javascript\"></script>";
+--	$this->strForm .= "</head>";
+--	$this->strForm .= "<body>";
+--	$this->big_body();
+end
+
+
+page = htmlpageClass.new(tr("Login Page").." - "..__SYSTEM.general.firmware_name.." "..tr("Administrative Console"))
+page.head.links:add(
+	{rel = "stylesheet", type = "text/css", href = "/themes/active/webif.css"}
+	)
+
+page.head.metas:add({
+	{ ["http_equiv"] = "Content-Type", content = [[text/html; charset=UTF-8]]},
+	{ ["http-equiv"] = "expires", content = "-1" }
+	})
+-- Can add code with this way, then the script open and close the div an set the id 
+page.container:add(htmlsectionClass.new("div","header"))
+page.container.header:add([[
+	<h1>X-Wrt</h1>
+	<em>OpenWrt for end users</em>
+]])
+-- or can add code directly to page.container like you write on standart html file
+page.container:add([[<div id="mainmenu"></div>]])
+page.container:add()
+page.container:add(htmlsectionClass.new("div","content"))
+local strpage=""
+if __FORM.login ~= nil then encriptpass()
+else
+	if __FORM['res'] ~= nil and __FORM['res'] ~= ""  then
+		if __FORM['res'] == "notyet" then strpage=notyet() end
+--	else
+	end
+end
+
+local str ="<br /><br />"
+for i,v in pairs(__FORM) do
+  str=str..i.."="..v.."<br>"
+end
+str=str.."<br /><br />"
+pepe=md5.sum("pepe")
+str=str..pepe
+str=str.."<br />"
+str=str..sumhexa(__FORM["challenge"])
+str=str.."<br />"
+str=str..md5.crypt("pepe","pepe")
+--[[
+for i,v in pairs(__SERVER) do
+  str=str..i.."="..v.."<br>"
+end
+]]
+strpage=strpage..str
+page.container.content:add(strpage)
+page.container:add([[
+<fieldset id="save">
+	<legend><strong>Proceed Changes</strong></legend>
+<div class="page-save"></div>	
+	<ul class="apply">
+	</ul>
+</fieldset>
+<hr />
+<div id="footer">
+	<h3>X-Wrt</h3>
+	<em>End user extensions for OpenWrt</em>
+</div>
+]])
+
+page:print()
