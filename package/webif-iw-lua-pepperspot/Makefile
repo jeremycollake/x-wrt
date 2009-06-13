@@ -12,7 +12,7 @@ define Package/webif-iw-lua-pepperspot
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+haserl +webif +lua +liblua +libuci-lua +luac +webif-iw-lua
+  DEPENDS:=+haserl +lua +liblua +libuci-lua +luac +webif-iw-lua
   TITLE:=This package is a webif to help you to configure chillispot, coova-chilli or peperspot in LUA
 endef
 

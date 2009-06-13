@@ -12,7 +12,7 @@ define Package/webif-iw-lua-coovachilli
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+haserl +webif +lua +liblua +libuci-lua +luac +webif-iw-lua
+  DEPENDS:=+haserl +lua +liblua +libuci-lua +luac +webif-iw-lua
   TITLE:=coovachilli Configuration Script in LUA
 endef
 
