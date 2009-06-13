@@ -12,7 +12,7 @@ define Package/webif-iw-lua-olsr
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+haserl +webif +lua +liblua +libuci-lua +luac +webif-iw-lua
+  DEPENDS:=+haserl +lua +liblua +libuci-lua +luac +webif-iw-lua
   TITLE:=Olsrd configuration Script in LUA
 endef
 

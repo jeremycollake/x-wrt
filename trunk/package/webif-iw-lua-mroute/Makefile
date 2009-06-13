@@ -12,7 +12,7 @@ define Package/webif-iw-lua-mroute
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+haserl +webif +lua +liblua +libuci-lua +luac +webif-iw-lua +m-route
+  DEPENDS:=+haserl +lua +liblua +libuci-lua +luac +webif-iw-lua +m-route
   TITLE:=M-Route Configuration Script in LUA
 endef
 
