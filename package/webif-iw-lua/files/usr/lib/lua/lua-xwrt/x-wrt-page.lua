@@ -158,7 +158,6 @@ function pageClass:footer()
 	elseif self.savebutton ~= "" then
 		self.savebutton = str..self.savebutton.."</div>"
 	end
-
 	if self.action_apply == nil then
 		self.action_apply = [[<a href="]]..__SERVER.SCRIPT_NAME.. [[?__ACTION=apply_changes&amp;]]..__MENU.selected..[[" >]]..tr("Apply Changes")..[[ &laquo;</a>]]
 	elseif self.action_apply ~= "" then
@@ -199,7 +198,7 @@ if self.form ~= nil and self.form ~= "" then footer = footer..tr(self.savebutton
 --	equal "$_use_progressbar" "1" && {
 --	echo '<script type="text/javascript" src="/js/waitbox.js"></script>'
 --	}
-if tonumber(__SYSTEM.general.use_progressbar) == 1 then footer = footer .. '<script type="text/javascript" src="/js/waitbox.js"></script>' end
+if uci.get("webif","general","use_progressbar") == "1" then footer = footer .. '<script type="text/javascript" src="/js/waitbox.js"></script>' end
 footer = footer .. [[
 	<ul class="apply">
 ]]
