@@ -46,12 +46,12 @@ elseif __FORM.option == "scripts" then
   forms[1] = cportal.script_form()
 elseif __FORM.option == "users" then
   require("webpkg")
-  pkg.check("x-wrt-iw-freeradius libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm")
+  pkg.check("webif-iw-lua-freeradius libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm")
   require("radius")
   forms[1] = radius.add_usr_form()
   forms[2] = radius.user_form()
 elseif __FORM.option == "communities" then
-    pkg.check("x-wrt-iw-freeradius libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm")
+    pkg.check("webif-iw-lua-freeradius libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm")
     require("radius")
     forms[1] = radius.community_form()
 elseif __FORM.option == "connections" then
@@ -68,7 +68,6 @@ elseif __FORM.option == "edit" then
 --  local freeradius_pkg = pkgInstalledClass.new("libltdl,freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm",true)
 else
   forms[1] = cportal.core_form()
-  print("pepito")
 end
 
 print(page:header())

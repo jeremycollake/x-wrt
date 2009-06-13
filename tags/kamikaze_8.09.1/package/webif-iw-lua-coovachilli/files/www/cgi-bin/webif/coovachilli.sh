@@ -68,7 +68,6 @@ elseif __FORM.option == "edit" then
 --  local freeradius_pkg = pkgInstalledClass.new("libltdl,freeradius,freeradius-mod-files,freeradius-mod-chap,freeradius-mod-radutmp,freeradius-mod-realm",true)
 else
   forms[1] = cportal.core_form()
-  print("pepito")
 end
 
 print(page:header())
