@@ -1,8 +1,8 @@
 #!/bin/sh
-[ -f ${IPKG_INSTROOT}/etc/chilli/defaults ] && {
-	ln -s /etc/chilli/www/chilliController.js ${IPKG_INSTROOT}/www/js
-	ln -s /etc/chilli/www/ChilliLibrary.js ${IPKG_INSTROOT}/www/js
-	ln -s /etc/chilli/www/wait.gif ${IPKG_INSTROOT}/www/images
-	ln -s /etc/chilli/www/openid.gif ${IPKG_INSTROOT}/www/images
-	mv /etc/chilli/defaults ${IPKG_INSTROOT}/etc/chilli/defaults.disable
-}
+#[ -f ${IPKG_INSTROOT}/etc/chilli/defaults ] && {
+#	ln -s /etc/chilli/www/chilliController.js ${IPKG_INSTROOT}/www/js
+#	ln -s /etc/chilli/www/ChilliLibrary.js ${IPKG_INSTROOT}/www/js
+#	ln -s /etc/chilli/www/wait.gif ${IPKG_INSTROOT}/www/images
+#	ln -s /etc/chilli/www/openid.gif ${IPKG_INSTROOT}/www/images
+#	mv /etc/chilli/defaults ${IPKG_INSTROOT}/etc/chilli/defaults.disable
+#}
