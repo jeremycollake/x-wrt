@@ -12,7 +12,7 @@ define Package/webif-iw-lua
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+haserl +webif +lua +liblua +libuci-lua +luac
+  DEPENDS:=+haserl +lua +liblua +libuci-lua +luac
   TITLE:=LUA libraries for X-Wrt
 endef
 
