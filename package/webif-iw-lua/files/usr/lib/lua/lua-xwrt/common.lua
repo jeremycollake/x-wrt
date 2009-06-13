@@ -14,7 +14,7 @@ require("uci_iwaddon")
 -- This functions read the system settings
 function loadsystemconf()
 	local self = sys_info_load()
-  self = loadconf("webif","",self)
+--  self = loadconf("webif","",self)
 	return self
 end
 -- Load conf Files formated "UCI files" 
@@ -25,23 +25,27 @@ function loadconf(filename,path,t)
 	local i = 0
 	local compare_var
 	if path == nil or path == "" then path = "/etc/config/" end
-	for line in io.lines(path..filename) do
-		linea = string.gsub (line, "\t", " ")
-		local ctype, name, value
-		if string.len(linea) > 0 then 
-			ctype, name, value = listtovars(linea,3)
-		end
-		if ctype == "config" then
-			i = i + 1
-			if value == nil or string.trim(value) == "" then value = "cfg"..i end 
-			name, value = value, name
-			config = name
-			self[config]={}
-		end
-		if ctype == "option" then		 
-			self[config][name]=value
+
+	if io.exists(path..filename) == true then
+		for line in io.lines(path..filename) do
+			linea = string.gsub (line, "\t", " ")
+			local ctype, name, value
+			if string.len(linea) > 0 then 
+				ctype, name, value = listtovars(linea,3)
+			end
+			if ctype == "config" then
+				i = i + 1
+				if value == nil or string.trim(value) == "" then value = "cfg"..i end 
+				name, value = value, name
+				config = name
+				self[config]={}
+			end
+			if ctype == "option" then		 
+				self[config][name]=value
+			end
 		end
 	end
+
 	return self
 end
 -- Load File

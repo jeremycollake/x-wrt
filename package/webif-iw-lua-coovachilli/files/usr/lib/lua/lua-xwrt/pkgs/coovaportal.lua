@@ -118,7 +118,6 @@ uci.check_set("coovachilli","settings","HS_LOC_NETWORK","X-Wrt Network")
 uci.check_set("coovachilli","settings","HS_RADAUTH","1812")
 uci.check_set("coovachilli","settings","HS_RADACCT","1813")
 
-
 if radconf > 0 then
   uci.check_set("coovachilli","settings","HS_RADIUS2","127.0.0.1")
   uci.check_set("coovachilli","settings","HS_RADIUS","127.0.0.1")
@@ -146,6 +145,7 @@ if uci.check_set("coovachilli","webadmin","homepage","0") == "0" then
 elseif uci.get("coovachilli","webadmin","homepage") == "1" then
 	uci.set("coovachilli","settings","HS_UAMHOMEPAGE","http://"..uci.get("coovachilli","settings","HS_UAMLISTEN").."/cgi-bin/login/home")
 end
+
 
 uci.save("coovachilli")
 
