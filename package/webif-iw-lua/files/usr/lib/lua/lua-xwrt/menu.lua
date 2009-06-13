@@ -216,6 +216,7 @@ function menuClass:selmenu(menu,menutype,menupath,sel)
 		if sel == nil and string.match(__SERVER.SCRIPT_NAME,link) == link then sel = i end
 --		local pepe = string.find(__SERVER.SCRIPT_NAME,link,1,true)
 --		if sel == nil and pepe ~= nil and pepe > 1 then sel = i end
+		if link ~= "No_link" then
 		link, option = unpack(string.split(link,"?"))
 		if option == nil then option = ""
 		else option = "&amp;"..option end
@@ -230,6 +231,7 @@ function menuClass:selmenu(menu,menutype,menupath,sel)
 			else
 				_strMenu = _strMenu.."\t<li><a href=\""..link.."?__menu="..menupath..i..option.."\">"..tr(v.name).."</a></li>\n"
 			end
+		end
 		end
 	end
 	_strMenu = _strMenu.."</ul>\n</div>\n"
@@ -266,13 +268,15 @@ function menuClass:get_link(t)
 	else
 		return "Error no es tabla"
 	end
-	return "No entro en ningun lado"
+	return "No_link"
 end
 
 function menuClass:loadXWRT()
+	if io.exists("/www/cgi-bin/webif/.categories") then
 	for linea in io.lines("/www/cgi-bin/webif/.categories") do
 		linea = string.gsub(linea,"%##WEBIF:category:","")
 		self:Add(linea)
+	end
 	end
 	self:loadXWRT_Subcategory(self)
 end	
@@ -281,7 +285,6 @@ function menuClass:loadXWRT_Subcategory()
 	local t = {}
 	listfile = io.popen("ls /www/cgi-bin/webif/")
 	for i in listfile:lines() do
-
 		local data = ""
 		local BUFSIZE = 2^15
 		local f = io.input(i)   -- open input file
