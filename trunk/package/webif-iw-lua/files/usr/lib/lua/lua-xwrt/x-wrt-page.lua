@@ -61,7 +61,7 @@ local header = self.__DOCTYPE
 self["header"] = [[
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>]]..self.title.." "..(uci.get("webif","general","firmware_name") or "")..tr("Administrative Console")..[[</title>
+<title>]]..self.title.." "..__SYSTEM.general.firmware_name..tr("Administrative Console")..[[</title>
 	<link rel="stylesheet" type="text/css" href="/themes/active/waitbox.css" media="screen" >
 	<link rel="stylesheet" type="text/css" href="/themes/active/webif.css" >
 	<link rel="alternate stylesheet" type="text/css" href="/themes/active/color_white.css" title="white" >
@@ -94,7 +94,7 @@ self.container = [[
 	<div id="short-status">
 		<h3><strong>]]..tr("Status")..[[ :</strong></h3>
 		<ul>
-			<li><strong> ]].. (uci.get("webif","general","firmware_name") or "Unknow Firmware") .." "..(uci.get("webif","general","firmware_version") or "")..[[</strong></li>
+			<li><strong> ]].. __SYSTEM.general.firmware_name.." "..__SYSTEM.general.firmware_version..[[</strong></li>
 			<li><strong>]]..tr("Host")..[[ :</strong> ]]..__SYSTEM.hostname..[[</li>
 			<li><strong>]]..tr("Uptime")..[[ :</strong> ]]..__SYSTEM.uptime..[[</li>
 			<li><strong>]]..tr("Load")..[[ :</strong> ]]..__SYSTEM.loadavg..[[</li>
@@ -111,7 +111,7 @@ self.container = [[
 	<div style="background: #fff" title="white" onclick="setActiveStyleSheet('white'); return false;"></div>
 </div>
 ]]
-if uci.get("webif","general","use_progressbar") == 1 then 
+if __SYSTEM.general.use_progressbar == 1 then 
 	self.container = self.container .. [[
 	<script type="text/javascript">start=0; end=10</SCRIPT>
 	<script src="/js/pageload.js" type="text/javascript"></SCRIPT>
@@ -158,6 +158,7 @@ function pageClass:footer()
 	elseif self.savebutton ~= "" then
 		self.savebutton = str..self.savebutton.."</div>"
 	end
+
 	if self.action_apply == nil then
 		self.action_apply = [[<a href="]]..__SERVER.SCRIPT_NAME.. [[?__ACTION=apply_changes&amp;]]..__MENU.selected..[[" >]]..tr("Apply Changes")..[[ &laquo;</a>]]
 	elseif self.action_apply ~= "" then
@@ -198,7 +199,7 @@ if self.form ~= nil and self.form ~= "" then footer = footer..tr(self.savebutton
 --	equal "$_use_progressbar" "1" && {
 --	echo '<script type="text/javascript" src="/js/waitbox.js"></script>'
 --	}
-if uci.get("webif","general","use_progressbar") == "1" then footer = footer .. '<script type="text/javascript" src="/js/waitbox.js"></script>' end
+if tonumber(__SYSTEM.general.use_progressbar) == 1 then footer = footer .. '<script type="text/javascript" src="/js/waitbox.js"></script>' end
 footer = footer .. [[
 	<ul class="apply">
 ]]

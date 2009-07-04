@@ -124,16 +124,16 @@ function call_parser(file)
       if depends_list == "" then depends_list = parser.depends_pkgs
       else depends_list = depends_list ..","..parser.depends_pkgs end
     end
+		if ( parser.init_script ~= nil ) then
+			exe_before[parser.init_script.." stop"] = "Stopping "
 
-    exe_before[parser.init_script.." stop"] = "Stopping "
-
-    if parser.enable == nil or tonumber(parser.enable) == 0 then
-      exe_before[parser.init_script.. " disable"] = "Disabling "
-    else
-      exe_before[parser.init_script.. " enable"] = "Enabling "
-      exe_after [parser.init_script.. " start"] = "Starting "
-    end
-
+			if parser.enable == nil or tonumber(parser.enable) == 0 then
+				exe_before[parser.init_script.. " disable"] = "Disabling "
+			else
+				exe_before[parser.init_script.. " enable"] = "Enabling "
+				exe_after [parser.init_script.. " start"] = "Starting "
+			end
+		end
     if parser.reboot == true then
       reboot_list[#reboot_list+1] = file
     end
@@ -183,16 +183,16 @@ for i=1, #file_to_process do
       if depends_list == "" then depends_list = parser.depends_pkgs
       else depends_list = depends_list ..","..parser.depends_pkgs end
     end
+		if ( parser.init_script ~= nil ) then
+			exe_before[parser.init_script.." stop"] = "Stopping "
     
-    exe_before[parser.init_script.." stop"] = "Stopping "
-    
-    if parser.enable == nil or tonumber(parser.enable) == 0 then
-      exe_before[parser.init_script.. " disable"] = "Disabling "
-    else
-      exe_before[parser.init_script.. " enable"] = "Enabling "
-      exe_after [parser.init_script.. " start"] = "Starting "
+			if parser.enable == nil or tonumber(parser.enable) == 0 then
+				exe_before[parser.init_script.. " disable"] = "Disabling "
+			else
+				exe_before[parser.init_script.. " enable"] = "Enabling "
+				exe_after [parser.init_script.. " start"] = "Starting "
+			end
     end
-    
     if parser.reboot == true then
       reboot_list[#reboot_list+1] = file
     end

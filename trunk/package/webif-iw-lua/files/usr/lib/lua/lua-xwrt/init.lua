@@ -1,9 +1,9 @@
 __WWW = os.getenv("SCRIPT_NAME")
 require("common")
 require("uci_iwaddon")
+
 __SYSTEM  = loadsystemconf()
 require("iw-luaipkg")
-
 local pkg = lpkgClass.new()
 if pkg.__installed.uci ~= nil then
   __UCI_VERSION = pkg.__installed.uci.Version
