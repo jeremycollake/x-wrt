@@ -22,11 +22,9 @@ local net = net
 setfenv(1, P)
 
 name = "M-Route"
-script = "mroute"
-init_script = "/etc/init.d/mroute"
+--script = "mroute"
+--init_script = "/etc/init.d/mroute"
 
-enable = tonumber(uci.get("mroute.webadmin.enable")) or 0
-local userlevel = tonumber(uci.get("mroute.webadmin.userlevel")) or 0
 call_parser = nil
 reboot = false                -- reboot device after all apply process
 --exe_before = {} -- execute os process in this table before any process
@@ -36,9 +34,9 @@ exe_after  = {} -- execute os process after all apply process
 --  exe_after["/etc/init.d/radiusd restart"]="freeradius"
 --end
 --depends_pkgs = "libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm iw-freeradius"
---exe_after["/etc/init.d/network restart"]="network"
+exe_after["/etc/init.d/network restart"]="network"
 --exe_after["wifi"]="wifi"
-exe_after["/etc/init.d/firewall restart"]="firewallwifi"
+--exe_after["/etc/init.d/firewall restart"]="firewallwifi"
 
 -- depends_pkgs = "libltdl freeradius freeradius-mod-files freeradius-mod-chap freeradius-mod-radutmp freeradius-mod-realm iw-freeradius"
 

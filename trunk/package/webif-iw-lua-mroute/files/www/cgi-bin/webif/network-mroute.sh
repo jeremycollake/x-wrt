@@ -22,6 +22,29 @@ require("init")
 require("mroute")
 require("webpkg")
 -- pageClass is part of the framework 
+	local mrState = uci.cursor(nil,"/var/state");
+--	local lan_list = mrState:get_type("mroute","lanif")
+--	local wan_list = mrState:get_type("mroute","wanif")
+	local fstat = ""
+	local wan_list = {}
+	mrState:foreach("mroute","wanif",  function(section)
+		wan_list[#wan_list+1] = section
+		end)
+
+	for w = 1, #wan_list do
+		if wan_list[w]["status"] == "1" then
+			fstat = fstat .. (wan_list[w]["name"] or wan_list[w][".name"] ).. " Routing by "..wan_list[w]["gateway"].."<br>"
+		end
+	end
+	page.title = "Multi-Route"
+--[[
+	if #wan_list > 1 then
+		page.title = "Multi-Route - "..fstat
+	else
+		page.title = "Multi-Route - "..fstat
+	end
+]]--	
+--[[
 local fstat, f = load_file("/var/run/mroute.active")
 if f == false then
 	f=io.popen("/etc/init.d/mroute status")
@@ -31,6 +54,7 @@ if f == false then
 else
 	page.title = "Multi-Route - "..fstat
 end
+]]--
 
 mroute.set_menu()
 __WIP=2
