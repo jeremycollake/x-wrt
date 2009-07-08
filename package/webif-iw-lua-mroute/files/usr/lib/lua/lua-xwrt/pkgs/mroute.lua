@@ -1,61 +1,18 @@
-function user_level_select (form,conffile,default,maxlevel,confsection,confuserlevel)
-	local confsection = confsection or "webadmin"
-	local confuserlevel = confuserlevel or "userlevel"
-	local default = default or 1
-	local maxlevel = maxlevel or 4
-	local uci_var = conffile.."."..confsection.."."..confuserlevel
-	
-  	form:Add("select",uci_var,uci.check_set(conffile,confsection,confuserlevel,default),tr("all_user_level#User Level"),"string")
-    form[uci_var].options:Add("0","Select Mode")
-    form[uci_var].options:Add("1","Beginer")
-	if maxlevel > 2 then
-		form[uci_var].options:Add("2","Medium")
-	end
-	if maxlevel > 2 then
-		form[uci_var].options:Add("3","Advanced")
-	end
-	if maxlevel > 3 then
-		form[uci_var].options:Add("4","Expert")
-	end
-    form:Add_help(tr("all_user_level#User Level"),tr("all_help_user_level#"..[[
-          <strong>Beginer :</strong>
-          This basic mode write the propers configuration files.
-		  ]]))
---          <br /><br />
---          <strong>Expert :</strong><br />
---          This mode keep your configurations file and you edit they by your self.
---          ]]))
-end
-
-function service_state_select (form,conffile,default,confsection,confenable)
-	local confsection = confsection or "webadmin"
-	local conf_var = conf_var or "enable"
-	local default = default or 0
-	local uci_var = conffile.."."..confsection.."."..conf_var
-	
-  	form:Add("select",uci_var,uci.check_set(conffile,confsection,conf_var,default),tr("all_service_state#Service State"),"string")
-    form[uci_var].options:Add("0","Disable")
-    form[uci_var].options:Add("1","Enable")
-    form:Add_help(tr("all_service_state#Service State"),tr("all_help_service_enable#"..[[
-          Enable or Disable service.
-          ]]))
-end
-
 require("net")
 require("tbform")
 require("uci_iwaddon")
+require("firewall")
+require("common-form")
 mroute = {}
 local P = {}
 mroute = P
 -- Import Section:
 -- declare everything this package needs from outside
 local menuClass = menuClass
-
 local formClass = formClass
 local __SERVER = __SERVER
 local __FORM = __FORM
 local __MENU = __MENU
-local user_level_select = user_level_select
 local service_state_select = service_state_select
 local print = print
 local tr = tr
@@ -63,6 +20,7 @@ local uci = uci
 local tbformClass = tbformClass
 local pairs = pairs
 local net = net
+local firewall = firewall
 -- no more external access after this point
 setfenv(1, P)
 
@@ -71,6 +29,17 @@ uci.check_set("mroute","system","mroute")
 uci.check_set("mroute","webadmin","enable","1")
 uci.check_set("mroute","system","apply","/usr/lib/lua/lua-xwrt/applys/mroute.lua")
 uci.save("mroute")
+
+function set_firewall()
+	local lan_list = uci.get_type("mroute","lanif")
+	local wan_list = uci.get_type("mroute","wanif")
+	for l = 1, #lan_list do
+		for w = 1, #wan_list do
+			firewall.set_zone(wan_list[w][".name"],"REJECT","ACCEPT","REJECT","1")
+			firewall.set_forwarding(lan_list[l][".name"],wan_list[w][".name"])
+		end
+	end
+end
 
 function set_menu()
   __MENU.Network["M-Routes"] = menuClass.new()
@@ -82,14 +51,14 @@ end
 
 function core_form()
 	local form = formClass.new(tr("Service Settings"))
-	user_level_select(form,"mroute",1,4,"webadmin","userlevel")
+--	user_level_select(form,"mroute",1,4,"webadmin","userlevel")
 	service_state_select(form,"mroute",0)
-	form:Add("select","mroute.settings.debug",uci.check_set("mroute","settings","debug","1"),tr("mroute_settings_debug#Debug"),"string")
+	form:Add("select","mroute.settings.debug",uci.check_set("mroute","settings","debug","0"),tr("mroute_settings_debug#Debug"),"string")
 	form["mroute.settings.debug"].options:Add("0","Disable")
-	form["mroute.settings.debug"].options:Add("1","Enable")
+	form["mroute.settings.debug"].options:Add("4","Errors")
+	form["mroute.settings.debug"].options:Add("5","Full")
 	form:Add_help(tr("mroute_settings_debug#Debug"),tr([[mroute_sttings_debug_help#Enable or Disable debug mode 
     ]]))
-	form:Add("text","mroute.settings.testip",uci.check_set("mroute","settings","testip","204.225.44.3"),tr("mroute_settings_seleeptime#Test Ip"),"string")
 	return form
 end
 
@@ -102,6 +71,7 @@ function tuneup_form(form, userlevel)
 		form:Add("subtitle",tr("Tune Up Failover"))
 	end
 --	form:Add("subtitle","Tune UP&nbsp;")
+	form:Add("text","mroute.settings.testip",uci.check_set("mroute","settings","testip","204.225.44.3"),tr("mroute_settings_seleeptime#Test Ip"),"string")
 	form:Add("select","mroute.settings.sleeptime",uci.check_set("mroute","settings","sleeptime","2"),tr("mroute_settings_sleeptime#Sleep Time"),"string")
 	for i=1, 30 do
 		form["mroute.settings.sleeptime"].options:Add(i,i)
@@ -139,6 +109,10 @@ function interfaces_form(form, userlevel)
   form:Add_col("text", "name","Name", "120px","string","width:120px")
   form:Add_col("text", "weight", "Weight", "60px","int","width:60px")
 --  form:Add_col("text", "ports", "Ports", "200px","string","width:200px")
+  form:Add_col("label", "status", "Status", "60px","int","width:60px")
+  form:Add_col("label", "ipv4", "IPv4", "160px","int","width:160px")
+  form:Add_col("label", "gateway", "Gateway", "160px","int","width:160px")
+	local mrState = uci.cursor(nil,"/var/state") 
 	for k, v in pairs (net.dev_list()) do
 		if k ~= "loopback" then
 			if __FORM["Type"..k] ~= nil then
@@ -169,20 +143,31 @@ function interfaces_form(form, userlevel)
 			local name = k
 			local weight = ""
 			local ports = ""
+			local status = ""
+			local ipv4 = ""
+			local gateway =""
+			
 			if ifvalues then
 				network = ifvalues[".type"] or "none"
 				name = ifvalues.name or k
 				weight = ifvalues.weight or ""
 				ports = ifvalues.ports or ""
+				if mrState:get("mroute",k,"status") == "1" then status = "Up" else status = "Down" end
+				ipv4 = mrState:get("mroute",k,"ipaddr") or "   .    .   .   "
+				gateway = mrState:get("mroute",k,"gateway") or "   .   .   .   "
 			end
 			if network ~= "lanif" then
 				form:set_col("weight","mroute."..k..".weight",weight)
 --				form:set_col("ports","mroute."..k..".ports",ports)
+				form:set_col("status","mroute."..k..".status",status)
+				form:set_col("ipv4","mroute."..k..".ipaddr",ipv4)
+				form:set_col("gateway","mroute."..k..".gateway",gateway)
 			end
 			form:set_col("name","mroute."..k..".name",name)
 			form:set_col("ifname","Type"..k, network)
 		end
 	end
+--	set_firewall()
   return form
 end
 
