@@ -5,6 +5,7 @@ require("uci_iwaddon")
 require("htmlClass")
 require("md5")
 require("iw-addon-string")
+require("translator")
 
 user_label  = uci.get("chillipages","login","user_label")
 pass_enable = tonumber(uci.get("chillipages","login","pass_enable") or 0)
@@ -242,7 +243,7 @@ function none()
 	return bodytext
 end
 
-page = htmlpageClass.new(tr("Login Page").." - "..__SYSTEM.general.firmware_name.." "..tr("Administrative Console"))
+page = htmlpageClass.new(tr("Login Page").." - ".. (uci.get("webif","general","firmware_name") or "Unknow Firmware") .." "..tr("Administrative Console"))
 page.head.links:add(
 	{rel = "stylesheet", type = "text/css", href = "/themes/active/webif.css"}
 	)
