@@ -67,12 +67,12 @@ elif [ "$FORM_action" = "iax_registry" ]; then
 	$asterisk_exec -r -x 'iax2 show registry'
 elif [ "$FORM_action" = "modules" ]; then
 	echo "<h3>Global/Modules</h3>"
-	$asterisk_exec -r -x 'show modules'
+	$asterisk_exec -r -x 'module show'
 elif [ "$FORM_action" = "execute" ]; then
 	echo "<h3>$FORM_exec_com</h3>"
 	$asterisk_exec -r -x "$FORM_exec_com"
 elif [ "$FORM_action" = "" ]; then
-	$asterisk_exec -r -x 'show version'
+	$asterisk_exec -r -x 'core show version'
 fi
 echo '</pre>'
 echo '</td></tr></table>'
@@ -114,8 +114,13 @@ if [ "$FORM_action" = "edit" ]; then
 	echo '</form>'
 fi
 else
-has_pkgs asterisk
-echo "@TR<<Asterisk is not running.>>"
+	if [ -x /usr/sbin/asterisk ]; then
+		echo "@TR<<Asterisk is not running.>>"
+	else
+		echo "@TR<<Asterisk is not installed.>>"
+		echo "@TR<<Install one of asterisk packages:>>"
+		has_pkgs asterisk14 asterisk14-mini asterisk16
+	fi
 fi
 footer ?>
 <!--
