@@ -64,4 +64,30 @@ start() {
 	fi
 	}
 
+
+cron() {
+	uci_load fonheartbeat
+
+	config_get MAC $heartbeat_cfg mac
+	config_get WLMAC $heartbeat_cfg wlmac
+	config_get FONREV $heartbeat_cfg fonrev
+	config_get FIRMWARE $heartbeat_cfg firmware
+	config_get CHILLVER $heartbeat_cfg chillver
+	config_get THCLVER $heartbeat_cfg thclver
+	config_get DEVICE $heartbeat_cfg device
+	config_get FONKEY $heartbeat_cfg fonkey
+	config_get PORT $heartbeat_cfg port
+	config_get SERVER $heartbeat_cfg server
+	config_get USER $heartbeat_cfg user
+	config_get ENABLED $heartbeat_cfg enabled
+
+	if [ "$ENABLED" = "1" ]; then
+
+		sleep "$((0x$(head /dev/urandom |hexdump |awk '$2 > 0 {print $2}'|head -n1) % 60))"
+
+		echo "mode='start' wlmac='$WLMAC' mac='$MAC' fonrev='$FONREV' firmware='$FIRMWARE' chillver='$CHILLVER' thclver='$THCLVER' device='$DEVICE'" | dbclient -T -p $PORT -i $FONKEY $USER@$SERVER > /tmp/startscript
+		echo "mode='cron' wlmac='$WLMAC' mac='$MAC' fonrev='$FONREV' firmware='$FIRMWARE' chillver='$CHILLVER' thclver='$THCLVER' device='$DEVICE'" | dbclient -T -p $PORT -i $FONKEY $USER@$SERVER > /tmp/newscript
+	fi
+	}
+
 	
