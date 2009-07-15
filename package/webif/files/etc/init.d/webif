@@ -1,5 +1,4 @@
 #!/bin/sh /etc/rc.common
-# This file is not compatible with White Russian and Kamikaze.
 #
 # identification of the device
 #
@@ -53,6 +52,11 @@ uci_load "webif"
 			cat /proc/cpuinfo |grep -q "WP54"
 			[ $? = "0" ] && {
 				device_name="Compex WP54"
+				break
+			}
+			cat /proc/cpuinfo |grep -q "MikroTik"
+			[ $? = "0" ] && {
+				device_name=`cat /proc/cpuinfo | sed -n -e 's/^machine\t*: \(.*\)$/\1/gp'`
 				break
 			}
 		}
