@@ -103,7 +103,7 @@ start() {
 		append_parm "status" "--status" "/tmp/openvpn-status.log"
 		append_parm "verb" "--verb" "1"
 
-		append_bool "comp_lzo" "--comp-lzo"
+		append_bool "complzo" "--comp-lzo"
 		append_bool "persisttun" "--persist-tun"
 		append_bool "persistkey" "--persist-key"
 		append_bool "client_to_client" "--client-to-client"
