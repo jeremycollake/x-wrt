@@ -43,6 +43,7 @@ if ! empty "$FORM_add_openvpncfg_number"; then
 	uci_set webifopenvpn "$CONFIG_SECTION" "cmdline" ""
 	uci_set webifopenvpn "$CONFIG_SECTION" "local" ""
 	uci_set webifopenvpn "$CONFIG_SECTION" "remote" ""
+	uci_set webifopenvpn "$CONFIG_SECTION" "pull" "1"
 	#Create Config dir
 	if [ -e  /etc/openvpn/webifopenvpn* ]; then
 		number=$(ls -1d /etc/openvpn/webifopenvpn* | sed -e '$!d' -e 's/.*\([0-9]\+\)$/\1/')
@@ -108,6 +109,7 @@ for config in $openvpnconfigs; do
 		config_get FORM_ovpn_cmdline $config "cmdline"
 		config_get FORM_ovpn_local $config "local"
 		config_get FORM_ovpn_remote  $config "remote"
+		config_get FORM_ovpn_pull $config "pull"
 
 	else
 		config_get dir_name $config "dir"
@@ -155,6 +157,7 @@ for config in $openvpnconfigs; do
 		eval FORM_ovpn_cmdline="\$FORM_ovpn_cmdline_$config"
 		eval FORM_ovpn_local="\$FORM_ovpn_local_$config"
 		eval FORM_ovpn_remote="\$FORM_ovpn_remote_$config"
+		eval FORM_ovpn_pull="\$FORM_ovpn_pull_$config"
 
 		uci_set webifopenvpn "$config" "mode" "$FORM_ovpn_mode"
 		uci_set webifopenvpn "$config" "enabled" "$FORM_ovpn_enabled"
@@ -171,6 +174,7 @@ for config in $openvpnconfigs; do
 		uci_set webifopenvpn "$config" "cmdline" "$FORM_ovpn_cmdline"
 		uci_set webifopenvpn "$config" "local" "$FORM_ovpn_local"
 		uci_set webifopenvpn "$config" "remote" "$FORM_ovpn_remote"
+		uci_set webifopenvpn "$config" "pull" "$FORM_ovpn_pull"
 	fi
 	ovpn_form="start_form|@TR<<OpenVPN Config>>
 	field|@TR<<Enabled>>
@@ -179,6 +183,8 @@ for config in $openvpnconfigs; do
 	select|ovpn_mode_$config|$FORM_ovpn_mode
 	option|client|@TR<<Client>>
 	option|server|@TR<<Server>>
+	field|@TR<<Accept Server Options>>|pull_$config|hidden
+	checkbox|ovpn_pull_$config|$FORM_ovpn_pull|1
 	field|@TR<<Server Address>>|ipaddr_$config|hidden
 	text|ovpn_ipaddr_$config|$FORM_ovpn_ipaddr
 	field|@TR<<Local Address>>|local_$config|hidden
@@ -302,6 +308,7 @@ for config in $openvpnconfigs; do
 
 	v = (isset('ovpn_mode_$config','client') && checked('ovpn_enabled_${config}_1'));
 	set_visible('ipaddr_$config', v);
+	set_visible('pull_$config', v);
 
 	v = isset('ovpn_auth_$config','psk');
 	set_visible('psk_status_$config', v);

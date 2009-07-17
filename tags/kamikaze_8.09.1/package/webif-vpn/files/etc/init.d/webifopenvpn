@@ -65,6 +65,7 @@ start() {
 		config_get CONFIG_ovpn_cmdline $config "cmdline"
 		config_get CONFIG_ovpn_local $config "local"
 		config_get CONFIG_ovpn_remote  $config "remote"
+		config_get CONFIG_ovpn_pull  $config "pull"
 		config_get dir_name $config "dir"
 
 		auth_incomplete=0
@@ -123,6 +124,7 @@ start() {
 					report_log "remote server not configured!"
 					exit
 				fi
+				append_bool "pull" "--pull"
 				if [ "$CONFIG_ovpn_auth" = "pem" ]; then
 					append args "--tls-client"
 				fi
