@@ -219,7 +219,7 @@ for config in $openvpnconfigs; do
 
 	# PEM Cert
 	field|@TR<<Certificate Status>>|root_ca_status_$config|hidden
-	$(empty "$NOROOTCACERT" || echo 'string|<span style="color:red">@TR<<Root CA certificate uploaded yet!>></span>')
+	$(empty "$NOROOTCACERT" || echo 'string|<span style="color:red">@TR<<No Root CA certificate uploaded yet!>></span>')
 	$(empty "$UPLOAD_ROOTCACERT" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
 	$(empty "$NOROOTCACERT" && echo 'string|@TR<<Found Installed Certificate.>>')
 	field|@TR<<Upload Root CA certificate>>|root_ca_$config|hidden
@@ -240,7 +240,7 @@ for config in $openvpnconfigs; do
 	upload|openvpn_clientkeyfile
 
 	field|@TR<<Certificate Status>>|dh_status_$config|hidden
-	$(empty "$NODH" || echo 'string|<span style="color:red">@TR<<No  Diffie Hellman parameters uploaded yet!>></span>')
+	$(empty "$NODH" || echo 'string|<span style="color:red">@TR<<No Diffie Hellman parameters uploaded yet!>></span>')
 	$(empty "$UPLOAD_DH" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
 	$(empty "$NODH" && echo 'string|@TR<<Found installed Diffie Hellman parameters.>>')
 	field|@TR<<Upload Diffie Hellman>>|dh_$config|hidden
