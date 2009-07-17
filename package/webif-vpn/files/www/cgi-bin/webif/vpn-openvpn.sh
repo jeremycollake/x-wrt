@@ -79,17 +79,17 @@ install_package_button=""
 for config in $openvpnconfigs; do
 	if empty "$FORM_submit"; then
 		config_get dir_name $config "dir"
-		[ -f $dir_name/certificate.p12 ] ||
+		[ -s "$dir_name/certificate.p12" ] ||
 			NOCERT=1
-		[ -f $dir_name/shared.key ] ||
+		[ -s "$dir_name/shared.key" ] ||
 			NOPSK=1
-		[ -f $dir_name/ca.crt ] ||
+		[ -s "$dir_name/ca.crt" ] ||
 			NOROOTCACERT=1
-		[ -f $dir_name/client.crt ] ||
+		[ -s "$dir_name/client.crt" ] ||
 			NOCLIENTCERT=1
-		[ -f $dir_name/client.key ] ||
+		[ -s "$dir_name/client.key" ] ||
 			NOCLIENTKEY=1
-		[ -f $dir_name/dh.pem ] ||
+		[ -s "$dir_name/dh.pem" ] ||
 			NODH=1
 	
 		# general settings
@@ -112,29 +112,29 @@ for config in $openvpnconfigs; do
 	else
 		config_get dir_name $config "dir"
 		#PKCS12
-		[ -f "$FORM_openvpn_pkcs12file" ] && {
+		[ -s "$FORM_openvpn_pkcs12file" ] && {
 			cp "$FORM_openvpn_pkcs12file" $dir_name/certificate.p12 &&
 				UPLOAD_CERT=1
 		}
 		#PreShared Key
-		[ -f "$FORM_openvpn_pskfile" ] && {
+		[ -s "$FORM_openvpn_pskfile" ] && {
 			cp "$FORM_openvpn_pskfile" $dir_name/shared.key &&
 				UPLOAD_PSK=1
 		}
 		#PEM Cert
-		[ -f "$FORM_openvpn_rootcafile" ] && {
+		[ -s "$FORM_openvpn_rootcafile" ] && {
 			cp "$FORM_openvpn_rootcafile" $dir_name/ca.crt &&
 				UPLOAD_ROOTCACERT=1
 		}
-		[ -f "$FORM_openvpn_clientcertfile" ] && {
+		[ -s "$FORM_openvpn_clientcertfile" ] && {
 			cp "$FORM_openvpn_clientcertfile" $dir_name/client.crt &&
 				UPLOAD_CLIENTCERT=1
 		}
-		[ -f "$FORM_openvpn_clientkeyfile" ] && {
+		[ -s "$FORM_openvpn_clientkeyfile" ] && {
 			cp "$FORM_openvpn_clientkeyfile" $dir_name/client.key &&
 				UPLOAD_CLIENTKEY=1
 		}
-		[ -f "$FORM_openvpn_dh" ] && {
+		[ -s "$FORM_openvpn_dh" ] && {
 			cp "$FORM_openvpn_dh" $dir_name/dh.pem &&
 				UPLOAD_DH=1
 		}
