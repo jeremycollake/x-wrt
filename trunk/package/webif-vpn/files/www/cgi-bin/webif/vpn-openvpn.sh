@@ -92,7 +92,9 @@ for config in $openvpnconfigs; do
 			NOCLIENTKEY=1
 		[ -s "$dir_name/dh.pem" ] ||
 			NODH=1
-	
+		[ -s "$dir_name/tlsauth.key" ] ||
+			NOTLSAUTH=1
+
 		# general settings
 		config_get FORM_ovpn_mode $config "mode"
 		config_get FORM_ovpn_enabled $config "enabled"
@@ -115,32 +117,36 @@ for config in $openvpnconfigs; do
 		config_get dir_name $config "dir"
 		#PKCS12
 		[ -s "$FORM_openvpn_pkcs12file" ] && {
-			cp "$FORM_openvpn_pkcs12file" $dir_name/certificate.p12 &&
+			cp "$FORM_openvpn_pkcs12file" "$dir_name/certificate.p12" &&
 				UPLOAD_CERT=1
 		}
 		#PreShared Key
 		[ -s "$FORM_openvpn_pskfile" ] && {
-			cp "$FORM_openvpn_pskfile" $dir_name/shared.key &&
+			cp "$FORM_openvpn_pskfile" "$dir_name/shared.key" &&
 				UPLOAD_PSK=1
 		}
 		#PEM Cert
 		[ -s "$FORM_openvpn_rootcafile" ] && {
-			cp "$FORM_openvpn_rootcafile" $dir_name/ca.crt &&
+			cp "$FORM_openvpn_rootcafile" "$dir_name/ca.crt" &&
 				UPLOAD_ROOTCACERT=1
 		}
 		[ -s "$FORM_openvpn_clientcertfile" ] && {
-			cp "$FORM_openvpn_clientcertfile" $dir_name/client.crt &&
+			cp "$FORM_openvpn_clientcertfile" "$dir_name/client.crt" &&
 				UPLOAD_CLIENTCERT=1
 		}
 		[ -s "$FORM_openvpn_clientkeyfile" ] && {
-			cp "$FORM_openvpn_clientkeyfile" $dir_name/client.key &&
+			cp "$FORM_openvpn_clientkeyfile" "$dir_name/client.key" &&
 				UPLOAD_CLIENTKEY=1
 		}
 		[ -s "$FORM_openvpn_dh" ] && {
-			cp "$FORM_openvpn_dh" $dir_name/dh.pem &&
+			cp "$FORM_openvpn_dh" "$dir_name/dh.pem" &&
 				UPLOAD_DH=1
 		}
-		
+		[ -s "$FORM_openvpn_tlsauth" ] && {
+			cp "$FORM_openvpn_tlsauth" "$dir_name/tlsauth.key" &&
+				UPLOAD_TLSAUTH=1
+		}
+
 		eval FORM_ovpn_mode="\$FORM_ovpn_mode_$config"
 		eval FORM_ovpn_enabled="\$FORM_ovpn_enabled_$config"
 		[ -z "$FORM_ovpn_enabled" ] && FORM_ovpn_enabled=0
@@ -215,7 +221,7 @@ for config in $openvpnconfigs; do
 	field|@TR<<Upload Preshared Key>>|psk_$config|hidden
 	upload|openvpn_pskfile
 
-	#PKCS12 Cert
+	# PKCS12 Cert
 	field|@TR<<Certificate Status>>|certificate_status_$config|hidden
 	$(empty "$NOCERT" || echo 'string|<span style="color:red">@TR<<No Certificate uploaded yet!>></span>')
 	$(empty "$UPLOAD_CERT" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
@@ -223,7 +229,7 @@ for config in $openvpnconfigs; do
 	field|@TR<<Upload PKCS12 Certificate>>|certificate_$config|hidden
 	upload|openvpn_pkcs12file
 
-	# PEM Cert
+	# PEM cert
 	field|@TR<<Certificate Status>>|root_ca_status_$config|hidden
 	$(empty "$NOROOTCACERT" || echo 'string|<span style="color:red">@TR<<No Root CA certificate uploaded yet!>></span>')
 	$(empty "$UPLOAD_ROOTCACERT" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
@@ -251,6 +257,14 @@ for config in $openvpnconfigs; do
 	$(empty "$NODH" && echo 'string|@TR<<Found installed Diffie Hellman parameters.>>')
 	field|@TR<<Upload Diffie Hellman>>|dh_$config|hidden
 	upload|openvpn_dh
+
+	# TLS Auth key
+	field|@TR<<Certificate Status>>|tlsauth_status_$config|hidden
+	$(empty "$NOTLSAUTH" || echo 'string|<span style="color:red">@TR<<No TLS Auth key uploaded yet!>></span>')
+	$(empty "$UPLOAD_TLSAUTH" || echo 'string|<span style="color:green">@TR<<Upload Successful>><br/></span>')
+	$(empty "$NOTLSAUTH" && echo 'string|@TR<<Found installed TLS Auth key.>>')
+	field|@TR<<Upload TLS Auth key>>|tlsauth_$config|hidden
+	upload|openvpn_tlsauth
 
 	helpitem|Uploading Keys
 	helptext|HelpText Uploading Keys#Only one key/certificate may be uploaded at a time.
@@ -282,59 +296,64 @@ for config in $openvpnconfigs; do
 	field|@TR<<Extra cmdline arguments>>
 	text|ovpn_cmdline_$config|$FORM_ovpn_cmdline
 	end_form
+
+	start_form
 	field|
 	string|<a href=\"$SCRIPT_NAME?remove_openvpncfg=$config\">@TR<<Remove OpenVPN Config>></a>"
 	append OVPN "$ovpn_form" "$N"
-	
+
 	javascript_forms="
-	v = checked('ovpn_enabled_${config}_1');
-	set_visible('mode_$config', v);
-	set_visible('port_$config', v);
-	set_visible('auth_$config', v);
-	set_visible('proto_$config', v);
-	set_visible('authentication_$config', v);
-	set_visible('advanced_option_$config', v);
-	set_visible('ovpn_advanced_$config', v);
-	set_visible('advanced_$config', v);
-	set_visible('local_$config', v);	
-	set_visible('remote_$config', v);
-	set_visible('advanced_option_$config', v);
+	var v;
+	var v_enabled = checked('ovpn_enabled_${config}_1');
+	var v_client = isset('ovpn_mode_$config','client');
+	var v_server = isset('ovpn_mode_$config','server');
 
-	v = (checked('ovpn_advanced_${config}_1') && checked('ovpn_enabled_${config}_1'));
-	set_visible('advanced_$config', v);
+	set_visible('mode_$config', v_enabled);
+	set_visible('port_$config', v_enabled);
+	set_visible('auth_$config', v_enabled);
+	set_visible('proto_$config', v_enabled);
+	set_visible('authentication_$config', v_enabled);
+	set_visible('advanced_option_$config', v_enabled);
+	set_visible('advanced_$config', v_enabled);
+	set_visible('local_$config', v_enabled);
+	set_visible('remote_$config', v_enabled);
+	set_visible('advanced_option_$config', v_enabled);
 
-	v = (isset('ovpn_mode_$config','server') && checked('ovpn_enabled_${config}_1'));
-	set_visible('field_client_to_client_$config', v);
+	if (v_enabled) {
+		set_visible('advanced_$config', checked('ovpn_advanced_${config}_1'));
 
-	v = (isset('ovpn_mode_$config','client') && checked('ovpn_enabled_${config}_1'));
-	set_visible('ipaddr_$config', v);
-	set_visible('pull_$config', v);
+		set_visible('field_client_to_client_$config', v_server);
+		set_visible('ipaddr_$config', v_client);
+		set_visible('pull_$config', v_client);
 
-	v = isset('ovpn_auth_$config','psk');
-	set_visible('psk_status_$config', v);
-	set_visible('psk_$config', v);
+		v = isset('ovpn_auth_$config','psk');
+		set_visible('psk_status_$config', v);
+		set_visible('psk_$config', v);
 
-	v = isset('ovpn_auth_$config','cert');
-	set_visible('certificate_status_$config', v);
-	set_visible('certificate_$config', v);
+		v = isset('ovpn_auth_$config','cert');
+		set_visible('certificate_status_$config', v);
+		set_visible('certificate_$config', v);
 
-	v = isset('ovpn_auth_$config','pem');
-	set_visible('root_ca_status_$config', v);
-	set_visible('root_ca_$config', v);
-	set_visible('client_certificate_status_$config', v);
-	set_visible('client_certificate_$config', v);
-	set_visible('client_key_status_$config', v);
-	set_visible('client_key_$config', v);
+		v = isset('ovpn_auth_$config','pem');
+		set_visible('root_ca_status_$config', v);
+		set_visible('root_ca_$config', v);
+		set_visible('client_certificate_status_$config', v);
+		set_visible('client_certificate_$config', v);
+		set_visible('client_key_status_$config', v);
+		set_visible('client_key_$config', v);
 
-	v = (isset('ovpn_auth_$config','pem') && isset('ovpn_mode_$config','server'));
-	set_visible('dh_status_$config', v);
-	set_visible('dh_$config', v);
-	set_visible('openvpn_dh_$config', v);"
+		v = (v_server && (isset('ovpn_auth_$config','cert') || isset('ovpn_auth_$config','pem')));
+		set_visible('dh_status_$config', v);
+		set_visible('dh_$config', v);
+		set_visible('tlsauth_status_$config', v);
+		set_visible('tlsauth_$config', v);
+	}"
 	append js "$javascript_forms" "$N"
 done
 
 add_ovpncfg="field|
-string|<a href=\"$SCRIPT_NAME?add_openvpncfg_number=$openvpncfg_number\">@TR<<Add OpenVPN Config>></a>"
+string|<a href=\"$SCRIPT_NAME?add_openvpncfg_number=$openvpncfg_number\">@TR<<Add OpenVPN Config>></a>
+end_form"
 append OVPN "$add_ovpncfg" "$N"
 
 cat <<EOF

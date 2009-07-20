@@ -37,7 +37,7 @@ append_parm() {
 
 file_check() {
 	while [ -n "$1" ]; do
-		if [ ! -f "$1" ]; then
+		if [ ! -s "$1" ]; then
 			report_log "Missing $1. Please generate and try again."
 			auth_incomplete=1
 		fi
@@ -74,18 +74,15 @@ start() {
 		case "$CONFIG_ovpn_auth" in
 			cert)
 				file_check "$dir_name/certificate.p12"
-				append args "--pkcs12 $dir_name/certificate.p12"
+				append args "--pkcs12 \"$dir_name/certificate.p12\""
 			;;
 			psk)
 				file_check "$dir_name/shared.key"
-				append args "--secret $dir_name/shared.key"
+				append args "--secret \"$dir_name/shared.key\""
 			;;
 			pem)
 				file_check "$dir_name/ca.crt" "$dir_name/client.crt" "$dir_name/client.key"
-				append args "--ca $dir_name/ca.crt --cert $dir_name/client.crt --key $dir_name/client.key"
-				if [ "$CONFIG_ovpn_mode" = "server" ]; then
-					append args "--dh $dir_name/dh.pem"
-				fi
+				append args "--ca \"$dir_name/ca.crt\" --cert \"$dir_name/client.crt\" --key \"$dir_name/client.key\""
 			;;
 			*)
 				report_log "unknown authentication type, aborting!"
@@ -101,7 +98,7 @@ start() {
 		append_parm "dev" "--dev" "tun"
 		append_parm "user" "--user" "nobody"
 		append_parm "group" "--group" "nogroup"
-		append_parm "status" "--status" "/tmp/openvpn-status.log"
+		append_parm "status" "--status" "\"/tmp/openvpn-status.log\""
 		append_parm "verb" "--verb" "1"
 
 		append_bool "complzo" "--comp-lzo"
@@ -112,7 +109,7 @@ start() {
 		append_parm "ping" "--ping"
 		append_parm "ping_restart" "--ping-restart"
 		pid=$(mktemp /var/run/webifopenvpn.pid.XXXXXX)
-		append_parm "write_pid" "--writepid" "$pid"
+		append_parm "write_pid" "--writepid" "\"$pid\""
 		append_parm "cmdline" ""
 		if [ -n "$CONFIG_ovpn_local" -a -n "$CONFIG_ovpn_remote" ]; then
 			append args "--ifconfig $CONFIG_ovpn_local $CONFIG_ovpn_remote"
@@ -125,7 +122,7 @@ start() {
 					exit
 				fi
 				append_bool "pull" "--pull"
-				if [ "$CONFIG_ovpn_auth" = "pem" ]; then
+				if [ "$CONFIG_ovpn_auth" = "cert" -o "$CONFIG_ovpn_auth" = "pem" ]; then
 					append args "--tls-client"
 				fi
 				append args "--remote $CONFIG_ovpn_ipaddr --nobind"
@@ -139,8 +136,14 @@ start() {
 					report_log "remote VPN endpoint not configured!"
 					exit
 				fi
-				if [ "$CONFIG_ovpn_auth" = "pem" ]; then
+				if [ "$CONFIG_ovpn_auth" = "cert" -o "$CONFIG_ovpn_auth" = "pem" ]; then
 					append args "--tls-server"
+				fi
+				if [ -s "$dir_name/dh.pem" ]; then
+					append args "--dh \"$dir_name/dh.pem\""
+				fi
+				if [ -s "$dir_name/tlsauth.key" ]; then
+					append args "--tls-auth \"$dir_name/tlsauth.key\""
 				fi
 			;;
 			*)
