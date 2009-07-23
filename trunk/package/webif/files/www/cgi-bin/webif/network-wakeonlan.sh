@@ -43,8 +43,9 @@ EOF
 empty "$FORM_wake" || mac=$FORM_wake;
 empty "$ERROR" && [ -n "$mac" ] && {
 	if [ -n "$FORM_wolapp" ]; then
-		echo "<p>&nbsp;</p><p style=\"background:#ffffc0; color:#c00000; font-weight: bold;\">$FORM_wolapp: ";
-		res=`$FORM_wolapp $mac 2>&1`;
+		i=${FORM_woliface##none}
+		echo "<p>&nbsp;</p><p style=\"background:#ffffc0; color:#c00000; font-weight: bold;\">$FORM_wolapp${i:+ -i $i}: ";
+		res=`$FORM_wolapp${i:+ -i $i} $mac 2>&1`;
 		if [ -n "$res" ]; then echo "$res"; else echo "Waking up $mac..."; fi
 		echo "</p><p>&nbsp;</p>";
 	else
@@ -58,12 +59,32 @@ empty $ERROR || { echo "<h3 class=Error>$ERROR</h3>"; }
 <form>
 <table><tr><th>@TR<<WOL application>>:</th><td><select name="wolapp">
 <?
-	for i in etherwake wol; do
-		[ -n `which $i` ] && {
-			echo "<option value=\"$i\" ";
-			[ "$i" = "$FORM_wolapp" ] && echo "SELECTED";
-			echo ">$i";
+	for i in ether-wake etherwake wol; do
+		[ -n "`which $i`" ] && {
+			echo -n "<option value=\"$i\"";
+			[ "$i" = "$FORM_wolapp" ] && echo -n " SELECTED";
+			echo ">$i</option>";
 		}
+	done
+?>
+</select></td></tr>
+<tr><th>@TR<<WOL interface>>:</th><td><select name="woliface">
+<?
+	system_ifaces="$(ifconfig -a|grep Ethernet |cut -d" " -f1)"
+
+	# set default to br-lan if existent
+	if [ -z "$FORM_woliface" ]; then
+		for i in $system_ifaces; do
+			[ "$i" = "br-lan" ] && { FORM_woliface=$i; break; }
+		done
+	fi
+
+	# list network interfaces as options
+	echo -n "<option value=\"none\">default</option>";
+	for i in $system_ifaces; do
+		echo -n "<option value=\"$i\"";
+		[ "$i" = "$FORM_woliface" ] && echo -n " SELECTED";
+		echo ">$i</option>";
 	done
 ?>
 </select></td></tr></table>
