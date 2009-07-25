@@ -251,11 +251,11 @@ form="$tr
 	text|name|$FORM_name
 	string|</td>
 	string|<td>
-	select|src_$rule|$FORM_src_rule
+	select|src_rule|$FORM_src_rule
 	$networks
 	string|</td>
 	string|<td>
-	select|dest_$rule|$FORM_dest_rule
+	select|dest_rule|$FORM_dest_rule
 	$networks
 	string|</td>
 	string|<td>
