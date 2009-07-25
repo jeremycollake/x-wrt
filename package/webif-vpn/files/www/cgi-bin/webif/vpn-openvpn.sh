@@ -342,11 +342,12 @@ for config in $openvpnconfigs; do
 		set_visible('client_key_status_$config', v);
 		set_visible('client_key_$config', v);
 
-		v = (v_server && (isset('ovpn_auth_$config','cert') || isset('ovpn_auth_$config','pem')));
-		set_visible('dh_status_$config', v);
-		set_visible('dh_$config', v);
+		v = (isset('ovpn_auth_$config','cert') || isset('ovpn_auth_$config','pem'))
 		set_visible('tlsauth_status_$config', v);
 		set_visible('tlsauth_$config', v);
+		v = (v && v_server)
+		set_visible('dh_status_$config', v);
+		set_visible('dh_$config', v);
 	}"
 	append js "$javascript_forms" "$N"
 done

@@ -124,6 +124,9 @@ start() {
 				append_bool "pull" "--pull"
 				if [ "$CONFIG_ovpn_auth" = "cert" -o "$CONFIG_ovpn_auth" = "pem" ]; then
 					append args "--tls-client"
+					if [ -s "$dir_name/tlsauth.key" ]; then
+						append args "--tls-auth \"$dir_name/tlsauth.key\""
+					fi
 				fi
 				append args "--remote $CONFIG_ovpn_ipaddr --nobind"
 			;;
@@ -138,12 +141,12 @@ start() {
 				fi
 				if [ "$CONFIG_ovpn_auth" = "cert" -o "$CONFIG_ovpn_auth" = "pem" ]; then
 					append args "--tls-server"
-				fi
-				if [ -s "$dir_name/dh.pem" ]; then
-					append args "--dh \"$dir_name/dh.pem\""
-				fi
-				if [ -s "$dir_name/tlsauth.key" ]; then
-					append args "--tls-auth \"$dir_name/tlsauth.key\""
+					if [ -s "$dir_name/dh.pem" ]; then
+						append args "--dh \"$dir_name/dh.pem\""
+					fi
+					if [ -s "$dir_name/tlsauth.key" ]; then
+						append args "--tls-auth \"$dir_name/tlsauth.key\""
+					fi
 				fi
 			;;
 			*)
