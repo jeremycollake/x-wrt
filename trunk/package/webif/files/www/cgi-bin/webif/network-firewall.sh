@@ -175,6 +175,7 @@ for rule in $rule_cfgs; do
 	if [ "$FORM_submit" = "" -o "$add_rule_cfg" = "$rule" ]; then
 		config_get FORM_src "$rule" src
 		config_get FORM_dest "$rule" dest
+		[ -z "$FORM_dest" ] && FORM_dest="$FORM_src"
 		config_get FORM_protocol "$rule" proto
 		config_get FORM_src_ip "$rule" src_ip
 		config_get FORM_dest_ip "$rule" dest_ip
@@ -196,7 +197,11 @@ ports|FORM_port|@TR<<Destination Port>>||$FORM_port
 EOF
 		equal "$?" 0 && {
 			uci_set firewall "$rule" src "$FORM_src"
-			uci_set firewall "$rule" dest "$FORM_dest"
+			if [ "$FORM_src" = "$FORM_dest" ]; then
+				uci_set firewall "$rule" dest ""
+			else
+				uci_set firewall "$rule" dest "$FORM_dest"
+			fi
 			uci_set firewall "$rule" proto "$FORM_protocol"
 			uci_set firewall "$rule" src_ip "$FORM_src_ip"
 			uci_set firewall "$rule" dest_ip "$FORM_dest_ip"
