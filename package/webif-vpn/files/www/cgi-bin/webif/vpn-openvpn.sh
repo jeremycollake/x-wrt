@@ -44,6 +44,7 @@ if ! empty "$FORM_add_openvpncfg_number"; then
 	uci_set webifopenvpn "$CONFIG_SECTION" "local" ""
 	uci_set webifopenvpn "$CONFIG_SECTION" "remote" ""
 	uci_set webifopenvpn "$CONFIG_SECTION" "pull" "1"
+	uci_set webifopenvpn "$CONFIG_SECTION" "verb" "1"
 	#Create Config dir
 	if [ -e  /etc/openvpn/webifopenvpn* ]; then
 		number=$(ls -1d /etc/openvpn/webifopenvpn* | sed -e '$!d' -e 's/.*\([0-9]\+\)$/\1/')
@@ -112,6 +113,8 @@ for config in $openvpnconfigs; do
 		config_get FORM_ovpn_local $config "local"
 		config_get FORM_ovpn_remote  $config "remote"
 		config_get FORM_ovpn_pull $config "pull"
+		config_get FORM_ovpn_verb $config "verb"
+		[ -z "$FORM_ovpn_verb" ] && FORM_ovpn_verb=1
 
 	else
 		config_get dir_name $config "dir"
@@ -164,6 +167,7 @@ for config in $openvpnconfigs; do
 		eval FORM_ovpn_local="\$FORM_ovpn_local_$config"
 		eval FORM_ovpn_remote="\$FORM_ovpn_remote_$config"
 		eval FORM_ovpn_pull="\$FORM_ovpn_pull_$config"
+		eval FORM_ovpn_verb="\$FORM_ovpn_verb_$config"
 
 		uci_set webifopenvpn "$config" "mode" "$FORM_ovpn_mode"
 		uci_set webifopenvpn "$config" "enabled" "$FORM_ovpn_enabled"
@@ -181,6 +185,7 @@ for config in $openvpnconfigs; do
 		uci_set webifopenvpn "$config" "local" "$FORM_ovpn_local"
 		uci_set webifopenvpn "$config" "remote" "$FORM_ovpn_remote"
 		uci_set webifopenvpn "$config" "pull" "$FORM_ovpn_pull"
+		uci_set webifopenvpn "$config" "verb" "$FORM_ovpn_verb"
 	fi
 	ovpn_form="start_form|@TR<<OpenVPN Config>>
 	field|@TR<<Enabled>>
@@ -281,18 +286,27 @@ for config in $openvpnconfigs; do
 	text|ovpn_pingrestart_$config|$FORM_ovpn_pingrestart
 	helpitem|Ping Restart
 	helptext|HelpText Ping Restart#Causes OpenVPN to restart after n seconds pass without reception of a ping or other packet from remote.
-	field|@TR<<Persist tun>>
+	field|@TR<<Persistent Device>>
 	checkbox|ovpn_persisttun_$config|$FORM_ovpn_persisttun|1
-	helpitem|Persistant Tunnel
-	helptext|HelpText Persistant Tunnel#Don't close and reopen TUN/TAP device or run up/down scripts across SIGUSR1 or ping-restart restarts. 
-	field|@TR<<Persist key>>
+	helpitem|Persistent Device
+	helptext|HelpText Persistent Device#Don't close and reopen TUN/TAP device or run up/down scripts across SIGUSR1 or ping-restart restarts. 
+	field|@TR<<Persistent Key>>
 	checkbox|ovpn_persistkey_$config|$FORM_ovpn_persistkey|1
-	helpitem|Persistant Key
-	helptext|HelpText Persistant Key#Don't re-read key files across SIGUSR1 or ping-restart.
-	field|@TR<<client-to-client>>|field_client_to_client_$config|hidden
+	helpitem|Persistent Key
+	helptext|HelpText Persistent Key#Don't re-read key files across SIGUSR1 or ping-restart.
+	field|@TR<<Client to Client>>|field_client_to_client_$config|hidden
 	checkbox|ovpn_client_to_client_$config|$FORM_ovpn_client_to_client|1
 	helpitem|Client to Client
 	helptext|HelpText Client to Client#When this option is used, each client will "see" the other clients which are currently connected. Otherwise, each client will only see the server.
+	field|@TR<<Logging Verbosity>>
+	select|ovpn_verb_$config|$FORM_ovpn_verb
+	option|0|0
+	option|1|1
+	option|2|2
+	option|3|3
+	option|4|4
+	helpitem|Logging Verbosity
+	helptext|HelpText Logging Verbosity#0 -- only fatal errors, 1 to 4 -- normal usage, default 1.
 	field|@TR<<Extra cmdline arguments>>
 	text|ovpn_cmdline_$config|$FORM_ovpn_cmdline
 	end_form
