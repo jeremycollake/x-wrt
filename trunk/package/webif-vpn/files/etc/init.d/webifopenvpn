@@ -2,33 +2,24 @@
 
 START=60
 
-config_cb() {
-	config_get TYPE "$CONFIG_SECTION" TYPE
-	case "$TYPE" in
-		webifopenvpn)
-			append openvpnconfigs "$CONFIG_SECTION" "$N"
-		;;
-	esac
-}
-
 report_log() {
 	[ "$#" -gt 0 ] && logger -s -t "webifopenvpn" "$@"
 }
 
 append_bool() {
-	local section="ovpn"
-	local option="$1"
-	local value="$2"
+	local section="$1"
+	local option="$2"
+	local value="$3"
 	local _loctmp
 	config_get_bool _loctmp "$section" "$option"
-	[ "$_loctmp" -gt 0 ] && append args "$2"
+	[ "$_loctmp" -gt 0 ] && append args "$value"
 }
 
 append_parm() {
-	local section="ovpn"
-	local option="$1"
-	local switch="$2"
-	local default="$3"
+	local section="$1"
+	local option="$2"
+	local switch="$3"
+	local default="$4"
 	local _loctmp
 	config_get _loctmp "$section" "$option"
 	[ -z "$_loctmp" ] && _loctmp="$default"
@@ -45,33 +36,25 @@ file_check() {
 	done
 }
 
-start() {
-	config_load webifopenvpn
-	openvpnconfigs=$(echo "$openvpnconfigs" |uniq)
+webifopenvpn_config() {
+	local cfg="$1"
+	local enabled service_mode authentication dir_name
+	local ifconfig_local ifconfig_remote ifconfig_ipaddr
+	local auth_incomplete args pid
 
-	for config in $openvpnconfigs; do
-		config_get CONFIG_ovpn_mode $config "mode"
-		config_get CONFIG_ovpn_enabled $config "enabled"
-		config_get CONFIG_ovpn_port $config "port"
-		config_get CONFIG_ovpn_auth $config "auth"
-		config_get CONFIG_ovpn_proto $config "proto"
-		config_get CONFIG_ovpn_complzo $config "complzo"
-		config_get CONFIG_ovpn_ping $config "ping"
-		config_get CONFIG_ovpn_pingrestart $config "pingrestart"
-		config_get CONFIG_ovpn_persisttun $config "persisttun"
-		config_get CONFIG_ovpn_persistkey $config "persistkey"
-		config_get CONFIG_ovpn_ipaddr $config "ipaddr"
-		config_get CONFIG_ovpn_client_to_client $config "client_to_client"
-		config_get CONFIG_ovpn_cmdline $config "cmdline"
-		config_get CONFIG_ovpn_local $config "local"
-		config_get CONFIG_ovpn_remote  $config "remote"
-		config_get CONFIG_ovpn_pull  $config "pull"
-		config_get dir_name $config "dir"
+	config_get_bool enabled "$cfg" enabled 0
+	[ "$enabled" -eq 1 ] && {
+		config_get service_mode "$cfg" mode
+		config_get authentication "$cfg" auth
+		config_get dir_name "$cfg" dir
+		config_get ifconfig_local "$cfg" local
+		config_get ifconfig_remote "$cfg" remote
+		config_get ifconfig_ipaddr "$cfg" ipaddr
 
 		auth_incomplete=0
 		args=""
 
-		case "$CONFIG_ovpn_auth" in
+		case "$authentication" in
 			cert)
 				file_check "$dir_name/certificate.p12"
 				append args "--pkcs12 \"$dir_name/certificate.p12\""
@@ -89,57 +72,56 @@ start() {
 				auth_incomplete=1
 			;;
 		esac
-		[ "$auth_incomplete" != 0 ] && exit
+		[ "$auth_incomplete" != 0 ] && return
 
+		append_parm "$cfg" "proto" "--proto" "udp"
+		append_parm "$cfg" "port" "--port" "1194"
 
-		append_parm "proto" "--proto" "udp"
-		append_parm "port" "--port" "1194"
+		append_parm "$cfg" "dev" "--dev" "tun"
+		append_parm "$cfg" "user" "--user" "nobody"
+		append_parm "$cfg" "group" "--group" "nogroup"
+		append_parm "$cfg" "status" "--status" "/tmp/openvpn-status.log"
+		append_parm "$cfg" "verb" "--verb" "1"
 
-		append_parm "dev" "--dev" "tun"
-		append_parm "user" "--user" "nobody"
-		append_parm "group" "--group" "nogroup"
-		append_parm "status" "--status" "\"/tmp/openvpn-status.log\""
-		append_parm "verb" "--verb" "1"
+		append_bool "$cfg" "complzo" "--comp-lzo"
+		append_bool "$cfg" "persisttun" "--persist-tun"
+		append_bool "$cfg" "persistkey" "--persist-key"
+		append_bool "$cfg" "client_to_client" "--client-to-client"
 
-		append_bool "complzo" "--comp-lzo"
-		append_bool "persisttun" "--persist-tun"
-		append_bool "persistkey" "--persist-key"
-		append_bool "client_to_client" "--client-to-client"
-
-		append_parm "ping" "--ping"
-		append_parm "ping_restart" "--ping-restart"
+		append_parm "$cfg" "ping" "--ping"
+		append_parm "$cfg" "ping_restart" "--ping-restart"
 		pid=$(mktemp /var/run/webifopenvpn.pid.XXXXXX)
-		append_parm "write_pid" "--writepid" "\"$pid\""
-		append_parm "cmdline" ""
-		if [ -n "$CONFIG_ovpn_local" -a -n "$CONFIG_ovpn_remote" ]; then
-			append args "--ifconfig $CONFIG_ovpn_local $CONFIG_ovpn_remote"
+		append_parm "$cfg" "write_pid" "--writepid" "\"$pid\""
+		append_parm "$cfg" "cmdline" ""
+		if [ -n "$ifconfig_local" -a -n "$ifconfig_remote" ]; then
+			append args "--ifconfig $ifconfig_local $ifconfig_remote"
 		fi
 
-		case "$CONFIG_ovpn_mode" in
+		case "$service_mode" in
 			client)
-				if [ -z "$CONFIG_ovpn_ipaddr" ]; then
+				if [ -z "$ifconfig_ipaddr" ]; then
 					report_log "remote server not configured!"
-					exit
+					return
 				fi
 				append_bool "pull" "--pull"
-				if [ "$CONFIG_ovpn_auth" = "cert" -o "$CONFIG_ovpn_auth" = "pem" ]; then
+				if [ "$authentication" = "cert" -o "$authentication" = "pem" ]; then
 					append args "--tls-client"
 					if [ -s "$dir_name/tlsauth.key" ]; then
 						append args "--tls-auth \"$dir_name/tlsauth.key\""
 					fi
 				fi
-				append args "--remote $CONFIG_ovpn_ipaddr --nobind"
+				append args "--remote $ifconfig_ipaddr --nobind"
 			;;
 			server)
-				if [ -z "$CONFIG_ovpn_local" ]; then
+				if [ -z "$ifconfig_local" ]; then
 					report_log "local VPN endpoint not configured!"
-					exit
+					return
 				fi
-				if [ -z "$CONFIG_ovpn_remote" ]; then
+				if [ -z "$ifconfig_remote" ]; then
 					report_log "remote VPN endpoint not configured!"
-					exit
+					return
 				fi
-				if [ "$CONFIG_ovpn_auth" = "cert" -o "$CONFIG_ovpn_auth" = "pem" ]; then
+				if [ "$authentication" = "cert" -o "$authentication" = "pem" ]; then
 					append args "--tls-server"
 					if [ -s "$dir_name/dh.pem" ]; then
 						append args "--dh \"$dir_name/dh.pem\""
@@ -151,17 +133,23 @@ start() {
 			;;
 			*)
 				report_log "unknown mode, aborting!"
-				exit 0
+				return
 			;;
 		esac
-		openvpn --daemon $args
-	done
+		eval "openvpn --daemon $args"
+	}
+}
+
+start() {
+	config_load webifopenvpn
+	config_foreach webifopenvpn_config webifopenvpn
 }
 
 stop() {
-	for i in $(ls /var/run/webifopenvpn.pid*); do
+	for i in $(ls /var/run/webifopenvpn.pid.*); do
 		webifopenvpn_pid=$(cat "$i" 2>/dev/null)
 		[ -n "$webifopenvpn_pid" ] && [ -d /proc/$webifopenvpn_pid ] && kill -TERM $webifopenvpn_pid 2>/dev/null
+		rm -f "$i" 2>/dev/null
 	done
 }
 
