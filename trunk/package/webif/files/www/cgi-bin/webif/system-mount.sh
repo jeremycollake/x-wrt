@@ -24,8 +24,6 @@
 #		/etc/config/fstab
 #
 # Required components:
-# 
-
 
 header "System" "Mountpoints" "@TR<<Mountpoints>>" '' "$SCRIPT_NAME"
 

@@ -23,7 +23,6 @@
 # Required components:
 #       /usr/lib/webif/common.awk
 #       /usr/lib/webif/notes.awk
-#
 
 header "Info" "Notes" "@TR<<Notes>>"
 

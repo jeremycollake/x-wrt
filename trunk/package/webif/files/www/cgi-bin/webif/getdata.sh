@@ -21,7 +21,6 @@
 # Required components:
 # 
 
-
 _uptime="$(uptime)"
 _loadavg="${_uptime#*load average: }"
 _uptime="${_uptime#*up }"

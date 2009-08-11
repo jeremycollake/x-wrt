@@ -185,7 +185,6 @@ define Package/webif/install
 	$(INSTALL_BIN) ./ipkg/webif.preinst $(1)/CONTROL/preinst
 	$(INSTALL_BIN) ./ipkg/webif.postinst $(1)/CONTROL/postinst
 	$(SED) 's,$$$$S,$(BOARD),g' $(1)/CONTROL/postinst
-	chmod -R 755 $(1)/*
 	rm -rf \
 		$(1)/usr/lib/webif/lang/ \
 		$(1)/www/themes/zephyr/ \
