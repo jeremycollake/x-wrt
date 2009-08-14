@@ -185,6 +185,7 @@ set_route () {
 
 come_up () {
 		[ "$(uci_get "mroute.$INTERFACE")" = "wanif" ] && {
+			[ "$(uci_get "network.$INTERFACE.proto")" = "dhcp" ] && uci_set_state network $INTERFACE gateway "0.0.0.0"
 			echo "Entering multi-wan configuration for ($new_name) $INTERFACE interface"
 			set_rtTables $INTERFACE
 			echo "0" > /proc/sys/net/ipv4/conf/$DEVICE/rp_filter
@@ -214,10 +215,12 @@ go_down () {
 			config_foreach remove_net_from_table wanif $old_network $old_device
 			remove_wan $INTERFACE
 			uci_revert_state mroute $INTERFACE
+			uci_revert_state network $INTERFACE gateway
 		}
 }
 
 killall mroute-ping 2> /dev/null 
+
 local DEBUG=$(uci_get "mroute.settings.debug")
 local new_ipaddr=$(uci_get "network.$INTERFACE.ipaddr")
 local new_netmask=$(uci_get "network.$INTERFACE.netmask")
@@ -234,8 +237,10 @@ new_network=$(echo $new_network | sed 's/.PRE.*//')
 
 case "$ACTION" in
 	ifup)
-		[ -z "$new_gatewa" ] && come_up 
-		[ "$(uci_get "mroute.$INTERFACE")" = "wanif" ] && set_route
+		[ "$(uci_get "mroute.webadmin.enable")" = "1" ] && {
+			[ -z "$new_gatewa" ] && come_up 
+			[ "$(uci_get "mroute.$INTERFACE")" = "wanif" ] && set_route
+		}
 	;;
 	update)
 		local old_device=$(uci_get "mroute.$INTERFACE.device")
@@ -267,4 +272,4 @@ case "$ACTION" in
 		}
 	;;
 esac
-/lib/mroute/mroute-ping &
+[ "$(uci_get "mroute.webadmin.enable")" = "1" ] && /lib/mroute/mroute-ping &

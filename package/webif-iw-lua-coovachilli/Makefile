@@ -12,7 +12,7 @@ define Package/webif-iw-lua-coovachilli
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+haserl +lua +liblua +libuci-lua +luac
+  DEPENDS:=+haserl +lua +liblua +libuci-lua
   TITLE:=coovachilli Configuration Script in LUA
 endef
 
@@ -21,14 +21,11 @@ endef
 
 define Package/webif-iw-lua-coovachilli/install
 	$(CP) -a ./files/* $(1)/
-	chmod -R 755 $(1)/*
-	rm -rf $(1)/usr/lib/webif/lang/
-	rm -f $(1)/www/cgi-bin/webif/*.wip
-	$(CP) -a ./ipkg/webif-iw-lua-coovachilli.postinst $(1)/CONTROL/postinst
-
-	find $(1) -name CVS | xargs rm -rf
-	find $(1) -name .svn | xargs rm -rf
-	find $(1) -name *~ | xargs rm -rf
+	$(INSTALL_BIN) ./files/etc/init.d/chilli $(1)/etc/init.d/chilli
+	$(INSTALL_BIN) ./files/usr/lib/lua/lua-xwrt/applys/* $(1)/usr/lib/lua/lua-xwrt/applys/
+	$(INSTALL_BIN) ./files/usr/lib/lua/lua-xwrt/pkgs/coovachilli/* $(1)/usr/lib/lua/lua-xwrt/pkgs/coovachilli/
+	$(INSTALL_BIN) ./files/www/cgi-bin/webif/* $(1)/www/cgi-bin/webif/
+	$(INSTALL_BIN) ./files/www/cgi-bin/login/* $(1)/www/cgi-bin/login/
 endef
 
 $(eval $(call BuildPackage,webif-iw-lua-coovachilli))
