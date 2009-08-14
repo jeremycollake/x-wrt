@@ -33,6 +33,8 @@ endef
 
 define Package/webif-mesh/install
 	$(CP) -a ./files/* $(1)/
+	$(INSTALL_BIN) ./files/www/cgi-bin/webif/* $(1)/www/cgi-bin/webif/
+	$(INSTALL_BIN) ./files/etc/init.d/mesh $(1)/etc/init.d/mesh
 	chmod -R 755 $(1)/*
 	$(CP) -a ./ipkg/webif-mesh.postinst $(1)/CONTROL/preinst
 	$(CP) -a ./ipkg/webif-mesh.postrm $(1)/CONTROL/postrm
