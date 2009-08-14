@@ -23,7 +23,7 @@ endef
 
 define Package/webif-applications/install
 	$(CP) -a ./files/* $(1)/
-	chmod -R 755 $(1)/*
+	$(INSTALL_BIN) ./files/www/cgi-bin/webif/* $(1)/www/cgi-bin/webif/
 endef
 
 $(eval $(call BuildPackage,webif-applications))
