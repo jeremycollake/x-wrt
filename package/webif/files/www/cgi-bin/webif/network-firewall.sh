@@ -174,8 +174,7 @@ append forms "$form" "$N"
 for rule in $rule_cfgs; do
 	if [ "$FORM_submit" = "" -o "$add_rule_cfg" = "$rule" ]; then
 		config_get FORM_src "$rule" src
-		config_get FORM_dest "$rule" dest
-		[ -z "$FORM_dest" ] && FORM_dest="$FORM_src"
+		config_get FORM_dest "$rule" dest "$FORM_src"
 		config_get FORM_protocol "$rule" proto
 		config_get FORM_src_ip "$rule" src_ip
 		config_get FORM_dest_ip "$rule" dest_ip
