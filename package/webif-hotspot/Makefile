@@ -24,12 +24,14 @@ endef
 
 define Package/webif-hotspot/install
 	$(CP) -a ./files/* $(1)/
-	chmod -R 755 $(1)/*
+	$(INSTALL_BIN) ./ipkg/webif-hotspot.postinst $(1)/CONTROL/preinst
+	$(INSTALL_BIN) ./ipkg/webif-hotspot.postrm $(1)/CONTROL/postrm
+	$(INSTALL_BIN) ./files/www/cgi-bin/webif/* $(1)/www/cgi-bin/webif/
+	$(INSTALL_BIN) ./files/usr/lib/webif/apply-hotspot.sh $(1)/usr/lib/webif/apply-hotspot.sh
+	$(INSTALL_BIN) ./files/usr/sbin/* $(1)/usr/sbin/
+
 	rm -rf $(1)/usr/lib/webif/lang/
 	rm -f $(1)/www/cgi-bin/webif/*.wip
-	$(CP) -a ./ipkg/webif-hotspot.postinst $(1)/CONTROL/preinst
-	$(CP) -a ./ipkg/webif-hotspot.postrm $(1)/CONTROL/postrm
-	chmod 755 $(1)/CONTROL/*inst
 	find $(1) -name CVS | xargs rm -rf
 	find $(1) -name .svn | xargs rm -rf
 	find $(1) -name *~ | xargs rm -rf
