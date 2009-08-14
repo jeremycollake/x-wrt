@@ -21,7 +21,7 @@ endef
 
 define Package/webif-iw-lua/install
 	$(CP) -a ./files/* $(1)/
-	$(INSTALL_BIN) ./files/usr/lib/lua/* $(1)/usr/lib/lua/
+	$(INSTALL_BIN) ./files/usr/lib/lua/set_path.lua $(1)/usr/lib/lua/set_path.lua
 	$(INSTALL_BIN) ./files/usr/lib/lua/lua-xwrt/* $(1)/usr/lib/lua/lua-xwrt/
 endef
 
