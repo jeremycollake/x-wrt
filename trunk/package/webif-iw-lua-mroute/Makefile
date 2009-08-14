@@ -1,6 +1,6 @@
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=webif-iw-lua-coovachilli
+PKG_NAME:=webif-iw-lua-mroute
 PKG_VERSION:=0.1
 PKG_RELEASE:=1
 
