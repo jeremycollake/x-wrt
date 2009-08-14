@@ -45,7 +45,9 @@ define Package/webif-freeloader/install
 	$(CP) -a ./files/* $(1)/
 	$(INSTALL_BIN) ./ipkg/webif-freeloader.postinst $(1)/CONTROL/postinst
 	$(INSTALL_BIN) ./ipkg/webif-freeloader.postrm $(1)/CONTROL/postrm
-	chmod -R 755 $(1)/*
+	$(INSTALL_BIN) ./files/www/cgi-bin/webif/* $(1)/www/cgi-bin/webif/
+	$(INSTALL_BIN) ./files/usr/lib/webif/* $(1)/usr/lib/webif/
+	$(INSTALL_BIN) ./files/usr/sbin/* $(1)/usr/sbin/
 	rm -rf $(1)/usr/lib/webif/lang/
 	rm -f $(1)/www/cgi-bin/webif/*.wip
 	find $(1) -name 'CVS' -o -name '.svn' -o -name '*~' | $(XARGS) rm -rf
