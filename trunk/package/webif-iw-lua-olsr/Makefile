@@ -21,12 +21,10 @@ endef
 
 define Package/webif-iw-lua-olsr/install
 	$(CP) -a ./files/* $(1)/
-	$(INSTALL_BIN) ./files/etc/init.d/* $(1)/etc/init.d/
 	$(INSTALL_BIN) ./files/usr/lib/lua/lua-xwrt/applys/* $(1)/usr/lib/lua/lua-xwrt/applys/
-	$(INSTALL_BIN) ./files/usr/lib/lua/lua-xwrt/pkgs/* $(1)/usr/lib/lua/lua-xwrt/pkgs/
+	$(INSTALL_DIR) ./files/usr/lib/lua/lua-xwrt/pkgs/ $(1)/usr/lib/lua/lua-xwrt/pkgs/
 	$(INSTALL_BIN) ./files/usr/lib/lua/lua-xwrt/pkgs/olsr/* $(1)/usr/lib/lua/lua-xwrt/pkgs/olsr/
 	$(INSTALL_BIN) ./files/www/cgi-bin/webif/* $(1)/www/cgi-bin/webif/
-	chmod -R 755 $(1)/*
 	rm -rf $(1)/usr/lib/webif/lang/
 	rm -f $(1)/www/cgi-bin/webif/*.wip
 
