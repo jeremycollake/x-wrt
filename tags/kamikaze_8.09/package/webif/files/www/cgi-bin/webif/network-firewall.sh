@@ -36,14 +36,14 @@ ports|FORM_port_rule|@TR<<Destination Port>>||$FORM_port_rule
 EOF
 	equal "$?" 0 && {
 		[ "$FORM_port_select_rule" != "custom" ] && FORM_port_rule="$FORM_port_select_rule"
-		uci_add "firewall" "rule" "$FORM_name"; add_rule_cfg="$CONFIG_SECTION"
-		uci_set "firewall" "$add_rule_cfg" "proto" "$FORM_protocol_rule"
-		uci_set "firewall" "$add_rule_cfg" "src" "$FORM_src_rule"
-		uci_set "firewall" "$add_rule_cfg" "dest" "$FORM_dest_rule"
-		uci_set "firewall" "$add_rule_cfg" "src_ip" "$FORM_src_ip_rule"
-		uci_set "firewall" "$add_rule_cfg" "dest_ip" "$FORM_dest_ip_rule"
-		uci_set "firewall" "$add_rule_cfg" "dest_port" "$FORM_port_rule"
-		uci_set "firewall" "$add_rule_cfg" "target" "$FORM_target_rule"
+		uci_add firewall rule "$FORM_name"; add_rule_cfg="$CONFIG_SECTION"
+		uci_set firewall "$add_rule_cfg" proto "$FORM_protocol_rule"
+		uci_set firewall "$add_rule_cfg" src "$FORM_src_rule"
+		uci_set firewall "$add_rule_cfg" dest "$FORM_dest_rule"
+		uci_set firewall "$add_rule_cfg" src_ip "$FORM_src_ip_rule"
+		uci_set firewall "$add_rule_cfg" dest_ip "$FORM_dest_ip_rule"
+		uci_set firewall "$add_rule_cfg" dest_port "$FORM_port_rule"
+		uci_set firewall "$add_rule_cfg" target "$FORM_target_rule"
 		unset FORM_port_rule FORM_dest_ip_rule FORM_src_ip_rule FORM_protocol_rule FORM_name FORM_src FORM_dest
 		FORM_port_select_rule=custom
 		FORM_src=wan
@@ -59,23 +59,23 @@ ports|FORM_dest_port_redirect|@TR<<To Port>>||$FORM_dest_port_redirect
 EOF
 	equal "$?" 0 && {
 		[ "$FORM_port_select_redirect" != "custom" ] && FORM_port_rule="$FORM_port_select_redirect"
-		uci_add "firewall" "redirect" "$FORM_name_redirect"; add_redirect_cfg="$CONFIG_SECTION"
-		uci_set "firewall" "$add_redirect_cfg" "src" "wan"
-		uci_set "firewall" "$add_redirect_cfg" "proto" "$FORM_protocol_redirect"
-		uci_set "firewall" "$add_redirect_cfg" "src_ip" "$FORM_src_ip_redirect"
-		uci_set "firewall" "$add_redirect_cfg" "src_dport" "$FORM_src_dport_redirect"
-		uci_set "firewall" "$add_redirect_cfg" "dest_ip" "$FORM_dest_ip_redirect"
+		uci_add firewall redirect "$FORM_name_redirect"; add_redirect_cfg="$CONFIG_SECTION"
+		uci_set firewall "$add_redirect_cfg" src wan
+		uci_set firewall "$add_redirect_cfg" proto "$FORM_protocol_redirect"
+		uci_set firewall "$add_redirect_cfg" src_ip "$FORM_src_ip_redirect"
+		uci_set firewall "$add_redirect_cfg" src_dport "$FORM_src_dport_redirect"
+		uci_set firewall "$add_redirect_cfg" dest_ip "$FORM_dest_ip_redirect"
 		[ "$FORM_dest_port_redirect" = "" -a "0" != "$(echo "$FORM_src_dport_redirect" |grep -q "-" -e ":";echo "$?")" ] && FORM_dest_port_redirect="$FORM_src_dport_redirect"
-		uci_set "firewall" "$add_redirect_cfg" "dest_port" "$FORM_dest_port_redirect"
+		uci_set firewall "$add_redirect_cfg" dest_port "$FORM_dest_port_redirect"
 		unset FORM_dest_port_redirect FORM_dest_ip_redirect FORM_src_dport_redirect FORM_src_ip_redirect FORM_protocol_redirect FORM_name_redirect
 		FORM_port_select_redirect=custom
 	}
 fi
 if [ -n "$FORM_add_rule_add" ]; then
-	uci_add "firewall" "forwarding" ""; add_foreward_cfg="$CONFIG_SECTION"
-	uci_set firewall "$add_foreward_cfg" src "$FORM_src_add"
-	uci_set firewall "$add_foreward_cfg" dest "$FORM_dest_add"
-	uci_set firewall "$add_foreward_cfg" mtu_fix "$FORM_mss"
+	uci_add firewall forwarding ""; add_forward_cfg="$CONFIG_SECTION"
+	uci_set firewall "$add_forward_cfg" src "$FORM_src_add"
+	uci_set firewall "$add_forward_cfg" dest "$FORM_dest_add"
+	uci_set firewall "$add_forward_cfg" mtu_fix "$FORM_mss"
 fi
 config_cb() {
 	local cfg_type="$1"
@@ -116,14 +116,14 @@ uci_load firewall
 uci_load network
 append forms "start_form|@TR<<Forwarding Configuration>>" "$N"
 for zone in $forwarding_cfgs; do
-	eval FORM_remove=\$FORM_remove_rule_$zone
+	eval FORM_remove="\$FORM_remove_rule_$zone"
 	if [ "$FORM_remove" != "" ]; then
-		uci_remove "firewall" "$zone"
+		uci_remove firewall "$zone"
 	fi
-	if [ "$FORM_submit" = "" -o "$add_foreward_cfg" = "$zone" ]; then
-		config_get FORM_src $zone src
-		config_get FORM_dest $zone dest
-		config_get FORM_mss $zone mtu_fix
+	if [ "$FORM_submit" = "" -o "$add_forward_cfg" = "$zone" ]; then
+		config_get FORM_src "$zone" src
+		config_get FORM_dest "$zone" dest
+		config_get FORM_mss "$zone" mtu_fix
 	else
 		eval FORM_src="\$FORM_src_$zone"
 		eval FORM_dest="\$FORM_dest_$zone"
@@ -134,14 +134,14 @@ for zone in $forwarding_cfgs; do
 	fi
 	if [ "$FORM_remove" = "" ]; then
 		form="field|@TR<<Allow traffic originating from>>
-			select|src_${zone}|$FORM_src
+			select|src_$zone|$FORM_src
 			$networks
 			string|@TR<<to>>
-			select|dest_${zone}|$FORM_dest
+			select|dest_$zone|$FORM_dest
 			$networks
 			string|@TR<<Fix MTU>>
 			checkbox|mss_$zone|$FORM_mss|1
-			submit|remove_rule_${zone}|@TR<<Remove Rule>>"
+			submit|remove_rule_$zone|@TR<<Remove Rule>>"
 		append forms "$form" "$N"
 	fi
 done
@@ -173,13 +173,14 @@ form="string|<div class=\"settings\">
 append forms "$form" "$N"
 for rule in $rule_cfgs; do
 	if [ "$FORM_submit" = "" -o "$add_rule_cfg" = "$rule" ]; then
-		config_get FORM_src $rule src
-		config_get FORM_dest $rule dest
-		config_get FORM_protocol $rule proto
-		config_get FORM_src_ip $rule src_ip
-		config_get FORM_dest_ip $rule dest_ip
-		config_get FORM_target $rule target
-		config_get FORM_port $rule dest_port
+		config_get FORM_src "$rule" src
+		config_get FORM_dest "$rule" dest
+		[ -z "$FORM_dest" ] && FORM_dest="$FORM_src"
+		config_get FORM_protocol "$rule" proto
+		config_get FORM_src_ip "$rule" src_ip
+		config_get FORM_dest_ip "$rule" dest_ip
+		config_get FORM_target "$rule" target
+		config_get FORM_port "$rule" dest_port
 		FORM_port_select_rule=custom
 	else
 		eval FORM_src="\$FORM_src_$rule"
@@ -195,13 +196,17 @@ ip|FORM_dest_ip|@TR<<Destination IP Address>>||$FORM_dest_ip
 ports|FORM_port|@TR<<Destination Port>>||$FORM_port
 EOF
 		equal "$?" 0 && {
-			uci_set firewall "$rule" "src" "$FORM_src"
-			uci_set firewall "$rule" "dest" "$FORM_dest"
-			uci_set firewall "$rule" "proto" "$FORM_protocol"
-			uci_set firewall "$rule" "src_ip" "$FORM_src_ip"
-			uci_set firewall "$rule" "dest_ip" "$FORM_dest_ip"
-			uci_set firewall "$rule" "dest_port" "$FORM_port"
-			uci_set firewall "$rule" "target" "$FORM_target"
+			uci_set firewall "$rule" src "$FORM_src"
+			if [ "$FORM_src" = "$FORM_dest" ]; then
+				uci_set firewall "$rule" dest ""
+			else
+				uci_set firewall "$rule" dest "$FORM_dest"
+			fi
+			uci_set firewall "$rule" proto "$FORM_protocol"
+			uci_set firewall "$rule" src_ip "$FORM_src_ip"
+			uci_set firewall "$rule" dest_ip "$FORM_dest_ip"
+			uci_set firewall "$rule" dest_port "$FORM_port"
+			uci_set firewall "$rule" target "$FORM_target"
 		}
 	fi
 
@@ -251,11 +256,11 @@ form="$tr
 	text|name|$FORM_name
 	string|</td>
 	string|<td>
-	select|src_$rule|$FORM_src_rule
+	select|src_rule|$FORM_src_rule
 	$networks
 	string|</td>
 	string|<td>
-	select|dest_$rule|$FORM_dest_rule
+	select|dest_rule|$FORM_dest_rule
 	$networks
 	string|</td>
 	string|<td>
@@ -313,11 +318,11 @@ append forms "$form" "$N"
 
 for rule in $redirect_cfgs; do
 	if [ "$FORM_submit" = "" -o "$add_redirect_cfg" = "$rule" ]; then
-		config_get FORM_protocol $rule proto
-		config_get FORM_src_ip $rule src_ip
-		config_get FORM_dest_ip $rule dest_ip
-		config_get FORM_src_dport $rule src_dport
-		config_get FORM_dest_port $rule dest_port
+		config_get FORM_protocol "$rule" proto
+		config_get FORM_src_ip "$rule" src_ip
+		config_get FORM_dest_ip "$rule" dest_ip
+		config_get FORM_src_dport "$rule" src_dport
+		config_get FORM_dest_port "$rule" dest_port
 		FORM_port_select_redirect=custom
 	else
 		eval FORM_protocol="\$FORM_protocol_$rule"
@@ -333,12 +338,12 @@ ip|FORM_dest_ip|@TR<<To IP>>|required|$FORM_dest_ip
 ports|FORM_dest_dport|@TR<<To Port>>||$FORM_dest_dport
 EOF
 		equal "$?" 0 && {
-			uci_set firewall "$rule" "proto" "$FORM_protocol"
-			uci_set firewall "$rule" "src_ip" "$FORM_src_ip"
-			uci_set firewall "$rule" "dest_ip" "$FORM_dest_ip"
-			uci_set firewall "$rule" "src_dport" "$FORM_src_dport"
+			uci_set firewall "$rule" proto "$FORM_protocol"
+			uci_set firewall "$rule" src_ip "$FORM_src_ip"
+			uci_set firewall "$rule" dest_ip "$FORM_dest_ip"
+			uci_set firewall "$rule" src_dport "$FORM_src_dport"
 			[ "$FORM_dest_port" = "" -a "0" != "$(echo "$FORM_src_dport_redirect" |grep -q "-" -e ":";echo "$?")" ] && FORM_dest_port="$FORM_src_dport"
-			uci_set firewall "$rule" "dest_port" "$FORM_dest_port"
+			uci_set firewall "$rule" dest_port "$FORM_dest_port"
 		}
 	fi
 
