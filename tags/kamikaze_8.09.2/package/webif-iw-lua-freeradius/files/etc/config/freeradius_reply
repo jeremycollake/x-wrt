@@ -1,0 +1,7 @@
+
+config 'user' 'steve'
+	option 'Fall_Through' 'no'
+
+config 'freeradius' 'system'
+	option 'apply' '/usr/lib/lua/lua-xwrt/applys/freeradius_check.lua'
+
