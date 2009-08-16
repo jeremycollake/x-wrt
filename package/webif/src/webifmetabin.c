@@ -1,4 +1,4 @@
-/* silly stupid meta binary stub 
+/* silly stupid meta binary stub
  * (c)2006 Jeremy Collake, released under GPL license. */
 
 #include <stdio.h>
@@ -32,7 +32,7 @@ PFN_MAIN ppEntryPoints[] =
 int main(int argc, char **argv)
 {
 	int nI;
-	for(nI=0; pszAppletNames[nI]; nI++) 
+	for(nI=0; pszAppletNames[nI]; nI++)
 	{
 		if(strstr(argv[0], pszAppletNames[nI]))
 		{
@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 
 	printf(" ERROR: Must symlink to a supported applet.\n");
 	printf(" Applets supported are:\n");
-	for(nI=0; pszAppletNames[nI]; nI++) 
+	for(nI=0; pszAppletNames[nI]; nI++)
 	{
 		printf("  %s\n", pszAppletNames[nI]);
 	}
