@@ -272,13 +272,14 @@ EOF
 					uci_set "network" "$interface" "defaultroute" "$FORM_defaultroute"
 					uci_set "network" "$interface" "ppp_redial" "$FORM_ppp_redial";;
 			esac
-
+			if "$FORM_proto" != "dhcp"; then
 			uci_set "network" "$interface" "ipaddr" "$FORM_ipaddr"
 			uci_set "network" "$interface" "ip6addr" "$FORM_ip6addr"
 			uci_set "network" "$interface" "netmask" "$FORM_netmask"
 			uci_set "network" "$interface" "gateway" "$FORM_gateway"
 			uci_set "network" "$interface" "ip6gw" "$FORM_gateway6"
 			uci_set "network" "$interface" "dns" "$FORM_dns"
+			fi
 		}
 	fi
 
