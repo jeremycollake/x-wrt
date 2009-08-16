@@ -29,6 +29,8 @@ define Package/webif/conffiles
 /etc/config/webif
 /etc/config/cron
 /etc/config/syslog
+/etc/ssl/openssl.cnf
+/etc/httpd.conf
 endef
 
 define Package/webif-subpackage
@@ -159,48 +161,42 @@ endef
 
 define Build/Prepare
 	$(call Build/Prepare/Default)
-	$(CP) src/* $(PKG_BUILD_DIR)/
+	$(CP) -a files src ipkg/* $(PKG_BUILD_DIR)
+	find $(PKG_BUILD_DIR)/files $(PKG_BUILD_DIR)/src -name 'CVS' -o -name '.svn' -o -name '*~' | $(XARGS) rm -rf
 endef
 
 define Build/Configure
+	$(SED) 's,$$$$S,$(BOARD),g' $(PKG_BUILD_DIR)/webif.postinst
+	./create_lang_list.sh $(PKG_BUILD_DIR) $(PKG_BUILD_DIR)/files/etc
+	./embed_rev.sh $(PKG_BUILD_DIR)/webif.*inst $(PKG_BUILD_DIR)/files
 endef
 
 define Build/Compile
-	$(TARGET_CC) $(TARGET_CFLAGS) \
-		-D_METAPACK \
-		-I$(STAGING_DIR)/include-host -I$(STAGING_DIR_HOST)/include -include endian.h \
-		$(TARGET_CFLAGS_EXTRA) \
-		$(TARGET_LDFLAGS) \
-		-o $(PKG_BUILD_DIR)/webifmetabin \
-		src/int2human/main.c src/int2human/human_readable.c \
-		src/wepkeygen/keygen.c src/wepkeygen/md5.c \
-		src/webif-page.c src/bstrip.c src/webifmetabin.c
-	$(STRIP) $(PKG_BUILD_DIR)/webifmetabin
-	./create_lang_list.sh . $(PKG_BUILD_DIR)
+	$(MAKE) -C $(PKG_BUILD_DIR)/src \
+	$(TARGET_CONFIGURE_OPTS) \
+	CFLAGS="$(TARGET_CFLAGS) -I$(STAGING_DIR)/include-host -I$(STAGING_DIR_HOST)/include -include endian.h  $(TARGET_CFLAGS_EXTRA)" \
+	LDFLAGS="$(TARGET_LDFLAGS)"
+	$(STRIP) $(PKG_BUILD_DIR)/src/webifmetabin
 endef
 
 define Package/webif/install
-	$(CP) -a ./files/* $(1)/
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/languages.root $(1)/etc/
-	$(INSTALL_BIN) ./ipkg/webif.preinst $(1)/CONTROL/preinst
-	$(INSTALL_BIN) ./ipkg/webif.postinst $(1)/CONTROL/postinst
-	$(SED) 's,$$$$S,$(BOARD),g' $(1)/CONTROL/postinst
+	$(CP) -a $(PKG_BUILD_DIR)/files/* $(1)/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/webif.preinst $(1)/CONTROL/preinst
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/webif.postinst $(1)/CONTROL/postinst
 	rm -rf \
 		$(1)/usr/lib/webif/lang/ \
 		$(1)/www/themes/zephyr/ \
 		$(1)/www/themes/xwrt-mini/ \
 		$(1)/www/themes/sedky1/ \
 		$(1)/www/themes/xwrt/
-	./embed_rev.sh $(1)
 	$(INSTALL_DIR) $(1)/usr/bin
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/webifmetabin $(1)/usr/bin/webifmetabin
-	find $(1) -name 'CVS' -o -name '.svn' -o -name '*~' | $(XARGS) rm -rf
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/webifmetabin $(1)/usr/bin/webifmetabin
 endef
 
 define BuildLang
   define Package/webif-lang-$(1)/install
 	$(INSTALL_DIR) $$(1)/usr/lib/webif/lang/$(1)/
-	$(INSTALL_DATA) ./files/usr/lib/webif/lang/$(1)/common.txt \
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/files/usr/lib/webif/lang/$(1)/common.txt \
 		$$(1)/usr/lib/webif/lang/$(1)/
   endef
 
@@ -210,7 +206,7 @@ endef
 define BuildTheme
   define Package/webif-theme-$(1)/install
 	$(INSTALL_DIR) $$(1)/www/themes/$(1)/
-	$(INSTALL_DATA) ./files/www/themes/$(1)/* \
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/files/www/themes/$(1)/* \
 		$$(1)/www/themes/$(1)/
   endef
 
