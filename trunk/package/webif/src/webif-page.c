@@ -49,7 +49,7 @@ static char buf[LINE_BUF], buf2[LINE_BUF];
 #define LANG_TYPE_MAX 32    /* maximum language name size (for main) */
 
 /* strip_next_token -
- *  specialized tokenization - handles quoted strings, 
+ *  specialized tokenization - handles quoted strings,
  *  whitespace as delimiter (hard coded, todo: change) */
 char *strip_next_token(char *pszSource, char *pszToken, int nTokenLen)
 {
@@ -58,9 +58,9 @@ char *strip_next_token(char *pszSource, char *pszToken, int nTokenLen)
 	int bInLeadingWhitespace=1;
 	int nI;
 	for(nI=0;nI<nTokenLen && pszSource[nI];nI++)
-	{		
+	{
 		if(!cClosingQuote)	/* if not in quoted string */
-		{						
+		{
 			switch(pszSource[nI])
 			{
 				/* if opening quote */
@@ -72,22 +72,22 @@ char *strip_next_token(char *pszSource, char *pszToken, int nTokenLen)
 				/* if whitespace */
 				case ' ':
 				case '\t':
-					if(bInLeadingWhitespace) 
+					if(bInLeadingWhitespace)
 					{
 						continue;
 					}
 					/* fall-through */
-				case '\n':				
+				case '\n':
 					pszToken[nTokenIndex]=0; /* terminate token */
-					return pszSource+nI;					
+					return pszSource+nI;
 					break;
 				default:
 					bInLeadingWhitespace=0;
-					break;					
-			}	
+					break;
+			}
 		}
 		else if(pszSource[nI]==cClosingQuote) /* if in quoted string, and ending quote */
-		{			
+		{
 			pszToken[nTokenIndex]=0; /* terminate token */
 			nI++; /* advance to the next source char */
 			break;
@@ -95,24 +95,23 @@ char *strip_next_token(char *pszSource, char *pszToken, int nTokenLen)
 		pszToken[nTokenIndex]=pszSource[nI];
 		nTokenIndex++;
 	}
-	pszToken[nTokenIndex]=0; /* terminate token */					
+	pszToken[nTokenIndex]=0; /* terminate token */
 	return pszSource+nI;
 }
 
-char *extract_lang(char *pszLine, char *pszBuffer, int nBufLen) 
+char *extract_lang(char *pszLine, char *pszBuffer, int nBufLen)
 {
-	char *pszDelims=" \t";
 	char szTokenBuffer[MAX_TOKEN_SIZE];
 	char *pszToken=szTokenBuffer;
 	int nCount;
-	pszLine=strip_next_token(pszLine, szTokenBuffer, MAX_TOKEN_SIZE); 	
+	pszLine=strip_next_token(pszLine, szTokenBuffer, MAX_TOKEN_SIZE);
 	for(nCount=0;pszToken[0];)
-	{		
-		switch(nCount) 
+	{
+		switch(nCount)
 		{
 			case 0:
 				/* if first argument is 'option' */
-				if(!strcasecmp(pszToken, "option")) 
+				if(!strcasecmp(pszToken, "option"))
 				{
 					nCount++;
 				}
@@ -124,7 +123,7 @@ char *extract_lang(char *pszLine, char *pszBuffer, int nBufLen)
 				break;
 			case 1:
 				/* if first non-empty argument is 'lang' */
-				if(!strcasecmp(pszToken, "lang")) 
+				if(!strcasecmp(pszToken, "lang"))
 				{
 					nCount++;
 				}
@@ -132,22 +131,22 @@ char *extract_lang(char *pszLine, char *pszBuffer, int nBufLen)
 				else
 				{
 					return NULL;
-				}				
+				}
 				break;
 			case 2:
-				if(strlen(pszToken)>nBufLen) 
+				if(strlen(pszToken)>nBufLen)
 				{
 					/* truncate string if can't fit in buffer */
 					pszToken[nBufLen-1]=0;
 				}
 				strcpy(pszBuffer,pszToken);
-				return pszBuffer;				
+				return pszBuffer;
 		}
 		pszLine=strip_next_token(pszLine, szTokenBuffer, MAX_TOKEN_SIZE);
-	}	
-	return NULL; 
+	}
+	return NULL;
 }
-/* lang parsing code block end 
+/* lang parsing code block end
    **************************************************************** */
 
 /* djb2 hash function */
@@ -158,7 +157,7 @@ static inline unsigned long hash(char *str)
 
 	while ((c = *str++))
 		hash = ((hash << 5) + hash) + c; /* hash * 33 + c */
-	
+
 	return hash;
 }
 
@@ -167,14 +166,14 @@ static inline char *translate_lookup(char *str)
 	char *name, *def, *p, *res = NULL;
 	lstr *i;
 	int h;
-	
+
 	def = name = str;
 	if (((p = strchr(str, '|')) != NULL)
 		|| ((p = strchr(str, '#')) != NULL)) {
 		def = p + 1;
 		*p = 0;
 	}
-	
+
 	h = hash(name) % HASH_MAX;
 	i = ltable[h];
 	while ((res == NULL) && (i != NULL)) {
@@ -182,10 +181,10 @@ static inline char *translate_lookup(char *str)
 			res = i->value;
 		i = i->next;
 	}
-	
+
 	if (res == NULL)
 		res = def;
-	
+
 	return res;
 }
 
@@ -198,7 +197,7 @@ static inline void add_line(char *name, char *value)
 	s->name = strdup(name);
 	s->value = strdup(value);
 	s->next = NULL;
-	
+
 	if (ltable[h] == NULL)
 		ltable[h] = s;
 	else {
@@ -233,7 +232,7 @@ static char *translate_line(char *line)
 		l += strlen(TR_END);
 	}
 	len++;
-	
+
 	if (len > LINE_BUF)
 		p = malloc(len);
 	else
@@ -267,7 +266,7 @@ static void load_lang(char *file)
 			b++; /* skip leading spaces */
 		if (!*b)
 			continue;
-		
+
 		name = b;
 		if ((b = strstr(name, "=>")) == NULL)
 			continue; /* separator not found */
@@ -275,17 +274,17 @@ static void load_lang(char *file)
 		value = b + 2;
 		if (!*value)
 			continue;
-		
+
 		*b = 0;
 		for (b--; isspace(*b); b--)
 			*b = 0; /* remove trailing spaces */
-		
+
 		while (isspace(*value))
 			value++; /* skip leading spaces */
 
 		for (b = value + strlen(value) - 1; isspace(*b); b--)
 			*b = 0; /* remove trailing spaces */
-		
+
 		if (!*value)
 			continue;
 
@@ -304,9 +303,8 @@ main
 (int argc, char **argv)
 {
 	FILE *f;
-	int len, i, done;
+	int i, done;
 	char line[LINE_BUF], *tmp, *arg;
-	glob_t langfiles;
 	char szLangBuffer[LANG_TYPE_MAX];
 	char *lang = NULL;
 	char *proc = "/usr/bin/haserl";
@@ -314,8 +312,7 @@ main
 
 	memset(ltable, 0, HASH_MAX * sizeof(lstr *));
 	if ((f = fopen("/etc/config/webif", "r")) != NULL) {
-		int n, i;
-		
+
 		while (!feof(f) && (lang == NULL)) {
 			fgets(line, LINE_BUF - 1, f);
 			lang=extract_lang(line, szLangBuffer, LANG_TYPE_MAX);
@@ -399,11 +396,11 @@ main
 	}
 
 	f = popen(line, "r");
-	
+
 	while (!feof(f) && (fgets(buf, LINE_BUF - 1, f)) != NULL) {
 		fprintf(stdout, "%s", translate_line(buf));
 		fflush(stdout);
 	}
-	
+
 	return 0;
 }

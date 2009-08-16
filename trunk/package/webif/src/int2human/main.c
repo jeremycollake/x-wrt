@@ -1,4 +1,4 @@
-/* stupid stand-alone stub - Jeremy Collake <jeremy@bitsum.com> */ 
+/* stupid stand-alone stub - Jeremy Collake <jeremy@bitsum.com> */
 /* This code GPL, as if anyone cares. */
 
 #include <stdio.h>
@@ -6,7 +6,7 @@
 #include <string.h>
 #include "human_readable.h"
 
-void int2human_usage() 
+void int2human_usage()
 {
 	printf("Usage: int2human integer1 integer2 integer3 ...\n\n"
 		" Where integerX is an integer to convert to human readable form. If multiple\n"
@@ -25,7 +25,6 @@ main
 #endif
 (int argc, char **argv)
 {
-	int nUseStdin=0;
 	char *pszInputText;
 	int nI;
 	if(argc<2)
@@ -35,7 +34,7 @@ main
 		{
 			int2human_usage();
 			exit(1);
-		}		
+		}
 	}
 	else
 	{
@@ -43,7 +42,7 @@ main
 		int nReqLen=1;  /* require at least null terminator */
 		for(nI=1; nI<argc;nI++)
 		{
-			if(!strcmp(argv[nI], "--?") || !strcmp(argv[nI], "--help")) 
+			if(!strcmp(argv[nI], "--?") || !strcmp(argv[nI], "--help"))
 			{
 				int2human_usage();
 				exit(1);
@@ -53,7 +52,7 @@ main
 		pszInputText=(char *)malloc(nReqLen);
 		pszInputText[0]=0;
 		for(nI=1; nI<argc;nI++)
-		{			
+		{
 			strcat(pszInputText,argv[nI]);
 			strcat(pszInputText," ");
 		}
@@ -68,6 +67,6 @@ main
 		printf("%s ", make_human_readable_str(strtoul(pS, NULL, 10), 1,  0));
 	}
 	free(pszInputText);
-	printf("\n");				
+	printf("\n");
 	exit(0);
 }
