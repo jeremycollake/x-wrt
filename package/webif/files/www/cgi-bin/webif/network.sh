@@ -364,7 +364,7 @@ EOF
 	end_form
 
 	start_form|$interface @TR<<DNS Servers>>|field_${interface}_dns|hidden
-	listedit|${interface}_dns|$SCRIPT_NAME?${interface}_proto=static&amp;|$FORM_dns|$FORM_dnsadd
+	listedit|${interface}_dns|$SCRIPT_NAME?${interface}_proto=static&amp;|$FORM_dns
 	end_form"
 
 	append forms "$network_options" "$N"
