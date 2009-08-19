@@ -250,9 +250,11 @@ EOF
 	}
 	if [ "$REMOTE_USER" != "root" -a "$REMOTE_USER" != "admin" ]; then
 		config_load webif_access_control
-		if [ "$1" != "Graphs" ]; then
+		if [ "$1" != "Graphs" -a "$2" != "" ]; then
 			webifform=`grep "##WEBIF:name:${1}:[0-9][0-9][0-9]:${2}" /www/cgi-bin/webif/*.sh |cut -d':' -f5`
 			config_get_bool permission "$REMOTE_USER" "${1}_${webifform}" 0
+		elif [ "$2" != "" ]; then
+			permission="1"
 		else
 			config_get_bool permission "$REMOTE_USER" "Graphs" 0
 		fi
