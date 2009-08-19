@@ -22,10 +22,8 @@
 if ! empty "$FORM_remove_vcfg"; then
 	uci_remove "firewall" "$FORM_remove_vcfg"
 fi
+#The following check needs to remain or we have no good way of knowing if a rule should be added.
 [ -z "$FORM_port_select_rule" ] && FORM_port_select_rule=custom
-[ -z "$FORM_target_rule" ] && FORM_target_rule=ACCEPT
-[ -z "$FORM_src_rule" ] && FORM_src_rule=wan
-[ -z "$FORM_dest_rule" ] && FORM_dest_rule=lan
 #Add new rules
 if [ -n "$FORM_port_rule" -o "$FORM_port_select_rule" != "custom" ]; then
 	validate <<EOF
@@ -173,12 +171,12 @@ form="string|<div class=\"settings\">
 append forms "$form" "$N"
 for rule in $rule_cfgs; do
 	if [ "$FORM_submit" = "" -o "$add_rule_cfg" = "$rule" ]; then
-		config_get FORM_src "$rule" src
-		config_get FORM_dest "$rule" dest "$FORM_src"
+		config_get FORM_src "$rule" src "wan"
+		config_get FORM_dest "$rule" dest
 		config_get FORM_protocol "$rule" proto
 		config_get FORM_src_ip "$rule" src_ip
 		config_get FORM_dest_ip "$rule" dest_ip
-		config_get FORM_target "$rule" target
+		config_get FORM_target "$rule" target "ACCEPT"
 		config_get FORM_port "$rule" dest_port
 		FORM_port_select_rule=custom
 	else
@@ -196,11 +194,7 @@ ports|FORM_port|@TR<<Destination Port>>||$FORM_port
 EOF
 		equal "$?" 0 && {
 			uci_set firewall "$rule" src "$FORM_src"
-			if [ "$FORM_src" = "$FORM_dest" ]; then
-				uci_set firewall "$rule" dest ""
-			else
-				uci_set firewall "$rule" dest "$FORM_dest"
-			fi
+			uci_set firewall "$rule" dest "$FORM_dest"
 			uci_set firewall "$rule" proto "$FORM_protocol"
 			uci_set firewall "$rule" src_ip "$FORM_src_ip"
 			uci_set firewall "$rule" dest_ip "$FORM_dest_ip"
@@ -215,10 +209,12 @@ EOF
 		string|<td>$name</td>
 		string|<td>
 		select|src_$rule|$FORM_src
+		option||@TR<<Router>>
 		$networks
 		string|</td>
 		string|<td>
 		select|dest_$rule|$FORM_dest
+		option||@TR<<Router>>
 		$networks
 		string|</td>
 		string|<td>
@@ -255,11 +251,13 @@ form="$tr
 	text|name|$FORM_name
 	string|</td>
 	string|<td>
-	select|src_rule|$FORM_src_rule
+	select|src_rule|wan
+	option||@TR<<Router>>
 	$networks
 	string|</td>
 	string|<td>
-	select|dest_rule|$FORM_dest_rule
+	select|dest_rule|
+	option||@TR<<Router>>
 	$networks
 	string|</td>
 	string|<td>
@@ -287,7 +285,7 @@ form="$tr
 	text|port_rule|$FORM_port_rule
 	string|</td>
 	string|<td>
-	select|target_rule|$FORM_target_rule
+	select|target_rule|ACCEPT
 	option|ACCEPT|@TR<<Accept>>
 	option|DROP|@TR<<Drop>>
 	option|REJECT|@TR<<Reject>>
