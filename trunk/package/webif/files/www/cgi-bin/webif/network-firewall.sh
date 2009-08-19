@@ -22,8 +22,8 @@
 if ! empty "$FORM_remove_vcfg"; then
 	uci_remove "firewall" "$FORM_remove_vcfg"
 fi
+#The following check needs to remain or we have no good way of knowing if a rule should be added.
 [ -z "$FORM_port_select_rule" ] && FORM_port_select_rule=custom
-[ -z "$FORM_target_rule" ] && FORM_target_rule=ACCEPT
 #Add new rules
 if [ -n "$FORM_port_rule" -o "$FORM_port_select_rule" != "custom" ]; then
 	validate <<EOF
@@ -176,7 +176,7 @@ for rule in $rule_cfgs; do
 		config_get FORM_protocol "$rule" proto
 		config_get FORM_src_ip "$rule" src_ip
 		config_get FORM_dest_ip "$rule" dest_ip
-		config_get FORM_target "$rule" target
+		config_get FORM_target "$rule" target "ACCEPT"
 		config_get FORM_port "$rule" dest_port
 		FORM_port_select_rule=custom
 	else
@@ -285,7 +285,7 @@ form="$tr
 	text|port_rule|$FORM_port_rule
 	string|</td>
 	string|<td>
-	select|target_rule|$FORM_target_rule
+	select|target_rule|ACCEPT
 	option|ACCEPT|@TR<<Accept>>
 	option|DROP|@TR<<Drop>>
 	option|REJECT|@TR<<Reject>>
