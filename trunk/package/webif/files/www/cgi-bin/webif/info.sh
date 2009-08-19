@@ -13,7 +13,7 @@ user_string="$REMOTE_USER"
 [ -z "$user_string" ] && user_string="not logged in"
 machinfo=$(uname -a 2>/dev/null)
 
-package_filename="webif_latest_stable.ipk"
+package_filename="webif_latest.ipk"
 if $(echo "$_firmware_version" | grep -q "r[[:digit:]]*"); then
 	svn_path="trunk"
 else
@@ -22,15 +22,8 @@ fi
 version_url=$(sed '/^src[[:space:]]*X-Wrt[[:space:]]*/!d; s/^src[[:space:]]*X-Wrt[[:space:]]*//g; s/\/packages.*$/\//g' /etc/opkg.conf 2>/dev/null)
 revision_text=" r$_webif_rev "
 this_revision="$_webif_rev"
-version_file=".version-stable"
-daily_checked=""
+version_file=".version"
 upgrade_button=""
-
-equal "$FORM_check_daily" "1" && {
-	version_file=".version"
-	package_filename="webif_latest.ipk"
-	daily_checked="checked=\"checked\""
-}
 
 if [ -n "$FORM_update_check" ]; then
 	echo "@TR<<Please wait>> ...<br />"
@@ -125,9 +118,6 @@ cat <<EOF
 		<input type="submit" value=" @TR<<info_check_update#Check For Webif Update>> " name="update_check" />
 		$upgrade_button
 		</td>
-	</tr>
-	<tr>
-		<td colspan="2"><input type="checkbox" $daily_checked value="1" name="check_daily" id="field_check_daily" />@TR<<info_check_daily_text#Include daily builds when checking for update to webif&sup2;>></td>
 	</tr>
 </tbody>
 </table>
