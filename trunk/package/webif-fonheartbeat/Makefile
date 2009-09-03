@@ -43,13 +43,13 @@ endef
 
 define Package/webif-fonheartbeat/install
 	$(CP) -a ./files/* $(1)/
+	mkdir -p $(1)/CONTROL
 	$(INSTALL_BIN) ./ipkg/webif-fonheartbeat.postinst $(1)/CONTROL/postinst
 	$(INSTALL_BIN) ./ipkg/webif-fonheartbeat.postrm $(1)/CONTROL/postrm
 	$(INSTALL_BIN) ./files/www/cgi-bin/webif/* $(1)/www/cgi-bin/webif/
 	$(INSTALL_BIN) ./files/etc/init.d/* $(1)/etc/init.d/
 	rm -rf $(1)/usr/lib/webif/lang/
 	rm -f $(1)/www/cgi-bin/webif/*.wip
-	find $(1) -name 'CVS' -o -name '.svn' -o -name '*~' | $(XARGS) rm -rf
 endef
 
 define BuildLang

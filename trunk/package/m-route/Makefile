@@ -20,6 +20,7 @@ endef
 
 define Package/m-route/install
 	$(CP) -a ./files/* $(1)/
+	mkdir -p $(1)/CONTROL
 	$(INSTALL_BIN) ./files/etc/hotplug.d/iface/* $(1)/etc/hotplug.d/iface/
 	$(INSTALL_BIN) ./files/lib/mroute/* $(1)/lib/mroute/
 endef
