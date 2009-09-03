@@ -24,6 +24,7 @@ endef
 
 define Package/webif-hotspot/install
 	$(CP) -a ./files/* $(1)/
+	mkdir -p $(1)/CONTROL
 	$(INSTALL_BIN) ./ipkg/webif-hotspot.postinst $(1)/CONTROL/preinst
 	$(INSTALL_BIN) ./ipkg/webif-hotspot.postrm $(1)/CONTROL/postrm
 	$(INSTALL_BIN) ./files/www/cgi-bin/webif/* $(1)/www/cgi-bin/webif/
@@ -32,9 +33,6 @@ define Package/webif-hotspot/install
 
 	rm -rf $(1)/usr/lib/webif/lang/
 	rm -f $(1)/www/cgi-bin/webif/*.wip
-	find $(1) -name CVS | xargs rm -rf
-	find $(1) -name .svn | xargs rm -rf
-	find $(1) -name *~ | xargs rm -rf
 endef
 
 $(eval $(call BuildPackage,webif-hotspot))
