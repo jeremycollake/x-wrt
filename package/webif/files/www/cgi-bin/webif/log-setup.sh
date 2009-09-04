@@ -6,45 +6,20 @@ config_cb() {
 	[ -n "$1" ] && eval "$1_cfg=\"$2\""
 }
 
-uci_load syslog
-[ "$?" != "0" ] && {
-	uci_set_default syslog <<EOF
-config 'syslogd'
-	option 'ipaddr' ''
-	option 'port' ''
-	option 'size' '16'
-	option 'type' 'circular'
-	option 'mark' '0'
-	option 'file' '/var/log/messages'
-config 'klogd'
-	option 'conloglevel' ''
-config 'dmesg'
-	option 'buffersize' ''
-config 'dmesgbackup'
-	option 'enabled' '0'
-	option 'file' '/var/log/dmesg'
-	option 'gzip' '1'
-EOF
-	uci_load syslog
-}
+uci_load system
 
 if empty "$FORM_submit"; then
-	eval FORM_ipaddr="\$CONFIG_${syslogd_cfg}_ipaddr"
-	eval FORM_port="\$CONFIG_${syslogd_cfg}_port"
-	FORM_port="${FORM_port:-514}"
-#	eval FORM_mark="\$CONFIG_${syslogd_cfg}_mark"
-	eval FORM_type="\$CONFIG_${syslogd_cfg}_type"
-	FORM_type="${FORM_type:-circular}"
-	eval FORM_file="\$CONFIG_${syslogd_cfg}_file"
-	FORM_file="${FORM_file:-/var/log/messages}"
-	eval FORM_size="\$CONFIG_${syslogd_cfg}_size"
-	FORM_size="${FORM_size:-16}"
-	eval FORM_conloglevel="\$CONFIG_${klogd_cfg}_conloglevel"
-	eval FORM_buffersize="\$CONFIG_${dmesg_cfg}_buffersize"
+	config_get FORM_ipaddr "$system_cfg" log_ip
+	config_get FORM_size "$system_cfg" log_size 16
+	config_get FORM_port "$system_cfg" log_port 514
+	config_get FORM_type "$system_cfg" log_type circular
+	config_get FORM_file "$system_cfg" log_file "/var/log/messages"
+	config_get FORM_conloglevel "$system_cfg" klogconloglevel
+	config_get FORM_buffersize "$system_cfg" buffersize
 	config_get_bool FORM_enabled "$dmesgbackup_cfg" enabled 0
-	eval FORM_kfile="\$CONFIG_${dmesgbackup_cfg}_file"
-	FORM_kfile="${FORM_kfile:-/var/log/dmesg}"
+	config_get FORM_kfile "$dmesgbackup_cfg" file "/var/log/dmesg"
 	config_get_bool FORM_gzip "$dmesgbackup_cfg" gzip 0
+
 else
 	SAVED=1
 	[ "$FORM_type" = "file" ] && file_required="required"
@@ -63,21 +38,17 @@ string|FORM_kfile|@TR<<Backup File>>|$kfile_required|$FORM_kfile
 int|FORM_gzip|@TR<<Compress Backup>>||$FORM_gzip
 EOF
 	equal "$?" 0 && {
-		[ -z "$syslogd_cfg" ] && { uci_add syslog syslogd; syslogd_cfg="$CONFIG_SECTION"; }
-		[ -z "$klogd_cfg" ] && { uci_add syslog klogd; klogd_cfg="$CONFIG_SECTION"; }
-		[ -z "$dmesg_cfg" ] && { uci_add syslog dmesg; dmesg_cfg="$CONFIG_SECTION"; }
-		[ -z "$dmesgbackup_cfg" ] && { uci_add syslog dmesgbackup; dmesgbackup_cfg="$CONFIG_SECTION"; }
-		uci_set syslog "$syslogd_cfg" ipaddr "$FORM_ipaddr"
-		uci_set syslog "$syslogd_cfg" port "$FORM_port"
-		#uci_set syslog "$syslogd_cfg" mark "$FORM_mark"
-		uci_set syslog "$syslogd_cfg" type "$FORM_type"
-		uci_set syslog "$syslogd_cfg" file "$FORM_file"
-		uci_set syslog "$syslogd_cfg" size "$FORM_size"
-		uci_set syslog "$klogd_cfg" conloglevel "$FORM_conloglevel"
-		uci_set syslog "$dmesg_cfg" buffersize "$FORM_buffersize"
-		uci_set syslog "$dmesgbackup_cfg" enabled "$FORM_enabled"
-		uci_set syslog "$dmesgbackup_cfg" file "$FORM_kfile"
-		uci_set syslog "$dmesgbackup_cfg" gzip "$FORM_gzip"
+		[ -z "$dmesgbackup_cfg" ] && { uci_add system dmesgbackup; dmesgbackup_cfg="$CONFIG_SECTION"; }
+		uci_set system "$system_cfg" log_ip "$FORM_ipaddr"
+		uci_set system "$system_cfg" log_port "$FORM_port"
+		uci_set system "$system_cfg" log_type "$FORM_type"
+		uci_set system "$system_cfg" log_file "$FORM_file"
+		uci_set system "$system_cfg" log_size "$FORM_size"
+		uci_set system "$system_cfg" klogconloglevel "$FORM_conloglevel"
+		uci_set system "$system_cfg" buffersize "$FORM_buffersize"
+		uci_set system "$dmesgbackup_cfg" enabled "$FORM_enabled"
+		uci_set system "$dmesgbackup_cfg" file "$FORM_kfile"
+		uci_set system "$dmesgbackup_cfg" gzip "$FORM_gzip"
 	}
 fi
 
