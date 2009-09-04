@@ -28,7 +28,6 @@ endef
 define Package/webif/conffiles
 /etc/config/webif
 /etc/config/cron
-/etc/config/syslog
 /etc/ssl/openssl.cnf
 /etc/httpd.conf
 endef

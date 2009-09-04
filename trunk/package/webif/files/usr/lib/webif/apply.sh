@@ -267,9 +267,6 @@ for package in $process_packages; do
 		"wireless")
 			echo '@TR<<Reloading>> @TR<<wireless>> ...'
 			wifi ;;
-		"syslog")
-			echo '@TR<<Reloading>> @TR<<syslogd>> ...'
-			/etc/init.d/syslog restart >&- 2>&- ;;
 		"webifopenvpn")
 			echo '@TR<<Reloading>> @TR<<OpenVPN>> ...'
 			if [ ! -e S??webifopenvpn ]; then
@@ -282,6 +279,8 @@ for package in $process_packages; do
 			reset_cb
 			config_get hostname "$system_cfg" hostname
 			echo "${hostname:-OpenWrt}" > /proc/sys/kernel/hostname
+			echo "If you made changes to the log settings please reboot for them to take effect!"
+			sleep 5
 			config_allclear
 			;;
 		"l2tpns")

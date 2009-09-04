@@ -24,6 +24,6 @@ dmesgbackup_config() {
 }
 
 start() {
-	config_load syslog
+	config_load system
 	config_foreach dmesgbackup_config dmesgbackup
 }
