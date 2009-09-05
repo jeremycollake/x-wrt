@@ -838,7 +838,7 @@ EOF
 			append forms "helpitem|Encryption Type" "$N"
 			append forms "helptext|HelpText Encryption Type#WPA (RADIUS) is only supported in Access Point mode. WPA (PSK) does not work in Ad-Hoc mode." "$N"
 
-				macpolicy="field|@TR<<MAC Filter>>
+				macpolicy="field|@TR<<MAC Filter>>|macpolicy_$vcfg|hidden
 					select|macpolicy_$vcfg|$FORM_macpolicy
 					option|none|@TR<<Disabled>>
 					option|allow|@TR<<Allow>>
@@ -900,7 +900,7 @@ EOF
 				set_visible('bgchannelform_$device', v);
 				v = (isset('ap_mode_$device','11a'));
 				set_visible('achannelform_$device', v);
-				v = (!isset('mode_$vcfg','wds'));
+				v = ((!isset('mode_$vcfg','wds') && ('$iftype'!='mac80211')));
 				set_visible('broadcast_form_$vcfg', v);
 				v = ((isset('mode_$vcfg','wds')) || (isset('mode_$vcfg','adhoc') && ('$iftype'=='mac80211')));
 				set_visible('bssid_form_$vcfg', v);
@@ -924,7 +924,9 @@ EOF
 				set_visible('radius_port_form_$vcfg', v);
 				v = (('$iftype'!='mac80211') && (isset('mode_$vcfg','ap') || isset('mode_$vcfg','sta')));
 				set_visible('wds_form_$vcfg', v);
-				v = (!isset('macpolicy_$vcfg','none'));
+				v = (('$iftype'!='mac80211'));
+				set_visible('macpolicy_$vcfg', v);
+				v = ((!isset('macpolicy_$vcfg','none') && ('$iftype'!='mac80211')));
 				set_visible('maclist_form_$vcfg', v);"
 			append js "$javascript_forms" "$N"
 			remove_vcfg="start_form
