@@ -1,7 +1,9 @@
 #!/usr/bin/webif-page
 <?
 . /usr/lib/webif/webif.sh
+
 #################################
+#
 # Wireless survey page
 #
 # Description:
@@ -11,57 +13,72 @@
 #	Jeremy Collake <jeremy.collake@gmail.com>
 #	Travis Kemen <thepeople@berlios.de>
 #
-# TODO:
-#   I originally wrote this before I had bothered to learn much about
-#   awk, so it uses 'pure' shell scripting. It would be much simpler
-#   and probably more efficient to use awk. Maybe recode someday, but
-#   why fix what's isn't broken...
-#
+# Completely rewritten for speed improvement into pure AWK by
+#	Stefan Stapelberg <stefan@rent-a-guru.de>
 
-header "Status" "Site Survey" "@TR<<Site Survey>>"
+MACLIST_URL="http://standards.ieee.org/cgi-bin/ouisearch?"
+
 config_cb() {
 	local cfg_type="$1"
 	local cfg_name="$2"
 
 	case "$cfg_type" in
-	        wifi-device)
-	                append DEVICES "$cfg_name"
-	        ;;
-	        wifi-iface)
-	                append vface "$cfg_name" "$N"
-	        ;;
+	        wifi-device) append devices "$cfg_name" ;;
+	        wifi-iface)  append vface "$cfg_name" "$N" ;;
 	esac
 }
+
 uci_load wireless
-for DEVICE in $DEVICES; do
-	config_get type $DEVICE type
-	echo "$type" |grep -q broadcom
-	[ "$?" = 0 ] && {
-		config_get disabled $DEVICE disabled
+
+for device in $devices; do
+	config_get type $device type
+	[ "$type" = "broadcom" ] && {
+		config_get disabled $device disabled
 		[ "$disabled" = "0" ] && scan_iface=1
 	}
-	echo "$type" |grep -q atheros
-	[ "$?" = 0 ] && {
-		config_get disabled $DEVICE disabled
-		[ "$disabled" = "0" ] && atheros_devices="$atheros_devices $DEVICE"
+	[ "$type" = "atheros" ] && {
+		config_get disabled $device disabled
+		[ "$disabled" = "0" ] && atheros_devices="$atheros_devices $device"
+	}
+	[ "$type" = "mac80211" ] && {
+		config_get disabled $device disabled
+		[ "$disabled" = "1" ] && {
+			scan_iface=1
+			FORM_clientswitch=1
+		}
 	}
 done
+
 for ath_device in $atheros_devices; do
 	for i in $vface; do
 		config_get iface $i device
 		if [ "$iface" = "$ath_device" ]; then
 			config_get mode $i mode
-			echo "$mode" |grep -q sta
-			[ "$?" = 0 ] && scan_iface=1
+			[ "$mode" = "sta" ] && scan_iface=1
 		fi
 	done
 done
 
+header "Status" "Site Survey" "@TR<<Site Survey>>"
+
+equal "$scan_iface" "1" || {
+	echo '<div class="settings">'
+	echo "@TR<<No wireless networks were found>>."
+	echo '</div>'
+	footer
+	exit
+}
+
+SCAN_BUTTON='@TR<<Start the scan now>>'
+tempfile=$(mktemp /tmp/.survtemp.XXXXXX)
+
 if [ "$FORM_clientswitch" != "" ]; then
-	for DEVICE in $DEVICES; do
-		config_get type $DEVICE type
-		echo "$type" |grep -q broadcom
-		[ "$?" = 0 ] && {
+	SCAN_BUTTON='@TR<<Start the scan again>>'
+	echo "<p style=\"margin: 1em 0;\">@TR<<Please wait, the scan needs some time>> ...</p>"
+
+	for device in $devices; do
+		config_get type $device type
+		[ "$type" = "broadcom" ] && {
 			wifi down
 			wlc stdin <<EOF
 down
@@ -103,186 +120,133 @@ vlan_mode 0
 ssid OpenWrt
 enabled 1
 EOF
-			scan_iface=1
 			break
 		}
-		echo "$type" |grep -q atheros
-		[ "$?" = 0 ] && {
+		[ "$type" = "atheros" ] && {
 			wifi down >/dev/null
 			wlanconfig ath0 create wlandev wifi0 wlanmode sta >/dev/null
-			scan_iface=1
 			ifconfig ath0 up
 			sleep 3
 		}
-			
+		[ "$type" = "mac80211" ] && {
+			wifi down >/dev/null
+			ifconfig wlan0 up
+			sleep 3
+		}
 	done
 fi
 
-if [ "$scan_iface" != "1" ]; then
-	cat <<EOF
+got_result=0
+
+for i in 1 2 3 4; do
+	iwlist scan 2>/dev/null | tee "$tempfile" | grep -qi 'Cell [0-9][0-9] - Address:' && {
+		got_result=1
+		break;
+	}
+done
+
+cat <<-EOF
 <div class="settings">
 <form enctype="multipart/form-data" method="post" action="$SCRIPT_NAME">
 <h3><strong>@TR<<Wireless Survey>></strong></h3>
-<p>@TR<<HelpText WLAN Survey#Your wireless adaptor is not in client mode. To do a scan it must be put into client mode for a few seconds. Your WLAN traffic will be interrupted during this brief period.>></p>
-<input type="submit" value=" @TR<<Scan>> " name="clientswitch" />
+<p style="margin-bottom: 1em;">
+@TR<<wlan_survey_helptext#Your wireless adaptor is not in client mode.<br />To do a scan it must be put into client mode for a few seconds.>>
+<br /><br />
+<span class="red">@TR<<wlan_survey_warning#<b>Note:</b> Your WLAN traffic will be interrupted during this brief period.>></span>
+</p>
+<input style="margin-left: 12em;" type="submit" name="clientswitch" value=" $SCAN_BUTTON " />
 </form>
-<div class="clearfix">&nbsp;</div></div>
+<div class="clearfix">&nbsp;</div>
+</div>
+<br />
 EOF
-fi
 
-##### Variables
+equal "$got_result" "1" || {
+	SCAN_BUTTON="@TR<<Start survey>>"
+	echo '<div class="settings" style="margin-top: 1em;">'
+	echo '<p>@TR<<status_wlan_noresults#Sorry, there are no scan results. Please do a search by clicking on>>'
+	echo "<i>${SCAN_BUTTON}</i> @TR<<above>>.</p>"
+	echo '</div>'
+	footer
+	rm "$tempfile"
+	exit
+}
 
-MAX_TRIES=4
-MAX_CELLS=100
-tempfile=$(mktemp /tmp/.survtemp.XXXXXX)
-tempfile2=$(mktemp /tmp/.survtemp.XXXXXX)
+FORM_cells=$(awk -v "maclist_url=$MACLIST_URL" '
+BEGIN { nc = 0; }
+	$1 == "Cell" && $4 == "Address:" {
+	nc = $2 + 0;	# strip leading zero
+	macaddr[nc] = $5;
+}
+nc > 0 {
+	if ($1 ~ /^ESSID:/) {
+		sub(/^  *ESSID:"/, "", $0);
+		sub(/"$/, "", $0);
+		essid[nc] = $0;
+		next;
+	}
+	if ($1 ~ /^Channel:/) {
+		split($1, arr, ":");
+		channel[nc] = arr[2];
+		next;
+	}
+	if ($1 ~ /^Quality:/ && $2 ~ /^Signal$/) {
+		split($1, arr, ":");
+		quality[nc] = arr[2];
+	
+		split($3, arr, ":");
+		siglevel[nc] = arr[2];
+	
+		split($6, arr, ":");
+		noiselevel[nc] = arr[2];
+		next;
+	}
+	if ($1 ~ /^Encryption/) {
+		split($2, arr, ":");
+		enc[nc] = arr[2];
+	}
+}
+END {	for (i=1; i <= nc; i++) {
+		split(macaddr[i], arr, ":");
+		abbr_macaddr = arr[1] "-" arr[2] "-" arr[3];
 
-if [ "$scan_iface" = "1" ]; then
-#echo " Please wait while scan is performed ... <br /><br />"
-counter=0
-for counter in $(seq 1 $MAX_TRIES); do
-	#echo "."
-	iwlist scan > $tempfile 2> /dev/null
-	grep -i "Address" < $tempfile >> /dev/null
-	equal "$?" "0" && break
-	sleep 1
-done
+		noise_delta = -99 - noiselevel[i];
+		integrity = siglevel[i] + noise_delta;
+		psnr = 100 + integrity;
 
-first_hit=1
-if [ $counter -gt $MAX_TRIES ]; then
-	echo "<tr><td>@TR<<Sorry, no scan results.>></td></tr>"
-else
-	current=0
-	counter=0
-	for counter in $(seq 1 $MAX_CELLS); do
-		current_line=$(sed '2,$ d' < $tempfile)
-		empty "$current_line" && break
-		# line must contain both "Cell" and "Address" to be considered
-		#  start of a new cell..
-		echo "$current_line" | grep "Cell" >> /dev/null
-		result_one=$?
-		echo "$current_line" | grep "Address" >> /dev/null
-		result_two=$?
-		equal "$result_one" "0" && equal "$result_two" "0" && {
-			equal "$first_hit" "0" && {
-				let "current+=1"
-			}
-			first_hit=0
-		}
-		equal "$first_hit" "0" && {
-			echo "$current_line" >> "$tempfile"_"${current}"
-		}
+		img_url = "<img src=\"/images/";
+		if (enc[i] == "on")
+			img_url = img_url "lock.png";
+		else	img_url = img_url "transmit.png";
+		img_url = img_url "\" width=\"16\" height=\"16\" border=\"0\" alt=\"\" />";
 
-		sed 1d < $tempfile > $tempfile2
-		rm $tempfile
-		mv $tempfile2 $tempfile
-	done
-
-	current=0
-	counter=0
-	for counter in $(seq 1 $MAX_CELLS); do
-		! exists "$tempfile"_"${current}" && break
-		####################################################
-		# parse out MAC
-		address_pre=$(sed '2,$ d' < "$tempfile"_"${current}" | sed -e s/'Cell'//g -e s/'Address'//g -e s/'-'//g)
-		count=0
-		for i in $address_pre; do
-			case $count in
-				0) CELL_ID=$i;;
-				2) MAC_ID=$i;;
-				3) break;;
-			esac
-			let "count+=1"
-		done
-
-		####################################################
-		# parse out essid
-		ESSID=$(grep -i "ESSID" < "$tempfile"_"${current}" | sed -e s/'ESSID:'//g -e s/'"'//g)
-
-		grep -q "Frequency:" < "$tempfile"_"${current}"
-		if [ "$?" = "0" ]; then
-			####################################################
-			# parse out channel
-			CHANNEL_ID=$(grep -i "Frequency:" < "$tempfile"_"${current}" | sed -e s/'Frequency:'//g -e s/' '//g)
-
-			####################################################
-			# parse out signal
-			quality_pre=$(grep -i "Quality" < "$tempfile"_"${current}" | sed -e s/'Quality='//g -e s/'Signal level='//g  -e s/'dBm'//g -e s/'Noise level='//g)
-		else
-			####################################################
-			# parse out channel
-			CHANNEL_ID=$(grep -i "Channel" < "$tempfile"_"${current}" | sed -e s/'Channel:'//g -e s/' '//g)
-
-			####################################################
-			# parse out signal
-			quality_pre=$(grep -i "Quality" < "$tempfile"_"${current}" | sed -e s/'Quality:'//g -e s/'Signal level:'//g  -e s/'dBm'//g -e s/'Noise level:'//g)
-		fi
-		count=0
-		for i in $quality_pre; do
-			case $count in
-				0) QUALITY=$i;;
-				1) SIGNAL_DBM=$i;;
-				2) NOISE_DBM=$i
-					break;;
-			esac
-			let "count+=1"
-		done
-
-		#
-		# only show quality if it's not 0/0
-		#
-		if ! equal "$QUALITY" "0/0"; then
-			QUALITY_STRING="string|<tr><td>@TR<<Quality>> $QUALITY</td></tr>"
-		fi
-
-		NOISE_BASE=-99
-		NOISE_DELTA=$(expr $NOISE_BASE - $NOISE_DBM)
-
-		SIGNAL_INTEGRITY=$(expr $SIGNAL_DBM + $NOISE_DELTA)
-		MAC_DASHES=$(echo "$MAC_ID" | sed s/':'/'-'/g)
-		MAC_FIRST_THREE=$(echo "$MAC_DASHES" | cut -c1-8)
-		SNR_PERCENT=$(expr 100 + $SIGNAL_INTEGRITY)
-
-		FORM_cells="$FORM_cells
-			string|<tr><td><strong>@TR<<Cell>></strong> $CELL_ID</td></tr>
-			string|<tr><td><strong>@TR<<SSID>></strong> $ESSID (<a href=\"http://standards.ieee.org/cgi-bin/ouisearch?$MAC_FIRST_THREE\" target=\"_blank\">$MAC_DASHES</a>)</td></tr>
-			string|<tr><td><strong>@TR<<Channel>></strong> $CHANNEL_ID</td></tr>
-			$QUALITY_STRING
-			string|<tr><td><strong>@TR<<Signal>></strong> $SIGNAL_DBM dBm / <strong>@TR<<Noise>></strong> $NOISE_DBM dBm</td></tr><tr><td>
-# I guess is more graphic
-			progressbar|SNR|<strong>@TR<<SNR>></strong> $SIGNAL_INTEGRITY dBm|200|$SNR_PERCENT|"$SNR_PERCENT%"
-#			progressbar|SNR|<strong>@TR<<SNR>></strong> $SIGNAL_INTEGRITY dBm|200|$SNR_PERCENT|$SIGNAL_INTEGRITY dBm
-			string|</td></tr><tr><td>&nbsp;</td></tr>"
-
-		rm -f "$tempfile"_"${current}"
-		let "found_networks+=1"
-		let "current+=1"
-	done
-fi # end if were scan results
+		printf("string|<tr><td class=\"wlscan\" valign=\"top\" nowrap=\"nowrap\">%s<span class=\"essid\">%s</span><br />\n",
+			img_url, essid[i]);
+		printf("string|<span class=\"wlinfo\"><a title=\"@TR<<Cell>> %d\" href=\"%s?%s\" target=\"_blank\">%s</a>\n",
+			i, maclist_url, abbr_macaddr, macaddr[i]);
+		printf("string| @TR<<on>> @TR<<Channel>> %d</span>", channel[i]);
+		if (quality[i] != "0/0")
+			printf("<br />\nstring|<span class=\"wlinfo\">@TR<<Quality>>: %s</span>", quality[i]);
+		printf("</td>\n");
+		printf("string|<td valign=\"top\">@TR<<Signal>> %d @TR<<dbm>> / @TR<<Noise>> %d @TR<<dbm>><br />\n",
+			siglevel[i], noiselevel[i]);
+		printf("progressbar|SNR|@TR<<SNR>> %d @TR<<dbm>>|200|%d|\"%d%%\"\n", integrity, psnr, psnr);
+		printf("string|</td></tr><tr><td colspan=\"2\">&nbsp;</td></tr>\n");
+	}
+}' "$tempfile")
 
 rm -f "$tempfile"
-rm -f "$tempfile2"
 
-if ! empty "$FORM_clientswitch"; then
-	#echo "<tr><td>Restoring settings...</tr></td>"
-	# restore radio to its original state
-	wifi >/dev/null
-fi
-fi # end if is in 'allowed to scan' mode
+# Restore radio to its original state
+empty "$FORM_clientswitch" || wifi >/dev/null 2>&1
 
-if [ "$scan_iface" = "1" ]; then
-	if equal "$found_networks" "0"; then
-		echo "@TR<<No wireless networks were found>>."
-	else
-		display_form <<EOF
-		start_form|@TR<<Survey Results>>
-		$FORM_cells
-		end_form|
+display_form <<-EOF
+start_form|@TR<<Survey Results>>
+$FORM_cells
+end_form|
 EOF
-	fi
-fi
 
 footer ?>
 <!--
-##WEBIF:name:Status:980:Site Survey
+##WEBIF:name:Status:900:Site Survey
 -->

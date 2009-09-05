@@ -16,30 +16,45 @@ libdir=/usr/lib/webif
 wwwdir=/www
 cgidir=/www/cgi-bin/webif
 rootdir=/cgi-bin/webif
+cachedir=/tmp/.webcache
+cachetime=7200			# cache time-out: 5 days
+
 . /usr/lib/webif/functions.sh
 . /lib/config/uci.sh
 
 uci_load "webif"
 _device="$CONFIG_general_device_name"
 
+init_cache() {
+	[ -d $cachedir ] || mkdir $cachedir 2>/dev/null 1>&2
+	awk -F: -v rootdir="$rootdir" -v cachedir="$cachedir" -v USER="${1:-root}" \
+	    -f /usr/lib/webif/common.awk -f /usr/lib/webif/acl.awk $cgidir/.categories $cgidir/*.sh 2>/dev/null
+}
+
 categories() {
-	grep '##WEBIF' $cgidir/.categories $cgidir/*.sh 2>/dev/null | \
-		awk -v "selected=$1" \
-			-v "USER=$REMOTE_USER" \
-			-v "rootdir=$rootdir" \
-			-f /usr/lib/webif/common.awk \
-			-f /usr/lib/webif/categories.awk -
+	cachefile="$cachedir/cat_${REMOTE_USER:-root}"
+	#awk -F: -v selected="$1" -f /usr/lib/webif/categories.awk $cachefile 2>/dev/null
+	sed -e 's%^-:-$%<li>\&nbsp;</li>%' \
+	    -e 's%^\([^:]*\):\(.*\)$%<li><a href="\2?cat=\1">@TR<<\1>></a></li>%' \
+	    -e '/'"$1"'/s%^<li>\(.*\)$%<li class="selected">\1%' $cachefile 2>/dev/null
 }
 
 subcategories() {
-	grep -H "##WEBIF:name:$1:" $cgidir/*.sh 2>/dev/null | \
-		sed -e 's,^.*/\([a-zA-Z0-9\.\-]*\):\(.*\)$,\2:\1,' | \
-		sort -n | \
-		awk -v "selected=$2" \
-			-v "rootdir=$rootdir" \
-			-v "USER=$REMOTE_USER" \
-			-f /usr/lib/webif/common.awk \
-			-f /usr/lib/webif/subcategories.awk -
+	cachefile="$cachedir/subcat_${REMOTE_USER:-root}"
+	#awk -F: -v category="$1" -v selected="$2" -f /usr/lib/webif/subcategories.awk $cachefile 2>/dev/null
+	
+	sed -e '/^'"$1"':/!d' \
+	    -e 's%[^:]*:[^:]*:\([^:]*\):\(.*\)$%<li><a href="\2">@TR<<\1>></a></li>%' \
+	    -e '/<<'"$2"'>>/s%^<li>\(.*\)$%<li class="selected">\1%' $cachefile 2>/dev/null
+}
+
+perm_denied() {
+	[ "$REMOTE_USER" = "root" -o "$REMOTE_USER" = "admin" ] && return 1
+	[ "$SCRIPT_NAME" = "/cgi-bin/webif/config.sh" ] && return 1
+	
+	cachefile="$cachedir/subcat_${REMOTE_USER:-root}"
+	grep -q "$SCRIPT_NAME" $cachefile 2>/dev/null && return 1
+	return 0
 }
 
 ShowWIPWarning() {
@@ -115,6 +130,12 @@ header() {
 		ERROR="<h3 class=\"warning\">$ERROR</h3>"
 		_saved_title=": @TR<<Settings not saved>>"
 	}
+
+	# Initialize the categories cache if not done already
+	[ -s "$cachedir/cat_${REMOTE_USER:-root}" ] || init_cache ${REMOTE_USER:-root}
+	#cache_needs_update="$(find $cachedir -mmin -$cachetime -name cat_${REMOTE_USER:-root} 2>/dev/null | wc -l)"
+	#[ "$cache_needs_update" = "0" ] && init_cache ${REMOTE_USER:-root}
+	
 
 	_category="$1"
 	_firmware_version="$CONFIG_general_firmware_version"
@@ -248,22 +269,11 @@ EOF
 			apply_passwd
 		}
 	}
-	if [ "$REMOTE_USER" != "root" -a "$REMOTE_USER" != "admin" ]; then
-		config_load webif_access_control
-		if [ "$1" != "Graphs" -a "$2" != "" ]; then
-			webifform=`grep "##WEBIF:name:${1}:[0-9][0-9][0-9]:${2}" /www/cgi-bin/webif/*.sh |cut -d':' -f5`
-			config_get_bool permission "$REMOTE_USER" "${1}_${webifform}" 0
-		elif [ "$2" != "" ]; then
-			permission="1"
-		else
-			config_get_bool permission "$REMOTE_USER" "Graphs" 0
-		fi
-		if [ "$permission" = "0" ]; then
-			echo "Permission Denied"
-			footer
-			exit
-		fi
-	fi
+	perm_denied "$_category" && {
+		echo "Permission Denied"
+		footer
+		exit
+	}
 }
 
 #######################################################
