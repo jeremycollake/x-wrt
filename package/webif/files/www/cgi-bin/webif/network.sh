@@ -197,6 +197,7 @@ for interface in $network; do
 		config_get FORM_ip6addr $interface ip6addr
 		config_get FORM_gateway6 $interface ip6gw
 		config_get FORM_dns $interface dns
+		config_get FORM_device $interface device
 		eval FORM_dnsremove="\$FORM_${interface}_dnsremove"
 		if [ "$FORM_dnsremove" != "" ]; then
 			list_remove FORM_dns "$FORM_dnsremove"
@@ -225,6 +226,7 @@ for interface in $network; do
 		eval FORM_defaultroute="\$FORM_${interface}_defaultroute"
 		eval FORM_ip6addr="\$FORM_${interface}_ip6addr"
 		eval FORM_gateway6="\$FORM_${interface}_gateway6"
+		eval FORM_device="\$FORM_${interface}_device"
 		eval FORM_dnsadd="\$FORM_${interface}_dnsadd"
 		config_get FORM_dns $interface dns
 		[ $FORM_dnsadd != "" ] && FORM_dns="$FORM_dns $FORM_dnsadd"
@@ -243,10 +245,13 @@ EOF
 			uci_set "network" "$interface" "proto" "$FORM_proto"
 			[ "$FORM_type" = "" ] && uci_remove "network" "$interface" "type"
 			[ "$FORM_type" != "" ] && uci_set "network" "$interface" "type" "$FORM_type"
+			[ "$FORM_device" != "" -a "$FORM_proto" != "pptp" ] && uci_remove "network" "$interface" "device"
 			uci_set "network" "$interface" "macaddr" "$FORM_macaddr"
 			case "$FORM_proto" in
 				pptp)
-					uci_set "network" "$interface" "server" "$FORM_pptp_server" ;;
+					uci_set "network" "$interface" "server" "$FORM_pptp_server" 
+					uci_set "network" "$interface" "device" "$FORM_device"
+					;;
 				wwan)
 					if ! equal "$FORM_pincode" "-@@-"; then
 						uci_set "network" "$interface" "pincode" "$FORM_pincode"
@@ -361,6 +366,8 @@ EOF
 	text|${interface}_vpi|$FORM_vpi
 	field|@TR<<Default Route>>
 	checkbox|${interface}_defaultroute|$FORM_defaultroute|1
+	field|@TR<<VPN>>|field_${interface}_vpn|hidden
+	checkbox|${interface}_device|$FORM_device|vpn
 	end_form
 
 	start_form|$interface @TR<<DNS Servers>>|field_${interface}_dns|hidden
@@ -399,6 +406,7 @@ EOF
 
 		v = (isset('${interface}_proto', 'pptp'));
 		set_visible('field_${interface}_pptp_server', v);
+		set_visible('field_${interface}_vpn', v);
 
 		v = (isset('${interface}_proto', 'pppoa'));
 		set_visible('field_${interface}_vci', v);
