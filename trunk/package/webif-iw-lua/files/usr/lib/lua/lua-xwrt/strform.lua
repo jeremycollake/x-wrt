@@ -31,13 +31,23 @@ function set_script (t)
 	end
 end
 
-function set_checked (t)
-	if t.checked == nil then t.checked = "1" end
-	if string.trim(t.value) == string.trim(t.checked) then 
-		return " checked=\"checked\"" 
-	else 
-		return "" 
+function set_checked (t,op)
+	if (op ~= nil) then
+		if string.trim(op.value) == string.trim(t.value) then 
+			if t.input == "radio" then
+				return " checked "
+			elseif t.input == "select" then
+				return " selected=\"selected\" "
+			end
+		end
 	end
+	if t.input == "checkbox" then
+		if t.checked == nil then t.checked = "1" end
+		if string.trim(t.value) == string.trim(t.checked) then 
+			return " checked=\"checked\" " 
+		end
+	end
+	return ""
 end
 
 function set_validate(t)
@@ -77,46 +87,43 @@ end
 function radio (t)
 	set_values(t)
 	for v,op in ipairs(t.options) do
-		str = str .. "<input type=\"radio\" name=\""..t.name.."\" value=\""..op.value.."\" "..style.." "..script.." />"..op.label
+		checked = set_checked(t,op)
+		str = str .. "<input type=\"radio\" name=\""..t.name.."\" value=\""..op.value.."\""..set_checked(t,op)..style.." "..script.." />"..op.label.."\n"
 	end
 	return str
 end
 
 function hidden (t)
 	set_values(t)
-	str = str .. "<input type=\"hidden\" name=\""..t.name.."\" value=\""..t.value.."\" />"
+	str = str .. "<input type=\"hidden\" name=\""..t.name.."\" value=\""..t.value.."\" />\n"
 	return str
 end
 
 function disabled_text(t)
 	set_values(t)
-	str = str .. "<input type=\"text\" name=\""..t.name.."\" value=\""..t.value.."\" "..style.." "..script.." disabled=\"disabled\"/>"
+	str = str .. "<input type=\"text\" name=\""..t.name.."\" value=\""..t.value.."\" "..style.." "..script.." disabled=\"disabled\"/>\n"
 	return str
 end
 
 function text_area(t)
 	set_values(t)
-	str = str .. "<TEXTAREA name=\""..t.name.."\" rows=\"6\" wrap=\"off\" "..style.." "..script.." >"..t.value.."</TEXTAREA>"
+	str = str .. "<TEXTAREA name=\""..t.name.."\" rows=\"6\" wrap=\"off\" "..style.." "..script.." >"..t.value.."</TEXTAREA>\n"
 	return str
 end
 
 function password(t)
 	set_values(t)
-	str = str .. "<input type=\"password\" name=\""..t.name.."\" value=\""..t.value.."\" "..style.." "..script..">"
+	str = str .. "<input type=\"password\" name=\""..t.name.."\" value=\""..t.value.."\" "..style.." "..script..">\n"
 	return str
 end
 
 function select(t)
 	set_values(t)
-	str = str .. "<select name=\""..t.name.."\" "..style.." "..script..">"
+	str = str .. "<select name=\""..t.name.."\" "..style.." "..script..">\n"
 	for v,op in ipairs(t.options) do
-		if string.trim(op.value) == string.trim(t.value) then 
-			str = str .. "<option value=\""..op.value.."\" selected=\"selected\">"..op.label.."</option>"
-		else
-			str = str .. "<option value=\""..op.value.."\" >"..op.label.."</option>"
-		end
+			str = str .. "\t<option value=\""..op.value.."\""..set_checked(t,op)..">"..op.label.."</option>"
 	end
-	str = str .. "</select>"
+	str = str .. "</select>\n"
 	return str
 end
 

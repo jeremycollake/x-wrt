@@ -218,6 +218,7 @@ end
 function dev_list()
   local wirelessif =uci.get_type("wireless","wifi-iface")
   local nets = {}
+	if wirelessif then
   for i=1, #wirelessif do
     local netname = wirelessif[i].device
     local t = uci.get_section("network",wirelessif[i].network)
@@ -227,6 +228,7 @@ function dev_list()
     end
     nets[netname] = wirelessif[i].device
   end
+	end
   local networks = uci.get_type("network","interface")
   for i, t in pairs(networks) do
     if networks[i].type == "bridge" then
