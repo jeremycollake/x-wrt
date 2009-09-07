@@ -51,6 +51,8 @@ function formClass:tostring(name)
 	if name ~= nil then 
 		if self[name].input == "text" then
 			return self:text_box(self[name])
+		elseif self[name].input == "radio" then
+			return self:radio(self[name])
 		elseif self[name].input == "text_box" then
 			return self:text_box(self[name])
 		elseif self[name].input == "disabled_text" then
@@ -316,18 +318,19 @@ function formClass:checkbox(t)
 	return str
 end
 
-function formClass:radio(name,value,label,options,style,script)
-	if label == nil then label = name end
-	if value == nil then value = "" end
-	if style == nil then style = "" end
-	if string.trim(value) == string.trim(options) then options = " checked=\"checked\"" end
-	if script == nil then script = "" end
-	local str  = "<tr><td width=\"40%\">" .. label .. "</td>"
+function formClass:radio(t)
+--	if label == nil then label = name end
+--	if value == nil then value = "" end
+--	if style == nil then style = "" end
+---	if string.trim(value) == string.trim(options) then options = " checked=\"checked\"" end
+--	if script == nil then script = "" end
+	local str  = "<tr><td width=\"40%\">" .. t.label .. "</td>"
 	str = str .. "<td width=\"60%\">"
-	str = str .. "<input type=\"hidden\" name=\"val_str_"..name.."\" value=\"string\" />"
-	str = str .. "<input type=\"hidden\" name=\"val_lbl_"..name.."\" value=\""..label.."\" />"
-	str = str .. "<input type=\"radio\" name=\""..name.."\" style=\""..style.."\" "..script.." "..options.."/>"
-	str = str .. "</td></tr>"
+--	str = str .. "<input type=\"hidden\" name=\"val_str_"..name.."\" value=\"string\" />"
+--	str = str .. "<input type=\"hidden\" name=\"val_lbl_"..name.."\" value=\""..label.."\" --/>"
+--	str = str .. "<input type=\"radio\" name=\""..name.."\" style=\""..style.."\" "..script.." "..options.."/>"
+		str = str .. strform.radio(t)
+		str = str .. "</td></tr>"
 	return str
 end
 
