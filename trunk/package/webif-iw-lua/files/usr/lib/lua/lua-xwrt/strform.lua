@@ -74,6 +74,14 @@ function button (t)
 	return str
 end
 
+function radio (t)
+	set_values(t)
+	for v,op in ipairs(t.options) do
+		str = str .. "<input type=\"radio\" name=\""..t.name.."\" value=\""..op.value.."\" "..style.." "..script.." />"..op.label
+	end
+	return str
+end
+
 function hidden (t)
 	set_values(t)
 	str = str .. "<input type=\"hidden\" name=\""..t.name.."\" value=\""..t.value.."\" />"
