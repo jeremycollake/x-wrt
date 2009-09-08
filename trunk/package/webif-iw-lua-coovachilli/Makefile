@@ -12,7 +12,7 @@ define Package/webif-iw-lua-coovachilli
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+haserl +lua +liblua +libuci-lua
+  DEPENDS:=+webif-iw-lua
   TITLE:=coovachilli Configuration Script in LUA
 endef
 
@@ -23,6 +23,7 @@ define Package/webif-iw-lua-coovachilli/install
 	$(CP) -a ./files/* $(1)/
 	$(INSTALL_BIN) ./files/etc/init.d/chilli $(1)/etc/init.d/chilli
 	$(INSTALL_BIN) ./files/usr/lib/lua/lua-xwrt/applys/* $(1)/usr/lib/lua/lua-xwrt/applys/
+	$(INSTALL_BIN) ./files/usr/lib/lua/lua-xwrt/pkgs/coovaportal.lua $(1)/usr/lib/lua/lua-xwrt/pkgs/coovaportal.lua
 	$(INSTALL_BIN) ./files/usr/lib/lua/lua-xwrt/pkgs/coovachilli/* $(1)/usr/lib/lua/lua-xwrt/pkgs/coovachilli/
 	$(INSTALL_BIN) ./files/www/cgi-bin/webif/* $(1)/www/cgi-bin/webif/
 	$(INSTALL_BIN) ./files/www/cgi-bin/login/* $(1)/www/cgi-bin/login/

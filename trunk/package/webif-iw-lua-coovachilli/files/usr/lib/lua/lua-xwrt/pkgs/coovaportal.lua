@@ -35,7 +35,6 @@ local tr = tr
 local tbformClass = tbformClass
 -- no more external access after this point
 setfenv(1, P)
-
 if __FORM.pageremove and __FORM.pageremove ~= "" then
 	os.execute("rm "..uci.get("chillipages",__FORM.pageremove,"filename"))
 	uci.delete("chillipages",__FORM.pageremove)
@@ -222,9 +221,11 @@ function get_wifinet(user_level)
   if user_level < 2 then
   	filternet["lan"] = ""
   end
+--[[
 	uci.check_set("network","wifi","interface")
 	uci.check_set("network","wifi","proto","static")
 	uci.check_set("network","wifi","type","bridge")
+]]--
 --	uci.check_set("network","wifi","ifname",iwifi[i].device)
 --	uci.check_set("network","wifi","ipaddr","192.168.2.2")
 --	uci.check_set("network","wifi","netmask","255.255.255.0")
@@ -232,17 +233,20 @@ function get_wifinet(user_level)
   
   local nets = net.networks()
   local iwifi = uci.get_type("wireless","wifi-iface")
-	for i, u in pairs(nets) do
-		if filternet[i] == nil then
-			for j=1, #iwifi do
-				local name = i.." on "..iwifi[j].device
-				t[name]=i..":"..iwifi[j].device
-        n = n + 1
+  if iwifi then
+		for i, u in pairs(nets) do
+			if filternet[i] == nil then
+				for j=1, #iwifi do
+					local name = i.." on "..iwifi[j].device
+					t[name]=i..":"..iwifi[j].device
+					n = n + 1
+				end
 			end
 		end
+		local unico = next(t)
+		return t, n, t[unico]
 	end
-  local unico = next(t)
-  return t, n, t[unico]
+	return nil, nil, nil
 end
 
 function core_form(form,user_level,rad_conf)
@@ -317,6 +321,8 @@ function net_form(form,user_level,localuam)
   local user_level = user_level or userlevel
   local form = form
   local ifiw, n, unico = get_wifinet(user_level)
+	
+	if n ~= nil then
 	if user_level > 1 or n > 1 then
   	if form == nil then
     	form = formClass.new(tr("Network Settings"))
@@ -333,11 +339,13 @@ function net_form(form,user_level,localuam)
     	end    
   	end
   else
-    uci.set("coovachilli","webadmin","HS_LANIF",unico)
-    uci.save("coovachilli")
+		if unico then
+			uci.set("coovachilli","webadmin","HS_LANIF",unico)
+			uci.save("coovachilli")
+		end
 	end
-
-  if user_level > 1 then
+	end
+  if user_level > 1 or unico == nil then
 
 	  local dev
     dev = net.invert_dev_list() -- for advanced users

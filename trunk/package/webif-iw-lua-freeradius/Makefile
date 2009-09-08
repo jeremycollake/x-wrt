@@ -12,7 +12,7 @@ define Package/webif-iw-lua-freeradius
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+haserl +lua +liblua +libuci-lua +luac +webif-iw-lua
+  DEPENDS:=+webif-iw-lua
   TITLE:=freeradius Configuration Script in LUA
 endef
 
@@ -21,6 +21,7 @@ endef
 
 define Package/webif-iw-lua-freeradius/install
 	$(CP) -a ./files/* $(1)/
+	$(INSTALL_BIN) ./files/etc/init.d/* $(1)/etc/init.d/
 	$(INSTALL_BIN) ./files/usr/lib/lua/lua-xwrt/applys/* $(1)/usr/lib/lua/lua-xwrt/applys/
 	$(INSTALL_BIN) ./files/usr/lib/lua/lua-xwrt/pkgs/* $(1)/usr/lib/lua/lua-xwrt/pkgs/
 	$(INSTALL_BIN) ./files/www/cgi-bin/webif/* $(1)/www/cgi-bin/webif/
