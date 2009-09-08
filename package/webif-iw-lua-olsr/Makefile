@@ -12,7 +12,7 @@ define Package/webif-iw-lua-olsr
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+haserl +lua +liblua +libuci-lua +luac +webif-iw-lua
+  DEPENDS:=+webif-iw-lua
   TITLE:=Olsrd configuration Script in LUA
 endef
 
@@ -27,6 +27,10 @@ define Package/webif-iw-lua-olsr/install
 	$(INSTALL_BIN) ./files/www/cgi-bin/webif/* $(1)/www/cgi-bin/webif/
 	rm -rf $(1)/usr/lib/webif/lang/
 	rm -f $(1)/www/cgi-bin/webif/*.wip
+
+	find $(1) -name CVS | xargs rm -rf
+	find $(1) -name .svn | xargs rm -rf
+	find $(1) -name *~ | xargs rm -rf
 endef
 
 $(eval $(call BuildPackage,webif-iw-lua-olsr))

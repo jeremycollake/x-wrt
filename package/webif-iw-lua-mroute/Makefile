@@ -1,6 +1,6 @@
 include $(TOPDIR)/rules.mk
 
-PKG_NAME:=webif-iw-lua-mroute
+PKG_NAME:=webif-iw-lua-coovachilli
 PKG_VERSION:=0.1
 PKG_RELEASE:=1
 
@@ -12,7 +12,7 @@ define Package/webif-iw-lua-mroute
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+m-route
+  DEPENDS:=+m-route +webif-iw-lua
   TITLE:=M-Route Configuration Script in LUA
 endef
 
@@ -21,6 +21,7 @@ endef
 
 define Package/webif-iw-lua-mroute/install
 	$(CP) -a ./files/* $(1)/
+	$(INSTALL_BIN) ./files/etc/init.d/* $(1)/etc/init.d/
 	$(INSTALL_BIN) ./files/usr/lib/lua/lua-xwrt/applys/* $(1)/usr/lib/lua/lua-xwrt/applys/
 	$(INSTALL_BIN) ./files/usr/lib/lua/lua-xwrt/pkgs/* $(1)/usr/lib/lua/lua-xwrt/pkgs/
 	$(INSTALL_BIN) ./files/www/cgi-bin/webif/* $(1)/www/cgi-bin/webif/
