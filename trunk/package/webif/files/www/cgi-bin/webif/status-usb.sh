@@ -81,6 +81,41 @@ header "Status" "USB" "@TR<<status_usb_USB_Devices#USB Devices>>"
 display_form <<EOF
 end_form
 EOF
+usbpr=`ls //usb/lp* 2>//null`
+if [ ! -z "$usbpr" ]; then
+        inklevel_form=$(
+        for p in $usbpr; do
+                ink -d $p |  awk -v FS=":" '
+                BEGIN
+                {
+                        line=0
+                        print "string|<table style=\"width: 90%; margin-left: 2.
+                }
+                {
+                        if (line==2)
+                        {
+                                print "string| @TR<<st
+                        }
+                        if (line >=4)
+                        {
+                                print "string| " $1 "
+                                print "progressbar|inklevel| 200| " $2 "| "
+                                print "string|"
+                        }
+                        line++
+                }
+                END
+                {
+                        print "string|"
+                }'
+        done;
+        )
+        display_form <<EOF
+        start_form|@TR<>
+        $inklevel_form
+        end_form
+EOF
+fi
 ?>
 <div class="settings">
 <h3>@TR<<status_usb_Mounted_USB_SCSI#Mounted USB / SCSI devices>></h3>
