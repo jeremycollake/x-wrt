@@ -54,6 +54,7 @@ hr,
 
 /* ---  Header  --- */
 #header {
+	position: relative;
 	clear: both;
 	width: 100%;
 	height: 5.5em;
@@ -65,10 +66,14 @@ hr,
 }
 
 #header em {
+	position: absolute;
+	bottom: 0;
 	display: block;
+/*
 	padding-top: 70px;
-	padding-left: 65px;
 	padding-bottom: 10px;
+*/
+	padding-left: 65px;
 	color: #808080;
 }
 
@@ -90,6 +95,12 @@ hr,
 	white-space: nowrap;
 	margin: 1em 0 0 2em;
 	font-size: 0.58em;
+}
+
+#short-status li {
+	float: left;
+	list-style-type: none;
+	min-width: 50%;
 }
 
 /* ---  Navigation  --- */
