@@ -24,7 +24,7 @@ fi
 
 header "System" "Upgrade" "<img src=\"/images/upd.jpg\" alt=\"@TR<<Firmware Upgrade>>\" />&nbsp;@TR<<Firmware Upgrade>>" '' "$SCRIPT_NAME"
 
-if [ "$target" = "x86-2.6" -o "$target" = "brcm" -o "$target" = "adm5120-2.6" ]; then
+if [ "$target" = "x86-2.6" -o "$target" = "brcm" -o "$target" = "adm5120-2.6"  -o "$target" = "atheros-2.6" ]; then
 	if empty "$FORM_submit"; then
 display_form <<EOF
 start_form
