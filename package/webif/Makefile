@@ -30,6 +30,7 @@ define Package/webif/conffiles
 /etc/config/cron
 /etc/ssl/openssl.cnf
 /etc/httpd.conf
+/etc/init.d/custom-user-startup
 endef
 
 define Package/webif-subpackage
