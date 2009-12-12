@@ -1189,7 +1189,7 @@ logout_reference => Для ссылки смотрите http://httpd.apache.org
 Yes, really reboot now => Да, действительно перезагрузить сейчас
 reboot_wait => Пожалуйста подождите около
 reboot_seconds => секунд.
-reboot_reload => Webif&sup2; должен автоматически перезагрузится.
+reboot_reload => Webif&sup2; должен автоматически перезагрузиться.
 
 # vpn-openvpn.sh
 #TODO: the below - install_package - does not work. Should it?
