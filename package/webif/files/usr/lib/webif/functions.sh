@@ -135,7 +135,7 @@ install_package() {
 	# emit output to std devices.
 	echo "@TR<<Installing package>>..."
 	local retval
-	opkg -force-overwrite -force-defaults install "$@" | sed 's/&/\&amp;/; s/"/\&#34;/; s/'\''/\&#39;/; s/\$/\&#36;/; s/</\&lt;/; s/>/\&gt;/; s/\\/\&#92;/; s/|/\&#124;/;'
+	opkg -force-overwrite install "$@" | sed 's/&/\&amp;/; s/"/\&#34;/; s/'\''/\&#39;/; s/\$/\&#36;/; s/</\&lt;/; s/>/\&gt;/; s/\\/\&#92;/; s/|/\&#124;/;'
 	retval="$?"
 	[ "$retval" != "0" ] && {
 		! equal "$(echo "$1" | grep -q ":\/\/")" "0" && {
