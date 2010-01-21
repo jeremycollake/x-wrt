@@ -249,11 +249,11 @@ for package in $process_packages; do
 			;;
 		"network")
 			echo '@TR<<Reloading>> @TR<<network>> ...'
-			/etc/init.d/network restart
-			sleep 3
-			killall dnsmasq
+			#background this in 8.09.2 due to issues with it not exiting properly causeing config.sh to hang.
+			/etc/init.d/network restart &
+			sleep 7
 			if [ -f /etc/rc.d/S??dnsmasq ]; then
-				/etc/init.d/dnsmasq start
+				/etc/init.d/dnsmasq restart
 			fi
 			;;
 		"ntpclient")
