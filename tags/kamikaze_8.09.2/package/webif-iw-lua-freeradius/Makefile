@@ -12,7 +12,7 @@ define Package/webif-iw-lua-freeradius
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+haserl +lua +liblua +libuci-lua +luac +webif-iw-lua
+  DEPENDS:=+haserl +lua +liblua +libuci-lua +luac +libltdl +webif-iw-lua +freeradius +freeradius-mod-files +freeradius-mod-chap +freeradius-mod-radutmp +freeradius-mod-realm
   TITLE:=freeradius Configuration Script in LUA
 endef
 

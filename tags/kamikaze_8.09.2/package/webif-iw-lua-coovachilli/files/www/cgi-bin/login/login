@@ -3,9 +3,6 @@ require("set_path")
 require("init")
 require("uci_iwaddon")
 require("htmlClass")
-require("md5")
-require("iw-addon-string")
-require("translator")
 
 user_label  = uci.get("chillipages","login","user_label")
 pass_enable = tonumber(uci.get("chillipages","login","pass_enable") or 0)
@@ -14,240 +11,27 @@ pass_value	= uci.get("chillipages","login","pass_value")
 msg_label		= uci.get("chillipages","login","msg_label")
 msg_enable	= tonumber(uci.get("chillipages","login","msg_enable") or 0)
 
-
-function mypack (k)
-  return (string.gsub(k, "..", function (c)
-						return string.char(hex2dec(c))
-         end))
-end
-
-function myunpack (k)
-  return (string.gsub(k, ".", function (c)
-						return string.format("%x",string.byte(c))
-         end))
-end
-
-function dec_value(k)	
-	t={}
-	t["a"]=10
-	t["b"]=11
-	t["c"]=12
-	t["d"]=13
-	t["e"]=14
-	t["f"]=15
-	if tonumber(k) == nil then
-		k=t[k]
-	end
-	return tonumber(k)
-end
-
-function hex2dec(k)
-	local uno=dec_value(string.sub(k,1,1))
-	local dos=dec_value(string.sub(k,2))
-	return uno*16+dos
-end
-
-function sumhexa (k)
---  k = core.sum(k)
-  return (string.gsub(k, ".", function (c)
-           return string.format("%02x", string.byte(c))
-         end))
-end
-
-function encriptpass()
-	uci.get("chillipages","login","user_label")
-	local uamsecret = uci.get("coovachilli","settings","HS_UAMSECRET")
-	local newchal = mypack(__FORM["challenge"])
-	local newpwd = myunpack(__FORM["password"])
-	if (uamsecret ~= nil) then
-		newchal = mypack(sumhexa(md5.sum(newchal..uamsecret)))
-	end
-	local response = sumhexa(md5.sum("\0"..__FORM["password"]..newchal))
-	local pappassword = string.hexXOr(newpwd,myunpack(newchal))
-
-	page.head.metas:add({
-	{ ["http-equiv"] = "Cache-control", content="no-cache" },
-	{ ["http-equiv"] = "Pragma", content="no-cache" }
-	})
-	if uamsecret ~= nil and pappassword ~= nil then
-		page.head.metas:add(
-			{ ["http-equiv"] = "refresh", content=[[0;url=http://]]..__FORM["uamip"]..":"..__FORM["uamport"].."/logon?username="..__FORM["username"].."&password="..pappassword.."&userurl="..__FORM["userurl"] }
-		)
-	else
-		page.head.metas:add(
-			{ ["http-equiv"] = "refresh", content=[[0;url=http://]]..__FORM["uamip"]..":"..__FORM["uamport"].."/logon?username="..__FORM["username"].."&response="..response.."&userurl="..__FORM["userurl"] }
-		)
-	end
-	page.head.links:add(
-		{
-		{rel = "icon", href="/favicon.ico", type = "image/x-icon"},
-		{rel = "shortcut icon", href="/favicon.ico", type = "image/x-icon"}
-		}
-	)
-	page.container.content:add('Pleas wait verifing your password<br />')
-end
-
-function url_decode(str)
-  if not str then return nil end
-  str = string.gsub (str, "+", " ")
-  str = string.gsub (str, "%%(%x%x)", function(h) return
-	string.char(tonumber(h,16)) end)
-  str = string.gsub (str, "\r\n", "\n")
-  return str
-end
-
-function login_form ()
-	local reply = __FORM['reply'] or ""
-	local strpage = [[ 
-	<form METHOD="get" name="logon" >
-		<INPUT TYPE="HIDDEN" NAME="nasid"   VALUE="]]..__FORM['nasid']..[[" />
-		<INPUT TYPE="HIDDEN" NAME="challenge"    VALUE="]]..__FORM['challenge']..[[" />
-		<INPUT TYPE="HIDDEN" NAME="uamip"   VALUE="]]..__FORM['uamip']..[[" />
-		<INPUT TYPE="HIDDEN" NAME="uamport" VALUE="]]..__FORM['uamport']..[[" />
-		<INPUT TYPE="HIDDEN" NAME="userurl" VALUE="]]..__FORM['userurl']..[[" />
-
-    <table id="logonTable" border="0" >
-      <tr>
-        <td colspan="2" style="font-size:120%;">
-          <div id="logonMessage" style="font-size:70%;padding-top:4px; ]]
-						if __FORM['reply'] == nil then
-							strpage=strpage..[[ display:none; ]]
-						end
-						strpage=strpage..[[">]]..reply..[[</div>
-        </td>
-      </tr>
-      <tr id="usernameRow">
-        <td id="usernameLabel"><b>]]..user_label..[[ </b></td>
-        <td><input name="username" type="text" id="username" size="20"/></td>
-      </tr>
-]]
-	if pass_enable == 0 then
-		strpage=strpage..[[			<tr id="passwordRow" style="display:none">]]
-	else 
-		strpage=strpage..[[			<tr id="passwordRow" > ]]
-	end
-	strpage=strpage..[[
-				<td id="passwordLabel" ><b> ]]..pass_label..[[ </b></td>
-				<td><input name="password" type="password" id="password"]]
-	if pass_enable == 0 then
-		strpage=strpage..[[  value="]]..pass_value..[["]]
-	end
-	strpage=strpage..[[ size="20"/></td>
-			</tr>
-			<tr>
-				<!--td colspan="2"><input type="submit" value="Connect" onClick="connect();"/></td-->
-				<td colspan="2"><input type="submit" name="login" value="Identificarse" /></td>
-			</tr>	
-		</table>		
-	</form>
-]]
-	return strpage
-end
-
-function disconnect()
-	return '<a href="http://' .. __FORM['uamip'] .. ':' .. __FORM['uamport'] .. '/logoff">Desconectarse</a>'
-end
-
-function connect()
-	return '<a href="http://' .. __FORM['uamip'] .. ':' .. __FORM['uamport'] .. '/prelogin">Conectarse</a>'
-end
-
-function success()
---	1: Login successful
-	local result = 1;
-	local title = "Identificado en $this->HotSpot";
-	local headline = "Identificado en  $this->HotSpot";
-	local bodytext = 'Bienvenido';
-
-	page.container.content:add('You are connected<br />')
-	page.container.content:add('<a href="' ..url_decode(__FORM["userurl"]).. '" target="_blanck">Click here to open your request page</a><br />')
-	return disconnect()
-end
-
-function  failed()
---# 2: Login failed
-	local result = 2;
-	local title = "Falló la Identificación";
-	local headline = "Fallo la Identificación en $this->HotSpot";
-	local bodytext = 'Disculpe, trate de nuevo';
-	local cta = "Necesita una Cuenta";
-	page.container.content:add('Login failed pleas try againg<br />')
-	return login_form()
-end
-
-function logoff()
--- 3: Logged out
-	local result = 3;
-	local title = "Desconectado de $this->HotSpot";
-	local headline = "Desconectado de $this->HotSpot";
-	page.head.metas:add(
-			{ ["http-equiv"] = "refresh", content=[[0;url=http://]].. __FORM['uamip'] .. ':' .. __FORM['uamport'] .. '/prelogin' }
-		)
-	return connect()
-end
-
-function already()
---	4: Tried to login while already logged in
-		local result = 4;
-		local title = "Identificado en $this->HotSpot";
-		local headline = "Identificado en  $this->HotSpot";
-		local bodytext = 'Bienvenido';
-
-		return "Ya estas Logeado Gilun<br />"..disconnect()
-end
-
-function notyet()
---5: Not logged in yet
-	local result = 5;
-	local title = "Todavía no se Identificó en $this->HotSpot";
-	local headline = "Todavía no se Identificó en $this->HotSpot";
-	local cta = "Necesita una Cuenta";
-	local bodytext = 'Por favor identifíquese';
-	return login_form();
-end
-
-function popup1()
---#11: Popup1
-	local result = 11;
-	local title = "Identificando en 1 $this->HotSpot";
-	local headline = "Identificando en $this->HotSpot";
-	local bodytext = __FORM['username'].." Por favor espere...";
-	return bodytext
-end
-	
-function popup2()
---#12: Popup2
-	local result = 12;
-	local title = "Identificado en  $this->HotSpot";
-	local headline = "Identificado en $this->HotSpot";
-	local bodytext = "Gracias por utilizar $this->HotSpot";
-	return disconnect()
-end
-
-function popup3()
---#13: Popup3
-	local result = 13;
-	local title = "Desconectado de $this->HotSpot";
-	local headline = "Desconectado de $this->HotSpot";
-	return connect()
-end
-
-function none()
---# 0: It was not a form request
---# Send out an error message
-	local result = 0;
-	local title = "Que quiere aquí";
-	local headline = "Identificación Falló";
-	local bodytext = "La Identificacion la debe hacer a traves del sistema!<BR><BR>Si desea Identificarse haga click" .. '<a href="http://www.altavista.com"> AquÃ­</a>';
-	local cta = "Necesita una Cuenta?";
-	return bodytext
-end
-
-page = htmlpageClass.new(tr("Login Page").." - ".. (uci.get("webif","general","firmware_name") or "Unknow Firmware") .." "..tr("Administrative Console"))
+page = htmlpageClass.new(tr("Login Page").." - "..__SYSTEM.general.firmware_name.." "..tr("Administrative Console"))
 page.head.links:add(
 	{rel = "stylesheet", type = "text/css", href = "/themes/active/webif.css"}
 	)
-
+page.head.scripts:add({
+	{ 
+		SRC="/js/ChilliLibrary.js",LANGUAGE="JavaScript1.2", TYPE="text/javascript"	
+	},
+	{
+		LANGUAGE="JavaScript1.2", TYPE="text/javascript", CODE=[[
+	chilliController.host = ']]..uci.get("coovachilli","settings","HS_UAMSERVER")..[[';
+	chilliController.port = ]]..uci.get("coovachilli","settings","HS_UAMPORT")..[[;
+	]]
+	},
+	{SRC="/js/chilliController.js", LANGUAGE="JavaScript1.2", TYPE="text/javascript"},
+	{
+		LANGUAGE="JavaScript1.2", TYPE="text/javascript", CODE=[[
+		setTimeout('chilliController.refresh()', 0); 
+		]]
+	}
+	})
 page.head.metas:add({
 	{ ["http_equiv"] = "Content-Type", content = [[text/html; charset=UTF-8]]},
 	{ ["http-equiv"] = "expires", content = "-1" }
@@ -260,31 +44,134 @@ page.container.header:add([[
 ]])
 -- or can add code directly to page.container like you write on standart html file
 page.container:add([[<div id="mainmenu"></div>]])
---page.container:add()
+page.container:add()
 page.container:add(htmlsectionClass.new("div","content"))
-local strpage=""
-if __FORM.login ~= nil then 
-	encriptpass()
-else
-	if __FORM['res'] == nil or __FORM['res'] == ""  then strpage=none()
-	elseif __FORM['res'] == "success" then strpage=success()
-	elseif __FORM['res'] == "failed" then strpage=failed()
-	elseif __FORM['res'] == "logoff" then strpage=logoff()
-	elseif __FORM['res'] == "already" then strpage=already() 
-	elseif __FORM['res'] == "notyet" then strpage=notyet() 
---	elseif __FORM['res'] == "popup1" then strpage=popup1() 
---	elseif __FORM['res'] == "popup2" then strpage=popup2() 
---	elseif __FORM['res'] == "popup3" then strpage=popup3() 
-	end
-end
-
-local str ="<br /><br />"
-for i,v in pairs(__FORM) do
-  str=str..i.."="..v.."<br>"
-end
+local strpage = [[
+	<div id="Chilli">
+    <table border="0">
+      <tr><td>
+        <div id="locationName" style="padding:5px 0px 0px 2px;font-size:120%;"></div>
+      </td></tr>
+      <tr><td>
+        <div id="chilliPage">
+          <div id="logonPage" style="display:none;">
+            <form onSubmit="return false;" name="logon">
+              <!--
+              <div id="openIDSelect" style="font-size:70%;padding-top:4px;float:right;display:none;">
+                <a href="#" onclick="javascript:return openID();"><img border="0" src="images/openid.gif"/></a>
+              </div>
+              <div id="openIDForm" style="display:none;background-color:white;position:absolute;padding:10px;border:solid 1px orange">
+                OpenID URL: <input style="font-size:60%;" name="username" type="text" id="username" size="30" value="http://"/>
+              </div>
+              -->
+              <table id="logonTable" border="0" >
+                <tr>
+                  <td colspan="2" style="font-size:120%;">
+                    <div id="logonMessage" style="font-size:70%;padding-top:4px; ]]
+										if msg_enable == 0 then
+										strpage=strpage..[[ display:none; ]]
+										end
+										strpage=strpage..[[">]]..msg_label..[[</div>
+                  </td>
+                </tr>
+                <tr id="usernameRow">
+                  <td id="usernameLabel"><b>]]..user_label..[[ </b></td>
+                  <td><input name="username" type="text" id="username" size="20"/></td>
+                </tr>
+								]]
+								
+								if pass_enable == 0 then
+								strpage=strpage..[[
+                <tr id="passwordRow" style="display:none">]]
+								else 
+								strpage=strpage..[[
+								<tr id="passwordRow" > ]]
+								end
+								strpage=strpage..[[
+                  <td id="passwordLabel" ><b> ]]..pass_label..[[ </b></td>
+                  <td><input name="password" type="password" id="password"]]
+								if pass_enable == 0 then
+								strpage=strpage..[[  value="]]..pass_value..[["]]
+								end
+								strpage=strpage..[[ size="20"/></td>
+                </tr>
+                <tr>
+                  <td colspan="2"><input type="submit" value="Connect" onClick="connect();"/></td>
+                </tr>	
+                <!--
+                <tr id="signUpRow">
+                  <td id="signUp" colspan="2" style="font-size: 50%">
+                    <a target="_blank" href="https://coova.org/app/c/signup.html">Sign up</a> for an account
+                  </td>
+                </tr>
+                -->
+              </table>		
+            </form>
+          </div>
+          <div id="statusPage" style="display:none;">
+            <table border="0" id="statusTable" style="padding-top:4px;font-size:70%">
+              <tr id="connectRow">
+                <td><span id="statusMessage">Connected</span></td>
+                <td><a href="#" onClick="return disconnect();">logout</a></td>
+              </tr>
+              <tr id="sessionIdRow">
+                <td id="sessionIdLabel" class="chilliLabel"><b>Session ID</b></td>
+                <td id="sessionId" class="chilliValue">Not available</td>
+              </tr>
+              <tr id="sessionTimeoutRow">
+                <td id="sessionTimeoutLabel" class="chilliLabel"><b>Max Session Time</b></td>
+                <td id="sessionTimeout" class="chilliValue">Not available</td>
+              </tr>
+              <tr id="idleTimeoutRow">
+                <td id="idleTimeoutLabel" class="chilliLabel"><b>Max Idle Time</b></td>
+                <td id="idleTimeout" class="chilliValue">Not available</td>
+              </tr>
+              <tr id="startTimeRow">
+                <td id="startTimeLabel" class="chilliLabel"><b>Start Time</b></td>
+                <td id="startTime" class="chilliValue">Not available</td>
+              </tr>
+              <tr id="sessionTimeRow">
+                <td id="sessionTimeLabel" class="chilliLabel"><b>Session Time</b></td>
+                <td id="sessionTime" class="chilliValue">Not available</td>
+              </tr>
+              <tr id="idleTimeRow">
+                <td id="idleTimeLabel" class="chilliLabel"><b>Idle Time</b></td>
+                <td id="idleTime" class="chilliValue">Not available</td>
+              </tr>
+              <tr id="inputOctetsRow">
+                <td id="inputOctetsLabel" class="chilliLabel"><b>Downloaded</b></td>
+                <td id="inputOctets" class="chilliValue">N/A</td>
+              </tr>
+              <tr id="outputOctetsRow">
+                <td id="outputOctetsLabel" class="chilliValueLabel"><b>Uploaded</b></td>
+                <td id="outputOctets" class="chilliValue">N/A</td>
+              </tr>
+              <tr id="originalURLRow">
+                <td id="originalURLLabel" class="chilliValueLabel"><b>Original URL</b></td>
+                <td id="originalURL" class="chilliValue">N/A</td>
+              </tr>
+              <tr id="leftTimeRow">
+                <td id="leftTimeLabel" class="chilliValueLabel"><b>Left Time</b></td>
+                <td id="leftTime" class="chilliValue">N/A</td>
+              </tr>
+            </table>
+          </div>
+        </div> <!-- chillipage -->
+      </td></tr>
+    </table>
+	  <div id="errorPage" style="display:none;">
+  	  <span id="errorMessage">Error</span>
+  	</div>
+	</div>
+<!--
+	<div id="debugPage" style="display:inline;">
+  	<textarea id="debugarea" rows="20" cols="60">
+  	</textarea>
+	</div>
+-->
+]]
 
 page.container.content:add(strpage)
---page.container.content:add(str)
 page.container:add([[
 <fieldset id="save">
 	<legend><strong>Proceed Changes</strong></legend>
