@@ -344,6 +344,9 @@ for package in $process_packages; do
 		"firewall")
 			/etc/init.d/firewall restart && reload_upnpd
 			;;
+		"httpd")
+			/etc/init.d/httpd restart
+			;;
 	esac
 done
 
