@@ -130,8 +130,8 @@ for config in $dnsmasq_cfgs; do
 		radio|expandhosts_$config|$expandhosts|1|@TR<<Enabled>>
 		radio|expandhosts_$config|$expandhosts|0|@TR<<Disabled>>
 		field|@TR<<Negative Caching>>
-		radio|nonegcache_$config|$nonegcache|1|@TR<<Enabled>>
-		radio|nonegcache_$config|$nonegcache|0|@TR<<Disabled>>
+		radio|nonegcache_$config|$nonegcache|0|@TR<<Enabled>>
+		radio|nonegcache_$config|$nonegcache|1|@TR<<Disabled>>
 		field|@TR<<Read Ethers>>
 		radio|readethers_$config|$readethers|1|@TR<<Enabled>>
 		radio|readethers_$config|$readethers|0|@TR<<Disabled>>
