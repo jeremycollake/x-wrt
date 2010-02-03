@@ -9,22 +9,58 @@ start() {
 . /usr/lib/webif/functions.sh
 uci_load "webif"
 	# initialize default webif theme
+#	if [ ! -e /www/themes/active ]; then
+#		config_get newtheme theme id
+#		# if theme isn't present, then install it
+#		! exists "/www/themes/$newtheme/webif.css" && {
+#			install_package "webif-theme-$newtheme"
+#		}
+#		if ! exists "/www/themes/$newtheme/webif.css"; then
+#			rm -rf "/www/themes/active"
+#			ln -sf "/www/themes/clubman" "/www/themes/active"
+#		else
+#			# create symlink to new active theme if its not already set right
+#			current_theme=$(ls -l /www/themes/active 2>/dev/null | cut -d '>' -f 2 | sed s/'\/www\/themes\/'//g)
+#			! equal "$current_theme" "$newtheme" && {
+#				rm /www/themes/active 2>/dev/null
+#				ln -s /www/themes/$newtheme /www/themes/active
+#			}
+#		fi
+#	fi
 	if [ ! -e /www/themes/active ]; then
 		config_get newtheme theme id
-		# if theme isn't present, then install it
-		! exists "/www/themes/$newtheme/webif.css" && {
-			install_package "webif-theme-$newtheme"
-		}
-		if ! exists "/www/themes/$newtheme/webif.css"; then
+		available_themes=$(ls /www/themes/)
+		echo "$newtheme, $available_themes"
+		if exists "/www/themes/$newtheme/webif.css"; then
 			rm -rf "/www/themes/active"
-			ln -sf "/www/themes/clubman" "/www/themes/active"
+			ln -sf "/www/themes/$newtheme" "/www/themes/active"
 		else
-			# create symlink to new active theme if its not already set right
-			current_theme=$(ls -l /www/themes/active 2>/dev/null | cut -d '>' -f 2 | sed s/'\/www\/themes\/'//g)
-			! equal "$current_theme" "$newtheme" && {
-				rm /www/themes/active 2>/dev/null
-				ln -s /www/themes/$newtheme /www/themes/active
+			if "$available_themes" != ""; then
+				for newtheme in $available_themes; do
+					if exists "/www/themes/$newtheme/webif.css"; then
+#						rm -rf "/www/themes/active"
+#						ln -sf "/www/themes/$newtheme" "/www/themes/active"
+						uci_set webif theme id $newtheme
+						uci_commit webif
+						break;
+					fi
+				done
+			fi
+			# if theme isn't present, then install it
+			! exists "/www/themes/$newtheme/webif.css" && {
+				install_package "webif-theme-$newtheme"
 			}
+			if ! exists "/www/themes/$newtheme/webif.css"; then
+				rm -rf "/www/themes/active"
+				ln -sf "/www/themes/$newtheme" "/www/themes/active"
+			else
+				# create symlink to new active theme if its not already set right
+				current_theme=$(ls -l /www/themes/active 2>/dev/null | cut -d '>' -f 2 | sed s/'\/www\/themes\/'//g)
+				! equal "$current_theme" "$newtheme" && {
+					rm /www/themes/active 2>/dev/null
+					ln -s /www/themes/$newtheme /www/themes/active
+				}
+			fi
 		fi
 	fi
 
