@@ -65,6 +65,12 @@ hr,
 	background-color: #f9f9f9;
 }
 
+#header img {
+	display: none;
+	position: absolute;
+	top: 15px;
+	left: 15px;
+}
 #header em {
 	position: absolute;
 	bottom: 0;

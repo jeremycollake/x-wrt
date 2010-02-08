@@ -74,7 +74,7 @@ hr,
 	font-size: 0em;
 }
 #header em { display: none; }
-
+#header img { display: none; }
 /* ---  Short-status  --- */
 #header #short-status {
 	position: absolute;
