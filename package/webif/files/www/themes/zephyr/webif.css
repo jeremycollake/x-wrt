@@ -68,6 +68,7 @@ hr,
 
 #header h1 { display: none; }
 #header em { display: none; }
+#header img { display: none; }
 
 /* ---  Short-status  --- */
 #header #short-status {

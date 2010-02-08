@@ -183,6 +183,7 @@ $header_inject_head</head>
 
 <div id="container">
 <div id="header">
+	<img src="images/logo.gif" />
 	<em>@TR<<making_usable#End user extensions for OpenWrt>></em>
 	<h1>@TR<<X-Wrt Administration Console>></h1>
 	<div id="short-status">
