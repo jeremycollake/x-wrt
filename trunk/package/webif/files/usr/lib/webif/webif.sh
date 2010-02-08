@@ -188,10 +188,10 @@ $header_inject_head</head>
 	<div id="short-status">
 		<h3><strong>@TR<<Status>>:</strong></h3>
 		<ul>
-			<li><strong>$_firmware_name $_firmware_version</strong></li>
+			<li class="sysname"><strong>$_firmware_name $_firmware_version</strong></li>
 			<li><strong>@TR<<Host>>: </strong>$_hostname</li>
-			<li><strong>@TR<<Uptime>>: </strong>$_uptime</li>
 			<li><strong>@TR<<Date>>: </strong>$_date</li>
+			<li><strong>@TR<<Uptime>>: </strong>$_uptime</li>
 			<li><strong>@TR<<Time>>: </strong>$_time</li>
 			<li><strong>@TR<<Load>>: </strong>$_loadavg</li>
 		</ul>
