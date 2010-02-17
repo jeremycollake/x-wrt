@@ -343,9 +343,12 @@ for package in $process_packages; do
 		"firewall")
 			/etc/init.d/firewall restart && reload_upnpd
 			;;
-		"firewall")
+		"httpd")
 			/etc/init.d/httpd restart
 			;;
+		"webif_access_control")
+			rm -fr /tmp/.webcache/*
+		;;
 	esac
 done
 
