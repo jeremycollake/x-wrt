@@ -21,7 +21,6 @@
 cachedir=/tmp/.webcache
 #admin is also a superuser but maybe removed in the future.
 superuser=root
-
 mkdir /tmp/.webif/
 exists /etc/config/webif_access_control || touch /etc/config/webif_access_control
 
@@ -43,6 +42,7 @@ EOF
 		echo "/cgi-bin/webif/:${FORM_user_add}:${password}" >>/tmp/.webif/file-httpd.conf
 		uci_add "webif_access_control" "accesscontrol" "${FORM_user_add}"
 	}
+	unset FORM_submit
 fi
 header "System" "Access Control" "@TR<<Access Control>>" '' "$SCRIPT_NAME"
 
@@ -68,7 +68,7 @@ BEGIN { ucount = 0;
 		password("user_"$2, ENVIRON["FORM_user_" $2]);
 		submit("change_password_"$2, "@TR<<system_acl_changepw#Change Password>>");
 		field("&nbsp;");
-		print "<span class=\"smalltext\"><a href=\"" ENVIRON["SCRIPT_NAME"] "?remove_user_" $2 "\">@TR<<system_acl_remove_user#Remove user>> " $2 "</a></span>";
+		print "<span class=\"smalltext\"><a href=\"" ENVIRON["SCRIPT_NAME"] "?remove_user_" $2 "=1&submit=1" "\">@TR<<system_acl_remove_user#Remove user>> " $2 "</a></span>";
 		field("&nbsp;");
 		ucount = ucount + 1;
 	}
@@ -76,9 +76,6 @@ BEGIN { ucount = 0;
 ((ENVIRON["FORM_submit"] != "") && ($1 != "")) {
 	if (($1 == "/cgi-bin/webif/") && (ENVIRON["FORM_remove_user_"$2] == "") && (ENVIRON["FORM_change_password_"$2] == "")) {
 		print $1":"$2":"$3 >>"/tmp/.webif/file-httpd.conf";
-	}
-	if ($1 != "/cgi-bin/webif/") {
-		print $1":"$2 >>"/tmp/.webif/file-httpd.conf";
 	}
 	if (ENVIRON["FORM_change_password_"$2] != "") {
 		("httpd -m " ENVIRON["FORM_user_"$2]) | getline password;
