@@ -28,7 +28,7 @@ EOF
 			cat $HTTPD_CONFIG_FILE | awk '
 BEGIN {
 	FS=":"
-	if (ENVIRON["FORM_submit"] != "") && system("/bin/rm /tmp/.webif/file-httpd.conf; touch/tmp/.webif/file-httpd.conf")
+	system("/bin/rm /tmp/.webif/file-httpd.conf; mkdir /tmp/.webif/; touch /tmp/.webif/file-httpd.conf");
 }
 ((ENVIRON["FORM_submit"] != "") && ($1 != "")) {
 	if (($1 == "/cgi-bin/webif/") && (ENVIRON["REMOTE_USER"] != $2)) {
