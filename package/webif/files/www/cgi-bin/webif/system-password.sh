@@ -30,7 +30,7 @@ BEGIN {
 	FS=":"
 	system("/bin/rm /tmp/.webif/file-httpd.conf; mkdir /tmp/.webif/; touch /tmp/.webif/file-httpd.conf");
 }
-((ENVIRON["FORM_submit"] != "") && ($1 != "")) {
+($1 != "") {
 	if (($1 == "/cgi-bin/webif/") && (ENVIRON["REMOTE_USER"] != $2)) {
 		print $1":"$2":"$3 >> "/tmp/.webif/file-httpd.conf"
 	}
