@@ -288,7 +288,7 @@ EOF
 			radio|disabled_$device|$FORM_disabled|1|@TR<<Off>>"
 	append forms "$mode_disabled" "$N"
 
-	if [ "$iftype" = "atheros" ]; then
+	if [ "$iftype" = "atheros" -o "$iftype" = "mac80211" ]; then
         	mode_fields="field|@TR<<Mode>>
 			select|ap_mode_$device|$FORM_ap_mode"
 		echo "$dmesg_txt" |grep -q "${device}: 11g"
@@ -326,8 +326,7 @@ EOF
 		append forms "$A_CHANNELS" "$N"
 	else
 		BG_CHANNELS="field|@TR<<Channel>>|bgchannelform_$device
-			select|bgchannel_$device|$FORM_channel
-			option|0|@TR<<Auto>>"
+			select|bgchannel_$device|$FORM_channel"
 		for ch in $BGCHANNELS; do
 			BG_CHANNELS="$BG_CHANNELS
 				option|$ch"
