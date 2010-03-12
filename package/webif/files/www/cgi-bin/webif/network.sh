@@ -259,6 +259,8 @@ EOF
 					uci_set "network" "$interface" "service" "$FORM_service"
 					uci_set "network" "$interface" "country" "$FORM_country"
 					uci_set "network" "$interface" "apn" "$FORM_apn" ;;
+				dhcp)
+					uci_remove "network" "$interface" "gateway"
 			esac
 			case "$FORM_proto" in
 				pppoe|pppoa|pptp|wwan)
