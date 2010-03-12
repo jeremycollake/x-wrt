@@ -55,9 +55,11 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	/etc/init.d/dmesgbackup enable
 	/etc/init.d/timezone enable
 	/etc/init.d/webiffirewalllog enable
+	/etc/init.d/httpd enable
 	
 	ExecuteIfExists "/etc/init.d/timezone" start
 	ExecuteIfExists "/etc/init.d/webif" start
+	ExecuteIfExists "/etc/init.d/httpd" start
 
 	# test installation successfulness
 	TestInstall
