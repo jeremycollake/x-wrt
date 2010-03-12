@@ -424,7 +424,7 @@ EOF
 				config_get_bool FORM_xr "$vcfg" xr
 				config_get_bool FORM_ar "$vcfg" ar
 				config_get_bool FORM_turbo "$vcfg" turbo
-				config_get FORM_macpolicy "$vcfg" macpolicy
+				config_get FORM_macpolicy "$vcfg" macfilter
 				config_get FORM_maclist "$vcfg" maclist
 				eval FORM_maclistremove="\$FORM_${vcfg}_maclistremove"
 				if [ "$FORM_maclistremove" != "" ]; then
@@ -533,7 +533,7 @@ EOF
 						uci_set "wireless" "$vcfg" "xr" "$FORM_xr"
 						uci_set "wireless" "$vcfg" "ar" "$FORM_ar"
 						uci_set "wireless" "$vcfg" "turbo" "$FORM_turbo"
-						uci_set "wireless" "$vcfg" "macpolicy" "$FORM_macpolicy"
+						uci_set "wireless" "$vcfg" "macfilter" "$FORM_macpolicy"
 						uci_set "wireless" "$vcfg" "maclist" "$FORM_maclist"
 					fi
 				}
