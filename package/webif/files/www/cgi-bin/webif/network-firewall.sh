@@ -144,8 +144,6 @@ form="field|@TR<<Allow traffic originating from>>
 	string|@TR<<to>>
 	select|dest_add
 	$networks
-	string|@TR<<Fix MTU>>
-	checkbox|mss|0|1
 	submit|add_rule_add|@TR<<Add Rule>>
 	end_form"
 append forms "$form" "$N"
