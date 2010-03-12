@@ -39,12 +39,12 @@ uci_load "webif"
 				device_name="La Fonera 2"
 				break
 			}
-			dd if=/dev/$(cat /proc/mtd | sed '/boardconfig/!d; s/:.*//' ) 2>/dev/null | strings | grep -q "MR3201A-FLF-FON" || ifconfig eth0 |grep -q 00:18:84:**:**:**
+			dd if=/dev/$(cat /proc/mtd | sed '/boardconfig/!d; s/:.*//' ) 2>/dev/null | strings | grep -q "MR3201A-FLF-FON" || ifconfig eth0 |grep -q 00:18:84:..:..:..
 			[ $? = "0" ] && {
 				device_name="La Fonera (ACCTON MR3201A)"
 				break
 			}
-			ifconfig eth0 |grep -q 00:18:0A:**:**:**
+			ifconfig eth0 |grep -q 00:18:0A:..:..:..
 			[ $? = "0" ] && {
 				device_name="Meraki Mini"
 				break
@@ -62,7 +62,7 @@ uci_load "webif"
 		}
 
 		if $(uname -m | grep -q "i.86"); then
-			ifconfig eth0 |grep -q 00:0D:B9:**:**:**
+			ifconfig eth0 |grep -q 00:0D:B9:..:..:..
 			[ $? = "0" ] && {
 				if [ "300" -lt `cat /proc/cpuinfo |grep "cpu MHz" |cut -d':' -f2 |cut -d'.' -f1` ]; then
 					device_name="PC Engines Alix"
