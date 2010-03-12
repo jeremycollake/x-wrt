@@ -2,6 +2,7 @@
 /* Fetch the news from SMF */
 require_once 'includes/rss_fetch.inc';
 $rss = fetch_rss('http://forum.x-wrt.org/index.php/board,3.0.html?type=rss;action=.xml');
+include_once("includes/analyticstracking.php")
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -80,7 +81,7 @@ $rss = fetch_rss('http://forum.x-wrt.org/index.php/board,3.0.html?type=rss;actio
       </h1><p><strong>X-Wrt</strong> is a set of packages and patches to enhance the end user experience of OpenWrt. It is NOT a fork of OpenWrt.
         We work in conjunction with the OpenWrt developers to extend OpenWrt.</p>
 	<p>
-        Our packages currently work with the latest public release of OpenWrt, Kamikaze 8.09.There are currently images of 8.09 uploaded, you can help by testing them and reporting bugs.
+        Our packages currently work with the latest public release of OpenWrt, Kamikaze 8.09.2.There are currently images of 8.09.2 uploaded, you can help by testing them and reporting bugs.
         Please see the Downloads/Install page for more information.
 	</p>
 	<p>More on the <a href="about.html">about page</a></p>
