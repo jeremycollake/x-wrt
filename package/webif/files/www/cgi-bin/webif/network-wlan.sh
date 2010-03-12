@@ -177,6 +177,16 @@ if ! empty "$FORM_install_wpa_supplicant"; then
 	install_package "wpa-supplicant"
 	echo "</pre>"
 fi
+if ! empty "$FORM_install_wpad"; then
+	echo "Installing wpad package ...<pre>"
+	install_package "wpad"
+	echo "</pre>"
+fi
+if ! empty "$FORM_install_wpad_mini"; then
+	echo "Installing wpad-mini package ...<pre>"
+	install_package "wpad-mini"
+	echo "</pre>"
+fi
 
 nas_installed="0"
 is_package_installed nas
@@ -193,6 +203,14 @@ equal "$?" "0" && hostapd_mini_installed="1"
 wpa_supplicant_installed="0"
 is_package_installed wpa-supplicant
 equal "$?" "0" && wpa_supplicant_installed="1"
+
+wpad_installed="0"
+is_package_installed wpad
+equal "$?" "0" && wpad_installed="1"
+
+wpad_mini_installed="0"
+is_package_installed wpad-mini
+equal "$?" "0" && wpad_mini_installed="1"
 
 #####################################################################
 # This is looped for every physical wireless card (wifi-device)
@@ -801,31 +819,31 @@ EOF
 				fi
 				append forms "$install_nas_button" "$N"
 			else
-				install_hostapd_mini_button="field|@TR<<HostAPD Package>>|install_hostapd_mini_$vcfg|hidden"
-				if [ "$hostapd_installed" = "1" -o "$hostapd_mini_installed" = "1" ]; then
+				install_hostapd_mini_button="field|@TR<<WPAD-Mini Package>>|install_wpad_mini_$vcfg|hidden"
+				if [ "$hostapd_installed" = "1" -o "$hostapd_mini_installed" = "1" -o "$wpad_mini_installed" = "1" -o "$wpad_installed" = "1" ]; then
 					install_hostapd_mini_button="$install_hostapd_mini_button
 						string|@TR<<Installed>>."
 				else
 					install_hostapd_mini_button="$install_hostapd_mini_button
-						string|<div class=\"warning\">PSK and PSK2 will not work until you install the HostAPD or HostAPD Mini package. (HostAPD Mini only does PSK and PSK2) </div>
-						submit|install_hostapd_mini| Install HostAPD-Mini Package |
-						submit|install_hostapd| Install HostAPD Package |"
+						string|<div class=\"warning\">PSK and PSK2 will not work until you install the WPAD or WPAD Mini package. (WPAD Mini only does PSK and PSK2) </div>
+						submit|install_wpad_mini| Install WPAD-Mini Package |
+						submit|install_wpad| Install HostAPD Package |"
 				fi
 				install_hostapd_button="field|@TR<<HostAPD Package>>|install_hostapd_$vcfg|hidden"
-				if [ "$hostapd_installed" != "1" ]; then
+				if [ "$wpad_installed" != "1" ]; then
 					install_hostapd_button="$install_hostapd_button
-						string|<div class=\"warning\">WPA and WPA2 will not work until you install the HostAPD package. </div>
-						submit|install_hostapd| Install HostAPD Package |"
+						string|<div class=\"warning\">WPA and WPA2 will not work until you install the WPAD package. </div>
+						submit|install_wpad| Install WPAD Package |"
 				else
 					install_hostapd_button="$install_hostapd_button
 						string|@TR<<Installed>>."
 				fi
 
 				install_wpa_supplicant_button="field|@TR<<wpa-supplicant Package>>|install_wpa_supplicant_$vcfg|hidden"
-				if ! equal "$wpa_supplicant_installed" "1"; then
+				if [ "$wpa_supplicant_installed" != "1" -o "$wpad_mini_installed" != "1" -o "$wpad_installed" != "1" ]; then
 					install_wpa_supplicant_button="$install_wpa_supplicant_button
-						string|<div class=\"warning\">WPA and WPA2 will not work until you install the wpa-supplicant package. </div>
-						submit|install_wpa_supplicant| Install wpa-supplicant Package |"
+						string|<div class=\"warning\">WPA and WPA2 will not work until you install the WPAD-mini package. </div>
+						submit|install_wpad_mini| Install wpad-mini Package |"
 				else
 					install_wpa_supplicant_button="$install_wpa_supplicant_button
 						string|@TR<<Installed>>."
