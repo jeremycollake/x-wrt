@@ -43,6 +43,10 @@ $1 == "ip" {
 		}
 	}
 	if (valid == 0) verr = "@TR<<Invalid value>>"
+	if (value == "0.0.0.0") {
+		valid = 0
+		verr = "@TR<<Please leave blank instead of using 0.0.0.0>>"
+	}
 }
 
 # two stages ip/netmask validation
