@@ -36,6 +36,10 @@ if [ "$FORM_button_add_network" != "" ]; then
 	else
 		uci_add "network" "interface" "$FORM_add_network"
 		uci_set "network" "$FORM_add_network" "proto" "none"
+		uci_add "firewall" "zone" ""; add_forward_cfg="$CONFIG_SECTION"
+		uci_get "firewall" "$add_forward_cfg" "input" "ACCEPT"
+		uci_get "firewall" "$add_forward_cfg" "output" "ACCEPT"
+		uci_get "firewall" "$add_forward_cfg" "forward" "REJECT"
 	fi
 fi
 
@@ -47,11 +51,15 @@ config_cb() {
 		interface)
 			append network "$cfg_name_dhcp" "$N"
 		;;
-		dhcp)
+		dhcp|zone)
 			option_cb() {
 				case "$1" in
 					interface)
-						[ "$2" = "$FORM_remove_network" ] && uci_remove "dhcp" "$cfg_name_dhcp";;
+						[ "$2" = "$FORM_remove_network" ] && uci_remove "dhcp" "$cfg_name_dhcp"
+					;;
+					name)
+						[ "$2" = "$FORM_remove_network" ] && uci_remove "zone" "$CONFIG_SECTION"
+					;;
 				esac
 			}
 		;;
