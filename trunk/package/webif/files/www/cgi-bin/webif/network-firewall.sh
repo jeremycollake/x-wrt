@@ -148,6 +148,47 @@ form="field|@TR<<Allow traffic originating from>>
 	end_form"
 append forms "$form" "$N"
 
+for zone in $zone_cfgs; do
+	if [ "$FORM_submit" = "" ]; then
+		config_get FORM_name $zone name
+		config_get FORM_input $zone input
+		config_get FORM_output $zone output
+		config_get FORM_forward $zone forward
+		config_get_bool FORM_masq $zone masq 0
+		config_get_bool FORM_mtu_fix $zone mtu_fix 0
+	else
+		config_get FORM_name $zone name
+		eval FORM_input="\$FORM_input_$zone"
+		eval FORM_output="\$FORM_output_$zone"
+		eval FORM_forward="\$FORM_forward_$zone"
+		eval FORM_masq="\$FORM_masq_$zone"
+		eval FORM_mtu_fix="\$FORM_mtu_fix_$zone"
+
+	fi
+	form="start_form|@TR<<$FORM_name Zone Settings>>
+		field|@TR<<Input>>
+		select|input_$zone|$FORM_input
+		option|ACCEPT|@TR<<Accept>>
+		option|REJECT|@TR<<Reject>>
+		option|DROP|@TR<<Drop>>
+		field|@TR<<Output>>
+		select|output_$zone|$FORM_output
+		option|ACCEPT|@TR<<Accept>>
+		option|REJECT|@TR<<Reject>>
+		option|DROP|@TR<<Drop>>
+		field|@TR<<Forward>>
+		select|forward_$zone|$FORM_forward
+		option|ACCEPT|@TR<<Accept>>
+		option|REJECT|@TR<<Reject>>
+		option|DROP|@TR<<Drop>>
+		field|@TR<<NAT>>
+		checkbox|masq_$zone|$FORM_masq|1
+		field|@TR<<MTU Fix>>
+		checkbox|mtu_fix_$zone|$FORM_mtu_fix|1
+		end_form"
+	append forms "$form" "$N"
+done
+
 get_tr
 form="string|<div class=\"settings\">
 	string|<h3><strong>@TR<<Incoming Ports>></strong></h3>
