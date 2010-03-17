@@ -38,6 +38,8 @@ EOF
 	else
 		echo "<br />Upgrading firmware, please wait ... <br />"
 		if [ "$FORM_nokeepconfig" = "1" ]; then
+			uci_set webif general firstboot 1
+			uci_commit "webif"
 			sysupgrade -n $FORM_upgradefile
 		else
 			sysupgrade $FORM_upgradefile
