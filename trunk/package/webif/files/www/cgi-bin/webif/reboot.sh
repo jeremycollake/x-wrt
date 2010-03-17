@@ -34,7 +34,8 @@ header "System" "Reboot" ""
 <? footer ?>
 <?
 ! empty "$FORM_reboot" && {
-	exit; reboot
+	reboot &
+	exit
 }
 ?>
 <!--
