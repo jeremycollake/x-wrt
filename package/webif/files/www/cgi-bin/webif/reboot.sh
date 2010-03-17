@@ -2,7 +2,7 @@
 <?
 . /usr/lib/webif/webif.sh
 
-timeout=40
+timeout=60
 if empty "$FORM_reboot"; then
 	reboot_msg="<form method=\"post\" action=\"$SCRIPT_NAME\"><input type=\"submit\" value=\" @TR<<Yes, really reboot now>> \" name=\"reboot\" /></form>"
 else
@@ -34,8 +34,7 @@ header "System" "Reboot" ""
 <? footer ?>
 <?
 ! empty "$FORM_reboot" && {
-	reboot &
-	exit
+	exit; reboot
 }
 ?>
 <!--
