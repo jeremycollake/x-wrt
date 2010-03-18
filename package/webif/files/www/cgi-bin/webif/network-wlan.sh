@@ -288,7 +288,7 @@ EOF
 			radio|disabled_$device|$FORM_disabled|1|@TR<<Off>>"
 	append forms "$mode_disabled" "$N"
 
-	if [ "$iftype" = "atheros" -o "$iftype" = "mac80211" ]; then
+	if [ "$iftype" = "atheros" ]; then
         	mode_fields="field|@TR<<Mode>>
 			select|ap_mode_$device|$FORM_ap_mode"
 		echo "$dmesg_txt" |grep -q "${device}: 11g"
