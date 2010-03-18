@@ -143,11 +143,6 @@ uci_load "webif"
 		firmware_version="unknown"
 	fi
 
-	if [ "$firmware_version" = "8.09" ]; then
-		unmarkedrccheck=$(cat /etc/banner |grep KAMIKAZE |cut -d '(' -f 2 |cut -d ')' -f 1 |cut -d' ' -f 2)
-		[ "$unmarkedrccheck" = "r14214" ] && firmware_version=8.09_RC2
-	fi
-	
 	if [ "$CONFIG_general_firstboot" = "1" ]; then
 		opkg update
 		# force re-initialization of extension package lists
