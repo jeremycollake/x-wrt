@@ -1,7 +1,0 @@
-
-config 'user' 'steve'
-	option 'User_Password' 'testing123'
-
-config 'freeradius' 'system'
-	option 'apply' '/usr/lib/lua/lua-xwrt/applys/freeradius_check.lua'
-
