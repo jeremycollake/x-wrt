@@ -346,6 +346,9 @@ for package in $process_packages; do
 		"httpd")
 			/etc/init.d/httpd restart
 			;;
+		"uhttpd")
+			/etc/init.d/uhttpd restart
+			;;
 		"webif_access_control")
 			rm -fr /tmp/.webcache/*
 		;;

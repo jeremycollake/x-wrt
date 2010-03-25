@@ -21,7 +21,7 @@ define Package/webif
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+haserl +opkg
+  DEPENDS:=+haserl +opkg +uhttpd
   TITLE:=A HTTP administrative console for OpenWrt
   VERSION:=$(PKG_VERSION)-$(PKG_RELEASE)
 endef

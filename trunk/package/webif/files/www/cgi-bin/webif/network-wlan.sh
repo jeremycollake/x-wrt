@@ -43,22 +43,13 @@ generate_channels() {
 	fi
 	BGCHANNELS="$(iwlist channel 2>&- |grep -v "no frequency information." |grep -v "[Ff]requenc" |grep -v "Current" |grep "2.[0-9]" |cut -d' ' -f12|sort |uniq)"
 	ACHANNELS="$(iwlist channel 2>&- |grep -v "no frequency information." |grep -v "[Ff]requenc" |grep -v "Current" |grep "5.[0-9]" |cut -d' ' -f12|sort |uniq)"
-	echo "BGCHANNELS=\"${BGCHANNELS}\"" > /usr/lib/webif/channels.lst
-	echo "ACHANNELS=\"${ACHANNELS}\"" >> /usr/lib/webif/channels.lst
+	echo "BGCHANNELS=\"${BGCHANNELS}\"" > /usr/lib/webif/channels-${1}-${2}.lst
+	echo "ACHANNELS=\"${ACHANNELS}\"" >> /usr/lib/webif/channels-${1}-${2}.lst
 	if [ "$cleanup" = "1" ]; then
 		wifi 2>/dev/null >/dev/null
 	fi
+	[ -f /usr/lib/webif/channels-${1}-${2}.lst ] && . /usr/lib/webif/channels-${1}-${2}.lst
 }
-
-if [ ! -f /usr/lib/webif/channels.lst ]; then
-	generate_channels
-fi
-
-[ -f /usr/lib/webif/channels.lst ] && . /usr/lib/webif/channels.lst
-
-if [ -z "$BGCHANNELS" -a -z "$ACHANNELS" ]; then
-	generate_channels
-fi
 
 dmesg_txt="$(dmesg)"
 adhoc_count=0
@@ -266,112 +257,104 @@ EOF
 	fi
 
 	append forms "start_form|@TR<<Wireless Adapter>> $device @TR<< Configuration>>" "$N"
-	if [ "$iftype" = "broadcom" ]; then
-		[ "$(uname -r | cut -d'.' -f2)" != "4" ] && uci_set "wireless" "$device" "type" "mac80211"
-		append forms "helpitem|Broadcom Wireless Configuration" "$N"
-		append forms "helptext|Helptext Broadcom Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-3x ap or 1-4x ap or 1x adhoc" "$N"
-	elif [ "$iftype" = "atheros" ]; then
-		ccSelect="0"
-		[ -e /proc/sys/dev/$device/countrycode ] && ccSelect="$(cat /proc/sys/dev/$device/countrycode)"
-		mode_country="field|@TR<<Country Code>>
-		select|country_$device|$FORM_country
-		option|0|@TR<<Default (or unset)>>$(equal "$ccSelect" '0' && echo ' ** CURRENT')
-		option|840|@TR<<United States>>$(equal "$ccSelect" '840' && echo ' ** CURRENT')
-		option|826|@TR<<UK and US 5.18-5.70GHz>>$(equal "$ccSelect" '826' && echo ' ** CURRENT')"
-		append forms "$mode_country" "$N"
-		append forms "helpitem|Atheros Wireless Configuration" "$N"
-		append forms "helptext|Helptext Atheros Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-4x ap or 1-4x ap or 1x adhoc" "$N"
-	fi
-
 	mode_disabled="field|@TR<<Radio>>
 			radio|disabled_$device|$FORM_disabled|0|@TR<<On>>
 			radio|disabled_$device|$FORM_disabled|1|@TR<<Off>>"
 	append forms "$mode_disabled" "$N"
 
-	if [ "$iftype" = "atheros" ]; then
-        	mode_fields="field|@TR<<Mode>>
+        mode_fields="field|@TR<<Mode>>
 			select|ap_mode_$device|$FORM_ap_mode"
-		echo "$dmesg_txt" |grep -q "${device}: 11g"
-		if [ "$?" = "0" ]; then
-			mode_fields="$mode_fields
-				option|11bg|@TR<<802.11B/G>>
-				option|11g|@TR<<802.11G>>"
-		fi
-		echo "$dmesg_txt" |grep -q "${device}: 11b"
-		if [ "$?" = "0" ]; then
-			mode_fields="$mode_fields
-				option|11b|@TR<<802.11B>>"
-		fi
-		echo "$dmesg_txt" |grep -q "${device}: 11a"
-		if [ "$?" = "0" ]; then
-			mode_fields="$mode_fields
-				option|11a|@TR<<802.11A>>"
-		fi
-		append forms "$mode_fields" "$N"
 
-		BG_CHANNELS="field|@TR<<Channel>>|bgchannelform_$device|hidden
-			select|bgchannel_$device|$FORM_channel
-			option|0|@TR<<Auto>>"
+	BG_CHANNELS="field|@TR<<Channel>>|bgchannelform_$device|hidden
+		select|bgchannel_$device|$FORM_channel"
+
+	A_CHANNELS="field|@TR<<Channel>>|achannelform_$device|hidden
+		select|achannel_$device|$FORM_channel"
+
+	case "$iftype" in
+		broadcom)
+			[ "$(uname -r | cut -d'.' -f2)" != "4" ] && uci_set "wireless" "$device" "type" "mac80211"
+			append forms "helpitem|Broadcom Wireless Configuration" "$N"
+			append forms "helptext|Helptext Broadcom Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-3x ap or 1-4x ap or 1x adhoc" "$N"
+			maxassoc="field|@TR<<Max Associated Clients (Default 128)>>
+			text|maxassoc_${device}|$FORM_maxassoc"
+			let "broadcom_count+=1"
+			[ -f /usr/lib/webif/channels-broadcom-$broadcom_count.lst ] && . /usr/lib/webif/channels-broadcom-$broadcom_count.lst || generate_channels "broadcom" "$broadcom_count"
+			for ch in $BGCHANNELS; do
+				BG_CHANNELS="$BG_CHANNELS
+					option|$ch"
+			done
+		;;
+		atheros)
+			ccSelect="0"
+			[ -e /proc/sys/dev/$device/countrycode ] && ccSelect="$(cat /proc/sys/dev/$device/countrycode)"
+			mode_country="field|@TR<<Country Code>>
+			select|country_$device|$FORM_country
+			option|0|@TR<<Default (or unset)>>$(equal "$ccSelect" '0' && echo ' ** CURRENT')
+			option|840|@TR<<United States>>$(equal "$ccSelect" '840' && echo ' ** CURRENT')
+			option|826|@TR<<UK and US 5.18-5.70GHz>>$(equal "$ccSelect" '826' && echo ' ** CURRENT')"
+			append forms "$mode_country" "$N"
+			append forms "helpitem|Atheros Wireless Configuration" "$N"
+			append forms "helptext|Helptext Atheros Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-4x ap or 1-4x ap or 1x adhoc" "$N"
+			echo "$dmesg_txt" |grep -q "${device}: 11b"
+			[ "$?" = "0" ] && append mode_fields "option|11b|@TR<<802.11B>>" "$N" && 11b=1
+			echo "$dmesg_txt" |grep -q "${device}: 11g"
+			[ "$?" = "0" ] && append mode_fields "option|11g|@TR<<802.11G>>" "$N" && 11g=1
+			[ "$11b" = "1" -a "11g" = "1" ] && append mode_fields "option|11bg|@TR<<802.11B/G>>" "$N"
+			echo "$dmesg_txt" |grep -q "${device}: 11a"
+			[ "$?" = "0" ] && append mode_fields "option|11a|@TR<<802.11A>>" "$N"
+			if [ "$_device" != "NanoStation2" -a "$_device" != "NanoStation5" ]; then
+				mode_diversity="field|@TR<<Diversity>>
+						radio|diversity_$device|$FORM_diversity|1|@TR<<On>>
+						radio|diversity_$device|$FORM_diversity|0|@TR<<Off>>"      	
+				append forms "$mode_diversity" "$N"
+				append forms "helpitem|Diversity" "$N"
+				append forms "helptext|Helptext Diversity#Used on systems with multiple antennas to help improve reception. Disable if you only have one antenna." "$N"
+				append forms "helplink|http://madwifi.org/wiki/UserDocs/AntennaDiversity" "$N"
+	
+				form_txant="field|@TR<<TX Antenna>>
+					radio|txantenna_$device|$FORM_txantenna|0|@TR<<Auto>>
+					radio|txantenna_$device|$FORM_txantenna|1|@TR<<Antenna 1>>
+					radio|txantenna_$device|$FORM_txantenna|2|@TR<<Antenna 2>>"
+				append forms "$form_txant" "$N"
+	
+				form_rxant="field|@TR<<RX Antenna>>
+					radio|rxantenna_$device|$FORM_rxantenna|0|@TR<<Auto>>
+					radio|rxantenna_$device|$FORM_rxantenna|1|@TR<<Antenna 1>>
+					radio|rxantenna_$device|$FORM_rxantenna|2|@TR<<Antenna 2>>"
+				append forms "$form_rxant" "$N"
+			else
+				form_antenna_selection="field|@TR<<Antenna>>
+						select|antenna_$device|$FORM_antenna
+						option|auto|@TR<<Internal Auto>>
+						option|horizontal|@TR<<Internal Horizontal>>
+						option|vertical|@TR<<Internal Vertical>>
+						option|external|@TR<<External>>"
+				append forms "$form_antenna_selection" "$N"
+			fi
+		;;
+		mac80211)
+			
+		;;
+	esac
+
+	append forms "$mode_fields" "$N"
+	append forms "$A_CHANNELS" "$N"
+	append forms "$BG_CHANNELS" "$N"
+	append forms "$maxassoc" "$N"
+
 		for ch in $BGCHANNELS; do
-			BG_CHANNELS="$BG_CHANNELS
+			BG_CHANNELS="option|0|@TR<<Auto>>
+				$BG_CHANNELS
 				option|$ch"
 		done
 
-		A_CHANNELS="field|@TR<<Channel>>|achannelform_$device|hidden
-			select|achannel_$device|$FORM_channel"
 		for ch in $ACHANNELS; do
 			A_CHANNELS="$A_CHANNELS
 				option|$ch"
 		done
 		append forms "$A_CHANNELS" "$N"
-	else
-		BG_CHANNELS="field|@TR<<Channel>>|bgchannelform_$device
-			select|bgchannel_$device|$FORM_channel"
-		for ch in $BGCHANNELS; do
-			BG_CHANNELS="$BG_CHANNELS
-				option|$ch"
-		done
-	fi
-	append forms "$BG_CHANNELS" "$N"
 
-	if [ "$iftype" = "atheros" ]; then
-		if [ "$_device" != "NanoStation2" -a "$_device" != "NanoStation5" ]; then
-			mode_diversity="field|@TR<<Diversity>>
-					radio|diversity_$device|$FORM_diversity|1|@TR<<On>>
-					radio|diversity_$device|$FORM_diversity|0|@TR<<Off>>"      	
-			append forms "$mode_diversity" "$N"
-			append forms "helpitem|Diversity" "$N"
-			append forms "helptext|Helptext Diversity#Used on systems with multiple antennas to help improve reception. Disable if you only have one antenna." "$N"
-			append forms "helplink|http://madwifi.org/wiki/UserDocs/AntennaDiversity" "$N"
-
-			form_txant="field|@TR<<TX Antenna>>
-				radio|txantenna_$device|$FORM_txantenna|0|@TR<<Auto>>
-				radio|txantenna_$device|$FORM_txantenna|1|@TR<<Antenna 1>>
-				radio|txantenna_$device|$FORM_txantenna|2|@TR<<Antenna 2>>"
-			append forms "$form_txant" "$N"
-
-			form_rxant="field|@TR<<RX Antenna>>
-				radio|rxantenna_$device|$FORM_rxantenna|0|@TR<<Auto>>
-				radio|rxantenna_$device|$FORM_rxantenna|1|@TR<<Antenna 1>>
-				radio|rxantenna_$device|$FORM_rxantenna|2|@TR<<Antenna 2>>"
-			append forms "$form_rxant" "$N"
-		else
-			form_antenna_selection="field|@TR<<Antenna>>
-					select|antenna_$device|$FORM_antenna
-					option|auto|@TR<<Internal Auto>>
-					option|horizontal|@TR<<Internal Horizontal>>
-					option|vertical|@TR<<Internal Vertical>>
-					option|external|@TR<<External>>"
-			append forms "$form_antenna_selection" "$N"
-		fi
-	fi
-
-	#Currently broadcom only.
-	if [ "$iftype" = "broadcom" ]; then
-	maxassoc="field|@TR<<Max Associated Clients (Default 128)>>
-		text|maxassoc_${device}|$FORM_maxassoc"
-	append forms "$maxassoc" "$N"
-	fi
 
 	distance="field|@TR<<Wireless Distance (In Meters)>>
 		text|distance_${device}|$FORM_distance"

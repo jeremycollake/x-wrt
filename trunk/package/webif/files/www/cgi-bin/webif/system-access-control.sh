@@ -37,7 +37,7 @@ EOF
 		ERROR="${ERROR}@TR<<root and admin are already users>>.<br />"
 	fi
 	empty "$ERROR" && {
-		password=$(httpd -m $FORM_password_add)
+		password=$(uhttpd -m $FORM_password_add)
 		[ -e /tmp/.webif/file-httpd.conf ] || cp /etc/httpd.conf /tmp/.webif/file-httpd.conf
 		echo "/cgi-bin/webif/:${FORM_user_add}:${password}" >>/tmp/.webif/file-httpd.conf
 		uci_add "webif_access_control" "accesscontrol" "${FORM_user_add}"
@@ -78,7 +78,7 @@ BEGIN { ucount = 0;
 		print $1":"$2":"$3 >>"/tmp/.webif/file-httpd.conf";
 	}
 	if (ENVIRON["FORM_change_password_"$2] != "") {
-		("httpd -m " ENVIRON["FORM_user_"$2]) | getline password;
+		("uhttpd -m " ENVIRON["FORM_user_"$2]) | getline password;
 		print $1":"$2":"password >>"/tmp/.webif/file-httpd.conf";
 	}
 }
