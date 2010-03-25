@@ -38,7 +38,7 @@ BEGIN {
 		print $1":"$2 >> "/tmp/.webif/file-httpd.conf"
 	}
 	if (ENVIRON["REMOTE_USER"] == $2) {
-		("httpd -m " ENVIRON["FORM_pw1"]) | getline password
+		("uhttpd -m " ENVIRON["FORM_pw1"]) | getline password
 		print $1":"$2":"password >> "/tmp/.webif/file-httpd.conf"
 	}
 }'

@@ -55,11 +55,9 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	/etc/init.d/dmesgbackup enable
 	/etc/init.d/timezone enable
 	/etc/init.d/webiffirewalllog enable
-	/etc/init.d/httpd enable
 	
 	ExecuteIfExists "/etc/init.d/timezone" start
 	ExecuteIfExists "/etc/init.d/webif" start
-	ExecuteIfExists "/etc/init.d/httpd" start
 
 	# test installation successfulness
 	TestInstall
@@ -68,7 +66,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 		httpd_2=$(cat /etc/httpd.conf)
 		[ "$httpd_1" != "$httpd_2" ] && {
 			echo "Reinitializing httpd ..."		
-			killall -HUP httpd
+			ExecuteIfExists "/etc/init.d/uhttpd" restart
 		}
 	fi
 
