@@ -51,8 +51,8 @@ append_params() {
 		config_get v "$s" "$p"
 		IFS="$LIST_SEP"
 		for v in $v; do
-			echo "$p - $v"
-			[ "$p" = "dhcpif" ] && DHCP_IF=$v && echo "$p -> $v"
+#			echo "$p - $v"
+			[ "$p" = "dhcpif" ] && DHCP_IF=$v
 			[ -n "$v" ] && append_param "$p" && ARGS="$ARGS $v$LIST_SEP"
 			
 		done
@@ -66,8 +66,8 @@ append_params_quoted() {
 		config_get v "$s" "$p"
 		IFS="$LIST_SEP"
 		for v in $v; do
-			echo "$p - $v"
-			[ "$p" = "dhcpif" ] && DHCP_IF=$v && echo "$p -> $v"
+#			echo "$p - $v"
+			[ "$p" = "dhcpif" ] && DHCP_IF=$v
 			[ -n "$v" ] && append_param "$p" && ARGS="$ARGS \"$v\"$LIST_SEP"
 		done
 		unset IFS
@@ -145,7 +145,7 @@ start (){
 	} || {
 		ARGS="--conf=$(uci_get "chillispot.service.config")"
 	}
-	echo "$ARGS"
+#	echo "$ARGS"
 	[ $ARGS != "" ] && {
 		/sbin/insmod tun >/dev/null 2>&1
 		[ -d $RUN_D ] || mkdir -p $RUN_D
