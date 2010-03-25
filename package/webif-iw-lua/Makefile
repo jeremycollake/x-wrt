@@ -1,0 +1,31 @@
+include $(TOPDIR)/rules.mk
+
+PKG_NAME:=webif-iw-lua
+PKG_VERSION:=1.1
+PKG_RELEASE:=2
+
+PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)-$(PKG_RELEASE)
+
+include $(INCLUDE_DIR)/package.mk
+
+define Package/webif-iw-lua
+  SECTION:=admin
+  CATEGORY:=Administration
+  SUBMENU:=webif
+  DEPENDS:=+lua
+  TITLE:=Librerias para scripts de lua
+endef
+
+define Build/Compile
+endef
+
+define Package/webif-iw-lua/install
+	$(CP) -a ./files/* $(1)/
+#	$(INSTALL_BIN) ./file/usr/lib/lua/* $(1)/usr/lib/lua/
+#	$(INSTALL_BIN) ./file/usr/lib/lua/lua-xwrt/* $(1)/usr/lib/lua/lua-xwrt/
+#	$(INSTALL_BIN) ./file/usr/lib/lua/lua-xwrt/html/* $(1)/usr/lib/lua/lua-xwrt/html/
+#	$(INSTALL_BIN) ./file/usr/lib/lua/lua-xwrt/addon/* $(1)/usr/lib/lua/lua-xwrt/addon/
+#	$(INSTALL_BIN) ./file/usr/lib/lua/lua-xwrt/xwrt/* $(1)/usr/lib/lua/lua-xwrt/xwrt/
+endef
+
+$(eval $(call BuildPackage,webif-iw-lua))
