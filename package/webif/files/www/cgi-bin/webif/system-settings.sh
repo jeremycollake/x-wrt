@@ -52,6 +52,7 @@ config_cb() {
 		;;
 		ntpclient)
 			append ntpclient_cfgs "$cfg_name" "$N"
+		;;
 	esac
 }
 
@@ -99,23 +100,7 @@ fi
 
 generate_ssl_key() {
 	local inst_packages inst_links llib llink libsymlinks
-	is_package_installed "zlib"
-	[ "$?" != "0" ] && {
-		inst_packages="zlib $inst_packages"
-		inst_links="$inst_links /tmp/usr/lib/libz.so.*"
-	}
-	is_package_installed "libopenssl"
-	[ "$?" != "0" ] && {
-		inst_packages="libopenssl $inst_packages"
-		inst_links="$inst_links /tmp/usr/lib/libssl.so.* /tmp/usr/lib/libcrypto.so.*"
-	}
-	is_package_installed "openssl-util"
-	[ "$?" != "0" ] && {
-		inst_packages="openssl-util $inst_packages"
-		inst_links="$inst_links /tmp/usr/bin/openssl"
-	}
-	[ -n "$inst_packages" ] && opkg -force-overwrite -d ram install $inst_packages
-	is_package_installed "openssl-util"
+	is_package_installed "px5g"
 	if [ "$?" = "0" ]; then
 		for llib in $inst_links; do
 			llink=$(echo "$llib" | sed 's/\/tmp//')
@@ -126,32 +111,26 @@ generate_ssl_key() {
 			is_package_installed "ntpclient"
 			[ "$?" != "0" ] && {
 				echo "@TR<<system_settings_Updating_time#Updating time>> ..."
-				rdate -s 0.openwrt.pool.ntp.org
+				rdate -s time.fu-berlin.de
+				[ "$?" != "0" ] && rdate -s ptbtime1.ptb.de
+				[ "$?" != "0" ] && rdate -s ac-ntp0.net.cmu.edu
+				[ "$?" != "0" ] && echo "@TR<<system_time_update_error#Updating time failed, generating cert anyhow>>"
 			}
 		fi
-		export RANDFILE="/tmp/.rnd"
-		dd if=/dev/urandom of="$RANDFILE" count=1 bs=512 2>/dev/null
-		(openssl genrsa -out /etc/stunnel/stunnel.key 2048; openssl req -new -batch -nodes -key /etc/stunnel/stunnel.key -out /etc/stunnel/stunnel.csr; openssl x509 -req -days 365 -in /etc/stunnel/stunnel.csr -signkey /etc/stunnel/stunnel.key -out /etc/stunnel/stunnel.cert)
-		rm -f "$RANDFILE" 2>/dev/null
-		unset RANDFILE
+		/tmp/usr/sbin/px5g selfsigned -der -days ${days:-730} -newkey rsa:${bits:-1024} -keyout "/etc/uhttpd.key" -out "/etc/uhttpd.crt" -subj /C=${country:-DE}/ST=${state:-Saxony}/L=${location:-Leipzig}/CN=${commonname:-OpenWrt}
 	fi
 	[ -n "$libsymlinks" ] && rm -f $libsymlinks
 	[ -n "$inst_packages" ] && opkg remove $inst_packages
 }
 
-if ! empty "$FORM_install_stunnel"; then
-	echo "@TR<<system_settings_Installing_STunnel_package#Installing STunnel package>> ...<pre>"
-	install_package "stunnel"
-	is_package_installed "stunnel"
-	[ "$?" = "0" ] && [ ! -e /etc/stunnel/stunnel.key -o ! -e /etc/stunnel/stunnel.cert ] && {
+if ! empty "$FORM_install_ssl"; then
+	echo "@TR<<system_settings_Installing_STunnel_package#Installing uhttpd-mod-tls package>> ...<pre>"
+	install_package "uhttpd-mod-tls"
+	is_package_installed "uhttpd-mod-tls"
+	[ "$?" = "0" ] && [ ! -e /etc/uhttpd.key -o ! -e /etc/uhttpd.crt ] && {
 		echo "@TR<<system_settings_Generating_SSL_certificate#Generating SSL certificate>> ..."
 		generate_ssl_key
 	}
-	echo "</pre><br />"
-fi
-if ! empty "$FORM_generate_certificate"; then
-	echo "@TR<<system_settings_Generating_SSL_certificate#Generating SSL certificate>> ...<pre>"
-	generate_ssl_key
 	echo "</pre><br />"
 fi
 
@@ -175,8 +154,7 @@ if empty "$FORM_submit"; then
 	FORM_effect="${CONFIG_general_use_progressbar}"		# -- effects checkbox
 	if equal $FORM_effect "1" ; then FORM_effect="checked" ; fi	# -- effects checkbox
 	FORM_language="${CONFIG_general_lang:-en}"	
-	FORM_theme=${CONFIG_theme_id:-xwrt}
-	FORM_ssl_enable="${CONFIG_general_ssl:-0}"
+	FORM_theme="${CONFIG_theme_id:-xwrt}"
 else
 #####################################################################
 # save forms
@@ -215,10 +193,6 @@ EOF
 			}
 		}
 		# webif settings
-		# fix emptying the field when not present
-		FORM_ssl_enable="${FORM_ssl_enable:-$CONFIG_general_ssl}"
-		FORM_ssl_enable="${FORM_ssl_enable:-0}"
-		uci_set "webif" "general" "ssl" "$FORM_ssl_enable"
 		uci_set "webif" "theme" "id" "$FORM_theme"
 		uci_set "webif" "general" "lang" "$FORM_language"
 		uci_set "webif" "general" "use_progressbar" "$FORM_effect_enable"
@@ -229,22 +203,14 @@ EOF
 fi
 
 WEBIF_SSL="field|@TR<<system_settings_Webif_SSL#Webif&sup2; SSL>>"
-is_package_installed "stunnel"
+is_package_installed "uhttpd-mod-tls"
 if [ "$?" != "0" ]; then
 	WEBIF_SSL="$WEBIF_SSL
-string|<div class=\"warning\">@TR<<system_settings_Feature_requires_stunnel#STunnel package is not installed. You need to install it for ssl support>>:</div>
-submit|install_stunnel| @TR<<system_settings_Install_stunnel#Install STunnel>> |"
+string|<div class=\"warning\">@TR<<system_settings_Feature_requires_ssl#uhttpd-mod-tls package is not installed. You need to install it for ssl support>>:</div>
+submit|install_ssl| @TR<<system_settings_Install_SSL#Install uhttpd-mod-tls>> |"
 else
-	if [ -e /etc/stunnel/stunnel.key -a -e /etc/stunnel/stunnel.cert ]; then
-		WEBIF_SSL="$WEBIF_SSL
-select|ssl_enable|$FORM_ssl_enable
-option|0|@TR<<system_settings_webifssl_Off#Off>>
-option|1|@TR<<system_settings_webifssl_On#On>>"
-	else
-		WEBIF_SSL="$WEBIF_SSL
-string|<div class=\"warning\">@TR<<system_settings_Feature_requires_certificate#The SSL certificate is missing. You need to generate it for ssl support>>:</div>
-submit|generate_certificate| @TR<<system_settings_Generate_SSL_Certificate#Generate SSL Certificate>> |"
-	fi
+	WEBIF_SSL="$WEBIF_SSL
+	string|<div class=\"warning\">@TR<<system_settings_Feature_ssl_enabled#SSL is enabled>></div>"
 fi
 
 	effect_field=$(cat <<EOF
@@ -389,13 +355,16 @@ TIMEZONE_OPTS=$(
 )
 #######################################################
 # Web Services Form
-uci_load httpd
-cfg=$CONFIG_SECTION
+uci_load uhttpd
 
 if empty "$FORM_submit"; then
-  config_get FORM_port "$cfg" port
+  config_get FORM_http_port "main" listen_http
+  [ "$FORM_http_port" = "0.0.0.0:80" ] && FORM_http_port="80"
+  config_get FORM_https_port "main" listen_https
+  [ "$FORM_https_port" = "0.0.0.0:443" ] && FORM_https_port="443"
 else
-  uci_set "httpd" "$cfg" "port" "$FORM_port"
+  uci_set "uhttpd" "main" "listen_http" "$FORM_http_port"
+  uci_set "uhttpd" "main" "listen_https" "$FORM_https_port"
 fi
 
 cat <<EOF
@@ -464,7 +433,9 @@ $WEBIF_SSL
 end_form
 start_form|@TR<<Web Configurator Settings>>
 field|@TR<<HTTP Port>>
-text|port|$FORM_port
+text|http_port|$FORM_http_port
+field|@TR<<HTTPS Port>>
+text|https_port|$FORM_https_port
 end_form
 EOF
 
