@@ -53,6 +53,9 @@ config_cb() {
 		ntpclient)
 			append ntpclient_cfgs "$cfg_name" "$N"
 		;;
+		rdate)
+			append rdate_cfgs "$cfg_name" "$N"
+		;;
 	esac
 }
 
@@ -287,40 +290,61 @@ has_nvram_support && {
 	helptext|HelpText wait_time#Number of seconds the boot loader should wait for a TFTP transfer if Boot Wait is on."
 
 }
+#####################################################################
+# rdate form
+
+for cfg in $rdate_cfgs; do
+	if empty "$FORM_submit"; then
+		config_get FORM_rdate $cfg server
+		eval FORM_rdateremove="\$FORM_${cfg}_rdateremove"
+		if [ "$FORM_rdateremove" != "" ]; then
+			list_remove FORM_rdate "$FORM_rdateremove"
+			uci_set "system" "$cfg" "server" "$FORM_rdate"
+		fi
+	else
+		eval FORM_rdateadd="\$FORM_${cfg}_rdateadd"
+		config_get FORM_rdate $cfg server
+		[ $FORM_rdateadd != "" ] && FORM_rdate="$FORM_rdate $FORM_rdateadd"
+		uci_set "system" "$cfg" "server" "$FORM_rdate"
+	fi
+
+	rdate_forms="start_form|@TR<<rdate Servers>>|field_${cfg}_rdate
+	listedit|${cfg}_rdate|$SCRIPT_NAME?|$FORM_rdate
+	end_form"
+	append rdate_form "$rdate_forms" "$N"
+done
+
 
 #####################################################################
 # ntp form
-for server in $ntpservers; do
-	if empty "$FORM_submit"; then
-		config_get FORM_ntp_server $server hostname
-		config_get FORM_ntp_port $server port
-	else
-		eval FORM_ntp_server="\$FORM_ntp_server_$server"
-		eval FORM_ntp_port="\$FORM_ntp_port_$server"
-	fi
-	#add check for blank config, the only time it will be seen is when config section is waitings to be removed
-	if [ "$FORM_ntp_port" != "" -o "$FORM_ntp_server" != "" ]; then
-		if [ "$FORM_ntp_port" = "" ]; then
-			FORM_ntp_port=123
+if [ -z "$(has_pkgs ntpclient)" ]; then
+	for server in $ntpservers; do
+		if empty "$FORM_submit"; then
+			config_get FORM_ntp_server $server hostname
+			config_get FORM_ntp_port $server port
+		else
+			eval FORM_ntp_server="\$FORM_ntp_server_$server"
+			eval FORM_ntp_port="\$FORM_ntp_port_$server"
 		fi
-		ntp_form="field|@TR<<NTP Server>>
-		text|ntp_server_$server|$FORM_ntp_server
-		field|@TR<<NTP Server Port>>
-		text|ntp_port_$server|$FORM_ntp_port
-		field|
-		string|<a href=\"$SCRIPT_NAME?remove_ntpcfg=$server\">@TR<<Remove NTP Server>></a>"
-		append NTP "$ntp_form" "$N"
-	fi
-done
-
+		#add check for blank config, the only time it will be seen is when config section is waitings to be removed
+		if [ "$FORM_ntp_port" != "" -o "$FORM_ntp_server" != "" ]; then
+			if [ "$FORM_ntp_port" = "" ]; then
+				FORM_ntp_port=123
+			fi
+			ntp_form="field|@TR<<NTP Server>>
+			text|ntp_server_$server|$FORM_ntp_server
+			field|@TR<<NTP Server Port>>
+			text|ntp_port_$server|$FORM_ntp_port
+			field|
+			string|<a href=\"$SCRIPT_NAME?remove_ntpcfg=$server\">@TR<<Remove NTP Server>></a>"
+			append NTP "$ntp_form" "$N"
+		fi
+	done
+fi
 add_ntpcfg="field|
 string|<a href=\"$SCRIPT_NAME?add_ntpcfg_number=$ntpcfg_number\">@TR<<Add NTP Server>></a>"
 append NTP "$add_ntpcfg" "$N"
 
-if [ -n "$(has_pkgs ntpclient)" -a -n "$(has_pkgs openntpd)" ]; then
-	NTPCLIENT_INSTALL_FORM="string|<div class=\"warning\">@TR<<Warning>>: @TR<<system_settings_feature_requires_ntpclient#No NTP client is installed. For correct time support you need to install one>>:</div>
-		submit|install_ntpclient| @TR<<system_settings_Install_NTP_Client#Install NTP Client>> |"
-fi
 
 #####################################################################
 # initialize time zones
@@ -418,7 +442,7 @@ helpitem|Timezone
 helptext|Timezone_helptext#Set up your time zone according to the nearest city of your region from the predefined list.
 $NTP
 end_form
-$NTPCLIENT_INSTALL_FORM
+$rdate_form
 ##########################
 # webif settings
 start_form|@TR<<Webif&sup2; Settings>>
