@@ -322,24 +322,6 @@ for package in $process_packages; do
 			[ ! -f /etc/rc.d/S??timezone ] && /etc/init.d/timezone enable >&- 2>&- <&-
 			/etc/init.d/timezone restart
 			;;
-		"webifssl")
-			config_load webif
-			config_get_bool test general ssl 0
-			if [ 1 -eq "$test" ]; then
-				[ -f /etc/init.d/stunnel ] && {
-					#echo '@TR<<Starting SSL>> ...'
-					/etc/init.d/stunnel enable >&- 2>&- <&-
-					/etc/init.d/stunnel start
-				}
-			else
-				[ -f /etc/init.d/webifssl ] && {
-					#echo '@TR<<Stopping SSL>> ...'
-					/etc/init.d/stunnel stop
-					/etc/init.d/stunnel disable >&- 2>&- <&-
-				}
-			fi
-			config_allclear
-			;;
 		"firewall")
 			/etc/init.d/firewall restart && reload_upnpd
 			;;
