@@ -90,17 +90,6 @@ let "ntpcfg_number+=1"
 #####################################################################
 header "System" "Settings" "@TR<<System Settings>>" ' onload="modechange()" ' "$SCRIPT_NAME"
 
-#####################################################################
-# install NTP client if asked
-if ! empty "$FORM_install_ntpclient"; then
-	tmpfile=$(mktemp "/tmp/.webif_ntp-XXXXXX")
-	echo "@TR<<system_settings_Installing_NTPCLIENT_package#Installing NTPCLIENT package>> ...<pre>"
-	install_package "ntpclient"
-	ACTION=ifup
-	. /etc/hotplug.d/iface/20-ntpclient
-	echo "</pre>"
-fi
-
 generate_ssl_key() {
 	local inst_packages inst_links llib llink libsymlinks
 	is_package_installed "px5g"
