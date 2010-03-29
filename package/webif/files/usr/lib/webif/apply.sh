@@ -148,7 +148,7 @@ switch_language() {
 			# build URL for package
 			#  since the original webif may be installed to, have to make sure we get latest ver
 			webif_version=$(opkg status webif | awk '/Version:/ { print $2 }')
-			xwrt_repo_url=$(cat /etc/opkg.conf | grep X-Wrt | cut -d' ' -f3)
+			xwrt_repo_url=$(cat /etc/opkg/xwrt.conf | grep X-Wrt | cut -d' ' -f3)
 			# always install language pack, since it may have been updated without package version change
 			opkg -force-reinstall -force-overwrite install "${xwrt_repo_url}/webif-lang-${newlang}_${webif_version}_all.ipk" | uniq
 			# switch to it if installed, even old one, otherwise return to previous
