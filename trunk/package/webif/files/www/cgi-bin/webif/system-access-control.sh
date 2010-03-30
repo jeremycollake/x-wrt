@@ -48,6 +48,7 @@ EOF
 		[ -e /tmp/.webif/file-httpd.conf ] || cp /etc/httpd.conf /tmp/.webif/file-httpd.conf
 		echo "/cgi-bin/webif/:${FORM_user_add}:${password}" >>/tmp/.webif/file-httpd.conf
 		uci_add "webif_access_control" "accesscontrol" "${FORM_user_add}"
+		unset FORM_user_add
 	}
 	unset FORM_submit
 fi
