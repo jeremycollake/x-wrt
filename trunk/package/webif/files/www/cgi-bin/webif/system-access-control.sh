@@ -36,6 +36,13 @@ EOF
 		[ -n "$ERROR" ] && ERROR="${ERROR}<br />"
 		ERROR="${ERROR}@TR<<root and admin are already users>>.<br />"
 	fi
+	[ -e /tmp/.webif/file-httpd.conf ] && HTTPD_CONFIG_FILE=/tmp/.webif/file-httpd.conf
+	[ -e /etc/httpd.conf ] && HTTPD_CONFIG_FILE="$HTTPD_CONFIG_FILE /etc/httpd.conf"
+	[ -n "HTTPD_CONFIG_FILE" ] && grep -q "$FORM_user_add" $HTTPD_CONFIG_FILE
+	if [ "$?" = "0" ]; then
+		[ -n "$ERROR" ] && ERROR="${ERROR}<br />"
+		ERROR="${ERROR}$FORM_user_add @TR<<already exists.>>.<br />"
+	fi
 	empty "$ERROR" && {
 		password=$(uhttpd -m $FORM_password_add)
 		[ -e /tmp/.webif/file-httpd.conf ] || cp /etc/httpd.conf /tmp/.webif/file-httpd.conf
