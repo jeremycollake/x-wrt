@@ -29,7 +29,6 @@ endef
 define Package/webif/conffiles
 /etc/config/webif
 /etc/config/cron
-/etc/ssl/openssl.cnf
 /etc/httpd.conf
 /etc/init.d/custom-user-startup
 endef
