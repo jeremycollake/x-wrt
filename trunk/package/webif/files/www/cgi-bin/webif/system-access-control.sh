@@ -65,9 +65,9 @@ BEGIN { ucount = 0;
 		if (ENVIRON["FORM_remove_user_"$2] != "") {
 			system("/bin/rm -f " cachedir "/cat" $2);
 			system("/bin/rm -f " cachedir "/subcat" $2);
-			system("/bin/rm /tmp/.webif/file-httpd.conf; touch/tmp/.webif/file-httpd.conf");
+			system("touch /tmp/.webif/file-httpd.conf.2");
 		} else if (ENVIRON["FORM_change_password_"$2] != "")
-			system("/bin/rm /tmp/.webif/file-httpd.conf; touch/tmp/.webif/file-httpd.conf");
+			system("touch /tmp/.webif/file-httpd.conf.2");
 	}
 }
 ($1 == "/cgi-bin/webif/" && $2 != superuser && $2 != "admin") {
@@ -76,18 +76,21 @@ BEGIN { ucount = 0;
 		password("user_"$2, ENVIRON["FORM_user_" $2]);
 		submit("change_password_"$2, "@TR<<system_acl_changepw#Change Password>>");
 		field("&nbsp;");
-		print "<span class=\"smalltext\"><a href=\"" ENVIRON["SCRIPT_NAME"] "?remove_user_" $2 "=1&submit=1" "\">@TR<<system_acl_remove_user#Remove user>> " $2 "</a></span>";
+		print "<span class=\"smalltext\"><a href=\"" ENVIRON["SCRIPT_NAME"] "?remove_user_" $2 "=" $2 "&submit=1" "\">@TR<<system_acl_remove_user#Remove user>> " $2 "</a></span>";
 		field("&nbsp;");
 		ucount = ucount + 1;
 	}
 }
 ((ENVIRON["FORM_submit"] != "") && ($1 != "")) {
-	if (($1 == "/cgi-bin/webif/") && (ENVIRON["FORM_remove_user_"$2] == "") && (ENVIRON["FORM_change_password_"$2] == "")) {
-		print $1":"$2":"$3 >>"/tmp/.webif/file-httpd.conf";
+	if (($1 == "/cgi-bin/webif/") && (ENVIRON["FORM_remove_user_"$2] != $2) && (ENVIRON["FORM_change_password_"$2] == "")) {
+		print $1":"$2":"$3 >>"/tmp/.webif/file-httpd.conf.2";
+	}
+	if ($1 != "/cgi-bin/webif/") {
+		print $0 >>"/tmp/.webif/file-httpd.conf.2";
 	}
 	if (ENVIRON["FORM_change_password_"$2] != "") {
 		("uhttpd -m " ENVIRON["FORM_user_"$2]) | getline password;
-		print $1":"$2":"password >>"/tmp/.webif/file-httpd.conf";
+		print $1":"$2":"password >>"/tmp/.webif/file-httpd.conf.2";
 	}
 }
 END {
@@ -107,6 +110,7 @@ END {
 	end_form("","",1);
 }' $HTTPD_CONFIG_FILE 2>/dev/null
 
+[ -e /tmp/.webif/file-httpd.conf.2 ] && mv -f /tmp/.webif/file-httpd.conf.2 /tmp/.webif/file-httpd.conf
 exists /tmp/.webif/file-httpd.conf && HTTPD_CONFIG_FILE=/tmp/.webif/file-httpd.conf || HTTPD_CONFIG_FILE=/etc/httpd.conf
 users=$(awk -F":" '($1 == "/cgi-bin/webif/") { if (($2 != "root") && ($2 != "admin")) print $2 }' $HTTPD_CONFIG_FILE 2>/dev/null)
 
