@@ -130,8 +130,8 @@ uci_load "webif"
 
 	if grep -qi "KAMIKAZE" "/etc/banner"; then
 		firmware_name="OpenWrt Kamikaze"
-	elif grep -qi "BackFire" "/etc/banner"; then
-		firmware_name="OpenWrt BackFire"
+	elif grep -qi "Backfire" "/etc/banner"; then
+		firmware_name="OpenWrt Backfire"
 	else
 		firmware_name="Unknown Wrt"
 	fi	
