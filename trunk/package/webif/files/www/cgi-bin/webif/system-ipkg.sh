@@ -87,7 +87,7 @@ EOF
 ! empty "$FORM_remove_repo_name" && ! empty "$FORM_remove_repo_url" && {
 	repo_update_needed=1
 	repo_src_line="src[\/gz]* $FORM_remove_repo_name $FORM_remove_repo_url"
-	remove_lines_from_file "/etc/opkg.conf" "$repo_src_line"
+	remove_lines_from_file "$FORM_remove_repo_file" "$repo_src_line"
 	# manually remove package lists since ipkg update won't..
 	# todo: odd issue where 'rm -f /usr/lib/opkg/lists/* does not work - openwrt should investigate
 	rm "${lists_path}/$FORM_remove_repo_name" >&- 2>&-
@@ -113,7 +113,7 @@ elif [ "$FORM_action" = "remove" ]; then
 	echo "</pre>"
 fi
 
-repo_list=$(awk '/^[[:space:]]*src[\/gz]*[[:space:]]/ { print "<tr class=\"repositories\"><td><a href=\"./system-ipkg.sh?remove_repo_name=" $2 "&amp;remove_repo_url=" $3 "\">@TR<<system_ipkg_removerepo#remove>></a>&nbsp;&nbsp;" $2 "</td><td colspan=\"2\">" $3 "</td></tr>"}' /etc/opkg.conf)
+repo_list=$(awk '/^[[:space:]]*src[\/gz]*[[:space:]]/ { print "<tr class=\"repositories\"><td><a href=\"./system-ipkg.sh?remove_repo_file=" FILENAME "&amp;"remove_repo_name=" $2 "&amp;remove_repo_url=" $3 "\">@TR<<system_ipkg_removerepo#remove>></a>&nbsp;&nbsp;" $2 "</td><td colspan=\"2\">" $3 "</td></tr>"}' /etc/opkg.conf /etc/opkg/*)
 
 display_form <<EOF
 start_form|@TR<<system_ipkg_addrepo#Add Repository>>
