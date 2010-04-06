@@ -214,6 +214,12 @@ if equal $_use_progressbar "1" ; then echo $_pageload
 else echo "<script type='text/javascript'>function load() { }</script>"
 fi
 
+insert_httpd_password_settings() {
+	echo "/cgi-bin/webif/:root:\$p\$root" >> /etc/httpd.conf
+	echo "/cgi-bin/webif/:admin:\$p\$root" >> /etc/httpd.conf
+	/etc/init.d/uhttpd restart
+}
+
 cat <<EOF
 $_form
 
@@ -230,7 +236,7 @@ EOF
 					echo "$FORM_passwd1"
 					sleep 1
 					echo "$FORM_passwd2"
-				) | passwd root 2>&1 && apply_passwd
+				) | passwd root 2>&1 && apply_passwd && insert_httpd_password_settings
 				echo '</pre><meta http-equiv="refresh" content="4; URL=/cgi-bin/webif/info.sh">'
 				footer
 				exit
