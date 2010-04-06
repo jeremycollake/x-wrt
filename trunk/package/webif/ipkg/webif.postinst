@@ -59,17 +59,6 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	ExecuteIfExists "/etc/init.d/timezone" start
 	ExecuteIfExists "/etc/init.d/webif" start
 
-	# test installation successfulness
-	TestInstall
-	if [ -e /etc/httpd.conf ]; then
-		httpd_1=$(cat /tmp/httpd.conf.old)
-		httpd_2=$(cat /etc/httpd.conf)
-		[ "$httpd_1" != "$httpd_2" ] && {
-			echo "Reinitializing httpd ..."		
-			ExecuteIfExists "/etc/init.d/uhttpd" restart
-		}
-	fi
-
 fi
 
 #remove lock file if it exists otherwise it can cause issues on first apply.
