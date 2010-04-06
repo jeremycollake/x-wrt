@@ -181,7 +181,6 @@ endef
 define Package/webif/install
 	$(CP) -a $(PKG_BUILD_DIR)/files/* $(1)/
 	mkdir -p $(1)/CONTROL
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/webif.preinst $(1)/CONTROL/preinst
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/webif.postinst $(1)/CONTROL/postinst
 	rm -rf \
 		$(1)/usr/lib/webif/lang/ \
