@@ -158,7 +158,7 @@ header() {
 	_date="`date +%F`"
 	if ! equal $6 "" && ! equal $6 "0" ; then _pageload="<SCRIPT type='text/javascript'>start=0; end=$6</SCRIPT><SCRIPT src='/js/pageload.js' type='text/javascript'></SCRIPT><DIV id='loadmain'><SCRIPT type='text/javascript'>document.getElementById(\"loadmain\").style.display = \"none\";</SCRIPT>"; _JSload="<SCRIPT type='text/javascript'>load()</SCRIPT>"; fi
 
-	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && grep 'root:!' /etc/passwd >&- 2>&- && {
+	neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && grep 'root:!' /etc/passwd >&- 2>&- && {
 		_nopasswd=1
 		_form=""
 		_savebutton=""
@@ -228,7 +228,7 @@ $_form
 	$ERROR
 EOF
 
-	empty "$REMOTE_USER" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && {
+	! empty "$_nopasswd" && neq "${SCRIPT_NAME#/cgi-bin/}" "webif.sh" && {
 		! empty "$FORM_passwd1$FORM_passwd2" && {
 			equal "$FORM_passwd1" "$FORM_passwd2" && {
 				echo '<pre>'
