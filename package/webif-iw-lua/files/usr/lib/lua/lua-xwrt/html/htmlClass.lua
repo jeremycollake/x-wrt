@@ -177,11 +177,11 @@ htmlpageClass_mt = {__index = htmlpageClass}
 function htmlpageClass.new (title)
 	local self = {}
 	self.title = title
---	self["conten_type"] = [[
---Content-Type: text/html; charset=UTF-8
---Pragma: no-cache
---
---]]
+	self["conten_type"] = [[
+Content-Type: text/html; charset=UTF-8
+Pragma: no-cache
+
+]]
 	self["doc_type"] = [[
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
@@ -209,11 +209,11 @@ end
 
 function htmlpageClass:text()
 	local str = ""
-	str = str .. [[
-Content-Type: text/html; charset=UTF-8
-Pragma: no-cache
-
-]]
+--	str = str .. [[
+--Content-Type: text/html; charset=UTF-8
+--Pragma: no-cache
+--
+--]]
 
 	if self.content_type then str = self.content_type end
 	if self.doc_type then str = str .. self.doc_type end
