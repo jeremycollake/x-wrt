@@ -12,8 +12,8 @@ define Package/webif-iw-lua-openvpn
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+webif-iw-lua +ip +openvpn +webif-iw-lua-openssl
-  TITLE:=ChilliSpot Configuration Script in LUA
+  DEPENDS:=+webif-iw-lua +ip +openvpn +webif-iw-lua-openssl +ntpclient
+  TITLE:=OpenVPN Configuration Script in LUA
 endef
 
 define Build/Compile
