@@ -182,6 +182,7 @@ Content-Type: text/html; charset=UTF-8
 Pragma: no-cache
 
 ]]
+	self["content_type"] = "Content-Type: text/html; chartset=UTF-8\r\nPragma: no-cache\r\n\r\n"
 	self["doc_type"] = [[
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
