@@ -12,7 +12,7 @@ define Package/webif-iw-lua
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+lua
+  DEPENDS:=+lua +libuci-lua
   TITLE:=Librerias para scripts de lua
 endef
 
