@@ -12,7 +12,7 @@ define Package/webif-iw-lua-openvpn
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+webif-iw-lua +ip +openvpn +webif-iw-lua-openssl +ntpclient
+  DEPENDS:=+webif-iw-lua +ip +openvpn +ntpclient
   TITLE:=OpenVPN Configuration Script in LUA
 endef
 

@@ -259,10 +259,12 @@ function set_menu(t)
 					newMenu[t[".name"]]:add("Upload Certificates",sub.."&suboption=cli_certificates")
 		end
 	end
+print("end_menu")
 --	print(util.table2string(t,"<br>"))	
 end
 
 function init()
+print("init")
 	newMenu:add("openvpn_menu_Core#Core","openvpn.sh")
 	uci.foreach("openvpn","openvpn", set_menu)
 	if __MENU[__FORM.cat].len > 1 then 
@@ -286,7 +288,9 @@ function form_new(form)
 
 	form:Add("subtitle",tr("openvpn_new_conf#Create New Configuration"))
 	form:Add("select","openvpn_new_type","client",tr("openvpn_new_type#Tunnel type"),"string")
-	form["openvpn_new_type"].options:Add("server",tr("Server"))
+	if ssl then
+		form["openvpn_new_type"].options:Add("server",tr("Server"))
+	end
 	form["openvpn_new_type"].options:Add("client",tr("Client"))
 	form["openvpn_new_type"].options:Add("tls_client",tr("TLS-Client"))
 	form["openvpn_new_type"].options:Add("custom",tr("Custom"))
@@ -295,9 +299,10 @@ function form_new(form)
 	form:Add_help_link('http://openvpn.net/index.php/open-source/documentation/manuals/69-openvpn-21.html',"OpenVPN Site", true)
 	form:Add("subtitle",tr("openvpn_del_conf#Remove Configuration"))
 	
---	local dir = util.dirList("/etc/openvpn")
-	local dir = ssl.joinDirUci(util.dirList("/etc/openvpn"),uci.get_type("openvpn","openvpn"))
-
+	local dir = util.dirList("/etc/openvpn")
+	if ssl then
+		dir = ssl.joinDirUci(dir,uci.get_type("openvpn","openvpn"))
+	end
 	form:Add("list", "dir_list:openvpn", dir, tr("Tunnel Names List"),"","","",true)
 	forms[#forms+1] = form
 	return forms

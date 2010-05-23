@@ -1,3 +1,30 @@
+function exists(file)
+    local f = io.open( file, "r" )
+    if f then
+        io.close( f )
+        return true
+    else
+        return false
+    end
+end
+
+old_require = require
+function require (str)
+	local fstr = string.gsub(str,"[.]","/")
+	for path in string.gmatch(package.path,"[^;]+") do
+		local path = string.gsub(path,"?",fstr)
+		if exists(path) then
+			return old_require(str)
+		end
+	end
+	for path in string.gmatch(package.cpath,"[^;]+") do
+		local path = string.gsub(path,"?",fstr)
+		if exists(path) then
+			return old_require(str)
+		end
+	end
+	return nil
+end
  __WORK_STATE = {"Warning... WORK NOT DONE... Not usefull...","Warning... Work in progress...","Warning... Work Not Tested","Warning... Work in Test"}
   __WIP = 0 
   __ERROR   = {} -- __ERROR[#__ERROR][var_name], __ERROR[#__ERROR][msg]
