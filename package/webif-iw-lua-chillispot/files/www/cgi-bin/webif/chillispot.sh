@@ -30,7 +30,7 @@ end
 for i = 1, #forms do
 	page.content:add(forms[i])
 end
-page.content:add(util.table2string(__FORM,"<br>"))
+--page.content:add(util.table2string(__FORM,"<br>"))
 --page.content:add(util.table2string(uci.get_all("chillispot"),"<br>"))
 page:print()
 

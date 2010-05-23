@@ -144,12 +144,12 @@ end
 
 function dirList(path)
 	local dir = {}
-	fdir = io.popen("ls "..path.."/*")
+	fdir = io.popen("find "..path.."/* -type d")
 	for line in fdir:lines() do
-		__, __, line = string.find(line,".*/(.+):")
-		if line then
+--		__, __, line = string.find(line,".*/(.+):")
+--		if line then
 			dir[#dir+1] = line
-		end
+--		end
 	end
 	fdir:close()
 	return dir
