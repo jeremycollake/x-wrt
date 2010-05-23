@@ -16,18 +16,34 @@ local string = string
 local type = type
 local print = print
 local tostring, tonumber = tostring, tonumber
-	if uci.get("chillispot","service","config") == "uci" then
-		__MENU[__FORM.cat]:add(tr("chilli_menu_tun#TUN"),"chillispot.sh?option=tun")
-		__MENU[__FORM.cat]:add(tr("chilli_menu_radiuis#Radius"),"chillispot.sh?option=radius")
-		__MENU[__FORM.cat]:add(tr("chilli_menu_proxy#Proxy"),"chillispot.sh?option=proxy")
-		__MENU[__FORM.cat]:add(tr("chilli_menu_dhcp#DHCP"),"chillispot.sh?option=dhcp")
-		__MENU[__FORM.cat]:add(tr("chilli_menu_uam#UAM"),"chillispot.sh?option=uam")
-		__MENU[__FORM.cat]:add(tr("chilli_menu_uam#MAC Authentication"),"chillispot.sh?option=mac")
-		__MENU[__FORM.cat]:add(tr("chilli_menu_socket#Remote Access"),"chillispot.sh?option=socket")
-	end
+
+-- Save upload configuration file
+if type(__FORM.upload_config) == "table" then
+    local file
+    if uci.get("chillispot","service","config") == "uci" then
+	file = io.open("/etc/config/chillispot","w")
+    else
+	file = io.open("/etc/chilli.conf","w")
+    end
+    if file then
+	file:write(__FORM.upload_config.data)
+	file:close()
+    end
+end
+
+if uci.get("chillispot","service","config") == "uci" then
+	__MENU[__FORM.cat]:add(tr("chilli_menu_tun#TUN"),"chillispot.sh?option=tun")
+	__MENU[__FORM.cat]:add(tr("chilli_menu_radiuis#Radius"),"chillispot.sh?option=radius")
+	__MENU[__FORM.cat]:add(tr("chilli_menu_proxy#Proxy"),"chillispot.sh?option=proxy")
+	__MENU[__FORM.cat]:add(tr("chilli_menu_dhcp#DHCP"),"chillispot.sh?option=dhcp")
+	__MENU[__FORM.cat]:add(tr("chilli_menu_uam#UAM"),"chillispot.sh?option=uam")
+	__MENU[__FORM.cat]:add(tr("chilli_menu_uam#MAC Authentication"),"chillispot.sh?option=mac")
+	__MENU[__FORM.cat]:add(tr("chilli_menu_socket#Remote Access"),"chillispot.sh?option=socket")
+end
 
 uci.check_set("chillispot","service","chillispot")
 uci.save("chillispot")
+
 module("lua-xwrt.chillispot")
 
 local tiface = {}
@@ -57,7 +73,8 @@ function service()
 	forms[#forms]:Add("select","chillispot.service.config",uci.get("chillispot","service","config","UCI"),tr("chilli_var_config#Config type"),"string")
 	forms[#forms]["chillispot.service.config"].options:Add("uci","UCI")
 	forms[#forms]["chillispot.service.config"].options:Add("/etc/chilli.conf","/etc/chilli.conf")
-  forms[#forms]:Add_help(tr("chillispot_var_enable#Service"),tr("chilli_help_enable#Enable or disable service."))
+	forms[#forms]:Add_help(tr("chillispot_var_enable#Service"),tr("chilli_help_enable#Enable or disable service."))
+	forms[#forms]:Add("file","upload_config","",tr("chillispot_var_uploadconf#Upload Conf"),"")
 	if uci.get("chillispot","service","config") ~= "uci" then
 		local conf_data, len = util.file_load("/etc/chilli.conf")
 		forms[#forms+1] = formClass.new("Configuration File",true)

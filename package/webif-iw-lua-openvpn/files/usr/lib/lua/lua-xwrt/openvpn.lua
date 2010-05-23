@@ -259,12 +259,12 @@ function set_menu(t)
 					newMenu[t[".name"]]:add("Upload Certificates",sub.."&suboption=cli_certificates")
 		end
 	end
-print("end_menu")
+--print("end_menu")
 --	print(util.table2string(t,"<br>"))	
 end
 
 function init()
-print("init")
+--print("init")
 	newMenu:add("openvpn_menu_Core#Core","openvpn.sh")
 	uci.foreach("openvpn","openvpn", set_menu)
 	if __MENU[__FORM.cat].len > 1 then 
