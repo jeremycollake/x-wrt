@@ -1,3 +1,5 @@
+old_require = require
+
 function exists(file)
     local f = io.open( file, "r" )
     if f then
@@ -8,7 +10,6 @@ function exists(file)
     end
 end
 
-old_require = require
 function require (str)
 	local fstr = string.gsub(str,"[.]","/")
 	for path in string.gmatch(package.path,"[^;]+") do
@@ -46,7 +47,7 @@ end
 	require("lua-xwrt.xwrt.page")
 	page = xwrtpageClass.new("X-Wrt Page")
 	require("lua-xwrt.html.form")
-	__MENU.permission()
+--	__MENU.permission()
 	if __FORM.__ACTION=="clear_changes"  then uci_changed:clear() end
 	if __FORM.__ACTION=="apply_changes"  then uci_changed:apply() end
 	if __FORM.__ACTION=="review_changes" then uci_changed:show() end
