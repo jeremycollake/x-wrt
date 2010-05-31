@@ -8,6 +8,7 @@ htmlhmenuClass_mt = {__index = htmlhmenuClass}
 function htmlhmenuClass.new(class)
 	self = {}
 	auth = {}
+	self.noauth = false
 	self.user = __ENV.REMOTE_USER or __ENV.USER
 	self.len = 0
 	self.class = class or "mainmenu"
@@ -73,14 +74,21 @@ function htmlhmenuClass:MakeFileMenu()
 	end
 	hcat:close()
 	hcat = io.open("/var/.webcache/cat_"..self.user,"w")
-	hcat:write(scat)
-	hcat:close()
+	if hcat then 
+		hcat:write(scat)
+		hcat:close()
+	end
 	hcat = io.open("/var/.webcache/subcat_"..self.user,"w")
-	hcat:write(ssub)
-	hcat:close()
+	if hcat then
+		hcat:write(ssub)
+		hcat:close()
+	end
 end
 
 function htmlhmenuClass:loadXWRT()
+	if self.user == nil then
+		return
+	end
 	if not util.file_exists("/var/.webcache/cat_"..self.user) then
 		self:MakeFileMenu()
 	end
@@ -88,6 +96,7 @@ function htmlhmenuClass:loadXWRT()
 	local ts = util.file2table("/var/.webcache/subcat_"..self.user)
 	local tmp = {}
 	self.sel_cat = __FORM.cat or "Info"
+	if tc then
 	for i=1, #tc do
 		category, script = unpack(string.split(tc[i],":"))
 		self:add(category, script)
@@ -103,6 +112,7 @@ function htmlhmenuClass:loadXWRT()
 			self[self.sel_cat]:add(subcat, script)
 			auth[script] = subcat
 		end
+	end
 	end
 end
 
@@ -161,6 +171,7 @@ function htmlhmenuClass:text(tmenu, level, scgi)
 end
 
 function htmlhmenuClass:permission()
+	if page.noauth == true then return true end
 	if user == "root"
 	or user == "admin" then 
 		return true 
@@ -188,6 +199,7 @@ function htmlhmenuClass:permission()
 end
 
 function htmlhmenuClass:Denied()
+	if noauth == true then return true end
 	print("Permission Denied<br>")
 --	page.title = tr("Review Changes").." ("..self.count..")"
 --	__MENU.selected = string.gsub(__ENV.REQUEST_URI,"(.*)_changes&(.*)","%2")
@@ -197,6 +209,8 @@ function htmlhmenuClass:Denied()
 	page.action_clear = ""
 	print(page:start())
 	page.content:Add("Permission Denied")
+	page.content:Add(__ENV.SCRIPT_NAME)
+	page.content:Add(__ENV.REQUEST_URI)
 	print(page:the_end())
 	os.exit()
 end
