@@ -49,7 +49,7 @@ function set_validate(t)
 	local str = ""
 --	local tmp = ""
 --	if t.input == "text_list" then tmp = "list_" end
-	if t.input == "text_list" then return str end
+	if t.input == "list_add" then return str end
 	if t.validate ~= "" then
 		str = str .. "<input type=\"hidden\" name=\"val_str_"..t.name.."\" value=\""..t.validate.."\" />"
 		str = str .. "<input type=\"hidden\" name=\"val_lbl_"..t.name.."\" value=\""..t.label.."\" />"
@@ -82,13 +82,15 @@ function list_add (t)
 	str = str .. [[<tr><td width="80%"><input type="text" name="]]..t.name..[[:add" value="" ]]..style.." "..script.." /></td>\n"
 	str = str .. [[<td width="20%"><input type="submit" name="]]..t.name..[[_add" value="Add" style="width:90%;float:right;"></td>]].."\n"
 	str = str .."</tr>\n"
+	if #t.value > 0 then
 	for i=1, #t.value do
---		str = str .. [[<tr><td>]]..[[<input type="text" name="]]..t.name..i..[[" value="]]..t.value[i]..[[" disabled="disabled" style="width:100%;"/>]]..[[</td><td align="right"><input type="submit" name="]]..t.name..[[:del:]]..t.value[i]..":"..i..[[" value="Remove" style="width:90%;float:right;"></td></tr>]].."\n"
+----		str = str .. [[<tr><td>]]..[[<input type="text" name="]]..t.name..i..[[" value="]]..t.value[i]..[[" disabled="disabled" style="width:100%;"/>]]..[[</td><td align="right"><input type="submit" name="]]..t.name..[[:del:]]..t.value[i]..":"..i..[[" value="Remove" style="width:90%;float:right;"></td></tr>]].."\n"
 		if t.disable == true then
 			str = str .. [[<tr><td>]]..[[<input type="text" name="]]..t.name..[[:set:]]..i..[[" value="]]..t.value[i]..[[" disabled="disabled" style="width:100%;"/>]]..[[</td><td align="right"><input type="submit" name="]]..t.name..[[:del:]]..i..":"..t.value[i]..[[" value="Remove" style="width:90%;float:right;"></td></tr>]].."\n"
 		else
 			str = str .. [[<tr><td>]]..[[<input type="text" name="]]..t.name..[[:set:]]..i..[[" value="]]..t.value[i]..[[" style="width:100%;"/>]]..[[</td><td align="right"><input type="submit" name="]]..t.name..[[:del:]]..i..":"..t.value[i]..[[" value="Remove" style="width:90%;float:right;"></td></tr>]].."\n"
 		end
+	end
 	end
 	str = str .. "</table>\n"
 	return str

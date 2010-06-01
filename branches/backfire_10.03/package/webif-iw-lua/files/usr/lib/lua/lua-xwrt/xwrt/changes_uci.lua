@@ -1,6 +1,7 @@
 require("lua-xwrt.addon.uci")
 require("lua-xwrt.html.form")
 require("lua-xwrt.xwrt.page")
+
 changes_uciClass = {} 
 changes_uciClass_mt = {__index = changes_uciClass} 
 
@@ -14,97 +15,87 @@ function changes_uciClass.new ()
 end 
 
 function changes_uciClass:Update()
---
--- this is a very bad idea for security reasons...
--- but i keep it until i can think something more ...
--- or somebody suggests something...
---
-
 	for key, value in pairs(__FORM) do
-			if string.match(key,"val_str_") then __TOCHECK[#__TOCHECK+1]=string.sub(key,9) end
-			if string.match(key,"UCI_CMD_") then
-        __UCI_CMD[#__UCI_CMD+1]={}
-        __UCI_CMD[#__UCI_CMD]["cmd"] = string.sub(key,9)
-        __UCI_CMD[#__UCI_CMD].cmd = string.sub(__UCI_CMD[#__UCI_CMD].cmd,1,3)
-        if __UCI_CMD[#__UCI_CMD].cmd == nil or __UCI_CMD[#__UCI_CMD].cmd == "" then
-          __UCI_CMD[#__UCI_CMD].cmd = "show"
-        end
-        __UCI_CMD[#__UCI_CMD].varname = string.sub(key,12)
-        __UCI_CMD[#__UCI_CMD].value = value 
-      end
-      if string.match(key, "UCI_MSG_") then
-        __UCI_MSG[#__UCI_MSG+1] = {}
-        __UCI_MSG[#__UCI_MSG]["cmd"] = string.sub(key,9,11)
---        __UCI_MSG[#__UCI_MSG]["cmd"] = string.sub(__UCI_MSG[#__UCI_MSG]["cmd"],9,11)
-        __UCI_MSG[#__UCI_MSG]["var"] = string.sub(key,12)
-        __UCI_MSG[#__UCI_MSG]["val"] = value
-      end
+		if string.match(key,"val_str_") then __TOCHECK[#__TOCHECK+1]=string.sub(key,9) end
+		if string.match(key,"UCI_CMD_") then
+			__UCI_CMD[#__UCI_CMD+1]={}
+			__UCI_CMD[#__UCI_CMD]["cmd"] = string.sub(key,9)
+			__UCI_CMD[#__UCI_CMD].cmd = string.sub(__UCI_CMD[#__UCI_CMD].cmd,1,3)
+			if __UCI_CMD[#__UCI_CMD].cmd == nil or __UCI_CMD[#__UCI_CMD].cmd == "" then
+				__UCI_CMD[#__UCI_CMD].cmd = "show"
+			end
+			__UCI_CMD[#__UCI_CMD].varname = string.sub(key,12)
+			__UCI_CMD[#__UCI_CMD].value = value 
+		end
+		if string.match(key, "UCI_MSG_") then
+			__UCI_MSG[#__UCI_MSG+1] = {}
+			__UCI_MSG[#__UCI_MSG]["cmd"] = string.sub(key,9,11)
+--			__UCI_MSG[#__UCI_MSG]["cmd"] = string.sub(__UCI_MSG[#__UCI_MSG]["cmd"],9,11)
+			__UCI_MSG[#__UCI_MSG]["var"] = string.sub(key,12)
+			__UCI_MSG[#__UCI_MSG]["val"] = value
+		end
 	end
-  for i=1, #__UCI_MSG do
-    if __UCI_MSG[i]["cmd"] == "set" then
-      uci.set(__UCI_MSG[i]["var"].."="..__UCI_MSG[i]["val"])
-    elseif __UCI_MSG[i]["cmd"] == "add" then
-      uci.add(__UCI_MSG[i]["var"].."="..__UCI_MSG[i]["val"])
-    elseif __UCI_MSG[i]["cmd"] == "del" then
-      uci.delete(__UCI_MSG[i]["var"])
-    else
-      print("Error :"..__UCI_MSG[i]["cmd"],__UCI_MSG[i]["var"],__UCI_MSG[i]["val"])
-    end
-  end
-  for i=1, #__UCI_CMD do
-    if __UCI_CMD[i].cmd == "snw" and __FORM.UCI_SET_VALUE ~= "" then
-      __UCI_CMD[i].cmd = "set"
-      __UCI_CMD[i].value = __UCI_CMD[i].value ..":"..__FORM.UCI_SET_VALUE
-    end
-    if __UCI_CMD[i].cmd == "set" then
-      local grp, name = unpack(string.split(__UCI_CMD[i].value,":"))
-      if name == nil then name = "" end
-      if __UCI_VERSION == nil then	
-        assert(os.execute("mkdir /tmp/.uci > /dev/null 2>&1"))
-		    os.execute("echo \"config '"..grp.."' '"..name.."'\" >>/tmp/.uci/"..__UCI_CMD[i].varname)
-		  else
-        if name == "" then
-          uci.add(__UCI_CMD[i].varname,grp)
-        else
-          uci.set(__UCI_CMD[i].varname,name,grp)
-        end
-		  end
-    elseif __UCI_CMD[i].cmd == "del" then
-      if __UCI_VERSION == nil then 
-        os.execute("uci "..__UCI_CMD[i].cmd.." "..__UCI_CMD[i].varname)
-      else
-        uci.delete(__UCI_CMD[i].varname)
-      end
-    end
-  end
---
--- End security risk
---
+	for i=1, #__UCI_MSG do
+		if __UCI_MSG[i]["cmd"] == "set" then
+			uci.set(__UCI_MSG[i]["var"].."="..__UCI_MSG[i]["val"])
+		elseif __UCI_MSG[i]["cmd"] == "add" then
+			uci.add(__UCI_MSG[i]["var"].."="..__UCI_MSG[i]["val"])
+		elseif __UCI_MSG[i]["cmd"] == "del" then
+			uci.delete(__UCI_MSG[i]["var"])
+		else
+			print("Error :"..__UCI_MSG[i]["cmd"],__UCI_MSG[i]["var"],__UCI_MSG[i]["val"])
+		end
+	end
+	for i=1, #__UCI_CMD do
+		if __UCI_CMD[i].cmd == "snw" and __FORM.UCI_SET_VALUE ~= "" then
+			__UCI_CMD[i].cmd = "set"
+			__UCI_CMD[i].value = __UCI_CMD[i].value ..":"..__FORM.UCI_SET_VALUE
+		end
+		if __UCI_CMD[i].cmd == "set" then
+			local grp, name = unpack(string.split(__UCI_CMD[i].value,":"))
+			if name == nil then name = "" end
+			if __UCI_VERSION == nil then	
+				assert(os.execute("mkdir /tmp/.uci > /dev/null 2>&1"))
+				os.execute("echo \"config '"..grp.."' '"..name.."'\" >>/tmp/.uci/"..__UCI_CMD[i].varname)
+			else
+				if name == "" then
+					uci.add(__UCI_CMD[i].varname,grp)
+				else
+					uci.set(__UCI_CMD[i].varname,name,grp)
+				end
+			end
+		elseif __UCI_CMD[i].cmd == "del" then
+			if __UCI_VERSION == nil then 
+				os.execute("uci "..__UCI_CMD[i].cmd.." "..__UCI_CMD[i].varname)
+			else
+				uci.delete(__UCI_CMD[i].varname)
+			end
+		end
+	end
+
 	local saveList = {}
-  for i, v in ipairs(__TOCHECK) do
+	for i, v in ipairs(__TOCHECK) do
 		local uciparam = {}
-    for value in string.gmatch(v,"[^.]+") do
-      uciparam[#uciparam+1] = value
-    end
+		for value in string.gmatch(v,"[^.]+") do
+			uciparam[#uciparam+1] = value
+		end
 		local uci_value = uci.get(v)
-		
 		if uci_value == nil then uci_value = "" end
 		if __FORM[v] == nil then __FORM[v] = "" end
-    
 		local error = validate(__FORM["val_lbl_"..v],__FORM[v],__FORM["val_str_"..v],v)
 		if error ~=nil then __ERROR[#__ERROR+1] = error end
 		if __FORM[v] ~= uci_value and error==nil then
 			if __FORM[v] == "" then 
 				uci.delete(v)
 			else
-        local okset = uci.set(uciparam[1],uciparam[2],uciparam[3],__FORM[v])
+				local okset = uci.set(uciparam[1],uciparam[2],uciparam[3],__FORM[v])
 			end
-		  saveList[uciparam[1]] = "to_save"
+			saveList[uciparam[1]] = "to_save"
 		end
 	end
-  for s, v in pairs(saveList) do
-    uci.save(s)
-  end
+	for s, v in pairs(saveList) do
+		uci.save(s)
+	end
 	self:count_changes()
 end
 
