@@ -30,15 +30,22 @@ if type(__FORM.upload_config) == "table" then
 	file:close()
     end
 end
+local newMenu = htmlhmenuClass.new("submenu")
+newMenu:add(tr("chilli_menu_service#Service"),"chillispot.sh")
+newMenu:add(tr("chilli_menu_tun#TUN"),"chillispot.sh?option=tun")
+newMenu:add(tr("chilli_menu_radiuis#Radius"),"chillispot.sh?option=radius")
+newMenu:add(tr("chilli_menu_proxy#Proxy"),"chillispot.sh?option=proxy")
+newMenu:add(tr("chilli_menu_dhcp#DHCP"),"chillispot.sh?option=dhcp")
+newMenu:add(tr("chilli_menu_uam#UAM"),"chillispot.sh?option=uam")
+newMenu:add(tr("chilli_menu_uam#MAC Authentication"),"chillispot.sh?option=mac")
+newMenu:add(tr("chilli_menu_socket#Remote Access"),"chillispot.sh?option=socket")
 
 if uci.get("chillispot","service","config") == "uci" then
-	__MENU[__FORM.cat]:add(tr("chilli_menu_tun#TUN"),"chillispot.sh?option=tun")
-	__MENU[__FORM.cat]:add(tr("chilli_menu_radiuis#Radius"),"chillispot.sh?option=radius")
-	__MENU[__FORM.cat]:add(tr("chilli_menu_proxy#Proxy"),"chillispot.sh?option=proxy")
-	__MENU[__FORM.cat]:add(tr("chilli_menu_dhcp#DHCP"),"chillispot.sh?option=dhcp")
-	__MENU[__FORM.cat]:add(tr("chilli_menu_uam#UAM"),"chillispot.sh?option=uam")
-	__MENU[__FORM.cat]:add(tr("chilli_menu_uam#MAC Authentication"),"chillispot.sh?option=mac")
-	__MENU[__FORM.cat]:add(tr("chilli_menu_socket#Remote Access"),"chillispot.sh?option=socket")
+	if __MENU[__FORM.cat].len > 1 then
+		__MENU[__FORM.cat]["ChilliSpot"] = newMenu
+	else
+		__MENU[__FORM.cat]= newMenu
+	end
 end
 
 uci.check_set("chillispot","service","chillispot")
@@ -65,7 +72,7 @@ function service()
 	forms[#forms+1] = formClass.new("Config")
 	forms[#forms]:Add("service","chillispot.service.enable","chilli",tr("chillispot_var_service#Service"),"")
 	forms[#forms]["chillispot.service.enable"].options:Add("service","chilli")
-	forms[#forms]["chillispot.service.enable"].options:Add("init","chillispot")
+	forms[#forms]["chillispot.service.enable"].options:Add("init","chilli")
 
 --	forms[#forms]:Add("select","chillispot.service.enable",uci.get("chillispot","service","enable",0),tr("chilli_var_enable#Service"),"string")
 --	forms[#forms]["chillispot.service.enable"].options:Add("0","Disable")
