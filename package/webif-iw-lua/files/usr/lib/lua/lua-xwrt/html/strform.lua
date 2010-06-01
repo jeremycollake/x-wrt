@@ -49,7 +49,7 @@ function set_validate(t)
 	local str = ""
 --	local tmp = ""
 --	if t.input == "text_list" then tmp = "list_" end
-	if t.input == "text_list" then return str end
+	if t.input == "list_add" then return str end
 	if t.validate ~= "" then
 		str = str .. "<input type=\"hidden\" name=\"val_str_"..t.name.."\" value=\""..t.validate.."\" />"
 		str = str .. "<input type=\"hidden\" name=\"val_lbl_"..t.name.."\" value=\""..t.label.."\" />"
