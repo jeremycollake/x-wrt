@@ -4,7 +4,6 @@
 #
 ################################################################################
 config chilli service
-	option 'enable' '0'
 	option 'config' 'uci'
 
 config chilli settings
@@ -121,8 +120,7 @@ config chilli settings
 # IP address of radius server 1
 # For most installations you need to modify this tag.
 #		option 'radiusserver1' 'rad01.chillispot.org'
-#		option 'radiusserver1' '172.16.1.2'
-		option 'radiusserver1' '10.10.0.1'
+		option 'radiusserver1' '192.168.1.1'
 
 # TAG: radiusserver2
 # IP address of radius server 2
@@ -130,8 +128,7 @@ config chilli settings
 # same value as radiusserver1.
 # For most installations you need to modify this tag.
 #		option 'radiusserver2' 'rad02.chillispot.org'
-#		option 'radiusserver2' '172.16.1.2'
-		option 'radiusserver2' '10.10.0.1'
+		option 'radiusserver2' '127.0.0.1'
 
 # TAG: radiusauthport
 # Radius authentication port
@@ -150,7 +147,7 @@ config chilli settings
 # TAG: radiussecret
 # Radius shared secret for both servers
 # For all installations you should modify this tag.
-		option 'radiussecret' '1234'
+		option 'radiussecret' 'testing123'
 
 # TAG: radiusnasid
 # Radius NAS-Identifier
@@ -161,7 +158,6 @@ config chilli settings
 # Radius NAS-IP-Address
 # Normally you do not need to uncomment this tag.
 #		option 'radiusnasip' '127.0.0.1'
-		option 'radiusnasip' '10.10.0.29'
 
 # TAG: radiuscalled
 # Radius Called-Station-ID
@@ -179,7 +175,7 @@ config chilli settings
 # <HOTSPOT_OPERATOR_NAME>,<LOCATION>
 # Normally you do not need to uncomment this tag.
 #		option 'radiuslocationname' 'ACMEWISP,Gate_14_Terminal_C_of_Newark_Airport'
-		option 'radiuslocationname' '"Centro San Ignacio"'
+#		option 'radiuslocationname' '"Centro San Ignacio"'
 
 # TAG: radiusnasporttype
 # Value of NAS-Port-Type attribute. Defaults to 19 (Wireless-IEEE-802.11). 
@@ -277,9 +273,8 @@ config chilli settings
 # TAG: uamserver
 # URL of web server handling authentication.
 #		option 'uamserver' 'https://radius.chillispot.org/hotspotlogin'
-#		option 'uamserver' 'http://192.168.182.1/cgi-bin/login/login'
+		option 'uamserver' 'http://192.168.182.1/cgi-bin/login/login'
 #		option 'uamserver' 'http://www.internet-wifi.com.ar/hotspotlogin_m.php'
-		option 'uamserver' 'https://www.intra-urbalink.com/hotspots/hotspotlogin.php'
 
 # TAG: uamhomepage
 # URL of welcome homepage.
@@ -287,13 +282,11 @@ config chilli settings
 # users will be redirected to the uamserver instead.
 # Normally you do not need to uncomment this tag.
 #		option 'uamhomepage' 'http://192.168.182.1/welcome.html'
-		option 'uamhomepage' 'https://www.intra-urbalink.com/abawifi/index.html'
 
 # TAG: uamsecret
 # Shared between chilli and authentication web server
 #		option 'uamsecret' 'ht2eb8ej6s4et3rg1ulp'
-#		option 'uamsecret' 'InternetWifi'
-		option 'uamsecret' 'ht2eb8ej6s4et3rg1ulp'
+#		option 'uamsecret' 'Internet-Wifi'
 
 # TAG: uamlisten
 # IP address to listen to for authentication requests
@@ -309,15 +302,19 @@ config chilli settings
 # Comma separated list of domain names, IP addresses or network segments
 # the client can access without first authenticating.
 # Normally you do not need to uncomment this tag.
-#		option 'uamallowed' 'www.chillispot.org,10.11.12.0/24'
-#	option 'uamallowed' '172.16.1.2,172.16.1.2,www.google.com,10.0.0.0/8'
-	option 'uamallowed' '190.7.25.160,www.urbalink.com,www.intra-urbalink.com,www.cantv.com.ve,www.cantv.net,www.myipaddress.com'
+#	list 'uamallowed' '10.0.0.0/8'
+	list 'uamallowed' 'www.chillispot.info'
+	list 'uamallowed' 'x-wrt.org'
+	list 'uamallowed' 'openwrt.org'
+	list 'uamallowed' 'www.google.com'
+	list 'uamallowed' '192.168.1.1/24'
 	
+
 # TAG: uamanydns
 # If this flag is given unauthenticated users are allowed to use
 # any DNS server.
 # Normally you do not need to uncomment this tag.
-#		option 'uamanydns' '0'
+		option 'uamanydns' '0'
 
 
 # MAC authentication
@@ -339,8 +336,10 @@ config chilli settings
 # This is useful if many mac addresses has to be specified. 
 # This tag is ignored if the macauth tag is given.
 # Normally you do not need to uncomment this tag.
-#		option 'macallowed' '00-0A-5E-AC-BE-51,00-30-1B-3C-32-E9,00-18-DE-26-E8-35'
-
+#	list 'macallowed' '00-0A-5E-AC-BE-51'
+#	list 'macallowed' '00-30-1B-3C-32-E9'
+#	list 'macallowed' '00-18-DE-26-E8-35'
+	
 # TAG: macpasswd
 # Password to use for MAC authentication.
 # Normally you do not need to uncomment this tag.
@@ -367,19 +366,3 @@ config chilli settings
 # Normally you do not need to uncomment this tag.
 #		option 'rmtpasswd' 'rmtpassword'
 
-# TAG: uamallowed
-# Alternative way to set uamallowed,  
-# It is possible to specify this tag multiple times.
-#config uamallow
-#		option 'uamallowed' 'www.google.com,192.168.4.0/24'
-#config uamallow
-#		option 'uamallowed' 'www.altavista.com,192.168.3.0/24'
-
-# TAG: macallowed
-# Alternative way to set it
-# It is possible to specify this tag multiple times.
-#config macallow
-#		option 'macallowed' '00-0A-5E-AC-BE-51,00-30-1B-3C-32-E9'
-#config macallow
-#		option 'macallowed' '00-18-DE-26-E8-35'
-		
