@@ -257,24 +257,12 @@ end
 
 function formClass:service(t)
 	local style = ""
---[[
-	local ps = ""
-	ps = io.popen("ps")
-	local running = false
-	print(t.options["service"].label)
-	for line in ps:lines() do
-		if string.match(line,t.options["service"].label) then
-			running = true
-			break
-		end
-	end
-	ps:close()
-]]
 	if t.style ~= "" then style = "style=\""..t.style.."\" " end
 	local str  = "<tr><td width=\""..self.label.."\">" .. t.label .. "</td>"
 	str = str .. "<td width=\""..self.input.."\">"
 	str = str .. "<table width='100%' cellspacing='0' cellpadding='0'>"
 	str = str .. "<tr><td>"
+
 	if util.isEnabled(t.value) == true then
 		str = str .. "<input type=\"submit\" name=\"service:"..t.value..":disable\" value=\"Disable it?\" style='width:80px;'	/>\n"
 	else
@@ -282,17 +270,19 @@ function formClass:service(t)
 	end
 --	str = str .. strform.select(t,2)
 	str = str .. "</td><td align='right'>\n<table width='184px' cellspacing='0' cellpadding='0'>"
-	str = str .. "<tr><td>"
 	local startst = ""
 	local restartst = ""
 	local stopst = ""
-	local status, desc = util.isRunning("/usr/sbin/"..t.options["service"].label)
+
+--	local status, desc = util.isRunning(t.options["service"].label)
+	local status, desc = util.isRunning(t.value)
 	if status == true then
 		startst = ' disabled="disabled" '
 	else
 		restartst = ' disabled="disabled" '
 		stopst = ' disabled="disabled" '
 	end
+	str = str .. "<tr><td>"
 	str = str .. "<input type=\"submit\" name=\"service:"..(t.options["service"].label or "service_name")..":start\" value=\"Start\" "..startst.." style='width:60px;'	/>\n"
 	str = str .. "</td>\n<td>"
 	str = str .. "<input type=\"submit\" name=\"service:"..(t.options["service"].label or "service_name")..":restart\" value=\"Restart\" "..restartst.." style='width:60px;' />\n"
