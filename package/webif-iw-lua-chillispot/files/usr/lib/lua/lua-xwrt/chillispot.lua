@@ -2,6 +2,7 @@ require("lua-xwrt.addon.string")
 require("lua-xwrt.addon.uci")
 require("lua-xwrt.html.form")
 require("lua-xwrt.xwrt.translator")
+require("lua-xwrt.html.messages")
 
 local string = string
 local io = io
@@ -18,6 +19,7 @@ local print = print
 local tostring, tonumber = tostring, tonumber
 
 -- Save upload configuration file
+--[[
 if type(__FORM.upload_config) == "table" then
     local file
     if uci.get("chillispot","service","config") == "uci" then
@@ -30,6 +32,7 @@ if type(__FORM.upload_config) == "table" then
 	file:close()
     end
 end
+]]
 local newMenu = htmlhmenuClass.new("submenu")
 newMenu:add(tr("chilli_menu_service#Service"),"chillispot.sh")
 newMenu:add(tr("chilli_menu_tun#TUN"),"chillispot.sh?option=tun")
@@ -70,7 +73,7 @@ end
 function service()
 	local forms = {}
 	forms[#forms+1] = formClass.new("Config")
-	forms[#forms]:Add("service","chillispot.service.enable","chilli",tr("chillispot_var_service#Service"),"")
+	forms[#forms]:Add("service","chillispot.service.enable","/usr/sbin/chilli",tr("chillispot_var_service#Service"),"")
 	forms[#forms]["chillispot.service.enable"].options:Add("service","chilli")
 	forms[#forms]["chillispot.service.enable"].options:Add("init","chilli")
 

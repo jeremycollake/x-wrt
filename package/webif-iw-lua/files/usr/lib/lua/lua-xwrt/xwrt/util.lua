@@ -95,7 +95,7 @@ function isEnabled(str)
 	local ls = io.popen("ls /etc/rc.d")
 	for line in ls:lines() do
 		if string.match(line,str) then
-			return true, line
+			return true
 		end
 	end
 	return false
@@ -108,7 +108,7 @@ function isRunning(str)
 			return true, line
 		end
 	end
-	return false
+	return false, "Not running"
 end
 
 -- To read a tables sort by Keys
