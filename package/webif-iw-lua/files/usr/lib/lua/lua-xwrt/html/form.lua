@@ -99,6 +99,8 @@ function formClass:tostring(name)
 			return self:service(self[name])
 		elseif self[name].input == "submit" then
 			return self:submit(self[name])
+		elseif self[name].input == "table" then
+			return self:submit(self[name])
 		else
 			return self:full_line(self[name])
 		end
@@ -383,6 +385,17 @@ function formClass:radio(name,value,label,options,style,script)
 	str = str .. "<input type=\"hidden\" name=\"val_lbl_"..name.."\" value=\""..label.."\" />"
 	str = str .. "<input type=\"radio\" name=\""..name.."\" style=\""..style.."\" "..script.." "..options.."/>"
 	str = str .. "</td></tr>"
+	return str
+end
+
+function formClass:table(name,value,label,options,style,script)
+	if label == nil then label = name end
+	if value == nil then value = "" end
+	if style == nil then style = "" end
+	if string.trim(value) == string.trim(options) then options = " checked=\"checked\"" end
+	if script == nil then script = "" end
+	local str  = "<table width='100%' border='1' celsspacing='1' celspading='1'>\n"
+	str = str .. "</table>"
 	return str
 end
 
