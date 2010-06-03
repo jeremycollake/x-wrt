@@ -27,7 +27,7 @@ define Build/Configure
 endef
 
 define Build/Compile
-	find $(PKG_BUILD_DIR)/files -type f -name '*.lua' -exec $(STAGING_DIR_HOST)/bin/luac -s -o {}.fin {} \;
+	find $(PKG_BUILD_DIR)/files -type f -name '*.lua' -exec $(STAGING_DIR_HOST)/bin/luac -s -o {} {} \;
 endef
 
 define Package/webif-iw-lua-chillispot/install
