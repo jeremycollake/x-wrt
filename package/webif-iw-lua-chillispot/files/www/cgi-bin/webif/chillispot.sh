@@ -9,7 +9,7 @@
 --
 -- Author(s) [in order of work date]:
 --       Fabián Omar Franzotti
---         
+--
 -- Configuration files referenced:
 --    hotspot
 --
