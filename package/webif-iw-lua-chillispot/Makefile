@@ -5,6 +5,7 @@ PKG_VERSION:=1.0
 PKG_RELEASE:=2
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)-$(PKG_VERSION)
+PKG_BUILD_DEPENDS:=+lua/host
 
 include $(INCLUDE_DIR)/package.mk
 
@@ -26,6 +27,7 @@ define Build/Configure
 endef
 
 define Build/Compile
+	find $(PKG_BUILD_DIR)/files -type f -name '*.lua' -exec $(STAGING_DIR_HOST)/bin/luac -s -o {}.fin {} \;
 endef
 
 define Package/webif-iw-lua-chillispot/install

@@ -120,7 +120,7 @@ config chilli settings
 # IP address of radius server 1
 # For most installations you need to modify this tag.
 #		option 'radiusserver1' 'rad01.chillispot.org'
-		option 'radiusserver1' '192.168.1.1'
+#		option 'radiusserver1' '192.168.1.1'
 
 # TAG: radiusserver2
 # IP address of radius server 2
@@ -128,7 +128,7 @@ config chilli settings
 # same value as radiusserver1.
 # For most installations you need to modify this tag.
 #		option 'radiusserver2' 'rad02.chillispot.org'
-		option 'radiusserver2' '127.0.0.1'
+#		option 'radiusserver2' '127.0.0.1'
 
 # TAG: radiusauthport
 # Radius authentication port
@@ -273,7 +273,7 @@ config chilli settings
 # TAG: uamserver
 # URL of web server handling authentication.
 #		option 'uamserver' 'https://radius.chillispot.org/hotspotlogin'
-		option 'uamserver' 'http://192.168.182.1/cgi-bin/login/login'
+#		option 'uamserver' 'http://192.168.182.1/cgi-bin/login/login'
 #		option 'uamserver' 'http://www.internet-wifi.com.ar/hotspotlogin_m.php'
 
 # TAG: uamhomepage
@@ -286,7 +286,6 @@ config chilli settings
 # TAG: uamsecret
 # Shared between chilli and authentication web server
 #		option 'uamsecret' 'ht2eb8ej6s4et3rg1ulp'
-#		option 'uamsecret' 'Internet-Wifi'
 
 # TAG: uamlisten
 # IP address to listen to for authentication requests
