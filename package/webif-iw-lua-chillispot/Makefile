@@ -34,6 +34,8 @@ define Package/webif-iw-lua-chillispot/install
 	$(CP) -a $(PKG_BUILD_DIR)/files/* $(1)/
 	$(INSTALL_DIR) $(1)/www/cgi-bin/webif/
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/www/cgi-bin/webif/* $(1)/www/cgi-bin/webif/
+	$(INSTALL_DIR) $(1)/www/cgi-bin/login/
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/www/cgi-bin/login/* $(1)/www/cgi-bin/login/
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/files/etc/init.d/* $(1)/etc/init.d/
 
