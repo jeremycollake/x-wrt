@@ -7,6 +7,7 @@ require ("lua-xwrt.html.htmlClass")
 require ("lua-xwrt.html.form")
 require ("lua-xwrt.xwrt.translator")
 require ("md5")
+
 tr_load()
 
 util = require("lua-xwrt.xwrt.util")
@@ -283,10 +284,10 @@ else
 	end
 end
 
-local str ="<br /><br />"
-for i,v in pairs(__FORM) do
-  str=str..i.."="..v.."<br>"
-end
+--local str ="<br /><br />"
+--for i,v in pairs(__FORM) do
+--  str=str..i.."="..v.."<br>"
+--end
 
 page.container.content:add(strpage)
 --page.container.content:add(str)
