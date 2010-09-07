@@ -11,6 +11,7 @@ function get_env()
 --print("-------------------------------------------------------")
 	return t
 end
+
 function processInfo(str,data)
 	local lines = string.split(str,"\r\n")
 	local retKey = ""
@@ -93,3 +94,10 @@ end
 
 __ENV = get_env()
 __FORM = get_post()
+for k, v in pairs(__FORM) do
+	local msg, service, action = unpack(string.split(k,":"))
+	if msg == "service" then
+		os.execute("/etc/init.d/"..service.." "..action )
+--		os.execute("sleep 3")
+	end
+end	

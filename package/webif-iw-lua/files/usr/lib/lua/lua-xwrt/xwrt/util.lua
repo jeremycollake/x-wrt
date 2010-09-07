@@ -34,6 +34,20 @@ function show_table(t,idx)
 	end
 end
 
+function intdiv(a,b)
+	a = tonumber(a) or 0
+	b = tonumber(b) or 0
+	if a == 0 then return 0 end
+	if b == 0 then return a end
+	local c = (a % b)
+	if c == 0 then 
+		return a/b, 0
+	else 
+		return ((a-c)/b), c
+	end
+end
+
+
 -- Load File
 function file_load(filename)
 	local data = ""

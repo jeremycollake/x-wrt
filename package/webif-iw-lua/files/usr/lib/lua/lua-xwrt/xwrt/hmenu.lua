@@ -9,7 +9,7 @@ function htmlhmenuClass.new(class)
 	self = {}
 	auth = {}
 	self.noauth = false
-	self.user = __ENV.REMOTE_USER or __ENV.USER
+	self.user = __ENV.REMOTE_USER or __ENV.USER or "unknow"
 	self.len = 0
 	self.class = class or "mainmenu"
 	self.selected =""
@@ -128,7 +128,7 @@ function htmlhmenuClass:text(tmenu, level, scgi)
 		selected ="submenu"..level
 	end
 	__strMenu =  "<div id=\""..tmenu.class.."\">\n\t<ul>\n"
-	for __, t in ipairs(tmenu) do
+	for zz, t in ipairs(tmenu) do
 		if t.name == "-" and t.value == "-" then
 			__strMenu = __strMenu .."\t\t<li class=\"separator\">&nbsp;</li>\n"
 		else
@@ -136,6 +136,39 @@ function htmlhmenuClass:text(tmenu, level, scgi)
 			cgi = selected.."="..t.name
 			if scgi ~= "" then cgi = "&"..cgi end
 			local inc = "?"
+			if t.value == "" then
+				local myMenu = tmenu
+				local tt = t
+				local idx = zz
+				repeat 
+					local nxtt = myMenu[tt.name][1]
+					t.value = nxtt.value
+--					print(zz,"name"..nxtt.name,"script"..nxtt.value,"name"..tt.name,"script"..tt.value)
+					myMenu = myMenu[tt.name]
+					tt = myMenu[1]
+--					print(zz,"name"..nxtt.name,"script"..nxtt.value,"name"..tt.name,"script"..tt.value)
+--					print(t.value,tt)
+--[[
+					for k, v in pairs(myMenu) do
+						print(k,v)
+						if type(v) == "table" then
+							for n,u in pairs(v) do
+								print("",n,u)
+								if type(u) == "table" then
+									for i,w in pairs(u) do
+										print("","",i,w)
+									end
+								end
+							end
+						end
+					end
+]]
+				until t.value ~= "" or tt == nil
+--				os.exit(0)
+				if t.value == "" then
+					t.value = "Error to find option"
+				end
+			end
 			if string.match(t.value,"[?]") then 
 				inc = "&"
 			end
