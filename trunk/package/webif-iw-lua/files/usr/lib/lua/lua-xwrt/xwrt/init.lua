@@ -40,6 +40,7 @@ end
 	require("lua-xwrt.xwrt.validate")
 	require("lua-xwrt.addon.uci")
 	require("lua-xwrt.xwrt.changes_uci")
+	
 	uci_changed = changes_uciClass.new()
 	require("lua-xwrt.xwrt.translator")
 	tr_load()

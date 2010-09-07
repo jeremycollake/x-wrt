@@ -80,7 +80,7 @@ function xwrtpageClass:init()
 	self.container.header:add(self:set_header())
 
 	self.container:add(self:set_menu())
-
+	self.container:add(self:set_form())
 	if uci.get("webif.general.use_progressbar") == "1" then
 		self.container:add([[
 <SCRIPT type='text/javascript'>
@@ -95,10 +95,11 @@ end=5;
 		self.container:add([[</DIV> <!-- loadmain -->]])
 	end
 
+--[[
 	if self.form then
 		self.container:add(self.form)
 	end
-
+]]
 	self.container:add(htmlsectionClass.new("div","content"))
 	self.container.content:add(self:set_content())
 
@@ -134,8 +135,18 @@ end
 
 function xwrtpageClass:set_menu()
 	return	function()
-						return __MENU:text()
-					end
+			return __MENU:text()
+	end
+end
+
+function xwrtpageClass:set_form()
+	return function()
+			if self.form then
+				return self.form
+			else
+				return ""
+			end
+	end
 end
 
 function xwrtpageClass:set_content()
