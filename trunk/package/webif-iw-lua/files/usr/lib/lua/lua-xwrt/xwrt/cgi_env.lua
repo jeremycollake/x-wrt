@@ -1,5 +1,6 @@
 require("lua-xwrt.addon.string")
-
+cgi = require("lua-xwrt.xwrt.cgi")
+--[[
 function get_env()
 	local t = {}
   local  myenv = io.popen("env")
@@ -91,9 +92,9 @@ function get_post()
 	end
 	return post
 end
-
-__ENV = get_env()
-__FORM = get_post()
+]]
+__ENV = cgi.env
+__FORM = cgi.params
 for k, v in pairs(__FORM) do
 	local msg, service, action = unpack(string.split(k,":"))
 	if msg == "service" then

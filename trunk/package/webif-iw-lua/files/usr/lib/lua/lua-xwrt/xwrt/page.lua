@@ -80,6 +80,7 @@ function xwrtpageClass:init()
 	self.container.header:add(self:set_header())
 
 	self.container:add(self:set_menu())
+	self.container:add(self:set_vmenu())
 	self.container:add(self:set_form())
 	if uci.get("webif.general.use_progressbar") == "1" then
 		self.container:add([[
@@ -134,9 +135,21 @@ function xwrtpageClass:set_header()
 end
 
 function xwrtpageClass:set_menu()
-	return	function()
+	return	
+		function()
 			return __MENU:text()
-	end
+		end
+end
+
+function xwrtpageClass:set_vmenu()
+	return	
+		function()
+			if __VMENU then
+				return __VMENU:text()
+			else
+				return ""
+			end
+		end
 end
 
 function xwrtpageClass:set_form()
@@ -262,6 +275,7 @@ function xwrtpageClass:start()
 	str = str .. '</div> <!-- header -->' .. '\n'
 --	str = str .. '<div ID="mainmenu"></div>' .. "\n"
 	str = str .. self:set_menu()()
+	str = str .. self:set_vmenu()()
 	str = str .. self.form .. '\n'
 	str = str .. '<div ID="content">' .. '\n'
 	str = str .. '<h2>'.. self.title .. '</h2>' 
