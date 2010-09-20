@@ -178,6 +178,7 @@ function htmlpageClass.new (title)
 	local self = {}
 	self.title = title
 	self["conten_type"] = [[
+HTTP/1.0 200 OK
 Content-Type: text/html; charset=UTF-8
 Pragma: no-cache
 
@@ -215,8 +216,9 @@ function htmlpageClass:text()
 --Pragma: no-cache
 --
 --]]
-
-	if self.content_type then str = self.content_type end
+	if uhttpd == nil then
+		if self.content_type then str = self.content_type end
+	end
 	if self.doc_type then str = str .. self.doc_type end
 	str = str .. (self.html or "<HTML>\n")
 	str = str .. self.head:text()
