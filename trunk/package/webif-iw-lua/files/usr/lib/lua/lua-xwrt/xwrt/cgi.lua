@@ -43,23 +43,29 @@ local function post()
 	end
 	return params
 end
+
 params = {}
 env = get_env()
-content_len = env["CONTENT_LENGTH"]
+content_len = env["CONTENT_LENGTH"] or env["CONTENT_LENGTH"]
 content_type, boundary = getboundary()
+request_method = env["REQUEST_METHOD"] or env["REQUEST_METHOD"]
 
-if env["REQUEST_METHOD"] == "POST" then
+if request_method == "POST" then
 	params = post()
-elseif env["REQUEST_METHOD"] == "GET" then
+elseif request_method == "GET" then
 	for line in string.gmatch(env.QUERY_STRING,"[^%&]+") do
 		local _, _, key, value = string.find(line,"([^%=]+)[%=]([^%=]*)")
 		params[key] = value
 	end
 else
+--[[
+	if #arg > 0 then
 	for i=1, #arg do
 		for line in string.gmatch(arg[i],"[^%&%s]+") do
 			local _, _, key, value = string.find(line,"([^%=]+)[%=]([^%=]*)")
 			params[key] = value
 		end
 	end
+	end
+]]
 end

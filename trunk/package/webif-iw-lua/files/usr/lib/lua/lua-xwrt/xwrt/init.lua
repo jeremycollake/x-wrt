@@ -26,12 +26,12 @@ function require (str)
 	end
 	return nil
 end
- __WORK_STATE = {"Warning... WORK NOT DONE... Not usefull...","Warning... Work in progress...","Warning... Work Not Tested","Warning... Work in Test"}
-  __WIP = 0 
-  __ERROR   = {} -- __ERROR[#__ERROR][var_name], __ERROR[#__ERROR][msg]
-  __TOCHECK = {} -- __TOCHECK[#__TOCHECK]
-  __UCI_CMD = {} -- __UCI_CMD[#__UCI_CMD]["command"], __UCI_CMD[#__UCI_CMD_]["varname"]
-  __UCI_MSG = {} -- 
+	__WORK_STATE = {"Warning... WORK NOT DONE... Not usefull...","Warning... Work in progress...","Warning... Work Not Tested","Warning... Work in Test"}
+	__WIP = 0 
+	__ERROR   = {} -- __ERROR[#__ERROR][var_name], __ERROR[#__ERROR][msg]
+	__TOCHECK = {} -- __TOCHECK[#__TOCHECK]
+	__UCI_CMD = {} -- __UCI_CMD[#__UCI_CMD]["command"], __UCI_CMD[#__UCI_CMD_]["varname"]
+	__UCI_MSG = {} -- 
 	__ERROR = {}
 	__ENV = {}
 	__FORM = {}
