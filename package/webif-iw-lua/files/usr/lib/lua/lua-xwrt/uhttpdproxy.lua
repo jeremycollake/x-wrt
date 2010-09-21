@@ -110,9 +110,10 @@ function handle_request(env)
 	__FORM = cgi
 	__HEADERS = env.headers
 	cgi.REMOTE_USER = "Unkonow"
-	local user, pass = "Unknow", "invalid"
+	local user, pass, fulluser = "Unknow", "invalid", ""
 	if env.headers.Authorization then
-		_, _, user, pass = string.find(uhttpd.b64decode(string.sub(env.headers.Authorization,7)),"([^%:]+):(.+)")
+		fulluser = uhttpd.b64decode(string.sub(env.headers.Authorization,7))
+		_, _, user, pass = string.find(uhttpd.b64decode(string.sub(env.headers.Authorization,7)),"([^%:]+):(%a*)")
 		userdb = "/etc/passwd"
 		huserdb = io.open(userdb,"r")
 		local myAuth = false;
@@ -120,6 +121,7 @@ function handle_request(env)
 			local _, _, username, passwd, UID, GID, full_name, directory, shell = string.find(l,"([^%:]+):([^%:]+):([^%:]+):([^%:]+):([^%:]+):([^%:]+):(.+)")
 			if username == user then
 				__REALM = {}
+				__REALM["fulluser"] = fulluser
 				__REALM["USERNAME"] = username
 				__REALM["PASSWD"] = passwd
 				__REALM["UID"] = UID
@@ -127,6 +129,8 @@ function handle_request(env)
 				__REALM["FULL_NAME"] = full_name
 				__REALM["DIRECTORY"] = directory
 				__REALM["SHELL"] = shell
+				__REALM["StrPass"] = pass
+--				__REALM["CryptPass"] = uhttpd.crypt(pass)
 				-- Check password --
 				env.REMOTE_USER = user
 				myAuth = true
