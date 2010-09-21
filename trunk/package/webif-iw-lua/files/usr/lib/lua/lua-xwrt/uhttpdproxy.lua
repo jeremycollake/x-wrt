@@ -109,10 +109,33 @@ function handle_request(env)
 	end
 	__FORM = cgi
 	__HEADERS = env.headers
-	cgi.algo, cgi.authstring = mime.unb64(env.headers.Authorization)
-	if cgi.USERNAME or env.headers.Authorization then
-		
-		if debug == true then showInfo() end
+	cgi.REMOTE_USER = "Unkonow"
+	local user, pass = "Unknow", "invalid"
+	if env.headers.Authorization then
+		_, _, user, pass = string.find(uhttpd.b64decode(string.sub(env.headers.Authorization,7)),"([^%:]+):(.+)")
+		userdb = "/etc/passwd"
+		huserdb = io.open(userdb,"r")
+		local myAuth = false;
+		for l in huserdb:lines() do
+			local _, _, username, passwd, UID, GID, full_name, directory, shell = string.find(l,"([^%:]+):([^%:]+):([^%:]+):([^%:]+):([^%:]+):([^%:]+):(.+)")
+			if username == user then
+				__REALM = {}
+				__REALM["USERNAME"] = username
+				__REALM["PASSWD"] = passwd
+				__REALM["UID"] = UID
+				__REALM["GID"] = GID
+				__REALM["FULL_NAME"] = full_name
+				__REALM["DIRECTORY"] = directory
+				__REALM["SHELL"] = shell
+				-- Check password --
+				env.REMOTE_USER = user
+				myAuth = true
+				break
+			end
+		end
+		if __REALM == nil then 
+			env.headers.Authorization = nil
+		end
 	end
 	local script = env.SCRIPT_NAME..env.PATH_INFO
 	local rc, err = pcall(dofile,"/www"..script)
