@@ -1,6 +1,6 @@
-mime = require("mime")
+require("lua-xwrt.addon.string")
 function handle_request(env)
-	local debug = true
+	local debug = false
 	local function split(str,sep)
 		local t = {}
 		local ini = 1
@@ -112,31 +112,40 @@ function handle_request(env)
 	cgi.REMOTE_USER = "Unkonow"
 	local user, pass, fulluser = "Unknow", "invalid", ""
 	if env.headers.Authorization then
-		fulluser = uhttpd.b64decode(string.sub(env.headers.Authorization,7))
-		_, _, user, pass = string.find(uhttpd.b64decode(string.sub(env.headers.Authorization,7)),"([^%:]+):(%a*)")
-		userdb = "/etc/passwd"
-		huserdb = io.open(userdb,"r")
-		local myAuth = false;
+		local optfile = 0
+		_, _, user, pass = string.find(uhttpd.b64decode(string.sub(env.headers.Authorization,7)),"([^%:]+):(.*)")
+		local huserdb = io.open("/etc/httpd.conf","r")
 		for l in huserdb:lines() do
-			local _, _, username, passwd, UID, GID, full_name, directory, shell = string.find(l,"([^%:]+):([^%:]+):([^%:]+):([^%:]+):([^%:]+):([^%:]+):(.+)")
-			if username == user then
-				__REALM = {}
-				__REALM["fulluser"] = fulluser
-				__REALM["USERNAME"] = username
-				__REALM["PASSWD"] = passwd
-				__REALM["UID"] = UID
-				__REALM["GID"] = GID
-				__REALM["FULL_NAME"] = full_name
-				__REALM["DIRECTORY"] = directory
-				__REALM["SHELL"] = shell
-				__REALM["StrPass"] = pass
---				__REALM["CryptPass"] = uhttpd.crypt(pass)
-				-- Check password --
-				env.REMOTE_USER = user
-				myAuth = true
-				break
+			local username, passwd, UID, GID, full_name, directory, shell
+			_, _, path, username, passwd = string.find(l,"([^%:]+):([^%:]+):(.+)")
+			if username and passwd then
+				if string.sub(passwd,1,3) == "$p$" then
+					passwddb = io.open("/etc/passwd",r)
+					for p in passwddb:lines() do
+						_, _, username, passwd, UID, GID, full_name, directory, shell = string.find(p,"([^%:]+):([^%:]+):([^%:]+):([^%:]+):([^%:]+):([^%:]+):(.+)")
+						if username == user then
+							break
+						end
+					end
+					passwddb:close()
+				end
+
+				if username == user then
+					if passwd == uhttpd.crypt(pass, passwd) then
+						__REALM = {}
+						__REALM["USERNAME"] = username
+						__REALM["UID"] = UID
+						__REALM["GID"] = GID
+						__REALM["FULL_NAME"] = full_name
+						__REALM["DIRECTORY"] = directory
+						__REALM["SHELL"] = shell
+						env.REMOTE_USER = user
+					end
+					break
+				end
 			end
 		end
+		huserdb:close()
 		if __REALM == nil then 
 			env.headers.Authorization = nil
 		end
