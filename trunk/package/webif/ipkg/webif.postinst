@@ -51,7 +51,7 @@ if [ -z "${IPKG_INSTROOT}" ]; then
 	/etc/init.d/custom-user-startup enable
 
 	# start X-Wrt specific services
-	/etc/init.d/syslog enable
+#	/etc/init.d/syslog enable
 	/etc/init.d/dmesgbackup enable
 	/etc/init.d/timezone enable
 	/etc/init.d/webiffirewalllog enable
