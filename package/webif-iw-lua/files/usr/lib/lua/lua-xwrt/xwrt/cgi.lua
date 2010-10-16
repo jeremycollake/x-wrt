@@ -34,6 +34,9 @@ local function post()
 		local t = {}
 		string.gsub(v,'([^%c%s:]+):%s+.+;%s*[^%s=]+="(.-)"%c*(%C*)', 
 			function(a,b,c)
+				a = string.trim(a)
+				b = string.trim(b)
+				c = string.trim(c)
 				t["content"] = string.lower(a)
 				t["name"] = b
 				t["value"] = c

@@ -91,6 +91,8 @@ function formClass:tostring(name)
 			return self:file(self[name])
 		elseif self[name].input == "list_add" then
 			return self:list_add(self[name])
+		elseif self[name].input == "check_list" then
+			return self:check_list(self[name])
 		elseif self[name].input == "list" then
 			return self:list(self[name])
 		elseif self[name].input == "uci_file" then
@@ -243,6 +245,19 @@ function formClass:list_add(t)
 	local str  = "<tr><td width=\""..self.label.."\">" .. t.label .. "</td>"
 	str = str .. "<td width=\""..self.input.."\">\n"
 	str = str .. strform.list_add(t)
+	str = str .. "</td></tr>"
+	return str
+end
+
+function formClass:check_list(t)
+--[[
+		No está hecho
+]]
+	local style = ""
+	if t.style ~= "" then style = "style=\""..t.style.."\" " end
+	local str  = "<tr><td width=\""..self.label.."\">" .. t.label .. "</td>"
+	str = str .. "<td width=\""..self.input.."\">\n"
+	str = str .. strform.check_list(t)
 	str = str .. "</td></tr>"
 	return str
 end

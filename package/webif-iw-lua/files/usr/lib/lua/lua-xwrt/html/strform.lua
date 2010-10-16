@@ -29,7 +29,7 @@ end
 function set_script (t)
 	if t.script == nil then return "" end
 	if t.script ~= "" then 
-		return t.style
+		return t.script
 	else
 		return ""
 	end

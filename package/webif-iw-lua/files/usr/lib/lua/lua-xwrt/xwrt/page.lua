@@ -9,14 +9,14 @@
 --	usage : page = xwrtpageClass.new(title_of_page)
 --	page instances
 --		page.content_type		(get or set) default value come from htmlpageClass
---		page.doc_type				(get or set) default value come from htmlpageClass
---		page.html						(get or set) default value come from htmlpageClass
---		page.head						(get or set)
+--		page.doc_type			(get or set) default value come from htmlpageClass
+--		page.html				(get or set) default value come from htmlpageClass
+--		page.head				(get or set)
 --		page.head.title			(get or set)
 --		page.head.links			(get or set)
 --		page.head.metas			(get or set)
 --		page.head.scripts		(get or set)
---		page.body						(get or set)
+--		page.body				(get or set)
 --		page.container			(get or set)
 --		page.container.header
 --		page.container.content

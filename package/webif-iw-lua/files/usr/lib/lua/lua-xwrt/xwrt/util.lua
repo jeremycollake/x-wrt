@@ -1,5 +1,5 @@
-require("lua-xwrt.addon.string")
-require("lua-xwrt.xwrt.translator")
+require("webif2.addon.string")
+require("webif2.xwrt.translator")
 
 local string = string
 local io = io
@@ -20,7 +20,7 @@ local loadstring = loadstring
 local tr = tr
 local page = page
 
-module("lua-xwrt.xwrt.util")
+module("webif2.xwrt.util")
 function show_table(t,idx)
 	local idx = idx or 0
 	local str = string.rep("  ",idx)
