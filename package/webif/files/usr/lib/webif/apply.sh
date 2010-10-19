@@ -326,7 +326,9 @@ for package in $process_packages; do
 			/etc/init.d/firewall restart && reload_upnpd
 			;;
 		"httpd")
-			/etc/init.d/httpd restart
+			[ -e "/etc/init.d/httpd" ] && /etc/init.d/httpd restart
+			[ -e "/etc/init.d/uhttpd" ] && /etc/init.d/uhttpd restart
+#			/etc/init.d/httpd restart
 			;;
 		"uhttpd")
 			/etc/init.d/uhttpd restart
@@ -349,5 +351,6 @@ cd "$pushed_dir"
 rm /tmp/.webif/* >&- 2>&-
 rm /tmp/.uci/* >&- 2>&-
 if [ "$HTTP_RESTART" = "1" ]; then
-	/etc/init.d/httpd restart
+	[ -e "/etc/init.d/httpd" ] && /etc/init.d/httpd restart
+	[ -e "/etc/init.d/uhttpd" ] && /etc/init.d/uhttpd restart
 fi
