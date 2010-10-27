@@ -1,6 +1,7 @@
 #!/usr/bin/webif-page
 <?
 . "/usr/lib/webif/webif.sh"
+LOAD_STATE=""
 ###################################################################
 # WAN and LAN configuration page
 #
@@ -184,6 +185,7 @@ for interface in $network; do
 	if empty "$FORM_submit"; then
 		config_get FORM_proto $interface proto
 		config_get FORM_type $interface type
+		config_get FORM_ifname $interface ifname
 		config_get FORM_ipaddr $interface ipaddr
 		config_get FORM_netmask $interface netmask
 		config_get FORM_gateway $interface gateway
@@ -214,6 +216,7 @@ for interface in $network; do
 	else
 		eval FORM_proto="\$FORM_${interface}_proto"
 		eval FORM_type="\$FORM_${interface}_type"
+		eval FORM_ifname="\$FORM_${interface}_ifname"
 		eval FORM_ipaddr="\$FORM_${interface}_ipaddr"
 		eval FORM_netmask="\$FORM_${interface}_netmask"
 		eval FORM_gateway="\$FORM_${interface}_gateway"
@@ -308,6 +311,11 @@ EOF
 	option|wwan|@TR<<WWAN>>
 	helpitem|Connection Type
 	helptext|Helptext Connection Type#Static IP: IP address of the interface is statically set. DHCP: The interface will fetch its IP address from a dhcp server.
+
+	field|@TR<<Interface>>
+	text|${interface}_ifname|$FORM_ifname
+	helpitem|Interface
+	helptext|Virtual Interfece used by this network, can have multiple interfaces separates by spaces.
 
 	field|@TR<<Type>>
 	select|${interface}_type|$FORM_type
