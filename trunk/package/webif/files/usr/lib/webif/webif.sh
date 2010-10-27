@@ -12,6 +12,7 @@
 # Configuration files referenced:
 #
 
+
 libdir=/usr/lib/webif
 wwwdir=/www
 cgidir=/www/cgi-bin/webif
