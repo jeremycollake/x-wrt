@@ -1,7 +1,8 @@
 #ifndef _LOGTRIGGER_UCI_H
 #define _LOGTRIGGER_UCI_H
 
-#include <uci.h>
+//#include <uci.h>
+
 #include "pairs.h"
 
 typedef struct st_list {
@@ -20,17 +21,14 @@ typedef struct st_logcheck {
 	pairlist_st *params;
 	struct st_logcheck *next;
 	struct st_logcheck *prev;
-
 } uci_logcheck;
 
 void hostblock_load_uci(const char *name);
 uci_list *listNew();
 static void parse_sections(struct uci_package *p);
-//static void do_logcheck(struct uci_section *s);
-//static void do_blacklist(struct uci_section *s);
-//static void do_whitelist(struct uci_section *s);
-//static void do_blocked(struct uci_section *s);
+uci_logcheck *newData();
+uci_logcheck *listAddlogcheck(uci_list* list, bool enable, char* name, char* pattern, char* fields, int maxfail, char *script, pairlist_st *params );
+static void do_logcheck(struct uci_section *s);
 
-uci_list *listlogcheck;
-
+//uci_list *listlogcheck;
 #endif

@@ -26,6 +26,7 @@ TARGET_CPPFLAGS := \
 	-I$(LINUX_DIR)/include \
 	-I$(PKG_BUILD_DIR) \
 	-Wall \
+	-DOPENWRT \
 	$(TARGET_CPPFLAGS)
 
 define Build/Prepare
