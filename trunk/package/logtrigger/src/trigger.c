@@ -26,7 +26,7 @@
 #include <syslog.h>
 #include <unistd.h>
 
-#include "uci.h"
+#include "config.h"
 #include "logread.h"
 #include "scan.h"
 #include "pairs.h"

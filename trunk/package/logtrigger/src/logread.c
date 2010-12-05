@@ -78,20 +78,20 @@ char *logread(int follow) {
     /* Locate the segment. */
     if((log_shmid = shmget(key, 0, 0)) < 0) {
         perror("shmget");
-        exit(1);
+        return NULL;
     }
 
     /* Now we attach the segment to our data space. */
     shbuf = shmat(log_shmid, NULL, SHM_RDONLY);
 	if (shbuf == NULL){
 		perror("shmat");
-        exit(1);
+        return NULL;
 	}
 
 	log_semid = semget(key, 0, 0);
 	if (log_semid == -1){
 		perror("shmat");
-        exit(1);
+        return NULL;
 	}
 	signal(SIGINT, interrupted);
     /* Now read what the server put in the memory. */
@@ -137,7 +137,7 @@ char *logread(int follow) {
 			if (cur == shbuf_tail) {
 				sem_up(log_semid);
 				fflush_all();
-				sleep(1); /* TODO: replace me with a sleep_on */
+//				sleep(1); /* TODO: replace me with a sleep_on */
 				continue;
 			}
 		}

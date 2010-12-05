@@ -20,7 +20,7 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <getopt.h>
-#include "uci.h"
+#include "config.h"
 #include "trigger.h"
 
 enum {
@@ -58,7 +58,13 @@ int main(int argc, char **argv)
 	int i;
 	DEBUG=0;
 	listlogcheck = listNew();
-	hostblock_load_uci("logtrigger");
+#ifdef OPENWRT
+	read_conf("/etc/config/logtrigger");
+#endif
+#ifndef OPENWRT
+	read_conf("logtrigger.conf");
+#endif
+//	hostblock_load_uci("logtrigger");
 
 	if (argc == 1){
 		read_syslog();
