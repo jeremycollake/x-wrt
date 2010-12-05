@@ -17,7 +17,6 @@ include $(INCLUDE_DIR)/kernel.mk
 define Package/logtrigger
   SECTION:=Utils
   CATEGORY:=Utilities
-  DEPENDS:=+libuci
   TITLE:=logtrigger help you to monitor syslog and run some script for all or specific log event 
 endef
 
