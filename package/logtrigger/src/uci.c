@@ -27,6 +27,8 @@
 #include "uci.h"
 
 extern int DEBUG;
+extern uci_list *listlogcheck;
+extern filelist_st *files;
 
 void read_conf_uci(const char *name)
 {
@@ -168,10 +170,8 @@ static void parse_sections(struct uci_package *p)
 {
 	struct uci_element *e;
 	struct uci_section *s;
-
 	uci_foreach_element(&p->sections, e) {
 		s = uci_to_section(e);
-
 		if (strcmp(s->type, "rule") == 0){
 			do_logcheck(s);
 		}
