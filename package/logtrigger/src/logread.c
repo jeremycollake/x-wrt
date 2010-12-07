@@ -137,7 +137,7 @@ char *logread(int follow) {
 			if (cur == shbuf_tail) {
 				sem_up(log_semid);
 				fflush_all();
-//				sleep(1); /* TODO: replace me with a sleep_on */
+				sleep(1); /* TODO: replace me with a sleep_on */
 				continue;
 			}
 		}

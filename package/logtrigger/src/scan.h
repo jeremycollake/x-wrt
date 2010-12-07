@@ -6,7 +6,7 @@
 #include <string.h>
 #include <malloc.h>
 #include "pairs.h"
-#include "config.h"
+#include "confreg.h"
 
 typedef struct {
 	char *value;

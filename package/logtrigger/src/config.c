@@ -1,48 +1,18 @@
 #include <stdio.h> 
+#include <stdlib.h> 
 #include <string.h> 
 #include <malloc.h> 
 #include <errno.h>
 #include <ctype.h>
 #include "util.h"
 #include "files.h"
-#include "pairs.h"
 #include "config.h"
+#include "confreg.h"
 
-uci_logcheck *newData(){
-	return ( uci_logcheck *)malloc( sizeof( uci_logcheck )) ;
-}
-
-uci_list *listNew(){
-	uci_list *list = ( uci_list *)malloc( sizeof( uci_list )) ;
-	list->first = NULL;
-	list->last = NULL;
-	list->count = 0;
-	return list;
-}
-
-uci_logcheck *listAddlogcheck(uci_list* list, int enable, char* name, char* pattern, char* fields, int maxfail, char *script, pairlist_st *params ){
-	uci_logcheck *d;
-	uci_logcheck *p;
-	d = ( uci_logcheck *)malloc( sizeof( uci_logcheck ));
-	d->enable = enable;
-	d->name = name;
-	d->pattern = pattern;
-	d->fields = fields;
-	d->maxfail = maxfail;
-	d->script = script;
-	d->params = (struct pairlist_st *) params;
-	d->next = NULL;
-	if (list->last){
-		p = list->last;
-		p->next = d;
-		d->prev = p;
-	}
-	if (list->first == NULL)
-		list->first = d;
-	list->last = d;
-	list->count++;
-	return d;
-}
+extern int errno;
+extern int DEBUG;
+extern uci_list *listlogcheck;
+extern filelist_st *files;
 
 void remove_comment(char *str)
 {
@@ -75,7 +45,7 @@ void clean_str(char *str)
 	char *newstr;
 	const char *buf = str;
 	newstr = (char*) malloc((strlen(buf)+10)*sizeof(char));
-	int len = strlen(buf)+1;
+//	int len = strlen(buf)+1;
 	int i = 0;
 
 	while (isspace(*buf)) buf++;
@@ -111,6 +81,7 @@ void clean_str(char *str)
 	free(newstr);
 }
 
+/*
 void set_vars(char* line)
 {
 	char *name;
@@ -122,6 +93,7 @@ void set_vars(char* line)
 		printf("\t\t%s = %s\n", name, value);
 	}
 }
+*/
 
 char *readuci_line(FILE *fp, char* tmp)
 {
@@ -181,15 +153,15 @@ int getucinext(FILE *fp, uci_reg *reg)
 void read_conf(const char *conffile)
 {
 	FILE *fp; 
-	char *line=NULL;
 	if ((fp=fopen(conffile,"rb")) == NULL){
 		printf("File Open Error: %s\n",strerror(errno));
-		return -1;
+		exit(-1);
 	}
+	if (DEBUG)
+		printf("Open '%s' sucefuly\n",conffile);
 	listlogcheck = listNew();
-	char type[33];
-	char uname[65];
-	char *uvalue=NULL;
+	files = newFileList();
+
 	int ret = 0;
 	uci_reg *reg=newucireg();
 	
@@ -197,15 +169,18 @@ void read_conf(const char *conffile)
 	while (ret >= 0){
 		if (ret == 2 && !strcmp(reg->name, "rule")){
 			ret = getucinext(fp, reg);
-			int enable;
-			char *name;
-			char *pattern;
-			char *fields;
-			int maxfail = 0;
-			char *script;
-			pairlist_st *params = (pairlist_st *)newPairList();
-			while (ret == 3)
-			{
+//			if(ret == 3){
+				int enable;
+				char *name;
+				char *pattern;
+				char *fields;
+				int maxfail = 0;
+				char *script;
+				pairlist_st *params = (pairlist_st *)newPairList();
+//printf("(%s) %s = %s\n", reg->type, reg->name, reg->value);
+			
+				while (ret == 3)
+				{
 					if (!strcmp(reg->name,"enable")){
 						enable=atoi(reg->value);
 					} else if (!strcmp(reg->name,"name")){
@@ -223,23 +198,43 @@ void read_conf(const char *conffile)
 						sprintf( tmp, "LT_%s", reg->name );
 						addPair(params, (char *)strndup(tmp, strlen(tmp)), (char *)strndup(reg->value, strlen(reg->value)));
 					}
-//printf("\t%s = %s\n", reg->name, reg->value);
+					if (DEBUG > 2)
+						printf("\t%s = %s\n", reg->name, reg->value);
+					ret = getucinext(fp, reg);
+				}
+				if (enable){
+//					printf("enable: %d\nname: %s\npattern: %s\nfield: %s\nscript: %s\nmaxfail: %d\n", enable, name, pattern, fields, script, maxfail);
+					listAddlogcheck(listlogcheck, enable, name, pattern, fields, maxfail, script, params );
+//					printf("agrego a lista\nret: %d, type: %s, name: %s, value: %s\n", ret, type, uname, uvalue);
+				} else {
+					if (name) free(name);
+					if (pattern) free(pattern);
+					if (fields) free(fields);
+					if (script) free(script);
+					if (params) params = freePairList(params);
+				}
+				if (DEBUG > 2) printf("\n");				
+		} else if (ret == 2 && !strcmp(reg->name, "logfile")){
+			ret = getucinext(fp, reg);
+			int enabled = 0;
+			char *logfilename=NULL;
+			while (ret == 3 && !strcmp(reg->type, "option"))
+			{
+				if (!strcmp(reg->type, "option") && !strcmp(reg->name,"file") && ret == 3)
+					logfilename = strndup(reg->value, strlen(reg->value));
+				if (!strcmp(reg->type, "option") && !strcmp(reg->name,"enabled") && ret == 3)
+					enabled = atoi(reg->value);
 				ret = getucinext(fp, reg);
 			}
-			if (enable){
-//				printf("enable: %d\nname: %s\npattern: %s\nfield: %s\nscript: %s\nmaxfail: %d\n", enable, name, pattern, fields, script, maxfail);
-				listAddlogcheck(listlogcheck, enable, name, pattern, fields, maxfail, script, params );
-//				printf("agrego a lista\nret: %d, type: %s, name: %s, value: %s\n", ret, type, uname, uvalue);
-			} else {
-				if (name) free(name);
-				if (pattern) free(pattern);
-				if (fields) free(fields);
-				if (script) free(script);
-				if (params) params = freePairList(params);
-			}
+			if (enabled)
+				addFile(files,logfilename);
+			if (logfilename)
+				free(logfilename);
+		} else {
+			ret = getucinext(fp, reg);
 		}
 	}
-//	reg = freeucireg(reg);
+	reg = freeucireg(reg);
 	uci_logcheck *checklog = listlogcheck->first;
 printf("registros");
 	while (checklog!=NULL){
@@ -249,7 +244,7 @@ printf("registros");
 		printf("LT_fields: %s\n", checklog->fields);
 		printf("LT_maxfail: %d\n", checklog->maxfail);
 		printf("LT_script: %s\n", checklog->script);
-		pair_st *params = checklog->params->first;
+		pair_st *params = (pair_st *)checklog->params->first;
 		while(params!=NULL){
 			printf("%s: %s\n", params->name, params->value);
 			params = params->next;
