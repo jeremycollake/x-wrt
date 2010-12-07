@@ -2,28 +2,24 @@
 #include <string.h> 
 #include <malloc.h> 
 
-typedef struct {
-	char *name;
-	long lasteof;
-	struct file_st *next;
-	struct file_st *prev;
-} file_st;
-
-typedef struct {
-	struct file_st *first;
-	struct file_st *last;
-	int count;
-} filelist_st;
+#include "confreg.h"
+#include "util.h"
+#include "tail.h"
+#ifndef OPENWRT
+	#include "config.h"
+#endif
+#ifdef OPENWRT
+	#include "uci.h"
+#endif
 
 
-char *strndup(const char *s, size_t n);
-filelist_st *newFileList();
-void addFile(filelist_st *list, const char *filename);
-void *freeFileList(filelist_st *list);
-char *readfile(FILE *fp);
-char *readlines(const char *filename, long *last);
-long getsize(const char *filename);
+extern int DEBUG;
+extern uci_list *listlogcheck;
+extern filelist_st *files;
 
+//char *strndup(const char *s, size_t n);
+
+/*
 char *strndup(const char *s, size_t n)
 {
 	char *d;
@@ -38,48 +34,7 @@ char *strndup(const char *s, size_t n)
 	d[i] = '\0';
 	return d;
 }
-
-filelist_st *newFileList(){
-	filelist_st *list = (filelist_st *) malloc( sizeof(filelist_st));
-	list->first = NULL;
-	list->last = NULL;
-	list->count = 0;
-	return list;
-}
-
-void addFile(filelist_st *list, const char *filename)
-{
-	file_st *d;
-	file_st *p;
-
-	int lname = strlen(filename);
-	d = ( file_st *) malloc(sizeof( file_st ));
-	d->name = strndup(filename,lname);
-	d->lasteof = getsize(filename);
-	d->next = NULL;
-	if (list->last){
-		p = (file_st *)list->last;
-		p->next = (file_st *)d;
-		d->prev = (file_st *)p;
-	}
-	if (list->first == NULL)
-		list->first = (file_st *)d;
-	list->last = (file_st *)d;
-	list->count++;
-}
-
-void *freeFileList(filelist_st *list)
-{
-	file_st *d = (file_st *)list->first;
-	while(d){
-		file_st * e = d;
-		d = (file_st *)d->next;
-		free(e->name);
-		free(e);
-	}
-	free(list);
-	return NULL;
-}
+*/
 
 char *readfile(FILE *fp)
 {
@@ -108,7 +63,7 @@ char *readlines(const char *filename, long *last)
 	FILE *fp=fopen(filename,"rb");
 	char *line=NULL;
 	if(fp==NULL) { 
-		printf("file not found!\n");
+		printf("Opening: %s file not found!\n", filename);
 		*last = 0;
 	} else {
 		fseek(fp, (long) *last, SEEK_SET);
@@ -119,13 +74,13 @@ char *readlines(const char *filename, long *last)
 	fclose(fp);
 	return line;
 }
-
+/*
 long getsize(const char *filename)
 {
 	long length;
 	FILE *fp=fopen(filename,"rb"); 
 	if(fp==NULL) { 
-		printf("file not found!\n");
+		printf("Opening: %s file not found!\n", filename);
 		length = -1;
 	} else { 
 		fseek(fp,0L,SEEK_END); 
@@ -134,19 +89,22 @@ long getsize(const char *filename)
 	fclose(fp);
 	return length;
 }	
-
-int main(void) 
+*/
+int logsread(void) 
 { 
 	FILE *fp; 
 	int i;
 	long length; 
 	long lineas;
-	filelist_st *files = newFileList();
-	addFile(files, "/var/log/asterisk/full");
-	addFile(files, "/var/log/asterisk/messages");
-	addFile(files, "/var/log/syslog");
-	addFile(files, "/var/log/auth.log");
-
+#ifdef OPENWRT
+	printf("Read configuraton from uci logtrigger\n");
+	read_conf_uci("logtrigger");
+#endif
+#ifndef OPENWRT
+	if (DEBUG)
+		printf("Read configuration from file\n");
+	read_conf("logtrigger.conf");
+#endif
 	char *filename = "/var/log/asterisk/full";
 	long lastread = getsize(filename);
 	long checkfile;

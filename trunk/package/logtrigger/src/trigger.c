@@ -31,9 +31,12 @@
 #include "scan.h"
 #include "pairs.h"
 #include "util.h"
+#include "confreg.h"
 #include "trigger.h"
 
 extern int DEBUG;
+extern uci_list *listlogcheck;
+extern filelist_st *files;
 
 char *matchre(const char *strdata, const char *pattern) 
 {

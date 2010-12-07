@@ -20,8 +20,14 @@
 #include <stdlib.h>
 #include <stdint.h>
 #include <getopt.h>
-#include "config.h"
 #include "trigger.h"
+#ifdef OPENWRT
+	#include "uci.h"
+#endif
+#ifndef OPENWRT
+	#include "config.h"
+#endif
+
 
 enum {
 	CMD_NONE,
@@ -32,39 +38,32 @@ enum {
 	CMD_SHOW,
 };
 
-static void
-print_usage(void)
+
+int DEBUG;
+uci_list *listlogcheck;
+filelist_st *files;
+
+static void print_usage(void)
 {
 	printf("hostblock \n");
 	exit(1);
 }
-
-int DEBUG;
-
-/*
-void setting()
-{
-	uci_logcheck *algo = listlogcheck->first;
-	printf("Active Patterns check log: %d\n", listlogcheck->count);
-	while (algo!=NULL){
-		printf("%s - %s %d\r\n",algo->pattern, algo->action, algo->maxfail);
-		algo = algo->next;
-	}
-}
-*/
 
 int main(int argc, char **argv)
 {
 	int i;
 	DEBUG=0;
 	listlogcheck = listNew();
+	files = newFileList();
 #ifdef OPENWRT
-	read_conf("/etc/config/logtrigger");
+	printf("Read configuraton from uci logtrigger\n");
+	read_conf_uci("logtrigger");
 #endif
 #ifndef OPENWRT
+	if (DEBUG)
+		printf("Read configuration from file\n");
 	read_conf("logtrigger.conf");
 #endif
-//	hostblock_load_uci("logtrigger");
 
 	if (argc == 1){
 		read_syslog();
@@ -91,6 +90,7 @@ int main(int argc, char **argv)
 					i++;
 				}else
 					DEBUG = 1;
+				printf("Run DEBUG = %d",DEBUG);
 				read_syslog();
 			}
 		}
