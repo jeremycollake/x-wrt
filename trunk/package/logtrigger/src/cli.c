@@ -56,12 +56,12 @@ int main(int argc, char **argv)
 	listlogcheck = listNew();
 	files = newFileList();
 #ifdef OPENWRT
-	printf("Read configuraton from uci logtrigger\n");
+//	printf("Read configuraton from uci logtrigger\n");
 	read_conf_uci("logtrigger");
 #endif
 #ifndef OPENWRT
-	if (DEBUG)
-		printf("Read configuration from file\n");
+//	if (DEBUG)
+//		printf("Read configuration from file\n");
 	read_conf("logtrigger.conf");
 #endif
 
