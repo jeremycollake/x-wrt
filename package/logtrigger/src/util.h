@@ -5,4 +5,5 @@
 
 char *strndup(const char *s, size_t n);
 char *valuedup(const long int value);
+long htoi (const char* s);
 #endif

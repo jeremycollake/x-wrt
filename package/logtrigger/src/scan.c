@@ -199,32 +199,21 @@ match_t *matchFree(match_t *result)
 
 void showMatch(match_t *result)
 {
-//	printf("-----------------------------------------------\n");
-/*
-	printf("Pattern: %s\nExpected: %d\nFound: %d\nLabels: %d\nString: %s\n", 
-			result->pattern, 
-			result->find, 
-			result->values->count, 
-			result->labels->count,
-			result->string);
-*/
 	if (result->string)
 		printf("\033[1m%24s: %s\033[0m\n", "string", result->string);
 	element_st *labels = (element_st *)result->labels->first;
 	element_st *values = (element_st *)result->values->first;
 	while (labels && values){
-//		printf("\033[1m\%32s\033[0m = \033[1m\%s\033[0m\n", labels->value, values->value);
 		printf("\033[1m%24s: \033[32m%s\033[0m\n",  labels->value, values->value);
 		values = (element_st *)values->next;
 		labels = (element_st *)labels->next;
 	}
-//	printf("\033[0m\n");
 }
 
 match_t *match(const char *buf, uci_logcheck *checklog)
 {
 	int init = 1;
-	if (DEBUG)
+	if (DEBUG>4)
 		printf("\t%s\n",checklog->pattern);
 	match_t *results = initMatch(checklog);
 	char *fmt = checklog->pattern;

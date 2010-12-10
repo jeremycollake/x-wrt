@@ -6,13 +6,14 @@
 #include <unistd.h>
 #include <stdbool.h>
 #include "util.h"
-
+#include "files.h"
 #include "confreg.h"
+#include "logread.h"
 
 extern int DEBUG;
 
-extern uci_list *listlogcheck;
-extern filelist_st *files;
+//extern uci_list *listlogcheck;
+//extern filelist_st *files;
 
 uci_logcheck *newData(){
 	return ( uci_logcheck *)malloc( sizeof( uci_logcheck )) ;
@@ -58,15 +59,28 @@ filelist_st *newFileList(){
 	return list;
 }
 
-void addFile(filelist_st *list, const char *filename)
+file_st * addFile(filelist_st *list, const char *filename, int disabled)
 {
 	file_st *d;
 	file_st *p;
 
-	int lname = strlen(filename);
+	int lname = 0;
+	if (filename!=NULL)
+		lname = strlen(filename);
 	d = ( file_st *) malloc(sizeof( file_st ));
-	d->name = strndup(filename,lname);
-	d->lasteof = getsize(filename);
+	if (filename!=NULL)
+		d->name = strndup(filename,lname);
+	else
+		d->name = NULL;
+#ifdef OPENWRT
+	if (!strcmp(filename,"OpenWrtLogSharedMemory"))
+		d->lasteof = get_tail();
+	else
+#endif
+		d->lasteof = getsize(filename);
+	if (d->lasteof < 0)
+		disabled++;
+	d->disabled = disabled;
 	d->next = NULL;
 	if (list->last){
 		p = (file_st *)list->last;
@@ -77,8 +91,9 @@ void addFile(filelist_st *list, const char *filename)
 		list->first = (file_st *)d;
 	list->last = (file_st *)d;
 	list->count++;
-	if (DEBUG)
-		printf("Adding %s to file list\n", filename);
+	if (DEBUG>4)
+		printf("(%d) Adding %s to file list\n", list->count, filename);
+	return d;
 }
 
 void *freeFileList(filelist_st *list)

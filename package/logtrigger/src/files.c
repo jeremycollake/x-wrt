@@ -1,7 +1,9 @@
 #include <stdio.h> 
 #include <string.h> 
 #include <malloc.h> 
+#include <errno.h>
 
+extern int errno;
 extern int DEBUG;
 
 char *readline(FILE *fp, char *tmp)
@@ -43,14 +45,15 @@ long getsize(const char *filename)
 {
 	long length;
 	FILE *fp=fopen(filename,"rb"); 
-	if(fp==NULL) { 
-		printf("file not found!\n");
+	if(fp==NULL) {
+		if (DEBUG>8)
+			printf("File %s Open Error: %s\n",filename, strerror(errno));
 		length = -1;
 	} else { 
 		fseek(fp,0L,SEEK_END); 
 		length=ftell(fp); 
+		fclose(fp);
 	}
-	fclose(fp);
 	return length;
 }	
 
