@@ -20,9 +20,12 @@
 
 #include <malloc.h>
 #include <sys/types.h>
+#include <errno.h>
+
 
 #include "logread.h"
 
+extern int errno;
 extern int DEBUG;
 
 /*
@@ -31,13 +34,14 @@ extern int DEBUG;
 static void sem_up(int semid)
 {
 	if (semop(semid, SMrup, 1) == -1){
+//		if (DEBUG>4)
+		printf("Error (%d): %s\n",errno,strerror(errno));
 		perror("semop[SMrup]");
 		exit(1);
 	}
 }
 
-size_t
-strnlen (const char *string, size_t maxlen)
+size_t strnlen (const char *string, size_t maxlen)
 {
   const char *end = memchr (string, '\0', maxlen);
   return end ? (size_t) (end - string) : maxlen;
@@ -55,6 +59,7 @@ static void error_exit(const char *str)
 	//release all acquired resources
 	shmdt(shbuf);
 	perror(str);
+	printf("Error (%d): %s\n",errno,strerror(errno));
 	exit(-1);
 }
 
@@ -78,19 +83,23 @@ char *logread(int follow) {
     /* Locate the segment. */
     if((log_shmid = shmget(key, 0, 0)) < 0) {
         perror("shmget");
+		if(DEBUG>4)
+			printf("Error (%d): %s\n",errno,strerror(errno));
         return NULL;
     }
 
     /* Now we attach the segment to our data space. */
     shbuf = shmat(log_shmid, NULL, SHM_RDONLY);
 	if (shbuf == NULL){
-		perror("shmat");
+		if(DEBUG>4)
+			printf("shmat Error (%d): %s\n",errno,strerror(errno));
         return NULL;
 	}
 
 	log_semid = semget(key, 0, 0);
 	if (log_semid == -1){
-		perror("shmat");
+		if(DEBUG>4)
+			printf("shmat Error (%d): %s\n",errno,strerror(errno));
         return NULL;
 	}
 	signal(SIGINT, interrupted);
@@ -115,11 +124,11 @@ char *logread(int follow) {
 		shbuf_tail = shbuf->tail;
 		shbuf_data = shbuf->data; /* pointer! */
 
-/*
-		if (DEBUG)
+
+		if (DEBUG>7)
 			printf("cur:%d tail:%i size:%i\n",
 					cur, shbuf_tail, shbuf_size);
-*/
+
 		if (!follow) {
 			/* advance to oldest complete message */
 			/* find NUL */
@@ -170,6 +179,136 @@ char *logread(int follow) {
 		}
 		free(copy);
 	} while (follow);
+	shmdt(shbuf);
+    return retval;
+}
+unsigned get_tail()
+{
+	unsigned cur;
+	int log_semid; /* ipc semaphore id */
+	int log_shmid; /* ipc shared memory id */
+    /* We need to get the segment named KEY, created by the server. */
+    key_t key = KEY;
+	
+	INIT_G();
+
+    /* Locate the segment. */
+    if((log_shmid = shmget(key, 0, 0)) < 0) {
+		if(DEBUG>4)
+		printf("shmget Error (%d): %s\n",errno,strerror(errno));
+        return -1;
+    }
+
+    /* Now we attach the segment to our data space. */
+    shbuf = shmat(log_shmid, NULL, SHM_RDONLY);
+	if (shbuf == NULL){
+		if(DEBUG>4)
+		printf("shmat Error (%d): %s\n",errno,strerror(errno));
+        return -1;
+	}
+
+	log_semid = semget(key, 0, 0);
+	if (log_semid == -1){
+		if(DEBUG>4)
+		printf("shmat Error (%d): %s\n",errno,strerror(errno));
+        return -1;
+	}
+	cur = shbuf->tail;
+	shmdt(shbuf);
+	return cur;
+}
+
+char *logreadlast(unsigned cur, long *last) {
+	char *retval = NULL;
+
+	int log_semid; /* ipc semaphore id */
+	int log_shmid; /* ipc shared memory id */
+    /* We need to get the segment named KEY, created by the server. */
+    key_t key = KEY;
+	
+	INIT_G();
+
+    /* Locate the segment. */
+    if((log_shmid = shmget(key, 0, 0)) < 0) {
+		if(DEBUG>4)
+		printf("shmget Error (%d): %s\n",errno,strerror(errno));
+        return NULL;
+    }
+
+    /* Now we attach the segment to our data space. */
+    shbuf = shmat(log_shmid, NULL, SHM_RDONLY);
+	if (shbuf == NULL){
+		if(DEBUG>4)
+		printf("shmat Error (%d): %s\n",errno,strerror(errno));
+        return NULL;
+	}
+
+	log_semid = semget(key, 0, 0);
+	if (log_semid == -1){
+		if(DEBUG>4)
+		printf("log_semid Error (%d): %s\n",errno,strerror(errno));
+        return NULL;
+	}
+//	signal(SIGINT, interrupted);
+    /* Now read what the server put in the memory. */
+//	cur = shbuf->tail;
+
+	/* Loop for logread -f, one pass if there was no -f */
+//	do {
+		unsigned shbuf_size;
+		unsigned shbuf_tail;
+		const char *shbuf_data;
+
+		int i;
+		int len_first_part;
+		int len_total = len_total; /* for gcc */
+		char *copy = copy; /* for gcc */
+
+		if (semop(log_semid, SMrdn, 2) == -1){
+			printf("semop[SMrdn] Error (%d): %s\n",errno,strerror(errno));
+			error_exit("semop[SMrdn]");
+		}
+		/* Copy the info, helps gcc to realize that it doesn't change */
+		shbuf_size = shbuf->size;
+		shbuf_tail = shbuf->tail;
+		shbuf_data = shbuf->data; /* pointer! */
+
+
+		if (DEBUG>7)
+			printf("cur:%d tail:%i size:%i\n",
+					cur, shbuf_tail, shbuf_size);
+
+			if (cur == shbuf_tail) {
+				sem_up(log_semid);
+				fflush_all();
+				return NULL;
+			}
+
+		/* Read from cur to tail */
+		len_first_part = len_total = shbuf_tail - cur;
+		if (len_total < 0) {
+			/* message wraps: */
+			/* [SECOND PART.........FIRST PART] */
+			/*  ^data      ^tail    ^cur      ^size */
+			len_total += shbuf_size;
+		}
+		copy = malloc(len_total + 1);
+		if (len_first_part < 0) {
+			/* message wraps (see above) */
+			len_first_part = shbuf_size - cur;
+			memcpy(copy + len_first_part, shbuf_data, shbuf_tail);
+		}
+		memcpy(copy, shbuf_data + cur, len_first_part);
+		copy[len_total] = '\0';
+		cur = shbuf_tail;
+		sem_up(log_semid);
+		retval = realloc(retval, len_total + 1);
+		memset(retval, 0, len_total+1);
+		for (i = 0; i < len_total; i += strlen(copy + i) + 1) {
+			strcat(retval, (char *) copy + i);
+		}
+		free(copy);
+		*last = shbuf_tail;
 	shmdt(shbuf);
     return retval;
 }

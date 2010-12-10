@@ -40,9 +40,6 @@ enum {
 
 
 int DEBUG;
-uci_list *listlogcheck;
-filelist_st *files;
-
 static void print_usage(void)
 {
 	printf("hostblock \n");
@@ -53,20 +50,8 @@ int main(int argc, char **argv)
 {
 	int i;
 	DEBUG=0;
-	listlogcheck = listNew();
-	files = newFileList();
-#ifdef OPENWRT
-//	printf("Read configuraton from uci logtrigger\n");
-	read_conf_uci("logtrigger");
-#endif
-#ifndef OPENWRT
-//	if (DEBUG)
-//		printf("Read configuration from file\n");
-	read_conf("logtrigger.conf");
-#endif
-
 	if (argc == 1){
-		read_syslog();
+		logtrigger_main();
 	}else{
 		int cmd = CMD_HELP;
 		for (i=0; i < argc; i++){
@@ -90,8 +75,8 @@ int main(int argc, char **argv)
 					i++;
 				}else
 					DEBUG = 1;
-				printf("Run DEBUG = %d",DEBUG);
-				read_syslog();
+				printf("Run DEBUG = %d\n",DEBUG);
+				logtrigger_main();
 			}
 		}
 		switch(cmd)
@@ -116,3 +101,5 @@ int main(int argc, char **argv)
 	}
 	return 0;
 }
+
+

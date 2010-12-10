@@ -8,8 +8,8 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=logtrigger
-PKG_VERSION:=1
-PKG_RELEASE:=1
+PKG_RELEASE:=001
+PKG_VERSION:=1.$(RELEASE)
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk
@@ -28,6 +28,8 @@ TARGET_CPPFLAGS := \
 	-Wall \
 	-DOPENWRT \
 	$(TARGET_CPPFLAGS)
+
+TARGET_CFLAGS += -DOPENWRT
 
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)

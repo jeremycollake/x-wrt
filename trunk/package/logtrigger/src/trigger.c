@@ -27,16 +27,22 @@
 #include <unistd.h>
 
 #include "config.h"
-#include "logread.h"
 #include "scan.h"
 #include "pairs.h"
 #include "util.h"
 #include "confreg.h"
 #include "trigger.h"
+#ifdef OPENWRT
+	#include "logread.h"
+	#include "uci.h"
+#else
+	#include "config.h"
+#endif
+
 
 extern int DEBUG;
-extern uci_list *listlogcheck;
-extern filelist_st *files;
+uci_list *listlogcheck;
+filelist_st *files;
 
 char *matchre(const char *strdata, const char *pattern) 
 {
@@ -125,21 +131,10 @@ int runscript(uci_logcheck *checklog, match_t *matchst, const char *str_ip, cons
 	char mes[4];
 	char str_date[16];
 	sscanf (message, "%s %d %d:%d:%d", mes, &ltime->tm_mday, &ltime->tm_hour, &ltime->tm_min,&ltime->tm_sec);
-//	if (ltime->tm_year < 1900) ltime->tm_year += 1900;
-/*
-	sprintf(str_date,"%4d/%02d/%02d",
-			ltime->tm_year,
-			ltime->tm_mon,
-			ltime->tm_mday);
-*/
+
 	strftime(str_date, sizeof(str_date), "%Y/%m/%d", ltime);
 	addPair(data, "LT_date", str_date);
-/*
-	sprintf(str_date,"%02d:%02d:%02d",
-			ltime->tm_hour,
-			ltime->tm_min,
-			ltime->tm_sec);
-*/
+
 	strftime(str_date, sizeof(str_date), "%H:%M:%S", ltime);
 	addPair(data, "LT_time", str_date);
 	tm1 = mktime(ltime);
@@ -157,8 +152,9 @@ int runscript(uci_logcheck *checklog, match_t *matchst, const char *str_ip, cons
 	}
 
 	pair_st *tosend = (pair_st *)data->first;
-	if(DEBUG > 1){
+	if(DEBUG)
 		printf("\033[0m%24s: \033[33m\033[1m%s\033[0m\n", "Call action script", checklog->script);
+	if(DEBUG > 1){
 		while(tosend)
 		{
 			printf("\033[1m%24s: \033[32m%s\033[0m\n", tosend->name, tosend->value);
@@ -201,10 +197,9 @@ int runscript(uci_logcheck *checklog, match_t *matchst, const char *str_ip, cons
 	exit(0);
 }
 
-int read_syslog(void)
+
+void  processMsg(char *msglog, file_st *file)
 {
-  	do {
-		char *msglog = logread(1);
 		char *sep = "\n";
 		char *message, *brkt;
 
@@ -213,9 +208,8 @@ int read_syslog(void)
 			message = strtok_r(NULL, sep, &brkt))
 		{
 			if (message == NULL) break;
-			if(DEBUG)
+			if(DEBUG>1)
 				printf("\033[1m\nMsg: %s\033[0m\n", message);
-				
 			uci_logcheck *checklog = listlogcheck->first;
 
 			while (checklog!=NULL){
@@ -224,9 +218,17 @@ int read_syslog(void)
 					showMatch(matchst);
 				if (matchst->string) 
 				{
-					char *retlog = logread(0);
+					char *retlog;
+					if (!strcmp(file->name,"OpenWrtLogSharedMemory"))
+						retlog = logread(0);
+					else {
+						long from = file->lasteof-16000;
+						if (from < 0 ) from = 0;
+						retlog = readlines(file->name, &from);
+						file->lasteof = from;
+					}
 					int fail = stringtimes(retlog, matchst->string);
-					if (DEBUG)
+					if (DEBUG>4)
 						printf("\tcount \033[1;1mfails(%d)\033[0m / max fails(%d)\n", fail, checklog->maxfail);
 					if ( fail >= checklog->maxfail){
 						char *str_ip = matchre(message,"([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})\\.([0-9]{1,3})");
@@ -245,6 +247,114 @@ int read_syslog(void)
 				matchst = matchFree(matchst);
 			}
 		}
-	} while ( 1 );
-	return 0;
+
+}
+
+char *readfile(FILE *fp)
+{
+	char line[4096];
+	long r = 0;
+	char *tmp=NULL;
+	while (!feof(fp)) {
+		r++;
+		if (fgets(line,4096,fp)){
+			if (tmp==NULL) {
+				tmp = malloc(strlen(line)+1 * sizeof(char));
+				strcpy(tmp, line);
+			} else {
+				int len = strlen(tmp);
+				len += strlen(line) + 1;
+				tmp = realloc(tmp, (len * sizeof(char)));
+				tmp = strcat(tmp,line);
+			}
+		}
+	}
+	return tmp;
+}	
+
+char *readlines(const char *filename, long *last)
+{
+	FILE *fp=fopen(filename,"rb");
+	char *line=NULL;
+	if(fp==NULL) { 
+		printf("Opening: %s file not found!\n", filename);
+		*last = 0;
+	} else {
+		fseek(fp, (long) *last, SEEK_SET);
+		if (DEBUG>5)
+		printf("------------ %s -----------------\n", filename);
+		line = readfile(fp);
+	}
+	*last = (long) ftell(fp);
+	fclose(fp);
+	return line;
+}
+
+void logtrigger_main()
+{
+	listlogcheck = listNew();
+	files = newFileList();
+	long checkfile;
+	file_st *file = NULL;
+#ifdef OPENWRT
+	addFile(files,"OpenWrtLogSharedMemory",0);
+	read_conf_uci("logtrigger");
+#else
+	read_conf("/etc/logtrigger/logtrigger.conf");
+#endif
+	int active = files->count;
+	while (active>0)
+	{
+		if (file == NULL) file = files->first;
+		while(file && active){
+#ifdef OPENWRT
+			if (!strcmp(file->name,"OpenWrtLogSharedMemory")){
+				checkfile = (long) get_tail();
+			} else {
+				checkfile = getsize(file->name);
+			}
+#else
+			checkfile = getsize(file->name);
+#endif
+			if (DEBUG>8)
+				printf("(%d)(%ld = %ld) - (%d - %s)\n", active, checkfile, file->lasteof, file->disabled, file->name);
+			if (checkfile < 0)
+			{
+				if (file->disabled < 11) file->disabled++;
+				if (file->disabled == 10){
+					active--;
+					if (DEBUG>4)
+						printf("\n\tDisabling readlog for %s\n\n", file->name);
+				}
+			} else {
+				// check if file changed
+				if (file->disabled > 9){
+					active++;
+					if (DEBUG>4)
+						printf("\n\tEnabling readlog for %s\n\n", file->name);
+				}
+				file->disabled = 0;
+				
+				if (checkfile != file->lasteof){
+					// Read new messages
+					char *message=NULL;
+					if (DEBUG>8)
+						printf("\n\n\tLeer log de %s\n\n",file->name);
+#ifdef OPENWRT
+					if (!strcmp(file->name,"OpenWrtLogSharedMemory")){
+						 message = logreadlast((unsigned) file->lasteof, &file->lasteof);
+					} else
+#endif
+						message = readlines(file->name, &file->lasteof);
+					if (message){	// process message
+						processMsg(message, file);
+						free(message);
+					}
+				}
+			}
+			file = file->next;
+		}
+		sleep(1);
+	}
+	printf("No logfile to check\n");
 }

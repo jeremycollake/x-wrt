@@ -104,68 +104,39 @@ static void do_logcheck(struct uci_section *s)
 static void do_logfiles(struct uci_section *s)
 {
 	struct uci_element *n;
+	int disabled = 0;
+	key_t key = 0;
+	char *logfilename=NULL;
 	
 	uci_foreach_element(&s->options, n) {
 		struct uci_option *o = uci_to_option(n);
+		if (!strcmp(n->name,"disabled")){
+			disabled = atoi(o->v.string);
+		} else if (!strcmp(n->name,"file")){
+			logfilename = strndup(o->v.string, strlen(o->v.string));
+		} else if (!strcmp(n->name,"key")){
+			if (logfilename)
+				free(logfilename);
+			logfilename=strndup("nofile_sharedmemory",19);
+			sscanf(o->v.string, "0x%x", &key); 
+		}
+		if(DEBUG>5)
 		printf("\t%s->%s\n", n->name, o->v.string);
 	}
+	if (disabled==0){
+		file_st * p = addFile(files,logfilename,disabled);
+		if(DEBUG>5)
+		printf("%s: %ld %d %d\n",p->name, p->lasteof, p->disabled, p->key);
+	} else {
+		if (DEBUG>5)
+			printf("Discard %s", logfilename);
+	}
+	disabled = 0;
+	key = 0;
+	if (logfilename) free(logfilename);
 }
 
-/*
-static void do_logfiles(struct uci_section *s)
-{
-	struct uci_element *n;
-//	este es para leer list y no option
-	struct uci_element *l;
-//
-	printf("Permanent Blocked\n");
-	uci_foreach_element(&s->options, n) {
-		struct uci_option *o = uci_to_option(n);
-		uci_foreach_element(&o->v.list,l) {
-			printf("\t%s->%s\n", n->name, l->name);
-		}
-	}
-}
-*/
-/*
-static void do_blocked(struct uci_section *s)
-{
-	struct uci_element *n;
-//	char *tmp=NULL;
-	char *hasta=NULL;
-	char *host=NULL;
-	char *mask=NULL;
-	
-	uci_foreach_element(&s->options, n) {
-		struct uci_option *o = uci_to_option(n);
-		int len = strlen(o->v.string)+1;
-		if (!strcmp(n->name,"host")){
-			host = (char*)realloc(host,sizeof(char)*len);
-			strcpy(host,o->v.string);
-		}
-		if (!strcmp(n->name,"mask")){
-			mask = (char*)realloc(mask,sizeof(char)*len);
-			mask = strcpy(mask,o->v.string);
-		}
 
-		if (!strcmp(n->name,"until")){
-			hasta = (char*)realloc(hasta,sizeof(char)*len);
-			strcpy(hasta,o->v.string);
-		}
-
-	}
-
-	if (host){
-		printf("Block: %s",host);
-		if (mask) 
-			printf("/%s",mask);
-	}
-	if (hasta)
-		printf(" until %s", hasta);
-	printf("\n");
-
-}
-*/
 static void parse_sections(struct uci_package *p)
 {
 	struct uci_element *e;

@@ -54,10 +54,10 @@ void clean_str(char *str)
 		if(*buf == '\''
 		|| *buf == '"' )
 		{
+			char end = *buf;
 			buf++;
 			while( *buf != '\0'
-				&& *buf != '\'' 
-				&& *buf != '\"' )
+				&& *buf != end )
 			{
 				if (*buf == '\\'){
 					newstr[i++] = *(buf++);
@@ -80,20 +80,6 @@ void clean_str(char *str)
 	strcpy(str, newstr);
 	free(newstr);
 }
-
-/*
-void set_vars(char* line)
-{
-	char *name;
-	char *value;
-	name = malloc(strlen(line));
-	value = malloc(strlen(line));
-	if (strcmp(line, "")){
-		printf("%d\n",sscanf(line, "option %s %[^\1]", name, value));
-		printf("\t\t%s = %s\n", name, value);
-	}
-}
-*/
 
 char *readuci_line(FILE *fp, char* tmp)
 {
@@ -154,10 +140,11 @@ void read_conf(const char *conffile)
 {
 	FILE *fp; 
 	if ((fp=fopen(conffile,"rb")) == NULL){
+		if (DEBUG>4)
 		printf("File Open Error: %s\n",strerror(errno));
 		exit(-1);
 	}
-	if (DEBUG)
+	if (DEBUG>5)
 		printf("Open '%s' sucefuly\n",conffile);
 	listlogcheck = listNew();
 	files = newFileList();
@@ -169,7 +156,6 @@ void read_conf(const char *conffile)
 	while (ret >= 0){
 		if (ret == 2 && !strcmp(reg->name, "rule")){
 			ret = getucinext(fp, reg);
-//			if(ret == 3){
 				int enable;
 				char *name;
 				char *pattern;
@@ -177,7 +163,6 @@ void read_conf(const char *conffile)
 				int maxfail = 0;
 				char *script;
 				pairlist_st *params = (pairlist_st *)newPairList();
-//printf("(%s) %s = %s\n", reg->type, reg->name, reg->value);
 			
 				while (ret == 3)
 				{
@@ -198,14 +183,12 @@ void read_conf(const char *conffile)
 						sprintf( tmp, "LT_%s", reg->name );
 						addPair(params, (char *)strndup(tmp, strlen(tmp)), (char *)strndup(reg->value, strlen(reg->value)));
 					}
-					if (DEBUG > 2)
+					if (DEBUG > 5)
 						printf("\t%s = %s\n", reg->name, reg->value);
 					ret = getucinext(fp, reg);
 				}
 				if (enable){
-//					printf("enable: %d\nname: %s\npattern: %s\nfield: %s\nscript: %s\nmaxfail: %d\n", enable, name, pattern, fields, script, maxfail);
 					listAddlogcheck(listlogcheck, enable, name, pattern, fields, maxfail, script, params );
-//					printf("agrego a lista\nret: %d, type: %s, name: %s, value: %s\n", ret, type, uname, uvalue);
 				} else {
 					if (name) free(name);
 					if (pattern) free(pattern);
@@ -213,21 +196,20 @@ void read_conf(const char *conffile)
 					if (script) free(script);
 					if (params) params = freePairList(params);
 				}
-				if (DEBUG > 2) printf("\n");				
+				if (DEBUG > 5) printf("\n");				
 		} else if (ret == 2 && !strcmp(reg->name, "logfile")){
 			ret = getucinext(fp, reg);
-			int enabled = 0;
+			int disabled = 0;
 			char *logfilename=NULL;
 			while (ret == 3 && !strcmp(reg->type, "option"))
 			{
 				if (!strcmp(reg->type, "option") && !strcmp(reg->name,"file") && ret == 3)
 					logfilename = strndup(reg->value, strlen(reg->value));
-				if (!strcmp(reg->type, "option") && !strcmp(reg->name,"enabled") && ret == 3)
-					enabled = atoi(reg->value);
+				if (!strcmp(reg->type, "option") && !strcmp(reg->name,"disabled") && ret == 3)
+					disabled = atoi(reg->value);
 				ret = getucinext(fp, reg);
 			}
-			if (enabled)
-				addFile(files,logfilename);
+				addFile(files,logfilename,disabled);
 			if (logfilename)
 				free(logfilename);
 		} else {
@@ -236,7 +218,7 @@ void read_conf(const char *conffile)
 	}
 	reg = freeucireg(reg);
 	uci_logcheck *checklog = listlogcheck->first;
-printf("registros");
+/*
 	while (checklog!=NULL){
 		printf("LT_enable: %d\n", checklog->enable);
 		printf("LT_name: %s\n", checklog->name);
@@ -252,4 +234,5 @@ printf("registros");
 		checklog = checklog->next;
 printf("\n");
 	}
+*/
 }

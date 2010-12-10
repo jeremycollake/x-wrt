@@ -42,5 +42,7 @@ struct globals {
 
 
 char *logread(int follow);
+unsigned get_tail();
+char *logreadlast(unsigned cur, long* last);
 
 #endif

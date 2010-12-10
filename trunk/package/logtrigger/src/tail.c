@@ -74,22 +74,7 @@ char *readlines(const char *filename, long *last)
 	fclose(fp);
 	return line;
 }
-/*
-long getsize(const char *filename)
-{
-	long length;
-	FILE *fp=fopen(filename,"rb"); 
-	if(fp==NULL) { 
-		printf("Opening: %s file not found!\n", filename);
-		length = -1;
-	} else { 
-		fseek(fp,0L,SEEK_END); 
-		length=ftell(fp); 
-	}
-	fclose(fp);
-	return length;
-}	
-*/
+
 int logsread(void) 
 { 
 	FILE *fp; 
