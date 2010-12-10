@@ -29,8 +29,6 @@ TARGET_CPPFLAGS := \
 	-DOPENWRT \
 	$(TARGET_CPPFLAGS)
 
-TARGET_CFLAGS += -DOPENWRT
-
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
 	$(CP) ./src/* $(PKG_BUILD_DIR)/
@@ -40,6 +38,7 @@ define Build/Compile
 	CFLAGS="$(TARGET_CPPFLAGS) $(TARGET_CFLAGS)" \
 	$(MAKE) -C $(PKG_BUILD_DIR) \
 		$(TARGET_CONFIGURE_OPTS) \
+		OPENWRT=1 \
 		LIBS="$(TARGET_LDFLAGS) -lm -luci"
 endef
 

@@ -6,7 +6,7 @@ ifndef OPENWRT
 LOGTRIGGEROBJS = cli.o util.o pairs.o trigger.o logread.o scan.o files.o confreg.o config.o 
 else
 LIBS=-lnl
-LOGTRIGGEROBJS = cli.o util.o pairs.o trigger.o logread.o scan.o files.o confreg.o tail.o uci.o
+LOGTRIGGEROBJS = cli.o util.o pairs.o trigger.o logread.o scan.o files.o confreg.o uci.o
 endif
 
 all: logtrigger
