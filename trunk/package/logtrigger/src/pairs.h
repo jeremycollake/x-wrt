@@ -4,18 +4,17 @@
 typedef struct {
 	char *name;
 	char *value;
-	struct pairs_st *next;
-	struct pairs_st *prev;
+	struct pair_st *next;
+	struct pair_st *prev;
 } pair_st;
 
 typedef struct {
-	struct pairs_st *first;
-	struct pairs_st *last;
+	struct pair_st *first;
+	struct pair_st *last;
 	int count;
 } pairlist_st;
 
 pairlist_st *newPairList();
 void addPair(pairlist_st *list, const char *name, const char *value);
 void *freePairList(pairlist_st *list);
-
 #endif

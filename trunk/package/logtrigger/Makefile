@@ -9,7 +9,7 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=logtrigger
 PKG_RELEASE:=001
-PKG_VERSION:=1.$(RELEASE)
+PKG_VERSION:=1.$(PKG_RELEASE)
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk

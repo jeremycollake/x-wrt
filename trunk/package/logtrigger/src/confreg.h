@@ -44,5 +44,4 @@ uci_logcheck *listAddlogcheck(uci_list* list, int enable, char* name, char* patt
 filelist_st *newFileList();
 file_st * addFile(filelist_st *list, const char *filename, int disabled);
 void *freeFileList(filelist_st *list);
-
 #endif

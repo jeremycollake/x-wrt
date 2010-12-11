@@ -45,7 +45,6 @@ void clean_str(char *str)
 	char *newstr;
 	const char *buf = str;
 	newstr = (char*) malloc((strlen(buf)+10)*sizeof(char));
-//	int len = strlen(buf)+1;
 	int i = 0;
 
 	while (isspace(*buf)) buf++;
@@ -139,13 +138,10 @@ int getucinext(FILE *fp, uci_reg *reg)
 void read_conf(const char *conffile)
 {
 	FILE *fp; 
-	if ((fp=fopen(conffile,"rb")) == NULL){
-		if (DEBUG>4)
-		printf("File Open Error: %s\n",strerror(errno));
+	if ((fp=(FILE *)fileOpen(conffile, "rb")) == NULL){
 		exit(-1);
 	}
-	if (DEBUG>5)
-		printf("Open '%s' sucefuly\n",conffile);
+
 	listlogcheck = listNew();
 	files = newFileList();
 
@@ -218,21 +214,4 @@ void read_conf(const char *conffile)
 	}
 	reg = freeucireg(reg);
 	uci_logcheck *checklog = listlogcheck->first;
-/*
-	while (checklog!=NULL){
-		printf("LT_enable: %d\n", checklog->enable);
-		printf("LT_name: %s\n", checklog->name);
-		printf("LT_pattern: %s\n", checklog->pattern);
-		printf("LT_fields: %s\n", checklog->fields);
-		printf("LT_maxfail: %d\n", checklog->maxfail);
-		printf("LT_script: %s\n", checklog->script);
-		pair_st *params = (pair_st *)checklog->params->first;
-		while(params!=NULL){
-			printf("%s: %s\n", params->name, params->value);
-			params = params->next;
-		}
-		checklog = checklog->next;
-printf("\n");
-	}
-*/
 }

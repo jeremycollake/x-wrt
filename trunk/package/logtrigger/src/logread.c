@@ -70,8 +70,10 @@ void fflush_all(void)
 	fflush(stderr);
 }
 
-char *logread(int follow) {
-	char *retval = NULL;
+char *logread(int follow, char *retval) {
+	if (retval!=NULL)
+		free(retval);
+	retval = NULL;
 	unsigned cur;
 	int log_semid; /* ipc semaphore id */
 	int log_shmid; /* ipc shared memory id */

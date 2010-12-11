@@ -14,12 +14,6 @@ all: logtrigger
 %.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $^
 
-mytail: tailmain.o tail.o confreg.o config.o pairs.o files.o
-	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
-
-config: config.o files.o util.o pairs.o
-	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
-
 logtrigger: $(LOGTRIGGEROBJS)
 	$(CC) $(LDFLAGS) -o $@ $^ $(LIBS)
 

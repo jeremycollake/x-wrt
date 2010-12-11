@@ -30,7 +30,7 @@ char *valuedup(const long int value)
 	snprintf(dec, sizeof(dec), "%ld", value);
 	return strdup(dec);
 }
-
+/*
 long htoi (const char* s)
 {
 	char *hexval="0123456789ABCDEF";
@@ -60,3 +60,4 @@ long htoi (const char* s)
 }
 
 
+*/
