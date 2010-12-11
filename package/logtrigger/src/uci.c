@@ -50,15 +50,15 @@ void read_conf_uci(const char *name)
 	uci_free_context(ctx);
 }
 
-static void do_logcheck(struct uci_section *s)
+void do_logcheck(struct uci_section *s)
 {
 	struct uci_element *n;
-	bool enable;
-	char *name;
-	char *pattern;
-	char *fields;
+	bool enable=0;
+	char *name=NULL;
+	char *pattern=NULL;
+	char *fields=NULL;
 	int maxfail = 0;
-	char *script;
+	char *script=NULL;
 	pairlist_st *params = (pairlist_st *)newPairList();
 	
 	uci_foreach_element(&s->options, n) {
@@ -101,7 +101,7 @@ static void do_logcheck(struct uci_section *s)
 	}
 }
 
-static void do_logfiles(struct uci_section *s)
+void do_logfiles(struct uci_section *s)
 {
 	struct uci_element *n;
 	int disabled = 0;
@@ -137,7 +137,7 @@ static void do_logfiles(struct uci_section *s)
 }
 
 
-static void parse_sections(struct uci_package *p)
+void parse_sections(struct uci_package *p)
 {
 	struct uci_element *e;
 	struct uci_section *s;

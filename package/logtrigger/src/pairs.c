@@ -17,7 +17,7 @@ pairlist_st *newPairList(){
 void addPair(pairlist_st *list, const char *name, const char *value)
 {
 	pair_st *d;
-	pair_st *p;
+	pair_st *p = (pair_st *)list->last;
 
 	int lname = strlen(name);
 	int lvalue = strlen(value);
@@ -26,13 +26,13 @@ void addPair(pairlist_st *list, const char *name, const char *value)
 	d->value = strndup(value,lvalue);
 	d->next = NULL;
 	if (list->last){
-		p = (pair_st *)list->last;
-		p->next = (pair_st *)d;
-		d->prev = (pair_st *)p;
+//		p = (pair_st *)list->last;
+		p->next = (struct pair_st *) d;
+		d->prev = (struct pair_st *) p;
 	}
 	if (list->first == NULL)
-		list->first = (pair_st *)d;
-	list->last = (pair_st *)d;
+		list->first = (struct pair_st *) d;
+	list->last = (struct pair_st *) d;
 	list->count++;
 }
 

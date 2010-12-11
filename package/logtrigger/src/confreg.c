@@ -12,9 +12,6 @@
 
 extern int DEBUG;
 
-//extern uci_list *listlogcheck;
-//extern filelist_st *files;
-
 uci_logcheck *newData(){
 	return ( uci_logcheck *)malloc( sizeof( uci_logcheck )) ;
 }
@@ -37,7 +34,7 @@ uci_logcheck *listAddlogcheck(uci_list* list, int enable, char* name, char* patt
 	d->fields = fields;
 	d->maxfail = maxfail;
 	d->script = script;
-	d->params = (struct pairlist_st *) params;
+	d->params = (pairlist_st *) params;
 	d->next = NULL;
 	if (list->last){
 		p = list->last;
@@ -84,12 +81,12 @@ file_st * addFile(filelist_st *list, const char *filename, int disabled)
 	d->next = NULL;
 	if (list->last){
 		p = (file_st *)list->last;
-		p->next = (file_st *)d;
-		d->prev = (file_st *)p;
+		p->next = (struct file_st *)d;
+		d->prev = (struct file_st *)p;
 	}
 	if (list->first == NULL)
-		list->first = (file_st *)d;
-	list->last = (file_st *)d;
+		list->first = (struct file_st *)d;
+	list->last = (struct file_st *)d;
 	list->count++;
 	if (DEBUG>4)
 		printf("(%d) Adding %s to file list\n", list->count, filename);
@@ -108,4 +105,3 @@ void *freeFileList(filelist_st *list)
 	free(list);
 	return NULL;
 }
-

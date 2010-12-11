@@ -28,16 +28,14 @@ typedef struct {
 	char *string;
 } match_t;
 
-//int scan(const char *buf, const char *fmt, counter_t **counter);
-//match_t *match(const char *buf, const char *fmt);
-//int scan(const char *buf, const char *fmt, char ** results);
-//char *strndup(const char *s, size_t n);
-//char *valuedup(const long int value);
-
 int scan_count(const char *fmt);
 void matchString(match_t *result);
+void addToList(list_st *list, const char *value);
+list_st * initList();
 match_t *initMatch(uci_logcheck *checklog);
+void *freeList(list_st *list);
 match_t *matchFree(match_t *result);
+
 void showMatch(match_t *result);
 match_t *match(const char *buf, uci_logcheck *checklog);
 #endif

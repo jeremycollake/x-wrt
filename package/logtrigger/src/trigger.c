@@ -218,13 +218,13 @@ void  processMsg(char *msglog, file_st *file)
 					showMatch(matchst);
 				if (matchst->string) 
 				{
-					char *retlog;
+					char *retlog=NULL;
 					if (!strcmp(file->name,"OpenWrtLogSharedMemory"))
-						retlog = logread(0);
+						retlog = logread(0, retlog);
 					else {
-						long from = file->lasteof-16000;
+						long from = file->lasteof-32000;
 						if (from < 0 ) from = 0;
-						retlog = readlines(file->name, &from);
+						retlog = readNewLines(file->name, &from, retlog);
 						file->lasteof = from;
 					}
 					int fail = stringtimes(retlog, matchst->string);
@@ -250,46 +250,6 @@ void  processMsg(char *msglog, file_st *file)
 
 }
 
-char *readfile(FILE *fp)
-{
-	char line[4096];
-	long r = 0;
-	char *tmp=NULL;
-	while (!feof(fp)) {
-		r++;
-		if (fgets(line,4096,fp)){
-			if (tmp==NULL) {
-				tmp = malloc(strlen(line)+1 * sizeof(char));
-				strcpy(tmp, line);
-			} else {
-				int len = strlen(tmp);
-				len += strlen(line) + 1;
-				tmp = realloc(tmp, (len * sizeof(char)));
-				tmp = strcat(tmp,line);
-			}
-		}
-	}
-	return tmp;
-}	
-
-char *readlines(const char *filename, long *last)
-{
-	FILE *fp=fopen(filename,"rb");
-	char *line=NULL;
-	if(fp==NULL) { 
-		printf("Opening: %s file not found!\n", filename);
-		*last = 0;
-	} else {
-		fseek(fp, (long) *last, SEEK_SET);
-		if (DEBUG>5)
-		printf("------------ %s -----------------\n", filename);
-		line = readfile(fp);
-	}
-	*last = (long) ftell(fp);
-	fclose(fp);
-	return line;
-}
-
 void logtrigger_main()
 {
 	listlogcheck = listNew();
@@ -305,7 +265,7 @@ void logtrigger_main()
 	int active = files->count;
 	while (active>0)
 	{
-		if (file == NULL) file = files->first;
+		if (file == NULL) file = (file_st *)files->first;
 		while(file && active){
 #ifdef OPENWRT
 			if (!strcmp(file->name,"OpenWrtLogSharedMemory")){
@@ -345,14 +305,14 @@ void logtrigger_main()
 						 message = logreadlast((unsigned) file->lasteof, &file->lasteof);
 					} else
 #endif
-						message = readlines(file->name, &file->lasteof);
+						message = readNewLines(file->name, &file->lasteof, message);
 					if (message){	// process message
 						processMsg(message, file);
 						free(message);
 					}
 				}
 			}
-			file = file->next;
+			file = (file_st *)file->next;
 		}
 		sleep(1);
 	}
