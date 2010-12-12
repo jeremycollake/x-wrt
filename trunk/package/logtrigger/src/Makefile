@@ -19,4 +19,10 @@ logtrigger: $(LOGTRIGGEROBJS)
 
 clean:
 	rm *.o logtrigger
-	
+
+install:
+	mkdir -p /usr/bin
+	cp logtrigger /usr/bin
+	mkdir -p /etc/logtrigger
+	cp -R conffile/* /etc/logtrigger
+	chmod 775 /etc/logtrigger/scripts/*
