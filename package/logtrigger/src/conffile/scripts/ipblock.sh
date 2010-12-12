@@ -2,7 +2,7 @@
 ipt_run () {
 	RUN="/usr/sbin/iptables $@"
 	echo $RUN
-#	$RUN
+	$RUN
 }
 
 [ ! -z $LT_ip ] && ipt_run -I INPUT -s $LT_ip -j DROP
