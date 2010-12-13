@@ -1,0 +1,67 @@
+config rule
+	option name "Asterisk Bad Auth"
+	option pattern "OpenWrt %s.%s asterisk[%d]: NOTICE[%d]: chan_sip.c:15889 in handle_request_register: Registration from '%b<%b:%b@%b>' failed for '%b' - %b"
+	option fields "log type pid dpid name protocol user server ip astmsg"
+	option script "/etc/logtrigger/ipblock.sh"
+	option maxfail "5"
+	option enable "1"
+
+config rule
+	option name "Asterisk Unknow"
+	option pattern "OpenWrt %s.%s asterisk[%d]"
+	option fields "log type"
+	option script "/etc/logtrigger/info.lua"
+	option maxfail "1"
+	option enable "1"
+	
+config rule
+	option name "SSH_WrongPass"
+	option pattern "OpenWrt %s.%s dropbear[%d]: bad password attempt for '%s' from %s:%d"
+	option fields "log type pid user ip port"
+	option script "/etc/logtrigger/info.lua"
+	option maxfail "5"
+	option enable "1"
+	
+config rule
+	option pattern "authpriv.info dropbear\[%d]: exit before auth (user '%s', 10 fails): Max auth tries reached - user '%s' from %s:%s"
+	option fields "pid user user1 ip port"
+	option script "/etc/logtrigger/info.lua"
+	option name "SSH_MaxAuthTries"
+	option maxfail "1"
+	option enable "1"
+	option action "blockip"
+
+config rule
+	option pattern "authpriv.warn dropbear\[%d]: login attempt for nonexistent user from %s:%s"
+	option fields "pid ip port"
+	option action "blockip"
+	option script "/etc/logtrigger/info.lua"
+	option name "SSH_nonexistent"
+	option time "3600"
+	option maxfail "5"
+	option enable "1"
+
+config rule
+	option enable "1"
+	option name "dropbear_INFO"
+	option pattern "OpenWrt %s.%s dropbear[%d]:"
+	option fields "log type pid"
+	option script "/etc/logtrigger/info.lua"
+	option maxfail "1"
+
+	option action "info"
+	option param1 "value1"
+	option param2 "value2"
+	option param3 "value3"
+
+config rule
+	option name "Any Log Message"
+	option pattern "OpenWrt %s.%s %s:"
+	option fields "log type proccess"
+	option action "info"
+	option script "/etc/logtrigger/info.sh"
+	option maxfail "1"
+	option enable "1"
+	option param1 "value1"
+	option param2 "value2"
+	option param3 "value3"
