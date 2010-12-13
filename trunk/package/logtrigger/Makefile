@@ -8,8 +8,11 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=logtrigger
-PKG_RELEASE:=001
+PKG_RELEASE:=00
 PKG_VERSION:=1.$(PKG_RELEASE)
+
+PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+PKG_SOURCE_URL:=http://logtrigger.googlecode.com/files/
 
 include $(INCLUDE_DIR)/package.mk
 include $(INCLUDE_DIR)/kernel.mk
