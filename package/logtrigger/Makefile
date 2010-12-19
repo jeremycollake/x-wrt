@@ -49,7 +49,7 @@ define Package/logtrigger/install
 	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DIR) $(1)/etc/logtrigger
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/conffile/OpenWrt/logtrigger.conf $(1)/etc/init.d/logtrigger
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/conffile/OpenWrt/logtrigger.init $(1)/etc/init.d/logtrigger
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/logtrigger $(1)/usr/bin/logtrigger
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/conffile/scripts/info.sh $(1)/etc/logtrigger/info.sh
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/conffile/scripts/info.lua $(1)/etc/logtrigger/info.lua
