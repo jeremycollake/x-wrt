@@ -46,6 +46,7 @@ endef
 
 define Package/logtrigger/install
 	$(INSTALL_DIR) $(1)/usr/bin
+	$(INSTALL_DIR) $(1)/etc/config
 	$(INSTALL_DIR) $(1)/etc/logtrigger
 	$(INSTALL_DIR) $(1)/etc/init.d
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/conffile/OpenWrt/logtrigger.conf $(1)/etc/init.d/logtrigger
