@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=logtrigger
-PKG_RELEASE:=03
+PKG_RELEASE:=03.1
 PKG_VERSION:=1.$(PKG_RELEASE)
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
@@ -48,13 +48,13 @@ define Package/logtrigger/install
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_DIR) $(1)/etc/logtrigger
 	$(INSTALL_DIR) $(1)/etc/init.d
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/etc/init.d/logtrigger $(1)/etc/init.d/logtrigger
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/conffiles/OpwnWrt/logtrigger.conf $(1)/etc/init.d/logtrigger
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/logtrigger $(1)/usr/bin/logtrigger
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/etc/conffiles/scripts/info.sh $(1)/etc/logtrigger/info.sh
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/etc/conffiles/scripts/info.lua $(1)/etc/logtrigger/info.lua
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/etc/conffiles/scripts/ipblock.sh $(1)/etc/logtrigger/ipblock.sh
-	$(INSTALL_BIN) $(PKG_BUILD_DIR)/etc/conffiles/scripts/ipblock.lua $(1)/etc/logtrigger/ipblock.lua
-	$(INSTALL_DATA) $(PKG_BUILD_DIR)/etc/conffiles/openwrt.conf $(1)/etc/config/logtrigger
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/conffiles/scripts/info.sh $(1)/etc/logtrigger/info.sh
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/conffiles/scripts/info.lua $(1)/etc/logtrigger/info.lua
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/conffiles/scripts/ipblock.sh $(1)/etc/logtrigger/ipblock.sh
+	$(INSTALL_BIN) $(PKG_BUILD_DIR)/conffiles/scripts/ipblock.lua $(1)/etc/logtrigger/ipblock.lua
+	$(INSTALL_DATA) $(PKG_BUILD_DIR)/conffiles/OpwnWrt/logtrigger.conf $(1)/etc/config/logtrigger
 endef
 
 $(eval $(call BuildPackage,logtrigger))
