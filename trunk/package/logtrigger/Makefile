@@ -35,7 +35,6 @@ TARGET_CPPFLAGS := \
 define Build/Prepare
 	mkdir -p $(PKG_BUILD_DIR)
 	$(CP) -a files/* $(PKG_BUILD_DIR)/
-	$(CP) ./src/* $(PKG_BUILD_DIR)/
 endef
 
 define Build/Compile
