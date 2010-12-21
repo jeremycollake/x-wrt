@@ -20,7 +20,7 @@ local loadstring = loadstring
 local tr = tr
 local page = page
 
-module("webif2.xwrt.util")
+module("lua-xwrt.xwrt.util")
 function show_table(t,idx)
 	local idx = idx or 0
 	local str = string.rep("  ",idx)

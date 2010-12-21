@@ -5,6 +5,8 @@
 --       Fabián Omar Franzotti
 --
 --------------------------------------------------------------------------------
+local util = require("lua-xwrt.xwrt.util")
+
 htmlheadtagsClass = {} 
 htmlheadtagsClass_mt = {__index = htmlheadtagsClass} 
 
@@ -116,7 +118,7 @@ function htmlsectionClass:text()
 	local str = ""
 	for i, t in ipairs(self) do
 		if type(t) == "table" then
-			str = str..t:text()
+			str = str .. t:text()
 		elseif type(t) == "function" then
 			str = str .. t() .."\n"
 		else
@@ -177,22 +179,9 @@ htmlpageClass_mt = {__index = htmlpageClass}
 function htmlpageClass.new (title)
 	local self = {}
 	self.title = title
-	self["conten_type"] = [[
-HTTP/1.0 200 OK
-Content-Type: text/html; charset=UTF-8
-Pragma: no-cache
-
-]]
-	self["content_type"] = "Content-Type: text/html; chartset=UTF-8\r\nPragma: no-cache\r\n\r\n"
-	self["doc_type"] = [[
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" >
-
-]]
-	self["html"] = [[
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-
-]]
+	self["content_type"] = "Content-Type: text/html; charset=UTF-8\r\nPragma: no-cache\r\n\r\n"
+	self["doc_type"] = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\" />\r\n\r\n"
+	self["html"] = "<HTML xmlns=\"http://www.w3.org/1999/xhtml\" lang=\"en\" xml:lang=\"en\">\r\n\r\n"
 	self["head"] = htmlheadClass.new(title)
 	self["body"] = "<BODY>"
 	self["container"] = htmlsectionClass.new("div","container")
@@ -211,14 +200,12 @@ end
 
 function htmlpageClass:text()
 	local str = ""
---	str = str .. [[
---Content-Type: text/html; charset=UTF-8
---Pragma: no-cache
---
---]]
+--[[
 	if uhttpd == nil then
-		if self.content_type then str = self.content_type end
+		print("HTTP/1.0 200 OK\r\nContent-Type: text/html\r\n\r\n")
 	end
+]]
+	if self.content_type then str = self.content_type end
 	if self.doc_type then str = str .. self.doc_type end
 	str = str .. (self.html or "<HTML>\n")
 	str = str .. self.head:text()

@@ -215,7 +215,7 @@ function validate(str_name,str_value,s,str_var)
 			end
 		end
 		if result == "" and #option[3] > 0 then
-			print (#option[3],"<br>")
+--			print (#option[3],"<br>")
 			result = "true"
 		end
 	end
