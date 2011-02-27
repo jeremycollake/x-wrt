@@ -8,7 +8,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=logtrigger
-PKG_RELEASE:=03.1
+PKG_RELEASE:=04
 PKG_VERSION:=1.$(PKG_RELEASE)
 
 PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
