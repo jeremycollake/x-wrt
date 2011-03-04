@@ -132,6 +132,8 @@ uci_load "webif"
 		firmware_name="OpenWrt Kamikaze"
 	elif grep -qi "BackFire" "/etc/banner"; then
 		firmware_name="OpenWrt BackFire"
+        elif grep -qi "ATTITUDE" "/etc/banner"; then
+                firmware_name="OpenWrt ATTITUDE ADJUSTMENT"
 	else
 		firmware_name="Unknown Wrt"
 	fi	
@@ -143,6 +145,8 @@ uci_load "webif"
 		firmware_version=$(cat /etc/banner |grep KAMIKAZE |cut -d '(' -f 2 |cut -d ')' -f 1)
 	elif grep -q "BackFire" "/etc/banner"; then
 		firmware_version=$(cat /etc/banner |grep BackFire |cut -d '(' -f 2 |cut -d ')' -f 1)
+	elif grep -q "ATTITUDE" "/etc/banner"; then
+		firmware_version=$(cat /etc/banner |grep ATTITUDE |cut -d '(' -f 2 |cut -d ')' -f 1)
 	else
 		firmware_version="unknown"
 	fi
