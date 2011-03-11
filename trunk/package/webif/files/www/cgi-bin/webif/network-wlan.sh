@@ -39,12 +39,20 @@ generate_channels() {
 		if [ "$?" = "0" ]; then
 			wlanconfig ath create wlandev wifi0 wlanmode ap 2>/dev/null >/dev/null
 			cleanup=1
+                	BGCHANNELS="$(iwlist channel 2>&- |grep -v "no frequency information." |grep -v "[Ff]requenc" |grep -v "Current" |grep "2.[0-9]" |cut -d' ' -f12|sort |uniq)"
+			ACHANNELS="$(iwlist channel 2>&- |grep -v "no frequency information." |grep -v "[Ff]requenc" |grep -v "Current" |grep "5.[0-9]" |cut -d' ' -f12|sort |uniq)"
 		fi
+		is_package_installed kmod-mac80211
+		if [ "$?" = "0" ]; then
+			BGCHANNELS="1 2 3 4 5 6 7 8 9 10 11"
+			ACHANNELS="100 104 108 112 116 132 136 140 149 153 157 161 165 36 40 44 48 52 56 60 64"
+		fi
+	else
+		BGCHANNELS="$(iwlist channel 2>&- |grep -v "no frequency information." |grep -v "[Ff]requenc" |grep -v "Current" |grep "2.[0-9]" |cut -d' ' -f12|sort |uniq)"
+		ACHANNELS="$(iwlist channel 2>&- |grep -v "no frequency information." |grep -v "[Ff]requenc" |grep -v "Current" |grep "5.[0-9]" |cut -d' ' -f12|sort |uniq)"
+		echo "BGCHANNELS=\"${BGCHANNELS}\"" > /usr/lib/webif/channels.lst
+		echo "ACHANNELS=\"${ACHANNELS}\"" >> /usr/lib/webif/channels.lst
 	fi
-	BGCHANNELS="$(iwlist channel 2>&- |grep -v "no frequency information." |grep -v "[Ff]requenc" |grep -v "Current" |grep "2.[0-9]" |cut -d' ' -f12|sort |uniq)"
-	ACHANNELS="$(iwlist channel 2>&- |grep -v "no frequency information." |grep -v "[Ff]requenc" |grep -v "Current" |grep "5.[0-9]" |cut -d' ' -f12|sort |uniq)"
-	echo "BGCHANNELS=\"${BGCHANNELS}\"" > /usr/lib/webif/channels.lst
-	echo "ACHANNELS=\"${ACHANNELS}\"" >> /usr/lib/webif/channels.lst
 	if [ "$cleanup" = "1" ]; then
 		wifi 2>/dev/null >/dev/null
 	fi
