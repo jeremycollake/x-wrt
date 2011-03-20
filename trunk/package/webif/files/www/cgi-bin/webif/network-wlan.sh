@@ -44,8 +44,8 @@ generate_channels() {
 		fi
 		is_package_installed kmod-mac80211
 		if [ "$?" = "0" ]; then
-			BGCHANNELS="1 2 3 4 5 6 7 8 9 10 11"
-			ACHANNELS="100 104 108 112 116 132 136 140 149 153 157 161 165 36 40 44 48 52 56 60 64"
+			BGCHANNELS="$(iw list |grep 24[0-9][0-9] |grep "dBm" |cut -d '[' -f2 |cut -d ']' -f1 |uniq)"
+			ACHANNELS="$(iw list |grep 5[0-9][0-9][0-9] |grep "dBm" |cut -d '[' -f2 |cut -d ']' -f1 |uniq)"
 		fi
 	else
 		BGCHANNELS="$(iwlist channel 2>&- |grep -v "no frequency information." |grep -v "[Ff]requenc" |grep -v "Current" |grep "2.[0-9]" |cut -d' ' -f12|sort |uniq)"
@@ -149,7 +149,7 @@ vface=$(echo "$vface" |uniq)
 
 vcfg_number=$(echo "$DEVICES $N $vface" |wc -l)
 let "vcfg_number+=1"
-
+device_count=0
 #####################################################################
 #setup network device form for vfaces
 #
@@ -242,7 +242,8 @@ for device in $DEVICES; do
 		eval FORM_country="\$FORM_country_$device"
 		eval FORM_ap_mode="\$FORM_ap_mode_$device"
 		eval FORM_channel="\$FORM_bgchannel_$device"
-		[ -z "$FORM_channel" ] && eval FORM_channel="\$FORM_achannel_$device"
+		[ "$FORM_ap_mode" = "11na" ] && eval FORM_channel="\$FORM_achannel_$device"
+		[ "$FORM_ap_mode" = "11a" ] && eval FORM_channel="\$FORM_achannel_$device"
 		eval FORM_maxassoc="\$FORM_maxassoc_$device"
 		eval FORM_distance="\$FORM_distance_$device"
 		eval FORM_diversity="\$FORM_diversity_$device"
@@ -332,6 +333,47 @@ EOF
 				option|$ch"
 		done
 		append forms "$A_CHANNELS" "$N"
+	elif [ "$iftype" = "mac80211" ]; then
+		mode_fields="field|@TR<<Mode>>
+			select|ap_mode_$device|$FORM_ap_mode"
+		iw phy${device_count} info |grep -q "24[0-9][0-9] MHz"
+		if [ "$?" = "0" ]; then
+			mode_fields="$mode_fields
+				option|11bg|@TR<<802.11B/G>>
+				option|11g|@TR<<802.11G>>"
+			iw phy${device_count} info |grep -q HT40
+			if [ "$?" = "0" ]; then
+				mode_fields="$mode_fields
+					option|11ng|@TR<<802.11N/G>>"
+			fi
+		fi
+		iw phy${device_count} info |grep -q "5[0-9][0-9][0-9] MHz"
+		if [ "$?" = "0" ]; then
+			mode_fields="$mode_fields
+				option|11a|@TR<<802.11A>>"
+			iw phy${device_count} info |grep -q HT40
+			if [ "$?" = "0" ]; then
+				mode_fields="$mode_fields
+					option|11na|@TR<<802.11N/A>>"
+			fi
+		fi
+		append forms "$mode_fields" "$N"
+
+		BG_CHANNELS="field|@TR<<Channel>>|bgchannelform_$device|hidden
+			select|bgchannel_$device|$FORM_channel"
+		for ch in $BGCHANNELS; do
+			BG_CHANNELS="$BG_CHANNELS
+				option|$ch"
+		done
+
+		A_CHANNELS="field|@TR<<Channel>>|achannelform_$device|hidden
+			select|achannel_$device|$FORM_channel"
+		for ch in $ACHANNELS; do
+			A_CHANNELS="$A_CHANNELS
+				option|$ch"
+		done
+		append forms "$A_CHANNELS" "$N"
+		let "device_count+=1"
 	else
 		BG_CHANNELS="field|@TR<<Channel>>|bgchannelform_$device
 			select|bgchannel_$device|$FORM_channel"
@@ -921,9 +963,9 @@ EOF
 						document.getElementById('encryption_$vcfg').value = 'none';
 					}
 				}
-				v = (isset('ap_mode_$device','11b') || isset('ap_mode_$device','11bg') || isset('ap_mode_$device','11g') || ('$iftype'!='atheros'));
+				v = (isset('ap_mode_$device','11b') || isset('ap_mode_$device','11bg') || isset('ap_mode_$device','11g') || isset('ap_mode_$device','11ng') || !('$iftype'=='atheros' || '$iftype'=='mac80211'));
 				set_visible('bgchannelform_$device', v);
-				v = (isset('ap_mode_$device','11a'));
+				v = (isset('ap_mode_$device','11a') || isset('ap_mode_$device','11na'));
 				set_visible('achannelform_$device', v);
 				v = ((!isset('mode_$vcfg','wds') && ('$iftype'!='mac80211')));
 				set_visible('broadcast_form_$vcfg', v);
