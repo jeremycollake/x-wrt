@@ -59,6 +59,11 @@ uci_load "webif"
 				device_name=`cat /proc/cpuinfo | sed -n -e 's/^machine\t*: \(.*\)$/\1/gp'`
 				break
 			}
+			cat /proc/cpuinfo |grep -q "NETGEAR"
+			[ $? = "0" ] && {
+				device_name=`cat /proc/cpuinfo | sed -n -e 's/^machine\t*: \(.*\)$/\1/gp'`
+				break
+			}
 		}
 
 		if $(uname -m | grep -q "i.86"); then
