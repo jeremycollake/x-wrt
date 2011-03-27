@@ -43,9 +43,9 @@ for device in $devices; do
 	[ "$type" = "mac80211" ] && {
 		config_get disabled $device disabled
 		[ "$disabled" = "1" ] && {
-			scan_iface=1
 			FORM_clientswitch=1
 		}
+		scan_iface=1
 	}
 done
 
@@ -130,6 +130,7 @@ EOF
 		}
 		[ "$type" = "mac80211" ] && {
 			wifi down >/dev/null
+			iw phy phy0 interface add wlan0 type managed
 			ifconfig wlan0 up
 			sleep 3
 		}
@@ -190,15 +191,18 @@ nc > 0 {
 		channel[nc] = arr[2];
 		next;
 	}
-	if ($1 ~ /^Quality:/ && $2 ~ /^Signal$/) {
-		split($1, arr, ":");
+	if ($1 ~ /^Quality=/ && $2 ~ /^Signal$/) {
+		split($1, arr, "=");
 		quality[nc] = arr[2];
 	
-		split($3, arr, ":");
+		split($3, arr, "=");
 		siglevel[nc] = arr[2];
 	
-		split($6, arr, ":");
+		split($6, arr, "=");
 		noiselevel[nc] = arr[2];
+		if (noiselevel == "") {
+			noiselevel[nc] = -99;
+		}
 		next;
 	}
 	if ($1 ~ /^Encryption/) {
