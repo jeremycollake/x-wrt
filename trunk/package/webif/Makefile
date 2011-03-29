@@ -21,7 +21,7 @@ define Package/webif
   SECTION:=admin
   CATEGORY:=Administration
   SUBMENU:=webif
-  DEPENDS:=+haserl +opkg +uhttpd +webif-theme-clubman
+  DEPENDS:=+haserl +opkg +uhttpd
   TITLE:=A HTTP administrative console for OpenWrt
   VERSION:=$(PKG_VERSION)-$(PKG_RELEASE)
 endef
@@ -188,8 +188,7 @@ define Package/webif/install
 		$(1)/www/themes/zephyr/ \
 		$(1)/www/themes/xwrt-mini/ \
 		$(1)/www/themes/sedky1/ \
-		$(1)/www/themes/xwrt/ \
-		$(1)/www/themes/clubman/
+		$(1)/www/themes/xwrt/
 	$(SED) 's,$$$$S,$(PKGARCH),g' $(1)/etc/opkg/xwrt.conf
 	$(INSTALL_DIR) $(1)/usr/bin
 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/src/webifmetabin $(1)/usr/bin/webifmetabin
