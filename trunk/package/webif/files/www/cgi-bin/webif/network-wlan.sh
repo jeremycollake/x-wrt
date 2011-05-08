@@ -290,6 +290,10 @@ EOF
 		append forms "$mode_country" "$N"
 		append forms "helpitem|Atheros Wireless Configuration" "$N"
 		append forms "helptext|Helptext Atheros Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-4x ap or 1-4x ap or 1x adhoc" "$N"
+	elif [ "$iftype" = "mac80211" ]; then
+		mode_country="field|@TR<<Country Code>>
+		text|country_${device}|$FORM_country"
+		append forms "$mode_country" "$N"
 	fi
 
 	mode_disabled="field|@TR<<Radio>>
