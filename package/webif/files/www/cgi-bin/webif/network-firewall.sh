@@ -156,6 +156,7 @@ for zone in $zone_cfgs; do
 		config_get FORM_forward $zone forward
 		config_get_bool FORM_masq $zone masq 0
 		config_get_bool FORM_mtu_fix $zone mtu_fix 0
+		config_get_bool FORM_disable_ipv6 $zone disable_ipv6 0
 	else
 		config_get FORM_name $zone name
 		eval FORM_input="\$FORM_input_$zone"
@@ -163,7 +164,13 @@ for zone in $zone_cfgs; do
 		eval FORM_forward="\$FORM_forward_$zone"
 		eval FORM_masq="\$FORM_masq_$zone"
 		eval FORM_mtu_fix="\$FORM_mtu_fix_$zone"
-
+		eval FORM_disable_ipv6="$FORM_disable_ipv6_$zone"
+		uci_set firewall "$zone" input "$FORM_input"
+		uci_set firewall "$zone" output "$FORM_output"
+		uci_set firewall "$zone" forward "$FORM_forward"
+		uci_set firewall "$zone" masq "$FORM_masq"
+		uci_set firewall "$zone" mtu_fix "$FORM_mtu_fix"
+		uci_set firewall "$zone" disable_ipv6 "$FORM_disable_ipv6"
 	fi
 	form="start_form|@TR<<$FORM_name Zone Settings>>
 		field|@TR<<Input>>
@@ -185,6 +192,8 @@ for zone in $zone_cfgs; do
 		checkbox|masq_$zone|$FORM_masq|1
 		field|@TR<<MTU Fix>>
 		checkbox|mtu_fix_$zone|$FORM_mtu_fix|1
+		field|@TR<<Disable IPv6>>
+		checkbox|disable_ipv6_$zone|$FORM_disable_ipv6|1
 		end_form"
 	append forms "$form" "$N"
 done
