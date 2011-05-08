@@ -49,10 +49,10 @@ setTimeout('top.location.href=\"/$1\"',"300")
 </script>
 EOF
 }
-if ! equal $FORM_download "" ; then
-	
-	if equal $FORM_rdflash "1" ; then
 
+if ! equal $FORM_download "" ; then
+	mkdir /tmp/.webif/backup/
+	if equal $FORM_rdflash "1" ; then
 		tmp=/tmp/flash_$FORM_name.trx
 		tgz=/www/flash_$FORM_name.trx
 		dd if=$mtd_path > $tmp 2>/dev/null
@@ -60,10 +60,9 @@ if ! equal $FORM_download "" ; then
 		DOWNLOAD flash_$FORM_name.trx
 		sleep 25 ; rm $tmp ; rm $tgz
 	else
-
 		tmp=/tmp/config.$$
-		tgz=/www/config.tgz
-		rm -rf $tmp 2>/dev/null
+		tgz=/tmp/.webif/backup/config.tgz
+		rm -rf $tmp $tgz 2>/dev/null
 		mkdir -p $tmp 2>/dev/null
 		date > $tmp/config.date
 		echo "$FORM_name" > $tmp/config.name
@@ -83,10 +82,9 @@ if ! equal $FORM_download "" ; then
 			}
 		done
 		[ -n "$tmp" ] && rm $tmp/etc/banner
-		(cd $tmp; tar czf $tgz *)
+		(cd $tmp; tar czf $tgz *; ln -s $tgz /www/config.tgz)
 		rm -rf $tmp 2>/dev/null
 		DOWNLOAD config.tgz
-		sleep 25 ; rm $tgz
 	fi
 
 elif ! equal $FORM_instconfig "" ; then
