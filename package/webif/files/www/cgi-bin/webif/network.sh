@@ -206,6 +206,9 @@ for interface in $network; do
 		config_get_bool FORM_defaultroute $interface defaultroute 1
 		config_get FORM_ip6addr $interface ip6addr
 		config_get FORM_gateway6 $interface ip6gw
+		config_get FORM_peeraddr $interface peeraddr
+		config_get FORM_ttl $interface ttl
+		config_get FORM_tunnelid $interface tunnelid
 		config_get FORM_dns $interface dns
 		config_get FORM_device $interface device
 		eval FORM_dnsremove="\$FORM_${interface}_dnsremove"
@@ -237,6 +240,9 @@ for interface in $network; do
 		eval FORM_defaultroute="\$FORM_${interface}_defaultroute"
 		eval FORM_ip6addr="\$FORM_${interface}_ip6addr"
 		eval FORM_gateway6="\$FORM_${interface}_gateway6"
+		eval FORM_peerid="\$FORM_${interface}_peeraddr"
+		eval FORM_ttl="\$FORM_${interface}_ttl"
+		eval FORM_tunnelid="\$FORM_${interface}_tunnelid"
 		eval FORM_device="\$FORM_${interface}_device"
 		eval FORM_dnsadd="\$FORM_${interface}_dnsadd"
 		config_get FORM_dns $interface dns
@@ -263,7 +269,7 @@ EOF
 					uci_set "network" "$interface" "server" "$FORM_pptp_server" 
 					uci_set "network" "$interface" "device" "$FORM_device"
 					;;
-				wwan)
+				3g)
 					if ! equal "$FORM_pincode" "-@@-"; then
 						uci_set "network" "$interface" "pincode" "$FORM_pincode"
 					fi
@@ -271,10 +277,18 @@ EOF
 					uci_set "network" "$interface" "country" "$FORM_country"
 					uci_set "network" "$interface" "apn" "$FORM_apn" ;;
 				dhcp)
-					uci_remove "network" "$interface" "gateway"
+					uci_remove "network" "$interface" "gateway";;
+				6in4)
+					uci_set "network" "$interface" "peeraddr" "$FORM_peeraddr"
+					uci_set "network" "$interface" "defaultroute" "$FORM_defaultroute"
+					uci_set "network" "$interface" "ttl" "$FORM_ttl"
+					uci_set "network" "$interface" "mtu" "$FORM_mtu"
+					uci_set "network" "$interface" "tunnelid" "$FORM_tunnelid"
+					uci_set "network" "$interface" "username" "$FORM_username"
+					uci_set "network" "$interface" "password" "$FORM_passwd";;
 			esac
 			case "$FORM_proto" in
-				pppoe|pppoa|pptp|wwan)
+				pppoe|pppoa|pptp|3g)
 					uci_set "network" "$interface" "username" "$FORM_username"
 					uci_set "network" "$interface" "password" "$FORM_passwd"
 					uci_set "network" "$interface" "vpi" "$FORM_vpi"
@@ -308,7 +322,10 @@ EOF
 	option|pppoe|@TR<<PPPOE>>
 	option|pppoa|@TR<<PPPOA>>
 	option|pptp|@TR<<PPTP>>
-	option|wwan|@TR<<WWAN>>
+	option|3g|@TR<<WWAN>>
+	option|6in4|@TR<<6in4>>
+	option|6to4|@TR<<6to4>>
+	option|ahcp|@TR<<AHCP>>
 	helpitem|Connection Type
 	helptext|Helptext Connection Type#Static IP: IP address of the interface is statically set. DHCP: The interface will fetch its IP address from a dhcp server.
 
@@ -386,6 +403,12 @@ EOF
 	checkbox|${interface}_defaultroute|$FORM_defaultroute|1
 	field|@TR<<VPN>>|field_${interface}_vpn|hidden
 	checkbox|${interface}_device|$FORM_device|vpn
+	field|@TR<<Peer Address>>|field_${interface}_peeraddr|hidden
+	text|${interface}_peeraddr|$FORM_peeraddr
+	field|TTL|field_${interface}_ttl|hidden
+	text|${interface}_ttl|$FORM_ttl
+	field|@TR<<Tunnel ID>>|field_${interface}_tunnelid|hidden
+	text|${interface}_tunnelid|$FORM_tunnelid
 	end_form
 
 	start_form|$interface @TR<<DNS Servers>>|field_${interface}_dns|hidden
@@ -400,12 +423,14 @@ EOF
 	###################################################################
 	# set JavaScript
 	javascript_forms="
-		v = (isset('${interface}_proto', 'pppoe') || isset('${interface}_proto', 'pptp') || isset('${interface}_proto', 'pppoa') || isset('${interface}_proto', 'wwan'));
+		v = (isset('${interface}_proto', 'pppoe') || isset('${interface}_proto', 'pptp') || isset('${interface}_proto', 'pppoa') || isset('${interface}_proto', '3g') || isset('${interface}_proto', '6in4'));
 		set_visible('${interface}_ppp_settings', v);
 		set_visible('field_${interface}_username', v);
 		set_visible('field_${interface}_passwd', v);
-		set_visible('${interface}_redial', v);
 		set_visible('field_${interface}_mtu', v);
+
+		v = (isset('${interface}_proto', 'pppoe') || isset('${interface}_proto', 'pptp') || isset('${interface}_proto', 'pppoa') || isset('${interface}_proto', '3g'));
+		set_visible('${interface}_redial', v);
 		set_visible('${interface}_demand_idletime', v && isset('${interface}_ppp_redial', 'demand'));
 		set_visible('${interface}_persist_redialperiod', v && !isset('${interface}_ppp_redial', 'demand'));
 
@@ -430,11 +455,16 @@ EOF
 		set_visible('field_${interface}_vci', v);
 		set_visible('field_${interface}_vpi', v);
 
-		v = (isset('${interface}_proto', 'wwan'));
+		v = (isset('${interface}_proto', '3g'));
 		set_visible('field_${interface}_service', v);
 		set_visible('field_${interface}_network', v);
 		set_visible('field_${interface}_apn', v);
-		set_visible('field_${interface}_pincode', v);"
+		set_visible('field_${interface}_pincode', v);
+
+		v = (isset('${interface}_proto', '6in4'));
+		set_visible('field_${interface}_ttl', v);
+		set_visible('field_${interface}_tunnelid', v);
+		set_visible('field_${interface}_peeraddr', v);"
 	append js "$javascript_forms" "$N"
 
 	wwan_js="document.getElementById(\"${interface}_apn\").value = apnDB[element.value].name;
