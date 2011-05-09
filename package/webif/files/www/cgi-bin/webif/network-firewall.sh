@@ -82,6 +82,9 @@ config_cb() {
 		forwarding)
 			append forwarding_cfgs "$cfg_name"
 		;;
+		defaults)
+			append default_cfgs "$cfg_name" "$N"
+		;;
 		zone)
 			append zone_cfgs "$cfg_name" "$N"
 		;;
@@ -148,6 +151,51 @@ form="field|@TR<<Allow traffic originating from>>
 	end_form"
 append forms "$form" "$N"
 
+for zone in $default_cfgs; do
+	if [ "$FORM_submit" = "" ]; then
+		config_get FORM_input $zone input
+		config_get FORM_output $zone output
+		config_get FORM_forward $zone forward
+		config_get_bool FORM_syn_flood $zone syn_flood 1
+		config_get_bool FORM_disable_ipv6 $zone disable_ipv6 0
+	else
+		eval FORM_input="\$FORM_input_$zone"
+		eval FORM_output="\$FORM_output_$zone"
+		eval FORM_forward="\$FORM_forward_$zone"
+		eval FORM_syn_flood="\$FORM_syn_flood_$zone"
+		eval FORM_disable_ipv6="\$FORM_disable_ipv6_$zone"
+		uci_set firewall "$zone" disable_ipv6 "$FORM_disable_ipv6"
+		uci_set firewall "$zone" output "$FORM_output"
+		uci_set firewall "$zone" input "$FORM_input"
+		uci_set firewall "$zone" forward "$FORM_forward"
+		[ "$FORM_syn_flood" = "" ] && FORM_syn_flood=0
+		uci_set firewall "$zone" syn_flood "$FORM_syn_flood"
+	fi
+
+	form="start_form|@TR<<Default Zone Settings>>
+		field|@TR<<Input>>
+		select|input_$zone|$FORM_input
+		option|ACCEPT|@TR<<Accept>>
+		option|REJECT|@TR<<Reject>>
+		option|DROP|@TR<<Drop>>
+		field|@TR<<Output>>
+		select|output_$zone|$FORM_output
+		option|ACCEPT|@TR<<Accept>>
+		option|REJECT|@TR<<Reject>>
+		option|DROP|@TR<<Drop>>
+		field|@TR<<Forward>>
+		select|forward_$zone|$FORM_forward
+		option|ACCEPT|@TR<<Accept>>
+		option|REJECT|@TR<<Reject>>
+		option|DROP|@TR<<Drop>>
+		field|@TR<<Disable IPv6>>
+		checkbox|disable_ipv6_$zone|$FORM_disable_ipv6|1
+		field|@TR<<SYN Flood Protection>>
+		checkbox|syn_flood_$zone|$FORM_syn_flood|1
+		end_form"
+		append forms "$form" "$N"
+done
+
 for zone in $zone_cfgs; do
 	if [ "$FORM_submit" = "" ]; then
 		config_get FORM_name $zone name
@@ -156,7 +204,6 @@ for zone in $zone_cfgs; do
 		config_get FORM_forward $zone forward
 		config_get_bool FORM_masq $zone masq 0
 		config_get_bool FORM_mtu_fix $zone mtu_fix 0
-		config_get_bool FORM_disable_ipv6 $zone disable_ipv6 0
 	else
 		config_get FORM_name $zone name
 		eval FORM_input="\$FORM_input_$zone"
@@ -164,13 +211,11 @@ for zone in $zone_cfgs; do
 		eval FORM_forward="\$FORM_forward_$zone"
 		eval FORM_masq="\$FORM_masq_$zone"
 		eval FORM_mtu_fix="\$FORM_mtu_fix_$zone"
-		eval FORM_disable_ipv6="$FORM_disable_ipv6_$zone"
 		uci_set firewall "$zone" input "$FORM_input"
 		uci_set firewall "$zone" output "$FORM_output"
 		uci_set firewall "$zone" forward "$FORM_forward"
 		uci_set firewall "$zone" masq "$FORM_masq"
 		uci_set firewall "$zone" mtu_fix "$FORM_mtu_fix"
-		uci_set firewall "$zone" disable_ipv6 "$FORM_disable_ipv6"
 	fi
 	form="start_form|@TR<<$FORM_name Zone Settings>>
 		field|@TR<<Input>>
@@ -192,8 +237,6 @@ for zone in $zone_cfgs; do
 		checkbox|masq_$zone|$FORM_masq|1
 		field|@TR<<MTU Fix>>
 		checkbox|mtu_fix_$zone|$FORM_mtu_fix|1
-		field|@TR<<Disable IPv6>>
-		checkbox|disable_ipv6_$zone|$FORM_disable_ipv6|1
 		end_form"
 	append forms "$form" "$N"
 done
