@@ -63,6 +63,7 @@ if [ ! -f /usr/lib/webif/channels.lst ]; then
 fi
 
 [ -f /usr/lib/webif/channels.lst ] && . /usr/lib/webif/channels.lst
+[ -f /usr/lib/webif/countrycodes.lst ] && . /usr/lib/webif/countrycodes.lst
 
 if [ -z "$BGCHANNELS" -a -z "$ACHANNELS" ]; then
 	generate_channels
@@ -292,7 +293,9 @@ EOF
 		append forms "helptext|Helptext Atheros Wireless Configuration#The router can be configured to handle multiple virtual interfaces which can be set to different modes and encryptions. Limitations are 1x sta, 0-4x ap or 1-4x ap or 1x adhoc" "$N"
 	elif [ "$iftype" = "mac80211" ]; then
 		mode_country="field|@TR<<Country Code>>
-		text|country_${device}|$FORM_country"
+		select|country_${device}|$FORM_country
+		option||@TR<<Not Selected>>
+		$COUNTRY_CODES"
 		append forms "$mode_country" "$N"
 	fi
 
