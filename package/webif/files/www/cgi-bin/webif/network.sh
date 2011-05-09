@@ -38,6 +38,7 @@ if [ "$FORM_button_add_network" != "" ]; then
 		uci_add "network" "interface" "$FORM_add_network"
 		uci_set "network" "$FORM_add_network" "proto" "none"
 		uci_add "firewall" "zone" ""; add_forward_cfg="$CONFIG_SECTION"
+		uci_set "firewall" "$add_forward_cfg" "name" "$FORM_add_network"
 		uci_set "firewall" "$add_forward_cfg" "input" "ACCEPT"
 		uci_set "firewall" "$add_forward_cfg" "output" "ACCEPT"
 		uci_set "firewall" "$add_forward_cfg" "forward" "REJECT"
