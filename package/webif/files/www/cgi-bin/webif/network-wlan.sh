@@ -228,7 +228,7 @@ for device in $DEVICES; do
 	if empty "$FORM_submit"; then
 		config_get FORM_ap_mode $device hwmode
 		config_get iftype "$device" type
-		config_get country $device country
+		config_get FORM_country $device country
 		config_get FORM_channel $device channel
 		config_get FORM_maxassoc $device maxassoc
 		config_get FORM_distance $device distance
@@ -238,6 +238,7 @@ for device in $DEVICES; do
 	        config_get_bool FORM_disabled $device disabled 0
 		config_get FORM_antenna $device antenna
 		[ -z $FORM_antenna ] && FORM_antenna=auto
+		[ -z $FORM_country ] && FORM_country=$(iw reg get |grep "country" |cut -d" " -f2 |cut -d":" -f1)
 	else
 		config_get iftype "$device" type
 		eval FORM_country="\$FORM_country_$device"
