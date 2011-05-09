@@ -332,7 +332,7 @@ EOF
 	field|@TR<<Interface>>
 	text|${interface}_ifname|$FORM_ifname
 	helpitem|Interface
-	helptext|Virtual Interfece used by this network, can have multiple interfaces separates by spaces.
+	helptext|Virtual Interface used by this network, can have multiple interfaces separates by spaces.
 
 	field|@TR<<Type>>
 	select|${interface}_type|$FORM_type
